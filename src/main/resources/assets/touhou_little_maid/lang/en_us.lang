@@ -1,0 +1,20 @@
+entity.tlm.maid.name=Touhou Maid
+entity.tlm.danmaku.name=Danmaku
+
+item.touhou_little_maid.kappa_compass.name=Kappa's Compass
+item.touhou_little_maid.hakurei_gohei.name=Hakurei's Gohei
+tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
+message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
+message.touhou_little_maid.kappa_compass.write_fail=Write Position Fail!
+
+item.touhou_little_maid.hakurei_gohei.mode=Mode: %d
+
+touhou_little_maid.danmaku.type.pellet=Pellet
+touhou_little_maid.danmaku.type.ball=Ball
+touhou_little_maid.danmaku.type.big_ball=Big Ball
+touhou_little_maid.danmaku.type.bubble=Bubble
+touhou_little_maid.danmaku.type.jellybean=Jellybean
+touhou_little_maid.danmaku.type.heart=Heart
+touhou_little_maid.danmaku.type.star=Star
+touhou_little_maid.danmaku.type.amulet=Amulet
+touhou_little_maid.danmaku.type.orbs=Orbs
