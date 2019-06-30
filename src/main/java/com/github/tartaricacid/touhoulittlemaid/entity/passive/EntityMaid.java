@@ -49,6 +49,7 @@ import java.util.List;
 
 public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb);
+    private static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> MODE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
@@ -56,7 +57,6 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private static final DataParameter<BlockPos> HOME_POS = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
-    private static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
@@ -97,6 +97,25 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(BEGGING, Boolean.FALSE);
+        this.dataManager.register(PICKUP, Boolean.TRUE);
+        this.dataManager.register(MODE, MaidMode.IDLE.getModeIndex());
+        this.dataManager.register(EXP, 0);
+        this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
+        this.dataManager.register(HOME, Boolean.FALSE);
+        this.dataManager.register(ARM_RISE, Boolean.FALSE);
+    }
+
+    @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
+    }
+
+    @Override
     protected void collideWithNearbyEntities() {
         super.collideWithNearbyEntities();
 
@@ -133,6 +152,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                             this.addExp(entityXp.xpValue);
                         }
                         entityXp.setDead();
+                        this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2F,
+                                (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F);
                     }
                 }
             }
@@ -140,22 +161,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
-        this.dataManager.register(BEGGING, Boolean.FALSE);
-        this.dataManager.register(PICKUP, Boolean.TRUE);
-        this.dataManager.register(MODE, MaidMode.IDLE.getModeIndex());
-        this.dataManager.register(EXP, 0);
-        this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
-        this.dataManager.register(HOME, Boolean.FALSE);
-        this.dataManager.register(ARM_RISE, Boolean.FALSE);
-    }
-
-    @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
+    protected void damageEntity(DamageSource damageSrc, float damageAmount) {
+        super.damageEntity(damageSrc, damageAmount);
     }
 
     @Override
@@ -189,15 +196,15 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             // 分为三档
             // 1 自机狙
             // <=5 60 度扇形
-            // >5 圆形
+            // >5 120 度扇形
             if (entityList.size() <= 1) {
                 DanmakuShoot.aimedShot(world, this, target, 2 * (distanceFactor + 1), 0, 0.3f * (distanceFactor + 1),
                         0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)));
             } else if (entityList.size() <= 5) {
-                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1), 0, 0.3f * (distanceFactor + 1),
+                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.2f), 0, 0.3f * (distanceFactor + 1),
                         0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI / 3, 8);
             } else {
-                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1), 0, 0.3f * (distanceFactor + 1),
+                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.5f), 0, 0.3f * (distanceFactor + 1),
                         0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI * 2 / 3, 32);
             }
         }
