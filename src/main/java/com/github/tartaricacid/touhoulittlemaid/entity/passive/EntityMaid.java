@@ -38,6 +38,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
@@ -49,7 +50,8 @@ import java.util.List;
 
 public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb);
-    private static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
+    public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
+    public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable;
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> MODE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
@@ -79,6 +81,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.tasks.addTask(5, new EntityMaidFarm(this, 0.6f));
         this.tasks.addTask(5, new EntityMaidAttackRanged(this, 0.6f, 2, 16));
         this.tasks.addTask(5, new EntityMaidFeedOwner(this, 8));
+        this.tasks.addTask(5, new EntityMaidShear(this, 0.6f));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 6.0F, 2.0F));

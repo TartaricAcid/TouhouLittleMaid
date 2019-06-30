@@ -11,11 +11,14 @@ public enum MaidMode {
     RANGE_ATTACK("range_attack", 2, Items.BOW), // 远程攻击模式
     DANMAKU_ATTACK("danmaku_attack", 3, Items.ENDER_PEARL), // 弹幕攻击：吃我梦想封印
     FARM("farm", 4, Items.IRON_HOE), // 农夫模式：还是种地适合老子
+    FEED("feed", 5, Items.COOKED_BEEF), // 喂养模式：来，喂两位公子吃饼
+    SHEARS("shears", 6, Items.SHEARS), // 剪羊毛模式
+    TORCH("torch", 7, ItemBlock.getItemFromBlock(Blocks.TORCH)); // 插火把模式
+
+    /*
     BREW("brew", 5, Items.BREWING_STAND), // 酿造模式：永远亭技术加成，妙手回春
     FURNACE("furnace", 6, ItemBlock.getItemFromBlock(Blocks.FURNACE)), // 熔炉模式：此时会烧制物品
-    FEED("feed", 7, Items.COOKED_BEEF), // 喂养模式：来，喂两位公子吃饼
-    SHEARS("shears", 8, Items.SHEARS), // 剪羊毛模式
-    TORCH("torch", 9, ItemBlock.getItemFromBlock(Blocks.TORCH)); // 插火把模式
+    */
 
     private String name;
     private int modeIndex;
