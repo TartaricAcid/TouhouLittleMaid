@@ -82,6 +82,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.tasks.addTask(5, new EntityMaidAttackRanged(this, 0.6f, 2, 16));
         this.tasks.addTask(5, new EntityMaidFeedOwner(this, 8));
         this.tasks.addTask(5, new EntityMaidShear(this, 0.6f));
+        this.tasks.addTask(5, new EntityMaidPlaceTorch(this, 7, 2, 0.6f));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 6.0F, 2.0F));
@@ -487,7 +488,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     public boolean isFarmItemInInventory() {
-        CombinedInvWrapper combinedInvWrapper = new CombinedInvWrapper(handsInvWrapper, mainInv);
+        CombinedInvWrapper combinedInvWrapper = getAvailableInv();
         for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
             ItemStack itemstack = combinedInvWrapper.getStackInSlot(i);
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof IPlantable) {
@@ -511,6 +512,10 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     public ItemStackHandler getBaubleInv() {
         return baubleInv;
+    }
+
+    public CombinedInvWrapper getAvailableInv() {
+        return new CombinedInvWrapper(mainInv, handsInvWrapper);
     }
 
     public boolean isBegging() {

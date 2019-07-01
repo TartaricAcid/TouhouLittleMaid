@@ -1,0 +1,105 @@
+package com.github.tartaricacid.touhoulittlemaid.entity.ai;
+
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
+
+import javax.annotation.Nullable;
+
+public class EntityMaidPlaceTorch extends EntityAIBase {
+    private EntityMaid entityMaid;
+    private World world;
+    private int radius;
+    private int heigh;
+    private BlockPos pos;
+    private float speed;
+    private int timeoutCounter;
+    private int failCounter;
+
+    public EntityMaidPlaceTorch(EntityMaid entityMaid, int radius, int heigh, float speed) {
+        this.entityMaid = entityMaid;
+        this.world = entityMaid.getEntityWorld();
+        this.radius = radius;
+        this.heigh = heigh;
+        this.speed = speed;
+    }
+
+    @Override
+    public boolean shouldExecute() {
+        return entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty() && getLowLightBlock() != null;
+    }
+
+    @Override
+    public void startExecuting() {
+        timeoutCounter = 0;
+    }
+
+    @Override
+    public void updateTask() {
+        if (pos != null) {
+            if (entityMaid.getDistanceSq(pos.up()) < 16) {
+                world.setBlockState(pos, Blocks.TORCH.getDefaultState());
+                // TODO：只在服务端执行，所以没法播放声音
+                getTorchItem(entityMaid).shrink(1);
+                pos = null;
+            } else {
+                // 40 次进行一次寻路
+                timeoutCounter++;
+                if (timeoutCounter > 40) {
+                    entityMaid.getLookHelper().setLookPosition((double) pos.getX() + 0.5d, (double) pos.getY() + 1d, (double) pos.getZ() + 0.5d, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
+                    // 用来解决传送后停止插火把行为
+                    // 我发现传送后，pos 还会是先前的 pos，此时太远无法寻路过去
+                    // 所以这时候需要将其变为 null
+                    if (!entityMaid.getNavigator().tryMoveToXYZ((double) pos.getX() + 0.5d, (double) pos.getY() + 1d, (double) pos.getZ() + 0.5d, speed)) {
+                        pos = null;
+                        timeoutCounter = 0;
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public boolean shouldContinueExecuting() {
+        return pos != null && entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty();
+    }
+
+    @Override
+    public void resetTask() {
+        entityMaid.getNavigator().clearPath();
+        pos = null;
+    }
+
+    private ItemStack getTorchItem(EntityMaid entityMaid) {
+        IItemHandler itemHandler = entityMaid.getAvailableInv();
+        for (int i = 0; i < itemHandler.getSlots(); ++i) {
+            ItemStack itemstack = itemHandler.getStackInSlot(i);
+            if (!itemstack.isEmpty() && itemstack.getItem() == ItemBlock.getItemFromBlock(Blocks.TORCH)) {
+                return itemstack;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Nullable
+    private BlockPos getLowLightBlock() {
+        int x = entityMaid.getRNG().nextInt(radius * 2) - radius;
+        int y = entityMaid.getRNG().nextInt(heigh * 2) - heigh;
+        int z = entityMaid.getRNG().nextInt(radius * 2) - radius;
+
+        BlockPos posRandom = entityMaid.getPosition().add(x, y, z);
+        if (world.getLightFromNeighbors(posRandom.up()) < 9 && world.isAirBlock(posRandom.up())
+                && Blocks.TORCH.canPlaceTorchOnTop(world.getBlockState(posRandom), world, posRandom)) {
+            pos = posRandom.up();
+            return posRandom;
+        }
+        return null;
+    }
+}

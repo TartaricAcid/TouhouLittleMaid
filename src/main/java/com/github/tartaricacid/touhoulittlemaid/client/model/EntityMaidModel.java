@@ -10,6 +10,7 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class EntityMaidModel extends ModelBase {
+    private final ModelRenderer upperBody;
     private final ModelRenderer head;
     private final ModelRenderer hair;
     private final ModelRenderer hairLeft;
@@ -20,8 +21,8 @@ public class EntityMaidModel extends ModelBase {
     private final ModelRenderer headdressRightBottom;
     private final ModelRenderer headdressMiddle;
     private final ModelRenderer hairBack;
-    private final ModelRenderer armRight;
     private final ModelRenderer armLeft;
+    private final ModelRenderer armRight;
     private final ModelRenderer body;
     private final ModelRenderer legLeft;
     private final ModelRenderer legRight;
@@ -30,8 +31,12 @@ public class EntityMaidModel extends ModelBase {
         textureWidth = 128;
         textureHeight = 64;
 
+        upperBody = new ModelRenderer(this);
+        upperBody.setRotationPoint(0.0F, 19.0F, 0.0F);
+
         head = new ModelRenderer(this);
-        head.setRotationPoint(0.0F, 6.0F, 0.0F);
+        head.setRotationPoint(0.0F, -13.0F, 0.0F);
+        upperBody.addChild(head);
         head.cubeList.add(new ModelBox(head, 0, 0, -4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F, false));
 
         hair = new ModelRenderer(this);
@@ -87,18 +92,21 @@ public class EntityMaidModel extends ModelBase {
         head.addChild(hairBack);
         hairBack.cubeList.add(new ModelBox(hairBack, 44, 45, -1.5F, 0.0F, -2.0F, 3, 9, 2, 0.0F, false));
 
-        armRight = new ModelRenderer(this);
-        armRight.setRotationPoint(-3.0F, 6.5F, 0.0F);
-        setRotationAngle(armRight, 0.0F, 0.0F, 0.4363F);
-        armRight.cubeList.add(new ModelBox(armRight, 35, 46, -2.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F, false));
-
         armLeft = new ModelRenderer(this);
-        armLeft.setRotationPoint(3.0F, 6.5F, 0.0F);
+        armLeft.setRotationPoint(3.0F, -12.5F, 0.0F);
         setRotationAngle(armLeft, 0.0F, 0.0F, -0.4363F);
+        upperBody.addChild(armLeft);
         armLeft.cubeList.add(new ModelBox(armLeft, 26, 46, 0.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F, false));
 
+        armRight = new ModelRenderer(this);
+        armRight.setRotationPoint(-3.0F, -12.5F, 0.0F);
+        setRotationAngle(armRight, 0.0F, 0.0F, 0.4363F);
+        upperBody.addChild(armRight);
+        armRight.cubeList.add(new ModelBox(armRight, 35, 46, -2.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F, false));
+
         body = new ModelRenderer(this);
-        body.setRotationPoint(0.0F, 13.5F, 0.0F);
+        body.setRotationPoint(0.0F, -5.5F, 0.0F);
+        upperBody.addChild(body);
         body.cubeList.add(new ModelBox(body, 33, 0, -3.0F, -7.5F, -3.0F, 6, 5, 6, 0.0F, false));
         body.cubeList.add(new ModelBox(body, 0, 17, -4.0F, -2.5F, -4.0F, 8, 4, 8, 0.0F, false));
         body.cubeList.add(new ModelBox(body, 0, 30, -5.0F, 0.5F, -5.0F, 10, 5, 10, 0.0F, false));
@@ -115,10 +123,7 @@ public class EntityMaidModel extends ModelBase {
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        head.render(f5);
-        armRight.render(f5);
-        armLeft.render(f5);
-        body.render(f5);
+        upperBody.render(f5);
         legLeft.render(f5);
         legRight.render(f5);
     }
@@ -149,7 +154,14 @@ public class EntityMaidModel extends ModelBase {
         this.armRight.rotateAngleZ = -MathHelper.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
 
         EntityMaid entityMaid = (EntityMaid) entityIn;
-        if (entityMaid.isSitting()) {
+        if (entityMaid.isRiding()) {
+            this.legLeft.rotateAngleX = -0.960f;
+            this.legLeft.rotateAngleZ = -0.523f;
+            this.legRight.rotateAngleX = -0.960f;
+            this.legRight.rotateAngleZ = 0.523f;
+
+            GlStateManager.translate(0, 0.3f, 0);
+        } else if (entityMaid.isSitting()) {
             this.armLeft.rotateAngleX = -0.798f;
             this.armLeft.rotateAngleZ = 0.274f;
             this.armRight.rotateAngleX = -0.798f;
@@ -161,6 +173,15 @@ public class EntityMaidModel extends ModelBase {
             this.legRight.rotateAngleZ = 0.523f;
 
             GlStateManager.translate(0, 0.3f, 0);
+        } else if (entityMaid.isSneaking()) {
+            this.head.rotateAngleX = -0.2f;
+            this.head.offsetX = 0f;
+            this.head.offsetY = 0.0625f;
+            this.upperBody.rotateAngleX = 0.3f;
+        } else {
+            this.head.offsetX = 0f;
+            this.head.offsetY = 0f;
+            this.upperBody.rotateAngleX = 0f;
         }
 
         if (entityMaid.isBegging()) {

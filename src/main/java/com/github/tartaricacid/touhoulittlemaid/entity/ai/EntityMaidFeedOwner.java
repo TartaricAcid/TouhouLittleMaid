@@ -27,18 +27,12 @@ public class EntityMaidFeedOwner extends EntityAIBase {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return timeCount < 0 && entityMaid.getMode() == MaidMode.FEED && !entityMaid.isSitting()
-                && entityMaid.getOwner() instanceof EntityPlayer && entityMaid.getDistance(entityMaid.getOwner()) < distance;
-    }
-
-    @Override
     public void startExecuting() {
         if (entityMaid.getOwner() instanceof EntityPlayer && entityMaid.getOwner().isEntityAlive()) {
             EntityPlayer player = (EntityPlayer) entityMaid.getOwner();
             entityMaid.getLookHelper().setLookPositionWithEntity(player, 10, 40);
             if (player.getFoodStats().needFood()) {
-                IItemHandler mainInv = entityMaid.getMainInv();
+                IItemHandler mainInv = entityMaid.getAvailableInv();
                 for (int i = 0; i < mainInv.getSlots(); ++i) {
                     ItemStack stack = mainInv.getStackInSlot(i);
                     if (stack.getItem() instanceof ItemFood) {
@@ -50,5 +44,10 @@ public class EntityMaidFeedOwner extends EntityAIBase {
             }
         }
         timeCount = 60;
+    }
+
+    @Override
+    public boolean shouldContinueExecuting() {
+        return false;
     }
 }
