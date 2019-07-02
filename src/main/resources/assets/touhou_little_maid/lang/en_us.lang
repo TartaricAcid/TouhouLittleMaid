@@ -3,7 +3,9 @@ entity.tlm.danmaku.name=Danmaku
 
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass
 item.touhou_little_maid.hakurei_gohei.name=Hakurei's Gohei
+item.touhou_little_maid.ultramarine_orb_elixir.name=Ultramarine Orb Elixir
 tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
+tooltips.touhou_little_maid.ultramarine_orb_elixir.desc=Remaining Usage Times: %d
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
 message.touhou_little_maid.kappa_compass.write_fail=Write Position Fail!
 

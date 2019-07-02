@@ -17,6 +17,7 @@ public class MaidItemsModel {
     public static void register(ModelRegistryEvent event) {
         registerRender(MaidItems.KAPPA_COMPASS);
         registerRender(MaidItems.HAKUREI_GOHEI);
+        registerRender(MaidItems.ULTRAMARINE_ORB_ELIXIR);
     }
 
     private static void registerRender(Item item) {

@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.AttackValue;
+import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
@@ -24,6 +26,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -165,29 +168,48 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     @Override
-    protected void damageEntity(DamageSource damageSrc, float damageAmount) {
-        super.damageEntity(damageSrc, damageAmount);
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        for (int i = 0; i < baubleInv.getSlots(); ++i) {
+            Item item = baubleInv.getStackInSlot(i).getItem();
+            if (item instanceof IMaidBauble) {
+                IMaidBauble bauble = (IMaidBauble) item;
+                if (bauble.onMaidAttacked(this, baubleInv.getStackInSlot(i), source, amount)) {
+                    return true;
+                }
+            }
+        }
+        return super.attackEntityFrom(source, amount);
     }
 
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         if (this.getMode() == MaidMode.RANGE_ATTACK) {
-            EntityArrow entityarrow = this.getArrow(distanceFactor);
+            EntityArrow entityArrow = this.getArrow(distanceFactor);
+
+            for (int i = 0; i < baubleInv.getSlots(); ++i) {
+                Item item = baubleInv.getStackInSlot(i).getItem();
+                if (item instanceof IMaidBauble) {
+                    IMaidBauble bauble = (IMaidBauble) item;
+                    if (bauble.onRangedAttack(this, target, baubleInv.getStackInSlot(i), distanceFactor, entityArrow)) {
+                        return;
+                    }
+                }
+            }
 
             // 如果获取得到的箭为 null，不执行攻击
-            if (entityarrow == null) {
+            if (entityArrow == null) {
                 return;
             }
 
             double x = target.posX - this.posX;
-            double y = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entityarrow.posY;
+            double y = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entityArrow.posY;
             double z = target.posZ - this.posZ;
             double pitch = MathHelper.sqrt(x * x + z * z) * 0.15D;
 
-            entityarrow.shoot(x, y + pitch, z, 1.6F, 1);
+            entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
             this.getHeldItemMainhand().damageItem(1, this);
             this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.world.spawnEntity(entityarrow);
+            this.world.spawnEntity(entityArrow);
             return;
         }
 
@@ -196,6 +218,16 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox()
                     .expand(8, 3, 8)
                     .expand(-8, -3, -8), IS_MOB);
+
+            for (int i = 0; i < baubleInv.getSlots(); ++i) {
+                Item item = baubleInv.getStackInSlot(i).getItem();
+                if (item instanceof IMaidBauble) {
+                    IMaidBauble bauble = (IMaidBauble) item;
+                    if (bauble.onDanmakuAttack(this, target, baubleInv.getStackInSlot(i), distanceFactor, entityList)) {
+                        return;
+                    }
+                }
+            }
 
             // 分为三档
             // 1 自机狙
@@ -299,29 +331,41 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         // 先获取实体基本的攻击数据
-        float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+        float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
         // 用来获取击退相关数据
-        int i = 0;
+        int knockBack = 0;
         // 火焰附加
-        int j = 0;
+        int fireAspect = 0;
 
         if (entityIn instanceof EntityLivingBase) {
             // 附加上主手武器的攻击（含附魔）数据
-            f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) entityIn).getCreatureAttribute());
+            damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) entityIn).getCreatureAttribute());
             // 附加上击退附魔数据
-            i += EnchantmentHelper.getKnockbackModifier(this);
+            knockBack += EnchantmentHelper.getKnockbackModifier(this);
             // 附加上火焰附加带来的数据
-            j += EnchantmentHelper.getFireAspectModifier(this);
+            fireAspect += EnchantmentHelper.getFireAspectModifier(this);
+        }
+
+        // 应用饰品效果
+        for (int i = 0; i < baubleInv.getSlots(); ++i) {
+            Item item = baubleInv.getStackInSlot(i).getItem();
+            if (item instanceof IMaidBauble) {
+                IMaidBauble bauble = (IMaidBauble) item;
+                AttackValue value = bauble.onMaidAttack(this, entityIn, baubleInv.getStackInSlot(i), damage, knockBack, fireAspect);
+                damage = value.getDamage();
+                knockBack = value.getKnockback();
+                fireAspect = value.getFireAspect();
+            }
         }
 
         // 检查攻击对象是否是无敌的
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
+        boolean isInvulnerable = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 
         // 如果不是无敌的
-        if (flag) {
+        if (isInvulnerable) {
             // 应用击退效果
-            if (i > 0) {
-                ((EntityLivingBase) entityIn).knockBack(this, (float) i * 0.5F,
+            if (knockBack > 0 && entityIn instanceof EntityLivingBase) {
+                ((EntityLivingBase) entityIn).knockBack(this, (float) knockBack * 0.5F,
                         (double) MathHelper.sin(this.rotationYaw * 0.017453292F),
                         (double) (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
                 this.motionX *= 0.6D;
@@ -329,23 +373,23 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             }
 
             // 应用火焰附加效果
-            if (j > 0) {
-                entityIn.setFire(j * 4);
+            if (fireAspect > 0) {
+                entityIn.setFire(fireAspect * 4);
             }
 
             // 如果攻击对象是玩家
             if (entityIn instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) entityIn;
-                ItemStack itemstack = this.getHeldItemMainhand(); // 攻击方手持的物品
-                ItemStack itemstack1 = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY; // 玩家手持物品
+                ItemStack itemMaidHand = this.getHeldItemMainhand(); // 攻击方手持的物品
+                ItemStack itemPlayerHand = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY; // 玩家手持物品
 
                 // 如果玩家手持盾牌而且还处于持盾状态，并且所持物品能够破盾
-                if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem().canDisableShield(itemstack, itemstack1, entityplayer, this)
-                        && itemstack1.getItem().isShield(itemstack1, entityplayer)) {
+                if (!itemMaidHand.isEmpty() && !itemPlayerHand.isEmpty() && itemMaidHand.getItem().canDisableShield(itemMaidHand, itemPlayerHand, entityplayer, this)
+                        && itemPlayerHand.getItem().isShield(itemPlayerHand, entityplayer)) {
                     float f1 = 0.25F + (float) EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
 
                     if (this.rand.nextFloat() < f1) {
-                        entityplayer.getCooldownTracker().setCooldown(itemstack1.getItem(), 100);
+                        entityplayer.getCooldownTracker().setCooldown(itemPlayerHand.getItem(), 100);
                         this.world.setEntityState(entityplayer, (byte) 30);
                     }
                 }
@@ -357,7 +401,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             this.getHeldItemMainhand().damageItem(1, this);
         }
 
-        return flag;
+        return isInvulnerable;
     }
 
     @Nullable
@@ -430,6 +474,17 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public void onDeath(DamageSource cause) {
+        // 检查饰品栏是否需要取消后续过程
+        for (int i = 0; i < baubleInv.getSlots(); ++i) {
+            Item item = baubleInv.getStackInSlot(i).getItem();
+            if (item instanceof IMaidBauble) {
+                IMaidBauble bauble = (IMaidBauble) item;
+                if (bauble.onMaidDeath(this, baubleInv.getStackInSlot(i), cause)) {
+                    return;
+                }
+            }
+        }
+
         super.onDeath(cause);
         if (!world.isRemote) {
             CombinedInvWrapper combinedInvWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);

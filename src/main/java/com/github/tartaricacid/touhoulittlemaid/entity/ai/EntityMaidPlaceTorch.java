@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -45,7 +46,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
         if (pos != null) {
             if (entityMaid.getDistanceSq(pos.up()) < 16) {
                 world.setBlockState(pos, Blocks.TORCH.getDefaultState());
-                // TODO：只在服务端执行，所以没法播放声音
+                entityMaid.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0f, 1.0f);
                 getTorchItem(entityMaid).shrink(1);
                 pos = null;
             } else {

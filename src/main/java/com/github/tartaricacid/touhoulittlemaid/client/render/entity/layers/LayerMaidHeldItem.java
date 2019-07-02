@@ -46,7 +46,6 @@ public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
             } else {
                 GlStateManager.translate(0.0625F, 0.125F, -0.525F);
             }
-
             boolean flag = handSide == EnumHandSide.LEFT;
             Minecraft.getMinecraft().getItemRenderer().renderItemSide(entityMaid, itemStack, type, flag);
             GlStateManager.popMatrix();
