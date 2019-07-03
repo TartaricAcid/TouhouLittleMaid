@@ -16,6 +16,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -94,6 +95,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 6.0F, 0.2f));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 6.0F, 0.2f));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityOcelot.class, 6.0F, 0.2f));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityParrot.class, 6.0F, 0.2f));
         this.tasks.addTask(10, new EntityAILookIdle(this));
         this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.4f));
 

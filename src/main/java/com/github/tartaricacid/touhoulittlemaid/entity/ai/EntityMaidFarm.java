@@ -28,6 +28,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         this.entityMaid = entityMaid;
     }
 
+    @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
         if (entityMaid.getMode() != MaidMode.FARM || entityMaid.isSitting()) {
@@ -50,11 +51,13 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return this.currentTask >= 0 && entityMaid.getMode() == MaidMode.FARM &&
                 !entityMaid.isSitting() && super.shouldContinueExecuting();
     }
 
+    @Override
     public void updateTask() {
         super.updateTask();
         // 女仆盯着耕地
@@ -100,6 +103,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         }
     }
 
+    @Override
     protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
         Block block = worldIn.getBlockState(pos).getBlock();
 

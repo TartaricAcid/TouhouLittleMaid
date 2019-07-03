@@ -11,10 +11,12 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
         this.entityMaid = entityMaid;
     }
 
+    @Override
     public boolean shouldExecute() {
         return !entityMaid.isHome() && super.shouldExecute();
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return !entityMaid.isHome() && super.shouldContinueExecuting();
     }

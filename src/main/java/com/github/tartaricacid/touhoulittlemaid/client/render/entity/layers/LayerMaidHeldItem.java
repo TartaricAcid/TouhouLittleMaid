@@ -9,7 +9,10 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
     protected final RenderLiving<EntityMaid> livingEntityRenderer;
 
@@ -33,20 +36,14 @@ public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
     private void renderHeldItem(EntityMaid entityMaid, ItemStack itemStack, ItemCameraTransforms.TransformType type, EnumHandSide handSide) {
         if (!itemStack.isEmpty()) {
             GlStateManager.pushMatrix();
-
             if (entityMaid.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
             ((EntityMaidModel) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, handSide);
-
             GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-            if (handSide == EnumHandSide.LEFT) {
-                GlStateManager.translate(-0.0625F, 0.125F, -0.525F);
-            } else {
-                GlStateManager.translate(0.0625F, 0.125F, -0.525F);
-            }
             boolean flag = handSide == EnumHandSide.LEFT;
+            GlStateManager.translate((float) (flag ? -1 : 1) / 16.0F, 0.125F, -0.525F);
             Minecraft.getMinecraft().getItemRenderer().renderItemSide(entityMaid, itemStack, type, flag);
             GlStateManager.popMatrix();
         }

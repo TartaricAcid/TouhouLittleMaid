@@ -60,6 +60,7 @@ public class MaidMainContainer extends Container {
                 /**
                  * 以防万一，设置最大堆叠数为 1
                  */
+                @Override
                 public int getSlotStackLimit() {
                     return 1;
                 }
@@ -67,6 +68,7 @@ public class MaidMainContainer extends Container {
                 /**
                  * 检查格子是否放置的是指定物品
                  */
+                @Override
                 public boolean isItemValid(ItemStack stack) {
                     return stack.getItem().isValidArmor(stack, entityequipmentslot, entityMaid);
                 }
@@ -75,11 +77,13 @@ public class MaidMainContainer extends Container {
                  * 检查能否拿出这个物品
                  * 如果物品为空，或者玩家为创造模式，物品没有绑定诅咒附魔才可以拿出
                  */
+                @Override
                 public boolean canTakeStack(EntityPlayer playerIn) {
                     ItemStack itemstack = this.getStack();
                     return (itemstack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.canTakeStack(playerIn);
                 }
 
+                @Override
                 @Nullable
                 @SideOnly(Side.CLIENT)
                 public String getSlotTexture() {
@@ -92,6 +96,7 @@ public class MaidMainContainer extends Container {
     private void addHandSlot(EntityMaid entityMaid, IItemHandler itemHandler) {
         this.addSlotToContainer(new SlotItemHandler(itemHandler, 4, 80, 62));
         this.addSlotToContainer(new SlotItemHandler(itemHandler, 5, 98, 62) {
+            @Override
             @Nullable
             @SideOnly(Side.CLIENT)
             public String getSlotTexture() {

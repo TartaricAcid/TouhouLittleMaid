@@ -11,10 +11,12 @@ public class EntityMaidSit extends EntityAIBase {
         this.setMutexBits(5);
     }
 
+    @Override
     public boolean shouldExecute() {
         return this.entityMaid.isTamed() && this.entityMaid.isSitting() && !this.entityMaid.isInWater() && !this.entityMaid.onGround;
     }
 
+    @Override
     public void startExecuting() {
         this.entityMaid.getNavigator().clearPath();
     }
@@ -24,6 +26,7 @@ public class EntityMaidSit extends EntityAIBase {
         return this.entityMaid.isSitting();
     }
 
+    @Override
     public void resetTask() {
         this.entityMaid.setSitting(false);
     }

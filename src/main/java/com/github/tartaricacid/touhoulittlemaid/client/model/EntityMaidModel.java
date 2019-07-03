@@ -8,7 +8,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class EntityMaidModel extends ModelBase {
     private final ModelRenderer head;
     private final ModelRenderer hair;
@@ -129,6 +132,7 @@ public class EntityMaidModel extends ModelBase {
         modelRenderer.rotateAngleZ = z;
     }
 
+    @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
                                   float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
         this.head.rotateAngleX = headPitch / 45f / (float) Math.PI;

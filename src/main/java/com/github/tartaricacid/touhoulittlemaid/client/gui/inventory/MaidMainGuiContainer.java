@@ -1,9 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 
+
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class MaidMainGuiContainer extends AbstractMaidGuiContainer {
     public MaidMainGuiContainer(Container inventorySlotsIn, EntityMaid entityMaid) {
         super(inventorySlotsIn, entityMaid, 1);

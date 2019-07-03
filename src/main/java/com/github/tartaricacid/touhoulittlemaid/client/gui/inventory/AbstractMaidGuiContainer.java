@@ -21,9 +21,12 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
+@SideOnly(Side.CLIENT)
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     EntityMaid entityMaid;
@@ -37,8 +40,22 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.entityMaid = entityMaid;
     }
 
+    /**
+     * 绘制自定义的背景，会在基础背景调用后，但是控件，前景图标，文本调用前渲染
+     *
+     * @param mouseX       鼠标 x 坐标
+     * @param mouseY       鼠标 y 坐标
+     * @param partialTicks tick 插值
+     */
     public abstract void drawCustomBackground(int mouseX, int mouseY, float partialTicks);
 
+    /**
+     * 绘制自定义 GUI，会在主背景绘制后调用
+     *
+     * @param mouseX       鼠标 x 坐标
+     * @param mouseY       鼠标 y 坐标
+     * @param partialTicks tick 插值
+     */
     public abstract void drawCustomScreen(int mouseX, int mouseY, float partialTicks);
 
     @Override
@@ -123,8 +140,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         int i = this.guiLeft;
         int j = this.guiTop;
+
         // 绘制模式上方的文字提示
-        if (((i - 28) < mouseX && mouseX < i) && (j < mouseY && mouseY < (j + 26))) {
+        boolean xInRange = ((i - 28) < mouseX && mouseX < i);
+        boolean yInRange = (j < mouseY && mouseY < (j + 26));
+        if (xInRange && yInRange) {
             this.drawHoveringText(String.format("This Maid Is In %s Mode", entityMaid.getMode().name().toUpperCase()), mouseX, mouseY);
         }
     }
@@ -177,7 +197,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.zLevel = 200.0F;
         this.itemRender.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = fontRenderer;
+        if (font == null) {
+            font = fontRenderer;
+        }
         this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
         this.zLevel = 0.0F;

@@ -13,10 +13,13 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Objects;
 
+@SideOnly(Side.CLIENT)
 public class EntityDanmakuRender extends Render<EntityDanmaku> {
     public static final Factory FACTORY = new EntityDanmakuRender.Factory();
 

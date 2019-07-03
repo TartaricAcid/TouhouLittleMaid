@@ -65,6 +65,7 @@ public class ItemHakureiGohei extends Item {
         }
     }
 
+    @Override
     public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.BOW;
     }
@@ -85,7 +86,7 @@ public class ItemHakureiGohei extends Item {
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(slot);
+        Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
         if (slot == EntityEquipmentSlot.MAINHAND) {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),

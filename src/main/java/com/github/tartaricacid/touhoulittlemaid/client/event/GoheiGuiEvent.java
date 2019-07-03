@@ -23,12 +23,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
 public class GoheiGuiEvent {
-    private static final ResourceLocation texture = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/danmaku.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/danmaku.png");
     private static int timer = 0;
     private static int color = 0;
     private static boolean show = false;
@@ -114,7 +116,7 @@ public class GoheiGuiEvent {
             BufferBuilder bufbuilder = tessellator.getBuffer();
 
             bufbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-            mc.getTextureManager().bindTexture(texture);
+            mc.getTextureManager().bindTexture(TEXTURE);
 
             bufbuilder.pos(-25, 25, 0).tex((pStartU + 0) / w, (pStartV + 32) / l).endVertex();
             bufbuilder.pos(-25, -25, 0).tex((pStartU + 0) / w, (pStartV + 0) / l).endVertex();

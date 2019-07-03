@@ -31,6 +31,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         this.attackCooldown = cooldown;
     }
 
+    @Override
     public boolean shouldExecute() {
         return !entity.isSitting() && this.entity.getAttackTarget() != null &&
                 ((this.entity.getMode() == MaidMode.RANGE_ATTACK && this.isBowInMainhand() && this.entity.hasArrow())
@@ -45,14 +46,17 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         return this.entity.getHeldItemMainhand().getItem() == MaidItems.HAKUREI_GOHEI;
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return this.shouldExecute();
     }
 
+    @Override
     public void startExecuting() {
         this.entity.setSwingingArms(true);
     }
 
+    @Override
     public void resetTask() {
         this.seeTime = 0;
         this.attackTime = -1;
@@ -61,6 +65,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         this.entity.getNavigator().clearPath();
     }
 
+    @Override
     public void updateTask() {
         // 获取攻击目标
         EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
