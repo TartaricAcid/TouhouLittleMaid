@@ -130,6 +130,6 @@ public class ItemHakureiGohei extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(I18n.format("item.touhou_little_maid.hakurei_gohei.mode", I18n.format("touhou_little_maid.danmaku.type." + getGoheiMode(stack).getName())));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.hakurei_gohei.desc", I18n.format("danmaku_type.touhou_little_maid." + getGoheiMode(stack).getName())));
     }
 }

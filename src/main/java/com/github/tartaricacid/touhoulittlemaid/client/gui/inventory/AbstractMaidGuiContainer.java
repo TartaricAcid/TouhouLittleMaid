@@ -15,6 +15,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -26,6 +27,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
+/**
+ * 女仆主 GUI 界面的集合，其他界面在此基础上拓展得到
+ *
+ * @author TartaricAcid
+ */
 @SideOnly(Side.CLIENT)
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
@@ -57,6 +63,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
      * @param partialTicks tick 插值
      */
     public abstract void drawCustomScreen(int mouseX, int mouseY, float partialTicks);
+
+    /**
+     * 该 GUI 的名称
+     *
+     * @return GUI 名称
+     */
+    public abstract String getGuiName();
 
     @Override
     public void initGui() {
@@ -140,12 +153,38 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         int i = this.guiLeft;
         int j = this.guiTop;
+        boolean xInRange;
+        boolean yInRange;
 
         // 绘制模式上方的文字提示
-        boolean xInRange = ((i - 28) < mouseX && mouseX < i);
-        boolean yInRange = (j < mouseY && mouseY < (j + 26));
+        xInRange = (i - 28) < mouseX && mouseX < i;
+        yInRange = j < mouseY && mouseY < (j + 26);
         if (xInRange && yInRange) {
-            this.drawHoveringText(String.format("This Maid Is In %s Mode", entityMaid.getMode().name().toUpperCase()), mouseX, mouseY);
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.mode_switch",
+                    I18n.format("mode.touhou_little_maid." + entityMaid.getMode().getName())), mouseX, mouseY);
+        }
+
+        // 绘制不同标签页的提示文字
+        xInRange = (i + 28 * (guiId - 1)) < mouseX && mouseX < (i + 28 * guiId);
+        yInRange = (j - 28) < mouseY && mouseY < j;
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.tab." + getGuiName()), mouseX, mouseY);
+        }
+
+        // Home 模式的描述
+        xInRange = (i + 143) < mouseX && mouseX < (i + 169);
+        yInRange = (j + 63) < mouseY && mouseY < (j + 79);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pickup",
+                    I18n.format("gui.touhou_little_maid." + entityMaid.isPickup())), mouseX, mouseY);
+        }
+
+        // 拾物模式描述
+        xInRange = (i + 116) < mouseX && mouseX < (i + 142);
+        yInRange = (j + 63) < mouseY && mouseY < (j + 79);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.home",
+                    I18n.format("gui.touhou_little_maid." + entityMaid.isHome())), mouseX, mouseY);
         }
     }
 
@@ -179,7 +218,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 绘制模式图标
         this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 6, j - 19, "");
         this.drawItemStack(ItemBlock.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19, "");
-        this.drawItemStack(Items.NETHER_WART.getDefaultInstance(), i + 62, j - 19, "");
+        this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 62, j - 19, "");
         this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19, "");
 
         // 绘制模式图标

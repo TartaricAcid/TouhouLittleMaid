@@ -97,8 +97,8 @@ public class GoheiGuiEvent {
             float sx = event.getResolution().getScaledWidth();
             float sy = event.getResolution().getScaledHeight();
 
-            String text = I18n.format("item.touhou_little_maid.hakurei_gohei.mode",
-                    I18n.format("touhou_little_maid.danmaku.type." + item.getGoheiMode(stack).getName()));
+            String text = I18n.format("tooltips.touhou_little_maid.hakurei_gohei.desc",
+                    I18n.format("danmaku_type.touhou_little_maid." + item.getGoheiMode(stack).getName()));
 
             mc.fontRenderer.drawString(text, (sx - mc.fontRenderer.getStringWidth(text)) / 2, sy * 0.30f, 0xffffff, true);
 

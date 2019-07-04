@@ -1,25 +1,59 @@
-entity.tlm.maid.name=Touhou Maid
-entity.tlm.danmaku.name=Danmaku
+# Touhou Little Mod Language File
 
+# Entity
+entity.touhou_little_maid.maid.name=Touhou Little Maid
+entity.touhou_little_maid.danmaku.name=Danmaku
+
+# Item
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass
 item.touhou_little_maid.hakurei_gohei.name=Hakurei's Gohei
 item.touhou_little_maid.ultramarine_orb_elixir.name=Ultramarine Orb Elixir
+
+# Tooltips
+tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
 tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
 tooltips.touhou_little_maid.ultramarine_orb_elixir.desc=Remaining Usage Times: %d
+
+# Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
 message.touhou_little_maid.kappa_compass.write_fail=Write Position Fail!
 
-item.touhou_little_maid.hakurei_gohei.mode=Mode: %d
-
-touhou_little_maid.danmaku.type.pellet=Pellet
-touhou_little_maid.danmaku.type.ball=Ball
-touhou_little_maid.danmaku.type.big_ball=Big Ball
-touhou_little_maid.danmaku.type.bubble=Bubble
-touhou_little_maid.danmaku.type.jellybean=Jellybean
-touhou_little_maid.danmaku.type.heart=Heart
-touhou_little_maid.danmaku.type.star=Star
-touhou_little_maid.danmaku.type.amulet=Amulet
-touhou_little_maid.danmaku.type.orbs=Orbs
-
+# Config
 config.touhou_little_maid.maid_config=Maid Config
-config.touhou_little_maid.maid_tamed_item=Maid Tamed Item
+config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item
+
+# Danmaku Type
+danmaku_type.touhou_little_maid.pellet=Pellet
+danmaku_type.touhou_little_maid.ball=Ball
+danmaku_type.touhou_little_maid.big_ball=Big Ball
+danmaku_type.touhou_little_maid.bubble=Bubble
+danmaku_type.touhou_little_maid.jellybean=Jellybean
+danmaku_type.touhou_little_maid.heart=Heart
+danmaku_type.touhou_little_maid.star=Star
+danmaku_type.touhou_little_maid.amulet=Amulet
+danmaku_type.touhou_little_maid.orbs=Orbs
+
+# Mode
+mode.touhou_little_maid.idle=Idle
+mode.touhou_little_maid.attack=Attack
+mode.touhou_little_maid.range_attack=Range Attack
+mode.touhou_little_maid.danmaku_attack=Danmaku Attack
+mode.touhou_little_maid.farm=Farm
+mode.touhou_little_maid.feed=Feed
+mode.touhou_little_maid.shears=Shears
+mode.touhou_little_maid.torch=Torch
+
+# GUI
+gui.touhou_little_maid.button.mode_switch=This Maid Is In %s Mode.
+gui.touhou_little_maid.info.healthy=HP: %.0f/%.0f
+gui.touhou_little_maid.info.armor=AR: %.0f/20
+gui.touhou_little_maid.info.attack=AT: %.1f
+gui.touhou_little_maid.info.experience=Exp: %d
+gui.touhou_little_maid.tab.main=Main
+gui.touhou_little_maid.tab.inventory=Inventory
+gui.touhou_little_maid.tab.bauble=Bauble
+gui.touhou_little_maid.button.pickup=Pick Mode Is %s.
+gui.touhou_little_maid.button.home=Home Mode Is %s.
+gui.touhou_little_maid.true=Enable
+gui.touhou_little_maid.false=Disable
+

@@ -24,4 +24,9 @@ public class MaidInventoryGuiContainer extends AbstractMaidGuiContainer {
         mc.getTextureManager().bindTexture(STORAGE_TEX);
         drawTexturedModalRect(guiLeft + 79, guiTop + 7, 0, 0, 90, 54);
     }
+
+    @Override
+    public String getGuiName() {
+        return "inventory";
+    }
 }

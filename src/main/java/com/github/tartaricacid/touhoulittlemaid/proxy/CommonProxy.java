@@ -18,11 +18,11 @@ public class CommonProxy {
     public static SimpleNetworkWrapper INSTANCE = null;
 
     public void preInit(FMLPreInitializationEvent event) {
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.tlm.maid"),
-                EntityMaid.class, "tlm.maid", 0, TouhouLittleMaid.INSTANCE, 32,
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.touhou_little_maid.maid"),
+                EntityMaid.class, "touhou_little_maid.maid", 0, TouhouLittleMaid.INSTANCE, 32,
                 3, true, 0x4a6195, 0xffffff);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.tlm.damaku"),
-                EntityDanmaku.class, "tlm.danmaku", 1, TouhouLittleMaid.INSTANCE, 32,
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.touhou_little_maid.danmaku"),
+                EntityDanmaku.class, "touhou_little_maid.danmaku", 1, TouhouLittleMaid.INSTANCE, 32,
                 3, true);
 
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(TouhouLittleMaid.MOD_ID);
