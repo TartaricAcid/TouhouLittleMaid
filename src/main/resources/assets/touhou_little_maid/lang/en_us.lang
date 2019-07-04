@@ -20,3 +20,6 @@ touhou_little_maid.danmaku.type.heart=Heart
 touhou_little_maid.danmaku.type.star=Star
 touhou_little_maid.danmaku.type.amulet=Amulet
 touhou_little_maid.danmaku.type.orbs=Orbs
+
+config.touhou_little_maid.maid_config=Maid Config
+config.touhou_little_maid.maid_tamed_item=Maid Tamed Item

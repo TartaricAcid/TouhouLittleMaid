@@ -29,14 +29,7 @@ public class ItemKappaCompass extends Item {
         if (player.getHeldItem(hand).getItem() == this) {
             ItemStack stack = player.getHeldItem(hand);
             int[] i = {pos.getX(), pos.getY() + 1, pos.getZ()};
-            if (!stack.hasTagCompound()) {
-                NBTTagCompound compound = new NBTTagCompound();
-                compound.setIntArray("Pos", i);
-                stack.setTagCompound(compound);
-            } else {
-                NBTTagCompound compound = stack.getTagCompound();
-                compound.setIntArray("Pos", i);
-            }
+            setPos(stack, i);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;
@@ -44,9 +37,47 @@ public class ItemKappaCompass extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Pos")) {
-            int[] i = stack.getTagCompound().getIntArray("Pos");
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT.POS.getName())) {
+            int[] i = getPos(stack);
             tooltip.add(TextFormatting.GOLD + I18n.format("tooltips.touhou_little_maid.kappa_compass.desc", i[0], i[1], i[2]));
+        }
+    }
+
+    @Nullable
+    public int[] getPos(ItemStack stack) {
+        if (stack.getItem() == this && stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT.POS.getName())) {
+            return stack.getTagCompound().getIntArray(NBT.POS.getName());
+        }
+        return null;
+    }
+
+    public void setPos(ItemStack stack, int[] pos) {
+        if (stack.getItem() == this) {
+            if (!stack.hasTagCompound()) {
+                NBTTagCompound compound = new NBTTagCompound();
+                compound.setIntArray(NBT.POS.getName(), new int[]{pos[0], pos[1], pos[2]});
+                stack.setTagCompound(compound);
+            } else {
+                stack.getTagCompound().setIntArray(NBT.POS.getName(), new int[]{pos[0], pos[1], pos[2]});
+            }
+        }
+    }
+
+    /**
+     * NBT 数据的枚举
+     */
+    private enum NBT {
+        // 记录的坐标
+        POS("Pos");
+
+        String name;
+
+        NBT(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 }
