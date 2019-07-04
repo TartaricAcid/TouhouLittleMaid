@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AttackValue;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
@@ -437,7 +438,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         }
 
         // 驯服
-        if (!this.isTamed() && hand == EnumHand.MAIN_HAND && itemstack.getItem() == Items.CAKE) {
+        Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
+        if (!this.isTamed() && hand == EnumHand.MAIN_HAND && itemstack.getItem() == tamedItem) {
             if (!world.isRemote) {
                 itemstack.shrink(1);
                 this.setTamedBy(player);
@@ -452,16 +454,16 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
         // 写入坐标
         if (this.isTamed() && hand == EnumHand.MAIN_HAND && this.getOwnerId().equals(player.getUniqueID()) && itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
-            if (!itemstack.isEmpty() && itemstack.getItem() == MaidItems.KAPPA_COMPASS && itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("Pos")) {
-                int[] i = itemstack.getTagCompound().getIntArray("Pos");
-                this.setHomePos(new BlockPos(i[0], i[1], i[2]));
+            int[] pos = MaidItems.KAPPA_COMPASS.getPos(itemstack);
+            if (pos != null) {
+                this.setHomePos(new BlockPos(pos[0], pos[1], pos[2]));
                 if (!world.isRemote) {
                     // 尝试移动到这里，距离超过 16 就传送
                     // 没办法，路径系统最大只允许寻路 16
-                    if (this.getPosition().getDistance(i[0], i[1], i[2]) < 16) {
-                        this.getNavigator().tryMoveToXYZ(i[0], i[1], i[2], 0.6f);
+                    if (this.getPosition().getDistance(pos[0], pos[1], pos[2]) < 16) {
+                        this.getNavigator().tryMoveToXYZ(pos[0], pos[1], pos[2], 0.6f);
                     } else {
-                        this.attemptTeleport(i[0], i[1], i[2]);
+                        this.attemptTeleport(pos[0], pos[1], pos[2]);
                     }
                     player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
                 }
@@ -507,40 +509,40 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        if (compound.hasKey("MaidInventory")) {
-            mainInv.deserializeNBT((NBTTagCompound) compound.getTag("MaidInventory"));
+        if (compound.hasKey(NBT.MAID_INVENTORY.getName())) {
+            mainInv.deserializeNBT((NBTTagCompound) compound.getTag(NBT.MAID_INVENTORY.getName()));
         }
-        if (compound.hasKey("BaubleInventory")) {
-            baubleInv.deserializeNBT((NBTTagCompound) compound.getTag("BaubleInventory"));
+        if (compound.hasKey(NBT.BAUBLE_INVENTORY.getName())) {
+            baubleInv.deserializeNBT((NBTTagCompound) compound.getTag(NBT.BAUBLE_INVENTORY.getName()));
         }
-        if (compound.hasKey("IsPickup")) {
-            setPickup(compound.getBoolean("IsPickup"));
+        if (compound.hasKey(NBT.IS_PICKUP.getName())) {
+            setPickup(compound.getBoolean(NBT.IS_PICKUP.getName()));
         }
-        if (compound.hasKey("MaidMode")) {
-            setMode(MaidMode.getMode(compound.getInteger("MaidMode")));
+        if (compound.hasKey(NBT.MAID_MODE.getName())) {
+            setMode(MaidMode.getMode(compound.getInteger(NBT.MAID_MODE.getName())));
         }
-        if (compound.hasKey("MaidExp")) {
-            setExp(compound.getInteger("MaidExp"));
+        if (compound.hasKey(NBT.MAID_EXP.getName())) {
+            setExp(compound.getInteger(NBT.MAID_EXP.getName()));
         }
-        if (compound.hasKey("HomePos")) {
-            int[] pos = compound.getIntArray("HomePos");
+        if (compound.hasKey(NBT.HOME_POS.getName())) {
+            int[] pos = compound.getIntArray(NBT.HOME_POS.getName());
             setHomePos(new BlockPos(pos[0], pos[1], pos[2]));
         }
-        if (compound.hasKey("MaidHome")) {
-            setHome(compound.getBoolean("MaidHome"));
+        if (compound.hasKey(NBT.MAID_HOME.getName())) {
+            setHome(compound.getBoolean(NBT.MAID_HOME.getName()));
         }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setTag("MaidInventory", mainInv.serializeNBT());
-        compound.setTag("BaubleInventory", baubleInv.serializeNBT());
-        compound.setBoolean("IsPickup", isPickup());
-        compound.setInteger("MaidMode", getMode().getModeIndex());
-        compound.setInteger("MaidExp", getExp());
-        compound.setIntArray("HomePos", new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
-        compound.setBoolean("MaidHome", isHome());
+        compound.setTag(NBT.MAID_INVENTORY.getName(), mainInv.serializeNBT());
+        compound.setTag(NBT.BAUBLE_INVENTORY.getName(), baubleInv.serializeNBT());
+        compound.setBoolean(NBT.IS_PICKUP.getName(), isPickup());
+        compound.setInteger(NBT.MAID_MODE.getName(), getMode().getModeIndex());
+        compound.setInteger(NBT.MAID_EXP.getName(), getExp());
+        compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
+        compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
         return compound;
     }
 
@@ -555,7 +557,6 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         return false;
     }
 
-    /*----------------------------------- 相关实体数据的获取与设置 -------------------------------------------*/
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
@@ -634,5 +635,37 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Override
     public void setSwingingArms(boolean swingingArms) {
         this.dataManager.set(ARM_RISE, swingingArms);
+    }
+
+    private enum NBT {
+        // 女仆的物品栏
+        MAID_INVENTORY("MaidInventory"),
+        // 女仆饰品栏
+        BAUBLE_INVENTORY("BaubleInventory"),
+        // 能否捡起物品
+        IS_PICKUP("IsPickup"),
+        // 女仆模式
+        MAID_MODE("MaidMode"),
+        // 女仆经验
+        MAID_EXP("MaidExp"),
+        // Home 的坐标
+        HOME_POS("HomePos"),
+        // 是否开启 Home 模式
+        MAID_HOME("MaidHome");
+
+        private String name;
+
+        /**
+         * 在女仆存储时所使用的 NBT 标签名枚举
+         *
+         * @param name 存储的标签名
+         */
+        NBT(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }
