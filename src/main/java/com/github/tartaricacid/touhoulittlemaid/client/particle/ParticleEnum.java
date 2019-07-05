@@ -1,6 +1,5 @@
-package com.github.tartaricacid.touhoulittlemaid.client.init;
+package com.github.tartaricacid.touhoulittlemaid.client.particle;
 
-import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleFlag;
 import net.minecraft.client.particle.IParticleFactory;
 
 /**

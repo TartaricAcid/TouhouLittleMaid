@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
-import com.github.tartaricacid.touhoulittlemaid.client.init.ParticleEnum;
+import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
 import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityDanmakuRender;
 import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityMaidRender;
+import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityMarisaBroomRender;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import net.minecraft.client.Minecraft;
@@ -18,6 +20,7 @@ public class ClientProxy extends CommonProxy {
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMaid.class, EntityMaidRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityDanmaku.class, EntityDanmakuRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMarisaBroom.class, EntityMarisaBroomRender.FACTORY);
     }
 
     @Override

@@ -87,8 +87,10 @@ public class GoheiGuiEvent {
             }
             timer += 1;
 
-            int w = 224; // 材质宽度
-            int l = 320; // 材质长度
+            // 材质宽度
+            int w = 224;
+            // 材质长度
+            int l = 320;
 
             // 依据类型颜色开始定位材质位置（材质块都是 32 * 32 大小）
             double pStartU = 32 * color;

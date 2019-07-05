@@ -1,13 +1,16 @@
 # Touhou Little Mod Language File
+itemGroup.touhou_little_maid.name=Touhou Little Maid
 
 # Entity
 entity.touhou_little_maid.maid.name=Touhou Little Maid
 entity.touhou_little_maid.danmaku.name=Danmaku
+entity.touhou_little_maid.marisa_broom.name=Marisa's Broom
 
 # Item
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass
 item.touhou_little_maid.hakurei_gohei.name=Hakurei's Gohei
 item.touhou_little_maid.ultramarine_orb_elixir.name=Ultramarine Orb Elixir
+item.touhou_little_maid.marisa_broom.name=Marisa's Broom
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +20,10 @@ import java.util.List;
 
 public class ItemKappaCompass extends Item {
     public ItemKappaCompass() {
-        this.setRegistryName("kappa_compass");
-        this.setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "kappa_compass");
-        this.setMaxStackSize(1);
+        setRegistryName("kappa_compass");
+        setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "kappa_compass");
+        setMaxStackSize(1);
+        setCreativeTab(MaidItems.TABS);
     }
 
     @Override

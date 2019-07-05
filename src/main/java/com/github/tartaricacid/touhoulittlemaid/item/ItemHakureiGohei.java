@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -39,6 +40,7 @@ public class ItemHakureiGohei extends Item {
         setRegistryName("hakurei_gohei");
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".hakurei_gohei");
         setMaxStackSize(1);
+        setCreativeTab(MaidItems.TABS);
         this.attackDamage = 4;
         this.attackSpeed = -2;
     }

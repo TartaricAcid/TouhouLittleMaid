@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.SoundEvents;
@@ -20,6 +21,7 @@ public class UltramarineOrbElixir extends Item implements IMaidBauble {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".ultramarine_orb_elixir");
         setMaxStackSize(1);
         setMaxDamage(5);
+        setCreativeTab(MaidItems.TABS);
     }
 
     @Override
