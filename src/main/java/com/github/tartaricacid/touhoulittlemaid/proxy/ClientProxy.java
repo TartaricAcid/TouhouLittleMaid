@@ -1,9 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
+import com.github.tartaricacid.touhoulittlemaid.client.init.ParticleEnum;
 import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityDanmakuRender;
 import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -21,6 +23,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+        Minecraft.getMinecraft().effectRenderer.registerParticle(ParticleEnum.FLAG.getId(), ParticleEnum.FLAG.getParticle());
     }
 
     @Override

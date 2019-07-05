@@ -175,16 +175,14 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         xInRange = (i + 143) < mouseX && mouseX < (i + 169);
         yInRange = (j + 63) < mouseY && mouseY < (j + 79);
         if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pickup",
-                    I18n.format("gui.touhou_little_maid." + entityMaid.isPickup())), mouseX, mouseY);
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pickup." + entityMaid.isPickup()), mouseX, mouseY);
         }
 
         // 拾物模式描述
         xInRange = (i + 116) < mouseX && mouseX < (i + 142);
         yInRange = (j + 63) < mouseY && mouseY < (j + 79);
         if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.home",
-                    I18n.format("gui.touhou_little_maid." + entityMaid.isHome())), mouseX, mouseY);
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.home." + entityMaid.isHome()), mouseX, mouseY);
         }
     }
 

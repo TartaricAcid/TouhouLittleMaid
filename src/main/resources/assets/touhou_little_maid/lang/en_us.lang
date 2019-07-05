@@ -45,15 +45,15 @@ mode.touhou_little_maid.torch=Torch
 
 # GUI
 gui.touhou_little_maid.button.mode_switch=This Maid Is In %s Mode.
-gui.touhou_little_maid.info.healthy=HP: %.0f/%.0f
-gui.touhou_little_maid.info.armor=AR: %.0f/20
+gui.touhou_little_maid.info.healthy=HP: %.1f/%.1f
+gui.touhou_little_maid.info.armor=AR: %.1f/20.0
 gui.touhou_little_maid.info.attack=AT: %.1f
 gui.touhou_little_maid.info.experience=Exp: %d
 gui.touhou_little_maid.tab.main=Main
 gui.touhou_little_maid.tab.inventory=Inventory
 gui.touhou_little_maid.tab.bauble=Bauble
-gui.touhou_little_maid.button.pickup=Pick Mode Is %s.
-gui.touhou_little_maid.button.home=Home Mode Is %s.
-gui.touhou_little_maid.true=Enable
-gui.touhou_little_maid.false=Disable
+gui.touhou_little_maid.button.pickup.true=Pick Mode Is Enable.
+gui.touhou_little_maid.button.pickup.false=Pick Mode Is Disable.
+gui.touhou_little_maid.button.home.true=Home Mode Is Enable.
+gui.touhou_little_maid.button.home.false=Home Mode Is Disable.
 

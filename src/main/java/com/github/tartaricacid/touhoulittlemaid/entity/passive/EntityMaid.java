@@ -29,6 +29,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -405,6 +406,23 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         }
 
         return isInvulnerable;
+    }
+
+    @Override
+    protected void damageArmor(float damage) {
+        // 依据原版玩家护甲耐久掉落机制书写而成
+        damage = damage / 4.0F;
+
+        if (damage < 1.0F) {
+            damage = 1.0F;
+        }
+
+        for (int i = 0; i < this.armorInvWrapper.getSlots(); ++i) {
+            ItemStack itemstack = this.armorInvWrapper.getStackInSlot(i);
+            if (itemstack.getItem() instanceof ItemArmor) {
+                itemstack.damageItem((int) damage, this);
+            }
+        }
     }
 
     @Nullable
