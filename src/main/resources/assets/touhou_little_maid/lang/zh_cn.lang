@@ -1,0 +1,69 @@
+# Touhou Little Mod Language File
+item_group.touhou_little_maid.name=Touhou Little Maid
+
+# Entity
+entity.touhou_little_maid.maid.name=Touhou Little Maid
+entity.touhou_little_maid.danmaku.name=弹幕
+entity.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
+
+# Item
+item.touhou_little_maid.kappa_compass.name=河童的罗盘
+item.touhou_little_maid.hakurei_gohei.name=博丽的御币
+item.touhou_little_maid.ultramarine_orb_elixir.name=绀珠之药
+item.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
+
+# Block
+tile.touhou_little_maid.garage_kit.name=手办
+
+# Tooltips
+tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
+tooltips.touhou_little_maid.kappa_compass.desc=坐标：%d，%d，%d
+tooltips.touhou_little_maid.ultramarine_orb_elixir.desc=剩余使用次数：%d
+tooltips.touhou_little_maid.garage_kit.desc=实体：%s
+
+# Message
+message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
+message.touhou_little_maid.kappa_compass.write_fail=坐标写入失败！
+
+# Info
+info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
+info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
+
+# Config
+config.touhou_little_maid.maid_config=女仆相关配置
+config.touhou_little_maid.maid_config.maid_tamed_item=女仆驯服所使用的物品
+
+# Danmaku Type
+danmaku_type.touhou_little_maid.pellet=点弹
+danmaku_type.touhou_little_maid.ball=小玉
+danmaku_type.touhou_little_maid.big_ball=中玉
+danmaku_type.touhou_little_maid.bubble=大玉
+danmaku_type.touhou_little_maid.jellybean=椭弹
+danmaku_type.touhou_little_maid.heart=心弹
+danmaku_type.touhou_little_maid.star=星弹
+danmaku_type.touhou_little_maid.amulet=札弹
+danmaku_type.touhou_little_maid.orbs=环玉
+
+# Mode
+mode.touhou_little_maid.idle=空闲
+mode.touhou_little_maid.attack=攻击
+mode.touhou_little_maid.range_attack=弓兵
+mode.touhou_little_maid.danmaku_attack=弹幕攻击
+mode.touhou_little_maid.farm=农场
+mode.touhou_little_maid.feed=喂养
+mode.touhou_little_maid.shears=剪刀
+mode.touhou_little_maid.torch=火把
+
+# GUI
+gui.touhou_little_maid.button.mode_switch=女仆当前处于%s模式
+gui.touhou_little_maid.info.healthy=血量：%.1f/%.1f
+gui.touhou_little_maid.info.armor=护甲：%.1f/20.0
+gui.touhou_little_maid.info.attack=伤害：%.1f
+gui.touhou_little_maid.info.experience=经验：%d
+gui.touhou_little_maid.tab.main=主界面
+gui.touhou_little_maid.tab.inventory=物品栏
+gui.touhou_little_maid.tab.bauble=饰品栏
+gui.touhou_little_maid.button.pickup.true=拾物模式已经开启
+gui.touhou_little_maid.button.pickup.false=拾物模式已经关闭
+gui.touhou_little_maid.button.home.true=Home 模式已经开启
+gui.touhou_little_maid.button.home.false=Home 模式已经关闭

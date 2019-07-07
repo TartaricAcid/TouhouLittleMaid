@@ -39,6 +39,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -55,6 +56,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityMaid extends EntityTameable implements IRangedAttackMob {
+    private static final ResourceLocation LOOT_TABLE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entities/maid");
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable;
@@ -384,8 +386,10 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             // 如果攻击对象是玩家
             if (entityIn instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) entityIn;
-                ItemStack itemMaidHand = this.getHeldItemMainhand(); // 攻击方手持的物品
-                ItemStack itemPlayerHand = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY; // 玩家手持物品
+                // 攻击方手持的物品
+                ItemStack itemMaidHand = this.getHeldItemMainhand();
+                // 玩家手持物品
+                ItemStack itemPlayerHand = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY;
 
                 // 如果玩家手持盾牌而且还处于持盾状态，并且所持物品能够破盾
                 if (!itemMaidHand.isEmpty() && !itemPlayerHand.isEmpty() && itemMaidHand.getItem().canDisableShield(itemMaidHand, itemPlayerHand, entityplayer, this)
@@ -444,6 +448,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 if (this.isSitting()) {
                     this.setSitting(false);
                 } else {
+                    this.setRevengeTarget(null);
                     this.setSitting(true);
                 }
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
@@ -522,6 +527,12 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Override
     protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
         // 不要调用父类的掉落方法，很坑爹的会掉落耐久损失很多的东西
+    }
+
+    @Nullable
+    @Override
+    protected ResourceLocation getLootTable() {
+        return LOOT_TABLE;
     }
 
     @Override

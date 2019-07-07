@@ -1,0 +1,24 @@
+{
+  "type": "entity",
+  "pools": [
+    {
+      "name": "touhou_little_maid:garage_kit",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "touhou_little_maid:garage_kit",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            }, {
+              "function": "set_nbt",
+              "tag": "{\"Character\":\"touhou_little_maid:entity.passive.maid\"}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

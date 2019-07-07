@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -38,7 +39,7 @@ public class EntityMarisaBroom extends EntityLiving {
         if (!world.isRemote && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             if (player.isSneaking()) {
-                EntityItem item = new EntityItem(world, this.posX, this.posY, this.posZ, MaidItems.MARISA_BROOM.getDefaultInstance());
+                EntityItem item = new EntityItem(world, this.posX, this.posY, this.posZ, new ItemStack(MaidItems.MARISA_BROOM));
                 item.setPickupDelay(10);
                 this.setDead();
                 world.spawnEntity(item);

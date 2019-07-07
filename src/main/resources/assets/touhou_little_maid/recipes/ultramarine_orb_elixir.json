@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "touhou_little_maid:ultramarine_orb_elixir",
+  "result": {
+    "item": "touhou_little_maid:ultramarine_orb_elixir"
+  },
+  "pattern": [
+    "CEC",
+    "CPC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:dye",
+      "data": 6
+    },
+    "P": {
+      "item": "minecraft:ender_pearl"
+    },
+    "E": {
+      "item": "minecraft:emerald_block"
+    }
+  }
+}

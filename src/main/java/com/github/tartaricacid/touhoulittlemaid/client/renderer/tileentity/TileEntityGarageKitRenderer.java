@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author TartaricAcid
@@ -26,6 +27,12 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
         GlStateManager.translate(x, y + 0.0625, z);
         GlStateManager.scale(0.5, 0.5, 0.5);
         GlStateManager.translate(1, 0, 1);
+
+        if (Minecraft.isAmbientOcclusionEnabled()) {
+            GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        } else {
+            GlStateManager.shadeModel(GL11.GL_FLAT);
+        }
 
         switch (facing) {
             case NORTH:

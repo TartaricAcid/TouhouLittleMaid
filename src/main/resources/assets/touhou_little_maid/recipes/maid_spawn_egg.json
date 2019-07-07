@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "touhou_little_maid:maid_spawn_egg",
+  "result": {
+    "type": "minecraft:item_nbt",
+    "item": "minecraft:spawn_egg",
+    "nbt": {
+      "EntityTag": {
+        "id": "touhou_little_maid:entity.passive.maid"
+      }
+    }
+  },
+  "pattern": [
+    "RWW",
+    "RDW",
+    "RRW"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:dye",
+      "data": 15
+    },
+    "R": {
+      "item": "minecraft:dye",
+      "data": 1
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    }
+  }
+}

@@ -25,6 +25,10 @@ tooltips.touhou_little_maid.garage_kit.desc=Character: %s
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
 message.touhou_little_maid.kappa_compass.write_fail=Write Position Fail!
 
+# Info
+info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
+info.touhou_little_maid.maid.set_pos=§a§lMaid Pos: %d, %d, %d
+
 # Config
 config.touhou_little_maid.maid_config=Maid Config
 config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item

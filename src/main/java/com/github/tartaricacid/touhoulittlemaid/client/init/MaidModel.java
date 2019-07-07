@@ -20,7 +20,7 @@ import java.util.Objects;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
-public class MaidModel {
+public final class MaidModel {
     @SubscribeEvent
     public static void register(ModelRegistryEvent event) {
         // Tile Entity Special Renderer

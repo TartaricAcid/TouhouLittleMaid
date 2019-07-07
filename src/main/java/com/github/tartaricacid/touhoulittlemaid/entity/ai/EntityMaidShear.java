@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
@@ -31,7 +32,8 @@ public class EntityMaidShear extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (entityMaid.getMode() != MaidMode.SHEARS || entityMaid.isSitting()) {
+        if (entityMaid.getMode() != MaidMode.SHEARS || entityMaid.isSitting() ||
+                !(entityMaid.getHeldItemMainhand().getItem() instanceof ItemShears)) {
             return false;
         }
 

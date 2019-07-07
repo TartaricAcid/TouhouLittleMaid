@@ -140,7 +140,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
      * @param name 实体 ID
      */
     private ItemStack getItemStackWithCharacter(String name) {
-        ItemStack stack = Item.getItemFromBlock(this).getDefaultInstance();
+        ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
         getTagCompoundSafe(stack).setString(NBT.CHARACTER.getName(), name);
         return stack;
     }

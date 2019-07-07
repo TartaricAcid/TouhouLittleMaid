@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "touhou_little_maid:kappa_compass",
+  "result": {
+    "item": "touhou_little_maid:kappa_compass"
+  },
+  "pattern": [
+    "ORO",
+    "OOO",
+    "OLO"
+  ],
+  "key": {
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "L": {
+      "item": "minecraft:dye",
+      "data": 4
+    }
+  }
+}
