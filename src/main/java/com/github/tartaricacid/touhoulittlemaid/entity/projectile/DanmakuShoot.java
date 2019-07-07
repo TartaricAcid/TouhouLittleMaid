@@ -8,8 +8,7 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public final class DanmakuShoot {
-    private static Random random = new Random();
-
+    private static Random RANDOM = new Random();
 
     /**
      * 自机狙弹幕

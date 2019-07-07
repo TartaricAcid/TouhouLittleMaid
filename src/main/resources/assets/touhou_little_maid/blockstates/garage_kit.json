@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "touhou_little_maid:garage_kit"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "model": "touhou_little_maid:item/garage_kit"
+      }
+    ]
+  }
+}

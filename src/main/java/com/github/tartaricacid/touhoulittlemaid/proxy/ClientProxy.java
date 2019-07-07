@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
 import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
-import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityDanmakuRender;
-import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityMaidRender;
-import com.github.tartaricacid.touhoulittlemaid.client.render.entity.EntityMarisaBroomRender;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityDanmakuRender;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRender;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMarisaBroomRender;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;

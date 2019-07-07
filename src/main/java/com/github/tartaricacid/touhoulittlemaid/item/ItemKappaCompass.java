@@ -39,8 +39,8 @@ public class ItemKappaCompass extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT.POS.getName())) {
-            int[] i = getPos(stack);
+        int[] i = getPos(stack);
+        if (i != null) {
             tooltip.add(TextFormatting.GOLD + I18n.format("tooltips.touhou_little_maid.kappa_compass.desc", i[0], i[1], i[2]));
         }
     }

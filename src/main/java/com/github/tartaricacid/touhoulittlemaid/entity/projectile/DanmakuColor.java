@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 public enum DanmakuColor {
+    // 各种颜色
     RED("red", 0),
     ORANGE("orange", 1),
     YELLOW("yellow", 2),

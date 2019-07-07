@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.render.entity.layers;
+package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMaidModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;

@@ -75,7 +75,7 @@ public class ItemHakureiGohei extends Item {
     @Override
     public ItemStack getDefaultInstance() {
         ItemStack itemStack = new ItemStack(this);
-        getTagCompoundSafe(itemStack).setInteger("GoheiMode", 0);
+        setGoheiMode(itemStack, DanmakuType.PELLET);
         return itemStack;
     }
 
@@ -113,12 +113,19 @@ public class ItemHakureiGohei extends Item {
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
     }
 
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.hakurei_gohei.desc", I18n.format("danmaku_type.touhou_little_maid." + getGoheiMode(stack).getName())));
+    }
+
+    // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
+
     public DanmakuType getGoheiMode(ItemStack stack) {
-        return DanmakuType.getType(getTagCompoundSafe(stack).getInteger("GoheiMode"));
+        return DanmakuType.getType(getTagCompoundSafe(stack).getInteger(NBT.MODE.getName()));
     }
 
     public void setGoheiMode(ItemStack stack, DanmakuType mode) {
-        getTagCompoundSafe(stack).setInteger("GoheiMode", mode.getIndex());
+        getTagCompoundSafe(stack).setInteger(NBT.MODE.getName(), mode.getIndex());
     }
 
     private NBTTagCompound getTagCompoundSafe(ItemStack stack) {
@@ -130,8 +137,17 @@ public class ItemHakureiGohei extends Item {
         return tagCompound;
     }
 
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.hakurei_gohei.desc", I18n.format("danmaku_type.touhou_little_maid." + getGoheiMode(stack).getName())));
+    private enum NBT {
+        // 御币的模式
+        MODE("GoheiMode");
+        private String name;
+
+        NBT(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

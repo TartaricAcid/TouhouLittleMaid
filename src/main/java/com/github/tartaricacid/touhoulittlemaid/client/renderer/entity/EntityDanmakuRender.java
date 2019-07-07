@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.render.entity;
+package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;

@@ -1,8 +1,8 @@
-package com.github.tartaricacid.touhoulittlemaid.client.render.entity;
+package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMaidModel;
-import com.github.tartaricacid.touhoulittlemaid.client.render.entity.layers.LayerMaidHeldItem;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidHeldItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
