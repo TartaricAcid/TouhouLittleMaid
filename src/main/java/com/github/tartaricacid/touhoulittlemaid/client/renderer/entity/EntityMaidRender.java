@@ -56,6 +56,17 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static class Factory implements IRenderFactory<EntityMaid> {
         @Override
         public Render<? super EntityMaid> createRenderFor(RenderManager manager) {
+            /*
+            TODO: 加载多个模型功能
+            Gson gson = new Gson();
+            try {
+                CustomModelPOJO pojo = gson.fromJson(new FileReader(new File("config/model.json")), new TypeToken<CustomModelPOJO>() {
+                }.getType());
+                return new EntityMaidRender(manager, new EntityModelJson(pojo), 0.5f);
+            } catch (IOException ioe) {
+                ;
+            }
+            */
             return new EntityMaidRender(manager, new EntityMaidModel(), 0.5f);
         }
     }

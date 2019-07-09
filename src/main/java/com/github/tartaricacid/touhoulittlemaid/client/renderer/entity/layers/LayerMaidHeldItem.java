@@ -39,6 +39,7 @@ public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
             if (entityMaid.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
+            // TODO：修正强制类型转换
             ((EntityMaidModel) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, handSide);
             GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
