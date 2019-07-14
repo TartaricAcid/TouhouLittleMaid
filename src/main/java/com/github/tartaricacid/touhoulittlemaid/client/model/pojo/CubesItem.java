@@ -12,7 +12,7 @@ public class CubesItem {
     private boolean mirror;
 
     @SerializedName("size")
-    private List<Integer> size;
+    private List<Float> size;
 
     @SerializedName("origin")
     private List<Float> origin;
@@ -25,7 +25,10 @@ public class CubesItem {
         return mirror;
     }
 
-    public List<Integer> getSize() {
+    /**
+     * 基岩版这货居然可以为浮点数，服了
+     */
+    public List<Float> getSize() {
         return size;
     }
 

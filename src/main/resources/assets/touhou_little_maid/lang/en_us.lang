@@ -68,3 +68,30 @@ gui.touhou_little_maid.button.pickup.false=Pick Mode Is Disable.
 gui.touhou_little_maid.button.home.true=Home Mode Is Enable.
 gui.touhou_little_maid.button.home.false=Home Mode Is Disable.
 
+# Skin Gui
+gui.touhou_little_maid.skin.text.author=Author: %s
+gui.touhou_little_maid.skin.text.version=Version: %s
+gui.touhou_little_maid.skin.text.date=Date: %s
+
+# Model Pack
+pack.vanilla_touhou_model.name=Vanilla Touhou Model
+pack.vanilla_touhou_model.desc=Default Model
+
+model.vanilla_touhou_model.hakurei_reimu.name=Reimu Hakurei
+model.vanilla_touhou_model.yakumo_ran.name=Ran Yakumo
+model.vanilla_touhou_model.inubashiri_momizi.name=Momiji Inubashiri
+model.vanilla_touhou_model.komeiji_satori.name=Satori Komeiji
+model.vanilla_touhou_model.reisen_udongein_inaba.name=Reisen Udongein Inaba
+model.vanilla_touhou_model.yasaka_kanako.name=Kanako Yasaka
+model.vanilla_touhou_model.sekibanki.name=Sekibanki
+model.vanilla_touhou_model.hata_no_kokoro.name=Hata no Kokoro
+
+model.vanilla_touhou_model.hakurei_reimu.desc=§7Shrine Maiden of Paradise
+model.vanilla_touhou_model.yakumo_ran.desc=§7Shikigami of the Gap Youkai
+model.vanilla_touhou_model.inubashiri_momizi.desc=§7The Petty Patrol Tengu
+model.vanilla_touhou_model.komeiji_satori.desc=§7The Girl Even the Vengeful Spirits Fear
+model.vanilla_touhou_model.reisen_udongein_inaba.desc=§7Lunatic Moon Rabbit
+model.vanilla_touhou_model.yasaka_kanako.desc=§7The Avatar of Mountains and Lakes
+model.vanilla_touhou_model.sekibanki.desc=§7The Rokurokubi Horror
+model.vanilla_touhou_model.hata_no_kokoro.desc=§7The Expressive Poker Face
+

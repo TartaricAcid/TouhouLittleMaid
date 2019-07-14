@@ -18,6 +18,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Objects;
 
+/**
+ * 这个类似乎名称容易产生误解<br>
+ * 它是加载该模组原版模型和材质的地方，因为这个模组主题是女仆<br>
+ * 所以名字才叫 Maid，而不是因为它是加载女仆实体模型的地方<br>
+ * 请谨记
+ */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
 public final class MaidModel {

@@ -35,6 +35,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(ChangeMaidModeMessage.Handler.class, ChangeMaidModeMessage.class, 2, Side.SERVER);
         INSTANCE.registerMessage(ChangeHomeDataMessage.Handler.class, ChangeHomeDataMessage.class, 3, Side.SERVER);
         INSTANCE.registerMessage(ChangeGoheiMessage.Handler.class, ChangeGoheiMessage.class, 4, Side.SERVER);
+        INSTANCE.registerMessage(ChangeMaidSkinMessage.Handler.class, ChangeMaidSkinMessage.class, 5, Side.SERVER);
     }
 
     public void init(FMLInitializationEvent event) {

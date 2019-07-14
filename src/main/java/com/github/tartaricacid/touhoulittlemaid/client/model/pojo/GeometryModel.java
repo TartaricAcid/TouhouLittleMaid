@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class GeometryEntityMaidModel {
+public class GeometryModel {
     @SerializedName("bones")
     private List<BonesItem> bones;
 
@@ -21,7 +21,7 @@ public class GeometryEntityMaidModel {
     private int visibleBoundsWidth;
 
     @SerializedName("visible_bounds_offset")
-    private List<Integer> visibleBoundsOffset;
+    private List<Float> visibleBoundsOffset;
 
     public List<BonesItem> getBones() {
         return bones;
@@ -43,14 +43,14 @@ public class GeometryEntityMaidModel {
         return visibleBoundsWidth;
     }
 
-    public List<Integer> getVisibleBoundsOffset() {
+    public List<Float> getVisibleBoundsOffset() {
         return visibleBoundsOffset;
     }
 
     @Override
     public String toString() {
         return
-                "GeometryEntityMaidModel{" +
+                "GeometryModel{" +
                         "bones = '" + bones + '\'' +
                         ",textureheight = '" + textureheight + '\'' +
                         ",texturewidth = '" + texturewidth + '\'' +

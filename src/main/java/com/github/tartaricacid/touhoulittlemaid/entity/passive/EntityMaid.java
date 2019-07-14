@@ -67,6 +67,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private static final DataParameter<BlockPos> HOME_POS = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<String> MODEL_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<String> TEXTURE_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
@@ -119,6 +121,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
         this.dataManager.register(HOME, Boolean.FALSE);
         this.dataManager.register(ARM_RISE, Boolean.FALSE);
+        this.dataManager.register(MODEL_LOCATION, "touhou_little_maid:models/entity/hakurei_reimu.json");
+        this.dataManager.register(TEXTURE_LOCATION, "touhou_little_maid:textures/entity/hakurei_reimu.png");
     }
 
     @Override
@@ -560,6 +564,12 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (compound.hasKey(NBT.MAID_HOME.getName())) {
             setHome(compound.getBoolean(NBT.MAID_HOME.getName()));
         }
+        if (compound.hasKey(NBT.MODEL_LOCATION.getName())) {
+            setModelLocation(compound.getString(NBT.MODEL_LOCATION.getName()));
+        }
+        if (compound.hasKey(NBT.TEXTURE_LOCATION.getName())) {
+            setTextureLocation(compound.getString(NBT.TEXTURE_LOCATION.getName()));
+        }
     }
 
     @Override
@@ -572,6 +582,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         compound.setInteger(NBT.MAID_EXP.getName(), getExp());
         compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
+        compound.setString(NBT.MODEL_LOCATION.getName(), getModelLocation());
+        compound.setString(NBT.TEXTURE_LOCATION.getName(), getTextureLocation());
         return compound;
     }
 
@@ -666,6 +678,22 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.dataManager.set(ARM_RISE, swingingArms);
     }
 
+    public String getModelLocation() {
+        return this.dataManager.get(MODEL_LOCATION);
+    }
+
+    public void setModelLocation(String modelLocation) {
+        this.dataManager.set(MODEL_LOCATION, modelLocation);
+    }
+
+    public String getTextureLocation() {
+        return this.dataManager.get(TEXTURE_LOCATION);
+    }
+
+    public void setTextureLocation(String textureLocation) {
+        this.dataManager.set(TEXTURE_LOCATION, textureLocation);
+    }
+
     private enum NBT {
         // 女仆的物品栏
         MAID_INVENTORY("MaidInventory"),
@@ -680,7 +708,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         // Home 的坐标
         HOME_POS("HomePos"),
         // 是否开启 Home 模式
-        MAID_HOME("MaidHome");
+        MAID_HOME("MaidHome"),
+        // 模型位置
+        MODEL_LOCATION("ModelLocation"),
+        // 材质位置
+        TEXTURE_LOCATION("TextureLocation");
 
         private String name;
 

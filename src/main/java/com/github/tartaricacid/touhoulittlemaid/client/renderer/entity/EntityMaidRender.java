@@ -1,10 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMaidModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidHeldItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
@@ -22,11 +22,21 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
-    private static ResourceLocation resourceLocation = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/reimu.png");
 
     public EntityMaidRender(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
         super(rendermanagerIn, modelbaseIn, shadowsizeIn);
         this.addLayer(new LayerMaidHeldItem(this));
+    }
+
+    @Override
+    public void doRender(EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        // 尝试读取模型
+        EntityModelJson modelJson = ClientProxy.LOCATION_MODEL_MAP.get(entity.getModelLocation());
+        // 如果模型不为空
+        if (modelJson != null) {
+            this.mainModel = modelJson;
+        }
+        super.doRender(entity, x, y, z, entityYaw, partialTicks);
     }
 
     @Override
@@ -39,6 +49,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     protected void renderEntityName(EntityMaid entityIn, double x, double y, double z, String name, double distanceSq) {
         String str;
         BlockPos pos = entityIn.getHomePos();
+        // 判断坐标是否为 0,0,0，显示不同的字符
         if (pos.equals(BlockPos.ORIGIN)) {
             str = I18n.format("info.touhou_little_maid.maid.unset_pos");
         } else {
@@ -50,24 +61,20 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityMaid entity) {
-        return resourceLocation;
+        // 皮之不存，毛将焉附？
+        // 先判定模型在不在，模型都不在，直接返回默认材质
+        if (ClientProxy.LOCATION_MODEL_MAP.get(entity.getModelLocation()) != null) {
+            return new ResourceLocation(entity.getTextureLocation());
+        } else {
+            return new ResourceLocation("touhou_little_maid:textures/entity/hakurei_reimu.png");
+        }
     }
 
     public static class Factory implements IRenderFactory<EntityMaid> {
         @Override
         public Render<? super EntityMaid> createRenderFor(RenderManager manager) {
-            /*
-            TODO: 加载多个模型功能
-            Gson gson = new Gson();
-            try {
-                CustomModelPOJO pojo = gson.fromJson(new FileReader(new File("config/model.json")), new TypeToken<CustomModelPOJO>() {
-                }.getType());
-                return new EntityMaidRender(manager, new EntityModelJson(pojo), 0.5f);
-            } catch (IOException ioe) {
-                ;
-            }
-            */
-            return new EntityMaidRender(manager, new EntityMaidModel(), 0.5f);
+            // 加载默认的灵梦模型
+            return new EntityMaidRender(manager, ClientProxy.LOCATION_MODEL_MAP.get("touhou_little_maid:models/entity/hakurei_reimu.json"), 0.5f);
         }
     }
 }

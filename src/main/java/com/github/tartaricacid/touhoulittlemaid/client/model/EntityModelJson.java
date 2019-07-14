@@ -23,7 +23,7 @@ import java.util.List;
  * @author TartaricAcid
  * @date 2019/7/9 14:18
  **/
-public class EntityModelJsonLoader extends ModelBase {
+public class EntityModelJson extends ModelBase {
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -37,13 +37,13 @@ public class EntityModelJsonLoader extends ModelBase {
      */
     private List<ModelRenderer> shouldRender = new ArrayList<>();
 
-    public EntityModelJsonLoader(CustomModelPOJO pojo) {
+    public EntityModelJson(CustomModelPOJO pojo) {
         // 材质的长度、宽度
-        textureWidth = pojo.getGeometryEntityMaidModel().getTexturewidth();
-        textureHeight = pojo.getGeometryEntityMaidModel().getTextureheight();
+        textureWidth = pojo.getGeometryModel().getTexturewidth();
+        textureHeight = pojo.getGeometryModel().getTextureheight();
 
         // 往 indexBones 里面注入数据，为后续坐标转换做参考
-        for (BonesItem bones : pojo.getGeometryEntityMaidModel().getBones()) {
+        for (BonesItem bones : pojo.getGeometryModel().getBones()) {
             // 塞索引，这是给后面坐标转换用的
             indexBones.put(bones.getName(), bones);
             // 塞入新建的空 ModelRenderer 实例
@@ -52,7 +52,7 @@ public class EntityModelJsonLoader extends ModelBase {
         }
 
         // 开始往 ModelRenderer 实例里面塞数据
-        for (BonesItem bones : pojo.getGeometryEntityMaidModel().getBones()) {
+        for (BonesItem bones : pojo.getGeometryModel().getBones()) {
             // 骨骼名称，注意因为后面动画的需要，头部、手部、腿部等骨骼命名必须是固定死的
             String name = bones.getName();
             // 旋转点，可能为空
@@ -86,12 +86,12 @@ public class EntityModelJsonLoader extends ModelBase {
             // 塞入 Cube List
             for (CubesItem cubes : bones.getCubes()) {
                 List<Integer> uv = cubes.getUv();
-                List<Integer> size = cubes.getSize();
+                List<Float> size = cubes.getSize();
                 boolean mirror = cubes.isMirror();
 
                 model.cubeList.add(new ModelBox(model, uv.get(0), uv.get(1),
                         convertOrigin(bones, cubes, 0), convertOrigin(bones, cubes, 1), convertOrigin(bones, cubes, 2),
-                        size.get(0), size.get(1), size.get(2), 0, mirror));
+                        size.get(0).intValue(), size.get(1).intValue(), size.get(2).intValue(), 0, mirror));
             }
         }
     }
@@ -179,8 +179,12 @@ public class EntityModelJsonLoader extends ModelBase {
     }
 
     private ModelRenderer getArmForSide(EnumHandSide side) {
-        // TODO：null 检查
-        return side == EnumHandSide.LEFT ? modelMap.get("armLeft") : modelMap.get("armRight");
+        if (modelMap.get("armLeft") != null && modelMap.get("armRight") != null) {
+            return side == EnumHandSide.LEFT ? modelMap.get("armLeft") : modelMap.get("armRight");
+        } else {
+            // TODO: Null 问题解决
+            return null;
+        }
     }
 
     /**

@@ -6,15 +6,15 @@ public class CustomModelPOJO {
     @SerializedName("format_version")
     private String formatVersion;
 
-    @SerializedName("geometry.EntityMaidModel")
-    private GeometryEntityMaidModel geometryEntityMaidModel;
+    @SerializedName("geometry.model")
+    private GeometryModel geometryModel;
 
     public String getFormatVersion() {
         return formatVersion;
     }
 
-    public GeometryEntityMaidModel getGeometryEntityMaidModel() {
-        return geometryEntityMaidModel;
+    public GeometryModel getGeometryModel() {
+        return geometryModel;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class CustomModelPOJO {
         return
                 "CustomModelPOJO{" +
                         "format_version = '" + formatVersion + '\'' +
-                        ",geometry.EntityMaidModel = '" + geometryEntityMaidModel + '\'' +
+                        ",geometry.model = '" + geometryModel + '\'' +
                         "}";
     }
 }

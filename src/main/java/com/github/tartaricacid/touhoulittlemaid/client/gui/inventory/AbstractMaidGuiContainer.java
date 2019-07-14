@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGuiMessage;
@@ -98,6 +99,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         toggleHome = new GuiButtonToggle(11, i + 116, j + 63, 26, 16, entityMaid.isHome());
         toggleHome.initTextureValues(178, 36, 28, 18, BACKGROUND);
         this.buttonList.add(toggleHome);
+
+        // 切换模型的按钮
+        this.buttonList.add(new GuiButtonImage(12, i + 65, j + 9, 9,
+                9, 178, 72, 10, BACKGROUND));
+
     }
 
     @Override
@@ -108,36 +114,49 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             if (entityMaid.isPickup()) {
                 togglePickup.setStateTriggered(false);
                 CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(entityMaid.getUniqueID(), false));
+                return;
             } else {
                 togglePickup.setStateTriggered(true);
                 CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(entityMaid.getUniqueID(), true));
+                return;
             }
         }
 
         if (button.id == 1) {
             CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), entityMaid.getEntityId(), 1));
+            return;
         }
 
         if (button.id == 2) {
             CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), entityMaid.getEntityId(), 2));
+            return;
         }
         if (button.id == 3) {
             CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), entityMaid.getEntityId(), 3));
+            return;
         }
 
         if (button.id == 10) {
             int modeIndex = (entityMaid.getMode().getModeIndex() + 1 > MaidMode.getLength() - 1) ? 0 : (entityMaid.getMode().getModeIndex() + 1);
             CommonProxy.INSTANCE.sendToServer(new ChangeMaidModeMessage(entityMaid.getUniqueID(), MaidMode.getMode(modeIndex)));
+            return;
         }
 
         if (button.id == 11) {
             if (entityMaid.isHome()) {
                 toggleHome.setStateTriggered(false);
                 CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(entityMaid.getUniqueID(), false));
+                return;
             } else {
                 toggleHome.setStateTriggered(true);
                 CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(entityMaid.getUniqueID(), true));
+                return;
             }
+        }
+
+        if (button.id == 12) {
+            // 避免多线程的 Bug
+            mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidSkinGui(entityMaid)));
         }
     }
 
