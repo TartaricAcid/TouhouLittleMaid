@@ -47,6 +47,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
@@ -135,6 +136,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Override
     protected void collideWithNearbyEntities() {
         super.collideWithNearbyEntities();
+
+        // 先判断拾物模式是否开启，没有开启的话，什么都不会吸收
+        if (!this.isPickup()) {
+            return;
+        }
 
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this,
                 this.getEntityBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), IS_PICKUP);
@@ -602,7 +608,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        return (T) new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);
+        } else {
+            return super.getCapability(capability, facing);
+        }
     }
 
     public ItemStackHandler getMainInv() {

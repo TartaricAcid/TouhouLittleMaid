@@ -13,6 +13,7 @@ public class EntityMaidPickup extends EntityAIBase {
     private float speed;
     private Entity entityPickup;
     private int countTime;
+    private List<Entity> list;
 
     public EntityMaidPickup(EntityMaid entityMaid, float speed) {
         this.entityMaid = entityMaid;
@@ -23,10 +24,12 @@ public class EntityMaidPickup extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
+        // 模式判定，如果模式不对，不进行拾取
         if (!entityMaid.isPickup() || entityMaid.isSitting()) {
             return false;
         }
 
+        // 计时判定，时间不到不进行拾取
         if (countTime > 0) {
             countTime--;
             return false;
@@ -34,46 +37,56 @@ public class EntityMaidPickup extends EntityAIBase {
 
         countTime = 10;
 
-        List<Entity> list = this.entityMaid.world.getEntitiesInAABBexcluding(entityMaid,
+        // 获取初始拾取列表
+        list = this.entityMaid.world.getEntitiesInAABBexcluding(entityMaid,
                 this.entityMaid.getEntityBoundingBox().expand(8, 2, 8).expand(-8, -2, -8),
                 EntityMaid.IS_PICKUP);
-        if (!list.isEmpty()) {
-            for (Entity entity : list) {
-                if (entity instanceof EntityItem && entityMaid.canEntityBeSeen(entity)) {
-                    this.entityPickup = entity;
-                    if (entityMaid.canInsertSlot(((EntityItem) entity).getItem())) {
-                        return true;
-                    }
-                }
 
-                if (entity instanceof EntityXPOrb && entityMaid.canEntityBeSeen(entity)) {
-                    entityPickup = entity;
-                    return true;
-                }
-            }
-        }
-        return false;
+        // 列表不为空，就执行
+        return !list.isEmpty();
     }
 
     @Override
     public void updateTask() {
-        if (entityPickup != null) {
+        // 检查拾取的对象
+        if (entityPickup != null && entityPickup.isEntityAlive()) {
             entityMaid.getLookHelper().setLookPositionWithEntity(entityPickup, 30f, entityMaid.getVerticalFaceSpeed());
             entityMaid.getNavigator().tryMoveToXYZ(entityPickup.posX, entityPickup.posY, entityPickup.posZ, speed);
+        }
+
+        // 拾取对象为空，或者没活着，那就遍历获取下一个
+        else {
+            if (!list.isEmpty()) {
+                for (Entity entity : list) {
+                    // 物品活着，而且能塞入女仆背包
+                    if (entity instanceof EntityItem && entity.isEntityAlive() && entityMaid.canEntityBeSeen(entity) &&
+                            entityMaid.canInsertSlot(((EntityItem) entity).getItem())) {
+                        entityPickup = entity;
+                        return;
+                    }
+
+                    // 经验球
+                    if (entity instanceof EntityXPOrb && entity.isEntityAlive() && entityMaid.canEntityBeSeen(entity)) {
+                        entityPickup = entity;
+                        return;
+                    }
+                }
+            }
+
+            // 如果都不符合，那就清空列表
+            list.clear();
         }
     }
 
     @Override
     public void resetTask() {
         entityPickup = null;
+        list.clear();
         entityMaid.getNavigator().clearPath();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return entityPickup != null && entityPickup.isEntityAlive() && !entityMaid.isSitting() && entityMaid.isPickup()
-                && ((entityPickup instanceof EntityItem && entityMaid.canInsertSlot(((EntityItem) entityPickup).getItem()))
-                || (entityPickup instanceof EntityXPOrb))
-                && entityMaid.canEntityBeSeen(entityPickup);
+        return !list.isEmpty() && !entityMaid.isSitting() && entityMaid.isPickup();
     }
 }

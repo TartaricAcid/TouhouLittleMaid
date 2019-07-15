@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -37,7 +36,6 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 GlStateManager.shadeModel(GL11.GL_FLAT);
             }
 
-            RenderHelper.enableStandardItemLighting();
             GlStateManager.scale(0.5, 0.5, 0.5);
             GlStateManager.rotate(22.5f, 1, 0, 0);
             GlStateManager.rotate(22.5f, 0, 1, 0);
@@ -47,7 +45,6 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
             Minecraft.getMinecraft().getRenderManager().setRenderShadow(true);
 
             GlStateManager.popMatrix();
-            RenderHelper.disableStandardItemLighting();
             GlStateManager.disableRescaleNormal();
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
             GlStateManager.disableTexture2D();

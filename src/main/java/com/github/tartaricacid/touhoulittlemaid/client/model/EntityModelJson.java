@@ -118,14 +118,14 @@ public class EntityModelJson extends ModelBase {
             head.rotateAngleY = netHeadYaw / 45f / (float) Math.PI;
 
             // 左脚右脚的运动
-            legLeft.rotateAngleX = MathHelper.cos(limbSwing * 1.2F) * 0.5F * limbSwingAmount;
-            legRight.rotateAngleX = -MathHelper.cos(limbSwing * 1.2F) * 0.5F * limbSwingAmount;
+            legLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
+            legRight.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
             legLeft.rotateAngleZ = 0f;
             legRight.rotateAngleZ = 0f;
 
             // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
-            armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 1.2F) * 1F * limbSwingAmount;
-            armRight.rotateAngleX = MathHelper.cos(limbSwing * 1.2F) * 1F * limbSwingAmount;
+            armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
+            armRight.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
             armLeft.rotateAngleY = 0f;
             armRight.rotateAngleY = 0f;
             armLeft.rotateAngleZ = MathHelper.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;

@@ -59,11 +59,15 @@ public class EntityDanmaku extends EntityThrowable {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+        // 如果碰撞对象为实体，而且投掷者不为空，也不为自己
         if (result.typeOfHit == RayTraceResult.Type.ENTITY && getThrower() != null && !result.entityHit.equals(this.thrower)) {
             result.entityHit.attackEntityFrom(new EntityDamageSource("arrow", getThrower()), this.getDamage());
             this.setDead();
         } else if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            this.setDead();
+            // 如果碰撞体积为 null
+            if (world.getBlockState(result.getBlockPos()).getCollisionBoundingBox(world, result.getBlockPos()) != null) {
+                this.setDead();
+            }
         }
     }
 
@@ -102,7 +106,8 @@ public class EntityDanmaku extends EntityThrowable {
         return compound;
     }
 
-    /*----------------------------------- 相关实体数据的获取与设置 -------------------------------------------*/
+    //----------------------------------- 相关实体数据的获取与设置 -------------------------------------------
+
     @Override
     protected float getGravityVelocity() {
         return this.getDataManager().get(GRAVITY);
