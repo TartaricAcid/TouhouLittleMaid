@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AttackValue;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
-import com.github.tartaricacid.touhoulittlemaid.client.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
@@ -14,6 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -279,6 +279,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.5f), 0, 0.3f * (distanceFactor + 1),
                         0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI * 2 / 3, 32);
             }
+
+            this.getHeldItemMainhand().damageItem(1, this);
         }
     }
 
@@ -569,7 +571,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         } else {
-            return ParseI18n.parse(getModelName());
+            return ParseI18n.parseServer(getModelName());
         }
     }
 

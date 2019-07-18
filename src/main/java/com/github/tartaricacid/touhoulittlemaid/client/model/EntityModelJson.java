@@ -12,6 +12,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.List;
  * @author TartaricAcid
  * @date 2019/7/9 14:18
  **/
+@SideOnly(Side.CLIENT)
 public class EntityModelJson extends ModelBase {
     /**
      * 存储 ModelRender 子模型的 HashMap

@@ -80,6 +80,11 @@
       "texture": "touhou_little_maid:textures/entity/houraisan_kaguya.png",
       "name": "{model.vanilla_touhou_model.houraisan_kaguya.name}",
       "description": ["{model.vanilla_touhou_model.houraisan_kaguya.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/moriya_suwako.json",
+      "texture": "touhou_little_maid:textures/entity/moriya_suwako.png",
+      "name": "{model.vanilla_touhou_model.moriya_suwako.name}",
+      "description": ["{model.vanilla_touhou_model.moriya_suwako.desc}"]
     }
   ]
 }

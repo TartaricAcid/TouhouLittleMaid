@@ -40,6 +40,7 @@ public class ItemHakureiGohei extends Item {
         setRegistryName("hakurei_gohei");
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".hakurei_gohei");
         setMaxStackSize(1);
+        setMaxDamage(300);
         setCreativeTab(MaidItems.TABS);
         this.attackDamage = 4;
         this.attackSpeed = -2;
@@ -64,6 +65,7 @@ public class ItemHakureiGohei extends Item {
             worldIn.spawnEntity(danmaku);
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
             player.getCooldownTracker().setCooldown(this, 10);
+            stack.damageItem(1, player);
         }
     }
 

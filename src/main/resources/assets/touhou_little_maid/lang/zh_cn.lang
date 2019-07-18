@@ -96,6 +96,7 @@ model.vanilla_touhou_model.nagae_iku.name=永江衣玖
 model.vanilla_touhou_model.cirno.name=琪露诺
 model.vanilla_touhou_model.daiyousei.name=大妖精
 model.vanilla_touhou_model.houraisan_kaguya.name=蓬莱山辉夜
+model.vanilla_touhou_model.moriya_suwako.name=泄矢诹访子
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7乐园的巫女
 model.vanilla_touhou_model.yakumo_ran.desc=§7隙间妖怪的式神
@@ -112,6 +113,7 @@ model.vanilla_touhou_model.nagae_iku.desc=§7美丽的绯之衣
 model.vanilla_touhou_model.cirno.desc=§7冰之妖精
 model.vanilla_touhou_model.daiyousei.desc=§7？？？
 model.vanilla_touhou_model.houraisan_kaguya.desc=§7永远的公主
+model.vanilla_touhou_model.moriya_suwako.desc=§7土著神的顶点
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

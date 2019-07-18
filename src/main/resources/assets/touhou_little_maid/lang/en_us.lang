@@ -96,6 +96,7 @@ model.vanilla_touhou_model.nagae_iku.name=Iku Nagae
 model.vanilla_touhou_model.cirno.name=Cirno
 model.vanilla_touhou_model.daiyousei.name=Daiyousei
 model.vanilla_touhou_model.houraisan_kaguya.name=Kaguya Houraisan
+model.vanilla_touhou_model.moriya_suwako.name=Suwako Moriya
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.vanilla_touhou_model.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -112,6 +113,7 @@ model.vanilla_touhou_model.nagae_iku.desc=§7Beautiful Scarlet Cloth
 model.vanilla_touhou_model.cirno.desc=§7Fairy of the Ice
 model.vanilla_touhou_model.daiyousei.desc=§7???
 model.vanilla_touhou_model.houraisan_kaguya.desc=§7Eternal Princess
+model.vanilla_touhou_model.moriya_suwako.desc=§7The Highest of Native Gods
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
