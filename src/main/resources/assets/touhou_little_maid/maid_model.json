@@ -1,6 +1,6 @@
 {
   "pack_name": "{pack.vanilla_touhou_model.name}",
-  "author": ["succinum"],
+  "author": ["succinum", "ZeniCrow", "Paulzzh"],
   "description": ["{pack.vanilla_touhou_model.desc}"],
   "version": "1.0.0",
   "date": "2019-07-14",
@@ -45,6 +45,41 @@
       "texture": "touhou_little_maid:textures/entity/sekibanki.png",
       "name": "{model.vanilla_touhou_model.sekibanki.name}",
       "description": ["{model.vanilla_touhou_model.sekibanki.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/kawasiro_nitori.json",
+      "texture": "touhou_little_maid:textures/entity/kawasiro_nitori.png",
+      "name": "{model.vanilla_touhou_model.kawasiro_nitori.name}",
+      "description": ["{model.vanilla_touhou_model.kawasiro_nitori.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/kochiya_sanae.json",
+      "texture": "touhou_little_maid:textures/entity/kochiya_sanae.png",
+      "name": "{model.vanilla_touhou_model.kochiya_sanae.name}",
+      "description": ["{model.vanilla_touhou_model.kochiya_sanae.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/izayoi_sakuya.json",
+      "texture": "touhou_little_maid:textures/entity/izayoi_sakuya.png",
+      "name": "{model.vanilla_touhou_model.izayoi_sakuya.name}",
+      "description": ["{model.vanilla_touhou_model.izayoi_sakuya.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/nagae_iku.json",
+      "texture": "touhou_little_maid:textures/entity/nagae_iku.png",
+      "name": "{model.vanilla_touhou_model.nagae_iku.name}",
+      "description": ["{model.vanilla_touhou_model.nagae_iku.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/cirno.json",
+      "texture": "touhou_little_maid:textures/entity/cirno.png",
+      "name": "{model.vanilla_touhou_model.cirno.name}",
+      "description": ["{model.vanilla_touhou_model.cirno.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/daiyousei.json",
+      "texture": "touhou_little_maid:textures/entity/daiyousei.png",
+      "name": "{model.vanilla_touhou_model.daiyousei.name}",
+      "description": ["{model.vanilla_touhou_model.daiyousei.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/houraisan_kaguya.json",
+      "texture": "touhou_little_maid:textures/entity/houraisan_kaguya.png",
+      "name": "{model.vanilla_touhou_model.houraisan_kaguya.name}",
+      "description": ["{model.vanilla_touhou_model.houraisan_kaguya.desc}"]
     }
   ]
 }

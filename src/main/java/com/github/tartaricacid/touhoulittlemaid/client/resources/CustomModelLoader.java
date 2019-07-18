@@ -12,6 +12,8 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
@@ -28,7 +30,7 @@ import java.util.List;
  **/
 @SideOnly(Side.CLIENT)
 public final class CustomModelLoader {
-    private static final Logger LOGGER = TouhouLittleMaid.LOGGER;
+    private static final Logger LOGGER = LogManager.getLogger(TouhouLittleMaid.MOD_ID + "/CustomModelLoader");
     private static final Gson GSON = new Gson();
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
@@ -63,12 +65,13 @@ public final class CustomModelLoader {
                     loadModelList(pojo.getModelList(), res);
                     // 装填模型包列表
                     MODEL_PACK_LIST.add(pojo);
-                    // 打印日志
-                    LOGGER.info("{} file is loaded", res);
                 } else {
                     // 否则日志给出提示
                     LOGGER.warn("{} file don't have pack_name field or model field", res);
                 }
+
+                // 关闭输入流
+                IOUtils.closeQuietly(input);
             } catch (IOException ignore) {
                 // 忽略错误，因为资源域很多
             }
@@ -117,6 +120,9 @@ public final class CustomModelLoader {
                 // 否则日志给出提示
                 LOGGER.warn("{} model file don't have model field", modelLocation);
             }
+
+            // 关闭输入流
+            IOUtils.closeQuietly(input);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
             LOGGER.warn("Failed to load model: {}", modelLocation);

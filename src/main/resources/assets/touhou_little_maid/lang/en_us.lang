@@ -19,7 +19,8 @@ tile.touhou_little_maid.garage_kit.name=Garage Kit
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
 tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
 tooltips.touhou_little_maid.ultramarine_orb_elixir.desc=Remaining Usage Times: %d
-tooltips.touhou_little_maid.garage_kit.desc=Character: %s
+tooltips.touhou_little_maid.garage_kit.id.desc=Entity Name: %s
+tooltips.touhou_little_maid.garage_kit.name.desc=Model Name: %s
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -67,6 +68,9 @@ gui.touhou_little_maid.button.pickup.true=Pick Mode Is Enable.
 gui.touhou_little_maid.button.pickup.false=Pick Mode Is Disable.
 gui.touhou_little_maid.button.home.true=Home Mode Is Enable.
 gui.touhou_little_maid.button.home.false=Home Mode Is Disable.
+gui.touhou_little_maid.button.skin=Change Skin
+gui.touhou_little_maid.skin.button.close=Close
+gui.touhou_little_maid.credit.url.close=This voice was delivered by Amitoro's Voice Material Studio
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=Author: %s
@@ -74,7 +78,7 @@ gui.touhou_little_maid.skin.text.version=Version: %s
 gui.touhou_little_maid.skin.text.date=Date: %s
 
 # Model Pack
-pack.vanilla_touhou_model.name=Vanilla Touhou Model
+pack.vanilla_touhou_model.name=Touhou Project Model
 pack.vanilla_touhou_model.desc=Default Model
 
 model.vanilla_touhou_model.hakurei_reimu.name=Reimu Hakurei
@@ -85,6 +89,13 @@ model.vanilla_touhou_model.reisen_udongein_inaba.name=Reisen Udongein Inaba
 model.vanilla_touhou_model.yasaka_kanako.name=Kanako Yasaka
 model.vanilla_touhou_model.sekibanki.name=Sekibanki
 model.vanilla_touhou_model.hata_no_kokoro.name=Hata no Kokoro
+model.vanilla_touhou_model.kawasiro_nitori.name=Nitori Kawashiro
+model.vanilla_touhou_model.kochiya_sanae.name=Sanae Kochiya
+model.vanilla_touhou_model.izayoi_sakuya.name=Sakuya Izayoi
+model.vanilla_touhou_model.nagae_iku.name=Iku Nagae
+model.vanilla_touhou_model.cirno.name=Cirno
+model.vanilla_touhou_model.daiyousei.name=Daiyousei
+model.vanilla_touhou_model.houraisan_kaguya.name=Kaguya Houraisan
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.vanilla_touhou_model.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -94,4 +105,36 @@ model.vanilla_touhou_model.reisen_udongein_inaba.desc=§7Lunatic Moon Rabbit
 model.vanilla_touhou_model.yasaka_kanako.desc=§7The Avatar of Mountains and Lakes
 model.vanilla_touhou_model.sekibanki.desc=§7The Rokurokubi Horror
 model.vanilla_touhou_model.hata_no_kokoro.desc=§7The Expressive Poker Face
+model.vanilla_touhou_model.kawasiro_nitori.desc=§7Super Youkai Warhead
+model.vanilla_touhou_model.kochiya_sanae.desc=§7Newbie Goddess of the Mountain
+model.vanilla_touhou_model.izayoi_sakuya.desc=§7Maid of the Scarlet Devil Mansion
+model.vanilla_touhou_model.nagae_iku.desc=§7Beautiful Scarlet Cloth
+model.vanilla_touhou_model.cirno.desc=§7Fairy of the Ice
+model.vanilla_touhou_model.daiyousei.desc=§7???
+model.vanilla_touhou_model.houraisan_kaguya.desc=§7Eternal Princess
+
+# Subtitle
+subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
+subtitle.touhou_little_maid.maid.mode.attack=Maid Attack Sound
+subtitle.touhou_little_maid.maid.mode.range_attack=Maid Range Attack Sound
+subtitle.touhou_little_maid.maid.mode.danmaku_attack=Maid Danmaku Sttack Sound
+subtitle.touhou_little_maid.maid.mode.farm=Maid Farm Sound
+subtitle.touhou_little_maid.maid.mode.feed=Maid Feed Sound
+subtitle.touhou_little_maid.maid.mode.shears=Maid Shears Sound
+subtitle.touhou_little_maid.maid.mode.torch=Maid Torch Sound
+subtitle.touhou_little_maid.maid.ai.find_target=Maid Find Target Sound
+subtitle.touhou_little_maid.maid.ai.hurt=Maid Hurt Sound
+subtitle.touhou_little_maid.maid.ai.hurt_fire=Maid Fire Hurt Sound
+subtitle.touhou_little_maid.maid.ai.hurt_player=Maid Player Hurt Sound
+subtitle.touhou_little_maid.maid.ai.tamed=Maid Tamed Sound
+subtitle.touhou_little_maid.maid.ai.item_get=Maid Get Item Sound
+subtitle.touhou_little_maid.maid.ai.death=Maid Death Sound
+subtitle.touhou_little_maid.maid.environment.hot=Maid Feel Hot Sound
+subtitle.touhou_little_maid.maid.environment.cold=Maid Feel Cold Sound
+subtitle.touhou_little_maid.maid.environment.rain=Maid Rain Sound
+subtitle.touhou_little_maid.maid.environment.snow=Maid Snow Sound
+subtitle.touhou_little_maid.maid.environment.morning=Maid Morning Sound
+subtitle.touhou_little_maid.maid.environment.night=Maid Night Sound
+subtitle.touhou_little_maid.other.credit=Credit: Amitoro's Voice Material Studio
+
 

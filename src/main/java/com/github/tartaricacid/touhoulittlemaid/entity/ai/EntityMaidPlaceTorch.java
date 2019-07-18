@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
@@ -45,6 +46,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     public void updateTask() {
         if (pos != null) {
             if (entityMaid.getDistanceSq(pos.up()) < 16) {
+                entityMaid.swingArm(EnumHand.MAIN_HAND);
                 world.setBlockState(pos, Blocks.TORCH.getDefaultState());
                 entityMaid.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0f, 1.0f);
                 getTorchItem(entityMaid).shrink(1);

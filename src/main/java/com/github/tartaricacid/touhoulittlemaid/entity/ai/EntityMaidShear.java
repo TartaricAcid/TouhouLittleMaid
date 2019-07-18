@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 
@@ -72,6 +73,9 @@ public class EntityMaidShear extends EntityAIBase {
 
             List<ItemStack> list = ((IShearable) shearableEntity).onSheared(mainhandItem, world, shearableEntity.getPosition(),
                     EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, mainhandItem));
+
+            // 手部动画
+            entityMaid.swingArm(EnumHand.MAIN_HAND);
 
             if (!this.world.isRemote) {
                 for (ItemStack stack : list) {

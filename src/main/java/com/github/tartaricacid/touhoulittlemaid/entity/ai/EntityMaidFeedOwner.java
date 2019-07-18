@@ -6,6 +6,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.IItemHandler;
 
 public class EntityMaidFeedOwner extends EntityAIBase {
@@ -36,6 +37,8 @@ public class EntityMaidFeedOwner extends EntityAIBase {
                 for (int i = 0; i < mainInv.getSlots(); ++i) {
                     ItemStack stack = mainInv.getStackInSlot(i);
                     if (stack.getItem() instanceof ItemFood) {
+                        // 手部动画
+                        entityMaid.swingArm(EnumHand.MAIN_HAND);
                         stack.getItem().onItemUseFinish(stack, player.world, player);
                         timeCount = 5;
                         return;

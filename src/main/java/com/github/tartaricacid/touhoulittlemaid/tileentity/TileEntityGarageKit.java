@@ -15,7 +15,10 @@ import javax.annotation.Nullable;
  * @date 2019/7/7 10:56
  **/
 public class TileEntityGarageKit extends TileEntity {
-    private String character = "touhou_little_maid:passive.maid";
+    private String entityId = "touhou_little_maid:passive.maid";
+    private String model = "touhou_little_maid:models/entity/hakurei_reimu.json";
+    private String texture = "touhou_little_maid:textures/entity/hakurei_reimu.png";
+    private String name = "{model.vanilla_touhou_model.hakurei_reimu.name}";
     private EnumFacing facing = EnumFacing.SOUTH;
 
     @Override
@@ -39,44 +42,62 @@ public class TileEntityGarageKit extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        if (getTileData().hasKey(BlockGarageKit.NBT.CHARACTER.getName())) {
-            character = getTileData().getString(BlockGarageKit.NBT.CHARACTER.getName());
+        if (getTileData().hasKey(BlockGarageKit.NBT.ENTITY_ID.getName())) {
+            entityId = getTileData().getString(BlockGarageKit.NBT.ENTITY_ID.getName());
         }
         if (getTileData().hasKey(BlockGarageKit.NBT.FACING.getName())) {
             facing = EnumFacing.byName(getTileData().getString(BlockGarageKit.NBT.FACING.getName()));
+        }
+        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_LOCATION.getName())) {
+            model = getTileData().getString(BlockGarageKit.NBT.MODEL_LOCATION.getName());
+        }
+        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_TEXTURE.getName())) {
+            texture = getTileData().getString(BlockGarageKit.NBT.MODEL_TEXTURE.getName());
+        }
+        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_NAME.getName())) {
+            name = getTileData().getString(BlockGarageKit.NBT.MODEL_NAME.getName());
         }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        getTileData().setString(BlockGarageKit.NBT.CHARACTER.getName(), character);
+        getTileData().setString(BlockGarageKit.NBT.ENTITY_ID.getName(), entityId);
         getTileData().setString(BlockGarageKit.NBT.FACING.getName(), facing.getName());
+        getTileData().setString(BlockGarageKit.NBT.MODEL_LOCATION.getName(), model);
+        getTileData().setString(BlockGarageKit.NBT.MODEL_TEXTURE.getName(), texture);
+        getTileData().setString(BlockGarageKit.NBT.MODEL_NAME.getName(), name);
         super.writeToNBT(compound);
         return compound;
     }
 
     // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
 
-    public String getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(String character) {
-        this.character = character;
-        markDirty(); // 确保数据已经存入
-        // 通知 world 更新方块数据
-        if (world != null) {
-            IBlockState state = world.getBlockState(getPos());
-            world.notifyBlockUpdate(getPos(), state, state, 3);
-        }
+    public String getEntityId() {
+        return entityId;
     }
 
     public EnumFacing getFacing() {
         return facing;
     }
 
-    public void setFacing(EnumFacing facing) {
+    public String getModel() {
+        return model;
+    }
+
+    public String getTexture() {
+        return texture;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setData(String character, EnumFacing facing, String model, String texture, String name) {
+        this.entityId = character;
         this.facing = facing;
+        this.model = model;
+        this.texture = texture;
+        this.name = name;
         markDirty(); // 确保数据已经存入
         // 通知 world 更新方块数据
         if (world != null) {

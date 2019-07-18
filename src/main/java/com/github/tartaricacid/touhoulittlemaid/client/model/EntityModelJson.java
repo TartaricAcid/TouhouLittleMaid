@@ -9,6 +9,7 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 
@@ -111,57 +112,132 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer legRight = modelMap.get("legRight");
         ModelRenderer armLeft = modelMap.get("armLeft");
         ModelRenderer armRight = modelMap.get("armRight");
+        ModelRenderer wingLeft = modelMap.get("wingLeft");
+        ModelRenderer wingRight = modelMap.get("wingRight");
+        // 呆毛
+        ModelRenderer ahoge = modelMap.get("ahoge");
+        ModelRenderer blink = modelMap.get("blink");
 
-        // TODO：更加全面的 null 值检查策略
-        if (head != null && legLeft != null && legRight != null && armLeft != null && armRight != null) {
+        // 用于手部使用动画的数据
+        float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
+        float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
+
+        if (head != null) {
             head.rotateAngleX = headPitch / 45f / (float) Math.PI;
             head.rotateAngleY = netHeadYaw / 45f / (float) Math.PI;
+        }
 
-            // 左脚右脚的运动
+        // 左脚右脚的运动
+        if (legLeft != null) {
             legLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
-            legRight.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
             legLeft.rotateAngleZ = 0f;
+        }
+
+        if (legRight != null) {
+            legRight.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
             legRight.rotateAngleZ = 0f;
+        }
 
-            // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
+        // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
+        if (armLeft != null) {
             armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
-            armRight.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
             armLeft.rotateAngleY = 0f;
-            armRight.rotateAngleY = 0f;
             armLeft.rotateAngleZ = MathHelper.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
-            armRight.rotateAngleZ = -MathHelper.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
+            // 手部使用动画
+            armLeft.rotateAngleX += f * 1.2F - f1 * 0.4F;
+            if (swingProgress > 0.0F && getSwingingHand((EntityMaid) entityIn) == EnumHandSide.LEFT) {
+                float tmp = MathHelper.sin(MathHelper.sqrt(swingProgress) * ((float) Math.PI * 2F)) * 0.1f;
+                armLeft.rotateAngleX = MathHelper.cos(tmp) * 5.0F;
+                armLeft.rotateAngleY += tmp;
+                armLeft.rotateAngleZ = MathHelper.sin(tmp) * 5.0F;
+            }
+        }
 
-            EntityMaid entityMaid = (EntityMaid) entityIn;
-            if (entityMaid.isRiding()) {
+        if (armRight != null) {
+            armRight.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
+            armRight.rotateAngleY = 0f;
+            armRight.rotateAngleZ = -MathHelper.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
+            // 手部使用动画
+            if (swingProgress > 0.0F && getSwingingHand((EntityMaid) entityIn) == EnumHandSide.RIGHT) {
+                float tmp = -MathHelper.sin(MathHelper.sqrt(swingProgress) * ((float) Math.PI * 2F)) * 0.1f;
+                armRight.rotateAngleX = MathHelper.cos(tmp) * 5.0F;
+                armRight.rotateAngleY += tmp;
+                armRight.rotateAngleZ = MathHelper.sin(tmp) * 5.0F;
+            }
+        }
+
+        if (wingLeft != null) {
+            wingLeft.rotateAngleY = -MathHelper.cos(ageInTicks * 0.3f) * 0.2f + 1.0f;
+        }
+
+        if (wingRight != null) {
+            wingRight.rotateAngleY = MathHelper.cos(ageInTicks * 0.3f) * 0.2f - 1.0f;
+        }
+
+        // 眨眼动作绘制
+        if (blink != null) {
+            float remainder = ageInTicks % 60;
+            // 0-10 显示眨眼贴图
+            blink.isHidden = !(55 < remainder && remainder < 60);
+        }
+
+        EntityMaid entityMaid = (EntityMaid) entityIn;
+        if (entityMaid.isRiding()) {
+            if (legLeft != null) {
                 legLeft.rotateAngleX = -0.960f;
                 legLeft.rotateAngleZ = -0.523f;
+            }
+            if (legRight != null) {
                 legRight.rotateAngleX = -0.960f;
                 legRight.rotateAngleZ = 0.523f;
+            }
 
-                GlStateManager.translate(0, 0.3f, 0);
-            } else if (entityMaid.isSitting()) {
+            GlStateManager.translate(0, 0.3f, 0);
+        } else if (entityMaid.isSitting()) {
+            if (armLeft != null) {
                 armLeft.rotateAngleX = -0.798f;
                 armLeft.rotateAngleZ = 0.274f;
+            }
+            if (armRight != null) {
                 armRight.rotateAngleX = -0.798f;
                 armRight.rotateAngleZ = -0.274f;
+            }
 
+            if (legLeft != null) {
                 legLeft.rotateAngleX = -0.960f;
                 legLeft.rotateAngleZ = -0.523f;
+            }
+            if (legRight != null) {
                 legRight.rotateAngleX = -0.960f;
                 legRight.rotateAngleZ = 0.523f;
-
-                GlStateManager.translate(0, 0.3f, 0);
             }
 
-            if (entityMaid.isBegging()) {
+            GlStateManager.translate(0, 0.3f, 0);
+        }
+
+        if (entityMaid.isBegging()) {
+            if (head != null) {
                 head.rotateAngleZ = 0.139f;
-            } else {
+            }
+            if (ahoge != null) {
+                ahoge.rotateAngleX = MathHelper.cos(ageInTicks * 1.0f) * 0.05f;
+                ahoge.rotateAngleZ = MathHelper.sin(ageInTicks * 1.0f) * 0.05f;
+            }
+        } else {
+            if (head != null) {
                 head.rotateAngleZ = 0f;
             }
+            if (ahoge != null) {
+                ahoge.rotateAngleZ = 0f;
+            }
+        }
 
-            if (entityMaid.isSwingingArms()) {
+        if (entityMaid.isSwingingArms()) {
+            if (armLeft != null) {
                 armLeft.rotateAngleX = -1.396f;
                 armLeft.rotateAngleY = 0.785f;
+            }
+            if (armRight != null) {
                 armRight.rotateAngleX = -1.396f;
                 armRight.rotateAngleY = -0.174f;
             }
@@ -175,16 +251,23 @@ public class EntityModelJson extends ModelBase {
     }
 
     public void postRenderArm(float scale, EnumHandSide side) {
-        this.getArmForSide(side).postRender(scale);
+        ModelRenderer arm = this.getArmForSide(side);
+        if (arm != null) {
+            arm.postRender(scale);
+        }
     }
 
+    @Nullable
     private ModelRenderer getArmForSide(EnumHandSide side) {
-        if (modelMap.get("armLeft") != null && modelMap.get("armRight") != null) {
-            return side == EnumHandSide.LEFT ? modelMap.get("armLeft") : modelMap.get("armRight");
-        } else {
-            // TODO: Null 问题解决
-            return null;
-        }
+        return side == EnumHandSide.LEFT ? modelMap.get("armLeft") : modelMap.get("armRight");
+    }
+
+    /**
+     * 获取现在使用的是主手还是副手<br>
+     * 如果是主手，那就返回右边
+     */
+    private EnumHandSide getSwingingHand(EntityMaid entityIn) {
+        return entityIn.swingingHand == EnumHand.MAIN_HAND ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
     }
 
     /**

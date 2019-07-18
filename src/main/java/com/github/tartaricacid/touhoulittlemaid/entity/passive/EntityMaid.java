@@ -3,12 +3,17 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AttackValue;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.base.Predicate;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -39,11 +44,13 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
@@ -57,7 +64,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityMaid extends EntityTameable implements IRangedAttackMob {
-    private static final ResourceLocation LOOT_TABLE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entities/maid");
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable;
@@ -70,6 +76,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> MODEL_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<String> TEXTURE_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<String> MODEL_NAME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
@@ -124,6 +131,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.dataManager.register(ARM_RISE, Boolean.FALSE);
         this.dataManager.register(MODEL_LOCATION, "touhou_little_maid:models/entity/hakurei_reimu.json");
         this.dataManager.register(TEXTURE_LOCATION, "touhou_little_maid:textures/entity/hakurei_reimu.png");
+        this.dataManager.register(MODEL_NAME, "{model.vanilla_touhou_model.hakurei_reimu.name}");
     }
 
     @Override
@@ -131,6 +139,12 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         super.applyEntityAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
+    }
+
+    @Override
+    public void onLivingUpdate() {
+        this.updateArmSwingProgress();
+        super.onLivingUpdate();
     }
 
     @Override
@@ -147,7 +161,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (!entityList.isEmpty() && this.isEntityAlive()) {
             for (Entity entityPickup : entityList) {
                 // 如果是物品
-                if (entityPickup instanceof EntityItem) {
+                if (entityPickup instanceof EntityItem && !((EntityItem) entityPickup).cannotPickup()) {
                     ItemStack itemstack = ((EntityItem) entityPickup).getItem();
                     for (int i = 0; i < mainInv.getSlots(); i++) {
                         itemstack = mainInv.insertItem(i, itemstack, false);
@@ -156,12 +170,15 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                         entityPickup.setDead();
                         this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                                 ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                        if (rand.nextInt(3) == 1) {
+                            this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                        }
                     } else {
                         ((EntityItem) entityPickup).getItem().setCount(itemstack.getCount());
                     }
                 }
                 // 如果是经验
-                if (entityPickup instanceof EntityXPOrb) {
+                if (entityPickup instanceof EntityXPOrb && ((EntityXPOrb) entityPickup).delayBeforeCanPickup == 0) {
                     EntityXPOrb entityXp = (EntityXPOrb) entityPickup;
                     if (!this.world.isRemote && entityXp.delayBeforeCanPickup == 0) {
                         // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
@@ -177,6 +194,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                         entityXp.setDead();
                         this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2F,
                                 (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F);
+                        if (rand.nextInt(3) == 1) {
+                            this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                        }
                     }
                 }
             }
@@ -479,8 +499,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 this.playTameEffect(true);
                 this.getNavigator().clearPath();
                 this.world.setEntityState(this, (byte) 7);
-                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
-                        ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                this.playSound(MaidSoundEvent.MAID_TAMED, 1, 1);
                 return true;
             }
         }
@@ -524,6 +543,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
         super.onDeath(cause);
         if (!world.isRemote) {
+            // 将女仆身上的物品进行掉落
             CombinedInvWrapper combinedInvWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);
             for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
                 ItemStack itemstack = combinedInvWrapper.getStackInSlot(i);
@@ -531,6 +551,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                     InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, itemstack);
                 }
             }
+
+            // 掉落女仆手办
+            InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ,
+                    MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
+                            this.getModelLocation(), this.getTextureLocation(), this.getModelName()));
         }
     }
 
@@ -539,10 +564,42 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         // 不要调用父类的掉落方法，很坑爹的会掉落耐久损失很多的东西
     }
 
+    @Override
+    public String getName() {
+        if (this.hasCustomName()) {
+            return this.getCustomNameTag();
+        } else {
+            return ParseI18n.parse(getModelName());
+        }
+    }
+
+    public boolean isFarmItemInInventory() {
+        CombinedInvWrapper combinedInvWrapper = getAvailableInv();
+        for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
+            ItemStack itemstack = combinedInvWrapper.getStackInSlot(i);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof IPlantable) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 用于刷怪蛋、刷怪笼、自然生成的初始化
+     */
     @Nullable
     @Override
-    protected ResourceLocation getLootTable() {
-        return LOOT_TABLE;
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        if (CommonProxy.MODEL_LIST != null) {
+            List<ModelItem> list = CommonProxy.MODEL_LIST.getModelList();
+            // 随机获取某个模型对象
+            ModelItem model = list.get(rand.nextInt(list.size()));
+            // 应用各种数据
+            this.setModelName(model.getName());
+            this.setModelLocation(model.getModel());
+            this.setTextureLocation(model.getTexture());
+        }
+        return super.onInitialSpawn(difficulty, livingdata);
     }
 
     @Override
@@ -576,6 +633,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (compound.hasKey(NBT.TEXTURE_LOCATION.getName())) {
             setTextureLocation(compound.getString(NBT.TEXTURE_LOCATION.getName()));
         }
+        if (compound.hasKey(NBT.MODEL_NAME.getName())) {
+            setModelName(compound.getString(NBT.MODEL_NAME.getName()));
+        }
     }
 
     @Override
@@ -590,18 +650,86 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
         compound.setString(NBT.MODEL_LOCATION.getName(), getModelLocation());
         compound.setString(NBT.TEXTURE_LOCATION.getName(), getTextureLocation());
+        compound.setString(NBT.MODEL_NAME.getName(), getModelName());
         return compound;
     }
 
-    public boolean isFarmItemInInventory() {
-        CombinedInvWrapper combinedInvWrapper = getAvailableInv();
-        for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
-            ItemStack itemstack = combinedInvWrapper.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof IPlantable) {
-                return true;
-            }
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        switch (getMode()) {
+            case IDLE:
+                return environmentSound(MaidSoundEvent.MAID_IDLE, 0.2f);
+            case ATTACK:
+                if (this.getAttackTarget() != null) {
+                    return MaidSoundEvent.MAID_FIND_TARGET;
+                } else {
+                    return MaidSoundEvent.MAID_ATTACK;
+                }
+            case RANGE_ATTACK:
+                return MaidSoundEvent.MAID_RANGE_ATTACK;
+            case DANMAKU_ATTACK:
+                return MaidSoundEvent.MAID_DANMAKU_ATTACK;
+            case FEED:
+                return environmentSound(MaidSoundEvent.MAID_FEED, 0.1f);
+            case FARM:
+                return environmentSound(MaidSoundEvent.MAID_FARM, 0.2f);
+            case TORCH:
+                return environmentSound(MaidSoundEvent.MAID_TORCH, 0.2f);
+            case SHEARS:
+                return environmentSound(MaidSoundEvent.MAID_SHEARS, 0.2f);
+            default:
+                return super.getAmbientSound();
         }
-        return false;
+    }
+
+    /**
+     * 用来播放基于环境的音效，比如气温，天气，时间
+     *
+     * @param defaultSound 这些都没有播放情况下的默认音效
+     * @param probability  播放环境音效的概率
+     * @return 应当触发的音效
+     */
+    private SoundEvent environmentSound(SoundEvent defaultSound, float probability) {
+        // 差不多早上 6:30 - 7:30
+        if (rand.nextFloat() < probability && 500 < world.getWorldTime() && world.getWorldTime() < 1500) {
+            return MaidSoundEvent.MAID_MORNING;
+        }
+        // 差不多下午 6:30 - 7:30
+        if (rand.nextFloat() < probability && 12500 < world.getWorldTime() && world.getWorldTime() < 13500) {
+            return MaidSoundEvent.MAID_NIGHT;
+        }
+        if (rand.nextFloat() < probability && (world.isRaining() || world.isThundering()) && world.getBiome(this.getPosition()).canRain()) {
+            return MaidSoundEvent.MAID_RAIN;
+        }
+        if (rand.nextFloat() < probability && (world.isRaining() || world.isThundering()) && world.getBiome(this.getPosition()).isSnowyBiome()) {
+            return MaidSoundEvent.MAID_SNOW;
+        }
+        if (rand.nextFloat() < probability && world.getBiome(this.getPosition()).getTempCategory() == Biome.TempCategory.COLD) {
+            return MaidSoundEvent.MAID_COLD;
+        }
+        if (rand.nextFloat() < probability && world.getBiome(this.getPosition()).getTempCategory() == Biome.TempCategory.WARM) {
+            return MaidSoundEvent.MAID_HOT;
+        }
+        return defaultSound;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        if (damageSourceIn.isFireDamage()) {
+            return MaidSoundEvent.MAID_HURT_FIRE;
+        } else if (damageSourceIn.getTrueSource() instanceof EntityPlayer) {
+            return MaidSoundEvent.MAID_PLAYER;
+        } else {
+            return MaidSoundEvent.MAID_HURT;
+        }
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return MaidSoundEvent.MAID_DEATH;
     }
 
     @SuppressWarnings("unchecked")
@@ -704,6 +832,14 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.dataManager.set(TEXTURE_LOCATION, textureLocation);
     }
 
+    public String getModelName() {
+        return this.dataManager.get(MODEL_NAME);
+    }
+
+    public void setModelName(String name) {
+        this.dataManager.set(MODEL_NAME, name);
+    }
+
     private enum NBT {
         // 女仆的物品栏
         MAID_INVENTORY("MaidInventory"),
@@ -722,7 +858,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         // 模型位置
         MODEL_LOCATION("ModelLocation"),
         // 材质位置
-        TEXTURE_LOCATION("TextureLocation");
+        TEXTURE_LOCATION("TextureLocation"),
+        // 模型名称
+        MODEL_NAME("ModelName");
 
         private String name;
 

@@ -1,0 +1,187 @@
+{
+  "format_version": "1.10.0",
+  "geometry.model": {
+    "texturewidth": 128,
+    "textureheight": 64,
+    "visible_bounds_width": 1,
+    "visible_bounds_height": 2,
+    "visible_bounds_offset": [0, 1, 0],
+    "bones": [
+      {
+        "name": "head",
+        "pivot": [0, 18, 0],
+        "cubes": [
+          {
+            "origin": [-4, 18, -4],
+            "size": [8, 8, 8],
+            "uv": [0, 0]
+          }
+        ]
+      },
+      {
+        "name": "hair",
+        "parent": "head",
+        "pivot": [0, 18, 4],
+        "rotation": [10, 0, 0],
+        "cubes": [
+          {
+            "origin": [-4, 7, 4],
+            "size": [8, 11, 0],
+            "uv": [42, 13]
+          }
+        ]
+      },
+      {
+        "name": "hairLeft",
+        "parent": "head",
+        "pivot": [4, 18, -3],
+        "rotation": [0, 0, -10],
+        "cubes": [
+          {
+            "origin": [4, 7, 1],
+            "size": [0, 11, 3],
+            "uv": [47, 40]
+          }
+        ]
+      },
+      {
+        "name": "hairFrontLeft",
+        "parent": "hairLeft",
+        "pivot": [4, 18, -3],
+        "rotation": [-5, 0, 0],
+        "cubes": [
+          {
+            "origin": [3, 11, -4],
+            "size": [1, 7, 1],
+            "uv": [48, 28]
+          }
+        ]
+      },
+      {
+        "name": "hairRight",
+        "parent": "head",
+        "pivot": [-4, 18, -3],
+        "rotation": [0, 0, 10],
+        "cubes": [
+          {
+            "origin": [-4, 7, 1],
+            "size": [0, 11, 3],
+            "uv": [47, 27]
+          }
+        ]
+      },
+      {
+        "name": "hairFrontRight",
+        "parent": "hairRight",
+        "pivot": [-4, 18, -3],
+        "rotation": [-5, 0, 0],
+        "cubes": [
+          {
+            "origin": [-4, 11, -4],
+            "size": [1, 7, 1],
+            "uv": [50, 43]
+          }
+        ]
+      },
+      {
+        "name": "armRight",
+        "pivot": [-3, 17.5, 0],
+        "rotation": [0, 0, 25],
+        "cubes": [
+          {
+            "origin": [-5, 9.5, -1],
+            "size": [2, 8, 2],
+            "uv": [35, 48]
+          }
+        ]
+      },
+      {
+        "name": "armLeft",
+        "pivot": [3, 17.5, 0],
+        "rotation": [0, 0, -25],
+        "cubes": [
+          {
+            "origin": [3, 9.5, -1],
+            "size": [2, 8, 2],
+            "uv": [26, 48]
+          }
+        ]
+      },
+      {
+        "name": "body",
+        "pivot": [0, 10.5, 0],
+        "cubes": [
+          {
+            "origin": [-3, 12, -3],
+            "size": [6, 6, 6],
+            "uv": [33, 0]
+          },
+          {
+            "origin": [-4, 9, -4],
+            "size": [8, 3, 8],
+            "uv": [0, 17]
+          },
+          {
+            "origin": [-5, 2, -5],
+            "size": [10, 8, 10],
+            "uv": [0, 30]
+          },
+          {
+            "origin": [-4, 7, -2],
+            "size": [8, 2, 4],
+            "uv": [26, 58]
+          }
+        ]
+      },
+      {
+        "name": "bone",
+        "parent": "body",
+        "pivot": [0, 10.5, 0],
+        "cubes": [
+          {
+            "origin": [-2, 17.5, -3.5],
+            "size": [1, 1, 1],
+            "uv": [34, 14]
+          },
+          {
+            "origin": [1, 17.5, -3.5],
+            "size": [1, 1, 1],
+            "uv": [38, 14]
+          },
+          {
+            "origin": [-1, 17, -3.5],
+            "size": [2, 1, 1],
+            "uv": [34, 19]
+          },
+          {
+            "origin": [-0.625, 15, -3.25],
+            "size": [1, 2, 1],
+            "uv": [1, 4]
+          }
+        ]
+      },
+      {
+        "name": "legLeft",
+        "pivot": [2, 9, 0],
+        "cubes": [
+          {
+            "origin": [0.5, 0, -1.5],
+            "size": [3, 9, 3],
+            "uv": [0, 48]
+          }
+        ]
+      },
+      {
+        "name": "legRight",
+        "pivot": [-2, 9, 0],
+        "cubes": [
+          {
+            "origin": [-3.5, 0, -1.5],
+            "size": [3, 9, 3],
+            "uv": [13, 48]
+          }
+        ]
+      }
+    ]
+  }
+}

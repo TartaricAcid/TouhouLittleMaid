@@ -135,6 +135,18 @@
         ]
       },
       {
+        "name": "blink",
+        "parent": "head",
+        "pivot": [0, 18, 0],
+        "cubes": [
+          {
+            "origin": [-4, 18, -4.001],
+            "size": [8, 8, 0],
+            "uv": [76, 0]
+          }
+        ]
+      },
+      {
         "name": "body",
         "pivot": [0, 10.5, 0],
         "cubes": [

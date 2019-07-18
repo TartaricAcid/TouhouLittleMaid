@@ -1,11 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
+import com.google.gson.Gson;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -14,11 +16,27 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class CommonProxy {
     public static SimpleNetworkWrapper INSTANCE = null;
+    /**
+     * 服务端用模型列表<br>
+     * 这个只会在服务器启动时候读取默认原版的列表<br>
+     * 主要用于刷怪蛋、刷怪笼、自然生成的随机模型<br>
+     * <br>
+     * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
+     */
+    public static CustomModelPackPOJO MODEL_LIST;
 
     public void preInit(FMLPreInitializationEvent event) {
+        // 初始化默认模型列表
+        initModelList();
+
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),
                 EntityMaid.class, "touhou_little_maid.maid", 0, TouhouLittleMaid.INSTANCE, 64,
                 3, true, 0x4a6195, 0xffffff);
@@ -43,5 +61,19 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
+    }
+
+    /**
+     * 初始化默认的模型列表
+     */
+    private void initModelList() {
+        InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/maid_model.json");
+        if (input != null) {
+            Gson gson = new Gson();
+            // 将其转换为 pojo 对象
+            MODEL_LIST = gson.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPackPOJO.class);
+        }
+        // 别忘了关闭输入流
+        IOUtils.closeQuietly(input);
     }
 }

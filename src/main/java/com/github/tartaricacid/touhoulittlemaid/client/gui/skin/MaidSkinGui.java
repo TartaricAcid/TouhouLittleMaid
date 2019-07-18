@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidSkinMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -13,6 +14,7 @@ import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,7 +62,7 @@ public class MaidSkinGui extends GuiScreen {
         this.labelList.clear();
 
         int i = this.width / 2 + 50;
-        int j = this.height / 2;
+        int j = this.height / 2 + 5;
         int id = 0;
 
         // 添加切换模型包的按钮
@@ -72,7 +74,7 @@ public class MaidSkinGui extends GuiScreen {
         this.buttonList.add(new GuiButtonImage(id++, i + 107, j + 73, 11, 17, 1, 201, 18, BG));
 
         // 关闭当前界面的按键
-        this.buttonList.add(new GuiButtonImage(id++, i + 125, j - 98, 21, 21, 58, 201, 22, BG));
+        this.buttonList.add(new GuiButtonImage(id++, i + 104, j - 116, 21, 17, 58, 201, 18, BG));
 
         // 添加按键，顺便装填按键对应模型的索引
         CustomModelPackPOJO pojo = ClientProxy.MODEL_PACK_LIST.get(PACK_INDEX);
@@ -112,7 +114,7 @@ public class MaidSkinGui extends GuiScreen {
 
         // 中心点
         int middleX = this.width / 2 + 50;
-        int middleY = this.height / 2;
+        int middleY = this.height / 2 + 5;
 
         // 绘制灰色默认背景
         drawDefaultBackground();
@@ -125,7 +127,11 @@ public class MaidSkinGui extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // 绘制左边示例实体
-        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, 45, middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, maid);
+        EntityMaid entityMaidNew = new EntityMaid(mc.world);
+        NBTTagCompound nbt = new NBTTagCompound();
+        maid.writeToNBT(nbt);
+        entityMaidNew.readFromNBT(nbt);
+        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, 45, middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entityMaidNew);
 
         // 绘制实体，绘制完毕后绘制文本提示
         drawEntity(middleX, middleY);
@@ -175,11 +181,11 @@ public class MaidSkinGui extends GuiScreen {
         int offSet = -80;
 
         // 绘制包名
-        drawCenteredString(fontRenderer, parseI18n(pojo.getPackName()), middleX - 193, middleY + offSet, 0xffffff);
+        drawCenteredString(fontRenderer, ParseI18n.parse(pojo.getPackName()), middleX - 193, middleY + offSet, 0xffffff);
 
         // 如果描述不为空，逐行绘制描述
         if (pojo.getDescription() != null) {
-            for (String str : parseI18n(pojo.getDescription())) {
+            for (String str : ParseI18n.parse(pojo.getDescription())) {
                 offSet += 10;
                 drawCenteredString(fontRenderer, TextFormatting.GRAY + str, middleX - 193, middleY + offSet, 0xffffff);
             }
@@ -250,7 +256,7 @@ public class MaidSkinGui extends GuiScreen {
                 }
 
                 // 绘制解析过的文本提示
-                drawHoveringText(parseI18n(str), mouseX, mouseY);
+                drawHoveringText(ParseI18n.parse(str), mouseX, mouseY);
             }
 
             // 往右绘制
@@ -261,6 +267,13 @@ public class MaidSkinGui extends GuiScreen {
                 x = -100;
                 y = y + 30;
             }
+        }
+
+        // 绘制关闭按钮的文本提示
+        boolean xInRange = (middleX + 104) < mouseX && mouseX < (middleX + 125);
+        boolean yInRange = (middleY - 116) < mouseY && mouseY < (middleY - 99);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.skin.button.close"), mouseX, mouseY);
         }
     }
 
@@ -306,38 +319,15 @@ public class MaidSkinGui extends GuiScreen {
                 CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),
                         BUTTON_MODEL_MAP.get(button.id).getModel().length(),
                         BUTTON_MODEL_MAP.get(button.id).getTexture().length(),
+                        BUTTON_MODEL_MAP.get(button.id).getName().length(),
                         BUTTON_MODEL_MAP.get(button.id).getModel(),
-                        BUTTON_MODEL_MAP.get(button.id).getTexture()));
+                        BUTTON_MODEL_MAP.get(button.id).getTexture(),
+                        BUTTON_MODEL_MAP.get(button.id).getName()));
         }
     }
 
     @Override
     public boolean doesGuiPauseGame() {
         return false;
-    }
-
-    /**
-     * 将传入的字符串进行国际化
-     */
-    private String parseI18n(String strIn) {
-        // 如果是“{ ”开头，“} ”结尾
-        if (strIn.startsWith("{") && strIn.endsWith("}")) {
-            // 将剔除大括号后的字符进行国际化
-            return I18n.format(strIn.substring(1, strIn.length() - 1));
-        } else {
-            // 否则装填原字符串（这算硬编码么？）
-            return strIn;
-        }
-    }
-
-    /**
-     * 将传入的字符串列表进行国际化
-     */
-    private List<String> parseI18n(List<String> strIn) {
-        List<String> strOut = new ArrayList<>();
-        for (String str : strIn) {
-            strOut.add(parseI18n(str));
-        }
-        return strOut;
     }
 }

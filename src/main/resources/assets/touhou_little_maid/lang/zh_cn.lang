@@ -2,7 +2,7 @@
 item_group.touhou_little_maid.name=Touhou Little Maid
 
 # Entity
-entity.touhou_little_maid.maid.name=Touhou Little Maid
+entity.touhou_little_maid.maid.name=小女仆
 entity.touhou_little_maid.danmaku.name=弹幕
 entity.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
 
@@ -19,7 +19,8 @@ tile.touhou_little_maid.garage_kit.name=手办
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
 tooltips.touhou_little_maid.kappa_compass.desc=坐标：%d，%d，%d
 tooltips.touhou_little_maid.ultramarine_orb_elixir.desc=剩余使用次数：%d
-tooltips.touhou_little_maid.garage_kit.desc=实体：%s
+tooltips.touhou_little_maid.garage_kit.id.desc=实体名称：%s
+tooltips.touhou_little_maid.garage_kit.name.desc=模型名称：%s
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
@@ -67,3 +68,73 @@ gui.touhou_little_maid.button.pickup.true=拾物模式已经开启
 gui.touhou_little_maid.button.pickup.false=拾物模式已经关闭
 gui.touhou_little_maid.button.home.true=Home 模式已经开启
 gui.touhou_little_maid.button.home.false=Home 模式已经关闭
+gui.touhou_little_maid.button.skin=更改皮肤
+gui.touhou_little_maid.skin.button.close=关闭
+gui.touhou_little_maid.credit.url.close=使用的音效由 あみたろの声素材工房 提供
+
+# Skin Gui
+gui.touhou_little_maid.skin.text.author=作者：%s
+gui.touhou_little_maid.skin.text.version=版本：%s
+gui.touhou_little_maid.skin.text.date=日期：%s
+
+# Model Pack
+pack.vanilla_touhou_model.name=东方 Project 模型
+pack.vanilla_touhou_model.desc=默认模型
+
+model.vanilla_touhou_model.hakurei_reimu.name=博丽灵梦
+model.vanilla_touhou_model.yakumo_ran.name=八云蓝
+model.vanilla_touhou_model.inubashiri_momizi.name=犬走椛
+model.vanilla_touhou_model.komeiji_satori.name=古明地觉
+model.vanilla_touhou_model.reisen_udongein_inaba.name=铃仙·优昙华院·因幡
+model.vanilla_touhou_model.yasaka_kanako.name=八坂神奈子
+model.vanilla_touhou_model.sekibanki.name=赤蛮奇
+model.vanilla_touhou_model.hata_no_kokoro.name=秦心
+model.vanilla_touhou_model.kawasiro_nitori.name=河城荷取
+model.vanilla_touhou_model.kochiya_sanae.name=东风谷早苗
+model.vanilla_touhou_model.izayoi_sakuya.name=十六夜咲夜
+model.vanilla_touhou_model.nagae_iku.name=永江衣玖
+model.vanilla_touhou_model.cirno.name=琪露诺
+model.vanilla_touhou_model.daiyousei.name=大妖精
+model.vanilla_touhou_model.houraisan_kaguya.name=蓬莱山辉夜
+
+model.vanilla_touhou_model.hakurei_reimu.desc=§7乐园的巫女
+model.vanilla_touhou_model.yakumo_ran.desc=§7隙间妖怪的式神
+model.vanilla_touhou_model.inubashiri_momizi.desc=§7下端哨戒天狗
+model.vanilla_touhou_model.komeiji_satori.desc=§7怨灵也为之惧怯的少女
+model.vanilla_touhou_model.reisen_udongein_inaba.desc=§7狂气的月兔
+model.vanilla_touhou_model.yasaka_kanako.desc=§7山坂与湖水的化身
+model.vanilla_touhou_model.sekibanki.desc=§7辘轳首的怪奇
+model.vanilla_touhou_model.hata_no_kokoro.desc=§7表情丰富的扑克脸
+model.vanilla_touhou_model.kawasiro_nitori.desc=§7超妖怪弹头
+model.vanilla_touhou_model.kochiya_sanae.desc=§7山上的新人神明
+model.vanilla_touhou_model.izayoi_sakuya.desc=§7红魔馆的女仆
+model.vanilla_touhou_model.nagae_iku.desc=§7美丽的绯之衣
+model.vanilla_touhou_model.cirno.desc=§7冰之妖精
+model.vanilla_touhou_model.daiyousei.desc=§7？？？
+model.vanilla_touhou_model.houraisan_kaguya.desc=§7永远的公主
+
+# Subtitle
+subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
+subtitle.touhou_little_maid.maid.mode.attack=女仆：攻击
+subtitle.touhou_little_maid.maid.mode.range_attack=女仆：范围攻击
+subtitle.touhou_little_maid.maid.mode.danmaku_attack=女仆：弹幕攻击
+subtitle.touhou_little_maid.maid.mode.farm=女仆：农场
+subtitle.touhou_little_maid.maid.mode.feed=女仆：喂养
+subtitle.touhou_little_maid.maid.mode.shears=女仆：剪刀
+subtitle.touhou_little_maid.maid.mode.torch=女仆：火把
+subtitle.touhou_little_maid.maid.ai.find_target=女仆：发现目标
+subtitle.touhou_little_maid.maid.ai.hurt=女仆：受伤
+subtitle.touhou_little_maid.maid.ai.hurt_fire=女仆：火焰伤害
+subtitle.touhou_little_maid.maid.ai.hurt_player=女仆：玩家伤害
+subtitle.touhou_little_maid.maid.ai.tamed=女仆：被驯服
+subtitle.touhou_little_maid.maid.ai.item_get=女仆：拾起物件
+subtitle.touhou_little_maid.maid.ai.death=女仆：死亡
+subtitle.touhou_little_maid.maid.environment.hot=女仆：热
+subtitle.touhou_little_maid.maid.environment.cold=女仆：冷
+subtitle.touhou_little_maid.maid.environment.rain=女仆：下雨
+subtitle.touhou_little_maid.maid.environment.snow=女仆：下雪
+subtitle.touhou_little_maid.maid.environment.morning=女仆：早上
+subtitle.touhou_little_maid.maid.environment.night=女仆：傍晚
+subtitle.touhou_little_maid.other.credit=致谢：あみたろの声素材工房
+
+

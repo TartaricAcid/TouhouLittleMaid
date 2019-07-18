@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -36,7 +37,12 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         if (modelJson != null) {
             this.mainModel = modelJson;
         }
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -20,7 +21,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     private final EntityMaid entityMaid;
     private final int searchLength;
     private boolean hasFarmItem;
-    private int currentTask; // 0 => 收获, 1 => 重新种植, -1 => 无
+    // 0 => 收获, 1 => 重新种植, -1 => 无
+    private int currentTask;
 
     public EntityMaidFarm(EntityMaid entityMaid, double speedIn) {
         super(entityMaid, speedIn, 16);
@@ -73,6 +75,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
             // 如果当前任务为收获，并且方块为作物而且长到最大阶段，破坏它
             if (this.currentTask == 0 && block instanceof BlockCrops && ((BlockCrops) block).isMaxAge(iblockstate)) {
+                // 手部动画
+                entityMaid.swingArm(EnumHand.MAIN_HAND);
                 world.destroyBlock(blockpos, true);
             }
 
@@ -90,6 +94,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
                     if (!itemstack.isEmpty() && itemstack.getItem() instanceof IPlantable) {
                         if (((IPlantable) itemstack.getItem()).getPlantType(world, blockpos) == EnumPlantType.Crop) {
+                            // 手部动画
+                            entityMaid.swingArm(EnumHand.MAIN_HAND);
                             world.setBlockState(blockpos, ((IPlantable) itemstack.getItem()).getPlant(world, blockpos), 3);
                             // 种植成功！扣除物品
                             itemstack.shrink(1);

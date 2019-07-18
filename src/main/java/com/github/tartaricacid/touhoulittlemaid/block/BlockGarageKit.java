@@ -1,7 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -38,6 +41,9 @@ import java.util.List;
  **/
 public class BlockGarageKit extends Block implements ITileEntityProvider {
     private static final String DEFAULT_ID = "touhou_little_maid:entity.passive.maid";
+    private static final String DEFAULT_MODEL = "touhou_little_maid:models/entity/hakurei_reimu.json";
+    private static final String DEFAULT_TEXTURE = "touhou_little_maid:textures/entity/hakurei_reimu.png";
+    private static final String DEFAULT_NAME = "{model.vanilla_touhou_model.hakurei_reimu.name}";
     public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
 
     public BlockGarageKit() {
@@ -60,7 +66,9 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
 
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        items.add(getItemStackWithCharacter(DEFAULT_ID));
+        for (ModelItem modelItem : CommonProxy.MODEL_LIST.getModelList()) {
+            items.add(getItemStackWithData(DEFAULT_ID, modelItem.getModel(), modelItem.getTexture(), modelItem.getName()));
+        }
     }
 
 
@@ -86,16 +94,17 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         if (!worldIn.isRemote) {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te instanceof TileEntityGarageKit) {
-                ((TileEntityGarageKit) te).setCharacter(getCharacter(stack));
-                ((TileEntityGarageKit) te).setFacing(EnumFacing.getDirectionFromEntityLiving(pos, placer));
+                ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
+                        this.getModel(stack), this.getTexture(stack), this.getName(stack));
             }
         }
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.desc",
-                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(getCharacter(stack))) + ".name")));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.id.desc",
+                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(getEntityId(stack))) + ".name")));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(getName(stack))));
     }
 
     @Override
@@ -128,31 +137,69 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     private ItemStack getItemStackFromBlock(World worldIn, BlockPos pos) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
-            return getItemStackWithCharacter(((TileEntityGarageKit) te).getCharacter());
+            TileEntityGarageKit kit = (TileEntityGarageKit) te;
+            return getItemStackWithData(kit.getEntityId(), kit.getModel(), kit.getTexture(), kit.getName());
         } else {
-            return getItemStackWithCharacter(DEFAULT_ID);
+            return getItemStackWithData(DEFAULT_ID, DEFAULT_MODEL, DEFAULT_TEXTURE, DEFAULT_NAME);
         }
     }
 
     /**
-     * 获取带有指定实体 ID 的 ItemStack
+     * 获取带有指定数据的 ItemStack
      *
-     * @param name 实体 ID
+     * @param id      实体 id
+     * @param model   模型地址
+     * @param texture 材质地址
+     * @param name    模型名称
+     * @return 带有这些数据的物品堆
      */
-    private ItemStack getItemStackWithCharacter(String name) {
+    public ItemStack getItemStackWithData(String id, String model, String texture, String name) {
         ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
-        getTagCompoundSafe(stack).setString(NBT.CHARACTER.getName(), name);
+        getTagCompoundSafe(stack).setString(NBT.ENTITY_ID.getName(), id);
+        getTagCompoundSafe(stack).setString(NBT.MODEL_LOCATION.getName(), model);
+        getTagCompoundSafe(stack).setString(NBT.MODEL_TEXTURE.getName(), texture);
+        getTagCompoundSafe(stack).setString(NBT.MODEL_NAME.getName(), name);
         return stack;
     }
 
     /**
-     * 获取 ItemStack 中的 CHARACTER NBT 数据，如果不存在则返回默认值
+     * 获取 ItemStack 中的 ENTITY_ID NBT 数据，如果不存在则返回默认值
      */
-    public String getCharacter(ItemStack stack) {
-        if (!getTagCompoundSafe(stack).getString(NBT.CHARACTER.getName()).isEmpty()) {
-            return getTagCompoundSafe(stack).getString(NBT.CHARACTER.getName());
+    public String getEntityId(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName());
         }
         return DEFAULT_ID;
+    }
+
+    /**
+     * 获取 ItemStack 中的 MODEL NBT 数据，如果不存在则返回默认值
+     */
+    public String getModel(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getString(NBT.MODEL_LOCATION.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getString(NBT.MODEL_LOCATION.getName());
+        }
+        return DEFAULT_MODEL;
+    }
+
+    /**
+     * 获取 ItemStack 中的 TEXTURE NBT 数据，如果不存在则返回默认值
+     */
+    public String getTexture(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getString(NBT.MODEL_TEXTURE.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getString(NBT.MODEL_TEXTURE.getName());
+        }
+        return DEFAULT_TEXTURE;
+    }
+
+    /**
+     * 获取 ItemStack 中的 MODEL_NAME NBT 数据，如果不存在则返回默认值
+     */
+    public String getName(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getString(NBT.MODEL_NAME.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getString(NBT.MODEL_NAME.getName());
+        }
+        return DEFAULT_NAME;
     }
 
     /**
@@ -169,9 +216,15 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
 
     public enum NBT {
         // 模型对应的实体 id
-        CHARACTER("Character"),
+        ENTITY_ID("EntityId"),
         // 模型的方向
-        FACING("Facing");
+        FACING("Facing"),
+        // 模型位置
+        MODEL_LOCATION("ModelLocation"),
+        // 模型材质
+        MODEL_TEXTURE("ModelTexture"),
+        // 模型名称
+        MODEL_NAME("ModelName");
 
         private String name;
 
