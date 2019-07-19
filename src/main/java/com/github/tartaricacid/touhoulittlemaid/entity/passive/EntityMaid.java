@@ -158,27 +158,31 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this,
                 this.getEntityBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), IS_PICKUP);
-        if (!entityList.isEmpty() && this.isEntityAlive()) {
+        if (!entityList.isEmpty() && this.isEntityAlive() && !world.isRemote) {
             for (Entity entityPickup : entityList) {
                 // 如果是物品
-                if (entityPickup instanceof EntityItem && !((EntityItem) entityPickup).cannotPickup()) {
+                if (!entityPickup.isDead && entityPickup instanceof EntityItem && !((EntityItem) entityPickup).cannotPickup()) {
+                    // 获取实体的物品堆，遍历尝试塞入背包
                     ItemStack itemstack = ((EntityItem) entityPickup).getItem();
                     for (int i = 0; i < mainInv.getSlots(); i++) {
                         itemstack = mainInv.insertItem(i, itemstack, false);
                     }
+                    // 如果遍历塞完后发现为空了
                     if (itemstack.isEmpty()) {
+                        // 清除这个实体
                         entityPickup.setDead();
+                        // 音效播放
                         this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                                 ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                        if (rand.nextInt(3) == 1) {
-                            this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                        }
+                        //if (rand.nextInt(3) == 1) {
+                        this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                        //}
                     } else {
                         ((EntityItem) entityPickup).getItem().setCount(itemstack.getCount());
                     }
                 }
                 // 如果是经验
-                if (entityPickup instanceof EntityXPOrb && ((EntityXPOrb) entityPickup).delayBeforeCanPickup == 0) {
+                if (!entityPickup.isDead && entityPickup instanceof EntityXPOrb && ((EntityXPOrb) entityPickup).delayBeforeCanPickup == 0) {
                     EntityXPOrb entityXp = (EntityXPOrb) entityPickup;
                     if (!this.world.isRemote && entityXp.delayBeforeCanPickup == 0) {
                         // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
@@ -554,10 +558,33 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 }
             }
 
-            // 掉落女仆手办
-            InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ,
-                    MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
-                            this.getModelLocation(), this.getTextureLocation(), this.getModelName()));
+            // 掉落手办
+            dropGarageKit();
+        }
+    }
+
+    /**
+     * 掉落手办，手办还要记录女仆的所有 NBT 数据，除去物品
+     */
+    private void dropGarageKit() {
+        // 掉落女仆手办
+        // 先往手办上写模型，名称之类的数据文件
+        ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid", this.getModelLocation(), this.getTextureLocation(), this.getModelName());
+        // 获取物品堆的 NBT 数据
+        NBTTagCompound stackTag = stack.getTagCompound();
+        // 获取女仆的 NBT 数据
+        NBTTagCompound entityTag = new NBTTagCompound();
+        this.writeEntityToNBT(entityTag);
+        // 剔除物品部分
+        entityTag.removeTag("ArmorItems");
+        entityTag.removeTag("HandItems");
+        entityTag.removeTag(NBT.MAID_INVENTORY.getName());
+        entityTag.removeTag(NBT.BAUBLE_INVENTORY.getName());
+        // 生成物品实体
+        if (stackTag != null) {
+            // 将实体数据存储到手办上
+            stackTag.setTag(NBT.MAID_DATA.getName(), entityTag);
+            InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, stack);
         }
     }
 
@@ -567,6 +594,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     @Override
+    @Deprecated
     public String getName() {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
@@ -605,8 +633,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
         if (compound.hasKey(NBT.MAID_INVENTORY.getName())) {
             mainInv.deserializeNBT((NBTTagCompound) compound.getTag(NBT.MAID_INVENTORY.getName()));
         }
@@ -641,8 +669,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
         compound.setTag(NBT.MAID_INVENTORY.getName(), mainInv.serializeNBT());
         compound.setTag(NBT.BAUBLE_INVENTORY.getName(), baubleInv.serializeNBT());
         compound.setBoolean(NBT.IS_PICKUP.getName(), isPickup());
@@ -653,7 +681,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         compound.setString(NBT.MODEL_LOCATION.getName(), getModelLocation());
         compound.setString(NBT.TEXTURE_LOCATION.getName(), getTextureLocation());
         compound.setString(NBT.MODEL_NAME.getName(), getModelName());
-        return compound;
+    }
+
+    @Override
+    public int getTalkInterval() {
+        return GeneralConfig.MAID_CONFIG.maidTalkInterval;
     }
 
     @Nullable
@@ -862,7 +894,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         // 材质位置
         TEXTURE_LOCATION("TextureLocation"),
         // 模型名称
-        MODEL_NAME("ModelName");
+        MODEL_NAME("ModelName"),
+        // 女仆 NBT 数据
+        MAID_DATA("MaidData");
 
         private String name;
 

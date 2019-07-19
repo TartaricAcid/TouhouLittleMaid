@@ -85,6 +85,26 @@
       "texture": "touhou_little_maid:textures/entity/moriya_suwako.png",
       "name": "{model.vanilla_touhou_model.moriya_suwako.name}",
       "description": ["{model.vanilla_touhou_model.moriya_suwako.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/wakasagihime.json",
+      "texture": "touhou_little_maid:textures/entity/wakasagihime.png",
+      "name": "{model.vanilla_touhou_model.wakasagihime.name}",
+      "description": ["{model.vanilla_touhou_model.wakasagihime.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/flandre_scarlet.json",
+      "texture": "touhou_little_maid:textures/entity/flandre_scarlet.png",
+      "name": "{model.vanilla_touhou_model.flandre_scarlet.name}",
+      "description": ["{model.vanilla_touhou_model.flandre_scarlet.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/fujiwara_no_mokou.json",
+      "texture": "touhou_little_maid:textures/entity/fujiwara_no_mokou.png",
+      "name": "{model.vanilla_touhou_model.fujiwara_no_mokou.name}",
+      "description": ["{model.vanilla_touhou_model.fujiwara_no_mokou.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/kisume.json",
+      "texture": "touhou_little_maid:textures/entity/kisume.png",
+      "name": "{model.vanilla_touhou_model.kisume.name}",
+      "description": ["{model.vanilla_touhou_model.kisume.desc}"]
     }
   ]
 }

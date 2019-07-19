@@ -297,8 +297,8 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 为了避免转向错误，所以直接 new 一个新实体，但是传入其他数据
         EntityMaid entityMaidNew = new EntityMaid(mc.world);
         NBTTagCompound nbt = new NBTTagCompound();
-        entityMaid.writeToNBT(nbt);
-        entityMaidNew.readFromNBT(nbt);
+        entityMaid.writeEntityToNBT(nbt);
+        entityMaidNew.readEntityFromNBT(nbt);
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 30,
                 (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, entityMaidNew);
     }

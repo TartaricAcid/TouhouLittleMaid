@@ -33,6 +33,7 @@ info.touhou_little_maid.maid.set_pos=§a§lMaid Pos: %d, %d, %d
 # Config
 config.touhou_little_maid.maid_config=Maid Config
 config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item
+config.touhou_little_maid.maid_config.maid_talk_interval=Maid Talk Interval (tick)
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
@@ -97,6 +98,10 @@ model.vanilla_touhou_model.cirno.name=Cirno
 model.vanilla_touhou_model.daiyousei.name=Daiyousei
 model.vanilla_touhou_model.houraisan_kaguya.name=Kaguya Houraisan
 model.vanilla_touhou_model.moriya_suwako.name=Suwako Moriya
+model.vanilla_touhou_model.wakasagihime.name=Wakasagihime
+model.vanilla_touhou_model.flandre_scarlet.name=Flandre Scarlet
+model.vanilla_touhou_model.fujiwara_no_mokou.name=Fujiwara no Mokou
+model.vanilla_touhou_model.kisume.name=Kisume
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.vanilla_touhou_model.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -114,6 +119,10 @@ model.vanilla_touhou_model.cirno.desc=§7Fairy of the Ice
 model.vanilla_touhou_model.daiyousei.desc=§7???
 model.vanilla_touhou_model.houraisan_kaguya.desc=§7Eternal Princess
 model.vanilla_touhou_model.moriya_suwako.desc=§7The Highest of Native Gods
+model.vanilla_touhou_model.wakasagihime.desc=§7Mermaid Living in Fresh Water
+model.vanilla_touhou_model.flandre_scarlet.desc=§7Sister of the Devil
+model.vanilla_touhou_model.fujiwara_no_mokou.desc=§7Figure of the Person of Hourai
+model.vanilla_touhou_model.kisume.desc=§7The Fearsome Well Spirit
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

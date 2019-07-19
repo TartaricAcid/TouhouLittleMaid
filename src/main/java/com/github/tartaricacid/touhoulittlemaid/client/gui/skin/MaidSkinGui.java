@@ -129,8 +129,8 @@ public class MaidSkinGui extends GuiScreen {
         // 绘制左边示例实体
         EntityMaid entityMaidNew = new EntityMaid(mc.world);
         NBTTagCompound nbt = new NBTTagCompound();
-        maid.writeToNBT(nbt);
-        entityMaidNew.readFromNBT(nbt);
+        maid.writeEntityToNBT(nbt);
+        entityMaidNew.readEntityFromNBT(nbt);
         GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, 45, middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entityMaidNew);
 
         // 绘制实体，绘制完毕后绘制文本提示

@@ -33,6 +33,7 @@ info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
 # Config
 config.touhou_little_maid.maid_config=女仆相关配置
 config.touhou_little_maid.maid_config.maid_tamed_item=女仆驯服所使用的物品
+config.touhou_little_maid.maid_config.maid_talk_interval=女仆发出声音的间隔（tick）
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹
@@ -97,6 +98,10 @@ model.vanilla_touhou_model.cirno.name=琪露诺
 model.vanilla_touhou_model.daiyousei.name=大妖精
 model.vanilla_touhou_model.houraisan_kaguya.name=蓬莱山辉夜
 model.vanilla_touhou_model.moriya_suwako.name=泄矢诹访子
+model.vanilla_touhou_model.wakasagihime.name=若鹭姬
+model.vanilla_touhou_model.flandre_scarlet.name=芙兰朵露·斯卡蕾特
+model.vanilla_touhou_model.fujiwara_no_mokou.name=藤原妹红
+model.vanilla_touhou_model.kisume.name=琪斯美
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7乐园的巫女
 model.vanilla_touhou_model.yakumo_ran.desc=§7隙间妖怪的式神
@@ -114,6 +119,10 @@ model.vanilla_touhou_model.cirno.desc=§7冰之妖精
 model.vanilla_touhou_model.daiyousei.desc=§7？？？
 model.vanilla_touhou_model.houraisan_kaguya.desc=§7永远的公主
 model.vanilla_touhou_model.moriya_suwako.desc=§7土著神的顶点
+model.vanilla_touhou_model.wakasagihime.desc=§7栖息于淡水的人鱼
+model.vanilla_touhou_model.flandre_scarlet.desc=§7恶魔之妹
+model.vanilla_touhou_model.fujiwara_no_mokou.desc=§7蓬莱的人之形
+model.vanilla_touhou_model.kisume.desc=§7可怕的水井妖怪
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
