@@ -62,9 +62,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     @Override
     public void updateTask() {
         super.updateTask();
-        // 女仆盯着耕地
-        this.entityMaid.getLookHelper().setLookPosition((double) this.destinationBlock.getX() + 0.5D, (double) (this.destinationBlock.getY() + 1),
-                (double) this.destinationBlock.getZ() + 0.5D, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
+        boolean shouldLook = true;
 
         // 先判定女仆是否在耕地上方
         if (this.getIsAboveDestination()) {
@@ -88,17 +86,25 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
                     return;
                 }
 
+                shouldLook = false;
                 // 开始遍历女仆背包，尝试种植作物
                 for (int i = 0; i < itemHandler.getSlots(); ++i) {
                     ItemStack itemstack = itemHandler.getStackInSlot(i);
 
                     if (!itemstack.isEmpty() && itemstack.getItem() instanceof IPlantable) {
                         if (((IPlantable) itemstack.getItem()).getPlantType(world, blockpos) == EnumPlantType.Crop) {
-                            // 手部动画
-                            entityMaid.swingArm(EnumHand.MAIN_HAND);
-                            world.setBlockState(blockpos, ((IPlantable) itemstack.getItem()).getPlant(world, blockpos), 3);
+                            IBlockState state = ((IPlantable) itemstack.getItem()).getPlant(world, blockpos);
+                            if (state.getBlock() == Blocks.AIR)
+                            {
+                                continue;
+                            }
+                            world.setBlockState(blockpos, state, 3);
                             // 种植成功！扣除物品
                             itemstack.shrink(1);
+                            // 手部动画
+                            entityMaid.swingArm(EnumHand.MAIN_HAND);
+                            shouldLook = true;
+                            break;
                         }
                     }
                 }
@@ -106,6 +112,12 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
             this.currentTask = -1;
             this.runDelay = 2;
+        }
+        if (shouldLook)
+        {
+            // 女仆盯着耕地
+            this.entityMaid.getLookHelper().setLookPosition((double) this.destinationBlock.getX() + 0.5D, (double) (this.destinationBlock.getY() + 1),
+                    (double) this.destinationBlock.getZ() + 0.5D, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
         }
     }
 
