@@ -32,7 +32,8 @@ info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
 
 # Config
 config.touhou_little_maid.maid_config=女仆相关配置
-config.touhou_little_maid.maid_config.maid_tamed_item=女仆驯服所使用的物品
+config.touhou_little_maid.maid_config.maid_tamed_item=驯服女仆所使用的物品
+config.touhou_little_maid.maid_config.maid_temptation_item=诱惑女仆所使用的物品
 config.touhou_little_maid.maid_config.maid_talk_interval=女仆发出声音的间隔（tick）
 
 # Danmaku Type
@@ -102,6 +103,13 @@ model.vanilla_touhou_model.wakasagihime.name=若鹭姬
 model.vanilla_touhou_model.flandre_scarlet.name=芙兰朵露·斯卡蕾特
 model.vanilla_touhou_model.fujiwara_no_mokou.name=藤原妹红
 model.vanilla_touhou_model.kisume.name=琪斯美
+model.vanilla_touhou_model.chen.name=橙
+model.vanilla_touhou_model.ibuki_suika.name=伊吹萃香
+model.vanilla_touhou_model.star_sapphire.name=斯塔萨菲雅
+model.vanilla_touhou_model.konpaku_youmu.name=魂魄妖梦
+model.vanilla_touhou_model.luna_child.name=露娜切露德
+model.vanilla_touhou_model.remilia_scarlet.name=蕾米莉亚·斯卡蕾特
+model.vanilla_touhou_model.sunny_milk.name=桑尼米尔克
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7乐园的巫女
 model.vanilla_touhou_model.yakumo_ran.desc=§7隙间妖怪的式神
@@ -116,13 +124,20 @@ model.vanilla_touhou_model.kochiya_sanae.desc=§7山上的新人神明
 model.vanilla_touhou_model.izayoi_sakuya.desc=§7红魔馆的女仆
 model.vanilla_touhou_model.nagae_iku.desc=§7美丽的绯之衣
 model.vanilla_touhou_model.cirno.desc=§7冰之妖精
-model.vanilla_touhou_model.daiyousei.desc=§7？？？
+model.vanilla_touhou_model.daiyousei.desc=§7新月般的妖精
 model.vanilla_touhou_model.houraisan_kaguya.desc=§7永远的公主
 model.vanilla_touhou_model.moriya_suwako.desc=§7土著神的顶点
 model.vanilla_touhou_model.wakasagihime.desc=§7栖息于淡水的人鱼
 model.vanilla_touhou_model.flandre_scarlet.desc=§7恶魔之妹
 model.vanilla_touhou_model.fujiwara_no_mokou.desc=§7蓬莱的人之形
 model.vanilla_touhou_model.kisume.desc=§7可怕的水井妖怪
+model.vanilla_touhou_model.chen.desc=§7凶兆的黑猫
+model.vanilla_touhou_model.ibuki_suika.desc=§7小小的百鬼夜行
+model.vanilla_touhou_model.star_sapphire.desc=§7倾泻而下的星之光
+model.vanilla_touhou_model.konpaku_youmu.desc=§7半人半灵的园艺师
+model.vanilla_touhou_model.luna_child.desc=§7静谧的月之光
+model.vanilla_touhou_model.remilia_scarlet.desc=§7红色恶魔
+model.vanilla_touhou_model.sunny_milk.desc=§7闪耀的日之光
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

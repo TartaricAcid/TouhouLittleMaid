@@ -58,6 +58,8 @@ public final class CustomModelLoader {
 
                 // 将其转换为 pojo 对象
                 CustomModelPackPOJO pojo = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPackPOJO.class);
+                // 关闭输入流
+                IOUtils.closeQuietly(input);
 
                 // 对必须的包名和模型列表做检查
                 if (pojo.getPackName() != null && pojo.getModelList() != null) {
@@ -69,9 +71,6 @@ public final class CustomModelLoader {
                     // 否则日志给出提示
                     LOGGER.warn("{} file don't have pack_name field or model field", res);
                 }
-
-                // 关闭输入流
-                IOUtils.closeQuietly(input);
             } catch (IOException ignore) {
                 // 忽略错误，因为资源域很多
             }
@@ -112,6 +111,14 @@ public final class CustomModelLoader {
         try {
             InputStream input = manager.getResource(modelLocation).getInputStream();
             CustomModelPOJO pojo = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPOJO.class);
+            // 关闭输入流
+            IOUtils.closeQuietly(input);
+
+            // 先判断是不是 1.10.0 版本基岩版模型文件
+            if (!"1.10.0".equals(pojo.getFormatVersion())) {
+                LOGGER.warn("{} model version is not 1.10.0", modelLocation);
+                return null;
+            }
 
             // 如果 model 字段不为空
             if (pojo.getGeometryModel() != null) {
@@ -120,9 +127,6 @@ public final class CustomModelLoader {
                 // 否则日志给出提示
                 LOGGER.warn("{} model file don't have model field", modelLocation);
             }
-
-            // 关闭输入流
-            IOUtils.closeQuietly(input);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
             LOGGER.warn("Failed to load model: {}", modelLocation);

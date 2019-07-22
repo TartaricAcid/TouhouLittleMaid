@@ -19,6 +19,11 @@ public class GeneralConfig {
         @Config.Name("MaidTamedItem")
         public String maidTamedItem = "minecraft:cake";
 
+        @Config.Comment("The Item That Can Temptation Maid")
+        @Config.LangKey("config.touhou_little_maid.maid_config.maid_temptation_item")
+        @Config.Name("MaidTemptationItem")
+        public String maidTemptationItem = "minecraft:cake";
+
         @Config.Comment("Get number of ticks, at least during which the maid will be silent.")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_talk_interval")
         @Config.Name("MaidTalkInterval")

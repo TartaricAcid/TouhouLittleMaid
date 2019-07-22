@@ -44,6 +44,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     private static final String DEFAULT_MODEL = "touhou_little_maid:models/entity/hakurei_reimu.json";
     private static final String DEFAULT_TEXTURE = "touhou_little_maid:textures/entity/hakurei_reimu.png";
     private static final String DEFAULT_NAME = "{model.vanilla_touhou_model.hakurei_reimu.name}";
+    private static final NBTTagCompound DEFAULT_DATA = new NBTTagCompound();
     public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
 
     public BlockGarageKit() {
@@ -67,7 +68,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         for (ModelItem modelItem : CommonProxy.MODEL_LIST.getModelList()) {
-            items.add(getItemStackWithData(DEFAULT_ID, modelItem.getModel(), modelItem.getTexture(), modelItem.getName()));
+            items.add(getItemStackWithData(DEFAULT_ID, modelItem.getModel(), modelItem.getTexture(), modelItem.getName(), DEFAULT_DATA));
         }
     }
 
@@ -95,7 +96,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te instanceof TileEntityGarageKit) {
                 ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
-                        this.getModel(stack), this.getTexture(stack), this.getName(stack));
+                        this.getModel(stack), this.getTexture(stack), this.getName(stack), this.getEntityData(stack));
             }
         }
     }
@@ -138,27 +139,29 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
             TileEntityGarageKit kit = (TileEntityGarageKit) te;
-            return getItemStackWithData(kit.getEntityId(), kit.getModel(), kit.getTexture(), kit.getName());
+            return getItemStackWithData(kit.getEntityId(), kit.getModel(), kit.getTexture(), kit.getName(), kit.getEntityData());
         } else {
-            return getItemStackWithData(DEFAULT_ID, DEFAULT_MODEL, DEFAULT_TEXTURE, DEFAULT_NAME);
+            return getItemStackWithData(DEFAULT_ID, DEFAULT_MODEL, DEFAULT_TEXTURE, DEFAULT_NAME, DEFAULT_DATA);
         }
     }
 
     /**
      * 获取带有指定数据的 ItemStack
      *
-     * @param id      实体 id
-     * @param model   模型地址
-     * @param texture 材质地址
-     * @param name    模型名称
+     * @param id         实体 id
+     * @param model      模型地址
+     * @param texture    材质地址
+     * @param name       模型名称
+     * @param entityData 模型存储的实体数据
      * @return 带有这些数据的物品堆
      */
-    public ItemStack getItemStackWithData(String id, String model, String texture, String name) {
+    public ItemStack getItemStackWithData(String id, String model, String texture, String name, NBTTagCompound entityData) {
         ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
         getTagCompoundSafe(stack).setString(NBT.ENTITY_ID.getName(), id);
         getTagCompoundSafe(stack).setString(NBT.MODEL_LOCATION.getName(), model);
         getTagCompoundSafe(stack).setString(NBT.MODEL_TEXTURE.getName(), texture);
         getTagCompoundSafe(stack).setString(NBT.MODEL_NAME.getName(), name);
+        getTagCompoundSafe(stack).setTag(NBT.MAID_DATA.getName(), entityData);
         return stack;
     }
 
@@ -203,6 +206,17 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     }
 
     /**
+     * 获取 ItemStack 中的 MAID_DATA NBT 数据，如果不存在则返回默认值
+     */
+    public NBTTagCompound getEntityData(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName());
+        }
+        return DEFAULT_DATA;
+    }
+
+
+    /**
      * 安全获取 NBT 实例的方法
      */
     private NBTTagCompound getTagCompoundSafe(ItemStack stack) {
@@ -224,7 +238,9 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         // 模型材质
         MODEL_TEXTURE("ModelTexture"),
         // 模型名称
-        MODEL_NAME("ModelName");
+        MODEL_NAME("ModelName"),
+        // 女仆 NBT 数据
+        MAID_DATA("MaidData");
 
         private String name;
 
