@@ -99,6 +99,11 @@ public class TileEntityGarageKit extends TileEntity {
         return name;
     }
 
+    public NBTTagCompound getEntityData()
+    {
+        return entityData;
+    }
+
     public void setData(String character, EnumFacing facing, String model, String texture, String name, NBTTagCompound entityData) {
         if (Objects.equal(this.entityId, character) && Objects.equal(this.facing, facing) && Objects.equal(this.model, model) && Objects.equal(this.texture, texture) && Objects.equal(this.name, name)) {
             return;
