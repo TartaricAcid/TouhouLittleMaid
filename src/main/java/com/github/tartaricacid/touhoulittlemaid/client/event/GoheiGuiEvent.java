@@ -52,15 +52,11 @@ public class GoheiGuiEvent {
 
     @SubscribeEvent
     public static void onMouseDwheelInput(MouseEvent event) {
-        if (event.isCanceled()) {
-            return;
-        }
-
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayerSP player = mc.player;
 
         if (show && mc.inGameHasFocus && event.getDwheel() != 0 && player.getHeldItemMainhand().getItem() == MaidItems.HAKUREI_GOHEI) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGoheiMessage(true));
+            CommonProxy.INSTANCE.sendToServer(new ChangeGoheiMessage(event.getDwheel() < 0));
             event.setCanceled(true);
         }
     }
