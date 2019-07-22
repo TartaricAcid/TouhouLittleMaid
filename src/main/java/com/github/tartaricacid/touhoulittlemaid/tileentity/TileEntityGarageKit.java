@@ -93,6 +93,9 @@ public class TileEntityGarageKit extends TileEntity {
     }
 
     public void setData(String character, EnumFacing facing, String model, String texture, String name) {
+        if (this.entityId == character && this.facing == facing && this.model == model && this.texture == texture && this.name == name) {
+            return;
+        }
         this.entityId = character;
         this.facing = facing;
         this.model = model;

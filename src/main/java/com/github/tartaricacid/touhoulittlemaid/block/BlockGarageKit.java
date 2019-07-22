@@ -71,10 +71,9 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         }
     }
 
-
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        worldIn.spawnEntity(new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), getItemStackFromBlock(worldIn, pos)));
+        spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
         super.breakBlock(worldIn, pos, state);
     }
 
@@ -91,12 +90,10 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if (!worldIn.isRemote) {
-            TileEntity te = worldIn.getTileEntity(pos);
-            if (te instanceof TileEntityGarageKit) {
-                ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
-                        this.getModel(stack), this.getTexture(stack), this.getName(stack));
-            }
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileEntityGarageKit) {
+            ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
+                    this.getModel(stack), this.getTexture(stack), this.getName(stack));
         }
     }
 
