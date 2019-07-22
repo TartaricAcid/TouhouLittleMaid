@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
+import com.google.common.base.Objects;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -16,10 +18,11 @@ import javax.annotation.Nullable;
  **/
 public class TileEntityGarageKit extends TileEntity {
     private String entityId = "touhou_little_maid:passive.maid";
+    private EnumFacing facing = EnumFacing.SOUTH;
     private String model = "touhou_little_maid:models/entity/hakurei_reimu.json";
     private String texture = "touhou_little_maid:textures/entity/hakurei_reimu.png";
     private String name = "{model.vanilla_touhou_model.hakurei_reimu.name}";
-    private EnumFacing facing = EnumFacing.SOUTH;
+    private NBTTagCompound entityData = new NBTTagCompound();
 
     @Override
     public NBTTagCompound getUpdateTag() {
@@ -57,6 +60,9 @@ public class TileEntityGarageKit extends TileEntity {
         if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_NAME.getName())) {
             name = getTileData().getString(BlockGarageKit.NBT.MODEL_NAME.getName());
         }
+        if (getTileData().hasKey(BlockGarageKit.NBT.MAID_DATA.getName())) {
+            entityData = getTileData().getCompoundTag(BlockGarageKit.NBT.MAID_DATA.getName());
+        }
     }
 
     @Override
@@ -66,6 +72,7 @@ public class TileEntityGarageKit extends TileEntity {
         getTileData().setString(BlockGarageKit.NBT.MODEL_LOCATION.getName(), model);
         getTileData().setString(BlockGarageKit.NBT.MODEL_TEXTURE.getName(), texture);
         getTileData().setString(BlockGarageKit.NBT.MODEL_NAME.getName(), name);
+        getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), entityData);
         super.writeToNBT(compound);
         return compound;
     }
@@ -92,8 +99,8 @@ public class TileEntityGarageKit extends TileEntity {
         return name;
     }
 
-    public void setData(String character, EnumFacing facing, String model, String texture, String name) {
-        if (this.entityId == character && this.facing == facing && this.model == model && this.texture == texture && this.name == name) {
+    public void setData(String character, EnumFacing facing, String model, String texture, String name, NBTTagCompound entityData) {
+        if (Objects.equal(this.entityId, character) && Objects.equal(this.facing, facing) && Objects.equal(this.model, model) && Objects.equal(this.texture, texture) && Objects.equal(this.name, name)) {
             return;
         }
         this.entityId = character;
@@ -101,7 +108,9 @@ public class TileEntityGarageKit extends TileEntity {
         this.model = model;
         this.texture = texture;
         this.name = name;
-        markDirty(); // 确保数据已经存入
+        this.entityData = entityData;
+        // 确保数据已经存入
+        markDirty();
         // 通知 world 更新方块数据
         if (world != null) {
             IBlockState state = world.getBlockState(getPos());

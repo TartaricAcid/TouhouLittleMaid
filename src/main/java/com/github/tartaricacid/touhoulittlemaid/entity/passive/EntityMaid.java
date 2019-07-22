@@ -64,7 +64,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityMaid extends EntityTameable implements IRangedAttackMob {
-    public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb);
+    public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable;
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
@@ -158,53 +158,88 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this,
                 this.getEntityBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), IS_PICKUP);
-        if (!entityList.isEmpty() && this.isEntityAlive() && !world.isRemote) {
+        if (!entityList.isEmpty() && this.isEntityAlive()) {
             for (Entity entityPickup : entityList) {
                 // 如果是物品
-                if (!entityPickup.isDead && entityPickup instanceof EntityItem && !((EntityItem) entityPickup).cannotPickup()) {
-                    // 获取实体的物品堆，遍历尝试塞入背包
-                    ItemStack itemstack = ((EntityItem) entityPickup).getItem();
-                    for (int i = 0; i < mainInv.getSlots(); i++) {
-                        itemstack = mainInv.insertItem(i, itemstack, false);
-                    }
-                    // 如果遍历塞完后发现为空了
-                    if (itemstack.isEmpty()) {
-                        // 清除这个实体
-                        entityPickup.setDead();
-                        // 音效播放
-                        this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
-                                ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                        //if (rand.nextInt(3) == 1) {
-                        this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                        //}
-                    } else {
-                        ((EntityItem) entityPickup).getItem().setCount(itemstack.getCount());
-                    }
+                if (entityPickup instanceof EntityItem) {
+                    pickupItem((EntityItem) entityPickup);
                 }
                 // 如果是经验
-                if (!entityPickup.isDead && entityPickup instanceof EntityXPOrb && ((EntityXPOrb) entityPickup).delayBeforeCanPickup == 0) {
-                    EntityXPOrb entityXp = (EntityXPOrb) entityPickup;
-                    if (!this.world.isRemote && entityXp.delayBeforeCanPickup == 0) {
-                        // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-                        ItemStack itemstack = EnchantmentHelper.getEnchantedItem(Enchantments.MENDING, this);
-                        if (!itemstack.isEmpty() && itemstack.isItemDamaged()) {
-                            int i = Math.min(entityXp.xpValue * 2, itemstack.getItemDamage());
-                            entityXp.xpValue -= (i / 2);
-                            itemstack.setItemDamage(itemstack.getItemDamage() - i);
-                        }
-                        if (entityXp.xpValue > 0) {
-                            this.addExp(entityXp.xpValue);
-                        }
-                        entityXp.setDead();
-                        this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2F,
-                                (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F);
-                        if (rand.nextInt(3) == 1) {
-                            this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                        }
-                    }
+                if (entityPickup instanceof EntityXPOrb) {
+                    pickupXPOrb((EntityXPOrb) entityPickup);
+                }
+                // 如果是箭
+                if (entityPickup instanceof EntityArrow) {
+                    pickupArrow((EntityArrow) entityPickup);
                 }
             }
         }
+    }
+
+    /**
+     * 捡起物品部分的逻辑
+     */
+    private void pickupItem(EntityItem entityItem) {
+        if (!world.isRemote && entityItem.isEntityAlive() && !entityItem.cannotPickup()) {
+            // 获取实体的物品堆，遍历尝试塞入背包
+            ItemStack itemstack = entityItem.getItem();
+            // 获取数量，为后面方面用
+            int count = itemstack.getCount();
+            for (int i = 0; i < mainInv.getSlots(); i++) {
+                itemstack = mainInv.insertItem(i, itemstack, false);
+            }
+            // 如果遍历塞完后发现为空了
+            if (itemstack.isEmpty()) {
+                // 我看原版 EntityItem 有这个方法，不知道意义如何，以防万一加上
+                // 似乎是向客户端发包同步掉落物的，但是不加这个我也没遇见过 Bug
+                this.onItemPickup(entityItem, count);
+                // 清除这个实体
+                entityItem.setDead();
+                // 音效播放
+                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
+                        ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                if (rand.nextInt(3) == 1) {
+                    this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                }
+            } else {
+                entityItem.getItem().setCount(itemstack.getCount());
+            }
+        }
+    }
+
+    /**
+     * 捡起经验球部分的逻辑
+     */
+    private void pickupXPOrb(EntityXPOrb entityXPOrb) {
+        if (!this.world.isRemote && entityXPOrb.isEntityAlive() && entityXPOrb.delayBeforeCanPickup == 0) {
+            // 我看原版 EntityItem 有这个方法，不知道意义如何，以防万一加上
+            // 似乎是向客户端发包同步实体的，但是不加这个我也没遇见过 Bug
+            this.onItemPickup(entityXPOrb, 1);
+
+            // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
+            ItemStack itemstack = EnchantmentHelper.getEnchantedItem(Enchantments.MENDING, this);
+            if (!itemstack.isEmpty() && itemstack.isItemDamaged()) {
+                int i = Math.min(entityXPOrb.xpValue * 2, itemstack.getItemDamage());
+                entityXPOrb.xpValue -= (i / 2);
+                itemstack.setItemDamage(itemstack.getItemDamage() - i);
+            }
+            if (entityXPOrb.xpValue > 0) {
+                this.addExp(entityXPOrb.xpValue);
+            }
+            entityXPOrb.setDead();
+            this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2F,
+                    (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F);
+            if (rand.nextInt(3) == 1) {
+                this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+            }
+        }
+    }
+
+    /**
+     * 捡起箭部分的逻辑
+     */
+    private void pickupArrow(EntityArrow entityArrow) {
+        // TODO
     }
 
     @Override
@@ -500,7 +535,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
         if (!this.isTamed() && hand == EnumHand.MAIN_HAND && itemstack.getItem() == tamedItem) {
             if (!world.isRemote) {
-                itemstack.shrink(1);
+                consumeItemFromStack(player, itemstack);
                 this.setTamedBy(player);
                 this.playTameEffect(true);
                 this.getNavigator().clearPath();
@@ -534,6 +569,14 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         return super.processInteract(player, hand);
     }
 
+    /**
+     * 女仆可不能繁殖哦
+     */
+    @Override
+    public boolean isBreedingItem(ItemStack stack) {
+        return false;
+    }
+
     @Override
     public void onDeath(DamageSource cause) {
         // 检查饰品栏是否需要取消后续过程
@@ -558,21 +601,16 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 }
             }
 
-            // 掉落手办
+            // 最后掉落手办
             dropGarageKit();
         }
     }
 
     /**
-     * 掉落手办，手办还要记录女仆的所有 NBT 数据，除去物品
+     * 掉落手办
      */
     private void dropGarageKit() {
-        // 掉落女仆手办
-        // 先往手办上写模型，名称之类的数据文件
-        ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid", this.getModelLocation(), this.getTextureLocation(), this.getModelName());
-        // 获取物品堆的 NBT 数据
-        NBTTagCompound stackTag = stack.getTagCompound();
-        // 获取女仆的 NBT 数据
+        // 先在死亡前获取女仆的 NBT 数据
         NBTTagCompound entityTag = new NBTTagCompound();
         this.writeEntityToNBT(entityTag);
         // 剔除物品部分
@@ -580,12 +618,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         entityTag.removeTag("HandItems");
         entityTag.removeTag(NBT.MAID_INVENTORY.getName());
         entityTag.removeTag(NBT.BAUBLE_INVENTORY.getName());
+        // 掉落女仆手办
+        ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
+                this.getModelLocation(), this.getTextureLocation(), this.getModelName(), entityTag);
         // 生成物品实体
-        if (stackTag != null) {
-            // 将实体数据存储到手办上
-            stackTag.setTag(NBT.MAID_DATA.getName(), entityTag);
-            InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, stack);
-        }
+        InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, stack);
     }
 
     @Override

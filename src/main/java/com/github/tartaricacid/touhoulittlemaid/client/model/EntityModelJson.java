@@ -119,7 +119,13 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer wingRight = modelMap.get("wingRight");
         // 呆毛
         ModelRenderer ahoge = modelMap.get("ahoge");
+        // 眨眼
         ModelRenderer blink = modelMap.get("blink");
+        // 尾巴
+        ModelRenderer tail = modelMap.get("tail");
+        // 浮动部件
+        ModelRenderer sinFloat = modelMap.get("sinFloat");
+        ModelRenderer cosFloat = modelMap.get("cosFloat");
 
         // 用于手部使用动画的数据
         float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
@@ -182,6 +188,19 @@ public class EntityModelJson extends ModelBase {
             float remainder = ageInTicks % 60;
             // 0-10 显示眨眼贴图
             blink.isHidden = !(55 < remainder && remainder < 60);
+        }
+
+        if (tail != null) {
+            tail.rotateAngleZ = MathHelper.cos(ageInTicks * 0.2f) * 0.1f;
+            tail.rotateAngleX = MathHelper.sin(ageInTicks * 0.2f) * 0.05f;
+        }
+
+        if (sinFloat != null) {
+            sinFloat.offsetY = MathHelper.sin(ageInTicks * 0.1f) * 0.05f;
+        }
+
+        if (cosFloat != null) {
+            cosFloat.offsetY = MathHelper.cos(ageInTicks * 0.1f) * 0.05f;
         }
 
         EntityMaid entityMaid = (EntityMaid) entityIn;
