@@ -33,7 +33,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        return !entity.isSitting() && this.entity.getAttackTarget() != null &&
+        return !entity.guiOpening && !entity.isSitting() && this.entity.getAttackTarget() != null &&
                 ((this.entity.getMode() == MaidMode.RANGE_ATTACK && this.isBowInMainhand() && this.entity.hasArrow())
                         || (this.entity.getMode() == MaidMode.DANMAKU_ATTACK && this.isGoheiInMainhand()));
     }

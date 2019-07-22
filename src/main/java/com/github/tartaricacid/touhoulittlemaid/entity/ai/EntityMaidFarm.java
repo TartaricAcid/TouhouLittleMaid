@@ -33,7 +33,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
-        if (entityMaid.getMode() != MaidMode.FARM || entityMaid.isSitting()) {
+        if (entityMaid.guiOpening || entityMaid.getMode() != MaidMode.FARM || entityMaid.isSitting()) {
             return false;
         }
 
@@ -55,7 +55,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return this.currentTask >= 0 && entityMaid.getMode() == MaidMode.FARM &&
+        return !entityMaid.guiOpening && this.currentTask >= 0 && entityMaid.getMode() == MaidMode.FARM &&
                 !entityMaid.isSitting() && super.shouldContinueExecuting();
     }
 

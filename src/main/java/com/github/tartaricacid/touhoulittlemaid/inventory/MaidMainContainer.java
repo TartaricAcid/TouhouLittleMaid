@@ -25,6 +25,21 @@ public class MaidMainContainer extends Container {
         addEntityArmorAndHandSlots(entityMaid);
         addPlayerSlots(playerInventory);
         this.entityMaid = entityMaid;
+        entityMaid.guiOpening = true;
+    }
+
+    @Override
+    public void detectAndSendChanges()
+    {
+        entityMaid.guiOpening = true;
+        super.detectAndSendChanges();
+    }
+
+    @Override
+    public void onContainerClosed(EntityPlayer playerIn)
+    {
+        entityMaid.guiOpening = false;
+        super.onContainerClosed(playerIn);
     }
 
     @Override

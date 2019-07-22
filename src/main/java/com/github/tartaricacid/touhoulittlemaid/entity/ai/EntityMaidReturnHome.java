@@ -20,14 +20,12 @@ public class EntityMaidReturnHome extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         // 尝试 attemptsCount 次后进行执行
-        timeCount--;
-
-        return timeCount < 0 && entityMaid.isHome() && !entityMaid.isSitting() && !entityMaid.getHomePos().equals(BlockPos.ORIGIN);
+        return !entityMaid.guiOpening && --timeCount < 0 && entityMaid.isHome() && !entityMaid.isSitting() && !entityMaid.getHomePos().equals(BlockPos.ORIGIN);
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return timeCount < 0 && entityMaid.isHome() && !entityMaid.isSitting() && !entityMaid.getHomePos().equals(BlockPos.ORIGIN);
+        return !entityMaid.guiOpening && timeCount < 0 && entityMaid.isHome() && !entityMaid.isSitting() && !entityMaid.getHomePos().equals(BlockPos.ORIGIN);
     }
 
     @Override

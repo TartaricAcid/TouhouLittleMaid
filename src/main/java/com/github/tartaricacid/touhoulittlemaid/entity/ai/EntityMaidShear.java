@@ -33,7 +33,7 @@ public class EntityMaidShear extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (entityMaid.getMode() != MaidMode.SHEARS || entityMaid.isSitting() ||
+        if (entityMaid.guiOpening || entityMaid.getMode() != MaidMode.SHEARS || entityMaid.isSitting() ||
                 !(entityMaid.getHeldItemMainhand().getItem() instanceof ItemShears)) {
             return false;
         }
@@ -103,7 +103,7 @@ public class EntityMaidShear extends EntityAIBase {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return shearableEntity != null && shearableEntity.isEntityAlive() && shearableEntity instanceof IShearable
+        return !entityMaid.guiOpening && shearableEntity != null && shearableEntity.isEntityAlive() && shearableEntity instanceof IShearable
                 && ((IShearable) shearableEntity).isShearable(mainhandItem, world, shearableEntity.getPosition());
     }
 }
