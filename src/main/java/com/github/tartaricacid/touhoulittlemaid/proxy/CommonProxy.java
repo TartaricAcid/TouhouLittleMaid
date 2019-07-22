@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
 import com.google.gson.Gson;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -75,5 +76,10 @@ public class CommonProxy {
         }
         // 别忘了关闭输入流
         IOUtils.closeQuietly(input);
+    }
+
+    public String translate(String key, Object... format)
+    {
+        return I18n.translateToLocalFormatted(key, format);
     }
 }

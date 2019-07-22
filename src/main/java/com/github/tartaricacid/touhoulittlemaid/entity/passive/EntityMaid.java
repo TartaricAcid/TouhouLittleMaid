@@ -636,7 +636,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         } else {
-            return ParseI18n.parseServer(getModelName());
+            return ParseI18n.parse(getModelName());
         }
     }
 
@@ -803,12 +803,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         return MaidSoundEvent.MAID_DEATH;
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv));
         } else {
             return super.getCapability(capability, facing);
         }
