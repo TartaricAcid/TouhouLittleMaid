@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class ClientProxy extends CommonProxy {
     public static List<CustomModelPackPOJO> MODEL_PACK_LIST = new ArrayList<>();
     public static HashMap<String, EntityModelJson> LOCATION_MODEL_MAP = new HashMap<>();
-    public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().weakValues().expireAfterAccess(5, TimeUnit.MINUTES).build();
+    public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
