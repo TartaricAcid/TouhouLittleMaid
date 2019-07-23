@@ -64,8 +64,10 @@ public class MaidMainContainer extends Container {
 
     private void addEntityArmorAndHandSlots(EntityMaid entityMaid) {
         IItemHandler itemHandler = entityMaid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        addArmorSlot(entityMaid, itemHandler); // 占用 0-3
-        addHandSlot(entityMaid, itemHandler); // 占用 4-5
+        // 占用 0-3
+        addArmorSlot(entityMaid, itemHandler);
+        // 占用 4-5
+        addHandSlot(entityMaid, itemHandler);
     }
 
     private void addArmorSlot(EntityMaid entityMaid, IItemHandler itemHandler) {

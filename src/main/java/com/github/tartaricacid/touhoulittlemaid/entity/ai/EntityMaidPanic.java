@@ -18,9 +18,9 @@ public class EntityMaidPanic extends EntityAIPanic {
      */
     @Override
     public boolean shouldExecute() {
-        // TODO：震惊，我居然写不出来
-        return !entityMaid.guiOpening && entityMaid.getMode() != MaidMode.ATTACK && entityMaid.getMode() != MaidMode.RANGE_ATTACK
-                && entityMaid.getMode() != MaidMode.DANMAKU_ATTACK && super.shouldExecute();
+        boolean notExecutedMode = entityMaid.getMode() == MaidMode.ATTACK || entityMaid.getMode() == MaidMode.RANGE_ATTACK || entityMaid.getMode() == MaidMode.DANMAKU_ATTACK;
+        // TODO：弓兵模式下没有箭的慌乱跑
+        return !entityMaid.guiOpening && !notExecutedMode && super.shouldExecute();
     }
 
     /**
@@ -29,8 +29,8 @@ public class EntityMaidPanic extends EntityAIPanic {
      */
     @Override
     public boolean shouldContinueExecuting() {
-        // TODO：震惊，我居然写不出来
-        return !entityMaid.guiOpening && entityMaid.getMode() != MaidMode.ATTACK && entityMaid.getMode() != MaidMode.RANGE_ATTACK
-                && entityMaid.getMode() != MaidMode.DANMAKU_ATTACK && super.shouldContinueExecuting();
+        boolean notExecutedMode = entityMaid.getMode() == MaidMode.ATTACK || entityMaid.getMode() == MaidMode.RANGE_ATTACK || entityMaid.getMode() == MaidMode.DANMAKU_ATTACK;
+        // TODO：弓兵模式下没有箭的慌乱跑
+        return !entityMaid.guiOpening && !notExecutedMode && super.shouldContinueExecuting();
     }
 }

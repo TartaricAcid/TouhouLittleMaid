@@ -33,9 +33,13 @@ public class EntityMaidAttackRanged extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        return !entity.guiOpening && !entity.isSitting() && this.entity.getAttackTarget() != null &&
-                ((this.entity.getMode() == MaidMode.RANGE_ATTACK && this.isBowInMainhand() && this.entity.hasArrow())
-                        || (this.entity.getMode() == MaidMode.DANMAKU_ATTACK && this.isGoheiInMainhand()));
+        // 能够远程攻击：模式正确、主手持弓、身上有箭
+        boolean canRangeAttack = this.entity.getMode() == MaidMode.RANGE_ATTACK && this.isBowInMainhand() && this.entity.hasArrow();
+        // 能够弹幕攻击：模式正确、主手持御币
+        boolean canDanmakuAttack = this.entity.getMode() == MaidMode.DANMAKU_ATTACK && this.isGoheiInMainhand();
+        // 能够处理攻击：攻击目标不为空、上述两者攻击存在一个
+        boolean canAttack = this.entity.getAttackTarget() != null && (canRangeAttack || canDanmakuAttack);
+        return !entity.guiOpening && !entity.isSitting() && canAttack;
     }
 
     private boolean isBowInMainhand() {

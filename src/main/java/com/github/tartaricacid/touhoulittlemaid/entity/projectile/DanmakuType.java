@@ -29,7 +29,6 @@ public enum DanmakuType {
      * 弹幕类型枚举
      *
      * @param name  弹幕名称
-     * @param index 弹幕数字索引
      * @param size  弹幕大小
      */
     DanmakuType(String name, double size) {

@@ -22,7 +22,6 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     private BlockPos pos;
     private float speed;
     private int timeoutCounter;
-    private int failCounter;
 
     public EntityMaidPlaceTorch(EntityMaid entityMaid, int radius, int heigh, float speed) {
         this.entityMaid = entityMaid;
