@@ -1,13 +1,15 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
+import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGuiMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeHomeDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidModeMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangePickupDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.gui.GuiButton;
@@ -21,8 +23,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -33,6 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * 女仆主 GUI 界面的集合，其他界面在此基础上拓展得到
@@ -42,15 +44,17 @@ import java.net.URISyntaxException;
 @SideOnly(Side.CLIENT)
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
-    EntityMaid entityMaid;
+    EntityMaid maid;
     private int guiId;
     private GuiButtonToggle togglePickup;
     private GuiButtonToggle toggleHome;
+    protected MaidMainContainer container;
 
-    public AbstractMaidGuiContainer(Container inventorySlotsIn, EntityMaid entityMaid, int guiId) {
+    public AbstractMaidGuiContainer(MaidMainContainer inventorySlotsIn, int guiId) {
         super(inventorySlotsIn);
         this.guiId = guiId;
-        this.entityMaid = entityMaid;
+        this.container = inventorySlotsIn;
+        this.maid = container.maid;
     }
 
     /**
@@ -85,7 +89,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         int j = this.guiTop;
 
         // 切换是否拾起物品的按钮
-        togglePickup = new GuiButtonToggle(0, i + 143, j + 63, 26, 16, entityMaid.isPickup());
+        togglePickup = new GuiButtonToggle(0, i + 143, j + 63, 26, 16, maid.isPickup());
         togglePickup.initTextureValues(178, 0, 28, 18, BACKGROUND);
         this.buttonList.add(togglePickup);
 
@@ -102,7 +106,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
                 26, 225, 230, 0, BACKGROUND));
 
         // 切换是否开启 home 模式的按钮
-        toggleHome = new GuiButtonToggle(11, i + 116, j + 63, 26, 16, entityMaid.isHome());
+        toggleHome = new GuiButtonToggle(11, i + 116, j + 63, 26, 16, maid.isHome());
         toggleHome.initTextureValues(178, 36, 28, 18, BACKGROUND);
         this.buttonList.add(toggleHome);
 
@@ -121,52 +125,46 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         super.actionPerformed(button);
 
         if (button.id == 0) {
-            if (entityMaid.isPickup()) {
+            if (maid.isPickup()) {
                 togglePickup.setStateTriggered(false);
-                CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(entityMaid.getUniqueID(), false));
+                CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(maid.getUniqueID(), false));
                 return;
             } else {
                 togglePickup.setStateTriggered(true);
-                CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(entityMaid.getUniqueID(), true));
+                CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(maid.getUniqueID(), true));
                 return;
             }
         }
 
-        if (button.id == 1) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), entityMaid.getEntityId(), 1));
+        // 切换标签页
+        if (1 <= button.id && button.id <= 3) {
+            CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), button.id, container.taskIndex));
             return;
         }
 
-        if (button.id == 2) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), entityMaid.getEntityId(), 2));
-            return;
-        }
-        if (button.id == 3) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), entityMaid.getEntityId(), 3));
-            return;
-        }
-
+        // 切换任务
         if (button.id == 10) {
-            int modeIndex = (entityMaid.getMode().getModeIndex() + 1 > MaidMode.getLength() - 1) ? 0 : (entityMaid.getMode().getModeIndex() + 1);
-            CommonProxy.INSTANCE.sendToServer(new ChangeMaidModeMessage(entityMaid.getUniqueID(), MaidMode.getMode(modeIndex)));
+            List<IMaidTask> tasks = LittleMaidAPI.getTasks();
+            container.taskIndex = (container.taskIndex + 1) % tasks.size();
+            container.task = LittleMaidAPI.getTasks().get(container.taskIndex);
             return;
         }
 
         if (button.id == 11) {
-            if (entityMaid.isHome()) {
+            if (maid.isHome()) {
                 toggleHome.setStateTriggered(false);
-                CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(entityMaid.getUniqueID(), false));
+                CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(maid.getUniqueID(), false));
                 return;
             } else {
                 toggleHome.setStateTriggered(true);
-                CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(entityMaid.getUniqueID(), true));
+                CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(maid.getUniqueID(), true));
                 return;
             }
         }
 
         if (button.id == 12) {
             // 避免多线程的 Bug
-            mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidSkinGui(entityMaid)));
+            mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidSkinGui(maid)));
             return;
         }
 
@@ -225,7 +223,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         yInRange = j < mouseY && mouseY < (j + 26);
         if (xInRange && yInRange) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.mode_switch",
-                    I18n.format("mode.touhou_little_maid." + entityMaid.getMode().getName())), mouseX, mouseY);
+                    I18n.format(Util.getTaskTranslationKey(container.task))), mouseX, mouseY);
         }
 
         // 绘制不同标签页的提示文字
@@ -239,14 +237,14 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         xInRange = (i + 143) < mouseX && mouseX < (i + 169);
         yInRange = (j + 63) < mouseY && mouseY < (j + 79);
         if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pickup." + entityMaid.isPickup()), mouseX, mouseY);
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pickup." + maid.isPickup()), mouseX, mouseY);
         }
 
         // 拾物模式描述
         xInRange = (i + 116) < mouseX && mouseX < (i + 142);
         yInRange = (j + 63) < mouseY && mouseY < (j + 79);
         if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.home." + entityMaid.isHome()), mouseX, mouseY);
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.home." + maid.isHome()), mouseX, mouseY);
         }
 
         // 切换皮肤描述
@@ -286,18 +284,18 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         // 绘制模式图标
         this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 6, j - 19, "");
-        this.drawItemStack(ItemBlock.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19, "");
+        this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19, "");
         this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 62, j - 19, "");
         this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19, "");
 
         // 绘制模式图标
-        this.drawItemStack(entityMaid.getMode().getItemIcon().getDefaultInstance(), i - 20, j + 5, "");
+        this.drawItemStack(container.task.getIcon(), i - 20, j + 5, "");
 
         // 绘制女仆样子
         // 为了避免转向错误，所以直接 new 一个新实体，但是传入其他数据
         EntityMaid entityMaidNew = new EntityMaid(mc.world);
         NBTTagCompound nbt = new NBTTagCompound();
-        entityMaid.writeEntityToNBT(nbt);
+        maid.writeEntityToNBT(nbt);
         entityMaidNew.readEntityFromNBT(nbt);
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 30,
                 (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, entityMaidNew);

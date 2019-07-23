@@ -1,10 +1,13 @@
-package com.github.tartaricacid.touhoulittlemaid.api;
+package com.github.tartaricacid.touhoulittlemaid.api.util;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
+
+import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;

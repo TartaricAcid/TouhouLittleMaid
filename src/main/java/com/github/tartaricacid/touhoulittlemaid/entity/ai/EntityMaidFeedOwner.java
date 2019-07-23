@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
@@ -23,7 +22,7 @@ public class EntityMaidFeedOwner extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         timeCount--;
-        return timeCount < 0 && entityMaid.getMode() == MaidMode.FEED && !entityMaid.isSitting()
+        return timeCount < 0 && !entityMaid.isSitting()
                 && entityMaid.getOwner() instanceof EntityPlayer && entityMaid.getDistance(entityMaid.getOwner()) < distance;
     }
 

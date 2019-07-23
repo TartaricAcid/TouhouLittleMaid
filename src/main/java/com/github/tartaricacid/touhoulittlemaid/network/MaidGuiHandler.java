@@ -24,13 +24,13 @@ public class MaidGuiHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (ID == 1 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(x));
+            return new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }
         if (ID == 2 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(x));
+            return new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }
         if (ID == 3 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(x));
+            return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }
         return null;
     }
@@ -45,16 +45,13 @@ public class MaidGuiHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (ID == 1 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidMainGuiContainer(new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(x)),
-                    (EntityMaid) world.getEntityByID(x));
+            return new MaidMainGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }
         if (ID == 2 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidInventoryGuiContainer(new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(x)),
-                    (EntityMaid) world.getEntityByID(x));
+            return new MaidInventoryGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }
         if (ID == 3 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidBaubleGuiContainer(new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(x)),
-                    (EntityMaid) world.getEntityByID(x));
+            return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }
         return null;
     }

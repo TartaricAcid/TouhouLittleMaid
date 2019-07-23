@@ -50,7 +50,7 @@ danmaku_type.touhou_little_maid.orbs=Orbs
 # Mode
 mode.touhou_little_maid.idle=Idle
 mode.touhou_little_maid.attack=Attack
-mode.touhou_little_maid.range_attack=Range Attack
+mode.touhou_little_maid.ranged_attack=Ranged Attack
 mode.touhou_little_maid.danmaku_attack=Danmaku Attack
 mode.touhou_little_maid.farm=Farm
 mode.touhou_little_maid.feed=Feed

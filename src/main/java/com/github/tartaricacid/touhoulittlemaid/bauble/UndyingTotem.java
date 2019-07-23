@@ -26,7 +26,7 @@ public class UndyingTotem implements IMaidBauble
         EntityLivingBase entity = event.getEntityLiving();
         if (LittleMaidAPI.isMaidEntity(entity))
         {
-            int slot = LittleMaidAPI.getBaubleSlotInMaid((EntityTameable) entity, this);
+            int slot = LittleMaidAPI.getBaubleSlotInMaid(entity, this);
             if (slot >= 0)
             {
                 LittleMaidAPI.getBaubleInventory(entity).setStackInSlot(slot, ItemStack.EMPTY);

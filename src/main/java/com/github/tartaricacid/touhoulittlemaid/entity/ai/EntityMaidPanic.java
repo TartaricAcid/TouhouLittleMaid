@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import net.minecraft.entity.ai.EntityAIPanic;
 
 public class EntityMaidPanic extends EntityAIPanic {
@@ -18,9 +17,8 @@ public class EntityMaidPanic extends EntityAIPanic {
      */
     @Override
     public boolean shouldExecute() {
-        boolean notExecutedMode = entityMaid.getMode() == MaidMode.ATTACK || entityMaid.getMode() == MaidMode.RANGE_ATTACK || entityMaid.getMode() == MaidMode.DANMAKU_ATTACK;
         // TODO：弓兵模式下没有箭的慌乱跑
-        return !entityMaid.guiOpening && !notExecutedMode && super.shouldExecute();
+        return !entityMaid.guiOpening && !entityMaid.getTask().isAttack() && super.shouldExecute();
     }
 
     /**
@@ -29,8 +27,7 @@ public class EntityMaidPanic extends EntityAIPanic {
      */
     @Override
     public boolean shouldContinueExecuting() {
-        boolean notExecutedMode = entityMaid.getMode() == MaidMode.ATTACK || entityMaid.getMode() == MaidMode.RANGE_ATTACK || entityMaid.getMode() == MaidMode.DANMAKU_ATTACK;
         // TODO：弓兵模式下没有箭的慌乱跑
-        return !entityMaid.guiOpening && !notExecutedMode && super.shouldContinueExecuting();
+        return !entityMaid.guiOpening && !entityMaid.getTask().isAttack() && super.shouldContinueExecuting();
     }
 }

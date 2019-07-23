@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.bauble.UltramarineOrbElixir;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemDamageable;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;

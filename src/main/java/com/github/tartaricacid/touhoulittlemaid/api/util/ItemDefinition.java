@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.tartaricacid.touhoulittlemaid.api;
+package com.github.tartaricacid.touhoulittlemaid.api.util;
 
 import java.util.Collections;
 import java.util.List;

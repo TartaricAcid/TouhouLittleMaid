@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -34,9 +33,9 @@ public class EntityMaidAttackRanged extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         // 能够远程攻击：模式正确、主手持弓、身上有箭
-        boolean canRangeAttack = this.entity.getMode() == MaidMode.RANGE_ATTACK && this.isBowInMainhand() && this.entity.hasArrow();
+        boolean canRangeAttack = this.isBowInMainhand() && this.entity.hasArrow();
         // 能够弹幕攻击：模式正确、主手持御币
-        boolean canDanmakuAttack = this.entity.getMode() == MaidMode.DANMAKU_ATTACK && this.isGoheiInMainhand();
+        boolean canDanmakuAttack = this.isGoheiInMainhand();
         // 能够处理攻击：攻击目标不为空、上述两者攻击存在一个
         boolean canAttack = this.entity.getAttackTarget() != null && (canRangeAttack || canDanmakuAttack);
         return !entity.guiOpening && !entity.isSitting() && canAttack;
@@ -96,7 +95,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
             }
 
             // 如果在最大攻击距离之内，而且看见的时长足够长
-            if (d0 <= (double) this.maxAttackDistance && this.seeTime >= 20) {
+            if (d0 <= this.maxAttackDistance && this.seeTime >= 20) {
                 // 清除先前的寻路路径，开始增加攻击时间
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
@@ -108,11 +107,11 @@ public class EntityMaidAttackRanged extends EntityAIBase {
 
             // 如果攻击时间也足够长，随机对走位方向和前后走位进行反转
             if (this.strafingTime >= 20) {
-                if ((double) this.entity.getRNG().nextFloat() < 0.3D) {
+                if (this.entity.getRNG().nextFloat() < 0.3D) {
                     this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if ((double) this.entity.getRNG().nextFloat() < 0.3D) {
+                if (this.entity.getRNG().nextFloat() < 0.3D) {
                     this.strafingBackwards = !this.strafingBackwards;
                 }
 
@@ -122,9 +121,9 @@ public class EntityMaidAttackRanged extends EntityAIBase {
             // 如果攻击时间大于 -1
             if (this.strafingTime > -1) {
                 // 依据距离远近决定是否前后走位
-                if (d0 > (double) (this.maxAttackDistance * 0.75F)) {
+                if (d0 > this.maxAttackDistance * 0.75F) {
                     this.strafingBackwards = false;
-                } else if (d0 < (double) (this.maxAttackDistance * 0.25F)) {
+                } else if (d0 < this.maxAttackDistance * 0.25F) {
                     this.strafingBackwards = true;
                 }
 

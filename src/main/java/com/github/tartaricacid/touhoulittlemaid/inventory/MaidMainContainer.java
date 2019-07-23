@@ -1,6 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory;
 
+import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidTaskMessage;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -19,33 +24,41 @@ import javax.annotation.Nullable;
 
 public class MaidMainContainer extends Container {
     private static final EntityEquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EntityEquipmentSlot[]{EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
-    public EntityMaid entityMaid;
+    public EntityMaid maid;
+    public int taskIndex;
+    public IMaidTask task;
 
-    public MaidMainContainer(IInventory playerInventory, EntityMaid entityMaid) {
-        addEntityArmorAndHandSlots(entityMaid);
+    public MaidMainContainer(IInventory playerInventory, EntityMaid maid, int taskIndex) {
+        addEntityArmorAndHandSlots(maid);
         addPlayerSlots(playerInventory);
-        this.entityMaid = entityMaid;
-        entityMaid.guiOpening = true;
+        this.maid = maid;
+        this.taskIndex = taskIndex;
+        task = LittleMaidAPI.getTasks().get(taskIndex);
+        maid.guiOpening = true;
     }
 
     @Override
     public void detectAndSendChanges()
     {
-        entityMaid.guiOpening = true;
+        maid.guiOpening = true;
         super.detectAndSendChanges();
     }
 
     @Override
     public void onContainerClosed(EntityPlayer playerIn)
     {
-        entityMaid.guiOpening = false;
+        maid.guiOpening = false;
+        if (playerIn.world.isRemote)
+        {
+            CommonProxy.INSTANCE.sendToServer(new ChangeMaidTaskMessage(maid.getUniqueID(), task));
+        }
         super.onContainerClosed(playerIn);
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
-        return this.entityMaid.isTamed() && this.entityMaid.getOwnerId().equals(playerIn.getUniqueID())
-                && this.entityMaid.isEntityAlive() && this.entityMaid.getDistance(playerIn) < 5.0F;
+        return this.maid.isTamed() && this.maid.getOwnerId().equals(playerIn.getUniqueID())
+                && this.maid.isEntityAlive() && this.maid.getDistance(playerIn) < 5.0F;
     }
 
     private void addPlayerSlots(IInventory playerInventory) {

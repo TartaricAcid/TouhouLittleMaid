@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;

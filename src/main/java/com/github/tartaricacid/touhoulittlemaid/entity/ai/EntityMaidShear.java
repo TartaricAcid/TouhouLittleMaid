@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -33,7 +32,7 @@ public class EntityMaidShear extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (entityMaid.guiOpening || entityMaid.getMode() != MaidMode.SHEARS || entityMaid.isSitting() ||
+        if (entityMaid.guiOpening || entityMaid.isSitting() ||
                 !(entityMaid.getHeldItemMainhand().getItem() instanceof ItemShears)) {
             return false;
         }
@@ -84,9 +83,9 @@ public class EntityMaidShear extends EntityAIBase {
                     if (entityitem == null) {
                         continue;
                     }
-                    entityitem.motionY += (double) (world.rand.nextFloat() * 0.05F);
-                    entityitem.motionX += (double) ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
-                    entityitem.motionZ += (double) ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+                    entityitem.motionY += world.rand.nextFloat() * 0.05F;
+                    entityitem.motionX += (world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F;
+                    entityitem.motionZ += (world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F;
                 }
             }
 

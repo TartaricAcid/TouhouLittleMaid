@@ -1,18 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.AttackValue;
-import com.github.tartaricacid.touhoulittlemaid.api.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
+import com.github.tartaricacid.touhoulittlemaid.internal.LittleMaidAPIImpl;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -46,13 +45,13 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
@@ -62,6 +61,7 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
 import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -71,7 +71,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable;
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> MODE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+    private static final DataParameter<String> TASK = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Integer> EXP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
     private static final DataParameter<BlockPos> HOME_POS = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
@@ -85,6 +85,10 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
 
     public boolean guiOpening;
+    @Nonnull
+    private IMaidTask task = LittleMaidAPIImpl.IDLE_TASK;
+    @Nullable
+    private EntityAIBase taskAI;
 
     public EntityMaid(World worldIn) {
         super(worldIn);
@@ -98,13 +102,6 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
         this.tasks.addTask(3, new EntityMaidReturnHome(this, 0.6f, 200));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
-
-        this.tasks.addTask(5, new EntityMaidAttack(this, 0.6f, false));
-        this.tasks.addTask(5, new EntityMaidFarm(this, 0.6f));
-        this.tasks.addTask(5, new EntityMaidAttackRanged(this, 0.6f, 2, 16));
-        this.tasks.addTask(5, new EntityMaidFeedOwner(this, 8));
-        this.tasks.addTask(5, new EntityMaidShear(this, 0.6f));
-        this.tasks.addTask(5, new EntityMaidPlaceTorch(this, 7, 2, 0.6f));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 6.0F, 2.0F));
@@ -128,7 +125,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         super.entityInit();
         this.dataManager.register(BEGGING, Boolean.FALSE);
         this.dataManager.register(PICKUP, Boolean.TRUE);
-        this.dataManager.register(MODE, MaidMode.IDLE.getModeIndex());
+        this.dataManager.register(TASK, TaskIdle.UID.toString());
         this.dataManager.register(EXP, 0);
         this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
         this.dataManager.register(HOME, Boolean.FALSE);
@@ -258,64 +255,64 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-        if (this.getMode() == MaidMode.RANGE_ATTACK) {
-            EntityArrow entityArrow = this.getArrow(distanceFactor);
-
-            if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
-            {
-                return;
-            }
-
-            // 如果获取得到的箭为 null，不执行攻击
-            if (entityArrow == null) {
-                return;
-            }
-
-            double x = target.posX - this.posX;
-            double y = target.getEntityBoundingBox().minY + target.height / 3.0F - entityArrow.posY;
-            double z = target.posZ - this.posZ;
-            double pitch = MathHelper.sqrt(x * x + z * z) * 0.15D;
-
-            entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
-            this.getHeldItemMainhand().damageItem(1, this);
-            this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.world.spawnEntity(entityArrow);
-            return;
-        }
-
-        if (this.getMode() == MaidMode.DANMAKU_ATTACK) {
-            // 获取周围 -10~10 范围内怪物数量
-            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox()
-                    .expand(8, 3, 8)
-                    .expand(-8, -3, -8), IS_MOB);
-
-            for (int i = 0; i < baubleInv.getSlots(); ++i) {
-                Item item = baubleInv.getStackInSlot(i).getItem();
-                if (item instanceof IMaidBauble) {
-                    IMaidBauble bauble = (IMaidBauble) item;
-                    if (bauble.onDanmakuAttack(this, target, baubleInv.getStackInSlot(i), distanceFactor, entityList)) {
-                        return;
-                    }
-                }
-            }
-
-            // 分为三档
-            // 1 自机狙
-            // <=5 60 度扇形
-            // >5 120 度扇形
-            if (entityList.size() <= 1) {
-                DanmakuShoot.aimedShot(world, this, target, 2 * (distanceFactor + 1), 0, 0.3f * (distanceFactor + 1),
-                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)));
-            } else if (entityList.size() <= 5) {
-                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.2f), 0, 0.3f * (distanceFactor + 1),
-                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI / 3, 8);
-            } else {
-                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.5f), 0, 0.3f * (distanceFactor + 1),
-                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI * 2 / 3, 32);
-            }
-
-            this.getHeldItemMainhand().damageItem(1, this);
-        }
+//        if (this.getMode() == MaidMode.RANGE_ATTACK) {
+//            EntityArrow entityArrow = this.getArrow(distanceFactor);
+//
+//            if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
+//            {
+//                return;
+//            }
+//
+//            // 如果获取得到的箭为 null，不执行攻击
+//            if (entityArrow == null) {
+//                return;
+//            }
+//
+//            double x = target.posX - this.posX;
+//            double y = target.getEntityBoundingBox().minY + target.height / 3.0F - entityArrow.posY;
+//            double z = target.posZ - this.posZ;
+//            double pitch = MathHelper.sqrt(x * x + z * z) * 0.15D;
+//
+//            entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
+//            this.getHeldItemMainhand().damageItem(1, this);
+//            this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+//            this.world.spawnEntity(entityArrow);
+//            return;
+//        }
+//
+//        if (this.getMode() == MaidMode.DANMAKU_ATTACK) {
+//            // 获取周围 -10~10 范围内怪物数量
+//            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox()
+//                    .expand(8, 3, 8)
+//                    .expand(-8, -3, -8), IS_MOB);
+//
+//            for (int i = 0; i < baubleInv.getSlots(); ++i) {
+//                Item item = baubleInv.getStackInSlot(i).getItem();
+//                if (item instanceof IMaidBauble) {
+//                    IMaidBauble bauble = (IMaidBauble) item;
+//                    if (bauble.onDanmakuAttack(this, target, baubleInv.getStackInSlot(i), distanceFactor, entityList)) {
+//                        return;
+//                    }
+//                }
+//            }
+//
+//            // 分为三档
+//            // 1 自机狙
+//            // <=5 60 度扇形
+//            // >5 120 度扇形
+//            if (entityList.size() <= 1) {
+//                DanmakuShoot.aimedShot(world, this, target, 2 * (distanceFactor + 1), 0, 0.3f * (distanceFactor + 1),
+//                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)));
+//            } else if (entityList.size() <= 5) {
+//                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.2f), 0, 0.3f * (distanceFactor + 1),
+//                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI / 3, 8);
+//            } else {
+//                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.5f), 0, 0.3f * (distanceFactor + 1),
+//                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI * 2 / 3, 32);
+//            }
+//
+//            this.getHeldItemMainhand().damageItem(1, this);
+//        }
     }
 
     /**
@@ -549,9 +546,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 }
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            } else {
+            } else if (!world.isRemote) {
                 // 否则打开 GUI
-                player.openGui(TouhouLittleMaid.INSTANCE, 1, world, this.getEntityId(), 0, 0);
+                player.openGui(TouhouLittleMaid.INSTANCE, 1, world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
             }
             return true;
         }
@@ -663,8 +660,10 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (compound.hasKey(NBT.IS_PICKUP.getName())) {
             setPickup(compound.getBoolean(NBT.IS_PICKUP.getName()));
         }
-        if (compound.hasKey(NBT.MAID_MODE.getName())) {
-            setMode(MaidMode.getMode(compound.getInteger(NBT.MAID_MODE.getName())));
+        if (compound.hasKey(NBT.MAID_TASK.getName())) {
+            setTask(
+                    LittleMaidAPI.findTask(new ResourceLocation(compound.getString(NBT.MAID_TASK.getName())))
+                    .or(LittleMaidAPIImpl.IDLE_TASK));
         }
         if (compound.hasKey(NBT.MAID_EXP.getName())) {
             setExp(compound.getInteger(NBT.MAID_EXP.getName()));
@@ -693,7 +692,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         compound.setTag(NBT.MAID_INVENTORY.getName(), mainInv.serializeNBT());
         compound.setTag(NBT.BAUBLE_INVENTORY.getName(), baubleInv.serializeNBT());
         compound.setBoolean(NBT.IS_PICKUP.getName(), isPickup());
-        compound.setInteger(NBT.MAID_MODE.getName(), getMode().getModeIndex());
+        compound.setString(NBT.MAID_TASK.getName(), task.getUid().toString());
         compound.setInteger(NBT.MAID_EXP.getName(), getExp());
         compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
@@ -710,61 +709,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        switch (getMode()) {
-            case IDLE:
-                return environmentSound(MaidSoundEvent.MAID_IDLE, 0.2f);
-            case ATTACK:
-                if (this.getAttackTarget() != null) {
-                    return MaidSoundEvent.MAID_FIND_TARGET;
-                } else {
-                    return MaidSoundEvent.MAID_ATTACK;
-                }
-            case RANGE_ATTACK:
-                return MaidSoundEvent.MAID_RANGE_ATTACK;
-            case DANMAKU_ATTACK:
-                return MaidSoundEvent.MAID_DANMAKU_ATTACK;
-            case FEED:
-                return environmentSound(MaidSoundEvent.MAID_FEED, 0.1f);
-            case FARM:
-                return environmentSound(MaidSoundEvent.MAID_FARM, 0.2f);
-            case TORCH:
-                return environmentSound(MaidSoundEvent.MAID_TORCH, 0.2f);
-            case SHEARS:
-                return environmentSound(MaidSoundEvent.MAID_SHEARS, 0.2f);
-            default:
-                return super.getAmbientSound();
-        }
-    }
-
-    /**
-     * 用来播放基于环境的音效，比如气温，天气，时间
-     *
-     * @param defaultSound 这些都没有播放情况下的默认音效
-     * @param probability  播放环境音效的概率
-     * @return 应当触发的音效
-     */
-    private SoundEvent environmentSound(SoundEvent defaultSound, float probability) {
-        // 差不多早上 6:30 - 7:30
-        if (rand.nextFloat() < probability && 500 < world.getWorldTime() && world.getWorldTime() < 1500) {
-            return MaidSoundEvent.MAID_MORNING;
-        }
-        // 差不多下午 6:30 - 7:30
-        if (rand.nextFloat() < probability && 12500 < world.getWorldTime() && world.getWorldTime() < 13500) {
-            return MaidSoundEvent.MAID_NIGHT;
-        }
-        if (rand.nextFloat() < probability && (world.isRaining() || world.isThundering()) && world.getBiome(this.getPosition()).canRain()) {
-            return MaidSoundEvent.MAID_RAIN;
-        }
-        if (rand.nextFloat() < probability && (world.isRaining() || world.isThundering()) && world.getBiome(this.getPosition()).isSnowyBiome()) {
-            return MaidSoundEvent.MAID_SNOW;
-        }
-        if (rand.nextFloat() < probability && world.getBiome(this.getPosition()).getTempCategory() == Biome.TempCategory.COLD) {
-            return MaidSoundEvent.MAID_COLD;
-        }
-        if (rand.nextFloat() < probability && world.getBiome(this.getPosition()).getTempCategory() == Biome.TempCategory.WARM) {
-            return MaidSoundEvent.MAID_HOT;
-        }
-        return defaultSound;
+        return task.getAmbientSound(this, rand);
     }
 
     @Nullable
@@ -823,12 +768,28 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.dataManager.set(PICKUP, pickup);
     }
 
-    public MaidMode getMode() {
-        return MaidMode.getMode(this.dataManager.get(MODE));
+//    public int getTaskIndex() {
+//        return this.dataManager.get(MODE);
+//    }
+
+    public IMaidTask getTask() {
+        return this.task;
     }
 
-    public void setMode(MaidMode maidMode) {
-        this.dataManager.set(MODE, maidMode.getModeIndex());
+    public void setTask(IMaidTask task) {
+        if (task == this.task)
+            return;
+        if (this.task != null)
+        {
+            tasks.removeTask(taskAI);
+        }
+        this.dataManager.set(TASK, task.getUid().toString());
+        this.task = task;
+        taskAI = task.createAI(this);
+        if (taskAI != null)
+        {
+            tasks.addTask(5, taskAI);
+        }
     }
 
     public int getExp() {
@@ -900,7 +861,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         // 能否捡起物品
         IS_PICKUP("IsPickup"),
         // 女仆模式
-        MAID_MODE("MaidMode"),
+        MAID_TASK("MaidTask"),
         // 女仆经验
         MAID_EXP("MaidExp"),
         // Home 的坐标
