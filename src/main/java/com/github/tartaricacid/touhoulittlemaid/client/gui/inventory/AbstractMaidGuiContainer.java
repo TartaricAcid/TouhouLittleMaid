@@ -22,9 +22,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,6 +45,7 @@ import java.net.URISyntaxException;
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     EntityMaid entityMaid;
+    EntityMaid renderingMaid;
     private int guiId;
     private GuiButtonToggle togglePickup;
     private GuiButtonToggle toggleHome;
@@ -83,6 +86,12 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         super.initGui();
         int i = this.guiLeft;
         int j = this.guiTop;
+
+        // 为了避免转向错误，初始化用于绘制的实体
+        renderingMaid = new EntityMaid(mc.world);
+        NBTTagCompound nbt = new NBTTagCompound();
+        entityMaid.writeEntityToNBT(nbt);
+        renderingMaid.readEntityFromNBT(nbt);
 
         // 切换是否拾起物品的按钮
         togglePickup = new GuiButtonToggle(0, i + 143, j + 63, 26, 16, entityMaid.isPickup());
@@ -286,7 +295,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         // 绘制模式图标
         this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 6, j - 19, "");
-        this.drawItemStack(ItemBlock.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19, "");
+        this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19, "");
         this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 62, j - 19, "");
         this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19, "");
 
@@ -294,13 +303,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.drawItemStack(entityMaid.getMode().getItemIcon().getDefaultInstance(), i - 20, j + 5, "");
 
         // 绘制女仆样子
-        // 为了避免转向错误，所以直接 new 一个新实体，但是传入其他数据
-        EntityMaid entityMaidNew = new EntityMaid(mc.world);
-        NBTTagCompound nbt = new NBTTagCompound();
-        entityMaid.writeEntityToNBT(nbt);
-        entityMaidNew.readEntityFromNBT(nbt);
+        // 首先同步手持物品
+        for (EnumHand hand : EnumHand.values())
+        {
+            renderingMaid.setHeldItem(hand, entityMaid.getHeldItem(hand));
+        }
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 30,
-                (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, entityMaidNew);
+                (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, renderingMaid);
     }
 
     private void drawItemStack(ItemStack stack, int x, int y, String altText) {
