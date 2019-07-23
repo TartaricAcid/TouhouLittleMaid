@@ -13,18 +13,23 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ChangeGoheiMessage implements IMessage {
+    private boolean next;
+
     public ChangeGoheiMessage() {
     }
 
-    public ChangeGoheiMessage(boolean i) {
+    public ChangeGoheiMessage(boolean next) {
+        this.next = next;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
+        next = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
+        buf.writeBoolean(next);
     }
 
     public static class Handler implements IMessageHandler<ChangeGoheiMessage, IMessage> {
@@ -36,8 +41,9 @@ public class ChangeGoheiMessage implements IMessage {
                     ItemStack stack = player.getHeldItemMainhand();
                     ItemHakureiGohei item = MaidItems.HAKUREI_GOHEI;
                     if (stack.getItem() == item) {
-                        item.setGoheiMode(stack, (item.getGoheiMode(stack).getIndex() + 1 > DanmakuType.getLength()) ?
-                                DanmakuType.PELLET : DanmakuType.getType(item.getGoheiMode(stack).getIndex() + 1));
+                        int index = item.getGoheiMode(stack).getIndex() + DanmakuType.getLength() + (message.next ? 1 : -1);
+                        index %= DanmakuType.getLength();
+                        item.setGoheiMode(stack, DanmakuType.getType(index));
                     }
                 });
             }
