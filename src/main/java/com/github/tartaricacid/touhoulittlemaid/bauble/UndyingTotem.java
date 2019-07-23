@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.bauble;
 
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
@@ -25,7 +24,7 @@ public class UndyingTotem implements IMaidBauble
     public void onLivingDeath(LivingDeathEvent event)
     {
         EntityLivingBase entity = event.getEntityLiving();
-        if (entity instanceof EntityMaid)
+        if (LittleMaidAPI.isMaidEntity(entity))
         {
             int slot = LittleMaidAPI.getBaubleSlotInMaid((EntityTameable) entity, this);
             if (slot >= 0)

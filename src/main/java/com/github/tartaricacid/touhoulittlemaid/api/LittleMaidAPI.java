@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.item.ItemStack;
 
 public class LittleMaidAPI
@@ -46,6 +45,11 @@ public class LittleMaidAPI
         return INSTANCE.getBaubleInventory(maid);
     }
 
+    public static boolean isMaidEntity(Entity entity)
+    {
+        return INSTANCE.isMaidEntity(entity);
+    }
+
     public static interface ILittleMaidAPI
     {
         IMaidBauble registerBauble(ItemDefinition item, IMaidBauble bauble);
@@ -75,5 +79,7 @@ public class LittleMaidAPI
             }
             return -1;
         }
+
+        boolean isMaidEntity(Entity entity);
     }
 }

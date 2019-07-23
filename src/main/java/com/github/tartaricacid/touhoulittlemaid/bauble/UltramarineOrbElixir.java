@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.bauble;
 
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,7 +24,7 @@ public class UltramarineOrbElixir implements IMaidBauble
     public void onLivingDeath(LivingDeathEvent event)
     {
         EntityLivingBase entity = event.getEntityLiving();
-        if (entity instanceof EntityMaid)
+        if (LittleMaidAPI.isMaidEntity(entity))
         {
             int slot = LittleMaidAPI.getBaubleSlotInMaid(entity, this);
             if (slot >= 0)

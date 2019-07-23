@@ -37,4 +37,10 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI
         return null;
     }
 
+    @Override
+    public boolean isMaidEntity(Entity entity)
+    {
+        return entity instanceof EntityMaid;
+    }
+
 }
