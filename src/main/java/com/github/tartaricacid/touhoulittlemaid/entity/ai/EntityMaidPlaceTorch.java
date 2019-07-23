@@ -22,7 +22,6 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     private BlockPos pos;
     private float speed;
     private int timeoutCounter;
-    private int failCounter;
 
     public EntityMaidPlaceTorch(EntityMaid entityMaid, int radius, int heigh, float speed) {
         this.entityMaid = entityMaid;
@@ -34,7 +33,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        return entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty() && getLowLightBlock() != null;
+        return !entityMaid.guiOpening && entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty() && getLowLightBlock() != null;
     }
 
     @Override
@@ -71,7 +70,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return pos != null && entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty();
+        return !entityMaid.guiOpening && pos != null && entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty();
     }
 
     @Override

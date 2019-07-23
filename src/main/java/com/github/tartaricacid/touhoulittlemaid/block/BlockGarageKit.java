@@ -72,10 +72,9 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         }
     }
 
-
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        worldIn.spawnEntity(new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), getItemStackFromBlock(worldIn, pos)));
+        spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
         super.breakBlock(worldIn, pos, state);
     }
 
@@ -92,12 +91,10 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if (!worldIn.isRemote) {
-            TileEntity te = worldIn.getTileEntity(pos);
-            if (te instanceof TileEntityGarageKit) {
-                ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
-                        this.getModel(stack), this.getTexture(stack), this.getName(stack), this.getEntityData(stack));
-            }
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileEntityGarageKit) {
+            ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
+                    this.getModel(stack), this.getTexture(stack), this.getName(stack), this.getEntityData(stack));
         }
     }
 
@@ -157,11 +154,15 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
      */
     public ItemStack getItemStackWithData(String id, String model, String texture, String name, NBTTagCompound entityData) {
         ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
-        getTagCompoundSafe(stack).setString(NBT.ENTITY_ID.getName(), id);
-        getTagCompoundSafe(stack).setString(NBT.MODEL_LOCATION.getName(), model);
-        getTagCompoundSafe(stack).setString(NBT.MODEL_TEXTURE.getName(), texture);
-        getTagCompoundSafe(stack).setString(NBT.MODEL_NAME.getName(), name);
-        getTagCompoundSafe(stack).setTag(NBT.MAID_DATA.getName(), entityData);
+        NBTTagCompound data = getTagCompoundSafe(stack);
+        data.setString(NBT.ENTITY_ID.getName(), id);
+        data.setString(NBT.MODEL_LOCATION.getName(), model);
+        data.setString(NBT.MODEL_TEXTURE.getName(), texture);
+        data.setString(NBT.MODEL_NAME.getName(), name);
+        if (!entityData.isEmpty())
+        {
+            data.setTag(NBT.MAID_DATA.getName(), entityData);
+        }
         return stack;
     }
 

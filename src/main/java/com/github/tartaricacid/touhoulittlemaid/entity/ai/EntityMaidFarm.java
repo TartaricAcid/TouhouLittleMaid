@@ -21,7 +21,9 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     private final EntityMaid entityMaid;
     private final int searchLength;
     private boolean hasFarmItem;
-    // 0 => 收获, 1 => 重新种植, -1 => 无
+    /**
+     * 0 => 收获, 1 => 重新种植, -1 => 无
+     */
     private int currentTask;
 
     public EntityMaidFarm(EntityMaid entityMaid, double speedIn) {
@@ -33,7 +35,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
-        if (entityMaid.getMode() != MaidMode.FARM || entityMaid.isSitting()) {
+        if (entityMaid.guiOpening || entityMaid.getMode() != MaidMode.FARM || entityMaid.isSitting()) {
             return false;
         }
 
@@ -55,16 +57,14 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return this.currentTask >= 0 && entityMaid.getMode() == MaidMode.FARM &&
+        return !entityMaid.guiOpening && this.currentTask >= 0 && entityMaid.getMode() == MaidMode.FARM &&
                 !entityMaid.isSitting() && super.shouldContinueExecuting();
     }
 
     @Override
     public void updateTask() {
         super.updateTask();
-        // 女仆盯着耕地
-        this.entityMaid.getLookHelper().setLookPosition((double) this.destinationBlock.getX() + 0.5D, (double) (this.destinationBlock.getY() + 1),
-                (double) this.destinationBlock.getZ() + 0.5D, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
+        boolean shouldLook = true;
 
         // 先判定女仆是否在耕地上方
         if (this.getIsAboveDestination()) {
@@ -80,7 +80,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
                 world.destroyBlock(blockpos, true);
             }
 
-            // 如果当前线程为种植，并且种植处为空气
+            // 如果当前任务为种植，并且种植处为空气
             else if (this.currentTask == 1 && iblockstate.getMaterial() == Material.AIR) {
                 // 先检查女仆的背包是不是 null
                 IItemHandler itemHandler = entityMaid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -88,17 +88,24 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
                     return;
                 }
 
+                shouldLook = false;
                 // 开始遍历女仆背包，尝试种植作物
                 for (int i = 0; i < itemHandler.getSlots(); ++i) {
                     ItemStack itemstack = itemHandler.getStackInSlot(i);
 
                     if (!itemstack.isEmpty() && itemstack.getItem() instanceof IPlantable) {
                         if (((IPlantable) itemstack.getItem()).getPlantType(world, blockpos) == EnumPlantType.Crop) {
-                            // 手部动画
-                            entityMaid.swingArm(EnumHand.MAIN_HAND);
-                            world.setBlockState(blockpos, ((IPlantable) itemstack.getItem()).getPlant(world, blockpos), 3);
+                            IBlockState state = ((IPlantable) itemstack.getItem()).getPlant(world, blockpos);
+                            if (state.getBlock() == Blocks.AIR) {
+                                continue;
+                            }
+                            world.setBlockState(blockpos, state, 3);
                             // 种植成功！扣除物品
                             itemstack.shrink(1);
+                            // 手部动画
+                            entityMaid.swingArm(EnumHand.MAIN_HAND);
+                            shouldLook = true;
+                            break;
                         }
                     }
                 }
@@ -106,6 +113,11 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
             this.currentTask = -1;
             this.runDelay = 2;
+        }
+        if (shouldLook) {
+            // 女仆盯着耕地
+            this.entityMaid.getLookHelper().setLookPosition((double) this.destinationBlock.getX() + 0.5D, (double) (this.destinationBlock.getY() + 1),
+                    (double) this.destinationBlock.getZ() + 0.5D, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
         }
     }
 
@@ -118,17 +130,21 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             pos = pos.up();
             IBlockState iblockstate = worldIn.getBlockState(pos);
             block = iblockstate.getBlock();
+            boolean blockIsOkay;
+            boolean taskIsOkay;
 
             // 上面有作物，达到了最大生长阶段，当前无其他任务
-            if (block instanceof BlockCrops && ((BlockCrops) block).isMaxAge(iblockstate)
-                    && (this.currentTask == 0 || this.currentTask < 0)) {
+            blockIsOkay = block instanceof BlockCrops && ((BlockCrops) block).isMaxAge(iblockstate);
+            taskIsOkay = this.currentTask == 0 || this.currentTask < 0;
+            if (blockIsOkay && taskIsOkay) {
                 this.currentTask = 0;
                 return true;
             }
 
             // 上面是空气，现在没有其他任务
-            if (iblockstate.getMaterial() == Material.AIR && this.hasFarmItem
-                    && (this.currentTask == 1 || this.currentTask < 0)) {
+            blockIsOkay = iblockstate.getMaterial() == Material.AIR && this.hasFarmItem;
+            taskIsOkay = this.currentTask == 1 || this.currentTask < 0;
+            if (blockIsOkay && taskIsOkay) {
                 this.currentTask = 1;
                 return true;
             }

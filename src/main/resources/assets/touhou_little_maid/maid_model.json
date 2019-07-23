@@ -140,6 +140,11 @@
       "texture": "touhou_little_maid:textures/entity/sunny_milk.png",
       "name": "{model.vanilla_touhou_model.sunny_milk.name}",
       "description": ["{model.vanilla_touhou_model.sunny_milk.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/alice_margatroid.json",
+      "texture": "touhou_little_maid:textures/entity/alice_margatroid.png",
+      "name": "{model.vanilla_touhou_model.alice_margatroid.name}",
+      "description": ["{model.vanilla_touhou_model.alice_margatroid.desc}"]
     }
   ]
 }

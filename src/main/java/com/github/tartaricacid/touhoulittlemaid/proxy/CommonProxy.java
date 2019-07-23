@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -90,5 +91,12 @@ public class CommonProxy {
         }
         // 别忘了关闭输入流
         IOUtils.closeQuietly(input);
+    }
+
+    /**
+     * 重新复写一遍原版本地化方法
+     */
+    public String translate(String key, Object... format) {
+        return I18n.translateToLocalFormatted(key, format);
     }
 }

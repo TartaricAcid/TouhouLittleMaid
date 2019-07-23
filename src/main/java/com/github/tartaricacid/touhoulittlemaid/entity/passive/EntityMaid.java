@@ -83,6 +83,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
+
     public boolean guiOpening;
 
     public EntityMaid(World worldIn) {
@@ -617,7 +618,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         } else {
-            return ParseI18n.parseServer(getModelName());
+            return ParseI18n.parse(getModelName());
         }
     }
 

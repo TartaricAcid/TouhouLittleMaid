@@ -13,18 +13,23 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ChangeGoheiMessage implements IMessage {
+    private boolean next;
+
     public ChangeGoheiMessage() {
     }
 
-    public ChangeGoheiMessage(boolean i) {
+    public ChangeGoheiMessage(boolean next) {
+        this.next = next;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
+        next = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
+        buf.writeBoolean(next);
     }
 
     public static class Handler implements IMessageHandler<ChangeGoheiMessage, IMessage> {
@@ -36,8 +41,12 @@ public class ChangeGoheiMessage implements IMessage {
                     ItemStack stack = player.getHeldItemMainhand();
                     ItemHakureiGohei item = MaidItems.HAKUREI_GOHEI;
                     if (stack.getItem() == item) {
-                        item.setGoheiMode(stack, (item.getGoheiMode(stack).getIndex() + 1 > DanmakuType.getLength()) ?
-                                DanmakuType.PELLET : DanmakuType.getType(item.getGoheiMode(stack).getIndex() + 1));
+                        // 一处稍微不太好理解的索引更改
+                        // 如果 next 为 true，那么会增加索引，到尾部自动跳转到首部
+                        // 如果 next 为 false，那么会减少索引，到首部会自动跳转到尾部
+                        int index = item.getGoheiMode(stack).getIndex() + DanmakuType.getLength() + (message.next ? 1 : -1);
+                        index %= DanmakuType.getLength();
+                        item.setGoheiMode(stack, DanmakuType.getType(index));
                     }
                 });
             }

@@ -6,7 +6,6 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 
 public class EntityMaidAttack extends EntityAIAttackMelee {
     private final EntityMaid entityMaid;
-    private int raiseArmTicks;
 
     public EntityMaidAttack(EntityMaid entityMaid, double speedIn, boolean longMemoryIn) {
         super(entityMaid, speedIn, longMemoryIn);
@@ -15,11 +14,11 @@ public class EntityMaidAttack extends EntityAIAttackMelee {
 
     @Override
     public boolean shouldExecute() {
-        return entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldExecute();
+        return !entityMaid.guiOpening && entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldExecute();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldContinueExecuting();
+        return !entityMaid.guiOpening && entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldContinueExecuting();
     }
 }

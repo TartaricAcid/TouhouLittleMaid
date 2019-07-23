@@ -2,38 +2,38 @@ package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 public enum DanmakuType {
     // 点弹
-    PELLET("pellet", 0, 0.8d),
+    PELLET("pellet", 0.8d),
     // 小玉
-    BALL("ball", 1, 0.8d),
+    BALL("ball", 0.8d),
     // 中玉
-    BIG_BALL("big_ball", 2, 0.8d),
+    BIG_BALL("big_ball", 0.8d),
     // 大玉
-    BUBBLE("bubble", 3, 1.2d),
+    BUBBLE("bubble", 1.2d),
     // 椭弹
-    JELLYBEAN("jellybean", 4, 0.4d),
+    JELLYBEAN("jellybean", 0.4d),
     // 心弹
-    HEART("heart", 5, 0.4d),
+    HEART("heart", 0.4d),
     // 星弹
-    STAR("star", 6, 0.3d),
+    STAR("star", 0.3d),
     // 札弹
-    AMULET("amulet", 7, 0.3d),
+    AMULET("amulet", 0.3d),
     // 环玉
-    ORBS("orbs", 8, 0.3d);
+    ORBS("orbs", 0.3d);
 
     private String name;
     private int index;
     private double size;
+    private static int length = values().length;
 
     /**
      * 弹幕类型枚举
      *
      * @param name  弹幕名称
-     * @param index 弹幕数字索引
      * @param size  弹幕大小
      */
-    DanmakuType(String name, int index, double size) {
+    DanmakuType(String name, double size) {
         this.name = name;
-        this.index = index;
+        this.index = ordinal();
         this.size = size;
     }
 
@@ -47,7 +47,7 @@ public enum DanmakuType {
     }
 
     public static int getLength() {
-        return DanmakuType.values().length;
+        return length;
     }
 
     public String getName() {

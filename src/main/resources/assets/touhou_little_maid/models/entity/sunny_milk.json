@@ -3,7 +3,7 @@
   "geometry.model": {
     "texturewidth": 128,
     "textureheight": 128,
-    "visible_bounds_width": 3,
+    "visible_bounds_width": 2,
     "visible_bounds_height": 2,
     "visible_bounds_offset": [0, 1, 0],
     "bones": [
@@ -513,17 +513,17 @@
         "rotation": [0, 0, 25],
         "cubes": [
           {
-            "origin": [-5, 9.5, -1],
+            "origin": [-5, 9, -1],
             "size": [2, 8, 2],
             "uv": [0, 107]
           },
           {
-            "origin": [-5.5, 14.5, -1.5],
+            "origin": [-5.5, 14, -1.5],
             "size": [3, 3, 3],
             "uv": [40, 97]
           },
           {
-            "origin": [-6, 10.5, -2],
+            "origin": [-6, 10, -2],
             "size": [4, 4, 4],
             "uv": [72, 89]
           }
@@ -535,17 +535,17 @@
         "rotation": [0, 0, -25],
         "cubes": [
           {
-            "origin": [3, 9.5, -1],
+            "origin": [3, 9, -1],
             "size": [2, 8, 2],
             "uv": [32, 97]
           },
           {
-            "origin": [2.5, 14.5, -1.5],
+            "origin": [2.5, 14, -1.5],
             "size": [3, 3, 3],
             "uv": [16, 101]
           },
           {
-            "origin": [2, 10.5, -2],
+            "origin": [2, 10, -2],
             "size": [4, 4, 4],
             "uv": [88, 89]
           }
