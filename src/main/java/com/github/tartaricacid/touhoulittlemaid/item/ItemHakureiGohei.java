@@ -37,7 +37,6 @@ public class ItemHakureiGohei extends Item {
     private double attackSpeed;
 
     public ItemHakureiGohei() {
-        setRegistryName("hakurei_gohei");
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".hakurei_gohei");
         setMaxStackSize(1);
         setMaxDamage(300);
