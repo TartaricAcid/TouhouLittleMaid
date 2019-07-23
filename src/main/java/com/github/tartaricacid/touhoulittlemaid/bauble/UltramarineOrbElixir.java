@@ -33,9 +33,9 @@ public class UltramarineOrbElixir implements IMaidBauble
                 event.setCanceled(true);
                 maid.setHealth(entity.getMaxHealth());
                 maid.spawnExplosionParticle();
-                ItemStack stack = maid.getBaubleInventory().getStackInSlot(slot);
+                ItemStack stack = maid.getBaubleInv().getStackInSlot(slot);
                 stack.damageItem(1, maid);
-                maid.getBaubleInventory().setStackInSlot(slot, stack);
+                maid.getBaubleInv().setStackInSlot(slot, stack);
                 // TODO: 注册独立的声音事件
                 maid.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0f, 1.0f);
             }

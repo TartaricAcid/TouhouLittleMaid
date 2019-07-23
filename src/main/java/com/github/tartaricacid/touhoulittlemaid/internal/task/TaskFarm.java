@@ -41,6 +41,6 @@ public class TaskFarm implements IMaidTask
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid)
     {
-        return new EntityMaidFarm((EntityMaid) maid, 0.6f);
+        return new EntityMaidFarm(maid, 0.6f);
     }
 }

@@ -138,6 +138,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         // 切换标签页
         if (1 <= button.id && button.id <= 3) {
+            container.realClose = false;
             CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), button.id, container.taskIndex));
             return;
         }

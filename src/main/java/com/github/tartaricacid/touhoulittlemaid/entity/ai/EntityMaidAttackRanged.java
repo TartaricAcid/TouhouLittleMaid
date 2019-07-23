@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,7 +9,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.util.EnumHand;
 
 public class EntityMaidAttackRanged extends EntityAIBase {
-    private final EntityMaid entity;
+    private final AbstractEntityMaid entity;
     private final double moveSpeedAmp;
     private final float maxAttackDistance;
     private int attackCooldown;
@@ -18,7 +19,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
     private boolean strafingBackwards;
     private int strafingTime = -1;
 
-    public EntityMaidAttackRanged(EntityMaid entity, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn) {
+    public EntityMaidAttackRanged(AbstractEntityMaid entity, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn) {
         this.entity = entity;
         this.moveSpeedAmp = moveSpeedAmpIn;
         this.attackCooldown = attackCooldownIn;
@@ -38,7 +39,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         boolean canDanmakuAttack = this.isGoheiInMainhand();
         // 能够处理攻击：攻击目标不为空、上述两者攻击存在一个
         boolean canAttack = this.entity.getAttackTarget() != null && (canRangeAttack || canDanmakuAttack);
-        return !entity.guiOpening && !entity.isSitting() && canAttack;
+        return !entity.isSitting() && canAttack;
     }
 
     private boolean isBowInMainhand() {

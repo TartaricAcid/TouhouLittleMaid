@@ -1,7 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -15,7 +19,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 
 public class EntityMaidPlaceTorch extends EntityAIBase {
-    private EntityMaid entityMaid;
+    private AbstractEntityMaid entityMaid;
     private World world;
     private int radius;
     private int heigh;
@@ -23,7 +27,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     private float speed;
     private int timeoutCounter;
 
-    public EntityMaidPlaceTorch(EntityMaid entityMaid, int radius, int heigh, float speed) {
+    public EntityMaidPlaceTorch(AbstractEntityMaid entityMaid, int radius, int heigh, float speed) {
         this.entityMaid = entityMaid;
         this.world = entityMaid.getEntityWorld();
         this.radius = radius;
@@ -33,7 +37,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        return !entityMaid.guiOpening && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty() && getLowLightBlock() != null;
+        return !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty() && getLowLightBlock() != null;
     }
 
     @Override
@@ -70,7 +74,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.guiOpening && pos != null && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty();
+        return pos != null && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty();
     }
 
     @Override
@@ -79,7 +83,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
         pos = null;
     }
 
-    private ItemStack getTorchItem(EntityMaid entityMaid) {
+    private ItemStack getTorchItem(AbstractEntityMaid entityMaid) {
         IItemHandler itemHandler = entityMaid.getAvailableInv();
         for (int i = 0; i < itemHandler.getSlots(); ++i) {
             ItemStack itemstack = itemHandler.getStackInSlot(i);

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.inventory;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.internal.LittleMaidAPIImpl;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidTaskMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 
@@ -27,6 +28,7 @@ public class MaidMainContainer extends Container {
     public EntityMaid maid;
     public int taskIndex;
     public IMaidTask task;
+    public boolean realClose = true;
 
     public MaidMainContainer(IInventory playerInventory, EntityMaid maid, int taskIndex) {
         addEntityArmorAndHandSlots(maid);
@@ -35,21 +37,15 @@ public class MaidMainContainer extends Container {
         this.taskIndex = taskIndex;
         task = LittleMaidAPI.getTasks().get(taskIndex);
         maid.guiOpening = true;
-    }
-
-    @Override
-    public void detectAndSendChanges()
-    {
-        maid.guiOpening = true;
-        super.detectAndSendChanges();
+        maid.setTask(LittleMaidAPIImpl.IDLE_TASK);
     }
 
     @Override
     public void onContainerClosed(EntityPlayer playerIn)
     {
-        maid.guiOpening = false;
-        if (playerIn.world.isRemote)
+        if (realClose && playerIn.world.isRemote)
         {
+            maid.guiOpening = false;
             CommonProxy.INSTANCE.sendToServer(new ChangeMaidTaskMessage(maid.getUniqueID(), task));
         }
         super.onContainerClosed(playerIn);

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -17,7 +18,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 public class EntityMaidFarm extends EntityAIMoveToBlock {
-    private final EntityMaid entityMaid;
+    private final AbstractEntityMaid entityMaid;
     private final int searchLength;
     private boolean hasFarmItem;
     /**
@@ -25,7 +26,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
      */
     private int currentTask;
 
-    public EntityMaidFarm(EntityMaid entityMaid, double speedIn) {
+    public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn) {
         super(entityMaid, speedIn, 16);
         searchLength = 16;
         this.entityMaid = entityMaid;
@@ -34,7 +35,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
-        if (entityMaid.guiOpening || entityMaid.isSitting()) {
+        if (entityMaid.isSitting()) {
             return false;
         }
 
@@ -56,7 +57,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.guiOpening && this.currentTask >= 0 &&
+        return this.currentTask >= 0 &&
                 !entityMaid.isSitting() && super.shouldContinueExecuting();
     }
 

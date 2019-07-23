@@ -41,6 +41,6 @@ public class TaskFeed implements IMaidTask
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid)
     {
-        return new EntityMaidFeedOwner((EntityMaid) maid, 8);
+        return new EntityMaidFeedOwner(maid, 8);
     }
 }

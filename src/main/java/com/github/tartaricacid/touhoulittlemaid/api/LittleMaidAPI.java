@@ -74,7 +74,7 @@ public class LittleMaidAPI
 
         default int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble)
         {
-            BaubleItemHandler handler = maid.getBaubleInventory();
+            BaubleItemHandler handler = maid.getBaubleInv();
             if (handler != null)
             {
                 for (int i = 0; i < handler.getSlots(); i++)

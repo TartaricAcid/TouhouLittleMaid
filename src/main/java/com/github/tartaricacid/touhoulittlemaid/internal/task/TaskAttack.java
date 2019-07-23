@@ -47,7 +47,7 @@ public class TaskAttack implements IMaidTask
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid)
     {
-        return new EntityMaidAttack((EntityMaid) maid, 0.6f, false);
+        return new EntityMaidAttack(maid, 0.6f, false);
     }
 
     @Override

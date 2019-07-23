@@ -31,7 +31,7 @@ public class UndyingTotem implements IMaidBauble
             int slot = LittleMaidAPI.getBaubleSlotInMaid(maid, this);
             if (slot >= 0)
             {
-                maid.getBaubleInventory().setStackInSlot(slot, ItemStack.EMPTY);
+                maid.getBaubleInv().setStackInSlot(slot, ItemStack.EMPTY);
                 event.setCanceled(true);
                 maid.setHealth(1.0F);
                 maid.clearActivePotions();

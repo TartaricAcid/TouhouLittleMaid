@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -15,14 +16,14 @@ import net.minecraftforge.common.IShearable;
 import java.util.List;
 
 public class EntityMaidShear extends EntityAIBase {
-    private EntityMaid entityMaid;
+    private AbstractEntityMaid entityMaid;
     private float speed;
     private World world;
     private ItemStack mainhandItem;
     private Entity shearableEntity = null;
     private int timeCount;
 
-    public EntityMaidShear(EntityMaid entityMaid, float speed) {
+    public EntityMaidShear(AbstractEntityMaid entityMaid, float speed) {
         this.entityMaid = entityMaid;
         this.speed = speed;
         timeCount = 10;
@@ -32,8 +33,7 @@ public class EntityMaidShear extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (entityMaid.guiOpening || entityMaid.isSitting() ||
-                !(entityMaid.getHeldItemMainhand().getItem() instanceof ItemShears)) {
+        if (entityMaid.isSitting() || !(entityMaid.getHeldItemMainhand().getItem() instanceof ItemShears)) {
             return false;
         }
 
@@ -102,7 +102,7 @@ public class EntityMaidShear extends EntityAIBase {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.guiOpening && shearableEntity != null && shearableEntity.isEntityAlive() && shearableEntity instanceof IShearable
+        return shearableEntity != null && shearableEntity.isEntityAlive() && shearableEntity instanceof IShearable
                 && ((IShearable) shearableEntity).isShearable(mainhandItem, world, shearableEntity.getPosition());
     }
 }

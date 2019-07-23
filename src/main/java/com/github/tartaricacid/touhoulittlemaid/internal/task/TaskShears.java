@@ -41,6 +41,6 @@ public class TaskShears implements IMaidTask
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid)
     {
-        return new EntityMaidShear((EntityMaid) maid, 0.6f);
+        return new EntityMaidShear(maid, 0.6f);
     }
 }

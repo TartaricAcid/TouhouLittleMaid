@@ -40,7 +40,7 @@ public class TaskAttackRanged implements IMaidTask
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid)
     {
-        return new EntityMaidAttackRanged((EntityMaid) maid, 0.6f, 2, 16);
+        return new EntityMaidAttackRanged(maid, 0.6f, 2, 16);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.api.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
@@ -57,6 +58,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
@@ -368,6 +370,7 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 检查女仆背包内是否有箭
      */
+    @Override
     public boolean hasArrow() {
         for (int i = 0; i < mainInv.getSlots(); ++i) {
             ItemStack itemstack = mainInv.getStackInSlot(i);
@@ -620,6 +623,7 @@ public class EntityMaid extends AbstractEntityMaid {
         }
     }
 
+    @Override
     public boolean isFarmItemInInventory() {
         CombinedInvWrapper combinedInvWrapper = getAvailableInv();
         for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
@@ -741,14 +745,32 @@ public class EntityMaid extends AbstractEntityMaid {
         }
     }
 
+    @Override
+    public IItemHandlerModifiable getInv(MaidInventory type)
+    {
+        switch (type) {
+        default:
+        case MAIN:
+            return mainInv;
+        case HAND:
+            return handsInvWrapper;
+        case BAUBLE:
+            return baubleInv;
+        case ARMOR:
+            return armorInvWrapper;
+        }
+    }
+
     public ItemStackHandler getMainInv() {
         return mainInv;
     }
 
-    public BaubleItemHandler getBaubleInventory() {
+    @Override
+    public BaubleItemHandler getBaubleInv() {
         return baubleInv;
     }
 
+    @Override
     public CombinedInvWrapper getAvailableInv() {
         return new CombinedInvWrapper(mainInv, handsInvWrapper);
     }
