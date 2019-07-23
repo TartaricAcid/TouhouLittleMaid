@@ -191,8 +191,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             }
             // 如果遍历塞完后发现为空了
             if (itemstack.isEmpty()) {
-                // 我看原版 EntityItem 有这个方法，不知道意义如何，以防万一加上
-                // 似乎是向客户端发包同步掉落物的，但是不加这个我也没遇见过 Bug
+                // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
                 this.onItemPickup(entityItem, count);
                 // 清除这个实体
                 entityItem.setDead();
@@ -213,8 +212,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
      */
     private void pickupXPOrb(EntityXPOrb entityXPOrb) {
         if (!this.world.isRemote && entityXPOrb.isEntityAlive() && entityXPOrb.delayBeforeCanPickup == 0) {
-            // 我看原版 EntityItem 有这个方法，不知道意义如何，以防万一加上
-            // 似乎是向客户端发包同步实体的，但是不加这个我也没遇见过 Bug
+            // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
             this.onItemPickup(entityXPOrb, 1);
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
