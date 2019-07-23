@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -31,8 +32,6 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRenderer {
     public static final TileEntityItemStackGarageKitRenderer instance = new TileEntityItemStackGarageKitRenderer();
 
-    private final Cache<String, Entity> entityCache = CacheBuilder.newBuilder().weakValues().expireAfterAccess(5, TimeUnit.MINUTES).build();
-
     @Override
     public void renderByItem(ItemStack itemStackIn) {
         if (itemStackIn.getItem() == Item.getItemFromBlock(MaidBlocks.GARAGE_KIT)) {
@@ -50,7 +49,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
             String name = MaidBlocks.GARAGE_KIT.getEntityId(itemStackIn);
             Entity entity = null;
             try {
-                entity = entityCache.get(name, () -> {
+                entity = ClientProxy.ENTITY_CACHE.get(name, () -> {
                     Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(name), world);
                     if (e == null) {
                         return new EntityMaid(world);

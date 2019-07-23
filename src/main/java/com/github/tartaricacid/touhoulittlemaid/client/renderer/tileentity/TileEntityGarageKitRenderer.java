@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,6 +13,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.concurrent.ExecutionException;
+
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -23,7 +28,21 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
     public void render(TileEntityGarageKit te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 
-        final Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(te.getEntityId()), getWorld());
+        String name = te.getEntityId();
+        Entity entity = null;
+        try {
+            entity = ClientProxy.ENTITY_CACHE.get(name, () -> {
+                Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(name), getWorld());
+                if (e == null) {
+                    return new EntityMaid(getWorld());
+                } else {
+                    return e;
+                }
+            });
+            entity.setWorld(getWorld());
+        } catch (ExecutionException e) {
+            return;
+        }
         final EnumFacing facing = te.getFacing();
 
         GlStateManager.pushMatrix();
@@ -59,8 +78,7 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
         }
 
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
-        Minecraft.getMinecraft().getRenderManager().renderEntity(entity == null ? new EntityMaid(getWorld()) : entity,
-                0, 0, 0, 0, 0, true);
+        Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0, 0, 0, 0, 0, true);
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(true);
         GlStateManager.popMatrix();
     }
