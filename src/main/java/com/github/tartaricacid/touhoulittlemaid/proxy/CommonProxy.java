@@ -78,8 +78,10 @@ public class CommonProxy {
         IOUtils.closeQuietly(input);
     }
 
-    public String translate(String key, Object... format)
-    {
+    /**
+     * 重新复写一遍原版本地化方法
+     */
+    public String translate(String key, Object... format) {
         return I18n.translateToLocalFormatted(key, format);
     }
 }

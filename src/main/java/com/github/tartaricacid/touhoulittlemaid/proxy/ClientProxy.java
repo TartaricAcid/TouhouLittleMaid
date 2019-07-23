@@ -11,9 +11,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -49,9 +49,11 @@ public class ClientProxy extends CommonProxy {
         super.postInit(event);
     }
 
+    /**
+     * 重新复写一遍原版本地化方法
+     */
     @Override
-    public String translate(String key, Object... format)
-    {
+    public String translate(String key, Object... format) {
         return I18n.format(key, format);
     }
 }

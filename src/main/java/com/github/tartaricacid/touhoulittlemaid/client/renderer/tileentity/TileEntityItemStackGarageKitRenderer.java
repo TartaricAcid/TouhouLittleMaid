@@ -1,13 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
-import java.util.concurrent.ExecutionException;
-
-import org.lwjgl.opengl.GL11;
-
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -20,6 +15,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author TartaricAcid
@@ -42,7 +40,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
             }
 
             String name = MaidBlocks.GARAGE_KIT.getEntityId(itemStackIn);
-            Entity entity = null;
+            Entity entity;
             try {
                 entity = ClientProxy.ENTITY_CACHE.get(name, () -> {
                     Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(name), world);
@@ -84,6 +82,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 GlStateManager.disableTexture2D();
             }
             GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+            GlStateManager.enableBlend();
         }
     }
 }
