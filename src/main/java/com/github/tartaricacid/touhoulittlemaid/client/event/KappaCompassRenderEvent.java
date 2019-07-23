@@ -3,7 +3,12 @@ package com.github.tartaricacid.touhoulittlemaid.client.event;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,10 +20,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class KappaCompassRenderEvent {
     @SubscribeEvent
     public static void renderBlockOverlayEvent(RenderGameOverlayEvent event) {
-        int[] i = MaidItems.KAPPA_COMPASS.getPos(Minecraft.getMinecraft().player.getHeldItemMainhand());
-        if (i != null) {
+        ItemStack stack = Minecraft.getMinecraft().player.getHeldItemMainhand();
+        if (stack.getItem() != MaidItems.KAPPA_COMPASS)
+        {
+            return;
+        }
+        BlockPos pos = ItemKappaCompass.getPos(stack);
+        if (pos != null && pos.distanceSq(Minecraft.getMinecraft().player.getPosition()) <= 1024) {
             Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(ParticleEnum.FLAG.getId(),
-                    (double) i[0] + 0.5, (double) i[1] + 0.5, (double) i[2] + 0.5, 0, 0, 0);
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0, 0, 0);
         }
     }
 }

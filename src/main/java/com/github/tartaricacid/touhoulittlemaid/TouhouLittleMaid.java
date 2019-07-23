@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.internal.LittleMaidAPIImpl;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -25,6 +27,11 @@ public class TouhouLittleMaid {
     @SidedProxy(serverSide = "com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy",
             clientSide = "com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy")
     public static CommonProxy proxy;
+
+    public TouhouLittleMaid()
+    {
+        LittleMaidAPI.setInstance(new LittleMaidAPIImpl());
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

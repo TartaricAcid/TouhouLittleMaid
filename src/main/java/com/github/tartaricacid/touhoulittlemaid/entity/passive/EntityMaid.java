@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AttackValue;
+import com.github.tartaricacid.touhoulittlemaid.api.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
@@ -12,6 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
@@ -80,7 +82,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
-    private final ItemStackHandler baubleInv = new ItemStackHandler(8);
+    private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
+    public boolean guiOpening;
 
     public EntityMaid(World worldIn) {
         super(worldIn);
@@ -143,6 +146,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public void onLivingUpdate() {
+        baubleInv.fireEvent((b, s) -> { b.onTick(this, s); return false; });
         this.updateArmSwingProgress();
         super.onLivingUpdate();
     }
@@ -244,14 +248,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        for (int i = 0; i < baubleInv.getSlots(); ++i) {
-            Item item = baubleInv.getStackInSlot(i).getItem();
-            if (item instanceof IMaidBauble) {
-                IMaidBauble bauble = (IMaidBauble) item;
-                if (bauble.onMaidAttacked(this, baubleInv.getStackInSlot(i), source, amount)) {
-                    return true;
-                }
-            }
+        if (baubleInv.fireEvent((b, s) -> b.onMaidAttacked(this, s, source, amount)))
+        {
+            return true;
         }
         return super.attackEntityFrom(source, amount);
     }
@@ -261,14 +260,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (this.getMode() == MaidMode.RANGE_ATTACK) {
             EntityArrow entityArrow = this.getArrow(distanceFactor);
 
-            for (int i = 0; i < baubleInv.getSlots(); ++i) {
-                Item item = baubleInv.getStackInSlot(i).getItem();
-                if (item instanceof IMaidBauble) {
-                    IMaidBauble bauble = (IMaidBauble) item;
-                    if (bauble.onRangedAttack(this, target, baubleInv.getStackInSlot(i), distanceFactor, entityArrow)) {
-                        return;
-                    }
-                }
+            if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
+            {
+                return;
             }
 
             // 如果获取得到的箭为 null，不执行攻击
@@ -277,7 +271,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             }
 
             double x = target.posX - this.posX;
-            double y = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entityArrow.posY;
+            double y = target.getEntityBoundingBox().minY + target.height / 3.0F - entityArrow.posY;
             double z = target.posZ - this.posZ;
             double pitch = MathHelper.sqrt(x * x + z * z) * 0.15D;
 
@@ -423,17 +417,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             fireAspect += EnchantmentHelper.getFireAspectModifier(this);
         }
 
-        // 应用饰品效果
-        for (int i = 0; i < baubleInv.getSlots(); ++i) {
-            Item item = baubleInv.getStackInSlot(i).getItem();
-            if (item instanceof IMaidBauble) {
-                IMaidBauble bauble = (IMaidBauble) item;
-                AttackValue value = bauble.onMaidAttack(this, entityIn, baubleInv.getStackInSlot(i), damage, knockBack, fireAspect);
-                damage = value.getDamage();
-                knockBack = value.getKnockback();
-                fireAspect = value.getFireAspect();
-            }
-        }
+        // TODO: 应用饰品效果
 
         // 检查攻击对象是否是无敌的
         boolean isInvulnerable = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
@@ -442,9 +426,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (isInvulnerable) {
             // 应用击退效果
             if (knockBack > 0 && entityIn instanceof EntityLivingBase) {
-                ((EntityLivingBase) entityIn).knockBack(this, (float) knockBack * 0.5F,
-                        (double) MathHelper.sin(this.rotationYaw * 0.017453292F),
-                        (double) (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
+                ((EntityLivingBase) entityIn).knockBack(this, knockBack * 0.5F,
+                        MathHelper.sin(this.rotationYaw * 0.017453292F),
+                        (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
                 this.motionX *= 0.6D;
                 this.motionZ *= 0.6D;
             }
@@ -465,7 +449,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 // 如果玩家手持盾牌而且还处于持盾状态，并且所持物品能够破盾
                 if (!itemMaidHand.isEmpty() && !itemPlayerHand.isEmpty() && itemMaidHand.getItem().canDisableShield(itemMaidHand, itemPlayerHand, entityplayer, this)
                         && itemPlayerHand.getItem().isShield(itemPlayerHand, entityplayer)) {
-                    float f1 = 0.25F + (float) EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
+                    float f1 = 0.25F + EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
 
                     if (this.rand.nextFloat() < f1) {
                         entityplayer.getCooldownTracker().setCooldown(itemPlayerHand.getItem(), 100);
@@ -508,10 +492,50 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
+        if (hand != EnumHand.MAIN_HAND)
+        {
+            return false;
+        }
         ItemStack itemstack = player.getHeldItem(hand);
 
+        // 驯服
+        Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
+        if (!this.isTamed() && itemstack.getItem() == tamedItem) {
+            if (!world.isRemote) {
+                consumeItemFromStack(player, itemstack);
+                this.setTamedBy(player);
+                this.playTameEffect(true);
+                this.getNavigator().clearPath();
+                this.world.setEntityState(this, (byte) 7);
+                this.playSound(MaidSoundEvent.MAID_TAMED, 1, 1);
+                return true;
+            }
+        }
+
+        // 写入坐标
+        if (this.isTamed() && this.getOwnerId().equals(player.getUniqueID()) && itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
+            BlockPos pos = ItemKappaCompass.getPos(itemstack);
+            if (pos != null) {
+                this.setHomePos(pos);
+                if (!world.isRemote) {
+                    // 尝试移动到这里，距离超过 16 就传送
+                    // 没办法，路径系统最大只允许寻路 16
+                    if (this.getPosition().distanceSq(pos) < 256) {
+                        this.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f);
+                    } else {
+                        this.attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                    }
+                    player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
+                }
+                return true;
+            }
+            if (!world.isRemote) {
+                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_fail"));
+            }
+        }
+
         // 打开 GUI 和切换待命状态
-        if (this.isTamed() && hand == EnumHand.MAIN_HAND && this.getOwnerId().equals(player.getUniqueID()) && itemstack.isEmpty()) {
+        if (this.isTamed() && this.getOwnerId().equals(player.getUniqueID())) {
             // 先清除寻路逻辑
             this.getNavigator().clearPath();
             // 如果玩家为潜行状态，那么切换待命
@@ -530,43 +554,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             }
             return true;
         }
-
-        // 驯服
-        Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
-        if (!this.isTamed() && hand == EnumHand.MAIN_HAND && itemstack.getItem() == tamedItem) {
-            if (!world.isRemote) {
-                consumeItemFromStack(player, itemstack);
-                this.setTamedBy(player);
-                this.playTameEffect(true);
-                this.getNavigator().clearPath();
-                this.world.setEntityState(this, (byte) 7);
-                this.playSound(MaidSoundEvent.MAID_TAMED, 1, 1);
-                return true;
-            }
-        }
-
-        // 写入坐标
-        if (this.isTamed() && hand == EnumHand.MAIN_HAND && this.getOwnerId().equals(player.getUniqueID()) && itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
-            int[] pos = MaidItems.KAPPA_COMPASS.getPos(itemstack);
-            if (pos != null) {
-                this.setHomePos(new BlockPos(pos[0], pos[1], pos[2]));
-                if (!world.isRemote) {
-                    // 尝试移动到这里，距离超过 16 就传送
-                    // 没办法，路径系统最大只允许寻路 16
-                    if (this.getPosition().getDistance(pos[0], pos[1], pos[2]) < 16) {
-                        this.getNavigator().tryMoveToXYZ(pos[0], pos[1], pos[2], 0.6f);
-                    } else {
-                        this.attemptTeleport(pos[0], pos[1], pos[2]);
-                    }
-                    player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
-                }
-                return true;
-            }
-            if (!world.isRemote) {
-                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_fail"));
-            }
-        }
-        return super.processInteract(player, hand);
+        return false;
     }
 
     /**
@@ -579,18 +567,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public void onDeath(DamageSource cause) {
-        // 检查饰品栏是否需要取消后续过程
-        for (int i = 0; i < baubleInv.getSlots(); ++i) {
-            Item item = baubleInv.getStackInSlot(i).getItem();
-            if (item instanceof IMaidBauble) {
-                IMaidBauble bauble = (IMaidBauble) item;
-                if (bauble.onMaidDeath(this, baubleInv.getStackInSlot(i), cause)) {
-                    return;
-                }
-            }
-        }
-
         super.onDeath(cause);
+        if (!dead)
+        {
+            return;
+        }
         if (!world.isRemote) {
             // 将女仆身上的物品进行掉落
             CombinedInvWrapper combinedInvWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);
@@ -803,12 +784,11 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         return MaidSoundEvent.MAID_DEATH;
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv));
         } else {
             return super.getCapability(capability, facing);
         }
@@ -818,7 +798,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         return mainInv;
     }
 
-    public ItemStackHandler getBaubleInv() {
+    public BaubleItemHandler getBaubleInv() {
         return baubleInv;
     }
 

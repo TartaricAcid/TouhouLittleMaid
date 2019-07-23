@@ -18,7 +18,7 @@ tile.touhou_little_maid.garage_kit.name=Garage Kit
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
 tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
-tooltips.touhou_little_maid.ultramarine_orb_elixir.desc=Remaining Usage Times: %d
+tooltips.touhou_little_maid.damageable.desc=Remaining Usage Times: %d
 tooltips.touhou_little_maid.garage_kit.id.desc=Entity Name: %s
 tooltips.touhou_little_maid.garage_kit.name.desc=Model Name: %s
 

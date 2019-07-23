@@ -1,13 +1,31 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.ItemDefinition;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.bauble.UltramarineOrbElixir;
+import com.github.tartaricacid.touhoulittlemaid.bauble.UndyingTotem;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGoheiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGuiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeHomeDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidModeMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidSkinMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangePickupDataMessage;
 import com.google.gson.Gson;
+
+import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -16,11 +34,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import org.apache.commons.io.IOUtils;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 public class CommonProxy {
     public static SimpleNetworkWrapper INSTANCE = null;
@@ -61,6 +74,8 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.ULTRAMARINE_ORB_ELIXIR), new UltramarineOrbElixir());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(Items.TOTEM_OF_UNDYING), new UndyingTotem());
     }
 
     /**

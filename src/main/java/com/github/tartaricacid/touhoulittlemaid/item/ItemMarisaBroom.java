@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 public class ItemMarisaBroom extends Item {
     public ItemMarisaBroom() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".marisa_broom");
-        setRegistryName("marisa_broom");
         setMaxStackSize(1);
         setCreativeTab(MaidItems.TABS);
     }
