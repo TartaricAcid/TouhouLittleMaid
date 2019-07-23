@@ -3,9 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.internal.task;
 import java.util.Random;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +28,7 @@ public class TaskAttackDanmaku extends TaskAttackRanged
     }
 
     @Override
-    public SoundEvent getAmbientSound(EntityLiving maid, Random rand)
+    public SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand)
     {
         return MaidSoundEvent.MAID_DANMAKU_ATTACK;
     }

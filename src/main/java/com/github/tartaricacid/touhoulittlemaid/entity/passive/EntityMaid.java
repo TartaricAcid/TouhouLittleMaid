@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
@@ -65,7 +66,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntityMaid extends EntityTameable implements IRangedAttackMob {
+public class EntityMaid extends AbstractEntityMaid {
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable;
@@ -744,7 +745,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         return mainInv;
     }
 
-    public BaubleItemHandler getBaubleInv() {
+    public BaubleItemHandler getBaubleInventory() {
         return baubleInv;
     }
 

@@ -17,10 +17,10 @@ public interface IMaidTask
     ItemStack getIcon();
 
     @Nullable
-    SoundEvent getAmbientSound(EntityLiving maid, Random rand);
+    SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand);
 
     @Nullable
-    EntityAIBase createAI(EntityLiving maid);
+    EntityAIBase createAI(AbstractEntityMaid maid);
 
     default boolean isAttack()
     {

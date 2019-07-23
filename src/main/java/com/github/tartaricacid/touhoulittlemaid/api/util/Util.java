@@ -2,10 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.api.util;
 
 import java.util.Random;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -20,7 +20,7 @@ public class Util
      * @param probability  播放环境音效的概率
      * @return 应当触发的音效
      */
-    public static SoundEvent environmentSound(EntityLiving maid, SoundEvent fallback, float probability, Random rand)
+    public static SoundEvent environmentSound(AbstractEntityMaid maid, SoundEvent fallback, float probability, Random rand)
     {
         World world = maid.world;
         // 差不多早上 6:30 - 7:30

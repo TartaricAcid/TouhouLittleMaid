@@ -3,11 +3,11 @@ package com.github.tartaricacid.touhoulittlemaid.internal.task;
 import java.util.Random;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -31,13 +31,13 @@ public class TaskIdle implements IMaidTask
     }
 
     @Override
-    public SoundEvent getAmbientSound(EntityLiving maid, Random rand)
+    public SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand)
     {
         return Util.environmentSound(maid, MaidSoundEvent.MAID_IDLE, 0.2f, rand);
     }
 
     @Override
-    public EntityAIBase createAI(EntityLiving maid)
+    public EntityAIBase createAI(AbstractEntityMaid maid)
     {
         return null;
     }

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.bauble;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 
@@ -24,18 +25,19 @@ public class UndyingTotem implements IMaidBauble
     public void onLivingDeath(LivingDeathEvent event)
     {
         EntityLivingBase entity = event.getEntityLiving();
-        if (LittleMaidAPI.isMaidEntity(entity))
+        if (entity instanceof AbstractEntityMaid)
         {
-            int slot = LittleMaidAPI.getBaubleSlotInMaid(entity, this);
+            AbstractEntityMaid maid = (AbstractEntityMaid) entity;
+            int slot = LittleMaidAPI.getBaubleSlotInMaid(maid, this);
             if (slot >= 0)
             {
-                LittleMaidAPI.getBaubleInventory(entity).setStackInSlot(slot, ItemStack.EMPTY);
+                maid.getBaubleInventory().setStackInSlot(slot, ItemStack.EMPTY);
                 event.setCanceled(true);
-                entity.setHealth(1.0F);
-                entity.clearActivePotions();
-                entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, 1));
-                entity.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 100, 1));
-                entity.world.setEntityState(entity, (byte) 35);
+                maid.setHealth(1.0F);
+                maid.clearActivePotions();
+                maid.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, 1));
+                maid.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 100, 1));
+                maid.world.setEntityState(entity, (byte) 35);
             }
         }
     }

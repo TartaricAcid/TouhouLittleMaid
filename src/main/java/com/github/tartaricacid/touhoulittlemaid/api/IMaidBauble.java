@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.api;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -80,7 +79,7 @@ public interface IMaidBauble {
         return false;
     }
 
-    default void onTick(EntityTameable maid, ItemStack bauble)
+    default void onTick(AbstractEntityMaid maid, ItemStack bauble)
     {
     }
 }

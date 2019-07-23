@@ -41,20 +41,9 @@ public class LittleMaidAPI
     }
 
     @Nonnull
-    public static int getBaubleSlotInMaid(Entity maid, IMaidBauble bauble)
+    public static int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble)
     {
         return INSTANCE.getBaubleSlotInMaid(maid, bauble);
-    }
-
-    @Nullable
-    public static BaubleItemHandler getBaubleInventory(Entity maid)
-    {
-        return INSTANCE.getBaubleInventory(maid);
-    }
-
-    public static boolean isMaidEntity(Entity entity)
-    {
-        return INSTANCE.isMaidEntity(entity);
     }
 
     public static void registerTask(IMaidTask task)
@@ -83,11 +72,9 @@ public class LittleMaidAPI
             return getBauble(ItemDefinition.of(item));
         }
 
-        BaubleItemHandler getBaubleInventory(Entity maid);
-
-        default int getBaubleSlotInMaid(Entity maid, IMaidBauble bauble)
+        default int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble)
         {
-            BaubleItemHandler handler = getBaubleInventory(maid);
+            BaubleItemHandler handler = maid.getBaubleInventory();
             if (handler != null)
             {
                 for (int i = 0; i < handler.getSlots(); i++)
@@ -101,8 +88,6 @@ public class LittleMaidAPI
             }
             return -1;
         }
-
-        boolean isMaidEntity(Entity entity);
 
         void registerTask(IMaidTask task);
 
