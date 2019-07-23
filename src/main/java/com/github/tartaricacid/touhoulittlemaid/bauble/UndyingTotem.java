@@ -37,8 +37,6 @@ public class UndyingTotem implements IMaidBauble
                 entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, 1));
                 entity.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 100, 1));
                 entity.world.setEntityState(entity, (byte) 35);
-                //                this.client.effectRenderer.emitParticleAtEntity(entity, EnumParticleTypes.TOTEM, 30);
-                //                this.world.playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_TOTEM_USE, entity.getSoundCategory(), 1.0F, 1.0F, false);
             }
         }
     }
