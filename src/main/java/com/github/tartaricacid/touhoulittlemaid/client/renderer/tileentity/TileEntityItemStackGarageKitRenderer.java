@@ -1,7 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
+import java.util.concurrent.ExecutionException;
+
+import org.lwjgl.opengl.GL11;
+
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -14,7 +20,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 /**
  * @author TartaricAcid
@@ -22,15 +27,12 @@ import org.lwjgl.opengl.GL11;
  **/
 @SideOnly(Side.CLIENT)
 public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRenderer {
-    public static TileEntityItemStackGarageKitRenderer instance = new TileEntityItemStackGarageKitRenderer();
+    public static final TileEntityItemStackGarageKitRenderer instance = new TileEntityItemStackGarageKitRenderer();
 
     @Override
     public void renderByItem(ItemStack itemStackIn) {
         if (itemStackIn.getItem() == Item.getItemFromBlock(MaidBlocks.GARAGE_KIT)) {
             World world = Minecraft.getMinecraft().world;
-            final Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(MaidBlocks.GARAGE_KIT.getEntityId(itemStackIn)), world);
-
-            GlStateManager.enableColorMaterial();
             GlStateManager.pushMatrix();
 
             if (Minecraft.isAmbientOcclusionEnabled()) {
@@ -39,25 +41,49 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 GlStateManager.shadeModel(GL11.GL_FLAT);
             }
 
-            GlStateManager.scale(0.5, 0.5, 0.5);
-            GlStateManager.rotate(22.5f, 1, 0, 0);
-            GlStateManager.rotate(22.5f, 0, 1, 0);
-            Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
+            String name = MaidBlocks.GARAGE_KIT.getEntityId(itemStackIn);
+            Entity entity = null;
+            try {
+                entity = ClientProxy.ENTITY_CACHE.get(name, () -> {
+                    Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(name), world);
+                    if (e == null) {
+                        return new EntityMaid(world);
+                    } else {
+                        return e;
+                    }
+                });
+                entity.setWorld(world);
+            } catch (ExecutionException e) {
+                return;
+            }
             if (entity instanceof EntityMaid) {
                 ((EntityMaid) entity).setModelLocation(MaidBlocks.GARAGE_KIT.getModel(itemStackIn));
                 ((EntityMaid) entity).setTextureLocation(MaidBlocks.GARAGE_KIT.getTexture(itemStackIn));
                 ((EntityMaid) entity).setModelName(MaidBlocks.GARAGE_KIT.getName(itemStackIn));
             }
-            Minecraft.getMinecraft().getRenderManager().renderEntity(entity == null ? new EntityMaid(world) : entity,
+
+            GlStateManager.enableColorMaterial();
+            GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+            final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
+            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+            Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
+            Minecraft.getMinecraft().getRenderManager().renderEntity(entity,
                     0.875, 0.25, 0.75, 0, 0, true);
             Minecraft.getMinecraft().getRenderManager().setRenderShadow(true);
 
             GlStateManager.popMatrix();
-            GlStateManager.disableRescaleNormal();
+            
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-            GlStateManager.disableTexture2D();
+            if (lightmapEnabled)
+            {
+                GlStateManager.enableTexture2D();
+            }
+            else
+            {
+                GlStateManager.disableTexture2D();
+            }
             GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-            GlStateManager.enableBlend();
         }
     }
 }

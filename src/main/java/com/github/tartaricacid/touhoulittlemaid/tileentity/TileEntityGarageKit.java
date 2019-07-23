@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
+import com.google.common.base.Objects;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -97,12 +99,16 @@ public class TileEntityGarageKit extends TileEntity {
         return name;
     }
 
-    public NBTTagCompound getEntityData() {
+    public NBTTagCompound getEntityData()
+    {
         return entityData;
     }
 
-    public void setData(String entityId, EnumFacing facing, String model, String texture, String name, NBTTagCompound entityData) {
-        this.entityId = entityId;
+    public void setData(String character, EnumFacing facing, String model, String texture, String name, NBTTagCompound entityData) {
+        if (Objects.equal(this.entityId, character) && Objects.equal(this.facing, facing) && Objects.equal(this.model, model) && Objects.equal(this.texture, texture) && Objects.equal(this.name, name)) {
+            return;
+        }
+        this.entityId = character;
         this.facing = facing;
         this.model = model;
         this.texture = texture;
