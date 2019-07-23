@@ -15,11 +15,11 @@ public class EntityMaidAttack extends EntityAIAttackMelee {
 
     @Override
     public boolean shouldExecute() {
-        return entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldExecute();
+        return !entityMaid.guiOpening && entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldExecute();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldContinueExecuting();
+        return !entityMaid.guiOpening && entityMaid.getMode() == MaidMode.ATTACK && !entityMaid.isSitting() && super.shouldContinueExecuting();
     }
 }

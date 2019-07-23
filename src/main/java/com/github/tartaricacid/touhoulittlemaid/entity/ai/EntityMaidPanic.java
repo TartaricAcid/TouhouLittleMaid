@@ -19,7 +19,7 @@ public class EntityMaidPanic extends EntityAIPanic {
     @Override
     public boolean shouldExecute() {
         // TODO：震惊，我居然写不出来
-        return entityMaid.getMode() != MaidMode.ATTACK && entityMaid.getMode() != MaidMode.RANGE_ATTACK
+        return !entityMaid.guiOpening && entityMaid.getMode() != MaidMode.ATTACK && entityMaid.getMode() != MaidMode.RANGE_ATTACK
                 && entityMaid.getMode() != MaidMode.DANMAKU_ATTACK && super.shouldExecute();
     }
 
@@ -30,7 +30,7 @@ public class EntityMaidPanic extends EntityAIPanic {
     @Override
     public boolean shouldContinueExecuting() {
         // TODO：震惊，我居然写不出来
-        return entityMaid.getMode() != MaidMode.ATTACK && entityMaid.getMode() != MaidMode.RANGE_ATTACK
+        return !entityMaid.guiOpening && entityMaid.getMode() != MaidMode.ATTACK && entityMaid.getMode() != MaidMode.RANGE_ATTACK
                 && entityMaid.getMode() != MaidMode.DANMAKU_ATTACK && super.shouldContinueExecuting();
     }
 }

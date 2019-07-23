@@ -81,6 +81,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
     private final ItemStackHandler baubleInv = new ItemStackHandler(8);
+    public boolean guiOpening;
 
     public EntityMaid(World worldIn) {
         super(worldIn);

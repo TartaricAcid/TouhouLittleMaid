@@ -27,13 +27,13 @@ public class EntityMaidBeg extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         this.player = this.world.getClosestPlayerToEntity(this.entityMaid, (double) this.maxPlayerDistance);
-        return this.player != null && this.hasTemptationItemInHand(this.player);
+        return !entityMaid.guiOpening && this.player != null && this.hasTemptationItemInHand(this.player);
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        // 如果玩家死了，不执行
-        if (!this.player.isEntityAlive()) {
+        // 如果玩家正在打开UI/死了，不执行
+        if (entityMaid.guiOpening || !this.player.isEntityAlive()) {
             return false;
         }
         // 女仆大于最小吸引距离了，也不执行
