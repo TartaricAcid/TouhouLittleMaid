@@ -1,10 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
+import java.util.concurrent.ExecutionException;
+
+import org.lwjgl.opengl.GL11;
+
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,11 +21,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
-import org.lwjgl.opengl.GL11;
-
 /**
  * @author TartaricAcid
  * @date 2019/7/7 15:36
@@ -36,7 +33,6 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
     public void renderByItem(ItemStack itemStackIn) {
         if (itemStackIn.getItem() == Item.getItemFromBlock(MaidBlocks.GARAGE_KIT)) {
             World world = Minecraft.getMinecraft().world;
-            GlStateManager.enableColorMaterial();
             GlStateManager.pushMatrix();
 
             if (Minecraft.isAmbientOcclusionEnabled()) {
@@ -45,7 +41,6 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 GlStateManager.shadeModel(GL11.GL_FLAT);
             }
 
-            Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
             String name = MaidBlocks.GARAGE_KIT.getEntityId(itemStackIn);
             Entity entity = null;
             try {
@@ -66,16 +61,29 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 ((EntityMaid) entity).setTextureLocation(MaidBlocks.GARAGE_KIT.getTexture(itemStackIn));
                 ((EntityMaid) entity).setModelName(MaidBlocks.GARAGE_KIT.getName(itemStackIn));
             }
+
+            GlStateManager.enableColorMaterial();
+            GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+            final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
+            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+            Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
             Minecraft.getMinecraft().getRenderManager().renderEntity(entity,
                     0.875, 0.25, 0.75, 0, 0, true);
             Minecraft.getMinecraft().getRenderManager().setRenderShadow(true);
 
             GlStateManager.popMatrix();
-            GlStateManager.disableRescaleNormal();
+            
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-            GlStateManager.disableTexture2D();
+            if (lightmapEnabled)
+            {
+                GlStateManager.enableTexture2D();
+            }
+            else
+            {
+                GlStateManager.disableTexture2D();
+            }
             GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-            GlStateManager.enableBlend();
         }
     }
 }
