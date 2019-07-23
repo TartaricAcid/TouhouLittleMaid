@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.api;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -77,5 +78,9 @@ public interface IMaidBauble {
      */
     default boolean onDanmakuAttack(EntityMaid entityMaid, EntityLivingBase target, ItemStack baubleItem, float distanceFactor, List<Entity> entityList) {
         return false;
+    }
+
+    default void onTick(EntityTameable maid, ItemStack bauble)
+    {
     }
 }

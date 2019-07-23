@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory;
 
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -32,7 +33,7 @@ public class MaidBaubleContainer extends MaidMainContainer {
 
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof IMaidBauble;
+                        return LittleMaidAPI.getBauble(stack) != null;
                     }
                 });
             }
