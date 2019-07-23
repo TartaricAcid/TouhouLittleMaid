@@ -768,10 +768,6 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.dataManager.set(PICKUP, pickup);
     }
 
-//    public int getTaskIndex() {
-//        return this.dataManager.get(MODE);
-//    }
-
     public IMaidTask getTask() {
         return this.task;
     }
@@ -779,17 +775,20 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     public void setTask(IMaidTask task) {
         if (task == this.task)
             return;
-        if (this.task != null)
+        if (!world.isRemote)
         {
-            tasks.removeTask(taskAI);
+            if (this.taskAI != null)
+            {
+                tasks.removeTask(taskAI);
+            }
+            taskAI = task.createAI(this);
+            if (taskAI != null)
+            {
+                tasks.addTask(5, taskAI);
+            }
         }
-        this.dataManager.set(TASK, task.getUid().toString());
         this.task = task;
-        taskAI = task.createAI(this);
-        if (taskAI != null)
-        {
-            tasks.addTask(5, taskAI);
-        }
+        this.dataManager.set(TASK, task.getUid().toString());
     }
 
     public int getExp() {
