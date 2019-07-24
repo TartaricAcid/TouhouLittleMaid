@@ -145,6 +145,11 @@
       "texture": "touhou_little_maid:textures/entity/alice_margatroid.png",
       "name": "{model.vanilla_touhou_model.alice_margatroid.name}",
       "description": ["{model.vanilla_touhou_model.alice_margatroid.desc}"]
+    }, {
+      "model": "touhou_little_maid:models/entity/patchouli_knowledge.json",
+      "texture": "touhou_little_maid:textures/entity/patchouli_knowledge.png",
+      "name": "{model.vanilla_touhou_model.patchouli_knowledge.name}",
+      "description": ["{model.vanilla_touhou_model.patchouli_knowledge.desc}"]
     }
   ]
 }

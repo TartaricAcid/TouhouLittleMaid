@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.AttackValue;
 import com.github.tartaricacid.touhoulittlemaid.api.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
@@ -147,7 +146,10 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public void onLivingUpdate() {
-        baubleInv.fireEvent((b, s) -> { b.onTick(this, s); return false; });
+        baubleInv.fireEvent((b, s) -> {
+            b.onTick(this, s);
+            return false;
+        });
         this.updateArmSwingProgress();
         super.onLivingUpdate();
     }
@@ -247,8 +249,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (baubleInv.fireEvent((b, s) -> b.onMaidAttacked(this, s, source, amount)))
-        {
+        if (baubleInv.fireEvent((b, s) -> b.onMaidAttacked(this, s, source, amount))) {
             return true;
         }
         return super.attackEntityFrom(source, amount);
@@ -259,8 +260,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (this.getMode() == MaidMode.RANGE_ATTACK) {
             EntityArrow entityArrow = this.getArrow(distanceFactor);
 
-            if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
-            {
+            if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow))) {
                 return;
             }
 
@@ -491,8 +491,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        if (hand != EnumHand.MAIN_HAND)
-        {
+        if (hand != EnumHand.MAIN_HAND) {
             return false;
         }
         ItemStack itemstack = player.getHeldItem(hand);
@@ -567,8 +566,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Override
     public void onDeath(DamageSource cause) {
         super.onDeath(cause);
-        if (!dead)
-        {
+        if (!dead) {
             return;
         }
         if (!world.isRemote) {

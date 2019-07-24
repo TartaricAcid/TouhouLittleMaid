@@ -111,6 +111,7 @@ model.vanilla_touhou_model.luna_child.name=露娜切露德
 model.vanilla_touhou_model.remilia_scarlet.name=蕾米莉亚·斯卡蕾特
 model.vanilla_touhou_model.sunny_milk.name=桑尼米尔克
 model.vanilla_touhou_model.alice_margatroid.name=爱丽丝·玛格特洛依德
+model.vanilla_touhou_model.patchouli_knowledge.name=帕秋莉·诺蕾姬
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7乐园的巫女
 model.vanilla_touhou_model.yakumo_ran.desc=§7隙间妖怪的式神
@@ -140,6 +141,7 @@ model.vanilla_touhou_model.luna_child.desc=§7静谧的月之光
 model.vanilla_touhou_model.remilia_scarlet.desc=§7红色恶魔
 model.vanilla_touhou_model.sunny_milk.desc=§7闪耀的日之光
 model.vanilla_touhou_model.alice_margatroid.desc=§7七色的人偶使
+model.vanilla_touhou_model.patchouli_knowledge.desc=§7不动的大图书馆
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
