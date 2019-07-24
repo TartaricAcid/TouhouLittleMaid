@@ -484,7 +484,7 @@ public class EntityMaid extends AbstractEntityMaid {
         ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
                 this.getModelLocation(), this.getTextureLocation(), this.getModelName(), entityTag);
         // 生成物品实体
-        InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, stack);
+        entityDropItem(stack, 0);
     }
 
     @Override
