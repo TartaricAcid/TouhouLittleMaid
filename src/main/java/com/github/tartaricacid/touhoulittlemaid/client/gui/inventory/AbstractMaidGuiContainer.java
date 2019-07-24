@@ -26,6 +26,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,6 +46,7 @@ import java.util.List;
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     EntityMaid maid;
+    EntityMaid renderingMaid;
     private int guiId;
     private GuiButtonToggle togglePickup;
     private GuiButtonToggle toggleHome;
@@ -87,6 +89,12 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         super.initGui();
         int i = this.guiLeft;
         int j = this.guiTop;
+
+        // 为了避免转向错误，初始化用于绘制的实体
+        renderingMaid = new EntityMaid(mc.world);
+        NBTTagCompound nbt = new NBTTagCompound();
+        maid.writeEntityToNBT(nbt);
+        renderingMaid.readEntityFromNBT(nbt);
 
         // 切换是否拾起物品的按钮
         togglePickup = new GuiButtonToggle(0, i + 143, j + 63, 26, 16, maid.isPickup());
@@ -292,13 +300,12 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.drawItemStack(container.task.getIcon(), i - 20, j + 5, "");
 
         // 绘制女仆样子
-        // 为了避免转向错误，所以直接 new 一个新实体，但是传入其他数据
-        EntityMaid entityMaidNew = new EntityMaid(mc.world);
-        NBTTagCompound nbt = new NBTTagCompound();
-        maid.writeEntityToNBT(nbt);
-        entityMaidNew.readEntityFromNBT(nbt);
+        // 首先同步手持物品
+        for (EnumHand hand : EnumHand.values()) {
+            renderingMaid.setHeldItem(hand, maid.getHeldItem(hand));
+        }
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 30,
-                (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, entityMaidNew);
+                (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, renderingMaid);
     }
 
     private void drawItemStack(ItemStack stack, int x, int y, String altText) {

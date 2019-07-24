@@ -111,6 +111,7 @@ model.vanilla_touhou_model.luna_child.name=Luna Child
 model.vanilla_touhou_model.remilia_scarlet.name=Remilia Scarlet
 model.vanilla_touhou_model.sunny_milk.name=Sunny Milk
 model.vanilla_touhou_model.alice_margatroid.name=Alice Margatroid
+model.vanilla_touhou_model.patchouli_knowledge.name=Patchouli Knowledge
 
 model.vanilla_touhou_model.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.vanilla_touhou_model.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -140,6 +141,7 @@ model.vanilla_touhou_model.luna_child.desc=§7Silent Moonlight
 model.vanilla_touhou_model.remilia_scarlet.desc=§7The Scarlet Devil
 model.vanilla_touhou_model.sunny_milk.desc=§7Shining Sunlight
 model.vanilla_touhou_model.alice_margatroid.desc=§7Seven-Colored Puppeteer
+model.vanilla_touhou_model.patchouli_knowledge.desc=§7The Unmoving Great Library
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

@@ -12,80 +12,72 @@ import com.google.common.base.Optional;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class LittleMaidAPI
-{
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+/**
+ * @author Snownee
+ * @date 2019/7/23 14:53
+ */
+public class LittleMaidAPI {
     private static ILittleMaidAPI INSTANCE = null;
 
-    public static void setInstance(ILittleMaidAPI instance)
-    {
+    public static void setInstance(ILittleMaidAPI instance) {
         INSTANCE = instance;
     }
 
     @Nullable
-    public static IMaidBauble registerBauble(ItemDefinition item, IMaidBauble bauble)
-    {
+    public static IMaidBauble registerBauble(ItemDefinition item, IMaidBauble bauble) {
         return INSTANCE.registerBauble(item, bauble);
     }
 
     @Nullable
-    public static IMaidBauble getBauble(ItemDefinition item)
-    {
+    public static IMaidBauble getBauble(ItemDefinition item) {
         return INSTANCE.getBauble(item);
     }
 
     @Nullable
-    public static IMaidBauble getBauble(ItemStack item)
-    {
+    public static IMaidBauble getBauble(ItemStack item) {
         return INSTANCE.getBauble(item);
     }
 
     @Nonnull
-    public static int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble)
-    {
+    public static int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble) {
         return INSTANCE.getBaubleSlotInMaid(maid, bauble);
     }
 
-    public static void registerTask(IMaidTask task)
-    {
+    public static void registerTask(IMaidTask task) {
         INSTANCE.registerTask(task);
     }
 
-    public static Optional<IMaidTask> findTask(ResourceLocation uid)
-    {
+    public static Optional<IMaidTask> findTask(ResourceLocation uid) {
         return INSTANCE.findTask(uid);
     }
 
-    public static List<IMaidTask> getTasks()
-    {
+    public static List<IMaidTask> getTasks() {
         return INSTANCE.getTasks();
     }
 
-    public static IMaidTask getIdleTask()
-    {
+    public static IMaidTask getIdleTask() {
         return INSTANCE.getIdleTask();
     }
 
-    public static interface ILittleMaidAPI
-    {
+    public static interface ILittleMaidAPI {
         IMaidBauble registerBauble(ItemDefinition item, IMaidBauble bauble);
 
         IMaidBauble getBauble(ItemDefinition item);
 
-        default IMaidBauble getBauble(ItemStack item)
-        {
+        default IMaidBauble getBauble(ItemStack item) {
             return getBauble(ItemDefinition.of(item));
         }
 
         default int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble)
         {
             BaubleItemHandler handler = maid.getBaubleInv();
-            if (handler != null)
-            {
-                for (int i = 0; i < handler.getSlots(); i++)
-                {
+            if (handler != null) {
+                for (int i = 0; i < handler.getSlots(); i++) {
                     IMaidBauble baubleIn = handler.getBaubleInSlot(i);
-                    if (baubleIn == bauble)
-                    {
+                    if (baubleIn == bauble) {
                         return i;
                     }
                 }

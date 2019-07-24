@@ -39,6 +39,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -67,7 +69,7 @@ import java.util.List;
 public class EntityMaid extends AbstractEntityMaid {
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
-    public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable;
+    public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> TASK = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
@@ -120,6 +122,14 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
+    protected PathNavigate createNavigator(World worldIn)
+    {
+        PathNavigateGround pathNavigate = new PathNavigateGround(this, worldIn);
+        pathNavigate.setBreakDoors(true);
+        return pathNavigate;
+    }
+
+    @Override
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(BEGGING, Boolean.FALSE);
@@ -143,7 +153,10 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public void onLivingUpdate() {
-        baubleInv.fireEvent((b, s) -> { b.onTick(this, s); return false; });
+        baubleInv.fireEvent((b, s) -> {
+            b.onTick(this, s);
+            return false;
+        });
         this.updateArmSwingProgress();
         super.onLivingUpdate();
     }
@@ -190,8 +203,7 @@ public class EntityMaid extends AbstractEntityMaid {
             itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, false);
             // 如果遍历塞完后发现为空了
             if (itemstack.isEmpty()) {
-                // 我看原版 EntityItem 有这个方法，不知道意义如何，以防万一加上
-                // 似乎是向客户端发包同步掉落物的，但是不加这个我也没遇见过 Bug
+                // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
                 this.onItemPickup(entityItem, count);
                 // 清除这个实体
                 entityItem.setDead();
@@ -213,8 +225,7 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private void pickupXPOrb(EntityXPOrb entityXPOrb) {
         if (!this.world.isRemote && entityXPOrb.isEntityAlive() && entityXPOrb.delayBeforeCanPickup == 0) {
-            // 我看原版 EntityItem 有这个方法，不知道意义如何，以防万一加上
-            // 似乎是向客户端发包同步实体的，但是不加这个我也没遇见过 Bug
+            // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
             this.onItemPickup(entityXPOrb, 1);
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
@@ -364,8 +375,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        if (hand != EnumHand.MAIN_HAND)
-        {
+        if (hand != EnumHand.MAIN_HAND) {
             return false;
         }
         ItemStack itemstack = player.getHeldItem(hand);
@@ -440,8 +450,7 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public void onDeath(DamageSource cause) {
         super.onDeath(cause);
-        if (!dead)
-        {
+        if (!dead) {
             return;
         }
         if (!world.isRemote) {

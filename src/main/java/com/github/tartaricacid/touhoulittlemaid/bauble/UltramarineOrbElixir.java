@@ -13,23 +13,18 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class UltramarineOrbElixir implements IMaidBauble
-{
-    public UltramarineOrbElixir()
-    {
+public class UltramarineOrbElixir implements IMaidBauble {
+    public UltramarineOrbElixir() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onLivingDeath(LivingDeathEvent event)
-    {
+    public void onLivingDeath(LivingDeathEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (entity instanceof AbstractEntityMaid)
-        {
+        if (entity instanceof AbstractEntityMaid) {
             AbstractEntityMaid maid = (AbstractEntityMaid) entity;
             int slot = LittleMaidAPI.getBaubleSlotInMaid(maid, this);
-            if (slot >= 0)
-            {
+            if (slot >= 0) {
                 event.setCanceled(true);
                 maid.setHealth(entity.getMaxHealth());
                 maid.spawnExplosionParticle();
