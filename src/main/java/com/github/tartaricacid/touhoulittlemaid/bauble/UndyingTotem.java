@@ -14,23 +14,18 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class UndyingTotem implements IMaidBauble
-{
-    public UndyingTotem()
-    {
+public class UndyingTotem implements IMaidBauble {
+    public UndyingTotem() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onLivingDeath(LivingDeathEvent event)
-    {
+    public void onLivingDeath(LivingDeathEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (entity instanceof AbstractEntityMaid)
-        {
+        if (entity instanceof AbstractEntityMaid) {
             AbstractEntityMaid maid = (AbstractEntityMaid) entity;
             int slot = LittleMaidAPI.getBaubleSlotInMaid(maid, this);
-            if (slot >= 0)
-            {
+            if (slot >= 0) {
                 maid.getBaubleInv().setStackInSlot(slot, ItemStack.EMPTY);
                 event.setCanceled(true);
                 maid.setHealth(1.0F);

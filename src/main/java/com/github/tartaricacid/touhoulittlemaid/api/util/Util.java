@@ -11,20 +11,20 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public class Util
-{
-    private Util()
-    {
+public class Util {
+    private Util() {
     }
+
     /**
      * 用来播放基于环境的音效，比如气温，天气，时间
      *
-     * @param fallback 这些都没有播放情况下的默认音效
-     * @param probability  播放环境音效的概率
+     * @param fallback
+     *            这些都没有播放情况下的默认音效
+     * @param probability
+     *            播放环境音效的概率
      * @return 应当触发的音效
      */
-    public static SoundEvent environmentSound(AbstractEntityMaid maid, SoundEvent fallback, float probability)
-    {
+    public static SoundEvent environmentSound(AbstractEntityMaid maid, SoundEvent fallback, float probability) {
         World world = maid.world;
         Random rand = maid.getRNG();
         // 差不多早上 6:30 - 7:30
@@ -51,8 +51,7 @@ public class Util
         return fallback;
     }
 
-    public static String getTaskTranslationKey(IMaidTask task)
-    {
+    public static String getTaskTranslationKey(IMaidTask task) {
         ResourceLocation rl = task.getUid();
         return "task." + rl.getNamespace() + "." + rl.getPath();
     }
