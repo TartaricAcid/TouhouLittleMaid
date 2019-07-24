@@ -13,6 +13,9 @@ import net.minecraft.world.biome.Biome;
 
 public class Util
 {
+    private Util()
+    {
+    }
     /**
      * 用来播放基于环境的音效，比如气温，天气，时间
      *

@@ -12,7 +12,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
-import com.github.tartaricacid.touhoulittlemaid.internal.LittleMaidAPIImpl;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -26,19 +25,15 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityParrot;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntitySpectralArrow;
-import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -263,70 +258,6 @@ public class EntityMaid extends AbstractEntityMaid {
 //            return;
 //        }
         task.onRangedAttack(this, target, distanceFactor);
-    }
-
-    /**
-     * 依据背包里面的箭获取对应实体箭
-     *
-     * @return 如果没有箭，会返回一个 null 对象
-     */
-    @Nullable
-    @Override
-    public EntityArrow getArrow(float chargeTime) {
-        ItemStack itemstack = ItemStack.EMPTY;
-
-        // 遍历女仆背包，找到第一个属于 arrow 的物品
-        for (int i = 0; i < mainInv.getSlots(); ++i) {
-            itemstack = mainInv.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemArrow) {
-                break;
-            }
-        }
-
-        // 如果是光灵箭
-        if (itemstack.getItem() == Items.SPECTRAL_ARROW) {
-            EntitySpectralArrow entityspectralarrow = new EntitySpectralArrow(this.world, this);
-            entityspectralarrow.setEnchantmentEffectsFromEntity(this, chargeTime);
-            shrinkArrow(itemstack, entityspectralarrow);
-            return entityspectralarrow;
-        }
-
-        // 如果是药水箭或者普通的箭
-        if (itemstack.getItem() == Items.ARROW || itemstack.getItem() == Items.TIPPED_ARROW) {
-            EntityTippedArrow entitytippedarrow = new EntityTippedArrow(this.world, this);
-            entitytippedarrow.setEnchantmentEffectsFromEntity(this, chargeTime);
-            entitytippedarrow.setPotionEffect(itemstack);
-            shrinkArrow(itemstack, entitytippedarrow);
-            return entitytippedarrow;
-        }
-
-        return null;
-    }
-
-    /**
-     * 依据主手持有物品是否有无限附魔来决定消耗
-     */
-    private void shrinkArrow(ItemStack arrow, EntityArrow entityArrow) {
-        // 无限附魔不存在或者小于 0 时
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, this.getHeldItemMainhand()) <= 0) {
-            arrow.shrink(1);
-            // 记得把箭设置为可以拾起状态
-            entityArrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
-        }
-    }
-
-    /**
-     * 检查女仆背包内是否有箭
-     */
-    @Override
-    public boolean hasArrow() {
-        for (int i = 0; i < mainInv.getSlots(); ++i) {
-            ItemStack itemstack = mainInv.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemArrow) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

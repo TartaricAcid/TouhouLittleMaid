@@ -24,16 +24,5 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
 
     abstract public IItemHandlerModifiable getInv(MaidInventory type);
 
-    /**
-     * 检查女仆背包内是否有箭
-     */
-    abstract public boolean hasArrow();
-
-    /**
-     * 依据背包里面的箭获取对应实体箭
-     */
-    @Nullable
-    abstract public EntityArrow getArrow(float distanceFactor);
-
     abstract public boolean isFarmItemInInventory();
 }

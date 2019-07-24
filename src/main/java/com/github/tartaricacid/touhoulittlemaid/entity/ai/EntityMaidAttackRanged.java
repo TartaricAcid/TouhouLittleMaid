@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackRanged;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemBow;
@@ -34,7 +36,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         // 能够远程攻击：模式正确、主手持弓、身上有箭
-        boolean canRangeAttack = this.isBowInMainhand() && this.entity.hasArrow();
+        boolean canRangeAttack = this.isBowInMainhand() && TaskAttackRanged.findArrow(entity) >= 0;
         // 能够弹幕攻击：模式正确、主手持御币
         boolean canDanmakuAttack = this.isGoheiInMainhand();
         // 能够处理攻击：攻击目标不为空、上述两者攻击存在一个
