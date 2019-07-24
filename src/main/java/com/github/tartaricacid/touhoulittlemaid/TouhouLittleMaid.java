@@ -28,8 +28,10 @@ public class TouhouLittleMaid {
             clientSide = "com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy")
     public static CommonProxy proxy;
 
-    public TouhouLittleMaid()
-    {
+    /**
+     * 设置 API 对象
+     */
+    public TouhouLittleMaid() {
         LittleMaidAPI.setInstance(new LittleMaidAPIImpl());
     }
 

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.material.Material;
@@ -42,7 +42,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         // 而后判定延迟，任务，还有是否有对应物品
         if (this.runDelay <= 0) {
             this.currentTask = -1;
-            this.hasFarmItem = this.entityMaid.isFarmItemInInventory();
+            this.hasFarmItem = ItemFindUtil.isItemIn(this.entityMaid.getAvailableInv(),
+                    (s) -> s != null && !s.isEmpty() && s.getItem() instanceof IPlantable);
         }
 
         // 距离下次检索的延时

@@ -4,11 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,8 +19,7 @@ public class KappaCompassRenderEvent {
     @SubscribeEvent
     public static void renderBlockOverlayEvent(RenderGameOverlayEvent event) {
         ItemStack stack = Minecraft.getMinecraft().player.getHeldItemMainhand();
-        if (stack.getItem() != MaidItems.KAPPA_COMPASS)
-        {
+        if (stack.getItem() != MaidItems.KAPPA_COMPASS) {
             return;
         }
         BlockPos pos = ItemKappaCompass.getPos(stack);

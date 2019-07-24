@@ -1,11 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.io.IOUtils;
-
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
@@ -16,23 +10,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttack;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackDanmaku;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackRanged;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskFarm;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskFeed;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskShears;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskTorch;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.*;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGoheiMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGuiMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeHomeDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidTaskMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidSkinMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangePickupDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
 import com.google.gson.Gson;
-
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -43,14 +24,19 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class CommonProxy {
     public static SimpleNetworkWrapper INSTANCE = null;
     /**
-     * 服务端用模型列表<br>
-     * 这个只会在服务器启动时候读取默认原版的列表<br>
-     * 主要用于刷怪蛋、刷怪笼、自然生成的随机模型<br>
-     * <br>
+     * 服务端用模型列表，
+     * 这个只会在服务器启动时候读取默认原版的列表，
+     * 主要用于刷怪蛋、刷怪笼、自然生成的随机模型，
+     * <p>
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static CustomModelPackPOJO MODEL_LIST;
@@ -83,9 +69,11 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
+        // 注册饰品
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.ULTRAMARINE_ORB_ELIXIR), new UltramarineOrbElixir());
         LittleMaidAPI.registerBauble(ItemDefinition.of(Items.TOTEM_OF_UNDYING), new UndyingTotem());
 
+        // 注册女仆模式
         LittleMaidAPI.registerTask(new TaskAttack());
         LittleMaidAPI.registerTask(new TaskAttackRanged());
         LittleMaidAPI.registerTask(new TaskAttackDanmaku());

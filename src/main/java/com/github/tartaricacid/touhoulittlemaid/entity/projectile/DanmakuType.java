@@ -20,16 +20,16 @@ public enum DanmakuType {
     // 环玉
     ORBS("orbs", 0.3d);
 
+    private static int length = values().length;
     private String name;
     private int index;
     private double size;
-    private static int length = values().length;
 
     /**
      * 弹幕类型枚举
      *
-     * @param name  弹幕名称
-     * @param size  弹幕大小
+     * @param name 弹幕名称
+     * @param size 弹幕大小
      */
     DanmakuType(String name, double size) {
         this.name = name;

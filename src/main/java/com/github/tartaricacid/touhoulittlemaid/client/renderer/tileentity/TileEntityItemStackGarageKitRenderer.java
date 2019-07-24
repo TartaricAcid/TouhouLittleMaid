@@ -71,14 +71,11 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
             Minecraft.getMinecraft().getRenderManager().setRenderShadow(true);
 
             GlStateManager.popMatrix();
-            
+
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-            if (lightmapEnabled)
-            {
+            if (lightmapEnabled) {
                 GlStateManager.enableTexture2D();
-            }
-            else
-            {
+            } else {
                 GlStateManager.disableTexture2D();
             }
             GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);

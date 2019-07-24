@@ -98,8 +98,7 @@ public class TileEntityGarageKit extends TileEntity {
         return name;
     }
 
-    public NBTTagCompound getEntityData()
-    {
+    public NBTTagCompound getEntityData() {
         return entityData;
     }
 

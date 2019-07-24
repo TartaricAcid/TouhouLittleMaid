@@ -3,8 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.bauble;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -13,6 +11,11 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+
+/**
+ * @author Snownee
+ * @date 2019/7/23 14:53
+ */
 public class UltramarineOrbElixir implements IMaidBauble {
     public UltramarineOrbElixir() {
         MinecraftForge.EVENT_BUS.register(this);

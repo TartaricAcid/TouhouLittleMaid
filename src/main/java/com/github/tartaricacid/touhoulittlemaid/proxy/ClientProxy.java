@@ -25,9 +25,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ClientProxy extends CommonProxy {
+    /**
+     * 实体缓存，在客户端会大量运用实体渲染，这个缓存可以减少重复创建实体带来的性能问题
+     */
+    public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
     public static List<CustomModelPackPOJO> MODEL_PACK_LIST = new ArrayList<>();
     public static HashMap<String, EntityModelJson> LOCATION_MODEL_MAP = new HashMap<>();
-    public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {

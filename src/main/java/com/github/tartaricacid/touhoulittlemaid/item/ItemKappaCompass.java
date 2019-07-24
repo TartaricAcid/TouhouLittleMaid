@@ -7,7 +7,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -29,6 +28,18 @@ public class ItemKappaCompass extends Item {
         setCreativeTab(MaidItems.TABS);
     }
 
+    @Nullable
+    public static BlockPos getPos(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT.POS.getName(), Constants.NBT.TAG_COMPOUND)) {
+            return NBTUtil.getPosFromTag(stack.getTagCompound().getCompoundTag(NBT.POS.getName()));
+        }
+        return null;
+    }
+
+    public static void setPos(ItemStack stack, BlockPos pos) {
+        stack.setTagInfo(NBT.POS.getName(), NBTUtil.createPosTag(pos));
+    }
+
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (player.getHeldItem(hand).getItem() == this) {
@@ -46,18 +57,6 @@ public class ItemKappaCompass extends Item {
         if (pos != null) {
             tooltip.add(TextFormatting.GOLD + I18n.format("tooltips.touhou_little_maid.kappa_compass.desc", pos.getX(), pos.getY(), pos.getZ()));
         }
-    }
-
-    @Nullable
-    public static BlockPos getPos(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT.POS.getName(), Constants.NBT.TAG_COMPOUND)) {
-            return NBTUtil.getPosFromTag(stack.getTagCompound().getCompoundTag(NBT.POS.getName()));
-        }
-        return null;
-    }
-
-    public static void setPos(ItemStack stack, BlockPos pos) {
-        stack.setTagInfo(NBT.POS.getName(), NBTUtil.createPosTag(pos));
     }
 
     /**

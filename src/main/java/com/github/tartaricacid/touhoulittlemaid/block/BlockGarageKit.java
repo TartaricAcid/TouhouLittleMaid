@@ -15,7 +15,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,12 +39,12 @@ import java.util.List;
  * @date 2019/7/7 10:58
  **/
 public class BlockGarageKit extends Block implements ITileEntityProvider {
+    public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
     private static final String DEFAULT_ID = "touhou_little_maid:entity.passive.maid";
     private static final String DEFAULT_MODEL = "touhou_little_maid:models/entity/hakurei_reimu.json";
     private static final String DEFAULT_TEXTURE = "touhou_little_maid:textures/entity/hakurei_reimu.png";
     private static final String DEFAULT_NAME = "{model.vanilla_touhou_model.hakurei_reimu.name}";
     private static final NBTTagCompound DEFAULT_DATA = new NBTTagCompound();
-    public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
 
     public BlockGarageKit() {
         super(Material.CLAY);
@@ -159,8 +158,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         data.setString(NBT.MODEL_LOCATION.getName(), model);
         data.setString(NBT.MODEL_TEXTURE.getName(), texture);
         data.setString(NBT.MODEL_NAME.getName(), name);
-        if (!entityData.isEmpty())
-        {
+        if (!entityData.isEmpty()) {
             data.setTag(NBT.MAID_DATA.getName(), entityData);
         }
         return stack;

@@ -3,9 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.bauble;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -14,6 +12,10 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+/**
+ * @author Snownee
+ * @date 2019/7/23 14:53
+ */
 public class UndyingTotem implements IMaidBauble {
     public UndyingTotem() {
         MinecraftForge.EVENT_BUS.register(this);

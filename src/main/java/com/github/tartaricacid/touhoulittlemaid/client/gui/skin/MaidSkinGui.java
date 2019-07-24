@@ -36,14 +36,14 @@ public class MaidSkinGui extends GuiScreen {
      */
     private static final HashMap<Integer, ModelItem> BUTTON_MODEL_MAP = new HashMap<>();
     /**
+     * 一页最多能容纳 44 个模型
+     */
+    private static final int PAGE_MAX_NUM = 44;
+    /**
      * 存储包的总数和当前包的索引
      */
     private static int PACK_COUNT = ClientProxy.MODEL_PACK_LIST.size();
     private static int PACK_INDEX = 0;
-    /**
-     * 一页最多能容纳 44 个模型
-     */
-    private static final int PAGE_MAX_NUM = 44;
     /**
      * 存储页面的总数和当前页面索引
      */
@@ -317,9 +317,6 @@ public class MaidSkinGui extends GuiScreen {
             // 其他按键进行模型更改的发包
             default:
                 CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),
-                        BUTTON_MODEL_MAP.get(button.id).getModel().length(),
-                        BUTTON_MODEL_MAP.get(button.id).getTexture().length(),
-                        BUTTON_MODEL_MAP.get(button.id).getName().length(),
                         BUTTON_MODEL_MAP.get(button.id).getModel(),
                         BUTTON_MODEL_MAP.get(button.id).getTexture(),
                         BUTTON_MODEL_MAP.get(button.id).getName()));

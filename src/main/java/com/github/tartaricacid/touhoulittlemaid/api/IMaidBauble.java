@@ -4,13 +4,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * @author Snownee
+ * @date 2019/7/24 02:31
+ */
 public interface IMaidBauble {
-
     /**
      * 在普通远程攻击模式下触发
      *
@@ -39,7 +41,12 @@ public interface IMaidBauble {
         return false;
     }
 
-    default void onTick(AbstractEntityMaid maid, ItemStack bauble)
-    {
+    /**
+     * 在游戏进行 tick 时触发的事件
+     *
+     * @param entityMaid 女仆对象
+     * @param baubleItem 所调用的饰品
+     */
+    default void onTick(AbstractEntityMaid entityMaid, ItemStack baubleItem) {
     }
 }

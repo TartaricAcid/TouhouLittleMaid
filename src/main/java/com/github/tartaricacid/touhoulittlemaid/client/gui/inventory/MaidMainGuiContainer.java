@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class MaidMainGuiContainer extends AbstractMaidGuiContainer {
     public MaidMainGuiContainer(InventoryPlayer inventory, EntityMaid maid, int taskIndex) {
-        super(new MaidMainContainer(inventory, maid, taskIndex), 1);
+        super(new MaidMainContainer(inventory, maid, taskIndex), BUTTON.MAIN.getGuiId());
     }
 
     @Override

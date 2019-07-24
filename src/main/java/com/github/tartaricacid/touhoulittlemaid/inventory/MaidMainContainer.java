@@ -3,10 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.inventory;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.internal.LittleMaidAPIImpl;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidTaskMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -40,18 +38,15 @@ public class MaidMainContainer extends Container {
     }
 
     @Override
-    public void detectAndSendChanges()
-    {
+    public void detectAndSendChanges() {
         maid.guiOpening = true;
         super.detectAndSendChanges();
     }
 
     @Override
-    public void onContainerClosed(EntityPlayer playerIn)
-    {
+    public void onContainerClosed(EntityPlayer playerIn) {
         maid.guiOpening = false;
-        if (playerIn.world.isRemote)
-        {
+        if (playerIn.world.isRemote) {
             CommonProxy.INSTANCE.sendToServer(new ChangeMaidTaskMessage(maid.getUniqueID(), task));
         }
         super.onContainerClosed(playerIn);

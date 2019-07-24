@@ -59,8 +59,7 @@ public class EntityMaidPickup extends EntityAIBase {
         // 拾取对象为空，或者没活着，那就遍历获取下一个
         else {
             for (Entity entity : list) {
-                if (entity.isDead || !entityMaid.canEntityBeSeen(entity))
-                {
+                if (entity.isDead || !entityMaid.canEntityBeSeen(entity)) {
                     continue;
                 }
                 // 物品活着，而且能塞入女仆背包
@@ -68,8 +67,8 @@ public class EntityMaidPickup extends EntityAIBase {
                     EntityItem item = (EntityItem) entity;
                     ItemStack before = item.getItem();
                     ItemStack after = ItemHandlerHelper.insertItemStacked(entityMaid.getAvailableInv(), before, true);
-                    if (before.getCount() == after.getCount())
-                    {
+                    // 尝试塞入后发现数量没有变化，说明无法拾取此对象，搜寻下一个
+                    if (before.getCount() == after.getCount()) {
                         continue;
                     }
                     entityPickup = entity;

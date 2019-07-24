@@ -1,12 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
-import java.util.UUID;
-
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.internal.LittleMaidAPIImpl;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -17,6 +13,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.UUID;
+
+/**
+ * @author Snownee
+ * @date 2019/7/24 02:31
+ */
 public class ChangeMaidTaskMessage implements IMessage {
     private UUID entityUuid;
     private IMaidTask task;

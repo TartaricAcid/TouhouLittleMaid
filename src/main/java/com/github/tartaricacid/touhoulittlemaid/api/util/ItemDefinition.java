@@ -44,54 +44,91 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Comparable, NBT-insensitive, size-insensitive item definition that may be used as key of Map.
- * <p>
  * 可比较的物品定义信息，忽略 NBT 数据及数量，可用作 Map 的键。
+ * 主要用于后续映射 物品 -> IMaidBauble 对象
  *
  * @author Snownee
  * @date 2019/7/23 14:53
  */
 public final class ItemDefinition implements Comparable<ItemDefinition> {
+    /**
+     * 空物品定义
+     */
     public static final ItemDefinition EMPTY = of(Items.AIR);
-
-    public static ItemDefinition of(Item item) {
-        return of(item, 0);
-    }
-
-    public static ItemDefinition of(ItemStack stack) {
-        return stack.isEmpty() ? EMPTY : of(stack.getItem(), stack.getHasSubtypes() ? stack.getMetadata() : 0);
-    }
-
-    public static ItemDefinition of(Block block) {
-        return of(Item.getItemFromBlock(block));
-    }
-
-    public static ItemDefinition of(Block block, int metadata) {
-        return of(Item.getItemFromBlock(block), metadata);
-    }
-
-    public static ItemDefinition of(Item item, int metadata) {
-        return new ItemDefinition(item, metadata);
-    }
-
+    /**
+     * 因为存在某些模组（比如潘马思）替换原版物品的情况，
+     * 替换后就会发生 Hash 变化，导致 物品 -> IMaidBauble 映射表出错，
+     * 通过注册项来获取的对象支持替换，后续的映射表就不会出现问题。
+     */
     private final IRegistryDelegate<Item> item;
     private final int metadata;
 
+    /**
+     * 通过传入物品和 metadata 来构建 ItemDefinition 对象
+     *
+     * @param item     物品
+     * @param metadata 元数据值
+     */
     public ItemDefinition(Item item, int metadata) {
         this.item = item.delegate;
         this.metadata = metadata;
     }
 
+    /**
+     * 将物品转换为 ItemDefinition 对象
+     */
+    public static ItemDefinition of(Item item) {
+        return of(item, 0);
+    }
+
+    /**
+     * 将 ItemStack 转换为 ItemDefinition 对象
+     */
+    public static ItemDefinition of(ItemStack stack) {
+        return stack.isEmpty() ? EMPTY : of(stack.getItem(), stack.getHasSubtypes() ? stack.getMetadata() : 0);
+    }
+
+    /**
+     * 将方块转换为 ItemDefinition 对象
+     */
+    public static ItemDefinition of(Block block) {
+        return of(Item.getItemFromBlock(block));
+    }
+
+    /**
+     * 将带 metadata 的方块转换为 ItemDefinition 对象
+     */
+    public static ItemDefinition of(Block block, int metadata) {
+        return of(Item.getItemFromBlock(block), metadata);
+    }
+
+    /**
+     * 将带 metadata 的物品转换为 ItemDefinition 对象
+     */
+    public static ItemDefinition of(Item item, int metadata) {
+        return new ItemDefinition(item, metadata);
+    }
+
+    /**
+     * 获取该对象对应的物品
+     */
     public Item getItem() {
         return item.get();
     }
 
+    /**
+     * 获取物品的 metadata
+     */
     public int getMetadata() {
         return metadata;
     }
 
+    /**
+     * 返回该类对应的物品堆
+     */
     @Nonnull
     public List<ItemStack> examples() {
+        // 如果 meta 为 WILDCARD_VALUE，则返回所有的子类
         if (metadata == OreDictionary.WILDCARD_VALUE) {
             CreativeTabs itemGroup = item.get().getCreativeTab();
             if (itemGroup != null) {
@@ -100,6 +137,7 @@ public final class ItemDefinition implements Comparable<ItemDefinition> {
                 return stacks;
             }
         }
+        // 否则只返回单例集合
         return Collections.singletonList(this.getItemStack());
     }
 
@@ -115,12 +153,18 @@ public final class ItemDefinition implements Comparable<ItemDefinition> {
         return this.item.equals(that.item) && this.metadata == that.metadata;
     }
 
+    /**
+     * 匹配物品堆是否和本对象相等
+     */
     public boolean matches(ItemStack stack) {
-        return stack.getItem().delegate == this.item && (OreDictionary.WILDCARD_VALUE == metadata || stack.getMetadata() == metadata);
+        // 如果 meta 为 WILDCARD_VALUE，或 meta 互相匹配
+        boolean metaMatches = OreDictionary.WILDCARD_VALUE == metadata || stack.getMetadata() == metadata;
+        return stack.getItem().delegate == this.item && metaMatches;
     }
 
     @Override
     public int hashCode() {
+        // 31 这个数字可以有效减少哈希碰撞问题
         return item.hashCode() * 31 + metadata;
     }
 
@@ -132,16 +176,18 @@ public final class ItemDefinition implements Comparable<ItemDefinition> {
 
     @Override
     public String toString() {
-        return item.name() + ":" + (metadata != OreDictionary.WILDCARD_VALUE ? metadata : "*");
+        // 如果 meta 为 WILDCARD_VALUE，输出为 * 字符
+        String metaChar = metadata != OreDictionary.WILDCARD_VALUE ? Integer.toString(metadata) : "*";
+        return item.name() + ":" + metaChar;
     }
 
     /**
      * 将该 ItemDefinition 对象转换为 ItemStack 对象.
-     *
-     * @return The only possible permutation of this ItemDefinition, in ItemStack form
      */
     public ItemStack getItemStack() {
-        return new ItemStack(this.item.get(), 1, metadata != OreDictionary.WILDCARD_VALUE ? this.metadata : 0, null);
+        // 如果 metadata 为 WILDCARD_VALUE，返回 0
+        int meta = metadata == OreDictionary.WILDCARD_VALUE ? 0 : this.metadata;
+        return new ItemStack(this.item.get(), 1, meta, null);
     }
 
     public boolean isEmpty() {

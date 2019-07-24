@@ -41,23 +41,15 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
 import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
@@ -86,8 +78,14 @@ public class EntityMaid extends AbstractEntityMaid {
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
 
     public boolean guiOpening;
+    /**
+     * 用来暂存当前实体所调用的 IMaidTask 对象
+     */
     @Nonnull
     private IMaidTask task = LittleMaidAPI.getIdleTask();
+    /**
+     * 当前 IMaidTask 对象对应的 AI
+     */
     @Nullable
     private EntityAIBase taskAI;
 
@@ -122,8 +120,7 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
-    protected PathNavigate createNavigator(World worldIn)
-    {
+    protected PathNavigate createNavigator(World worldIn) {
         PathNavigateGround pathNavigate = new PathNavigateGround(this, worldIn);
         pathNavigate.setBreakDoors(true);
         return pathNavigate;
@@ -194,7 +191,7 @@ public class EntityMaid extends AbstractEntityMaid {
      * 捡起物品部分的逻辑
      */
     private void pickupItem(EntityItem entityItem) {
-        // TODO: 当物品pickupDelay较小时等待
+        // TODO: 当物品 pickupDelay 较小时等待
         if (!world.isRemote && entityItem.isEntityAlive() && !entityItem.cannotPickup()) {
             // 获取实体的物品堆，遍历尝试塞入背包
             ItemStack itemstack = entityItem.getItem();
@@ -256,10 +253,6 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-//        if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
-//        {
-//            return;
-//        }
         task.onRangedAttack(this, target, distanceFactor);
     }
 
@@ -270,22 +263,14 @@ public class EntityMaid extends AbstractEntityMaid {
         if (stack.isEmpty()) {
             return false;
         }
-
-        for (int i = 0; i < mainInv.getSlots(); ++i) {
-            ItemStack slot = mainInv.getStackInSlot(i);
-            if (slot.isEmpty()) {
-                return true;
-            }
-            // FIXME: NBT?
-            if (slot.getItem() == stack.getItem() && slot.getCount() < slot.getMaxStackSize()) {
-                return true;
-            }
-        }
-        return false;
+        int before = stack.getCount();
+        int after = ItemHandlerHelper.insertItemStacked(mainInv, stack, true).getCount();
+        // 模拟塞入后数值变小了，那就说明能塞入
+        return after < before;
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
+    public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
         // 先获取实体基本的攻击数据
         float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
         // 用来获取击退相关数据
@@ -308,7 +293,7 @@ public class EntityMaid extends AbstractEntityMaid {
         // 如果不是无敌的
         if (isInvulnerable) {
             // 应用击退效果
-            if (knockBack > 0 && entityIn instanceof EntityLivingBase) {
+            if (knockBack > 0) {
                 ((EntityLivingBase) entityIn).knockBack(this, knockBack * 0.5F,
                         MathHelper.sin(this.rotationYaw * 0.017453292F),
                         (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
@@ -323,22 +308,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
             // 如果攻击对象是玩家
             if (entityIn instanceof EntityPlayer) {
-                EntityPlayer entityplayer = (EntityPlayer) entityIn;
-                // 攻击方手持的物品
-                ItemStack itemMaidHand = this.getHeldItemMainhand();
-                // 玩家手持物品
-                ItemStack itemPlayerHand = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY;
-
-                // 如果玩家手持盾牌而且还处于持盾状态，并且所持物品能够破盾
-                if (!itemMaidHand.isEmpty() && !itemPlayerHand.isEmpty() && itemMaidHand.getItem().canDisableShield(itemMaidHand, itemPlayerHand, entityplayer, this)
-                        && itemPlayerHand.getItem().isShield(itemPlayerHand, entityplayer)) {
-                    float f1 = 0.25F + EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
-
-                    if (this.rand.nextFloat() < f1) {
-                        entityplayer.getCooldownTracker().setCooldown(itemPlayerHand.getItem(), 100);
-                        this.world.setEntityState(entityplayer, (byte) 30);
-                    }
-                }
+                attackEntityAsPlayer((EntityPlayer) entityIn);
             }
 
             // 应用其他附魔
@@ -350,11 +320,33 @@ public class EntityMaid extends AbstractEntityMaid {
         return isInvulnerable;
     }
 
+    /**
+     * 攻击玩家
+     */
+    private void attackEntityAsPlayer(EntityPlayer entityplayer) {
+        // 攻击方手持的物品
+        ItemStack itemMaidHand = this.getHeldItemMainhand();
+        // 玩家手持物品
+        ItemStack itemPlayerHand = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY;
+
+        // 如果玩家手持盾牌而且还处于持盾状态，并且所持物品能够破盾
+        if (!itemMaidHand.isEmpty() && !itemPlayerHand.isEmpty() && itemMaidHand.getItem().canDisableShield(itemMaidHand, itemPlayerHand, entityplayer, this)
+                && itemPlayerHand.getItem().isShield(itemPlayerHand, entityplayer)) {
+            float efficiencyModifier = 0.25F + EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
+
+            if (this.rand.nextFloat() < efficiencyModifier) {
+                entityplayer.getCooldownTracker().setCooldown(itemPlayerHand.getItem(), 100);
+                this.world.setEntityState(entityplayer, (byte) 30);
+            }
+        }
+    }
+
     @Override
     protected void damageArmor(float damage) {
         // 依据原版玩家护甲耐久掉落机制书写而成
         damage = damage / 4.0F;
 
+        // 最小伤害必须为 1.0
         if (damage < 1.0F) {
             damage = 1.0F;
         }
@@ -369,18 +361,27 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable ageable) {
+    public EntityAgeable createChild(@Nonnull EntityAgeable ageable) {
         return null;
     }
 
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        if (hand != EnumHand.MAIN_HAND) {
-            return false;
+    public boolean processInteract(EntityPlayer player, @Nullable EnumHand hand) {
+        // 必须是主手
+        if (hand == EnumHand.MAIN_HAND) {
+            ItemStack itemstack = player.getHeldItem(hand);
+            // 利用短路原理，逐个触发对应的交互事件
+            return tamedMaid(itemstack, player) || writeHomePos(itemstack, player) || openGuiAndSitting(itemstack, player);
         }
-        ItemStack itemstack = player.getHeldItem(hand);
+        return false;
+    }
 
-        // 驯服
+    /**
+     * 驯服女仆
+     *
+     * @return 该逻辑是否成功应用
+     */
+    private boolean tamedMaid(ItemStack itemstack, EntityPlayer player) {
         Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
         if (!this.isTamed() && itemstack.getItem() == tamedItem) {
             if (!world.isRemote) {
@@ -393,8 +394,15 @@ public class EntityMaid extends AbstractEntityMaid {
                 return true;
             }
         }
+        return false;
+    }
 
-        // 写入坐标
+    /**
+     * 对女仆应用坐标
+     *
+     * @return 该逻辑是否成功应用
+     */
+    private boolean writeHomePos(ItemStack itemstack, EntityPlayer player) {
         if (this.isTamed() && this.getOwnerId().equals(player.getUniqueID()) && itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
             BlockPos pos = ItemKappaCompass.getPos(itemstack);
             if (pos != null) {
@@ -415,9 +423,16 @@ public class EntityMaid extends AbstractEntityMaid {
                 player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_fail"));
             }
         }
+        return false;
+    }
 
-        // 打开 GUI 和切换待命状态
-        if (this.isTamed() && this.getOwnerId().equals(player.getUniqueID())) {
+    /**
+     * 打开 GUI 或者切换待命模式
+     *
+     * @return 该逻辑是否成功应用
+     */
+    private boolean openGuiAndSitting(ItemStack itemstack, EntityPlayer player) {
+        if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
             // 先清除寻路逻辑
             this.getNavigator().clearPath();
             // 如果玩家为潜行状态，那么切换待命
@@ -432,6 +447,7 @@ public class EntityMaid extends AbstractEntityMaid {
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             } else if (!world.isRemote) {
                 // 否则打开 GUI
+                // FIXME: 2019/7/24 这一块用了数字，最好能用枚举，而且和前面的 GUI 绘制部分统一起来
                 player.openGui(TouhouLittleMaid.INSTANCE, 1, world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
             }
             return true;
@@ -450,19 +466,23 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public void onDeath(DamageSource cause) {
         super.onDeath(cause);
+
+        // 防止 Forge 的事件系统的取消，导致后面掉落物的触发，故加此判定
         if (!dead) {
             return;
         }
+
+        // 将女仆身上的物品进行掉落
         if (!world.isRemote) {
-            // 将女仆身上的物品进行掉落
-            CombinedInvWrapper combinedInvWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv);
-            for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
-                ItemStack itemstack = combinedInvWrapper.getStackInSlot(i);
-                if (!itemstack.isEmpty()) {
-                    InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, itemstack);
+            IItemHandler itemHandler = this.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            if (itemHandler != null) {
+                for (int i = 0; i < itemHandler.getSlots(); ++i) {
+                    ItemStack itemstack = itemHandler.getStackInSlot(i);
+                    if (!itemstack.isEmpty()) {
+                        InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, itemstack);
+                    }
                 }
             }
-
             // 最后掉落手办
             dropGarageKit();
         }
@@ -502,18 +522,6 @@ public class EntityMaid extends AbstractEntityMaid {
         }
     }
 
-    @Override
-    public boolean isFarmItemInInventory() {
-        CombinedInvWrapper combinedInvWrapper = getAvailableInv();
-        for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
-            ItemStack itemstack = combinedInvWrapper.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof IPlantable) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * 用于刷怪蛋、刷怪笼、自然生成的初始化
      */
@@ -545,8 +553,7 @@ public class EntityMaid extends AbstractEntityMaid {
             setPickup(compound.getBoolean(NBT.IS_PICKUP.getName()));
         }
         if (compound.hasKey(NBT.MAID_TASK.getName())) {
-            setTask(
-                    LittleMaidAPI.findTask(new ResourceLocation(compound.getString(NBT.MAID_TASK.getName())))
+            setTask(LittleMaidAPI.findTask(new ResourceLocation(compound.getString(NBT.MAID_TASK.getName())))
                     .or(LittleMaidAPI.getIdleTask()));
         }
         if (compound.hasKey(NBT.MAID_EXP.getName())) {
@@ -625,23 +632,19 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
-    public IItemHandlerModifiable getInv(MaidInventory type)
-    {
+    public IItemHandlerModifiable getInv(MaidInventory type) {
         switch (type) {
-        default:
-        case MAIN:
-            return mainInv;
-        case HAND:
-            return handsInvWrapper;
-        case BAUBLE:
-            return baubleInv;
-        case ARMOR:
-            return armorInvWrapper;
+            default:
+                return mainInv;
+            case MAIN:
+                return mainInv;
+            case HAND:
+                return handsInvWrapper;
+            case BAUBLE:
+                return baubleInv;
+            case ARMOR:
+                return armorInvWrapper;
         }
-    }
-
-    public ItemStackHandler getMainInv() {
-        return mainInv;
     }
 
     @Override
@@ -675,21 +678,25 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     public void setTask(IMaidTask task) {
-        if (task == this.task)
+        if (task == this.task) {
             return;
-        if (!world.isRemote)
-        {
-            if (this.taskAI != null)
-            {
+        }
+        // 先应用 IMaidTask 对象对应的 AI
+        if (!world.isRemote) {
+            // 如果 taskAI 不为空，先将其移除
+            if (this.taskAI != null) {
                 tasks.removeTask(taskAI);
             }
+            // 然后通过 IMaidTask 对象创建指定的 AI
             taskAI = task.createAI(this);
-            if (taskAI != null)
-            {
+            // 再次检查此 AI 是否为空，加入 AI 列表中
+            if (taskAI != null) {
                 tasks.addTask(5, taskAI);
             }
         }
+        // 将实体的 IMaidTask 对象指向传入的 IMaidTask
         this.task = task;
+        // 往实体数据中存入此对象
         this.dataManager.set(TASK, task.getUid().toString());
     }
 

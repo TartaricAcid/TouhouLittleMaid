@@ -34,6 +34,26 @@ public class EntityMarisaBroom extends EntityLiving {
         setSize(0.5f, 0.5f);
     }
 
+    @SideOnly(Side.CLIENT)
+    private static boolean keyForward() {
+        return Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static boolean keyBack() {
+        return Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static boolean keyLeft() {
+        return Minecraft.getMinecraft().gameSettings.keyBindLeft.isKeyDown();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static boolean keyRight() {
+        return Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown();
+    }
+
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (!world.isRemote && source.getTrueSource() instanceof EntityPlayer) {
@@ -144,25 +164,5 @@ public class EntityMarisaBroom extends EntityLiving {
     @Override
     protected boolean canTriggerWalking() {
         return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static boolean keyForward() {
-        return Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown();
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static boolean keyBack() {
-        return Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown();
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static boolean keyLeft() {
-        return Minecraft.getMinecraft().gameSettings.keyBindLeft.isKeyDown();
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static boolean keyRight() {
-        return Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown();
     }
 }

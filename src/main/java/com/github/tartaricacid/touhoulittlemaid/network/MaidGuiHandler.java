@@ -23,6 +23,7 @@ public class MaidGuiHandler implements IGuiHandler {
     @Nullable
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        // FIXME: 2019/7/24 对应的数字 ID 需要后续与 GUI 的枚举类型进行对接
         if (ID == 1 && world.getEntityByID(x) instanceof EntityMaid) {
             return new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }
@@ -44,6 +45,7 @@ public class MaidGuiHandler implements IGuiHandler {
     @Nullable
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        // FIXME: 2019/7/24 对应的数字 ID 需要后续与 GUI 的枚举类型进行对接
         if (ID == 1 && world.getEntityByID(x) instanceof EntityMaid) {
             return new MaidMainGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
         }

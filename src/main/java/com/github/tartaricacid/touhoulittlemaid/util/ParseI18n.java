@@ -1,18 +1,18 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 
 /**
  * @author TartaricAcid
  * @date 2019/7/18 18:13
  **/
 public final class ParseI18n {
+    private ParseI18n() {
+    }
+
     /**
      * 将传入的字符串进行国际化
      */

@@ -47,15 +47,15 @@ danmaku_type.touhou_little_maid.star=Star
 danmaku_type.touhou_little_maid.amulet=Amulet
 danmaku_type.touhou_little_maid.orbs=Orbs
 
-# Mode
-mode.touhou_little_maid.idle=Idle
-mode.touhou_little_maid.attack=Attack
-mode.touhou_little_maid.ranged_attack=Ranged Attack
-mode.touhou_little_maid.danmaku_attack=Danmaku Attack
-mode.touhou_little_maid.farm=Farm
-mode.touhou_little_maid.feed=Feed
-mode.touhou_little_maid.shears=Shears
-mode.touhou_little_maid.torch=Torch
+# Task
+task.touhou_little_maid.idle=Idle
+task.touhou_little_maid.attack=Attack
+task.touhou_little_maid.ranged_attack=Ranged Attack
+task.touhou_little_maid.danmaku_attack=Danmaku Attack
+task.touhou_little_maid.farm=Farm
+task.touhou_little_maid.feed=Feed
+task.touhou_little_maid.shears=Shears
+task.touhou_little_maid.torch=Torch
 
 # GUI
 gui.touhou_little_maid.button.mode_switch=This Maid Is In %s Mode.
