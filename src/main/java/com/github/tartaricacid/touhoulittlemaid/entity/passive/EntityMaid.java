@@ -54,6 +54,7 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
@@ -180,14 +181,13 @@ public class EntityMaid extends AbstractEntityMaid {
      * 捡起物品部分的逻辑
      */
     private void pickupItem(EntityItem entityItem) {
+        // TODO: 当物品pickupDelay较小时等待
         if (!world.isRemote && entityItem.isEntityAlive() && !entityItem.cannotPickup()) {
             // 获取实体的物品堆，遍历尝试塞入背包
             ItemStack itemstack = entityItem.getItem();
             // 获取数量，为后面方面用
             int count = itemstack.getCount();
-            for (int i = 0; i < mainInv.getSlots(); i++) {
-                itemstack = mainInv.insertItem(i, itemstack, false);
-            }
+            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, false);
             // 如果遍历塞完后发现为空了
             if (itemstack.isEmpty()) {
                 // 我看原版 EntityItem 有这个方法，不知道意义如何，以防万一加上
@@ -202,7 +202,8 @@ public class EntityMaid extends AbstractEntityMaid {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
                 }
             } else {
-                entityItem.getItem().setCount(itemstack.getCount());
+                // 将物品数量同步到客户端
+                entityItem.setItem(itemstack);
             }
         }
     }

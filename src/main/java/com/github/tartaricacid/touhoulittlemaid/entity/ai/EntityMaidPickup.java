@@ -5,6 +5,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 
@@ -56,20 +58,28 @@ public class EntityMaidPickup extends EntityAIBase {
 
         // 拾取对象为空，或者没活着，那就遍历获取下一个
         else {
-            if (!list.isEmpty()) {
-                for (Entity entity : list) {
-                    // 物品活着，而且能塞入女仆背包
-                    if (entity instanceof EntityItem && entity.isEntityAlive() && entityMaid.canEntityBeSeen(entity) &&
-                            entityMaid.canInsertSlot(((EntityItem) entity).getItem())) {
-                        entityPickup = entity;
-                        return;
+            for (Entity entity : list) {
+                if (entity.isDead || !entityMaid.canEntityBeSeen(entity))
+                {
+                    continue;
+                }
+                // 物品活着，而且能塞入女仆背包
+                if (entity instanceof EntityItem) {
+                    EntityItem item = (EntityItem) entity;
+                    ItemStack before = item.getItem();
+                    ItemStack after = ItemHandlerHelper.insertItemStacked(entityMaid.getAvailableInv(), before, true);
+                    if (before.getCount() == after.getCount())
+                    {
+                        continue;
                     }
+                    entityPickup = entity;
+                    return;
+                }
 
-                    // 经验球
-                    if (entity instanceof EntityXPOrb && entity.isEntityAlive() && entityMaid.canEntityBeSeen(entity)) {
-                        entityPickup = entity;
-                        return;
-                    }
+                // 经验球
+                if (entity instanceof EntityXPOrb) {
+                    entityPickup = entity;
+                    return;
                 }
             }
 

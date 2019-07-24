@@ -28,7 +28,6 @@ public class MaidMainContainer extends Container {
     public EntityMaid maid;
     public int taskIndex;
     public IMaidTask task;
-    public boolean realClose = true;
 
     public MaidMainContainer(IInventory playerInventory, EntityMaid maid, int taskIndex) {
         addEntityArmorAndHandSlots(maid);
@@ -41,11 +40,18 @@ public class MaidMainContainer extends Container {
     }
 
     @Override
+    public void detectAndSendChanges()
+    {
+        maid.guiOpening = true;
+        super.detectAndSendChanges();
+    }
+
+    @Override
     public void onContainerClosed(EntityPlayer playerIn)
     {
-        if (realClose && playerIn.world.isRemote)
+        maid.guiOpening = false;
+        if (playerIn.world.isRemote)
         {
-            maid.guiOpening = false;
             CommonProxy.INSTANCE.sendToServer(new ChangeMaidTaskMessage(maid.getUniqueID(), task));
         }
         super.onContainerClosed(playerIn);
