@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class LittleMaidAPIImpl implements ILittleMaidAPI
 {
-    public static IMaidTask IDLE_TASK;
+    private IMaidTask IDLE_TASK;
 
     private final Map<ItemDefinition, IMaidBauble> baubles = Maps.newHashMap();
     private final Map<ResourceLocation, IMaidTask> taskMap = Maps.newHashMap();
@@ -59,6 +59,12 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI
     public Optional<IMaidTask> findTask(ResourceLocation uid)
     {
         return Optional.fromNullable(taskMap.get(uid));
+    }
+
+    @Override
+    public IMaidTask getIdleTask()
+    {
+        return IDLE_TASK;
     }
 
 }

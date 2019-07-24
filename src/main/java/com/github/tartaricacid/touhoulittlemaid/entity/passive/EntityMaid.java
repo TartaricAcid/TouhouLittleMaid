@@ -89,7 +89,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     public boolean guiOpening;
     @Nonnull
-    private IMaidTask task = LittleMaidAPIImpl.IDLE_TASK;
+    private IMaidTask task = LittleMaidAPI.getIdleTask();
     @Nullable
     private EntityAIBase taskAI;
 
@@ -258,64 +258,11 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-//        if (this.getMode() == MaidMode.RANGE_ATTACK) {
-//            EntityArrow entityArrow = this.getArrow(distanceFactor);
-//
-//            if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
-//            {
-//                return;
-//            }
-//
-//            // 如果获取得到的箭为 null，不执行攻击
-//            if (entityArrow == null) {
-//                return;
-//            }
-//
-//            double x = target.posX - this.posX;
-//            double y = target.getEntityBoundingBox().minY + target.height / 3.0F - entityArrow.posY;
-//            double z = target.posZ - this.posZ;
-//            double pitch = MathHelper.sqrt(x * x + z * z) * 0.15D;
-//
-//            entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
-//            this.getHeldItemMainhand().damageItem(1, this);
-//            this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-//            this.world.spawnEntity(entityArrow);
+//        if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
+//        {
 //            return;
 //        }
-//
-//        if (this.getMode() == MaidMode.DANMAKU_ATTACK) {
-//            // 获取周围 -10~10 范围内怪物数量
-//            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox()
-//                    .expand(8, 3, 8)
-//                    .expand(-8, -3, -8), IS_MOB);
-//
-//            for (int i = 0; i < baubleInv.getSlots(); ++i) {
-//                Item item = baubleInv.getStackInSlot(i).getItem();
-//                if (item instanceof IMaidBauble) {
-//                    IMaidBauble bauble = (IMaidBauble) item;
-//                    if (bauble.onDanmakuAttack(this, target, baubleInv.getStackInSlot(i), distanceFactor, entityList)) {
-//                        return;
-//                    }
-//                }
-//            }
-//
-//            // 分为三档
-//            // 1 自机狙
-//            // <=5 60 度扇形
-//            // >5 120 度扇形
-//            if (entityList.size() <= 1) {
-//                DanmakuShoot.aimedShot(world, this, target, 2 * (distanceFactor + 1), 0, 0.3f * (distanceFactor + 1),
-//                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)));
-//            } else if (entityList.size() <= 5) {
-//                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.2f), 0, 0.3f * (distanceFactor + 1),
-//                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI / 3, 8);
-//            } else {
-//                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.5f), 0, 0.3f * (distanceFactor + 1),
-//                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI * 2 / 3, 32);
-//            }
-//
-//            this.getHeldItemMainhand().damageItem(1, this);
-//        }
+        task.onRangedAttack(this, target, distanceFactor);
     }
 
     /**
@@ -324,7 +271,8 @@ public class EntityMaid extends AbstractEntityMaid {
      * @return 如果没有箭，会返回一个 null 对象
      */
     @Nullable
-    private EntityArrow getArrow(float chargeTime) {
+    @Override
+    public EntityArrow getArrow(float chargeTime) {
         ItemStack itemstack = ItemStack.EMPTY;
 
         // 遍历女仆背包，找到第一个属于 arrow 的物品
@@ -394,6 +342,7 @@ public class EntityMaid extends AbstractEntityMaid {
             if (slot.isEmpty()) {
                 return true;
             }
+            // FIXME: NBT?
             if (slot.getItem() == stack.getItem() && slot.getCount() < slot.getMaxStackSize()) {
                 return true;
             }
@@ -668,7 +617,7 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MAID_TASK.getName())) {
             setTask(
                     LittleMaidAPI.findTask(new ResourceLocation(compound.getString(NBT.MAID_TASK.getName())))
-                    .or(LittleMaidAPIImpl.IDLE_TASK));
+                    .or(LittleMaidAPI.getIdleTask()));
         }
         if (compound.hasKey(NBT.MAID_EXP.getName())) {
             setExp(compound.getInteger(NBT.MAID_EXP.getName()));
@@ -714,7 +663,7 @@ public class EntityMaid extends AbstractEntityMaid {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return task.getAmbientSound(this, rand);
+        return task.getAmbientSound(this);
     }
 
     @Nullable
@@ -772,7 +721,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public CombinedInvWrapper getAvailableInv() {
-        return new CombinedInvWrapper(mainInv, handsInvWrapper);
+        return new CombinedInvWrapper(handsInvWrapper, mainInv);
     }
 
     public boolean isBegging() {

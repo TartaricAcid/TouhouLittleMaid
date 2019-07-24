@@ -32,7 +32,7 @@ public class TaskAttack implements IMaidTask
     }
 
     @Override
-    public SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand)
+    public SoundEvent getAmbientSound(AbstractEntityMaid maid)
     {
         if (maid.getAttackTarget() != null)
         {

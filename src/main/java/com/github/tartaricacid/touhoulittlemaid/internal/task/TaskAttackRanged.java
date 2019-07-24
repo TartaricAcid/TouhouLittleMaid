@@ -6,14 +6,17 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.EntityMaidAttackRanged;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 
 public class TaskAttackRanged implements IMaidTask
 {
@@ -32,7 +35,7 @@ public class TaskAttackRanged implements IMaidTask
     }
 
     @Override
-    public SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand)
+    public SoundEvent getAmbientSound(AbstractEntityMaid maid)
     {
         return MaidSoundEvent.MAID_RANGE_ATTACK;
     }
@@ -47,5 +50,27 @@ public class TaskAttackRanged implements IMaidTask
     public boolean isAttack()
     {
         return true;
+    }
+
+    @Override
+    public void onRangedAttack(AbstractEntityMaid maid, EntityLivingBase target, float distanceFactor)
+    {
+        EntityArrow entityArrow = maid.getArrow(distanceFactor);
+
+        // 如果获取得到的箭为 null，不执行攻击
+        if (entityArrow == null)
+        {
+            return;
+        }
+
+        double x = target.posX - maid.posX;
+        double y = target.getEntityBoundingBox().minY + target.height / 3.0F - entityArrow.posY;
+        double z = target.posZ - maid.posZ;
+        double pitch = MathHelper.sqrt(x * x + z * z) * 0.15D;
+
+        entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
+        maid.getHeldItemMainhand().damageItem(1, maid);
+        maid.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (maid.getRNG().nextFloat() * 0.4F + 0.8F));
+        maid.world.spawnEntity(entityArrow);
     }
 }

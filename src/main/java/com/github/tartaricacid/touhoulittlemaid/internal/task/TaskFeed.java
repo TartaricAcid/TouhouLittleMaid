@@ -33,9 +33,9 @@ public class TaskFeed implements IMaidTask
     }
 
     @Override
-    public SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand)
+    public SoundEvent getAmbientSound(AbstractEntityMaid maid)
     {
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_FEED, 0.1f, rand);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_FEED, 0.1f);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class ChangeMaidTaskMessage implements IMessage {
     public void fromBytes(ByteBuf buf) {
         entityUuid = new UUID(buf.readLong(), buf.readLong());
         ResourceLocation uid = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
-        task = LittleMaidAPI.findTask(uid).or(LittleMaidAPIImpl.IDLE_TASK);
+        task = LittleMaidAPI.findTask(uid).or(LittleMaidAPI.getIdleTask());
     }
 
     @Override

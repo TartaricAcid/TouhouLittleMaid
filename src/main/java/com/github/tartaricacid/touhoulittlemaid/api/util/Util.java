@@ -20,9 +20,10 @@ public class Util
      * @param probability  播放环境音效的概率
      * @return 应当触发的音效
      */
-    public static SoundEvent environmentSound(AbstractEntityMaid maid, SoundEvent fallback, float probability, Random rand)
+    public static SoundEvent environmentSound(AbstractEntityMaid maid, SoundEvent fallback, float probability)
     {
         World world = maid.world;
+        Random rand = maid.getRNG();
         // 差不多早上 6:30 - 7:30
         if (500 < world.getWorldTime() && world.getWorldTime() < 1500 && rand.nextFloat() < probability) {
             return MaidSoundEvent.MAID_MORNING;

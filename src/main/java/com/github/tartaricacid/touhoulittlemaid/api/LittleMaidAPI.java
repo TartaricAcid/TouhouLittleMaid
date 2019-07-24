@@ -9,7 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.google.common.base.Optional;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -61,6 +60,11 @@ public class LittleMaidAPI
         return INSTANCE.getTasks();
     }
 
+    public static IMaidTask getIdleTask()
+    {
+        return INSTANCE.getIdleTask();
+    }
+
     public static interface ILittleMaidAPI
     {
         IMaidBauble registerBauble(ItemDefinition item, IMaidBauble bauble);
@@ -94,5 +98,7 @@ public class LittleMaidAPI
         Optional<IMaidTask> findTask(ResourceLocation uid);
 
         List<IMaidTask> getTasks();
+
+        IMaidTask getIdleTask();
     }
 }

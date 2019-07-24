@@ -37,7 +37,7 @@ public class MaidMainContainer extends Container {
         this.taskIndex = taskIndex;
         task = LittleMaidAPI.getTasks().get(taskIndex);
         maid.guiOpening = true;
-        maid.setTask(LittleMaidAPIImpl.IDLE_TASK);
+        maid.setTask(LittleMaidAPI.getIdleTask());
     }
 
     @Override

@@ -33,9 +33,9 @@ public class TaskShears implements IMaidTask
     }
 
     @Override
-    public SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand)
+    public SoundEvent getAmbientSound(AbstractEntityMaid maid)
     {
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_SHEARS, 0.2f, rand);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_SHEARS, 0.2f);
     }
 
     @Override

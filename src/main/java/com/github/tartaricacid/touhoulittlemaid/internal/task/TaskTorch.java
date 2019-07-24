@@ -34,9 +34,9 @@ public class TaskTorch implements IMaidTask
     }
 
     @Override
-    public SoundEvent getAmbientSound(AbstractEntityMaid maid, Random rand)
+    public SoundEvent getAmbientSound(AbstractEntityMaid maid)
     {
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_TORCH, 0.2f, rand);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_TORCH, 0.2f);
     }
 
     @Override
