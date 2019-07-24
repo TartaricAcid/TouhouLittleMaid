@@ -243,15 +243,6 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (baubleInv.fireEvent((b, s) -> b.onMaidAttacked(this, s, source, amount)))
-        {
-            return true;
-        }
-        return super.attackEntityFrom(source, amount);
-    }
-
-    @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
 //        if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
 //        {
@@ -298,8 +289,6 @@ public class EntityMaid extends AbstractEntityMaid {
             // 附加上火焰附加带来的数据
             fireAspect += EnchantmentHelper.getFireAspectModifier(this);
         }
-
-        // TODO: 应用饰品效果
 
         // 检查攻击对象是否是无敌的
         boolean isInvulnerable = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), damage);

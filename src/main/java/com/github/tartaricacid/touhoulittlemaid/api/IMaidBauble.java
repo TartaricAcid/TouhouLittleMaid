@@ -12,34 +12,6 @@ import java.util.List;
 public interface IMaidBauble {
 
     /**
-     * 在女仆受到攻击时触发的方法
-     *
-     * @param entityMaid 女仆对象
-     * @param baubleItem 所调用的饰品
-     * @param source     伤害源
-     * @param amount     伤害值
-     * @return 是否取消后续伤害事件
-     */
-    default boolean onMaidAttacked(AbstractEntityMaid entityMaid, ItemStack baubleItem, DamageSource source, float amount) {
-        return false;
-    }
-
-    /**
-     * 在女仆近战攻击时触发的方法
-     *
-     * @param entityMaid   女仆对象
-     * @param entityTarget 女仆攻击的对象
-     * @param baubleItem   所调用的饰品
-     * @param damage       会造成的伤害
-     * @param knockBack    会造成的击退效果
-     * @param fireAspect   会造成的火焰附加等级
-     * @return 包含伤害、击退、火焰附加数值的一个对象
-     */
-    default AttackValue onMaidAttack(AbstractEntityMaid entityMaid, Entity entityTarget, ItemStack baubleItem, float damage, int knockBack, int fireAspect) {
-        return new AttackValue(damage, knockBack, fireAspect);
-    }
-
-    /**
      * 在普通远程攻击模式下触发
      *
      * @param entityMaid     女仆对象
