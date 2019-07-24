@@ -7,8 +7,8 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.bauble.UltramarineOrbElixir;
 import com.github.tartaricacid.touhoulittlemaid.bauble.UndyingTotem;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
@@ -16,11 +16,19 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttack;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackDanmaku;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackRanged;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskFarm;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskFeed;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskShears;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskTorch;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGoheiMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGuiMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeHomeDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidModeMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidTaskMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidSkinMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangePickupDataMessage;
 import com.google.gson.Gson;
@@ -64,7 +72,7 @@ public class CommonProxy {
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(TouhouLittleMaid.MOD_ID);
         INSTANCE.registerMessage(ChangeGuiMessage.Handler.class, ChangeGuiMessage.class, 0, Side.SERVER);
         INSTANCE.registerMessage(ChangePickupDataMessage.Handler.class, ChangePickupDataMessage.class, 1, Side.SERVER);
-        INSTANCE.registerMessage(ChangeMaidModeMessage.Handler.class, ChangeMaidModeMessage.class, 2, Side.SERVER);
+        INSTANCE.registerMessage(ChangeMaidTaskMessage.Handler.class, ChangeMaidTaskMessage.class, 2, Side.SERVER);
         INSTANCE.registerMessage(ChangeHomeDataMessage.Handler.class, ChangeHomeDataMessage.class, 3, Side.SERVER);
         INSTANCE.registerMessage(ChangeGoheiMessage.Handler.class, ChangeGoheiMessage.class, 4, Side.SERVER);
         INSTANCE.registerMessage(ChangeMaidSkinMessage.Handler.class, ChangeMaidSkinMessage.class, 5, Side.SERVER);
@@ -77,6 +85,15 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.ULTRAMARINE_ORB_ELIXIR), new UltramarineOrbElixir());
         LittleMaidAPI.registerBauble(ItemDefinition.of(Items.TOTEM_OF_UNDYING), new UndyingTotem());
+
+        LittleMaidAPI.registerTask(new TaskAttack());
+        LittleMaidAPI.registerTask(new TaskAttackRanged());
+        LittleMaidAPI.registerTask(new TaskAttackDanmaku());
+        LittleMaidAPI.registerTask(new TaskFarm());
+        LittleMaidAPI.registerTask(new TaskFeed());
+        LittleMaidAPI.registerTask(new TaskIdle());
+        LittleMaidAPI.registerTask(new TaskShears());
+        LittleMaidAPI.registerTask(new TaskTorch());
     }
 
     /**

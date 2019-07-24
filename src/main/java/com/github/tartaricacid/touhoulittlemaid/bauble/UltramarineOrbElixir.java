@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.bauble;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
@@ -20,17 +21,18 @@ public class UltramarineOrbElixir implements IMaidBauble {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onLivingDeath(LivingDeathEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (entity instanceof EntityMaid) {
-            int slot = LittleMaidAPI.getBaubleSlotInMaid(entity, this);
+        if (entity instanceof AbstractEntityMaid) {
+            AbstractEntityMaid maid = (AbstractEntityMaid) entity;
+            int slot = LittleMaidAPI.getBaubleSlotInMaid(maid, this);
             if (slot >= 0) {
                 event.setCanceled(true);
-                entity.setHealth(entity.getMaxHealth());
-                ((EntityLiving) entity).spawnExplosionParticle();
-                ItemStack stack = LittleMaidAPI.getBaubleInventory(entity).getStackInSlot(slot);
-                stack.damageItem(1, entity);
-                LittleMaidAPI.getBaubleInventory(entity).setStackInSlot(slot, stack);
+                maid.setHealth(entity.getMaxHealth());
+                maid.spawnExplosionParticle();
+                ItemStack stack = maid.getBaubleInv().getStackInSlot(slot);
+                stack.damageItem(1, maid);
+                maid.getBaubleInv().setStackInSlot(slot, stack);
                 // TODO: 注册独立的声音事件
-                entity.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0f, 1.0f);
+                maid.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0f, 1.0f);
             }
         }
     }

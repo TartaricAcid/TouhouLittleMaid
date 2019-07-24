@@ -1,4 +1,13 @@
-package com.github.tartaricacid.touhoulittlemaid.api;
+package com.github.tartaricacid.touhoulittlemaid.api.util;
+
+import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.stream.IntStream;
+
+import javax.annotation.Nullable;
+
+import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -35,7 +44,8 @@ public class BaubleItemHandler extends ItemStackHandler {
     public void setSize(int size) {
         if (size == stacks.size()) {
             Arrays.fill(baubles, null);
-        } else {
+        }
+        else {
             baubles = new IMaidBauble[stacks.size()];
         }
         super.setSize(size);
@@ -51,7 +61,8 @@ public class BaubleItemHandler extends ItemStackHandler {
         ItemStack stack = getStackInSlot(slot);
         if (stack.isEmpty()) {
             return null;
-        } else {
+        }
+        else {
             return baubles[slot];
         }
     }
@@ -61,7 +72,8 @@ public class BaubleItemHandler extends ItemStackHandler {
         ItemStack stack = getStackInSlot(slot);
         if (stack.isEmpty()) {
             setBaubleInSlot(slot, null);
-        } else {
+        }
+        else {
             setBaubleInSlot(slot, LittleMaidAPI.getBauble(stack));
         }
     }
@@ -75,7 +87,8 @@ public class BaubleItemHandler extends ItemStackHandler {
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         if (isItemValid(slot, stack)) {
             return super.insertItem(slot, stack, simulate);
-        } else {
+        }
+        else {
             return stack;
         }
     }

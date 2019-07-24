@@ -2,7 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import net.minecraft.inventory.Container;
+import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryContainer;
+
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -11,8 +13,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class MaidInventoryGuiContainer extends AbstractMaidGuiContainer {
     private static final ResourceLocation STORAGE_TEX = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_storage.png");
 
-    public MaidInventoryGuiContainer(Container inventorySlotsIn, EntityMaid entityMaid) {
-        super(inventorySlotsIn, entityMaid, 2);
+    public MaidInventoryGuiContainer(InventoryPlayer inventory, EntityMaid maid, int taskIndex) {
+        super(new MaidInventoryContainer(inventory, maid, taskIndex), 2);
     }
 
     @Override

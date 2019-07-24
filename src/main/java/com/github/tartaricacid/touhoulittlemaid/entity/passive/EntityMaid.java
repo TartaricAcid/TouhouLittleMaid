@@ -1,17 +1,18 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.api.MaidInventory;
+import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -24,19 +25,15 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityParrot;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntitySpectralArrow;
-import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -47,32 +44,35 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
 import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntityMaid extends EntityTameable implements IRangedAttackMob {
+public class EntityMaid extends AbstractEntityMaid {
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> MODE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+    private static final DataParameter<String> TASK = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Integer> EXP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
     private static final DataParameter<BlockPos> HOME_POS = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
@@ -86,6 +86,10 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
 
     public boolean guiOpening;
+    @Nonnull
+    private IMaidTask task = LittleMaidAPI.getIdleTask();
+    @Nullable
+    private EntityAIBase taskAI;
 
     public EntityMaid(World worldIn) {
         super(worldIn);
@@ -99,13 +103,6 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
         this.tasks.addTask(3, new EntityMaidReturnHome(this, 0.6f, 200));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
-
-        this.tasks.addTask(5, new EntityMaidAttack(this, 0.6f, false));
-        this.tasks.addTask(5, new EntityMaidFarm(this, 0.6f));
-        this.tasks.addTask(5, new EntityMaidAttackRanged(this, 0.6f, 2, 16));
-        this.tasks.addTask(5, new EntityMaidFeedOwner(this, 8));
-        this.tasks.addTask(5, new EntityMaidShear(this, 0.6f));
-        this.tasks.addTask(5, new EntityMaidPlaceTorch(this, 7, 2, 0.6f));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 6.0F, 2.0F));
@@ -137,7 +134,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         super.entityInit();
         this.dataManager.register(BEGGING, Boolean.FALSE);
         this.dataManager.register(PICKUP, Boolean.TRUE);
-        this.dataManager.register(MODE, MaidMode.IDLE.getModeIndex());
+        this.dataManager.register(TASK, TaskIdle.UID.toString());
         this.dataManager.register(EXP, 0);
         this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
         this.dataManager.register(HOME, Boolean.FALSE);
@@ -197,14 +194,13 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
      * 捡起物品部分的逻辑
      */
     private void pickupItem(EntityItem entityItem) {
+        // TODO: 当物品pickupDelay较小时等待
         if (!world.isRemote && entityItem.isEntityAlive() && !entityItem.cannotPickup()) {
             // 获取实体的物品堆，遍历尝试塞入背包
             ItemStack itemstack = entityItem.getItem();
             // 获取数量，为后面方面用
             int count = itemstack.getCount();
-            for (int i = 0; i < mainInv.getSlots(); i++) {
-                itemstack = mainInv.insertItem(i, itemstack, false);
-            }
+            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, false);
             // 如果遍历塞完后发现为空了
             if (itemstack.isEmpty()) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
@@ -218,7 +214,8 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
                 }
             } else {
-                entityItem.getItem().setCount(itemstack.getCount());
+                // 将物品数量同步到客户端
+                entityItem.setItem(itemstack);
             }
         }
     }
@@ -258,134 +255,12 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (baubleInv.fireEvent((b, s) -> b.onMaidAttacked(this, s, source, amount))) {
-            return true;
-        }
-        return super.attackEntityFrom(source, amount);
-    }
-
-    @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-        if (this.getMode() == MaidMode.RANGE_ATTACK) {
-            EntityArrow entityArrow = this.getArrow(distanceFactor);
-
-            if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow))) {
-                return;
-            }
-
-            // 如果获取得到的箭为 null，不执行攻击
-            if (entityArrow == null) {
-                return;
-            }
-
-            double x = target.posX - this.posX;
-            double y = target.getEntityBoundingBox().minY + target.height / 3.0F - entityArrow.posY;
-            double z = target.posZ - this.posZ;
-            double pitch = MathHelper.sqrt(x * x + z * z) * 0.15D;
-
-            entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
-            this.getHeldItemMainhand().damageItem(1, this);
-            this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.world.spawnEntity(entityArrow);
-            return;
-        }
-
-        if (this.getMode() == MaidMode.DANMAKU_ATTACK) {
-            // 获取周围 -10~10 范围内怪物数量
-            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox()
-                    .expand(8, 3, 8)
-                    .expand(-8, -3, -8), IS_MOB);
-
-            for (int i = 0; i < baubleInv.getSlots(); ++i) {
-                Item item = baubleInv.getStackInSlot(i).getItem();
-                if (item instanceof IMaidBauble) {
-                    IMaidBauble bauble = (IMaidBauble) item;
-                    if (bauble.onDanmakuAttack(this, target, baubleInv.getStackInSlot(i), distanceFactor, entityList)) {
-                        return;
-                    }
-                }
-            }
-
-            // 分为三档
-            // 1 自机狙
-            // <=5 60 度扇形
-            // >5 120 度扇形
-            if (entityList.size() <= 1) {
-                DanmakuShoot.aimedShot(world, this, target, 2 * (distanceFactor + 1), 0, 0.3f * (distanceFactor + 1),
-                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)));
-            } else if (entityList.size() <= 5) {
-                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.2f), 0, 0.3f * (distanceFactor + 1),
-                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI / 3, 8);
-            } else {
-                DanmakuShoot.fanShapedShot(world, this, target, 2 * (distanceFactor + 1.5f), 0, 0.3f * (distanceFactor + 1),
-                        0.2f, DanmakuType.getType(rand.nextInt(2)), DanmakuColor.getColor(rand.nextInt(7)), Math.PI * 2 / 3, 32);
-            }
-
-            this.getHeldItemMainhand().damageItem(1, this);
-        }
-    }
-
-    /**
-     * 依据背包里面的箭获取对应实体箭
-     *
-     * @return 如果没有箭，会返回一个 null 对象
-     */
-    @Nullable
-    private EntityArrow getArrow(float chargeTime) {
-        ItemStack itemstack = ItemStack.EMPTY;
-
-        // 遍历女仆背包，找到第一个属于 arrow 的物品
-        for (int i = 0; i < mainInv.getSlots(); ++i) {
-            itemstack = mainInv.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemArrow) {
-                break;
-            }
-        }
-
-        // 如果是光灵箭
-        if (itemstack.getItem() == Items.SPECTRAL_ARROW) {
-            EntitySpectralArrow entityspectralarrow = new EntitySpectralArrow(this.world, this);
-            entityspectralarrow.setEnchantmentEffectsFromEntity(this, chargeTime);
-            shrinkArrow(itemstack, entityspectralarrow);
-            return entityspectralarrow;
-        }
-
-        // 如果是药水箭或者普通的箭
-        if (itemstack.getItem() == Items.ARROW || itemstack.getItem() == Items.TIPPED_ARROW) {
-            EntityTippedArrow entitytippedarrow = new EntityTippedArrow(this.world, this);
-            entitytippedarrow.setEnchantmentEffectsFromEntity(this, chargeTime);
-            entitytippedarrow.setPotionEffect(itemstack);
-            shrinkArrow(itemstack, entitytippedarrow);
-            return entitytippedarrow;
-        }
-
-        return null;
-    }
-
-    /**
-     * 依据主手持有物品是否有无限附魔来决定消耗
-     */
-    private void shrinkArrow(ItemStack arrow, EntityArrow entityArrow) {
-        // 无限附魔不存在或者小于 0 时
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, this.getHeldItemMainhand()) <= 0) {
-            arrow.shrink(1);
-            // 记得把箭设置为可以拾起状态
-            entityArrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
-        }
-    }
-
-    /**
-     * 检查女仆背包内是否有箭
-     */
-    public boolean hasArrow() {
-        for (int i = 0; i < mainInv.getSlots(); ++i) {
-            ItemStack itemstack = mainInv.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemArrow) {
-                return true;
-            }
-        }
-        return false;
+//        if (baubleInv.fireEvent((b, s) -> b.onRangedAttack(this, target, s, distanceFactor, entityArrow)))
+//        {
+//            return;
+//        }
+        task.onRangedAttack(this, target, distanceFactor);
     }
 
     /**
@@ -401,6 +276,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             if (slot.isEmpty()) {
                 return true;
             }
+            // FIXME: NBT?
             if (slot.getItem() == stack.getItem() && slot.getCount() < slot.getMaxStackSize()) {
                 return true;
             }
@@ -425,8 +301,6 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
             // 附加上火焰附加带来的数据
             fireAspect += EnchantmentHelper.getFireAspectModifier(this);
         }
-
-        // TODO: 应用饰品效果
 
         // 检查攻击对象是否是无敌的
         boolean isInvulnerable = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
@@ -556,9 +430,9 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
                 }
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            } else {
+            } else if (!world.isRemote) {
                 // 否则打开 GUI
-                player.openGui(TouhouLittleMaid.INSTANCE, 1, world, this.getEntityId(), 0, 0);
+                player.openGui(TouhouLittleMaid.INSTANCE, 1, world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
             }
             return true;
         }
@@ -610,7 +484,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
                 this.getModelLocation(), this.getTextureLocation(), this.getModelName(), entityTag);
         // 生成物品实体
-        InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, stack);
+        entityDropItem(stack, 0);
     }
 
     @Override
@@ -628,6 +502,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         }
     }
 
+    @Override
     public boolean isFarmItemInInventory() {
         CombinedInvWrapper combinedInvWrapper = getAvailableInv();
         for (int i = 0; i < combinedInvWrapper.getSlots(); ++i) {
@@ -669,8 +544,10 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         if (compound.hasKey(NBT.IS_PICKUP.getName())) {
             setPickup(compound.getBoolean(NBT.IS_PICKUP.getName()));
         }
-        if (compound.hasKey(NBT.MAID_MODE.getName())) {
-            setMode(MaidMode.getMode(compound.getInteger(NBT.MAID_MODE.getName())));
+        if (compound.hasKey(NBT.MAID_TASK.getName())) {
+            setTask(
+                    LittleMaidAPI.findTask(new ResourceLocation(compound.getString(NBT.MAID_TASK.getName())))
+                    .or(LittleMaidAPI.getIdleTask()));
         }
         if (compound.hasKey(NBT.MAID_EXP.getName())) {
             setExp(compound.getInteger(NBT.MAID_EXP.getName()));
@@ -699,7 +576,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         compound.setTag(NBT.MAID_INVENTORY.getName(), mainInv.serializeNBT());
         compound.setTag(NBT.BAUBLE_INVENTORY.getName(), baubleInv.serializeNBT());
         compound.setBoolean(NBT.IS_PICKUP.getName(), isPickup());
-        compound.setInteger(NBT.MAID_MODE.getName(), getMode().getModeIndex());
+        compound.setString(NBT.MAID_TASK.getName(), task.getUid().toString());
         compound.setInteger(NBT.MAID_EXP.getName(), getExp());
         compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
@@ -716,61 +593,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        switch (getMode()) {
-            case IDLE:
-                return environmentSound(MaidSoundEvent.MAID_IDLE, 0.2f);
-            case ATTACK:
-                if (this.getAttackTarget() != null) {
-                    return MaidSoundEvent.MAID_FIND_TARGET;
-                } else {
-                    return MaidSoundEvent.MAID_ATTACK;
-                }
-            case RANGE_ATTACK:
-                return MaidSoundEvent.MAID_RANGE_ATTACK;
-            case DANMAKU_ATTACK:
-                return MaidSoundEvent.MAID_DANMAKU_ATTACK;
-            case FEED:
-                return environmentSound(MaidSoundEvent.MAID_FEED, 0.1f);
-            case FARM:
-                return environmentSound(MaidSoundEvent.MAID_FARM, 0.2f);
-            case TORCH:
-                return environmentSound(MaidSoundEvent.MAID_TORCH, 0.2f);
-            case SHEARS:
-                return environmentSound(MaidSoundEvent.MAID_SHEARS, 0.2f);
-            default:
-                return super.getAmbientSound();
-        }
-    }
-
-    /**
-     * 用来播放基于环境的音效，比如气温，天气，时间
-     *
-     * @param defaultSound 这些都没有播放情况下的默认音效
-     * @param probability  播放环境音效的概率
-     * @return 应当触发的音效
-     */
-    private SoundEvent environmentSound(SoundEvent defaultSound, float probability) {
-        // 差不多早上 6:30 - 7:30
-        if (rand.nextFloat() < probability && 500 < world.getWorldTime() && world.getWorldTime() < 1500) {
-            return MaidSoundEvent.MAID_MORNING;
-        }
-        // 差不多下午 6:30 - 7:30
-        if (rand.nextFloat() < probability && 12500 < world.getWorldTime() && world.getWorldTime() < 13500) {
-            return MaidSoundEvent.MAID_NIGHT;
-        }
-        if (rand.nextFloat() < probability && (world.isRaining() || world.isThundering()) && world.getBiome(this.getPosition()).canRain()) {
-            return MaidSoundEvent.MAID_RAIN;
-        }
-        if (rand.nextFloat() < probability && (world.isRaining() || world.isThundering()) && world.getBiome(this.getPosition()).isSnowyBiome()) {
-            return MaidSoundEvent.MAID_SNOW;
-        }
-        if (rand.nextFloat() < probability && world.getBiome(this.getPosition()).getTempCategory() == Biome.TempCategory.COLD) {
-            return MaidSoundEvent.MAID_COLD;
-        }
-        if (rand.nextFloat() < probability && world.getBiome(this.getPosition()).getTempCategory() == Biome.TempCategory.WARM) {
-            return MaidSoundEvent.MAID_HOT;
-        }
-        return defaultSound;
+        return task.getAmbientSound(this);
     }
 
     @Nullable
@@ -801,16 +624,34 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         }
     }
 
+    @Override
+    public IItemHandlerModifiable getInv(MaidInventory type)
+    {
+        switch (type) {
+        default:
+        case MAIN:
+            return mainInv;
+        case HAND:
+            return handsInvWrapper;
+        case BAUBLE:
+            return baubleInv;
+        case ARMOR:
+            return armorInvWrapper;
+        }
+    }
+
     public ItemStackHandler getMainInv() {
         return mainInv;
     }
 
+    @Override
     public BaubleItemHandler getBaubleInv() {
         return baubleInv;
     }
 
+    @Override
     public CombinedInvWrapper getAvailableInv() {
-        return new CombinedInvWrapper(mainInv, handsInvWrapper);
+        return new CombinedInvWrapper(handsInvWrapper, mainInv);
     }
 
     public boolean isBegging() {
@@ -829,12 +670,27 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         this.dataManager.set(PICKUP, pickup);
     }
 
-    public MaidMode getMode() {
-        return MaidMode.getMode(this.dataManager.get(MODE));
+    public IMaidTask getTask() {
+        return this.task;
     }
 
-    public void setMode(MaidMode maidMode) {
-        this.dataManager.set(MODE, maidMode.getModeIndex());
+    public void setTask(IMaidTask task) {
+        if (task == this.task)
+            return;
+        if (!world.isRemote)
+        {
+            if (this.taskAI != null)
+            {
+                tasks.removeTask(taskAI);
+            }
+            taskAI = task.createAI(this);
+            if (taskAI != null)
+            {
+                tasks.addTask(5, taskAI);
+            }
+        }
+        this.task = task;
+        this.dataManager.set(TASK, task.getUid().toString());
     }
 
     public int getExp() {
@@ -906,7 +762,7 @@ public class EntityMaid extends EntityTameable implements IRangedAttackMob {
         // 能否捡起物品
         IS_PICKUP("IsPickup"),
         // 女仆模式
-        MAID_MODE("MaidMode"),
+        MAID_TASK("MaidTask"),
         // 女仆经验
         MAID_EXP("MaidExp"),
         // Home 的坐标

@@ -16,14 +16,16 @@ public class ChangeGuiMessage implements IMessage {
     private UUID uuid;
     private int entityId;
     private int guiId;
+    private int formTaskIndex;
 
     public ChangeGuiMessage() {
     }
 
-    public ChangeGuiMessage(UUID uuid, int entityId, int guiId) {
+    public ChangeGuiMessage(UUID uuid, int entityId, int guiId, int formTaskIndex) {
         this.uuid = uuid;
         this.entityId = entityId;
         this.guiId = guiId;
+        this.formTaskIndex = formTaskIndex;
     }
 
     @Override
@@ -31,6 +33,7 @@ public class ChangeGuiMessage implements IMessage {
         uuid = new UUID(buf.readLong(), buf.readLong());
         entityId = buf.readInt();
         guiId = buf.readInt();
+        formTaskIndex = buf.readInt();
     }
 
     @Override
@@ -39,6 +42,7 @@ public class ChangeGuiMessage implements IMessage {
         buf.writeLong(uuid.getLeastSignificantBits());
         buf.writeInt(entityId);
         buf.writeInt(guiId);
+        buf.writeInt(formTaskIndex);
     }
 
     public UUID getUUID() {
@@ -60,7 +64,7 @@ public class ChangeGuiMessage implements IMessage {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity player = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getUUID());
                     if (player instanceof EntityPlayer) {
-                        ((EntityPlayer) player).openGui(TouhouLittleMaid.INSTANCE, message.getGuiId(), player.getEntityWorld(), message.getEntityId(), 0, 0);
+                        ((EntityPlayer) player).openGui(TouhouLittleMaid.INSTANCE, message.getGuiId(), player.getEntityWorld(), message.getEntityId(), message.formTaskIndex, 0);
                     }
                 });
             }

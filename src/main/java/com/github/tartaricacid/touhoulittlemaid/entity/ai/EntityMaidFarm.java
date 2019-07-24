@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.material.Material;
@@ -18,7 +18,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 public class EntityMaidFarm extends EntityAIMoveToBlock {
-    private final EntityMaid entityMaid;
+    private final AbstractEntityMaid entityMaid;
     private final int searchLength;
     private boolean hasFarmItem;
     /**
@@ -26,7 +26,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
      */
     private int currentTask;
 
-    public EntityMaidFarm(EntityMaid entityMaid, double speedIn) {
+    public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn) {
         super(entityMaid, speedIn, 16);
         searchLength = 16;
         this.entityMaid = entityMaid;
@@ -35,7 +35,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
-        if (entityMaid.guiOpening || entityMaid.getMode() != MaidMode.FARM || entityMaid.isSitting()) {
+        if (entityMaid.isSitting()) {
             return false;
         }
 
@@ -57,7 +57,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.guiOpening && this.currentTask >= 0 && entityMaid.getMode() == MaidMode.FARM &&
+        return this.currentTask >= 0 &&
                 !entityMaid.isSitting() && super.shouldContinueExecuting();
     }
 
@@ -116,8 +116,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         }
         if (shouldLook) {
             // 女仆盯着耕地
-            this.entityMaid.getLookHelper().setLookPosition((double) this.destinationBlock.getX() + 0.5D, (double) (this.destinationBlock.getY() + 1),
-                    (double) this.destinationBlock.getZ() + 0.5D, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
+            this.entityMaid.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1,
+                    this.destinationBlock.getZ() + 0.5D, 10.0F, this.entityMaid.getVerticalFaceSpeed());
         }
     }
 

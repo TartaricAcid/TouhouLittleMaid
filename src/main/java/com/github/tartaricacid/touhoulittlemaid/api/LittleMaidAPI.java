@@ -1,7 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
-import net.minecraft.entity.Entity;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
+import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
+import com.google.common.base.Optional;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,13 +42,24 @@ public class LittleMaidAPI {
     }
 
     @Nonnull
-    public static int getBaubleSlotInMaid(Entity maid, IMaidBauble bauble) {
+    public static int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble) {
         return INSTANCE.getBaubleSlotInMaid(maid, bauble);
     }
 
-    @Nullable
-    public static BaubleItemHandler getBaubleInventory(Entity maid) {
-        return INSTANCE.getBaubleInventory(maid);
+    public static void registerTask(IMaidTask task) {
+        INSTANCE.registerTask(task);
+    }
+
+    public static Optional<IMaidTask> findTask(ResourceLocation uid) {
+        return INSTANCE.findTask(uid);
+    }
+
+    public static List<IMaidTask> getTasks() {
+        return INSTANCE.getTasks();
+    }
+
+    public static IMaidTask getIdleTask() {
+        return INSTANCE.getIdleTask();
     }
 
     public static interface ILittleMaidAPI {
@@ -51,10 +71,9 @@ public class LittleMaidAPI {
             return getBauble(ItemDefinition.of(item));
         }
 
-        BaubleItemHandler getBaubleInventory(Entity maid);
-
-        default int getBaubleSlotInMaid(Entity maid, IMaidBauble bauble) {
-            BaubleItemHandler handler = getBaubleInventory(maid);
+        default int getBaubleSlotInMaid(AbstractEntityMaid maid, IMaidBauble bauble)
+        {
+            BaubleItemHandler handler = maid.getBaubleInv();
             if (handler != null) {
                 for (int i = 0; i < handler.getSlots(); i++) {
                     IMaidBauble baubleIn = handler.getBaubleInSlot(i);
@@ -65,5 +84,13 @@ public class LittleMaidAPI {
             }
             return -1;
         }
+
+        void registerTask(IMaidTask task);
+
+        Optional<IMaidTask> findTask(ResourceLocation uid);
+
+        List<IMaidTask> getTasks();
+
+        IMaidTask getIdleTask();
     }
 }

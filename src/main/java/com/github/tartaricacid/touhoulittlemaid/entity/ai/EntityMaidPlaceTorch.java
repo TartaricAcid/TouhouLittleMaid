@@ -1,10 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidMode;
+
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -15,7 +19,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 
 public class EntityMaidPlaceTorch extends EntityAIBase {
-    private EntityMaid entityMaid;
+    private AbstractEntityMaid entityMaid;
     private World world;
     private int radius;
     private int heigh;
@@ -23,7 +27,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     private float speed;
     private int timeoutCounter;
 
-    public EntityMaidPlaceTorch(EntityMaid entityMaid, int radius, int heigh, float speed) {
+    public EntityMaidPlaceTorch(AbstractEntityMaid entityMaid, int radius, int heigh, float speed) {
         this.entityMaid = entityMaid;
         this.world = entityMaid.getEntityWorld();
         this.radius = radius;
@@ -33,7 +37,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        return !entityMaid.guiOpening && entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty() && getLowLightBlock() != null;
+        return !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty() && getLowLightBlock() != null;
     }
 
     @Override
@@ -54,11 +58,11 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
                 // 40 次进行一次寻路
                 timeoutCounter++;
                 if (timeoutCounter > 40) {
-                    entityMaid.getLookHelper().setLookPosition((double) pos.getX() + 0.5d, (double) pos.getY() + 1d, (double) pos.getZ() + 0.5d, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
+                    entityMaid.getLookHelper().setLookPosition(pos.getX() + 0.5d, pos.getY() + 1d, pos.getZ() + 0.5d, 10.0F, this.entityMaid.getVerticalFaceSpeed());
                     // 用来解决传送后停止插火把行为
                     // 我发现传送后，pos 还会是先前的 pos，此时太远无法寻路过去
                     // 所以这时候需要将其变为 null
-                    if (!entityMaid.getNavigator().tryMoveToXYZ((double) pos.getX() + 0.5d, (double) pos.getY() + 1d, (double) pos.getZ() + 0.5d, speed)) {
+                    if (!entityMaid.getNavigator().tryMoveToXYZ(pos.getX() + 0.5d, pos.getY() + 1d, pos.getZ() + 0.5d, speed)) {
                         pos = null;
                         timeoutCounter = 0;
                     }
@@ -70,7 +74,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.guiOpening && pos != null && entityMaid.getMode() == MaidMode.TORCH && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty();
+        return pos != null && !entityMaid.isSitting() && !getTorchItem(entityMaid).isEmpty();
     }
 
     @Override
@@ -79,11 +83,11 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
         pos = null;
     }
 
-    private ItemStack getTorchItem(EntityMaid entityMaid) {
+    private ItemStack getTorchItem(AbstractEntityMaid entityMaid) {
         IItemHandler itemHandler = entityMaid.getAvailableInv();
         for (int i = 0; i < itemHandler.getSlots(); ++i) {
             ItemStack itemstack = itemHandler.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() == ItemBlock.getItemFromBlock(Blocks.TORCH)) {
+            if (!itemstack.isEmpty() && itemstack.getItem() == Item.getItemFromBlock(Blocks.TORCH)) {
                 return itemstack;
             }
         }

@@ -10,13 +10,13 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class MaidInventoryContainer extends MaidMainContainer {
-    public MaidInventoryContainer(IInventory playerInventory, EntityMaid entityMaid) {
-        super(playerInventory, entityMaid);
+    public MaidInventoryContainer(IInventory playerInventory, EntityMaid maid, int taskIndex) {
+        super(playerInventory, maid, taskIndex);
         addMaidInventorySlots(playerInventory);
     }
 
     private void addMaidInventorySlots(IInventory playerInventory) {
-        IItemHandler itemHandler = entityMaid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        IItemHandler itemHandler = maid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         // 女仆物品栏
         for (int l = 0; l < 3; ++l) {
             for (int j = 0; j < 5; ++j) {

@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory;
 
-import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,13 +13,13 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 public class MaidBaubleContainer extends MaidMainContainer {
-    public MaidBaubleContainer(IInventory playerInventory, EntityMaid entityMaid) {
-        super(playerInventory, entityMaid);
+    public MaidBaubleContainer(IInventory playerInventory, EntityMaid entityMaid, int taskIndex) {
+        super(playerInventory, entityMaid, taskIndex);
         addMaidBaubleSlots(playerInventory);
     }
 
     private void addMaidBaubleSlots(IInventory playerInventory) {
-        IItemHandler itemHandler = entityMaid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        IItemHandler itemHandler = maid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         // 女仆饰品栏
         for (int l = 0; l < 2; ++l) {
             for (int j = 0; j < 4; ++j) {

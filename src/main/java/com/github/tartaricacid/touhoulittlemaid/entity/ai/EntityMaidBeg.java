@@ -26,7 +26,7 @@ public class EntityMaidBeg extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        this.player = this.world.getClosestPlayerToEntity(this.entityMaid, (double) this.maxPlayerDistance);
+        this.player = this.world.getClosestPlayerToEntity(this.entityMaid, this.maxPlayerDistance);
         return !entityMaid.guiOpening && this.player != null && this.hasTemptationItemInHand(this.player);
     }
 
@@ -61,7 +61,7 @@ public class EntityMaidBeg extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        this.entityMaid.getLookHelper().setLookPosition(this.player.posX, this.player.posY + (double) this.player.getEyeHeight(), this.player.posZ, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
+        this.entityMaid.getLookHelper().setLookPosition(this.player.posX, this.player.posY + this.player.getEyeHeight(), this.player.posZ, 10.0F, this.entityMaid.getVerticalFaceSpeed());
         if (!this.entityMaid.isSitting()) {
             if (this.entityMaid.getDistance(player) > 1.5) {
                 this.entityMaid.getMoveHelper().setMoveTo(this.player.posX, this.player.posY, this.player.posZ, 0.7);
