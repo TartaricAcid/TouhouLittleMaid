@@ -49,6 +49,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
@@ -56,6 +57,9 @@ import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
@@ -173,7 +177,7 @@ public class EntityMaid extends AbstractEntityMaid {
             for (Entity entityPickup : entityList) {
                 // 如果是物品
                 if (entityPickup instanceof EntityItem) {
-                    pickupItem((EntityItem) entityPickup);
+                    pickupItem((EntityItem) entityPickup, false);
                 }
                 // 如果是经验
                 if (entityPickup instanceof EntityXPOrb) {
@@ -181,7 +185,7 @@ public class EntityMaid extends AbstractEntityMaid {
                 }
                 // 如果是箭
                 if (entityPickup instanceof EntityArrow) {
-                    pickupArrow((EntityArrow) entityPickup);
+                    pickupArrow((EntityArrow) entityPickup, false);
                 }
             }
         }
@@ -190,31 +194,39 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 捡起物品部分的逻辑
      */
-    private void pickupItem(EntityItem entityItem) {
+    public boolean pickupItem(EntityItem entityItem, boolean simulate) {
         // TODO: 当物品 pickupDelay 较小时等待
         if (!world.isRemote && entityItem.isEntityAlive() && !entityItem.cannotPickup()) {
             // 获取实体的物品堆，遍历尝试塞入背包
             ItemStack itemstack = entityItem.getItem();
             // 获取数量，为后面方面用
             int count = itemstack.getCount();
-            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, false);
-            // 如果遍历塞完后发现为空了
-            if (itemstack.isEmpty()) {
+            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, simulate);
+            if (count == itemstack.getCount()) {
+                return false;
+            }
+            if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
-                this.onItemPickup(entityItem, count);
-                // 清除这个实体
-                entityItem.setDead();
+                this.onItemPickup(entityItem, count - itemstack.getCount());
                 // 音效播放
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 if (rand.nextInt(3) == 1) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
                 }
-            } else {
-                // 将物品数量同步到客户端
-                entityItem.setItem(itemstack);
+                // 如果遍历塞完后发现为空了
+                if (itemstack.isEmpty()) {
+                    // 清除这个实体
+                    entityItem.setDead();
+                } else {
+                    // 将物品数量同步到客户端
+                    entityItem.setItem(itemstack);
+                }
             }
+
+            return true;
         }
+        return false;
     }
 
     /**
@@ -247,10 +259,41 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 捡起箭部分的逻辑
      */
-    private void pickupArrow(EntityArrow entityArrow) {
-        // TODO
+    public boolean pickupArrow(EntityArrow arrow, boolean simulate) {
+        if (!this.world.isRemote && arrow.inGround && arrow.arrowShake <= 0)
+        {
+            if (arrow.pickupStatus != EntityArrow.PickupStatus.ALLOWED)
+            {
+                return false;
+            }
+
+            ItemStack stack = getArrowFromEntity(arrow);
+            if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(), stack, simulate).isEmpty())
+            {
+                return false;
+            }
+
+            if (!simulate) {
+                this.onItemPickup(arrow, 1);
+                arrow.setDead();
+            }
+            return true;
+        }
+        return false;
     }
 
+    public ItemStack getArrowFromEntity(EntityArrow entity)
+    {
+        Method method = ReflectionHelper.findMethod(entity.getClass(), "getArrowStack", "func_184550_j");
+        method.setAccessible(true);
+        try {
+            return (ItemStack) method.invoke(ItemStack.class);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            return new ItemStack(Items.ARROW);
+        }
+    }
+    
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         task.onRangedAttack(this, target, distanceFactor);

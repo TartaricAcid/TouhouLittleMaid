@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -63,20 +64,19 @@ public class EntityMaidPickup extends EntityAIBase {
                     continue;
                 }
                 // 物品活着，而且能塞入女仆背包
-                if (entity instanceof EntityItem) {
-                    EntityItem item = (EntityItem) entity;
-                    ItemStack before = item.getItem();
-                    ItemStack after = ItemHandlerHelper.insertItemStacked(entityMaid.getAvailableInv(), before, true);
-                    // 尝试塞入后发现数量没有变化，说明无法拾取此对象，搜寻下一个
-                    if (before.getCount() == after.getCount()) {
-                        continue;
-                    }
+                if (entity instanceof EntityItem && entityMaid.pickupItem((EntityItem) entity, true)) {
                     entityPickup = entity;
                     return;
                 }
 
                 // 经验球
                 if (entity instanceof EntityXPOrb) {
+                    entityPickup = entity;
+                    return;
+                }
+
+                // 经验球
+                if (entity instanceof EntityArrow && entityMaid.pickupArrow((EntityArrow) entity, true)) {
                     entityPickup = entity;
                     return;
                 }
