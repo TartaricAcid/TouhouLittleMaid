@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -205,7 +204,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         yInRange = j < mouseY && mouseY < (j + 26);
         if (xInRange && yInRange) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.mode_switch",
-                    I18n.format(Util.getTaskTranslationKey(container.task))), mouseX, mouseY);
+                    container.task.getTaskI18n()), mouseX, mouseY);
         }
 
         // 绘制不同标签页的提示文字

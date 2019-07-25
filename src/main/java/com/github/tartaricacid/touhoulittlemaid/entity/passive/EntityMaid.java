@@ -674,7 +674,8 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     public IMaidTask getTask() {
-        return this.task;
+        return LittleMaidAPI.findTask(new ResourceLocation(this.dataManager.get(TASK)))
+                .or(LittleMaidAPI.getIdleTask());
     }
 
     public void setTask(IMaidTask task) {
@@ -761,7 +762,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(MODEL_NAME, name);
     }
 
-    private enum NBT {
+    public enum NBT {
         // 女仆的物品栏
         MAID_INVENTORY("MaidInventory"),
         // 女仆饰品栏

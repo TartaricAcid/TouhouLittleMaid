@@ -7,7 +7,6 @@ import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.util.math.Vec3d;
 
 public class ModelBoxFloat extends ModelBox {
-
     public ModelBoxFloat(ModelRenderer renderer, int texU, int texV, float x, float y, float z, float dx, float dy, float dz, float delta) {
         this(renderer, texU, texV, x, y, z, dx, dy, dz, delta, renderer.mirror);
     }

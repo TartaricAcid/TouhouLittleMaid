@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.model.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 
@@ -21,6 +22,7 @@ public class BonesItem {
     @SerializedName("parent")
     private String parent;
 
+    @Nullable
     public List<CubesItem> getCubes() {
         return cubes;
     }

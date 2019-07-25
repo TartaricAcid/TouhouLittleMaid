@@ -8,80 +8,96 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+// 只需要编辑下面的东西即可，上部的代码是 Forge 设置所添加并必须的。
 
-
-version = "1.12.2-1.1.2-alpha"
-group = "com.github.tartaricacid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+// 模组的基本信息，包括版本，包名等
+// 参考 http://maven.apache.org/guides/mini/guide-naming-conventions.html 了解命名规则
+version = mod_version
+group = "com.github.tartaricacid"
 archivesBaseName = "touhoulittlemaid"
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+// 此处需要它，以便 eclipse 任务能够正确生成。
+sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
+    // 所使用的 Forge 版本
+    version = "1.12.2-${forge_version}"
+    // 游戏试运行时的文件夹
     runDir = "run"
-
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "stable_39"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    // MCP 的版本，修改后只需要重新构建开发环境即可
+    mappings = mcp_mappings
+    // 将代码中的所有 @VERSION@ 字段替换为 version 变量
     replace "@VERSION@", project.version
 }
 
-dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+// 添加仓库
+repositories {
+    maven {
+        // JEI
+        name = "Progwml6 Maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // HWYLA
+        name = "Tehnut Maven"
+        url = "http://tehnut.info/maven"
+    }
+    maven {
+        // The One Probe
+        name 'tterrag maven'
+        url "http://maven.tterrag.com/"
+    }
+    maven {
+        // 给 The One Probe 所需的 Redstone Flux 使用的仓库
+        name = "CoFH Maven"
+        url = "http://maven.covers1624.net"
+    }
 }
 
+dependencies {
+    //  JEI
+    deobfCompile "mezz.jei:jei_1.12.2:${jei_version}"
+    // HWYLA
+    deobfCompile "mcp.mobius.waila:Hwyla:${hwyla_version}"
+    // The One Probe
+    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:${top_version}"
+
+    // 想要了解更多，可以查询如下网址
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+}
+
+// 处理资源部分
 processResources {
-    // this will ensure that this task is redone when the versions change.
+    // 在版本更改时，这将确保任务会进行重置
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
+    // 将资源部部分的 mcmod.info 文件的 ${version} 和 ${mcversion} 替换为如下两个变量
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-
-        // replace version and mcversion
         expand 'version': project.version, 'mcversion': project.minecraft.version
     }
 
-    // copy everything else except the mcmod.info
+    // 复制除 mcmod.info 之外的所有其他内容
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
+// 强制将编译环境的变化设置为 UTF-8 编码
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+// 打包部分
 jar {
+    // 打包的包名
+    baseName = archivesBaseName + "-1.12.2-${mod_version}-alpha"
+    // 打包 Access Transformers 文件
     manifest {
         attributes 'FMLAT': 'touhou_little_maid_at.cfg'
     }

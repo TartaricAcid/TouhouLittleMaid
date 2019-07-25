@@ -17,7 +17,9 @@ import com.google.gson.Gson;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -44,6 +46,12 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         // 初始化默认模型列表
         initModelList();
+
+        // 注册 TOP
+        if (Loader.isModLoaded("theoneprobe")) {
+            FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe",
+                    "com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo");
+        }
 
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),
                 EntityMaid.class, "touhou_little_maid.maid", 0, TouhouLittleMaid.INSTANCE, 64,

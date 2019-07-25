@@ -1,9 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api.util;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -50,13 +48,5 @@ public final class Util {
             return MaidSoundEvent.MAID_HOT;
         }
         return fallback;
-    }
-
-    /**
-     * 通过枚举类型 IMaidTask 构建对应的本地化词条
-     */
-    public static String getTaskTranslationKey(IMaidTask task) {
-        ResourceLocation rl = task.getUid();
-        return "task." + rl.getNamespace() + "." + rl.getPath();
     }
 }
