@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.internal;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI.ILittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.google.common.base.Optional;
@@ -32,6 +33,8 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
      * 目前可用的 IMaidTask 对象
      */
     private final List<IMaidTask> tasks = Lists.newArrayList();
+
+    private final List<FarmHandler> farmHandlers = Lists.newArrayList();
     /**
      * 默认的 IMaidTask 对象
      */
@@ -54,13 +57,15 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
 
     @Override
     public void registerTask(IMaidTask task) {
-        if (!tasks.isEmpty() && task.getUid().equals(TaskIdle.UID)) {
-            tasks.add(0, task);
-            IDLE_TASK = task;
-        } else {
-            tasks.add(task);
-        }
         taskMap.put(task.getUid(), task);
+        if (task.getUid().equals(TaskIdle.UID)) {
+            IDLE_TASK = task;
+            if (!tasks.isEmpty()) {
+                tasks.add(0, task);
+                return;
+            }
+        }
+        tasks.add(task);
     }
 
     @Override
@@ -71,6 +76,16 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
     @Override
     public IMaidTask getIdleTask() {
         return IDLE_TASK;
+    }
+
+    @Override
+    public void registerFarmHandler(FarmHandler handler) {
+        farmHandlers.add(handler);
+    }
+
+    @Override
+    public List<FarmHandler> getFarmHandlers() {
+        return farmHandlers;
     }
 
 }

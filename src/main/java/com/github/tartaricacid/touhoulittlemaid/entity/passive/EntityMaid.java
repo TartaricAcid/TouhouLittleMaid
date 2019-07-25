@@ -17,6 +17,8 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -25,6 +27,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityParrot;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -799,5 +802,15 @@ public class EntityMaid extends AbstractEntityMaid {
         public String getName() {
             return name;
         }
+    }
+
+    @Override
+    public boolean destroyBlock(BlockPos pos) {
+        return world.destroyBlock(pos, true);
+    }
+
+    @Override
+    public boolean placeBlock(BlockPos pos, IBlockState state) {
+        return world.setBlockState(pos, state);
     }
 }

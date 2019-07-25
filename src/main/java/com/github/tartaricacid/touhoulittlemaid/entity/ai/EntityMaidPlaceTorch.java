@@ -45,7 +45,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
         if (pos != null) {
             if (entityMaid.getDistanceSq(pos.up()) < 16) {
                 entityMaid.swingArm(EnumHand.MAIN_HAND);
-                world.setBlockState(pos, Blocks.TORCH.getDefaultState());
+                entityMaid.placeBlock(pos, Blocks.TORCH.getDefaultState());
                 entityMaid.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0f, 1.0f);
                 getTorchItem(entityMaid).shrink(1);
                 pos = null;
