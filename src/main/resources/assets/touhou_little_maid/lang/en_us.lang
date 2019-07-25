@@ -168,5 +168,6 @@ subtitle.touhou_little_maid.maid.environment.night=Maid Night Sound
 subtitle.touhou_little_maid.other.credit=Credit: Amitoro's Voice Material Studio
 
 # HWYLA & The One Probe
-hwyla.touhou_little_maid.entity_maid.task=Mode: %s
-top.touhou_little_maid.entity_maid.task=Mode: 
+hwyla_top.touhou_little_maid.entity_maid.task=Current Mode: %s
+
+
