@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -93,9 +92,9 @@ public class EntityModelJson extends ModelBase {
                 List<Float> size = cubes.getSize();
                 boolean mirror = cubes.isMirror();
 
-                model.cubeList.add(new ModelBox(model, uv.get(0), uv.get(1),
+                model.cubeList.add(new ModelBoxFloat(model, uv.get(0), uv.get(1),
                         convertOrigin(bones, cubes, 0), convertOrigin(bones, cubes, 1), convertOrigin(bones, cubes, 2),
-                        size.get(0).intValue(), size.get(1).intValue(), size.get(2).intValue(), 0, mirror));
+                        size.get(0), size.get(1), size.get(2), 0, mirror));
             }
         }
     }
