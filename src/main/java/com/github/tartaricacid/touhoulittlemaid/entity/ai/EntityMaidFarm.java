@@ -175,8 +175,6 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
      * 检索指定范围内是否有合适方块
      */
     private boolean searchForDestination() {
-        List<FarmHandler> handlers = LittleMaidAPI.getFarmHandlers();
-
         BlockPos blockpos = new BlockPos(this.maid);
 
         for (int k = 0; k <= 1; k = k > 0 ? -k : 1 - k) {
