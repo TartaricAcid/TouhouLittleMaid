@@ -27,6 +27,6 @@ public class EntityMaidProvider implements IWailaEntityProvider {
                         I18n.format(maid.getTask().getTranslationKey())));
             }
         }
-        return currenttip;
+        return currentTip;
     }
 }

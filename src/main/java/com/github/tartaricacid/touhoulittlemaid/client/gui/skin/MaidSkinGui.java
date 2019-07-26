@@ -319,7 +319,8 @@ public class MaidSkinGui extends GuiScreen {
                 CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),
                         BUTTON_MODEL_MAP.get(button.id).getModel(),
                         BUTTON_MODEL_MAP.get(button.id).getTexture(),
-                        BUTTON_MODEL_MAP.get(button.id).getName()));
+                        BUTTON_MODEL_MAP.get(button.id).getName(),
+                        BUTTON_MODEL_MAP.get(button.id).getFormat()));
         }
     }
 

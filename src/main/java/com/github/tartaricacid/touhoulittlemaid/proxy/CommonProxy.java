@@ -90,6 +90,9 @@ public class CommonProxy {
         LittleMaidAPI.registerTask(new TaskIdle());
         LittleMaidAPI.registerTask(new TaskShears());
         LittleMaidAPI.registerTask(new TaskTorch());
+
+        LittleMaidAPI.registerFarmHandler(new VanillaFarmHandler());
+        LittleMaidAPI.registerFeedHandler(new VanillaFeedHandler());
     }
 
     /**

@@ -21,6 +21,7 @@
       "name": "{model.vanilla_touhou_model.inubashiri_momizi.name}",
       "description": ["{model.vanilla_touhou_model.inubashiri_momizi.desc}"]
     }, {
+      "format": 1,
       "model": "touhou_little_maid:models/entity/komeiji_satori.json",
       "texture": "touhou_little_maid:textures/entity/komeiji_satori.png",
       "name": "{model.vanilla_touhou_model.komeiji_satori.name}",

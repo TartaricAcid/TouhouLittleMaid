@@ -19,6 +19,12 @@ public class ModelItem {
     private String model;
 
     /**
+     * 用来为以后可能做改动的而设置的参数
+     */
+    @SerializedName("format")
+    private int format;
+
+    /**
      * 材质必须存在
      */
     public String getTexture() {
@@ -42,6 +48,10 @@ public class ModelItem {
      */
     public String getModel() {
         return model;
+    }
+
+    public int getFormat() {
+        return format;
     }
 
     @Override
