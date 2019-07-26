@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI.ILittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.google.common.base.Optional;
@@ -35,6 +36,8 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
     private final List<IMaidTask> tasks = Lists.newArrayList();
 
     private final List<FarmHandler> farmHandlers = Lists.newArrayList();
+
+    private final List<FeedHandler> feedHandlers = Lists.newArrayList();
     /**
      * 默认的 IMaidTask 对象
      */
@@ -86,6 +89,16 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
     @Override
     public List<FarmHandler> getFarmHandlers() {
         return farmHandlers;
+    }
+
+    @Override
+    public void registerFeedHandler(FeedHandler handler) {
+        feedHandlers.add(handler);
+    }
+
+    @Override
+    public List<FeedHandler> getFeedHandlers() {
+        return feedHandlers;
     }
 
 }

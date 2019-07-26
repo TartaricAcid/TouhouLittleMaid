@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.google.common.base.Optional;
@@ -102,6 +103,14 @@ public class LittleMaidAPI {
         return INSTANCE.getFarmHandlers();
     }
 
+    public static void registerFeedHandler(FeedHandler handler) {
+        INSTANCE.registerFeedHandler(handler);
+    }
+
+    public static List<FeedHandler> getFeedHandlers() {
+        return INSTANCE.getFeedHandlers();
+    }
+
     /**
      * ILittleMaidAPI 用于饰品注册，寻找物品对应饰品对象等杂项性的内容
      */
@@ -185,5 +194,9 @@ public class LittleMaidAPI {
         void registerFarmHandler(FarmHandler handler);
 
         List<FarmHandler> getFarmHandlers();
+
+        void registerFeedHandler(FeedHandler handler);
+
+        List<FeedHandler> getFeedHandlers();
     }
 }
