@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
@@ -15,7 +14,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +25,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityParrot;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -77,10 +74,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<BlockPos> HOME_POS = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<String> MODEL_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
-    private static final DataParameter<String> TEXTURE_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
-    private static final DataParameter<String> MODEL_NAME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
-    private static final DataParameter<Integer> MODEL_FORMAT = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+    private static final DataParameter<String> MODEL = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
@@ -149,10 +143,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
         this.dataManager.register(HOME, Boolean.FALSE);
         this.dataManager.register(ARM_RISE, Boolean.FALSE);
-        this.dataManager.register(MODEL_LOCATION, "touhou_little_maid:models/entity/hakurei_reimu.json");
-        this.dataManager.register(TEXTURE_LOCATION, "touhou_little_maid:textures/entity/hakurei_reimu.png");
-        this.dataManager.register(MODEL_NAME, "{model.vanilla_touhou_model.hakurei_reimu.name}");
-        this.dataManager.register(MODEL_FORMAT, 0);
+        this.dataManager.register(MODEL, "touhou_little_maid:hakurei_reimu");
     }
 
     @Override
@@ -556,7 +547,7 @@ public class EntityMaid extends AbstractEntityMaid {
         entityTag.removeTag(NBT.BAUBLE_INVENTORY.getName());
         // 掉落女仆手办
         ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
-                this.getModelLocation(), this.getTextureLocation(), this.getModelName(), entityTag);
+                this.getModel(), entityTag);
         // 生成物品实体
         entityDropItem(stack, 0);
     }
@@ -572,7 +563,11 @@ public class EntityMaid extends AbstractEntityMaid {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         } else {
-            return ParseI18n.parse(getModelName());
+            String key = getModel();
+            if (CommonProxy.MODEL2NAME.containsKey(key)) {
+                return CommonProxy.MODEL2NAME.get(key);
+            }
+            return super.getName();
         }
     }
 
@@ -582,15 +577,11 @@ public class EntityMaid extends AbstractEntityMaid {
     @Nullable
     @Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        if (CommonProxy.MODEL_LIST != null) {
-            List<ModelItem> list = CommonProxy.MODEL_LIST.getModelList();
+        if (!CommonProxy.MODEL2NAME.isEmpty()) {
             // 随机获取某个模型对象
-            ModelItem model = list.get(rand.nextInt(list.size()));
+            String key = CommonProxy.MODEL2NAME.keySet().stream().skip(rand.nextInt(CommonProxy.MODEL2NAME.size())).findFirst().get();
             // 应用各种数据
-            this.setModelName(model.getName());
-            this.setModelLocation(model.getModel());
-            this.setTextureLocation(model.getTexture());
-            this.setModelFormat(model.getFormat());
+            this.setModel(key);
         }
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -621,17 +612,8 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MAID_HOME.getName())) {
             setHome(compound.getBoolean(NBT.MAID_HOME.getName()));
         }
-        if (compound.hasKey(NBT.MODEL_LOCATION.getName())) {
-            setModelLocation(compound.getString(NBT.MODEL_LOCATION.getName()));
-        }
-        if (compound.hasKey(NBT.TEXTURE_LOCATION.getName())) {
-            setTextureLocation(compound.getString(NBT.TEXTURE_LOCATION.getName()));
-        }
-        if (compound.hasKey(NBT.MODEL_NAME.getName())) {
-            setModelName(compound.getString(NBT.MODEL_NAME.getName()));
-        }
-        if (compound.hasKey(NBT.MODEL_FORMAT.getName())) {
-            setModelFormat(compound.getInteger(NBT.MODEL_FORMAT.getName()));
+        if (compound.hasKey(NBT.MODEL.getName())) {
+            setModel(compound.getString(NBT.MODEL.getName()));
         }
     }
 
@@ -645,10 +627,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setInteger(NBT.MAID_EXP.getName(), getExp());
         compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
-        compound.setString(NBT.MODEL_LOCATION.getName(), getModelLocation());
-        compound.setString(NBT.TEXTURE_LOCATION.getName(), getTextureLocation());
-        compound.setString(NBT.MODEL_NAME.getName(), getModelName());
-        compound.setInteger(NBT.MODEL_FORMAT.getName(), getModelFormat());
+        compound.setString(NBT.MODEL.getName(), getModel().toString());
     }
 
     @Override
@@ -724,6 +703,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(BEGGING, beg);
     }
 
+    @Override
     public boolean isPickup() {
         return this.dataManager.get(PICKUP);
     }
@@ -780,6 +760,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(HOME_POS, home);
     }
 
+    @Override
     public boolean isHome() {
         return this.dataManager.get(HOME);
     }
@@ -797,36 +778,12 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(ARM_RISE, swingingArms);
     }
 
-    public String getModelLocation() {
-        return this.dataManager.get(MODEL_LOCATION);
+    public String getModel() {
+        return this.dataManager.get(MODEL);
     }
 
-    public void setModelLocation(String modelLocation) {
-        this.dataManager.set(MODEL_LOCATION, modelLocation);
-    }
-
-    public String getTextureLocation() {
-        return this.dataManager.get(TEXTURE_LOCATION);
-    }
-
-    public void setTextureLocation(String textureLocation) {
-        this.dataManager.set(TEXTURE_LOCATION, textureLocation);
-    }
-
-    public String getModelName() {
-        return this.dataManager.get(MODEL_NAME);
-    }
-
-    public void setModelName(String name) {
-        this.dataManager.set(MODEL_NAME, name);
-    }
-
-    public void setModelFormat(int format) {
-        this.dataManager.set(MODEL_FORMAT, format);
-    }
-
-    public int getModelFormat() {
-        return this.dataManager.get(MODEL_FORMAT);
+    public void setModel(String name) {
+        this.dataManager.set(MODEL, name.toString());
     }
 
     public enum NBT {
@@ -844,16 +801,8 @@ public class EntityMaid extends AbstractEntityMaid {
         HOME_POS("HomePos"),
         // 是否开启 Home 模式
         MAID_HOME("MaidHome"),
-        // 模型位置
-        MODEL_LOCATION("ModelLocation"),
-        // 材质位置
-        TEXTURE_LOCATION("TextureLocation"),
-        // 模型名称
-        MODEL_NAME("ModelName"),
-        // 女仆 NBT 数据
-        MAID_DATA("MaidData"),
-        // 女仆模型版本
-        MODEL_FORMAT("ModelFormat");
+        // 模型
+        MODEL("Model");
 
         private String name;
 

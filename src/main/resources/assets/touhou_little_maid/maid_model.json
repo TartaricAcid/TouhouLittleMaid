@@ -6,52 +6,62 @@
   "date": "2019-07-14",
   "model_list": [
     {
+      "location": "touhou_little_maid:hakurei_reimu",
       "model": "touhou_little_maid:models/entity/hakurei_reimu.json",
       "texture": "touhou_little_maid:textures/entity/hakurei_reimu.png",
       "name": "{model.vanilla_touhou_model.hakurei_reimu.name}",
       "description": ["{model.vanilla_touhou_model.hakurei_reimu.desc}"]
     }, {
+      "location": "touhou_little_maid:yakumo_ran",
       "model": "touhou_little_maid:models/entity/yakumo_ran.json",
       "texture": "touhou_little_maid:textures/entity/yakumo_ran.png",
       "name": "{model.vanilla_touhou_model.yakumo_ran.name}",
       "description": ["{model.vanilla_touhou_model.yakumo_ran.desc}"]
     }, {
+      "location": "touhou_little_maid:inubashiri_momizi",
       "model": "touhou_little_maid:models/entity/inubashiri_momizi.json",
       "texture": "touhou_little_maid:textures/entity/inubashiri_momizi.png",
       "name": "{model.vanilla_touhou_model.inubashiri_momizi.name}",
       "description": ["{model.vanilla_touhou_model.inubashiri_momizi.desc}"]
     }, {
       "format": 1,
+      "location": "touhou_little_maid:komeiji_satori",
       "model": "touhou_little_maid:models/entity/komeiji_satori.json",
       "texture": "touhou_little_maid:textures/entity/komeiji_satori.png",
       "name": "{model.vanilla_touhou_model.komeiji_satori.name}",
       "description": ["{model.vanilla_touhou_model.komeiji_satori.desc}"]
     }, {
+      "location": "touhou_little_maid:reisen_udongein_inaba",
       "model": "touhou_little_maid:models/entity/reisen_udongein_inaba.json",
       "texture": "touhou_little_maid:textures/entity/reisen_udongein_inaba.png",
       "name": "{model.vanilla_touhou_model.reisen_udongein_inaba.name}",
       "description": ["{model.vanilla_touhou_model.reisen_udongein_inaba.desc}"]
     }, {
+      "location": "touhou_little_maid:yasaka_kanako",
       "model": "touhou_little_maid:models/entity/yasaka_kanako.json",
       "texture": "touhou_little_maid:textures/entity/yasaka_kanako.png",
       "name": "{model.vanilla_touhou_model.yasaka_kanako.name}",
       "description": ["{model.vanilla_touhou_model.yasaka_kanako.desc}"]
     }, {
+      "location": "touhou_little_maid:hata_no_kokoro",
       "model": "touhou_little_maid:models/entity/hata_no_kokoro.json",
       "texture": "touhou_little_maid:textures/entity/hata_no_kokoro.png",
       "name": "{model.vanilla_touhou_model.hata_no_kokoro.name}",
       "description": ["{model.vanilla_touhou_model.hata_no_kokoro.desc}"]
     }, {
+      "location": "touhou_little_maid:sekibanki",
       "model": "touhou_little_maid:models/entity/sekibanki.json",
       "texture": "touhou_little_maid:textures/entity/sekibanki.png",
       "name": "{model.vanilla_touhou_model.sekibanki.name}",
       "description": ["{model.vanilla_touhou_model.sekibanki.desc}"]
     }, {
+      "location": "touhou_little_maid:kawasiro_nitori",
       "model": "touhou_little_maid:models/entity/kawasiro_nitori.json",
       "texture": "touhou_little_maid:textures/entity/kawasiro_nitori.png",
       "name": "{model.vanilla_touhou_model.kawasiro_nitori.name}",
       "description": ["{model.vanilla_touhou_model.kawasiro_nitori.desc}"]
     }, {
+      "location": "touhou_little_maid:kochiya_sanae",
       "model": "touhou_little_maid:models/entity/kochiya_sanae.json",
       "texture": "touhou_little_maid:textures/entity/kochiya_sanae.png",
       "name": "{model.vanilla_touhou_model.kochiya_sanae.name}",

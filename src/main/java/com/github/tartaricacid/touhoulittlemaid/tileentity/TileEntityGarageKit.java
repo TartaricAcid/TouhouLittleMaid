@@ -18,9 +18,7 @@ import javax.annotation.Nullable;
 public class TileEntityGarageKit extends TileEntity {
     private String entityId = "touhou_little_maid:passive.maid";
     private EnumFacing facing = EnumFacing.SOUTH;
-    private String model = "touhou_little_maid:models/entity/hakurei_reimu.json";
-    private String texture = "touhou_little_maid:textures/entity/hakurei_reimu.png";
-    private String name = "{model.vanilla_touhou_model.hakurei_reimu.name}";
+    private String location = "touhou_little_maid:hakurei_reimu";
     private NBTTagCompound entityData = new NBTTagCompound();
 
     @Override
@@ -50,14 +48,8 @@ public class TileEntityGarageKit extends TileEntity {
         if (getTileData().hasKey(BlockGarageKit.NBT.FACING.getName())) {
             facing = EnumFacing.byName(getTileData().getString(BlockGarageKit.NBT.FACING.getName()));
         }
-        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_LOCATION.getName())) {
-            model = getTileData().getString(BlockGarageKit.NBT.MODEL_LOCATION.getName());
-        }
-        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_TEXTURE.getName())) {
-            texture = getTileData().getString(BlockGarageKit.NBT.MODEL_TEXTURE.getName());
-        }
-        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_NAME.getName())) {
-            name = getTileData().getString(BlockGarageKit.NBT.MODEL_NAME.getName());
+        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL.getName())) {
+            location = getTileData().getString(BlockGarageKit.NBT.MODEL.getName());
         }
         if (getTileData().hasKey(BlockGarageKit.NBT.MAID_DATA.getName())) {
             entityData = getTileData().getCompoundTag(BlockGarageKit.NBT.MAID_DATA.getName());
@@ -68,9 +60,7 @@ public class TileEntityGarageKit extends TileEntity {
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         getTileData().setString(BlockGarageKit.NBT.ENTITY_ID.getName(), entityId);
         getTileData().setString(BlockGarageKit.NBT.FACING.getName(), facing.getName());
-        getTileData().setString(BlockGarageKit.NBT.MODEL_LOCATION.getName(), model);
-        getTileData().setString(BlockGarageKit.NBT.MODEL_TEXTURE.getName(), texture);
-        getTileData().setString(BlockGarageKit.NBT.MODEL_NAME.getName(), name);
+        getTileData().setString(BlockGarageKit.NBT.MODEL.getName(), location);
         getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), entityData);
         super.writeToNBT(compound);
         return compound;
@@ -87,30 +77,20 @@ public class TileEntityGarageKit extends TileEntity {
     }
 
     public String getModel() {
-        return model;
-    }
-
-    public String getTexture() {
-        return texture;
-    }
-
-    public String getName() {
-        return name;
+        return location;
     }
 
     public NBTTagCompound getEntityData() {
         return entityData;
     }
 
-    public void setData(String entityId, EnumFacing facing, String model, String texture, String name, NBTTagCompound entityData) {
-        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.model, model) && Objects.equal(this.texture, texture) && Objects.equal(this.name, name)) {
+    public void setData(String entityId, EnumFacing facing, String location, NBTTagCompound entityData) {
+        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.location, location)) {
             return;
         }
         this.entityId = entityId;
         this.facing = facing;
-        this.model = model;
-        this.texture = texture;
-        this.name = name;
+        this.location = location;
         this.entityData = entityData;
         // 确保数据已经存入
         markDirty();

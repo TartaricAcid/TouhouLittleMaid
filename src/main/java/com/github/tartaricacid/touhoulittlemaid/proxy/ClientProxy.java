@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityDan
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMarisaBroomRender;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
@@ -29,8 +30,9 @@ public class ClientProxy extends CommonProxy {
      * 实体缓存，在客户端会大量运用实体渲染，这个缓存可以减少重复创建实体带来的性能问题
      */
     public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
-    public static List<CustomModelPackPOJO> MODEL_PACK_LIST = new ArrayList<>();
-    public static HashMap<String, EntityModelJson> LOCATION_MODEL_MAP = new HashMap<>();
+    public static final List<CustomModelPackPOJO> MODEL_PACK_LIST = new ArrayList<>();
+    public static final HashMap<String, EntityModelJson> LOCATION_MODEL_MAP = new HashMap<>();
+    public static final HashMap<String, ModelItem> LOCATION_INFO_MAP = new HashMap<>();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {

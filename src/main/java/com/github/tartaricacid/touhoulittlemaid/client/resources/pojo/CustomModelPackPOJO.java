@@ -3,10 +3,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Nullable;
+
+import java.util.Collections;
 import java.util.List;
 
 public class CustomModelPackPOJO {
-    @SerializedName("date")
     private String date;
 
     @SerializedName("model_list")
@@ -15,14 +16,13 @@ public class CustomModelPackPOJO {
     @SerializedName("pack_name")
     private String packName;
 
-    @SerializedName("author")
     private List<String> author;
 
-    @SerializedName("description")
     private List<String> description;
 
-    @SerializedName("version")
     private String version;
+
+    private int format;
 
     @Nullable
     public String getDate() {
@@ -43,12 +43,10 @@ public class CustomModelPackPOJO {
         return packName;
     }
 
-    @Nullable
     public List<String> getAuthor() {
         return author;
     }
 
-    @Nullable
     public List<String> getDescription() {
         return description;
     }
@@ -66,5 +64,20 @@ public class CustomModelPackPOJO {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+
+    public CustomModelPackPOJO decorate() {
+        if (modelList == null) {
+            modelList = Collections.EMPTY_LIST;
+        }
+        if (description == null) {
+            description = Collections.EMPTY_LIST;
+        }
+        if (author == null) {
+            author = Collections.EMPTY_LIST;
+        }
+
+        modelList.forEach(m -> m.decorate(format));
+        return this;
     }
 }
