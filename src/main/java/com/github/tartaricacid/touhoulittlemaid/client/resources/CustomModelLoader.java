@@ -37,7 +37,6 @@ public final class CustomModelLoader {
     private static final Marker MARKER = MarkerManager.getMarker("ModelLoader");
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
     private static final String OLD_BEDROCK_VERSION = "1.10.0";
-
     /**
      * 获取客户端代理类的模型包列表数据
      */

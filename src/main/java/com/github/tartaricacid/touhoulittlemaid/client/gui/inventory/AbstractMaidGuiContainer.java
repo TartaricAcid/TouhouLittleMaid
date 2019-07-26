@@ -305,6 +305,41 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     }
 
     /**
+     * 该界面的按钮枚举
+     */
+    public enum BUTTON {
+        // 拾物模式按钮
+        PICKUP(-1),
+        // 主界面按钮
+        MAIN(1),
+        // 主物品栏按钮
+        INVENTORY(2),
+        // 饰品栏按钮
+        BAUBLE(3),
+        // 模式切换按钮
+        TASK_SWITCH(-1),
+        // HOME 模式切换按钮
+        HOME(-1),
+        // 女仆模型皮肤按钮
+        SKIN(-1),
+        // 声音素材致谢
+        SOUND_CREDIT(-1);
+
+        private int guiId;
+
+        /**
+         * @param guiId 摁下按钮后触发的 GUI 的 ID，如果不触发 GUI，可以将其设置为 -1
+         */
+        BUTTON(int guiId) {
+            this.guiId = guiId;
+        }
+
+        public int getGuiId() {
+            return guiId;
+        }
+    }
+
+    /**
      * 一个简单的打开连接的提示界面
      */
     private class GuiSoundCredit extends GuiConfirmOpenLink {
@@ -337,41 +372,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             super.drawScreen(mouseX, mouseY, partialTicks);
             this.drawCenteredString(this.fontRenderer, TextFormatting.GOLD.toString() + TextFormatting.BOLD.toString() +
                     I18n.format("gui.touhou_little_maid.credit.url.close"), this.width / 2, 110, 0xffcccc);
-        }
-    }
-
-    /**
-     * 该界面的按钮枚举
-     */
-    public enum BUTTON {
-        // 拾物模式按钮
-        PICKUP(-1),
-        // 主界面按钮
-        MAIN(1),
-        // 主物品栏按钮
-        INVENTORY(2),
-        // 饰品栏按钮
-        BAUBLE(3),
-        // 模式切换按钮
-        TASK_SWITCH(-1),
-        // HOME 模式切换按钮
-        HOME(-1),
-        // 女仆模型皮肤按钮
-        SKIN(-1),
-        // 声音素材致谢
-        SOUND_CREDIT(-1);
-
-        private int guiId;
-
-        /**
-         * @param guiId 摁下按钮后触发的 GUI 的 ID，如果不触发 GUI，可以将其设置为 -1
-         */
-        BUTTON(int guiId) {
-            this.guiId = guiId;
-        }
-
-        public int getGuiId() {
-            return guiId;
         }
     }
 }

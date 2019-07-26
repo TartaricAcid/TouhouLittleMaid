@@ -24,6 +24,7 @@ public final class Util {
      * @return 应当触发的音效
      */
     public static SoundEvent environmentSound(AbstractEntityMaid maid, SoundEvent fallback, float probability) {
+        // FIXME: 2019/7/26 这里调用了非 api 包的方法，看起来需要剔除或者转移位置
         World world = maid.world;
         Random rand = maid.getRNG();
         // 差不多早上 6:30 - 7:30

@@ -60,7 +60,7 @@ public class EntityMaidPickup extends EntityAIBase {
                 if (entity.isDead || !entityMaid.canEntityBeSeen(entity)) {
                     continue;
                 }
-                // 物品活着，而且能塞入女仆背包
+                // 物品
                 if (entity instanceof EntityItem && entityMaid.pickupItem((EntityItem) entity, true)) {
                     entityPickup = entity;
                     return;
@@ -72,7 +72,7 @@ public class EntityMaidPickup extends EntityAIBase {
                     return;
                 }
 
-                // 经验球
+                // 弓箭
                 if (entity instanceof EntityArrow && entityMaid.pickupArrow((EntityArrow) entity, true)) {
                     entityPickup = entity;
                     return;

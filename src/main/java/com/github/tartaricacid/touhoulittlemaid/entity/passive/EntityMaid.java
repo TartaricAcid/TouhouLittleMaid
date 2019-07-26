@@ -15,7 +15,6 @@ import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -57,7 +56,6 @@ import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -194,6 +192,8 @@ public class EntityMaid extends AbstractEntityMaid {
 
     /**
      * 捡起物品部分的逻辑
+     *
+     * @param simulate 是否是模拟塞入，可用于检测此物品是否能拾起
      */
     public boolean pickupItem(EntityItem entityItem, boolean simulate) {
         // TODO: 当物品 pickupDelay 较小时等待
@@ -207,11 +207,9 @@ public class EntityMaid extends AbstractEntityMaid {
                 return false;
             }
             if (!simulate) {
-                // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
+                // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(entityItem, count - itemstack.getCount());
-                // 音效播放
-                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
-                        ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                // FIXME: 2019/7/26 拾起物品的声音播放还是存在问题，应该用计数延时，而不是概率触发
                 if (rand.nextInt(3) == 1) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
                 }
@@ -235,7 +233,7 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private void pickupXPOrb(EntityXPOrb entityXPOrb) {
         if (!this.world.isRemote && entityXPOrb.isEntityAlive() && entityXPOrb.delayBeforeCanPickup == 0) {
-            // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
+            // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.onItemPickup(entityXPOrb, 1);
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
@@ -249,8 +247,6 @@ public class EntityMaid extends AbstractEntityMaid {
                 this.addExp(entityXPOrb.xpValue);
             }
             entityXPOrb.setDead();
-            this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2F,
-                    (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F);
             // FIXME: 2019/7/26 拾起物品的声音播放还是存在问题，应该用计数延时，而不是概率触发
             if (rand.nextInt(3) == 1) {
                 this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
@@ -260,22 +256,23 @@ public class EntityMaid extends AbstractEntityMaid {
 
     /**
      * 捡起箭部分的逻辑
+     *
+     * @param simulate 是否是模拟塞入，可用于检测此物品是否能拾起
      */
     public boolean pickupArrow(EntityArrow arrow, boolean simulate) {
-        if (!this.world.isRemote && arrow.inGround && arrow.arrowShake <= 0)
-        {
-            if (arrow.pickupStatus != EntityArrow.PickupStatus.ALLOWED)
-            {
+        if (!this.world.isRemote && arrow.isEntityAlive() && arrow.inGround && arrow.arrowShake <= 0) {
+            // 先判断箭是否处于可以拾起的状态
+            if (arrow.pickupStatus != EntityArrow.PickupStatus.ALLOWED) {
                 return false;
             }
-
+            // 能够塞入
             ItemStack stack = getArrowFromEntity(arrow);
-            if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(), stack, simulate).isEmpty())
-            {
+            if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(), stack, simulate).isEmpty()) {
                 return false;
             }
-
+            // 非模拟状态下，清除实体箭
             if (!simulate) {
+                // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(arrow, 1);
                 arrow.setDead();
             }
@@ -284,18 +281,19 @@ public class EntityMaid extends AbstractEntityMaid {
         return false;
     }
 
-    public ItemStack getArrowFromEntity(EntityArrow entity)
-    {
+    /**
+     * 无法对抽象类使用 AT，所以通过反射获取箭
+     */
+    public ItemStack getArrowFromEntity(EntityArrow entity) {
         Method method = ReflectionHelper.findMethod(entity.getClass(), "getArrowStack", "func_184550_j");
         method.setAccessible(true);
         try {
             return (ItemStack) method.invoke(ItemStack.class);
-        }
-        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             return new ItemStack(Items.ARROW);
         }
     }
-    
+
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         task.onRangedAttack(this, target, distanceFactor);
@@ -786,6 +784,16 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(MODEL, name.toString());
     }
 
+    @Override
+    public boolean destroyBlock(BlockPos pos) {
+        return world.destroyBlock(pos, true);
+    }
+
+    @Override
+    public boolean placeBlock(BlockPos pos, IBlockState state) {
+        return world.setBlockState(pos, state);
+    }
+
     public enum NBT {
         // 女仆的物品栏
         MAID_INVENTORY("MaidInventory"),
@@ -818,15 +826,5 @@ public class EntityMaid extends AbstractEntityMaid {
         public String getName() {
             return name;
         }
-    }
-
-    @Override
-    public boolean destroyBlock(BlockPos pos) {
-        return world.destroyBlock(pos, true);
-    }
-
-    @Override
-    public boolean placeBlock(BlockPos pos, IBlockState state) {
-        return world.setBlockState(pos, state);
     }
 }

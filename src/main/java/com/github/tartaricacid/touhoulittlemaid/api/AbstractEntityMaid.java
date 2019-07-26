@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.passive.EntityTameable;
@@ -41,11 +40,34 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      */
     abstract public IItemHandlerModifiable getInv(MaidInventory type);
 
+    /**
+     * 女仆执行破坏方块时的行为
+     *
+     * @param pos 破坏的方块坐标
+     * @return 是否成功破坏
+     */
     abstract public boolean destroyBlock(BlockPos pos);
 
+    /**
+     * 女仆执行放置方块的行为
+     *
+     * @param pos   放置方块的坐标
+     * @param state 放置方块的 IBlockState
+     * @return 是否成功放置
+     */
     abstract public boolean placeBlock(BlockPos pos, IBlockState state);
 
+    /**
+     * 当前女仆是否处于 Home 模式
+     *
+     * @return boolean
+     */
     abstract public boolean isHome();
 
+    /**
+     * 当前女仆是否处于拾物模式
+     *
+     * @return boolean
+     */
     abstract public boolean isPickup();
 }

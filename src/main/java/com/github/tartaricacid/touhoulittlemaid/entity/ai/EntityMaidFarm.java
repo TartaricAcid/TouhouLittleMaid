@@ -1,14 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.item.ItemStack;
@@ -19,17 +14,29 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class EntityMaidFarm extends EntityAIMoveToBlock {
     private final AbstractEntityMaid maid;
     private final int searchLength;
-    private NonNullList<ItemStack> seeds = NonNullList.create();
-    private List<FarmHandler> handlers;
-    private FarmHandler activeHandler;
-    private ItemStack activeSeed = ItemStack.EMPTY;
     /**
-     * 0 => 收获, 1 => 重新种植, -1 => 无
+     * 当前可种植的种子列表
      */
-    private int currentTask;
+    private NonNullList<ItemStack> seeds = NonNullList.create();
+    /**
+     * 判定当前种植逻辑可用的 FarmHandler
+     */
+    private List<FarmHandler> handlers;
+    /**
+     * 当前执行的 FarmHandler
+     */
+    private FarmHandler activeHandler;
+    /**
+     * 当前执行种植的种子
+     */
+    private ItemStack activeSeed = ItemStack.EMPTY;
+    private TASK currentTask;
 
     public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn) {
         super(entityMaid, speedIn, 16);
@@ -49,15 +56,19 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             return false;
         }
 
+        // 随机设置 10 - 70 tick 的延时
         this.runDelay = 10 + this.maid.getRNG().nextInt(60);
-        this.currentTask = -1;
+        this.currentTask = TASK.NONE;
 
+        // 通过 LittleMaidAPI 获取开启了 canExecute 的 FarmHandlers
         handlers = LittleMaidAPI.getFarmHandlers().stream().filter(h -> h.canExecute(maid)).collect(Collectors.toList());
         if (handlers.isEmpty()) {
             return false;
         }
 
+        // 先清空种子列表
         seeds.clear();
+        // 而后通过 FarmHandlers 获取到玩家背包的内所有可以种植的种子
         IItemHandler inv = maid.getAvailableInv();
         for (int i = 0; i < inv.getSlots(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
@@ -65,31 +76,25 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
                 seeds.add(stack);
             }
         }
+
+        // 最后选取合适的种植方块
         return searchForDestination();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return activeHandler != null && this.currentTask >= 0 && !maid.isSitting() && super.shouldContinueExecuting();
+        return activeHandler != null && this.currentTask != TASK.NONE && !maid.isSitting() && super.shouldContinueExecuting();
     }
 
     @Override
     public void updateTask() {
         if (activeHandler == null) {
-            return; // 我也不知道为什么会这样
+            // 我也不知道为什么会这样
+            return;
         }
-        if (maid.getDistanceSqToCenter(this.destinationBlock.up()) > 1.5D) {
-            this.isAboveDestination = false;
-            ++this.timeoutCounter;
 
-            if (this.timeoutCounter % 40 == 0) {
-                maid.getNavigator().tryMoveToXYZ((this.destinationBlock.getX()) + 0.5D, this.destinationBlock.getY() + 1, (this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
-            }
-        }
-        else {
-            this.isAboveDestination = true;
-            --this.timeoutCounter;
-        }
+        // 先尝试移动到此处
+        tryMoveToDestination(1.2d, 40);
         boolean shouldLook = true;
 
         // 先判定女仆是否在耕地上方
@@ -97,70 +102,60 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             World world = this.maid.world;
             BlockPos pos = this.destinationBlock.up();
             IBlockState state = world.getBlockState(pos);
-            Block block = state.getBlock();
 
-            // 如果当前任务为收获，并且方块为作物而且长到最大阶段，破坏它
-            if (this.currentTask == 0 && activeHandler.canHarvest(maid, world, pos, state)) {
-                activeHandler.harvest(maid, world, pos, state);
-                // 手部动画
-                maid.swingArm(EnumHand.MAIN_HAND);
+            // 如果当前任务为收获，并且 canHarvest，执行收获逻辑
+            if (this.currentTask == TASK.HARVEST && activeHandler.canHarvest(maid, world, pos, state)) {
+                harvestLogic(world, pos, state);
             }
 
-            // 如果当前任务为种植，并且种植处为空气
-            else if (this.currentTask == 1 && activeHandler.canPlant(maid, world, pos, activeSeed)) {
-                shouldLook = false;
-                // 先检查种子是否还在女仆的背包中
-                IItemHandlerModifiable itemHandler = maid.getAvailableInv();
-                int slot = ItemFindUtil.findItem(itemHandler, s -> s == activeSeed);
-
-                // 尝试种植作物
-                if (slot >= 0) {
-                    ItemStack remain = activeHandler.plant(maid, world, pos, activeSeed);
-                    itemHandler.setStackInSlot(slot, remain);
-                    activeSeed = remain;
-                    // 手部动画
-                    maid.swingArm(EnumHand.MAIN_HAND);
-                    shouldLook = true;
-                }
+            // 如果当前任务为种植，并且种植处 canPlant，执行种植逻辑
+            else if (this.currentTask == TASK.PLANT && activeHandler.canPlant(maid, world, pos, activeSeed)) {
+                shouldLook = plantLogic(world, pos);
             }
 
-            this.currentTask = -1;
+            this.currentTask = TASK.NONE;
             this.runDelay = 2;
         }
+
+        // 女仆头部朝向逻辑
         if (shouldLook) {
             // 女仆盯着耕地
-            this.maid.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, this.destinationBlock.getZ() + 0.5D, 10.0F, this.maid.getVerticalFaceSpeed());
+            this.maid.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1,
+                    this.destinationBlock.getZ() + 0.5D, 10.0F, this.maid.getVerticalFaceSpeed());
         }
     }
 
-    // 目前的问题： 可可豆会挡住实体行走
+
     @Override
     protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
+        // FIXME: 2019/7/26 目前的问题： 可可豆会挡住实体行走
         pos = pos.up();
         IBlockState stateUp = worldIn.getBlockState(pos);
         IBlockState stateUp2 = worldIn.getBlockState(pos.up());
+
+        // 该位置不可到达时返回 false
         if (!stateUp2.getBlock().isPassable(worldIn, pos.up())) {
-            return false; // 该位置不可到达
+            return false;
         }
 
-        // 当前无其他任务，上面有可收获作物
-        if (this.currentTask == 0 || this.currentTask == -1) {
+        if (this.currentTask == TASK.HARVEST || this.currentTask == TASK.NONE) {
+            // 遍历 FarmHandler 找到能够处理此作物的 FarmHandler
             for (FarmHandler handler : handlers) {
                 if (handler.canHarvest(maid, worldIn, pos, stateUp)) {
                     activeHandler = handler;
-                    this.currentTask = 0;
+                    this.currentTask = TASK.HARVEST;
                     return true;
                 }
             }
         }
 
-        // 当前无其他任务，上面可种植
-        boolean taskIsOkay = this.currentTask == 1 || this.currentTask == -1;
+        boolean taskIsOkay = this.currentTask == TASK.PLANT || this.currentTask == TASK.NONE;
         if (taskIsOkay && !seeds.isEmpty()) {
+            // 遍历 FarmHandler 的 seeds 找到能够处理种植 FarmHandler 和 Seed
             for (FarmHandler handler : handlers) {
                 for (ItemStack seed : seeds) {
                     if (handler.isSeed(seed) && handler.canPlant(maid, worldIn, pos, seed)) {
-                        this.currentTask = 1;
+                        this.currentTask = TASK.PLANT;
                         activeHandler = handler;
                         activeSeed = seed;
                         return true;
@@ -194,5 +189,70 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         }
 
         return false;
+    }
+
+    /**
+     * 女仆尝试移动到此处
+     *
+     * @param minDistanceSq 最小移动距离
+     * @param interval      尝试移动的间隔时间
+     */
+    private void tryMoveToDestination(double minDistanceSq, int interval) {
+        if (maid.getDistanceSqToCenter(this.destinationBlock.up()) > Math.sqrt(minDistanceSq)) {
+            this.isAboveDestination = false;
+            ++this.timeoutCounter;
+
+            if (this.timeoutCounter % interval == 0) {
+                maid.getNavigator().tryMoveToXYZ((this.destinationBlock.getX()) + 0.5D, this.destinationBlock.getY() + 1, (this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
+            }
+        } else {
+            this.isAboveDestination = true;
+            --this.timeoutCounter;
+        }
+    }
+
+    /**
+     * 种植逻辑
+     *
+     * @return 女仆是否看向此方块
+     */
+    private boolean plantLogic(World world, BlockPos pos) {
+        boolean shouldLook = false;
+        // 先检查种子是否还在女仆的背包中
+        IItemHandlerModifiable itemHandler = maid.getAvailableInv();
+        int slot = ItemFindUtil.findItem(itemHandler, s -> s == activeSeed);
+
+        // 尝试种植作物
+        if (slot >= 0) {
+            ItemStack remain = activeHandler.plant(maid, world, pos, activeSeed);
+            itemHandler.setStackInSlot(slot, remain);
+            activeSeed = remain;
+            // 手部动画
+            maid.swingArm(EnumHand.MAIN_HAND);
+            shouldLook = true;
+        }
+
+        return shouldLook;
+    }
+
+    /**
+     * 收获逻辑
+     */
+    private void harvestLogic(World world, BlockPos pos, IBlockState state) {
+        activeHandler.harvest(maid, world, pos, state);
+        // 手部动画
+        maid.swingArm(EnumHand.MAIN_HAND);
+    }
+
+    /**
+     * 种植状态
+     */
+    private enum TASK {
+        // 种植状态
+        PLANT,
+        // 收获状态
+        HARVEST,
+        // 无状态
+        NONE
     }
 }
