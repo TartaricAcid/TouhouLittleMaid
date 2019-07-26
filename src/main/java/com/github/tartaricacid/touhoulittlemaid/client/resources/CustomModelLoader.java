@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -118,7 +120,7 @@ public final class CustomModelLoader {
 
             // 先判断是不是 1.10.0 版本基岩版模型文件
             if (!pojo.getFormatVersion().equals(OLD_BEDROCK_VERSION)) {
-                LOGGER.warn("{} model version is not 1.10.0", modelLocation);
+                LOGGER.warn(MARKER, "{} model version is not 1.10.0", modelLocation);
                 // TODO: 2019/7/26 添加对高版本基岩版模型的兼容
                 return null;
             }

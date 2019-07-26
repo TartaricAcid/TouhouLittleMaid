@@ -105,16 +105,14 @@ public class EntityModelJson extends ModelBase {
         // 获取女仆的模型版本号
         int format = ((EntityMaid) entityIn).getModelFormat();
         // 如果为 1，开启 cull 功能
-        if (format == 1) {
+        if (format >= 1) {
             GlStateManager.enableCull();
-            for (ModelRenderer model : shouldRender) {
-                model.render(scale);
-            }
+        }
+        for (ModelRenderer model : shouldRender) {
+            model.render(scale);
+        }
+        if (format >= 1) {
             GlStateManager.disableCull();
-        } else {
-            for (ModelRenderer model : shouldRender) {
-                model.render(scale);
-            }
         }
     }
 

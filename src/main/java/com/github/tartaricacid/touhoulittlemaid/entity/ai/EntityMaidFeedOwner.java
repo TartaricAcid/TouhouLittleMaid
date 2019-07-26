@@ -66,19 +66,13 @@ public class EntityMaidFeedOwner extends EntityAIBase {
                 }
             }
 
-            int slot;
-            FeedHandler handler;
-            if (!exactFoods.isEmpty()) {
-                // 获取随机成员
-                slot = exactFoods.keySet().stream().skip(entityMaid.getRNG().nextInt(exactFoods.size())).findFirst().get();
-                handler = exactFoods.get(slot);
-            } else if (!badFoods.isEmpty()) {
-                slot = badFoods.keySet().stream().skip(entityMaid.getRNG().nextInt(badFoods.size())).findFirst().get();
-                handler = badFoods.get(slot);
-            } else {
+            if (exactFoods.isEmpty() && badFoods.isEmpty()) {
                 return;
             }
-
+            Int2ObjectMap<FeedHandler> map = !exactFoods.isEmpty() ? exactFoods : badFoods;
+            // 获取随机成员
+            int slot = map.keySet().stream().skip(entityMaid.getRNG().nextInt(map.size())).findFirst().get();
+            FeedHandler handler = map.get(slot);
             ItemStack stack = inv.getStackInSlot(slot);
 
             entityMaid.getLookHelper().setLookPositionWithEntity(player, 10, 40);
