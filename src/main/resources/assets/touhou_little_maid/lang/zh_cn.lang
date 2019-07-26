@@ -168,5 +168,6 @@ subtitle.touhou_little_maid.maid.environment.night=女仆：傍晚
 subtitle.touhou_little_maid.other.credit=致谢：あみたろの声素材工房
 
 # HWYLA & The One Probe
-hwyla.touhou_little_maid.entity_maid.task=当前模式：%s
-top.touhou_little_maid.entity_maid.task=当前模式：
+hwyla_top.touhou_little_maid.entity_maid.task=当前模式：%s
+
+
