@@ -1,18 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.google.common.base.Optional;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author Snownee
@@ -21,9 +19,6 @@ import net.minecraft.util.ResourceLocation;
 public class LittleMaidAPI {
     private static ILittleMaidAPI INSTANCE = null;
 
-    /**
-     * 设置该类实例
-     */
     public static void setInstance(ILittleMaidAPI instance) {
         INSTANCE = instance;
     }
@@ -40,17 +35,11 @@ public class LittleMaidAPI {
         return INSTANCE.registerBauble(item, bauble);
     }
 
-    /**
-     * 通过物品对象来获取对应的饰品对象
-     */
     @Nullable
     public static IMaidBauble getBauble(ItemDefinition item) {
         return INSTANCE.getBauble(item);
     }
 
-    /**
-     * 通过 ItemStack 来获取饰品对象
-     */
     @Nullable
     public static IMaidBauble getBauble(ItemStack item) {
         return INSTANCE.getBauble(item);
@@ -67,30 +56,18 @@ public class LittleMaidAPI {
         return INSTANCE.getBaubleSlotInMaid(maid, bauble);
     }
 
-    /**
-     * 注册女仆模式
-     */
     public static void registerTask(IMaidTask task) {
         INSTANCE.registerTask(task);
     }
 
-    /**
-     * 通过 uid 找到女仆的模式
-     */
     public static Optional<IMaidTask> findTask(ResourceLocation uid) {
         return INSTANCE.findTask(uid);
     }
 
-    /**
-     * 获取女仆所有的模式
-     */
     public static List<IMaidTask> getTasks() {
         return INSTANCE.getTasks();
     }
 
-    /**
-     * 获取女仆的空闲模式
-     */
     public static IMaidTask getIdleTask() {
         return INSTANCE.getIdleTask();
     }
@@ -191,12 +168,32 @@ public class LittleMaidAPI {
          */
         IMaidTask getIdleTask();
 
+        /**
+         * 注册 FarmHandler
+         *
+         * @param handler FarmHandler
+         */
         void registerFarmHandler(FarmHandler handler);
 
+        /**
+         * 获取所有的 FarmHandler
+         *
+         * @return FarmHandler 列表
+         */
         List<FarmHandler> getFarmHandlers();
 
+        /**
+         * 注册 FeedHandler
+         *
+         * @param handler FeedHandler
+         */
         void registerFeedHandler(FeedHandler handler);
 
+        /**
+         * 获取所有的 FeedHandler
+         *
+         * @return FeedHandler 列表
+         */
         List<FeedHandler> getFeedHandlers();
     }
 }
