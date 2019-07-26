@@ -204,7 +204,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         yInRange = j < mouseY && mouseY < (j + 26);
         if (xInRange && yInRange) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.mode_switch",
-                    container.task.getTaskI18n()), mouseX, mouseY);
+                    I18n.format(container.task.getTranslationKey())), mouseX, mouseY);
         }
 
         // 绘制不同标签页的提示文字

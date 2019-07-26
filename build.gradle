@@ -63,7 +63,9 @@ dependencies {
     // HWYLA
     deobfCompile "mcp.mobius.waila:Hwyla:${hwyla_version}"
     // The One Probe
-    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:${top_version}"
+    deobfCompile("mcjty.theoneprobe:TheOneProbe-1.12:${top_version}") {
+        exclude group: 'cofh'
+    }
 
     // 想要了解更多，可以查询如下网址
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
