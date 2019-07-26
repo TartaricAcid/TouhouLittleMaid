@@ -1,15 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
-import net.minecraft.client.resources.I18n;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 /**
  * 女仆任务模式接口
@@ -74,8 +71,7 @@ public interface IMaidTask {
      *
      * @return 本地化的模式名称
      */
-    @SideOnly(Side.CLIENT)
-    default String getTaskI18n() {
-        return I18n.format("task." + getUid().getNamespace() + "." + getUid().getPath());
+    default String getTranslationKey() {
+        return "task." + getUid().getNamespace() + "." + getUid().getPath();
     }
 }
