@@ -1,8 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -37,4 +40,12 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @return IItemHandlerModifiable 对象
      */
     abstract public IItemHandlerModifiable getInv(MaidInventory type);
+
+    abstract public boolean destroyBlock(BlockPos pos);
+
+    abstract public boolean placeBlock(BlockPos pos, IBlockState state);
+
+    abstract public boolean isHome();
+
+    abstract public boolean isPickup();
 }

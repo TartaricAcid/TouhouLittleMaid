@@ -23,6 +23,6 @@ public class EntityMaidProvider implements IWailaEntityProvider {
             currenttip.add(I18n.format("hwyla_top.touhou_little_maid.entity_maid.task",
                     maid.getTask().getTaskI18n()));
         }
-        return currenttip;
+        return currentTip;
     }
 }

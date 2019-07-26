@@ -33,6 +33,7 @@ public final class CustomModelLoader {
     private static final Logger LOGGER = LogManager.getLogger(TouhouLittleMaid.MOD_ID + "/CustomModelLoader");
     private static final Gson GSON = new Gson();
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
+    private static final String OLD_BEDROCK_VERSION = "1.10.0";
 
     /**
      * 获取客户端代理类的模型包列表数据
@@ -115,8 +116,9 @@ public final class CustomModelLoader {
             IOUtils.closeQuietly(input);
 
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (!"1.10.0".equals(pojo.getFormatVersion())) {
+            if (!pojo.getFormatVersion().equals(OLD_BEDROCK_VERSION)) {
                 LOGGER.warn("{} model version is not 1.10.0", modelLocation);
+                // TODO: 2019/7/26 添加对高版本基岩版模型的兼容
                 return null;
             }
 
