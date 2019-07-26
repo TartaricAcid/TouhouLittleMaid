@@ -30,7 +30,8 @@ import java.util.List;
  **/
 @SideOnly(Side.CLIENT)
 public final class CustomModelLoader {
-    private static final Logger LOGGER = LogManager.getLogger(TouhouLittleMaid.MOD_ID + "/CustomModelLoader");
+    private static final Logger LOGGER = TouhouLittleMaid.LOGGER;
+    private static final Marker MARKER = MarkerManager.getMarker("ModelLoader");
     private static final Gson GSON = new Gson();
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
@@ -47,7 +48,7 @@ public final class CustomModelLoader {
      * 加载所有的模型包
      */
     private static void loadModelPack() {
-        LOGGER.info("Touhou little maid mod's model is loading...");
+        LOGGER.info(MARKER, "Touhou little maid mod's model is loading...");
 
         // 遍历所有的资源包，获取到模型文件
         for (String domain : manager.getResourceDomains()) {
@@ -69,13 +70,13 @@ public final class CustomModelLoader {
                     MODEL_PACK_LIST.add(pojo);
                 } else {
                     // 否则日志给出提示
-                    LOGGER.warn("{} file don't have pack_name field or model field", res);
+                    LOGGER.warn(MARKER, "{} file don't have pack_name field or model field", res);
                 }
             } catch (IOException ignore) {
                 // 忽略错误，因为资源域很多
             }
         }
-        LOGGER.info("Touhou little maid mod's model is loaded");
+        LOGGER.info(MARKER, "Touhou little maid mod's model is loaded");
     }
 
     /**
@@ -92,11 +93,11 @@ public final class CustomModelLoader {
                     // 塞入资源域到模型的映射列表
                     LOCATION_MODEL_MAP.put(model.getModel(), modelJson);
                     // 打印日志
-                    LOGGER.info("Loaded model: {}", model.getModel());
+                    LOGGER.info(MARKER, "Loaded model: {}", model.getModel());
                 }
             } else {
                 // 否则日志给出提示
-                LOGGER.warn("{} file don't have model field or name field or texture field", res);
+                LOGGER.warn(MARKER, "{} file don't have model field or name field or texture field", res);
             }
         }
     }
@@ -116,7 +117,7 @@ public final class CustomModelLoader {
 
             // 先判断是不是 1.10.0 版本基岩版模型文件
             if (!"1.10.0".equals(pojo.getFormatVersion())) {
-                LOGGER.warn("{} model version is not 1.10.0", modelLocation);
+                LOGGER.warn(MARKER, "{} model version is not 1.10.0", modelLocation);
                 return null;
             }
 
@@ -125,11 +126,11 @@ public final class CustomModelLoader {
                 return new EntityModelJson(pojo);
             } else {
                 // 否则日志给出提示
-                LOGGER.warn("{} model file don't have model field", modelLocation);
+                LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
             }
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
-            LOGGER.warn("Failed to load model: {}", modelLocation);
+            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
         }
 
         // 如果前面出了错，返回 Null
