@@ -31,7 +31,7 @@
         ]
       },
       {
-        "name": "hat",
+        "name": "helmet",
         "parent": "head",
         "pivot": [0, 18, 0],
         "cubes": [
@@ -109,7 +109,7 @@
       },
       {
         "name": "bone22",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [0, 18, 0],
         "rotation": [0, 0, 45],
         "cubes": [
@@ -122,7 +122,7 @@
       },
       {
         "name": "bone21",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [0, 18, 0],
         "rotation": [0, 0, -45],
         "cubes": [
@@ -135,7 +135,7 @@
       },
       {
         "name": "bone23",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [-4.5, 25, 0],
         "rotation": [0, 0, 60],
         "cubes": [
@@ -148,7 +148,7 @@
       },
       {
         "name": "bone24",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [-4.5, 25, 0],
         "rotation": [0, 0, 15],
         "cubes": [
@@ -161,7 +161,7 @@
       },
       {
         "name": "bone25",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [-4.5, 25, 0],
         "rotation": [0, 0, -15],
         "cubes": [
@@ -174,7 +174,7 @@
       },
       {
         "name": "bone26",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [-4.5, 25, 0],
         "rotation": [0, 0, -60],
         "cubes": [

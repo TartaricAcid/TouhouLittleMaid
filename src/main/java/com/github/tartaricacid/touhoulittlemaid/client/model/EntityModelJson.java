@@ -8,6 +8,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
@@ -101,8 +102,19 @@ public class EntityModelJson extends ModelBase {
 
     @Override
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        for (ModelRenderer model : shouldRender) {
-            model.render(scale);
+        // 获取女仆的模型版本号
+        int format = ((EntityMaid) entityIn).getModelFormat();
+        // 如果为 1，开启 cull 功能
+        if (format == 1) {
+            GlStateManager.enableCull();
+            for (ModelRenderer model : shouldRender) {
+                model.render(scale);
+            }
+            GlStateManager.disableCull();
+        } else {
+            for (ModelRenderer model : shouldRender) {
+                model.render(scale);
+            }
         }
     }
 
@@ -125,6 +137,11 @@ public class EntityModelJson extends ModelBase {
         // 浮动部件
         ModelRenderer sinFloat = modelMap.get("sinFloat");
         ModelRenderer cosFloat = modelMap.get("cosFloat");
+        // 护甲部分显示
+        ModelRenderer helmet = modelMap.get("helmet");
+        ModelRenderer chestPlate = modelMap.get("chestPlate");
+        ModelRenderer leggings = modelMap.get("leggings");
+        ModelRenderer boots = modelMap.get("boots");
 
         // 用于手部使用动画的数据
         float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
@@ -203,6 +220,21 @@ public class EntityModelJson extends ModelBase {
         }
 
         EntityMaid entityMaid = (EntityMaid) entityIn;
+
+        // 护甲部分渲染
+        if (helmet != null) {
+            helmet.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
+        }
+        if (chestPlate != null) {
+            chestPlate.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
+        if (leggings != null) {
+            leggings.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (boots != null) {
+            boots.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
+        }
+
         if (entityMaid.isRiding()) {
             if (legLeft != null) {
                 legLeft.rotateAngleX = -0.960f;

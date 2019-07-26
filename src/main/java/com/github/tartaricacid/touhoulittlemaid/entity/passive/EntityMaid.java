@@ -62,6 +62,7 @@ public class EntityMaid extends AbstractEntityMaid {
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
+
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> TASK = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
@@ -72,11 +73,16 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<String> MODEL_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<String> TEXTURE_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<String> MODEL_NAME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<Integer> MODEL_FORMAT = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
 
+    /**
+     * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
+     */
     public boolean guiOpening;
     /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
@@ -139,6 +145,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(MODEL_LOCATION, "touhou_little_maid:models/entity/hakurei_reimu.json");
         this.dataManager.register(TEXTURE_LOCATION, "touhou_little_maid:textures/entity/hakurei_reimu.png");
         this.dataManager.register(MODEL_NAME, "{model.vanilla_touhou_model.hakurei_reimu.name}");
+        this.dataManager.register(MODEL_FORMAT, 0);
     }
 
     @Override
@@ -238,6 +245,7 @@ public class EntityMaid extends AbstractEntityMaid {
             entityXPOrb.setDead();
             this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2F,
                     (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F);
+            // FIXME: 2019/7/26 拾起物品的声音播放还是存在问题，应该用计数延时，而不是概率触发
             if (rand.nextInt(3) == 1) {
                 this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
             }
@@ -536,6 +544,7 @@ public class EntityMaid extends AbstractEntityMaid {
             this.setModelName(model.getName());
             this.setModelLocation(model.getModel());
             this.setTextureLocation(model.getTexture());
+            this.setModelFormat(model.getFormat());
         }
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -575,6 +584,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MODEL_NAME.getName())) {
             setModelName(compound.getString(NBT.MODEL_NAME.getName()));
         }
+        if (compound.hasKey(NBT.MODEL_FORMAT.getName())) {
+            setModelFormat(compound.getInteger(NBT.MODEL_FORMAT.getName()));
+        }
     }
 
     @Override
@@ -590,6 +602,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setString(NBT.MODEL_LOCATION.getName(), getModelLocation());
         compound.setString(NBT.TEXTURE_LOCATION.getName(), getTextureLocation());
         compound.setString(NBT.MODEL_NAME.getName(), getModelName());
+        compound.setInteger(NBT.MODEL_FORMAT.getName(), getModelFormat());
     }
 
     @Override
@@ -762,6 +775,14 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(MODEL_NAME, name);
     }
 
+    public void setModelFormat(int format) {
+        this.dataManager.set(MODEL_FORMAT, format);
+    }
+
+    public int getModelFormat() {
+        return this.dataManager.get(MODEL_FORMAT);
+    }
+
     public enum NBT {
         // 女仆的物品栏
         MAID_INVENTORY("MaidInventory"),
@@ -784,7 +805,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 模型名称
         MODEL_NAME("ModelName"),
         // 女仆 NBT 数据
-        MAID_DATA("MaidData");
+        MAID_DATA("MaidData"),
+        // 女仆模型版本
+        MODEL_FORMAT("ModelFormat");
 
         private String name;
 
