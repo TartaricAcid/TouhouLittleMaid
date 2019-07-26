@@ -7,13 +7,14 @@ import mcp.mobius.waila.api.IWailaRegistrar;
 import mcp.mobius.waila.api.WailaPlugin;
 
 /**
- * HWYLA 模组的兼容部分
- *
  * @author TartaricAcid
  * @date 2019/7/25 18:16
  **/
 @WailaPlugin(TouhouLittleMaid.MOD_ID)
 public class WailaInfo implements IWailaPlugin {
+    /**
+     * 按照接口说明，必须存在一个默认的构造器
+     */
     public WailaInfo() {
     }
 

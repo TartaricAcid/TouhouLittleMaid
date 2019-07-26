@@ -19,10 +19,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -273,9 +273,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.drawItemStack(container.task.getIcon(), i - 20, j + 5, "");
 
         // 绘制女仆样子
-        // 首先同步手持物品
-        for (EnumHand hand : EnumHand.values()) {
-            renderingMaid.setHeldItem(hand, maid.getHeldItem(hand));
+        // 首先同步手持和护甲物品
+        for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+            renderingMaid.setItemStackToSlot(slot, maid.getItemStackFromSlot(slot));
         }
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 28,
                 (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, renderingMaid);

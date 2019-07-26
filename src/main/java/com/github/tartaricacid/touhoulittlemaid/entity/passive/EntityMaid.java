@@ -17,6 +17,8 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -25,6 +27,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityParrot;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -49,6 +52,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
@@ -56,12 +60,16 @@ import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
     public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow);
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
+
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> TASK = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
@@ -72,11 +80,16 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<String> MODEL_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<String> TEXTURE_LOCATION = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<String> MODEL_NAME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<Integer> MODEL_FORMAT = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
 
+    /**
+     * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
+     */
     public boolean guiOpening;
     /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
@@ -139,6 +152,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(MODEL_LOCATION, "touhou_little_maid:models/entity/hakurei_reimu.json");
         this.dataManager.register(TEXTURE_LOCATION, "touhou_little_maid:textures/entity/hakurei_reimu.png");
         this.dataManager.register(MODEL_NAME, "{model.vanilla_touhou_model.hakurei_reimu.name}");
+        this.dataManager.register(MODEL_FORMAT, 0);
     }
 
     @Override
@@ -173,7 +187,7 @@ public class EntityMaid extends AbstractEntityMaid {
             for (Entity entityPickup : entityList) {
                 // 如果是物品
                 if (entityPickup instanceof EntityItem) {
-                    pickupItem((EntityItem) entityPickup);
+                    pickupItem((EntityItem) entityPickup, false);
                 }
                 // 如果是经验
                 if (entityPickup instanceof EntityXPOrb) {
@@ -181,7 +195,7 @@ public class EntityMaid extends AbstractEntityMaid {
                 }
                 // 如果是箭
                 if (entityPickup instanceof EntityArrow) {
-                    pickupArrow((EntityArrow) entityPickup);
+                    pickupArrow((EntityArrow) entityPickup, false);
                 }
             }
         }
@@ -190,31 +204,39 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 捡起物品部分的逻辑
      */
-    private void pickupItem(EntityItem entityItem) {
+    public boolean pickupItem(EntityItem entityItem, boolean simulate) {
         // TODO: 当物品 pickupDelay 较小时等待
         if (!world.isRemote && entityItem.isEntityAlive() && !entityItem.cannotPickup()) {
             // 获取实体的物品堆，遍历尝试塞入背包
             ItemStack itemstack = entityItem.getItem();
             // 获取数量，为后面方面用
             int count = itemstack.getCount();
-            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, false);
-            // 如果遍历塞完后发现为空了
-            if (itemstack.isEmpty()) {
+            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, simulate);
+            if (count == itemstack.getCount()) {
+                return false;
+            }
+            if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画
-                this.onItemPickup(entityItem, count);
-                // 清除这个实体
-                entityItem.setDead();
+                this.onItemPickup(entityItem, count - itemstack.getCount());
                 // 音效播放
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 if (rand.nextInt(3) == 1) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
                 }
-            } else {
-                // 将物品数量同步到客户端
-                entityItem.setItem(itemstack);
+                // 如果遍历塞完后发现为空了
+                if (itemstack.isEmpty()) {
+                    // 清除这个实体
+                    entityItem.setDead();
+                } else {
+                    // 将物品数量同步到客户端
+                    entityItem.setItem(itemstack);
+                }
             }
+
+            return true;
         }
+        return false;
     }
 
     /**
@@ -238,6 +260,7 @@ public class EntityMaid extends AbstractEntityMaid {
             entityXPOrb.setDead();
             this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2F,
                     (world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F);
+            // FIXME: 2019/7/26 拾起物品的声音播放还是存在问题，应该用计数延时，而不是概率触发
             if (rand.nextInt(3) == 1) {
                 this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
             }
@@ -247,10 +270,41 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 捡起箭部分的逻辑
      */
-    private void pickupArrow(EntityArrow entityArrow) {
-        // TODO
+    public boolean pickupArrow(EntityArrow arrow, boolean simulate) {
+        if (!this.world.isRemote && arrow.inGround && arrow.arrowShake <= 0)
+        {
+            if (arrow.pickupStatus != EntityArrow.PickupStatus.ALLOWED)
+            {
+                return false;
+            }
+
+            ItemStack stack = getArrowFromEntity(arrow);
+            if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(), stack, simulate).isEmpty())
+            {
+                return false;
+            }
+
+            if (!simulate) {
+                this.onItemPickup(arrow, 1);
+                arrow.setDead();
+            }
+            return true;
+        }
+        return false;
     }
 
+    public ItemStack getArrowFromEntity(EntityArrow entity)
+    {
+        Method method = ReflectionHelper.findMethod(entity.getClass(), "getArrowStack", "func_184550_j");
+        method.setAccessible(true);
+        try {
+            return (ItemStack) method.invoke(ItemStack.class);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            return new ItemStack(Items.ARROW);
+        }
+    }
+    
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         task.onRangedAttack(this, target, distanceFactor);
@@ -536,6 +590,7 @@ public class EntityMaid extends AbstractEntityMaid {
             this.setModelName(model.getName());
             this.setModelLocation(model.getModel());
             this.setTextureLocation(model.getTexture());
+            this.setModelFormat(model.getFormat());
         }
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -575,6 +630,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MODEL_NAME.getName())) {
             setModelName(compound.getString(NBT.MODEL_NAME.getName()));
         }
+        if (compound.hasKey(NBT.MODEL_FORMAT.getName())) {
+            setModelFormat(compound.getInteger(NBT.MODEL_FORMAT.getName()));
+        }
     }
 
     @Override
@@ -590,6 +648,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setString(NBT.MODEL_LOCATION.getName(), getModelLocation());
         compound.setString(NBT.TEXTURE_LOCATION.getName(), getTextureLocation());
         compound.setString(NBT.MODEL_NAME.getName(), getModelName());
+        compound.setInteger(NBT.MODEL_FORMAT.getName(), getModelFormat());
     }
 
     @Override
@@ -762,6 +821,14 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(MODEL_NAME, name);
     }
 
+    public void setModelFormat(int format) {
+        this.dataManager.set(MODEL_FORMAT, format);
+    }
+
+    public int getModelFormat() {
+        return this.dataManager.get(MODEL_FORMAT);
+    }
+
     public enum NBT {
         // 女仆的物品栏
         MAID_INVENTORY("MaidInventory"),
@@ -784,7 +851,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 模型名称
         MODEL_NAME("ModelName"),
         // 女仆 NBT 数据
-        MAID_DATA("MaidData");
+        MAID_DATA("MaidData"),
+        // 女仆模型版本
+        MODEL_FORMAT("ModelFormat");
 
         private String name;
 
@@ -800,5 +869,15 @@ public class EntityMaid extends AbstractEntityMaid {
         public String getName() {
             return name;
         }
+    }
+
+    @Override
+    public boolean destroyBlock(BlockPos pos) {
+        return world.destroyBlock(pos, true);
+    }
+
+    @Override
+    public boolean placeBlock(BlockPos pos, IBlockState state) {
+        return world.setBlockState(pos, state);
     }
 }
