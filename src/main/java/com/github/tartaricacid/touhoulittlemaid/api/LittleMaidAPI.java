@@ -1,14 +1,18 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
-import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
-import com.google.common.base.Optional;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
+
+import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
+import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
+import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
+import com.google.common.base.Optional;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author Snownee
@@ -71,7 +75,7 @@ public class LittleMaidAPI {
     }
 
     /**
-     * 通过 uid 找到女仆的模式，可能为 null
+     * 通过 uid 找到女仆的模式
      */
     public static Optional<IMaidTask> findTask(ResourceLocation uid) {
         return INSTANCE.findTask(uid);
@@ -89,6 +93,22 @@ public class LittleMaidAPI {
      */
     public static IMaidTask getIdleTask() {
         return INSTANCE.getIdleTask();
+    }
+
+    public static void registerFarmHandler(FarmHandler handler) {
+        INSTANCE.registerFarmHandler(handler);
+    }
+
+    public static List<FarmHandler> getFarmHandlers() {
+        return INSTANCE.getFarmHandlers();
+    }
+
+    public static void registerFeedHandler(FeedHandler handler) {
+        INSTANCE.registerFeedHandler(handler);
+    }
+
+    public static List<FeedHandler> getFeedHandlers() {
+        return INSTANCE.getFeedHandlers();
     }
 
     /**
@@ -170,5 +190,13 @@ public class LittleMaidAPI {
          * @return 空闲模式
          */
         IMaidTask getIdleTask();
+
+        void registerFarmHandler(FarmHandler handler);
+
+        List<FarmHandler> getFarmHandlers();
+
+        void registerFeedHandler(FeedHandler handler);
+
+        List<FeedHandler> getFeedHandlers();
     }
 }
