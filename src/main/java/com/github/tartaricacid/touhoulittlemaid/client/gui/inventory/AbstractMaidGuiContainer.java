@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI;
@@ -42,6 +43,7 @@ import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GU
  */
 @SideOnly(Side.CLIENT)
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
+    protected static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     protected MaidMainContainer container;
     EntityMaid maid;
