@@ -90,6 +90,16 @@
       }
     ]
   },
+  "maid.mode.feed_animal": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.feed_animal",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
   "maid.ai.find_target": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.find_target",

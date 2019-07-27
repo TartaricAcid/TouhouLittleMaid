@@ -457,7 +457,7 @@ public class EntityMaid extends AbstractEntityMaid {
         if (hand == EnumHand.MAIN_HAND) {
             ItemStack itemstack = player.getHeldItem(hand);
             // 利用短路原理，逐个触发对应的交互事件
-            return tamedMaid(itemstack, player) || writeHomePos(itemstack, player) || openGuiAndSitting(itemstack, player);
+            return tamedMaid(itemstack, player) || writeHomePos(itemstack, player) || openGuiOrSittingOrDismount(itemstack, player);
         }
         return false;
     }
@@ -513,21 +513,28 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     /**
-     * 打开 GUI 或者切换待命模式
+     * 打开 GUI 或者切换待命模式或解除骑乘状态
      *
      * @return 该逻辑是否成功应用
      */
-    private boolean openGuiAndSitting(ItemStack itemstack, EntityPlayer player) {
+    private boolean openGuiOrSittingOrDismount(ItemStack itemstack, EntityPlayer player) {
         if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
             // 先清除寻路逻辑
             this.getNavigator().clearPath();
             // 如果玩家为潜行状态，那么切换待命
             if (player.isSneaking()) {
-                if (this.isSitting()) {
-                    this.setSitting(false);
-                } else {
-                    this.setRevengeTarget(null);
-                    this.setSitting(true);
+                // 骑乘扫帚情况下，取消骑乘状态
+                if (this.getRidingEntity() != null) {
+                    this.dismountRidingEntity();
+                }
+                // 否则切换待命状态
+                else {
+                    if (this.isSitting()) {
+                        this.setSitting(false);
+                    } else {
+                        this.setRevengeTarget(null);
+                        this.setSitting(true);
+                    }
                 }
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);

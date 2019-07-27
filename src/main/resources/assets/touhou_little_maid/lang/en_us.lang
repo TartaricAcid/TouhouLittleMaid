@@ -56,6 +56,7 @@ task.touhou_little_maid.farm=Farm
 task.touhou_little_maid.feed=Feed
 task.touhou_little_maid.shears=Shears
 task.touhou_little_maid.torch=Torch
+task.touhou_little_maid.feed_animal=Feed Animal
 
 # GUI
 gui.touhou_little_maid.button.mode_switch=This Maid Is In %s Mode.
@@ -162,6 +163,7 @@ subtitle.touhou_little_maid.maid.mode.farm=Maid Farm Sound
 subtitle.touhou_little_maid.maid.mode.feed=Maid Feed Sound
 subtitle.touhou_little_maid.maid.mode.shears=Maid Shears Sound
 subtitle.touhou_little_maid.maid.mode.torch=Maid Torch Sound
+subtitle.touhou_little_maid.maid.mode.feed_animal=Maid Feed Animal Sound
 subtitle.touhou_little_maid.maid.ai.find_target=Maid Find Target Sound
 subtitle.touhou_little_maid.maid.ai.hurt=Maid Hurt Sound
 subtitle.touhou_little_maid.maid.ai.hurt_fire=Maid Fire Hurt Sound

@@ -5,6 +5,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
  * @date 2019/7/5 22:38
  **/
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -14,12 +15,14 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class EntityMarisaBroom extends EntityLiving {
     private boolean keyForward = false;
@@ -52,6 +55,45 @@ public class EntityMarisaBroom extends EntityLiving {
     @SideOnly(Side.CLIENT)
     private static boolean keyRight() {
         return Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown();
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        applyMaidRiding();
+        applyMaidRotation();
+    }
+
+    /**
+     * 将贴近的女仆坐上去
+     */
+    private void applyMaidRiding() {
+        // 取自原版船部分逻辑
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2, 0.1, 0.2),
+                EntitySelectors.getTeamCollisionPredicate(this));
+
+        // 遍历进行乘坐判定
+        for (Entity entity : list) {
+            // 如果选择的实体不是已经坐上去的乘客
+            if (!entity.isPassenger(this)) {
+                // 服务端，没有实体坐上去，扫帚也没有坐在别的实体上，而且尝试坐上去的实体时女仆
+                if (!world.isRemote && getPassengers().isEmpty() && !entity.isRiding() && entity instanceof EntityMaid) {
+                    entity.startRiding(this);
+                }
+            }
+        }
+    }
+
+    /**
+     * 与旋转有关系的一堆东西，用来控制扫帚朝向
+     */
+    private void applyMaidRotation() {
+        if (getControllingPassenger() instanceof EntityMaid) {
+            EntityMaid maid = (EntityMaid) getControllingPassenger();
+            this.rotationYawHead = this.renderYawOffset = this.prevRotationYaw = this.rotationYaw = maid.rotationYaw;
+            this.rotationPitch = maid.rotationPitch;
+            this.setRotation(this.rotationYaw, this.rotationPitch);
+        }
     }
 
     @Override
@@ -110,11 +152,6 @@ public class EntityMarisaBroom extends EntityLiving {
     }
 
     @Override
-    public void dismountRidingEntity() {
-        super.dismountRidingEntity();
-    }
-
-    @Override
     protected boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (!player.isSneaking() && !this.world.isRemote && !this.isBeingRidden()) {
             player.startRiding(this);
@@ -130,7 +167,7 @@ public class EntityMarisaBroom extends EntityLiving {
 
     @Override
     public double getMountedYOffset() {
-        return 0.05d;
+        return 0.1d;
     }
 
     @Override
