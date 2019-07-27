@@ -159,7 +159,7 @@ public class MaidSkinGui extends GuiScreen {
         // 开始绘制实体图案，并往上添加对应模型和材质
         for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
             EntityMaid maid = new EntityMaid(Minecraft.getMinecraft().world);
-            maid.setModel(modelItem.getModel().toString());
+            maid.setModel(modelItem.getLocation().toString());
             GuiInventory.drawEntityOnScreen(middleX + x, middleY + y, 12, -25, -20, maid);
 
             // 往右绘制
@@ -314,7 +314,7 @@ public class MaidSkinGui extends GuiScreen {
             // 其他按键进行模型更改的发包
             default:
                 CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),
-                        BUTTON_MODEL_MAP.get(button.id).getModel()));
+                        BUTTON_MODEL_MAP.get(button.id).getLocation()));
         }
     }
 
