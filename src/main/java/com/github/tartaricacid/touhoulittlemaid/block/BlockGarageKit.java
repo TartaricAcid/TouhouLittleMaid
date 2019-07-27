@@ -109,10 +109,6 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         String id = getEntityId(stack);
         tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.id.desc",
                 I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(id)) + ".name")));
-
-        if (stack.hasTagCompound()) {
-            tooltip.add(stack.getTagCompound().toString());
-        }
         if (id.equals("touhou_little_maid:entity.passive.maid")) {
             ModelItem modelItem = ClientProxy.LOCATION_INFO_MAP.get(getModel(stack));
             if (modelItem != null) {
