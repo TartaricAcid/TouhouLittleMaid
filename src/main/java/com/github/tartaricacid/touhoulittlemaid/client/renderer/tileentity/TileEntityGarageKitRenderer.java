@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,6 +39,7 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
                 }
             });
             entity.setWorld(getWorld());
+            entity.readFromNBT(te.getEntityData());
         } catch (ExecutionException e) {
             return;
         }
@@ -69,7 +71,7 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
                 break;
         }
 
-        if (entity instanceof EntityMaid) {
+        if (te.getModel() != null && entity instanceof EntityMaid) {
             ((EntityMaid) entity).setModel(te.getModel());
         }
 

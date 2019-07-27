@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
+import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -51,6 +52,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                     }
                 });
                 entity.setWorld(world);
+                entity.readFromNBT(BlockGarageKit.getEntityData(itemStackIn));
             } catch (ExecutionException e) {
                 return;
             }
