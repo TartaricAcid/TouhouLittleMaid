@@ -47,7 +47,7 @@ public class CommonProxy {
      * <p>
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
-    public static Map<String, String> ID_NAME_MAP = Maps.newHashMap();
+    public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
 
     /**
      * 通过输入流读取 CustomModelPackPOJO 对象，并进行二次修饰
@@ -113,15 +113,14 @@ public class CommonProxy {
     /**
      * 初始化默认的模型列表
      */
-    private void initModelList() {
-        ID_NAME_MAP.clear();
+    protected void initModelList() {
+        VANILLA_ID_NAME_MAP.clear();
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/maid_model.json");
         if (input != null) {
             try {
                 // 将其转换为 pojo 对象
                 CustomModelPackPOJO pojo = readModelPack(input);
-                // TODO: 客户端重载
-                pojo.getModelList().forEach(m -> ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));
+                pojo.getModelList().forEach(m -> VANILLA_ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));
             } catch (JsonSyntaxException e) {
                 TouhouLittleMaid.LOGGER.warn("Fail to parse model pack in domain {}", TouhouLittleMaid.MOD_ID);
             }

@@ -71,8 +71,9 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        for (String key : CommonProxy.ID_NAME_MAP.keySet()) {
+        for (String key : ClientProxy.ID_INFO_MAP.keySet()) {
             items.add(getItemStackWithData(DEFAULT_ENTITY_ID, key, DEFAULT_DATA));
         }
     }
