@@ -13,7 +13,9 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -562,8 +564,14 @@ public class EntityMaid extends AbstractEntityMaid {
             return this.getCustomNameTag();
         } else {
             String key = getModelId();
-            if (CommonProxy.ID_NAME_MAP.containsKey(key)) {
-                return CommonProxy.ID_NAME_MAP.get(key);
+            if (world.isRemote) {
+                if (ClientProxy.ID_INFO_MAP.containsKey(key)) {
+                    return ParseI18n.parse(ClientProxy.ID_INFO_MAP.get(key).getName());
+                }
+            } else {
+                if (CommonProxy.VANILLA_ID_NAME_MAP.containsKey(key)) {
+                    return CommonProxy.VANILLA_ID_NAME_MAP.get(key);
+                }
             }
             return super.getName();
         }
@@ -575,9 +583,9 @@ public class EntityMaid extends AbstractEntityMaid {
     @Nullable
     @Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        if (!CommonProxy.ID_NAME_MAP.isEmpty()) {
+        if (!CommonProxy.VANILLA_ID_NAME_MAP.isEmpty()) {
             // 随机获取某个模型对象
-            String key = CommonProxy.ID_NAME_MAP.keySet().stream().skip(rand.nextInt(CommonProxy.ID_NAME_MAP.size())).findFirst().get();
+            String key = CommonProxy.VANILLA_ID_NAME_MAP.keySet().stream().skip(rand.nextInt(CommonProxy.VANILLA_ID_NAME_MAP.size())).findFirst().get();
             // 应用各种数据
             this.setModelId(key);
         }
