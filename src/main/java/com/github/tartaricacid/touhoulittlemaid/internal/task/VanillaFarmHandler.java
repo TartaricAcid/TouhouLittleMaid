@@ -68,6 +68,11 @@ public class VanillaFarmHandler implements FarmHandler {
             return true;
         }
 
+        // 甘蔗：下方还是甘蔗，再下方能够维持甘蔗
+        if (block == Blocks.REEDS && canReedHarvest(world.getBlockState(pos.down()).getBlock(), world.getBlockState(pos.down(2)).getBlock())) {
+            return true;
+        }
+
         // 地狱疣
         return block == Blocks.NETHER_WART && state.getValue(BlockNetherWart.AGE) >= 3;
     }
@@ -133,5 +138,19 @@ public class VanillaFarmHandler implements FarmHandler {
 
         // 返回扣除后的物品对象
         return seed;
+    }
+
+    /**
+     * 收获条件：下方还是甘蔗，再下方是甘蔗生长的方块。
+     * 不用原版的判定方法，因为原版判定条件多了下方是甘蔗这种情况，而收获时不需要这种判断。
+     * 当然也勿需判定其周围是否有水，反正我只管收获，不管种植的
+     *
+     * @param blockDown  下方的方块
+     * @param blockDown2 下方两格的方块
+     */
+    private boolean canReedHarvest(Block blockDown, Block blockDown2) {
+        boolean blockDownIsOkay = blockDown == Blocks.REEDS;
+        boolean blockDown2IsOkay = blockDown2 == Blocks.GRASS || blockDown2 == Blocks.DIRT || blockDown2 == Blocks.SAND;
+        return blockDownIsOkay && blockDown2IsOkay;
     }
 }

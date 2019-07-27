@@ -82,6 +82,15 @@ public class EntityMaid extends AbstractEntityMaid {
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
 
     /**
+     * 拾起物品声音的延时计数器
+     */
+    private static int pickupSoundCount = 60;
+    /**
+     * 玩家伤害女仆后的声音延时计数器
+     */
+    private static int playerHurtSoundCount = 100;
+
+    /**
      * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
      */
     public boolean guiOpening;
@@ -159,8 +168,48 @@ public class EntityMaid extends AbstractEntityMaid {
             b.onTick(this, s);
             return false;
         });
+        // 更新手部使用
         this.updateArmSwingProgress();
+        // 计数器自减
+        if (pickupSoundCount > 0) {
+            pickupSoundCount--;
+        }
+        if (playerHurtSoundCount > 0) {
+            playerHurtSoundCount--;
+        }
+        // 随机回血
+        this.randomRestoreHealth();
         super.onLivingUpdate();
+    }
+
+    /**
+     * 随机拥有小概率回血
+     * <p>
+     * 每 tick 有 0.25% 概率回血，也就是平均 20 秒尝试回血一次
+     */
+    private void randomRestoreHealth() {
+        if (this.getHealth() <= this.getMaxHealth() - 1 && rand.nextFloat() < 0.0025) {
+            this.heal(1);
+            this.spawnRestoreHealthParticle(rand.nextInt(3) + 7);
+        }
+    }
+
+    /**
+     * 来自原版爆炸粒子效果的修改
+     */
+    private void spawnRestoreHealthParticle(int particleCount) {
+        if (this.world.isRemote) {
+            for (int i = 0; i < particleCount; ++i) {
+                double d0 = this.rand.nextGaussian() * 0.02D;
+                double d1 = this.rand.nextGaussian() * 0.02D;
+                double d2 = this.rand.nextGaussian() * 0.02D;
+                this.world.spawnParticle(EnumParticleTypes.SPELL,
+                        this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width - d0 * 10.0D,
+                        this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D,
+                        this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width - d2 * 10.0D,
+                        d0, d1, d2);
+            }
+        }
     }
 
     @Override
@@ -211,9 +260,9 @@ public class EntityMaid extends AbstractEntityMaid {
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(entityItem, count - itemstack.getCount());
-                // FIXME: 2019/7/26 拾起物品的声音播放还是存在问题，应该用计数延时，而不是概率触发
-                if (rand.nextInt(3) == 1) {
+                if (pickupSoundCount == 0) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                    pickupSoundCount = 60;
                 }
                 // 如果遍历塞完后发现为空了
                 if (itemstack.isEmpty()) {
@@ -237,6 +286,10 @@ public class EntityMaid extends AbstractEntityMaid {
         if (!this.world.isRemote && entityXPOrb.isEntityAlive() && entityXPOrb.delayBeforeCanPickup == 0) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.onItemPickup(entityXPOrb, 1);
+            if (pickupSoundCount == 0) {
+                this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                pickupSoundCount = 60;
+            }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
             ItemStack itemstack = EnchantmentHelper.getEnchantedItem(Enchantments.MENDING, this);
@@ -249,10 +302,6 @@ public class EntityMaid extends AbstractEntityMaid {
                 this.addExp(entityXPOrb.xpValue);
             }
             entityXPOrb.setDead();
-            // FIXME: 2019/7/26 拾起物品的声音播放还是存在问题，应该用计数延时，而不是概率触发
-            if (rand.nextInt(3) == 1) {
-                this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-            }
         }
     }
 
@@ -276,6 +325,10 @@ public class EntityMaid extends AbstractEntityMaid {
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(arrow, 1);
+                if (pickupSoundCount == 0) {
+                    this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                    pickupSoundCount = 60;
+                }
                 arrow.setDead();
             }
             return true;
@@ -299,19 +352,6 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         task.onRangedAttack(this, target, distanceFactor);
-    }
-
-    /**
-     * 指定物品类型能否插入女仆背包
-     */
-    public boolean canInsertSlot(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return false;
-        }
-        int before = stack.getCount();
-        int after = ItemHandlerHelper.insertItemStacked(mainInv, stack, true).getCount();
-        // 模拟塞入后数值变小了，那就说明能塞入
-        return after < before;
     }
 
     @Override
@@ -653,7 +693,12 @@ public class EntityMaid extends AbstractEntityMaid {
         if (damageSourceIn.isFireDamage()) {
             return MaidSoundEvent.MAID_HURT_FIRE;
         } else if (damageSourceIn.getTrueSource() instanceof EntityPlayer) {
-            return MaidSoundEvent.MAID_PLAYER;
+            if (playerHurtSoundCount == 0) {
+                playerHurtSoundCount = 100;
+                return MaidSoundEvent.MAID_PLAYER;
+            } else {
+                return null;
+            }
         } else {
             return MaidSoundEvent.MAID_HURT;
         }
@@ -678,8 +723,6 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public IItemHandlerModifiable getInv(MaidInventory type) {
         switch (type) {
-            default:
-                return mainInv;
             case MAIN:
                 return mainInv;
             case HAND:
@@ -688,6 +731,8 @@ public class EntityMaid extends AbstractEntityMaid {
                 return baubleInv;
             case ARMOR:
                 return armorInvWrapper;
+            default:
+                return mainInv;
         }
     }
 

@@ -94,7 +94,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         }
 
         // 先尝试移动到此处
-        tryMoveToDestination(1.2d, 40);
+        tryMoveToDestination(9.0d, 40);
         boolean shouldLook = true;
 
         // 先判定女仆是否在耕地上方
