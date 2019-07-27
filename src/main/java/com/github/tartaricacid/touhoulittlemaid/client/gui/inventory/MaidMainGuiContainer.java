@@ -20,9 +20,9 @@ public class MaidMainGuiContainer extends AbstractMaidGuiContainer {
         int i = this.guiLeft;
         int j = this.guiTop;
         // 绘制文字
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.healthy", maid.getHealth(), maid.getMaxHealth()), i + 82, j + 10, 0x555555, false);
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.armor", maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue()), i + 82, j + 22, 0x555555, false);
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.attack", maid.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()), i + 82, j + 34, 0x555555, false);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.healthy", DECIMAL_FORMAT.format(maid.getHealth()), DECIMAL_FORMAT.format(maid.getMaxHealth())), i + 82, j + 10, 0x555555, false);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.armor", DECIMAL_FORMAT.format(maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue())), i + 82, j + 22, 0x555555, false);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.attack", DECIMAL_FORMAT.format(maid.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())), i + 82, j + 34, 0x555555, false);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.experience", maid.getExp()), i + 82, j + 46, 0x555555, false);
     }
 
