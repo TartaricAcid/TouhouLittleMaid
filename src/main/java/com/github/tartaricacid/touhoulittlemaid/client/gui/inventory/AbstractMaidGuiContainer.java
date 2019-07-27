@@ -33,6 +33,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI;
+
 /**
  * 女仆主 GUI 界面的集合，其他界面在此基础上拓展得到
  *
@@ -264,13 +266,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.drawTexturedModalRect(i - 28, j, 0, 167, 31, 26);
 
         // 绘制模式图标
-        this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 6, j - 19, "");
-        this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19, "");
-        this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 62, j - 19, "");
-        this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19, "");
+        this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 6, j - 19);
+        this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19);
+        this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 62, j - 19);
+        this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19);
 
         // 绘制模式图标
-        this.drawItemStack(container.task.getIcon(), i - 20, j + 5, "");
+        this.drawItemStack(container.task.getIcon(), i - 20, j + 5);
 
         // 绘制女仆样子
         // 首先同步手持和护甲物品
@@ -283,10 +285,8 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
     /**
      * 通过 ItemStack 绘制对应图标
-     *
-     * @param altText 图标右下角的文字
      */
-    private void drawItemStack(ItemStack stack, int x, int y, String altText) {
+    private void drawItemStack(ItemStack stack, int x, int y) {
         RenderHelper.enableGUIStandardItemLighting();
 
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
@@ -297,7 +297,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             font = fontRenderer;
         }
         this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
+        this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, "");
         this.zLevel = 0.0F;
         this.itemRender.zLevel = 0.0F;
 
@@ -309,26 +309,26 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
      */
     public enum BUTTON {
         // 拾物模式按钮
-        PICKUP(-1),
+        PICKUP(GUI.NONE.getId()),
         // 主界面按钮
-        MAIN(1),
+        MAIN(GUI.MAIN.getId()),
         // 主物品栏按钮
-        INVENTORY(2),
+        INVENTORY(GUI.INVENTORY.getId()),
         // 饰品栏按钮
-        BAUBLE(3),
+        BAUBLE(GUI.BAUBLE.getId()),
         // 模式切换按钮
-        TASK_SWITCH(-1),
+        TASK_SWITCH(GUI.NONE.getId()),
         // HOME 模式切换按钮
-        HOME(-1),
+        HOME(GUI.NONE.getId()),
         // 女仆模型皮肤按钮
-        SKIN(-1),
+        SKIN(GUI.NONE.getId()),
         // 声音素材致谢
-        SOUND_CREDIT(-1);
+        SOUND_CREDIT(GUI.NONE.getId());
 
         private int guiId;
 
         /**
-         * @param guiId 摁下按钮后触发的 GUI 的 ID，如果不触发 GUI，可以将其设置为 -1
+         * @param guiId 摁下按钮后触发的 GUI 的 ID，如果不触发 GUI，可以将其设置为 GUI.NONE
          */
         BUTTON(int guiId) {
             this.guiId = guiId;

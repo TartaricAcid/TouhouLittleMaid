@@ -9,10 +9,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI.MAIN;
+
 @SideOnly(Side.CLIENT)
 public class MaidMainGuiContainer extends AbstractMaidGuiContainer {
     public MaidMainGuiContainer(InventoryPlayer inventory, EntityMaid maid, int taskIndex) {
-        super(new MaidMainContainer(inventory, maid, taskIndex), BUTTON.MAIN.getGuiId());
+        super(new MaidMainContainer(inventory, maid, taskIndex), MAIN.getId());
     }
 
     @Override

@@ -15,46 +15,67 @@ import javax.annotation.Nullable;
 
 public class MaidGuiHandler implements IGuiHandler {
     /**
-     * @param ID     GUI 的 ID
-     * @param player 玩家
-     * @param world  世界
-     * @param x      实体 ID
+     * @param guiId     GUI 的 ID
+     * @param player    玩家
+     * @param world     世界
+     * @param entityId  实体 ID
+     * @param taskIndex 打开 GUI 时缓存的 taskIndex
      */
     @Nullable
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        // FIXME: 2019/7/24 对应的数字 ID 需要后续与 GUI 的枚举类型进行对接
-        if (ID == 1 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
+    public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int z) {
+        if (guiId == GUI.MAIN.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
+            return new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
-        if (ID == 2 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
+        if (guiId == GUI.INVENTORY.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
+            return new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
-        if (ID == 3 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
+        if (guiId == GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
+            return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
         return null;
     }
 
     /**
-     * @param ID     GUI 的 ID
-     * @param player 玩家
-     * @param world  世界
-     * @param x      实体 ID
+     * @param guiId     GUI 的 ID
+     * @param player    玩家
+     * @param world     世界
+     * @param entityId  实体 ID
+     * @param taskIndex 打开 GUI 时缓存的 taskIndex
      */
     @Nullable
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        // FIXME: 2019/7/24 对应的数字 ID 需要后续与 GUI 的枚举类型进行对接
-        if (ID == 1 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidMainGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
+    public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int z) {
+        if (guiId == GUI.MAIN.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
+            return new MaidMainGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
-        if (ID == 2 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidInventoryGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
+        if (guiId == GUI.INVENTORY.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
+            return new MaidInventoryGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
-        if (ID == 3 && world.getEntityByID(x) instanceof EntityMaid) {
-            return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(x), y);
+        if (guiId == GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
+            return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
         return null;
+    }
+
+    public enum GUI {
+        // 女仆主界面
+        MAIN(1),
+        // 女仆物品栏界面
+        INVENTORY(2),
+        // 女仆饰品栏
+        BAUBLE(3),
+        // 无 GUI
+        NONE(-1);
+
+        private int id;
+
+        GUI(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
     }
 }

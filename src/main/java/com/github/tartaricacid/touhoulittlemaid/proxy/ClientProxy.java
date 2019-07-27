@@ -22,15 +22,10 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.client.resource.VanillaResourceType;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -56,13 +51,10 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
      */
     public static final HashMap<String, ModelItem> ID_INFO_MAP = Maps.newHashMap();
 
-    private int dimAt;
-
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
-        MinecraftForge.EVENT_BUS.register(this);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMaid.class, EntityMaidRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityDanmaku.class, EntityDanmakuRender.FACTORY);
@@ -88,21 +80,14 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         return I18n.format(key, format);
     }
 
+    /**
+     * 重载服务端名称
+     * 端模型
+     */
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager, @Nonnull Predicate<IResourceType> resourcePredicate) {
         if (resourcePredicate.test(VanillaResourceType.LANGUAGES)) {
             initModelList();
-        }
-    }
-
-    @SubscribeEvent
-    public void onChangeDim(EntityJoinWorldEvent event) {
-        if (event.getWorld().isRemote && event.getEntity() == Minecraft.getMinecraft().player) {
-            int dim = event.getEntity().world.provider.getDimension();
-            if (dim != dimAt) {
-                dimAt = dim;
-                ENTITY_CACHE.invalidateAll();
-            }
         }
     }
 }

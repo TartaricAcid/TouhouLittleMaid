@@ -13,6 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
+import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -532,8 +533,7 @@ public class EntityMaid extends AbstractEntityMaid {
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             } else if (!world.isRemote) {
                 // 否则打开 GUI
-                // FIXME: 2019/7/24 这一块用了数字，最好能用枚举，而且和前面的 GUI 绘制部分统一起来
-                player.openGui(TouhouLittleMaid.INSTANCE, 1, world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
+                player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
             }
             return true;
         }

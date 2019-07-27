@@ -8,12 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI.INVENTORY;
+
 @SideOnly(Side.CLIENT)
 public class MaidInventoryGuiContainer extends AbstractMaidGuiContainer {
     private static final ResourceLocation STORAGE_TEX = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_storage.png");
 
     public MaidInventoryGuiContainer(InventoryPlayer inventory, EntityMaid maid, int taskIndex) {
-        super(new MaidInventoryContainer(inventory, maid, taskIndex), BUTTON.INVENTORY.getGuiId());
+        super(new MaidInventoryContainer(inventory, maid, taskIndex), INVENTORY.getId());
     }
 
     @Override
