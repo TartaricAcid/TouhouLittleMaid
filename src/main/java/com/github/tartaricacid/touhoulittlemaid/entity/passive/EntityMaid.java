@@ -202,7 +202,7 @@ public class EntityMaid extends AbstractEntityMaid {
             ItemStack itemstack = entityItem.getItem();
             // 获取数量，为后面方面用
             int count = itemstack.getCount();
-            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(), itemstack, simulate);
+            itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(false), itemstack, simulate);
             if (count == itemstack.getCount()) {
                 return false;
             }
@@ -267,7 +267,7 @@ public class EntityMaid extends AbstractEntityMaid {
             }
             // 能够塞入
             ItemStack stack = getArrowFromEntity(arrow);
-            if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(), stack, simulate).isEmpty()) {
+            if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(false), stack, simulate).isEmpty()) {
                 return false;
             }
             // 非模拟状态下，清除实体箭
@@ -689,8 +689,8 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
-    public CombinedInvWrapper getAvailableInv() {
-        return new CombinedInvWrapper(handsInvWrapper, mainInv);
+    public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
+        return handsFirst ? new CombinedInvWrapper(handsInvWrapper, mainInv) : new CombinedInvWrapper(mainInv, handsInvWrapper);
     }
 
     public boolean isBegging() {

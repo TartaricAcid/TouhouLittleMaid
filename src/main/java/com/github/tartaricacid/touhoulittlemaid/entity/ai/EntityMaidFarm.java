@@ -69,7 +69,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         // 先清空种子列表
         seeds.clear();
         // 而后通过 FarmHandlers 获取到玩家背包的内所有可以种植的种子
-        IItemHandler inv = maid.getAvailableInv();
+        IItemHandler inv = maid.getAvailableInv(true);
         for (int i = 0; i < inv.getSlots(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
             if (handlers.stream().anyMatch(h -> h.isSeed(stack))) {
@@ -219,7 +219,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     private boolean plantLogic(World world, BlockPos pos) {
         boolean shouldLook = false;
         // 先检查种子是否还在女仆的背包中
-        IItemHandlerModifiable itemHandler = maid.getAvailableInv();
+        IItemHandlerModifiable itemHandler = maid.getAvailableInv(true);
         int slot = ItemFindUtil.findItem(itemHandler, s -> s == activeSeed);
 
         // 尝试种植作物

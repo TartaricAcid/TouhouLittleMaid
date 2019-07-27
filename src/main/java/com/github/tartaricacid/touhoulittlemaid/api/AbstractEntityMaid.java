@@ -30,7 +30,7 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      *
      * @return IItemHandlerModifiable 对象
      */
-    abstract public IItemHandlerModifiable getAvailableInv();
+    abstract public IItemHandlerModifiable getAvailableInv(boolean handsFirst);
 
     /**
      * 获取女仆的物品栏
