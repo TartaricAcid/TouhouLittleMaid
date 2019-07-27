@@ -51,7 +51,6 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                         return e;
                     }
                 });
-                entity.setWorld(world);
                 entity.readFromNBT(BlockGarageKit.getEntityData(itemStackIn));
             } catch (ExecutionException e) {
                 return;

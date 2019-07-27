@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -139,6 +140,10 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
             if (modelItem != null) {
                 tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(modelItem.getName())));
             }
+        }
+
+        if (flagIn.isAdvanced() && GuiScreen.isShiftKeyDown() && stack.hasTagCompound()) {
+            tooltip.add(stack.getTagCompound().toString());
         }
     }
 
