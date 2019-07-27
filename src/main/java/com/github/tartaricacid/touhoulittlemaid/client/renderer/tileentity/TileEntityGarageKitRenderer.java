@@ -39,7 +39,7 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
                 }
             });
             entity.setWorld(getWorld());
-            entity.readFromNBT(te.getEntityData());
+            entity.readFromNBT(te.getMaidData());
         } catch (ExecutionException e) {
             return;
         }
@@ -71,7 +71,7 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
                 break;
         }
 
-        if (te.getModel() != null && entity instanceof EntityMaid) {
+        if (te.getModelId() != null && entity instanceof EntityMaid) {
             ((EntityMaid) entity).setModelId(te.getModelId());
         }
 

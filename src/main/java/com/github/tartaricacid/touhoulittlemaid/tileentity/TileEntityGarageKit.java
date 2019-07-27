@@ -49,9 +49,9 @@ public class TileEntityGarageKit extends TileEntity {
             facing = EnumFacing.byName(getTileData().getString(BlockGarageKit.NBT.FACING.getName()));
         }
         if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_ID.getName())) {
-            location = getTileData().getString(BlockGarageKit.NBT.MODEL_ID.getName());
+            modelId = getTileData().getString(BlockGarageKit.NBT.MODEL_ID.getName());
         } else {
-            location = null;
+            modelId = null;
         }
         if (getTileData().hasKey(BlockGarageKit.NBT.MAID_DATA.getName())) {
             maidData = getTileData().getCompoundTag(BlockGarageKit.NBT.MAID_DATA.getName());
@@ -62,10 +62,10 @@ public class TileEntityGarageKit extends TileEntity {
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         getTileData().setString(BlockGarageKit.NBT.ENTITY_ID.getName(), entityId);
         getTileData().setString(BlockGarageKit.NBT.FACING.getName(), facing.getName());
-        if (location != null) {
-            getTileData().setString(BlockGarageKit.NBT.MODEL_ID.getName(), location);
+        if (modelId != null) {
+            getTileData().setString(BlockGarageKit.NBT.MODEL_ID.getName(), modelId);
         }
-        getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), entityData);
+        getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), maidData);
         super.writeToNBT(compound);
         return compound;
     }
@@ -89,8 +89,8 @@ public class TileEntityGarageKit extends TileEntity {
         return maidData;
     }
 
-    public void setData(String entityId, EnumFacing facing, String location, NBTTagCompound entityData) {
-        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.modelId, modelId) && Objects.equal(this.entityData, entityData)) {
+    public void setData(String entityId, EnumFacing facing, String modelId, NBTTagCompound maidData) {
+        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.modelId, modelId) && Objects.equal(this.maidData, maidData)) {
             return;
         }
         this.entityId = entityId;
