@@ -70,21 +70,16 @@ public class EntityMaidFeedOwner extends EntityAIBase {
                 }
             }
 
-            // 随机选择 EXACT 和 BAD 分类的某一个食物所在的格子，还有对应的 FeedHandler
-            int slot;
-            FeedHandler handler;
-            // 获取随机成员，EXACT 优先选择，BAD 次之
-            if (!exactFoods.isEmpty()) {
-                slot = exactFoods.keySet().stream().skip(entityMaid.getRNG().nextInt(exactFoods.size())).findFirst().get();
-                handler = exactFoods.get(slot);
-            } else if (!badFoods.isEmpty()) {
-                slot = badFoods.keySet().stream().skip(entityMaid.getRNG().nextInt(badFoods.size())).findFirst().get();
-                handler = badFoods.get(slot);
-            } else {
+            if (exactFoods.isEmpty() && badFoods.isEmpty()) {
                 return;
             }
+            // 随机选择 EXACT 和 BAD 分类的某一个食物所在的格子，还有对应的 FeedHandler
+            // 获取随机成员，EXACT 优先选择，BAD 次之
+            Int2ObjectMap<FeedHandler> map = !exactFoods.isEmpty() ? exactFoods : badFoods;
+            int slot = map.keySet().stream().skip(entityMaid.getRNG().nextInt(map.size())).findFirst().get();
+            FeedHandler handler = map.get(slot);
+            ItemStack stack = inv.getStackInSlot(slot);
 
-            // 朝向，喂养，动画
             entityMaid.getLookHelper().setLookPositionWithEntity(player, 10, 40);
             inv.setStackInSlot(slot, handler.feed(inv.getStackInSlot(slot), player));
             entityMaid.swingArm(EnumHand.MAIN_HAND);

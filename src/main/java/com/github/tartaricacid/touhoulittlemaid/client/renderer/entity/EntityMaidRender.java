@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidHeldItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -32,7 +33,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     @Override
     public void doRender(EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模型
-        EntityModelJson modelJson = ClientProxy.LOCATION_MODEL_MAP.get(entity.getModelLocation());
+        EntityModelJson modelJson = ClientProxy.LOCATION_MODEL_MAP.get(entity.getModel());
         // 如果模型不为空
         if (modelJson != null) {
             this.mainModel = modelJson;
@@ -69,8 +70,9 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     protected ResourceLocation getEntityTexture(EntityMaid entity) {
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
-        if (ClientProxy.LOCATION_MODEL_MAP.get(entity.getModelLocation()) != null) {
-            return new ResourceLocation(entity.getTextureLocation());
+        ModelItem modelItem = ClientProxy.LOCATION_INFO_MAP.get(entity.getModel());
+        if (modelItem != null) {
+            return modelItem.getTexture();
         } else {
             return new ResourceLocation("touhou_little_maid:textures/entity/hakurei_reimu.png");
         }
@@ -80,7 +82,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         @Override
         public Render<? super EntityMaid> createRenderFor(RenderManager manager) {
             // 加载默认的灵梦模型
-            return new EntityMaidRender(manager, ClientProxy.LOCATION_MODEL_MAP.get("touhou_little_maid:models/entity/hakurei_reimu.json"), 0.5f);
+            return new EntityMaidRender(manager, ClientProxy.LOCATION_MODEL_MAP.get("touhou_little_maid:hakurei_reimu"), 0.5f);
         }
     }
 }

@@ -13,7 +13,12 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.*;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -31,8 +36,10 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class CommonProxy {
+    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
     public static SimpleNetworkWrapper INSTANCE = null;
     /**
      * 服务端用模型列表，
@@ -41,7 +48,7 @@ public class CommonProxy {
      * <p>
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
-    public static CustomModelPackPOJO MODEL_LIST;
+    public static Map<String, String> MODEL2NAME = Maps.newHashMap();
 
     public void preInit(FMLPreInitializationEvent event) {
         // 初始化默认模型列表
@@ -100,14 +107,26 @@ public class CommonProxy {
      * 初始化默认的模型列表
      */
     private void initModelList() {
+        MODEL2NAME.clear();
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/maid_model.json");
         if (input != null) {
-            Gson gson = new Gson();
-            // 将其转换为 pojo 对象
-            MODEL_LIST = gson.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPackPOJO.class);
+            try {
+                // 将其转换为 pojo 对象
+                CustomModelPackPOJO pojo = readModelPack(input);
+                // TODO: 客户端重载
+                pojo.getModelList().forEach(m -> MODEL2NAME.put(m.getLocation().toString(), ParseI18n.parse(m.getName())));
+            } catch (JsonSyntaxException e) {
+                TouhouLittleMaid.LOGGER.warn("Fail to parse model pack in domain {}", TouhouLittleMaid.MOD_ID);
+            }
         }
         // 别忘了关闭输入流
         IOUtils.closeQuietly(input);
+    }
+
+    public static CustomModelPackPOJO readModelPack(InputStream input) throws JsonSyntaxException
+    {
+        CustomModelPackPOJO pojo = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPackPOJO.class);
+        return pojo.decorate();
     }
 
     /**

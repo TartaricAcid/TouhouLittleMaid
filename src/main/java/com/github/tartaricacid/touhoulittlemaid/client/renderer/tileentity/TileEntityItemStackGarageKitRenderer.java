@@ -55,9 +55,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 return;
             }
             if (entity instanceof EntityMaid) {
-                ((EntityMaid) entity).setModelLocation(MaidBlocks.GARAGE_KIT.getModel(itemStackIn));
-                ((EntityMaid) entity).setTextureLocation(MaidBlocks.GARAGE_KIT.getTexture(itemStackIn));
-                ((EntityMaid) entity).setModelName(MaidBlocks.GARAGE_KIT.getName(itemStackIn));
+                ((EntityMaid) entity).setModel(MaidBlocks.GARAGE_KIT.getModel(itemStackIn));
             }
 
             GlStateManager.enableColorMaterial();

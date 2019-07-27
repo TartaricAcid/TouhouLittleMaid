@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,6 +29,7 @@ import java.util.List;
  **/
 @SideOnly(Side.CLIENT)
 public class EntityModelJson extends ModelBase {
+    private final int format;
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -41,7 +43,8 @@ public class EntityModelJson extends ModelBase {
      */
     private List<ModelRenderer> shouldRender = new ArrayList<>();
 
-    public EntityModelJson(CustomModelPOJO pojo) {
+    public EntityModelJson(CustomModelPOJO pojo, int format) {
+        this.format = format;
         // 材质的长度、宽度
         textureWidth = pojo.getGeometryModel().getTexturewidth();
         textureHeight = pojo.getGeometryModel().getTextureheight();
@@ -102,19 +105,15 @@ public class EntityModelJson extends ModelBase {
 
     @Override
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        // 获取女仆的模型版本号
-        int format = ((EntityMaid) entityIn).getModelFormat();
         // 如果为 1，开启 cull 功能
-        if (format == 1) {
+        if (format >= 1) {
             GlStateManager.enableCull();
-            for (ModelRenderer model : shouldRender) {
-                model.render(scale);
-            }
+        }
+        for (ModelRenderer model : shouldRender) {
+            model.render(scale);
+        }
+        if (format >= 1) {
             GlStateManager.disableCull();
-        } else {
-            for (ModelRenderer model : shouldRender) {
-                model.render(scale);
-            }
         }
     }
 
