@@ -91,7 +91,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
-            ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
+            ((TileEntityGarageKit) te).setData(this.getEntityId(stack), placer.getHorizontalFacing().getOpposite(),
                     this.getModel(stack), this.getEntityData(stack));
         }
     }
