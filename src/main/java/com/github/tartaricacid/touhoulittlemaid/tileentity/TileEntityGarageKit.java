@@ -18,8 +18,8 @@ import javax.annotation.Nullable;
 public class TileEntityGarageKit extends TileEntity {
     private String entityId = "touhou_little_maid:passive.maid";
     private EnumFacing facing = EnumFacing.SOUTH;
-    private String location = "touhou_little_maid:hakurei_reimu";
-    private NBTTagCompound entityData = new NBTTagCompound();
+    private String modelId = "touhou_little_maid:hakurei_reimu";
+    private NBTTagCompound maidData = new NBTTagCompound();
 
     @Override
     public NBTTagCompound getUpdateTag() {
@@ -48,11 +48,11 @@ public class TileEntityGarageKit extends TileEntity {
         if (getTileData().hasKey(BlockGarageKit.NBT.FACING.getName())) {
             facing = EnumFacing.byName(getTileData().getString(BlockGarageKit.NBT.FACING.getName()));
         }
-        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL.getName())) {
-            location = getTileData().getString(BlockGarageKit.NBT.MODEL.getName());
+        if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_ID.getName())) {
+            modelId = getTileData().getString(BlockGarageKit.NBT.MODEL_ID.getName());
         }
         if (getTileData().hasKey(BlockGarageKit.NBT.MAID_DATA.getName())) {
-            entityData = getTileData().getCompoundTag(BlockGarageKit.NBT.MAID_DATA.getName());
+            maidData = getTileData().getCompoundTag(BlockGarageKit.NBT.MAID_DATA.getName());
         }
     }
 
@@ -60,8 +60,8 @@ public class TileEntityGarageKit extends TileEntity {
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         getTileData().setString(BlockGarageKit.NBT.ENTITY_ID.getName(), entityId);
         getTileData().setString(BlockGarageKit.NBT.FACING.getName(), facing.getName());
-        getTileData().setString(BlockGarageKit.NBT.MODEL.getName(), location);
-        getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), entityData);
+        getTileData().setString(BlockGarageKit.NBT.MODEL_ID.getName(), modelId);
+        getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), maidData);
         super.writeToNBT(compound);
         return compound;
     }
@@ -76,22 +76,22 @@ public class TileEntityGarageKit extends TileEntity {
         return facing;
     }
 
-    public String getModel() {
-        return location;
+    public String getModelId() {
+        return modelId;
     }
 
-    public NBTTagCompound getEntityData() {
-        return entityData;
+    public NBTTagCompound getMaidData() {
+        return maidData;
     }
 
-    public void setData(String entityId, EnumFacing facing, String location, NBTTagCompound entityData) {
-        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.location, location)) {
+    public void setData(String entityId, EnumFacing facing, String modelId, NBTTagCompound maidData) {
+        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.modelId, modelId)) {
             return;
         }
         this.entityId = entityId;
         this.facing = facing;
-        this.location = location;
-        this.entityData = entityData;
+        this.modelId = modelId;
+        this.maidData = maidData;
         // 确保数据已经存入
         markDirty();
         // 通知 world 更新方块数据

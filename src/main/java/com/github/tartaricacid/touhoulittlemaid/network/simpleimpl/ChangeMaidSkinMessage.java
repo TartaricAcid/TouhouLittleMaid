@@ -15,35 +15,35 @@ import java.util.UUID;
 
 public class ChangeMaidSkinMessage implements IMessage {
     private UUID entityUuid;
-    private ResourceLocation location;
+    private ResourceLocation modelId;
 
     public ChangeMaidSkinMessage() {
     }
 
-    public ChangeMaidSkinMessage(UUID entityUuid, ResourceLocation location) {
+    public ChangeMaidSkinMessage(UUID entityUuid, ResourceLocation modelId) {
         this.entityUuid = entityUuid;
-        this.location = location;
+        this.modelId = modelId;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         entityUuid = new UUID(buf.readLong(), buf.readLong());
-        location = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
+        modelId = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeLong(entityUuid.getMostSignificantBits());
         buf.writeLong(entityUuid.getLeastSignificantBits());
-        ByteBufUtils.writeUTF8String(buf, location.toString());
+        ByteBufUtils.writeUTF8String(buf, modelId.toString());
     }
 
     public UUID getEntityUuid() {
         return entityUuid;
     }
 
-    public ResourceLocation getLocation() {
-        return location;
+    public ResourceLocation getModelId() {
+        return modelId;
     }
 
     public static class Handler implements IMessageHandler<ChangeMaidSkinMessage, IMessage> {
@@ -54,7 +54,7 @@ public class ChangeMaidSkinMessage implements IMessage {
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
                     if (entity instanceof EntityMaid) {
                         EntityMaid maid = (EntityMaid) entity;
-                        maid.setModel(message.getLocation().toString());
+                        maid.setModelId(message.getModelId().toString());
                     }
                 });
             }

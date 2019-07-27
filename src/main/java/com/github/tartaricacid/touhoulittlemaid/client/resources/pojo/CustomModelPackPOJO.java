@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Nullable;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -66,9 +66,16 @@ public class CustomModelPackPOJO {
         return super.equals(obj);
     }
 
+    /**
+     * 模型包 pojo 的二次修饰
+     */
     public CustomModelPackPOJO decorate() {
-        if (modelList == null) {
-            modelList = Collections.EMPTY_LIST;
+        // 包名和 model list 不能为空
+        if (packName == null) {
+            throw new JsonSyntaxException("Expected \"pack_name\" in pack");
+        }
+        if (modelList == null || modelList.isEmpty()) {
+            throw new JsonSyntaxException("Expected \"model_list\" in pack");
         }
         if (description == null) {
             description = Collections.EMPTY_LIST;
@@ -77,6 +84,7 @@ public class CustomModelPackPOJO {
             author = Collections.EMPTY_LIST;
         }
 
+        // 为此包的模型对象进行二次修饰
         modelList.forEach(m -> m.decorate(format));
         return this;
     }

@@ -6,120 +6,120 @@
   "date": "2019-07-14",
   "model_list": [
     {
-      "location": "touhou_little_maid:hakurei_reimu",
+      "model_id": "touhou_little_maid:hakurei_reimu",
       "name": "{model.vanilla_touhou_model.hakurei_reimu.name}",
       "description": ["{model.vanilla_touhou_model.hakurei_reimu.desc}"]
     }, {
-      "location": "touhou_little_maid:yakumo_ran",
+      "model_id": "touhou_little_maid:yakumo_ran",
       "name": "{model.vanilla_touhou_model.yakumo_ran.name}",
       "description": ["{model.vanilla_touhou_model.yakumo_ran.desc}"]
     }, {
-      "location": "touhou_little_maid:inubashiri_momizi",
+      "model_id": "touhou_little_maid:inubashiri_momizi",
       "name": "{model.vanilla_touhou_model.inubashiri_momizi.name}",
       "description": ["{model.vanilla_touhou_model.inubashiri_momizi.desc}"]
     }, {
       "format": 1,
-      "location": "touhou_little_maid:komeiji_satori",
+      "model_id": "touhou_little_maid:komeiji_satori",
       "name": "{model.vanilla_touhou_model.komeiji_satori.name}",
       "description": ["{model.vanilla_touhou_model.komeiji_satori.desc}"]
     }, {
-      "location": "touhou_little_maid:reisen_udongein_inaba",
+      "model_id": "touhou_little_maid:reisen_udongein_inaba",
       "name": "{model.vanilla_touhou_model.reisen_udongein_inaba.name}",
       "description": ["{model.vanilla_touhou_model.reisen_udongein_inaba.desc}"]
     }, {
-      "location": "touhou_little_maid:yasaka_kanako",
+      "model_id": "touhou_little_maid:yasaka_kanako",
       "name": "{model.vanilla_touhou_model.yasaka_kanako.name}",
       "description": ["{model.vanilla_touhou_model.yasaka_kanako.desc}"]
     }, {
-      "location": "touhou_little_maid:hata_no_kokoro",
+      "model_id": "touhou_little_maid:hata_no_kokoro",
       "name": "{model.vanilla_touhou_model.hata_no_kokoro.name}",
       "description": ["{model.vanilla_touhou_model.hata_no_kokoro.desc}"]
     }, {
-      "location": "touhou_little_maid:sekibanki",
+      "model_id": "touhou_little_maid:sekibanki",
       "name": "{model.vanilla_touhou_model.sekibanki.name}",
       "description": ["{model.vanilla_touhou_model.sekibanki.desc}"]
     }, {
-      "location": "touhou_little_maid:kawasiro_nitori",
+      "model_id": "touhou_little_maid:kawasiro_nitori",
       "name": "{model.vanilla_touhou_model.kawasiro_nitori.name}",
       "description": ["{model.vanilla_touhou_model.kawasiro_nitori.desc}"]
     }, {
-      "location": "touhou_little_maid:kochiya_sanae",
+      "model_id": "touhou_little_maid:kochiya_sanae",
       "name": "{model.vanilla_touhou_model.kochiya_sanae.name}",
       "description": ["{model.vanilla_touhou_model.kochiya_sanae.desc}"]
     }, {
-      "location": "touhou_little_maid:izayoi_sakuya",
+      "model_id": "touhou_little_maid:izayoi_sakuya",
       "name": "{model.vanilla_touhou_model.izayoi_sakuya.name}",
       "description": ["{model.vanilla_touhou_model.izayoi_sakuya.desc}"]
     }, {
-      "location": "touhou_little_maid:nagae_iku",
+      "model_id": "touhou_little_maid:nagae_iku",
       "name": "{model.vanilla_touhou_model.nagae_iku.name}",
       "description": ["{model.vanilla_touhou_model.nagae_iku.desc}"]
     }, {
-      "location": "touhou_little_maid:cirno",
+      "model_id": "touhou_little_maid:cirno",
       "name": "{model.vanilla_touhou_model.cirno.name}",
       "description": ["{model.vanilla_touhou_model.cirno.desc}"]
     }, {
-      "location": "touhou_little_maid:daiyousei",
+      "model_id": "touhou_little_maid:daiyousei",
       "name": "{model.vanilla_touhou_model.daiyousei.name}",
       "description": ["{model.vanilla_touhou_model.daiyousei.desc}"]
     }, {
-      "location": "touhou_little_maid:houraisan_kaguya",
+      "model_id": "touhou_little_maid:houraisan_kaguya",
       "name": "{model.vanilla_touhou_model.houraisan_kaguya.name}",
       "description": ["{model.vanilla_touhou_model.houraisan_kaguya.desc}"]
     }, {
-      "location": "touhou_little_maid:moriya_suwako",
+      "model_id": "touhou_little_maid:moriya_suwako",
       "name": "{model.vanilla_touhou_model.moriya_suwako.name}",
       "description": ["{model.vanilla_touhou_model.moriya_suwako.desc}"]
     }, {
-      "location": "touhou_little_maid:wakasagihime",
+      "model_id": "touhou_little_maid:wakasagihime",
       "name": "{model.vanilla_touhou_model.wakasagihime.name}",
       "description": ["{model.vanilla_touhou_model.wakasagihime.desc}"]
     }, {
-      "location": "touhou_little_maid:flandre_scarlet",
+      "model_id": "touhou_little_maid:flandre_scarlet",
       "name": "{model.vanilla_touhou_model.flandre_scarlet.name}",
       "description": ["{model.vanilla_touhou_model.flandre_scarlet.desc}"]
     }, {
-      "location": "touhou_little_maid:fujiwara_no_mokou",
+      "model_id": "touhou_little_maid:fujiwara_no_mokou",
       "name": "{model.vanilla_touhou_model.fujiwara_no_mokou.name}",
       "description": ["{model.vanilla_touhou_model.fujiwara_no_mokou.desc}"]
     }, {
-      "location": "touhou_little_maid:kisume",
+      "model_id": "touhou_little_maid:kisume",
       "name": "{model.vanilla_touhou_model.kisume.name}",
       "description": ["{model.vanilla_touhou_model.kisume.desc}"]
     }, {
-      "location": "touhou_little_maid:chen",
+      "model_id": "touhou_little_maid:chen",
       "name": "{model.vanilla_touhou_model.chen.name}",
       "description": ["{model.vanilla_touhou_model.chen.desc}"]
     }, {
-      "location": "touhou_little_maid:ibuki_suika",
+      "model_id": "touhou_little_maid:ibuki_suika",
       "name": "{model.vanilla_touhou_model.ibuki_suika.name}",
       "description": ["{model.vanilla_touhou_model.ibuki_suika.desc}"]
     }, {
-      "location": "touhou_little_maid:star_sapphire",
+      "model_id": "touhou_little_maid:star_sapphire",
       "name": "{model.vanilla_touhou_model.star_sapphire.name}",
       "description": ["{model.vanilla_touhou_model.star_sapphire.desc}"]
     }, {
-      "location": "touhou_little_maid:konpaku_youmu",
+      "model_id": "touhou_little_maid:konpaku_youmu",
       "name": "{model.vanilla_touhou_model.konpaku_youmu.name}",
       "description": ["{model.vanilla_touhou_model.konpaku_youmu.desc}"]
     }, {
-      "location": "touhou_little_maid:luna_child",
+      "model_id": "touhou_little_maid:luna_child",
       "name": "{model.vanilla_touhou_model.luna_child.name}",
       "description": ["{model.vanilla_touhou_model.luna_child.desc}"]
     }, {
-      "location": "touhou_little_maid:remilia_scarlet",
+      "model_id": "touhou_little_maid:remilia_scarlet",
       "name": "{model.vanilla_touhou_model.remilia_scarlet.name}",
       "description": ["{model.vanilla_touhou_model.remilia_scarlet.desc}"]
     }, {
-      "location": "touhou_little_maid:sunny_milk",
+      "model_id": "touhou_little_maid:sunny_milk",
       "name": "{model.vanilla_touhou_model.sunny_milk.name}",
       "description": ["{model.vanilla_touhou_model.sunny_milk.desc}"]
     }, {
-      "location": "touhou_little_maid:alice_margatroid",
+      "model_id": "touhou_little_maid:alice_margatroid",
       "name": "{model.vanilla_touhou_model.alice_margatroid.name}",
       "description": ["{model.vanilla_touhou_model.alice_margatroid.desc}"]
     }, {
-      "location": "touhou_little_maid:patchouli_knowledge",
+      "model_id": "touhou_little_maid:patchouli_knowledge",
       "name": "{model.vanilla_touhou_model.patchouli_knowledge.name}",
       "description": ["{model.vanilla_touhou_model.patchouli_knowledge.desc}"]
     }

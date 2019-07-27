@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidSki
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
@@ -34,7 +35,7 @@ public class MaidSkinGui extends GuiScreen {
     /**
      * 按钮的 ID -> 模型 映射
      */
-    private static final HashMap<Integer, ModelItem> BUTTON_MODEL_MAP = new HashMap<>();
+    private static final HashMap<Integer, ModelItem> BUTTON_MODEL_MAP = Maps.newHashMap();
     /**
      * 一页最多能容纳 44 个模型
      */
@@ -159,7 +160,7 @@ public class MaidSkinGui extends GuiScreen {
         // 开始绘制实体图案，并往上添加对应模型和材质
         for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
             EntityMaid maid = new EntityMaid(Minecraft.getMinecraft().world);
-            maid.setModel(modelItem.getLocation().toString());
+            maid.setModelId(modelItem.getModelId().toString());
             GuiInventory.drawEntityOnScreen(middleX + x, middleY + y, 12, -25, -20, maid);
 
             // 往右绘制
@@ -243,15 +244,10 @@ public class MaidSkinGui extends GuiScreen {
             if (isxInRange && isyInRange) {
                 // 绘制的文本
                 List<String> str = new ArrayList<>();
-
                 // 塞入模型名称
                 str.add(modelItem.getName());
-
-                // 如果描述不为空，塞入描述
-                if (modelItem.getDescription() != null) {
-                    str.addAll(modelItem.getDescription());
-                }
-
+                // 塞入描述
+                str.addAll(modelItem.getDescription());
                 // 绘制解析过的文本提示
                 drawHoveringText(ParseI18n.parse(str), mouseX, mouseY);
             }
@@ -314,7 +310,7 @@ public class MaidSkinGui extends GuiScreen {
             // 其他按键进行模型更改的发包
             default:
                 CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),
-                        BUTTON_MODEL_MAP.get(button.id).getLocation()));
+                        BUTTON_MODEL_MAP.get(button.id).getModelId()));
         }
     }
 
