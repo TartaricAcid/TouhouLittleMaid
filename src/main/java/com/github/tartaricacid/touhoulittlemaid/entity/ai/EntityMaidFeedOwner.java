@@ -70,16 +70,18 @@ public class EntityMaidFeedOwner extends EntityAIBase {
                 }
             }
 
+            // 如果两者皆为空，不执行喂食
             if (exactFoods.isEmpty() && badFoods.isEmpty()) {
                 return;
             }
-            // 随机选择 EXACT 和 BAD 分类的某一个食物所在的格子，还有对应的 FeedHandler
-            // 获取随机成员，EXACT 优先选择，BAD 次之
+
+            // EXACT 优先选择，BAD 次之
+            // 随机选择某一个食物所在的格子，还有对应的 FeedHandler
             Int2ObjectMap<FeedHandler> map = !exactFoods.isEmpty() ? exactFoods : badFoods;
             int slot = map.keySet().stream().skip(entityMaid.getRNG().nextInt(map.size())).findFirst().get();
             FeedHandler handler = map.get(slot);
-            ItemStack stack = inv.getStackInSlot(slot);
 
+            // 朝向，喂食，手臂动画一气呵成
             entityMaid.getLookHelper().setLookPositionWithEntity(player, 10, 40);
             inv.setStackInSlot(slot, handler.feed(inv.getStackInSlot(slot), player));
             entityMaid.swingArm(EnumHand.MAIN_HAND);

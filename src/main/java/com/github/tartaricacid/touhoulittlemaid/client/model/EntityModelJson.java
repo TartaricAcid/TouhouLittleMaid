@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;

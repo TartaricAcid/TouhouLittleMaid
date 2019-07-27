@@ -343,7 +343,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
      * 一个简单的打开连接的提示界面
      */
     private class GuiSoundCredit extends GuiConfirmOpenLink {
-        public GuiSoundCredit(GuiYesNoCallback parentScreenIn) {
+        GuiSoundCredit(GuiYesNoCallback parentScreenIn) {
             super(parentScreenIn, "https://www14.big.or.jp/~amiami/happy/index.html", BUTTON.SOUND_CREDIT.ordinal(), true);
         }
 

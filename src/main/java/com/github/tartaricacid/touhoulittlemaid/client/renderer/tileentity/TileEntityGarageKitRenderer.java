@@ -72,7 +72,7 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
         }
 
         if (te.getModel() != null && entity instanceof EntityMaid) {
-            ((EntityMaid) entity).setModel(te.getModel());
+            ((EntityMaid) entity).setModelId(te.getModelId());
         }
 
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);

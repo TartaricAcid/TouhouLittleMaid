@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.gson.JsonSyntaxException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -35,18 +34,20 @@ import java.util.List;
 public final class CustomModelLoader {
     private static final Logger LOGGER = TouhouLittleMaid.LOGGER;
     private static final Marker MARKER = MarkerManager.getMarker("ModelLoader");
-    private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
     private static final String OLD_BEDROCK_VERSION = "1.10.0";
     /**
      * 获取客户端代理类的模型包列表数据
      */
     private static final List<CustomModelPackPOJO> MODEL_PACK_LIST = ClientProxy.MODEL_PACK_LIST;
     /**
-     * 获取模型资源域名和对应模型的映射表
+     * 模型 ID 和对应模型的映射
      */
-    private static final HashMap<String, EntityModelJson> LOCATION_MODEL_MAP = ClientProxy.LOCATION_MODEL_MAP;
-
-    private static final HashMap<String, ModelItem> LOCATION_INFO_MAP = ClientProxy.LOCATION_INFO_MAP;
+    private static final HashMap<String, EntityModelJson> ID_MODEL_MAP = ClientProxy.ID_MODEL_MAP;
+    /**
+     * 模型 ID 和对应 ModelItem 类的映射
+     */
+    private static final HashMap<String, ModelItem> ID_INFO_MAP = ClientProxy.ID_INFO_MAP;
+    private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
     /**
      * 加载所有的模型包
@@ -60,26 +61,20 @@ public final class CustomModelLoader {
                 // 获取所有资源域下的 maid_model.json 文件
                 ResourceLocation res = new ResourceLocation(domain, "maid_model.json");
                 InputStream input = manager.getResource(res).getInputStream();
-
                 // 将其转换为 pojo 对象
+                // 这个 pojo 是二次修饰的过的对象，所以一部分数据异常已经进行了处理或者抛出
                 CustomModelPackPOJO pojo = CommonProxy.readModelPack(input);
                 // 关闭输入流
                 IOUtils.closeQuietly(input);
-
-                // 对必须的包名和模型列表做检查
-                if (pojo.getPackName() != null && !pojo.getModelList().isEmpty()) {
-                    // 加载模型
-                    loadModelList(pojo.getModelList(), res);
-                    // 装填模型包列表
-                    MODEL_PACK_LIST.add(pojo);
-                } else {
-                    // 否则日志给出提示
-                    LOGGER.warn(MARKER, "{} file don't have pack_name field or model field", res);
-                }
+                // 加载模型
+                loadModelList(pojo.getModelList());
+                // 装填模型包列表
+                MODEL_PACK_LIST.add(pojo);
             } catch (IOException ignore) {
                 // 忽略错误，因为资源域很多
             } catch (JsonSyntaxException e) {
                 LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain);
+                e.printStackTrace();
             }
         }
         LOGGER.info(MARKER, "Touhou little maid mod's model is loaded");
@@ -87,25 +82,20 @@ public final class CustomModelLoader {
 
     /**
      * 加载所有的模型列表
+     * 传入的 modelItem 是已经二次修饰过的
      */
-    private static void loadModelList(List<ModelItem> modelList, ResourceLocation res) {
-        for (ModelItem model : modelList) {
-            // 如果模型、模型名和模型材质都不为空
-            if (model.getModel() != null && model.getName() != null && model.getTexture() != null) {
-                // 尝试加载模型
-                EntityModelJson modelJson = loadModel(model.getModel(), model.getFormat());
-                if (modelJson != null) {
-                    // 如果加载的模型不为空
-                    // 塞入资源域到模型的映射列表
-                    String location = model.getLocation().toString();
-                    LOCATION_MODEL_MAP.put(location, modelJson);
-                    LOCATION_INFO_MAP.put(location, model);
-                    // 打印日志
-                    LOGGER.info(MARKER, "Loaded model: {}", model.getModel());
-                }
-            } else {
-                // 否则日志给出提示
-                LOGGER.warn(MARKER, "{} file don't have model field or name field or texture field", res);
+    private static void loadModelList(List<ModelItem> modelList) throws JsonSyntaxException {
+        for (ModelItem modelItem : modelList) {
+            // 尝试加载模型
+            EntityModelJson modelJson = loadModel(modelItem.getModel(), modelItem.getFormat());
+            if (modelJson != null) {
+                // 如果加载的模型不为空
+                // 塞入资源域到模型的映射列表
+                String id = modelItem.getModelId().toString();
+                ID_MODEL_MAP.put(id, modelJson);
+                ID_INFO_MAP.put(id, modelItem);
+                // 打印日志
+                LOGGER.info(MARKER, "Loaded model: {}", modelItem.getModel());
             }
         }
     }
@@ -153,8 +143,8 @@ public final class CustomModelLoader {
     public static void reloadModelPack() {
         // 清空数据
         MODEL_PACK_LIST.clear();
-        LOCATION_MODEL_MAP.clear();
-        LOCATION_INFO_MAP.clear();
+        ID_MODEL_MAP.clear();
+        ID_INFO_MAP.clear();
 
         // 重载数据
         loadModelPack();

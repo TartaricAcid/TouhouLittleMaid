@@ -12,6 +12,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -20,7 +22,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,9 +31,18 @@ public class ClientProxy extends CommonProxy {
      * 实体缓存，在客户端会大量运用实体渲染，这个缓存可以减少重复创建实体带来的性能问题
      */
     public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
-    public static final List<CustomModelPackPOJO> MODEL_PACK_LIST = new ArrayList<>();
-    public static final HashMap<String, EntityModelJson> LOCATION_MODEL_MAP = new HashMap<>();
-    public static final HashMap<String, ModelItem> LOCATION_INFO_MAP = new HashMap<>();
+    /**
+     * 当前所有模型包列表，用于 GUI 显示
+     */
+    public static final List<CustomModelPackPOJO> MODEL_PACK_LIST = Lists.newArrayList();
+    /**
+     * ID -> 模型 映射，用于渲染模型操作
+     */
+    public static final HashMap<String, EntityModelJson> ID_MODEL_MAP = Maps.newHashMap();
+    /**
+     * ID -> 模型信息 映射，用于添加材质，显示模型名称等操作
+     */
+    public static final HashMap<String, ModelItem> ID_INFO_MAP = Maps.newHashMap();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {

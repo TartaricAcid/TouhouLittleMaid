@@ -24,6 +24,8 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
+    private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
+    private static final String DEFAULT_MODEL_TEXTURE = "touhou_little_maid:textures/entity/hakurei_reimu.png";
 
     public EntityMaidRender(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
         super(rendermanagerIn, modelbaseIn, shadowsizeIn);
@@ -33,7 +35,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     @Override
     public void doRender(EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模型
-        EntityModelJson modelJson = ClientProxy.LOCATION_MODEL_MAP.get(entity.getModel());
+        EntityModelJson modelJson = ClientProxy.ID_MODEL_MAP.get(entity.getModelId());
         // 如果模型不为空
         if (modelJson != null) {
             this.mainModel = modelJson;
@@ -70,11 +72,11 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     protected ResourceLocation getEntityTexture(EntityMaid entity) {
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
-        ModelItem modelItem = ClientProxy.LOCATION_INFO_MAP.get(entity.getModel());
+        ModelItem modelItem = ClientProxy.ID_INFO_MAP.get(entity.getModelId());
         if (modelItem != null) {
             return modelItem.getTexture();
         } else {
-            return new ResourceLocation("touhou_little_maid:textures/entity/hakurei_reimu.png");
+            return new ResourceLocation(DEFAULT_MODEL_TEXTURE);
         }
     }
 
@@ -82,7 +84,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         @Override
         public Render<? super EntityMaid> createRenderFor(RenderManager manager) {
             // 加载默认的灵梦模型
-            return new EntityMaidRender(manager, ClientProxy.LOCATION_MODEL_MAP.get("touhou_little_maid:hakurei_reimu"), 0.5f);
+            return new EntityMaidRender(manager, ClientProxy.ID_MODEL_MAP.get(DEFAULT_MODEL_ID), 0.5f);
         }
     }
 }

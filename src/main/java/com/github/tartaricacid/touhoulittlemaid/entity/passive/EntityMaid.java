@@ -72,7 +72,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<BlockPos> HOME_POS = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<String> MODEL = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
@@ -141,7 +141,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
         this.dataManager.register(HOME, Boolean.FALSE);
         this.dataManager.register(ARM_RISE, Boolean.FALSE);
-        this.dataManager.register(MODEL, "touhou_little_maid:hakurei_reimu");
+        this.dataManager.register(MODEL_ID, "touhou_little_maid:hakurei_reimu");
     }
 
     @Override
@@ -545,7 +545,7 @@ public class EntityMaid extends AbstractEntityMaid {
         entityTag.removeTag(NBT.BAUBLE_INVENTORY.getName());
         // 掉落女仆手办
         ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
-                this.getModel(), entityTag);
+                this.getModelId(), entityTag);
         // 生成物品实体
         entityDropItem(stack, 0);
     }
@@ -561,9 +561,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         } else {
-            String key = getModel();
-            if (CommonProxy.MODEL2NAME.containsKey(key)) {
-                return CommonProxy.MODEL2NAME.get(key);
+            String key = getModelId();
+            if (CommonProxy.ID_NAME_MAP.containsKey(key)) {
+                return CommonProxy.ID_NAME_MAP.get(key);
             }
             return super.getName();
         }
@@ -575,11 +575,11 @@ public class EntityMaid extends AbstractEntityMaid {
     @Nullable
     @Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        if (!CommonProxy.MODEL2NAME.isEmpty()) {
+        if (!CommonProxy.ID_NAME_MAP.isEmpty()) {
             // 随机获取某个模型对象
-            String key = CommonProxy.MODEL2NAME.keySet().stream().skip(rand.nextInt(CommonProxy.MODEL2NAME.size())).findFirst().get();
+            String key = CommonProxy.ID_NAME_MAP.keySet().stream().skip(rand.nextInt(CommonProxy.ID_NAME_MAP.size())).findFirst().get();
             // 应用各种数据
-            this.setModel(key);
+            this.setModelId(key);
         }
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -610,8 +610,8 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MAID_HOME.getName())) {
             setHome(compound.getBoolean(NBT.MAID_HOME.getName()));
         }
-        if (compound.hasKey(NBT.MODEL.getName())) {
-            setModel(compound.getString(NBT.MODEL.getName()));
+        if (compound.hasKey(NBT.MODEL_ID.getName())) {
+            setModelId(compound.getString(NBT.MODEL_ID.getName()));
         }
     }
 
@@ -625,7 +625,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setInteger(NBT.MAID_EXP.getName(), getExp());
         compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
-        compound.setString(NBT.MODEL.getName(), getModel().toString());
+        compound.setString(NBT.MODEL_ID.getName(), getModelId());
     }
 
     @Override
@@ -776,12 +776,12 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(ARM_RISE, swingingArms);
     }
 
-    public String getModel() {
-        return this.dataManager.get(MODEL);
+    public String getModelId() {
+        return this.dataManager.get(MODEL_ID);
     }
 
-    public void setModel(String name) {
-        this.dataManager.set(MODEL, name.toString());
+    public void setModelId(String name) {
+        this.dataManager.set(MODEL_ID, name);
     }
 
     @Override
@@ -810,7 +810,7 @@ public class EntityMaid extends AbstractEntityMaid {
         // 是否开启 Home 模式
         MAID_HOME("MaidHome"),
         // 模型
-        MODEL("Model");
+        MODEL_ID("ModelId");
 
         private String name;
 

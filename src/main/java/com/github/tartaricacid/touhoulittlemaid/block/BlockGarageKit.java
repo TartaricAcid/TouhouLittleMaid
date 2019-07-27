@@ -48,8 +48,8 @@ import java.util.List;
  **/
 public class BlockGarageKit extends Block implements ITileEntityProvider {
     public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
-    private static final String DEFAULT_ID = "touhou_little_maid:entity.passive.maid";
-    private static final String DEFAULT_MODEL = "touhou_little_maid:hakurei_reimu";
+    private static final String DEFAULT_ENTITY_ID = "touhou_little_maid:entity.passive.maid";
+    private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final NBTTagCompound DEFAULT_DATA = new NBTTagCompound();
 
     public BlockGarageKit() {
@@ -72,8 +72,8 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
 
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        for (String key : CommonProxy.MODEL2NAME.keySet()) {
-            items.add(getItemStackWithData(DEFAULT_ID, key, DEFAULT_DATA));
+        for (String key : CommonProxy.ID_NAME_MAP.keySet()) {
+            items.add(getItemStackWithData(DEFAULT_ENTITY_ID, key, DEFAULT_DATA));
         }
     }
 
@@ -99,7 +99,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
             ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
-                    this.getModel(stack), this.getEntityData(stack));
+                    this.getModelId(stack), this.getEntityData(stack));
         }
     }
 
@@ -110,7 +110,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.id.desc",
                 I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(id)) + ".name")));
         if (id.equals("touhou_little_maid:entity.passive.maid")) {
-            ModelItem modelItem = ClientProxy.LOCATION_INFO_MAP.get(getModel(stack));
+            ModelItem modelItem = ClientProxy.ID_INFO_MAP.get(getModelId(stack));
             if (modelItem != null) {
                 tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(modelItem.getName())));
             }
@@ -159,7 +159,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         {
             ((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
             if (entity instanceof EntityMaid) {
-                garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModel(), new NBTTagCompound());
+                garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModelId(), new NBTTagCompound());
                 return true;
             }
         }
@@ -176,28 +176,26 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
             TileEntityGarageKit kit = (TileEntityGarageKit) te;
-            return getItemStackWithData(kit.getEntityId(), kit.getModel(), kit.getEntityData());
+            return getItemStackWithData(kit.getEntityId(), kit.getModelId(), kit.getMaidData());
         } else {
-            return getItemStackWithData(DEFAULT_ID, DEFAULT_MODEL, DEFAULT_DATA);
+            return getItemStackWithData(DEFAULT_ENTITY_ID, DEFAULT_MODEL_ID, DEFAULT_DATA);
         }
     }
 
     /**
      * 获取带有指定数据的 ItemStack
      *
-     * @param id         实体 id
-     * @param model      模型地址
-     * @param texture    材质地址
-     * @param name       模型名称
+     * @param entityId   实体 id
+     * @param modelId    模型的 id
      * @param entityData 模型存储的实体数据
      * @return 带有这些数据的物品堆
      */
-    public ItemStack getItemStackWithData(String id, String location, NBTTagCompound entityData) {
+    public ItemStack getItemStackWithData(String entityId, String modelId, NBTTagCompound entityData) {
         ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
         NBTTagCompound data = getTagCompoundSafe(stack);
-        data.setString(NBT.ENTITY_ID.getName(), id);
-        if (location != null) {
-            data.setString(NBT.MODEL.getName(), location);
+        data.setString(NBT.ENTITY_ID.getName(), entityId);
+        if (modelId != null) {
+            data.setString(NBT.MODEL_ID.getName(), modelId);
         }
         if (!entityData.isEmpty()) {
             data.setTag(NBT.MAID_DATA.getName(), entityData);
@@ -212,17 +210,17 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         if (!getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName()).isEmpty()) {
             return getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName());
         }
-        return DEFAULT_ID;
+        return DEFAULT_ENTITY_ID;
     }
 
     /**
-     * 获取 ItemStack 中的 MODEL NBT 数据，如果不存在则返回默认值
+     * 获取 ItemStack 中的 MODEL_ID NBT 数据，如果不存在则返回默认值
      */
-    public String getModel(ItemStack stack) {
-        if (!getTagCompoundSafe(stack).getString(NBT.MODEL.getName()).isEmpty()) {
-            return getTagCompoundSafe(stack).getString(NBT.MODEL.getName());
+    public String getModelId(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName());
         }
-        return DEFAULT_MODEL;
+        return DEFAULT_MODEL_ID;
     }
 
     /**
@@ -254,7 +252,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         // 模型的方向
         FACING("Facing"),
         // 模型位置
-        MODEL("Model"),
+        MODEL_ID("ModelId"),
         // 女仆 NBT 数据
         MAID_DATA("MaidData");
 
