@@ -6,6 +6,8 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModelItem {
     private String name;
@@ -84,19 +86,21 @@ public class ModelItem {
         if (description == null) {
             description = Collections.EMPTY_LIST;
         }
-
-        // 以下四者缺一不可
+        if (modelId == null) {
+            if (model != null) {
+                Pattern pattern = Pattern.compile("^.+\\/(.+)\\.json$");
+                Matcher matcher = pattern.matcher(model.getPath());
+                if (matcher.find()) {
+                    modelId = new ResourceLocation(model.getNamespace(), matcher.group(1));
+                }
+            }
+        } else {
+            model = new ResourceLocation(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
+            texture = new ResourceLocation(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
+        }
         // 如果 model_id 为空，抛出异常
         if (modelId == null) {
             throw new JsonSyntaxException("Expected \"model_id\" in model");
-        }
-        // 如果 model 为空，抛出异常
-        if (model == null) {
-            throw new JsonSyntaxException("Expected \"model\" in model");
-        }
-        // 如果 texture 为空，抛出异常
-        if (texture == null) {
-            throw new JsonSyntaxException("Expected \"texture\" in model");
         }
         // 如果 name 为空，抛出异常
         if (name == null) {
