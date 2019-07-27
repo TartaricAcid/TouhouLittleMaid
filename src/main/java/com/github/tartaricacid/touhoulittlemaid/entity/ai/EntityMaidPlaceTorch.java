@@ -79,7 +79,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     }
 
     private ItemStack getTorchItem(AbstractEntityMaid entityMaid) {
-        IItemHandler itemHandler = entityMaid.getAvailableInv();
+        IItemHandler itemHandler = entityMaid.getAvailableInv(true);
         for (int i = 0; i < itemHandler.getSlots(); ++i) {
             ItemStack itemstack = itemHandler.getStackInSlot(i);
             if (!itemstack.isEmpty() && itemstack.getItem() == Item.getItemFromBlock(Blocks.TORCH)) {

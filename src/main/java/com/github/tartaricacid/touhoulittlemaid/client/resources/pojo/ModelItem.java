@@ -12,9 +12,9 @@ public class ModelItem {
 
     private List<String> description;
 
-    private ResourceLocation model;
+    private transient ResourceLocation model;
 
-    private ResourceLocation texture;
+    private transient ResourceLocation texture;
 
     @SerializedName("model_id")
     private ResourceLocation modelId;
@@ -84,24 +84,16 @@ public class ModelItem {
         if (description == null) {
             description = Collections.EMPTY_LIST;
         }
-
-        // 以下四者缺一不可
         // 如果 model_id 为空，抛出异常
         if (modelId == null) {
             throw new JsonSyntaxException("Expected \"model_id\" in model");
-        }
-        // 如果 model 为空，抛出异常
-        if (model == null) {
-            throw new JsonSyntaxException("Expected \"model\" in model");
-        }
-        // 如果 texture 为空，抛出异常
-        if (texture == null) {
-            throw new JsonSyntaxException("Expected \"texture\" in model");
         }
         // 如果 name 为空，抛出异常
         if (name == null) {
             throw new JsonSyntaxException("Expected \"name\" in model");
         }
+        model = new ResourceLocation(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
+        texture = new ResourceLocation(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
         return this;
     }
 }

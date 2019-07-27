@@ -50,7 +50,7 @@ public class EntityMaidFeedOwner extends EntityAIBase {
             Int2ObjectMap<FeedHandler> exactFoods = new Int2ObjectArrayMap<>();
 
             // 先筛选出 EXACT 和 BAD 分类的食物
-            IItemHandlerModifiable inv = entityMaid.getAvailableInv();
+            IItemHandlerModifiable inv = entityMaid.getAvailableInv(true);
             for (int i = 0; i < inv.getSlots(); ++i) {
                 ItemStack stack = inv.getStackInSlot(i);
                 // 遍历 FeedHandler 进行食物的添加和分类

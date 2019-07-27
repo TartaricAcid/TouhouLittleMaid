@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -14,14 +15,20 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -91,7 +98,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
-            ((TileEntityGarageKit) te).setData(this.getEntityId(stack), EnumFacing.getDirectionFromEntityLiving(pos, placer),
+            ((TileEntityGarageKit) te).setData(this.getEntityId(stack), placer.getHorizontalFacing().getOpposite(),
                     this.getModelId(stack), this.getEntityData(stack));
         }
     }
@@ -99,19 +106,21 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        String id = getEntityId(stack);
         tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.id.desc",
-                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(getEntityId(stack))) + ".name")));
-
-        ModelItem modelItem = ClientProxy.ID_INFO_MAP.get(getModelId(stack));
-        if (modelItem != null) {
-            tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(modelItem.getName())));
+                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(id)) + ".name")));
+        if (id.equals("touhou_little_maid:entity.passive.maid")) {
+            ModelItem modelItem = ClientProxy.ID_INFO_MAP.get(getModelId(stack));
+            if (modelItem != null) {
+                tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(modelItem.getName())));
+            }
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return false;
+        return side == EnumFacing.DOWN;
     }
 
     @Override
@@ -128,6 +137,34 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     public boolean isFullCube(IBlockState state) {
         // 否则玩家会卡死在方块里面窒息
         return false;
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if (worldIn.isRemote || stack.getItem() != Items.SPAWN_EGG) {
+            return false;
+        }
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (!(tile instanceof TileEntityGarageKit)) {
+            return false;
+        }
+        ResourceLocation id = ItemMonsterPlacer.getNamedIdFrom(stack);
+        if (id == null || !EntityList.ENTITY_EGGS.containsKey(id)) {
+            return false;
+        }
+        TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
+        Entity entity = EntityList.createEntityByIDFromName(id, worldIn);
+        if (entity instanceof EntityLiving)
+        {
+            ((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
+            if (entity instanceof EntityMaid) {
+                garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModelId(), new NBTTagCompound());
+                return true;
+            }
+        }
+        garageKit.setData(id.toString(), garageKit.getFacing(), null, entity.writeToNBT(new NBTTagCompound()));
+        return true;
     }
 
     // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
@@ -157,7 +194,9 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
         NBTTagCompound data = getTagCompoundSafe(stack);
         data.setString(NBT.ENTITY_ID.getName(), entityId);
-        data.setString(NBT.MODEL_ID.getName(), modelId);
+        if (modelId != null) {
+            data.setString(NBT.MODEL_ID.getName(), modelId);
+        }
         if (!entityData.isEmpty()) {
             data.setTag(NBT.MAID_DATA.getName(), entityData);
         }
@@ -187,7 +226,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     /**
      * 获取 ItemStack 中的 MAID_DATA NBT 数据，如果不存在则返回默认值
      */
-    public NBTTagCompound getEntityData(ItemStack stack) {
+    public static NBTTagCompound getEntityData(ItemStack stack) {
         if (!getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName()).isEmpty()) {
             return getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName());
         }
@@ -198,7 +237,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     /**
      * 安全获取 NBT 实例的方法
      */
-    private NBTTagCompound getTagCompoundSafe(ItemStack stack) {
+    private static NBTTagCompound getTagCompoundSafe(ItemStack stack) {
         NBTTagCompound tagCompound = stack.getTagCompound();
         if (tagCompound == null) {
             tagCompound = new NBTTagCompound();
