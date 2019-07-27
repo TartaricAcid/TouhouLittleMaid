@@ -28,6 +28,7 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
     /**
      * 获取女仆可用的物品栏，可用指的是能够塞入普通物品的地方，一般指代女仆的主手副手和主物品栏
      *
+     * @param handsFirst 是否主手副手栏优先
      * @return IItemHandlerModifiable 对象
      */
     abstract public IItemHandlerModifiable getAvailableInv(boolean handsFirst);

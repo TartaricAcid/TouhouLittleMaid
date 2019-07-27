@@ -119,11 +119,16 @@ public class EntityModelJson extends ModelBase {
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
                                   float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+        EntityMaid entityMaid = (EntityMaid) entityIn;
+        // 头部
         ModelRenderer head = modelMap.get("head");
+        // 腿部
         ModelRenderer legLeft = modelMap.get("legLeft");
         ModelRenderer legRight = modelMap.get("legRight");
+        // 手部
         ModelRenderer armLeft = modelMap.get("armLeft");
         ModelRenderer armRight = modelMap.get("armRight");
+        // 翅膀
         ModelRenderer wingLeft = modelMap.get("wingLeft");
         ModelRenderer wingRight = modelMap.get("wingRight");
         // 呆毛
@@ -135,32 +140,58 @@ public class EntityModelJson extends ModelBase {
         // 浮动部件
         ModelRenderer sinFloat = modelMap.get("sinFloat");
         ModelRenderer cosFloat = modelMap.get("cosFloat");
-        // 护甲部分显示
+        ModelRenderer negativeSinFloat = modelMap.get("-sinFloat");
+        ModelRenderer negativeCosFloat = modelMap.get("-cosFloat");
+        // 护甲
         ModelRenderer helmet = modelMap.get("helmet");
         ModelRenderer chestPlate = modelMap.get("chestPlate");
         ModelRenderer leggings = modelMap.get("leggings");
         ModelRenderer boots = modelMap.get("boots");
 
-        // 用于手部使用动画的数据
-        float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
-        float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
+        // 动画和姿势
+        headAnimation(head, netHeadYaw, headPitch);
+        legAnimation(legLeft, legRight, limbSwing, limbSwingAmount);
+        armAnimation(entityMaid, armLeft, armRight, limbSwing, limbSwingAmount, ageInTicks);
+        wingAnimation(wingLeft, wingRight, ageInTicks);
+        blinkAnimation(blink, ageInTicks);
+        tailAnimation(tail, ageInTicks);
+        floatAnimation(sinFloat, cosFloat, negativeSinFloat, negativeCosFloat, ageInTicks);
+        renderArmor(entityMaid, helmet, chestPlate, leggings, boots);
+        beggingPosture(entityMaid, head, ahoge, ageInTicks);
+        swingingArmsPosture(entityMaid, armLeft, armRight);
 
+        // 因为两者不允许同时存在，所以需要 if 判定
+        if (entityMaid.isRiding()) {
+            ridingPosture(legLeft, legRight);
+        } else if (entityMaid.isSitting()) {
+            sittingPosture(armLeft, armRight, legLeft, legRight);
+        }
+    }
+
+    private void headAnimation(@Nullable ModelRenderer head, float netHeadYaw, float headPitch) {
         if (head != null) {
             head.rotateAngleX = headPitch / 45f / (float) Math.PI;
             head.rotateAngleY = netHeadYaw / 45f / (float) Math.PI;
         }
+    }
 
+    private void legAnimation(@Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight, float limbSwing, float limbSwingAmount) {
         // 左脚右脚的运动
         if (legLeft != null) {
             legLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
             legLeft.rotateAngleZ = 0f;
         }
-
         if (legRight != null) {
             legRight.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
             legRight.rotateAngleZ = 0f;
         }
+    }
 
+    private void armAnimation(EntityMaid entityMaid, @Nullable ModelRenderer armLeft, @Nullable ModelRenderer armRight,
+                              float limbSwing, float limbSwingAmount, float ageInTicks) {
+        // 用于手部使用动画的数据
+        float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
+        float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
         // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
         if (armLeft != null) {
             armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
@@ -168,7 +199,7 @@ public class EntityModelJson extends ModelBase {
             armLeft.rotateAngleZ = MathHelper.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
             // 手部使用动画
             armLeft.rotateAngleX += f * 1.2F - f1 * 0.4F;
-            if (swingProgress > 0.0F && getSwingingHand((EntityMaid) entityIn) == EnumHandSide.LEFT) {
+            if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.LEFT) {
                 float tmp = MathHelper.sin(MathHelper.sqrt(swingProgress) * ((float) Math.PI * 2F)) * 0.1f;
                 armLeft.rotateAngleX = MathHelper.cos(tmp) * 5.0F;
                 armLeft.rotateAngleY += tmp;
@@ -181,44 +212,57 @@ public class EntityModelJson extends ModelBase {
             armRight.rotateAngleY = 0f;
             armRight.rotateAngleZ = -MathHelper.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
             // 手部使用动画
-            if (swingProgress > 0.0F && getSwingingHand((EntityMaid) entityIn) == EnumHandSide.RIGHT) {
+            if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.RIGHT) {
                 float tmp = -MathHelper.sin(MathHelper.sqrt(swingProgress) * ((float) Math.PI * 2F)) * 0.1f;
                 armRight.rotateAngleX = MathHelper.cos(tmp) * 5.0F;
                 armRight.rotateAngleY += tmp;
                 armRight.rotateAngleZ = MathHelper.sin(tmp) * 5.0F;
             }
         }
+    }
 
+    private void wingAnimation(@Nullable ModelRenderer wingLeft, @Nullable ModelRenderer wingRight, float ageInTicks) {
         if (wingLeft != null) {
             wingLeft.rotateAngleY = -MathHelper.cos(ageInTicks * 0.3f) * 0.2f + 1.0f;
         }
-
         if (wingRight != null) {
             wingRight.rotateAngleY = MathHelper.cos(ageInTicks * 0.3f) * 0.2f - 1.0f;
         }
+    }
 
-        // 眨眼动作绘制
+    private void blinkAnimation(@Nullable ModelRenderer blink, float ageInTicks) {
         if (blink != null) {
             float remainder = ageInTicks % 60;
             // 0-10 显示眨眼贴图
             blink.isHidden = !(55 < remainder && remainder < 60);
         }
+    }
 
+    private void tailAnimation(@Nullable ModelRenderer tail, float ageInTicks) {
         if (tail != null) {
             tail.rotateAngleZ = MathHelper.cos(ageInTicks * 0.2f) * 0.1f;
             tail.rotateAngleX = MathHelper.sin(ageInTicks * 0.2f) * 0.05f;
         }
+    }
 
+    private void floatAnimation(@Nullable ModelRenderer sinFloat, @Nullable ModelRenderer cosFloat,
+                                @Nullable ModelRenderer negativeSinFloat, @Nullable ModelRenderer negativeCosFloat, float ageInTicks) {
         if (sinFloat != null) {
             sinFloat.offsetY = MathHelper.sin(ageInTicks * 0.1f) * 0.05f;
         }
-
         if (cosFloat != null) {
             cosFloat.offsetY = MathHelper.cos(ageInTicks * 0.1f) * 0.05f;
         }
+        if (negativeSinFloat != null) {
+            negativeSinFloat.offsetY = -MathHelper.sin(ageInTicks * 0.1f) * 0.05f;
+        }
+        if (negativeCosFloat != null) {
+            negativeCosFloat.offsetY = -MathHelper.cos(ageInTicks * 0.1f) * 0.05f;
+        }
+    }
 
-        EntityMaid entityMaid = (EntityMaid) entityIn;
-
+    private void renderArmor(EntityMaid entityMaid, @Nullable ModelRenderer helmet, @Nullable ModelRenderer chestPlate,
+                             @Nullable ModelRenderer leggings, @Nullable ModelRenderer boots) {
         // 护甲部分渲染
         if (helmet != null) {
             helmet.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
@@ -232,40 +276,43 @@ public class EntityModelJson extends ModelBase {
         if (boots != null) {
             boots.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
         }
+    }
 
-        if (entityMaid.isRiding()) {
-            if (legLeft != null) {
-                legLeft.rotateAngleX = -0.960f;
-                legLeft.rotateAngleZ = -0.523f;
-            }
-            if (legRight != null) {
-                legRight.rotateAngleX = -0.960f;
-                legRight.rotateAngleZ = 0.523f;
-            }
+    private void sittingPosture(@Nullable ModelRenderer armLeft, @Nullable ModelRenderer armRight,
+                                @Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight) {
+        if (armLeft != null) {
+            armLeft.rotateAngleX = -0.798f;
+            armLeft.rotateAngleZ = 0.274f;
+        }
+        if (armRight != null) {
+            armRight.rotateAngleX = -0.798f;
+            armRight.rotateAngleZ = -0.274f;
+        }
+        if (legLeft != null) {
+            legLeft.rotateAngleX = -0.960f;
+            legLeft.rotateAngleZ = -0.523f;
+        }
+        if (legRight != null) {
+            legRight.rotateAngleX = -0.960f;
+            legRight.rotateAngleZ = 0.523f;
+        }
+        GlStateManager.translate(0, 0.3f, 0);
+    }
 
-            GlStateManager.translate(0, 0.3f, 0);
-        } else if (entityMaid.isSitting()) {
-            if (armLeft != null) {
-                armLeft.rotateAngleX = -0.798f;
-                armLeft.rotateAngleZ = 0.274f;
-            }
-            if (armRight != null) {
-                armRight.rotateAngleX = -0.798f;
-                armRight.rotateAngleZ = -0.274f;
-            }
-
-            if (legLeft != null) {
-                legLeft.rotateAngleX = -0.960f;
-                legLeft.rotateAngleZ = -0.523f;
-            }
-            if (legRight != null) {
-                legRight.rotateAngleX = -0.960f;
-                legRight.rotateAngleZ = 0.523f;
-            }
-
-            GlStateManager.translate(0, 0.3f, 0);
+    private void ridingPosture(@Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight) {
+        if (legLeft != null) {
+            legLeft.rotateAngleX = -0.960f;
+            legLeft.rotateAngleZ = -0.523f;
+        }
+        if (legRight != null) {
+            legRight.rotateAngleX = -0.960f;
+            legRight.rotateAngleZ = 0.523f;
         }
 
+        GlStateManager.translate(0, 0.3f, 0);
+    }
+
+    private void beggingPosture(EntityMaid entityMaid, @Nullable ModelRenderer head, @Nullable ModelRenderer ahoge, float ageInTicks) {
         if (entityMaid.isBegging()) {
             if (head != null) {
                 head.rotateAngleZ = 0.139f;
@@ -282,7 +329,9 @@ public class EntityModelJson extends ModelBase {
                 ahoge.rotateAngleZ = 0f;
             }
         }
+    }
 
+    private void swingingArmsPosture(EntityMaid entityMaid, @Nullable ModelRenderer armLeft, @Nullable ModelRenderer armRight) {
         if (entityMaid.isSwingingArms()) {
             if (armLeft != null) {
                 armLeft.rotateAngleX = -1.396f;

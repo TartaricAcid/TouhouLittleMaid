@@ -19,7 +19,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -58,6 +57,28 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         setHardness(0.5f);
         setRegistryName("garage_kit");
         setCreativeTab(MaidItems.TABS);
+    }
+
+    /**
+     * 获取 ItemStack 中的 MAID_DATA NBT 数据，如果不存在则返回默认值
+     */
+    public static NBTTagCompound getEntityData(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName());
+        }
+        return DEFAULT_DATA;
+    }
+
+    /**
+     * 安全获取 NBT 实例的方法
+     */
+    private static NBTTagCompound getTagCompoundSafe(ItemStack stack) {
+        NBTTagCompound tagCompound = stack.getTagCompound();
+        if (tagCompound == null) {
+            tagCompound = new NBTTagCompound();
+            stack.setTagCompound(tagCompound);
+        }
+        return tagCompound;
     }
 
     @Override
@@ -99,17 +120,20 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
             ((TileEntityGarageKit) te).setData(this.getEntityId(stack), placer.getHorizontalFacing().getOpposite(),
-                    this.getModelId(stack), this.getEntityData(stack));
+                    this.getModelId(stack), getEntityData(stack));
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        String id = getEntityId(stack);
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.id.desc",
-                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(id)) + ".name")));
-        if (id.equals("touhou_little_maid:entity.passive.maid")) {
+        // 先显示实体名称
+        String entityId = getEntityId(stack);
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.entity_id.desc",
+                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(entityId)) + ".name")));
+
+        // 如果是女仆，才会显示对应的模型名称
+        if (entityId.equals(DEFAULT_ENTITY_ID)) {
             ModelItem modelItem = ClientProxy.ID_INFO_MAP.get(getModelId(stack));
             if (modelItem != null) {
                 tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(modelItem.getName())));
@@ -133,6 +157,8 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         return false;
     }
 
+    // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
+
     @Override
     public boolean isFullCube(IBlockState state) {
         // 否则玩家会卡死在方块里面窒息
@@ -141,6 +167,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        // 先是各种条件判定，不符合进行返回
         ItemStack stack = playerIn.getHeldItem(hand);
         if (worldIn.isRemote || stack.getItem() != Items.SPAWN_EGG) {
             return false;
@@ -153,11 +180,14 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         if (id == null || !EntityList.ENTITY_EGGS.containsKey(id)) {
             return false;
         }
+
+        // 应用刷怪蛋
         TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
         Entity entity = EntityList.createEntityByIDFromName(id, worldIn);
-        if (entity instanceof EntityLiving)
-        {
+        if (entity instanceof EntityLiving) {
+            // 获取初始化的实体对象
             ((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
+            // 女仆的话，需要应用上模型 ID
             if (entity instanceof EntityMaid) {
                 garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModelId(), new NBTTagCompound());
                 return true;
@@ -166,8 +196,6 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         garageKit.setData(id.toString(), garageKit.getFacing(), null, entity.writeToNBT(new NBTTagCompound()));
         return true;
     }
-
-    // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
 
     /**
      * 通过读取 TileEntityGarageKit 来获得对应 ItemStack
@@ -221,29 +249,6 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
             return getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName());
         }
         return DEFAULT_MODEL_ID;
-    }
-
-    /**
-     * 获取 ItemStack 中的 MAID_DATA NBT 数据，如果不存在则返回默认值
-     */
-    public static NBTTagCompound getEntityData(ItemStack stack) {
-        if (!getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName()).isEmpty()) {
-            return getTagCompoundSafe(stack).getCompoundTag(NBT.MAID_DATA.getName());
-        }
-        return DEFAULT_DATA;
-    }
-
-
-    /**
-     * 安全获取 NBT 实例的方法
-     */
-    private static NBTTagCompound getTagCompoundSafe(ItemStack stack) {
-        NBTTagCompound tagCompound = stack.getTagCompound();
-        if (tagCompound == null) {
-            tagCompound = new NBTTagCompound();
-            stack.setTagCompound(tagCompound);
-        }
-        return tagCompound;
     }
 
     public enum NBT {

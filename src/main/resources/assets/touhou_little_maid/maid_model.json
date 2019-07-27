@@ -1,157 +1,113 @@
 {
-  "pack_name": "{pack.vanilla_touhou_model.name}",
+  "pack_name": "{pack.touhou_little_maid.name}",
   "author": ["Succinum", "ZeniCrow", "Paulzzh"],
-  "description": ["{pack.vanilla_touhou_model.desc}"],
+  "description": ["{pack.touhou_little_maid.desc}"],
   "version": "1.0.0",
   "date": "2019-07-14",
   "model_list": [
     {
       "model_id": "touhou_little_maid:hakurei_reimu",
-      "name": "{model.vanilla_touhou_model.hakurei_reimu.name}",
-      "description": ["{model.vanilla_touhou_model.hakurei_reimu.desc}"]
+      "description": ["{model.touhou_little_maid.hakurei_reimu.desc}"]
     }, {
       "model_id": "touhou_little_maid:yakumo_ran",
-      "name": "{model.vanilla_touhou_model.yakumo_ran.name}",
-      "description": ["{model.vanilla_touhou_model.yakumo_ran.desc}"]
+      "description": ["{model.touhou_little_maid.yakumo_ran.desc}"]
     }, {
       "model_id": "touhou_little_maid:inubashiri_momizi",
-      "name": "{model.vanilla_touhou_model.inubashiri_momizi.name}",
-      "description": ["{model.vanilla_touhou_model.inubashiri_momizi.desc}"]
+      "description": ["{model.touhou_little_maid.inubashiri_momizi.desc}"]
     }, {
       "format": 1,
       "model_id": "touhou_little_maid:komeiji_satori",
-      "name": "{model.vanilla_touhou_model.komeiji_satori.name}",
-      "description": ["{model.vanilla_touhou_model.komeiji_satori.desc}"]
+      "description": ["{model.touhou_little_maid.komeiji_satori.desc}"]
     }, {
       "model_id": "touhou_little_maid:reisen_udongein_inaba",
-      "name": "{model.vanilla_touhou_model.reisen_udongein_inaba.name}",
-      "description": ["{model.vanilla_touhou_model.reisen_udongein_inaba.desc}"]
+      "description": ["{model.touhou_little_maid.reisen_udongein_inaba.desc}"]
     }, {
       "model_id": "touhou_little_maid:yasaka_kanako",
-      "name": "{model.vanilla_touhou_model.yasaka_kanako.name}",
-      "description": ["{model.vanilla_touhou_model.yasaka_kanako.desc}"]
+      "description": ["{model.touhou_little_maid.yasaka_kanako.desc}"]
     }, {
       "model_id": "touhou_little_maid:hata_no_kokoro",
-      "name": "{model.vanilla_touhou_model.hata_no_kokoro.name}",
-      "description": ["{model.vanilla_touhou_model.hata_no_kokoro.desc}"]
+      "description": ["{model.touhou_little_maid.hata_no_kokoro.desc}"]
     }, {
       "model_id": "touhou_little_maid:sekibanki",
-      "name": "{model.vanilla_touhou_model.sekibanki.name}",
-      "description": ["{model.vanilla_touhou_model.sekibanki.desc}"]
+      "description": ["{model.touhou_little_maid.sekibanki.desc}"]
     }, {
       "model_id": "touhou_little_maid:kawasiro_nitori",
-      "name": "{model.vanilla_touhou_model.kawasiro_nitori.name}",
-      "description": ["{model.vanilla_touhou_model.kawasiro_nitori.desc}"]
+      "description": ["{model.touhou_little_maid.kawasiro_nitori.desc}"]
     }, {
       "model_id": "touhou_little_maid:kochiya_sanae",
-      "name": "{model.vanilla_touhou_model.kochiya_sanae.name}",
-      "description": ["{model.vanilla_touhou_model.kochiya_sanae.desc}"]
+      "description": ["{model.touhou_little_maid.kochiya_sanae.desc}"]
     }, {
       "model_id": "touhou_little_maid:izayoi_sakuya",
-      "name": "{model.vanilla_touhou_model.izayoi_sakuya.name}",
-      "description": ["{model.vanilla_touhou_model.izayoi_sakuya.desc}"]
+      "description": ["{model.touhou_little_maid.izayoi_sakuya.desc}"]
     }, {
       "model_id": "touhou_little_maid:nagae_iku",
-      "name": "{model.vanilla_touhou_model.nagae_iku.name}",
-      "description": ["{model.vanilla_touhou_model.nagae_iku.desc}"]
+      "description": ["{model.touhou_little_maid.nagae_iku.desc}"]
     }, {
       "model_id": "touhou_little_maid:cirno",
-      "name": "{model.vanilla_touhou_model.cirno.name}",
-      "description": ["{model.vanilla_touhou_model.cirno.desc}"]
+      "description": ["{model.touhou_little_maid.cirno.desc}"]
     }, {
       "model_id": "touhou_little_maid:daiyousei",
-      "name": "{model.vanilla_touhou_model.daiyousei.name}",
-      "description": ["{model.vanilla_touhou_model.daiyousei.desc}"]
+      "description": ["{model.touhou_little_maid.daiyousei.desc}"]
     }, {
       "model_id": "touhou_little_maid:houraisan_kaguya",
-      "name": "{model.vanilla_touhou_model.houraisan_kaguya.name}",
-      "description": ["{model.vanilla_touhou_model.houraisan_kaguya.desc}"]
+      "description": ["{model.touhou_little_maid.houraisan_kaguya.desc}"]
     }, {
       "model_id": "touhou_little_maid:moriya_suwako",
-      "name": "{model.vanilla_touhou_model.moriya_suwako.name}",
-      "description": ["{model.vanilla_touhou_model.moriya_suwako.desc}"]
+      "description": ["{model.touhou_little_maid.moriya_suwako.desc}"]
     }, {
       "model_id": "touhou_little_maid:wakasagihime",
-      "name": "{model.vanilla_touhou_model.wakasagihime.name}",
-      "description": ["{model.vanilla_touhou_model.wakasagihime.desc}"]
+      "description": ["{model.touhou_little_maid.wakasagihime.desc}"]
     }, {
       "model_id": "touhou_little_maid:flandre_scarlet",
-      "name": "{model.vanilla_touhou_model.flandre_scarlet.name}",
-      "description": ["{model.vanilla_touhou_model.flandre_scarlet.desc}"]
+      "description": ["{model.touhou_little_maid.flandre_scarlet.desc}"]
     }, {
       "model_id": "touhou_little_maid:fujiwara_no_mokou",
-      "name": "{model.vanilla_touhou_model.fujiwara_no_mokou.name}",
-      "description": ["{model.vanilla_touhou_model.fujiwara_no_mokou.desc}"]
+      "description": ["{model.touhou_little_maid.fujiwara_no_mokou.desc}"]
     }, {
       "model_id": "touhou_little_maid:kisume",
-      "name": "{model.vanilla_touhou_model.kisume.name}",
-      "description": ["{model.vanilla_touhou_model.kisume.desc}"]
+      "description": ["{model.touhou_little_maid.kisume.desc}"]
     }, {
       "model_id": "touhou_little_maid:chen",
-      "name": "{model.vanilla_touhou_model.chen.name}",
-      "description": ["{model.vanilla_touhou_model.chen.desc}"]
+      "description": ["{model.touhou_little_maid.chen.desc}"]
     }, {
       "model_id": "touhou_little_maid:ibuki_suika",
-      "name": "{model.vanilla_touhou_model.ibuki_suika.name}",
-      "description": ["{model.vanilla_touhou_model.ibuki_suika.desc}"]
+      "description": ["{model.touhou_little_maid.ibuki_suika.desc}"]
     }, {
       "model_id": "touhou_little_maid:star_sapphire",
-      "name": "{model.vanilla_touhou_model.star_sapphire.name}",
-      "description": ["{model.vanilla_touhou_model.star_sapphire.desc}"]
+      "description": ["{model.touhou_little_maid.star_sapphire.desc}"]
     }, {
       "model_id": "touhou_little_maid:konpaku_youmu",
-      "name": "{model.vanilla_touhou_model.konpaku_youmu.name}",
-      "description": ["{model.vanilla_touhou_model.konpaku_youmu.desc}"]
+      "description": ["{model.touhou_little_maid.konpaku_youmu.desc}"]
     }, {
       "model_id": "touhou_little_maid:luna_child",
-      "name": "{model.vanilla_touhou_model.luna_child.name}",
-      "description": ["{model.vanilla_touhou_model.luna_child.desc}"]
+      "description": ["{model.touhou_little_maid.luna_child.desc}"]
     }, {
       "model_id": "touhou_little_maid:remilia_scarlet",
-      "name": "{model.vanilla_touhou_model.remilia_scarlet.name}",
-      "description": ["{model.vanilla_touhou_model.remilia_scarlet.desc}"]
+      "description": ["{model.touhou_little_maid.remilia_scarlet.desc}"]
     }, {
       "model_id": "touhou_little_maid:sunny_milk",
-      "name": "{model.vanilla_touhou_model.sunny_milk.name}",
-      "description": ["{model.vanilla_touhou_model.sunny_milk.desc}"]
+      "description": ["{model.touhou_little_maid.sunny_milk.desc}"]
     }, {
       "model_id": "touhou_little_maid:alice_margatroid",
-      "name": "{model.vanilla_touhou_model.alice_margatroid.name}",
-      "description": ["{model.vanilla_touhou_model.alice_margatroid.desc}"]
+      "description": ["{model.touhou_little_maid.alice_margatroid.desc}"]
     }, {
       "model_id": "touhou_little_maid:patchouli_knowledge",
-      "name": "{model.vanilla_touhou_model.patchouli_knowledge.name}",
-      "description": ["{model.vanilla_touhou_model.patchouli_knowledge.desc}"]
+      "description": ["{model.touhou_little_maid.patchouli_knowledge.desc}"]
     }, {
       "model_id": "touhou_little_maid:hong_meiling",
-      "model": "touhou_little_maid:models/entity/hong_meiling.json",
-      "texture": "touhou_little_maid:textures/entity/hong_meiling.png",
-      "name": "{model.vanilla_touhou_model.hong_meiling.name}",
-      "description": ["{model.vanilla_touhou_model.hong_meiling.desc}"]
+      "description": ["{model.touhou_little_maid.hong_meiling.desc}"]
     }, {
       "model_id": "touhou_little_maid:koakuma",
-      "model": "touhou_little_maid:models/entity/koakuma.json",
-      "texture": "touhou_little_maid:textures/entity/koakuma.png",
-      "name": "{model.vanilla_touhou_model.koakuma.name}",
-      "description": ["{model.vanilla_touhou_model.koakuma.desc}"]
+      "description": ["{model.touhou_little_maid.koakuma.desc}"]
     }, {
       "model_id": "touhou_little_maid:letty_whiterock",
-      "model": "touhou_little_maid:models/entity/letty_whiterock.json",
-      "texture": "touhou_little_maid:textures/entity/letty_whiterock.png",
-      "name": "{model.vanilla_touhou_model.letty_whiterock.name}",
-      "description": ["{model.vanilla_touhou_model.letty_whiterock.desc}"]
+      "description": ["{model.touhou_little_maid.letty_whiterock.desc}"]
     }, {
       "model_id": "touhou_little_maid:lunasa_prismriver",
-      "model": "touhou_little_maid:models/entity/lunasa_prismriver.json",
-      "texture": "touhou_little_maid:textures/entity/lunasa_prismriver.png",
-      "name": "{model.vanilla_touhou_model.lunasa_prismriver.name}",
-      "description": ["{model.vanilla_touhou_model.lunasa_prismriver.desc}"]
+      "description": ["{model.touhou_little_maid.lunasa_prismriver.desc}"]
     }, {
       "model_id": "touhou_little_maid:merlin_prismriver",
-      "model": "touhou_little_maid:models/entity/merlin_prismriver.json",
-      "texture": "touhou_little_maid:textures/entity/merlin_prismriver.png",
-      "name": "{model.vanilla_touhou_model.merlin_prismriver.name}",
-      "description": ["{model.vanilla_touhou_model.merlin_prismriver.desc}"]
+      "description": ["{model.touhou_little_maid.merlin_prismriver.desc}"]
     }
   ]
 }

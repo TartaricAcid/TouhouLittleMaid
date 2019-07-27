@@ -7,9 +7,6 @@
   "model_list": [
     {
       "model_id": "snownee:nyaruko",
-      "model": "snownee:models/entity/nyaruko.json",
-      "texture": "snownee:textures/entity/nyaruko.png",
-      "name": "{model.snownee.nyaruko.name}",
       "description": ["{model.snownee.nyaruko.desc}"]
     }
   ]

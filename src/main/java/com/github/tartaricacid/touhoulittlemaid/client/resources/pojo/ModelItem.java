@@ -12,9 +12,9 @@ public class ModelItem {
 
     private List<String> description;
 
-    private transient ResourceLocation model;
+    private ResourceLocation model;
 
-    private transient ResourceLocation texture;
+    private ResourceLocation texture;
 
     @SerializedName("model_id")
     private ResourceLocation modelId;
@@ -24,16 +24,10 @@ public class ModelItem {
      */
     private int format = -1;
 
-    /**
-     * 材质必须存在
-     */
     public ResourceLocation getTexture() {
         return texture;
     }
 
-    /**
-     * 模型名称必须存在
-     */
     public String getName() {
         return name;
     }
@@ -49,9 +43,6 @@ public class ModelItem {
         return modelId;
     }
 
-    /**
-     * 模型必须存在
-     */
     public ResourceLocation getModel() {
         return model;
     }
@@ -88,12 +79,17 @@ public class ModelItem {
         if (modelId == null) {
             throw new JsonSyntaxException("Expected \"model_id\" in model");
         }
-        // 如果 name 为空，抛出异常
-        if (name == null) {
-            throw new JsonSyntaxException("Expected \"name\" in model");
+        // 如果 model 或 texture 为空，自动生成默认位置的模型
+        if (model == null) {
+            model = new ResourceLocation(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
         }
-        model = new ResourceLocation(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
-        texture = new ResourceLocation(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
+        if (texture == null) {
+            texture = new ResourceLocation(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
+        }
+        // 如果名称为空，自动生成本地化名称
+        if (name == null) {
+            name = String.format("{model.%s.%s.name}", modelId.getNamespace(), modelId.getPath());
+        }
         return this;
     }
 }
