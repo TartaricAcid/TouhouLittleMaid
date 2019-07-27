@@ -3,7 +3,7 @@
   "geometry.model": {
     "texturewidth": 128,
     "textureheight": 128,
-    "visible_bounds_width": 2,
+    "visible_bounds_width": 3,
     "visible_bounds_height": 2,
     "visible_bounds_offset": [0, 1, 0],
     "bones": [
@@ -235,7 +235,7 @@
         ]
       },
       {
-        "name": "bone",
+        "name": "boneRight",
         "parent": "body",
         "pivot": [-1, 10.5, -4.5],
         "rotation": [-30, 0, 20],
@@ -248,7 +248,7 @@
         ]
       },
       {
-        "name": "bone",
+        "name": "boneLeft",
         "parent": "body",
         "pivot": [1, 10.5, -4.5],
         "rotation": [-30, 0, -20],

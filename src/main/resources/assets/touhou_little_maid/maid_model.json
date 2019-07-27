@@ -180,6 +180,36 @@
       "texture": "touhou_little_maid:textures/entity/patchouli_knowledge.png",
       "name": "{model.vanilla_touhou_model.patchouli_knowledge.name}",
       "description": ["{model.vanilla_touhou_model.patchouli_knowledge.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:hong_meiling",
+      "model": "touhou_little_maid:models/entity/hong_meiling.json",
+      "texture": "touhou_little_maid:textures/entity/hong_meiling.png",
+      "name": "{model.vanilla_touhou_model.hong_meiling.name}",
+      "description": ["{model.vanilla_touhou_model.hong_meiling.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:koakuma",
+      "model": "touhou_little_maid:models/entity/koakuma.json",
+      "texture": "touhou_little_maid:textures/entity/koakuma.png",
+      "name": "{model.vanilla_touhou_model.koakuma.name}",
+      "description": ["{model.vanilla_touhou_model.koakuma.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:letty_whiterock",
+      "model": "touhou_little_maid:models/entity/letty_whiterock.json",
+      "texture": "touhou_little_maid:textures/entity/letty_whiterock.png",
+      "name": "{model.vanilla_touhou_model.letty_whiterock.name}",
+      "description": ["{model.vanilla_touhou_model.letty_whiterock.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:lunasa_prismriver",
+      "model": "touhou_little_maid:models/entity/lunasa_prismriver.json",
+      "texture": "touhou_little_maid:textures/entity/lunasa_prismriver.png",
+      "name": "{model.vanilla_touhou_model.lunasa_prismriver.name}",
+      "description": ["{model.vanilla_touhou_model.lunasa_prismriver.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:merlin_prismriver",
+      "model": "touhou_little_maid:models/entity/merlin_prismriver.json",
+      "texture": "touhou_little_maid:textures/entity/merlin_prismriver.png",
+      "name": "{model.vanilla_touhou_model.merlin_prismriver.name}",
+      "description": ["{model.vanilla_touhou_model.merlin_prismriver.desc}"]
     }
   ]
 }
