@@ -12,9 +12,9 @@ public class ModelItem {
 
     private List<String> description;
 
-    private ResourceLocation model;
+    private transient ResourceLocation model;
 
-    private ResourceLocation texture;
+    private transient ResourceLocation texture;
 
     @SerializedName("model_id")
     private ResourceLocation modelId;
