@@ -37,7 +37,6 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
                     return e;
                 }
             });
-            entity.setWorld(getWorld());
             entity.readFromNBT(te.getMaidData());
         } catch (ExecutionException e) {
             return;

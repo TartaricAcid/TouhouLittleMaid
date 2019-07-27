@@ -578,6 +578,9 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private void dropGarageKit() {
         // 先在死亡前获取女仆的 NBT 数据
+        hurtResistantTime = 0;
+        hurtTime = 0;
+        deathTime = 0;
         NBTTagCompound entityTag = new NBTTagCompound();
         this.writeEntityToNBT(entityTag);
         // 剔除物品部分
