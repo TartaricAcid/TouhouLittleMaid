@@ -1,13 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.SerializedName;
+import net.minecraft.util.ResourceLocation;
+
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.google.gson.JsonSyntaxException;
-
-import net.minecraft.util.ResourceLocation;
 
 public class ModelItem {
     private String name;
@@ -18,7 +16,8 @@ public class ModelItem {
 
     private ResourceLocation texture;
 
-    private ResourceLocation location;
+    @SerializedName("model_id")
+    private ResourceLocation modelId;
 
     /**
      * 用来为以后可能做改动的而设置的参数
@@ -43,8 +42,11 @@ public class ModelItem {
         return description;
     }
 
-    public ResourceLocation getLocation() {
-        return location;
+    /**
+     * model id 必须存在
+     */
+    public ResourceLocation getModelId() {
+        return modelId;
     }
 
     /**
@@ -68,27 +70,37 @@ public class ModelItem {
         return super.equals(obj);
     }
 
+    /**
+     * 二次修饰此 pojo
+     *
+     * @param format 该模型对象所属包的 format
+     */
     public ModelItem decorate(int format) {
+        // 如果该模型对象的 format 为默认值，才允许设置所属包的 format
         if (this.format < 0) {
             this.format = format;
         }
+        // description 设置为空列表
         if (description == null) {
             description = Collections.EMPTY_LIST;
         }
-        if (location == null) {
-            if (model != null) {
-                Pattern pattern = Pattern.compile("^.+\\/(.+)\\.json$");
-                Matcher matcher = pattern.matcher(model.getPath());
-                if (matcher.find()) {
-                    location = new ResourceLocation(model.getNamespace(), matcher.group(1));
-                }
-            }
-            if (location == null) {
-                throw new JsonSyntaxException("Expected \"location\" in model");
-            }
-        } else {
-            model = new ResourceLocation(location.getNamespace(), "models/entity/" + location.getPath() + ".json");
-            texture = new ResourceLocation(location.getNamespace(), "textures/entity/" + location.getPath() + ".png");
+
+        // 以下四者缺一不可
+        // 如果 model_id 为空，抛出异常
+        if (modelId == null) {
+            throw new JsonSyntaxException("Expected \"model_id\" in model");
+        }
+        // 如果 model 为空，抛出异常
+        if (model == null) {
+            throw new JsonSyntaxException("Expected \"model\" in model");
+        }
+        // 如果 texture 为空，抛出异常
+        if (texture == null) {
+            throw new JsonSyntaxException("Expected \"texture\" in model");
+        }
+        // 如果 name 为空，抛出异常
+        if (name == null) {
+            throw new JsonSyntaxException("Expected \"name\" in model");
         }
         return this;
     }

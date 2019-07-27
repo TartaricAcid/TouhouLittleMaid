@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+
+import javax.annotation.Nullable;
 
 /**
  * 女仆任务模式接口
@@ -67,9 +67,9 @@ public interface IMaidTask {
     }
 
     /**
-     * 获取当前模式的本地化名称
+     * 获取当前模式的国际化 key
      *
-     * @return 本地化的模式名称
+     * @return 国际化 key
      */
     default String getTranslationKey() {
         return "task." + getUid().getNamespace() + "." + getUid().getPath();
