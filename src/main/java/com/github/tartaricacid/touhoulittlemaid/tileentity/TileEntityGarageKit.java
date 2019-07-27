@@ -50,6 +50,8 @@ public class TileEntityGarageKit extends TileEntity {
         }
         if (getTileData().hasKey(BlockGarageKit.NBT.MODEL_ID.getName())) {
             modelId = getTileData().getString(BlockGarageKit.NBT.MODEL_ID.getName());
+        } else {
+            modelId = null;
         }
         if (getTileData().hasKey(BlockGarageKit.NBT.MAID_DATA.getName())) {
             maidData = getTileData().getCompoundTag(BlockGarageKit.NBT.MAID_DATA.getName());
@@ -60,7 +62,9 @@ public class TileEntityGarageKit extends TileEntity {
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         getTileData().setString(BlockGarageKit.NBT.ENTITY_ID.getName(), entityId);
         getTileData().setString(BlockGarageKit.NBT.FACING.getName(), facing.getName());
-        getTileData().setString(BlockGarageKit.NBT.MODEL_ID.getName(), modelId);
+        if (modelId != null) {
+            getTileData().setString(BlockGarageKit.NBT.MODEL_ID.getName(), modelId);
+        }
         getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), maidData);
         super.writeToNBT(compound);
         return compound;
@@ -76,6 +80,7 @@ public class TileEntityGarageKit extends TileEntity {
         return facing;
     }
 
+    @Nullable
     public String getModelId() {
         return modelId;
     }
@@ -85,7 +90,7 @@ public class TileEntityGarageKit extends TileEntity {
     }
 
     public void setData(String entityId, EnumFacing facing, String modelId, NBTTagCompound maidData) {
-        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.modelId, modelId)) {
+        if (Objects.equal(this.entityId, entityId) && Objects.equal(this.facing, facing) && Objects.equal(this.modelId, modelId) && Objects.equal(this.maidData, maidData)) {
             return;
         }
         this.entityId = entityId;
