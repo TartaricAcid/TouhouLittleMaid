@@ -40,7 +40,7 @@ public class EntityMaidPickup extends EntityAIBase {
 
         // 获取初始拾取列表
         list = this.entityMaid.world.getEntitiesInAABBexcluding(entityMaid,
-                this.entityMaid.getEntityBoundingBox().expand(8, 2, 8).expand(-8, -2, -8),
+                this.entityMaid.getEntityBoundingBox().grow(8, 2, 8),
                 EntityMaid.IS_PICKUP);
 
         // 列表不为空，就执行

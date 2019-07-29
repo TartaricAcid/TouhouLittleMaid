@@ -47,7 +47,7 @@ public class EntityMaidShear extends EntityAIBase {
 
         // 开始判定 16 范围内的可剪生物
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(entityMaid, entityMaid.getEntityBoundingBox()
-                .expand(8, 2, 8).expand(-8, -2, -8), EntityMaid.CAN_SHEAR);
+                .grow(8, 2, 8), EntityMaid.CAN_SHEAR);
         for (Entity entity : entityList) {
             if (entity instanceof IShearable && ((IShearable) entity).isShearable(mainhandItem, world, entity.getPosition())) {
                 shearableEntity = entity;

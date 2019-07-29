@@ -35,6 +35,7 @@ config.touhou_little_maid.maid_config=女仆相关配置
 config.touhou_little_maid.maid_config.maid_tamed_item=驯服女仆所使用的物品
 config.touhou_little_maid.maid_config.maid_temptation_item=诱惑女仆所使用的物品
 config.touhou_little_maid.maid_config.maid_talk_interval=女仆发出声音的间隔（tick）
+config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽子
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹
@@ -56,6 +57,7 @@ task.touhou_little_maid.farm=农场
 task.touhou_little_maid.feed=喂食
 task.touhou_little_maid.shears=剪刀
 task.touhou_little_maid.torch=火把
+task.touhou_little_maid.feed_animal=繁殖动物
 
 # GUI
 gui.touhou_little_maid.button.mode_switch=女仆当前处于%s模式
@@ -117,6 +119,8 @@ model.touhou_little_maid.koakuma.name=小恶魔
 model.touhou_little_maid.letty_whiterock.name=蕾蒂·霍瓦特洛克
 model.touhou_little_maid.lunasa_prismriver.name=露娜萨·普莉兹姆利巴
 model.touhou_little_maid.merlin_prismriver.name=梅露兰·普莉兹姆利巴
+model.touhou_little_maid.kirisame_marisa.name=雾雨魔理沙
+model.touhou_little_maid.hinanawi_tenshi.name=比那名居天子
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -152,6 +156,8 @@ model.touhou_little_maid.koakuma.desc=§7？？？
 model.touhou_little_maid.letty_whiterock.desc=§7冬天的遗忘之物
 model.touhou_little_maid.lunasa_prismriver.desc=§7骚灵提琴手
 model.touhou_little_maid.merlin_prismriver.desc=§7骚灵小号手
+model.touhou_little_maid.kirisame_marisa.desc=§7普通的魔法使
+model.touhou_little_maid.hinanawi_tenshi.desc=§7非想非非想天之女
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
@@ -162,6 +168,7 @@ subtitle.touhou_little_maid.maid.mode.farm=女仆：农场
 subtitle.touhou_little_maid.maid.mode.feed=女仆：喂养
 subtitle.touhou_little_maid.maid.mode.shears=女仆：剪刀
 subtitle.touhou_little_maid.maid.mode.torch=女仆：火把
+subtitle.touhou_little_maid.maid.mode.feed_animal=女仆：繁殖动物
 subtitle.touhou_little_maid.maid.ai.find_target=女仆：发现目标
 subtitle.touhou_little_maid.maid.ai.hurt=女仆：受伤
 subtitle.touhou_little_maid.maid.ai.hurt_fire=女仆：火焰伤害

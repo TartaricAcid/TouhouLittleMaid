@@ -108,6 +108,12 @@
     }, {
       "model_id": "touhou_little_maid:merlin_prismriver",
       "description": ["{model.touhou_little_maid.merlin_prismriver.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kirisame_marisa",
+      "description": ["{model.touhou_little_maid.kirisame_marisa.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:hinanawi_tenshi",
+      "description": ["{model.touhou_little_maid.hinanawi_tenshi.desc}"]
     }
   ]
 }

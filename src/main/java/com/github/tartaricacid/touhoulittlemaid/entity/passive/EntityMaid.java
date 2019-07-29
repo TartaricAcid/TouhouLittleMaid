@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -25,6 +26,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.passive.EntityWolf;
@@ -42,6 +44,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -76,12 +79,6 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
-
-    private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
-    private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
-    private final ItemStackHandler mainInv = new ItemStackHandler(15);
-    private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
-
     /**
      * 拾起物品声音的延时计数器
      */
@@ -90,7 +87,10 @@ public class EntityMaid extends AbstractEntityMaid {
      * 玩家伤害女仆后的声音延时计数器
      */
     private static int playerHurtSoundCount = 100;
-
+    private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
+    private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
+    private final ItemStackHandler mainInv = new ItemStackHandler(15);
+    private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
     /**
      * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
      */
@@ -120,9 +120,8 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
-        this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 6.0F, 2.0F));
+        this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
 
-        this.tasks.addTask(8, new EntityAIOpenDoor(this, true));
         this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 6.0F, 0.2f));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 6.0F, 0.2f));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityOcelot.class, 6.0F, 0.2f));
@@ -134,13 +133,6 @@ public class EntityMaid extends AbstractEntityMaid {
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityMob.class, true));
         this.targetTasks.addTask(3, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(4, new EntityAIOwnerHurtTarget(this));
-    }
-
-    @Override
-    protected PathNavigate createNavigator(World worldIn) {
-        PathNavigateGround pathNavigate = new PathNavigateGround(this, worldIn);
-        pathNavigate.setBreakDoors(true);
-        return pathNavigate;
     }
 
     @Override
@@ -159,8 +151,12 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
+
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
+
+        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.4d);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
     }
 
     @Override
@@ -181,6 +177,8 @@ public class EntityMaid extends AbstractEntityMaid {
         // 随机回血
         this.randomRestoreHealth();
         super.onLivingUpdate();
+        applyBroomRiding();
+        applyNavigatorAndMoveHelper();
     }
 
     /**
@@ -211,6 +209,99 @@ public class EntityMaid extends AbstractEntityMaid {
                         d0, d1, d2);
             }
         }
+    }
+
+    /**
+     * 时时刻刻检查寻路算法
+     */
+    private void applyNavigatorAndMoveHelper() {
+        // 非骑扫帚状态，对应寻路算法也对劲
+        if (!(getControllingPassenger() instanceof EntityMarisaBroom) && !(navigator instanceof PathNavigateFlying) && !(moveHelper instanceof EntityFlyHelper)) {
+            return;
+        }
+        // 骑扫帚状态，对应寻路算法也对劲
+        if (getControllingPassenger() instanceof EntityMarisaBroom && navigator instanceof PathNavigateFlying && moveHelper instanceof EntityFlyHelper) {
+            return;
+        }
+        // 否则，重置
+        if (getControllingPassenger() instanceof EntityMarisaBroom) {
+            navigator = createNavigatorFlying(world);
+            moveHelper = new EntityFlyHelper(this);
+        } else {
+            navigator = createNavigatorGround(world);
+            moveHelper = new EntityMoveHelper(this);
+            // 以防万一清除重力
+            this.setNoGravity(false);
+        }
+    }
+
+    /**
+     * 将贴近的扫把附加到女仆身上去
+     */
+    private void applyBroomRiding() {
+        // 取自原版船部分逻辑
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0, 0, 0),
+                entity -> entity instanceof EntityMarisaBroom);
+
+        if (list.isEmpty()) {
+            return;
+        }
+
+        // 遍历进行乘坐判定
+        for (Entity entity : list) {
+            // 如果选择的实体不是已经坐上去的乘客
+            if (!entity.isPassenger(this)) {
+                // 没有实体坐在女仆上，女仆也没有坐在别的实体上
+                boolean maidNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
+                // 服务端，女仆没有处于待命状态，而且尝试坐上去的实体是扫把
+                if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding && entity instanceof EntityMarisaBroom) {
+                    entity.startRiding(this);
+                }
+            }
+        }
+    }
+
+    /**
+     * 与旋转有关系的一堆东西，用来控制扫帚朝向
+     */
+    @Override
+    public void updatePassenger(Entity passenger) {
+        super.updatePassenger(passenger);
+        if (this.isPassenger(passenger) && passenger instanceof EntityMarisaBroom) {
+            EntityMarisaBroom broom = (EntityMarisaBroom) passenger;
+            // 视线也必须同步，因为扫把的朝向受视线限制
+            // 只能以视线方向为中心左右各 90 度，不同步就会导致朝向错误
+            broom.rotationYawHead = this.rotationYawHead;
+            // 旋转方向同步，包括渲染的旋转方向
+            broom.rotationPitch = this.rotationPitch;
+            broom.rotationYaw = this.rotationYaw;
+            broom.renderYawOffset = this.renderYawOffset;
+            // fallDistance 永远为 0
+            this.fallDistance = 0;
+            broom.fallDistance = 0;
+        }
+    }
+
+    /**
+     * 只有扫帚能骑上女仆，其他一概不允许
+     */
+    @Override
+    protected boolean canBeRidden(Entity entityIn) {
+        if (entityIn instanceof EntityMarisaBroom) {
+            return true;
+        }
+        return super.canBeRidden(entityIn);
+    }
+
+    @Override
+    public double getMountedYOffset() {
+        return 0;
+    }
+
+    @Nullable
+    @Override
+    public Entity getControllingPassenger() {
+        return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
 
     @Override
@@ -457,7 +548,7 @@ public class EntityMaid extends AbstractEntityMaid {
         if (hand == EnumHand.MAIN_HAND) {
             ItemStack itemstack = player.getHeldItem(hand);
             // 利用短路原理，逐个触发对应的交互事件
-            return tamedMaid(itemstack, player) || writeHomePos(itemstack, player) || openGuiAndSitting(itemstack, player);
+            return tamedMaid(itemstack, player) || writeHomePos(itemstack, player) || openGuiOrSittingOrDismount(itemstack, player);
         }
         return false;
     }
@@ -513,21 +604,34 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     /**
-     * 打开 GUI 或者切换待命模式
+     * 打开 GUI 或者切换待命模式或解除骑乘状态
      *
      * @return 该逻辑是否成功应用
      */
-    private boolean openGuiAndSitting(ItemStack itemstack, EntityPlayer player) {
+    private boolean openGuiOrSittingOrDismount(ItemStack itemstack, EntityPlayer player) {
         if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
             // 先清除寻路逻辑
             this.getNavigator().clearPath();
             // 如果玩家为潜行状态，那么切换待命
             if (player.isSneaking()) {
-                if (this.isSitting()) {
-                    this.setSitting(false);
-                } else {
-                    this.setRevengeTarget(null);
-                    this.setSitting(true);
+                if (this.getRidingEntity() != null || this.getControllingPassenger() != null) {
+                    // 取消骑乘状态
+                    if (this.getRidingEntity() != null) {
+                        this.dismountRidingEntity();
+                    }
+                    // 取消被骑乘状态
+                    if (this.getControllingPassenger() != null) {
+                        this.getControllingPassenger().dismountRidingEntity();
+                    }
+                }
+                // 否则切换待命状态
+                else {
+                    if (this.isSitting()) {
+                        this.setSitting(false);
+                    } else {
+                        this.setRevengeTarget(null);
+                        this.setSitting(true);
+                    }
                 }
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                         ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
@@ -545,6 +649,11 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     @Override
     public boolean isBreedingItem(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean canMateWith(EntityAnimal otherAnimal) {
         return false;
     }
 
@@ -711,6 +820,19 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     protected SoundEvent getDeathSound() {
         return MaidSoundEvent.MAID_DEATH;
+    }
+
+    private PathNavigate createNavigatorFlying(World worldIn) {
+        PathNavigateFlying pathnavigateflying = new PathNavigateFlying(this, worldIn);
+        pathnavigateflying.setCanFloat(true);
+        pathnavigateflying.setCanEnterDoors(true);
+        return pathnavigateflying;
+    }
+
+    private PathNavigate createNavigatorGround(World worldIn) {
+        PathNavigateGround pathNavigate = new PathNavigateGround(this, worldIn);
+        pathNavigate.setBreakDoors(true);
+        return pathNavigate;
     }
 
     @Nullable

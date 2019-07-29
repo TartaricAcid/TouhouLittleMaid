@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -55,6 +54,7 @@ public class EntityMaidBeg extends EntityAIBase {
     public void resetTask() {
         // 别忘了重置回去
         this.entityMaid.setBegging(false);
+        this.entityMaid.getNavigator().clearPath();
         this.player = null;
     }
 
@@ -63,10 +63,10 @@ public class EntityMaidBeg extends EntityAIBase {
     public void updateTask() {
         this.entityMaid.getLookHelper().setLookPosition(this.player.posX, this.player.posY + this.player.getEyeHeight(), this.player.posZ, 10.0F, this.entityMaid.getVerticalFaceSpeed());
         if (!this.entityMaid.isSitting()) {
-            if (this.entityMaid.getDistance(player) > 1.5) {
-                this.entityMaid.getMoveHelper().setMoveTo(this.player.posX, this.player.posY, this.player.posZ, 0.7);
+            if (this.entityMaid.getDistance(player) > 2.5) {
+                this.entityMaid.getNavigator().tryMoveToXYZ(this.player.posX, this.player.posY, this.player.posZ, 0.7);
             } else {
-                this.entityMaid.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
+                this.entityMaid.getNavigator().clearPath();
             }
         }
     }
