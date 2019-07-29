@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "stone_pressure_plate_down",
+    "textures": { "texture": "touhou_little_maid:block/my" }
+  },
+  "variants": {
+    "facing": {
+      "up_east": { "y": 90 },
+      "up_west": { "y": 270 },
+      "up_north": {},
+      "up_south": { "y": 180 },
+      "down_east": { "x": 180, "y": 90 },
+      "down_west": { "x": 180, "y": 270 },
+      "down_north": { "x": 180 },
+      "down_south": { "x": 180, "y": 180 },
+      "east": { "x": 90, "y": 90 },
+      "west": { "x": 90, "y": 270 },
+      "north": { "x": 90 },
+      "south": { "x": 90, "y": 180 }
+    },
+    "inventory": [{ "model": "stone_pressure_plate_up" }]
+  }
+}

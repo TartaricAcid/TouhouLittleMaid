@@ -49,6 +49,7 @@ public final class MaidItems {
                 .setCreativeTab(MaidItems.TABS));
         event.getRegistry().register(new ItemMarisaBroom().setRegistryName("marisa_broom"));
 
+        event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));
     }
 }

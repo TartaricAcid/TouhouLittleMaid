@@ -51,9 +51,8 @@ repositories {
         url "http://maven.tterrag.com/"
     }
     maven {
-        // 给 The One Probe 所需的 Redstone Flux 使用的仓库
-        name = "CoFH Maven"
-        url = "http://maven.covers1624.net"
+        name = "MCMultiPart2 Maven"
+        url = "http://maven.amadornes.com/"
     }
 }
 
@@ -66,7 +65,7 @@ dependencies {
     deobfCompile("mcjty.theoneprobe:TheOneProbe-1.12:${top_version}") {
         exclude group: 'cofh'
     }
-
+    deobfCompile "MCMultiPart2:MCMultiPart:${mcmp_version}"
     // 想要了解更多，可以查询如下网址
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
