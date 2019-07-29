@@ -68,6 +68,7 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
         RenderItem itemRenderer = mc.getRenderItem();
 
         GlStateManager.translate(.5f, .5f, .5f);
+        RenderHelper.enableStandardItemLighting();
         int rotY = (int) direction.rotY;
         if (rotY == 90 || rotY == 270) {
             rotY += 180;
@@ -80,7 +81,7 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
         GlStateManager.scale(-1 / 16f, -1 / 16f, -0.00001);
         GlStateManager.translate(0, 1, 1 - z);
 
-        int ambLight = getWorld().getCombinedLight(te.getPos().offset(direction.face), 0);
+        int ambLight = getWorld().getCombinedLight(te.getPos(), 0);
         int lu = ambLight % 65536;
         int lv = ambLight / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) lu / 1.0F, (float) lv / 1.0F);
@@ -93,7 +94,6 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
                     continue;
                 }
                 GlStateManager.pushMatrix();
-                RenderHelper.enableStandardItemLighting();
 
                 // TileEntitySkullRenderer alters both of these options on, but does not restore them.
                 GlStateManager.enableCull();
