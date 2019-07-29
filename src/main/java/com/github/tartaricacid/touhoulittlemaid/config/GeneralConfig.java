@@ -14,12 +14,12 @@ public class GeneralConfig {
     public static MaidConfig MAID_CONFIG = new MaidConfig();
 
     public static class MaidConfig {
-        @Config.Comment("The Item That Can Tamed Maid")
+        @Config.Comment("The item that can tamed maid")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_tamed_item")
         @Config.Name("MaidTamedItem")
         public String maidTamedItem = "minecraft:cake";
 
-        @Config.Comment("The Item That Can Temptation Maid")
+        @Config.Comment("The item that can temptation maid")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_temptation_item")
         @Config.Name("MaidTemptationItem")
         public String maidTemptationItem = "minecraft:cake";
@@ -29,6 +29,11 @@ public class GeneralConfig {
         @Config.Name("MaidTalkInterval")
         @Config.RangeInt(min = 20)
         public int maidTalkInterval = 120;
+
+        @Config.Comment("Should the maid always show the hat? when set to false, the maid will only render the hat when wearing the helmet.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.maid_always_show_hat")
+        @Config.Name("MaidAlwaysShowHat")
+        public boolean maidAlwaysShowHat = false;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
@@ -60,8 +61,8 @@ public class EntityMarisaBroomModel extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        all.render(f5);
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        all.render(scale);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -71,7 +72,12 @@ public class EntityMarisaBroomModel extends ModelBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        this.all.rotateAngleX = f4 / 90 / (float) Math.PI;
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
+                                  float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+        this.all.rotateAngleX = headPitch * 0.017453292F * 0.3F;
+        // 当骑着女仆时，设置一个 12 度的仰角
+        if (entityIn.getRidingEntity() instanceof EntityMaid) {
+            this.all.rotateAngleX -= 12f * (float) Math.PI / 180;
+        }
     }
 }

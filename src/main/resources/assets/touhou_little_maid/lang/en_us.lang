@@ -35,6 +35,7 @@ config.touhou_little_maid.maid_config=Maid Config
 config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item
 config.touhou_little_maid.maid_config.maid_temptation_item=Maid Temptation Item
 config.touhou_little_maid.maid_config.maid_talk_interval=Maid Talk Interval (tick)
+config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
@@ -118,6 +119,8 @@ model.touhou_little_maid.koakuma.name=Koakuma
 model.touhou_little_maid.letty_whiterock.name=Letty Whiterock
 model.touhou_little_maid.lunasa_prismriver.name=Lunasa Prismriver
 model.touhou_little_maid.merlin_prismriver.name=Merlin Prismriver
+model.touhou_little_maid.kirisame_marisa.name=Marisa Kirisame
+model.touhou_little_maid.hinanawi_tenshi.name=Tenshi Hinanawi
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -153,6 +156,8 @@ model.touhou_little_maid.koakuma.desc=§7？？？
 model.touhou_little_maid.letty_whiterock.desc=§7What Winter Left Behind
 model.touhou_little_maid.lunasa_prismriver.desc=§7Poltergeist Violinist
 model.touhou_little_maid.merlin_prismriver.desc=§7Poltergeist Trumpeter
+model.touhou_little_maid.kirisame_marisa.desc=§7Ordinary Magician
+model.touhou_little_maid.hinanawi_tenshi.desc=§7Girl of the Sphere of Neither Perception nor Non-Perception
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

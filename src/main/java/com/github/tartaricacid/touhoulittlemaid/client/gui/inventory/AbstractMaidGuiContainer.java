@@ -19,10 +19,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -47,7 +45,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     protected MaidMainContainer container;
     EntityMaid maid;
-    private EntityMaid renderingMaid;
     private int guiId;
     private GuiButtonToggle togglePickup;
     private GuiButtonToggle toggleHome;
@@ -87,12 +84,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         super.initGui();
         int i = this.guiLeft;
         int j = this.guiTop;
-
-        // 为了避免转向错误，初始化用于绘制的实体
-        renderingMaid = new EntityMaid(mc.world);
-        NBTTagCompound nbt = new NBTTagCompound();
-        maid.writeEntityToNBT(nbt);
-        renderingMaid.readEntityFromNBT(nbt);
 
         // 切换是否拾起物品的按钮
         togglePickup = new GuiButtonToggle(BUTTON.PICKUP.ordinal(), i + 143, j + 63, 26, 16, maid.isPickup());
@@ -276,13 +267,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 绘制模式图标
         this.drawItemStack(container.task.getIcon(), i - 20, j + 5);
 
-        // 绘制女仆样子
-        // 首先同步手持和护甲物品
-        for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-            renderingMaid.setItemStackToSlot(slot, maid.getItemStackFromSlot(slot));
-        }
+        // 绘制女仆
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 28,
-                (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, renderingMaid);
+                (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, maid);
     }
 
     /**
@@ -290,19 +277,12 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
      */
     private void drawItemStack(ItemStack stack, int x, int y) {
         RenderHelper.enableGUIStandardItemLighting();
-
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
         this.zLevel = 200.0F;
         this.itemRender.zLevel = 200.0F;
-        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
-        if (font == null) {
-            font = fontRenderer;
-        }
         this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, "");
         this.zLevel = 0.0F;
         this.itemRender.zLevel = 0.0F;
-
         RenderHelper.disableStandardItemLighting();
     }
 

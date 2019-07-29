@@ -15,7 +15,6 @@ import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -128,11 +127,7 @@ public class MaidSkinGui extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // 绘制左边示例实体
-        EntityMaid entityMaidNew = new EntityMaid(mc.world);
-        NBTTagCompound nbt = new NBTTagCompound();
-        maid.writeEntityToNBT(nbt);
-        entityMaidNew.readEntityFromNBT(nbt);
-        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, 45, middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entityMaidNew);
+        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, 45, middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, maid);
 
         // 绘制实体，绘制完毕后绘制文本提示
         drawEntity(middleX, middleY);

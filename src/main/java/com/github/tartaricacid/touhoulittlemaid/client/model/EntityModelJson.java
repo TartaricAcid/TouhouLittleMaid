@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.model;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -144,6 +146,7 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer negativeCosFloat = modelMap.get("-cosFloat");
         // 护甲
         ModelRenderer helmet = modelMap.get("helmet");
+        ModelRenderer hat = modelMap.get("hat");
         ModelRenderer chestPlate = modelMap.get("chestPlate");
         ModelRenderer leggings = modelMap.get("leggings");
         ModelRenderer boots = modelMap.get("boots");
@@ -156,12 +159,19 @@ public class EntityModelJson extends ModelBase {
         blinkAnimation(blink, ageInTicks);
         tailAnimation(tail, ageInTicks);
         floatAnimation(sinFloat, cosFloat, negativeSinFloat, negativeCosFloat, ageInTicks);
-        renderArmor(entityMaid, helmet, chestPlate, leggings, boots);
+        renderArmor(entityMaid, helmet, hat, chestPlate, leggings, boots);
         beggingPosture(entityMaid, head, ahoge, ageInTicks);
         swingingArmsPosture(entityMaid, armLeft, armRight);
 
         // 因为两者不允许同时存在，所以需要 if 判定
-        if (entityMaid.isRiding()) {
+        if (head != null) {
+            // 头部复位
+            head.offsetY = 0;
+        }
+        if (entityMaid.getControllingPassenger() instanceof EntityMarisaBroom) {
+            // 坐在扫帚上时，应用待命的动作
+            ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
+        } else if (entityMaid.isRiding()) {
             ridingPosture(legLeft, legRight);
         } else if (entityMaid.isSitting()) {
             sittingPosture(armLeft, armRight, legLeft, legRight);
@@ -170,8 +180,8 @@ public class EntityModelJson extends ModelBase {
 
     private void headAnimation(@Nullable ModelRenderer head, float netHeadYaw, float headPitch) {
         if (head != null) {
-            head.rotateAngleX = headPitch / 45f / (float) Math.PI;
-            head.rotateAngleY = netHeadYaw / 45f / (float) Math.PI;
+            head.rotateAngleX = headPitch * 0.017453292F;
+            head.rotateAngleY = netHeadYaw * 0.017453292F;
         }
     }
 
@@ -261,11 +271,14 @@ public class EntityModelJson extends ModelBase {
         }
     }
 
-    private void renderArmor(EntityMaid entityMaid, @Nullable ModelRenderer helmet, @Nullable ModelRenderer chestPlate,
+    private void renderArmor(EntityMaid entityMaid, @Nullable ModelRenderer helmet, @Nullable ModelRenderer hat, @Nullable ModelRenderer chestPlate,
                              @Nullable ModelRenderer leggings, @Nullable ModelRenderer boots) {
         // 护甲部分渲染
         if (helmet != null) {
             helmet.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
+        }
+        if (hat != null) {
+            hat.isHidden = !GeneralConfig.MAID_CONFIG.maidAlwaysShowHat && entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
         }
         if (chestPlate != null) {
             chestPlate.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
@@ -276,40 +289,6 @@ public class EntityModelJson extends ModelBase {
         if (boots != null) {
             boots.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
         }
-    }
-
-    private void sittingPosture(@Nullable ModelRenderer armLeft, @Nullable ModelRenderer armRight,
-                                @Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight) {
-        if (armLeft != null) {
-            armLeft.rotateAngleX = -0.798f;
-            armLeft.rotateAngleZ = 0.274f;
-        }
-        if (armRight != null) {
-            armRight.rotateAngleX = -0.798f;
-            armRight.rotateAngleZ = -0.274f;
-        }
-        if (legLeft != null) {
-            legLeft.rotateAngleX = -0.960f;
-            legLeft.rotateAngleZ = -0.523f;
-        }
-        if (legRight != null) {
-            legRight.rotateAngleX = -0.960f;
-            legRight.rotateAngleZ = 0.523f;
-        }
-        GlStateManager.translate(0, 0.3f, 0);
-    }
-
-    private void ridingPosture(@Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight) {
-        if (legLeft != null) {
-            legLeft.rotateAngleX = -0.960f;
-            legLeft.rotateAngleZ = -0.523f;
-        }
-        if (legRight != null) {
-            legRight.rotateAngleX = -0.960f;
-            legRight.rotateAngleZ = 0.523f;
-        }
-
-        GlStateManager.translate(0, 0.3f, 0);
     }
 
     private void beggingPosture(EntityMaid entityMaid, @Nullable ModelRenderer head, @Nullable ModelRenderer ahoge, float ageInTicks) {
@@ -342,6 +321,51 @@ public class EntityModelJson extends ModelBase {
                 armRight.rotateAngleY = -0.174f;
             }
         }
+    }
+
+    private void sittingPosture(@Nullable ModelRenderer armLeft, @Nullable ModelRenderer armRight,
+                                @Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight) {
+        if (armLeft != null) {
+            armLeft.rotateAngleX = -0.798f;
+            armLeft.rotateAngleZ = 0.274f;
+        }
+        if (armRight != null) {
+            armRight.rotateAngleX = -0.798f;
+            armRight.rotateAngleZ = -0.274f;
+        }
+        if (legLeft != null) {
+            legLeft.rotateAngleX = -0.960f;
+            legLeft.rotateAngleZ = -0.523f;
+        }
+        if (legRight != null) {
+            legRight.rotateAngleX = -0.960f;
+            legRight.rotateAngleZ = 0.523f;
+        }
+        GlStateManager.translate(0, 0.3f, 0);
+    }
+
+    private void ridingBroomPosture(@Nullable ModelRenderer head, @Nullable ModelRenderer armLeft, @Nullable ModelRenderer armRight,
+                                    @Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight) {
+        sittingPosture(armLeft, armRight, legLeft, legRight);
+        if (head != null) {
+            head.rotateAngleX -= 30f * (float) Math.PI / 180;
+            head.offsetY = 0.0625f;
+        }
+        GlStateManager.rotate(30, 1, 0, 0);
+        GlStateManager.translate(0, -0.4, -0.3);
+    }
+
+    private void ridingPosture(@Nullable ModelRenderer legLeft, @Nullable ModelRenderer legRight) {
+        if (legLeft != null) {
+            legLeft.rotateAngleX = -0.960f;
+            legLeft.rotateAngleZ = -0.523f;
+        }
+        if (legRight != null) {
+            legRight.rotateAngleX = -0.960f;
+            legRight.rotateAngleZ = 0.523f;
+        }
+
+        GlStateManager.translate(0, 0.3f, 0);
     }
 
     private void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

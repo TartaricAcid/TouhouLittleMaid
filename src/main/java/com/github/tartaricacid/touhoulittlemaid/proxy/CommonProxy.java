@@ -39,7 +39,6 @@ import java.util.Map;
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
-    public static SimpleNetworkWrapper INSTANCE = null;
     /**
      * 服务端用模型列表，
      * 这个只会在服务器启动时候读取默认原版的列表，
@@ -48,6 +47,7 @@ public class CommonProxy {
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
+    public static SimpleNetworkWrapper INSTANCE = null;
 
     /**
      * 通过输入流读取 CustomModelPackPOJO 对象，并进行二次修饰
