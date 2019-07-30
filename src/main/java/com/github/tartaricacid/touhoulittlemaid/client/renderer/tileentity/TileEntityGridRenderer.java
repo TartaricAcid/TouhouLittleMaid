@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid.Direction;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -152,7 +154,7 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
                 GlStateManager.popAttrib();
 
                 IBakedModel bakedmodel = itemRenderer.getItemModelWithOverrides(stack, getWorld(), null);
-                if (!bakedmodel.isGui3d()) {
+                if (!bakedmodel.isGui3d() || stack.getItem() == Item.getItemFromBlock(MaidBlocks.GRID)) {
                     GlStateManager.disableLighting();
                 }
                 else {

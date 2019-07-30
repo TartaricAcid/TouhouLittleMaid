@@ -28,6 +28,8 @@ public class TouhouLittleMaid {
             clientSide = "com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy")
     public static CommonProxy proxy;
 
+    public static boolean MCMPCompat = false;
+
     /**
      * 设置 API 对象
      */

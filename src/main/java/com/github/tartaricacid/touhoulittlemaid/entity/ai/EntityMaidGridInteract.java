@@ -1,10 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
-import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import java.util.List;
+
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.compat.mcmp.MCMPCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid.Mode;
+import com.google.common.collect.Lists;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
@@ -35,8 +39,8 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
             return false;
         }
 
-        // 随机设置 10 - 70 tick 的延时
-        this.runDelay = 10 + this.maid.getRNG().nextInt(60);
+        // 随机设置 50 - 100 tick 的延时
+        this.runDelay = 50 + this.maid.getRNG().nextInt(50);
         this.currentTask = TASK.NONE;
 
         // 最后选取合适的种植方块
@@ -62,9 +66,11 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
 
             // 如果当前任务为收获，并且 canHarvest，执行收获逻辑
             if (this.currentTask == TASK.MOVING) {
-                TileEntity tile = world.getTileEntity(pos);
-                if (tile instanceof TileEntityGrid) {
-                    ((TileEntityGrid) tile).interact(maid.getAvailableInv(false), maid, false);
+                IBlockState state = world.getBlockState(pos);
+                for (TileEntityGrid grid : getTilesIn(world, pos, state)) {
+                    if (grid.interact(maid.getAvailableInv(false), maid, false)) {
+                        break;
+                    }
                 }
             }
 
@@ -75,20 +81,13 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
         // 女仆头部朝向逻辑
         if (shouldLook) {
             // 女仆盯着耕地
-            this.maid.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1,
-                    this.destinationBlock.getZ() + 0.5D, 10.0F, this.maid.getVerticalFaceSpeed());
+            this.maid.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, this.destinationBlock.getZ() + 0.5D, 10.0F, this.maid.getVerticalFaceSpeed());
         }
     }
-
 
     @Override
     protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
         pos = pos.up();
-        IBlockState stateUp = worldIn.getBlockState(pos);
-
-        if (stateUp.getBlock() != MaidBlocks.GRID) {
-            return false;
-        }
 
         IBlockState stateUp2 = worldIn.getBlockState(pos.up());
 
@@ -97,16 +96,28 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
             return false;
         }
 
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityGrid) {
-            TileEntityGrid grid = (TileEntityGrid) tile;
-            if (grid.updateMode(stateUp) != Mode.UNKNOWN && grid.interact(maid.getAvailableInv(false), maid, true))
-            {
+        IBlockState stateUp = worldIn.getBlockState(pos);
+        for (TileEntityGrid grid : getTilesIn(worldIn, pos, stateUp)) {
+            if (grid.updateMode(null) != Mode.UNKNOWN && grid.interact(maid.getAvailableInv(false), maid, true)) {
                 this.currentTask = TASK.MOVING;
                 return true;
             }
         }
         return false;
+    }
+
+    private List<TileEntityGrid> getTilesIn(World worldIn, BlockPos pos, IBlockState state) {
+        List<TileEntityGrid> grids = Lists.newArrayList();
+        if (TouhouLittleMaid.MCMPCompat) {
+            MCMPCompat.getPartTiles(worldIn, pos, state, grids);
+        }
+        else if (state.getBlock() == MaidBlocks.GRID) {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof TileEntityGrid) {
+                grids.add((TileEntityGrid) tile);
+            }
+        }
+        return grids;
     }
 
     /**
@@ -137,8 +148,10 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
     /**
      * 女仆尝试移动到此处
      *
-     * @param minDistanceSq 最小移动距离
-     * @param interval      尝试移动的间隔时间
+     * @param minDistanceSq
+     *            最小移动距离
+     * @param interval
+     *            尝试移动的间隔时间
      */
     private void tryMoveToDestination(double minDistanceSq, int interval) {
         if (maid.getDistanceSqToCenter(this.destinationBlock.up()) > Math.sqrt(minDistanceSq)) {
@@ -148,7 +161,8 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
             if (this.timeoutCounter % interval == 0) {
                 maid.getNavigator().tryMoveToXYZ((this.destinationBlock.getX()) + 0.5D, this.destinationBlock.getY() + 1, (this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
             }
-        } else {
+        }
+        else {
             this.isAboveDestination = true;
             --this.timeoutCounter;
         }

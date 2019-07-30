@@ -1,8 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "touhou_little_maid:grid",
-    "textures": { "0": "touhou_little_maid:block/my" }
+    "model": "touhou_little_maid:grid"
   },
   "variants": {
     "facing": {
@@ -20,13 +19,13 @@
       "south": { "x": 90, "y": 180 }
     },
     "input": {
-      "true": { "textures": { "input": "blocks/concrete_light_blue" } },
+      "true": {},
       "false": { "textures": { "input": "blocks/concrete_orange" } }
     },
     "blacklist": {
       "true": { "textures": { "blacklist": "blocks/obsidian" } },
-      "false": { "textures": { "blacklist": "blocks/quartz_block_side" } }
+      "false": {}
     },
-    "inventory": [{ "model": "stone_pressure_plate_up" }]
+    "inventory": [{}]
   }
 }
