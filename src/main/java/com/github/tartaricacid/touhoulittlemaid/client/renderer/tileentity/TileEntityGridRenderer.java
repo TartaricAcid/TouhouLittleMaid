@@ -1,7 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid.Direction;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
@@ -12,6 +10,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,6 +23,10 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
     @Override
     public void render(TileEntityGrid te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+
+        if (x * x + y * y + z * z > 256) {
+            return;
+        }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
@@ -68,32 +73,39 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
         RenderItem itemRenderer = mc.getRenderItem();
 
         GlStateManager.translate(.5f, .5f, .5f);
-        RenderHelper.enableStandardItemLighting();
         int rotY = (int) direction.rotY;
         if (rotY == 90 || rotY == 270) {
             rotY += 180;
         }
+
         GlStateManager.rotate(180 - rotY, 0, 1, 0);
         GlStateManager.rotate(90 - direction.rotX, 1, 0, 0);
         GlStateManager.scale(.25f, .25f, .25f);
         GlStateManager.translate(0f, 0f, 1.8f);
-        // RenderItem#setupGuiTransform
-        GlStateManager.scale(-1 / 16f, -1 / 16f, -0.00001);
-        GlStateManager.translate(0, 1, 1 - z);
-
-        int ambLight = getWorld().getCombinedLight(te.getPos(), 0);
-        int lu = ambLight % 65536;
-        int lv = ambLight / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) lu / 1.0F, (float) lv / 1.0F);
+        GlStateManager.scale(-1, 1, -0.001);
 
         for (int i = 0, j = -1; j < 2; j++) {
             for (int k = -1; k < 2; k++) {
+
                 ItemStack stack = te.handler.getStackInSlot(i);
                 ++i;
                 if (stack.isEmpty()) {
                     continue;
                 }
+
                 GlStateManager.pushMatrix();
+
+                GlStateManager.pushMatrix();
+                GlStateManager.scale(1.92f, 1.92f, 1);
+                GlStateManager.rotate(17.0F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.rotate(105.0F, -1.0F, 0.0F, 0.0F);
+                RenderHelper.enableStandardItemLighting();
+                GlStateManager.popMatrix();
+
+                int ambLight = getWorld().getCombinedLight(te.getPos(), 0);
+                int lu = ambLight % 65536;
+                int lv = ambLight / 65536;
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) lu / 1.0F, (float) lv / 1.0F);
 
                 // TileEntitySkullRenderer alters both of these options on, but does not restore them.
                 GlStateManager.enableCull();
@@ -115,13 +127,37 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
                 // directly away from the face, which is visible as the block faces having identical
                 // (dark) shading.
 
-                //                GlStateManager.enableRescaleNormal();
-                //                GlStateManager.disableRescaleNormal();
-                //                GlStateManager.pushAttrib();
-                //                GlStateManager.enableRescaleNormal();
-                //                GlStateManager.popAttrib();
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.disableRescaleNormal();
+                GlStateManager.pushAttrib();
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.popAttrib();
 
-                itemRenderer.renderItemIntoGUI(stack, k * 16 - 8, j * 16 - 10);
+                IBakedModel bakedmodel = itemRenderer.getItemModelWithOverrides(stack, getWorld(), null);
+                if (!bakedmodel.isGui3d()) {
+                    GlStateManager.disableLighting();
+                }
+                else {
+                    GlStateManager.enableLighting();
+                }
+                GlStateManager.pushMatrix();
+                mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.enableAlpha();
+                GlStateManager.alphaFunc(516, 0.1F);
+                GlStateManager.enableBlend();
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.translate(k, -j, 0);
+                bakedmodel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedmodel, ItemCameraTransforms.TransformType.GUI, false);
+                itemRenderer.renderItem(stack, bakedmodel);
+                GlStateManager.disableAlpha();
+                GlStateManager.disableRescaleNormal();
+                GlStateManager.disableLighting();
+                GlStateManager.popMatrix();
+                mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
 
                 GlStateManager.disableBlend(); // Clean up after RenderItem
                 GlStateManager.enableAlpha(); // Restore world render state after RenderItem

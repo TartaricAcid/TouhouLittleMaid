@@ -32,6 +32,7 @@ import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -560,7 +561,7 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private boolean tamedMaid(ItemStack itemstack, EntityPlayer player) {
         Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
-        if (!this.isTamed() && itemstack.getItem() == tamedItem) {
+        if (itemstack.getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_VOID) || !this.isTamed() && itemstack.getItem() == tamedItem) {
             if (!world.isRemote) {
                 consumeItemFromStack(player, itemstack);
                 this.setTamedBy(player);

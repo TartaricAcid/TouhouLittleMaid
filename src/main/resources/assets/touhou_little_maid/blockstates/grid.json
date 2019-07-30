@@ -19,6 +19,14 @@
       "north": { "x": 90 },
       "south": { "x": 90, "y": 180 }
     },
+    "input": {
+      "true": {},
+      "false": {}
+    },
+    "blacklist": {
+      "true": {},
+      "false": {}
+    },
     "inventory": [{ "model": "stone_pressure_plate_up" }]
   }
 }
