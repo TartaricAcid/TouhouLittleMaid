@@ -83,11 +83,11 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 拾起物品声音的延时计数器
      */
-    private static int pickupSoundCount = 60;
+    private static int pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
     /**
      * 玩家伤害女仆后的声音延时计数器
      */
-    private static int playerHurtSoundCount = 100;
+    private static int playerHurtSoundCount = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
     private final ItemStackHandler mainInv = new ItemStackHandler(15);
@@ -356,7 +356,7 @@ public class EntityMaid extends AbstractEntityMaid {
                 this.onItemPickup(entityItem, count - itemstack.getCount());
                 if (pickupSoundCount == 0) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                    pickupSoundCount = 60;
+                    pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
                 }
                 // 如果遍历塞完后发现为空了
                 if (itemstack.isEmpty()) {
@@ -548,9 +548,15 @@ public class EntityMaid extends AbstractEntityMaid {
     public boolean processInteract(EntityPlayer player, @Nullable EnumHand hand) {
         // 必须是主手
         if (hand == EnumHand.MAIN_HAND) {
+            boolean isYourMaid = this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID());
             ItemStack itemstack = player.getHeldItem(hand);
-            // 利用短路原理，逐个触发对应的交互事件
-            return tamedMaid(itemstack, player) || writeHomePos(itemstack, player) || openGuiOrSittingOrDismount(itemstack, player);
+            if (isYourMaid) {
+                // 利用短路原理，逐个触发对应的交互事件
+                return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player)
+                        || dismountMaid(player) || switchSitting(player) || openMaidGui(player);
+            } else {
+                return tamedMaid(itemstack, player);
+            }
         }
         return false;
     }
@@ -562,7 +568,9 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private boolean tamedMaid(ItemStack itemstack, EntityPlayer player) {
         Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
-        if (itemstack.getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_VOID) || !this.isTamed() && itemstack.getItem() == tamedItem) {
+        boolean isReloadTamedCondition = itemstack.getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_VOID);
+        boolean isNormalTamedCondition = !this.isTamed() && itemstack.getItem() == tamedItem;
+        if (isReloadTamedCondition || isNormalTamedCondition) {
             if (!world.isRemote) {
                 consumeItemFromStack(player, itemstack);
                 this.setTamedBy(player);
@@ -582,17 +590,14 @@ public class EntityMaid extends AbstractEntityMaid {
      * @return 该逻辑是否成功应用
      */
     private boolean writeHomePos(ItemStack itemstack, EntityPlayer player) {
-        if (this.isTamed() && this.getOwnerId().equals(player.getUniqueID()) && itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
+        if (itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
             BlockPos pos = ItemKappaCompass.getPos(itemstack);
             if (pos != null) {
                 this.setHomePos(pos);
                 if (!world.isRemote) {
-                    // 尝试移动到这里，距离超过 16 就传送
-                    // 没办法，路径系统最大只允许寻路 16
-                    if (this.getPosition().distanceSq(pos) < 256) {
-                        this.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f);
-                    } else {
-                        this.attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                    // 如果尝试移动失败，那就尝试传送
+                    if (!getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
+                        attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
                     }
                     player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
                 }
@@ -605,42 +610,72 @@ public class EntityMaid extends AbstractEntityMaid {
         return false;
     }
 
+    private boolean applyPotionEffect(ItemStack itemstack, EntityPlayer player) {
+        if (itemstack.getItem() == Items.POTIONITEM) {
+            if (player.capabilities.isCreativeMode) {
+                itemstack.getItem().onItemUseFinish(itemstack.copy(), world, this);
+            } else {
+                player.setHeldItem(EnumHand.MAIN_HAND, itemstack.getItem().onItemUseFinish(itemstack, world, this));
+            }
+            this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.6f, 0.8F + this.rand.nextFloat() * 0.4F);
+            return true;
+        }
+        return false;
+    }
+
     /**
-     * 打开 GUI 或者切换待命模式或解除骑乘状态
-     *
-     * @return 该逻辑是否成功应用
+     * 解除女仆的所有骑乘，被骑乘状态
      */
-    private boolean openGuiOrSittingOrDismount(ItemStack itemstack, EntityPlayer player) {
-        if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
+    private boolean dismountMaid(EntityPlayer player) {
+        if (player.isSneaking()) {
+            // 满足其一，返回 true
+            if (this.getRidingEntity() != null || this.getControllingPassenger() != null) {
+                // 取消骑乘状态
+                if (this.getRidingEntity() != null) {
+                    this.dismountRidingEntity();
+                }
+                // 取消被骑乘状态
+                if (this.getControllingPassenger() != null) {
+                    this.getControllingPassenger().dismountRidingEntity();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 切换待命状态
+     */
+    private boolean switchSitting(EntityPlayer player) {
+        if (player.isSneaking()) {
             // 先清除寻路逻辑
             this.getNavigator().clearPath();
             // 如果玩家为潜行状态，那么切换待命
-            if (player.isSneaking()) {
-                if (this.getRidingEntity() != null || this.getControllingPassenger() != null) {
-                    // 取消骑乘状态
-                    if (this.getRidingEntity() != null) {
-                        this.dismountRidingEntity();
-                    }
-                    // 取消被骑乘状态
-                    if (this.getControllingPassenger() != null) {
-                        this.getControllingPassenger().dismountRidingEntity();
-                    }
-                }
-                // 否则切换待命状态
-                else {
-                    if (this.isSitting()) {
-                        this.setSitting(false);
-                    } else {
-                        this.setRevengeTarget(null);
-                        this.setSitting(true);
-                    }
-                }
-                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
-                        ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            } else if (!world.isRemote) {
-                // 否则打开 GUI
-                player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
+            if (this.isSitting()) {
+                this.setSitting(false);
             }
+            // 否则切换待命状态
+            else {
+                this.setRevengeTarget(null);
+                this.setSitting(true);
+            }
+            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
+                    ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 打开 GUI
+     *
+     * @return 该逻辑是否成功应用
+     */
+    private boolean openMaidGui(EntityPlayer player) {
+        if (!world.isRemote) {
+            // 否则打开 GUI
+            player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
             return true;
         }
         return false;
@@ -654,6 +689,9 @@ public class EntityMaid extends AbstractEntityMaid {
         return false;
     }
 
+    /**
+     * 女仆可不能杂交哦
+     */
     @Override
     public boolean canMateWith(EntityAnimal otherAnimal) {
         return false;
@@ -808,7 +846,7 @@ public class EntityMaid extends AbstractEntityMaid {
             return MaidSoundEvent.MAID_HURT_FIRE;
         } else if (damageSourceIn.getTrueSource() instanceof EntityPlayer) {
             if (playerHurtSoundCount == 0) {
-                playerHurtSoundCount = 100;
+                playerHurtSoundCount = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
                 return MaidSoundEvent.MAID_PLAYER;
             } else {
                 return null;
