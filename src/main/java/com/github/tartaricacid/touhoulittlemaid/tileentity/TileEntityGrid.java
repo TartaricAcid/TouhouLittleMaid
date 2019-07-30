@@ -114,6 +114,7 @@ public class TileEntityGrid extends TileEntity {
     }
 
     public ItemStack getItem(IItemHandler inv) {
+        outer:
         for (int i = 0; i < inv.getSlots(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
             if (stack.isEmpty()) {
@@ -126,7 +127,7 @@ public class TileEntityGrid extends TileEntity {
                 }
                 if (itemMatches(stack, filterItem, true)) {
                     if (blacklist) {
-                        break;
+                        continue outer;
                     }
                     else {
                         return stack;

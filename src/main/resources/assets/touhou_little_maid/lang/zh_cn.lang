@@ -14,6 +14,7 @@ item.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
+tile.touhou_little_maid.grid.name=女仆交互面板
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
