@@ -2,10 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGridRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackGarageKitRenderer;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -31,10 +34,12 @@ public final class MaidModel {
     public static void register(ModelRegistryEvent event) {
         // Tile Entity Special Renderer
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGarageKit.class, new TileEntityGarageKitRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrid.class, new TileEntityGridRenderer());
 
         // Block Item
         Item.getItemFromBlock(MaidBlocks.GARAGE_KIT).setTileEntityItemStackRenderer(TileEntityItemStackGarageKitRenderer.instance);
         registerRender(Item.getItemFromBlock(MaidBlocks.GARAGE_KIT));
+        registerRender(Item.getItemFromBlock(MaidBlocks.GRID));
 
         // Item
         registerRender(MaidItems.KAPPA_COMPASS);
