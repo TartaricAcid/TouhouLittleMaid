@@ -122,6 +122,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
+        this.tasks.addTask(6, new EntityMaidGridInteract(this, 0.6f));
 
         this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 6.0F, 0.2f));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 6.0F, 0.2f));

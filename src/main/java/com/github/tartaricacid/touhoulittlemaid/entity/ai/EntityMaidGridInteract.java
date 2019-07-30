@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid.Mode;
@@ -12,11 +13,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityMaidGridInteract extends EntityAIMoveToBlock {
-    private final AbstractEntityMaid maid;
+    private final EntityMaid maid;
     private final int searchLength;
     private TASK currentTask;
 
-    public EntityMaidGridInteract(AbstractEntityMaid entityMaid, double speedIn) {
+    public EntityMaidGridInteract(EntityMaid entityMaid, double speedIn) {
         super(entityMaid, speedIn, 16);
         searchLength = 16;
         this.maid = entityMaid;
@@ -25,7 +26,7 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
     @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
-        if (maid.isSitting()) {
+        if (maid.guiOpening || maid.isSitting()) {
             return false;
         }
 
@@ -44,7 +45,7 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return this.currentTask != TASK.NONE && !maid.isSitting() && super.shouldContinueExecuting();
+        return !maid.guiOpening && this.currentTask != TASK.NONE && !maid.isSitting() && super.shouldContinueExecuting();
     }
 
     @Override

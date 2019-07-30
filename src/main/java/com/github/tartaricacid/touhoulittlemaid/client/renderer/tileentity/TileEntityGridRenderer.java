@@ -28,6 +28,17 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
             return;
         }
 
+        int itemCount = 0;
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = te.handler.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                ++itemCount;
+            }
+        }
+        if (itemCount == 0) {
+            return;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
 
@@ -80,8 +91,8 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
 
         GlStateManager.rotate(180 - rotY, 0, 1, 0);
         GlStateManager.rotate(90 - direction.rotX, 1, 0, 0);
-        GlStateManager.scale(.25f, .25f, .25f);
-        GlStateManager.translate(0f, 0f, 1.8f);
+        GlStateManager.scale(.21f, .21f, .21f);
+        GlStateManager.translate(0f, 0f, 2.05f);
         GlStateManager.scale(-1, 1, -0.001);
 
         for (int i = 0, j = -1; j < 2; j++) {
@@ -95,8 +106,15 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
 
                 GlStateManager.pushMatrix();
 
-                GlStateManager.pushMatrix();
-                GlStateManager.scale(1.92f, 1.92f, 1);
+                if (j == 0 && k == 0 && itemCount == 1) {
+                    GlStateManager.scale(2.5f, 2.5f, 1);
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(4f, 4f, 1);
+                }
+                else {
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(1.92f, 1.92f, 1);
+                }
                 GlStateManager.rotate(17.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(105.0F, -1.0F, 0.0F, 0.0F);
                 RenderHelper.enableStandardItemLighting();

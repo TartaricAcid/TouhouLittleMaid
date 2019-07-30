@@ -33,6 +33,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -105,9 +106,75 @@ public class TileEntityGrid extends TileEntity {
         default:
         case UNKNOWN:
             return false;
+        case ITEM_IO:
+            return interactItemIO(items, maid, simulate);
         case CRAFTING:
             return interactCrafting(items, maid, simulate);
         }
+    }
+
+    public ItemStack getItem(IItemHandler inv) {
+        for (int i = 0; i < inv.getSlots(); i++) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack.isEmpty()) {
+                continue;
+            }
+            for (int j = 0; j < 9; j++) {
+                ItemStack filterItem = handler.getStackInSlot(j);
+                if (filterItem.isEmpty()) {
+                    continue;
+                }
+                if (itemMatches(stack, filterItem, true)) {
+                    if (blacklist) {
+                        break;
+                    }
+                    else {
+                        return stack;
+                    }
+                }
+            }
+            if (blacklist) {
+                return stack;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    private boolean interactItemIO(IItemHandlerModifiable inv, AbstractEntityMaid maid, boolean simulate) {
+        IBlockState state = getBlockType().getStateFromMeta(getBlockMetadata());
+        EnumFacing facing = state.getValue(BlockGrid.DIRECTION).face;
+        BlockPos offsetPos = pos.offset(facing.getOpposite());
+        TileEntity tile = world.getTileEntity(offsetPos);
+        if (tile == null || !tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
+            return false;
+        }
+        IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
+        IItemHandler src = input ? inv : itemHandler;
+        IItemHandler dest = input ? itemHandler : inv;
+        ItemStack stack = getItem(src);
+        if (stack.isEmpty()) {
+            return false;
+        }
+        ItemStack remain = ItemHandlerHelper.insertItemStacked(dest, stack.copy(), simulate);
+        if (stack.getCount() != remain.getCount()) {
+            if (!simulate) {
+                if (input) {
+                    stack.setCount(remain.getCount());
+                }
+                else {
+                    for (int i = 0; i < itemHandler.getSlots(); i++) {
+                        ItemStack s = itemHandler.getStackInSlot(i);
+                        if (stack == s) {
+                            int amount = stack.getCount() - remain.getCount();
+                            itemHandler.extractItem(i, amount, false);
+                            break;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     private boolean interactCrafting(IItemHandlerModifiable inv, AbstractEntityMaid maid, boolean simulate) {
@@ -123,7 +190,7 @@ public class TileEntityGrid extends TileEntity {
             if (!stack.isEmpty()) {
                 boolean flag = false;
                 for (int j = 0; j < ingredients.size(); j++) {
-                    if (itemMatches(stack, ingredients.get(j))) {
+                    if (itemMatches(stack, ingredients.get(j), false)) {
                         ingredients.get(j).grow(1);
                         flag = true;
                     }
@@ -148,12 +215,12 @@ public class TileEntityGrid extends TileEntity {
                 hasEmptySlot = true;
                 continue;
             }
-            if (itemMatches(stack, result)) {
+            if (itemMatches(stack, result, false)) {
                 sameCount += result.getMaxStackSize() - stack.getCount();
             }
             for (int j = 0; j < ingredients.size(); j++) {
                 ItemStack ingredient = ingredients.get(j);
-                if (itemMatches(stack, ingredient)) {
+                if (itemMatches(stack, ingredient, false)) {
                     matchedItems.put(ingredient, stack);
                     int c0 = ingredientsCount.getOrDefault(ingredient, 0);
                     ingredientsCount.put(ingredient, c0 + stack.getCount());
@@ -269,21 +336,21 @@ public class TileEntityGrid extends TileEntity {
         return craftingResult;
     }
 
-    private void clearCraftingResult() {
+    public void clearCraftingResult() {
         craftingResult = ItemStack.EMPTY;
         remainingItems = Collections.EMPTY_LIST;
     }
 
-    private static boolean itemMatches(ItemStack stackA, ItemStack stackB) {
-        return ItemStack.areItemsEqual(stackA, stackB) && ItemStack.areItemStackTagsEqual(stackA, stackB);
+    private static boolean itemMatches(ItemStack stackA, ItemStack stackB, boolean ignoreNBT) {
+        return ItemStack.areItemsEqual(stackA, stackB) && (ignoreNBT || ItemStack.areItemStackTagsEqual(stackA, stackB));
     }
 
     public Mode updateMode(@Nullable IBlockState state) {
         if (state == null) {
             state = getBlockType().getStateFromMeta(getBlockMetadata());
         }
-        EnumFacing facing = state.getValue(BlockGrid.DIRECTION).face.getOpposite();
-        BlockPos offsetPos = pos.offset(facing);
+        EnumFacing facing = state.getValue(BlockGrid.DIRECTION).face;
+        BlockPos offsetPos = pos.offset(facing.getOpposite());
         IBlockState offsetState = world.getBlockState(offsetPos);
         if (offsetState.getBlock() == Blocks.CRAFTING_TABLE) {
             return mode = Mode.CRAFTING;
@@ -296,8 +363,8 @@ public class TileEntityGrid extends TileEntity {
             }
         }
         TileEntity tile = world.getTileEntity(offsetPos);
-        if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
-            return Mode.ITEM_IO;
+        if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
+            return mode = Mode.ITEM_IO;
         }
         return mode = Mode.UNKNOWN;
     }

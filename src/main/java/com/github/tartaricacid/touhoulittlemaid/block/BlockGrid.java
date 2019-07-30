@@ -6,6 +6,7 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.util.MatrixUtil;
@@ -27,6 +28,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -92,17 +94,33 @@ public class BlockGrid extends Block {
             for (int i = 0; i < grid.handler.getSlots(); i++) {
                 grid.handler.setStackInSlot(i, ItemStack.EMPTY);
             }
+            grid.clearCraftingResult();
         }
         else {
             ItemStack stack = playerIn.getHeldItem(hand);
             Matrix4f matrix = state.getValue(DIRECTION).matrix();
             Point3f point = new Point3f(hitX, hitY, hitZ);
             matrix.transform(point);
-            int ix = MathHelper.clamp((int) (point.x * 3), 0, 2);
-            int iz = MathHelper.clamp((int) (point.z * 3), 0, 2);
-            int i = ix + iz * 3;
-            ItemStack copy = stack.isEmpty() ? ItemStack.EMPTY : ItemHandlerHelper.copyStackWithSize(stack, 1);
-            grid.handler.setStackInSlot(i, copy);
+            if (point.x > 0.1875 && point.x < 0.8125 && point.z > 0.1875 && point.z < 0.8125) {
+                int ix = MathHelper.clamp((int) ((point.x - 0.1875) / 0.625 * 3), 0, 2);
+                int iz = MathHelper.clamp((int) ((point.z - 0.1875) / 0.625 * 3), 0, 2);
+                int i = ix + iz * 3;
+                ItemStack copy = stack.isEmpty() ? ItemStack.EMPTY : ItemHandlerHelper.copyStackWithSize(stack, 1);
+                grid.handler.setStackInSlot(i, copy);
+                grid.clearCraftingResult();
+            }
+            else if ((point.x > 0.3125 && point.x < 0.6875) || (point.z > 0.3125 && point.z < 0.6875)) {
+                grid.blacklist = !grid.blacklist;
+                if (worldIn.isRemote) {
+                    playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.blacklist." + grid.blacklist), true);
+                }
+            }
+            else {
+                grid.input = !grid.input;
+                if (worldIn.isRemote) {
+                    playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.input." + grid.input), true);
+                }
+            }
         }
         grid.refresh();
         return true;
