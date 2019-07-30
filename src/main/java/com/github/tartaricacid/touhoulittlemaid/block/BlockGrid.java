@@ -20,11 +20,14 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -95,6 +98,7 @@ public class BlockGrid extends Block {
                 grid.handler.setStackInSlot(i, ItemStack.EMPTY);
             }
             grid.clearCraftingResult();
+            worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 2, 1);
         }
         else {
             ItemStack stack = playerIn.getHeldItem(hand);
@@ -108,15 +112,19 @@ public class BlockGrid extends Block {
                 ItemStack copy = stack.isEmpty() ? ItemStack.EMPTY : ItemHandlerHelper.copyStackWithSize(stack, 1);
                 grid.handler.setStackInSlot(i, copy);
                 grid.clearCraftingResult();
+                SoundEvent soundEvent = stack.isEmpty() ? SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM : SoundEvents.ENTITY_ITEM_PICKUP;
+                worldIn.playSound(playerIn, hitX, hitY, hitZ, soundEvent, SoundCategory.PLAYERS, 1, 1);
             }
             else if ((point.x > 0.3125 && point.x < 0.6875) || (point.z > 0.3125 && point.z < 0.6875)) {
                 grid.blacklist = !grid.blacklist;
+                worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
                     playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.blacklist." + grid.blacklist), true);
                 }
             }
             else {
                 grid.input = !grid.input;
+                worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
                     playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.input." + grid.input), true);
                 }
