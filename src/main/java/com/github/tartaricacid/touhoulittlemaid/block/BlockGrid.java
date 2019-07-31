@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.util.MatrixUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -50,9 +51,11 @@ public class BlockGrid extends Block {
     public static final AxisAlignedBB[] AABBS = new AxisAlignedBB[] { AABB_DOWN, AABB_UP, AABB_NORTH, AABB_SOUTH, AABB_WEST, AABB_EAST };
 
     public BlockGrid() {
-        super(Material.IRON);
+        super(Material.CLAY);
+        setSoundType(SoundType.METAL);
         setDefaultState(blockState.getBaseState().withProperty(DIRECTION, Direction.UP_NORTH).withProperty(INPUT, true).withProperty(BLACKLIST, false));
         setCreativeTab(MaidItems.TABS);
+        setHardness(0.25f);
     }
 
     @Override
