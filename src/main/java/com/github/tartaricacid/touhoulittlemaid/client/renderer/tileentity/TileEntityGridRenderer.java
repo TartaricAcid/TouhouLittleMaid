@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,6 +28,14 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
         super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 
         if (x * x + y * y + z * z > 256) {
+            return;
+        }
+
+        IBlockState state = te.getBlockType().getStateFromMeta(te.getBlockMetadata());
+        Direction direction = state.getValue(BlockGrid.DIRECTION);
+        Vec3i vec = direction.face.getDirectionVec();
+        double d = x * vec.getX() + y * vec.getY() + z * vec.getZ();
+        if (d > 2) {
             return;
         }
 
@@ -43,9 +52,6 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
-
-        IBlockState state = te.getBlockType().getStateFromMeta(te.getBlockMetadata());
-        Direction direction = state.getValue(BlockGrid.DIRECTION);
         //Matrix4f matrix = new Matrix4f(direction.matrix());
         //try {
         //    GlStateManager.disableTexture2D();
