@@ -111,7 +111,7 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
         if (TouhouLittleMaid.MCMPCompat) {
             MCMPCompat.getPartTiles(worldIn, pos, state, grids);
         }
-        else if (state.getBlock() == MaidBlocks.GRID) {
+        if (state.getBlock() == MaidBlocks.GRID) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityGrid) {
                 grids.add((TileEntityGrid) tile);

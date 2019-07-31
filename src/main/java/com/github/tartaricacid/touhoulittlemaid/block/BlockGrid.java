@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.util.MatrixUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -20,11 +21,14 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -47,9 +51,11 @@ public class BlockGrid extends Block {
     public static final AxisAlignedBB[] AABBS = new AxisAlignedBB[] { AABB_DOWN, AABB_UP, AABB_NORTH, AABB_SOUTH, AABB_WEST, AABB_EAST };
 
     public BlockGrid() {
-        super(Material.IRON);
+        super(Material.CLAY);
+        setSoundType(SoundType.METAL);
         setDefaultState(blockState.getBaseState().withProperty(DIRECTION, Direction.UP_NORTH).withProperty(INPUT, true).withProperty(BLACKLIST, false));
         setCreativeTab(MaidItems.TABS);
+        setHardness(0.25f);
     }
 
     @Override
@@ -95,6 +101,7 @@ public class BlockGrid extends Block {
                 grid.handler.setStackInSlot(i, ItemStack.EMPTY);
             }
             grid.clearCraftingResult();
+            worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 2, 1);
         }
         else {
             ItemStack stack = playerIn.getHeldItem(hand);
@@ -105,18 +112,26 @@ public class BlockGrid extends Block {
                 int ix = MathHelper.clamp((int) ((point.x - 0.1875) / 0.625 * 3), 0, 2);
                 int iz = MathHelper.clamp((int) ((point.z - 0.1875) / 0.625 * 3), 0, 2);
                 int i = ix + iz * 3;
+                ItemStack before = grid.handler.getStackInSlot(i);
                 ItemStack copy = stack.isEmpty() ? ItemStack.EMPTY : ItemHandlerHelper.copyStackWithSize(stack, 1);
+                if (before.isEmpty() && copy.isEmpty()) {
+                    return false;
+                }
                 grid.handler.setStackInSlot(i, copy);
                 grid.clearCraftingResult();
+                SoundEvent soundEvent = stack.isEmpty() ? SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM : SoundEvents.ENTITY_ITEM_PICKUP;
+                worldIn.playSound(playerIn, hitX, hitY, hitZ, soundEvent, SoundCategory.PLAYERS, 1, 1);
             }
             else if ((point.x > 0.3125 && point.x < 0.6875) || (point.z > 0.3125 && point.z < 0.6875)) {
                 grid.blacklist = !grid.blacklist;
+                worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
                     playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.blacklist." + grid.blacklist), true);
                 }
             }
             else {
                 grid.input = !grid.input;
+                worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
                     playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.input." + grid.input), true);
                 }

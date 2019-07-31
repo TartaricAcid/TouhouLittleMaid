@@ -21,6 +21,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -31,6 +32,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -159,6 +161,7 @@ public class TileEntityGrid extends TileEntity {
         ItemStack remain = ItemHandlerHelper.insertItemStacked(dest, stack.copy(), simulate);
         if (stack.getCount() != remain.getCount()) {
             if (!simulate) {
+                world.playSound(null, maid.posX, maid.posY, maid.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.5f, 1);
                 if (input) {
                     stack.setCount(remain.getCount());
                 }
@@ -306,6 +309,7 @@ public class TileEntityGrid extends TileEntity {
                 }
             }
         }
+        world.playSound(null, maid.posX, maid.posY, maid.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.5f, 1);
         return true;
     }
 
