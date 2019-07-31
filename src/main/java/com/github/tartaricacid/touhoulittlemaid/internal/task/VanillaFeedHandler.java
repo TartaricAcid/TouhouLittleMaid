@@ -4,6 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.task.Trend;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -79,7 +81,9 @@ public class VanillaFeedHandler implements FeedHandler {
 
     @Override
     public ItemStack feed(ItemStack stack, EntityPlayer owner) {
-        // TODO: 2019/7/27 使用牛奶桶时释放音效
+        if (stack.getItemUseAction() == EnumAction.DRINK) {
+            owner.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.5F, owner.world.rand.nextFloat() * 0.1F + 0.9F);
+        }
         return stack.getItem().onItemUseFinish(stack, owner.world, owner);
     }
 }
