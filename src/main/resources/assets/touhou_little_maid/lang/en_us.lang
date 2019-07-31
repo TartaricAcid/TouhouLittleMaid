@@ -68,9 +68,9 @@ task.touhou_little_maid.feed_animal=Feed Animal
 
 # GUI
 gui.touhou_little_maid.button.mode_switch=This Maid Is In %s Mode.
-gui.touhou_little_maid.info.healthy=HP: %.1f/%.1f
-gui.touhou_little_maid.info.armor=AR: %.1f/20.0
-gui.touhou_little_maid.info.attack=AT: %.1f
+gui.touhou_little_maid.info.healthy=HP: %f/%f
+gui.touhou_little_maid.info.armor=AR: %f/20.0
+gui.touhou_little_maid.info.attack=AT: %f
 gui.touhou_little_maid.info.experience=Exp: %d
 gui.touhou_little_maid.tab.main=Main
 gui.touhou_little_maid.tab.inventory=Inventory
@@ -126,8 +126,11 @@ model.touhou_little_maid.koakuma.name=Koakuma
 model.touhou_little_maid.letty_whiterock.name=Letty Whiterock
 model.touhou_little_maid.lunasa_prismriver.name=Lunasa Prismriver
 model.touhou_little_maid.merlin_prismriver.name=Merlin Prismriver
+model.touhou_little_maid.lyrica_prismriver.name=Lyrica Prismriver
 model.touhou_little_maid.kirisame_marisa.name=Marisa Kirisame
 model.touhou_little_maid.hinanawi_tenshi.name=Tenshi Hinanawi
+model.touhou_little_maid.lily_white.name=Lily White
+model.touhou_little_maid.lily_black.name=Lily White (Black)
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -163,8 +166,10 @@ model.touhou_little_maid.koakuma.desc=§7？？？
 model.touhou_little_maid.letty_whiterock.desc=§7What Winter Left Behind
 model.touhou_little_maid.lunasa_prismriver.desc=§7Poltergeist Violinist
 model.touhou_little_maid.merlin_prismriver.desc=§7Poltergeist Trumpeter
+model.touhou_little_maid.lyrica_prismriver.desc=§7Poltergeist Keyboardist
 model.touhou_little_maid.kirisame_marisa.desc=§7Ordinary Magician
 model.touhou_little_maid.hinanawi_tenshi.desc=§7Girl of the Sphere of Neither Perception nor Non-Perception
+model.touhou_little_maid.lily_white.desc=§7Fairy Herald of Spring
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

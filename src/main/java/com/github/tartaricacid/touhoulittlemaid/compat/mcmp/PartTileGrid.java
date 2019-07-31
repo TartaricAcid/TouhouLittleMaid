@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.mcmp;
 
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
-
 import mcmultipart.api.multipart.IMultipartTile;
 import net.minecraft.tileentity.TileEntity;
 

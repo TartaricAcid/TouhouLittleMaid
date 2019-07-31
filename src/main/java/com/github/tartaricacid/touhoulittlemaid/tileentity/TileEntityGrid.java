@@ -1,20 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.block.state.IBlockState;
@@ -34,19 +24,24 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.*;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class TileEntityGrid extends TileEntity {
 
     public final ItemStackHandler handler = new ItemStackHandler(9) {
         public int getSlotLimit(int slot) {
             return 1;
-        };
+        }
+
+        ;
     };
 
     public boolean input = true;
@@ -54,6 +49,10 @@ public class TileEntityGrid extends TileEntity {
     private Mode mode = Mode.UNKNOWN;
     private ItemStack craftingResult = ItemStack.EMPTY;
     private List<ItemStack> remainingItems = Collections.EMPTY_LIST;
+
+    private static boolean itemMatches(ItemStack stackA, ItemStack stackB, boolean ignoreNBT) {
+        return ItemStack.areItemsEqual(stackA, stackB) && (ignoreNBT || ItemStack.areItemStackTagsEqual(stackA, stackB));
+    }
 
     public void refresh() {
         markDirty();
@@ -105,13 +104,13 @@ public class TileEntityGrid extends TileEntity {
             updateMode(null);
         }
         switch (mode) {
-        default:
-        case UNKNOWN:
-            return false;
-        case ITEM_IO:
-            return interactItemIO(items, maid, simulate);
-        case CRAFTING:
-            return interactCrafting(items, maid, simulate);
+            default:
+            case UNKNOWN:
+                return false;
+            case ITEM_IO:
+                return interactItemIO(items, maid, simulate);
+            case CRAFTING:
+                return interactCrafting(items, maid, simulate);
         }
     }
 
@@ -130,8 +129,7 @@ public class TileEntityGrid extends TileEntity {
                 if (itemMatches(stack, filterItem, true)) {
                     if (blacklist) {
                         continue outer;
-                    }
-                    else {
+                    } else {
                         return stack;
                     }
                 }
@@ -164,8 +162,7 @@ public class TileEntityGrid extends TileEntity {
                 world.playSound(null, maid.posX, maid.posY, maid.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.5f, 1);
                 if (input) {
                     stack.setCount(remain.getCount());
-                }
-                else {
+                } else {
                     for (int i = 0; i < itemHandler.getSlots(); i++) {
                         ItemStack s = itemHandler.getStackInSlot(i);
                         if (stack == s) {
@@ -344,10 +341,6 @@ public class TileEntityGrid extends TileEntity {
     public void clearCraftingResult() {
         craftingResult = ItemStack.EMPTY;
         remainingItems = Collections.EMPTY_LIST;
-    }
-
-    private static boolean itemMatches(ItemStack stackA, ItemStack stackB, boolean ignoreNBT) {
-        return ItemStack.areItemsEqual(stackA, stackB) && (ignoreNBT || ItemStack.areItemStackTagsEqual(stackA, stackB));
     }
 
     public Mode updateMode(@Nullable IBlockState state) {

@@ -1,12 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.mcmp;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
-
 import mcmultipart.api.addon.IMCMPAddon;
 import mcmultipart.api.addon.MCMPAddon;
 import mcmultipart.api.container.IMultipartContainerBlock;
@@ -18,15 +14,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Optional;
+
 @MCMPAddon
 public class MCMPCompat implements IMCMPAddon {
-    @Override
-    public void registerParts(IMultipartRegistry registry) {
-        TouhouLittleMaid.MCMPCompat = true;
-        registry.registerPartWrapper(MaidBlocks.GRID, new PartGrid());
-        registry.registerStackWrapper(MaidBlocks.GRID);
-    }
-
     public static void getPartTiles(World world, BlockPos pos, IBlockState state, List<TileEntityGrid> grids) {
         if (state.getBlock() instanceof IMultipartContainerBlock) {
             for (EnumFaceSlot slot : EnumFaceSlot.VALUES) {
@@ -36,5 +28,12 @@ public class MCMPCompat implements IMCMPAddon {
                 }
             }
         }
+    }
+
+    @Override
+    public void registerParts(IMultipartRegistry registry) {
+        TouhouLittleMaid.MCMPCompat = true;
+        registry.registerPartWrapper(MaidBlocks.GRID, new PartGrid());
+        registry.registerStackWrapper(MaidBlocks.GRID);
     }
 }

@@ -1,16 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import java.util.Locale;
-
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Point3f;
-import javax.vecmath.Vector3f;
-
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.util.MatrixUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -24,11 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -36,6 +25,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+import java.util.Locale;
 
 public class BlockGrid extends Block {
 
@@ -48,7 +42,7 @@ public class BlockGrid extends Block {
     protected static final AxisAlignedBB AABB_SOUTH = new AxisAlignedBB(0.0625D, 0.0625D, 0, 0.9375D, 0.9375D, 0.0625D);
     protected static final AxisAlignedBB AABB_WEST = new AxisAlignedBB(0.9375D, 0.0625D, 0.0625D, 1.0D, 0.9375D, 0.9375D);
     protected static final AxisAlignedBB AABB_EAST = new AxisAlignedBB(0, 0.0625D, 0.0625D, 0.0625D, 0.9375D, 0.9375D);
-    public static final AxisAlignedBB[] AABBS = new AxisAlignedBB[] { AABB_DOWN, AABB_UP, AABB_NORTH, AABB_SOUTH, AABB_WEST, AABB_EAST };
+    public static final AxisAlignedBB[] AABBS = new AxisAlignedBB[]{AABB_DOWN, AABB_UP, AABB_NORTH, AABB_SOUTH, AABB_WEST, AABB_EAST};
 
     public BlockGrid() {
         super(Material.CLAY);
@@ -102,8 +96,7 @@ public class BlockGrid extends Block {
             }
             grid.clearCraftingResult();
             worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 2, 1);
-        }
-        else {
+        } else {
             ItemStack stack = playerIn.getHeldItem(hand);
             Matrix4f matrix = state.getValue(DIRECTION).matrix();
             Point3f point = new Point3f(hitX, hitY, hitZ);
@@ -121,15 +114,13 @@ public class BlockGrid extends Block {
                 grid.clearCraftingResult();
                 SoundEvent soundEvent = stack.isEmpty() ? SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM : SoundEvents.ENTITY_ITEM_PICKUP;
                 worldIn.playSound(playerIn, hitX, hitY, hitZ, soundEvent, SoundCategory.PLAYERS, 1, 1);
-            }
-            else if ((point.x > 0.3125 && point.x < 0.6875) || (point.z > 0.3125 && point.z < 0.6875)) {
+            } else if ((point.x > 0.3125 && point.x < 0.6875) || (point.z > 0.3125 && point.z < 0.6875)) {
                 grid.blacklist = !grid.blacklist;
                 worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
                     playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.blacklist." + grid.blacklist), true);
                 }
-            }
-            else {
+            } else {
                 grid.input = !grid.input;
                 worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
@@ -214,13 +205,12 @@ public class BlockGrid extends Block {
         WEST(EnumFacing.WEST, null, 90, 270),
         EAST(EnumFacing.EAST, null, 90, 90);
 
+        public static final Direction[] VALUES = values();
         public final EnumFacing face;
         public final EnumFacing rot;
         public float rotX;
         public float rotY;
         private Matrix4f matrix;
-
-        public static final Direction[] VALUES = values();
 
         private Direction(EnumFacing face, EnumFacing rot, int rotX, int rotY) {
             this.face = face;
@@ -234,8 +224,7 @@ public class BlockGrid extends Block {
                 if (face == direction.face) {
                     if (face.getHorizontalIndex() >= 0) {
                         return direction;
-                    }
-                    else if (rot == direction.rot) {
+                    } else if (rot == direction.rot) {
                         return direction;
                     }
                 }

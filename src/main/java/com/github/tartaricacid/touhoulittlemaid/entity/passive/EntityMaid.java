@@ -32,10 +32,7 @@ import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.init.*;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -47,6 +44,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -552,7 +550,7 @@ public class EntityMaid extends AbstractEntityMaid {
             ItemStack itemstack = player.getHeldItem(hand);
             if (isYourMaid) {
                 // 利用短路原理，逐个触发对应的交互事件
-                return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player)
+                return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player) || applyGoldenApple(itemstack, player)
                         || dismountMaid(player) || switchSitting(player) || openMaidGui(player);
             } else {
                 return tamedMaid(itemstack, player);
@@ -617,7 +615,34 @@ public class EntityMaid extends AbstractEntityMaid {
             } else {
                 player.setHeldItem(EnumHand.MAIN_HAND, itemstack.getItem().onItemUseFinish(itemstack, world, this));
             }
-            this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.6f, 0.8F + this.rand.nextFloat() * 0.4F);
+            this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.6f, 0.8F + rand.nextFloat() * 0.4F);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean applyGoldenApple(ItemStack itemstack, EntityPlayer player) {
+        if (itemstack.getItem() == Items.GOLDEN_APPLE) {
+            if (!world.isRemote) {
+                // 作用效果
+                if (itemstack.getMetadata() > 0) {
+                    this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 400, 1));
+                    this.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 6000, 0));
+                    this.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 6000, 0));
+                    this.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 2400, 3));
+                } else {
+                    this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 1));
+                    this.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 2400, 0));
+                }
+            }
+
+            // 物品消耗判定
+            if (!player.capabilities.isCreativeMode) {
+                itemstack.shrink(1);
+            }
+
+            // 播放音效
+            this.playSound(SoundEvents.ENTITY_PLAYER_BURP, 0.5F, rand.nextFloat() * 0.1F + 0.9F);
             return true;
         }
         return false;

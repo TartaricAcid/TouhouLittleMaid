@@ -45,7 +45,9 @@ public final class MaidItems {
             ItemMonsterPlacer.applyEntityIdToItemStack(egg, new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"));
             items.add(egg);
             super.displayAllRelevantItems(items);
-        };
+        }
+
+        ;
     };
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "ultramarine_orb_elixir")
     public static Item ULTRAMARINE_ORB_ELIXIR;

@@ -8,10 +8,11 @@ public class MatrixUtil {
     /**
      * Rotates the source matrix around the given axis the specified angle and
      * put the result in the destination matrix.
+     *
      * @param angle the angle, in radians.
-     * @param axis The vector representing the rotation axis. Must be normalized.
-     * @param src The matrix to rotate
-     * @param dest The matrix to put the result, or null if a new matrix is to be created
+     * @param axis  The vector representing the rotation axis. Must be normalized.
+     * @param src   The matrix to rotate
+     * @param dest  The matrix to put the result, or null if a new matrix is to be created
      * @return The rotated matrix
      */
     public static Matrix4f rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f dest) {

@@ -109,11 +109,20 @@
       "model_id": "touhou_little_maid:merlin_prismriver",
       "description": ["{model.touhou_little_maid.merlin_prismriver.desc}"]
     }, {
+      "model_id": "touhou_little_maid:lyrica_prismriver",
+      "description": ["{model.touhou_little_maid.lyrica_prismriver.desc}"]
+    }, {
       "model_id": "touhou_little_maid:kirisame_marisa",
       "description": ["{model.touhou_little_maid.kirisame_marisa.desc}"]
     }, {
       "model_id": "touhou_little_maid:hinanawi_tenshi",
       "description": ["{model.touhou_little_maid.hinanawi_tenshi.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:lily_white",
+      "description": ["{model.touhou_little_maid.lily_white.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:lily_black",
+      "description": ["{model.touhou_little_maid.lily_white.desc}"]
     }
   ]
 }

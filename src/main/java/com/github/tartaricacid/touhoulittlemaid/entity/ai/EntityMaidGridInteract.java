@@ -1,7 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
-import java.util.List;
-
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.mcmp.MCMPCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -9,12 +7,13 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid.Mode;
 import com.google.common.collect.Lists;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class EntityMaidGridInteract extends EntityAIMoveToBlock {
     private final EntityMaid maid;
@@ -148,10 +147,8 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
     /**
      * 女仆尝试移动到此处
      *
-     * @param minDistanceSq
-     *            最小移动距离
-     * @param interval
-     *            尝试移动的间隔时间
+     * @param minDistanceSq 最小移动距离
+     * @param interval      尝试移动的间隔时间
      */
     private void tryMoveToDestination(double minDistanceSq, int interval) {
         if (maid.getDistanceSqToCenter(this.destinationBlock.up()) > Math.sqrt(minDistanceSq)) {
@@ -161,8 +158,7 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
             if (this.timeoutCounter % interval == 0) {
                 maid.getNavigator().tryMoveToXYZ((this.destinationBlock.getX()) + 0.5D, this.destinationBlock.getY() + 1, (this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
             }
-        }
-        else {
+        } else {
             this.isAboveDestination = true;
             --this.timeoutCounter;
         }

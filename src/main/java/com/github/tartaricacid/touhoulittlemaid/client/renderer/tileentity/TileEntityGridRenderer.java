@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid.Direction;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -118,8 +117,7 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
                     GlStateManager.scale(2.5f, 2.5f, 1);
                     GlStateManager.pushMatrix();
                     GlStateManager.scale(4f, 4f, 1);
-                }
-                else {
+                } else {
                     GlStateManager.pushMatrix();
                     GlStateManager.scale(1.92f, 1.92f, 1);
                 }
@@ -162,8 +160,7 @@ public class TileEntityGridRenderer extends TileEntitySpecialRenderer<TileEntity
                 IBakedModel bakedmodel = itemRenderer.getItemModelWithOverrides(stack, getWorld(), null);
                 if (!bakedmodel.isGui3d() || stack.getItem() == Item.getItemFromBlock(MaidBlocks.GRID)) {
                     GlStateManager.disableLighting();
-                }
-                else {
+                } else {
                     GlStateManager.enableLighting();
                 }
                 GlStateManager.pushMatrix();

@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.compat.mcmp;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
-
 import mcmultipart.api.multipart.IMultipart;
 import mcmultipart.api.multipart.IMultipartTile;
 import mcmultipart.api.slot.EnumFaceSlot;
@@ -33,8 +32,7 @@ public class PartGrid implements IMultipart {
     public IMultipartTile convertToMultipartTile(TileEntity tileEntity) {
         if (tileEntity instanceof TileEntityGrid) {
             return new PartTileGrid((TileEntityGrid) tileEntity);
-        }
-        else {
+        } else {
             return null;
         }
     }

@@ -126,8 +126,11 @@ model.touhou_little_maid.koakuma.name=小恶魔
 model.touhou_little_maid.letty_whiterock.name=蕾蒂·霍瓦特洛克
 model.touhou_little_maid.lunasa_prismriver.name=露娜萨·普莉兹姆利巴
 model.touhou_little_maid.merlin_prismriver.name=梅露兰·普莉兹姆利巴
+model.touhou_little_maid.lyrica_prismriver.name=莉莉卡·普莉兹姆利巴
 model.touhou_little_maid.kirisame_marisa.name=雾雨魔理沙
 model.touhou_little_maid.hinanawi_tenshi.name=比那名居天子
+model.touhou_little_maid.lily_white.name=莉莉霍瓦特
+model.touhou_little_maid.lily_black.name=莉莉霍瓦特（黑）
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -163,8 +166,10 @@ model.touhou_little_maid.koakuma.desc=§7？？？
 model.touhou_little_maid.letty_whiterock.desc=§7冬天的遗忘之物
 model.touhou_little_maid.lunasa_prismriver.desc=§7骚灵提琴手
 model.touhou_little_maid.merlin_prismriver.desc=§7骚灵小号手
+model.touhou_little_maid.lyrica_prismriver.desc=§7骚灵键盘手
 model.touhou_little_maid.kirisame_marisa.desc=§7普通的魔法使
 model.touhou_little_maid.hinanawi_tenshi.desc=§7非想非非想天之女
+model.touhou_little_maid.lily_white.desc=§7运送春天的妖精
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
@@ -194,7 +199,3 @@ subtitle.touhou_little_maid.other.credit=致谢：あみたろの声素材工房
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s
 top.touhou_little_maid.entity_maid.task=当前模式：
-message.touhou_little_maid.grid.blacklist.false=过滤模式：白名单
-message.touhou_little_maid.grid.blacklist.true=过滤模式：黑名单
-message.touhou_little_maid.grid.input.false=物流模式：输出
-message.touhou_little_maid.grid.input.true=物流模式：输入
