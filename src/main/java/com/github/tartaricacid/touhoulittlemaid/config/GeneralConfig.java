@@ -30,6 +30,18 @@ public class GeneralConfig {
         @Config.RangeInt(min = 20)
         public int maidTalkInterval = 120;
 
+        @Config.Comment("Get number of ticks, at least during which the maid will be silent in pickup item.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.maid_pickup_sound_interval")
+        @Config.Name("MaidPickupSoundInterval")
+        @Config.RangeInt(min = 20)
+        public int maidPickupSoundInterval = 60;
+
+        @Config.Comment("Get number of ticks, at least during which the maid will be silent in hurt.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.maid_hurt_sound_interval")
+        @Config.Name("MaidHurtSoundInterval")
+        @Config.RangeInt(min = 20)
+        public int maidHurtSoundInterval = 120;
+
         @Config.Comment("Should the maid always show the hat? when set to false, the maid will only render the hat when wearing the helmet.")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_always_show_hat")
         @Config.Name("MaidAlwaysShowHat")

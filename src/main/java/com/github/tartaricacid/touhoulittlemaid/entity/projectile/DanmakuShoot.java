@@ -26,7 +26,8 @@ public final class DanmakuShoot {
     public static void aimedShot(World worldIn, EntityLivingBase thrower, EntityLivingBase target, float damage, float gravity, Float velocity, Float inaccuracy, DanmakuType type, DanmakuColor color) {
         if (!worldIn.isRemote) {
             EntityDanmaku danmaku = new EntityDanmaku(worldIn, thrower, damage, gravity, type, color);
-            danmaku.shoot(target.posX - thrower.posX, target.posY - thrower.posY, target.posZ - thrower.posZ, velocity, inaccuracy);
+            float offset = thrower.height / 2;
+            danmaku.shoot(target.posX - thrower.posX, target.posY - thrower.posY - offset, target.posZ - thrower.posZ, velocity, inaccuracy);
             worldIn.spawnEntity(danmaku);
         }
         worldIn.playSound(null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, thrower.getSoundCategory(), 1.0f, 0.8f);
@@ -54,7 +55,8 @@ public final class DanmakuShoot {
         }
 
         if (!worldIn.isRemote) {
-            Vec3d v = new Vec3d(target.posX - thrower.posX, target.posY - thrower.posY, target.posZ - thrower.posZ);
+            float offset = thrower.height / 2;
+            Vec3d v = new Vec3d(target.posX - thrower.posX, target.posY - thrower.posY - offset, target.posZ - thrower.posZ);
             double yaw = -(yawTotal / 2);
             double addYaw = yawTotal / (fanNum - 1);
             for (int i = 1; i <= fanNum; i++) {

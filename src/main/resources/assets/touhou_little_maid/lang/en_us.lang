@@ -40,6 +40,8 @@ config.touhou_little_maid.maid_config=Maid Config
 config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item
 config.touhou_little_maid.maid_config.maid_temptation_item=Maid Temptation Item
 config.touhou_little_maid.maid_config.maid_talk_interval=Maid Talk Interval (tick)
+config.touhou_little_maid.maid_config.maid_pickup_sound_interval=Maid Pickup Sound Interval (tick)
+config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound Interval (tick)
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 
 # Danmaku Type
