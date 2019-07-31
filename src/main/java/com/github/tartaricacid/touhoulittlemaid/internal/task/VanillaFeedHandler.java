@@ -41,11 +41,11 @@ public class VanillaFeedHandler implements FeedHandler {
             return flag;
         }
 
-        // 如果是食物（生鸡肉除外，它有负面效果）
-        if (stack.getItem() != Items.CHICKEN && stack.getItem() instanceof ItemFood) {
+        // 如果是食物
+        if (stack.getItem() instanceof ItemFood) {
             ItemFood food = (ItemFood) stack.getItem();
             // 如果该食物没有药水属性，或者药水属性不是负面的，就可以喂食
-            return food.potionId == null || !food.potionId.getPotion().isBadEffect();
+            return stack.getItem() == Items.CHICKEN || food.potionId == null || !food.potionId.getPotion().isBadEffect();
         }
         return false;
     }
