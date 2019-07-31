@@ -15,13 +15,16 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:stick"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     },
     "P": {
-      "item": "minecraft:paper"
+      "type": "forge:ore_dict",
+      "ore": "paper"
     },
     "D": {
-      "item": "minecraft:diamond_block"
+      "type": "forge:ore_dict",
+      "ore": "blockDiamond"
     }
   }
 }
