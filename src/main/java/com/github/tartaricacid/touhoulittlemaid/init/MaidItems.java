@@ -6,9 +6,13 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMarisaBroom;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +37,15 @@ public final class MaidItems {
         public String getTranslationKey() {
             return "item_group." + getTabLabel();
         }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void displayAllRelevantItems(NonNullList<ItemStack> items) {
+            ItemStack egg = new ItemStack(Items.SPAWN_EGG);
+            ItemMonsterPlacer.applyEntityIdToItemStack(egg, new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"));
+            items.add(egg);
+            super.displayAllRelevantItems(items);
+        };
     };
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "ultramarine_orb_elixir")
     public static Item ULTRAMARINE_ORB_ELIXIR;
