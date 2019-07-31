@@ -109,7 +109,11 @@ public class BlockGrid extends Block {
                 int ix = MathHelper.clamp((int) ((point.x - 0.1875) / 0.625 * 3), 0, 2);
                 int iz = MathHelper.clamp((int) ((point.z - 0.1875) / 0.625 * 3), 0, 2);
                 int i = ix + iz * 3;
+                ItemStack before = grid.handler.getStackInSlot(i);
                 ItemStack copy = stack.isEmpty() ? ItemStack.EMPTY : ItemHandlerHelper.copyStackWithSize(stack, 1);
+                if (before.isEmpty() && copy.isEmpty()) {
+                    return false;
+                }
                 grid.handler.setStackInSlot(i, copy);
                 grid.clearCraftingResult();
                 SoundEvent soundEvent = stack.isEmpty() ? SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM : SoundEvents.ENTITY_ITEM_PICKUP;
