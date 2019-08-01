@@ -138,7 +138,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             return false;
         }
 
-        if (this.currentTask == TASK.HARVEST || this.currentTask == TASK.NONE) {
+        if ((this.currentTask == TASK.HARVEST || this.currentTask == TASK.NONE) && maid.canDestroyBlock(pos)) {
             // 遍历 FarmHandler 找到能够处理此作物的 FarmHandler
             for (FarmHandler handler : handlers) {
                 if (handler.canHarvest(maid, worldIn, pos, stateUp)) {
@@ -150,7 +150,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         }
 
         boolean taskIsOkay = this.currentTask == TASK.PLANT || this.currentTask == TASK.NONE;
-        if (taskIsOkay && !seeds.isEmpty()) {
+        if (taskIsOkay && !seeds.isEmpty() && maid.canPlaceBlock(pos, stateUp)) {
             // 遍历 FarmHandler 的 seeds 找到能够处理种植 FarmHandler 和 Seed
             for (FarmHandler handler : handlers) {
                 for (ItemStack seed : seeds) {

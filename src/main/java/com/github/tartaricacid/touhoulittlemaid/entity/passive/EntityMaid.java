@@ -53,6 +53,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
@@ -1028,13 +1029,27 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
+    public boolean canDestroyBlock(BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock().canEntityDestroy(state, world, pos, this) && ForgeEventFactory.onEntityDestroyBlock(this, pos, state);
+    }
+
+    @Override
+    public boolean canPlaceBlock(BlockPos pos, IBlockState state) {
+        // https://github.com/MinecraftForge/MinecraftForge/pull/5057
+        IBlockState oldState = world.getBlockState(pos);
+        return oldState.getBlock().isReplaceable(world, pos);
+    }
+
+    @Override
     public boolean destroyBlock(BlockPos pos) {
-        return world.destroyBlock(pos, true);
+        // TODO 破坏进度
+        return canDestroyBlock(pos) && world.destroyBlock(pos, true);
     }
 
     @Override
     public boolean placeBlock(BlockPos pos, IBlockState state) {
-        return world.setBlockState(pos, state);
+        return canPlaceBlock(pos, state) && world.setBlockState(pos, state);
     }
 
     public enum NBT {
