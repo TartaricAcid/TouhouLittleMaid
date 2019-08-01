@@ -5,7 +5,6 @@ import mcmultipart.api.multipart.IMultipartTile;
 import net.minecraft.tileentity.TileEntity;
 
 public class PartTileGrid implements IMultipartTile {
-
     private final TileEntityGrid grid;
 
     public PartTileGrid(TileEntityGrid grid) {

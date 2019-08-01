@@ -22,7 +22,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.*;
 import net.minecraftforge.oredict.OreDictionary;
@@ -31,17 +30,16 @@ import org.apache.commons.lang3.ArrayUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 
 public class TileEntityGrid extends TileEntity {
-
     public final ItemStackHandler handler = new ItemStackHandler(9) {
+        @Override
         public int getSlotLimit(int slot) {
             return 1;
         }
-
-        ;
     };
 
     public boolean input = true;
@@ -54,6 +52,9 @@ public class TileEntityGrid extends TileEntity {
         return ItemStack.areItemsEqual(stackA, stackB) && (ignoreNBT || ItemStack.areItemStackTagsEqual(stackA, stackB));
     }
 
+    /**
+     * 用于刷新方块信息，通知 world 进行数据存储
+     */
     public void refresh() {
         markDirty();
         if (world != null) {
@@ -99,21 +100,33 @@ public class TileEntityGrid extends TileEntity {
         return super.writeToNBT(compound);
     }
 
+    /**
+     * 尝试进行交互
+     *
+     * @return true -> 交互成功；false -> 交互失败
+     */
     public boolean interact(IItemHandlerModifiable items, AbstractEntityMaid maid, boolean simulate) {
         if (mode == Mode.UNKNOWN) {
             updateMode(null);
         }
         switch (mode) {
-            default:
             case UNKNOWN:
                 return false;
             case ITEM_IO:
                 return interactItemIO(items, maid, simulate);
             case CRAFTING:
                 return interactCrafting(items, maid, simulate);
+            default:
+                return false;
         }
     }
 
+    /**
+     * 比较女仆背包和 grid 的物品，进行匹配
+     *
+     * @param inv 女仆的背包
+     * @return 匹配的第一个对象，如果不匹配，返回 ItemStack.EMPTY
+     */
     public ItemStack getItem(IItemHandler inv) {
         outer:
         for (int i = 0; i < inv.getSlots(); i++) {
@@ -159,7 +172,7 @@ public class TileEntityGrid extends TileEntity {
         ItemStack remain = ItemHandlerHelper.insertItemStacked(dest, stack.copy(), simulate);
         if (stack.getCount() != remain.getCount()) {
             if (!simulate) {
-                world.playSound(null, maid.posX, maid.posY, maid.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.5f, 1);
+                maid.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, 1);
                 if (input) {
                     stack.setCount(remain.getCount());
                 } else {
@@ -190,9 +203,9 @@ public class TileEntityGrid extends TileEntity {
             ItemStack stack = handler.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 boolean flag = false;
-                for (int j = 0; j < ingredients.size(); j++) {
-                    if (itemMatches(stack, ingredients.get(j), false)) {
-                        ingredients.get(j).grow(1);
+                for (ItemStack ingredient : ingredients) {
+                    if (itemMatches(stack, ingredient, false)) {
+                        ingredient.grow(1);
                         flag = true;
                     }
                 }
@@ -219,8 +232,7 @@ public class TileEntityGrid extends TileEntity {
             if (itemMatches(stack, result, false)) {
                 sameCount += result.getMaxStackSize() - stack.getCount();
             }
-            for (int j = 0; j < ingredients.size(); j++) {
-                ItemStack ingredient = ingredients.get(j);
+            for (ItemStack ingredient : ingredients) {
                 if (itemMatches(stack, ingredient, false)) {
                     matchedItems.put(ingredient, stack);
                     int c0 = ingredientsCount.getOrDefault(ingredient, 0);
@@ -276,7 +288,7 @@ public class TileEntityGrid extends TileEntity {
         for (ItemStack ingredient : matchedItems.keySet()) {
             int count = ingredientsCount.getInt(ingredient);
             List<ItemStack> stacks = Lists.newArrayList(matchedItems.get(ingredient));
-            Collections.sort(stacks, (a, b) -> a.getCount() - b.getCount());
+            stacks.sort(Comparator.comparingInt(ItemStack::getCount));
             for (ItemStack stack : stacks) {
                 int shrink = Math.min(stack.getCount(), count);
                 stack.shrink(shrink);
@@ -306,7 +318,7 @@ public class TileEntityGrid extends TileEntity {
                 }
             }
         }
-        world.playSound(null, maid.posX, maid.posY, maid.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.5f, 1);
+        maid.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, 1);
         return true;
     }
 
@@ -314,7 +326,7 @@ public class TileEntityGrid extends TileEntity {
         if (craftingResult.isEmpty()) {
             Container container = new Container() {
                 @Override
-                public boolean canInteractWith(EntityPlayer playerIn) {
+                public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
                     return false;
                 }
             };
@@ -367,7 +379,12 @@ public class TileEntityGrid extends TileEntity {
         return mode = Mode.UNKNOWN;
     }
 
-    public static enum Mode {
-        UNKNOWN, ITEM_IO, CRAFTING
+    public enum Mode {
+        // 未知模式
+        UNKNOWN,
+        // 物品 IO 模式
+        ITEM_IO,
+        // 物品合成模式
+        CRAFTING
     }
 }

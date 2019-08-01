@@ -41,6 +41,12 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      */
     abstract public IItemHandlerModifiable getInv(MaidInventory type);
 
+    /**
+     * 女仆能否破坏方块
+     *
+     * @param pos 破坏的方块所处的坐标
+     * @return boolean
+     */
     abstract public boolean canDestroyBlock(BlockPos pos);
 
     /**
@@ -51,6 +57,13 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      */
     abstract public boolean destroyBlock(BlockPos pos);
 
+    /**
+     * 女仆能否放置方块
+     *
+     * @param pos   放置的坐标
+     * @param state 放置的方块 IBlockState
+     * @return boolean
+     */
     abstract public boolean canPlaceBlock(BlockPos pos, IBlockState state);
 
     /**

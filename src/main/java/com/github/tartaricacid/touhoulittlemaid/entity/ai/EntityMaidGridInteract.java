@@ -42,7 +42,7 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
         this.runDelay = 50 + this.maid.getRNG().nextInt(50);
         this.currentTask = TASK.NONE;
 
-        // 最后选取合适的种植方块
+        // 最后选取方块
         return searchForDestination();
     }
 
@@ -53,48 +53,43 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
 
     @Override
     public void updateTask() {
-
         // 先尝试移动到此处
-        tryMoveToDestination(9.0d, 40);
-        boolean shouldLook = true;
+        tryMoveToDestination(2.25d, 40);
 
-        // 先判定女仆是否在耕地上方
+        // 先判定女仆是否在范围内
         if (this.getIsAboveDestination()) {
             World world = this.maid.world;
             BlockPos pos = this.destinationBlock.up();
 
-            // 如果当前任务为收获，并且 canHarvest，执行收获逻辑
+            // 如果当前任务为移动
             if (this.currentTask == TASK.MOVING) {
                 IBlockState state = world.getBlockState(pos);
+                // 为 MCMultiPart 做的兼容，搜索一个坐标内的多个 Grid
                 for (TileEntityGrid grid : getTilesIn(world, pos, state)) {
+                    // 只要无法交互，直接跳出
                     if (grid.interact(maid.getAvailableInv(false), maid, false)) {
                         break;
                     }
                 }
             }
-
             this.currentTask = TASK.NONE;
-            this.runDelay = 2;
         }
 
-        // 女仆头部朝向逻辑
-        if (shouldLook) {
-            // 女仆盯着耕地
-            this.maid.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, this.destinationBlock.getZ() + 0.5D, 10.0F, this.maid.getVerticalFaceSpeed());
-        }
+        // 女仆盯着交互面板
+        this.maid.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, this.destinationBlock.getZ() + 0.5D, 10.0F, this.maid.getVerticalFaceSpeed());
     }
 
     @Override
     protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
         pos = pos.up();
-
         IBlockState stateUp2 = worldIn.getBlockState(pos.up());
 
-        // 该位置不可到达时返回 false
+        // 上方两格处不可通过时
         if (!stateUp2.getBlock().isPassable(worldIn, pos.up())) {
             return false;
         }
 
+        // 可通过时，并且能够塞入
         IBlockState stateUp = worldIn.getBlockState(pos);
         for (TileEntityGrid grid : getTilesIn(worldIn, pos, stateUp)) {
             if (grid.updateMode(null) != Mode.UNKNOWN && grid.interact(maid.getAvailableInv(false), maid, true)) {
@@ -105,6 +100,9 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
         return false;
     }
 
+    /**
+     * 获取当前坐标内所有的 grid
+     */
     private List<TileEntityGrid> getTilesIn(World worldIn, BlockPos pos, IBlockState state) {
         List<TileEntityGrid> grids = Lists.newArrayList();
         if (TouhouLittleMaid.MCMPCompat) {
@@ -117,31 +115,6 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
             }
         }
         return grids;
-    }
-
-    /**
-     * 检索指定范围内是否有合适方块
-     */
-    private boolean searchForDestination() {
-        BlockPos blockpos = new BlockPos(this.maid);
-
-        for (int k = 0; k <= 1; k = k > 0 ? -k : 1 - k) {
-            for (int l = 0; l < this.searchLength; ++l) {
-                for (int i1 = 0; i1 <= l; i1 = i1 > 0 ? -i1 : 1 - i1) {
-                    for (int j1 = i1 < l && i1 > -l ? l : 0; j1 <= l; j1 = j1 > 0 ? -j1 : 1 - j1) {
-                        BlockPos blockpos1 = blockpos.add(i1, k - 1, j1);
-
-                        // 如果方块在 Home 范围内，而且方块符合条件
-                        if (this.maid.isWithinHomeDistanceFromPosition(blockpos1) && this.shouldMoveTo(this.maid.world, blockpos1)) {
-                            this.destinationBlock = blockpos1;
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -168,6 +141,7 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
      * 种植状态
      */
     private enum TASK {
+        // 移动状态
         MOVING,
         // 无状态
         NONE

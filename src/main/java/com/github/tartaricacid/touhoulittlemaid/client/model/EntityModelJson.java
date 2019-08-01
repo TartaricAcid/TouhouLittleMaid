@@ -163,11 +163,12 @@ public class EntityModelJson extends ModelBase {
         beggingPosture(entityMaid, head, ahoge, ageInTicks);
         swingingArmsPosture(entityMaid, armLeft, armRight);
 
-        // 因为两者不允许同时存在，所以需要 if 判定
+        // 头部复位
         if (head != null) {
-            // 头部复位
             head.offsetY = 0;
         }
+
+        // 因为三者不允许同时存在，所以需要 if 判定
         if (entityMaid.getControllingPassenger() instanceof EntityMarisaBroom) {
             // 坐在扫帚上时，应用待命的动作
             ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);

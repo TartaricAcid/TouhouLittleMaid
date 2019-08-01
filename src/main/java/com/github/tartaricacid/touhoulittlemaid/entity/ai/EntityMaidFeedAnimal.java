@@ -63,7 +63,7 @@ public class EntityMaidFeedAnimal extends EntityAIBase {
         // 选取第一个可喂养生物
         for (Entity entity : entityList) {
             if (entity instanceof EntityAnimal && entity.isEntityAlive() && ((EntityAnimal) entity).getGrowingAge() == 0 &&
-                    !((EntityAnimal) entity).isInLove() && ItemFindUtil.isItemIn(maid.getAvailableInv(false), ((EntityAnimal) entity)::isBreedingItem)) {
+                    !((EntityAnimal) entity).isInLove() && ItemFindUtil.isStackIn(maid.getAvailableInv(false), ((EntityAnimal) entity)::isBreedingItem)) {
                 entitySelected = (EntityAnimal) entity;
                 timeCount = 5;
                 return true;
@@ -85,7 +85,7 @@ public class EntityMaidFeedAnimal extends EntityAIBase {
             }
 
             // 开始遍历女仆背包，寻找合适的繁殖物品
-            int slot = ItemFindUtil.findItem(maid.getAvailableInv(false), entitySelected::isBreedingItem);
+            int slot = ItemFindUtil.findStackSlot(maid.getAvailableInv(false), entitySelected::isBreedingItem);
             // 再次判定一些条件，尽可能减少间隔
             if (slot >= 0 && entitySelected.isEntityAlive() && entitySelected.getGrowingAge() == 0 && !entitySelected.isInLove()) {
                 maid.getAvailableInv(false).getStackInSlot(slot).shrink(1);

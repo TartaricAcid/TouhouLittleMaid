@@ -40,7 +40,7 @@ config.touhou_little_maid.maid_config=女仆相关配置
 config.touhou_little_maid.maid_config.maid_tamed_item=驯服女仆所使用的物品
 config.touhou_little_maid.maid_config.maid_temptation_item=诱惑女仆所使用的物品
 config.touhou_little_maid.maid_config.maid_talk_interval=女仆发出声音的间隔（tick）
-config.touhou_little_maid.maid_config.maid_pickup_sound_interval=女仆拾物的声音间隔（tick）
+config.touhou_little_maid.maid_config.maid_pickup_sound_interval=女仆拾物的声音间隔（拾取计数）
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=女仆受伤的声音间隔（tick）
 config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽子
 

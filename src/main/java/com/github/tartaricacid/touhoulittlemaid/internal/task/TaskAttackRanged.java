@@ -33,7 +33,7 @@ public class TaskAttackRanged implements IMaidTask {
     public static int findArrow(AbstractEntityMaid maid) {
         // 遍历女仆背包，找到第一个属于 arrow 的物品
         IItemHandlerModifiable handler = maid.getAvailableInv(true);
-        return ItemFindUtil.findItem(handler, s -> s.getItem() == Items.ARROW || s.getItem() == Items.TIPPED_ARROW || s.getItem() == Items.SPECTRAL_ARROW);
+        return ItemFindUtil.findStackSlot(handler, s -> s.getItem() == Items.ARROW || s.getItem() == Items.TIPPED_ARROW || s.getItem() == Items.SPECTRAL_ARROW);
     }
 
     @Nullable

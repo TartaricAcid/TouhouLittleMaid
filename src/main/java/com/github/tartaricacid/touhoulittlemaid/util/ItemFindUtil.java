@@ -18,7 +18,7 @@ public final class ItemFindUtil {
      *
      * @return 如果没找到，返回 -1
      */
-    public static int findItem(IItemHandler handler, Predicate<ItemStack> filter) {
+    public static int findStackSlot(IItemHandler handler, Predicate<ItemStack> filter) {
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stack = handler.getStackInSlot(i);
             if (filter.test(stack)) {
@@ -31,7 +31,21 @@ public final class ItemFindUtil {
     /**
      * 符合 filter 条件的物品是否在 handler 中
      */
-    public static boolean isItemIn(IItemHandler handler, Predicate<ItemStack> filter) {
-        return findItem(handler, filter) >= 0;
+    public static boolean isStackIn(IItemHandler handler, Predicate<ItemStack> filter) {
+        return findStackSlot(handler, filter) >= 0;
+    }
+
+    /**
+     * 获取符合 filter 添加的 ItemStack
+     *
+     * @return 如果该物品不存在，返回 ItemStack.EMPTY
+     */
+    public static ItemStack getStack(IItemHandler handler, Predicate<ItemStack> filter) {
+        int slotIndex = findStackSlot(handler, filter);
+        if (slotIndex >= 0) {
+            return handler.getStackInSlot(slotIndex);
+        } else {
+            return ItemStack.EMPTY;
+        }
     }
 }

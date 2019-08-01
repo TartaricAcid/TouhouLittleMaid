@@ -32,10 +32,10 @@ import javax.vecmath.Vector3f;
 import java.util.Locale;
 
 public class BlockGrid extends Block {
-
     public static final PropertyEnum<Direction> DIRECTION = PropertyEnum.create("facing", Direction.class);
     public static final PropertyBool INPUT = PropertyBool.create("input");
     public static final PropertyBool BLACKLIST = PropertyBool.create("blacklist");
+
     protected static final AxisAlignedBB AABB_DOWN = new AxisAlignedBB(0.0625D, 0.9375D, 0.0625D, 0.9375D, 1, 0.9375D);
     protected static final AxisAlignedBB AABB_UP = new AxisAlignedBB(0.0625D, 0, 0.0625D, 0.9375D, 0.0625D, 0.9375D);
     protected static final AxisAlignedBB AABB_NORTH = new AxisAlignedBB(0.0625D, 0.0625D, 0.9375D, 0.9375D, 0.9375D, 1.0D);
@@ -86,22 +86,35 @@ public class BlockGrid extends Block {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tile = worldIn.getTileEntity(pos);
+        // 先检查 TileEntityGrid
         if (!(tile instanceof TileEntityGrid)) {
             return false;
         }
         TileEntityGrid grid = (TileEntityGrid) tile;
+
+        // 玩家潜行状态右击，清除面板
         if (playerIn.isSneaking()) {
             for (int i = 0; i < grid.handler.getSlots(); i++) {
                 grid.handler.setStackInSlot(i, ItemStack.EMPTY);
             }
             grid.clearCraftingResult();
             worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 2, 1);
-        } else {
+        }
+
+        // 否则，执行物品标记
+        else {
             ItemStack stack = playerIn.getHeldItem(hand);
+            // 应用矩阵转换坐标
             Matrix4f matrix = state.getValue(DIRECTION).matrix();
             Point3f point = new Point3f(hitX, hitY, hitZ);
             matrix.transform(point);
-            if (point.x > 0.1875 && point.x < 0.8125 && point.z > 0.1875 && point.z < 0.8125) {
+
+            // 范围判定
+            boolean isInMarkItemRange = point.x > 0.1875 && point.x < 0.8125 && point.z > 0.1875 && point.z < 0.8125;
+            boolean isInSwitchListRange = (point.x > 0.3125 && point.x < 0.6875) || (point.z > 0.3125 && point.z < 0.6875);
+
+            // 标记物品
+            if (isInMarkItemRange) {
                 int ix = MathHelper.clamp((int) ((point.x - 0.1875) / 0.625 * 3), 0, 2);
                 int iz = MathHelper.clamp((int) ((point.z - 0.1875) / 0.625 * 3), 0, 2);
                 int i = ix + iz * 3;
@@ -114,17 +127,21 @@ public class BlockGrid extends Block {
                 grid.clearCraftingResult();
                 SoundEvent soundEvent = stack.isEmpty() ? SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM : SoundEvents.ENTITY_ITEM_PICKUP;
                 worldIn.playSound(playerIn, hitX, hitY, hitZ, soundEvent, SoundCategory.PLAYERS, 1, 1);
-            } else if ((point.x > 0.3125 && point.x < 0.6875) || (point.z > 0.3125 && point.z < 0.6875)) {
+            }
+            // 切换白名单黑名单
+            else if (isInSwitchListRange) {
                 grid.blacklist = !grid.blacklist;
                 worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
-                    playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.blacklist." + grid.blacklist), true);
+                    playerIn.sendStatusMessage(new TextComponentTranslation(String.format("message.%s.grid.blacklist.%s", TouhouLittleMaid.MOD_ID, grid.blacklist)), true);
                 }
-            } else {
+            }
+            // 其他位置，切换输入输出
+            else {
                 grid.input = !grid.input;
                 worldIn.playSound(playerIn, hitX, hitY, hitZ, SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
                 if (worldIn.isRemote) {
-                    playerIn.sendStatusMessage(new TextComponentTranslation("message." + TouhouLittleMaid.MOD_ID + ".grid.input." + grid.input), true);
+                    playerIn.sendStatusMessage(new TextComponentTranslation(String.format("message.%s.grid.input.%s", TouhouLittleMaid.MOD_ID, grid.input)), true);
                 }
             }
         }
@@ -190,8 +207,8 @@ public class BlockGrid extends Block {
         return getDefaultState().withProperty(DIRECTION, Direction.VALUES[meta % 12]);
     }
 
-    public static enum Direction implements IStringSerializable {
-
+    public enum Direction implements IStringSerializable {
+        // 所有的放置方向
         DOWN_NORTH(EnumFacing.DOWN, EnumFacing.NORTH, 180, 0),
         DOWN_SOUTH(EnumFacing.DOWN, EnumFacing.SOUTH, 180, 180),
         DOWN_WEST(EnumFacing.DOWN, EnumFacing.WEST, 180, 90),
@@ -212,13 +229,24 @@ public class BlockGrid extends Block {
         public float rotY;
         private Matrix4f matrix;
 
-        private Direction(EnumFacing face, EnumFacing rot, int rotX, int rotY) {
+        /**
+         * 物品放置的方向枚举
+         *
+         * @param face 方块所处的方向（X 方向）
+         * @param rot  方块所处的方向（Y 方向）
+         * @param rotX X 方向旋转角度
+         * @param rotY Y 方向旋转角度
+         */
+        Direction(EnumFacing face, EnumFacing rot, int rotX, int rotY) {
             this.face = face;
             this.rot = rot;
             this.rotX = rotX;
             this.rotY = rotY;
         }
 
+        /**
+         * 通过传入两个方向，获取枚举
+         */
         public static Direction byFacing(EnumFacing face, EnumFacing rot) {
             for (Direction direction : VALUES) {
                 if (face == direction.face) {
@@ -232,6 +260,9 @@ public class BlockGrid extends Block {
             return UP_NORTH;
         }
 
+        /**
+         * 将朝向转换成一个 4x4 矩阵
+         */
         public Matrix4f matrix() {
             if (matrix == null) {
                 matrix = new Matrix4f();
@@ -255,6 +286,5 @@ public class BlockGrid extends Block {
         public String getName() {
             return toString().toLowerCase(Locale.US);
         }
-
     }
 }

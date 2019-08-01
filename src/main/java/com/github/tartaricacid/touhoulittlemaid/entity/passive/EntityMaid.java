@@ -169,9 +169,6 @@ public class EntityMaid extends AbstractEntityMaid {
         // 更新手部使用
         this.updateArmSwingProgress();
         // 计数器自减
-        if (pickupSoundCount > 0) {
-            pickupSoundCount--;
-        }
         if (playerHurtSoundCount > 0) {
             playerHurtSoundCount--;
         }
@@ -353,6 +350,7 @@ public class EntityMaid extends AbstractEntityMaid {
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(entityItem, count - itemstack.getCount());
+                pickupSoundCount--;
                 if (pickupSoundCount == 0) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
                     pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
@@ -379,9 +377,10 @@ public class EntityMaid extends AbstractEntityMaid {
         if (!this.world.isRemote && entityXPOrb.isEntityAlive() && entityXPOrb.delayBeforeCanPickup == 0) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.onItemPickup(entityXPOrb, 1);
+            pickupSoundCount--;
             if (pickupSoundCount == 0) {
                 this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                pickupSoundCount = 60;
+                pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
@@ -418,9 +417,10 @@ public class EntityMaid extends AbstractEntityMaid {
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(arrow, 1);
+                pickupSoundCount--;
                 if (pickupSoundCount == 0) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                    pickupSoundCount = 60;
+                    pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
                 }
                 arrow.setDead();
             }

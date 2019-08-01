@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-
+import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
@@ -82,14 +82,8 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
 
     private ItemStack getTorchItem(AbstractEntityMaid entityMaid) {
         // TODO OreDictionary: torch
-        IItemHandler itemHandler = entityMaid.getAvailableInv(true);
-        for (int i = 0; i < itemHandler.getSlots(); ++i) {
-            ItemStack itemstack = itemHandler.getStackInSlot(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() == Item.getItemFromBlock(Blocks.TORCH)) {
-                return itemstack;
-            }
-        }
-        return ItemStack.EMPTY;
+        IItemHandler itemHandler = entityMaid.getAvailableInv(false);
+        return ItemFindUtil.getStack(itemHandler, (stack -> stack.getItem() == Item.getItemFromBlock(Blocks.TORCH)));
     }
 
     @Nullable

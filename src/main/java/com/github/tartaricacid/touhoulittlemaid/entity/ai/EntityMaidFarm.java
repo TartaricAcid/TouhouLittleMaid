@@ -97,7 +97,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         tryMoveToDestination(9.0d, 40);
         boolean shouldLook = true;
 
-        // 先判定女仆是否在耕地上方
+        // 先判定女仆是否在范围内
         if (this.getIsAboveDestination()) {
             World world = this.maid.world;
             BlockPos pos = this.destinationBlock.up();
@@ -167,31 +167,6 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     }
 
     /**
-     * 检索指定范围内是否有合适方块
-     */
-    private boolean searchForDestination() {
-        BlockPos blockpos = new BlockPos(this.maid);
-
-        for (int k = 0; k <= 1; k = k > 0 ? -k : 1 - k) {
-            for (int l = 0; l < this.searchLength; ++l) {
-                for (int i1 = 0; i1 <= l; i1 = i1 > 0 ? -i1 : 1 - i1) {
-                    for (int j1 = i1 < l && i1 > -l ? l : 0; j1 <= l; j1 = j1 > 0 ? -j1 : 1 - j1) {
-                        BlockPos blockpos1 = blockpos.add(i1, k - 1, j1);
-
-                        // 如果方块在 Home 范围内，而且方块符合条件
-                        if (this.maid.isWithinHomeDistanceFromPosition(blockpos1) && this.shouldMoveTo(this.maid.world, blockpos1)) {
-                            this.destinationBlock = blockpos1;
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * 女仆尝试移动到此处
      *
      * @param minDistanceSq 最小移动距离
@@ -220,7 +195,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         boolean shouldLook = false;
         // 先检查种子是否还在女仆的背包中
         IItemHandlerModifiable itemHandler = maid.getAvailableInv(true);
-        int slot = ItemFindUtil.findItem(itemHandler, s -> s == activeSeed);
+        int slot = ItemFindUtil.findStackSlot(itemHandler, s -> s == activeSeed);
 
         // 尝试种植作物
         if (slot >= 0) {
