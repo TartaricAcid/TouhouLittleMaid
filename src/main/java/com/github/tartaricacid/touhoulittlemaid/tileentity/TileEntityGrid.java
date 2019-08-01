@@ -300,7 +300,7 @@ public class TileEntityGrid extends TileEntity {
         }
 
         result = result.copy();
-        result.setCount(minCount);
+        result.setCount(result.getCount() * minCount);
         ItemHandlerHelper.insertItemStacked(inv, result, false);
         for (ItemStack stack : remainingItems) {
             if (!stack.isEmpty()) {
