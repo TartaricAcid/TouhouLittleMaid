@@ -17,15 +17,16 @@
   ],
   "key": {
     "W": {
-      "item": "minecraft:dye",
-      "data": 15
+      "type": "forge:ore_dict",
+      "ore": "dyeWhite"
     },
     "R": {
-      "item": "minecraft:dye",
-      "data": 1
+      "type": "forge:ore_dict",
+      "ore": "dyeRed"
     },
     "D": {
-      "item": "minecraft:diamond_block"
+      "type": "forge:ore_dict",
+      "ore": "blockDiamond"
     }
   }
 }
