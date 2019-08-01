@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -79,6 +81,7 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     }
 
     private ItemStack getTorchItem(AbstractEntityMaid entityMaid) {
+        // TODO OreDictionary: torch
         IItemHandler itemHandler = entityMaid.getAvailableInv(true);
         for (int i = 0; i < itemHandler.getSlots(); ++i) {
             ItemStack itemstack = itemHandler.getStackInSlot(i);
@@ -96,10 +99,14 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
         int z = entityMaid.getRNG().nextInt(radius * 2) - radius;
 
         BlockPos posRandom = entityMaid.getPosition().add(x, y, z);
-        if (world.getLightFromNeighbors(posRandom.up()) < 9 && world.isAirBlock(posRandom.up())
-                && Blocks.TORCH.canPlaceTorchOnTop(world.getBlockState(posRandom), world, posRandom)) {
-            pos = posRandom.up();
-            return posRandom;
+        BlockPos posUp = posRandom.up();
+        if (world.getLightFromNeighbors(posUp) < 9 && entityMaid.canPlaceBlock(posUp, Blocks.TORCH.getDefaultState())) {
+            IBlockState state = world.getBlockState(posRandom);
+            IBlockState stateUp = world.getBlockState(posUp);
+            if (Blocks.TORCH.canPlaceTorchOnTop(state, world, posRandom) && !stateUp.getMaterial().isLiquid()) {
+                pos = posUp;
+                return posRandom;
+            }
         }
         return null;
     }
