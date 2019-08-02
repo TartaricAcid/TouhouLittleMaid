@@ -185,7 +185,7 @@ public class EntityMaid extends AbstractEntityMaid {
      * 每 tick 有 0.25% 概率回血，也就是平均 20 秒尝试回血一次
      */
     private void randomRestoreHealth() {
-        if (this.getHealth() <= this.getMaxHealth() - 1 && rand.nextFloat() < 0.0025) {
+        if (this.getHealth() < this.getMaxHealth() && rand.nextFloat() < 0.0025) {
             this.heal(1);
             this.spawnRestoreHealthParticle(rand.nextInt(3) + 7);
         }
