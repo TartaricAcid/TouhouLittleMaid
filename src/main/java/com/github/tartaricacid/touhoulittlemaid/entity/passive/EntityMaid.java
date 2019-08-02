@@ -23,6 +23,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
@@ -67,7 +68,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
-    public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow);
+    public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow) && !entity.isInWater();
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
 
@@ -79,6 +80,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<Boolean> STRUCK_BY_LIGHTNING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     /**
      * 拾起物品声音的延时计数器
      */
@@ -147,6 +149,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(HOME, Boolean.FALSE);
         this.dataManager.register(ARM_RISE, Boolean.FALSE);
         this.dataManager.register(MODEL_ID, "touhou_little_maid:hakurei_reimu");
+        this.dataManager.register(STRUCK_BY_LIGHTNING, false);
     }
 
     @Override
@@ -156,7 +159,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
-        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.4d);
+        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.5d);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
     }
 
@@ -185,7 +188,7 @@ public class EntityMaid extends AbstractEntityMaid {
      * 每 tick 有 0.25% 概率回血，也就是平均 20 秒尝试回血一次
      */
     private void randomRestoreHealth() {
-        if (this.getHealth() <= this.getMaxHealth() - 1 && rand.nextFloat() < 0.0025) {
+        if (this.getHealth() < this.getMaxHealth() && rand.nextFloat() < 0.0025) {
             this.heal(1);
             this.spawnRestoreHealthParticle(rand.nextInt(3) + 7);
         }
@@ -520,6 +523,16 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
+    public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+        super.onStruckByLightning(lightningBolt);
+        if (!isStruckByLightning()) {
+            double beforeMaxHealth = this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
+            this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(beforeMaxHealth * 2);
+            setStruckByLightning(true);
+        }
+    }
+
+    @Override
     protected void damageArmor(float damage) {
         // 依据原版玩家护甲耐久掉落机制书写而成
         damage = damage / 4.0F;
@@ -552,7 +565,7 @@ public class EntityMaid extends AbstractEntityMaid {
             if (isYourMaid) {
                 // 利用短路原理，逐个触发对应的交互事件
                 return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player) || applyGoldenApple(itemstack, player)
-                        || dismountMaid(player) || switchSitting(player) || openMaidGui(player);
+                        || applyNameTag(itemstack, player) || dismountMaid(player) || switchSitting(player) || openMaidGui(player);
             } else {
                 return tamedMaid(itemstack, player);
             }
@@ -645,6 +658,13 @@ public class EntityMaid extends AbstractEntityMaid {
             // 播放音效
             this.playSound(SoundEvents.ENTITY_PLAYER_BURP, 0.5F, rand.nextFloat() * 0.1F + 0.9F);
             return true;
+        }
+        return false;
+    }
+
+    private boolean applyNameTag(ItemStack itemstack, EntityPlayer player) {
+        if (itemstack.getItem() == Items.NAME_TAG) {
+            return itemstack.interactWithEntity(player, this, EnumHand.MAIN_HAND);
         }
         return false;
     }
@@ -838,6 +858,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MODEL_ID.getName())) {
             setModelId(compound.getString(NBT.MODEL_ID.getName()));
         }
+        if (compound.hasKey(NBT.STRUCK_BY_LIGHTNING.getName())) {
+            setStruckByLightning(compound.getBoolean(NBT.STRUCK_BY_LIGHTNING.getName()));
+        }
     }
 
     @Override
@@ -851,6 +874,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
         compound.setString(NBT.MODEL_ID.getName(), getModelId());
+        compound.setBoolean(NBT.STRUCK_BY_LIGHTNING.getName(), isStruckByLightning());
     }
 
     @Override
@@ -1037,6 +1061,14 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(MODEL_ID, name);
     }
 
+    public boolean isStruckByLightning() {
+        return this.getDataManager().get(STRUCK_BY_LIGHTNING);
+    }
+
+    public void setStruckByLightning(boolean isStruck) {
+        this.getDataManager().set(STRUCK_BY_LIGHTNING, isStruck);
+    }
+
     @Override
     public boolean canDestroyBlock(BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
@@ -1077,7 +1109,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 是否开启 Home 模式
         MAID_HOME("MaidHome"),
         // 模型
-        MODEL_ID("ModelId");
+        MODEL_ID("ModelId"),
+        // 是否被雷击过
+        STRUCK_BY_LIGHTNING("StruckByLightning");
 
         private String name;
 

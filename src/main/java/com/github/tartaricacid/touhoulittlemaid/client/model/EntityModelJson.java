@@ -200,34 +200,37 @@ public class EntityModelJson extends ModelBase {
 
     private void armAnimation(EntityMaid entityMaid, @Nullable ModelRenderer armLeft, @Nullable ModelRenderer armRight,
                               float limbSwing, float limbSwingAmount, float ageInTicks) {
-        // 用于手部使用动画的数据
-        float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
-        float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
-        // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
+        // 使用动画的数据预处理，来自 ModelBiped
+        float f1 = 1.0F - this.swingProgress;
+        f1 = f1 * f1;
+        f1 = f1 * f1;
+        f1 = 1.0F - f1;
+        float f2 = MathHelper.sin(f1 * (float) Math.PI);
+        float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.7F * 0.75F;
+
         if (armLeft != null) {
+            // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
             armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
             armLeft.rotateAngleY = 0f;
             armLeft.rotateAngleZ = MathHelper.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
+
             // 手部使用动画
-            armLeft.rotateAngleX += f * 1.2F - f1 * 0.4F;
             if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.LEFT) {
-                float tmp = MathHelper.sin(MathHelper.sqrt(swingProgress) * ((float) Math.PI * 2F)) * 0.1f;
-                armLeft.rotateAngleX = MathHelper.cos(tmp) * 5.0F;
-                armLeft.rotateAngleY += tmp;
-                armLeft.rotateAngleZ = MathHelper.sin(tmp) * 5.0F;
+                armLeft.rotateAngleX = (float) ((double) armLeft.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+                armLeft.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
             }
         }
 
         if (armRight != null) {
+            // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
             armRight.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
             armRight.rotateAngleY = 0f;
             armRight.rotateAngleZ = -MathHelper.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
+
             // 手部使用动画
             if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.RIGHT) {
-                float tmp = -MathHelper.sin(MathHelper.sqrt(swingProgress) * ((float) Math.PI * 2F)) * 0.1f;
-                armRight.rotateAngleX = MathHelper.cos(tmp) * 5.0F;
-                armRight.rotateAngleY += tmp;
-                armRight.rotateAngleZ = MathHelper.sin(tmp) * 5.0F;
+                armRight.rotateAngleX = (float) ((double) armRight.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+                armRight.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
             }
         }
     }

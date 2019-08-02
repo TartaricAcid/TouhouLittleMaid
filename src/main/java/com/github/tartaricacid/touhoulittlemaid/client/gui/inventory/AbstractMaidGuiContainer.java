@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
+import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGuiMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeHomeDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangePickupDataMessage;
@@ -31,6 +32,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Locale;
 
 import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI;
 
@@ -203,10 +205,12 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         }
 
         // 绘制不同标签页的提示文字
-        xInRange = (i + 28 * (guiId - 1)) < mouseX && mouseX < (i + 28 * guiId);
-        yInRange = (j - 28) < mouseY && mouseY < j;
-        if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.tab." + getGuiName()), mouseX, mouseY);
+        for (MaidGuiHandler.GUI gui : GUI.values()) {
+            xInRange = (i + 28 * (gui.getId() - 1)) < mouseX && mouseX < (i + 28 * gui.getId());
+            yInRange = (j - 28) < mouseY && mouseY < j;
+            if (xInRange && yInRange) {
+                this.drawHoveringText(I18n.format("gui.touhou_little_maid.tab." + gui.name().toLowerCase(Locale.US)), mouseX, mouseY);
+            }
         }
 
         // Home 模式的描述

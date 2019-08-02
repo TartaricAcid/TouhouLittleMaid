@@ -8,6 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Locale;
+
 import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI.INVENTORY;
 
 @SideOnly(Side.CLIENT)
@@ -30,6 +32,6 @@ public class MaidInventoryGuiContainer extends AbstractMaidGuiContainer {
 
     @Override
     public String getGuiName() {
-        return "inventory";
+        return INVENTORY.name().toLowerCase(Locale.US);
     }
 }
