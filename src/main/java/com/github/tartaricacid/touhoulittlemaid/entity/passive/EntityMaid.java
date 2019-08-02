@@ -552,7 +552,7 @@ public class EntityMaid extends AbstractEntityMaid {
             if (isYourMaid) {
                 // 利用短路原理，逐个触发对应的交互事件
                 return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player) || applyGoldenApple(itemstack, player)
-                        || dismountMaid(player) || switchSitting(player) || openMaidGui(player);
+                        || applyNameTag(itemstack, player) || dismountMaid(player) || switchSitting(player) || openMaidGui(player);
             } else {
                 return tamedMaid(itemstack, player);
             }
@@ -645,6 +645,13 @@ public class EntityMaid extends AbstractEntityMaid {
             // 播放音效
             this.playSound(SoundEvents.ENTITY_PLAYER_BURP, 0.5F, rand.nextFloat() * 0.1F + 0.9F);
             return true;
+        }
+        return false;
+    }
+
+    private boolean applyNameTag(ItemStack itemstack, EntityPlayer player) {
+        if (itemstack.getItem() == Items.NAME_TAG) {
+            return itemstack.interactWithEntity(player, this, EnumHand.MAIN_HAND);
         }
         return false;
     }
