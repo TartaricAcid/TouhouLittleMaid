@@ -8,6 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Locale;
+
 import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI.BAUBLE;
 
 @SideOnly(Side.CLIENT)
@@ -30,6 +32,6 @@ public class MaidBaubleGuiContainer extends AbstractMaidGuiContainer {
 
     @Override
     public String getGuiName() {
-        return "bauble";
+        return BAUBLE.name().toLowerCase(Locale.US);
     }
 }
