@@ -702,9 +702,8 @@ public class EntityMaid extends AbstractEntityMaid {
         if (!world.isRemote) {
             // 否则打开 GUI
             player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
-            return true;
         }
-        return false;
+        return true;
     }
 
     /**
