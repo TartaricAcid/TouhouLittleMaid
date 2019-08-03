@@ -81,6 +81,11 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> STRUCK_BY_LIGHTNING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
+
+    /**
+     * 模式所应用的 AI 的优先级
+     */
+    private static final int TASK_PRIORITY = 5;
     /**
      * 拾起物品声音的延时计数器
      */
@@ -120,10 +125,10 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
         this.tasks.addTask(3, new EntityMaidReturnHome(this, 0.6f, 200));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
+        this.tasks.addTask(4, new EntityMaidGridInteract(this, 0.6f));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
-        this.tasks.addTask(6, new EntityMaidGridInteract(this, 0.6f));
 
         this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 6.0F, 0.2f));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 6.0F, 0.2f));
@@ -1003,7 +1008,7 @@ public class EntityMaid extends AbstractEntityMaid {
             taskAI = task.createAI(this);
             // 再次检查此 AI 是否为空，加入 AI 列表中
             if (taskAI != null) {
-                tasks.addTask(5, taskAI);
+                tasks.addTask(TASK_PRIORITY, taskAI);
             }
         }
         // 将实体的 IMaidTask 对象指向传入的 IMaidTask
