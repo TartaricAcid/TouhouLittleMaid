@@ -10,8 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -60,18 +60,50 @@ public class EntityMarisaBroom extends EntityLivingBase {
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        if (!world.isRemote && source.getTrueSource() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) source.getTrueSource();
-            // 当玩家潜行左击，将其掉落
-            if (player.isSneaking()) {
-                EntityItem item = new EntityItem(world, this.posX, this.posY, this.posZ, new ItemStack(MaidItems.MARISA_BROOM));
-                item.setPickupDelay(10);
-                this.setDead();
-                world.spawnEntity(item);
-                return true;
+        if (!this.world.isRemote && !this.isDead) {
+            // 如果实体是无敌的
+            if (this.isEntityInvulnerable(source)) {
+                return false;
+            }
+            // 应用打掉的逻辑
+            if (source.getTrueSource() instanceof EntityPlayer) {
+                return applyHitBroomLogic((EntityPlayer) source.getTrueSource());
             }
         }
         return false;
+    }
+
+    /**
+     * 击打扫帚逻辑
+     */
+    private boolean applyHitBroomLogic(EntityPlayer player) {
+        boolean isPlayerCreativeMode = player.capabilities.isCreativeMode;
+        // 潜行状态才会运用击打逻辑
+        if (player.isSneaking()) {
+            this.removePassengers();
+            if (isPlayerCreativeMode && !this.hasCustomName()) {
+                // 如果是创造模式，而且扫帚没有命名，直接消失
+                this.setDead();
+            } else {
+                // 否则应用实体转物品逻辑
+                this.killBroom();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 将扫帚从实体状态转变为物品状态
+     */
+    private void killBroom() {
+        this.setDead();
+        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+            ItemStack itemstack = new ItemStack(MaidItems.MARISA_BROOM, 1);
+            if (this.hasCustomName()) {
+                itemstack.setStackDisplayName(this.getCustomNameTag());
+            }
+            this.entityDropItem(itemstack, 0.0F);
+        }
     }
 
     /**
@@ -124,17 +156,15 @@ public class EntityMarisaBroom extends EntityLivingBase {
      */
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        return this.processInteract(player) || super.processInitialInteract(player, hand);
-    }
-
-    /**
-     * 处理交互
-     */
-    private boolean processInteract(EntityPlayer player) {
+        if (player.getHeldItem(hand).getItem() == Items.NAME_TAG) {
+            // 返回 false，交由玩家侧的右击事件进行处理
+            return false;
+        }
         if (!player.isSneaking() && !this.world.isRemote && !this.isBeingRidden() && !this.isRiding()) {
             player.startRiding(this);
+            return true;
         }
-        return true;
+        return super.processInitialInteract(player, hand);
     }
 
     @Nullable
@@ -187,22 +217,25 @@ public class EntityMarisaBroom extends EntityLivingBase {
 
     // ------------ EntityLivingBase 要求实现的几个抽象方法，因为全用不上，故返回默认值 ----------- //
 
+    @Nonnull
     @Override
-    public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
+    public ItemStack getItemStackFromSlot(@Nonnull EntityEquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+    public void setItemStackToSlot(@Nonnull EntityEquipmentSlot slotIn, @Nonnull ItemStack stack) {
     }
 
+    @Nonnull
     @Override
     public Iterable<ItemStack> getArmorInventoryList() {
         return Collections.emptyList();
     }
 
+    @Nonnull
     @Override
     public EnumHandSide getPrimaryHand() {
-        return null;
+        return EnumHandSide.LEFT;
     }
 }

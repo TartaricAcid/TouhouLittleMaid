@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -26,8 +27,14 @@ public class ItemMarisaBroom extends Item {
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote && player.isSneaking() && facing == EnumFacing.UP) {
+            ItemStack itemstack = player.getHeldItem(hand);
             EntityMarisaBroom broom = new EntityMarisaBroom(worldIn);
             broom.setPosition(pos.getX() + 0.5, pos.up().getY(), pos.getZ() + 0.5);
+            // 应用命名
+            if (itemstack.hasDisplayName()) {
+                broom.setCustomNameTag(itemstack.getDisplayName());
+            }
+            // 物品消耗，实体生成
             player.getHeldItem(hand).shrink(1);
             worldIn.spawnEntity(broom);
             return EnumActionResult.SUCCESS;
