@@ -3,7 +3,7 @@
   "geometry.model": {
     "texturewidth": 128,
     "textureheight": 128,
-    "visible_bounds_width": 3,
+    "visible_bounds_width": 2,
     "visible_bounds_height": 2,
     "visible_bounds_offset": [0, 1, 0],
     "bones": [
@@ -251,7 +251,7 @@
         "cubes": [
           {
             "origin": [3, 14, -3.501],
-            "size": [3, 4, 7.002],
+            "size": [3, 4, 7],
             "uv": [0, 58]
           }
         ]
@@ -264,7 +264,7 @@
         "cubes": [
           {
             "origin": [-7.02606, 14.18092, -3.501],
-            "size": [3, 4, 7.002],
+            "size": [3, 4, 7],
             "uv": [20, 58]
           }
         ]

@@ -123,6 +123,9 @@
     }, {
       "model_id": "touhou_little_maid:lily_black",
       "description": ["{model.touhou_little_maid.lily_white.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:komeiji_koishi",
+      "description": ["{model.touhou_little_maid.komeiji_koishi.desc}"]
     }
   ]
 }

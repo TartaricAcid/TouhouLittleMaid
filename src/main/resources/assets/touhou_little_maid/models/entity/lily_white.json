@@ -3,7 +3,7 @@
   "geometry.model": {
     "texturewidth": 128,
     "textureheight": 128,
-    "visible_bounds_width": 3,
+    "visible_bounds_width": 2,
     "visible_bounds_height": 2,
     "visible_bounds_offset": [0, 1, 0],
     "bones": [
@@ -207,6 +207,32 @@
         "pivot": [0, 10.5, 0]
       },
       {
+        "name": "clothLeft",
+        "parent": "body",
+        "pivot": [3, 15, -3.5],
+        "rotation": [0, 0, 20],
+        "cubes": [
+          {
+            "origin": [3, 14, -3.501],
+            "size": [3, 4, 7],
+            "uv": [0, 58]
+          }
+        ]
+      },
+      {
+        "name": "clothRight",
+        "parent": "body",
+        "pivot": [-3, 18, 0.5],
+        "rotation": [0, 0, -20],
+        "cubes": [
+          {
+            "origin": [-7.02606, 14.18092, -3.501],
+            "size": [3, 4, 7],
+            "uv": [20, 58]
+          }
+        ]
+      },
+      {
         "name": "dress",
         "parent": "body",
         "pivot": [0, 10.5, 0],
@@ -240,32 +266,6 @@
             "origin": [-4, 14.99, -3.5],
             "size": [8, 3, 7],
             "uv": [72, 95]
-          }
-        ]
-      },
-      {
-        "name": "clothLeft",
-        "parent": "dress",
-        "pivot": [3, 15, -3.5],
-        "rotation": [0, 0, 20],
-        "cubes": [
-          {
-            "origin": [3, 14, -3.501],
-            "size": [3, 4, 7.002],
-            "uv": [0, 58]
-          }
-        ]
-      },
-      {
-        "name": "clothRight",
-        "parent": "dress",
-        "pivot": [-3, 18, 0.5],
-        "rotation": [0, 0, -20],
-        "cubes": [
-          {
-            "origin": [-7.02606, 14.18092, -3.501],
-            "size": [3, 4, 7.002],
-            "uv": [20, 58]
           }
         ]
       },

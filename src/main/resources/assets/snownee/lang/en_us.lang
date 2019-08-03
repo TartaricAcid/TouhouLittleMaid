@@ -1,4 +1,10 @@
+# Pack
 pack.snownee.name=Snownee Model Pack
 pack.snownee.desc=Credit To Snownee
+
+# Model Name
 model.snownee.nyaruko.name=Nyaruko
+model.snownee.shirakami_fubuki.name=Shirakami Fubuki
+
+# Model Desc
 model.snownee.nyaruko.desc=§7§o"I'm the chaos that always crawls up to you with a smile, Nyarlathotep!"

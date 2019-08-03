@@ -11,6 +11,7 @@ item.touhou_little_maid.kappa_compass.name=河童的罗盘
 item.touhou_little_maid.hakurei_gohei.name=博丽的御币
 item.touhou_little_maid.ultramarine_orb_elixir.name=绀珠之药
 item.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
+entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -68,9 +69,9 @@ task.touhou_little_maid.feed_animal=繁殖动物
 
 # GUI
 gui.touhou_little_maid.button.mode_switch=女仆当前处于%s模式
-gui.touhou_little_maid.info.healthy=血量：%.1f/%.1f
-gui.touhou_little_maid.info.armor=护甲：%.1f/20.0
-gui.touhou_little_maid.info.attack=伤害：%.1f
+gui.touhou_little_maid.info.healthy=血量：%f/%f
+gui.touhou_little_maid.info.armor=护甲：%f/20.0
+gui.touhou_little_maid.info.attack=伤害：%f
 gui.touhou_little_maid.info.experience=经验：%d
 gui.touhou_little_maid.tab.main=主界面
 gui.touhou_little_maid.tab.inventory=物品栏
@@ -131,6 +132,7 @@ model.touhou_little_maid.kirisame_marisa.name=雾雨魔理沙
 model.touhou_little_maid.hinanawi_tenshi.name=比那名居天子
 model.touhou_little_maid.lily_white.name=莉莉霍瓦特
 model.touhou_little_maid.lily_black.name=莉莉霍瓦特（黑）
+model.touhou_little_maid.komeiji_koishi.name=古明地恋
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -170,6 +172,7 @@ model.touhou_little_maid.lyrica_prismriver.desc=§7骚灵键盘手
 model.touhou_little_maid.kirisame_marisa.desc=§7普通的魔法使
 model.touhou_little_maid.hinanawi_tenshi.desc=§7非想非非想天之女
 model.touhou_little_maid.lily_white.desc=§7运送春天的妖精
+model.touhou_little_maid.komeiji_koishi.desc=§7紧闭的恋之瞳
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

@@ -11,6 +11,7 @@ item.touhou_little_maid.kappa_compass.name=Kappa's Compass
 item.touhou_little_maid.hakurei_gohei.name=Hakurei's Gohei
 item.touhou_little_maid.ultramarine_orb_elixir.name=Ultramarine Orb Elixir
 item.touhou_little_maid.marisa_broom.name=Marisa's Broom
+entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -131,6 +132,7 @@ model.touhou_little_maid.kirisame_marisa.name=Marisa Kirisame
 model.touhou_little_maid.hinanawi_tenshi.name=Tenshi Hinanawi
 model.touhou_little_maid.lily_white.name=Lily White
 model.touhou_little_maid.lily_black.name=Lily White (Black)
+model.touhou_little_maid.komeiji_koishi.name=Koishi Komeiji
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -170,6 +172,7 @@ model.touhou_little_maid.lyrica_prismriver.desc=§7Poltergeist Keyboardist
 model.touhou_little_maid.kirisame_marisa.desc=§7Ordinary Magician
 model.touhou_little_maid.hinanawi_tenshi.desc=§7Girl of the Sphere of Neither Perception nor Non-Perception
 model.touhou_little_maid.lily_white.desc=§7Fairy Herald of Spring
+model.touhou_little_maid.komeiji_koishi.desc=§7The Closed Eyes of Love
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

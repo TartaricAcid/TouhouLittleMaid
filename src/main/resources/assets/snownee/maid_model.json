@@ -8,6 +8,8 @@
     {
       "model_id": "snownee:nyaruko",
       "description": ["{model.snownee.nyaruko.desc}"]
+    }, {
+      "model_id": "snownee:shirakami_fubuki"
     }
   ]
 }
