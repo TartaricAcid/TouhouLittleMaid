@@ -568,7 +568,8 @@ public class EntityMaid extends AbstractEntityMaid {
             if (isYourMaid) {
                 // 利用短路原理，逐个触发对应的交互事件
                 return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player) || applyGoldenApple(itemstack, player)
-                        || applyNameTag(itemstack, player) || dismountMaid(player) || switchSitting(player) || openMaidGui(player);
+                        || applyNameTag(itemstack, player) || getExpBottle(itemstack, player) || dismountMaid(player)
+                        || switchSitting(player) || openMaidGui(player);
             } else {
                 return tamedMaid(itemstack, player);
             }
@@ -668,6 +669,22 @@ public class EntityMaid extends AbstractEntityMaid {
     private boolean applyNameTag(ItemStack itemstack, EntityPlayer player) {
         if (itemstack.getItem() == Items.NAME_TAG) {
             return itemstack.interactWithEntity(player, this, EnumHand.MAIN_HAND);
+        }
+        return false;
+    }
+
+    private boolean getExpBottle(ItemStack itemstack, EntityPlayer player) {
+        // WIKI 上说附魔之瓶会掉落 3-11 的经验
+        // 那么我们就让其消耗 12 点经验获得一个附魔之瓶吧
+        int costNum = 12;
+        if (itemstack.getItem() == Items.GLASS_BOTTLE && this.getExp() / costNum > 0) {
+            this.setExp(this.getExp() - costNum);
+            itemstack.shrink(1);
+            if (!world.isRemote) {
+                InventoryHelper.spawnItemStack(world, player.posX, player.posY, player.posZ, new ItemStack(Items.EXPERIENCE_BOTTLE));
+            }
+            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            return true;
         }
         return false;
     }
