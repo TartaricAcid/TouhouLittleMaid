@@ -888,6 +888,16 @@ public class EntityMaid extends AbstractEntityMaid {
         return task.getAmbientSound(this);
     }
 
+    @Override
+    protected float getSoundPitch() {
+        return 1 + rand.nextFloat() * 0.1F;
+    }
+
+    @Override
+    public boolean isChild() {
+        return false;
+    }
+
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
