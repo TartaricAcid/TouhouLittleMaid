@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(modid = TouhouLittleMaid.MOD_ID, name = TouhouLittleMaid.MOD_NAME,
         acceptedMinecraftVersions = "[1.12]", version = TouhouLittleMaid.VERSION,
-        dependencies = "required-after:forge@[14.21.1.2768,);")
+        dependencies = "required-after:forge@[14.23.5.2768,);")
 public class TouhouLittleMaid {
     public static final String MOD_ID = "touhou_little_maid";
     public static final String MOD_NAME = "Touhou Little Maid";
