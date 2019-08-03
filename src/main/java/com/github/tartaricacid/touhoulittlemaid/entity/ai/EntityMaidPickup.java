@@ -25,8 +25,8 @@ public class EntityMaidPickup extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        // 模式判定，如果模式不对，不进行拾取
-        if (entityMaid.guiOpening || !entityMaid.isPickup() || entityMaid.isSitting()) {
+        // 一些状态判定，如果状态不对，不进行拾取
+        if (entityMaid.guiOpening || !entityMaid.isPickup() || entityMaid.isSitting() || !entityMaid.isTamed()) {
             return false;
         }
 

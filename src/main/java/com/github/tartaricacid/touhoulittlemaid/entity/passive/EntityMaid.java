@@ -308,27 +308,24 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     protected void collideWithNearbyEntities() {
         super.collideWithNearbyEntities();
-
-        // 先判断拾物模式是否开启，没有开启的话，什么都不会吸收
-        if (!this.isPickup()) {
-            return;
-        }
-
-        List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this,
-                this.getEntityBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), IS_PICKUP);
-        if (!entityList.isEmpty() && this.isEntityAlive()) {
-            for (Entity entityPickup : entityList) {
-                // 如果是物品
-                if (entityPickup instanceof EntityItem) {
-                    pickupItem((EntityItem) entityPickup, false);
-                }
-                // 如果是经验
-                if (entityPickup instanceof EntityXPOrb) {
-                    pickupXPOrb((EntityXPOrb) entityPickup);
-                }
-                // 如果是箭
-                if (entityPickup instanceof EntityArrow) {
-                    pickupArrow((EntityArrow) entityPickup, false);
+        // 只有拾物模式开启，驯服状态下才可以捡起物品
+        if (this.isPickup() && this.isTamed()) {
+            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this,
+                    this.getEntityBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), IS_PICKUP);
+            if (!entityList.isEmpty() && this.isEntityAlive()) {
+                for (Entity entityPickup : entityList) {
+                    // 如果是物品
+                    if (entityPickup instanceof EntityItem) {
+                        pickupItem((EntityItem) entityPickup, false);
+                    }
+                    // 如果是经验
+                    if (entityPickup instanceof EntityXPOrb) {
+                        pickupXPOrb((EntityXPOrb) entityPickup);
+                    }
+                    // 如果是箭
+                    if (entityPickup instanceof EntityArrow) {
+                        pickupArrow((EntityArrow) entityPickup, false);
+                    }
                 }
             }
         }
