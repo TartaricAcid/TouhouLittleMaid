@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 public class EntityMaidFarm extends EntityAIMoveToBlock {
     private final AbstractEntityMaid maid;
-    private final int searchLength;
     /**
      * 当前可种植的种子列表
      */
@@ -40,7 +39,6 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
     public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn) {
         super(entityMaid, speedIn, 16);
-        searchLength = 16;
         this.maid = entityMaid;
     }
 
@@ -114,7 +112,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             }
 
             this.currentTask = TASK.NONE;
-            this.runDelay = 2;
+            this.runDelay = 5;
         }
 
         // 女仆头部朝向逻辑
@@ -138,7 +136,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             return false;
         }
 
-        if ((this.currentTask == TASK.HARVEST || this.currentTask == TASK.NONE) && maid.canDestroyBlock(pos)) {
+        boolean taskDestroyIsOkay = this.currentTask == TASK.HARVEST || this.currentTask == TASK.NONE;
+        if (taskDestroyIsOkay && maid.canDestroyBlock(pos)) {
             // 遍历 FarmHandler 找到能够处理此作物的 FarmHandler
             for (FarmHandler handler : handlers) {
                 if (handler.canHarvest(maid, worldIn, pos, stateUp)) {
@@ -149,8 +148,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             }
         }
 
-        boolean taskIsOkay = this.currentTask == TASK.PLANT || this.currentTask == TASK.NONE;
-        if (taskIsOkay && !seeds.isEmpty() && maid.canPlaceBlock(pos, stateUp)) {
+        boolean taskPlaceIsOkay = this.currentTask == TASK.PLANT || this.currentTask == TASK.NONE;
+        if (taskPlaceIsOkay && !seeds.isEmpty() && maid.canPlaceBlock(pos, stateUp)) {
             // 遍历 FarmHandler 的 seeds 找到能够处理种植 FarmHandler 和 Seed
             for (FarmHandler handler : handlers) {
                 for (ItemStack seed : seeds) {

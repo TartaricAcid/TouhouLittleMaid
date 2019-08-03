@@ -17,12 +17,10 @@ import java.util.List;
 
 public class EntityMaidGridInteract extends EntityAIMoveToBlock {
     private final EntityMaid maid;
-    private final int searchLength;
     private TASK currentTask;
 
     public EntityMaidGridInteract(EntityMaid entityMaid, double speedIn) {
         super(entityMaid, speedIn, 16);
-        searchLength = 16;
         this.maid = entityMaid;
     }
 

@@ -126,6 +126,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(3, new EntityMaidReturnHome(this, 0.6f, 200));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
         this.tasks.addTask(4, new EntityMaidGridInteract(this, 0.6f));
+        this.tasks.addTask(4, new EntityMaidOpenDoor(this, true));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
@@ -923,16 +924,29 @@ public class EntityMaid extends AbstractEntityMaid {
         return MaidSoundEvent.MAID_DEATH;
     }
 
+    @Override
+    protected PathNavigate createNavigator(World worldIn) {
+        if (this.getControllingPassenger() instanceof EntityMarisaBroom) {
+            return createNavigatorFlying(worldIn);
+        }
+        return createNavigatorGround(worldIn);
+    }
+
     private PathNavigate createNavigatorFlying(World worldIn) {
         PathNavigateFlying pathnavigateflying = new PathNavigateFlying(this, worldIn);
         pathnavigateflying.setCanFloat(true);
         pathnavigateflying.setCanEnterDoors(true);
+        pathnavigateflying.setCanOpenDoors(true);
+        pathnavigateflying.setSpeed(0.8f);
         return pathnavigateflying;
     }
 
     private PathNavigate createNavigatorGround(World worldIn) {
         PathNavigateGround pathNavigate = new PathNavigateGround(this, worldIn);
         pathNavigate.setBreakDoors(true);
+        pathNavigate.setEnterDoors(true);
+        pathNavigate.setCanSwim(true);
+        pathNavigate.setAvoidSun(false);
         return pathNavigate;
     }
 
