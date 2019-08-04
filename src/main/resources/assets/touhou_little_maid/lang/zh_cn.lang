@@ -133,6 +133,8 @@ model.touhou_little_maid.hinanawi_tenshi.name=比那名居天子
 model.touhou_little_maid.lily_white.name=莉莉霍瓦特
 model.touhou_little_maid.lily_black.name=莉莉霍瓦特（黑）
 model.touhou_little_maid.komeiji_koishi.name=古明地恋
+model.touhou_little_maid.reiuji_utsuho.name=灵乌路空
+model.touhou_little_maid.kaenbyou_rin.name=火焰猫燐
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -173,6 +175,8 @@ model.touhou_little_maid.kirisame_marisa.desc=§7普通的魔法使
 model.touhou_little_maid.hinanawi_tenshi.desc=§7非想非非想天之女
 model.touhou_little_maid.lily_white.desc=§7运送春天的妖精
 model.touhou_little_maid.komeiji_koishi.desc=§7紧闭的恋之瞳
+model.touhou_little_maid.reiuji_utsuho.desc=§7难以驾驭的神之火
+model.touhou_little_maid.kaenbyou_rin.desc=§7地狱的轮祸
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

@@ -126,6 +126,12 @@
     }, {
       "model_id": "touhou_little_maid:komeiji_koishi",
       "description": ["{model.touhou_little_maid.komeiji_koishi.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:reiuji_utsuho",
+      "description": ["{model.touhou_little_maid.reiuji_utsuho.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kaenbyou_rin",
+      "description": ["{model.touhou_little_maid.kaenbyou_rin.desc}"]
     }
   ]
 }

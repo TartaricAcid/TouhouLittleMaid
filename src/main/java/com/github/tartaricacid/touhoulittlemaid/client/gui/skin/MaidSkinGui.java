@@ -302,10 +302,16 @@ public class MaidSkinGui extends GuiScreen {
                 mc.addScheduledTask(() -> mc.displayGuiScreen(null));
                 return;
 
-            // 其他按键进行模型更改的发包
+            // 其他按键
             default:
-                CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),
-                        BUTTON_MODEL_MAP.get(button.id).getModelId()));
+                if (isShiftKeyDown()) {
+                    // shift 状态下打开详情页
+                    mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidSkinDetailsGui(maid.world, BUTTON_MODEL_MAP.get(button.id).getModelId())));
+                } else {
+                    // 进行模型更改的发包
+                    CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),
+                            BUTTON_MODEL_MAP.get(button.id).getModelId()));
+                }
         }
     }
 

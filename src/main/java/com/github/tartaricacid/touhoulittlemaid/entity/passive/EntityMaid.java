@@ -56,6 +56,8 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
@@ -102,6 +104,11 @@ public class EntityMaid extends AbstractEntityMaid {
      * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
      */
     public boolean guiOpening;
+    /**
+     * 是否开启 debug 模式下的地面显示，仅在客户端调用
+     */
+    @SideOnly(Side.CLIENT)
+    public boolean isDebugFloorOpen = false;
     /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
      */
