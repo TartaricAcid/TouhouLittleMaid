@@ -83,6 +83,17 @@ gui.touhou_little_maid.button.home.false=Home 模式已经关闭
 gui.touhou_little_maid.button.skin=更改皮肤
 gui.touhou_little_maid.skin.button.close=关闭
 gui.touhou_little_maid.credit.url.close=使用的音效由 あみたろの声素材工房 提供
+gui.touhou_little_maid.skin_details.beg=祈求状态
+gui.touhou_little_maid.skin_details.walk=行走状态
+gui.touhou_little_maid.skin_details.sit=待命状态
+gui.touhou_little_maid.skin_details.ride=普通骑乘状态
+gui.touhou_little_maid.skin_details.ride_broom=骑乘扫帚状态
+gui.touhou_little_maid.skin_details.helmet=显示头盔
+gui.touhou_little_maid.skin_details.chest_plate=显示胸甲
+gui.touhou_little_maid.skin_details.leggings=显示护腿
+gui.touhou_little_maid.skin_details.boots=显示靴子
+gui.touhou_little_maid.skin_details.main_hand=显示主手物品
+gui.touhou_little_maid.skin_details.off_hand=显示副手物品
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=作者：%s
@@ -135,6 +146,7 @@ model.touhou_little_maid.lily_black.name=莉莉霍瓦特（黑）
 model.touhou_little_maid.komeiji_koishi.name=古明地恋
 model.touhou_little_maid.reiuji_utsuho.name=灵乌路空
 model.touhou_little_maid.kaenbyou_rin.name=火焰猫燐
+model.touhou_little_maid.rumia.name=露米娅
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -177,6 +189,7 @@ model.touhou_little_maid.lily_white.desc=§7运送春天的妖精
 model.touhou_little_maid.komeiji_koishi.desc=§7紧闭的恋之瞳
 model.touhou_little_maid.reiuji_utsuho.desc=§7难以驾驭的神之火
 model.touhou_little_maid.kaenbyou_rin.desc=§7地狱的轮祸
+model.touhou_little_maid.rumia.desc=§7宵暗的妖怪
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

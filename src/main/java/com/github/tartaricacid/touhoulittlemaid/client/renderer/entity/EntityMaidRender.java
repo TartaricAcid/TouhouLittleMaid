@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugBroom;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugFloor;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidHeldItem;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
@@ -21,6 +23,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
@@ -29,14 +32,15 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final String DEFAULT_MODEL_TEXTURE = "touhou_little_maid:textures/entity/hakurei_reimu.png";
 
-    public EntityMaidRender(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
-        super(rendermanagerIn, modelbaseIn, shadowsizeIn);
+    private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
+        super(renderManager, modelBase, shadowSize);
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(new LayerMaidDebugFloor(new DebugFloorModel()));
+        this.addLayer(new LayerMaidDebugBroom(new EntityMarisaBroomModel()));
     }
 
     @Override
-    public void doRender(EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRender(@Nonnull EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模型
         EntityModelJson modelJson = ClientProxy.ID_MODEL_MAP.get(entity.getModelId());
         // 如果模型不为空
@@ -58,7 +62,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     }
 
     @Override
-    protected void renderEntityName(EntityMaid entityIn, double x, double y, double z, String name, double distanceSq) {
+    protected void renderEntityName(@Nonnull EntityMaid entityIn, double x, double y, double z, String name, double distanceSq) {
         String str;
         BlockPos pos = entityIn.getHomePos();
         // 判断坐标是否为 0,0,0，显示不同的字符
@@ -72,7 +76,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityMaid entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityMaid entity) {
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
         ModelItem modelItem = ClientProxy.ID_INFO_MAP.get(entity.getModelId());

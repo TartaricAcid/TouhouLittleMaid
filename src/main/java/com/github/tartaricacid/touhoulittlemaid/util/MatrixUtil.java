@@ -4,7 +4,6 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
 public class MatrixUtil {
-
     /**
      * Rotates the source matrix around the given axis the specified angle and
      * put the result in the destination matrix.
@@ -16,8 +15,9 @@ public class MatrixUtil {
      * @return The rotated matrix
      */
     public static Matrix4f rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f dest) {
-        if (dest == null)
+        if (dest == null) {
             dest = new Matrix4f();
+        }
         float c = (float) Math.cos(angle);
         float s = (float) Math.sin(angle);
         float oneminusc = 1.0f - c;

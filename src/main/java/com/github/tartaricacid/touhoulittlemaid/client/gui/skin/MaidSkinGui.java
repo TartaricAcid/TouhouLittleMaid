@@ -306,7 +306,7 @@ public class MaidSkinGui extends GuiScreen {
             default:
                 if (isShiftKeyDown()) {
                     // shift 状态下打开详情页
-                    mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidSkinDetailsGui(maid.world, BUTTON_MODEL_MAP.get(button.id).getModelId())));
+                    mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidSkinDetailsGui(maid, BUTTON_MODEL_MAP.get(button.id).getModelId())));
                 } else {
                     // 进行模型更改的发包
                     CommonProxy.INSTANCE.sendToServer(new ChangeMaidSkinMessage(maid.getUniqueID(),

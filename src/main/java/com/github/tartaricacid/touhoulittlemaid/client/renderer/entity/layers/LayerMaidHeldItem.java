@@ -12,6 +12,8 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
     protected final RenderLiving<EntityMaid> livingEntityRenderer;
@@ -21,7 +23,7 @@ public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
     }
 
     @Override
-    public void doRenderLayer(EntityMaid entityMaid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void doRenderLayer(@Nonnull EntityMaid entityMaid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         ItemStack mainRightItem = entityMaid.getHeldItemMainhand();
         ItemStack offLeftItem = entityMaid.getHeldItemOffhand();
 

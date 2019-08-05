@@ -110,6 +110,11 @@ public class EntityMaid extends AbstractEntityMaid {
     @SideOnly(Side.CLIENT)
     public boolean isDebugFloorOpen = false;
     /**
+     * 是否开启 debug 模式下的扫帚显示，仅在客户端调用
+     */
+    @SideOnly(Side.CLIENT)
+    public boolean isDebugBroomShow = false;
+    /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
      */
     @Nonnull
@@ -309,7 +314,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public double getMountedYOffset() {
-        return 0;
+        return 0.15;
     }
 
     @Nullable

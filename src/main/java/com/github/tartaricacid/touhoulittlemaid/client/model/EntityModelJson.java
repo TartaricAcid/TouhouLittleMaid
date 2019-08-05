@@ -149,7 +149,8 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer hat = modelMap.get("hat");
         ModelRenderer chestPlate = modelMap.get("chestPlate");
         ModelRenderer leggings = modelMap.get("leggings");
-        ModelRenderer boots = modelMap.get("boots");
+        ModelRenderer bootsLeft = modelMap.get("bootsLeft");
+        ModelRenderer bootsRight = modelMap.get("bootsRight");
 
         // 动画和姿势
         headAnimation(head, netHeadYaw, headPitch);
@@ -159,7 +160,7 @@ public class EntityModelJson extends ModelBase {
         blinkAnimation(blink, ageInTicks);
         tailAnimation(tail, ageInTicks);
         floatAnimation(sinFloat, cosFloat, negativeSinFloat, negativeCosFloat, ageInTicks);
-        renderArmor(entityMaid, helmet, hat, chestPlate, leggings, boots);
+        renderArmor(entityMaid, helmet, hat, chestPlate, leggings, bootsLeft, bootsRight);
         beggingPosture(entityMaid, head, ahoge, ageInTicks);
         swingingArmsPosture(entityMaid, armLeft, armRight);
 
@@ -169,7 +170,7 @@ public class EntityModelJson extends ModelBase {
         }
 
         // 因为三者不允许同时存在，所以需要 if 判定
-        if (entityMaid.getControllingPassenger() instanceof EntityMarisaBroom) {
+        if (entityMaid.getControllingPassenger() instanceof EntityMarisaBroom || entityMaid.isDebugBroomShow) {
             // 坐在扫帚上时，应用待命的动作
             ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
         } else if (entityMaid.isRiding()) {
@@ -276,7 +277,7 @@ public class EntityModelJson extends ModelBase {
     }
 
     private void renderArmor(EntityMaid entityMaid, @Nullable ModelRenderer helmet, @Nullable ModelRenderer hat, @Nullable ModelRenderer chestPlate,
-                             @Nullable ModelRenderer leggings, @Nullable ModelRenderer boots) {
+                             @Nullable ModelRenderer leggings, @Nullable ModelRenderer bootsLeft, @Nullable ModelRenderer bootsRight) {
         // 护甲部分渲染
         if (helmet != null) {
             helmet.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
@@ -290,8 +291,11 @@ public class EntityModelJson extends ModelBase {
         if (leggings != null) {
             leggings.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
         }
-        if (boots != null) {
-            boots.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
+        if (bootsLeft != null) {
+            bootsLeft.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
+        }
+        if (bootsRight != null) {
+            bootsRight.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
         }
     }
 

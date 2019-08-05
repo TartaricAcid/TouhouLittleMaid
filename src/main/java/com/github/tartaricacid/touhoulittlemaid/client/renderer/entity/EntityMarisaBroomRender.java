@@ -12,6 +12,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -21,10 +22,10 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 public class EntityMarisaBroomRender extends RenderLivingBase<EntityMarisaBroom> {
     public static final EntityMarisaBroomRender.Factory FACTORY = new EntityMarisaBroomRender.Factory();
-    private static ResourceLocation resourceLocation = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/marisa_broom.png");
+    private static final ResourceLocation BROOM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/marisa_broom.png");
 
-    public EntityMarisaBroomRender(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
-        super(rendermanagerIn, modelbaseIn, shadowsizeIn);
+    private EntityMarisaBroomRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
+        super(renderManager, modelBase, shadowSize);
     }
 
     @Override
@@ -34,8 +35,8 @@ public class EntityMarisaBroomRender extends RenderLivingBase<EntityMarisaBroom>
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityMarisaBroom entity) {
-        return resourceLocation;
+    protected ResourceLocation getEntityTexture(@Nonnull EntityMarisaBroom entity) {
+        return BROOM_TEXTURE;
     }
 
     public static class Factory implements IRenderFactory<EntityMarisaBroom> {

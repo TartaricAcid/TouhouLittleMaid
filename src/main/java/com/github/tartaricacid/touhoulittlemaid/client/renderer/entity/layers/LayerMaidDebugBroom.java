@@ -14,29 +14,27 @@ import javax.annotation.Nonnull;
 
 /**
  * @author TartaricAcid
- * @date 2019/8/4 22:45
+ * @date 2019/8/5 19:47
  * <p>
- * 用于渲染皮肤详情页面的地面网格
+ * 用于渲染皮肤详情页面的扫帚效果
  **/
 @SideOnly(Side.CLIENT)
-public class LayerMaidDebugFloor implements LayerRenderer<EntityMaid> {
-    private static final ResourceLocation FLOOR_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/debug_floor.png");
+public class LayerMaidDebugBroom implements LayerRenderer<EntityMaid> {
+    private static final ResourceLocation BROOM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/marisa_broom.png");
     private ModelBase modelBase;
 
-    public LayerMaidDebugFloor(ModelBase modelBase) {
+    public LayerMaidDebugBroom(ModelBase modelBase) {
         this.modelBase = modelBase;
     }
 
     @Override
     public void doRenderLayer(@Nonnull EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (maid.isDebugFloorOpen) {
+        if (maid.isDebugBroomShow) {
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.color(255, 255, 255, 255);
-            GlStateManager.translate(0, 1.5001, 0);
-            GlStateManager.scale(0.123, 0, 0.123);
-            Minecraft.getMinecraft().renderEngine.bindTexture(FLOOR_TEXTURE);
+            GlStateManager.rotate(-12f, 1, 0, 0);
+            GlStateManager.translate(0, -0.2, 0.2);
+            Minecraft.getMinecraft().renderEngine.bindTexture(BROOM_TEXTURE);
             modelBase.render(maid, 0, 0, 0, 0, 0, 0.0625f);
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();

@@ -27,7 +27,7 @@ public class EntityMarisaBroomModel extends ModelBase {
         textureHeight = 64;
 
         all = new ModelRenderer(this);
-        all.setRotationPoint(-1.0F, 21.0F, 4.0F);
+        all.setRotationPoint(0.0F, 21.0F, 4.0F);
 
         head = new ModelRenderer(this);
         head.setRotationPoint(0.0F, 0.0F, 2.0F);
@@ -65,7 +65,7 @@ public class EntityMarisaBroomModel extends ModelBase {
         all.render(scale);
     }
 
-    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    private void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;

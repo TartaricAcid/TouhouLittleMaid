@@ -132,6 +132,9 @@
     }, {
       "model_id": "touhou_little_maid:kaenbyou_rin",
       "description": ["{model.touhou_little_maid.kaenbyou_rin.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:rumia",
+      "description": ["{model.touhou_little_maid.rumia.desc}"]
     }
   ]
 }

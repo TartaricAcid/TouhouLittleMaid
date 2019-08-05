@@ -83,6 +83,17 @@ gui.touhou_little_maid.button.home.false=Home Mode Is Disable.
 gui.touhou_little_maid.button.skin=Change Skin
 gui.touhou_little_maid.skin.button.close=Close
 gui.touhou_little_maid.credit.url.close=This voice was delivered by Amitoro's Voice Material Studio
+gui.touhou_little_maid.skin_details.beg=Beg Status
+gui.touhou_little_maid.skin_details.walk=Walk Status
+gui.touhou_little_maid.skin_details.sit=Sit Status
+gui.touhou_little_maid.skin_details.ride=Normal Ride Status
+gui.touhou_little_maid.skin_details.ride_broom=Ride Broom Status
+gui.touhou_little_maid.skin_details.helmet=Show Helmet
+gui.touhou_little_maid.skin_details.chest_plate=Show Chest Plate
+gui.touhou_little_maid.skin_details.leggings=Show Leggings
+gui.touhou_little_maid.skin_details.boots=Show Boots
+gui.touhou_little_maid.skin_details.main_hand=Show Main Hand Item
+gui.touhou_little_maid.skin_details.off_hand=Show Off Hand Item
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=Author: %s
@@ -135,6 +146,7 @@ model.touhou_little_maid.lily_black.name=Lily White (Black)
 model.touhou_little_maid.komeiji_koishi.name=Koishi Komeiji
 model.touhou_little_maid.reiuji_utsuho.name=Utsuho Reiuji
 model.touhou_little_maid.kaenbyou_rin.name=Rin Kaenbyou
+model.touhou_little_maid.rumia.name=Rumia
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -177,6 +189,7 @@ model.touhou_little_maid.lily_white.desc=§7Fairy Herald of Spring
 model.touhou_little_maid.komeiji_koishi.desc=§7The Closed Eyes of Love
 model.touhou_little_maid.reiuji_utsuho.desc=§7Scorching, Troublesome Divine Flame
 model.touhou_little_maid.kaenbyou_rin.desc=§7Hell's Traffic Accident
+model.touhou_little_maid.rumia.desc=§7Youkai of the Dusk
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
