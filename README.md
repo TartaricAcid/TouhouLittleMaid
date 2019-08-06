@@ -12,3 +12,4 @@
 - 模组中使用的小绿旗像素画学习自[笨办法学像素画：道具旗帜画法](https://32comic.com/2018/08/25/笨办法学像素画：道具旗帜画法);
 - 部分 AI 方面代码因为原版写死的原因，无法继承来做改动，只能复制粘贴做修改;
 - 部分代码书写学习自 McJty 和 <https://harbinger.covertdragon.team>。
+- 游戏中声音素材来自于：[あみたろの声素材工房](https://www14.big.or.jp/~amiami/happy/)、[Open Game Art](https://opengameart.org/)

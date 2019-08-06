@@ -44,6 +44,8 @@ public final class MaidModel {
         registerRender(MaidItems.HAKUREI_GOHEI);
         registerRender(MaidItems.ULTRAMARINE_ORB_ELIXIR);
         registerRender(MaidItems.MARISA_BROOM);
+        registerRender(MaidItems.CAMERA);
+        registerRender(MaidItems.PHOTO);
     }
 
     private static void registerRender(Item item) {

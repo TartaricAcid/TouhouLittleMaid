@@ -3,7 +3,10 @@ package com.github.tartaricacid.touhoulittlemaid.util;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
-public class MatrixUtil {
+public final class MatrixUtil {
+    private MatrixUtil() {
+    }
+
     /**
      * Rotates the source matrix around the given axis the specified angle and
      * put the result in the destination matrix.

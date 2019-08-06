@@ -48,6 +48,11 @@ public class TileEntityGrid extends TileEntity {
     private ItemStack craftingResult = ItemStack.EMPTY;
     private List<ItemStack> remainingItems = Collections.EMPTY_LIST;
 
+    /**
+     * 比较；两个 ItemStack 是否相等
+     *
+     * @param ignoreNBT 比较时是否忽略 NBT
+     */
     private static boolean itemMatches(ItemStack stackA, ItemStack stackB, boolean ignoreNBT) {
         return ItemStack.areItemsEqual(stackA, stackB) && (ignoreNBT || ItemStack.areItemStackTagsEqual(stackA, stackB));
     }
@@ -122,64 +127,98 @@ public class TileEntityGrid extends TileEntity {
     }
 
     /**
-     * 比较女仆背包和 grid 的物品，进行匹配
+     * 比较某物品栏和 grid 的物品，进行匹配
      *
-     * @param inv 女仆的背包
+     * @param inv 某物品栏
      * @return 匹配的第一个对象，如果不匹配，返回 ItemStack.EMPTY
      */
     public ItemStack getItem(IItemHandler inv) {
         outer:
+        // 首先遍历该物品栏
         for (int i = 0; i < inv.getSlots(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
+            // 空物品跳过
             if (stack.isEmpty()) {
                 continue;
             }
+            // 而后遍历 grid 上的物品
             for (int j = 0; j < 9; j++) {
                 ItemStack filterItem = handler.getStackInSlot(j);
+                // 空物品跳过
                 if (filterItem.isEmpty()) {
                     continue;
                 }
+                // 对比两者是否匹配
                 if (itemMatches(stack, filterItem, true)) {
                     if (blacklist) {
+                        // 如果是黑名单模式，匹配符合说明该物品不能被选择
+                        // 跳到最外层进行重新遍历
                         continue outer;
                     } else {
+                        // 白名单模型，说明找到了合适的物品
                         return stack;
                     }
                 }
             }
+            // 如果上述遍历 gird 的操作都没有找到物品，而且现在还是黑名单模式
+            // 说明第一个物品就可以选择
             if (blacklist) {
                 return stack;
             }
         }
+        // 什么都没有找到，返回空
         return ItemStack.EMPTY;
     }
 
+    /**
+     * 处理物品的输入输出
+     *
+     * @param inv      输入输出的物品栏
+     * @param maid     女仆
+     * @param simulate 是否是模拟操作
+     */
     private boolean interactItemIO(IItemHandlerModifiable inv, AbstractEntityMaid maid, boolean simulate) {
+        // 基本数据的获取
         IBlockState state = getBlockType().getStateFromMeta(getBlockMetadata());
         EnumFacing facing = state.getValue(BlockGrid.DIRECTION).face;
         BlockPos offsetPos = pos.offset(facing.getOpposite());
         TileEntity tile = world.getTileEntity(offsetPos);
+        // 空 tileEntity 或无 Capability 返回
         if (tile == null || !tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
             return false;
         }
+        // 获取指定方向的 ITEM_HANDLER_CAPABILITY
         IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
+
+        // 依据当前是输入还是输出模型，设定目标物品栏和源物品栏
         IItemHandler src = input ? inv : itemHandler;
         IItemHandler dest = input ? itemHandler : inv;
-        ItemStack stack = getItem(src);
-        if (stack.isEmpty()) {
+
+        // 开始对物品栏中的物品和标记物品进行匹配
+        ItemStack matchedStack = getItem(src);
+        if (matchedStack.isEmpty()) {
             return false;
         }
-        ItemStack remain = ItemHandlerHelper.insertItemStacked(dest, stack.copy(), simulate);
-        if (stack.getCount() != remain.getCount()) {
+
+        // 开始尝试插入物品，获取插入后剩余的物品堆
+        ItemStack remainStack = ItemHandlerHelper.insertItemStacked(dest, matchedStack.copy(), simulate);
+        // 如果两者不相等，说明成功插入了
+        if (matchedStack.getCount() != remainStack.getCount()) {
+            // 非模拟状态下，就需要进行对应物品扣除和音效的播放
             if (!simulate) {
                 maid.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, 1);
                 if (input) {
-                    stack.setCount(remain.getCount());
+                    // 如果是输入模式，将匹配的物品数量进行扣除
+                    matchedStack.setCount(remainStack.getCount());
                 } else {
+                    // 如果是输出模式，则需要对容器里面的物品进行扣除
                     for (int i = 0; i < itemHandler.getSlots(); i++) {
                         ItemStack s = itemHandler.getStackInSlot(i);
-                        if (stack == s) {
-                            int amount = stack.getCount() - remain.getCount();
+                        if (matchedStack == s) {
+                            int amount = matchedStack.getCount() - remainStack.getCount();
+                            // 通过 extractItem 方法进行物品的扣除
+                            // 比如某个容器的物品是可以无限取出的，那么如果用前面的 setCount 方法
+                            // 就会导致无限取出失效
                             itemHandler.extractItem(i, amount, false);
                             break;
                         }

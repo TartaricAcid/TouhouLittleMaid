@@ -5,13 +5,15 @@ item_group.touhou_little_maid.name=Touhou Little Maid
 entity.touhou_little_maid.maid.name=Touhou Little Maid
 entity.touhou_little_maid.danmaku.name=Danmaku
 entity.touhou_little_maid.marisa_broom.name=Marisa's Broom
+entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass
 item.touhou_little_maid.hakurei_gohei.name=Hakurei's Gohei
 item.touhou_little_maid.ultramarine_orb_elixir.name=Ultramarine Orb Elixir
 item.touhou_little_maid.marisa_broom.name=Marisa's Broom
-entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
+item.touhou_little_maid.camera.name=Aya's Camera
+item.touhou_little_maid.photo.name=Photo
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -83,6 +85,9 @@ gui.touhou_little_maid.button.home.false=Home Mode Is Disable.
 gui.touhou_little_maid.button.skin=Change Skin
 gui.touhou_little_maid.skin.button.close=Close
 gui.touhou_little_maid.credit.url.close=This voice was delivered by Amitoro's Voice Material Studio
+gui.touhou_little_maid.skin_details.close=Close
+gui.touhou_little_maid.skin_details.floor=Show/Hide Floor
+gui.touhou_little_maid.skin_details.return=Return
 gui.touhou_little_maid.skin_details.beg=Beg Status
 gui.touhou_little_maid.skin_details.walk=Walk Status
 gui.touhou_little_maid.skin_details.sit=Sit Status
@@ -215,6 +220,7 @@ subtitle.touhou_little_maid.maid.environment.snow=Maid Snow Sound
 subtitle.touhou_little_maid.maid.environment.morning=Maid Morning Sound
 subtitle.touhou_little_maid.maid.environment.night=Maid Night Sound
 subtitle.touhou_little_maid.other.credit=Credit: Amitoro's Voice Material Studio
+subtitle.touhou_little_maid.item.camera_use=Camera Use Sound
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s

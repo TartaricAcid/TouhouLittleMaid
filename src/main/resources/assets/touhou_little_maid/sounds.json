@@ -214,5 +214,15 @@
         "stream": true
       }
     ]
+  },
+  "item.camera_use": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.item.camera_use",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:item/camera_use",
+        "stream": true
+      }
+    ]
   }
 }

@@ -5,13 +5,15 @@ item_group.touhou_little_maid.name=Touhou Little Maid
 entity.touhou_little_maid.maid.name=小女仆
 entity.touhou_little_maid.danmaku.name=弹幕
 entity.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
+entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item
 item.touhou_little_maid.kappa_compass.name=河童的罗盘
 item.touhou_little_maid.hakurei_gohei.name=博丽的御币
 item.touhou_little_maid.ultramarine_orb_elixir.name=绀珠之药
 item.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
-entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
+item.touhou_little_maid.camera.name=文文的相机
+item.touhou_little_maid.photo.name=照片
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -83,6 +85,9 @@ gui.touhou_little_maid.button.home.false=Home 模式已经关闭
 gui.touhou_little_maid.button.skin=更改皮肤
 gui.touhou_little_maid.skin.button.close=关闭
 gui.touhou_little_maid.credit.url.close=使用的音效由 あみたろの声素材工房 提供
+gui.touhou_little_maid.skin_details.close=关闭
+gui.touhou_little_maid.skin_details.floor=显示/隐藏地面网格
+gui.touhou_little_maid.skin_details.return=返回
 gui.touhou_little_maid.skin_details.beg=祈求状态
 gui.touhou_little_maid.skin_details.walk=行走状态
 gui.touhou_little_maid.skin_details.sit=待命状态
@@ -215,6 +220,7 @@ subtitle.touhou_little_maid.maid.environment.snow=女仆：下雪
 subtitle.touhou_little_maid.maid.environment.morning=女仆：早上
 subtitle.touhou_little_maid.maid.environment.night=女仆：傍晚
 subtitle.touhou_little_maid.other.credit=致谢：あみたろの声素材工房
+subtitle.touhou_little_maid.item.camera_use=相机咔哒声
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s

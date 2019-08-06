@@ -134,6 +134,8 @@ public class MaidSkinDetailsGui extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         // 绘制按钮文字
         drawButtonText();
+        // 绘制顶部按键的文本提示
+        drawButtonTooltips(mouseX, mouseY);
     }
 
     /**
@@ -210,9 +212,12 @@ public class MaidSkinDetailsGui extends GuiScreen {
         // 顶部按钮
         GuiButtonImage closeButton = new GuiButtonImage(CLOSE.ordinal(), width - 15, 0, 15, 15,
                 0, 24, 15, BUTTON_TEXTURE);
-        GuiButtonImage returnButton = new GuiButtonImage(RETURN.ordinal(), width - 30, 0, 15, 15,
+        GuiButtonImage floorButton = new GuiButtonImage(SHOW_FLOOR.ordinal(), width - 30, 0, 15, 15,
+                30, 24, 15, BUTTON_TEXTURE);
+        GuiButtonImage returnButton = new GuiButtonImage(RETURN.ordinal(), width - 45, 0, 15, 15,
                 15, 24, 15, BUTTON_TEXTURE);
         addButton(closeButton);
+        addButton(floorButton);
         addButton(returnButton);
 
         // 所有的侧边栏按钮
@@ -257,6 +262,9 @@ public class MaidSkinDetailsGui extends GuiScreen {
             case CLOSE:
                 applyCloseButtonLogic();
                 return;
+            case SHOW_FLOOR:
+                applyFloorButtonLogic();
+                return;
             case RETURN:
                 applyReturnButtonLogic();
                 return;
@@ -300,6 +308,10 @@ public class MaidSkinDetailsGui extends GuiScreen {
 
     private void applyCloseButtonLogic() {
         mc.addScheduledTask(() -> mc.displayGuiScreen(null));
+    }
+
+    private void applyFloorButtonLogic() {
+        maid.isDebugFloorOpen = !maid.isDebugFloorOpen;
     }
 
     private void applyReturnButtonLogic() {
@@ -444,13 +456,40 @@ public class MaidSkinDetailsGui extends GuiScreen {
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.off_hand"), 16, 19 + 13 * 10, 0xcacad4);
     }
 
+    /**
+     * 绘制顶部按钮的文本提示
+     */
+    private void drawButtonTooltips(int mouseX, int mouseY) {
+        boolean isInWidthRange;
+        boolean isInHeightRange;
+
+        isInWidthRange = width - 15 < mouseX && mouseX < width;
+        isInHeightRange = 0 < mouseY && mouseY < 15;
+        if (isInWidthRange && isInHeightRange) {
+            drawHoveringText(I18n.format("gui.touhou_little_maid.skin_details.close"), mouseX + 16, mouseY + 24);
+        }
+
+        isInWidthRange = width - 30 < mouseX && mouseX < width - 15;
+        if (isInWidthRange && isInHeightRange) {
+            drawHoveringText(I18n.format("gui.touhou_little_maid.skin_details.floor"), mouseX + 16, mouseY + 24);
+        }
+
+        isInWidthRange = width - 45 < mouseX && mouseX < width - 30;
+        if (isInWidthRange && isInHeightRange) {
+            drawHoveringText(I18n.format("gui.touhou_little_maid.skin_details.return"), mouseX + 16, mouseY + 24);
+        }
+    }
+
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
 
-        // 如果不在范围内，不执行任何鼠标操作
         int mouseX = Mouse.getX() * width / mc.displayWidth;
         int mouseY = height - Mouse.getY() * height / mc.displayHeight - 1;
+        int mouseDX = Mouse.getDX() * width / mc.displayWidth * 3;
+        int mouseDY = -Mouse.getDY() * height / mc.displayHeight * 3;
+
+        // 如果不在范围内，不执行任何鼠标操作
         boolean isInWidthRange = 132 < mouseX && mouseX < width - 1;
         boolean isInHeightRange = 15 < mouseY && mouseY < height - 16;
         if (!(isInWidthRange && isInHeightRange)) {
@@ -461,25 +500,15 @@ public class MaidSkinDetailsGui extends GuiScreen {
         if (Mouse.getEventDWheel() != 0) {
             changeScaleValue(Mouse.getEventDWheel() * 0.07f);
         }
-
         // 鼠标左键拖动旋转
         if (Mouse.isButtonDown(0)) {
-            if (Mouse.getEventDX() != 0) {
-                yaw += Mouse.getEventDX() * 0.4f;
-            }
-            if (Mouse.getEventDY() != 0) {
-                changePitchValue(Mouse.getEventDY() * 0.4f);
-            }
+            yaw += mouseDX;
+            changePitchValue(mouseDY);
         }
-
         // 鼠标右键移动位置
         if (Mouse.isButtonDown(1)) {
-            if (Mouse.getEventDX() != 0) {
-                posX += Mouse.getEventDX() * 0.4f;
-            }
-            if (Mouse.getEventDY() != 0) {
-                posY -= Mouse.getEventDY() * 0.4f;
-            }
+            posX += mouseDX;
+            posY += mouseDY;
         }
     }
 
@@ -505,12 +534,12 @@ public class MaidSkinDetailsGui extends GuiScreen {
      * @param amount 增加或者减少的数值
      */
     private void changePitchValue(float amount) {
-        if (pitch + amount > PITCH_MAX) {
+        if (pitch - amount > PITCH_MAX) {
             pitch = 90;
-        } else if (pitch + amount < PITCH_MIN) {
+        } else if (pitch - amount < PITCH_MIN) {
             pitch = -90;
         } else {
-            pitch = pitch + amount;
+            pitch = pitch - amount;
         }
     }
 
@@ -570,6 +599,8 @@ public class MaidSkinDetailsGui extends GuiScreen {
     enum BUTTON {
         // 关闭按钮
         CLOSE,
+        // 显示地面
+        SHOW_FLOOR,
         // 返回按钮
         RETURN,
         // 祈求动画按钮

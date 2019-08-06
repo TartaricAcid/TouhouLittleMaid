@@ -41,6 +41,7 @@ public final class MaidSoundEvent {
     public static final SoundEvent MAID_MORNING = registerSound("maid.environment.morning");
     public static final SoundEvent MAID_NIGHT = registerSound("maid.environment.night");
     public static final SoundEvent OTHER_CREDIT = registerSound("other.credit");
+    public static final SoundEvent CAMERA_USE = registerSound("item.camera_use");
 
     @SubscribeEvent
     public static void register(RegistryEvent.Register<SoundEvent> event) {
