@@ -56,8 +56,6 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
@@ -107,12 +105,10 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 是否开启 debug 模式下的地面显示，仅在客户端调用
      */
-    @SideOnly(Side.CLIENT)
     public boolean isDebugFloorOpen = false;
     /**
      * 是否开启 debug 模式下的扫帚显示，仅在客户端调用
      */
-    @SideOnly(Side.CLIENT)
     public boolean isDebugBroomShow = false;
     /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
@@ -130,6 +126,7 @@ public class EntityMaid extends AbstractEntityMaid {
         setSize(0.6f, 1.5f);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
@@ -284,7 +281,7 @@ public class EntityMaid extends AbstractEntityMaid {
      * 与旋转有关系的一堆东西，用来控制扫帚朝向
      */
     @Override
-    public void updatePassenger(Entity passenger) {
+    public void updatePassenger(@Nonnull Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger) && passenger instanceof EntityMarisaBroom) {
             EntityMarisaBroom broom = (EntityMarisaBroom) passenger;
@@ -450,7 +447,7 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 无法对抽象类使用 AT，所以通过反射获取箭
      */
-    public ItemStack getArrowFromEntity(EntityArrow entity) {
+    private ItemStack getArrowFromEntity(EntityArrow entity) {
         Method method = ReflectionHelper.findMethod(entity.getClass(), "getArrowStack", "func_184550_j");
         method.setAccessible(true);
         try {
@@ -461,7 +458,7 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
-    public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+    public void attackEntityWithRangedAttack(@Nonnull EntityLivingBase target, float distanceFactor) {
         task.onRangedAttack(this, target, distanceFactor);
     }
 
@@ -581,7 +578,7 @@ public class EntityMaid extends AbstractEntityMaid {
                 // 利用短路原理，逐个触发对应的交互事件
                 return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player) || applyGoldenApple(itemstack, player)
                         || applyNameTag(itemstack, player) || getExpBottle(itemstack, player) || dismountMaid(player)
-                        || switchSitting(player) || openMaidGui(player);
+                        || switchSitting(player) || openMaidGui(itemstack, player);
             } else {
                 return tamedMaid(itemstack, player);
             }
@@ -750,9 +747,15 @@ public class EntityMaid extends AbstractEntityMaid {
      *
      * @return 该逻辑是否成功应用
      */
-    private boolean openMaidGui(EntityPlayer player) {
+    private boolean openMaidGui(ItemStack itemStack, EntityPlayer player) {
+        // 当玩家使用相机时，应该禁止开启 GUI
+        if (itemStack.getItem() == MaidItems.CAMERA) {
+            // 返回 false，让物品侧的逻辑进行启用
+            return false;
+        }
+
+        // 否则打开 GUI
         if (!world.isRemote) {
-            // 否则打开 GUI
             player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
         }
         return true;
@@ -770,12 +773,12 @@ public class EntityMaid extends AbstractEntityMaid {
      * 女仆可不能杂交哦
      */
     @Override
-    public boolean canMateWith(EntityAnimal otherAnimal) {
+    public boolean canMateWith(@Nonnull EntityAnimal otherAnimal) {
         return false;
     }
 
     @Override
-    public void onDeath(DamageSource cause) {
+    public void onDeath(@Nonnull DamageSource cause) {
         super.onDeath(cause);
 
         // 防止 Forge 的事件系统的取消，导致后面掉落物的触发，故加此判定
@@ -826,6 +829,7 @@ public class EntityMaid extends AbstractEntityMaid {
         // 不要调用父类的掉落方法，很坑爹的会掉落耐久损失很多的东西
     }
 
+    @Nonnull
     @Override
     @Deprecated
     public String getName() {
@@ -953,8 +957,9 @@ public class EntityMaid extends AbstractEntityMaid {
         return MaidSoundEvent.MAID_DEATH;
     }
 
+    @Nonnull
     @Override
-    protected PathNavigate createNavigator(World worldIn) {
+    protected PathNavigate createNavigator(@Nonnull World worldIn) {
         if (this.getControllingPassenger() instanceof EntityMarisaBroom) {
             return createNavigatorFlying(worldIn);
         }
@@ -981,7 +986,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv));
         } else {
