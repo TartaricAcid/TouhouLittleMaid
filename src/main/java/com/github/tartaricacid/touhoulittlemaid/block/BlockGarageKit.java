@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
@@ -120,8 +121,8 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
-            ((TileEntityGarageKit) te).setData(this.getEntityId(stack), placer.getHorizontalFacing().getOpposite(),
-                    this.getModelId(stack), getEntityData(stack));
+            ((TileEntityGarageKit) te).setData(getEntityId(stack), placer.getHorizontalFacing().getOpposite(),
+                    getModelId(stack), getEntityData(stack));
         }
     }
 
@@ -205,7 +206,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     /**
      * 通过读取 TileEntityGarageKit 来获得对应 ItemStack
      */
-    private ItemStack getItemStackFromBlock(World worldIn, BlockPos pos) {
+    private static ItemStack getItemStackFromBlock(World worldIn, BlockPos pos) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityGarageKit) {
             TileEntityGarageKit kit = (TileEntityGarageKit) te;
@@ -223,8 +224,8 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
      * @param entityData 模型存储的实体数据
      * @return 带有这些数据的物品堆
      */
-    public ItemStack getItemStackWithData(String entityId, String modelId, NBTTagCompound entityData) {
-        ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+    public static ItemStack getItemStackWithData(String entityId, String modelId, NBTTagCompound entityData) {
+        ItemStack stack = new ItemStack(Item.getItemFromBlock(MaidBlocks.GARAGE_KIT));
         NBTTagCompound data = getTagCompoundSafe(stack);
         data.setString(NBT.ENTITY_ID.getName(), entityId);
         if (modelId != null) {
@@ -239,7 +240,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     /**
      * 获取 ItemStack 中的 ENTITY_ID NBT 数据，如果不存在则返回默认值
      */
-    public String getEntityId(ItemStack stack) {
+    public static String getEntityId(ItemStack stack) {
         if (!getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName()).isEmpty()) {
             return getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName());
         }
@@ -249,7 +250,7 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     /**
      * 获取 ItemStack 中的 MODEL_ID NBT 数据，如果不存在则返回默认值
      */
-    public String getModelId(ItemStack stack) {
+    public static String getModelId(ItemStack stack) {
         if (!getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName()).isEmpty()) {
             return getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName());
         }

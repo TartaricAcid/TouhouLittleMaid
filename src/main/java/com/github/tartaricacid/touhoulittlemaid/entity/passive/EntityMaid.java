@@ -6,14 +6,15 @@ import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -37,6 +38,7 @@ import net.minecraft.init.*;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -68,7 +70,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
-    public static final Predicate<Entity> IS_PICKUP = entity -> (entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow) && !entity.isInWater();
+    public static final Predicate<Entity> IS_PICKUP = entity -> ((entity instanceof EntityItem && !isIllegalItem(((EntityItem) entity).getItem()))
+            || entity instanceof EntityXPOrb || entity instanceof EntityArrow) && !entity.isInWater();
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
 
@@ -95,8 +98,18 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private static int playerHurtSoundCount = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
-    private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this);
-    private final ItemStackHandler mainInv = new ItemStackHandler(15);
+    private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this) {
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            return !isIllegalItem(stack);
+        }
+    };
+    private final ItemStackHandler mainInv = new ItemStackHandler(15) {
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            return !isIllegalItem(stack);
+        }
+    };
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
     /**
      * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
@@ -354,8 +367,12 @@ public class EntityMaid extends AbstractEntityMaid {
     public boolean pickupItem(EntityItem entityItem, boolean simulate) {
         // TODO: 当物品 pickupDelay 较小时等待
         if (!world.isRemote && entityItem.isEntityAlive() && !entityItem.cannotPickup()) {
-            // 获取实体的物品堆，遍历尝试塞入背包
+            // 获取实体的物品堆
             ItemStack itemstack = entityItem.getItem();
+            // 检查物品是否合法
+            if (isIllegalItem(itemstack)) {
+                return false;
+            }
             // 获取数量，为后面方面用
             int count = itemstack.getCount();
             itemstack = ItemHandlerHelper.insertItemStacked(getAvailableInv(false), itemstack, simulate);
@@ -818,7 +835,7 @@ public class EntityMaid extends AbstractEntityMaid {
         entityTag.removeTag(NBT.MAID_INVENTORY.getName());
         entityTag.removeTag(NBT.BAUBLE_INVENTORY.getName());
         // 掉落女仆手办
-        ItemStack stack = MaidBlocks.GARAGE_KIT.getItemStackWithData("touhou_little_maid:entity.passive.maid",
+        ItemStack stack = BlockGarageKit.getItemStackWithData("touhou_little_maid:entity.passive.maid",
                 this.getModelId(), entityTag);
         // 生成物品实体
         entityDropItem(stack, 0);
@@ -1141,6 +1158,13 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public boolean placeBlock(BlockPos pos, IBlockState state) {
         return canPlaceBlock(pos, state) && world.setBlockState(pos, state);
+    }
+
+    /**
+     * 检查输入的物品是否是非法的
+     */
+    private static boolean isIllegalItem(ItemStack stack) {
+        return stack.getItem() instanceof ItemShulkerBox || stack.getItem() instanceof ItemPhoto;
     }
 
     public enum NBT {

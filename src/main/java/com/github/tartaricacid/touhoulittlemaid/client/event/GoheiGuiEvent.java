@@ -67,12 +67,13 @@ public class GoheiGuiEvent {
             Minecraft mc = Minecraft.getMinecraft();
             EntityPlayerSP player = mc.player;
 
-            if (player.getHeldItemMainhand().getItem() != MaidItems.HAKUREI_GOHEI) {
+            if (player.getHeldItemMainhand().getItem() != MaidItems.HAKUREI_GOHEI ||
+                    !(MaidItems.HAKUREI_GOHEI instanceof ItemHakureiGohei)) {
                 return;
             }
 
+            ItemHakureiGohei item = (ItemHakureiGohei) MaidItems.HAKUREI_GOHEI;
             ItemStack stack = player.getHeldItemMainhand();
-            ItemHakureiGohei item = MaidItems.HAKUREI_GOHEI;
 
             // 获取相关数据
             DanmakuType type = item.getGoheiMode(stack);

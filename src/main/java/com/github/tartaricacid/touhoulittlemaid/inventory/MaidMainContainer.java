@@ -77,7 +77,7 @@ public class MaidMainContainer extends Container {
         // 占用 0-3
         addArmorSlot(entityMaid, itemHandler);
         // 占用 4-5
-        addHandSlot(entityMaid, itemHandler);
+        addHandSlot(itemHandler);
     }
 
     private void addArmorSlot(EntityMaid entityMaid, IItemHandler itemHandler) {
@@ -97,7 +97,7 @@ public class MaidMainContainer extends Container {
                  */
                 @Override
                 public boolean isItemValid(ItemStack stack) {
-                    return stack.getItem().isValidArmor(stack, entityequipmentslot, entityMaid);
+                    return stack.getItem().isValidArmor(stack, entityequipmentslot, entityMaid) && super.isItemValid(stack);
                 }
 
                 /**
@@ -120,7 +120,7 @@ public class MaidMainContainer extends Container {
         }
     }
 
-    private void addHandSlot(EntityMaid entityMaid, IItemHandler itemHandler) {
+    private void addHandSlot(IItemHandler itemHandler) {
         this.addSlotToContainer(new SlotItemHandler(itemHandler, 4, 80, 62));
         this.addSlotToContainer(new SlotItemHandler(itemHandler, 5, 98, 62) {
             @Override

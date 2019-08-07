@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public final class MaidBlocks {
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "garage_kit")
-    public static BlockGarageKit GARAGE_KIT;
+    public static Block GARAGE_KIT;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":grid")
     public static Block GRID;
 

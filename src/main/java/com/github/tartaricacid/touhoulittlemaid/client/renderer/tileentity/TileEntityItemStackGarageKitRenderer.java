@@ -40,7 +40,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 GlStateManager.shadeModel(GL11.GL_FLAT);
             }
 
-            String name = MaidBlocks.GARAGE_KIT.getEntityId(itemStackIn);
+            String name = BlockGarageKit.getEntityId(itemStackIn);
             Entity entity;
             try {
                 entity = ClientProxy.ENTITY_CACHE.get(name, () -> {
@@ -56,7 +56,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 return;
             }
             if (entity instanceof EntityMaid) {
-                ((EntityMaid) entity).setModelId(MaidBlocks.GARAGE_KIT.getModelId(itemStackIn));
+                ((EntityMaid) entity).setModelId(BlockGarageKit.getModelId(itemStackIn));
             }
 
             GlStateManager.enableColorMaterial();
