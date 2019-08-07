@@ -75,8 +75,7 @@ public class ItemHakureiGohei extends Item {
         return EnumAction.BOW;
     }
 
-    @Override
-    public ItemStack getDefaultInstance() {
+    public ItemStack getDefaultItemStack() {
         ItemStack itemStack = new ItemStack(this);
         setGoheiMode(itemStack, DanmakuType.PELLET);
         return itemStack;
@@ -85,7 +84,7 @@ public class ItemHakureiGohei extends Item {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            items.add(getDefaultInstance());
+            items.add(getDefaultItemStack());
         }
     }
 

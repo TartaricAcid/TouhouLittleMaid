@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -94,6 +96,13 @@ public class ItemPhoto extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        // 无数据时显示红色提醒信息
+        boolean haveNoData = !stack.hasTagCompound() ||
+                Objects.requireNonNull(stack.getTagCompound()).getCompoundTag(MAID_INFO.getNbtName()).isEmpty();
+        if (!flagIn.isAdvanced() && haveNoData) {
+            tooltip.add(TextFormatting.DARK_RED + I18n.format("tooltips.touhou_little_maid.photo.no_data.desc"));
+        }
+        // 调试模式直接显示整个 NBT
         if (flagIn.isAdvanced() && GuiScreen.isShiftKeyDown() && stack.hasTagCompound()) {
             tooltip.add(Objects.requireNonNull(stack.getTagCompound()).toString());
         }

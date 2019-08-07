@@ -25,6 +25,7 @@ tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
 tooltips.touhou_little_maid.damageable.desc=Remaining Usage Times: %d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=Entity Name: %s
 tooltips.touhou_little_maid.garage_kit.name.desc=Model Name: %s
+tooltips.touhou_little_maid.photo.no_data.desc=This Photo Is Missing Maid Data
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!

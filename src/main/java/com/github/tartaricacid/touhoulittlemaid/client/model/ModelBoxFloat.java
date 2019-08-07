@@ -43,15 +43,12 @@ public class ModelBoxFloat extends ModelBox {
         this.vertexPositions[5].vector3D = new Vec3d(f, y, f2);
         this.vertexPositions[6].vector3D = new Vec3d(f, f1, f2);
         this.vertexPositions[7].vector3D = new Vec3d(x, f1, f2);
-        int ddx = (int) Math.ceil(dx);
-        int ddy = (int) Math.ceil(dy);
-        int ddz = (int) Math.ceil(dz);
-        this.quadList[0] = new TexturedQuad(new PositionTextureVertex[]{vertexPositions[5], vertexPositions[1], vertexPositions[2], vertexPositions[6]}, texU + ddz + ddx, texV + ddz, texU + ddz + ddx + ddz, texV + ddz + ddy, renderer.textureWidth, renderer.textureHeight);
-        this.quadList[1] = new TexturedQuad(new PositionTextureVertex[]{vertexPositions[0], vertexPositions[4], vertexPositions[7], vertexPositions[3]}, texU, texV + ddz, texU + ddz, texV + ddz + ddy, renderer.textureWidth, renderer.textureHeight);
-        this.quadList[2] = new TexturedQuad(new PositionTextureVertex[]{vertexPositions[5], vertexPositions[4], vertexPositions[0], vertexPositions[1]}, texU + ddz, texV, texU + ddz + ddx, texV + ddz, renderer.textureWidth, renderer.textureHeight);
-        this.quadList[3] = new TexturedQuad(new PositionTextureVertex[]{vertexPositions[2], vertexPositions[3], vertexPositions[7], vertexPositions[6]}, texU + ddz + ddx, texV + ddz, texU + ddz + ddx + ddx, texV, renderer.textureWidth, renderer.textureHeight);
-        this.quadList[4] = new TexturedQuad(new PositionTextureVertex[]{vertexPositions[1], vertexPositions[0], vertexPositions[3], vertexPositions[2]}, texU + ddz, texV + ddz, texU + ddz + ddx, texV + ddz + ddy, renderer.textureWidth, renderer.textureHeight);
-        this.quadList[5] = new TexturedQuad(new PositionTextureVertex[]{vertexPositions[4], vertexPositions[5], vertexPositions[6], vertexPositions[7]}, texU + ddz + ddx + ddz, texV + ddz, texU + ddz + ddx + ddz + ddx, texV + ddz + ddy, renderer.textureWidth, renderer.textureHeight);
+        this.quadList[0] = new TexturedQuardFloat(new PositionTextureVertex[]{vertexPositions[5], vertexPositions[1], vertexPositions[2], vertexPositions[6]}, texU + dz + dx, texV + dz, texU + dz + dx + dz, texV + dz + dy, renderer.textureWidth, renderer.textureHeight);
+        this.quadList[1] = new TexturedQuardFloat(new PositionTextureVertex[]{vertexPositions[0], vertexPositions[4], vertexPositions[7], vertexPositions[3]}, texU, texV + dz, texU + dz, texV + dz + dy, renderer.textureWidth, renderer.textureHeight);
+        this.quadList[2] = new TexturedQuardFloat(new PositionTextureVertex[]{vertexPositions[5], vertexPositions[4], vertexPositions[0], vertexPositions[1]}, texU + dz, texV, texU + dz + dx, texV + dz, renderer.textureWidth, renderer.textureHeight);
+        this.quadList[3] = new TexturedQuardFloat(new PositionTextureVertex[]{vertexPositions[2], vertexPositions[3], vertexPositions[7], vertexPositions[6]}, texU + dz + dx, texV + dz, texU + dz + dx + dx, texV, renderer.textureWidth, renderer.textureHeight);
+        this.quadList[4] = new TexturedQuardFloat(new PositionTextureVertex[]{vertexPositions[1], vertexPositions[0], vertexPositions[3], vertexPositions[2]}, texU + dz, texV + dz, texU + dz + dx, texV + dz + dy, renderer.textureWidth, renderer.textureHeight);
+        this.quadList[5] = new TexturedQuardFloat(new PositionTextureVertex[]{vertexPositions[4], vertexPositions[5], vertexPositions[6], vertexPositions[7]}, texU + dz + dx + dz, texV + dz, texU + dz + dx + dz + dx, texV + dz + dy, renderer.textureWidth, renderer.textureHeight);
 
         if (mirror) {
             for (TexturedQuad texturedquad : this.quadList) {

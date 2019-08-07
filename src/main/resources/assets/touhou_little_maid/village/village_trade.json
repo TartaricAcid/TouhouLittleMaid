@@ -1,0 +1,101 @@
+[
+  {
+    "level": 1,
+    "in": {
+      "id": "minecraft:emerald",
+      "count": {
+        "min": 12,
+        "max": 24
+      }
+    },
+    "out": {
+      "id": "touhou_little_maid:hakurei_gohei",
+      "nbt": "{\"GoheiMode\":0}",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  }, {
+  "level": 1,
+  "in": {
+    "id": "minecraft:emerald",
+    "count": {
+      "min": 24,
+      "max": 32
+    }
+  },
+  "out": {
+    "id": "minecraft:spawn_egg",
+    "nbt": "{\"EntityTag\":{\"id\":\"touhou_little_maid:entity.passive.maid\"}}",
+    "count": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}, {
+  "level": 2,
+  "in": {
+    "id": "minecraft:emerald",
+    "count": {
+      "min": 2,
+      "max": 3
+    }
+  },
+  "out": {
+    "id": "touhou_little_maid:kappa_compass",
+    "count": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}, {
+  "level": 2,
+  "in": {
+    "id": "minecraft:emerald",
+    "count": {
+      "min": 7,
+      "max": 11
+    }
+  },
+  "out": {
+    "id": "touhou_little_maid:ultramarine_orb_elixir",
+    "count": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}, {
+  "level": 3,
+  "in": {
+    "id": "minecraft:emerald",
+    "count": {
+      "min": 12,
+      "max": 15
+    }
+  },
+  "out": {
+    "id": "touhou_little_maid:marisa_broom",
+    "count": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}, {
+  "level": 3,
+  "in": {
+    "id": "minecraft:emerald",
+    "count": {
+      "min": 2,
+      "max": 3
+    }
+  },
+  "out": {
+    "id": "touhou_little_maid:grid",
+    "count": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}
+]

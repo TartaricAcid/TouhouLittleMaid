@@ -25,6 +25,7 @@ tooltips.touhou_little_maid.kappa_compass.desc=坐标：%d，%d，%d
 tooltips.touhou_little_maid.damageable.desc=剩余使用次数：%d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=实体名称：%s
 tooltips.touhou_little_maid.garage_kit.name.desc=模型名称：%s
+tooltips.touhou_little_maid.photo.no_data.desc=这张照片缺失女仆数据
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！

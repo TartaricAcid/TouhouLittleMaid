@@ -1,13 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.village;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.entity.IMerchant;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
@@ -39,29 +39,35 @@ public class VillagerRegistryHandler {
 
     @SubscribeEvent
     public static void registry(RegistryEvent.Register<VillagerProfession> event) {
-        ItemStack emerald = new ItemStack(Items.EMERALD);
+        for (VillageTradePOJO trade : CommonProxy.VILLAGE_TRADE) {
+            Item in = Item.getByNameOrId(trade.getIn().getId());
+            Item out = Item.getByNameOrId(trade.getOut().getId());
+            PriceInfo inCount = new PriceInfo(trade.getIn().getCount().getMin(), trade.getIn().getCount().getMax());
+            PriceInfo outCount = new PriceInfo(trade.getOut().getCount().getMin(), trade.getOut().getCount().getMax());
 
-        ItemStack hakureiGohei = MaidItems.HAKUREI_GOHEI.getDefaultInstance();
-        ItemStack maidSpawnEgg = new ItemStack(Items.SPAWN_EGG);
-        ItemMonsterPlacer.applyEntityIdToItemStack(maidSpawnEgg, new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"));
+            // 空值不进行加载
+            if (in == null || out == null) {
+                TouhouLittleMaid.LOGGER.warn("Unable to find the corresponding item: {} or {}", trade.getIn().getId(), trade.getOut().getId());
+                continue;
+            }
 
-        ItemStack kappaCompass = new ItemStack(MaidItems.KAPPA_COMPASS);
-        ItemStack ultramarineOrbElixir = new ItemStack(MaidItems.ULTRAMARINE_ORB_ELIXIR);
+            ItemStack inStack = new ItemStack(in, 1, trade.getIn().getMeta());
+            ItemStack outStack = new ItemStack(out, 1, trade.getOut().getMeta());
 
-        ItemStack marisaBroom = new ItemStack(MaidItems.MARISA_BROOM);
-        ItemStack grid = new ItemStack(Item.getItemFromBlock(MaidBlocks.GRID));
+            // NBT 数据加载
+            try {
+                if (trade.getIn().getNbt() != null && !"".equals(trade.getIn().getNbt())) {
+                    inStack.setTagCompound(JsonToNBT.getTagFromJson(trade.getIn().getNbt()));
+                }
+                if (trade.getOut().getNbt() != null && !"".equals(trade.getOut().getNbt())) {
+                    outStack.setTagCompound(JsonToNBT.getTagFromJson(trade.getOut().getNbt()));
+                }
+            } catch (NBTException e) {
+                TouhouLittleMaid.LOGGER.warn("NBT data reading exception: {} or {}", trade.getIn().getId(), trade.getOut().getId());
+            }
 
-        STORE_OWNER_OF_KOURINDOU_CAREER.addTrade(1,
-                new ItemStackToItemStack(emerald.copy(), new PriceInfo(12, 24), hakureiGohei, new PriceInfo(1, 1)),
-                new ItemStackToItemStack(emerald.copy(), new PriceInfo(24, 32), maidSpawnEgg, new PriceInfo(1, 2))
-        ).addTrade(2,
-                new ItemStackToItemStack(emerald.copy(), new PriceInfo(2, 3), kappaCompass, new PriceInfo(1, 1)),
-                new ItemStackToItemStack(emerald.copy(), new PriceInfo(7, 11), ultramarineOrbElixir, new PriceInfo(1, 1))
-        ).addTrade(3,
-                new ItemStackToItemStack(emerald.copy(), new PriceInfo(12, 15), marisaBroom, new PriceInfo(1, 1)),
-                new ItemStackToItemStack(emerald.copy(), new PriceInfo(2, 3), grid, new PriceInfo(2, 4))
-        );
-
+            STORE_OWNER_OF_KOURINDOU_CAREER.addTrade(trade.getLevel(), new ItemStackToItemStack(inStack, inCount, outStack, outCount));
+        }
         event.getRegistry().register(STORE_OWNER_OF_KOURINDOU);
     }
 

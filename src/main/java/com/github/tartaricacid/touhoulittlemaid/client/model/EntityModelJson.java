@@ -148,7 +148,13 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer helmet = modelMap.get("helmet");
         ModelRenderer hat = modelMap.get("hat");
         ModelRenderer chestPlate = modelMap.get("chestPlate");
+        ModelRenderer chestPlateLeft = modelMap.get("chestPlateLeft");
+        ModelRenderer chestPlateMiddle = modelMap.get("chestPlateMiddle");
+        ModelRenderer chestPlateRight = modelMap.get("chestPlateRight");
         ModelRenderer leggings = modelMap.get("leggings");
+        ModelRenderer leggingsLeft = modelMap.get("leggingsLeft");
+        ModelRenderer leggingsMiddle = modelMap.get("leggingsMiddle");
+        ModelRenderer leggingsRight = modelMap.get("leggingsRight");
         ModelRenderer bootsLeft = modelMap.get("bootsLeft");
         ModelRenderer bootsRight = modelMap.get("bootsRight");
 
@@ -160,7 +166,8 @@ public class EntityModelJson extends ModelBase {
         blinkAnimation(blink, ageInTicks);
         tailAnimation(tail, ageInTicks);
         floatAnimation(sinFloat, cosFloat, negativeSinFloat, negativeCosFloat, ageInTicks);
-        renderArmor(entityMaid, helmet, hat, chestPlate, leggings, bootsLeft, bootsRight);
+        renderArmor(entityMaid, helmet, hat, chestPlate, chestPlateLeft, chestPlateMiddle, chestPlateRight,
+                leggings, leggingsLeft, leggingsMiddle, leggingsRight, bootsLeft, bootsRight);
         beggingPosture(entityMaid, head, ahoge, ageInTicks);
         swingingArmsPosture(entityMaid, armLeft, armRight);
 
@@ -276,8 +283,10 @@ public class EntityModelJson extends ModelBase {
         }
     }
 
-    private void renderArmor(EntityMaid entityMaid, @Nullable ModelRenderer helmet, @Nullable ModelRenderer hat, @Nullable ModelRenderer chestPlate,
-                             @Nullable ModelRenderer leggings, @Nullable ModelRenderer bootsLeft, @Nullable ModelRenderer bootsRight) {
+    private void renderArmor(EntityMaid entityMaid, @Nullable ModelRenderer helmet, @Nullable ModelRenderer hat,
+                             @Nullable ModelRenderer chestPlate, @Nullable ModelRenderer chestPlateLeft, @Nullable ModelRenderer chestPlateMiddle, @Nullable ModelRenderer chestPlateRight,
+                             @Nullable ModelRenderer leggings, @Nullable ModelRenderer leggingsLeft, @Nullable ModelRenderer leggingsMiddle, @Nullable ModelRenderer leggingsRight,
+                             @Nullable ModelRenderer bootsLeft, @Nullable ModelRenderer bootsRight) {
         // 护甲部分渲染
         if (helmet != null) {
             helmet.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
@@ -288,8 +297,26 @@ public class EntityModelJson extends ModelBase {
         if (chestPlate != null) {
             chestPlate.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
         }
+        if (chestPlateLeft != null) {
+            chestPlateLeft.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
+        if (chestPlateMiddle != null) {
+            chestPlateMiddle.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
+        if (chestPlateRight != null) {
+            chestPlateRight.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
         if (leggings != null) {
             leggings.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (leggingsLeft != null) {
+            leggingsLeft.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (leggingsMiddle != null) {
+            leggingsMiddle.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (leggingsRight != null) {
+            leggingsRight.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
         }
         if (bootsLeft != null) {
             bootsLeft.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();

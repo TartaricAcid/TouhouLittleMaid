@@ -45,7 +45,7 @@ public class GeneralConfig {
         @Config.Comment("Should the maid always show the hat? when set to false, the maid will only render the hat when wearing the helmet.")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_always_show_hat")
         @Config.Name("MaidAlwaysShowHat")
-        public boolean maidAlwaysShowHat = false;
+        public boolean maidAlwaysShowHat = true;
     }
 
     /**
