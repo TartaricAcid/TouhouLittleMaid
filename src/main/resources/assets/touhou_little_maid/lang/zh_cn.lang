@@ -33,6 +33,8 @@ message.touhou_little_maid.grid.input.true=物流模式：输入
 message.touhou_little_maid.grid.input.false=物流模式：输出
 message.touhou_little_maid.grid.blacklist.true=过滤模式：黑名单
 message.touhou_little_maid.grid.blacklist.false=过滤模式：白名单
+message.touhou_little_maid.photo.not_suitable_for_place_maid=这鬼地方没法放置女仆。
+message.touhou_little_maid.photo.have_no_nbt_data=这鬼照片没有 NBT 数据。
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标

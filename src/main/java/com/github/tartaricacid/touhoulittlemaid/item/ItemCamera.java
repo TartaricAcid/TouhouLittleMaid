@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
+import static com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto.NBT.MAID_INFO;
+
 /**
  * @author TartaricAcid
  * @date 2019/8/6 15:41
@@ -44,7 +46,7 @@ public class ItemCamera extends Item {
                     NBTTagCompound photoTag = new NBTTagCompound();
                     NBTTagCompound maidTag = new NBTTagCompound();
                     maid.writeEntityToNBT(maidTag);
-                    photoTag.setTag("MaidInfo", maidTag);
+                    photoTag.setTag(MAID_INFO.getNbtName(), maidTag);
                     photo.setTagCompound(photoTag);
                     InventoryHelper.spawnItemStack(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, photo);
                 }

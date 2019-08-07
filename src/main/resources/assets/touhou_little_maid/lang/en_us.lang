@@ -33,6 +33,8 @@ message.touhou_little_maid.grid.input.true=IO Mode: Input
 message.touhou_little_maid.grid.input.false=IO Mode: Output
 message.touhou_little_maid.grid.blacklist.true=Filter Mode: Blacklist
 message.touhou_little_maid.grid.blacklist.false=Filter Mode: Whitelist
+message.touhou_little_maid.photo.not_suitable_for_place_maid=This damnable place can't place the maid.
+message.touhou_little_maid.photo.have_no_nbt_data=This damnable photo don't have NBT data.
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos

@@ -20,17 +20,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public final class MaidItems {
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "kappa_compass")
-    public static ItemKappaCompass KAPPA_COMPASS;
+    public static Item KAPPA_COMPASS;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "hakurei_gohei")
     public static ItemHakureiGohei HAKUREI_GOHEI;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "ultramarine_orb_elixir")
     public static Item ULTRAMARINE_ORB_ELIXIR;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "marisa_broom")
-    public static ItemMarisaBroom MARISA_BROOM;
+    public static Item MARISA_BROOM;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "camera")
-    public static ItemCamera CAMERA;
+    public static Item CAMERA;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "photo")
-    public static ItemPhoto PHOTO;
+    public static Item PHOTO;
 
     @SuppressWarnings("all")
     @SubscribeEvent
