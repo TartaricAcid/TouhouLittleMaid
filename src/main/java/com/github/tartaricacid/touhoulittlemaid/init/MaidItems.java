@@ -31,6 +31,8 @@ public final class MaidItems {
     public static Item CAMERA;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "photo")
     public static Item PHOTO;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "chair")
+    public static Item CHAIR;
 
     @SuppressWarnings("all")
     @SubscribeEvent
@@ -43,6 +45,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemMarisaBroom().setRegistryName("marisa_broom"));
         event.getRegistry().register(new ItemCamera().setRegistryName("camera"));
         event.getRegistry().register(new ItemPhoto().setRegistryName("photo"));
+        event.getRegistry().register(new ItemChair().setRegistryName("chair"));
 
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));

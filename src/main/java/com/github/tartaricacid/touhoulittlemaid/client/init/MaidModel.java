@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGridRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackChairRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackGarageKitRenderer;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
@@ -35,7 +36,8 @@ public final class MaidModel {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrid.class, new TileEntityGridRenderer());
 
         // Block Item
-        Item.getItemFromBlock(MaidBlocks.GARAGE_KIT).setTileEntityItemStackRenderer(TileEntityItemStackGarageKitRenderer.instance);
+        Item.getItemFromBlock(MaidBlocks.GARAGE_KIT).setTileEntityItemStackRenderer(TileEntityItemStackGarageKitRenderer.INSTANCE);
+        MaidItems.CHAIR.setTileEntityItemStackRenderer(TileEntityItemStackChairRenderer.INSTANCE);
         registerRender(Item.getItemFromBlock(MaidBlocks.GARAGE_KIT));
         registerRender(Item.getItemFromBlock(MaidBlocks.GRID));
 
@@ -46,6 +48,7 @@ public final class MaidModel {
         registerRender(MaidItems.MARISA_BROOM);
         registerRender(MaidItems.CAMERA);
         registerRender(MaidItems.PHOTO);
+        registerRender(MaidItems.CHAIR);
     }
 
     private static void registerRender(Item item) {

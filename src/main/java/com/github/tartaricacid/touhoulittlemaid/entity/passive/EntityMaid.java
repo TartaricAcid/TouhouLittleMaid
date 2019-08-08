@@ -296,18 +296,20 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
         super.updatePassenger(passenger);
-        if (this.isPassenger(passenger) && passenger instanceof EntityMarisaBroom) {
-            EntityMarisaBroom broom = (EntityMarisaBroom) passenger;
-            // 视线也必须同步，因为扫把的朝向受视线限制
-            // 只能以视线方向为中心左右各 90 度，不同步就会导致朝向错误
-            broom.rotationYawHead = this.rotationYawHead;
-            // 旋转方向同步，包括渲染的旋转方向
-            broom.rotationPitch = this.rotationPitch;
-            broom.rotationYaw = this.rotationYaw;
-            broom.renderYawOffset = this.renderYawOffset;
-            // fallDistance 永远为 0
-            this.fallDistance = 0;
-            broom.fallDistance = 0;
+        if (this.isPassenger(passenger)) {
+            if (passenger instanceof EntityMarisaBroom) {
+                EntityMarisaBroom broom = (EntityMarisaBroom) passenger;
+                // 视线也必须同步，因为扫把的朝向受视线限制
+                // 只能以视线方向为中心左右各 90 度，不同步就会导致朝向错误
+                broom.rotationYawHead = this.rotationYawHead;
+                // 旋转方向同步，包括渲染的旋转方向
+                broom.rotationPitch = this.rotationPitch;
+                broom.rotationYaw = this.rotationYaw;
+                broom.renderYawOffset = this.renderYawOffset;
+                // fallDistance 永远为 0
+                this.fallDistance = 0;
+                broom.fallDistance = 0;
+            }
         }
     }
 
@@ -855,8 +857,8 @@ public class EntityMaid extends AbstractEntityMaid {
         } else {
             String key = getModelId();
             if (world.isRemote) {
-                if (ClientProxy.ID_INFO_MAP.containsKey(key)) {
-                    return ParseI18n.parse(ClientProxy.ID_INFO_MAP.get(key).getName());
+                if (ClientProxy.ID_MODEL_INFO_MAP.containsKey(key)) {
+                    return ParseI18n.parse(ClientProxy.ID_MODEL_INFO_MAP.get(key).getName());
                 }
             } else {
                 if (CommonProxy.VANILLA_ID_NAME_MAP.containsKey(key)) {
@@ -1124,8 +1126,8 @@ public class EntityMaid extends AbstractEntityMaid {
         return this.dataManager.get(MODEL_ID);
     }
 
-    public void setModelId(String name) {
-        this.dataManager.set(MODEL_ID, name);
+    public void setModelId(String modelId) {
+        this.dataManager.set(MODEL_ID, modelId);
     }
 
     public boolean isStruckByLightning() {

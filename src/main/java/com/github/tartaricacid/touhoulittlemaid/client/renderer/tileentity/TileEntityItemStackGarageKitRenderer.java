@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -26,10 +27,10 @@ import java.util.concurrent.ExecutionException;
  **/
 @SideOnly(Side.CLIENT)
 public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRenderer {
-    public static final TileEntityItemStackGarageKitRenderer instance = new TileEntityItemStackGarageKitRenderer();
+    public static final TileEntityItemStackGarageKitRenderer INSTANCE = new TileEntityItemStackGarageKitRenderer();
 
     @Override
-    public void renderByItem(ItemStack itemStackIn) {
+    public void renderByItem(@Nonnull ItemStack itemStackIn) {
         if (itemStackIn.getItem() == Item.getItemFromBlock(MaidBlocks.GARAGE_KIT)) {
             World world = Minecraft.getMinecraft().world;
             GlStateManager.pushMatrix();
@@ -40,11 +41,11 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 GlStateManager.shadeModel(GL11.GL_FLAT);
             }
 
-            String name = BlockGarageKit.getEntityId(itemStackIn);
+            String entityId = BlockGarageKit.getEntityId(itemStackIn);
             Entity entity;
             try {
-                entity = ClientProxy.ENTITY_CACHE.get(name, () -> {
-                    Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(name), world);
+                entity = ClientProxy.ENTITY_CACHE.get(entityId, () -> {
+                    Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(entityId), world);
                     if (e == null) {
                         return new EntityMaid(world);
                     } else {

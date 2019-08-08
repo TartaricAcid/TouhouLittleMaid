@@ -103,7 +103,7 @@ public class MaidSkinDetailsGui extends GuiScreen {
         this.preMaid = preMaid;
         this.maid = new EntityMaid(preMaid.world);
         this.marisaBroom = new EntityMarisaBroom(preMaid.world);
-        this.modelItem = ClientProxy.ID_INFO_MAP.get(modelId.toString());
+        this.modelItem = ClientProxy.ID_MODEL_INFO_MAP.get(modelId.toString());
         this.maid.setModelId(modelId.toString());
         this.maid.isDebugFloorOpen = true;
         // 启用模拟 tick 线程

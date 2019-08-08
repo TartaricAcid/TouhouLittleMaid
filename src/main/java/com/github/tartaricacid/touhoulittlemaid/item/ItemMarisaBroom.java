@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -26,7 +27,7 @@ public class ItemMarisaBroom extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote && player.isSneaking() && facing == EnumFacing.UP) {
+        if (player.isSneaking() && facing == EnumFacing.UP) {
             ItemStack itemstack = player.getHeldItem(hand);
             EntityMarisaBroom broom = new EntityMarisaBroom(worldIn);
             broom.setPosition(pos.getX() + 0.5, pos.up().getY(), pos.getZ() + 0.5);
@@ -36,7 +37,10 @@ public class ItemMarisaBroom extends Item {
             }
             // 物品消耗，实体生成
             player.getHeldItem(hand).shrink(1);
-            worldIn.spawnEntity(broom);
+            if (!worldIn.isRemote) {
+                worldIn.spawnEntity(broom);
+            }
+            broom.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 1.0f, 1.0f);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;

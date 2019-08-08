@@ -135,6 +135,9 @@
     }, {
       "model_id": "touhou_little_maid:rumia",
       "description": ["{model.touhou_little_maid.rumia.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:matara_okina",
+      "description": ["{model.touhou_little_maid.matara_okina.desc}"]
     }
   ]
 }

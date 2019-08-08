@@ -19,6 +19,9 @@ public class ModelItem {
     @SerializedName("model_id")
     private ResourceLocation modelId;
 
+    @SerializedName("mounted_height")
+    private float mountedYOffset;
+
     /**
      * 用来为以后可能做改动的而设置的参数
      */
@@ -45,6 +48,10 @@ public class ModelItem {
 
     public ResourceLocation getModel() {
         return model;
+    }
+
+    public float getMountedYOffset() {
+        return mountedYOffset;
     }
 
     public int getFormat() {

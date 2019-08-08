@@ -1,0 +1,18 @@
+{
+  "pack_name": "{pack.touhou_little_maid.chair.name}",
+  "author": ["Succinum"],
+  "description": ["{pack.touhou_little_maid.chair.desc}"],
+  "version": "1.0.0",
+  "date": "2019-08-08",
+  "model_list": [
+    {
+      "model_id": "touhou_little_maid:cushion",
+      "mounted_height": -0.002,
+      "description": ["{model.touhou_little_maid.cushion.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:wheel_chair",
+      "mounted_height": 0.375,
+      "description": ["{model.touhou_little_maid.wheel_chair.desc}"]
+    }
+  ]
+}

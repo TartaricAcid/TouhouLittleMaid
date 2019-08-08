@@ -79,7 +79,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     protected ResourceLocation getEntityTexture(@Nonnull EntityMaid entity) {
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
-        ModelItem modelItem = ClientProxy.ID_INFO_MAP.get(entity.getModelId());
+        ModelItem modelItem = ClientProxy.ID_MODEL_INFO_MAP.get(entity.getModelId());
         if (modelItem != null) {
             return modelItem.getTexture();
         } else {

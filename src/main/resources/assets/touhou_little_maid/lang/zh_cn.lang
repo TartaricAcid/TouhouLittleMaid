@@ -5,6 +5,7 @@ item_group.touhou_little_maid.name=Touhou Little Maid
 entity.touhou_little_maid.maid.name=小女仆
 entity.touhou_little_maid.danmaku.name=弹幕
 entity.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
+entity.touhou_little_maid.chair.name=椅子
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item
@@ -14,6 +15,7 @@ item.touhou_little_maid.ultramarine_orb_elixir.name=绀珠之药
 item.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
 item.touhou_little_maid.camera.name=文文的相机
 item.touhou_little_maid.photo.name=照片
+item.touhou_little_maid.chair.name=椅子
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -155,6 +157,7 @@ model.touhou_little_maid.komeiji_koishi.name=古明地恋
 model.touhou_little_maid.reiuji_utsuho.name=灵乌路空
 model.touhou_little_maid.kaenbyou_rin.name=火焰猫燐
 model.touhou_little_maid.rumia.name=露米娅
+model.touhou_little_maid.matara_okina.name=摩多罗隐岐奈
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -198,6 +201,7 @@ model.touhou_little_maid.komeiji_koishi.desc=§7紧闭的恋之瞳
 model.touhou_little_maid.reiuji_utsuho.desc=§7难以驾驭的神之火
 model.touhou_little_maid.kaenbyou_rin.desc=§7地狱的轮祸
 model.touhou_little_maid.rumia.desc=§7宵暗的妖怪
+model.touhou_little_maid.matara_okina.desc=§7究极的绝对秘神
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

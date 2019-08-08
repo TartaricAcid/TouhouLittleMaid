@@ -121,7 +121,14 @@ public class EntityModelJson extends ModelBase {
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
                                   float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        EntityMaid entityMaid = (EntityMaid) entityIn;
+        if (entityIn instanceof EntityMaid) {
+            setMaidRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, (EntityMaid) entityIn);
+        }
+    }
+
+
+    private void setMaidRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
+                                       float netHeadYaw, float headPitch, float scaleFactor, EntityMaid entityMaid) {
         // 头部
         ModelRenderer head = modelMap.get("head");
         // 腿部

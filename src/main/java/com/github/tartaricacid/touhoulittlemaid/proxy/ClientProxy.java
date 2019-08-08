@@ -2,11 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.proxy;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityChairRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityDanmakuRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMarisaBroomRender;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
@@ -39,17 +41,20 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
      */
     public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
     /**
-     * 当前所有模型包列表，用于 GUI 显示
+     * 当前所有模型列表，用于 GUI 显示
      */
     public static final List<CustomModelPackPOJO> MODEL_PACK_LIST = Lists.newArrayList();
+    public static final List<CustomModelPackPOJO> CHAIR_PACK_LIST = Lists.newArrayList();
     /**
-     * ID -> 模型 映射，用于渲染模型操作
+     * 用于渲染模型操作
      */
     public static final HashMap<String, EntityModelJson> ID_MODEL_MAP = Maps.newHashMap();
+    public static final HashMap<String, EntityModelJson> ID_CHAIR_MAP = Maps.newHashMap();
     /**
-     * ID -> 模型信息 映射，用于添加材质，显示模型名称等操作
+     * 用于添加材质，显示模型名称等操作
      */
-    public static final HashMap<String, ModelItem> ID_INFO_MAP = Maps.newHashMap();
+    public static final HashMap<String, ModelItem> ID_MODEL_INFO_MAP = Maps.newHashMap();
+    public static final HashMap<String, ModelItem> ID_CHAIR_INFO_MAP = Maps.newHashMap();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
@@ -59,6 +64,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntityMaid.class, EntityMaidRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityDanmaku.class, EntityDanmakuRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityMarisaBroom.class, EntityMarisaBroomRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityChair.class, EntityChairRender.FACTORY);
     }
 
     @Override
