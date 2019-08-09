@@ -34,7 +34,7 @@ public class EntityChair extends EntityLivingBase {
 
     public EntityChair(World worldIn) {
         super(worldIn);
-        this.rotationYawHead = rotationYaw;
+        this.rotationYawHead = rotationYaw = 0;
         setSize(0.875f, 0.5f);
     }
 
