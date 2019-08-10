@@ -10,7 +10,11 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
+import static com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku.NBT.*;
+
 public class EntityDanmaku extends EntityThrowable {
+    private static final int MAX_TICKS_EXISTED = 200;
+
     private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.VARINT);
     private static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
@@ -74,7 +78,7 @@ public class EntityDanmaku extends EntityThrowable {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (this.ticksExisted > 200) {
+        if (this.ticksExisted > MAX_TICKS_EXISTED) {
             this.setDead();
         }
     }
@@ -82,27 +86,27 @@ public class EntityDanmaku extends EntityThrowable {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        if (compound.hasKey("DanmakuType")) {
-            setType(DanmakuType.getType(compound.getInteger("DanmakuType")));
+        if (compound.hasKey(DANMAKU_TYPE.getName())) {
+            setType(DanmakuType.getType(compound.getInteger(DANMAKU_TYPE.getName())));
         }
-        if (compound.hasKey("DanmakuColor")) {
-            setColor(DanmakuColor.getColor(compound.getInteger("DanmakuColor")));
+        if (compound.hasKey(DANMAKU_COLOR.getName())) {
+            setColor(DanmakuColor.getColor(compound.getInteger(DANMAKU_COLOR.getName())));
         }
-        if (compound.hasKey("DanmakuDamage")) {
-            setDamage(compound.getFloat("DanmakuDamage"));
+        if (compound.hasKey(DANMAKU_DAMAGE.getName())) {
+            setDamage(compound.getFloat(DANMAKU_DAMAGE.getName()));
         }
-        if (compound.hasKey("DanmakuGravity")) {
-            setGravityVelocity(compound.getFloat("DanmakuGravity"));
+        if (compound.hasKey(DANMAKU_GRAVITY.getName())) {
+            setGravityVelocity(compound.getFloat(DANMAKU_GRAVITY.getName()));
         }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setInteger("DanmakuType", getType().getIndex());
-        compound.setInteger("DanmakuColor", getColor().getIndex());
-        compound.setFloat("DanmakuDamage", getDamage());
-        compound.setFloat("DanmakuGravity", getGravityVelocity());
+        compound.setInteger(DANMAKU_TYPE.getName(), getType().getIndex());
+        compound.setInteger(DANMAKU_COLOR.getName(), getColor().getIndex());
+        compound.setFloat(DANMAKU_DAMAGE.getName(), getDamage());
+        compound.setFloat(DANMAKU_GRAVITY.getName(), getGravityVelocity());
         return compound;
     }
 
@@ -139,5 +143,23 @@ public class EntityDanmaku extends EntityThrowable {
 
     public void setDamage(float damage) {
         this.dataManager.set(DAMAGE, damage);
+    }
+
+    enum NBT {
+        // 弹幕相关参数
+        DANMAKU_TYPE("DanmakuType"),
+        DANMAKU_COLOR("DanmakuColor"),
+        DANMAKU_DAMAGE("DanmakuDamage"),
+        DANMAKU_GRAVITY("DanmakuGravity");
+
+        private String name;
+
+        NBT(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

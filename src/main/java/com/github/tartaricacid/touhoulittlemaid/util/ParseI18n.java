@@ -10,7 +10,21 @@ import java.util.List;
  * @date 2019/7/18 18:13
  **/
 public final class ParseI18n {
+    private static final String I18N_START_CHAR = "{";
+    private static final String I18N_END_CHAR = "}";
+
     private ParseI18n() {
+    }
+
+    /**
+     * 获取本地化的 key
+     */
+    public static String getI18nKey(String strIn) {
+        if (strIn.startsWith(I18N_START_CHAR) && strIn.endsWith(I18N_END_CHAR)) {
+            return strIn.substring(1, strIn.length() - 1);
+        } else {
+            return strIn;
+        }
     }
 
     /**
@@ -18,7 +32,7 @@ public final class ParseI18n {
      */
     public static String parse(String strIn) {
         // 如果是“{ ”开头，“} ”结尾
-        if (strIn.startsWith("{") && strIn.endsWith("}")) {
+        if (strIn.startsWith(I18N_START_CHAR) && strIn.endsWith(I18N_END_CHAR)) {
             // 将剔除大括号后的字符进行国际化
             return TouhouLittleMaid.proxy.translate(strIn.substring(1, strIn.length() - 1));
         } else {

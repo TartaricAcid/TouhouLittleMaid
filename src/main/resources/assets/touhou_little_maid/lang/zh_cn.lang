@@ -111,8 +111,9 @@ gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s
 
 # Model Pack
-pack.touhou_little_maid.name=东方 Project 模型
-pack.touhou_little_maid.desc=默认模型
+pack.touhou_little_maid.maid.name=东方 Project 模型
+pack.touhou_little_maid.maid.desc=默认模型
+pack.touhou_little_maid.chair.name=默认椅子模型
 
 model.touhou_little_maid.hakurei_reimu.name=博丽灵梦
 model.touhou_little_maid.yakumo_ran.name=八云蓝
@@ -202,6 +203,16 @@ model.touhou_little_maid.reiuji_utsuho.desc=§7难以驾驭的神之火
 model.touhou_little_maid.kaenbyou_rin.desc=§7地狱的轮祸
 model.touhou_little_maid.rumia.desc=§7宵暗的妖怪
 model.touhou_little_maid.matara_okina.desc=§7究极的绝对秘神
+
+model.touhou_little_maid.cushion.name=坐垫
+model.touhou_little_maid.wheel_chair.name=轮椅
+model.touhou_little_maid.class_desk.name=课桌
+model.touhou_little_maid.class_chair.name=课椅
+model.touhou_little_maid.kotatsu.name=被炉
+model.touhou_little_maid.play_station.name=游戏机
+model.touhou_little_maid.cat_cart.name=猫车
+model.touhou_little_maid.rickshaw.name=黄包车
+model.touhou_little_maid.tall_stool.name=高脚凳
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

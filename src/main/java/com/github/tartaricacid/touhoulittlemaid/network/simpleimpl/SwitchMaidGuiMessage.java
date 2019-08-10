@@ -12,17 +12,17 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.UUID;
 
-public class ChangeGuiMessage implements IMessage {
-    private UUID uuid;
+public class SwitchMaidGuiMessage implements IMessage {
+    private UUID playerUuid;
     private int entityId;
     private int guiId;
     private int formTaskIndex;
 
-    public ChangeGuiMessage() {
+    public SwitchMaidGuiMessage() {
     }
 
-    public ChangeGuiMessage(UUID uuid, int entityId, int guiId, int formTaskIndex) {
-        this.uuid = uuid;
+    public SwitchMaidGuiMessage(UUID playerUuid, int entityId, int guiId, int formTaskIndex) {
+        this.playerUuid = playerUuid;
         this.entityId = entityId;
         this.guiId = guiId;
         this.formTaskIndex = formTaskIndex;
@@ -30,7 +30,7 @@ public class ChangeGuiMessage implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        uuid = new UUID(buf.readLong(), buf.readLong());
+        playerUuid = new UUID(buf.readLong(), buf.readLong());
         entityId = buf.readInt();
         guiId = buf.readInt();
         formTaskIndex = buf.readInt();
@@ -38,15 +38,15 @@ public class ChangeGuiMessage implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeLong(uuid.getMostSignificantBits());
-        buf.writeLong(uuid.getLeastSignificantBits());
+        buf.writeLong(playerUuid.getMostSignificantBits());
+        buf.writeLong(playerUuid.getLeastSignificantBits());
         buf.writeInt(entityId);
         buf.writeInt(guiId);
         buf.writeInt(formTaskIndex);
     }
 
     public UUID getUUID() {
-        return uuid;
+        return playerUuid;
     }
 
     public int getEntityId() {
@@ -57,9 +57,9 @@ public class ChangeGuiMessage implements IMessage {
         return guiId;
     }
 
-    public static class Handler implements IMessageHandler<ChangeGuiMessage, IMessage> {
+    public static class Handler implements IMessageHandler<SwitchMaidGuiMessage, IMessage> {
         @Override
-        public IMessage onMessage(ChangeGuiMessage message, MessageContext ctx) {
+        public IMessage onMessage(SwitchMaidGuiMessage message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity player = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getUUID());

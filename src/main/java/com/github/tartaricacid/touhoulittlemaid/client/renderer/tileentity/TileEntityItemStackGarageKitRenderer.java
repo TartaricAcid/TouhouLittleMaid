@@ -33,6 +33,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
     public void renderByItem(@Nonnull ItemStack itemStackIn) {
         if (itemStackIn.getItem() == Item.getItemFromBlock(MaidBlocks.GARAGE_KIT)) {
             World world = Minecraft.getMinecraft().world;
+            float renderItemScale = 1.0f;
             GlStateManager.pushMatrix();
 
             if (Minecraft.isAmbientOcclusionEnabled()) {
@@ -58,6 +59,9 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
             }
             if (entity instanceof EntityMaid) {
                 ((EntityMaid) entity).setModelId(BlockGarageKit.getModelId(itemStackIn));
+                if (ClientProxy.ID_MODEL_INFO_MAP.containsKey(BlockGarageKit.getModelId(itemStackIn))) {
+                    renderItemScale = ClientProxy.ID_MODEL_INFO_MAP.get(BlockGarageKit.getModelId(itemStackIn)).getRenderItemScale();
+                }
             }
 
             GlStateManager.enableColorMaterial();
@@ -65,6 +69,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
             final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
             GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
+            GlStateManager.scale(renderItemScale, renderItemScale, renderItemScale);
             Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
             Minecraft.getMinecraft().getRenderManager().renderEntity(entity,
                     0.875, 0.25, 0.75, 0, 0, true);

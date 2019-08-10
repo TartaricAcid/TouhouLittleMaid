@@ -111,8 +111,9 @@ gui.touhou_little_maid.skin.text.version=Version: %s
 gui.touhou_little_maid.skin.text.date=Date: %s
 
 # Model Pack
-pack.touhou_little_maid.name=Touhou Project Model
-pack.touhou_little_maid.desc=Default Model
+pack.touhou_little_maid.maid.name=Touhou Project Model
+pack.touhou_little_maid.maid.desc=Default Model
+pack.touhou_little_maid.chair.name=Deafult Chair Model
 
 model.touhou_little_maid.hakurei_reimu.name=Reimu Hakurei
 model.touhou_little_maid.yakumo_ran.name=Ran Yakumo
@@ -202,6 +203,16 @@ model.touhou_little_maid.reiuji_utsuho.desc=§7Scorching, Troublesome Divine Fla
 model.touhou_little_maid.kaenbyou_rin.desc=§7Hell's Traffic Accident
 model.touhou_little_maid.rumia.desc=§7Youkai of the Dusk
 model.touhou_little_maid.matara_okina.desc=§7The Ultimate, Absolute Secret God
+
+model.touhou_little_maid.cushion.name=Cushion
+model.touhou_little_maid.wheel_chair.name=Wheel Chair
+model.touhou_little_maid.class_desk.name=Class Desk
+model.touhou_little_maid.class_chair.name=Class Chair
+model.touhou_little_maid.kotatsu.name=Kotatsu
+model.touhou_little_maid.play_station.name=Play Station
+model.touhou_little_maid.cat_cart.name=Cat Cart
+model.touhou_little_maid.rickshaw.name=Rickshaw
+model.touhou_little_maid.tall_stool.name=Tall Stool
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

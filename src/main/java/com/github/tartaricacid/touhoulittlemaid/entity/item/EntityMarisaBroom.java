@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,6 +57,12 @@ public class EntityMarisaBroom extends EntityLivingBase {
     @SideOnly(Side.CLIENT)
     private static boolean keyRight() {
         return Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown();
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getPickedResult(RayTraceResult target) {
+        return new ItemStack(MaidItems.MARISA_BROOM);
     }
 
     @Override

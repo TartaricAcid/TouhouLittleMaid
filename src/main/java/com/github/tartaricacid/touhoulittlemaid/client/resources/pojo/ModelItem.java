@@ -22,6 +22,12 @@ public class ModelItem {
     @SerializedName("mounted_height")
     private float mountedYOffset;
 
+    @SerializedName("tameable_can_ride")
+    private boolean tameableCanRide = true;
+
+    @SerializedName("render_item_scale")
+    private float renderItemScale = 1.0f;
+
     /**
      * 用来为以后可能做改动的而设置的参数
      */
@@ -52,6 +58,14 @@ public class ModelItem {
 
     public float getMountedYOffset() {
         return mountedYOffset;
+    }
+
+    public boolean isTameableCanRide() {
+        return tameableCanRide;
+    }
+
+    public float getRenderItemScale() {
+        return renderItemScale;
     }
 
     public int getFormat() {

@@ -1,8 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
@@ -17,6 +20,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -31,10 +35,10 @@ import java.util.List;
 public class EntityChair extends EntityLivingBase {
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityChair.class, DataSerializers.STRING);
     private static final DataParameter<Float> MOUNTED_HEIGHT = EntityDataManager.createKey(EntityChair.class, DataSerializers.FLOAT);
+    private static final DataParameter<Boolean> TAMEABLE_CAN_RIDE = EntityDataManager.createKey(EntityChair.class, DataSerializers.BOOLEAN);
 
     public EntityChair(World worldIn) {
         super(worldIn);
-        this.rotationYawHead = rotationYaw = 0;
         setSize(0.875f, 0.5f);
     }
 
@@ -47,7 +51,8 @@ public class EntityChair extends EntityLivingBase {
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(MODEL_ID, "touhou_little_maid:cushion");
-        this.dataManager.register(MOUNTED_HEIGHT, -0.002f);
+        this.dataManager.register(MOUNTED_HEIGHT, 0f);
+        this.dataManager.register(TAMEABLE_CAN_RIDE, true);
     }
 
     @Override
@@ -63,7 +68,9 @@ public class EntityChair extends EntityLivingBase {
             if (!entity.isPassenger(this)) {
                 // 该实体既没有坐在别的实体上，也没有别的实体坐在它身上
                 boolean notRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
-                if (!world.isRemote && notRiddenAndRiding && entity instanceof EntityTameable) {
+                // 因为某些人会利用此功能做一些破坏平衡性的设计（用座椅锁住 xx Boss）
+                // 所以限定，只允许 EntityTameable 坐上去（应该不会有人把 Boss 设计为 EntityTameable 的子类吧）
+                if (!world.isRemote && notRiddenAndRiding && entity instanceof EntityTameable && isTameableCanRide()) {
                     // 待命状态的生物不执行坐的逻辑
                     if (((EntityTameable) entity).isSitting()) {
                         return;
@@ -72,6 +79,12 @@ public class EntityChair extends EntityLivingBase {
                 }
             }
         }
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getPickedResult(RayTraceResult target) {
+        return ItemChair.setAllTagData(new ItemStack(MaidItems.CHAIR), this.getModelId(), this.getMountedHeight(), this.isTameableCanRide());
     }
 
     @Override
@@ -89,7 +102,13 @@ public class EntityChair extends EntityLivingBase {
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         if (player.isSneaking()) {
-            return false;
+            if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
+                return true;
+            }
+            if (world.isRemote) {
+                Minecraft.getMinecraft().displayGuiScreen(new ChairSkinGui(this));
+            }
+            return true;
         } else {
             if (!this.world.isRemote && !this.isBeingRidden()) {
                 player.startRiding(this);
@@ -101,12 +120,24 @@ public class EntityChair extends EntityLivingBase {
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
         super.updatePassenger(passenger);
-        if (passenger instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) passenger;
+        if (this.isPassenger(passenger) && passenger instanceof EntityLivingBase) {
             // renderYawOffset 也必须同步，因为坐上的女仆朝向受 renderYawOffset 限制
             // 不同步就会导致朝向出现小问题
-            this.renderYawOffset = maid.renderYawOffset;
+            this.renderYawOffset = ((EntityLivingBase) passenger).renderYawOffset;
         }
+    }
+
+    @Nonnull
+    @Override
+    public String getName() {
+        if (this.hasCustomName()) {
+            return this.getCustomNameTag();
+        }
+        if (world.isRemote && ClientProxy.ID_CHAIR_INFO_MAP.containsKey(this.getModelId())) {
+            String name = ClientProxy.ID_CHAIR_INFO_MAP.get(this.getModelId()).getName();
+            return ParseI18n.parse(name);
+        }
+        return super.getName();
     }
 
     @Nullable
@@ -167,7 +198,7 @@ public class EntityChair extends EntityLivingBase {
         this.setDead();
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
             ItemStack itemstack = new ItemStack(MaidItems.CHAIR, 1);
-            ItemChair.setModelIdAndHeight(itemstack, this.getModelId(), this.getMountedHeight());
+            ItemChair.setAllTagData(itemstack, this.getModelId(), this.getMountedHeight(), this.isTameableCanRide());
             if (this.hasCustomName()) {
                 itemstack.setStackDisplayName(this.getCustomNameTag());
             }
@@ -184,6 +215,9 @@ public class EntityChair extends EntityLivingBase {
         if (compound.hasKey(NBT.MOUNTED_HEIGHT.getName())) {
             setMountedHeight(compound.getFloat(NBT.MOUNTED_HEIGHT.getName()));
         }
+        if (compound.hasKey(NBT.TAMEABLE_CAN_RIDE.getName())) {
+            setTameableCanRide(compound.getBoolean(NBT.TAMEABLE_CAN_RIDE.getName()));
+        }
     }
 
     @Override
@@ -191,6 +225,7 @@ public class EntityChair extends EntityLivingBase {
         super.writeEntityToNBT(compound);
         compound.setString(NBT.MODEL_ID.getName(), getModelId());
         compound.setFloat(NBT.MOUNTED_HEIGHT.getName(), getMountedHeight());
+        compound.setBoolean(NBT.TAMEABLE_CAN_RIDE.getName(), isTameableCanRide());
     }
 
     public String getModelId() {
@@ -206,7 +241,21 @@ public class EntityChair extends EntityLivingBase {
     }
 
     public void setMountedHeight(float height) {
+        // 防止有人恶意利用这一点，强行增加范围限制
+        if (height > 3.0f) {
+            height = 3.0f;
+        } else if (height < -1.0f) {
+            height = -1.0f;
+        }
         this.dataManager.set(MOUNTED_HEIGHT, height);
+    }
+
+    public boolean isTameableCanRide() {
+        return this.dataManager.get(TAMEABLE_CAN_RIDE);
+    }
+
+    public void setTameableCanRide(boolean canRide) {
+        this.dataManager.set(TAMEABLE_CAN_RIDE, canRide);
     }
 
     // ------------ EntityLivingBase 要求实现的几个抽象方法，因为全用不上，故返回默认值 ----------- //
@@ -237,7 +286,9 @@ public class EntityChair extends EntityLivingBase {
         // 模型 ID
         MODEL_ID("ModelId"),
         // 实体坐上去的高度
-        MOUNTED_HEIGHT("MountedHeight");
+        MOUNTED_HEIGHT("MountedHeight"),
+        // 女仆能坐上去么？
+        TAMEABLE_CAN_RIDE("TameableCanRide");
 
         private String name;
 

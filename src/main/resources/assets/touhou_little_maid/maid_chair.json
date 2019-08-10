@@ -1,18 +1,41 @@
 {
   "pack_name": "{pack.touhou_little_maid.chair.name}",
   "author": ["Succinum"],
-  "description": ["{pack.touhou_little_maid.chair.desc}"],
   "version": "1.0.0",
   "date": "2019-08-08",
   "model_list": [
     {
       "model_id": "touhou_little_maid:cushion",
-      "mounted_height": -0.002,
-      "description": ["{model.touhou_little_maid.cushion.desc}"]
+      "mounted_height": 0
     }, {
       "model_id": "touhou_little_maid:wheel_chair",
-      "mounted_height": 0.375,
-      "description": ["{model.touhou_little_maid.wheel_chair.desc}"]
+      "mounted_height": 0.375
+    }, {
+      "model_id": "touhou_little_maid:class_desk",
+      "mounted_height": 0.75,
+      "tameable_can_ride": false
+    }, {
+      "model_id": "touhou_little_maid:class_chair",
+      "mounted_height": 0.1875
+    }, {
+      "model_id": "touhou_little_maid:kotatsu",
+      "mounted_height": 0.625,
+      "tameable_can_ride": false,
+      "render_item_scale": 0.4
+    }, {
+      "model_id": "touhou_little_maid:play_station",
+      "mounted_height": -0.125,
+      "render_item_scale": 0.5
+    }, {
+      "model_id": "touhou_little_maid:cat_cart",
+      "mounted_height": 0.25
+    }, {
+      "model_id": "touhou_little_maid:rickshaw",
+      "mounted_height": 0.5,
+      "render_item_scale": 0.5
+    }, {
+      "model_id": "touhou_little_maid:tall_stool",
+      "mounted_height": 0.75
     }
   ]
 }

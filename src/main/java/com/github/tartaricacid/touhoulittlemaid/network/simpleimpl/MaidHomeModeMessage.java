@@ -3,9 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -13,48 +11,47 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.UUID;
 
-public class ChangeMaidSkinMessage implements IMessage {
+public class MaidHomeModeMessage implements IMessage {
     private UUID entityUuid;
-    private ResourceLocation modelId;
+    private boolean home;
 
-    public ChangeMaidSkinMessage() {
+    public MaidHomeModeMessage() {
     }
 
-    public ChangeMaidSkinMessage(UUID entityUuid, ResourceLocation modelId) {
+    public MaidHomeModeMessage(UUID entityUuid, boolean home) {
         this.entityUuid = entityUuid;
-        this.modelId = modelId;
+        this.home = home;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         entityUuid = new UUID(buf.readLong(), buf.readLong());
-        modelId = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
+        home = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeLong(entityUuid.getMostSignificantBits());
         buf.writeLong(entityUuid.getLeastSignificantBits());
-        ByteBufUtils.writeUTF8String(buf, modelId.toString());
+        buf.writeBoolean(home);
+    }
+
+    public boolean isHome() {
+        return home;
     }
 
     public UUID getEntityUuid() {
         return entityUuid;
     }
 
-    public ResourceLocation getModelId() {
-        return modelId;
-    }
-
-    public static class Handler implements IMessageHandler<ChangeMaidSkinMessage, IMessage> {
+    public static class Handler implements IMessageHandler<MaidHomeModeMessage, IMessage> {
         @Override
-        public IMessage onMessage(ChangeMaidSkinMessage message, MessageContext ctx) {
+        public IMessage onMessage(MaidHomeModeMessage message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
                     if (entity instanceof EntityMaid) {
-                        EntityMaid maid = (EntityMaid) entity;
-                        maid.setModelId(message.getModelId().toString());
+                        ((EntityMaid) entity).setHome(message.isHome());
                     }
                 });
             }

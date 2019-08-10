@@ -153,10 +153,11 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
 
-        this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 6.0F, 0.2f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 6.0F, 0.2f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityOcelot.class, 6.0F, 0.2f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityParrot.class, 6.0F, 0.2f));
+        this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityMaid.class, 4.0F, 0.2f));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityOcelot.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityParrot.class, 4.0F, 0.1f));
         this.tasks.addTask(10, new EntityAILookIdle(this));
         this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.4f));
 
@@ -596,8 +597,8 @@ public class EntityMaid extends AbstractEntityMaid {
             if (isYourMaid) {
                 // 利用短路原理，逐个触发对应的交互事件
                 return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player) || applyGoldenApple(itemstack, player)
-                        || applyNameTag(itemstack, player) || getExpBottle(itemstack, player) || dismountMaid(player)
-                        || switchSitting(player) || openMaidGui(itemstack, player);
+                        || getExpBottle(itemstack, player) || dismountMaid(player) || switchSitting(player)
+                        || itemstack.interactWithEntity(player, this, EnumHand.MAIN_HAND) || openMaidGui(player);
             } else {
                 return tamedMaid(itemstack, player);
             }
@@ -694,13 +695,6 @@ public class EntityMaid extends AbstractEntityMaid {
         return false;
     }
 
-    private boolean applyNameTag(ItemStack itemstack, EntityPlayer player) {
-        if (itemstack.getItem() == Items.NAME_TAG) {
-            return itemstack.interactWithEntity(player, this, EnumHand.MAIN_HAND);
-        }
-        return false;
-    }
-
     private boolean getExpBottle(ItemStack itemstack, EntityPlayer player) {
         // WIKI 上说附魔之瓶会掉落 3-11 的经验
         // 那么我们就让其消耗 12 点经验获得一个附魔之瓶吧
@@ -766,13 +760,7 @@ public class EntityMaid extends AbstractEntityMaid {
      *
      * @return 该逻辑是否成功应用
      */
-    private boolean openMaidGui(ItemStack itemStack, EntityPlayer player) {
-        // 当玩家使用相机时，应该禁止开启 GUI
-        if (itemStack.getItem() == MaidItems.CAMERA) {
-            // 返回 false，让物品侧的逻辑进行启用
-            return false;
-        }
-
+    private boolean openMaidGui(EntityPlayer player) {
         // 否则打开 GUI
         if (!world.isRemote) {
             player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);

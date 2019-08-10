@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.util.MaidRayTraceHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
@@ -29,7 +30,7 @@ public class ItemCamera extends Item {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".camera");
         setMaxStackSize(1);
         setCreativeTab(MaidItems.TABS);
-        setMaxDamage(150);
+        setMaxDamage(50);
     }
 
     @Nonnull
@@ -59,5 +60,14 @@ public class ItemCamera extends Item {
             }
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
+    @Override
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+        // 返回 true，阻止打开女仆 GUI
+        if (target instanceof EntityMaid) {
+            return true;
+        }
+        return super.itemInteractionForEntity(stack, playerIn, target, hand);
     }
 }

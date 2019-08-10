@@ -26,7 +26,7 @@ public final class DanmakuShoot {
     public static void aimedShot(World worldIn, EntityLivingBase thrower, EntityLivingBase target, float damage, float gravity, Float velocity, Float inaccuracy, DanmakuType type, DanmakuColor color) {
         if (!worldIn.isRemote) {
             EntityDanmaku danmaku = new EntityDanmaku(worldIn, thrower, damage, gravity, type, color);
-            float offset = thrower.height / 2;
+            float offset = 0.3f / target.height;
             danmaku.shoot(target.posX - thrower.posX, target.posY - thrower.posY - offset, target.posZ - thrower.posZ, velocity, inaccuracy);
             worldIn.spawnEntity(danmaku);
         }
@@ -55,7 +55,7 @@ public final class DanmakuShoot {
         }
 
         if (!worldIn.isRemote) {
-            float offset = thrower.height / 2;
+            float offset = 0.3f / target.height;
             Vec3d v = new Vec3d(target.posX - thrower.posX, target.posY - thrower.posY - offset, target.posZ - thrower.posZ);
             double yaw = -(yawTotal / 2);
             double addYaw = yawTotal / (fanNum - 1);

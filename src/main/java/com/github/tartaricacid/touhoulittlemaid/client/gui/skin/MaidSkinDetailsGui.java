@@ -364,7 +364,7 @@ public class MaidSkinDetailsGui extends GuiScreen {
     }
 
     private void applyRideBroomButtonLogic() {
-        if (maid.getControllingPassenger() != null) {
+        if (maid.isDebugBroomShow) {
             maid.isDebugBroomShow = false;
             rideBroomButton.setStateTriggered(false);
         } else {

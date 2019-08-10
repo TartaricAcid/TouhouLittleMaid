@@ -4,6 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -17,13 +20,15 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
-import static com.github.tartaricacid.touhoulittlemaid.item.ItemChair.NBT.MODEL_ID;
-import static com.github.tartaricacid.touhoulittlemaid.item.ItemChair.NBT.MOUNTED_HEIGHT;
+import static com.github.tartaricacid.touhoulittlemaid.item.ItemChair.NBT.*;
 
 /**
  * @author TartaricAcid
@@ -31,7 +36,8 @@ import static com.github.tartaricacid.touhoulittlemaid.item.ItemChair.NBT.MOUNTE
  **/
 public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
-    private static final float DEFAULT_MOUNTED_HEIGHT = -0.002f;
+    private static final float DEFAULT_MOUNTED_HEIGHT = 0f;
+    private static final boolean DEFAULT_TAMEABLE_CAN_RIDE = true;
 
     public ItemChair() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".chair");
@@ -39,6 +45,7 @@ public class ItemChair extends Item {
         setCreativeTab(MaidItems.TABS);
     }
 
+    @Nonnull
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (facing == EnumFacing.UP) {
@@ -47,6 +54,7 @@ public class ItemChair extends Item {
             EntityChair chair = new EntityChair(worldIn, pos.getX() + 0.5, pos.up().getY(), pos.getZ() + 0.5, yaw);
             chair.setModelId(getChairModelId(itemstack));
             chair.setMountedHeight(getMountedHeight(itemstack));
+            chair.setTameableCanRide(isTameableCanRide(itemstack));
             // 应用命名
             if (itemstack.hasDisplayName()) {
                 chair.setCustomNameTag(itemstack.getDisplayName());
@@ -105,9 +113,30 @@ public class ItemChair extends Item {
         return stack;
     }
 
-    public static ItemStack setModelIdAndHeight(ItemStack stack, String modelId, float height) {
+    public static boolean isTameableCanRide(ItemStack stack) {
+        if (stack.getItem() == MaidItems.CHAIR && stack.hasTagCompound() && stack.getTagCompound().hasKey(TAMEABLE_CAN_RIDE.getName())) {
+            return stack.getTagCompound().getBoolean(TAMEABLE_CAN_RIDE.getName());
+        }
+        return DEFAULT_TAMEABLE_CAN_RIDE;
+    }
+
+    private static ItemStack setTameableCanRide(ItemStack stack, boolean canRide) {
+        if (stack.getItem() == MaidItems.CHAIR) {
+            if (stack.hasTagCompound()) {
+                stack.getTagCompound().setBoolean(TAMEABLE_CAN_RIDE.getName(), canRide);
+            } else {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setBoolean(TAMEABLE_CAN_RIDE.getName(), canRide);
+                stack.setTagCompound(tag);
+            }
+        }
+        return stack;
+    }
+
+    public static ItemStack setAllTagData(ItemStack stack, String modelId, float height, boolean canRide) {
         setChairModelId(stack, modelId);
         setMountedHeight(stack, height);
+        setTameableCanRide(stack, canRide);
         return stack;
     }
 
@@ -117,8 +146,31 @@ public class ItemChair extends Item {
         if (this.isInCreativeTab(tab)) {
             for (String key : ClientProxy.ID_CHAIR_INFO_MAP.keySet()) {
                 float height = ClientProxy.ID_CHAIR_INFO_MAP.get(key).getMountedYOffset();
-                items.add(setModelIdAndHeight(new ItemStack(this), key, height));
+                boolean canRide = ClientProxy.ID_CHAIR_INFO_MAP.get(key).isTameableCanRide();
+                items.add(setAllTagData(new ItemStack(this), key, height, canRide));
             }
+        }
+    }
+
+    @Nonnull
+    @Override
+    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT &&
+                ClientProxy.ID_CHAIR_INFO_MAP.containsKey(getChairModelId(stack))) {
+            String name = ClientProxy.ID_CHAIR_INFO_MAP.get(getChairModelId(stack)).getName();
+            return ParseI18n.parse(name);
+        }
+        return super.getItemStackDisplayName(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        // 调试模式，不加国际化
+        if (flagIn.isAdvanced() && GuiScreen.isShiftKeyDown() && stack.hasTagCompound()) {
+            tooltip.add(String.format("Model Id: %s", getChairModelId(stack)));
+            tooltip.add(String.format("Mounted Height: %f", getMountedHeight(stack)));
+            tooltip.add(String.format("Tameable Can Ride: %s", isTameableCanRide(stack)));
         }
     }
 
@@ -126,7 +178,9 @@ public class ItemChair extends Item {
         // 模型 ID
         MODEL_ID("ModelId"),
         // 实体坐上去的高度
-        MOUNTED_HEIGHT("MountedHeight");
+        MOUNTED_HEIGHT("MountedHeight"),
+        // 女仆能坐上去么？
+        TAMEABLE_CAN_RIDE("TameableCanRide");
 
         private String name;
 

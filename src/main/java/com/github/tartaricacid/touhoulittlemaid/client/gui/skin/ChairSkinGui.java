@@ -1,0 +1,72 @@
+package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
+
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyChairSkinDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.concurrent.ExecutionException;
+
+/**
+ * @author TartaricAcid
+ * @date 2019/7/12 12:27
+ **/
+@SideOnly(Side.CLIENT)
+public class ChairSkinGui extends AbstractSkinGui<EntityChair> {
+
+    public ChairSkinGui(EntityChair chair) {
+        super(chair, ClientProxy.CHAIR_PACK_LIST, "touhou_little_maid:entity.item.chair");
+    }
+
+    @Override
+    void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
+        float renderItemScale = 1.0f;
+        if (ClientProxy.ID_CHAIR_INFO_MAP.containsKey(entity.getModelId())) {
+            renderItemScale = ClientProxy.ID_CHAIR_INFO_MAP.get(entity.getModelId()).getRenderItemScale();
+        }
+        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
+    }
+
+    @Override
+    void drawRightEntity(int posX, int posY, ModelItem modelItem) {
+        EntityChair chair;
+        try {
+            chair = (EntityChair) ClientProxy.ENTITY_CACHE.get(ENTITY_ID, () -> {
+                Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(ENTITY_ID), mc.world);
+                if (e == null) {
+                    return new EntityChair(mc.world);
+                } else {
+                    return e;
+                }
+            });
+        } catch (ExecutionException | ClassCastException e) {
+            e.printStackTrace();
+            return;
+        }
+        chair.setModelId(modelItem.getModelId().toString());
+        GuiInventory.drawEntityOnScreen(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, chair);
+    }
+
+    @Override
+    void drawDetailsGui(EntityChair chair, ResourceLocation modelId) {
+        // TODO: 2019/8/10 绘制 GUI
+    }
+
+    @Override
+    void notifyModelChange(EntityChair chair, ResourceLocation modelId) {
+        float mountedYOffset = 0f;
+        boolean isTameableCanRide = true;
+        if (ClientProxy.ID_CHAIR_INFO_MAP.containsKey(modelId.toString())) {
+            mountedYOffset = ClientProxy.ID_CHAIR_INFO_MAP.get(modelId.toString()).getMountedYOffset();
+            isTameableCanRide = ClientProxy.ID_CHAIR_INFO_MAP.get(modelId.toString()).isTameableCanRide();
+        }
+        CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(chair.getUniqueID(), modelId, mountedYOffset, isTameableCanRide));
+    }
+}

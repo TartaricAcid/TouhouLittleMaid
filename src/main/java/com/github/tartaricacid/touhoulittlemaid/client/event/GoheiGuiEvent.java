@@ -6,7 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGoheiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.GoheiModeMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -56,7 +56,7 @@ public class GoheiGuiEvent {
         EntityPlayerSP player = mc.player;
 
         if (show && mc.inGameHasFocus && event.getDwheel() != 0 && player.getHeldItemMainhand().getItem() == MaidItems.HAKUREI_GOHEI) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGoheiMessage(event.getDwheel() < 0));
+            CommonProxy.INSTANCE.sendToServer(new GoheiModeMessage(event.getDwheel() < 0));
             event.setCanceled(true);
         }
     }

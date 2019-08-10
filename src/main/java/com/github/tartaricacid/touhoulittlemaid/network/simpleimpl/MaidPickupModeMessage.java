@@ -11,47 +11,47 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.UUID;
 
-public class ChangeHomeDataMessage implements IMessage {
+public class MaidPickupModeMessage implements IMessage {
     private UUID entityUuid;
-    private boolean home;
+    private boolean pickup;
 
-    public ChangeHomeDataMessage() {
+    public MaidPickupModeMessage() {
     }
 
-    public ChangeHomeDataMessage(UUID entityUuid, boolean home) {
+    public MaidPickupModeMessage(UUID entityUuid, boolean pickup) {
         this.entityUuid = entityUuid;
-        this.home = home;
+        this.pickup = pickup;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         entityUuid = new UUID(buf.readLong(), buf.readLong());
-        home = buf.readBoolean();
+        pickup = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeLong(entityUuid.getMostSignificantBits());
         buf.writeLong(entityUuid.getLeastSignificantBits());
-        buf.writeBoolean(home);
+        buf.writeBoolean(pickup);
     }
 
-    public boolean isHome() {
-        return home;
+    public boolean isPickup() {
+        return pickup;
     }
 
     public UUID getEntityUuid() {
         return entityUuid;
     }
 
-    public static class Handler implements IMessageHandler<ChangeHomeDataMessage, IMessage> {
+    public static class Handler implements IMessageHandler<MaidPickupModeMessage, IMessage> {
         @Override
-        public IMessage onMessage(ChangeHomeDataMessage message, MessageContext ctx) {
+        public IMessage onMessage(MaidPickupModeMessage message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
                     if (entity instanceof EntityMaid) {
-                        ((EntityMaid) entity).setHome(message.isHome());
+                        ((EntityMaid) entity).setPickup(message.isPickup());
                     }
                 });
             }

@@ -8,9 +8,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeGuiMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeHomeDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangePickupDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidHomeModeMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidPickupModeMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SwitchMaidGuiMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -126,26 +126,26 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         if (button.id == BUTTON.PICKUP.ordinal()) {
             if (maid.isPickup()) {
                 togglePickup.setStateTriggered(false);
-                CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(maid.getUniqueID(), false));
+                CommonProxy.INSTANCE.sendToServer(new MaidPickupModeMessage(maid.getUniqueID(), false));
                 return;
             } else {
                 togglePickup.setStateTriggered(true);
-                CommonProxy.INSTANCE.sendToServer(new ChangePickupDataMessage(maid.getUniqueID(), true));
+                CommonProxy.INSTANCE.sendToServer(new MaidPickupModeMessage(maid.getUniqueID(), true));
                 return;
             }
         }
 
         // 切换标签页
         if (button.id == BUTTON.MAIN.ordinal()) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.MAIN.getGuiId(), container.taskIndex));
+            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.MAIN.getGuiId(), container.taskIndex));
             return;
         }
         if (button.id == BUTTON.INVENTORY.ordinal()) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.INVENTORY.getGuiId(), container.taskIndex));
+            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.INVENTORY.getGuiId(), container.taskIndex));
             return;
         }
         if (button.id == BUTTON.BAUBLE.ordinal()) {
-            CommonProxy.INSTANCE.sendToServer(new ChangeGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.BAUBLE.getGuiId(), container.taskIndex));
+            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.BAUBLE.getGuiId(), container.taskIndex));
             return;
         }
 
@@ -160,11 +160,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         if (button.id == BUTTON.HOME.ordinal()) {
             if (maid.isHome()) {
                 toggleHome.setStateTriggered(false);
-                CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(maid.getUniqueID(), false));
+                CommonProxy.INSTANCE.sendToServer(new MaidHomeModeMessage(maid.getUniqueID(), false));
                 return;
             } else {
                 toggleHome.setStateTriggered(true);
-                CommonProxy.INSTANCE.sendToServer(new ChangeHomeDataMessage(maid.getUniqueID(), true));
+                CommonProxy.INSTANCE.sendToServer(new MaidHomeModeMessage(maid.getUniqueID(), true));
                 return;
             }
         }

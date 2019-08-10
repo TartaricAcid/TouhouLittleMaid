@@ -15,11 +15,11 @@ public class DebugFloorModel extends ModelBase {
     private final ModelRenderer floor;
 
     public DebugFloorModel() {
-        textureWidth = 1024;
-        textureHeight = 1024;
+        textureWidth = 64;
+        textureHeight = 32;
         floor = new ModelRenderer(this);
         floor.setRotationPoint(0.0F, 24.0F, 0.0F);
-        floor.cubeList.add(new ModelBox(floor, 0, 0, -65.0F, 0.0F, -80.0F, 130, 0, 145, 0.0F, false));
+        floor.cubeList.add(new ModelBox(floor, 0, 0, -8.0F, 0.0F, -11.0F, 16, 0, 19, 0.0F, false));
     }
 
     @Override

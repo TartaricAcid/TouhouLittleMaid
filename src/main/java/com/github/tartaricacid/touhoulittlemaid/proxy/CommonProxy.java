@@ -90,12 +90,13 @@ public class CommonProxy {
                 3, true);
 
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(TouhouLittleMaid.MOD_ID);
-        INSTANCE.registerMessage(ChangeGuiMessage.Handler.class, ChangeGuiMessage.class, 0, Side.SERVER);
-        INSTANCE.registerMessage(ChangePickupDataMessage.Handler.class, ChangePickupDataMessage.class, 1, Side.SERVER);
+        INSTANCE.registerMessage(SwitchMaidGuiMessage.Handler.class, SwitchMaidGuiMessage.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MaidPickupModeMessage.Handler.class, MaidPickupModeMessage.class, 1, Side.SERVER);
         INSTANCE.registerMessage(ChangeMaidTaskMessage.Handler.class, ChangeMaidTaskMessage.class, 2, Side.SERVER);
-        INSTANCE.registerMessage(ChangeHomeDataMessage.Handler.class, ChangeHomeDataMessage.class, 3, Side.SERVER);
-        INSTANCE.registerMessage(ChangeGoheiMessage.Handler.class, ChangeGoheiMessage.class, 4, Side.SERVER);
-        INSTANCE.registerMessage(ChangeMaidSkinMessage.Handler.class, ChangeMaidSkinMessage.class, 5, Side.SERVER);
+        INSTANCE.registerMessage(MaidHomeModeMessage.Handler.class, MaidHomeModeMessage.class, 3, Side.SERVER);
+        INSTANCE.registerMessage(GoheiModeMessage.Handler.class, GoheiModeMessage.class, 4, Side.SERVER);
+        INSTANCE.registerMessage(ApplyMaidSkinDataMessage.Handler.class, ApplyMaidSkinDataMessage.class, 5, Side.SERVER);
+        INSTANCE.registerMessage(ApplyChairSkinDataMessage.Handler.class, ApplyChairSkinDataMessage.class, 6, Side.SERVER);
     }
 
     public void init(FMLInitializationEvent event) {

@@ -34,8 +34,7 @@ public class LayerMaidDebugFloor implements LayerRenderer<EntityMaid> {
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.color(255, 255, 255, 255);
-            GlStateManager.translate(0, 1.5001, 0);
-            GlStateManager.scale(0.123, 0, 0.123);
+            GlStateManager.translate(0, 0.00001, 0);
             Minecraft.getMinecraft().renderEngine.bindTexture(FLOOR_TEXTURE);
             modelBase.render(maid, 0, 0, 0, 0, 0, 0.0625f);
             GlStateManager.disableBlend();

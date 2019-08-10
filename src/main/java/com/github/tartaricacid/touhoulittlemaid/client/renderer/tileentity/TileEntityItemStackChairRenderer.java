@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -16,9 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-import java.util.concurrent.ExecutionException;
-
 import javax.annotation.Nonnull;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author TartaricAcid
@@ -31,6 +29,7 @@ public class TileEntityItemStackChairRenderer extends TileEntityItemStackRendere
     public void renderByItem(@Nonnull ItemStack itemStackIn) {
         World world = Minecraft.getMinecraft().world;
         String entityId = TouhouLittleMaid.MOD_ID + ":entity.item.chair";
+        float renderItemScale = 1.0f;
         EntityChair entityChair;
         try {
             entityChair = (EntityChair) ClientProxy.ENTITY_CACHE.get(entityId, () -> {
@@ -41,12 +40,14 @@ public class TileEntityItemStackChairRenderer extends TileEntityItemStackRendere
                     return e;
                 }
             });
-        }
-        catch (ExecutionException | ClassCastException e) {
+        } catch (ExecutionException | ClassCastException e) {
             e.printStackTrace();
             return;
         }
         entityChair.setModelId(ItemChair.getChairModelId(itemStackIn));
+        if (ClientProxy.ID_CHAIR_INFO_MAP.containsKey(ItemChair.getChairModelId(itemStackIn))) {
+            renderItemScale = ClientProxy.ID_CHAIR_INFO_MAP.get(ItemChair.getChairModelId(itemStackIn)).getRenderItemScale();
+        }
 
         GlStateManager.pushMatrix();
 
@@ -60,10 +61,10 @@ public class TileEntityItemStackChairRenderer extends TileEntityItemStackRendere
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-
+        GlStateManager.scale(renderItemScale, renderItemScale, renderItemScale);
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
         Minecraft.getMinecraft().getRenderManager().renderEntity(entityChair,
-                0.875, 0.25, 0.75, 0, 0, true);
+                1 / renderItemScale - 0.125, 0.25, 0.75, 0, 0, true);
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(true);
 
         GlStateManager.popMatrix();

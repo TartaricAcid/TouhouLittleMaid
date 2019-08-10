@@ -12,13 +12,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class ChangeGoheiMessage implements IMessage {
+public class GoheiModeMessage implements IMessage {
     private boolean next;
 
-    public ChangeGoheiMessage() {
+    public GoheiModeMessage() {
     }
 
-    public ChangeGoheiMessage(boolean next) {
+    public GoheiModeMessage(boolean next) {
         this.next = next;
     }
 
@@ -32,9 +32,9 @@ public class ChangeGoheiMessage implements IMessage {
         buf.writeBoolean(next);
     }
 
-    public static class Handler implements IMessageHandler<ChangeGoheiMessage, IMessage> {
+    public static class Handler implements IMessageHandler<GoheiModeMessage, IMessage> {
         @Override
-        public IMessage onMessage(ChangeGoheiMessage message, MessageContext ctx) {
+        public IMessage onMessage(GoheiModeMessage message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     EntityPlayerMP player = ctx.getServerHandler().player;

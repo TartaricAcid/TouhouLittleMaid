@@ -1,7 +1,7 @@
 {
-  "pack_name": "{pack.touhou_little_maid.name}",
+  "pack_name": "{pack.touhou_little_maid.maid.name}",
   "author": ["Succinum", "ZeniCrow", "Paulzzh"],
-  "description": ["{pack.touhou_little_maid.desc}"],
+  "description": ["{pack.touhou_little_maid.maid.desc}"],
   "version": "1.0.0",
   "date": "2019-07-14",
   "model_list": [
