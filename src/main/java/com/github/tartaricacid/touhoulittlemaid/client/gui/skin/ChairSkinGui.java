@@ -56,7 +56,7 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair> {
 
     @Override
     void drawDetailsGui(EntityChair chair, ResourceLocation modelId) {
-        // TODO: 2019/8/10 绘制 GUI
+        mc.addScheduledTask(() -> mc.displayGuiScreen(new ChairSkinDetailsGui(chair, modelId)));
     }
 
     @Override

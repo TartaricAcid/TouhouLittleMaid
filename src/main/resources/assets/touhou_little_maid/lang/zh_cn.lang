@@ -28,6 +28,7 @@ tooltips.touhou_little_maid.damageable.desc=剩余使用次数：%d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=实体名称：%s
 tooltips.touhou_little_maid.garage_kit.name.desc=模型名称：%s
 tooltips.touhou_little_maid.photo.no_data.desc=这张照片缺失女仆数据
+tooltips.touhou_little_maid.camera.desc=能够捕获女仆，绝大多数情况下是这样……
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
@@ -104,6 +105,10 @@ gui.touhou_little_maid.skin_details.leggings=显示护腿
 gui.touhou_little_maid.skin_details.boots=显示靴子
 gui.touhou_little_maid.skin_details.main_hand=显示主手物品
 gui.touhou_little_maid.skin_details.off_hand=显示副手物品
+gui.touhou_little_maid.skin_details.apply_data=应用数据
+gui.touhou_little_maid.skin_details.mounted_height=高度
+gui.touhou_little_maid.skin_details.show_character=显示参考角色
+gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift 点击能够进行十倍修改
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=作者：%s

@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.network;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidBaubleGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidInventoryGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidMainGuiContainer;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidBaubleContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryContainer;
@@ -33,6 +35,10 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
+        if (guiId == GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
+            // 服务端什么也不做
+            return null;
+        }
         return null;
     }
 
@@ -55,6 +61,9 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
+        if (guiId == GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
+            return new ChairSkinGui((EntityChair) world.getEntityByID(entityId));
+        }
         return null;
     }
 
@@ -65,6 +74,8 @@ public class MaidGuiHandler implements IGuiHandler {
         INVENTORY(2),
         // 女仆饰品栏
         BAUBLE(3),
+        // 椅子的 GUI
+        CHAIR(4),
         // 无 GUI
         NONE(-1);
 

@@ -28,6 +28,7 @@ tooltips.touhou_little_maid.damageable.desc=Remaining Usage Times: %d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=Entity Name: %s
 tooltips.touhou_little_maid.garage_kit.name.desc=Model Name: %s
 tooltips.touhou_little_maid.photo.no_data.desc=This Photo Is Missing Maid Data
+tooltips.touhou_little_maid.camera.desc=Being able to capture maid, at least in most cases...
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -104,6 +105,10 @@ gui.touhou_little_maid.skin_details.leggings=Show Leggings
 gui.touhou_little_maid.skin_details.boots=Show Boots
 gui.touhou_little_maid.skin_details.main_hand=Show Main Hand Item
 gui.touhou_little_maid.skin_details.off_hand=Show Off Hand Item
+gui.touhou_little_maid.skin_details.apply_data=Apply Data
+gui.touhou_little_maid.skin_details.mounted_height=Height
+gui.touhou_little_maid.skin_details.show_character=Show Ref Character
+gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift Click To Make Ten Times Modification
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=Author: %s

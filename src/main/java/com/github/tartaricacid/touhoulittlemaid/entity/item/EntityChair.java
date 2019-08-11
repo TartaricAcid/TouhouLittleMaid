@@ -1,11 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
+import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
@@ -36,6 +36,15 @@ public class EntityChair extends EntityLivingBase {
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityChair.class, DataSerializers.STRING);
     private static final DataParameter<Float> MOUNTED_HEIGHT = EntityDataManager.createKey(EntityChair.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> TAMEABLE_CAN_RIDE = EntityDataManager.createKey(EntityChair.class, DataSerializers.BOOLEAN);
+
+    /**
+     * 是否开启 debug 模式下的地面显示，仅在客户端调用
+     */
+    public boolean isDebugFloorOpen = false;
+    /**
+     * 是否开启 debug 模式下的人物显示，仅在客户端调用
+     */
+    public boolean isDebugCharacterOpen = false;
 
     public EntityChair(World worldIn) {
         super(worldIn);
@@ -106,7 +115,7 @@ public class EntityChair extends EntityLivingBase {
                 return true;
             }
             if (world.isRemote) {
-                Minecraft.getMinecraft().displayGuiScreen(new ChairSkinGui(this));
+                player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.CHAIR.getId(), world, this.getEntityId(), 0, 0);
             }
             return true;
         } else {
@@ -242,10 +251,10 @@ public class EntityChair extends EntityLivingBase {
 
     public void setMountedHeight(float height) {
         // 防止有人恶意利用这一点，强行增加范围限制
-        if (height > 3.0f) {
-            height = 3.0f;
-        } else if (height < -1.0f) {
-            height = -1.0f;
+        if (height > 1.5f) {
+            height = 1.5f;
+        } else if (height < -0.5f) {
+            height = -0.5f;
         }
         this.dataManager.set(MOUNTED_HEIGHT, height);
     }
