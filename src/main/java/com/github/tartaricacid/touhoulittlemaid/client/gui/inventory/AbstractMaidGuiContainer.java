@@ -244,6 +244,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.drawDefaultBackground();
 
         // 绘制选择图标背景
+        GlStateManager.color(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(BACKGROUND);
         this.drawTexturedModalRect(i, j - 28, 0, 193, 112, 32);
 
