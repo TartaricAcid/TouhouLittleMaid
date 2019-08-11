@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,11 +45,21 @@ public class EntityModelJson extends ModelBase {
      */
     private List<ModelRenderer> shouldRender = new ArrayList<>();
 
+    public final AxisAlignedBB renderBoundingBox;
+
     public EntityModelJson(CustomModelPOJO pojo, int format) {
         this.format = format;
         // 材质的长度、宽度
         textureWidth = pojo.getGeometryModel().getTexturewidth();
         textureHeight = pojo.getGeometryModel().getTextureheight();
+
+        List<Float> offset = pojo.getGeometryModel().getVisibleBoundsOffset();
+        float offsetX = offset.get(0);
+        float offsetY = offset.get(1);
+        float offsetZ = offset.get(2);
+        float width = pojo.getGeometryModel().getVisibleBoundsWidth() / 2;
+        float height = pojo.getGeometryModel().getVisibleBoundsHeight() / 2;
+        renderBoundingBox = new AxisAlignedBB(offsetX - width, offsetY - height, offsetZ - width, offsetX + width, offsetY + height, offsetZ + width);
 
         // 往 indexBones 里面注入数据，为后续坐标转换做参考
         for (BonesItem bones : pojo.getGeometryModel().getBones()) {
