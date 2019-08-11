@@ -252,7 +252,7 @@ public class EntityChair extends EntityLivingBase {
 
     public void setMountedHeight(float height) {
         // 防止有人恶意利用这一点，强行增加范围限制
-        height = MathHelper.clamp(height, -1.0f, 3.0f);
+        height = MathHelper.clamp(height, -0.5f, 1.5f);
         this.dataManager.set(MOUNTED_HEIGHT, height);
     }
 
