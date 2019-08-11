@@ -36,6 +36,10 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      */
     private static final int PAGE_MAX_NUM = 44;
     /**
+     * 用来在子类中通过实体 id 获取缓存中的实体对象
+     */
+    protected static String ENTITY_ID;
+    /**
      * 存储包的总数和当前包的索引
      */
     private static int PACK_COUNT;
@@ -49,7 +53,6 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      * 使用的模型包列表
      */
     private static List<CustomModelPackPOJO> MODEL_PACK_LIST = Lists.newArrayList();
-    protected static String ENTITY_ID;
     protected T entity;
 
     public AbstractSkinGui(T entity, List<CustomModelPackPOJO> listPack, String entityId) {

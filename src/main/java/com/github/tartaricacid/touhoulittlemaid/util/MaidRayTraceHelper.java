@@ -38,13 +38,13 @@ public final class MaidRayTraceHelper {
         return Optional.empty();
     }
 
-    private static boolean isEntityBeLooked(EntityPlayer player, Entity look) {
+    private static boolean isEntityBeLooked(EntityPlayer player, Entity lookEntity) {
         // 玩家朝向向量（标准化）
         Vec3d lookVec = player.getLook(1.0F).normalize();
         // 玩家和实体间构成的向量
-        Vec3d playerAndEntityVec = new Vec3d(look.posX - player.posX,
-                look.getEntityBoundingBox().minY + (double) look.getEyeHeight() - (player.posY + (double) player.getEyeHeight()),
-                look.posZ - player.posZ);
+        Vec3d playerAndEntityVec = new Vec3d(lookEntity.posX - player.posX,
+                lookEntity.getEntityBoundingBox().minY + (double) lookEntity.getEyeHeight() * 2 / 3 - (player.posY + (double) player.getEyeHeight()),
+                lookEntity.posZ - player.posZ);
         // 玩家和实体间的距离
         double playerAndEntityDistance = playerAndEntityVec.length();
         // 玩家和实体间构成的向量（标准化）
@@ -52,8 +52,8 @@ public final class MaidRayTraceHelper {
         // 标准化的向量，点乘得到的直接就是 cos 夹角值
         double cosAngle = lookVec.dotProduct(playerAndEntityVec);
         // 最大偏差，与距离有关系，距离越远，偏差应该越小
-        double maxDistanceDeviation = 0.1D / playerAndEntityDistance;
+        double maxDistanceDeviation = 0.075D / playerAndEntityDistance;
         // 最后再检查一次能否看见
-        return cosAngle > 1.0D - maxDistanceDeviation && player.canEntityBeSeen(look);
+        return cosAngle > 1.0D - maxDistanceDeviation && player.canEntityBeSeen(lookEntity);
     }
 }

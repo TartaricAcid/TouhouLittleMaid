@@ -1,7 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 
+import com.github.tartaricacid.touhoulittlemaid.client.model.DebugCharacterModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugCharacter;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugFloor;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -30,6 +34,8 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
         super(renderManager, mainModel, 0f);
+        addLayer(new LayerChairDebugFloor(new DebugFloorModel()));
+        addLayer(new LayerChairDebugCharacter(new DebugCharacterModel()));
     }
 
     @Override

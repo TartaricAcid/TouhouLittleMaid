@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMai
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMarisaBroomRender;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
@@ -64,7 +63,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntityMaid.class, EntityMaidRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityDanmaku.class, EntityDanmakuRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityMarisaBroom.class, EntityMarisaBroomRender.FACTORY);
-        RenderingRegistry.registerEntityRenderingHandler(EntityChair.class, EntityChairRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair.class, EntityChairRender.FACTORY);
     }
 
     @Override
