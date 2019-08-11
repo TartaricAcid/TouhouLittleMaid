@@ -107,11 +107,33 @@ public class EntityMaid extends AbstractEntityMaid {
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             return !isIllegalItem(stack);
         }
+
+        @Override
+        @Nonnull
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            // 物品合法才允许插入，否则原样返回
+            if (isItemValid(slot, stack)) {
+                return super.insertItem(slot, stack, simulate);
+            } else {
+                return stack;
+            }
+        }
     };
     private final ItemStackHandler mainInv = new ItemStackHandler(15) {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             return !isIllegalItem(stack);
+        }
+
+        @Override
+        @Nonnull
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            // 物品合法才允许插入，否则原样返回
+            if (isItemValid(slot, stack)) {
+                return super.insertItem(slot, stack, simulate);
+            } else {
+                return stack;
+            }
         }
     };
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
