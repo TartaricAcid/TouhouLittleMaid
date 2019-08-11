@@ -968,6 +968,11 @@ public class EntityMaid extends AbstractEntityMaid {
         return MaidSoundEvent.MAID_DEATH;
     }
 
+    @Override
+    public float getEyeHeight() {
+        return this.height * (isSitting() ? 0.65F : 0.85F);
+    }
+
     @Nonnull
     @Override
     protected PathNavigate createNavigator(@Nonnull World worldIn) {

@@ -22,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -256,11 +257,7 @@ public class EntityChair extends EntityLivingBase {
 
     public void setMountedHeight(float height) {
         // 防止有人恶意利用这一点，强行增加范围限制
-        if (height > 3.0f) {
-            height = 3.0f;
-        } else if (height < -1.0f) {
-            height = -1.0f;
-        }
+        height = MathHelper.clamp(height, -1.0f, 3.0f);
         this.dataManager.set(MOUNTED_HEIGHT, height);
     }
 
