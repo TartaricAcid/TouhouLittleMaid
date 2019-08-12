@@ -23,12 +23,21 @@ tile.touhou_little_maid.grid.name=Maid Interaction Panel
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
+tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc=Press the Alt key and slide the mouse wheel to switch modes.
+tooltips.touhou_little_maid.kappa_compass.usage.desc=Right click on the block to set the coordinates, then right click on the maid binding coordinates.
 tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
 tooltips.touhou_little_maid.damageable.desc=Remaining Usage Times: %d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=Entity Name: %s
 tooltips.touhou_little_maid.garage_kit.name.desc=Model Name: %s
 tooltips.touhou_little_maid.photo.no_data.desc=This Photo Is Missing Maid Data
+tooltips.touhou_little_maid.photo.maid.desc=Maid Name: %s
 tooltips.touhou_little_maid.camera.desc=Being able to capture maid, at least in most cases...
+tooltips.touhou_little_maid.broom.place.desc=Right click on the top of the block to place it.
+tooltips.touhou_little_maid.broom.destroy.desc=Shift left hit can destroy it.
+tooltips.touhou_little_maid.chair.place.desc=Right click on the top of the block to place it.
+tooltips.touhou_little_maid.chair.destroy.desc=Shift left hit can destroy it.
+tooltips.touhou_little_maid.chair.gui.desc=Shift right click can open skin gui.
+
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -218,6 +227,9 @@ model.touhou_little_maid.play_station.name=Play Station
 model.touhou_little_maid.cat_cart.name=Cat Cart
 model.touhou_little_maid.rickshaw.name=Rickshaw
 model.touhou_little_maid.tall_stool.name=Tall Stool
+model.touhou_little_maid.low_stool.name=Low Stool
+model.touhou_little_maid.barbecue_booth.name=Barbecue Booth
+model.touhou_little_maid.barbecue_booth_2.name=Barbecue Booth
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

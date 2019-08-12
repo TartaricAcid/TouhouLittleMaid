@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
@@ -99,8 +101,14 @@ public class ItemPhoto extends Item {
         // 无数据时显示红色提醒信息
         boolean haveNoData = !stack.hasTagCompound() ||
                 Objects.requireNonNull(stack.getTagCompound()).getCompoundTag(MAID_INFO.getNbtName()).isEmpty();
-        if (!flagIn.isAdvanced() && haveNoData) {
+        if (haveNoData) {
             tooltip.add(TextFormatting.DARK_RED + I18n.format("tooltips.touhou_little_maid.photo.no_data.desc"));
+        } else {
+            String modelId = stack.getTagCompound().getCompoundTag(MAID_INFO.getNbtName()).getString(EntityMaid.NBT.MODEL_ID.getName());
+            if (!"".equals(modelId) && ClientProxy.ID_MODEL_INFO_MAP.containsKey(modelId)) {
+                tooltip.add(I18n.format("tooltips.touhou_little_maid.photo.maid.desc",
+                        ParseI18n.parse(ClientProxy.ID_MODEL_INFO_MAP.get(modelId).getName())));
+            }
         }
         // 调试模式直接显示整个 NBT
         if (flagIn.isAdvanced() && GuiScreen.isShiftKeyDown() && stack.hasTagCompound()) {

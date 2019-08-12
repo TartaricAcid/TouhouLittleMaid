@@ -36,6 +36,18 @@
     }, {
       "model_id": "touhou_little_maid:tall_stool",
       "mounted_height": 0.75
+    }, {
+      "model_id": "touhou_little_maid:low_stool",
+      "mounted_height": 0.3125
+    }, {
+      "model_id": "touhou_little_maid:barbecue_booth",
+      "mounted_height": 0.8125,
+      "render_item_scale": 0.2
+    }, {
+      "model_id": "touhou_little_maid:barbecue_booth_2",
+      "mounted_height": -0.0625,
+      "render_item_scale": 0.2,
+      "tameable_can_ride": false
     }
   ]
 }

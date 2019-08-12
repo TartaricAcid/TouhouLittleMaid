@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -166,6 +167,9 @@ public class ItemChair extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.chair.place.desc"));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.chair.destroy.desc"));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.chair.gui.desc"));
         // 调试模式，不加国际化
         if (flagIn.isAdvanced() && GuiScreen.isShiftKeyDown() && stack.hasTagCompound()) {
             tooltip.add(String.format("Model Id: %s", getChairModelId(stack)));

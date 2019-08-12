@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "touhou_little_maid:kappa_compass",
   "result": {
     "item": "touhou_little_maid:kappa_compass"
   },

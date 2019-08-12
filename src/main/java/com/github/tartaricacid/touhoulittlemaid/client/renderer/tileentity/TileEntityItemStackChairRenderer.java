@@ -13,6 +13,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -22,6 +24,7 @@ import java.util.concurrent.ExecutionException;
  * @author TartaricAcid
  * @date 2019/8/9 0:36
  **/
+@SideOnly(Side.CLIENT)
 public class TileEntityItemStackChairRenderer extends TileEntityItemStackRenderer {
     public static final TileEntityItemStackChairRenderer INSTANCE = new TileEntityItemStackChairRenderer();
 

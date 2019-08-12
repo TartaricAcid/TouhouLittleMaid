@@ -5,7 +5,10 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelBoxFloat extends ModelBox {
     public ModelBoxFloat(ModelRenderer renderer, int texU, int texV, float x, float y, float z, float dx, float dy, float dz, float delta) {
         this(renderer, texU, texV, x, y, z, dx, dy, dz, delta, renderer.mirror);

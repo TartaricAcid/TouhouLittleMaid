@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "type": "minecraft:item_nbt",
+    "item": "touhou_little_maid:chair",
+    "nbt": {
+      "ModelId": "touhou_little_maid:cushion",
+      "MountedHeight": 0.0,
+      "TameableCanRide": true
+    }
+  },
+  "pattern": [
+    "   ",
+    "WWW",
+    "IPI"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:wool",
+      "data": 0
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    }
+  }
+}

@@ -4,6 +4,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author TartaricAcid
@@ -11,6 +13,7 @@ import net.minecraft.entity.Entity;
  * <p>
  * 绘制皮肤详情界面的地面网格
  **/
+@SideOnly(Side.CLIENT)
 public class DebugFloorModel extends ModelBase {
     private final ModelRenderer floor;
 

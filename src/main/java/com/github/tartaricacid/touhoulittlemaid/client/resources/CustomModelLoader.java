@@ -170,6 +170,10 @@ public final class CustomModelLoader {
         ID_MODEL_MAP.clear();
         ID_MODEL_INFO_MAP.clear();
 
+        CHAIR_PACK_LIST.clear();
+        ID_CHAIR_MAP.clear();
+        ID_CHAIR_INFO_MAP.clear();
+
         // 重载数据
         loadModelPack();
     }
