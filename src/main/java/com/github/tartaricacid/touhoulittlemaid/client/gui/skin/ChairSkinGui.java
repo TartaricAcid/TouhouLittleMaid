@@ -20,6 +20,8 @@ import java.util.concurrent.ExecutionException;
  **/
 @SideOnly(Side.CLIENT)
 public class ChairSkinGui extends AbstractSkinGui<EntityChair> {
+    private static int PACK_INDEX = 0;
+    private static int PAGE_INDEX = 0;
 
     public ChairSkinGui(EntityChair chair) {
         super(chair, ClientProxy.CHAIR_PACK_LIST, "touhou_little_maid:entity.item.chair");
@@ -55,7 +57,7 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair> {
     }
 
     @Override
-    void drawDetailsGui(EntityChair chair, ResourceLocation modelId) {
+    void openDetailsGui(EntityChair chair, ResourceLocation modelId) {
         mc.addScheduledTask(() -> mc.displayGuiScreen(new ChairSkinDetailsGui(chair, modelId)));
     }
 
@@ -68,5 +70,25 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair> {
             isTameableCanRide = ClientProxy.ID_CHAIR_INFO_MAP.get(modelId.toString()).isTameableCanRide();
         }
         CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(chair.getUniqueID(), modelId, mountedYOffset, isTameableCanRide));
+    }
+
+    @Override
+    int getPackIndex() {
+        return PACK_INDEX;
+    }
+
+    @Override
+    void setPackIndex(int packIndex) {
+        PACK_INDEX = packIndex;
+    }
+
+    @Override
+    int getPageIndex() {
+        return PAGE_INDEX;
+    }
+
+    @Override
+    void setPageIndex(int pageIndex) {
+        PAGE_INDEX = pageIndex;
     }
 }

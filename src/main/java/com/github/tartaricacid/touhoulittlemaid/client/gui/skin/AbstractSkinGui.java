@@ -40,15 +40,13 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      */
     protected static String ENTITY_ID;
     /**
-     * 存储包的总数和当前包的索引
+     * 存储包的总数
      */
     private static int PACK_COUNT;
-    private static int PACK_INDEX = 0;
     /**
-     * 存储页面的总数和当前页面索引
+     * 存储页面的总数
      */
-    private static int MODEL_PAGE_COUNT = 1;
-    private static int MODEL_PAGE = 0;
+    private static int PAGE_COUNT = 1;
     /**
      * 使用的模型包列表
      */
@@ -58,17 +56,51 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
     public AbstractSkinGui(T entity, List<CustomModelPackPOJO> listPack, String entityId) {
         this.entity = entity;
         MODEL_PACK_LIST = listPack;
-        PACK_COUNT = listPack.size();
         ENTITY_ID = entityId;
     }
 
+    /**
+     * 绘制左侧示例实体
+     *
+     * @param middleX 屏幕参考中点
+     * @param middleY 屏幕参考中点
+     * @param mouseX  鼠标 x 坐标
+     * @param mouseY  鼠标 Y 坐标
+     */
     abstract void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY);
 
+    /**
+     * 绘制右侧示例实体
+     *
+     * @param posX      实体所在的 x 坐标
+     * @param posY      实体所在的 y 坐标
+     * @param modelItem 该实体应该对应的模型数据
+     */
     abstract void drawRightEntity(int posX, int posY, ModelItem modelItem);
 
-    abstract void drawDetailsGui(T entity, ResourceLocation modelId);
+    /**
+     * 打开详情界面
+     *
+     * @param entity  实体
+     * @param modelId 该实体应该对应的模型数据
+     */
+    abstract void openDetailsGui(T entity, ResourceLocation modelId);
 
+    /**
+     * 发包通知模型更改
+     *
+     * @param entity  实体
+     * @param modelId 该实体应该对应的模型数据
+     */
     abstract void notifyModelChange(T entity, ResourceLocation modelId);
+
+    abstract int getPackIndex();
+
+    abstract void setPackIndex(int packIndex);
+
+    abstract int getPageIndex();
+
+    abstract void setPageIndex(int pageIndex);
 
     @Override
     public void initGui() {
@@ -92,15 +124,15 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
         this.buttonList.add(new GuiButtonImage(id++, i + 104, j - 116, 21, 17, 58, 201, 18, BG));
 
         // 添加按键，顺便装填按键对应模型的索引
-        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(PACK_INDEX);
+        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(getPackIndex());
 
         // 起始坐标
         int x = -100;
         int y = -35;
 
         // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
-        int fromIndex = PAGE_MAX_NUM * MODEL_PAGE;
-        int toIndex = PAGE_MAX_NUM * (MODEL_PAGE + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (MODEL_PAGE + 1);
+        int fromIndex = PAGE_MAX_NUM * getPageIndex();
+        int toIndex = PAGE_MAX_NUM * (getPageIndex() + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (getPageIndex() + 1);
 
         // 开始添加按键，顺便装填按键对应模型的索引
         for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
@@ -125,7 +157,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
         PACK_COUNT = MODEL_PACK_LIST.size();
 
         // 计算出模型分页总数（用来刷新）
-        MODEL_PAGE_COUNT = MODEL_PACK_LIST.get(PACK_INDEX).getModelList().size() / PAGE_MAX_NUM + 1;
+        PAGE_COUNT = (MODEL_PACK_LIST.get(getPackIndex()).getModelList().size() - 1) / PAGE_MAX_NUM + 1;
 
         // 中心点
         int middleX = this.width / 2 + 50;
@@ -154,7 +186,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      */
     private void drawEntity(int middleX, int middleY) {
         // 获取当前包索引得到的模型列表
-        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(PACK_INDEX);
+        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(getPackIndex());
 
         // 绘制包信息
         drawPackInfoText(pojo, middleX, middleY);
@@ -164,8 +196,8 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
         int y = -35;
 
         // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
-        int fromIndex = PAGE_MAX_NUM * MODEL_PAGE;
-        int toIndex = PAGE_MAX_NUM * (MODEL_PAGE + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (MODEL_PAGE + 1);
+        int fromIndex = PAGE_MAX_NUM * getPageIndex();
+        int toIndex = PAGE_MAX_NUM * (getPageIndex() + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (getPageIndex() + 1);
 
         // 开始绘制实体图案，并往上添加对应模型和材质
         for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
@@ -219,8 +251,8 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
 
 
         // 绘制最后的翻页数
-        drawCenteredString(fontRenderer, String.format("%s/%s", PACK_INDEX + 1, PACK_COUNT), middleX, middleY - 84, 0xffffff);
-        drawCenteredString(fontRenderer, String.format("%s/%s", MODEL_PAGE + 1, MODEL_PAGE_COUNT), middleX, middleY + 78, 0xffffff);
+        drawCenteredString(fontRenderer, String.format("%s/%s", getPackIndex() + 1, PACK_COUNT), middleX, middleY - 84, 0xffffff);
+        drawCenteredString(fontRenderer, String.format("%s/%s", getPageIndex() + 1, PAGE_COUNT), middleX, middleY + 78, 0xffffff);
     }
 
     /**
@@ -230,15 +262,15 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      */
     private void drawTooltips(int mouseX, int mouseY, int middleX, int middleY) {
         // 获取当前包索引得到的模型列表
-        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(PACK_INDEX);
+        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(getPackIndex());
 
         // 起始坐标
         int x = -100;
         int y = -35;
 
         // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
-        int fromIndex = PAGE_MAX_NUM * MODEL_PAGE;
-        int toIndex = PAGE_MAX_NUM * (MODEL_PAGE + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (MODEL_PAGE + 1);
+        int fromIndex = PAGE_MAX_NUM * getPageIndex();
+        int toIndex = PAGE_MAX_NUM * (getPageIndex() + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (getPageIndex() + 1);
 
         // 开始绘制实体图案，并往上添加对应模型和材质
         for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
@@ -282,30 +314,30 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
             // 向前翻包按钮
             case 0:
                 // 重载包索引、重新计算该包分页总数、将页面索引重载成 0 ，同时重载所有的按键
-                PACK_INDEX = (PACK_INDEX <= 0) ? PACK_COUNT - 1 : PACK_INDEX - 1;
-                MODEL_PAGE = 0;
+                setPackIndex((getPackIndex() <= 0) ? PACK_COUNT - 1 : getPackIndex() - 1);
+                setPageIndex(0);
                 this.initGui();
                 return;
 
             // 向后翻包
             case 1:
                 // 重载包索引、重新计算该包模型的总数、将页面索引重载成 0 ，同时重载所有的按键
-                PACK_INDEX = (PACK_INDEX >= PACK_COUNT - 1) ? 0 : PACK_INDEX + 1;
-                MODEL_PAGE = 0;
+                setPackIndex((getPackIndex() >= PACK_COUNT - 1) ? 0 : getPackIndex() + 1);
+                setPageIndex(0);
                 this.initGui();
                 return;
 
             // 向前翻页
             case 2:
                 // 重载页面索引、重载所有的按键
-                MODEL_PAGE = (MODEL_PAGE <= 0) ? MODEL_PAGE_COUNT - 1 : MODEL_PAGE - 1;
+                setPageIndex((getPageIndex() <= 0) ? PAGE_COUNT - 1 : getPageIndex() - 1);
                 this.initGui();
                 return;
 
             // 向后翻页
             case 3:
                 // 重载页面索引、重载所有的按键
-                MODEL_PAGE = (MODEL_PAGE >= MODEL_PAGE_COUNT - 1) ? 0 : MODEL_PAGE + 1;
+                setPageIndex((getPageIndex() >= PAGE_COUNT - 1) ? 0 : getPageIndex() + 1);
                 this.initGui();
                 return;
 
@@ -317,7 +349,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
             default:
                 if (isShiftKeyDown()) {
                     // shift 状态下打开详情页
-                    drawDetailsGui(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
+                    openDetailsGui(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
                 } else {
                     // 进行模型更改的发包
                     notifyModelChange(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());

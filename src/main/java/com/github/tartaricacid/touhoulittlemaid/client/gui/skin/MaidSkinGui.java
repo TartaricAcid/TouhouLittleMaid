@@ -20,6 +20,8 @@ import java.util.concurrent.ExecutionException;
  **/
 @SideOnly(Side.CLIENT)
 public class MaidSkinGui extends AbstractSkinGui<EntityMaid> {
+    private static int PACK_INDEX = 0;
+    private static int PAGE_INDEX = 0;
 
     public MaidSkinGui(EntityMaid maid) {
         super(maid, ClientProxy.MODEL_PACK_LIST, "touhou_little_maid:entity.passive.maid");
@@ -55,12 +57,32 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid> {
     }
 
     @Override
-    void drawDetailsGui(EntityMaid maid, ResourceLocation modelId) {
+    void openDetailsGui(EntityMaid maid, ResourceLocation modelId) {
         mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidSkinDetailsGui(maid, modelId)));
     }
 
     @Override
     void notifyModelChange(EntityMaid maid, ResourceLocation modelId) {
         CommonProxy.INSTANCE.sendToServer(new ApplyMaidSkinDataMessage(maid.getUniqueID(), modelId));
+    }
+
+    @Override
+    int getPackIndex() {
+        return PACK_INDEX;
+    }
+
+    @Override
+    void setPackIndex(int packIndex) {
+        PACK_INDEX = packIndex;
+    }
+
+    @Override
+    int getPageIndex() {
+        return PAGE_INDEX;
+    }
+
+    @Override
+    void setPageIndex(int pageIndex) {
+        PAGE_INDEX = pageIndex;
     }
 }
