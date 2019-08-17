@@ -301,6 +301,12 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         drawEntityPost(rendermanager);
     }
 
+    @Override
+    public void onGuiClosed() {
+        guiEntity.dismountRidingEntity();
+        super.onGuiClosed();
+    }
+
     enum BUTTON {
         // 祈求动画按钮
         BEG,
