@@ -148,10 +148,6 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     public boolean isDebugFloorOpen = false;
     /**
-     * 是否开启 debug 模式下的扫帚显示，仅在客户端调用
-     */
-    public boolean isDebugBroomShow = false;
-    /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
      */
     @Nonnull

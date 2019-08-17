@@ -337,10 +337,7 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends
         }
     }
 
-    /**
-     * 绘制实体部分
-     */
-    private void drawEntity(int middleWidth, int middleHeight) {
+    protected void drawEntityPre(RenderManager rendermanager, int middleWidth, int middleHeight) {
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
         GlStateManager.translate(posX + middleWidth, posY + middleHeight, -500);
@@ -349,10 +346,11 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         GlStateManager.scale(-scale, scale, scale);
         RenderHelper.enableStandardItemLighting();
-        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
-        rendermanager.renderEntity(guiEntity, 0.0D, -1.0D, 0.0D, 0.0F, 0.0f, true);
+    }
+
+    protected void drawEntityPost(RenderManager rendermanager) {
         rendermanager.setRenderShadow(true);
         GlStateManager.popMatrix();
         RenderHelper.disableStandardItemLighting();
@@ -360,6 +358,16 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+
+    /**
+     * 绘制实体部分
+     */
+    protected void drawEntity(int middleWidth, int middleHeight) {
+        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+        drawEntityPre(rendermanager, middleWidth, middleHeight);
+        rendermanager.renderEntity(guiEntity, 0.0D, -1.0D, 0.0D, 0.0F, 0.0f, true);
+        drawEntityPost(rendermanager);
     }
 
     /**
