@@ -138,6 +138,12 @@
     }, {
       "model_id": "touhou_little_maid:matara_okina",
       "description": ["{model.touhou_little_maid.matara_okina.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:mystia_lorelei",
+      "description": ["{model.touhou_little_maid.mystia_lorelei.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kitcho_yachie",
+      "description": ["{model.touhou_little_maid.kitcho_yachie.desc}"]
     }
   ]
 }

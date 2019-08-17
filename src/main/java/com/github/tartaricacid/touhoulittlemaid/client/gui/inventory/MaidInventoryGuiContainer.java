@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Locale;
 
-import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI.INVENTORY;
+import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.MAIN_GUI.INVENTORY;
 
 @SideOnly(Side.CLIENT)
 public class MaidInventoryGuiContainer extends AbstractMaidGuiContainer {

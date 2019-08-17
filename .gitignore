@@ -21,3 +21,4 @@ build
 eclipse
 run
 venv
+test

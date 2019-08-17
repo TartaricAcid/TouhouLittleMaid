@@ -72,7 +72,7 @@ public class ItemCamera extends Item {
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         // 返回 true，阻止打开女仆 GUI
-        if (target.isEntityAlive() && target instanceof EntityMaid && ((EntityMaid) target).isOwner(playerIn)) {
+        if (stack.getItem() == this && target.isEntityAlive() && target instanceof EntityMaid && ((EntityMaid) target).isOwner(playerIn)) {
             onItemRightClick(playerIn.world, playerIn, hand);
             return true;
         }

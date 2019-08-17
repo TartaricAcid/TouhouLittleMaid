@@ -97,6 +97,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(GoheiModeMessage.Handler.class, GoheiModeMessage.class, 4, Side.SERVER);
         INSTANCE.registerMessage(ApplyMaidSkinDataMessage.Handler.class, ApplyMaidSkinDataMessage.class, 5, Side.SERVER);
         INSTANCE.registerMessage(ApplyChairSkinDataMessage.Handler.class, ApplyChairSkinDataMessage.class, 6, Side.SERVER);
+        INSTANCE.registerMessage(SetMaidSasimonoCRC32.Handler.class, SetMaidSasimonoCRC32.class, 7, Side.SERVER);
     }
 
     public void init(FMLInitializationEvent event) {
@@ -144,7 +145,7 @@ public class CommonProxy {
     /**
      * 初始化默认的模型列表
      */
-    protected void initModelList() {
+    void initModelList() {
         VANILLA_ID_NAME_MAP.clear();
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/maid_model.json");
         if (input != null) {

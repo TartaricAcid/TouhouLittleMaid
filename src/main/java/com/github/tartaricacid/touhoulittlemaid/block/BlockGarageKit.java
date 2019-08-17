@@ -82,6 +82,60 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         return tagCompound;
     }
 
+    /**
+     * 通过读取 TileEntityGarageKit 来获得对应 ItemStack
+     */
+    private static ItemStack getItemStackFromBlock(World worldIn, BlockPos pos) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileEntityGarageKit) {
+            TileEntityGarageKit kit = (TileEntityGarageKit) te;
+            return getItemStackWithData(kit.getEntityId(), kit.getModelId(), kit.getMaidData());
+        } else {
+            return getItemStackWithData(DEFAULT_ENTITY_ID, DEFAULT_MODEL_ID, DEFAULT_DATA);
+        }
+    }
+
+    /**
+     * 获取带有指定数据的 ItemStack
+     *
+     * @param entityId   实体 id
+     * @param modelId    模型的 id
+     * @param entityData 模型存储的实体数据
+     * @return 带有这些数据的物品堆
+     */
+    public static ItemStack getItemStackWithData(String entityId, String modelId, NBTTagCompound entityData) {
+        ItemStack stack = new ItemStack(Item.getItemFromBlock(MaidBlocks.GARAGE_KIT));
+        NBTTagCompound data = getTagCompoundSafe(stack);
+        data.setString(NBT.ENTITY_ID.getName(), entityId);
+        if (modelId != null) {
+            data.setString(NBT.MODEL_ID.getName(), modelId);
+        }
+        if (!entityData.isEmpty()) {
+            data.setTag(NBT.MAID_DATA.getName(), entityData);
+        }
+        return stack;
+    }
+
+    /**
+     * 获取 ItemStack 中的 ENTITY_ID NBT 数据，如果不存在则返回默认值
+     */
+    public static String getEntityId(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName());
+        }
+        return DEFAULT_ENTITY_ID;
+    }
+
+    /**
+     * 获取 ItemStack 中的 MODEL_ID NBT 数据，如果不存在则返回默认值
+     */
+    public static String getModelId(ItemStack stack) {
+        if (!getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName()).isEmpty()) {
+            return getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName());
+        }
+        return DEFAULT_MODEL_ID;
+    }
+
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         return getItemStackFromBlock(world, pos);
@@ -163,8 +217,6 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         return false;
     }
 
-    // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
-
     @Override
     public boolean isFullCube(IBlockState state) {
         // 否则玩家会卡死在方块里面窒息
@@ -201,60 +253,6 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         }
         garageKit.setData(id.toString(), garageKit.getFacing(), null, entity.writeToNBT(new NBTTagCompound()));
         return true;
-    }
-
-    /**
-     * 通过读取 TileEntityGarageKit 来获得对应 ItemStack
-     */
-    private static ItemStack getItemStackFromBlock(World worldIn, BlockPos pos) {
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te instanceof TileEntityGarageKit) {
-            TileEntityGarageKit kit = (TileEntityGarageKit) te;
-            return getItemStackWithData(kit.getEntityId(), kit.getModelId(), kit.getMaidData());
-        } else {
-            return getItemStackWithData(DEFAULT_ENTITY_ID, DEFAULT_MODEL_ID, DEFAULT_DATA);
-        }
-    }
-
-    /**
-     * 获取带有指定数据的 ItemStack
-     *
-     * @param entityId   实体 id
-     * @param modelId    模型的 id
-     * @param entityData 模型存储的实体数据
-     * @return 带有这些数据的物品堆
-     */
-    public static ItemStack getItemStackWithData(String entityId, String modelId, NBTTagCompound entityData) {
-        ItemStack stack = new ItemStack(Item.getItemFromBlock(MaidBlocks.GARAGE_KIT));
-        NBTTagCompound data = getTagCompoundSafe(stack);
-        data.setString(NBT.ENTITY_ID.getName(), entityId);
-        if (modelId != null) {
-            data.setString(NBT.MODEL_ID.getName(), modelId);
-        }
-        if (!entityData.isEmpty()) {
-            data.setTag(NBT.MAID_DATA.getName(), entityData);
-        }
-        return stack;
-    }
-
-    /**
-     * 获取 ItemStack 中的 ENTITY_ID NBT 数据，如果不存在则返回默认值
-     */
-    public static String getEntityId(ItemStack stack) {
-        if (!getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName()).isEmpty()) {
-            return getTagCompoundSafe(stack).getString(NBT.ENTITY_ID.getName());
-        }
-        return DEFAULT_ENTITY_ID;
-    }
-
-    /**
-     * 获取 ItemStack 中的 MODEL_ID NBT 数据，如果不存在则返回默认值
-     */
-    public static String getModelId(ItemStack stack) {
-        if (!getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName()).isEmpty()) {
-            return getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName());
-        }
-        return DEFAULT_MODEL_ID;
     }
 
     public enum NBT {
