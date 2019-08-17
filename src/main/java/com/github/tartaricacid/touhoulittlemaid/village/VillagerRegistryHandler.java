@@ -28,13 +28,13 @@ import static net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerPr
  **/
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public class VillagerRegistryHandler {
-    public static final VillagerCareer STORE_OWNER_OF_KOURINDOU_CAREER = new VillagerCareer(STORE_OWNER_OF_KOURINDOU,
-            String.format("%s.store_owner_of_kourindou.name", TouhouLittleMaid.MOD_ID));
     private static final ResourceLocation PROFESSION = new ResourceLocation(TouhouLittleMaid.MOD_ID, "store_owner_of_kourindou");
     private static final ResourceLocation VILLAGER_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/villager_rinnosuke.png");
     private static final ResourceLocation ZOMBIE_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/zombie_rinnosuke.png");
-    public static final VillagerProfession STORE_OWNER_OF_KOURINDOU = new VillagerProfession(PROFESSION.toString(),
+    private static final VillagerProfession STORE_OWNER_OF_KOURINDOU = new VillagerProfession(PROFESSION.toString(),
             VILLAGER_TEXTURE.toString(), ZOMBIE_TEXTURE.toString());
+    private static final VillagerCareer STORE_OWNER_OF_KOURINDOU_CAREER = new VillagerCareer(STORE_OWNER_OF_KOURINDOU,
+            String.format("%s.store_owner_of_kourindou.name", TouhouLittleMaid.MOD_ID));
 
     @SubscribeEvent
     public static void registry(RegistryEvent.Register<VillagerProfession> event) {

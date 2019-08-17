@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerHataSasimono;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugFloor;
@@ -32,12 +31,13 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final String DEFAULT_MODEL_TEXTURE = "touhou_little_maid:textures/entity/hakurei_reimu.png";
     private static final LayerMaidDebugFloor DEBUG_FLOOR = new LayerMaidDebugFloor(new DebugFloorModel());
+    private static final LayerHataSasimono HATA_SASIMONO = new LayerHataSasimono();
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(DEBUG_FLOOR);
-        this.addLayer(new LayerHataSasimono());
+        this.addLayer(HATA_SASIMONO);
     }
 
     @Override

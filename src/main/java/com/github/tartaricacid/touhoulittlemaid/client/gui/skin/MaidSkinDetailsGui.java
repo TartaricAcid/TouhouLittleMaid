@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonToggle;
