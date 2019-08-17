@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 女仆主 MAIN_GUI 界面的集合，其他界面在此基础上拓展得到
+ * 女仆主 GUI 界面的集合，其他界面在此基础上拓展得到
  *
  * @author TartaricAcid
  */
@@ -67,7 +67,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     public abstract void drawCustomBackground(int mouseX, int mouseY, float partialTicks);
 
     /**
-     * 绘制自定义 MAIN_GUI，会在主背景绘制后调用
+     * 绘制自定义 GUI，会在主背景绘制后调用
      *
      * @param mouseX       鼠标 x 坐标
      * @param mouseY       鼠标 y 坐标
@@ -76,7 +76,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     public abstract void drawCustomScreen(int mouseX, int mouseY, float partialTicks);
 
     /**
-     * 该 MAIN_GUI 的名称
+     * 该 GUI 的名称
      */
     public abstract String getGuiName();
 
@@ -334,7 +334,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         private int guiId;
 
         /**
-         * @param guiId 摁下按钮后触发的 MAIN_GUI 的 ID，如果不触发 MAIN_GUI，可以将其设置为 MAIN_GUI.NONE
+         * @param guiId 摁下按钮后触发的 GUI 的 ID，如果不触发 GUI，可以将其设置为 MaidGuiHandler.NONE_GUI.NONE
          */
         BUTTON(int guiId) {
             this.guiId = guiId;

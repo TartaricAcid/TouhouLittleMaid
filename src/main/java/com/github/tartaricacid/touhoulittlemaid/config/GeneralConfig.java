@@ -49,7 +49,7 @@ public class GeneralConfig {
     }
 
     /**
-     * 用于 MAIN_GUI 界面配置调节的保存
+     * 用于 GUI 界面配置调节的保存
      */
     @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
     public static class ConfigSyncHandler {

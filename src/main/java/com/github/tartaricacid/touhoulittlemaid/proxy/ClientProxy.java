@@ -47,7 +47,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
      */
     public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
     /**
-     * 当前所有模型列表，用于 MAIN_GUI 显示
+     * 当前所有模型列表，用于 GUI 显示
      */
     public static final List<CustomModelPackPOJO> MODEL_PACK_LIST = Lists.newArrayList();
     public static final List<CustomModelPackPOJO> CHAIR_PACK_LIST = Lists.newArrayList();

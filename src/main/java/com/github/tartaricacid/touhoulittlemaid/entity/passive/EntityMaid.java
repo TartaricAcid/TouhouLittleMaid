@@ -140,7 +140,7 @@ public class EntityMaid extends AbstractEntityMaid {
     };
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
     /**
-     * 依据此变量，在打开 MAIN_GUI 时暂时中断实体的 AI 执行
+     * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
      */
     public boolean guiOpening;
     /**
@@ -793,12 +793,12 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     /**
-     * 打开 MAIN_GUI
+     * 打开 GUI
      *
      * @return 该逻辑是否成功应用
      */
     private boolean openMaidGui(EntityPlayer player) {
-        // 否则打开 MAIN_GUI
+        // 否则打开 GUI
         if (!world.isRemote) {
             player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.MAIN_GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
         }

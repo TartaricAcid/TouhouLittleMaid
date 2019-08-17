@@ -36,7 +36,7 @@ public class GoheiGuiEvent {
     private static boolean show = false;
 
     /**
-     * 当 Alt 键摁下时，更改布尔值，判定 MAIN_GUI 是否显示
+     * 当 Alt 键摁下时，更改布尔值，判定 GUI 是否显示
      */
     @SubscribeEvent
     public static void onAltKeyInput(InputEvent.KeyInputEvent event) {

@@ -180,8 +180,6 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         }
     }
 
-    // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
-
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
