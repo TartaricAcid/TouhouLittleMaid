@@ -9,6 +9,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -46,6 +48,15 @@ public class TaskAttackDanmaku extends TaskAttackRanged {
         World world = maid.world;
         Random rand = maid.getRNG();
         List<Entity> entityList = world.getEntitiesInAABBexcluding(maid, maid.getEntityBoundingBox().expand(8, 3, 8).expand(-8, -3, -8), EntityMaid.IS_MOB);
+
+        if (maid.hasSasimono()) {
+            boolean targetIsTameableHasSameOwner = target instanceof EntityTameable && ((EntityTameable) target).getOwnerId() != null &&
+                    ((EntityTameable) target).getOwnerId().equals(maid.getOwnerId());
+            boolean targetIsPlayerOwner = target instanceof EntityPlayer && target.getUniqueID().equals(maid.getOwnerId());
+            if (targetIsTameableHasSameOwner || targetIsPlayerOwner) {
+                return;
+            }
+        }
 
         // 分为三档
         // 1 自机狙

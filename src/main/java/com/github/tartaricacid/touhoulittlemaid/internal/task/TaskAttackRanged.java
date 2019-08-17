@@ -9,6 +9,8 @@ import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
@@ -100,6 +102,16 @@ public class TaskAttackRanged implements IMaidTask {
         // 如果获取得到的箭为 null，不执行攻击
         if (entityArrow == null) {
             return;
+        }
+
+        // 应用指物旗相关 ai
+        if (maid.hasSasimono()) {
+            boolean targetIsTameableHasSameOwner = target instanceof EntityTameable && ((EntityTameable) target).getOwnerId() != null &&
+                    ((EntityTameable) target).getOwnerId().equals(maid.getOwnerId());
+            boolean targetIsPlayerOwner = target instanceof EntityPlayer && target.getUniqueID().equals(maid.getOwnerId());
+            if (targetIsTameableHasSameOwner || targetIsPlayerOwner) {
+                return;
+            }
         }
 
         double x = target.posX - maid.posX;

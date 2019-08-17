@@ -66,6 +66,11 @@ public class EntityMarisaBroom extends EntityLivingBase {
     }
 
     @Override
+    public boolean attackable() {
+        return false;
+    }
+
+    @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
         if (!this.world.isRemote && !this.isDead) {
             // 如果实体是无敌的

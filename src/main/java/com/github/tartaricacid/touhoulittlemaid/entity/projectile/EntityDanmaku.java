@@ -1,6 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -9,6 +13,8 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 import static com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku.NBT.*;
 
@@ -62,16 +68,48 @@ public class EntityDanmaku extends EntityThrowable {
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
-        // 如果碰撞对象为实体，而且投掷者不为空，也不为自己
-        if (result.typeOfHit == RayTraceResult.Type.ENTITY && getThrower() != null && !result.entityHit.equals(this.thrower)) {
+    protected void onImpact(@Nonnull RayTraceResult result) {
+        if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
+            boolean throwerMaidHasSasimono = getThrower() instanceof EntityMaid && ((EntityMaid) getThrower()).hasSasimono();
+            boolean hitMaidHasSasimono = result.entityHit instanceof EntityMaid && ((EntityMaid) result.entityHit).hasSasimono();
+            if (throwerMaidHasSasimono || hitMaidHasSasimono) {
+                applyHasHataSasimonoLogic(result);
+            } else {
+                applyNormalEntityHitLogic(result);
+            }
+        } else if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+            applyBlockHitLogic(result);
+        }
+    }
+
+    private void applyHasHataSasimonoLogic(@Nonnull RayTraceResult result) {
+        EntityLivingBase thrower = getThrower();
+        Entity hit = result.entityHit;
+        boolean throwerAndHitHasSameOwner = thrower instanceof EntityTameable && hit instanceof EntityTameable &&
+                ((EntityTameable) thrower).getOwnerId() != null && ((EntityTameable) thrower).getOwnerId().equals(((EntityTameable) hit).getOwnerId());
+        boolean throwerIsPlayerAndHitIsOwnerTameable = thrower instanceof EntityPlayer && hit instanceof EntityTameable
+                && thrower.getUniqueID().equals(((EntityTameable) hit).getOwnerId());
+        boolean throwerIsTameableAndHitIsPlayerOwner = thrower instanceof EntityTameable && hit instanceof EntityPlayer &&
+                ((EntityTameable) thrower).getOwnerId() != null && ((EntityTameable) thrower).getOwnerId().equals(hit.getUniqueID());
+        if (throwerAndHitHasSameOwner || throwerIsPlayerAndHitIsOwnerTameable || throwerIsTameableAndHitIsPlayerOwner) {
+            this.setDead();
+        } else {
+            applyNormalEntityHitLogic(result);
+        }
+    }
+
+    private void applyNormalEntityHitLogic(@Nonnull RayTraceResult result) {
+        // 投掷者不为空，也不为自己
+        if (getThrower() != null && !result.entityHit.equals(this.thrower)) {
             result.entityHit.attackEntityFrom(new EntityDamageSource("arrow", getThrower()), this.getDamage());
             this.setDead();
-        } else if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            // 如果碰撞体积为 null
-            if (world.getBlockState(result.getBlockPos()).getCollisionBoundingBox(world, result.getBlockPos()) != null) {
-                this.setDead();
-            }
+        }
+    }
+
+    private void applyBlockHitLogic(@Nonnull RayTraceResult result) {
+        // 如果碰撞体积为 null
+        if (world.getBlockState(result.getBlockPos()).getCollisionBoundingBox(world, result.getBlockPos()) != null) {
+            this.setDead();
         }
     }
 

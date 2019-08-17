@@ -24,6 +24,9 @@ public class MaidProvider implements IWailaEntityProvider {
                 currenttip.add(I18n.format("hwyla.touhou_little_maid.entity_maid.task",
                         I18n.format(maid.getTask().getTranslationKey())));
             }
+            if (maid.hasSasimono()) {
+                currenttip.add(I18n.format("hwyla.touhou_little_maid.entity_maid.has_sasimono"));
+            }
         }
         return currenttip;
     }

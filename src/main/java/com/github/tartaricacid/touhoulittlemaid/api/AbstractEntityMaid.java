@@ -88,4 +88,11 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @return boolean
      */
     abstract public boolean isPickup();
+
+    /**
+     * 当前女仆是否拥有旗指物
+     *
+     * @return boolean
+     */
+    abstract public boolean hasSasimono();
 }

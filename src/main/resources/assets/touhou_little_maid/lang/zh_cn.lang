@@ -172,6 +172,7 @@ model.touhou_little_maid.luna_child.name=露娜切露德
 model.touhou_little_maid.remilia_scarlet.name=蕾米莉亚·斯卡蕾特
 model.touhou_little_maid.sunny_milk.name=桑尼米尔克
 model.touhou_little_maid.alice_margatroid.name=爱丽丝·玛格特洛依德
+model.touhou_little_maid.alice.name=爱丽丝
 model.touhou_little_maid.patchouli_knowledge.name=帕秋莉·诺蕾姬
 model.touhou_little_maid.hong_meiling.name=红美铃
 model.touhou_little_maid.koakuma.name=小恶魔
@@ -190,6 +191,8 @@ model.touhou_little_maid.rumia.name=露米娅
 model.touhou_little_maid.matara_okina.name=摩多罗隐岐奈
 model.touhou_little_maid.mystia_lorelei.name=米斯蒂娅·萝蕾拉
 model.touhou_little_maid.kitcho_yachie.name=吉吊八千慧
+model.touhou_little_maid.saigyouji_yuyuko.name=西行寺幽幽子
+model.touhou_little_maid.yorigami_shion.name=依神紫苑
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -219,6 +222,7 @@ model.touhou_little_maid.luna_child.desc=§7静谧的月之光
 model.touhou_little_maid.remilia_scarlet.desc=§7红色恶魔
 model.touhou_little_maid.sunny_milk.desc=§7闪耀的日之光
 model.touhou_little_maid.alice_margatroid.desc=§7七色的人偶使
+model.touhou_little_maid.alice.desc=§7死之少女
 model.touhou_little_maid.patchouli_knowledge.desc=§7不动的大图书馆
 model.touhou_little_maid.hong_meiling.desc=§7华人小姑娘
 model.touhou_little_maid.koakuma.desc=§7？？？
@@ -236,6 +240,8 @@ model.touhou_little_maid.rumia.desc=§7宵暗的妖怪
 model.touhou_little_maid.matara_okina.desc=§7究极的绝对秘神
 model.touhou_little_maid.mystia_lorelei.desc=§7夜雀妖怪
 model.touhou_little_maid.kitcho_yachie.desc=§7鬼杰组组长
+model.touhou_little_maid.saigyouji_yuyuko.desc=§7华胥的亡灵
+model.touhou_little_maid.yorigami_shion.desc=§7最凶最恶的双子之姐
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -254,6 +260,8 @@ model.touhou_little_maid.square_table.name=八仙桌
 model.touhou_little_maid.mahjong_table.name=麻将桌
 model.touhou_little_maid.beach_chair.name=沙滩椅
 model.touhou_little_maid.parasol.name=遮阳伞
+model.touhou_little_maid.shin_takarajima.name=新宝岛
+model.touhou_little_maid.water_wheel.name=水车
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
@@ -283,4 +291,6 @@ subtitle.touhou_little_maid.item.camera_use=相机咔哒声
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s
+hwyla.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物
 top.touhou_little_maid.entity_maid.task=当前模式：
+top.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物

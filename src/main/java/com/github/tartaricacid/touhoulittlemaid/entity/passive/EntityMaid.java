@@ -10,6 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -26,6 +27,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
@@ -508,6 +510,20 @@ public class EntityMaid extends AbstractEntityMaid {
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             return new ItemStack(Items.ARROW);
         }
+    }
+
+    @Override
+    public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
+        // 拥有旗指物时，玩家对自己女仆的伤害数值为 1/5
+        if (source.getTrueSource() instanceof EntityPlayer && this.isOwner((EntityPlayer) source.getTrueSource()) && this.hasSasimono()) {
+            amount = amount / 5;
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    @Override
+    public boolean canAttackClass(Class<? extends EntityLivingBase> cls) {
+        return cls != EntityChair.class && cls != EntityMarisaBroom.class && cls != EntityArmorStand.class && super.canAttackClass(cls);
     }
 
     @Override
@@ -1180,6 +1196,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(SASIMONO_CRC32, String.valueOf(crc32));
     }
 
+    @Override
     public boolean hasSasimono() {
         return !this.dataManager.get(SASIMONO_CRC32).equals(String.valueOf(0L));
     }
@@ -1216,6 +1233,7 @@ public class EntityMaid extends AbstractEntityMaid {
         return canPlaceBlock(pos, state) && world.setBlockState(pos, state);
     }
 
+    @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {

@@ -9,6 +9,11 @@
       "model_id": "touhou_little_maid:hakurei_reimu",
       "description": ["{model.touhou_little_maid.hakurei_reimu.desc}"]
     }, {
+      "model_id": "touhou_little_maid:hakurei_reimu_2",
+      "model": "touhou_little_maid:models/entity/hakurei_reimu.json",
+      "name": "{model.touhou_little_maid.hakurei_reimu.name}",
+      "description": ["{model.touhou_little_maid.hakurei_reimu.desc}"]
+    }, {
       "model_id": "touhou_little_maid:yakumo_ran",
       "description": ["{model.touhou_little_maid.yakumo_ran.desc}"]
     }, {
@@ -91,6 +96,9 @@
       "model_id": "touhou_little_maid:alice_margatroid",
       "description": ["{model.touhou_little_maid.alice_margatroid.desc}"]
     }, {
+      "model_id": "touhou_little_maid:alice",
+      "description": ["{model.touhou_little_maid.alice.desc}"]
+    }, {
       "model_id": "touhou_little_maid:patchouli_knowledge",
       "description": ["{model.touhou_little_maid.patchouli_knowledge.desc}"]
     }, {
@@ -144,6 +152,12 @@
     }, {
       "model_id": "touhou_little_maid:kitcho_yachie",
       "description": ["{model.touhou_little_maid.kitcho_yachie.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:saigyouji_yuyuko",
+      "description": ["{model.touhou_little_maid.saigyouji_yuyuko.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:yorigami_shion",
+      "description": ["{model.touhou_little_maid.yorigami_shion.desc}"]
     }
   ]
 }

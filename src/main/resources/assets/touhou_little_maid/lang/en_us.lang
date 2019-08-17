@@ -172,6 +172,7 @@ model.touhou_little_maid.luna_child.name=Luna Child
 model.touhou_little_maid.remilia_scarlet.name=Remilia Scarlet
 model.touhou_little_maid.sunny_milk.name=Sunny Milk
 model.touhou_little_maid.alice_margatroid.name=Alice Margatroid
+model.touhou_little_maid.alice.name=Alice
 model.touhou_little_maid.patchouli_knowledge.name=Patchouli Knowledge
 model.touhou_little_maid.hong_meiling.name=Hong Meiling
 model.touhou_little_maid.koakuma.name=Koakuma
@@ -190,6 +191,8 @@ model.touhou_little_maid.rumia.name=Rumia
 model.touhou_little_maid.matara_okina.name=Okina Matara
 model.touhou_little_maid.mystia_lorelei.name=Mystia Lorelei
 model.touhou_little_maid.kitcho_yachie.name=Yachie Kitcho
+model.touhou_little_maid.saigyouji_yuyuko.name=Yuyuko Saigyouji
+model.touhou_little_maid.yorigami_shion.name=Shion Yorigami
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -219,6 +222,7 @@ model.touhou_little_maid.luna_child.desc=§7Silent Moonlight
 model.touhou_little_maid.remilia_scarlet.desc=§7The Scarlet Devil
 model.touhou_little_maid.sunny_milk.desc=§7Shining Sunlight
 model.touhou_little_maid.alice_margatroid.desc=§7Seven-Colored Puppeteer
+model.touhou_little_maid.alice.desc=§7Girl of Death
 model.touhou_little_maid.patchouli_knowledge.desc=§7The Unmoving Great Library
 model.touhou_little_maid.hong_meiling.desc=§7Chinese Girl
 model.touhou_little_maid.koakuma.desc=§7？？？
@@ -236,6 +240,8 @@ model.touhou_little_maid.rumia.desc=§7Youkai of the Dusk
 model.touhou_little_maid.matara_okina.desc=§7The Ultimate, Absolute Secret God
 model.touhou_little_maid.mystia_lorelei.desc=§7Night Sparrow Apparition
 model.touhou_little_maid.kitcho_yachie.desc=§7Matriarch of the Kiketsu Family
+model.touhou_little_maid.saigyouji_yuyuko.desc=§7Dreaming Ghost
+model.touhou_little_maid.yorigami_shion.desc=§7The Most-Despicable and Disastrous Elder Twin Sister
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -254,6 +260,8 @@ model.touhou_little_maid.square_table.name=Square Table
 model.touhou_little_maid.mahjong_table.name=Mahjong Table
 model.touhou_little_maid.beach_chair.name=Beach Chair
 model.touhou_little_maid.parasol.name=Parasol
+model.touhou_little_maid.shin_takarajima.name=Shin Takarajima
+model.touhou_little_maid.water_wheel.name=Water Wheel
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
@@ -283,4 +291,6 @@ subtitle.touhou_little_maid.item.camera_use=Camera Use Sound
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s
-top.touhou_little_maid.entity_maid.task=Mode: 
+hwyla.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
+top.touhou_little_maid.entity_maid.task=Mode:
+top.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
