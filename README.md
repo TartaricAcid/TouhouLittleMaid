@@ -13,3 +13,4 @@
 - 部分 AI 方面代码因为原版写死的原因，无法继承来做改动，只能复制粘贴做修改;
 - 部分代码书写学习自 McJty 和 <https://harbinger.covertdragon.team>。
 - 游戏中声音素材来自于：[あみたろの声素材工房](https://www14.big.or.jp/~amiami/happy/)、[Open Game Art](https://opengameart.org/)
+- 旗指物材质来自于：<http://sengokudama.jugem.jp/?eid=1447>

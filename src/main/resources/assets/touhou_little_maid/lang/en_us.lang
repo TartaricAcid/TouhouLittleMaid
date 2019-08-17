@@ -16,10 +16,15 @@ item.touhou_little_maid.marisa_broom.name=Marisa's Broom
 item.touhou_little_maid.camera.name=Aya's Camera
 item.touhou_little_maid.photo.name=Photo
 item.touhou_little_maid.chair.name=Chair
+item.touhou_little_maid.hata_sasimono.name=Hata Sasimono
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
 tile.touhou_little_maid.grid.name=Maid Interaction Panel
+
+# Command
+commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>
+commands.touhou_little_maid.hata.reload=Has reloaded all hata texture
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
@@ -37,7 +42,7 @@ tooltips.touhou_little_maid.broom.destroy.desc=Shift left hit can destroy it.
 tooltips.touhou_little_maid.chair.place.desc=Right click on the top of the block to place it.
 tooltips.touhou_little_maid.chair.destroy.desc=Shift left hit can destroy it.
 tooltips.touhou_little_maid.chair.gui.desc=Shift right click can open skin gui.
-
+tooltips.touhou_little_maid.hata_sasimono.desc=Right click on the maid to apply hata sasimono.
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -98,6 +103,7 @@ gui.touhou_little_maid.button.pickup.false=Pick Mode Is Disable.
 gui.touhou_little_maid.button.home.true=Home Mode Is Enable.
 gui.touhou_little_maid.button.home.false=Home Mode Is Disable.
 gui.touhou_little_maid.button.skin=Change Skin
+gui.touhou_little_maid.button.hata_sasimono=Change Hata Sasimono
 gui.touhou_little_maid.skin.button.close=Close
 gui.touhou_little_maid.credit.url.close=This voice was delivered by Amitoro's Voice Material Studio
 gui.touhou_little_maid.skin_details.close=Close
@@ -118,6 +124,11 @@ gui.touhou_little_maid.skin_details.apply_data=Apply Data
 gui.touhou_little_maid.skin_details.mounted_height=Height
 gui.touhou_little_maid.skin_details.show_character=Show Ref Character
 gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift Click To Make Ten Times Modification
+gui.touhou_little_maid.hata_select.apply=Apply Texture
+gui.touhou_little_maid.hata_select.close=Close
+gui.touhou_little_maid.hata_select.display.true=Show Sasimono
+gui.touhou_little_maid.hata_select.display.false=Hide Sasimono
+
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=Author: %s
@@ -173,6 +184,8 @@ model.touhou_little_maid.reiuji_utsuho.name=Utsuho Reiuji
 model.touhou_little_maid.kaenbyou_rin.name=Rin Kaenbyou
 model.touhou_little_maid.rumia.name=Rumia
 model.touhou_little_maid.matara_okina.name=Okina Matara
+model.touhou_little_maid.mystia_lorelei.name=Mystia Lorelei
+model.touhou_little_maid.kitcho_yachie.name=Yachie Kitcho
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -217,6 +230,8 @@ model.touhou_little_maid.reiuji_utsuho.desc=§7Scorching, Troublesome Divine Fla
 model.touhou_little_maid.kaenbyou_rin.desc=§7Hell's Traffic Accident
 model.touhou_little_maid.rumia.desc=§7Youkai of the Dusk
 model.touhou_little_maid.matara_okina.desc=§7The Ultimate, Absolute Secret God
+model.touhou_little_maid.mystia_lorelei.desc=§7Night Sparrow Apparition
+model.touhou_little_maid.kitcho_yachie.desc=§7Matriarch of the Kiketsu Family
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -230,6 +245,11 @@ model.touhou_little_maid.tall_stool.name=Tall Stool
 model.touhou_little_maid.low_stool.name=Low Stool
 model.touhou_little_maid.barbecue_booth.name=Barbecue Booth
 model.touhou_little_maid.barbecue_booth_2.name=Barbecue Booth
+model.touhou_little_maid.long_stool.name=Long Stool
+model.touhou_little_maid.square_table.name=Square Table
+model.touhou_little_maid.mahjong_table.name=Mahjong Table
+model.touhou_little_maid.beach_chair.name=Beach Chair
+model.touhou_little_maid.parasol.name=Parasol
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

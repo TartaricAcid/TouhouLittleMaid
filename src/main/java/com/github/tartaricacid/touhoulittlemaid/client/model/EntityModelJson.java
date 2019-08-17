@@ -31,6 +31,7 @@ import java.util.List;
  **/
 @SideOnly(Side.CLIENT)
 public class EntityModelJson extends ModelBase {
+    public final AxisAlignedBB renderBoundingBox;
     private final int format;
     /**
      * 存储 ModelRender 子模型的 HashMap
@@ -44,8 +45,6 @@ public class EntityModelJson extends ModelBase {
      * 哪些模型需要渲染。加载进父骨骼的子骨骼是不需要渲染的
      */
     private List<ModelRenderer> shouldRender = new ArrayList<>();
-
-    public final AxisAlignedBB renderBoundingBox;
 
     public EntityModelJson(CustomModelPOJO pojo, int format) {
         this.format = format;

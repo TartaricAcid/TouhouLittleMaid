@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerHataSasimono;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugBroom;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugFloor;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidHeldItem;
@@ -37,6 +38,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(new LayerMaidDebugFloor(new DebugFloorModel()));
         this.addLayer(new LayerMaidDebugBroom(new EntityMarisaBroomModel()));
+        this.addLayer(new LayerHataSasimono());
     }
 
     @Override

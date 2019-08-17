@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
@@ -121,7 +120,7 @@ public class EntityChair extends EntityLivingBase {
                 return true;
             }
             if (world.isRemote) {
-                player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.CHAIR.getId(), world, this.getEntityId(), 0, 0);
+                player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.SKIN_GUI.CHAIR.getId(), world, this.getEntityId(), 0, 0);
             }
             return true;
         } else {

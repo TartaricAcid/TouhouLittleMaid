@@ -45,8 +45,30 @@
       "render_item_scale": 0.2
     }, {
       "model_id": "touhou_little_maid:barbecue_booth_2",
+      "texture": "touhou_little_maid:textures/entity/barbecue_booth.png",
       "mounted_height": -0.0625,
       "render_item_scale": 0.2,
+      "tameable_can_ride": false
+    }, {
+      "model_id": "touhou_little_maid:long_stool",
+      "mounted_height": 0.25,
+      "render_item_scale": 0.8
+    }, {
+      "model_id": "touhou_little_maid:square_table",
+      "mounted_height": 0.75,
+      "render_item_scale": 0.5
+    }, {
+      "model_id": "touhou_little_maid:mahjong_table",
+      "mounted_height": 0.75,
+      "render_item_scale": 0.8,
+      "tameable_can_ride": false
+    }, {
+      "model_id": "touhou_little_maid:beach_chair",
+      "mounted_height": 0.125
+    }, {
+      "model_id": "touhou_little_maid:parasol",
+      "mounted_height": -0.1875,
+      "render_item_scale": 0.6,
       "tameable_can_ride": false
     }
   ]

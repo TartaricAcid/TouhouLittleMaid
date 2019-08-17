@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -34,10 +35,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
-import static com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler.GUI;
-
 /**
- * 女仆主 GUI 界面的集合，其他界面在此基础上拓展得到
+ * 女仆主 MAIN_GUI 界面的集合，其他界面在此基础上拓展得到
  *
  * @author TartaricAcid
  */
@@ -68,7 +67,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     public abstract void drawCustomBackground(int mouseX, int mouseY, float partialTicks);
 
     /**
-     * 绘制自定义 GUI，会在主背景绘制后调用
+     * 绘制自定义 MAIN_GUI，会在主背景绘制后调用
      *
      * @param mouseX       鼠标 x 坐标
      * @param mouseY       鼠标 y 坐标
@@ -77,7 +76,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     public abstract void drawCustomScreen(int mouseX, int mouseY, float partialTicks);
 
     /**
-     * 该 GUI 的名称
+     * 该 MAIN_GUI 的名称
      */
     public abstract String getGuiName();
 
@@ -112,6 +111,12 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 切换模型的按钮
         this.buttonList.add(new GuiButtonImage(BUTTON.SKIN.ordinal(), i + 65, j + 9, 9,
                 9, 178, 72, 10, BACKGROUND));
+
+        // 切换旗指物的按钮
+        if (maid.hasSasimono()) {
+            this.buttonList.add(new GuiButtonImage(BUTTON.HATA_SASIMONO.ordinal(), i + 26, j + 9, 9,
+                    9, 188, 72, 10, BACKGROUND));
+        }
 
         // 显示声音版权的页面
         this.buttonList.add(new GuiButtonImage(BUTTON.SOUND_CREDIT.ordinal(), i - 19, j + 141, 19,
@@ -175,6 +180,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             return;
         }
 
+        if (button.id == BUTTON.HATA_SASIMONO.ordinal()) {
+            mc.addScheduledTask(() -> mc.displayGuiScreen(new MaidHataSelect(maid)));
+            return;
+        }
+
         if (button.id == BUTTON.SOUND_CREDIT.ordinal()) {
             mc.player.playSound(MaidSoundEvent.OTHER_CREDIT, 1, 1);
             mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSoundCredit(this)));
@@ -205,7 +215,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         }
 
         // 绘制不同标签页的提示文字
-        for (MaidGuiHandler.GUI gui : GUI.values()) {
+        for (MaidGuiHandler.MAIN_GUI gui : MaidGuiHandler.MAIN_GUI.values()) {
             xInRange = (i + 28 * (gui.getId() - 1)) < mouseX && mouseX < (i + 28 * gui.getId());
             yInRange = (j - 28) < mouseY && mouseY < j;
             if (xInRange && yInRange) {
@@ -232,6 +242,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         yInRange = (j + 9) < mouseY && mouseY < (j + 18);
         if (xInRange && yInRange) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.skin"), mouseX, mouseY);
+        }
+
+        // 切换皮肤描述
+        xInRange = (i + 26) < mouseX && mouseX < (i + 35);
+        yInRange = (j + 9) < mouseY && mouseY < (j + 18);
+        if (xInRange && yInRange && maid.hasSasimono()) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.hata_sasimono"), mouseX, mouseY);
         }
     }
 
@@ -296,26 +313,28 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
      */
     public enum BUTTON {
         // 拾物模式按钮
-        PICKUP(GUI.NONE.getId()),
+        PICKUP(MaidGuiHandler.NONE_GUI.NONE.getId()),
         // 主界面按钮
-        MAIN(GUI.MAIN.getId()),
+        MAIN(MaidGuiHandler.MAIN_GUI.MAIN.getId()),
         // 主物品栏按钮
-        INVENTORY(GUI.INVENTORY.getId()),
+        INVENTORY(MaidGuiHandler.MAIN_GUI.INVENTORY.getId()),
         // 饰品栏按钮
-        BAUBLE(GUI.BAUBLE.getId()),
+        BAUBLE(MaidGuiHandler.MAIN_GUI.BAUBLE.getId()),
         // 模式切换按钮
-        TASK_SWITCH(GUI.NONE.getId()),
+        TASK_SWITCH(MaidGuiHandler.NONE_GUI.NONE.getId()),
         // HOME 模式切换按钮
-        HOME(GUI.NONE.getId()),
+        HOME(MaidGuiHandler.NONE_GUI.NONE.getId()),
         // 女仆模型皮肤按钮
-        SKIN(GUI.NONE.getId()),
+        SKIN(MaidGuiHandler.NONE_GUI.NONE.getId()),
         // 声音素材致谢
-        SOUND_CREDIT(GUI.NONE.getId());
+        SOUND_CREDIT(MaidGuiHandler.NONE_GUI.NONE.getId()),
+        // 旗指物按钮
+        HATA_SASIMONO(MaidGuiHandler.NONE_GUI.NONE.getId());
 
         private int guiId;
 
         /**
-         * @param guiId 摁下按钮后触发的 GUI 的 ID，如果不触发 GUI，可以将其设置为 GUI.NONE
+         * @param guiId 摁下按钮后触发的 MAIN_GUI 的 ID，如果不触发 MAIN_GUI，可以将其设置为 MAIN_GUI.NONE
          */
         BUTTON(int guiId) {
             this.guiId = guiId;

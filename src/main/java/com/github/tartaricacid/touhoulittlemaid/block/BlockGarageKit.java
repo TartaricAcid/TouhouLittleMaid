@@ -82,127 +82,6 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         return tagCompound;
     }
 
-    @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return getItemStackFromBlock(world, pos);
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BLOCK_AABB;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        for (String key : ClientProxy.ID_MODEL_INFO_MAP.keySet()) {
-            items.add(getItemStackWithData(DEFAULT_ENTITY_ID, key, DEFAULT_DATA));
-        }
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        // 需要留空
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityGarageKit();
-    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te instanceof TileEntityGarageKit) {
-            ((TileEntityGarageKit) te).setData(getEntityId(stack), placer.getHorizontalFacing().getOpposite(),
-                    getModelId(stack), getEntityData(stack));
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        // 先显示实体名称
-        String entityId = getEntityId(stack);
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.entity_id.desc",
-                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(entityId)) + ".name")));
-
-        // 如果是女仆，才会显示对应的模型名称
-        if (entityId.equals(DEFAULT_ENTITY_ID)) {
-            ModelItem modelItem = ClientProxy.ID_MODEL_INFO_MAP.get(getModelId(stack));
-            if (modelItem != null) {
-                tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(modelItem.getName())));
-            }
-        }
-
-        if (flagIn.isAdvanced() && GuiScreen.isShiftKeyDown() && stack.hasTagCompound()) {
-            tooltip.add(stack.getTagCompound().toString());
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return side == EnumFacing.DOWN;
-    }
-
-    @Override
-    public boolean isBlockNormalCube(IBlockState blockState) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState blockState) {
-        return false;
-    }
-
-    // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
-
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        // 否则玩家会卡死在方块里面窒息
-        return false;
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // 先是各种条件判定，不符合进行返回
-        ItemStack stack = playerIn.getHeldItem(hand);
-        if (worldIn.isRemote || stack.getItem() != Items.SPAWN_EGG) {
-            return false;
-        }
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (!(tile instanceof TileEntityGarageKit)) {
-            return false;
-        }
-        ResourceLocation id = ItemMonsterPlacer.getNamedIdFrom(stack);
-        if (id == null || !EntityList.ENTITY_EGGS.containsKey(id)) {
-            return false;
-        }
-
-        // 应用刷怪蛋
-        TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
-        Entity entity = EntityList.createEntityByIDFromName(id, worldIn);
-        if (entity instanceof EntityLiving) {
-            // 获取初始化的实体对象
-            ((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
-            // 女仆的话，需要应用上模型 ID
-            if (entity instanceof EntityMaid) {
-                garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModelId(), new NBTTagCompound());
-                return true;
-            }
-        }
-        garageKit.setData(id.toString(), garageKit.getFacing(), null, entity.writeToNBT(new NBTTagCompound()));
-        return true;
-    }
-
     /**
      * 通过读取 TileEntityGarageKit 来获得对应 ItemStack
      */
@@ -255,6 +134,127 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
             return getTagCompoundSafe(stack).getString(NBT.MODEL_ID.getName());
         }
         return DEFAULT_MODEL_ID;
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return getItemStackFromBlock(world, pos);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BLOCK_AABB;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+        for (String key : ClientProxy.ID_MODEL_INFO_MAP.keySet()) {
+            items.add(getItemStackWithData(DEFAULT_ENTITY_ID, key, DEFAULT_DATA));
+        }
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        // 需要留空
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntityGarageKit();
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileEntityGarageKit) {
+            ((TileEntityGarageKit) te).setData(getEntityId(stack), placer.getHorizontalFacing().getOpposite(),
+                    getModelId(stack), getEntityData(stack));
+        }
+    }
+
+    // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        // 先显示实体名称
+        String entityId = getEntityId(stack);
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.entity_id.desc",
+                I18n.format("entity." + EntityList.getTranslationName(new ResourceLocation(entityId)) + ".name")));
+
+        // 如果是女仆，才会显示对应的模型名称
+        if (entityId.equals(DEFAULT_ENTITY_ID)) {
+            ModelItem modelItem = ClientProxy.ID_MODEL_INFO_MAP.get(getModelId(stack));
+            if (modelItem != null) {
+                tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(modelItem.getName())));
+            }
+        }
+
+        if (flagIn.isAdvanced() && GuiScreen.isShiftKeyDown() && stack.hasTagCompound()) {
+            tooltip.add(stack.getTagCompound().toString());
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        return side == EnumFacing.DOWN;
+    }
+
+    @Override
+    public boolean isBlockNormalCube(IBlockState blockState) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState blockState) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        // 否则玩家会卡死在方块里面窒息
+        return false;
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        // 先是各种条件判定，不符合进行返回
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if (worldIn.isRemote || stack.getItem() != Items.SPAWN_EGG) {
+            return false;
+        }
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (!(tile instanceof TileEntityGarageKit)) {
+            return false;
+        }
+        ResourceLocation id = ItemMonsterPlacer.getNamedIdFrom(stack);
+        if (id == null || !EntityList.ENTITY_EGGS.containsKey(id)) {
+            return false;
+        }
+
+        // 应用刷怪蛋
+        TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
+        Entity entity = EntityList.createEntityByIDFromName(id, worldIn);
+        if (entity instanceof EntityLiving) {
+            // 获取初始化的实体对象
+            ((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
+            // 女仆的话，需要应用上模型 ID
+            if (entity instanceof EntityMaid) {
+                garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModelId(), new NBTTagCompound());
+                return true;
+            }
+        }
+        garageKit.setData(id.toString(), garageKit.getFacing(), null, entity.writeToNBT(new NBTTagCompound()));
+        return true;
     }
 
     public enum NBT {

@@ -166,7 +166,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
         // 绘制灰色默认背景
         drawDefaultBackground();
 
-        // 绘制 GUI 背景
+        // 绘制 MAIN_GUI 背景
         mc.renderEngine.bindTexture(BG);
         drawTexturedModalRect(middleX - 256 / 2, middleY - 100, 0, 0, 256, 200);
 
