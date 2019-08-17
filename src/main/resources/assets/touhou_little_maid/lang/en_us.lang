@@ -42,6 +42,10 @@ tooltips.touhou_little_maid.broom.destroy.desc=Shift left hit can destroy it.
 tooltips.touhou_little_maid.chair.place.desc=Right click on the top of the block to place it.
 tooltips.touhou_little_maid.chair.destroy.desc=Shift left hit can destroy it.
 tooltips.touhou_little_maid.chair.gui.desc=Shift right click can open skin gui.
+tooltips.touhou_little_maid.grid.input.true=Input
+tooltips.touhou_little_maid.grid.input.false=Output
+tooltips.touhou_little_maid.grid.blacklist.true=Blacklist
+tooltips.touhou_little_maid.grid.blacklist.false=Whitelist
 tooltips.touhou_little_maid.hata_sasimono.desc=Right click on the maid to apply hata sasimono.
 
 # Message

@@ -42,6 +42,10 @@ tooltips.touhou_little_maid.broom.destroy.desc=Shift 左击破坏它。
 tooltips.touhou_little_maid.chair.place.desc=右击方块顶部进行放置。
 tooltips.touhou_little_maid.chair.destroy.desc=Shift 左击破坏它。
 tooltips.touhou_little_maid.chair.gui.desc=Shift 右击打开皮肤界面。
+tooltips.touhou_little_maid.grid.input.true=输入
+tooltips.touhou_little_maid.grid.input.false=输出
+tooltips.touhou_little_maid.grid.blacklist.true=黑名单
+tooltips.touhou_little_maid.grid.blacklist.false=白名单
 tooltips.touhou_little_maid.hata_sasimono.desc=右击女仆应用上旗指物。
 
 # Message

@@ -99,10 +99,15 @@ public class TileEntityGrid extends TileEntity {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        write(compound);
+        return super.writeToNBT(compound);
+    }
+
+    public NBTTagCompound write(NBTTagCompound compound) {
         compound.merge(handler.serializeNBT());
         compound.setBoolean("Blacklist", blacklist);
         compound.setBoolean("Input", input);
-        return super.writeToNBT(compound);
+        return compound;
     }
 
     /**
@@ -416,6 +421,18 @@ public class TileEntityGrid extends TileEntity {
             return mode = Mode.ITEM_IO;
         }
         return mode = Mode.UNKNOWN;
+    }
+
+    public boolean isCleared() {
+        if (input == true && blacklist == false) {
+            for (int i = 0; i < handler.getSlots(); i++) {
+                if (!handler.getStackInSlot(i).isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public enum Mode {

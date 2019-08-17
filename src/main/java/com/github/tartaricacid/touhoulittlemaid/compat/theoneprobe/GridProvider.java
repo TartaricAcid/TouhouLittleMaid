@@ -15,7 +15,7 @@ import net.minecraft.world.World;
  * @author TartaricAcid
  * @date 2019/8/1 14:40
  **/
-public class TileEntityGridProvider implements IProbeInfoProvider {
+public class GridProvider implements IProbeInfoProvider {
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
