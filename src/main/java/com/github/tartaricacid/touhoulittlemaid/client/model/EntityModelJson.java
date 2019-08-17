@@ -195,7 +195,7 @@ public class EntityModelJson extends ModelBase {
         }
 
         // 因为三者不允许同时存在，所以需要 if 判定
-        if (entityMaid.getControllingPassenger() instanceof EntityMarisaBroom || entityMaid.isDebugBroomShow) {
+        if (entityMaid.getControllingPassenger() instanceof EntityMarisaBroom) {
             // 坐在扫帚上时，应用待命的动作
             ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
         } else if (entityMaid.isRiding()) {
