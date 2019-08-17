@@ -12,7 +12,7 @@ import net.minecraft.world.World;
  * @author TartaricAcid
  * @date 2019/7/25 20:55
  **/
-public class EntityMaidProvider implements IProbeInfoEntityProvider {
+public class MaidProvider implements IProbeInfoEntityProvider {
     @Override
     public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, Entity entity, IProbeHitEntityData data) {
         if (entity instanceof EntityMaid && ((EntityMaid) entity).isTamed()) {

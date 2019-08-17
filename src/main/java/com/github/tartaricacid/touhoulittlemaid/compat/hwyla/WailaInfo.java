@@ -21,7 +21,7 @@ public class WailaInfo implements IWailaPlugin {
 
     @Override
     public void register(IWailaRegistrar registrar) {
-        registrar.registerBodyProvider(new EntityMaidProvider(), EntityMaid.class);
-        registrar.registerBodyProvider(new TileEntityGridProvider(), BlockGrid.class);
+        registrar.registerBodyProvider(new MaidProvider(), EntityMaid.class);
+        registrar.registerBodyProvider(new GridProvider(), BlockGrid.class);
     }
 }

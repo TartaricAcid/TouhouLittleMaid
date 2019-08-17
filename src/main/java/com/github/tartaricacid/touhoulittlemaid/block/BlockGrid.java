@@ -1,5 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
@@ -12,25 +15,31 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 import java.util.Locale;
-
 public class BlockGrid extends Block {
     public static final PropertyEnum<Direction> DIRECTION = PropertyEnum.create("facing", Direction.class);
     public static final PropertyBool INPUT = PropertyBool.create("input");
@@ -159,7 +168,72 @@ public class BlockGrid extends Block {
     }
 
     @Override
-    public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
+    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+        // NO-OP
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        ItemStack itemstack = new ItemStack(this);
+        TileEntity tile = worldIn.getTileEntity(pos);
+
+        if (tile instanceof TileEntityGrid) {
+            TileEntityGrid grid = (TileEntityGrid) tile;
+            if (!grid.isCleared()) {
+                NBTTagCompound nbttagcompound = new NBTTagCompound();
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound.setTag("BlockEntityTag", grid.write(nbttagcompound1));
+                itemstack.setTagCompound(nbttagcompound);
+            }
+        }
+
+        spawnAsEntity(worldIn, pos, itemstack);
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        NBTTagCompound nbttagcompound = stack.getTagCompound();
+        if (nbttagcompound == null || !nbttagcompound.hasKey("BlockEntityTag", 10)) {
+            tooltip.add(getModeTooltip(true, false));
+            return;
+        }
+
+        NBTTagCompound tag = nbttagcompound.getCompoundTag("BlockEntityTag");
+
+        tooltip.add(getModeTooltip(tag.getBoolean("Input"), tag.getBoolean("Blacklist")));
+
+        if (tag.hasKey("Items", 9)) {
+            NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(27, ItemStack.EMPTY);
+            ItemStackHelper.loadAllItems(tag, nonnulllist);
+            int i = 0;
+            int j = 0;
+
+            for (ItemStack itemstack : nonnulllist) {
+                if (!itemstack.isEmpty()) {
+                    ++j;
+
+                    if (i <= 4) {
+                        ++i;
+                        tooltip.add(itemstack.getDisplayName());
+                    }
+                }
+            }
+
+            if (j - i > 0) {
+                tooltip.add(String.format(TextFormatting.ITALIC + I18n.format("container.shulkerBox.more"), j - i));
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static String getModeTooltip(boolean input, boolean blacklist) {
+        String s = I18n.format(String.format("tooltips.%s.grid.input.%s", TouhouLittleMaid.MOD_ID, input));
+        s += " | ";
+        s += I18n.format(String.format("tooltips.%s.grid.blacklist.%s", TouhouLittleMaid.MOD_ID, blacklist));
+        return s;
     }
 
     @Override

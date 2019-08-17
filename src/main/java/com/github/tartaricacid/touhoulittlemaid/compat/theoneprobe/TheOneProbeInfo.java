@@ -14,8 +14,8 @@ public class TheOneProbeInfo implements Function<ITheOneProbe, Void> {
     @Override
     public Void apply(@Nullable ITheOneProbe probe) {
         if (probe != null) {
-            probe.registerEntityProvider(new EntityMaidProvider());
-            probe.registerProvider(new TileEntityGridProvider());
+            probe.registerEntityProvider(new MaidProvider());
+            probe.registerProvider(new GridProvider());
         }
         return null;
     }

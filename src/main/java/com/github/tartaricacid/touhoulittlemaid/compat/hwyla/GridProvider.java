@@ -15,7 +15,7 @@ import java.util.List;
  * @author TartaricAcid
  * @date 2019/8/1 14:33
  **/
-public class TileEntityGridProvider implements IWailaDataProvider {
+public class GridProvider implements IWailaDataProvider {
     @Nonnull
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> tooltip, IWailaDataAccessor accessor, IWailaConfigHandler config) {

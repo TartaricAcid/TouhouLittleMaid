@@ -14,7 +14,7 @@ import java.util.List;
  * @author TartaricAcid
  * @date 2019/7/25 19:46
  **/
-public class EntityMaidProvider implements IWailaEntityProvider {
+public class MaidProvider implements IWailaEntityProvider {
     @Nonnull
     @Override
     public List<String> getWailaBody(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config) {
