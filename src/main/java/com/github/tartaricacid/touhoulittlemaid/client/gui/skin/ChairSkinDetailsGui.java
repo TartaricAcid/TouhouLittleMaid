@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyChairSkinDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonToggle;
 import net.minecraft.client.resources.I18n;
@@ -16,9 +18,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
     private GuiButtonToggle characterButton;
+    private ResourceLocation modelId;
 
     public ChairSkinDetailsGui(EntityChair sourceEntity, ResourceLocation modelId) {
         super(sourceEntity, new EntityChair(sourceEntity.world), ClientProxy.ID_CHAIR_INFO_MAP.get(modelId.toString()));
+        this.modelId = modelId;
         guiEntity.setModelId(modelId.toString());
         guiEntity.setMountedHeight(modelItem.getMountedYOffset());
         guiEntity.setTameableCanRide(modelItem.isTameableCanRide());
@@ -40,8 +44,8 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
     void actionSideButtonPerformed(GuiButton button) {
         switch (BUTTON.getButtonFromOrdinal(button.id)) {
             case APPLY_DATA:
-                sourceEntity.setModelId(guiEntity.getModelId());
-                sourceEntity.setMountedHeight(guiEntity.getMountedHeight());
+                CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(sourceEntity.getUniqueID(),
+                        modelId, guiEntity.getMountedHeight(), guiEntity.isTameableCanRide()));
                 return;
             case MIN_HEIGHT:
                 // Shift 10 倍率减少

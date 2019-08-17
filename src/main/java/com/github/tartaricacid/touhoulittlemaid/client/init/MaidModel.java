@@ -49,6 +49,7 @@ public final class MaidModel {
         registerRender(MaidItems.CAMERA);
         registerRender(MaidItems.PHOTO);
         registerRender(MaidItems.CHAIR);
+        registerRender(MaidItems.HATA_SASIMONO);
     }
 
     private static void registerRender(Item item) {

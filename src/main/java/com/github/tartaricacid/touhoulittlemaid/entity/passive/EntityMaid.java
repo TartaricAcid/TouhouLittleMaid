@@ -88,6 +88,8 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> STRUCK_BY_LIGHTNING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<String> SASIMONO_CRC32 = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<Boolean> SHOW_SASIMONO = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
 
     /**
      * 模式所应用的 AI 的优先级
@@ -146,10 +148,6 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     public boolean isDebugFloorOpen = false;
     /**
-     * 是否开启 debug 模式下的扫帚显示，仅在客户端调用
-     */
-    public boolean isDebugBroomShow = false;
-    /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
      */
     @Nonnull
@@ -163,6 +161,13 @@ public class EntityMaid extends AbstractEntityMaid {
     public EntityMaid(World worldIn) {
         super(worldIn);
         setSize(0.6f, 1.5f);
+    }
+
+    /**
+     * 检查输入的物品是否是非法的
+     */
+    private static boolean isIllegalItem(ItemStack stack) {
+        return stack.getItem() instanceof ItemShulkerBox || stack.getItem() instanceof ItemPhoto;
     }
 
     @SuppressWarnings("unchecked")
@@ -205,6 +210,8 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(ARM_RISE, Boolean.FALSE);
         this.dataManager.register(MODEL_ID, "touhou_little_maid:hakurei_reimu");
         this.dataManager.register(STRUCK_BY_LIGHTNING, false);
+        this.dataManager.register(SASIMONO_CRC32, String.valueOf(0L));
+        this.dataManager.register(SHOW_SASIMONO, false);
     }
 
     @Override
@@ -789,7 +796,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private boolean openMaidGui(EntityPlayer player) {
         // 否则打开 GUI
         if (!world.isRemote) {
-            player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
+            player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.MAIN_GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
         }
         return true;
     }
@@ -930,6 +937,12 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.STRUCK_BY_LIGHTNING.getName())) {
             setStruckByLightning(compound.getBoolean(NBT.STRUCK_BY_LIGHTNING.getName()));
         }
+        if (compound.hasKey(NBT.SASIMONO_CRC32.getName())) {
+            setSasimonoCRC32(compound.getLong(NBT.SASIMONO_CRC32.getName()));
+        }
+        if (compound.hasKey(NBT.SHOW_SASIMONO.getName())) {
+            setShowSasimono(compound.getBoolean(NBT.SHOW_SASIMONO.getName()));
+        }
     }
 
     @Override
@@ -944,6 +957,8 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
         compound.setString(NBT.MODEL_ID.getName(), getModelId());
         compound.setBoolean(NBT.STRUCK_BY_LIGHTNING.getName(), isStruckByLightning());
+        compound.setLong(NBT.SASIMONO_CRC32.getName(), getSasimonoCRC32());
+        compound.setBoolean(NBT.SHOW_SASIMONO.getName(), isShowSasimono());
     }
 
     @Override
@@ -1157,6 +1172,26 @@ public class EntityMaid extends AbstractEntityMaid {
         this.getDataManager().set(STRUCK_BY_LIGHTNING, isStruck);
     }
 
+    public Long getSasimonoCRC32() {
+        return Long.valueOf(this.dataManager.get(SASIMONO_CRC32));
+    }
+
+    public void setSasimonoCRC32(Long crc32) {
+        this.dataManager.set(SASIMONO_CRC32, String.valueOf(crc32));
+    }
+
+    public boolean hasSasimono() {
+        return !this.dataManager.get(SASIMONO_CRC32).equals(String.valueOf(0L));
+    }
+
+    public boolean isShowSasimono() {
+        return this.dataManager.get(SHOW_SASIMONO);
+    }
+
+    public void setShowSasimono(boolean isShow) {
+        this.dataManager.set(SHOW_SASIMONO, isShow);
+    }
+
     @Override
     public boolean canDestroyBlock(BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
@@ -1191,13 +1226,6 @@ public class EntityMaid extends AbstractEntityMaid {
         return modelJson.renderBoundingBox.offset(getPositionVector());
     }
 
-    /**
-     * 检查输入的物品是否是非法的
-     */
-    private static boolean isIllegalItem(ItemStack stack) {
-        return stack.getItem() instanceof ItemShulkerBox || stack.getItem() instanceof ItemPhoto;
-    }
-
     public enum NBT {
         // 女仆的物品栏
         MAID_INVENTORY("MaidInventory"),
@@ -1216,7 +1244,11 @@ public class EntityMaid extends AbstractEntityMaid {
         // 模型
         MODEL_ID("ModelId"),
         // 是否被雷击过
-        STRUCK_BY_LIGHTNING("StruckByLightning");
+        STRUCK_BY_LIGHTNING("StruckByLightning"),
+        // 指物旗的 CRC32
+        SASIMONO_CRC32("SasimonoCRC32"),
+        // 是否显示指物旗
+        SHOW_SASIMONO("ShowSasimono");
 
         private String name;
 

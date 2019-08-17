@@ -3,8 +3,12 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonToggle;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -66,7 +70,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         sitButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         rideButton = new GuiButtonToggle(RIDE.ordinal(), 2, 17 + 13 * 3, 128, 12, guiEntity.isRiding());
         rideButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
-        rideBroomButton = new GuiButtonToggle(RIDE_BROOM.ordinal(), 2, 17 + 13 * 4, 128, 12, guiEntity.isDebugBroomShow);
+        rideBroomButton = new GuiButtonToggle(RIDE_BROOM.ordinal(), 2, 17 + 13 * 4, 128, 12, false);
         rideBroomButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         helmetButton = new GuiButtonToggle(HELMET.ordinal(), 2, 17 + 13 * 5, 128, 12, !guiEntity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty());
         helmetButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
@@ -197,26 +201,24 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     }
 
     private void applyRideButtonLogic() {
-        if (guiEntity.isRiding()) {
-            guiEntity.dismountRidingEntity();
-            rideButton.setStateTriggered(false);
-        } else {
+        rideButton.setStateTriggered(!rideButton.isStateTriggered());
+        if (rideButton.isStateTriggered()) {
             // 不兼容的动作列表需要归位
             applyConflictReset(RIDE);
             guiEntity.startRiding(marisaBroom);
-            rideButton.setStateTriggered(true);
+        } else {
+            guiEntity.dismountRidingEntity();
         }
     }
 
     private void applyRideBroomButtonLogic() {
-        if (guiEntity.isDebugBroomShow) {
-            guiEntity.isDebugBroomShow = false;
-            rideBroomButton.setStateTriggered(false);
-        } else {
+        rideBroomButton.setStateTriggered(!rideBroomButton.isStateTriggered());
+        if (rideBroomButton.isStateTriggered()) {
             // 不兼容的动作列表需要归位
             applyConflictReset(RIDE_BROOM);
-            guiEntity.isDebugBroomShow = true;
-            rideBroomButton.setStateTriggered(true);
+            guiEntity.startRiding(marisaBroom);
+        } else {
+            guiEntity.dismountRidingEntity();
         }
     }
 
@@ -275,13 +277,34 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
             sitButton.setStateTriggered(false);
         }
         if (button != RIDE) {
-            guiEntity.dismountRidingEntity();
             rideButton.setStateTriggered(false);
         }
         if (button != RIDE_BROOM) {
-            guiEntity.isDebugBroomShow = false;
             rideBroomButton.setStateTriggered(false);
         }
+        if (!rideButton.isStateTriggered() && !rideBroomButton.isStateTriggered()) {
+            guiEntity.dismountRidingEntity();
+        }
+    }
+
+    @Override
+    protected void drawEntity(int middleWidth, int middleHeight) {
+        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+        drawEntityPre(rendermanager, middleWidth, middleHeight);
+        rendermanager.renderEntity(guiEntity, 0.0D, -1.0D, 0.0D, 0.0F, 0.0f, true);
+        if (rideBroomButton.isStateTriggered()) {
+            GlStateManager.pushMatrix();
+            GlStateManager.rotate(-12f, 1, 0, 0);
+            rendermanager.renderEntity(marisaBroom, 0.0D, -1.2D, 0.0D, 0.0F, 0.0f, true);
+            GlStateManager.popMatrix();
+        }
+        drawEntityPost(rendermanager);
+    }
+
+    @Override
+    public void onGuiClosed() {
+        guiEntity.dismountRidingEntity();
+        super.onGuiClosed();
     }
 
     enum BUTTON {

@@ -16,10 +16,15 @@ item.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
 item.touhou_little_maid.camera.name=文文的相机
 item.touhou_little_maid.photo.name=照片
 item.touhou_little_maid.chair.name=椅子
+item.touhou_little_maid.hata_sasimono.name=旗指物
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
 tile.touhou_little_maid.grid.name=女仆交互面板
+
+# Command
+commands.touhou_little_maid.hata.usage=§c用法：/hata <reload>
+commands.touhou_little_maid.hata.reload=已经重载所有的旗指物材质
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -41,6 +46,7 @@ tooltips.touhou_little_maid.grid.input.true=输入
 tooltips.touhou_little_maid.grid.input.false=输出
 tooltips.touhou_little_maid.grid.blacklist.true=黑名单
 tooltips.touhou_little_maid.grid.blacklist.false=白名单
+tooltips.touhou_little_maid.hata_sasimono.desc=右击女仆应用上旗指物。
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
@@ -101,6 +107,7 @@ gui.touhou_little_maid.button.pickup.false=拾物模式已经关闭
 gui.touhou_little_maid.button.home.true=Home 模式已经开启
 gui.touhou_little_maid.button.home.false=Home 模式已经关闭
 gui.touhou_little_maid.button.skin=更改皮肤
+gui.touhou_little_maid.button.hata_sasimono=更改旗指物
 gui.touhou_little_maid.skin.button.close=关闭
 gui.touhou_little_maid.credit.url.close=使用的音效由 あみたろの声素材工房 提供
 gui.touhou_little_maid.skin_details.close=关闭
@@ -121,6 +128,11 @@ gui.touhou_little_maid.skin_details.apply_data=应用数据
 gui.touhou_little_maid.skin_details.mounted_height=高度
 gui.touhou_little_maid.skin_details.show_character=显示参考角色
 gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift 点击能够进行十倍修改
+gui.touhou_little_maid.hata_select.apply=应用材质
+gui.touhou_little_maid.hata_select.close=关闭
+gui.touhou_little_maid.hata_select.display.true=显示旗指物
+gui.touhou_little_maid.hata_select.display.false=隐藏旗指物
+
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=作者：%s
@@ -176,6 +188,8 @@ model.touhou_little_maid.reiuji_utsuho.name=灵乌路空
 model.touhou_little_maid.kaenbyou_rin.name=火焰猫燐
 model.touhou_little_maid.rumia.name=露米娅
 model.touhou_little_maid.matara_okina.name=摩多罗隐岐奈
+model.touhou_little_maid.mystia_lorelei.name=米斯蒂娅·萝蕾拉
+model.touhou_little_maid.kitcho_yachie.name=吉吊八千慧
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -220,6 +234,8 @@ model.touhou_little_maid.reiuji_utsuho.desc=§7难以驾驭的神之火
 model.touhou_little_maid.kaenbyou_rin.desc=§7地狱的轮祸
 model.touhou_little_maid.rumia.desc=§7宵暗的妖怪
 model.touhou_little_maid.matara_okina.desc=§7究极的绝对秘神
+model.touhou_little_maid.mystia_lorelei.desc=§7夜雀妖怪
+model.touhou_little_maid.kitcho_yachie.desc=§7鬼杰组组长
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -233,6 +249,11 @@ model.touhou_little_maid.tall_stool.name=高脚凳
 model.touhou_little_maid.low_stool.name=低脚凳
 model.touhou_little_maid.barbecue_booth.name=烧烤摊
 model.touhou_little_maid.barbecue_booth_2.name=烧烤摊
+model.touhou_little_maid.long_stool.name=长条凳
+model.touhou_little_maid.square_table.name=八仙桌
+model.touhou_little_maid.mahjong_table.name=麻将桌
+model.touhou_little_maid.beach_chair.name=沙滩椅
+model.touhou_little_maid.parasol.name=遮阳伞
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

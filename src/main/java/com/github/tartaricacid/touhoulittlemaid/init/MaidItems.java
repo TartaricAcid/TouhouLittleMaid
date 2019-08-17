@@ -23,35 +23,6 @@ public final class MaidItems {
     public static Item KAPPA_COMPASS;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "hakurei_gohei")
     public static Item HAKUREI_GOHEI;
-    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "ultramarine_orb_elixir")
-    public static Item ULTRAMARINE_ORB_ELIXIR;
-    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "marisa_broom")
-    public static Item MARISA_BROOM;
-    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "camera")
-    public static Item CAMERA;
-    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "photo")
-    public static Item PHOTO;
-    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "chair")
-    public static Item CHAIR;
-
-    @SuppressWarnings("all")
-    @SubscribeEvent
-    public static void register(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(new ItemKappaCompass().setRegistryName("kappa_compass"));
-        event.getRegistry().register(new ItemHakureiGohei().setRegistryName("hakurei_gohei"));
-        event.getRegistry().register(new ItemDamageable(5).setRegistryName("ultramarine_orb_elixir")
-                .setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "ultramarine_orb_elixir")
-                .setCreativeTab(MaidItems.TABS));
-        event.getRegistry().register(new ItemMarisaBroom().setRegistryName("marisa_broom"));
-        event.getRegistry().register(new ItemCamera().setRegistryName("camera"));
-        event.getRegistry().register(new ItemPhoto().setRegistryName("photo"));
-        event.getRegistry().register(new ItemChair().setRegistryName("chair"));
-
-        event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
-        event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));
-    }
-
-
     public static final CreativeTabs TABS = new CreativeTabs("touhou_little_maid.name") {
         @Override
         public ItemStack createIcon() {
@@ -73,4 +44,34 @@ public final class MaidItems {
             super.displayAllRelevantItems(items);
         }
     };
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "ultramarine_orb_elixir")
+    public static Item ULTRAMARINE_ORB_ELIXIR;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "marisa_broom")
+    public static Item MARISA_BROOM;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "camera")
+    public static Item CAMERA;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "photo")
+    public static Item PHOTO;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "chair")
+    public static Item CHAIR;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "hata_sasimono")
+    public static Item HATA_SASIMONO;
+
+    @SuppressWarnings("all")
+    @SubscribeEvent
+    public static void register(RegistryEvent.Register<Item> event) {
+        event.getRegistry().register(new ItemKappaCompass().setRegistryName("kappa_compass"));
+        event.getRegistry().register(new ItemHakureiGohei().setRegistryName("hakurei_gohei"));
+        event.getRegistry().register(new ItemDamageable(5).setRegistryName("ultramarine_orb_elixir")
+                .setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "ultramarine_orb_elixir")
+                .setCreativeTab(MaidItems.TABS));
+        event.getRegistry().register(new ItemMarisaBroom().setRegistryName("marisa_broom"));
+        event.getRegistry().register(new ItemCamera().setRegistryName("camera"));
+        event.getRegistry().register(new ItemPhoto().setRegistryName("photo"));
+        event.getRegistry().register(new ItemChair().setRegistryName("chair"));
+        event.getRegistry().register(new ItemHataSasimono().setRegistryName("hata_sasimono"));
+
+        event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
+        event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));
+    }
 }

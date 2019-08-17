@@ -46,40 +46,12 @@ public class ItemChair extends Item {
         setCreativeTab(MaidItems.TABS);
     }
 
-    @Nonnull
-    @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (facing == EnumFacing.UP) {
-            ItemStack itemstack = player.getHeldItem(hand);
-            float yaw = (float) MathHelper.floor((MathHelper.wrapDegrees(player.rotationYaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
-            EntityChair chair = new EntityChair(worldIn, pos.getX() + 0.5, pos.up().getY(), pos.getZ() + 0.5, yaw);
-            chair.setModelId(getChairModelId(itemstack));
-            chair.setMountedHeight(getMountedHeight(itemstack));
-            chair.setTameableCanRide(isTameableCanRide(itemstack));
-            // 应用命名
-            if (itemstack.hasDisplayName()) {
-                chair.setCustomNameTag(itemstack.getDisplayName());
-            }
-            // 物品消耗，实体生成
-            player.getHeldItem(hand).shrink(1);
-            if (!worldIn.isRemote) {
-                worldIn.spawnEntity(chair);
-            }
-            chair.rotationYawHead = yaw;
-            chair.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 1.0f, 1.0f);
-            return EnumActionResult.SUCCESS;
-        }
-        return EnumActionResult.PASS;
-    }
-
-
     public static String getChairModelId(ItemStack stack) {
         if (stack.getItem() == MaidItems.CHAIR && stack.hasTagCompound() && stack.getTagCompound().hasKey(MODEL_ID.getName())) {
             return stack.getTagCompound().getString(MODEL_ID.getName());
         }
         return DEFAULT_MODEL_ID;
     }
-
 
     private static ItemStack setChairModelId(ItemStack stack, String modelId) {
         if (stack.getItem() == MaidItems.CHAIR) {
@@ -139,6 +111,32 @@ public class ItemChair extends Item {
         setMountedHeight(stack, height);
         setTameableCanRide(stack, canRide);
         return stack;
+    }
+
+    @Nonnull
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (facing == EnumFacing.UP) {
+            ItemStack itemstack = player.getHeldItem(hand);
+            float yaw = (float) MathHelper.floor((MathHelper.wrapDegrees(player.rotationYaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
+            EntityChair chair = new EntityChair(worldIn, pos.getX() + 0.5, pos.up().getY(), pos.getZ() + 0.5, yaw);
+            chair.setModelId(getChairModelId(itemstack));
+            chair.setMountedHeight(getMountedHeight(itemstack));
+            chair.setTameableCanRide(isTameableCanRide(itemstack));
+            // 应用命名
+            if (itemstack.hasDisplayName()) {
+                chair.setCustomNameTag(itemstack.getDisplayName());
+            }
+            // 物品消耗，实体生成
+            player.getHeldItem(hand).shrink(1);
+            if (!worldIn.isRemote) {
+                worldIn.spawnEntity(chair);
+            }
+            chair.rotationYawHead = yaw;
+            chair.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 1.0f, 1.0f);
+            return EnumActionResult.SUCCESS;
+        }
+        return EnumActionResult.PASS;
     }
 
     @Override

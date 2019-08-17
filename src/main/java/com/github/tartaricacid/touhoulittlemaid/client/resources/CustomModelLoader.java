@@ -55,6 +55,24 @@ public final class CustomModelLoader {
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
     /**
+     * 重新装载所有的模型包
+     * 实际上也可用来首次加载资源包，我就是这么做的，省代码了
+     */
+    public static void reloadModelPack() {
+        // 清空数据
+        MODEL_PACK_LIST.clear();
+        ID_MODEL_MAP.clear();
+        ID_MODEL_INFO_MAP.clear();
+
+        CHAIR_PACK_LIST.clear();
+        ID_CHAIR_MAP.clear();
+        ID_CHAIR_INFO_MAP.clear();
+
+        // 重载数据
+        loadModelPack();
+    }
+
+    /**
      * 加载所有的模型包
      */
     private static void loadModelPack() {
@@ -158,23 +176,5 @@ public final class CustomModelLoader {
 
         // 如果前面出了错，返回 Null
         return null;
-    }
-
-    /**
-     * 重新装载所有的模型包
-     * 实际上也可用来首次加载资源包，我就是这么做的，省代码了
-     */
-    public static void reloadModelPack() {
-        // 清空数据
-        MODEL_PACK_LIST.clear();
-        ID_MODEL_MAP.clear();
-        ID_MODEL_INFO_MAP.clear();
-
-        CHAIR_PACK_LIST.clear();
-        ID_CHAIR_MAP.clear();
-        ID_CHAIR_INFO_MAP.clear();
-
-        // 重载数据
-        loadModelPack();
     }
 }

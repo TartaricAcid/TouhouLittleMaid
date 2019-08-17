@@ -31,11 +31,13 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static final EntityChairRender.Factory FACTORY = new EntityChairRender.Factory();
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
     private static final String DEFAULT_CHAIR_TEXTURE = "touhou_little_maid:textures/entity/cushion.png";
+    private static final LayerChairDebugFloor DEBUG_FLOOR = new LayerChairDebugFloor(new DebugFloorModel());
+    private static final LayerChairDebugCharacter DEBUG_CHARACTER = new LayerChairDebugCharacter(new DebugCharacterModel());
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
         super(renderManager, mainModel, 0f);
-        addLayer(new LayerChairDebugFloor(new DebugFloorModel()));
-        addLayer(new LayerChairDebugCharacter(new DebugCharacterModel()));
+        addLayer(DEBUG_FLOOR);
+        addLayer(DEBUG_CHARACTER);
     }
 
     @Override
