@@ -120,7 +120,7 @@ public class EntityChair extends EntityLivingBase {
                 return true;
             }
             if (world.isRemote) {
-                player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.SKIN_GUI.CHAIR.getId(), world, this.getEntityId(), 0, 0);
+                player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.OTHER_GUI.CHAIR.getId(), world, this.getEntityId(), 0, 0);
             }
             return true;
         } else {
@@ -272,7 +272,7 @@ public class EntityChair extends EntityLivingBase {
 
     public void setMountedHeight(float height) {
         // 防止有人恶意利用这一点，强行增加范围限制
-        height = MathHelper.clamp(height, -0.5f, 1.5f);
+        height = MathHelper.clamp(height, -0.5f, 2.5f);
         this.dataManager.set(MOUNTED_HEIGHT, height);
     }
 

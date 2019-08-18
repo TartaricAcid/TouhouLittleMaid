@@ -313,7 +313,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
      */
     public enum BUTTON {
         // 拾物模式按钮
-        PICKUP(MaidGuiHandler.NONE_GUI.NONE.getId()),
+        PICKUP(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 主界面按钮
         MAIN(MaidGuiHandler.MAIN_GUI.MAIN.getId()),
         // 主物品栏按钮
@@ -321,15 +321,15 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 饰品栏按钮
         BAUBLE(MaidGuiHandler.MAIN_GUI.BAUBLE.getId()),
         // 模式切换按钮
-        TASK_SWITCH(MaidGuiHandler.NONE_GUI.NONE.getId()),
+        TASK_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // HOME 模式切换按钮
-        HOME(MaidGuiHandler.NONE_GUI.NONE.getId()),
+        HOME(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 女仆模型皮肤按钮
-        SKIN(MaidGuiHandler.NONE_GUI.NONE.getId()),
+        SKIN(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 声音素材致谢
-        SOUND_CREDIT(MaidGuiHandler.NONE_GUI.NONE.getId()),
+        SOUND_CREDIT(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 旗指物按钮
-        HATA_SASIMONO(MaidGuiHandler.NONE_GUI.NONE.getId());
+        HATA_SASIMONO(MaidGuiHandler.OTHER_GUI.NONE.getId());
 
         private int guiId;
 

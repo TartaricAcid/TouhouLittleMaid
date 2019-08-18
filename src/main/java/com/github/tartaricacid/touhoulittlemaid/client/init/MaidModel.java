@@ -50,6 +50,7 @@ public final class MaidModel {
         registerRender(MaidItems.PHOTO);
         registerRender(MaidItems.CHAIR);
         registerRender(MaidItems.HATA_SASIMONO);
+        registerRender(MaidItems.ALBUM);
     }
 
     private static void registerRender(Item item) {

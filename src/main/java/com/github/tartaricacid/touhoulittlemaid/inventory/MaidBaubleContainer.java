@@ -9,6 +9,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
+
 public class MaidBaubleContainer extends MaidMainContainer {
     public MaidBaubleContainer(IInventory playerInventory, EntityMaid entityMaid, int taskIndex) {
         super(playerInventory, entityMaid, taskIndex);
@@ -34,6 +36,7 @@ public class MaidBaubleContainer extends MaidMainContainer {
     /**
      * 处理 Shift 点击情况下的物品逻辑
      */
+    @Nonnull
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;

@@ -19,6 +19,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class MaidMainContainer extends Container {
@@ -53,7 +54,7 @@ public class MaidMainContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
         return this.maid.isTamed() && this.maid.getOwnerId().equals(playerIn.getUniqueID())
                 && this.maid.isEntityAlive() && this.maid.getDistance(playerIn) < 5.0F;
     }
@@ -96,7 +97,7 @@ public class MaidMainContainer extends Container {
                  * 检查格子是否放置的是指定物品
                  */
                 @Override
-                public boolean isItemValid(ItemStack stack) {
+                public boolean isItemValid(@Nonnull ItemStack stack) {
                     return stack.getItem().isValidArmor(stack, entityequipmentslot, entityMaid) && super.isItemValid(stack);
                 }
 
@@ -124,7 +125,6 @@ public class MaidMainContainer extends Container {
         this.addSlotToContainer(new SlotItemHandler(itemHandler, 4, 80, 62));
         this.addSlotToContainer(new SlotItemHandler(itemHandler, 5, 98, 62) {
             @Override
-            @Nullable
             @SideOnly(Side.CLIENT)
             public String getSlotTexture() {
                 return "minecraft:items/empty_armor_slot_shield";
@@ -135,6 +135,7 @@ public class MaidMainContainer extends Container {
     /**
      * 处理 Shift 点击情况下的物品逻辑
      */
+    @Nonnull
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;

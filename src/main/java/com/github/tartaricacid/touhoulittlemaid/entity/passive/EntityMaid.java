@@ -15,6 +15,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
@@ -173,7 +174,7 @@ public class EntityMaid extends AbstractEntityMaid {
      * 检查输入的物品是否是非法的
      */
     private static boolean isIllegalItem(ItemStack stack) {
-        return stack.getItem() instanceof ItemShulkerBox || stack.getItem() instanceof ItemPhoto;
+        return stack.getItem() instanceof ItemShulkerBox || stack.getItem() instanceof ItemPhoto || stack.getItem() instanceof ItemAlbum;
     }
 
     @SuppressWarnings("unchecked")

@@ -17,6 +17,7 @@ item.touhou_little_maid.camera.name=Aya's Camera
 item.touhou_little_maid.photo.name=Photo
 item.touhou_little_maid.chair.name=Chair
 item.touhou_little_maid.hata_sasimono.name=Hata Sasimono
+item.touhou_little_maid.album.name=Album
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -263,6 +264,8 @@ model.touhou_little_maid.beach_chair.name=Beach Chair
 model.touhou_little_maid.parasol.name=Parasol
 model.touhou_little_maid.shin_takarajima.name=Shin Takarajima
 model.touhou_little_maid.water_wheel.name=Water Wheel
+model.touhou_little_maid.saisen_bako.name=Saisen Bako
+model.touhou_little_maid.mech.name=Mech
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

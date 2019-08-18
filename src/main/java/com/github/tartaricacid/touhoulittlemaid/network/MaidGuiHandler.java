@@ -1,14 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.network;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.AlbumGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidBaubleGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidInventoryGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidMainGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.inventory.AlbumContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidBaubleContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -35,9 +38,12 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == MAIN_GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
-        if (guiId == SKIN_GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
+        if (guiId == OTHER_GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
             // 服务端什么也不做
             return null;
+        }
+        if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
+            return new AlbumContainer(player.inventory, player.getHeldItemMainhand());
         }
         return null;
     }
@@ -61,8 +67,11 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == MAIN_GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
-        if (guiId == SKIN_GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
+        if (guiId == OTHER_GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
             return new ChairSkinGui((EntityChair) world.getEntityByID(entityId));
+        }
+        if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
+            return new AlbumGuiContainer(player.inventory, player.getHeldItemMainhand());
         }
         return null;
     }
@@ -90,33 +99,19 @@ public class MaidGuiHandler implements IGuiHandler {
     }
 
     /**
-     * 无 GUI 的占位符
+     * 其他界面的 GUI ID 枚举
      */
-    public enum NONE_GUI {
-        // 无 GUI
-        NONE(-1);
-
-        private int id;
-
-        NONE_GUI(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
-
-    /**
-     * 皮肤界面的 GUI ID 枚举
-     */
-    public enum SKIN_GUI {
+    public enum OTHER_GUI {
+        // 无 GUI 的占位符
+        NONE(-1),
         // 椅子的 GUI
-        CHAIR(4);
+        CHAIR(4),
+        // 相册
+        ALBUM(5);
 
         private int id;
 
-        SKIN_GUI(int id) {
+        OTHER_GUI(int id) {
             this.id = id;
         }
 

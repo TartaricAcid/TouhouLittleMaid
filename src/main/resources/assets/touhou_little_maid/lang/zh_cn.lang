@@ -17,6 +17,7 @@ item.touhou_little_maid.camera.name=文文的相机
 item.touhou_little_maid.photo.name=照片
 item.touhou_little_maid.chair.name=椅子
 item.touhou_little_maid.hata_sasimono.name=旗指物
+item.touhou_little_maid.album.name=相册
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -263,6 +264,8 @@ model.touhou_little_maid.beach_chair.name=沙滩椅
 model.touhou_little_maid.parasol.name=遮阳伞
 model.touhou_little_maid.shin_takarajima.name=新宝岛
 model.touhou_little_maid.water_wheel.name=水车
+model.touhou_little_maid.saisen_bako.name=赛钱箱
+model.touhou_little_maid.mech.name=机甲
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

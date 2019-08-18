@@ -58,19 +58,19 @@ if __name__ == '__main__':
         # 拷贝该文件夹到临时文件夹
         shutil.copytree(search_dir, tmp_dir)
         # 获取得到符合条件的文件
-        math_list = find_png(tmp_dir)
+        match_list = find_png(tmp_dir)
         # 两个变量，记录改变前后的文件大小
         before_total_size = 0
         after_total_size = 0
 
         # 遍历进行文件压缩处理
-        for math in math_list:
-            before_size = os.path.getsize(math)
+        for match in match_list:
+            before_size = os.path.getsize(match)
             before_total_size += before_size
-            Image.open(math).save(math)
-            after_size = os.path.getsize(math)
+            Image.open(match).save(match)
+            after_size = os.path.getsize(match)
             after_total_size += after_size
-            logging.info("压缩率：%.2f%%" % ((before_size - after_size) / before_size * 100))
+            logging.info("文件 %s " % match + "压缩率：%.2f%%" % ((before_size - after_size) / before_size * 100))
         logging.info("总压缩率：%.2f%%" % ((before_total_size - after_total_size) / before_total_size * 100))
 
         # 再度打开窗口，选择放置处理好的文件路径
