@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -73,6 +74,9 @@ public class ApplyChairSkinDataMessage implements IMessage {
                         chair.setModelId(message.getModelId().toString());
                         chair.setMountedHeight(message.getMountedHeight());
                         chair.setTameableCanRide(message.isTameableCanRide());
+                        if (!message.isTameableCanRide() && chair.getControllingPassenger() instanceof EntityMaid) {
+                            chair.getControllingPassenger().dismountRidingEntity();
+                        }
                     }
                 });
             }

@@ -150,6 +150,10 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     public boolean isDebugFloorOpen = false;
     /**
+     * 是否开启 debug 模式下的扫帚显示，仅在客户端调用
+     */
+    public boolean isDebugBroomShow = false;
+    /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
      */
     @Nonnull
@@ -514,9 +518,9 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        // 拥有旗指物时，玩家对自己女仆的伤害数值为 1/5
+        // 拥有旗指物时，玩家对自己女仆的伤害数值为 1/5，最大为 2
         if (source.getTrueSource() instanceof EntityPlayer && this.isOwner((EntityPlayer) source.getTrueSource()) && this.hasSasimono()) {
-            amount = amount / 5;
+            amount = MathHelper.clamp(amount / 5, 0, 2);
         }
         return super.attackEntityFrom(source, amount);
     }

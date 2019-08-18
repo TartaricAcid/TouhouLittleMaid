@@ -124,6 +124,7 @@ gui.touhou_little_maid.skin_details.leggings=Show Leggings
 gui.touhou_little_maid.skin_details.boots=Show Boots
 gui.touhou_little_maid.skin_details.main_hand=Show Main Hand Item
 gui.touhou_little_maid.skin_details.off_hand=Show Off Hand Item
+gui.touhou_little_maid.skin_details.hata_sasimono=Show Hata Sasimono
 gui.touhou_little_maid.skin_details.apply_data=Apply Data
 gui.touhou_little_maid.skin_details.mounted_height=Height
 gui.touhou_little_maid.skin_details.show_character=Show Ref Character

@@ -160,6 +160,7 @@ public class EntityChair extends EntityLivingBase {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
 
+    @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {

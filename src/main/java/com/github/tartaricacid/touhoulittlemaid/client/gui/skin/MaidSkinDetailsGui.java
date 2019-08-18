@@ -3,11 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonToggle;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -15,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinDetailsGui.BUTTON.*;
 
@@ -30,6 +29,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     private static final ItemStack MAIN_HAND_SWORD = Items.DIAMOND_SWORD.getDefaultInstance();
     private static final ItemStack OFF_HAND_SHIELD = Items.SHIELD.getDefaultInstance();
     private static final ItemStack ARMOR_ITEM = Items.GOLDEN_APPLE.getDefaultInstance();
+    private static final Random RANDOM = new Random();
 
     /**
      * 必须的部分变量
@@ -50,8 +50,9 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     private GuiButtonToggle bootsButton;
     private GuiButtonToggle mainHandButton;
     private GuiButtonToggle offHandButton;
+    private GuiButtonToggle hataSasimonoButton;
 
-    public MaidSkinDetailsGui(EntityMaid sourceMaid, ResourceLocation modelId) {
+    MaidSkinDetailsGui(EntityMaid sourceMaid, ResourceLocation modelId) {
         super(sourceMaid, new EntityMaid(sourceMaid.world), ClientProxy.ID_MODEL_INFO_MAP.get(modelId.toString()));
         this.marisaBroom = new EntityMarisaBroom(sourceMaid.world);
         guiEntity.setModelId(modelId.toString());
@@ -69,7 +70,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         sitButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         rideButton = new GuiButtonToggle(RIDE.ordinal(), 2, 17 + 13 * 3, 128, 12, guiEntity.isRiding());
         rideButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
-        rideBroomButton = new GuiButtonToggle(RIDE_BROOM.ordinal(), 2, 17 + 13 * 4, 128, 12, false);
+        rideBroomButton = new GuiButtonToggle(RIDE_BROOM.ordinal(), 2, 17 + 13 * 4, 128, 12, guiEntity.isDebugBroomShow);
         rideBroomButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         helmetButton = new GuiButtonToggle(HELMET.ordinal(), 2, 17 + 13 * 5, 128, 12, !guiEntity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty());
         helmetButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
@@ -83,6 +84,8 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         mainHandButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         offHandButton = new GuiButtonToggle(OFF_HAND.ordinal(), 2, 17 + 13 * 10, 128, 12, !guiEntity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty());
         offHandButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
+        hataSasimonoButton = new GuiButtonToggle(HATA_SASIMONO.ordinal(), 2, 17 + 13 * 11, 128, 12, guiEntity.isShowSasimono());
+        hataSasimonoButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         addButton(begButton);
         addButton(walkButton);
         addButton(sitButton);
@@ -94,6 +97,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         addButton(bootsButton);
         addButton(mainHandButton);
         addButton(offHandButton);
+        addButton(hataSasimonoButton);
     }
 
     @Override
@@ -109,6 +113,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.boots"), 16, 19 + 13 * 8, 0xcacad4);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.main_hand"), 16, 19 + 13 * 9, 0xcacad4);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.off_hand"), 16, 19 + 13 * 10, 0xcacad4);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.hata_sasimono"), 16, 19 + 13 * 11, 0xcacad4);
     }
 
     @Override
@@ -147,6 +152,9 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
             case OFF_HAND:
                 applyEquipmentButtonLogic(EntityEquipmentSlot.OFFHAND);
                 return;
+            case HATA_SASIMONO:
+                applyHataSasimonoButtonLogic();
+                return;
             default:
                 super.applyCloseButtonLogic();
         }
@@ -167,35 +175,25 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     }
 
     private void applyBegButtonLogic() {
-        if (guiEntity.isBegging()) {
-            begButton.setStateTriggered(false);
-            guiEntity.setBegging(false);
-        } else {
-            begButton.setStateTriggered(true);
-            guiEntity.setBegging(true);
-        }
+        begButton.setStateTriggered(!begButton.isStateTriggered());
+        guiEntity.setBegging(!guiEntity.isBegging());
     }
 
     private void applyWalkButtonLogic() {
-        if (isEnableWalk) {
-            isEnableWalk = false;
-            walkButton.setStateTriggered(false);
-        } else {
+        walkButton.setStateTriggered(!walkButton.isStateTriggered());
+        isEnableWalk = !isEnableWalk;
+        // 如果此时启用了行走，需要处理那些冲突的行为
+        if (walkButton.isStateTriggered()) {
             applyConflictReset(WALK);
-            isEnableWalk = true;
-            walkButton.setStateTriggered(true);
         }
     }
 
     private void applySitButtonLogic() {
-        if (guiEntity.isSitting()) {
-            guiEntity.setSitting(false);
-            sitButton.setStateTriggered(false);
-        } else {
+        sitButton.setStateTriggered(!sitButton.isStateTriggered());
+        guiEntity.setSitting(!guiEntity.isSitting());
+        if (sitButton.isStateTriggered()) {
             // 不兼容的动作列表需要归位
             applyConflictReset(SIT);
-            guiEntity.setSitting(true);
-            sitButton.setStateTriggered(true);
         }
     }
 
@@ -212,12 +210,10 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
 
     private void applyRideBroomButtonLogic() {
         rideBroomButton.setStateTriggered(!rideBroomButton.isStateTriggered());
+        guiEntity.isDebugBroomShow = !guiEntity.isDebugBroomShow;
         if (rideBroomButton.isStateTriggered()) {
             // 不兼容的动作列表需要归位
             applyConflictReset(RIDE_BROOM);
-            guiEntity.startRiding(marisaBroom);
-        } else {
-            guiEntity.dismountRidingEntity();
         }
     }
 
@@ -234,6 +230,17 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
                 guiEntity.setItemStackToSlot(slot, ARMOR_ITEM);
             }
             setEquipmentStateTriggered(slot, true);
+        }
+    }
+
+    private void applyHataSasimonoButtonLogic() {
+        hataSasimonoButton.setStateTriggered(!hataSasimonoButton.isStateTriggered());
+        if (hataSasimonoButton.isStateTriggered()) {
+            Object[] key = ClientProxy.HATA_NAME_MAP.keySet().toArray();
+            guiEntity.setSasimonoCRC32((Long) key[RANDOM.nextInt(key.length)]);
+            guiEntity.setShowSasimono(true);
+        } else {
+            guiEntity.setShowSasimono(false);
         }
     }
 
@@ -276,28 +283,13 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
             sitButton.setStateTriggered(false);
         }
         if (button != RIDE) {
+            guiEntity.dismountRidingEntity();
             rideButton.setStateTriggered(false);
         }
         if (button != RIDE_BROOM) {
+            guiEntity.isDebugBroomShow = false;
             rideBroomButton.setStateTriggered(false);
         }
-        if (!rideButton.isStateTriggered() && !rideBroomButton.isStateTriggered()) {
-            guiEntity.dismountRidingEntity();
-        }
-    }
-
-    @Override
-    protected void drawEntity(int middleWidth, int middleHeight) {
-        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
-        drawEntityPre(rendermanager, middleWidth, middleHeight);
-        rendermanager.renderEntity(guiEntity, 0.0D, -1.0D, 0.0D, 0.0F, 0.0f, true);
-        if (rideBroomButton.isStateTriggered()) {
-            GlStateManager.pushMatrix();
-            GlStateManager.rotate(-12f, 1, 0, 0);
-            rendermanager.renderEntity(marisaBroom, 0.0D, -1.2D, 0.0D, 0.0F, 0.0f, true);
-            GlStateManager.popMatrix();
-        }
-        drawEntityPost(rendermanager);
     }
 
     @Override
@@ -328,7 +320,9 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         // 主手持有物品
         MAIN_HAND,
         // 副手持有物品
-        OFF_HAND;
+        OFF_HAND,
+        // 旗指物
+        HATA_SASIMONO;
 
         /**
          * 通过序号获取对应的 BUTTON 枚举类型

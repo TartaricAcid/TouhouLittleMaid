@@ -124,6 +124,7 @@ gui.touhou_little_maid.skin_details.leggings=显示护腿
 gui.touhou_little_maid.skin_details.boots=显示靴子
 gui.touhou_little_maid.skin_details.main_hand=显示主手物品
 gui.touhou_little_maid.skin_details.off_hand=显示副手物品
+gui.touhou_little_maid.skin_details.hata_sasimono=显示旗指物
 gui.touhou_little_maid.skin_details.apply_data=应用数据
 gui.touhou_little_maid.skin_details.mounted_height=高度
 gui.touhou_little_maid.skin_details.show_character=显示参考角色
