@@ -4,9 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.MaidPlaceHelper;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -41,11 +40,9 @@ public class ItemPhoto extends Item {
         setCreativeTab(MaidItems.TABS);
     }
 
-    @Nonnull
-    @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    static EnumActionResult onPhotoUse(EntityPlayer player, World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, ItemStack photo) {
         // 方向不对或者位置不合适
-        if (facing != EnumFacing.UP || notSuitableForPlaceMaid(worldIn, pos)) {
+        if (facing != EnumFacing.UP || MaidPlaceHelper.notSuitableForPlaceMaid(worldIn, pos)) {
             if (worldIn.isRemote) {
                 player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.photo.not_suitable_for_place_maid"));
             }
@@ -53,7 +50,6 @@ public class ItemPhoto extends Item {
         }
 
         // 检查照片的 NBT 数据
-        ItemStack photo = player.getHeldItem(hand);
         if (photo.getTagCompound() == null || photo.getTagCompound().getCompoundTag(MAID_INFO.getNbtName()).isEmpty()) {
             if (worldIn.isRemote) {
                 player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.photo.have_no_nbt_data"));
@@ -74,26 +70,11 @@ public class ItemPhoto extends Item {
         return EnumActionResult.SUCCESS;
     }
 
-    /**
-     * 该坐标是否适合释放女仆
-     */
-    private boolean notSuitableForPlaceMaid(World worldIn, BlockPos pos) {
-        BlockPos firstPos = pos.up();
-        BlockPos secondPos = pos.up(2);
-        IBlockState firstBlock = worldIn.getBlockState(firstPos);
-        IBlockState secondBlock = worldIn.getBlockState(secondPos);
-        boolean firstBlockHasCollisionBoundingBox = hasCollisionBoundingBox(worldIn, firstBlock, firstPos);
-        boolean secondBlockHasCollisionBoundingBox = hasCollisionBoundingBox(worldIn, secondBlock, secondPos);
-        return firstBlockHasCollisionBoundingBox || secondBlockHasCollisionBoundingBox;
+    @Nonnull
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        return onPhotoUse(player, worldIn, pos, facing, hitX, hitY, hitZ, player.getHeldItem(hand));
     }
-
-    /**
-     * 该方块是否拥有碰撞体积
-     */
-    private boolean hasCollisionBoundingBox(World worldIn, IBlockState blockState, BlockPos pos) {
-        return blockState.getCollisionBoundingBox(worldIn, pos) != Block.NULL_AABB;
-    }
-
 
     @Override
     @SideOnly(Side.CLIENT)

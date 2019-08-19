@@ -48,6 +48,7 @@ tooltips.touhou_little_maid.grid.input.false=Output
 tooltips.touhou_little_maid.grid.blacklist.true=Blacklist
 tooltips.touhou_little_maid.grid.blacklist.false=Whitelist
 tooltips.touhou_little_maid.hata_sasimono.desc=Right click on the maid to apply hata sasimono.
+tooltips.touhou_little_maid.album.desc=Storage Situation: %d/%d
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
