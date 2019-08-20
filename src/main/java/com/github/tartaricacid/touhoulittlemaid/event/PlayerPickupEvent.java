@@ -23,7 +23,8 @@ public class PlayerPickupEvent {
     public static void onPlayerPickup(EntityItemPickupEvent event) {
         if (event.getItem().getItem().getItem() instanceof ItemPhoto && event.getEntityPlayer().isEntityAlive() && event.getItem().isEntityAlive()) {
             PlayerInvWrapper playerInvWrapper = new PlayerInvWrapper(event.getEntityPlayer().inventory);
-            ItemStack album = ItemFindUtil.getStack(playerInvWrapper, (stack) -> stack.getItem() instanceof ItemAlbum);
+            ItemStack album = ItemFindUtil.getStack(playerInvWrapper,
+                    (stack) -> stack.getItem() instanceof ItemAlbum && ItemAlbum.getAlbumPhotoNum(stack) < ItemAlbum.ALBUM_INV_SIZE);
 
             if (album != ItemStack.EMPTY) {
                 EntityItem entityItem = event.getItem();

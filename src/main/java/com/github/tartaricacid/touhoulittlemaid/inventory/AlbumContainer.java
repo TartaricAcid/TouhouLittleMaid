@@ -32,6 +32,10 @@ public class AlbumContainer extends Container {
     @Nonnull
     @Override
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
+        // 禁阻一切对当前手持物品的交互，防止刷物品 bug
+        if (slotId == 27 + player.inventory.currentItem) {
+            return player.inventory.getStackInSlot(slotId);
+        }
         ItemStack stack = super.slotClick(slotId, dragType, clickTypeIn, player);
         ItemAlbum.setAlbumInv(album, itemStackHandler);
         return stack;

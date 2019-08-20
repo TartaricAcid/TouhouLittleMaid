@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2019/8/18 18:02
  **/
 public class ItemAlbum extends Item {
-    private static final int ALBUM_INV_SIZE = 32;
+    public static final int ALBUM_INV_SIZE = 32;
 
     public ItemAlbum() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".album");
@@ -61,6 +61,17 @@ public class ItemAlbum extends Item {
         }
     }
 
+    public static int getAlbumPhotoNum(ItemStack album) {
+        if (album.getItem() instanceof ItemAlbum && album.hasTagCompound() &&
+                album.getTagCompound().hasKey(NBT.INVENTORY.getName(), Constants.NBT.TAG_COMPOUND)) {
+            NBTTagCompound tag = album.getTagCompound().getCompoundTag(NBT.INVENTORY.getName());
+            if (tag.hasKey("Size", Constants.NBT.TAG_INT) && tag.hasKey("Items", Constants.NBT.TAG_LIST)) {
+                return tag.getTagList("Items", Constants.NBT.TAG_COMPOUND).tagCount();
+            }
+        }
+        return 0;
+    }
+
     @Nonnull
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -89,13 +100,9 @@ public class ItemAlbum extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT.INVENTORY.getName(), Constants.NBT.TAG_COMPOUND)) {
-            NBTTagCompound tag = stack.getTagCompound().getCompoundTag(NBT.INVENTORY.getName());
-            if (tag.hasKey("Size", Constants.NBT.TAG_INT) && tag.hasKey("Items", Constants.NBT.TAG_LIST)) {
-                int totalSize = tag.getInteger("Size");
-                int currentSize = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND).tagCount();
-                tooltip.add(I18n.format("tooltips.touhou_little_maid.album.desc", currentSize, totalSize));
-            }
+        int photoNum = getAlbumPhotoNum(stack);
+        if (photoNum > 0) {
+            tooltip.add(I18n.format("tooltips.touhou_little_maid.album.desc", photoNum, ALBUM_INV_SIZE));
         }
     }
 

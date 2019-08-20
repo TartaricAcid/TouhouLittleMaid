@@ -196,6 +196,7 @@ model.touhou_little_maid.mystia_lorelei.name=米斯蒂娅·萝蕾拉
 model.touhou_little_maid.kitcho_yachie.name=吉吊八千慧
 model.touhou_little_maid.saigyouji_yuyuko.name=西行寺幽幽子
 model.touhou_little_maid.yorigami_shion.name=依神紫苑
+model.touhou_little_maid.kisin_sagume.name=稀神探女
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -245,6 +246,7 @@ model.touhou_little_maid.mystia_lorelei.desc=§7夜雀妖怪
 model.touhou_little_maid.kitcho_yachie.desc=§7鬼杰组组长
 model.touhou_little_maid.saigyouji_yuyuko.desc=§7华胥的亡灵
 model.touhou_little_maid.yorigami_shion.desc=§7最凶最恶的双子之姐
+model.touhou_little_maid.kisin_sagume.desc=§7招来口舌之祸的女神
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -267,6 +269,8 @@ model.touhou_little_maid.shin_takarajima.name=新宝岛
 model.touhou_little_maid.water_wheel.name=水车
 model.touhou_little_maid.saisen_bako.name=赛钱箱
 model.touhou_little_maid.mech.name=机甲
+model.touhou_little_maid.giraffe.name=长颈鹿
+model.touhou_little_maid.well.name=水井
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

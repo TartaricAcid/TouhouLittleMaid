@@ -158,6 +158,9 @@
     }, {
       "model_id": "touhou_little_maid:yorigami_shion",
       "description": ["{model.touhou_little_maid.yorigami_shion.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kisin_sagume",
+      "description": ["{model.touhou_little_maid.kisin_sagume.desc}"]
     }
   ]
 }

@@ -83,12 +83,22 @@
     }, {
       "model_id": "touhou_little_maid:saisen_bako",
       "mounted_height": 0.875,
-      "render_item_scale": 0.8,
+      "render_item_scale": 0.7,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:mech",
       "mounted_height": 2.25,
       "render_item_scale": 0.35
+    }, {
+      "model_id": "touhou_little_maid:giraffe",
+      "mounted_height": 2.5,
+      "render_item_scale": 0.4,
+      "tameable_can_ride": false
+    }, {
+      "model_id": "touhou_little_maid:well",
+      "mounted_height": 0.25,
+      "render_item_scale": 0.9,
+      "tameable_can_ride": false
     }
   ]
 }
