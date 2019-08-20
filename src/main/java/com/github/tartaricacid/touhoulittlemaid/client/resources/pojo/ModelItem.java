@@ -111,6 +111,8 @@ public class ModelItem {
         if (name == null) {
             name = String.format("{model.%s.%s.name}", modelId.getNamespace(), modelId.getPath());
         }
+        // 将写入的高度转换为游戏内部的高度
+        mountedYOffset = (mountedYOffset - 3) * 0.0625f;
         return this;
     }
 }

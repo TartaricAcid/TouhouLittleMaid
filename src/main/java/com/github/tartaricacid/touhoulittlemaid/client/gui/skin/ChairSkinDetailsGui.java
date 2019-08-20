@@ -82,7 +82,7 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
     @Override
     void drawSideButtonText() {
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.mounted_height"), 5, 43, 0xcacad4);
-        String data = String.format("%.4f", guiEntity.getMountedHeight());
+        String data = String.format("%.2f", guiEntity.getMountedHeight() / 0.0625f + 3);
         fontRenderer.drawString(data, (188 - fontRenderer.getStringWidth(data)) / 2, 43, 0xcacad4);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.show_character"), 16, 57, 0xcacad4);
     }

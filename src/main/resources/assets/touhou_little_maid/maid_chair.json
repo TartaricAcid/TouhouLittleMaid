@@ -6,97 +6,97 @@
   "model_list": [
     {
       "model_id": "touhou_little_maid:cushion",
-      "mounted_height": 0
+      "mounted_height": 3
     }, {
       "model_id": "touhou_little_maid:wheel_chair",
-      "mounted_height": 0.375
+      "mounted_height": 9
     }, {
       "model_id": "touhou_little_maid:class_desk",
-      "mounted_height": 0.75,
+      "mounted_height": 15,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:class_chair",
-      "mounted_height": 0.1875
+      "mounted_height": 6
     }, {
       "model_id": "touhou_little_maid:kotatsu",
-      "mounted_height": 0.625,
+      "mounted_height": 13,
       "tameable_can_ride": false,
       "render_item_scale": 0.4
     }, {
       "model_id": "touhou_little_maid:play_station",
-      "mounted_height": -0.125,
+      "mounted_height": 1,
       "render_item_scale": 0.7
     }, {
       "model_id": "touhou_little_maid:cat_cart",
-      "mounted_height": 0.25
+      "mounted_height": 7
     }, {
       "model_id": "touhou_little_maid:rickshaw",
-      "mounted_height": 0.5,
+      "mounted_height": 11,
       "render_item_scale": 0.7
     }, {
       "model_id": "touhou_little_maid:tall_stool",
-      "mounted_height": 0.75
+      "mounted_height": 15
     }, {
       "model_id": "touhou_little_maid:low_stool",
-      "mounted_height": 0.3125
+      "mounted_height": 8
     }, {
       "model_id": "touhou_little_maid:barbecue_booth",
-      "mounted_height": 0.8125,
+      "mounted_height": 16,
       "render_item_scale": 0.3
     }, {
       "model_id": "touhou_little_maid:barbecue_booth_2",
       "texture": "touhou_little_maid:textures/entity/barbecue_booth.png",
-      "mounted_height": -0.0625,
+      "mounted_height": 2,
       "render_item_scale": 0.3,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:long_stool",
-      "mounted_height": 0.25
+      "mounted_height": 7
     }, {
       "model_id": "touhou_little_maid:square_table",
-      "mounted_height": 0.75,
+      "mounted_height": 15,
       "render_item_scale": 0.7,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:mahjong_table",
-      "mounted_height": 0.75,
+      "mounted_height": 15,
       "render_item_scale": 0.9,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:beach_chair",
-      "mounted_height": 0.125
+      "mounted_height": 5
     }, {
       "model_id": "touhou_little_maid:parasol",
-      "mounted_height": -0.1875,
+      "mounted_height": 0,
       "render_item_scale": 0.6,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:shin_takarajima",
-      "mounted_height": 0,
+      "mounted_height": 3,
       "render_item_scale": 0.25,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:water_wheel",
-      "mounted_height": 0,
+      "mounted_height": 3,
       "render_item_scale": 0.4,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:saisen_bako",
-      "mounted_height": 0.875,
+      "mounted_height": 17,
       "render_item_scale": 0.7,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:mech",
-      "mounted_height": 2.25,
+      "mounted_height": 39,
       "render_item_scale": 0.35
     }, {
       "model_id": "touhou_little_maid:giraffe",
-      "mounted_height": 2.5,
+      "mounted_height": 43,
       "render_item_scale": 0.4,
       "tameable_can_ride": false
     }, {
       "model_id": "touhou_little_maid:well",
-      "mounted_height": 0.25,
+      "mounted_height": 7,
       "render_item_scale": 0.9,
       "tameable_can_ride": false
     }

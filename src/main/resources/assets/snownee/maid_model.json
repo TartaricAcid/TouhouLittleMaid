@@ -1,6 +1,6 @@
 {
   "pack_name": "{pack.snownee.name}",
-  "author": ["Succinum"],
+  "author": ["Succinum", "Tian_mi"],
   "description": ["{pack.snownee.desc}"],
   "version": "1.0.0",
   "date": "2019-07-27",
@@ -12,6 +12,8 @@
       "model_id": "snownee:shirakami_fubuki"
     }, {
       "model_id": "snownee:exusiai"
+    }, {
+      "model_id": "snownee:joan_of_arc"
     }
   ]
 }
