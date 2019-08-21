@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author TartaricAcid
@@ -41,7 +40,7 @@ public class ReloadHataCommand extends CommandBase {
                 sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.hata.usage"));
                 return;
             }
-            CustomHataTextureLoader.onHataTextureReload(Objects.requireNonNull(getClass().getClassLoader().getResource("assets/touhou_little_maid/hata_texture")));
+            CustomHataTextureLoader.onHataTextureReload();
             sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.hata.reload"));
         }
     }

@@ -197,6 +197,9 @@ model.touhou_little_maid.kitcho_yachie.name=Yachie Kitcho
 model.touhou_little_maid.saigyouji_yuyuko.name=Yuyuko Saigyouji
 model.touhou_little_maid.yorigami_shion.name=Shion Yorigami
 model.touhou_little_maid.kisin_sagume.name=Sagume Kishin
+model.touhou_little_maid.yukari_yakumo.name=Yukari Yakumo
+model.touhou_little_maid.tewi_inaba.name=Tewi Inaba
+model.touhou_little_maid.wriggle_nightbug.name=Wriggle Nightbug
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -247,6 +250,9 @@ model.touhou_little_maid.kitcho_yachie.desc=§7Matriarch of the Kiketsu Family
 model.touhou_little_maid.saigyouji_yuyuko.desc=§7Dreaming Ghost
 model.touhou_little_maid.yorigami_shion.desc=§7The Most-Despicable and Disastrous Elder Twin Sister
 model.touhou_little_maid.kisin_sagume.desc=§7Goddess Who Invites Unfortunate Slips of the Tongue
+model.touhou_little_maid.yukari_yakumo.desc=§7Youkai of Boundaries
+model.touhou_little_maid.tewi_inaba.desc=§7White Rabbit of Good Fortune
+model.touhou_little_maid.wriggle_nightbug.desc=§7A Bug of Light Wriggling in the Dark
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -271,6 +277,7 @@ model.touhou_little_maid.saisen_bako.name=Saisen Bako
 model.touhou_little_maid.mech.name=Mech
 model.touhou_little_maid.giraffe.name=Giraffe
 model.touhou_little_maid.well.name=Well
+model.touhou_little_maid.atashi_sai_seisan.name=Atashi Sai Seisan
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

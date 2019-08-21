@@ -197,6 +197,9 @@ model.touhou_little_maid.kitcho_yachie.name=吉吊八千慧
 model.touhou_little_maid.saigyouji_yuyuko.name=西行寺幽幽子
 model.touhou_little_maid.yorigami_shion.name=依神紫苑
 model.touhou_little_maid.kisin_sagume.name=稀神探女
+model.touhou_little_maid.yukari_yakumo.name=八云紫
+model.touhou_little_maid.tewi_inaba.name=因幡帝
+model.touhou_little_maid.wriggle_nightbug.name=莉格露·奈特巴格
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -247,6 +250,9 @@ model.touhou_little_maid.kitcho_yachie.desc=§7鬼杰组组长
 model.touhou_little_maid.saigyouji_yuyuko.desc=§7华胥的亡灵
 model.touhou_little_maid.yorigami_shion.desc=§7最凶最恶的双子之姐
 model.touhou_little_maid.kisin_sagume.desc=§7招来口舌之祸的女神
+model.touhou_little_maid.yukari_yakumo.desc=§7境界的妖怪
+model.touhou_little_maid.tewi_inaba.desc=§7幸运的白兔
+model.touhou_little_maid.wriggle_nightbug.desc=§7暗中蠢动的光虫
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -271,6 +277,7 @@ model.touhou_little_maid.saisen_bako.name=赛钱箱
 model.touhou_little_maid.mech.name=机甲
 model.touhou_little_maid.giraffe.name=长颈鹿
 model.touhou_little_maid.well.name=水井
+model.touhou_little_maid.atashi_sai_seisan.name=アタシ 再生産
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

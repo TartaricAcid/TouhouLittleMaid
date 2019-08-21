@@ -37,7 +37,6 @@ import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -83,7 +82,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         super.init(event);
         Minecraft.getMinecraft().effectRenderer.registerParticle(ParticleEnum.FLAG.getId(), ParticleEnum.FLAG.getParticle());
         HATA_TEXTURE_MANAGER = new HataTextureManager(Minecraft.getMinecraft().getResourceManager());
-        CustomHataTextureLoader.onHataTextureReload(Objects.requireNonNull(getClass().getClassLoader().getResource("assets/touhou_little_maid/hata_texture")));
+        CustomHataTextureLoader.onHataTextureReload();
         ClientCommandHandler.instance.registerCommand(new ReloadHataCommand());
     }
 

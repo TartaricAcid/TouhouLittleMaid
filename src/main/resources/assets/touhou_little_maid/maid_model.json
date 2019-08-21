@@ -1,6 +1,6 @@
 {
   "pack_name": "{pack.touhou_little_maid.maid.name}",
-  "author": ["Succinum", "ZeniCrow", "Paulzzh"],
+  "author": ["Succinum", "ZeniCrow", "Paulzzh", "Tian_mi"],
   "description": ["{pack.touhou_little_maid.maid.desc}"],
   "version": "1.0.0",
   "date": "2019-07-14",
@@ -161,6 +161,15 @@
     }, {
       "model_id": "touhou_little_maid:kisin_sagume",
       "description": ["{model.touhou_little_maid.kisin_sagume.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:yukari_yakumo",
+      "description": ["{model.touhou_little_maid.yukari_yakumo.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:tewi_inaba",
+      "description": ["{model.touhou_little_maid.tewi_inaba.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:wriggle_nightbug",
+      "description": ["{model.touhou_little_maid.wriggle_nightbug.desc}"]
     }
   ]
 }

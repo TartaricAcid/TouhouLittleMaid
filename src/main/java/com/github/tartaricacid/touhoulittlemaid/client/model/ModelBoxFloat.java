@@ -10,12 +10,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelBoxFloat extends ModelBox {
-    public ModelBoxFloat(ModelRenderer renderer, int texU, int texV, float x, float y, float z, float dx, float dy, float dz, float delta) {
-        this(renderer, texU, texV, x, y, z, dx, dy, dz, delta, renderer.mirror);
-    }
-
     public ModelBoxFloat(ModelRenderer renderer, int texU, int texV, float x, float y, float z, float dx, float dy, float dz, float delta, boolean mirror) {
-        super(renderer, texU, texV, x, y, z, (int) dx, (int) dy, (int) dz, delta, renderer.mirror);
+        super(renderer, texU, texV, x, y, z, (int) dx, (int) dy, (int) dz, delta, mirror);
         if (posX2 == x + dx && posY2 == y + dy && posZ2 == z + dz) {
             return;
         }
