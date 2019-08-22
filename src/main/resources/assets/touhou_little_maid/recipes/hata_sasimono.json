@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "touhou_little_maid:hata_sasimono"
+  },
+  "pattern": [
+    "SB ",
+    "SB ",
+    "S  "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "B": {
+      "item": "minecraft:wool",
+      "data": 11
+    }
+  }
+}

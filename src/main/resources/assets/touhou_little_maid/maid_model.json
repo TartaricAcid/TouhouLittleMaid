@@ -170,6 +170,12 @@
     }, {
       "model_id": "touhou_little_maid:wriggle_nightbug",
       "description": ["{model.touhou_little_maid.wriggle_nightbug.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:keine_kamishirasawa",
+      "description": ["{model.touhou_little_maid.keine_kamishirasawa.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:yagokoro_eirin",
+      "description": ["{model.touhou_little_maid.yagokoro_eirin.desc}"]
     }
   ]
 }
