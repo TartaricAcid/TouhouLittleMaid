@@ -40,6 +40,8 @@ public class ItemHataSasimono extends Item {
                 CommonProxy.INSTANCE.sendToServer(new SetMaidSasimonoCRC32(target.getUniqueID(), crc32, true));
             }
             stack.shrink(1);
+            ((EntityMaid) target).setAttackTarget(null);
+            target.setRevengeTarget(null);
             return true;
         }
         return super.itemInteractionForEntity(stack, playerIn, target, hand);

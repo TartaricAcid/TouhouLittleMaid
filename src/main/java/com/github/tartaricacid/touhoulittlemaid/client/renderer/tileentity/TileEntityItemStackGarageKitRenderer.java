@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -53,15 +54,24 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                         return e;
                     }
                 });
+                if (entity instanceof EntityMaid) {
+                    ((EntityMaid) entity).setModelId(BlockGarageKit.getModelId(itemStackIn));
+                    if (ClientProxy.ID_MODEL_INFO_MAP.containsKey(BlockGarageKit.getModelId(itemStackIn))) {
+                        renderItemScale = ClientProxy.ID_MODEL_INFO_MAP.get(BlockGarageKit.getModelId(itemStackIn)).getRenderItemScale();
+                    }
+                    // 缓存的对象往往有一些奇怪的东西，一并清除
+                    ((EntityMaid) entity).setShowSasimono(false);
+                    ((EntityMaid) entity).hurtResistantTime = 0;
+                    ((EntityMaid) entity).hurtTime = 0;
+                    ((EntityMaid) entity).deathTime = 0;
+                    ((EntityMaid) entity).setSitting(false);
+                    for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+                        entity.setItemStackToSlot(slot, ItemStack.EMPTY);
+                    }
+                }
                 entity.readFromNBT(BlockGarageKit.getEntityData(itemStackIn));
             } catch (ExecutionException e) {
                 return;
-            }
-            if (entity instanceof EntityMaid) {
-                ((EntityMaid) entity).setModelId(BlockGarageKit.getModelId(itemStackIn));
-                if (ClientProxy.ID_MODEL_INFO_MAP.containsKey(BlockGarageKit.getModelId(itemStackIn))) {
-                    renderItemScale = ClientProxy.ID_MODEL_INFO_MAP.get(BlockGarageKit.getModelId(itemStackIn)).getRenderItemScale();
-                }
             }
 
             GlStateManager.enableColorMaterial();

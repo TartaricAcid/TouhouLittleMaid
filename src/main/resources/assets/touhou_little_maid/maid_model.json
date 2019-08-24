@@ -176,6 +176,13 @@
     }, {
       "model_id": "touhou_little_maid:yagokoro_eirin",
       "description": ["{model.touhou_little_maid.yagokoro_eirin.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:keine_kamishirasawa_2",
+      "name": "{model.touhou_little_maid.keine_kamishirasawa.name}",
+      "description": ["{model.touhou_little_maid.keine_kamishirasawa.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:mima",
+      "description": ["{model.touhou_little_maid.mima.desc}"]
     }
   ]
 }

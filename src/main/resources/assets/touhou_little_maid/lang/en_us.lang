@@ -202,6 +202,7 @@ model.touhou_little_maid.tewi_inaba.name=Tewi Inaba
 model.touhou_little_maid.wriggle_nightbug.name=Wriggle Nightbug
 model.touhou_little_maid.keine_kamishirasawa.name=Keine Kamishirasawa
 model.touhou_little_maid.yagokoro_eirin.name=Eirin Yagokoro
+model.touhou_little_maid.mima.name=Mima
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -257,6 +258,7 @@ model.touhou_little_maid.tewi_inaba.desc=§7White Rabbit of Good Fortune
 model.touhou_little_maid.wriggle_nightbug.desc=§7A Bug of Light Wriggling in the Dark
 model.touhou_little_maid.keine_kamishirasawa.desc=§7History-Eating Half Beast
 model.touhou_little_maid.yagokoro_eirin.desc=§7Brain of the Moon
+model.touhou_little_maid.mima.desc=§7Evil Spirit
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

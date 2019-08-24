@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,6 +39,20 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
                     return e;
                 }
             });
+            if (entity instanceof EntityMaid) {
+                if (te.getModelId() != null) {
+                    ((EntityMaid) entity).setModelId(te.getModelId());
+                }
+                // 缓存的对象往往有一些奇怪的东西，一并清除
+                ((EntityMaid) entity).setShowSasimono(false);
+                ((EntityMaid) entity).hurtResistantTime = 0;
+                ((EntityMaid) entity).hurtTime = 0;
+                ((EntityMaid) entity).deathTime = 0;
+                ((EntityMaid) entity).setSitting(false);
+                for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+                    entity.setItemStackToSlot(slot, ItemStack.EMPTY);
+                }
+            }
             entity.readFromNBT(te.getMaidData());
         } catch (ExecutionException e) {
             return;
@@ -67,10 +83,6 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
             case WEST:
                 GlStateManager.rotate(270, 0, 1, 0);
                 break;
-        }
-
-        if (te.getModelId() != null && entity instanceof EntityMaid) {
-            ((EntityMaid) entity).setModelId(te.getModelId());
         }
 
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);

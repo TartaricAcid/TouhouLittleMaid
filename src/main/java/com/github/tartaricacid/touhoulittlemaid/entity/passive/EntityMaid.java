@@ -32,10 +32,7 @@ import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityParrot;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.*;
@@ -791,16 +788,13 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private boolean switchSitting(EntityPlayer player) {
         if (player.isSneaking()) {
-            // 先清除寻路逻辑
-            this.getNavigator().clearPath();
-            // 如果玩家为潜行状态，那么切换待命
+            this.setSitting(!this.isSitting());
             if (this.isSitting()) {
-                this.setSitting(false);
-            }
-            // 否则切换待命状态
-            else {
+                // 清除寻路逻辑
+                this.getNavigator().clearPath();
+                // 清除所有的攻击目标
+                this.setAttackTarget(null);
                 this.setRevengeTarget(null);
-                this.setSitting(true);
             }
             this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                     ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
@@ -1081,6 +1075,50 @@ public class EntityMaid extends AbstractEntityMaid {
                 return armorInvWrapper;
             default:
                 return mainInv;
+        }
+    }
+
+    @Nullable
+    @Override
+    public EntityLivingBase getAttackTarget() {
+        boolean hasSasimonoAndTargetIsPlayer = this.hasSasimono() && super.getAttackTarget() instanceof EntityPlayer;
+        boolean hasSasimonoAndTargetIsTameable = this.hasSasimono() && super.getAttackTarget() instanceof EntityTameable;
+        if (hasSasimonoAndTargetIsPlayer || hasSasimonoAndTargetIsTameable) {
+            return null;
+        }
+        return super.getAttackTarget();
+    }
+
+    @Override
+    public void setAttackTarget(@Nullable EntityLivingBase entityLivingBase) {
+        boolean hasSasimonoAndTargetIsPlayer = this.hasSasimono() && entityLivingBase instanceof EntityPlayer;
+        boolean hasSasimonoAndTargetIsTameable = this.hasSasimono() && entityLivingBase instanceof EntityTameable;
+        if (hasSasimonoAndTargetIsPlayer || hasSasimonoAndTargetIsTameable) {
+            super.setAttackTarget(null);
+        } else {
+            super.setAttackTarget(entityLivingBase);
+        }
+    }
+
+    @Nullable
+    @Override
+    public EntityLivingBase getRevengeTarget() {
+        boolean hasSasimonoAndTargetIsPlayer = this.hasSasimono() && super.getRevengeTarget() instanceof EntityPlayer;
+        boolean hasSasimonoAndTargetIsTameable = this.hasSasimono() && super.getRevengeTarget() instanceof EntityTameable;
+        if (hasSasimonoAndTargetIsPlayer || hasSasimonoAndTargetIsTameable) {
+            return null;
+        }
+        return super.getRevengeTarget();
+    }
+
+    @Override
+    public void setRevengeTarget(@Nullable EntityLivingBase entityLivingBase) {
+        boolean hasSasimonoAndTargetIsPlayer = this.hasSasimono() && entityLivingBase instanceof EntityPlayer;
+        boolean hasSasimonoAndTargetIsTameable = this.hasSasimono() && entityLivingBase instanceof EntityTameable;
+        if (hasSasimonoAndTargetIsPlayer || hasSasimonoAndTargetIsTameable) {
+            super.setRevengeTarget(null);
+        } else {
+            super.setRevengeTarget(entityLivingBase);
         }
     }
 
