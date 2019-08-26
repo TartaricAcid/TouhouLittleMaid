@@ -136,7 +136,6 @@ gui.touhou_little_maid.hata_select.close=Close
 gui.touhou_little_maid.hata_select.display.true=Show Sasimono
 gui.touhou_little_maid.hata_select.display.false=Hide Sasimono
 
-
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=Author: %s
 gui.touhou_little_maid.skin.text.version=Version: %s
@@ -277,13 +276,9 @@ model.touhou_little_maid.square_table.name=Square Table
 model.touhou_little_maid.mahjong_table.name=Mahjong Table
 model.touhou_little_maid.beach_chair.name=Beach Chair
 model.touhou_little_maid.parasol.name=Parasol
-model.touhou_little_maid.shin_takarajima.name=Shin Takarajima
 model.touhou_little_maid.water_wheel.name=Water Wheel
 model.touhou_little_maid.saisen_bako.name=Saisen Bako
-model.touhou_little_maid.mech.name=Mech
-model.touhou_little_maid.giraffe.name=Giraffe
 model.touhou_little_maid.well.name=Well
-model.touhou_little_maid.atashi_sai_seisan.name=Atashi Sai Seisan
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

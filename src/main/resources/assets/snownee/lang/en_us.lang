@@ -1,6 +1,7 @@
 # Pack
 pack.snownee.name=Snownee Model Pack
 pack.snownee.desc=Credit To Snownee
+pack.snownee.chair.name=Chair
 
 # Model Name
 model.snownee.nyaruko.name=Nyaruko
@@ -9,6 +10,12 @@ model.snownee.exusiai.name=Joan of Arc
 model.snownee.joan_of_arc.name=Exusiai
 model.snownee.cuora.name=Cuora
 model.snownee.nanachi.name=Nanachi
+
+model.snownee.shin_takarajima.name=Shin Takarajima
+model.snownee.mech.name=Mech
+model.snownee.giraffe.name=Giraffe
+model.snownee.atashi_sai_seisan.name=Atashi Sai Seisan
+model.snownee.road_roller.name=Road Roller
 
 # Model Desc
 model.snownee.nyaruko.desc=§7§o"I'm the chaos that always crawls up to you with a smile, Nyarlathotep!"

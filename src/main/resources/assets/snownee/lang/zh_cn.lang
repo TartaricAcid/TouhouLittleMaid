@@ -1,5 +1,6 @@
 pack.snownee.name=Snownee 模型包
 pack.snownee.desc=鸣谢 Snownee
+pack.snownee.chair.name=椅子模型
 
 model.snownee.nyaruko.name=奈亚子
 model.snownee.shirakami_fubuki.name=白上吹雪
@@ -7,5 +8,11 @@ model.snownee.exusiai.name=能天使
 model.snownee.joan_of_arc.name=贞德
 model.snownee.cuora.name=蛇屠箱
 model.snownee.nanachi.name=娜娜奇
+
+model.snownee.shin_takarajima.name=新宝岛
+model.snownee.mech.name=机甲
+model.snownee.giraffe.name=长颈鹿
+model.snownee.atashi_sai_seisan.name=アタシ 再生産
+model.snownee.road_roller.name=压路机
 
 model.snownee.nyaruko.desc=§7§o“真寻，你是要先吃我呢？还是要先把我吃掉呢？还是想先·吃·我·呢？”
