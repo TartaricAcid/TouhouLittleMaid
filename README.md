@@ -17,5 +17,5 @@
 
 # 自动化集成
 鉴于部分玩家想要更为快捷的使用，这里在 Jack 的帮助下搭建了一个 Jenkins 的集成页面。       
-但是请注意，Jenkins 上的模组都是未经任何测试的，大概率会导致不可预知的严重错误和改动，请谨慎使用！
+但是请注意，Jenkins 上的模组都是未经任何测试的，大概率会导致不可预知的严重错误和改动，请谨慎使用！      
 [【Jenkins】](https://ci.covertdragon.team/job/TouhouLittleMaid/)
