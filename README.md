@@ -14,3 +14,8 @@
 - 部分代码书写学习自 McJty 和 <https://harbinger.covertdragon.team>。
 - 游戏中声音素材来自于：[あみたろの声素材工房](https://www14.big.or.jp/~amiami/happy/)、[Open Game Art](https://opengameart.org/)
 - 旗指物材质来自于：<http://sengokudama.jugem.jp/?eid=1447>
+
+# 自动化集成
+鉴于部分玩家想要更为快捷的使用，这里在 Jack 的帮助下搭建了一个 Jenkins 的集成页面。       
+但是请注意，Jenkins 上的模组都是未经任何测试的，大概率会导致不可预知的严重错误和改动，请谨慎使用！
+[【Jenkins】](https://ci.covertdragon.team/job/TouhouLittleMaid/)
