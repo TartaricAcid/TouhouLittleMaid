@@ -97,7 +97,13 @@ tasks.withType(JavaCompile) {
 // 打包部分
 jar {
     // 打包的包名
-    baseName = archivesBaseName + "-1.12.2-${mod_version}-alpha"
+    if (System.getenv().BUILD_NUMBER != null) {
+        // 在 Jenkins 上，打包名为 touhoulittlemaid-1.12.2-jenkins-build-3.jar 这样的
+        archiveName = archivesBaseName + "-1.12.2-jenkins-build-${System.getenv().BUILD_NUMBER}.jar"
+    } else {
+        // 默认环境为 touhoulittlemaid-1.12.2-1.1.4-alpha.jar 这样的
+        archiveName = archivesBaseName + "-1.12.2-${mod_version}-alpha.jar"
+    }
     // 打包 Access Transformers 文件
     manifest {
         attributes 'FMLAT': 'touhou_little_maid_at.cfg'
