@@ -2,12 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerHataSasimono;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugBroom;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugFloor;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidHeldItem;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -35,9 +33,11 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     private static final LayerMaidDebugFloor DEBUG_FLOOR = new LayerMaidDebugFloor(new DebugFloorModel());
     private static final LayerMaidDebugBroom DEBUG_BROOM = new LayerMaidDebugBroom(new EntityMarisaBroomModel());
     private static final LayerHataSasimono HATA_SASIMONO = new LayerHataSasimono();
+    private ResourceLocation modelRes;
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
+        modelRes = new ResourceLocation(DEFAULT_MODEL_TEXTURE);
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(DEBUG_FLOOR);
         this.addLayer(DEBUG_BROOM);
@@ -47,11 +47,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     @Override
     public void doRender(@Nonnull EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模型
-        EntityModelJson modelJson = ClientProxy.ID_MODEL_MAP.get(entity.getModelId());
-        // 如果模型不为空
-        if (modelJson != null) {
-            this.mainModel = modelJson;
-        }
+        ClientProxy.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -84,19 +80,15 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     protected ResourceLocation getEntityTexture(@Nonnull EntityMaid entity) {
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
-        ModelItem modelItem = ClientProxy.ID_MODEL_INFO_MAP.get(entity.getModelId());
-        if (modelItem != null) {
-            return modelItem.getTexture();
-        } else {
-            return new ResourceLocation(DEFAULT_MODEL_TEXTURE);
-        }
+        ClientProxy.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
+        return modelRes;
     }
 
     public static class Factory implements IRenderFactory<EntityMaid> {
         @Override
         public Render<? super EntityMaid> createRenderFor(RenderManager manager) {
             // 加载默认的灵梦模型
-            return new EntityMaidRender(manager, ClientProxy.ID_MODEL_MAP.get(DEFAULT_MODEL_ID), 0.5f);
+            return new EntityMaidRender(manager, ClientProxy.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new), 0.5f);
         }
     }
 }

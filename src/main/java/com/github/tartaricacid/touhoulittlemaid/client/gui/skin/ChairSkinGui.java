@@ -24,15 +24,12 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair> {
     private static int PAGE_INDEX = 0;
 
     public ChairSkinGui(EntityChair chair) {
-        super(chair, ClientProxy.CHAIR_PACK_LIST, "touhou_little_maid:entity.item.chair");
+        super(chair, ClientProxy.CHAIR_MODEL.getPackList(), "touhou_little_maid:entity.item.chair");
     }
 
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
-        float renderItemScale = 1.0f;
-        if (ClientProxy.ID_CHAIR_INFO_MAP.containsKey(entity.getModelId())) {
-            renderItemScale = ClientProxy.ID_CHAIR_INFO_MAP.get(entity.getModelId()).getRenderItemScale();
-        }
+        float renderItemScale = ClientProxy.CHAIR_MODEL.getModelRenderItemScale(entity.getModelId());
         GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
     }
 
@@ -63,12 +60,8 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair> {
 
     @Override
     void notifyModelChange(EntityChair chair, ResourceLocation modelId) {
-        float mountedYOffset = 0f;
-        boolean isTameableCanRide = true;
-        if (ClientProxy.ID_CHAIR_INFO_MAP.containsKey(modelId.toString())) {
-            mountedYOffset = ClientProxy.ID_CHAIR_INFO_MAP.get(modelId.toString()).getMountedYOffset();
-            isTameableCanRide = ClientProxy.ID_CHAIR_INFO_MAP.get(modelId.toString()).isTameableCanRide();
-        }
+        float mountedYOffset = ClientProxy.CHAIR_MODEL.getModelMountedYOffset(modelId.toString());
+        boolean isTameableCanRide = ClientProxy.CHAIR_MODEL.getModelTameableCanRide(modelId.toString());
         CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(chair.getUniqueID(), modelId, mountedYOffset, isTameableCanRide));
     }
 

@@ -56,9 +56,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 });
                 if (entity instanceof EntityMaid) {
                     ((EntityMaid) entity).setModelId(BlockGarageKit.getModelId(itemStackIn));
-                    if (ClientProxy.ID_MODEL_INFO_MAP.containsKey(BlockGarageKit.getModelId(itemStackIn))) {
-                        renderItemScale = ClientProxy.ID_MODEL_INFO_MAP.get(BlockGarageKit.getModelId(itemStackIn)).getRenderItemScale();
-                    }
+                    renderItemScale = ClientProxy.MAID_MODEL.getModelRenderItemScale(BlockGarageKit.getModelId(itemStackIn));
                     // 缓存的对象往往有一些奇怪的东西，一并清除
                     ((EntityMaid) entity).setShowSasimono(false);
                     ((EntityMaid) entity).hurtResistantTime = 0;

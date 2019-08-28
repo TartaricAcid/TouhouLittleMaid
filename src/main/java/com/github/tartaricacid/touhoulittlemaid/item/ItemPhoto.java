@@ -86,9 +86,10 @@ public class ItemPhoto extends Item {
             tooltip.add(TextFormatting.DARK_RED + I18n.format("tooltips.touhou_little_maid.photo.no_data.desc"));
         } else {
             String modelId = stack.getTagCompound().getCompoundTag(MAID_INFO.getNbtName()).getString(EntityMaid.NBT.MODEL_ID.getName());
-            if (!"".equals(modelId) && ClientProxy.ID_MODEL_INFO_MAP.containsKey(modelId)) {
-                tooltip.add(I18n.format("tooltips.touhou_little_maid.photo.maid.desc",
-                        ParseI18n.parse(ClientProxy.ID_MODEL_INFO_MAP.get(modelId).getName())));
+            if (!"".equals(modelId)) {
+                ClientProxy.MAID_MODEL.getInfo(modelId).ifPresent(modelItem ->
+                        tooltip.add(I18n.format("tooltips.touhou_little_maid.photo.maid.desc",
+                                ParseI18n.parse(modelItem.getName()))));
             }
         }
         // 调试模式直接显示整个 NBT

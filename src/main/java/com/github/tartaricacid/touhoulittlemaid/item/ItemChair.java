@@ -143,9 +143,9 @@ public class ItemChair extends Item {
     @SideOnly(Side.CLIENT)
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            for (String key : ClientProxy.ID_CHAIR_INFO_MAP.keySet()) {
-                float height = ClientProxy.ID_CHAIR_INFO_MAP.get(key).getMountedYOffset();
-                boolean canRide = ClientProxy.ID_CHAIR_INFO_MAP.get(key).isTameableCanRide();
+            for (String key : ClientProxy.CHAIR_MODEL.getModelIdSet()) {
+                float height = ClientProxy.CHAIR_MODEL.getModelMountedYOffset(key);
+                boolean canRide = ClientProxy.CHAIR_MODEL.getModelTameableCanRide(key);
                 items.add(setAllTagData(new ItemStack(this), key, height, canRide));
             }
         }
@@ -155,8 +155,8 @@ public class ItemChair extends Item {
     @Override
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT &&
-                ClientProxy.ID_CHAIR_INFO_MAP.containsKey(getChairModelId(stack))) {
-            String name = ClientProxy.ID_CHAIR_INFO_MAP.get(getChairModelId(stack)).getName();
+                ClientProxy.CHAIR_MODEL.getInfo(getChairModelId(stack)).isPresent()) {
+            String name = ClientProxy.CHAIR_MODEL.getInfo(getChairModelId(stack)).get().getName();
             return ParseI18n.parse(name);
         }
         return super.getItemStackDisplayName(stack);

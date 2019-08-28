@@ -53,7 +53,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     private GuiButtonToggle hataSasimonoButton;
 
     MaidSkinDetailsGui(EntityMaid sourceMaid, ResourceLocation modelId) {
-        super(sourceMaid, new EntityMaid(sourceMaid.world), ClientProxy.ID_MODEL_INFO_MAP.get(modelId.toString()));
+        super(sourceMaid, new EntityMaid(sourceMaid.world), ClientProxy.MAID_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
         this.marisaBroom = new EntityMarisaBroom(sourceMaid.world);
         guiEntity.setModelId(modelId.toString());
         guiEntity.isDebugFloorOpen = true;

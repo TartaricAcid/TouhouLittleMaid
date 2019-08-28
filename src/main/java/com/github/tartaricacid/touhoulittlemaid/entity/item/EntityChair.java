@@ -147,8 +147,8 @@ public class EntityChair extends EntityLivingBase {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         }
-        if (world.isRemote && ClientProxy.ID_CHAIR_INFO_MAP.containsKey(this.getModelId())) {
-            String name = ClientProxy.ID_CHAIR_INFO_MAP.get(this.getModelId()).getName();
+        if (world.isRemote && ClientProxy.CHAIR_MODEL.getInfo(getModelId()).isPresent()) {
+            String name = ClientProxy.CHAIR_MODEL.getInfo(getModelId()).get().getName();
             return ParseI18n.parse(name);
         }
         return super.getName();
@@ -164,7 +164,7 @@ public class EntityChair extends EntityLivingBase {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        EntityModelJson modelJson = ClientProxy.ID_CHAIR_MAP.get(getModelId());
+        EntityModelJson modelJson = ClientProxy.CHAIR_MODEL.getModel(getModelId()).orElse(null);
         if (modelJson == null) {
             return super.getRenderBoundingBox();
         }

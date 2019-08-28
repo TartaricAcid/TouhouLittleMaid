@@ -21,7 +21,7 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
     private ResourceLocation modelId;
 
     public ChairSkinDetailsGui(EntityChair sourceEntity, ResourceLocation modelId) {
-        super(sourceEntity, new EntityChair(sourceEntity.world), ClientProxy.ID_CHAIR_INFO_MAP.get(modelId.toString()));
+        super(sourceEntity, new EntityChair(sourceEntity.world), ClientProxy.CHAIR_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
         this.modelId = modelId;
         guiEntity.setModelId(modelId.toString());
         guiEntity.setMountedHeight(modelItem.getMountedYOffset());

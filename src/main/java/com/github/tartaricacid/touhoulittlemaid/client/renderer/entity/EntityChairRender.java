@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugCharacter;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugFloor;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,9 +32,11 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     private static final String DEFAULT_CHAIR_TEXTURE = "touhou_little_maid:textures/entity/cushion.png";
     private static final LayerChairDebugFloor DEBUG_FLOOR = new LayerChairDebugFloor(new DebugFloorModel());
     private static final LayerChairDebugCharacter DEBUG_CHARACTER = new LayerChairDebugCharacter(new DebugCharacterModel());
+    private ResourceLocation modelRes;
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
         super(renderManager, mainModel, 0f);
+        modelRes = new ResourceLocation(DEFAULT_CHAIR_TEXTURE);
         addLayer(DEBUG_FLOOR);
         addLayer(DEBUG_CHARACTER);
     }
@@ -43,11 +44,7 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     @Override
     public void doRender(@Nonnull EntityChair chair, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模型
-        EntityModelJson modelJson = ClientProxy.ID_CHAIR_MAP.get(chair.getModelId());
-        // 如果模型不为空
-        if (modelJson != null) {
-            this.mainModel = modelJson;
-        }
+        ClientProxy.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.mainModel = model);
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -61,12 +58,8 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     protected ResourceLocation getEntityTexture(@Nonnull EntityChair chair) {
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
-        ModelItem modelItem = ClientProxy.ID_CHAIR_INFO_MAP.get(chair.getModelId());
-        if (modelItem != null) {
-            return modelItem.getTexture();
-        } else {
-            return new ResourceLocation(DEFAULT_CHAIR_TEXTURE);
-        }
+        ClientProxy.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
+        return modelRes;
     }
 
     @Override
@@ -82,7 +75,7 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static class Factory implements IRenderFactory<EntityChair> {
         @Override
         public Render<? super EntityChair> createRenderFor(RenderManager manager) {
-            return new EntityChairRender(manager, ClientProxy.ID_CHAIR_MAP.get(DEFAULT_CHAIR_ID));
+            return new EntityChairRender(manager, ClientProxy.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).orElseThrow(NullPointerException::new));
         }
     }
 }

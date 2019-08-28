@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadHataCommand;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityChairRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityDanmakuRender;
@@ -9,8 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMai
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMarisaBroomRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelResources;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -34,8 +32,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -46,21 +42,10 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
      */
     public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
     /**
-     * 当前所有模型列表，用于 GUI 显示
+     * 自定义模型部分
      */
-    public static final List<CustomModelPackPOJO> MODEL_PACK_LIST = Lists.newArrayList();
-    public static final List<CustomModelPackPOJO> CHAIR_PACK_LIST = Lists.newArrayList();
-    /**
-     * 用于渲染模型操作
-     */
-    public static final HashMap<String, EntityModelJson> ID_MODEL_MAP = Maps.newHashMap();
-    public static final HashMap<String, EntityModelJson> ID_CHAIR_MAP = Maps.newHashMap();
-    /**
-     * 用于添加材质，显示模型名称等操作
-     */
-    public static final HashMap<String, ModelItem> ID_MODEL_INFO_MAP = Maps.newHashMap();
-    public static final HashMap<String, ModelItem> ID_CHAIR_INFO_MAP = Maps.newHashMap();
-
+    public static final CustomModelResources MAID_MODEL = new CustomModelResources("maid_model.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap());
+    public static final CustomModelResources CHAIR_MODEL = new CustomModelResources("maid_chair.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap());
     /**
      * 指物旗部分
      */

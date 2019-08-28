@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.Minecraft;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -37,65 +35,32 @@ public final class CustomModelLoader {
     private static final Logger LOGGER = TouhouLittleMaid.LOGGER;
     private static final Marker MARKER = MarkerManager.getMarker("ModelLoader");
     private static final String OLD_BEDROCK_VERSION = "1.10.0";
-    /**
-     * 获取客户端代理类的模型包列表数据
-     */
-    private static final List<CustomModelPackPOJO> MODEL_PACK_LIST = ClientProxy.MODEL_PACK_LIST;
-    private static final List<CustomModelPackPOJO> CHAIR_PACK_LIST = ClientProxy.CHAIR_PACK_LIST;
-    /**
-     * 模型 ID 和对应模型的映射
-     */
-    private static final HashMap<String, EntityModelJson> ID_MODEL_MAP = ClientProxy.ID_MODEL_MAP;
-    private static final HashMap<String, EntityModelJson> ID_CHAIR_MAP = ClientProxy.ID_CHAIR_MAP;
-    /**
-     * 模型 ID 和对应 ModelItem 类的映射
-     */
-    private static final HashMap<String, ModelItem> ID_MODEL_INFO_MAP = ClientProxy.ID_MODEL_INFO_MAP;
-    private static final HashMap<String, ModelItem> ID_CHAIR_INFO_MAP = ClientProxy.ID_CHAIR_INFO_MAP;
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
     /**
      * 重新装载所有的模型包
      * 实际上也可用来首次加载资源包，我就是这么做的，省代码了
      */
-    public static void reloadModelPack() {
-        // 清空数据
-        MODEL_PACK_LIST.clear();
-        ID_MODEL_MAP.clear();
-        ID_MODEL_INFO_MAP.clear();
-
-        CHAIR_PACK_LIST.clear();
-        ID_CHAIR_MAP.clear();
-        ID_CHAIR_INFO_MAP.clear();
-
+    public static void reloadModelPack(CustomModelResources resources) {
+        resources.clearAll();
         // 重载数据
-        loadModelPack();
+        loadModelPack(resources);
     }
 
     /**
      * 加载所有的模型包
      */
-    private static void loadModelPack() {
+    private static void loadModelPack(CustomModelResources resources) {
         LOGGER.info(MARKER, "Touhou little maid mod's model is loading...");
-        loadModelPackMain("maid_model.json", pojo -> {
+        loadModelPackMain(resources.getJsonFileName(), pojo -> {
             // 加载模型
             loadModelList(pojo.getModelList(), ((modelItem, modelJson) -> {
                 String id = modelItem.getModelId().toString();
-                ID_MODEL_MAP.put(id, modelJson);
-                ID_MODEL_INFO_MAP.put(id, modelItem);
+                resources.putModel(id, modelJson);
+                resources.putInfo(id, modelItem);
             }));
             // 装填模型包列表
-            MODEL_PACK_LIST.add(pojo);
-        });
-        loadModelPackMain("maid_chair.json", pojo -> {
-            // 加载模型
-            loadModelList(pojo.getModelList(), ((modelItem, modelJson) -> {
-                String id = modelItem.getModelId().toString();
-                ID_CHAIR_MAP.put(id, modelJson);
-                ID_CHAIR_INFO_MAP.put(id, modelItem);
-            }));
-            // 装填模型包列表
-            CHAIR_PACK_LIST.add(pojo);
+            resources.addPack(pojo);
         });
         LOGGER.info(MARKER, "Touhou little maid mod's model is loaded");
     }

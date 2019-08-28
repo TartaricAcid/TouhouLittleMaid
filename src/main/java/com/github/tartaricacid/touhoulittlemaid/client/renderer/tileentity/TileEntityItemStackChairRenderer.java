@@ -32,7 +32,7 @@ public class TileEntityItemStackChairRenderer extends TileEntityItemStackRendere
     public void renderByItem(@Nonnull ItemStack itemStackIn) {
         World world = Minecraft.getMinecraft().world;
         String entityId = TouhouLittleMaid.MOD_ID + ":entity.item.chair";
-        float renderItemScale = 1.0f;
+        float renderItemScale = ClientProxy.CHAIR_MODEL.getModelRenderItemScale(ItemChair.getChairModelId(itemStackIn));
         EntityChair entityChair;
         try {
             entityChair = (EntityChair) ClientProxy.ENTITY_CACHE.get(entityId, () -> {
@@ -48,9 +48,6 @@ public class TileEntityItemStackChairRenderer extends TileEntityItemStackRendere
             return;
         }
         entityChair.setModelId(ItemChair.getChairModelId(itemStackIn));
-        if (ClientProxy.ID_CHAIR_INFO_MAP.containsKey(ItemChair.getChairModelId(itemStackIn))) {
-            renderItemScale = ClientProxy.ID_CHAIR_INFO_MAP.get(ItemChair.getChairModelId(itemStackIn)).getRenderItemScale();
-        }
 
         GlStateManager.pushMatrix();
 

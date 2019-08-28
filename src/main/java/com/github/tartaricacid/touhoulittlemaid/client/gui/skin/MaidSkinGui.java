@@ -24,15 +24,12 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid> {
     private static int PAGE_INDEX = 0;
 
     public MaidSkinGui(EntityMaid maid) {
-        super(maid, ClientProxy.MODEL_PACK_LIST, "touhou_little_maid:entity.passive.maid");
+        super(maid, ClientProxy.MAID_MODEL.getPackList(), "touhou_little_maid:entity.passive.maid");
     }
 
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
-        float renderItemScale = 1.0f;
-        if (ClientProxy.ID_MODEL_INFO_MAP.containsKey(entity.getModelId())) {
-            renderItemScale = ClientProxy.ID_MODEL_INFO_MAP.get(entity.getModelId()).getRenderItemScale();
-        }
+        float renderItemScale = ClientProxy.MAID_MODEL.getModelRenderItemScale(entity.getModelId());
         GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, (int) (45 * renderItemScale), middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entity);
     }
 

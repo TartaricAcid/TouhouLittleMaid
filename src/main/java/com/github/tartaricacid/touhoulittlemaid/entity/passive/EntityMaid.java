@@ -891,14 +891,14 @@ public class EntityMaid extends AbstractEntityMaid {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         } else {
-            String key = getModelId();
+            String modelId = getModelId();
             if (world.isRemote) {
-                if (ClientProxy.ID_MODEL_INFO_MAP.containsKey(key)) {
-                    return ParseI18n.parse(ClientProxy.ID_MODEL_INFO_MAP.get(key).getName());
+                if (ClientProxy.MAID_MODEL.getInfo(modelId).isPresent()) {
+                    return ParseI18n.parse(ClientProxy.MAID_MODEL.getInfo(modelId).get().getName());
                 }
             } else {
-                if (CommonProxy.VANILLA_ID_NAME_MAP.containsKey(key)) {
-                    return CommonProxy.VANILLA_ID_NAME_MAP.get(key);
+                if (CommonProxy.VANILLA_ID_NAME_MAP.containsKey(modelId)) {
+                    return CommonProxy.VANILLA_ID_NAME_MAP.get(modelId);
                 }
             }
             return super.getName();
@@ -1280,7 +1280,7 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        EntityModelJson modelJson = ClientProxy.ID_MODEL_MAP.get(getModelId());
+        EntityModelJson modelJson = ClientProxy.MAID_MODEL.getModel(getModelId()).orElse(null);
         if (modelJson == null) {
             return super.getRenderBoundingBox();
         }
