@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
@@ -24,6 +26,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,10 +55,14 @@ public class ItemHakureiGohei extends Item {
         if (!worldIn.isRemote && entityLiving instanceof EntityPlayer && !entityLiving.isSneaking()) {
             EntityPlayer player = (EntityPlayer) entityLiving;
             Vec3d v = player.getLookVec();
+            PowerHandler powerHandler = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+            int power = powerHandler == null ? 0 : MathHelper.floor(powerHandler.get());
+
+            // 依据右键时长，Power 数来决定伤害和发射速度
             // 右键有效时长为 0-5 s
-            // 右键持续 1 秒 -> a 为 1
-            // 右键持续 3 秒 -> a 为 3
-            int a = ((500 - timeLeft) > 100 ? 100 : (500 - timeLeft)) / 20;
+            // Power 有效范围 0-5
+            // a = 右键时长增益（0-5）+ Power 数（0-5）
+            int a = (((500 - timeLeft) > 100 ? 100 : (500 - timeLeft)) / 20) + power;
             int damage = a + 4;
             float velocity = 0.2f * (a + 1);
             DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
@@ -65,7 +72,7 @@ public class ItemHakureiGohei extends Item {
             danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
             worldIn.spawnEntity(danmaku);
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
-            player.getCooldownTracker().setCooldown(this, 10);
+            player.getCooldownTracker().setCooldown(this, 11 - a);
             stack.damageItem(1, player);
         }
     }

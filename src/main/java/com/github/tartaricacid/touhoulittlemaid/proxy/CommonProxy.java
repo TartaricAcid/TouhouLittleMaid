@@ -5,7 +5,9 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.bauble.UltramarineOrbElixir;
 import com.github.tartaricacid.touhoulittlemaid.bauble.UndyingTotem;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
+import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -26,10 +28,8 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -98,10 +98,12 @@ public class CommonProxy {
         INSTANCE.registerMessage(ApplyMaidSkinDataMessage.Handler.class, ApplyMaidSkinDataMessage.class, 5, Side.SERVER);
         INSTANCE.registerMessage(ApplyChairSkinDataMessage.Handler.class, ApplyChairSkinDataMessage.class, 6, Side.SERVER);
         INSTANCE.registerMessage(SetMaidSasimonoCRC32.Handler.class, SetMaidSasimonoCRC32.class, 7, Side.SERVER);
+        INSTANCE.registerMessage(SyncPowerMessage.Handler.class, SyncPowerMessage.class, 8, Side.CLIENT);
     }
 
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(TouhouLittleMaid.INSTANCE, new MaidGuiHandler());
+        CapabilityPowerHandler.register();
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -123,6 +125,11 @@ public class CommonProxy {
         // 注册 FarmHandler 和 FeedHandler
         LittleMaidAPI.registerFarmHandler(new VanillaFarmHandler());
         LittleMaidAPI.registerFeedHandler(new VanillaFeedHandler());
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new MainCommand());
     }
 
     /**

@@ -26,6 +26,8 @@ tile.touhou_little_maid.grid.name=女仆交互面板
 # Command
 commands.touhou_little_maid.hata.usage=§c用法：/hata <reload>
 commands.touhou_little_maid.hata.reload=已经重载所有的旗指物材质
+command.touhou_little_maid.main.usage=§c用法：/touhou_little_maid <power> <get|set|add|min> <玩家> [数值]
+command.touhou_little_maid.main.power.info=当前 Power 数：%.2f
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -135,7 +137,6 @@ gui.touhou_little_maid.hata_select.apply=应用材质
 gui.touhou_little_maid.hata_select.close=关闭
 gui.touhou_little_maid.hata_select.display.true=显示旗指物
 gui.touhou_little_maid.hata_select.display.false=隐藏旗指物
-
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.author=作者：%s
@@ -277,13 +278,9 @@ model.touhou_little_maid.square_table.name=八仙桌
 model.touhou_little_maid.mahjong_table.name=麻将桌
 model.touhou_little_maid.beach_chair.name=沙滩椅
 model.touhou_little_maid.parasol.name=遮阳伞
-model.touhou_little_maid.shin_takarajima.name=新宝岛
 model.touhou_little_maid.water_wheel.name=水车
 model.touhou_little_maid.saisen_bako.name=赛钱箱
-model.touhou_little_maid.mech.name=机甲
-model.touhou_little_maid.giraffe.name=长颈鹿
 model.touhou_little_maid.well.name=水井
-model.touhou_little_maid.atashi_sai_seisan.name=アタシ 再生産
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

@@ -26,6 +26,8 @@ tile.touhou_little_maid.grid.name=Maid Interaction Panel
 # Command
 commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>
 commands.touhou_little_maid.hata.reload=Has reloaded all hata texture
+command.touhou_little_maid.main.usage=§cUsage: /touhou_little_maid <power> <get|set|add|min> <player> [value]
+command.touhou_little_maid.main.power.info=Current Power: %.2f
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d

@@ -1,8 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
@@ -36,10 +33,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
+import java.util.List;
 import java.util.Locale;
+
 public class BlockGrid extends Block {
     public static final PropertyEnum<Direction> DIRECTION = PropertyEnum.create("facing", Direction.class);
     public static final PropertyBool INPUT = PropertyBool.create("input");
@@ -59,6 +59,14 @@ public class BlockGrid extends Block {
         setDefaultState(blockState.getBaseState().withProperty(DIRECTION, Direction.UP_NORTH).withProperty(INPUT, true).withProperty(BLACKLIST, false));
         setCreativeTab(MaidItems.TABS);
         setHardness(0.25f);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static String getModeTooltip(boolean input, boolean blacklist) {
+        String s = I18n.format(String.format("tooltips.%s.grid.input.%s", TouhouLittleMaid.MOD_ID, input));
+        s += " | ";
+        s += I18n.format(String.format("tooltips.%s.grid.blacklist.%s", TouhouLittleMaid.MOD_ID, blacklist));
+        return s;
     }
 
     @Override
@@ -226,14 +234,6 @@ public class BlockGrid extends Block {
                 tooltip.add(String.format(TextFormatting.ITALIC + I18n.format("container.shulkerBox.more"), j - i));
             }
         }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static String getModeTooltip(boolean input, boolean blacklist) {
-        String s = I18n.format(String.format("tooltips.%s.grid.input.%s", TouhouLittleMaid.MOD_ID, input));
-        s += " | ";
-        s += I18n.format(String.format("tooltips.%s.grid.blacklist.%s", TouhouLittleMaid.MOD_ID, blacklist));
-        return s;
     }
 
     @Override
