@@ -145,6 +145,14 @@ public class BaubleItemHandler extends ItemStackHandler {
     }
 
     /**
+     * 处理反序列化时的饰品加载
+     */
+    @Override
+    protected void onLoad() {
+        IntStream.range(0, getSlots()).forEach(this::onContentsChanged);
+    }
+
+    /**
      * 事件触发
      *
      * @param function 触发时应用的逻辑
