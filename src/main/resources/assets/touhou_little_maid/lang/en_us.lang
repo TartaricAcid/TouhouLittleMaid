@@ -6,6 +6,7 @@ entity.touhou_little_maid.maid.name=Touhou Little Maid
 entity.touhou_little_maid.danmaku.name=Danmaku
 entity.touhou_little_maid.marisa_broom.name=Marisa's Broom
 entity.touhou_little_maid.chair.name=Chair
+entity.touhou_little_maid.rinnosuke.name=Rinnosuke Morichika
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item
@@ -66,7 +67,7 @@ message.touhou_little_maid.photo.have_no_nbt_data=This damnable photo don't have
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
 info.touhou_little_maid.maid.set_pos=§a§lMaid Pos: %d, %d, %d
 
-# Config
+# Main Config
 config.touhou_little_maid.maid_config=Maid Config
 config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item
 config.touhou_little_maid.maid_config.maid_temptation_item=Maid Temptation Item
@@ -74,6 +75,10 @@ config.touhou_little_maid.maid_config.maid_talk_interval=Maid Talk Interval (tic
 config.touhou_little_maid.maid_config.maid_pickup_sound_interval=Maid Pickup Sound Interval (Pickup Counts)
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound Interval (tick)
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
+
+# Vanilla Config
+config.touhou_little_maid.vanilla_config=Vanilla Config
+config.touhou_little_maid.vanilla_config.change_xp_texture=Change XP Orb Texture
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet

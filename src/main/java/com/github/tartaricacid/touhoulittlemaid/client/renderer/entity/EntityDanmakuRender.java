@@ -23,7 +23,7 @@ import java.util.Objects;
 public class EntityDanmakuRender extends Render<EntityDanmaku> {
     public static final Factory FACTORY = new EntityDanmakuRender.Factory();
 
-    public EntityDanmakuRender(RenderManager renderManagerIn) {
+    private EntityDanmakuRender(RenderManager renderManagerIn) {
         super(renderManagerIn);
     }
 
@@ -59,15 +59,15 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
 
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufbuilder = tessellator.getBuffer();
+        BufferBuilder bufBuilder = tessellator.getBuffer();
 
-        bufbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bufBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         this.renderManager.renderEngine.bindTexture(Objects.requireNonNull(getEntityTexture(entity)));
 
-        bufbuilder.pos(-type.getSize(), type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 32) / l).endVertex();
-        bufbuilder.pos(-type.getSize(), -type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 0) / l).endVertex();
-        bufbuilder.pos(type.getSize(), -type.getSize(), 0).tex((pStartU + 32) / w, (pStartV + 0) / l).endVertex();
-        bufbuilder.pos(type.getSize(), type.getSize(), 0).tex((pStartU + 32) / w, (pStartV + 32) / l).endVertex();
+        bufBuilder.pos(-type.getSize(), type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 32) / l).endVertex();
+        bufBuilder.pos(-type.getSize(), -type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 0) / l).endVertex();
+        bufBuilder.pos(type.getSize(), -type.getSize(), 0).tex((pStartU + 32) / w, (pStartV + 0) / l).endVertex();
+        bufBuilder.pos(type.getSize(), type.getSize(), 0).tex((pStartU + 32) / w, (pStartV + 32) / l).endVertex();
         tessellator.draw();
 
         GlStateManager.disableBlend();

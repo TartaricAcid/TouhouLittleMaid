@@ -4,11 +4,14 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author TartaricAcid
  * @date 2019/8/13 17:40
  **/
+@SideOnly(Side.CLIENT)
 public class HataSasimonoFlagModel extends ModelBase {
     private final ModelRenderer hata;
 

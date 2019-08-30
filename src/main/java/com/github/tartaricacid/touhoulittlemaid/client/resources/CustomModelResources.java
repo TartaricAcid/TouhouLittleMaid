@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Set;
  * @author TartaricAcid
  * @date 2019/8/28 13:56
  **/
+@SideOnly(Side.CLIENT)
 public class CustomModelResources {
     private String jsonFileName;
     private List<CustomModelPackPOJO> packList;

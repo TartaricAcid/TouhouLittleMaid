@@ -6,6 +6,7 @@ entity.touhou_little_maid.maid.name=小女仆
 entity.touhou_little_maid.danmaku.name=弹幕
 entity.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
 entity.touhou_little_maid.chair.name=椅子
+entity.touhou_little_maid.rinnosuke.name=森近霖之助
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item
@@ -66,7 +67,7 @@ message.touhou_little_maid.photo.have_no_nbt_data=这鬼照片没有 NBT 数据�
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
 info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
 
-# Config
+# Main Config
 config.touhou_little_maid.maid_config=女仆相关配置
 config.touhou_little_maid.maid_config.maid_tamed_item=驯服女仆所使用的物品
 config.touhou_little_maid.maid_config.maid_temptation_item=诱惑女仆所使用的物品
@@ -74,6 +75,10 @@ config.touhou_little_maid.maid_config.maid_talk_interval=女仆发出声音的�
 config.touhou_little_maid.maid_config.maid_pickup_sound_interval=女仆拾物的声音间隔（拾取计数）
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=女仆受伤的声音间隔（tick）
 config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽子
+
+# Vanilla Config
+config.touhou_little_maid.vanilla_config=原版相关配置
+config.touhou_little_maid.vanilla_config.change_xp_texture=改变经验球材质
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹

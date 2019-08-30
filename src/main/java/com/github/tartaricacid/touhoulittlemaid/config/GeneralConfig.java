@@ -13,6 +13,10 @@ public class GeneralConfig {
     @Config.Name("MaidConfig")
     public static MaidConfig MAID_CONFIG = new MaidConfig();
 
+    @Config.LangKey("config.touhou_little_maid.vanilla_config")
+    @Config.Name("VanillaConfig")
+    public static VanillaConfig VANILLA_CONFIG = new VanillaConfig();
+
     public static class MaidConfig {
         @Config.Comment("The item that can tamed maid")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_tamed_item")
@@ -46,6 +50,13 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_always_show_hat")
         @Config.Name("MaidAlwaysShowHat")
         public boolean maidAlwaysShowHat = true;
+    }
+
+    public static class VanillaConfig {
+        @Config.Comment("Whether to replace the vanilla xp orb texture with the touhou project's point items.")
+        @Config.LangKey("config.touhou_little_maid.vanilla_config.change_xp_texture")
+        @Config.Name("ChangeXPTexture")
+        public boolean changeXPTexture = false;
     }
 
     /**
