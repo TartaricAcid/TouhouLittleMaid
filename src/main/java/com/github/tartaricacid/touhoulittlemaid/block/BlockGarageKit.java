@@ -154,9 +154,10 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
-        super.breakBlock(worldIn, pos, state);
+    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+        if (!player.isCreative()) {
+            spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
+        }
     }
 
     @Override

@@ -55,6 +55,8 @@ public class BlockGrid extends Block {
 
     public BlockGrid() {
         super(Material.CLAY);
+        setRegistryName("grid");
+        setTranslationKey(TouhouLittleMaid.MOD_ID + ".grid");
         setSoundType(SoundType.METAL);
         setDefaultState(blockState.getBaseState().withProperty(DIRECTION, Direction.UP_NORTH).withProperty(INPUT, true).withProperty(BLACKLIST, false));
         setCreativeTab(MaidItems.TABS);

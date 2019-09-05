@@ -23,6 +23,7 @@ item.touhou_little_maid.album.name=Album
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
 tile.touhou_little_maid.grid.name=Maid Interaction Panel
+tile.touhou_little_maid.altar.name=Altar
 
 # Command
 commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>

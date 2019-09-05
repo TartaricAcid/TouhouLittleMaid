@@ -15,6 +15,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 import static net.minecraft.entity.passive.EntityVillager.ITradeList;
@@ -87,7 +88,7 @@ public class VillagerRegistryHandler {
         }
 
         @Override
-        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
+        public void addMerchantRecipe(@Nonnull IMerchant merchant, @Nonnull MerchantRecipeList recipeList, @Nonnull Random random) {
             sellItem.setCount(sellCount.getPrice(random));
             buyItem.setCount(buyCount.getPrice(random));
             recipeList.add(new MerchantRecipe(sellItem, buyItem));

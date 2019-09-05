@@ -9,6 +9,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -21,6 +22,7 @@ public class TileEntityGarageKit extends TileEntity {
     private String modelId = "touhou_little_maid:hakurei_reimu";
     private NBTTagCompound maidData = new NBTTagCompound();
 
+    @Nonnull
     @Override
     public NBTTagCompound getUpdateTag() {
         return writeToNBT(new NBTTagCompound());
@@ -58,6 +60,7 @@ public class TileEntityGarageKit extends TileEntity {
         }
     }
 
+    @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         getTileData().setString(BlockGarageKit.NBT.ENTITY_ID.getName(), entityId);
@@ -66,8 +69,7 @@ public class TileEntityGarageKit extends TileEntity {
             getTileData().setString(BlockGarageKit.NBT.MODEL_ID.getName(), modelId);
         }
         getTileData().setTag(BlockGarageKit.NBT.MAID_DATA.getName(), maidData);
-        super.writeToNBT(compound);
-        return compound;
+        return super.writeToNBT(compound);
     }
 
     // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //

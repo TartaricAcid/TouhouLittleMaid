@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.hwyla;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockAltar;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import mcp.mobius.waila.api.IWailaPlugin;
@@ -23,5 +24,6 @@ public class WailaInfo implements IWailaPlugin {
     public void register(IWailaRegistrar registrar) {
         registrar.registerBodyProvider(new MaidProvider(), EntityMaid.class);
         registrar.registerBodyProvider(new GridProvider(), BlockGrid.class);
+        registrar.registerStackProvider(new AltarProvider(), BlockAltar.class);
     }
 }

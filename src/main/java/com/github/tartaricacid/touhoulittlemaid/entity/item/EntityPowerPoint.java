@@ -30,6 +30,33 @@ public class EntityPowerPoint extends EntityXPOrb {
         super(worldIn, x, y, z, powerValue);
     }
 
+    /**
+     * 划分 P 点数值
+     */
+    public static int getPowerSplit(int expValue) {
+        if (expValue >= 485) {
+            return 485;
+        } else if (expValue >= 385) {
+            return 385;
+        } else if (expValue >= 285) {
+            return 285;
+        } else if (expValue >= 185) {
+            return 185;
+        } else if (expValue >= 89) {
+            return 89;
+        } else if (expValue >= 36) {
+            return 34;
+        } else if (expValue >= 17) {
+            return 13;
+        } else if (expValue >= 7) {
+            return 7;
+        } else if (expValue >= 5) {
+            return 5;
+        } else {
+            return expValue >= 3 ? 3 : 1;
+        }
+    }
+
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer player) {
         if (!this.world.isRemote) {
@@ -68,33 +95,6 @@ public class EntityPowerPoint extends EntityXPOrb {
             return 2;
         } else {
             return this.xpValue >= 3 ? 1 : 0;
-        }
-    }
-
-    /**
-     * 划分 P 点数值
-     */
-    public static int getPowerSplit(int expValue) {
-        if (expValue >= 485) {
-            return 485;
-        } else if (expValue >= 385) {
-            return 385;
-        } else if (expValue >= 285) {
-            return 285;
-        } else if (expValue >= 185) {
-            return 185;
-        } else if (expValue >= 89) {
-            return 89;
-        } else if (expValue >= 36) {
-            return 34;
-        } else if (expValue >= 17) {
-            return 13;
-        } else if (expValue >= 7) {
-            return 7;
-        } else if (expValue >= 5) {
-            return 5;
-        } else {
-            return expValue >= 3 ? 3 : 1;
         }
     }
 }
