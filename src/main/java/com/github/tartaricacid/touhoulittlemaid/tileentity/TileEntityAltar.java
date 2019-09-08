@@ -81,11 +81,13 @@ public class TileEntityAltar extends TileEntity {
         handler.deserializeNBT(getTileData().getCompoundTag(NBT.STORAGE_ITEM.getName()));
         facing = EnumFacing.byIndex(getTileData().getInteger(NBT.FACING.getName()));
 
+        blockPosList.clear();
         NBTTagList blockList = getTileData().getTagList(NBT.STORAGE_BLOCK_LIST.getName(), Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < blockList.tagCount(); i++) {
             blockPosList.add(NBTUtil.getPosFromTag(blockList.getCompoundTagAt(i)));
         }
 
+        canPlaceItemPosList.clear();
         NBTTagList itemList = getTileData().getTagList(NBT.CAN_PLACE_ITEM_POS_LIST.getName(), Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < itemList.tagCount(); i++) {
             canPlaceItemPosList.add(NBTUtil.getPosFromTag(itemList.getCompoundTagAt(i)));

@@ -32,6 +32,7 @@ public class TileEntityAltarRenderer extends TileEntitySpecialRenderer<TileEntit
         if (te.isRender()) {
             this.bindTexture(TEXTURE);
             GlStateManager.pushMatrix();
+            GlStateManager.disableCull();
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
             final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
             GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
@@ -60,6 +61,7 @@ public class TileEntityAltarRenderer extends TileEntitySpecialRenderer<TileEntit
             GlStateManager.rotate(180, 0, 0, 1);
             MODEL.render(null, 0, 0, 0, 0, 0, 0.0625f);
             GlStateManager.disableBlend();
+            GlStateManager.enableCull();
             GlStateManager.popMatrix();
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);

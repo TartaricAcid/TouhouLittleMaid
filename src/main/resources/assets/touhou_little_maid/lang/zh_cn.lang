@@ -28,8 +28,8 @@ tile.touhou_little_maid.altar.name=祭坛
 # Command
 commands.touhou_little_maid.hata.usage=§c用法：/hata <reload>
 commands.touhou_little_maid.hata.reload=已经重载所有的旗指物材质
-command.touhou_little_maid.main.usage=§c用法：/touhou_little_maid <power> <get|set|add|min> <玩家> [数值]
-command.touhou_little_maid.main.power.info=当前 Power 数：%.2f
+commands.touhou_little_maid.main.usage=§c用法：/touhou_little_maid <power> <get|set|add|min> <玩家> [数值]
+commands.touhou_little_maid.main.power.info=当前 Power 数：%.2f
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -63,6 +63,7 @@ message.touhou_little_maid.grid.blacklist.true=过滤模式：黑名单
 message.touhou_little_maid.grid.blacklist.false=过滤模式：白名单
 message.touhou_little_maid.photo.not_suitable_for_place_maid=这鬼地方没法放置女仆。
 message.touhou_little_maid.photo.have_no_nbt_data=这鬼照片没有 NBT 数据。
+message.touhou_little_maid.altar.not_enough_power=你的 P 点不足。
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
@@ -210,6 +211,11 @@ model.touhou_little_maid.wriggle_nightbug.name=莉格露·奈特巴格
 model.touhou_little_maid.keine_kamishirasawa.name=上白泽慧音
 model.touhou_little_maid.yagokoro_eirin.name=八意永琳
 model.touhou_little_maid.mima.name=魅魔
+model.touhou_little_maid.kazami_yuka.name=风见幽香
+model.touhou_little_maid.onozuka_komachi.name=小野塚小町
+model.touhou_little_maid.shikieiki_yamaxanadu.name=四季映姬·亚玛萨那度
+model.touhou_little_maid.syameimaru_aya.name=射命丸文
+model.touhou_little_maid.medicine_melancholy.name=梅蒂欣·梅兰可莉
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -266,6 +272,11 @@ model.touhou_little_maid.wriggle_nightbug.desc=§7暗中蠢动的光虫
 model.touhou_little_maid.keine_kamishirasawa.desc=§7吞食历史的半兽
 model.touhou_little_maid.yagokoro_eirin.desc=§7月之头脑
 model.touhou_little_maid.mima.desc=§7恶灵小姐
+model.touhou_little_maid.kazami_yuka.desc=§7四季的鲜花之主
+model.touhou_little_maid.onozuka_komachi.desc=§7三途河的引航人
+model.touhou_little_maid.shikieiki_yamaxanadu.desc=§7乐园的最高裁判长
+model.touhou_little_maid.syameimaru_aya.desc=§7传统的幻想记者
+model.touhou_little_maid.medicine_melancholy.desc=§7小小的甜蜜毒药
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

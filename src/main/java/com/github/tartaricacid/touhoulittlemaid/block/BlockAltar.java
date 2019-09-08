@@ -1,13 +1,21 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
+import com.github.tartaricacid.touhoulittlemaid.util.DelayedTask;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +27,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,7 +65,7 @@ public class BlockAltar extends Block implements ITileEntityProvider {
             if (playerIn.isSneaking()) {
                 applyTakeOutLogic(worldIn, pos, altar);
             } else {
-                applyPlaceLogic(altar, playerIn);
+                applyPlaceLogic(worldIn, altar, playerIn);
             }
             altar.refresh();
             return true;
@@ -72,7 +81,7 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         }
     }
 
-    private void applyPlaceLogic(TileEntityAltar altar, EntityPlayer playerIn) {
+    private void applyPlaceLogic(World world, TileEntityAltar altar, EntityPlayer playerIn) {
         if (altar.isCanPlaceItem()) {
             if (altar.handler.getStackInSlot(0) == ItemStack.EMPTY && playerIn.getHeldItemMainhand() != ItemStack.EMPTY) {
                 altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(playerIn.getHeldItemMainhand(), 1));
@@ -80,7 +89,87 @@ public class BlockAltar extends Block implements ITileEntityProvider {
                     playerIn.getHeldItemMainhand().shrink(1);
                 }
             }
+            applyCraftingLogic(world, altar, playerIn);
         }
+    }
+
+    private void applyCraftingLogic(World world, TileEntityAltar altar, EntityPlayer playerIn) {
+        List<ItemStack> inputStackList = Lists.newArrayList();
+        for (BlockPos pos : altar.getCanPlaceItemPosList()) {
+            TileEntity tileEntity = world.getTileEntity(pos);
+            if (tileEntity instanceof TileEntityAltar) {
+                inputStackList.add(((TileEntityAltar) tileEntity).handler.getStackInSlot(0));
+            }
+        }
+        AltarRecipe altarRecipe = AltarRecipesManager.instance().getMatchRecipes(inputStackList);
+        PowerHandler power = playerIn.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+        if (altarRecipe != null && power != null) {
+            spawnResultEntity(world, playerIn, power, altarRecipe, inputStackList, altar);
+        }
+    }
+
+    private void spawnResultEntity(World world, EntityPlayer playerIn, PowerHandler power,
+                                   AltarRecipe altarRecipe, List<ItemStack> inputStackList, TileEntityAltar altar) {
+        if (power.get() >= altarRecipe.getPowerCost()) {
+            BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getPos());
+            DelayedTask.add(() -> {
+                if (!world.isRemote) {
+                    Entity entity = altarRecipe.getOutputEntity(world, centrePos, inputStackList);
+                    if (entity instanceof EntityLightningBolt) {
+                        // 特例：闪电，原版就这么做的
+                        world.addWeatherEffect(entity);
+                    } else {
+                        world.spawnEntity(entity);
+                    }
+                }
+            }, 3);
+            for (BlockPos pos : altar.getCanPlaceItemPosList()) {
+                TileEntity tileEntity = world.getTileEntity(pos);
+                if (tileEntity instanceof TileEntityAltar) {
+                    ((TileEntityAltar) tileEntity).handler.setStackInSlot(0, ItemStack.EMPTY);
+                    ((TileEntityAltar) tileEntity).refresh();
+                    spawnParticleInCentre(world, tileEntity.getPos());
+                }
+            }
+            power.min(altarRecipe.getPowerCost());
+            spawnParticleInCentre(world, centrePos);
+        } else {
+            if (!world.isRemote) {
+                playerIn.sendMessage(new TextComponentTranslation("message.touhou_little_maid.altar.not_enough_power"));
+            }
+        }
+    }
+
+    private void spawnParticleInCentre(World world, BlockPos centrePos) {
+        int width = 1;
+        int height = 1;
+        for (int i = 0; i < 5; ++i) {
+            double xSpeed = RANDOM.nextGaussian() * 0.02D;
+            double ySpeed = RANDOM.nextGaussian() * 0.02D;
+            double zSpeed = RANDOM.nextGaussian() * 0.02D;
+            world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
+                    centrePos.getX() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - xSpeed * 10.0D,
+                    centrePos.getY() + (double) (RANDOM.nextFloat() * height) - ySpeed * 10.0D,
+                    centrePos.getZ() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - zSpeed * 10.0D,
+                    xSpeed, ySpeed, zSpeed);
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,
+                    centrePos.getX() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - xSpeed * 10.0D,
+                    centrePos.getY() + (double) (RANDOM.nextFloat() * height) - ySpeed * 10.0D,
+                    centrePos.getZ() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - zSpeed * 10.0D,
+                    xSpeed, ySpeed, zSpeed);
+        }
+    }
+
+    private BlockPos getCentrePos(List<BlockPos> posList, BlockPos posClick) {
+        int x = 0;
+        int z = 0;
+        for (BlockPos pos : posList) {
+            if (pos.getY() == posClick.getY() - 2) {
+                x += pos.getX();
+                z += pos.getZ();
+            }
+        }
+        return new BlockPos(x / 8, posClick.getY() - 2, z / 8);
     }
 
     @Override

@@ -28,8 +28,8 @@ tile.touhou_little_maid.altar.name=Altar
 # Command
 commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>
 commands.touhou_little_maid.hata.reload=Has reloaded all hata texture
-command.touhou_little_maid.main.usage=§cUsage: /touhou_little_maid <power> <get|set|add|min> <player> [value]
-command.touhou_little_maid.main.power.info=Current Power: %.2f
+commands.touhou_little_maid.main.usage=§cUsage: /touhou_little_maid <power> <get|set|add|min> <player> [value]
+commands.touhou_little_maid.main.power.info=Current Power: %.2f
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
@@ -63,6 +63,7 @@ message.touhou_little_maid.grid.blacklist.true=Filter Mode: Blacklist
 message.touhou_little_maid.grid.blacklist.false=Filter Mode: Whitelist
 message.touhou_little_maid.photo.not_suitable_for_place_maid=This damnable place can't place the maid.
 message.touhou_little_maid.photo.have_no_nbt_data=This damnable photo don't have NBT data.
+message.touhou_little_maid.altar.not_enough_power=You don't have enough power.
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -210,6 +211,11 @@ model.touhou_little_maid.wriggle_nightbug.name=Wriggle Nightbug
 model.touhou_little_maid.keine_kamishirasawa.name=Keine Kamishirasawa
 model.touhou_little_maid.yagokoro_eirin.name=Eirin Yagokoro
 model.touhou_little_maid.mima.name=Mima
+model.touhou_little_maid.kazami_yuka.name=Yuuka Kazami
+model.touhou_little_maid.onozuka_komachi.name=Komachi Onozuka
+model.touhou_little_maid.shikieiki_yamaxanadu.name=Eiki Shiki, Yamaxanadu
+model.touhou_little_maid.syameimaru_aya.name=Aya Shameimaru
+model.touhou_little_maid.medicine_melancholy.name=Medicine Melancholy
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -266,6 +272,11 @@ model.touhou_little_maid.wriggle_nightbug.desc=§7A Bug of Light Wriggling in th
 model.touhou_little_maid.keine_kamishirasawa.desc=§7History-Eating Half Beast
 model.touhou_little_maid.yagokoro_eirin.desc=§7Brain of the Moon
 model.touhou_little_maid.mima.desc=§7Evil Spirit
+model.touhou_little_maid.kazami_yuka.desc=§7Flower Master of the Four Seasons
+model.touhou_little_maid.onozuka_komachi.desc=§7Guide of the Sanzu River
+model.touhou_little_maid.shikieiki_yamaxanadu.desc=§7Supreme Judge of Paradise
+model.touhou_little_maid.syameimaru_aya.desc=§7Traditional Reporter of Fantasy
+model.touhou_little_maid.medicine_melancholy.desc=§7Little Sweet Poison
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

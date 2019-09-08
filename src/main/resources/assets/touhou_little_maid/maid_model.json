@@ -183,6 +183,21 @@
     }, {
       "model_id": "touhou_little_maid:mima",
       "description": ["{model.touhou_little_maid.mima.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kazami_yuka",
+      "description": ["{model.touhou_little_maid.kazami_yuka.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:onozuka_komachi",
+      "description": ["{model.touhou_little_maid.onozuka_komachi.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:shikieiki_yamaxanadu",
+      "description": ["{model.touhou_little_maid.shikieiki_yamaxanadu.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:syameimaru_aya",
+      "description": ["{model.touhou_little_maid.syameimaru_aya.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:medicine_melancholy",
+      "description": ["{model.touhou_little_maid.medicine_melancholy.desc}"]
     }
   ]
 }

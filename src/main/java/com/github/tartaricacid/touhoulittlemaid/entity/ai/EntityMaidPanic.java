@@ -18,7 +18,7 @@ public class EntityMaidPanic extends EntityAIPanic {
     @Override
     public boolean shouldExecute() {
         // TODO：弓兵模式下没有箭的慌乱跑
-        return !entityMaid.guiOpening && !entityMaid.getTask().isAttack() && super.shouldExecute();
+        return !entityMaid.guiOpening && !entityMaid.isSitting() && !entityMaid.getTask().isAttack() && super.shouldExecute();
     }
 
     /**
@@ -28,6 +28,6 @@ public class EntityMaidPanic extends EntityAIPanic {
     @Override
     public boolean shouldContinueExecuting() {
         // TODO：弓兵模式下没有箭的慌乱跑
-        return !entityMaid.guiOpening && !entityMaid.getTask().isAttack() && super.shouldContinueExecuting();
+        return !entityMaid.guiOpening && !entityMaid.isSitting() && !entityMaid.getTask().isAttack() && super.shouldContinueExecuting();
     }
 }

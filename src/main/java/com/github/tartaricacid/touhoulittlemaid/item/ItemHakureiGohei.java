@@ -87,7 +87,7 @@ public class ItemHakureiGohei extends Item {
             for (Template.BlockInfo blockInfo : altarTemplate.blocks) {
                 posList.add(posStart.add(blockInfo.pos));
                 if (blockInfo.pos.getY() == 2 && blockInfo.blockState.equals(Blocks.LOG.getDefaultState())) {
-                    canPlaceItemPosList.add(blockInfo.pos);
+                    canPlaceItemPosList.add(posStart.add(blockInfo.pos));
                 }
             }
             for (Template.BlockInfo blockInfo : altarTemplate.blocks) {

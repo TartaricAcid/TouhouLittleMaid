@@ -910,14 +910,14 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     @Nullable
     @Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingData) {
         if (!CommonProxy.VANILLA_ID_NAME_MAP.isEmpty()) {
             // 随机获取某个模型对象
             String key = CommonProxy.VANILLA_ID_NAME_MAP.keySet().stream().skip(rand.nextInt(CommonProxy.VANILLA_ID_NAME_MAP.size())).findFirst().get();
             // 应用各种数据
             this.setModelId(key);
         }
-        return super.onInitialSpawn(difficulty, livingdata);
+        return livingData;
     }
 
     @Override

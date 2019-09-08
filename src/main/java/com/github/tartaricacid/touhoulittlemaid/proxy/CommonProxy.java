@@ -10,6 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomMode
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
+import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
@@ -56,6 +57,7 @@ public class CommonProxy {
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
+    public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
 
     /**
@@ -134,6 +136,9 @@ public class CommonProxy {
         // 注册 FarmHandler 和 FeedHandler
         LittleMaidAPI.registerFarmHandler(new VanillaFarmHandler());
         LittleMaidAPI.registerFeedHandler(new VanillaFeedHandler());
+
+        // 注册祭坛合成
+        ALTAR_RECIPES_MANAGER = new AltarRecipesManager();
     }
 
     @Mod.EventHandler
