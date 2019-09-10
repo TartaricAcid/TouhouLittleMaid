@@ -81,6 +81,7 @@ config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=原版相关配置
 config.touhou_little_maid.vanilla_config.change_xp_texture=改变经验球材质
+config.touhou_little_maid.vanilla_config.change_slime_model=将史莱姆模型变为油库里
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹

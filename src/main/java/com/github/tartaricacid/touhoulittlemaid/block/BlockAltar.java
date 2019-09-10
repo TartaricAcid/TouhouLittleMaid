@@ -162,14 +162,15 @@ public class BlockAltar extends Block implements ITileEntityProvider {
 
     private BlockPos getCentrePos(List<BlockPos> posList, BlockPos posClick) {
         int x = 0;
+        int y = posClick.getY() - 2;
         int z = 0;
         for (BlockPos pos : posList) {
-            if (pos.getY() == posClick.getY() - 2) {
+            if (pos.getY() == y) {
                 x += pos.getX();
                 z += pos.getZ();
             }
         }
-        return new BlockPos(x / 8, posClick.getY() - 2, z / 8);
+        return new BlockPos(x / 8, y, z / 8);
     }
 
     @Override

@@ -106,11 +106,6 @@ public class EntityChair extends EntityLivingBase {
         return false;
     }
 
-    @Override
-    public boolean canBeAttackedWithItem() {
-        return false;
-    }
-
     /**
      * 不允许被挤走，所以此处留空
      */

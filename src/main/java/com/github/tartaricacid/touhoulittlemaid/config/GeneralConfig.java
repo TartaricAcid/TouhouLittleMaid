@@ -57,6 +57,11 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.vanilla_config.change_xp_texture")
         @Config.Name("ChangeXPTexture")
         public boolean changeXPTexture = false;
+
+        @Config.Comment("Whether to replace the vanilla slime model with the yukkuri.")
+        @Config.LangKey("config.touhou_little_maid.vanilla_config.change_slime_model")
+        @Config.Name("ChangeSlimeTexture")
+        public boolean changeSlimeModel = false;
     }
 
     /**

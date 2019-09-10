@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
+import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
@@ -31,7 +32,9 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -180,6 +183,8 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityMaidSit(this));
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
+        this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityRinnosuke.class, 3.0f, 0.8d, 0.9d));
+        this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityCreeper.class, 6.0F, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidReturnHome(this, 0.6f, 200));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
         this.tasks.addTask(4, new EntityMaidGridInteract(this, 0.6f));
@@ -198,6 +203,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityMob.class, true));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntitySlime.class, true));
         this.targetTasks.addTask(3, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(4, new EntityAIOwnerHurtTarget(this));
     }

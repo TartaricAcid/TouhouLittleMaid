@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.bauble.UndyingTotem;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
+import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
@@ -76,8 +77,7 @@ public class CommonProxy {
 
         // 注册 TOP
         if (Loader.isModLoaded("theoneprobe")) {
-            FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe",
-                    "com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo");
+            FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", TheOneProbeInfo.class.getName());
         }
 
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),

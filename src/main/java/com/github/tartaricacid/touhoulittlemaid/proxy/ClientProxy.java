@@ -22,6 +22,7 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
@@ -63,6 +64,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntityRinnosuke.class, EntityRinnosukeRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityPowerPoint.class, EntityPowerPointRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityXPOrb.class, EntityChangeXPRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySlime.class, EntityYukkuriSlimeRender.FACTORY);
     }
 
     @Override

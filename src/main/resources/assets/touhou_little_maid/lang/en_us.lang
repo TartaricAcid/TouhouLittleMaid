@@ -81,6 +81,7 @@ config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=Vanilla Config
 config.touhou_little_maid.vanilla_config.change_xp_texture=Change XP Orb Texture
+config.touhou_little_maid.vanilla_config.change_slime_model=Change Slime Model To Yukkuri
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
