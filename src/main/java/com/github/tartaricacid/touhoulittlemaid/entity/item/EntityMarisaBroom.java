@@ -6,6 +6,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
  **/
 
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -217,6 +219,14 @@ public class EntityMarisaBroom extends EntityLivingBase {
     @Override
     public boolean attackable() {
         return false;
+    }
+
+    @Override
+    public void fall(float distance, float damageMultiplier) {
+    }
+
+    @Override
+    protected void updateFallState(double y, boolean onGroundIn, @Nonnull IBlockState state, @Nonnull BlockPos pos) {
     }
 
     /**

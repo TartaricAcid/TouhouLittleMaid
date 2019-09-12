@@ -224,5 +224,43 @@
         "stream": true
       }
     ]
+  },
+  "item.album_open": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.item.album_open",
+    "sounds": [
+      "touhou_little_maid:item/album_open"
+    ]
+  },
+  "block.altar_craft": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.block.altar_craft",
+    "sounds": [
+      "touhou_little_maid:block/altar_craft_1",
+      "touhou_little_maid:block/altar_craft_2"
+    ]
+  },
+  "monster.rinnosuke_ambient": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.monster.rinnosuke_ambient",
+    "sounds": [
+      "touhou_little_maid:monster/rinnosuke_ambient_1",
+      "touhou_little_maid:monster/rinnosuke_ambient_2"
+    ]
+  },
+  "monster.rinnosuke_death": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.monster.rinnosuke_death",
+    "sounds": [
+      "touhou_little_maid:monster/rinnosuke_death"
+    ]
+  },
+  "monster.rinnosuke_hurt": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.monster.rinnosuke_hurt",
+    "sounds": [
+      "touhou_little_maid:monster/rinnosuke_hurt_1",
+      "touhou_little_maid:monster/rinnosuke_hurt_2"
+    ]
   }
 }

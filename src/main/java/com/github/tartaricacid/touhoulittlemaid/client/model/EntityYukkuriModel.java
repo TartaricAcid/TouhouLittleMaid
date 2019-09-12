@@ -5,12 +5,15 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 /**
  * @author TartaricAcid
  * @date 2019/8/30 14:50
  **/
+@SideOnly(Side.CLIENT)
 public class EntityYukkuriModel extends ModelBase {
     private final ModelRenderer bone;
     private final ModelRenderer bone2;

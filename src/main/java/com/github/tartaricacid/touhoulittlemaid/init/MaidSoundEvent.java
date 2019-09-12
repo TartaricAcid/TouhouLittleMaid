@@ -42,6 +42,11 @@ public final class MaidSoundEvent {
     public static final SoundEvent MAID_NIGHT = registerSound("maid.environment.night");
     public static final SoundEvent OTHER_CREDIT = registerSound("other.credit");
     public static final SoundEvent CAMERA_USE = registerSound("item.camera_use");
+    public static final SoundEvent ALBUM_OPEN = registerSound("item.album_open");
+    public static final SoundEvent ALTAR_CRAFT = registerSound("block.altar_craft");
+    public static final SoundEvent RINNOSUKE_AMBIENT = registerSound("monster.rinnosuke_ambient");
+    public static final SoundEvent RINNOSUKE_DEATH = registerSound("monster.rinnosuke_death");
+    public static final SoundEvent RINNOSUKE_HURT = registerSound("monster.rinnosuke_hurt");
 
     @SubscribeEvent
     public static void register(RegistryEvent.Register<SoundEvent> event) {

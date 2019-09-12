@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.DelayedTask;
 import com.google.common.collect.Lists;
@@ -20,10 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -65,7 +63,7 @@ public class BlockAltar extends Block implements ITileEntityProvider {
             if (playerIn.isSneaking()) {
                 applyTakeOutLogic(worldIn, pos, altar);
             } else {
-                applyPlaceLogic(worldIn, altar, playerIn);
+                applyPlaceAndCraftLogic(worldIn, altar, playerIn);
             }
             altar.refresh();
             return true;
@@ -81,7 +79,7 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         }
     }
 
-    private void applyPlaceLogic(World world, TileEntityAltar altar, EntityPlayer playerIn) {
+    private void applyPlaceAndCraftLogic(World world, TileEntityAltar altar, EntityPlayer playerIn) {
         if (altar.isCanPlaceItem()) {
             if (altar.handler.getStackInSlot(0) == ItemStack.EMPTY && playerIn.getHeldItemMainhand() != ItemStack.EMPTY) {
                 altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(playerIn.getHeldItemMainhand(), 1));
@@ -112,30 +110,40 @@ public class BlockAltar extends Block implements ITileEntityProvider {
                                    AltarRecipe altarRecipe, List<ItemStack> inputStackList, TileEntityAltar altar) {
         if (power.get() >= altarRecipe.getPowerCost()) {
             BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getPos());
-            DelayedTask.add(() -> {
-                if (!world.isRemote) {
-                    Entity entity = altarRecipe.getOutputEntity(world, centrePos, inputStackList);
-                    if (entity instanceof EntityLightningBolt) {
-                        // 特例：闪电，原版就这么做的
-                        world.addWeatherEffect(entity);
-                    } else {
-                        world.spawnEntity(entity);
-                    }
-                }
-            }, 3);
-            for (BlockPos pos : altar.getCanPlaceItemPosList()) {
-                TileEntity tileEntity = world.getTileEntity(pos);
-                if (tileEntity instanceof TileEntityAltar) {
-                    ((TileEntityAltar) tileEntity).handler.setStackInSlot(0, ItemStack.EMPTY);
-                    ((TileEntityAltar) tileEntity).refresh();
-                    spawnParticleInCentre(world, tileEntity.getPos());
-                }
-            }
+            addDelayedSpawnLogic(world, altarRecipe, centrePos, inputStackList);
+            setAllAltarItemForEmpty(world, altar);
             power.min(altarRecipe.getPowerCost());
             spawnParticleInCentre(world, centrePos);
+            world.playSound(centrePos.getX(), centrePos.getY(), centrePos.getZ(), MaidSoundEvent.ALTAR_CRAFT,
+                    SoundCategory.VOICE, 1.0f, 1.0f, false);
         } else {
             if (!world.isRemote) {
                 playerIn.sendMessage(new TextComponentTranslation("message.touhou_little_maid.altar.not_enough_power"));
+            }
+        }
+    }
+
+    private void addDelayedSpawnLogic(World world, AltarRecipe altarRecipe, BlockPos centrePos, List<ItemStack> inputStackList) {
+        DelayedTask.add(() -> {
+            if (!world.isRemote) {
+                Entity entity = altarRecipe.getOutputEntity(world, centrePos, inputStackList);
+                if (entity instanceof EntityLightningBolt) {
+                    // 特例：闪电，原版就这么做的
+                    world.addWeatherEffect(entity);
+                } else {
+                    world.spawnEntity(entity);
+                }
+            }
+        }, 3);
+    }
+
+    private void setAllAltarItemForEmpty(World world, TileEntityAltar altar) {
+        for (BlockPos pos : altar.getCanPlaceItemPosList()) {
+            TileEntity tileEntity = world.getTileEntity(pos);
+            if (tileEntity instanceof TileEntityAltar) {
+                ((TileEntityAltar) tileEntity).handler.setStackInSlot(0, ItemStack.EMPTY);
+                ((TileEntityAltar) tileEntity).refresh();
+                spawnParticleInCentre(world, tileEntity.getPos());
             }
         }
     }

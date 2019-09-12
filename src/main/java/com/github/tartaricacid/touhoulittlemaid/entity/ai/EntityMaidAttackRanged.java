@@ -38,7 +38,8 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         // 能够弹幕攻击：模式正确、主手持御币
         boolean canDanmakuAttack = this.isGoheiInMainhand();
         // 能够处理攻击：攻击目标不为空、上述两者攻击存在一个
-        boolean canAttack = this.entity.getAttackTarget() != null && (canRangeAttack || canDanmakuAttack);
+        boolean canAttack = this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive()
+                && (canRangeAttack || canDanmakuAttack);
         return !entity.isSitting() && canAttack;
     }
 
@@ -81,10 +82,10 @@ public class EntityMaidAttackRanged extends EntityAIBase {
             // 能否看见对方
             boolean canSee = this.entity.getEntitySenses().canSee(entitylivingbase);
             // 看见的时长是否大于 0
-            boolean flag1 = this.seeTime > 0;
+            boolean seeTimeMoreThanZero = this.seeTime > 0;
 
             // 如果两者不一致，重置看见时间
-            if (canSee != flag1) {
+            if (canSee != seeTimeMoreThanZero) {
                 this.seeTime = 0;
             }
 

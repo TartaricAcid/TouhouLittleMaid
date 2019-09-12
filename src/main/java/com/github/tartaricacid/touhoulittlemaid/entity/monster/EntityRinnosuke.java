@@ -1,11 +1,19 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.monster;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
+import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * @author TartaricAcid
@@ -19,7 +27,7 @@ public class EntityRinnosuke extends AbstractEntityTouhouMob {
 
     @Override
     public int getPowerPoint() {
-        return 100;
+        return 128;
     }
 
     @Override
@@ -44,5 +52,31 @@ public class EntityRinnosuke extends AbstractEntityTouhouMob {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(2.0D);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return MaidSoundEvent.RINNOSUKE_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return MaidSoundEvent.RINNOSUKE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return MaidSoundEvent.RINNOSUKE_DEATH;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.4f;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+        this.playSound(SoundEvents.ENTITY_ZOMBIE_STEP, 0.15F, 1.0F);
     }
 }

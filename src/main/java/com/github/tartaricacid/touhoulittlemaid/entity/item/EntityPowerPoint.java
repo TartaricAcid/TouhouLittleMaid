@@ -65,7 +65,7 @@ public class EntityPowerPoint extends EntityXPOrb {
                 player.xpCooldown = 2;
                 player.onItemPickup(this, 1);
                 if (this.xpValue > 0) {
-                    power.add(xpValue / 100);
+                    power.add(xpValue / 100.0f);
                 }
                 this.setDead();
             }

@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
+import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -184,6 +185,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(2, new EntityMaidSit(this));
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityRinnosuke.class, 3.0f, 0.8d, 0.9d));
+        this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityFairy.class, 3.0f, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityCreeper.class, 6.0F, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidReturnHome(this, 0.6f, 200));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));

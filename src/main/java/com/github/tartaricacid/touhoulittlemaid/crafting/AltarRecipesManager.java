@@ -4,10 +4,14 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,21 +30,21 @@ import java.util.function.Predicate;
  **/
 @SuppressWarnings("unchecked")
 public class AltarRecipesManager {
-    private static final Map<ResourceLocation, AltarRecipe> ALTAR_RECIPES_MAP = Maps.newHashMap();
+    private final Map<ResourceLocation, AltarRecipe> ALTAR_RECIPES_MAP = Maps.newHashMap();
 
     public AltarRecipesManager() {
-        addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "SpawnMaid"),
+        addEntitySpawnRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_maid"),
                 new AltarRecipe<EntityMaid>(
                         new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),
                         (entity, itemStackList) -> {
                             entity.onInitialSpawn(entity.getEntityWorld()
                                     .getDifficultyForLocation(entity.getPosition()), null);
                             return entity;
-                        }, 0.2f,
+                        }, 0.5f,
                         of(Items.DIAMOND), of(Items.DYE, 4), of(Items.GOLD_INGOT),
                         of(Items.REDSTONE), of(Items.IRON_INGOT), of(Items.COAL)));
 
-        addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "RebornMaid"),
+        addEntitySpawnRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "reborn_maid"),
                 new AltarRecipe<EntityMaid>(
                         new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),
                         (entity, itemStackList) -> {
@@ -49,17 +53,43 @@ public class AltarRecipesManager {
                                     .findFirst().orElseThrow(NullPointerException::new);
                             entity.readEntityFromNBT(BlockGarageKit.getEntityData(garageKit));
                             entity.setHealth(entity.getMaxHealth());
+                            entity.setModelId(BlockGarageKit.getModelId(garageKit));
                             return entity;
-                        }, 0.2f,
+                        }, 0.3f,
                         of(MaidBlocks.GARAGE_KIT), of(Items.DYE, 4), of(Items.GOLD_INGOT),
                         of(Items.REDSTONE), of(Items.IRON_INGOT), of(Items.COAL)));
 
-        addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "SpawnLightBolt"),
+        addEntitySpawnRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_light_bolt"),
                 new AltarRecipe<EntityLightningBolt>(
                         new ResourceLocation("lightning_bolt"),
                         (entity, itemStackList) -> entity, 0.2f,
                         of(Items.GUNPOWDER), of(Items.GUNPOWDER), of(Items.GUNPOWDER),
                         of(Items.BLAZE_POWDER), of(Items.BLAZE_POWDER), of(Items.BLAZE_POWDER)));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_album"),
+                0.1f, of(MaidItems.ALBUM),
+                of(Items.PAPER), of(Items.PAPER), of(Items.PAPER),
+                of(Items.PAPER), of(Items.PAPER), of(Items.BOOK));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_compass"),
+                0.1f, of(MaidItems.KAPPA_COMPASS),
+                of(Blocks.OBSIDIAN), of(Blocks.OBSIDIAN), of(Blocks.OBSIDIAN),
+                of(Items.DYE, 4), of(Items.REDSTONE), of(Blocks.OBSIDIAN));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_gohei"),
+                0.15f, ((ItemHakureiGohei) MaidItems.HAKUREI_GOHEI).getDefaultItemStack(),
+                of(Items.STICK), of(Items.STICK), of(Items.STICK),
+                of(Items.PAPER), of(Items.PAPER));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_camera"),
+                0.1f, of(MaidItems.CAMERA),
+                of(Blocks.QUARTZ_BLOCK), of(Blocks.QUARTZ_BLOCK), of(Blocks.QUARTZ_BLOCK),
+                of(Blocks.QUARTZ_BLOCK), of(Blocks.OBSIDIAN), of(Blocks.OBSIDIAN));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_elixir"),
+                0.3f, of(MaidItems.ULTRAMARINE_ORB_ELIXIR),
+                of(Blocks.EMERALD_BLOCK), of(Items.ENDER_PEARL), of(Items.DYE, 6),
+                of(Items.DYE, 6), of(Items.DYE, 6), of(Items.DYE, 6));
     }
 
     public static AltarRecipesManager instance() {
@@ -108,8 +138,20 @@ public class AltarRecipesManager {
         return stackFirst.isItemEqualIgnoreDurability(stackSecond);
     }
 
-    private void addRecipe(ResourceLocation id, AltarRecipe altarRecipe) {
+    private void addEntitySpawnRecipe(ResourceLocation id, AltarRecipe altarRecipe) {
         ALTAR_RECIPES_MAP.put(id, altarRecipe);
+    }
+
+    private void addItemCraftRecipe(ResourceLocation id, float powerCost, ItemStack outputItemStack, ItemStack... inputItemStack) {
+        ItemStack[] recipe = new ItemStack[inputItemStack.length + 1];
+        recipe[0] = outputItemStack;
+        System.arraycopy(inputItemStack, 0, recipe, 1, inputItemStack.length);
+        addEntitySpawnRecipe(id, new AltarRecipe<EntityItem>(
+                new ResourceLocation("item"),
+                (entity, itemStackList) -> {
+                    entity.setItem(outputItemStack);
+                    return entity;
+                }, powerCost, recipe));
     }
 
     private ItemStack of(Item item) {
@@ -122,5 +164,9 @@ public class AltarRecipesManager {
 
     private ItemStack of(Item item, int meta) {
         return new ItemStack(item, 1, meta);
+    }
+
+    public Map<ResourceLocation, AltarRecipe> getAltarRecipesMap() {
+        return ALTAR_RECIPES_MAP;
     }
 }

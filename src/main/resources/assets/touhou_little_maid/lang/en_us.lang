@@ -7,6 +7,7 @@ entity.touhou_little_maid.danmaku.name=Danmaku
 entity.touhou_little_maid.marisa_broom.name=Marisa's Broom
 entity.touhou_little_maid.chair.name=Chair
 entity.touhou_little_maid.rinnosuke.name=Rinnosuke Morichika
+entity.touhou_little_maid.fairy.name=Maid Fairy
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item
@@ -325,9 +326,22 @@ subtitle.touhou_little_maid.maid.environment.morning=Maid Morning Sound
 subtitle.touhou_little_maid.maid.environment.night=Maid Night Sound
 subtitle.touhou_little_maid.other.credit=Credit: Amitoro's Voice Material Studio
 subtitle.touhou_little_maid.item.camera_use=Camera Use Sound
+subtitle.touhou_little_maid.item.album_open=Album Open Sound
+subtitle.touhou_little_maid.block.altar_craft=Altar Craft Sound
+subtitle.touhou_little_maid.monster.rinnosuke_ambient=Rinnosuke Ambient Sound
+subtitle.touhou_little_maid.monster.rinnosuke_death=Rinnosuke Death Sound
+subtitle.touhou_little_maid.monster.rinnosuke_hurt=Rinnosuke Hurt Sound
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s
 hwyla.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
 top.touhou_little_maid.entity_maid.task=Mode:
 top.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
+
+# JEI
+jei.touhou_little_maid.altar_craft.title=Altar Craft
+jei.touhou_little_maid.altar_craft.result=Effect: %s
+jei.touhou_little_maid.altar_craft.item_craft.result=Craft A Item
+jei.touhou_little_maid.altar_craft.spawn_maid.result=Spawn New Maid
+jei.touhou_little_maid.altar_craft.reborn_maid.result=Reborn Maid From Garage Kit
+jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=Spawn Light Bolt

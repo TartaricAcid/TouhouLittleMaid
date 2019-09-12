@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
 import net.minecraft.client.resources.I18n;
@@ -93,6 +94,7 @@ public class ItemAlbum extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         if (handIn == EnumHand.MAIN_HAND && playerIn.getHeldItem(handIn).getItem() instanceof ItemAlbum) {
             playerIn.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.OTHER_GUI.ALBUM.getId(), worldIn, 0, 0, 0);
+            playerIn.playSound(MaidSoundEvent.ALBUM_OPEN, 0.8f, 1.0f);
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
