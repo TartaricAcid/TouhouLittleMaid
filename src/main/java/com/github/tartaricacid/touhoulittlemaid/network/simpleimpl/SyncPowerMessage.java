@@ -46,6 +46,9 @@ public class SyncPowerMessage implements IMessage {
             if (ctx.side == Side.CLIENT) {
                 Minecraft.getMinecraft().addScheduledTask(() -> {
                     EntityPlayer player = Minecraft.getMinecraft().player;
+                    if (player == null) {
+                        return;
+                    }
                     PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
                     if (power != null) {
                         power.set(message.getPower());

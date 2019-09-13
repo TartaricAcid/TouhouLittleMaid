@@ -23,7 +23,9 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 public class EntityFairyRender extends RenderLiving<EntityFairy> {
     public static final EntityFairyRender.Factory FACTORY = new EntityFairyRender.Factory();
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy.png");
+    private static final ResourceLocation TEXTURE_0 = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy_0.png");
+    private static final ResourceLocation TEXTURE_1 = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy_1.png");
+    private static final ResourceLocation TEXTURE_2 = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy_2.png");
 
     private EntityFairyRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
@@ -42,7 +44,16 @@ public class EntityFairyRender extends RenderLiving<EntityFairy> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityFairy entity) {
-        return TEXTURE;
+        switch (entity.getFairyTypeOrdinal()) {
+            case 0:
+                return TEXTURE_0;
+            case 1:
+                return TEXTURE_1;
+            case 2:
+                return TEXTURE_2;
+            default:
+                return TEXTURE_0;
+        }
     }
 
     public static class Factory implements IRenderFactory<EntityFairy> {
