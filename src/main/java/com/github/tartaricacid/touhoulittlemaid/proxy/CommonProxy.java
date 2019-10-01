@@ -3,8 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.proxy;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
-import com.github.tartaricacid.touhoulittlemaid.bauble.UltramarineOrbElixir;
-import com.github.tartaricacid.touhoulittlemaid.bauble.UndyingTotem;
+import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
@@ -97,8 +96,14 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event) {
         // 注册饰品
-        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.ULTRAMARINE_ORB_ELIXIR), new UltramarineOrbElixir());
-        LittleMaidAPI.registerBauble(ItemDefinition.of(Items.TOTEM_OF_UNDYING), new UndyingTotem());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.ULTRAMARINE_ORB_ELIXIR), new ExtraLifeBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(Items.TOTEM_OF_UNDYING), new UndyingTotemBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.EXPLOSION_PROTECT_BAUBLE), new ExplosionProtectBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.FIRE_PROTECT_BAUBLE), new FireProtectBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.MAGIC_PROTECT_BAUBLE), new MagicProtectBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.PROJECTILE_PROTECT_BAUBLE), new ProjectileProtectBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.FALL_PROTECT_BAUBLE), new FallProtectBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.DROWN_PROTECT_BAUBLE), new DrownProtectBauble());
 
         // 注册女仆模式
         LittleMaidAPI.registerTask(new TaskAttack());

@@ -7,12 +7,15 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Snownee
  * @date 2019/7/24 02:31
  */
 public interface IMaidBauble {
+    Random RANDOM = new Random();
+
     /**
      * 在普通远程攻击模式下触发
      *

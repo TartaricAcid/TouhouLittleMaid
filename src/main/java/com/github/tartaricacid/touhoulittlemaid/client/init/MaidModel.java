@@ -41,9 +41,16 @@ public final class MaidModel {
         registerRender(Item.getItemFromBlock(MaidBlocks.GRID));
 
         // Item
+        registerRender(MaidItems.ULTRAMARINE_ORB_ELIXIR);
+        registerRender(MaidItems.PROJECTILE_PROTECT_BAUBLE);
+        registerRender(MaidItems.MAGIC_PROTECT_BAUBLE);
+        registerRender(MaidItems.FIRE_PROTECT_BAUBLE);
+        registerRender(MaidItems.EXPLOSION_PROTECT_BAUBLE);
+        registerRender(MaidItems.FALL_PROTECT_BAUBLE);
+        registerRender(MaidItems.DROWN_PROTECT_BAUBLE);
+
         registerRender(MaidItems.KAPPA_COMPASS);
         registerRender(MaidItems.HAKUREI_GOHEI);
-        registerRender(MaidItems.ULTRAMARINE_ORB_ELIXIR);
         registerRender(MaidItems.MARISA_BROOM);
         registerRender(MaidItems.CAMERA);
         registerRender(MaidItems.PHOTO);

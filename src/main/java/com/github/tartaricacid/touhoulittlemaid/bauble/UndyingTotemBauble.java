@@ -16,8 +16,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * @author Snownee
  * @date 2019/7/23 14:53
  */
-public class UndyingTotem implements IMaidBauble {
-    public UndyingTotem() {
+public class UndyingTotemBauble implements IMaidBauble {
+    public UndyingTotemBauble() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 

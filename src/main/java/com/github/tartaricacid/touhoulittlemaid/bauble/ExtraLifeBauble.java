@@ -16,8 +16,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * @author Snownee
  * @date 2019/7/23 14:53
  */
-public class UltramarineOrbElixir implements IMaidBauble {
-    public UltramarineOrbElixir() {
+public class ExtraLifeBauble implements IMaidBauble {
+    public ExtraLifeBauble() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 

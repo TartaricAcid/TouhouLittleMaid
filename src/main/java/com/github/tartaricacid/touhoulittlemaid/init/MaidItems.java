@@ -46,6 +46,19 @@ public final class MaidItems {
     };
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "ultramarine_orb_elixir")
     public static Item ULTRAMARINE_ORB_ELIXIR;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "explosion_protect_bauble")
+    public static Item EXPLOSION_PROTECT_BAUBLE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "fire_protect_bauble")
+    public static Item FIRE_PROTECT_BAUBLE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "projectile_protect_bauble")
+    public static Item PROJECTILE_PROTECT_BAUBLE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "magic_protect_bauble")
+    public static Item MAGIC_PROTECT_BAUBLE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "fall_protect_bauble")
+    public static Item FALL_PROTECT_BAUBLE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "drown_protect_bauble")
+    public static Item DROWN_PROTECT_BAUBLE;
+
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "marisa_broom")
     public static Item MARISA_BROOM;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "camera")
@@ -62,11 +75,16 @@ public final class MaidItems {
     @SuppressWarnings("all")
     @SubscribeEvent
     public static void register(RegistryEvent.Register<Item> event) {
+        event.getRegistry().register(getDamageableBaubles(6, "ultramarine_orb_elixir"));
+        event.getRegistry().register(getDamageableBaubles(32, "explosion_protect_bauble"));
+        event.getRegistry().register(getDamageableBaubles(128, "fire_protect_bauble"));
+        event.getRegistry().register(getDamageableBaubles(64, "projectile_protect_bauble"));
+        event.getRegistry().register(getDamageableBaubles(128, "magic_protect_bauble"));
+        event.getRegistry().register(getDamageableBaubles(32, "fall_protect_bauble"));
+        event.getRegistry().register(getDamageableBaubles(64, "drown_protect_bauble"));
+
         event.getRegistry().register(new ItemKappaCompass().setRegistryName("kappa_compass"));
         event.getRegistry().register(new ItemHakureiGohei().setRegistryName("hakurei_gohei"));
-        event.getRegistry().register(new ItemDamageable(5).setRegistryName("ultramarine_orb_elixir")
-                .setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "ultramarine_orb_elixir")
-                .setCreativeTab(MaidItems.TABS));
         event.getRegistry().register(new ItemMarisaBroom().setRegistryName("marisa_broom"));
         event.getRegistry().register(new ItemCamera().setRegistryName("camera"));
         event.getRegistry().register(new ItemPhoto().setRegistryName("photo"));
@@ -76,5 +94,14 @@ public final class MaidItems {
 
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));
+    }
+
+    private static Item getDamageableBaubles(int maxDamage, String id) {
+        return new ItemDamageable(maxDamage - 1)
+                .setRegistryName(id)
+                .setTranslationKey(TouhouLittleMaid.MOD_ID + "." + id)
+                .setMaxStackSize(1)
+                .setNoRepair()
+                .setCreativeTab(MaidItems.TABS);
     }
 }
