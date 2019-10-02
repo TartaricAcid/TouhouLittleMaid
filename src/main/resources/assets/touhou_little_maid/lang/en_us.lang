@@ -31,6 +31,7 @@ item.touhou_little_maid.album.name=Album
 tile.touhou_little_maid.garage_kit.name=Garage Kit
 tile.touhou_little_maid.grid.name=Maid Interaction Panel
 tile.touhou_little_maid.altar.name=Altar
+tile.touhou_little_maid.tombstone.name=Tombstone
 
 # Command
 commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>
@@ -71,6 +72,7 @@ message.touhou_little_maid.grid.blacklist.false=Filter Mode: Whitelist
 message.touhou_little_maid.photo.not_suitable_for_place_maid=This damnable place can't place the maid.
 message.touhou_little_maid.photo.have_no_nbt_data=This damnable photo don't have NBT data.
 message.touhou_little_maid.altar.not_enough_power=You don't have enough power.
+message.touhou_little_maid.tombstone.place_fail=Tombstone Place Fail!
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos

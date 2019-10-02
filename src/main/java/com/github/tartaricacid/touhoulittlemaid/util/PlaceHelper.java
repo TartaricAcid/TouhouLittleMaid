@@ -9,8 +9,8 @@ import net.minecraft.world.World;
  * @author TartaricAcid
  * @date 2019/8/19 14:35
  **/
-public final class MaidPlaceHelper {
-    private MaidPlaceHelper() {
+public final class PlaceHelper {
+    private PlaceHelper() {
     }
 
     /**
@@ -28,6 +28,18 @@ public final class MaidPlaceHelper {
         boolean firstBlockHasCollisionBoundingBox = hasCollisionBoundingBox(worldIn, firstBlock, firstPos);
         boolean secondBlockHasCollisionBoundingBox = hasCollisionBoundingBox(worldIn, secondBlock, secondPos);
         return firstBlockHasCollisionBoundingBox || secondBlockHasCollisionBoundingBox;
+    }
+
+    /**
+     * 该坐标是否适合放置墓碑
+     *
+     * @param worldIn 放置的世界
+     * @param pos     放置的坐标
+     * @return 是否适合放置墓碑
+     */
+    public static boolean notSuitableForPlaceTombstone(World worldIn, BlockPos pos) {
+        IBlockState blockState = worldIn.getBlockState(pos);
+        return hasCollisionBoundingBox(worldIn, blockState, pos);
     }
 
     /**

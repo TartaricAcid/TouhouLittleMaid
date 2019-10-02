@@ -104,6 +104,7 @@ public class CommonProxy {
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.PROJECTILE_PROTECT_BAUBLE), new ProjectileProtectBauble());
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.FALL_PROTECT_BAUBLE), new FallProtectBauble());
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.DROWN_PROTECT_BAUBLE), new DrownProtectBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.TOMBSTONE_BAUBLE), new TombstoneBauble());
 
         // 注册女仆模式
         LittleMaidAPI.registerTask(new TaskAttack());

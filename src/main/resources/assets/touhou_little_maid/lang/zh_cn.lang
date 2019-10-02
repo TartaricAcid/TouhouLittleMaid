@@ -15,7 +15,7 @@ item.touhou_little_maid.kappa_compass.name=河童的罗盘
 item.touhou_little_maid.hakurei_gohei.name=博丽的御币
 item.touhou_little_maid.ultramarine_orb_elixir.name=绀珠之药
 item.touhou_little_maid.explosion_protect_bauble.name=爆炸保护饰品
-item.touhou_little_maid.fire_protect_bauble.name=爆炸保护饰品
+item.touhou_little_maid.fire_protect_bauble.name=火焰保护饰品
 item.touhou_little_maid.projectile_protect_bauble.name=弹射物保护饰品
 item.touhou_little_maid.magic_protect_bauble.name=药水保护饰品
 item.touhou_little_maid.fall_protect_bauble.name=摔落保护饰品
@@ -31,6 +31,7 @@ item.touhou_little_maid.album.name=相册
 tile.touhou_little_maid.garage_kit.name=手办
 tile.touhou_little_maid.grid.name=女仆交互面板
 tile.touhou_little_maid.altar.name=祭坛
+tile.touhou_little_maid.tombstone.name=墓碑
 
 # Command
 commands.touhou_little_maid.hata.usage=§c用法：/hata <reload>
@@ -71,6 +72,7 @@ message.touhou_little_maid.grid.blacklist.false=过滤模式：白名单
 message.touhou_little_maid.photo.not_suitable_for_place_maid=这鬼地方没法放置女仆。
 message.touhou_little_maid.photo.have_no_nbt_data=这鬼照片没有 NBT 数据。
 message.touhou_little_maid.altar.not_enough_power=你的 P 点不足。
+message.touhou_little_maid.tombstone.place_fail=墓碑放置失败！
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标

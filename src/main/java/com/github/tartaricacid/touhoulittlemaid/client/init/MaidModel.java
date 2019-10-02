@@ -48,6 +48,7 @@ public final class MaidModel {
         registerRender(MaidItems.EXPLOSION_PROTECT_BAUBLE);
         registerRender(MaidItems.FALL_PROTECT_BAUBLE);
         registerRender(MaidItems.DROWN_PROTECT_BAUBLE);
+        registerRender(MaidItems.TOMBSTONE_BAUBLE);
 
         registerRender(MaidItems.KAPPA_COMPASS);
         registerRender(MaidItems.HAKUREI_GOHEI);

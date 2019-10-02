@@ -4,8 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
-import com.github.tartaricacid.touhoulittlemaid.util.MaidPlaceHelper;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,7 +42,7 @@ public class ItemPhoto extends Item {
 
     static EnumActionResult onPhotoUse(EntityPlayer player, World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, ItemStack photo) {
         // 方向不对或者位置不合适
-        if (facing != EnumFacing.UP || MaidPlaceHelper.notSuitableForPlaceMaid(worldIn, pos)) {
+        if (facing != EnumFacing.UP || PlaceHelper.notSuitableForPlaceMaid(worldIn, pos)) {
             if (worldIn.isRemote) {
                 player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.photo.not_suitable_for_place_maid"));
             }
