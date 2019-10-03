@@ -39,7 +39,7 @@ public class DrownProtectBauble implements IMaidBauble {
                     float f = RANDOM.nextFloat() - RANDOM.nextFloat();
                     float f1 = RANDOM.nextFloat() - RANDOM.nextFloat();
                     maid.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE,
-                            maid.posX + (double) f2, maid.posY + (double) f, maid.posZ + (double) f1,
+                            maid.posX + f2, maid.posY + f, maid.posZ + f1,
                             maid.motionX, maid.motionY, maid.motionZ);
                 }
             }

@@ -347,7 +347,7 @@ top.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
 # JEI
 jei.touhou_little_maid.altar_craft.title=Altar Craft
 jei.touhou_little_maid.altar_craft.result=Effect: %s
-jei.touhou_little_maid.altar_craft.item_craft.result=Craft A Item
+jei.touhou_little_maid.altar_craft.item_craft.result=Craft an Item
 jei.touhou_little_maid.altar_craft.spawn_maid.result=Spawn New Maid
 jei.touhou_little_maid.altar_craft.reborn_maid.result=Reborn Maid From Garage Kit
 jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=Spawn Light Bolt
