@@ -52,4 +52,15 @@ public interface IMaidBauble {
      */
     default void onTick(AbstractEntityMaid entityMaid, ItemStack baubleItem) {
     }
+
+    /**
+     * 在女仆掉落物品之前触发
+     *
+     * @param entityMaid 女仆
+     * @param baubleItem 触发的饰品
+     * @return 是否取消后续事件
+     */
+    default boolean onDropsPre(AbstractEntityMaid entityMaid, ItemStack baubleItem) {
+        return false;
+    }
 }

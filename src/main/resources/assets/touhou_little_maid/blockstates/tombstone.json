@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "touhou_little_maid:altar"
+    "model": "touhou_little_maid:tombstone"
   },
   "variants": {
     "normal": [

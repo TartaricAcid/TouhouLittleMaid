@@ -1,18 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.api.util;
 
-import java.util.LinkedHashSet;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.LinkedHashSet;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * @author Snownee
@@ -56,48 +55,37 @@ public final class Util {
         }
         return fallback;
     }
-    
-    public static boolean doesItemHaveOreName(ItemStack stack, String ore)
-    {
-        if (stack.isEmpty() || !OreDictionary.doesOreNameExist(ore))
-        {
+
+    public static boolean doesItemHaveOreName(ItemStack stack, String ore) {
+        if (stack.isEmpty() || !OreDictionary.doesOreNameExist(ore)) {
             return false;
         }
         int oreid = OreDictionary.getOreID(ore);
-        for (int id : OreDictionary.getOreIDs(stack))
-        {
-            if (oreid == id)
-            {
+        for (int id : OreDictionary.getOreIDs(stack)) {
+            if (oreid == id) {
                 return true;
             }
         }
         return false;
     }
-    
-    public static NonNullList<ItemDefinition> getItemsFromOre(String ore)
-    {
+
+    public static NonNullList<ItemDefinition> getItemsFromOre(String ore) {
         LinkedHashSet<ItemDefinition> set = new LinkedHashSet<>();
-        if (!ore.isEmpty())
-        {
-            for (ItemStack item : OreDictionary.getOres(ore, false))
-            {
-                if (item.getMetadata() == OreDictionary.WILDCARD_VALUE)
-                {
+        if (!ore.isEmpty()) {
+            for (ItemStack item : OreDictionary.getOres(ore, false)) {
+                if (item.getMetadata() == OreDictionary.WILDCARD_VALUE) {
                     NonNullList<ItemStack> subItems = NonNullList.create();
                     item.getItem().getSubItems(item.getItem().getCreativeTab(), subItems);
                     set.addAll(subItems.stream().map(ItemDefinition::of).collect(Collectors.toList()));
-                }
-                else
-                {
+                } else {
                     set.add(ItemDefinition.of(item));
                 }
             }
         }
         return NonNullList.from(ItemDefinition.EMPTY, set.toArray(new ItemDefinition[0]));
     }
-    
-    public static NonNullList<ItemStack> getItemsFromOre(String ore, int count)
-    {
+
+    public static NonNullList<ItemStack> getItemsFromOre(String ore, int count) {
         return NonNullList.from(ItemStack.EMPTY, getItemsFromOre(ore).stream().map(ItemDefinition::getItemStack).peek(i -> i.setCount(count)).toArray(ItemStack[]::new));
     }
 }

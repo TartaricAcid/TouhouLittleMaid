@@ -10,9 +10,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -30,6 +32,20 @@ public class BlockTombstone extends Block implements ITileEntityProvider {
         setRegistryName("tombstone");
     }
 
+    /**
+     * 略微修改原版该方法，取消默认的半秒拾取延迟
+     */
+    public static void spawnAsEntity(World worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+        if (!worldIn.isRemote && !stack.isEmpty() && worldIn.getGameRules().getBoolean("doTileDrops") && !worldIn.restoringBlockSnapshots) {
+            if (captureDrops.get()) {
+                capturedDrops.get().add(stack);
+                return;
+            }
+            EntityItem entityitem = new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
+            worldIn.spawnEntity(entityitem);
+        }
+    }
+
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
@@ -43,6 +59,9 @@ public class BlockTombstone extends Block implements ITileEntityProvider {
             TileEntityTombstone tombstone = (TileEntityTombstone) te;
             for (int i = 0; i < tombstone.handler.getSlots(); i++) {
                 spawnAsEntity(worldIn, player.getPosition(), tombstone.handler.getStackInSlot(i));
+            }
+            if (!worldIn.isRemote) {
+                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.tombstone.on_block_activated"));
             }
         }
     }
@@ -58,20 +77,30 @@ public class BlockTombstone extends Block implements ITileEntityProvider {
             }
         }
         worldIn.setBlockToAir(pos);
+        if (!worldIn.isRemote) {
+            playerIn.sendMessage(new TextComponentTranslation("message.touhou_little_maid.tombstone.on_block_activated"));
+        }
         return true;
     }
 
-    /**
-     * 略微修改原版该方法，取消默认的半秒拾取延迟
-     */
-    public static void spawnAsEntity(World worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
-        if (!worldIn.isRemote && !stack.isEmpty() && worldIn.getGameRules().getBoolean("doTileDrops") && !worldIn.restoringBlockSnapshots) {
-            if (captureDrops.get()) {
-                capturedDrops.get().add(stack);
-                return;
-            }
-            EntityItem entityitem = new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
-            worldIn.spawnEntity(entityitem);
-        }
+    @Nonnull
+    @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean isBlockNormalCube(IBlockState blockState) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState blockState) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
     }
 }

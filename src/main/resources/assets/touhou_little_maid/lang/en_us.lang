@@ -13,13 +13,14 @@ entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of 
 # Item
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass
 item.touhou_little_maid.hakurei_gohei.name=Hakurei's Gohei
-item.touhou_little_maid.ultramarine_orb_elixir.name=Ultramarine Orb Elixir
-item.touhou_little_maid.explosion_protect_bauble.name=Explosion Protect Bauble
-item.touhou_little_maid.fire_protect_bauble.name=Fire Protect Bauble
-item.touhou_little_maid.projectile_protect_bauble.name=Projectile Protect Bauble
-item.touhou_little_maid.magic_protect_bauble.name=Potion Protect Bauble
-item.touhou_little_maid.fall_protect_bauble.name=Fall Protect Bauble
-item.touhou_little_maid.drown_protect_bauble.name=Drown Protect Bauble
+item.touhou_little_maid.ultramarine_orb_elixir.name=§6Ultramarine Orb Elixir
+item.touhou_little_maid.explosion_protect_bauble.name=§6Explosion Protect Bauble
+item.touhou_little_maid.fire_protect_bauble.name=§6Fire Protect Bauble
+item.touhou_little_maid.projectile_protect_bauble.name=§6Projectile Protect Bauble
+item.touhou_little_maid.magic_protect_bauble.name=§6Potion Protect Bauble
+item.touhou_little_maid.fall_protect_bauble.name=§6Fall Protect Bauble
+item.touhou_little_maid.drown_protect_bauble.name=§6Drown Protect Bauble
+item.touhou_little_maid.tombstone_bauble.name=§6Tombstone Bauble
 item.touhou_little_maid.marisa_broom.name=Marisa's Broom
 item.touhou_little_maid.camera.name=Aya's Camera
 item.touhou_little_maid.photo.name=Photo
@@ -73,6 +74,7 @@ message.touhou_little_maid.photo.not_suitable_for_place_maid=This damnable place
 message.touhou_little_maid.photo.have_no_nbt_data=This damnable photo don't have NBT data.
 message.touhou_little_maid.altar.not_enough_power=You don't have enough power.
 message.touhou_little_maid.tombstone.place_fail=Tombstone Place Fail!
+message.touhou_little_maid.tombstone.on_block_activated=Tombstone Has Been Taken Back!
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos

@@ -849,6 +849,11 @@ public class EntityMaid extends AbstractEntityMaid {
             return;
         }
 
+        // 因为原版的死亡事件触发位置不对，故在此设计一个
+        if (baubleInv.fireEvent((b, s) -> b.onDropsPre(this, s))) {
+            return;
+        }
+
         // 将女仆身上的物品进行掉落
         if (!world.isRemote) {
             IItemHandler itemHandler = this.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -1223,6 +1228,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(ARM_RISE, swingingArms);
     }
 
+    @Override
     public String getModelId() {
         return this.dataManager.get(MODEL_ID);
     }

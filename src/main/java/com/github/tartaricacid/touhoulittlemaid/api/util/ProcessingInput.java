@@ -1,15 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.api.util;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.item.ItemStack;
 
-public interface ProcessingInput extends Predicate<ItemStack>
-{
+import javax.annotation.Nonnull;
+import java.util.List;
+
+public interface ProcessingInput extends Predicate<ItemStack> {
 
     /**
      * Return a list of ItemStack so that each element e in the list will
@@ -21,32 +18,29 @@ public interface ProcessingInput extends Predicate<ItemStack>
      * @return A list of ItemStack instances that satisfy <code>matches(e)
      * == true</code>.
      */
-    @Nonnull List<ItemStack> examples();
+    @Nonnull
+    List<ItemStack> examples();
 
     /**
      * Perform a check to determine whether the actual ItemStack satisfies
      * the criteria defined by this <code>CuisineProcessingInput</code>.
      *
      * @param stack The actual ItemStack instance to be examined.
-     *
      * @return <code>true</code> if the given instance is matched;
      * <code>false</code> if otherwise.
      */
     boolean matches(@Nonnull ItemStack stack);
 
     @Override
-    default boolean apply(ItemStack stack)
-    {
+    default boolean apply(ItemStack stack) {
         return matches(stack);
     }
-    
+
     /**
      * @return <code>true</code> if this effectively represents an "empty"
      * state, and thus cannot matches anything; <code>false</code> if
      * otherwise.
-     *
-     * @implSpec
-     * If <code>isEmpty</code> returns <code>true</code>, then any invocations
+     * @implSpec If <code>isEmpty</code> returns <code>true</code>, then any invocations
      * of <code>matches</code> on this must return <code>false</code>.
      */
     boolean isEmpty();
@@ -55,7 +49,6 @@ public interface ProcessingInput extends Predicate<ItemStack>
      * Perform equivalence check with another object.
      *
      * @param obj Another object
-     *
      * @return <code>true</code> if the given object is identical to this.
      */
     @Override

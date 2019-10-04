@@ -53,7 +53,7 @@ public class AltarRecipesManager {
                         0.3f,
                         ItemDefinition.of(MaidBlocks.GARAGE_KIT, OreDictionary.WILDCARD_VALUE), lapis, gold,
                         redstone, iron, coal));
-        
+
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_light_bolt"),
                 new AltarRecipe(
                         new ResourceLocation("lightning_bolt"),
@@ -93,13 +93,11 @@ public class AltarRecipesManager {
 
     @Nullable
     public AltarRecipe getMatchRecipe(List<ItemStack> inputStacks) {
-    	for (AltarRecipe recipe : ALTAR_RECIPES_MAP.values())
-    	{
-    		if (recipe.matches(inputStacks))
-    		{
-    			return recipe;
-    		}
-    	}
+        for (AltarRecipe recipe : ALTAR_RECIPES_MAP.values()) {
+            if (recipe.matches(inputStacks)) {
+                return recipe;
+            }
+        }
         return null;
     }
 

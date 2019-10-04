@@ -13,13 +13,14 @@ entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 # Item
 item.touhou_little_maid.kappa_compass.name=河童的罗盘
 item.touhou_little_maid.hakurei_gohei.name=博丽的御币
-item.touhou_little_maid.ultramarine_orb_elixir.name=绀珠之药
-item.touhou_little_maid.explosion_protect_bauble.name=爆炸保护饰品
-item.touhou_little_maid.fire_protect_bauble.name=火焰保护饰品
-item.touhou_little_maid.projectile_protect_bauble.name=弹射物保护饰品
-item.touhou_little_maid.magic_protect_bauble.name=药水保护饰品
-item.touhou_little_maid.fall_protect_bauble.name=摔落保护饰品
-item.touhou_little_maid.drown_protect_bauble.name=溺水保护饰品
+item.touhou_little_maid.ultramarine_orb_elixir.name=§6绀珠之药
+item.touhou_little_maid.explosion_protect_bauble.name=§6爆炸保护饰品
+item.touhou_little_maid.fire_protect_bauble.name=§6火焰保护饰品
+item.touhou_little_maid.projectile_protect_bauble.name=§6弹射物保护饰品
+item.touhou_little_maid.magic_protect_bauble.name=§6药水保护饰品
+item.touhou_little_maid.fall_protect_bauble.name=§6摔落保护饰品
+item.touhou_little_maid.drown_protect_bauble.name=§6溺水保护饰品
+item.touhou_little_maid.tombstone_bauble.name=§6墓碑饰品
 item.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
 item.touhou_little_maid.camera.name=文文的相机
 item.touhou_little_maid.photo.name=照片
@@ -73,6 +74,7 @@ message.touhou_little_maid.photo.not_suitable_for_place_maid=这鬼地方没法�
 message.touhou_little_maid.photo.have_no_nbt_data=这鬼照片没有 NBT 数据。
 message.touhou_little_maid.altar.not_enough_power=你的 P 点不足。
 message.touhou_little_maid.tombstone.place_fail=墓碑放置失败！
+message.touhou_little_maid.tombstone.on_block_activated=墓碑已经被收回！
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标

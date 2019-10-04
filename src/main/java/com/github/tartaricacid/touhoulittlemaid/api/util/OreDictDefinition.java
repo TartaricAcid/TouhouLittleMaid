@@ -30,48 +30,41 @@
 
 package com.github.tartaricacid.touhoulittlemaid.api.util;
 
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-
-public class OreDictDefinition implements ProcessingInput
-{
+public class OreDictDefinition implements ProcessingInput {
     public static final OreDictDefinition EMPTY = of("");
 
     String ore;
 
-    private OreDictDefinition(String ore)
-    {
+    private OreDictDefinition(String ore) {
         this.ore = ore;
     }
 
-    public static OreDictDefinition of(String ore)
-    {
+    public static OreDictDefinition of(String ore) {
         return new OreDictDefinition(ore);
     }
 
     @Override
-    public List<ItemStack> examples()
-    {
+    public List<ItemStack> examples() {
         return isEmpty() ? Collections.emptyList() : Util.getItemsFromOre(ore, 1);
     }
 
     @Override
-    public boolean matches(ItemStack stack)
-    {
+    public boolean matches(@Nonnull ItemStack stack) {
         return Util.doesItemHaveOreName(stack, ore);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         OreDictDefinition that = (OreDictDefinition) o;
@@ -79,20 +72,17 @@ public class OreDictDefinition implements ProcessingInput
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "ore:" + (isEmpty() ? "null" : ore);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return ore.hashCode();
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return ore.isEmpty();
     }
 }

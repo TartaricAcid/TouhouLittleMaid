@@ -95,4 +95,11 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @return boolean
      */
     abstract public boolean hasSasimono();
+
+    /**
+     * 女仆当前的模型 id
+     *
+     * @return String
+     */
+    abstract public String getModelId();
 }

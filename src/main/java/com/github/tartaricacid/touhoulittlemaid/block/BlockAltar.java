@@ -98,14 +98,12 @@ public class BlockAltar extends Block implements ITileEntityProvider {
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity instanceof TileEntityAltar) {
                 ItemStack stack = ((TileEntityAltar) tileEntity).handler.getStackInSlot(0);
-                if (!stack.isEmpty())
-                {
+                if (!stack.isEmpty()) {
                     inputStackList.add(stack);
                 }
             }
         }
-        if (!inputStackList.isEmpty())
-        {
+        if (!inputStackList.isEmpty()) {
             AltarRecipe altarRecipe = AltarRecipesManager.instance().getMatchRecipe(inputStackList);
             PowerHandler power = playerIn.getCapability(CapabilityPowerHandler.POWER_CAP, null);
             if (altarRecipe != null && power != null) {
