@@ -81,7 +81,7 @@ public class ItemAlbum extends Item {
             ItemStack album = player.getHeldItem(hand);
             ItemStackHandler itemStackHandler = getAlbumInv(album);
             ItemStack photo = ItemFindUtil.getStack(itemStackHandler, (stack) -> stack.getItem() instanceof ItemPhoto);
-            if (photo != ItemStack.EMPTY && ItemPhoto.onPhotoUse(player, worldIn, pos, facing, hitX, hitY, hitZ, photo) == EnumActionResult.SUCCESS) {
+            if (!photo.isEmpty() && ItemPhoto.onPhotoUse(player, worldIn, pos, facing, hitX, hitY, hitZ, photo) == EnumActionResult.SUCCESS) {
                 setAlbumInv(album, itemStackHandler);
             }
             return EnumActionResult.SUCCESS;

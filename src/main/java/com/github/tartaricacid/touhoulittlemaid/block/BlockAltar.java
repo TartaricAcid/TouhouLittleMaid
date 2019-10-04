@@ -60,8 +60,8 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof TileEntityAltar && hand == EnumHand.MAIN_HAND) {
             TileEntityAltar altar = (TileEntityAltar) tileEntity;
-            if (playerIn.isSneaking()) {
-                applyTakeOutLogic(worldIn, pos, altar);
+            if (playerIn.isSneaking() || playerIn.getHeldItemMainhand().isEmpty()) {
+                applyTakeOutLogic(worldIn, pos, altar, playerIn);
             } else {
                 applyPlaceAndCraftLogic(worldIn, altar, playerIn);
             }
@@ -71,23 +71,24 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
-    private void applyTakeOutLogic(World world, BlockPos pos, TileEntityAltar altar) {
+    private void applyTakeOutLogic(World world, BlockPos pos, TileEntityAltar altar, EntityPlayer player) {
         if (altar.isCanPlaceItem()) {
-            if (altar.handler.getStackInSlot(0) != ItemStack.EMPTY) {
+            if (!altar.handler.getStackInSlot(0).isEmpty()) {
                 Block.spawnAsEntity(world, pos.add(0, 1, 0), altar.handler.extractItem(0, 1, false));
+                applyCraftingLogic(world, altar, player);
             }
         }
     }
 
     private void applyPlaceAndCraftLogic(World world, TileEntityAltar altar, EntityPlayer playerIn) {
         if (altar.isCanPlaceItem()) {
-            if (altar.handler.getStackInSlot(0) == ItemStack.EMPTY && playerIn.getHeldItemMainhand() != ItemStack.EMPTY) {
+            if (altar.handler.getStackInSlot(0).isEmpty() && !playerIn.getHeldItemMainhand().isEmpty()) {
                 altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(playerIn.getHeldItemMainhand(), 1));
                 if (!playerIn.isCreative()) {
                     playerIn.getHeldItemMainhand().shrink(1);
                 }
+                applyCraftingLogic(world, altar, playerIn);
             }
-            applyCraftingLogic(world, altar, playerIn);
         }
     }
 
@@ -192,7 +193,7 @@ public class BlockAltar extends Block implements ITileEntityProvider {
     public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         if (!worldIn.isRemote) {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if (tileEntity instanceof TileEntityAltar && ((TileEntityAltar) tileEntity).handler.getStackInSlot(0) != ItemStack.EMPTY) {
+            if (tileEntity instanceof TileEntityAltar && !((TileEntityAltar) tileEntity).handler.getStackInSlot(0).isEmpty()) {
                 Block.spawnAsEntity(worldIn, pos.add(0, 1, 0), ((TileEntityAltar) tileEntity).handler.getStackInSlot(0));
             }
         }
