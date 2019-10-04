@@ -26,7 +26,7 @@ public class PlayerPickupEvent {
             ItemStack album = ItemFindUtil.getStack(playerInvWrapper,
                     (stack) -> stack.getItem() instanceof ItemAlbum && ItemAlbum.getAlbumPhotoNum(stack) < ItemAlbum.ALBUM_INV_SIZE);
 
-            if (album != ItemStack.EMPTY) {
+            if (!album.isEmpty()) {
                 EntityItem entityItem = event.getItem();
                 ItemStack stackBefore = entityItem.getItem();
                 ItemStackHandler itemStackHandler = ItemAlbum.getAlbumInv(album);

@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -72,7 +71,7 @@ public class TileEntityAltarRenderer extends TileEntitySpecialRenderer<TileEntit
             }
             GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
         }
-        if (te.isCanPlaceItem() && te.handler.getStackInSlot(0) != ItemStack.EMPTY) {
+        if (te.isCanPlaceItem() && !te.handler.getStackInSlot(0).isEmpty()) {
             Entity entity;
             try {
                 entity = ClientProxy.ENTITY_CACHE.get(ENTITY_ITEM_ID, () -> {

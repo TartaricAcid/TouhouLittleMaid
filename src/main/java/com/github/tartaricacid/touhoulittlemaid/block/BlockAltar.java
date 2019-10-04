@@ -60,8 +60,8 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof TileEntityAltar && hand == EnumHand.MAIN_HAND) {
             TileEntityAltar altar = (TileEntityAltar) tileEntity;
-            if (playerIn.isSneaking()) {
-                applyTakeOutLogic(worldIn, pos, altar);
+            if (playerIn.isSneaking() || playerIn.getHeldItemMainhand().isEmpty()) {
+                applyTakeOutLogic(worldIn, pos, altar, playerIn);
             } else {
                 applyPlaceAndCraftLogic(worldIn, altar, playerIn);
             }
@@ -71,23 +71,24 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
-    private void applyTakeOutLogic(World world, BlockPos pos, TileEntityAltar altar) {
+    private void applyTakeOutLogic(World world, BlockPos pos, TileEntityAltar altar, EntityPlayer player) {
         if (altar.isCanPlaceItem()) {
-            if (altar.handler.getStackInSlot(0) != ItemStack.EMPTY) {
+            if (!altar.handler.getStackInSlot(0).isEmpty()) {
                 Block.spawnAsEntity(world, pos.add(0, 1, 0), altar.handler.extractItem(0, 1, false));
+                applyCraftingLogic(world, altar, player);
             }
         }
     }
 
     private void applyPlaceAndCraftLogic(World world, TileEntityAltar altar, EntityPlayer playerIn) {
         if (altar.isCanPlaceItem()) {
-            if (altar.handler.getStackInSlot(0) == ItemStack.EMPTY && playerIn.getHeldItemMainhand() != ItemStack.EMPTY) {
+            if (altar.handler.getStackInSlot(0).isEmpty() && !playerIn.getHeldItemMainhand().isEmpty()) {
                 altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(playerIn.getHeldItemMainhand(), 1));
                 if (!playerIn.isCreative()) {
                     playerIn.getHeldItemMainhand().shrink(1);
                 }
+                applyCraftingLogic(world, altar, playerIn);
             }
-            applyCraftingLogic(world, altar, playerIn);
         }
     }
 
@@ -96,13 +97,20 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         for (BlockPos pos : altar.getCanPlaceItemPosList()) {
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity instanceof TileEntityAltar) {
-                inputStackList.add(((TileEntityAltar) tileEntity).handler.getStackInSlot(0));
+                ItemStack stack = ((TileEntityAltar) tileEntity).handler.getStackInSlot(0);
+                if (!stack.isEmpty())
+                {
+                    inputStackList.add(stack);
+                }
             }
         }
-        AltarRecipe altarRecipe = AltarRecipesManager.instance().getMatchRecipes(inputStackList);
-        PowerHandler power = playerIn.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-        if (altarRecipe != null && power != null) {
-            spawnResultEntity(world, playerIn, power, altarRecipe, inputStackList, altar);
+        if (!inputStackList.isEmpty())
+        {
+            AltarRecipe altarRecipe = AltarRecipesManager.instance().getMatchRecipe(inputStackList);
+            PowerHandler power = playerIn.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+            if (altarRecipe != null && power != null) {
+                spawnResultEntity(world, playerIn, power, altarRecipe, inputStackList, altar);
+            }
         }
     }
 
@@ -156,14 +164,14 @@ public class BlockAltar extends Block implements ITileEntityProvider {
             double ySpeed = RANDOM.nextGaussian() * 0.02D;
             double zSpeed = RANDOM.nextGaussian() * 0.02D;
             world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
-                    centrePos.getX() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - xSpeed * 10.0D,
+                    centrePos.getX() + (double) (RANDOM.nextFloat() * width * 2.0F) - width - xSpeed * 10.0D,
                     centrePos.getY() + (double) (RANDOM.nextFloat() * height) - ySpeed * 10.0D,
-                    centrePos.getZ() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - zSpeed * 10.0D,
+                    centrePos.getZ() + (double) (RANDOM.nextFloat() * width * 2.0F) - width - zSpeed * 10.0D,
                     xSpeed, ySpeed, zSpeed);
             world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,
-                    centrePos.getX() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - xSpeed * 10.0D,
+                    centrePos.getX() + (double) (RANDOM.nextFloat() * width * 2.0F) - width - xSpeed * 10.0D,
                     centrePos.getY() + (double) (RANDOM.nextFloat() * height) - ySpeed * 10.0D,
-                    centrePos.getZ() + (double) (RANDOM.nextFloat() * width * 2.0F) - (double) width - zSpeed * 10.0D,
+                    centrePos.getZ() + (double) (RANDOM.nextFloat() * width * 2.0F) - width - zSpeed * 10.0D,
                     xSpeed, ySpeed, zSpeed);
         }
     }
@@ -185,7 +193,7 @@ public class BlockAltar extends Block implements ITileEntityProvider {
     public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         if (!worldIn.isRemote) {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if (tileEntity instanceof TileEntityAltar && ((TileEntityAltar) tileEntity).handler.getStackInSlot(0) != ItemStack.EMPTY) {
+            if (tileEntity instanceof TileEntityAltar && !((TileEntityAltar) tileEntity).handler.getStackInSlot(0).isEmpty()) {
                 Block.spawnAsEntity(worldIn, pos.add(0, 1, 0), ((TileEntityAltar) tileEntity).handler.getStackInSlot(0));
             }
         }
@@ -262,11 +270,11 @@ public class BlockAltar extends Block implements ITileEntityProvider {
             for (int j = 0; j < 4; ++j) {
                 for (int k = 0; k < 4; ++k) {
                     for (int l = 0; l < 4; ++l) {
-                        double d0 = ((double) j + 0.5D) / 4.0D;
-                        double d1 = ((double) k + 0.5D) / 4.0D;
-                        double d2 = ((double) l + 0.5D) / 4.0D;
+                        double d0 = (j + 0.5D) / 4.0D;
+                        double d1 = (k + 0.5D) / 4.0D;
+                        double d2 = (l + 0.5D) / 4.0D;
                         manager.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(),
-                                (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2,
+                                pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2,
                                 d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, Block.getStateId(state));
                     }
                 }
@@ -285,35 +293,36 @@ public class BlockAltar extends Block implements ITileEntityProvider {
             int j = pos.getY();
             int k = pos.getZ();
             AxisAlignedBB axisalignedbb = iblockstate.getBoundingBox(world, pos);
-            double d0 = (double) i + rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - 0.20000000298023224D)
+            double d0 = i + rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - 0.20000000298023224D)
                     + 0.10000000149011612D + axisalignedbb.minX;
-            double d1 = (double) j + rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - 0.20000000298023224D)
+            double d1 = j + rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - 0.20000000298023224D)
                     + 0.10000000149011612D + axisalignedbb.minY;
-            double d2 = (double) k + rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - 0.20000000298023224D)
+            double d2 = k + rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - 0.20000000298023224D)
                     + 0.10000000149011612D + axisalignedbb.minZ;
             if (side == EnumFacing.DOWN) {
-                d1 = (double) j + axisalignedbb.minY - 0.10000000149011612D;
+                d1 = j + axisalignedbb.minY - 0.10000000149011612D;
             }
             if (side == EnumFacing.UP) {
-                d1 = (double) j + axisalignedbb.maxY + 0.10000000149011612D;
+                d1 = j + axisalignedbb.maxY + 0.10000000149011612D;
             }
             if (side == EnumFacing.NORTH) {
-                d2 = (double) k + axisalignedbb.minZ - 0.10000000149011612D;
+                d2 = k + axisalignedbb.minZ - 0.10000000149011612D;
             }
             if (side == EnumFacing.SOUTH) {
-                d2 = (double) k + axisalignedbb.maxZ + 0.10000000149011612D;
+                d2 = k + axisalignedbb.maxZ + 0.10000000149011612D;
             }
             if (side == EnumFacing.WEST) {
-                d0 = (double) i + axisalignedbb.minX - 0.10000000149011612D;
+                d0 = i + axisalignedbb.minX - 0.10000000149011612D;
             }
             if (side == EnumFacing.EAST) {
-                d0 = (double) i + axisalignedbb.maxX + 0.10000000149011612D;
+                d0 = i + axisalignedbb.maxX + 0.10000000149011612D;
             }
             manager.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(),
                     d0, d1, d2, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean hasCustomBreakingProgress(IBlockState state) {
         return false;

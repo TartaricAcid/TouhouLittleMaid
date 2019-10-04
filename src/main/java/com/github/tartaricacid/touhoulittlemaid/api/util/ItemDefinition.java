@@ -50,7 +50,7 @@ import java.util.List;
  * @author Snownee
  * @date 2019/7/23 14:53
  */
-public final class ItemDefinition implements Comparable<ItemDefinition> {
+public final class ItemDefinition implements ProcessingInput, Comparable<ItemDefinition> {
     /**
      * 空物品定义
      */
@@ -126,6 +126,7 @@ public final class ItemDefinition implements Comparable<ItemDefinition> {
     /**
      * 返回该类对应的物品堆
      */
+    @Override
     @Nonnull
     public List<ItemStack> examples() {
         // 如果 meta 为 WILDCARD_VALUE，则返回所有的子类
@@ -156,6 +157,7 @@ public final class ItemDefinition implements Comparable<ItemDefinition> {
     /**
      * 匹配物品堆是否和本对象相等
      */
+    @Override
     public boolean matches(ItemStack stack) {
         // 如果 meta 为 WILDCARD_VALUE，或 meta 互相匹配
         boolean metaMatches = OreDictionary.WILDCARD_VALUE == metadata || stack.getMetadata() == metadata;
@@ -190,6 +192,7 @@ public final class ItemDefinition implements Comparable<ItemDefinition> {
         return new ItemStack(this.item.get(), 1, meta, null);
     }
 
+    @Override
     public boolean isEmpty() {
         return item.get() == Items.AIR;
     }

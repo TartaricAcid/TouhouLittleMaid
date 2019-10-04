@@ -1,77 +1,97 @@
 package com.github.tartaricacid.touhoulittlemaid.crafting;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import com.github.tartaricacid.touhoulittlemaid.api.util.ProcessingInput;
 import com.google.common.collect.Lists;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.BiFunction;
+import net.minecraftforge.common.util.RecipeMatcher;
 
 /**
  * @author TartaricAcid
  * @date 2019/9/7 14:26
  **/
-public class AltarRecipe<T extends Entity> {
+public class AltarRecipe
+{
     private static final int RECIPES_SIZE = 6;
-    private static final ResourceLocation ENTITY_ITEM_ID = new ResourceLocation("item");
+    static final ResourceLocation ENTITY_ITEM_ID = new ResourceLocation("item");
     private ResourceLocation entityId;
-    private BiFunction<T, List<ItemStack>, T> entityFunc;
     private float powerCost;
-    private boolean isItemCraft = false;
-    private ItemStack outputItemStack = ItemStack.EMPTY;
-    private LinkedList<ItemStack> recipe = Lists.newLinkedList();
+    private ItemStack output = ItemStack.EMPTY;
+    private List<ProcessingInput> inputs;
 
-    AltarRecipe(ResourceLocation entityId, BiFunction<T, List<ItemStack>, T> entityFunc, float powerCost, ItemStack... recipe) {
+    public AltarRecipe(ResourceLocation entityId, float powerCost, ItemStack output, ProcessingInput... inputs)
+    {
         this.entityId = entityId;
-        this.entityFunc = entityFunc;
         this.powerCost = powerCost;
-        int i = 0;
         int recipesSize = RECIPES_SIZE;
-        if (entityId.equals(ENTITY_ITEM_ID)) {
-            isItemCraft = true;
-            outputItemStack = recipe[0];
-            i++;
-            recipesSize++;
+        if (entityId.equals(ENTITY_ITEM_ID) && !output.isEmpty())
+        {
+            this.output = output;
         }
-        for (; i < recipesSize; i++) {
-            this.recipe.add(Arrays.stream(recipe).skip(i).findFirst().orElse(ItemStack.EMPTY));
+        if (inputs.length == 0 || inputs.length > RECIPES_SIZE)
+        {
+            throw new IllegalAccessError();
         }
+        this.inputs = Lists.newArrayList(inputs);
     }
 
-    @SuppressWarnings("unchecked")
-    public T getOutputEntity(World world, BlockPos pos, List<ItemStack> inputItems) {
+    public Entity getOutputEntity(World world, BlockPos pos, List<ItemStack> inputItems)
+    {
         Entity entity;
         // 特例：闪电，原版就这么做的
-        if (EntityList.LIGHTNING_BOLT.equals(entityId)) {
+        if (EntityList.LIGHTNING_BOLT.equals(entityId))
+        {
             entity = new EntityLightningBolt(world, pos.getX(), pos.getY(), pos.getZ(), false);
-        } else {
-            entity = Objects.requireNonNull(EntityList.createEntityByIDFromName(entityId, world));
         }
-        entity.setPosition(pos.getX(), pos.getY() + 0.8, pos.getZ());
-        return entityFunc.apply((T) entity, inputItems);
+        else
+        {
+            entity = Objects.requireNonNull(EntityList.createEntityByIDFromName(entityId, world));
+            entity.setPosition(pos.getX(), pos.getY() + 0.8, pos.getZ());
+            if (isItemCraft() && entity instanceof EntityItem)
+            {
+                ((EntityItem) entity).setItem(output.copy());
+            }
+            else if (entity instanceof EntityLiving)
+            {
+                ((EntityLiving)entity).onInitialSpawn(entity.getEntityWorld().getDifficultyForLocation(entity.getPosition()), null);
+            }
+        }
+        return entity;
     }
 
-    public float getPowerCost() {
+    public float getPowerCost()
+    {
         return powerCost;
     }
 
-    public LinkedList<ItemStack> getRecipe() {
-        return recipe;
+    public List<ProcessingInput> getRecipe()
+    {
+        return Collections.unmodifiableList(inputs);
     }
 
-    public boolean isItemCraft() {
-        return isItemCraft;
+    public boolean isItemCraft()
+    {
+        return !output.isEmpty();
     }
 
-    public ItemStack getOutputItemStack() {
-        return outputItemStack;
+    public ItemStack getOutputItemStack()
+    {
+        return output;
+    }
+
+    public boolean matches(List<ItemStack> stacks)
+    {
+        return RecipeMatcher.findMatches(stacks, inputs) != null;
     }
 }

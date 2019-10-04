@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.jei.altar;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
+import com.github.tartaricacid.touhoulittlemaid.api.util.ProcessingInput;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
@@ -9,15 +9,12 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,18 +28,11 @@ public class AltarRecipeWrapper implements IRecipeWrapper {
     private final float powerCost;
     private final String resultLanguageKey;
 
-    AltarRecipeWrapper(List<ItemStack> inputs, List<ItemStack> outputs, float powerCost, String resultLanguageKey) {
+    AltarRecipeWrapper(List<ProcessingInput> inputs, List<ItemStack> outputs, float powerCost, String resultLanguageKey) {
         this.inputs = new ArrayList<>();
         this.outputs = outputs;
-        for (ItemStack stack : inputs) {
-            NonNullList<ItemStack> itemStackNonNullList = NonNullList.create();
-            Item item = stack.getItem();
-            if (item == Item.getItemFromBlock(MaidBlocks.GARAGE_KIT) && item.getCreativeTab() != null) {
-                stack.getItem().getSubItems(item.getCreativeTab(), itemStackNonNullList);
-                this.inputs.add(itemStackNonNullList);
-            } else {
-                this.inputs.add(Collections.singletonList(stack));
-            }
+        for (ProcessingInput input : inputs) {
+            this.inputs.add(input.examples());
         }
         this.powerCost = powerCost;
         this.resultLanguageKey = resultLanguageKey;
