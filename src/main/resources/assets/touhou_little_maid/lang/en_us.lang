@@ -108,16 +108,15 @@ danmaku_type.touhou_little_maid.orbs=Orbs
 # Task
 task.touhou_little_maid.idle=Idle
 task.touhou_little_maid.attack=Attack
-task.touhou_little_maid.ranged_attack=Ranged Attack
-task.touhou_little_maid.danmaku_attack=Danmaku Attack
+task.touhou_little_maid.ranged_attack=Bow
+task.touhou_little_maid.danmaku_attack=Danmaku
 task.touhou_little_maid.farm=Farm
 task.touhou_little_maid.feed=Feed
 task.touhou_little_maid.shears=Shears
 task.touhou_little_maid.torch=Torch
-task.touhou_little_maid.feed_animal=Feed Animal
+task.touhou_little_maid.feed_animal=Breed
 
 # GUI
-gui.touhou_little_maid.button.mode_switch=This Maid Is In %s Mode.
 gui.touhou_little_maid.info.healthy=HP: %f/%f
 gui.touhou_little_maid.info.armor=AR: %f/20.0
 gui.touhou_little_maid.info.attack=AT: %f
@@ -125,6 +124,7 @@ gui.touhou_little_maid.info.experience=Exp: %d
 gui.touhou_little_maid.tab.main=Main
 gui.touhou_little_maid.tab.inventory=Inventory
 gui.touhou_little_maid.tab.bauble=Bauble
+gui.touhou_little_maid.tab.skill=Skill (WIP)
 gui.touhou_little_maid.button.pickup.true=Pick Mode Is Enable.
 gui.touhou_little_maid.button.pickup.false=Pick Mode Is Disable.
 gui.touhou_little_maid.button.home.true=Home Mode Is Enable.
@@ -228,6 +228,9 @@ model.touhou_little_maid.onozuka_komachi.name=Komachi Onozuka
 model.touhou_little_maid.shikieiki_yamaxanadu.name=Eiki Shiki, Yamaxanadu
 model.touhou_little_maid.syameimaru_aya.name=Aya Shameimaru
 model.touhou_little_maid.medicine_melancholy.name=Medicine Melancholy
+model.touhou_little_maid.aki_sizuha.name=Shizuha Aki
+model.touhou_little_maid.kagiyama_hina.name=Hina Kagiyama
+model.touhou_little_maid.kurodani_yamame.name=Yamame Kurodani
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -289,6 +292,9 @@ model.touhou_little_maid.onozuka_komachi.desc=§7Guide of the Sanzu River
 model.touhou_little_maid.shikieiki_yamaxanadu.desc=§7Supreme Judge of Paradise
 model.touhou_little_maid.syameimaru_aya.desc=§7Traditional Reporter of Fantasy
 model.touhou_little_maid.medicine_melancholy.desc=§7Little Sweet Poison
+model.touhou_little_maid.aki_sizuha.desc=§7Symbol of Loneliness and Demise
+model.touhou_little_maid.kagiyama_hina.desc=§7Nagashi-bina of the Hidden God
+model.touhou_little_maid.kurodani_yamame.desc=§7The Bright Net in the Dark Cave
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -345,8 +351,10 @@ subtitle.touhou_little_maid.monster.rinnosuke_hurt=Rinnosuke Hurt Sound
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s
 hwyla.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
+hwyla.touhou_little_maid.tombstone.maid_owner=Maid Owner: %s
 top.touhou_little_maid.entity_maid.task=Mode:
 top.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
+top.touhou_little_maid.tombstone.maid_owner=Maid Owner: %s
 
 # JEI
 jei.touhou_little_maid.altar_craft.title=Altar Craft

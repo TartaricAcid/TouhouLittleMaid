@@ -6,12 +6,12 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -34,7 +34,7 @@ public class TaskAttackDanmaku extends TaskAttackRanged {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(Items.ENDER_PEARL);
+        return new ItemStack(MaidItems.HAKUREI_GOHEI);
     }
 
     @Override

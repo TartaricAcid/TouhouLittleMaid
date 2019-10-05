@@ -17,6 +17,7 @@ public class TheOneProbeInfo implements Function<ITheOneProbe, Void> {
             probe.registerEntityProvider(new MaidProvider());
             probe.registerProvider(new GridProvider());
             probe.registerBlockDisplayOverride(new AltarProvider());
+            probe.registerProvider(new TombstoneProvider());
         }
         return null;
     }

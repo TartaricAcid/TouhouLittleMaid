@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.hwyla;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockAltar;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;
@@ -25,5 +26,7 @@ public class WailaInfo implements IWailaPlugin {
         registrar.registerBodyProvider(new MaidProvider(), EntityMaid.class);
         registrar.registerBodyProvider(new GridProvider(), BlockGrid.class);
         registrar.registerStackProvider(new AltarProvider(), BlockAltar.class);
+        // FIXME: 2019/10/5 这一块注册没用
+        registrar.registerBodyProvider(new TombstoneProvider(), BlockTombstone.class);
     }
 }

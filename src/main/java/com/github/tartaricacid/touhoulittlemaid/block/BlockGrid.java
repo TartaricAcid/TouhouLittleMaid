@@ -233,7 +233,7 @@ public class BlockGrid extends Block {
             }
 
             if (j - i > 0) {
-                tooltip.add(String.format(TextFormatting.ITALIC + I18n.format("container.shulkerBox.more"), j - i));
+                tooltip.add(TextFormatting.ITALIC + I18n.format("container.shulkerBox.more", j - i));
             }
         }
     }

@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -44,9 +43,12 @@ import java.util.Locale;
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
     protected static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
+    private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_side.png");
+    private static int taskPageIndex;
     protected MaidMainContainer container;
     EntityMaid maid;
     private int guiId;
+    private int taskPageTotal;
     private GuiButtonToggle togglePickup;
     private GuiButtonToggle toggleHome;
 
@@ -55,6 +57,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.guiId = guiId;
         this.container = inventorySlotsIn;
         this.maid = container.maid;
+        this.taskPageTotal = LittleMaidAPI.getTasks().size() / 6;
     }
 
     /**
@@ -82,6 +85,10 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
     @Override
     public void initGui() {
+        // 清除按钮列表、标签列表，用来给后面重载按键用的
+        this.buttonList.clear();
+        this.labelList.clear();
+
         super.initGui();
         int i = this.guiLeft;
         int j = this.guiTop;
@@ -99,10 +106,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.buttonList.add(new GuiButtonImage(BUTTON.BAUBLE.ordinal(), i + 59, j - 25, 22,
                 22, 234, 234, 0, BACKGROUND));
 
-        // 模式切换按钮
-        this.buttonList.add(new GuiButtonImage(BUTTON.TASK_SWITCH.ordinal(), i - 28, j, 28,
-                26, 225, 230, 0, BACKGROUND));
-
         // 切换是否开启 home 模式的按钮
         toggleHome = new GuiButtonToggle(BUTTON.HOME.ordinal(), i + 116, j + 63, 26, 16, maid.isHome());
         toggleHome.initTextureValues(178, 36, 28, 18, BACKGROUND);
@@ -119,8 +122,32 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         }
 
         // 显示声音版权的页面
-        this.buttonList.add(new GuiButtonImage(BUTTON.SOUND_CREDIT.ordinal(), i - 19, j + 141, 19,
-                21, 233, 0, 22, BACKGROUND));
+        this.buttonList.add(new GuiButtonImage(BUTTON.SOUND_CREDIT.ordinal(), i + 3, j + 166, 21,
+                21, 233, 0, 24, BACKGROUND));
+
+        // 模式翻页
+        if (taskPageIndex != 0) {
+            this.buttonList.add(new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
+                    11, 177, 0, 16, SIDE));
+        }
+        if (taskPageIndex != taskPageTotal) {
+            this.buttonList.add(new GuiButtonImage(BUTTON.TASK_RIGHT_SWITCH.ordinal(), i - 17, j + 150, 7,
+                    11, 165, 0, 16, SIDE));
+        }
+
+        // 模式
+        for (int k = 0; k < 6; k++) {
+            if (k + taskPageIndex * 6 >= LittleMaidAPI.getTasks().size()) {
+                break;
+            }
+            if (LittleMaidAPI.getTasks().get(k + taskPageIndex * 6) == container.task) {
+                this.buttonList.add(new GuiButtonImage(k + BUTTON.values().length, i - 70, j + 23 + 21 * k, 60,
+                        20, 98, 0, 0, SIDE));
+            } else {
+                this.buttonList.add(new GuiButtonImage(k + BUTTON.values().length, i - 70, j + 23 + 21 * k, 60,
+                        20, 98, 20, 20, SIDE));
+            }
+        }
 
     }
 
@@ -154,14 +181,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             return;
         }
 
-        // 切换任务
-        if (button.id == BUTTON.TASK_SWITCH.ordinal()) {
-            List<IMaidTask> tasks = LittleMaidAPI.getTasks();
-            container.taskIndex = (container.taskIndex + 1) % tasks.size();
-            container.task = LittleMaidAPI.getTasks().get(container.taskIndex);
-            return;
-        }
-
         if (button.id == BUTTON.HOME.ordinal()) {
             if (maid.isHome()) {
                 toggleHome.setStateTriggered(false);
@@ -188,6 +207,31 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         if (button.id == BUTTON.SOUND_CREDIT.ordinal()) {
             mc.player.playSound(MaidSoundEvent.OTHER_CREDIT, 1, 1);
             mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSoundCredit(this)));
+            return;
+        }
+
+        if (button.id == BUTTON.TASK_LEFT_SWITCH.ordinal()) {
+            if (taskPageIndex > 0) {
+                taskPageIndex--;
+                this.initGui();
+            }
+            return;
+        }
+
+        if (button.id == BUTTON.TASK_RIGHT_SWITCH.ordinal()) {
+            if (taskPageIndex <= taskPageTotal) {
+                taskPageIndex++;
+                this.initGui();
+            }
+        }
+
+        if ((button.id >= BUTTON.values().length) && (button.id < BUTTON.values().length + 6)) {
+            int listIndex = button.id - BUTTON.values().length + taskPageIndex * 6;
+            if (listIndex < LittleMaidAPI.getTasks().size()) {
+                container.taskIndex = listIndex;
+                container.task = LittleMaidAPI.getTasks().get(listIndex);
+                this.initGui();
+            }
         }
     }
 
@@ -205,14 +249,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         int j = this.guiTop;
         boolean xInRange;
         boolean yInRange;
-
-        // 绘制模式上方的文字提示
-        xInRange = (i - 28) < mouseX && mouseX < i;
-        yInRange = j < mouseY && mouseY < (j + 26);
-        if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.mode_switch",
-                    I18n.format(container.task.getTranslationKey())), mouseX, mouseY);
-        }
 
         // 绘制不同标签页的提示文字
         for (MaidGuiHandler.MAIN_GUI gui : MaidGuiHandler.MAIN_GUI.values()) {
@@ -250,6 +286,23 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         if (xInRange && yInRange && maid.hasSasimono()) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.hata_sasimono"), mouseX, mouseY);
         }
+
+        // 绘制侧边栏信息
+        String currentModeName = TextFormatting.DARK_GRAY + I18n.format(container.task.getTranslationKey());
+        fontRenderer.drawString(currentModeName, (float) (i - 39 - fontRenderer.getStringWidth(currentModeName) / 2), j + 9, 0xffffff, false);
+        String pageText = String.format("%s%d/%d", TextFormatting.DARK_GRAY, taskPageIndex + 1, this.taskPageTotal + 1);
+        fontRenderer.drawString(pageText, (float) (i - 39 - fontRenderer.getStringWidth(pageText) / 2), j + 151, 0xffffff, false);
+
+        // 绘制侧边栏模式列表图标、名称
+        for (int k = 0; k < 6; k++) {
+            if (k + taskPageIndex * 6 >= LittleMaidAPI.getTasks().size()) {
+                break;
+            }
+            IMaidTask task = LittleMaidAPI.getTasks().get(k + taskPageIndex * 6);
+            drawItemStack(task.getIcon(), i - 68, j + 25 + 21 * k);
+            String name = I18n.format(task.getTranslationKey());
+            fontRenderer.drawString(name, i - 32 - fontRenderer.getStringWidth(name) / 2, j + 29 + 21 * k, 0xdddddd, false);
+        }
     }
 
 
@@ -265,6 +318,10 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         mc.getTextureManager().bindTexture(BACKGROUND);
         this.drawTexturedModalRect(i, j - 28, 0, 193, 112, 32);
 
+        // 绘制侧边栏
+        mc.getTextureManager().bindTexture(SIDE);
+        this.drawTexturedModalRect(i - 76, j, 0, 0, 89, this.ySize);
+
         // 绘制主背景
         mc.getTextureManager().bindTexture(BACKGROUND);
         this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
@@ -276,18 +333,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         mc.getTextureManager().bindTexture(BACKGROUND);
         this.drawTexturedModalRect(i + 28 * (guiId - 1), j - 28, 28 * (guiId - 1), 224, 28, 32);
 
-        // 绘制模式图标背景
-        mc.getTextureManager().bindTexture(BACKGROUND);
-        this.drawTexturedModalRect(i - 28, j, 0, 167, 31, 26);
-
         // 绘制模式图标
         this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 6, j - 19);
         this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19);
         this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 62, j - 19);
         this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19);
-
-        // 绘制模式图标
-        this.drawItemStack(container.task.getIcon(), i - 20, j + 5);
 
         // 绘制女仆
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 28,
@@ -320,8 +370,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         INVENTORY(MaidGuiHandler.MAIN_GUI.INVENTORY.getId()),
         // 饰品栏按钮
         BAUBLE(MaidGuiHandler.MAIN_GUI.BAUBLE.getId()),
-        // 模式切换按钮
-        TASK_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // HOME 模式切换按钮
         HOME(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 女仆模型皮肤按钮
@@ -329,7 +377,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 声音素材致谢
         SOUND_CREDIT(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 旗指物按钮
-        HATA_SASIMONO(MaidGuiHandler.OTHER_GUI.NONE.getId());
+        HATA_SASIMONO(MaidGuiHandler.OTHER_GUI.NONE.getId()),
+        // 模式左翻页
+        TASK_LEFT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
+        // 模式右翻页
+        TASK_RIGHT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId());
 
         private int guiId;
 

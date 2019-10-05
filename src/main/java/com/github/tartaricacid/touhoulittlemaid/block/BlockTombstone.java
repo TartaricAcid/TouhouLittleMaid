@@ -2,9 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityTombstone;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,12 +25,13 @@ import javax.annotation.Nullable;
  * @author TartaricAcid
  * @date 2019/10/2 21:46
  **/
-public class BlockTombstone extends Block implements ITileEntityProvider {
+public class BlockTombstone extends BlockHorizontal implements ITileEntityProvider {
     public BlockTombstone() {
         super(Material.ROCK);
         setHardness(1.0f);
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "tombstone");
         setRegistryName("tombstone");
+        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
     /**
@@ -44,6 +46,23 @@ public class BlockTombstone extends Block implements ITileEntityProvider {
             EntityItem entityitem = new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
             worldIn.spawnEntity(entityitem);
         }
+    }
+
+    @Nonnull
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FACING).getHorizontalIndex();
+    }
+
+    @Nonnull
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
     }
 
     @Nullable

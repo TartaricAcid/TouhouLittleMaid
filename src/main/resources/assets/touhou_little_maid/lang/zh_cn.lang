@@ -117,7 +117,6 @@ task.touhou_little_maid.torch=火把
 task.touhou_little_maid.feed_animal=繁殖动物
 
 # GUI
-gui.touhou_little_maid.button.mode_switch=女仆当前处于%s模式
 gui.touhou_little_maid.info.healthy=血量：%f/%f
 gui.touhou_little_maid.info.armor=护甲：%f/20.0
 gui.touhou_little_maid.info.attack=伤害：%f
@@ -125,6 +124,7 @@ gui.touhou_little_maid.info.experience=经验：%d
 gui.touhou_little_maid.tab.main=主界面
 gui.touhou_little_maid.tab.inventory=物品栏
 gui.touhou_little_maid.tab.bauble=饰品栏
+gui.touhou_little_maid.tab.skill=技能栏（敬请期待）
 gui.touhou_little_maid.button.pickup.true=拾物模式已经开启
 gui.touhou_little_maid.button.pickup.false=拾物模式已经关闭
 gui.touhou_little_maid.button.home.true=Home 模式已经开启
@@ -228,6 +228,9 @@ model.touhou_little_maid.onozuka_komachi.name=小野塚小町
 model.touhou_little_maid.shikieiki_yamaxanadu.name=四季映姬·亚玛萨那度
 model.touhou_little_maid.syameimaru_aya.name=射命丸文
 model.touhou_little_maid.medicine_melancholy.name=梅蒂欣·梅兰可莉
+model.touhou_little_maid.aki_sizuha.name=秋静叶
+model.touhou_little_maid.kagiyama_hina.name=键山雏
+model.touhou_little_maid.kurodani_yamame.name=黑谷山女
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -289,6 +292,9 @@ model.touhou_little_maid.onozuka_komachi.desc=§7三途河的引航人
 model.touhou_little_maid.shikieiki_yamaxanadu.desc=§7乐园的最高裁判长
 model.touhou_little_maid.syameimaru_aya.desc=§7传统的幻想记者
 model.touhou_little_maid.medicine_melancholy.desc=§7小小的甜蜜毒药
+model.touhou_little_maid.aki_sizuha.desc=§7寂寞与终焉的象征
+model.touhou_little_maid.kagiyama_hina.desc=§7秘神流雏
+model.touhou_little_maid.kurodani_yamame.desc=§7昏暗洞窟中明亮的网
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -345,8 +351,10 @@ subtitle.touhou_little_maid.monster.rinnosuke_hurt=霖之助：受伤
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s
 hwyla.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物
+hwyla.touhou_little_maid.tombstone.maid_owner=女仆主人：%s
 top.touhou_little_maid.entity_maid.task=当前模式：
 top.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物
+top.touhou_little_maid.tombstone.maid_owner=女仆主人：%s
 
 # JEI
 jei.touhou_little_maid.altar_craft.title=祭坛合成

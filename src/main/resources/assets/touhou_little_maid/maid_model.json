@@ -196,8 +196,18 @@
       "model_id": "touhou_little_maid:syameimaru_aya",
       "description": ["{model.touhou_little_maid.syameimaru_aya.desc}"]
     }, {
-      "model_id": "touhou_little_maid:medicine_melancholy",
-      "description": ["{model.touhou_little_maid.medicine_melancholy.desc}"]
+      "model_id": "touhou_little_maid:aki_sizuha",
+      "description": ["{model.touhou_little_maid.aki_sizuha.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:aki_sizuha_2",
+      "name": "{model.touhou_little_maid.aki_sizuha.name}",
+      "description": ["{model.touhou_little_maid.aki_sizuha.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kagiyama_hina",
+      "description": ["{model.touhou_little_maid.kagiyama_hina.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kurodani_yamame",
+      "description": ["{model.touhou_little_maid.kurodani_yamame.desc}"]
     }
   ]
 }
