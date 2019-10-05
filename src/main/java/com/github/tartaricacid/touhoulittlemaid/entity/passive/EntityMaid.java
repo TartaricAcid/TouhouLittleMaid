@@ -49,6 +49,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -1057,7 +1058,14 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     private PathNavigate createNavigatorGround(World worldIn) {
-        PathNavigateGround pathNavigate = new PathNavigateGround(this, worldIn);
+        PathNavigateGround pathNavigate = new PathNavigateGround(this, worldIn) {
+            @Override
+            protected PathFinder getPathFinder() {
+                this.nodeProcessor = new MaidNodeProcessor();
+                this.nodeProcessor.setCanEnterDoors(true);
+                return new PathFinder(this.nodeProcessor);
+            }
+        };
         pathNavigate.setBreakDoors(true);
         pathNavigate.setEnterDoors(true);
         pathNavigate.setCanSwim(true);
