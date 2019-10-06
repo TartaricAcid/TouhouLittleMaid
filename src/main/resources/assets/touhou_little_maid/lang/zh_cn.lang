@@ -157,10 +157,9 @@ gui.touhou_little_maid.hata_select.close=关闭
 gui.touhou_little_maid.hata_select.display.true=显示旗指物
 gui.touhou_little_maid.hata_select.display.false=隐藏旗指物
 
-# Skin Gui
-gui.touhou_little_maid.skin.text.author=作者：%s
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s
+gui.touhou_little_maid.skin.tooltips.show_details=Shift 点击打开详情界面
 
 # Model Pack
 pack.touhou_little_maid.maid.name=东方 Project 模型
@@ -363,3 +362,5 @@ jei.touhou_little_maid.altar_craft.item_craft.result=合成物品
 jei.touhou_little_maid.altar_craft.spawn_maid.result=生成新的女仆
 jei.touhou_little_maid.altar_craft.reborn_maid.result=从手办中复活女仆
 jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=生成闪电
+# Skin Gui
+gui.touhou_little_maid.skin.text.author=作者：%s

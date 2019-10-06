@@ -47,12 +47,17 @@ repositories {
     }
     maven {
         // The One Probe
-        name 'tterrag maven'
-        url "http://maven.tterrag.com/"
+        name = 'tterrag maven'
+        url = "http://maven.tterrag.com/"
     }
     maven {
         name = "MCMultiPart2 Maven"
         url = "http://maven.amadornes.com/"
+    }
+    maven {
+        // Patchouli
+        name = 'Blamejared Maven'
+        url = 'https://maven.blamejared.com'
     }
 }
 
@@ -66,6 +71,7 @@ dependencies {
         exclude group: 'cofh'
     }
     deobfCompile "MCMultiPart2:MCMultiPart:${mcmp_version}"
+    compile "vazkii.patchouli:Patchouli:${patchouli_version}"
     // 想要了解更多，可以查询如下网址
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html

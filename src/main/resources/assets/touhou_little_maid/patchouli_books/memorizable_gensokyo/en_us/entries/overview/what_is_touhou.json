@@ -1,0 +1,22 @@
+{
+  "name": "Touhou Project",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "link",
+      "text": "The Touhou Project is a Japanese doujin game series that specialises in shoot 'em ups by sole Team Shanghai Alice member ZUN.",
+      "url": "https://en.touhouwiki.net/wiki/Touhou_Wiki",
+      "link_text": "Touhou Wiki"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/hakurei_reimu.png"
+      ],
+      "title": "Reimu Hakurei",
+      "border": true,
+      "text": "The main protagonist of the Touhou Project series."
+    }
+  ]
+}
