@@ -63,7 +63,7 @@ public class MaidHataSelect extends GuiScreen {
             showHideButton.displayString = I18n.format("gui.touhou_little_maid.hata_select.display.false");
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
-        fontRenderer.drawString(String.format("%s%d/%d", TextFormatting.BOLD, index, ClientProxy.HATA_NAME_MAP.size()),
+        fontRenderer.drawString(String.format("%s%d/%d", TextFormatting.BOLD, index + 1, ClientProxy.HATA_NAME_MAP.size()),
                 width / 2, height / 9, 0xFFFFFF);
     }
 
@@ -138,7 +138,7 @@ public class MaidHataSelect extends GuiScreen {
         super.handleMouseInput();
         // 鼠标滚轮改变大小
         if (Mouse.getEventDWheel() != 0) {
-            index = Mouse.getEventDWheel() > 0 ? indexCycle(index + 1) : indexCycle(index - 1);
+            index = Mouse.getEventDWheel() < 0 ? indexCycle(index + 1) : indexCycle(index - 1);
         }
     }
 
