@@ -242,9 +242,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 绘制自定义前景
         this.drawCustomScreen(mouseX, mouseY, partialTicks);
 
-        // 绘制物品的文本提示
-        this.renderHoveredToolTip(mouseX, mouseY);
-
         int i = this.guiLeft;
         int j = this.guiTop;
         boolean xInRange;
@@ -303,6 +300,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             String name = I18n.format(task.getTranslationKey());
             fontRenderer.drawString(name, i - 32 - fontRenderer.getStringWidth(name) / 2, j + 29 + 21 * k, 0xdddddd, false);
         }
+
+        // 绘制物品的文本提示
+        this.renderHoveredToolTip(mouseX, mouseY);
     }
 
 
