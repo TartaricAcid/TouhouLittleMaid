@@ -39,7 +39,7 @@ public final class PlaceHelper {
      */
     public static boolean notSuitableForPlaceTombstone(World worldIn, BlockPos pos) {
         IBlockState blockState = worldIn.getBlockState(pos);
-        return hasCollisionBoundingBox(worldIn, blockState, pos);
+        return hasCollisionBoundingBox(worldIn, blockState, pos) && !blockState.getBlock().isReplaceable(worldIn, pos);
     }
 
     /**

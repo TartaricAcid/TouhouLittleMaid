@@ -39,7 +39,9 @@ public class TombstoneBauble implements IMaidBauble {
 
         // 位置不适合时候不生成墓碑，并且对在线的玩家发出提示
         if (PlaceHelper.notSuitableForPlaceTombstone(world, pos) && ownerUuid != null) {
-            applyNotSuitableForPlaceTombstoneLogic(world, ownerUuid);
+            if (!world.isRemote) {
+                applyNotSuitableForPlaceTombstoneLogic(world, ownerUuid);
+            }
             return false;
         }
 
@@ -48,7 +50,9 @@ public class TombstoneBauble implements IMaidBauble {
         baubleItem.shrink(1);
 
         if (te instanceof TileEntityTombstone && maidCapability != null) {
-            applyTombstoneStorageItemLogic(maidCapability, (TileEntityTombstone) te, maid, ownerUuid);
+            if (!world.isRemote) {
+                applyTombstoneStorageItemLogic(maidCapability, (TileEntityTombstone) te, maid, ownerUuid);
+            }
         }
         return true;
     }
