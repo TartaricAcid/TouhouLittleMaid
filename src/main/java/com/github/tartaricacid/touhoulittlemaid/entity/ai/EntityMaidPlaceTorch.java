@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -8,6 +9,7 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -48,10 +50,13 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     public void updateTask() {
         if (pos != null) {
             if (entityMaid.getDistanceSq(pos.up()) < 4) {
-                entityMaid.swingArm(EnumHand.MAIN_HAND);
-                entityMaid.placeBlock(pos, Blocks.TORCH.getDefaultState());
-                entityMaid.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0f, 1.0f);
-                getTorchItem().shrink(1);
+                ItemStack torch = getTorchItem();
+                if (!torch.isEmpty()) {
+                    torch.shrink(1);
+                    entityMaid.swingArm(EnumHand.MAIN_HAND);
+                    entityMaid.placeBlock(pos, ((ItemBlock) torch.getItem()).getBlock().getDefaultState());
+                    entityMaid.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0f, 1.0f);
+                }
                 pos = null;
             } else {
                 entityMaid.getLookHelper().setLookPosition(pos.getX() + 0.5d, pos.getY() + 1d, pos.getZ() + 0.5d, 10.0F, this.entityMaid.getVerticalFaceSpeed());
@@ -83,9 +88,8 @@ public class EntityMaidPlaceTorch extends EntityAIBase {
     }
 
     private ItemStack getTorchItem() {
-        // TODO OreDictionary: torch
         IItemHandler itemHandler = entityMaid.getAvailableInv(false);
-        return ItemFindUtil.getStack(itemHandler, (stack -> stack.getItem() == Item.getItemFromBlock(Blocks.TORCH)));
+        return ItemFindUtil.getStack(itemHandler, stack -> stack.getItem() instanceof ItemBlock && Util.doesItemHaveOreName(stack, "torch"));
     }
 
     @Nullable
