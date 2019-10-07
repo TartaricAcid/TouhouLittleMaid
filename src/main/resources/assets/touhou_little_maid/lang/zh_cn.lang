@@ -362,5 +362,7 @@ jei.touhou_little_maid.altar_craft.item_craft.result=合成物品
 jei.touhou_little_maid.altar_craft.spawn_maid.result=生成新的女仆
 jei.touhou_little_maid.altar_craft.reborn_maid.result=从手办中复活女仆
 jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=生成闪电
-# Skin Gui
-gui.touhou_little_maid.skin.text.author=作者：%s
+
+# Patchouli
+patchouli.touhou_little_maid.book.name=记忆中的幻想乡
+patchouli.touhou_little_maid.book.landing_text=一个与女仆和东方 Project 有关的模组。$(br2)感谢 Snownee 在代码方面的帮助。$(br)感谢 Succinum，ZeniCrow，Paulzzh，Tian_mi 以及其他美工制作了如此优秀的模型和材质。$(br)感谢 Little Maid Mob 的作者 Verclene。

@@ -1,0 +1,22 @@
+{
+  "name": "东方 Project",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "link",
+      "text": "东方 Project 是日本同人社团上海爱丽丝幻乐团制作的一系列同人作品，系列以清版弹幕射击游戏为主。",
+      "url": "https://thwiki.cc/",
+      "link_text": "THB Wiki"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/hakurei_reimu.png"
+      ],
+      "title": "博丽灵梦",
+      "border": true,
+      "text": "东方 Project 系列中的主角之一。"
+    }
+  ]
+}

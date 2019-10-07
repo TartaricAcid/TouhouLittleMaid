@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
+import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
@@ -92,6 +93,9 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(TouhouLittleMaid.INSTANCE, new MaidGuiHandler());
         CapabilityPowerHandler.register();
+        if (Loader.isModLoaded("patchouli")) {
+            MultiblockRegistry.init();
+        }
     }
 
     public void postInit(FMLPostInitializationEvent event) {

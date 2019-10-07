@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "type": "minecraft:item_nbt",
+    "item": "patchouli:guide_book",
+    "nbt": {
+      "patchouli:book": "touhou_little_maid:memorizable_gensokyo"
+    }
+  },
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "dyeWhite"
+    }, {
+      "type": "forge:ore_dict",
+      "ore": "dyeRed"
+    }, {
+      "item": "minecraft:book"
+    }
+  ]
+}

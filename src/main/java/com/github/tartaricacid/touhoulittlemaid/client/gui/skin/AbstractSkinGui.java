@@ -229,9 +229,11 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
 
         // 绘制作者列表
         if (!pojo.getAuthor().isEmpty()) {
-            offSet += 10;
-            drawCenteredString(fontRenderer, TextFormatting.GOLD + I18n.format("gui.touhou_little_maid.skin.text.author", pojo.getAuthor().toString()),
-                    middleX - 193, middleY + offSet, 0xffffff);
+            for (List<String> textList : Lists.partition(pojo.getAuthor(), 2)) {
+                offSet += 10;
+                drawCenteredString(fontRenderer, TextFormatting.GOLD + textList.toString(),
+                        middleX - 193, middleY + offSet, 0xffffff);
+            }
         }
 
         // 绘制版本信息
@@ -286,6 +288,9 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
                 str.add(modelItem.getName());
                 // 塞入描述
                 str.addAll(modelItem.getDescription());
+                // 塞入提示语
+                str.add(TextFormatting.DARK_GRAY.toString() + TextFormatting.ITALIC.toString() +
+                        I18n.format("gui.touhou_little_maid.skin.tooltips.show_details"));
                 // 绘制解析过的文本提示
                 drawHoveringText(ParseI18n.parse(str), mouseX, mouseY);
             }

@@ -32,7 +32,6 @@ public class AltarRecipe {
     public AltarRecipe(ResourceLocation entityId, float powerCost, ItemStack output, ProcessingInput... inputs) {
         this.entityId = entityId;
         this.powerCost = powerCost;
-        int recipesSize = RECIPES_SIZE;
         if (entityId.equals(ENTITY_ITEM_ID) && !output.isEmpty()) {
             this.output = output;
         }

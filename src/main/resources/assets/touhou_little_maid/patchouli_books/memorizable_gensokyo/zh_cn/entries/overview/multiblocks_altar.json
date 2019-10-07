@@ -1,0 +1,30 @@
+{
+  "name": "多方块祭坛",
+  "icon": "minecraft:wool:14",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "祭坛是本模组用于合成所必需的多方块结构。$(br2)祭坛的合成表可以通过 JEI 获取，合成同时还需要玩家的$(l:overview/power_point)power 值$()。"
+    },
+    {
+      "type": "multiblock",
+      "name": "祭坛",
+      "multiblock_id": "touhou_little_maid:altar",
+      "text": "使用$(l:overview/gohei_and_danmaku)御币$()右击第四层中间偏左的红色羊毛正面，能够构建祭坛。"
+    },
+    {
+      "type": "text",
+      "text": "你可以右击六个橡木柱子的顶端来放置物品。通过空手 Shift 右击来移除物品。$(br2)当物品完全放置且玩家的 Power 值足够，祭坛就能触发合成。$(br2)因为缺少 Power 而导致的合成中断，在获取足够 Power 以后，再次右击可以重新触发合成。"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/altar_craft.png"
+      ],
+      "title": "祭坛合成",
+      "border": true,
+      "text": "展示了生成闪电的合成，谨记所有的合成都是无序合成。"
+    }
+  ]
+}

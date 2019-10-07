@@ -1,0 +1,31 @@
+{
+  "name": "世界生成",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这个模组添加了两种怪物和一种新村民。$(br2)怪物的掉落物是重要的合成材料，村民则可以交易一些本模组的物品。"
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.fairy{OnGround:true}",
+      "offset": 0.125,
+      "text": "在平原生物群系的夜晚生成，会以飞行状态弹幕攻击玩家和女仆。",
+      "anchor": "fairy"
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.rinnosuke",
+      "offset": 0.125,
+      "text": "在森林生物群系的夜晚生成，会攻击玩家和女仆。",
+      "anchor": "rinnosuke"
+    },
+    {
+      "type": "entity",
+      "entity": "minecraft:villager{ProfessionName:'touhou_little_maid:store_owner_of_kourindou'}",
+      "offset": 0.125,
+      "text": "在原版村庄生成，能够交易一些本模组的物品。"
+    }
+  ]
+}

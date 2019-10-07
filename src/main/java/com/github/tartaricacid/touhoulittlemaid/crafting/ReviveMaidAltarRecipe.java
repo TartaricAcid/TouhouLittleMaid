@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class ReviveMaidAltarRecipe extends AltarRecipe {
-
     public ReviveMaidAltarRecipe(float powerCost, ProcessingInput... inputs) {
         super(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"), powerCost, ItemStack.EMPTY, inputs);
     }
@@ -30,5 +29,4 @@ public class ReviveMaidAltarRecipe extends AltarRecipe {
         maid.setModelId(BlockGarageKit.getModelId(garageKit));
         return maid;
     }
-
 }

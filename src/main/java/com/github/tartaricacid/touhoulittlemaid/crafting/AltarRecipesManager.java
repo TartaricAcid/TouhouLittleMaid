@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Maps;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -27,39 +28,49 @@ public class AltarRecipesManager {
     private final Map<ResourceLocation, AltarRecipe> ALTAR_RECIPES_MAP = Maps.newHashMap();
 
     public AltarRecipesManager() {
-
-        ProcessingInput gold = OreDictDefinition.of("ingotGold");
-        ProcessingInput iron = OreDictDefinition.of("ingotIron");
-        ProcessingInput lapis = OreDictDefinition.of("gemLapis");
-        ProcessingInput coal = ItemDefinition.of(Items.COAL);
+        ProcessingInput blockGold = OreDictDefinition.of("blockGold");
+        ProcessingInput blockIron = OreDictDefinition.of("blockIron");
+        ProcessingInput blockLapis = OreDictDefinition.of("blockLapis");
+        ProcessingInput blockCoal = OreDictDefinition.of("blockCoal");
         ProcessingInput gunpowder = OreDictDefinition.of("gunpowder");
-        ProcessingInput blaze_powder = ItemDefinition.of(Items.BLAZE_POWDER);
+        ProcessingInput blazePowder = ItemDefinition.of(Items.BLAZE_POWDER);
         ProcessingInput paper = OreDictDefinition.of("paper");
         ProcessingInput stick = OreDictDefinition.of("stickWood");
         ProcessingInput obsidian = OreDictDefinition.of("obsidian");
         ProcessingInput redstone = OreDictDefinition.of("dustRedstone");
-        ProcessingInput quartz_block = OreDictDefinition.of("blockQuartz");
-        ProcessingInput dye6 = OreDictDefinition.of("dyeCyan");
+        ProcessingInput blockRedstone = OreDictDefinition.of("blockRedstone");
+        ProcessingInput quartzBlock = OreDictDefinition.of("blockQuartz");
+        ProcessingInput dyeCyan = OreDictDefinition.of("dyeCyan");
+        ProcessingInput dyeOrange = OreDictDefinition.of("dyeOrange");
+        ProcessingInput dyeRed = OreDictDefinition.of("dyeRed");
+        ProcessingInput dyeBlue = OreDictDefinition.of("dyeBlue");
+        ProcessingInput dyeYellow = OreDictDefinition.of("dyeYellow");
+        ProcessingInput dyeLime = OreDictDefinition.of("dyeLime");
+        ProcessingInput shield = ItemDefinition.of(Items.SHIELD);
+        ProcessingInput sugar = ItemDefinition.of(Items.SUGAR);
+        ProcessingInput feather = ItemDefinition.of(Items.FEATHER);
+        ProcessingInput cobblestone = OreDictDefinition.of("cobblestone");
+        ProcessingInput puffer = ItemDefinition.of(Items.FISH, 3);
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_maid"),
                 new AltarRecipe(
                         new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),
                         0.5f, ItemStack.EMPTY,
-                        OreDictDefinition.of("gemDiamond"), lapis, gold,
-                        redstone, iron, coal));
+                        OreDictDefinition.of("gemDiamond"), blockLapis, blockGold,
+                        blockRedstone, blockIron, blockCoal));
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "reborn_maid"),
                 new ReviveMaidAltarRecipe(
                         0.3f,
-                        ItemDefinition.of(MaidBlocks.GARAGE_KIT, OreDictionary.WILDCARD_VALUE), lapis, gold,
-                        redstone, iron, coal));
+                        ItemDefinition.of(MaidBlocks.GARAGE_KIT, OreDictionary.WILDCARD_VALUE), blockLapis, blockGold,
+                        blockRedstone, blockIron, blockCoal));
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_light_bolt"),
                 new AltarRecipe(
                         new ResourceLocation("lightning_bolt"),
                         0.2f, ItemStack.EMPTY,
                         gunpowder, gunpowder, gunpowder,
-                        blaze_powder, blaze_powder, blaze_powder));
+                        blazePowder, blazePowder, blazePowder));
 
         addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_album"),
                 0.1f, new ItemStack(MaidItems.ALBUM),
@@ -78,13 +89,48 @@ public class AltarRecipesManager {
 
         addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_camera"),
                 0.1f, new ItemStack(MaidItems.CAMERA),
-                quartz_block, quartz_block, quartz_block,
-                quartz_block, obsidian, obsidian);
+                quartzBlock, quartzBlock, quartzBlock,
+                quartzBlock, obsidian, obsidian);
 
         addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_elixir"),
                 0.3f, new ItemStack(MaidItems.ULTRAMARINE_ORB_ELIXIR),
-                OreDictDefinition.of("blockEmerald"), OreDictDefinition.of("enderpearl"), dye6,
-                dye6, dye6, dye6);
+                OreDictDefinition.of("blockEmerald"), OreDictDefinition.of("enderpearl"), dyeCyan,
+                dyeCyan, dyeCyan, dyeCyan);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_explosion_protect_bauble"),
+                0.2f, new ItemStack(MaidItems.EXPLOSION_PROTECT_BAUBLE),
+                ItemDefinition.of(Blocks.NETHER_WART_BLOCK), dyeOrange, obsidian,
+                obsidian, obsidian, obsidian);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_fire_protect_bauble"),
+                0.2f, new ItemStack(MaidItems.FIRE_PROTECT_BAUBLE),
+                ItemDefinition.of(Blocks.NETHER_WART_BLOCK), dyeRed, blazePowder,
+                blazePowder, blazePowder, blazePowder);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_projectile_protect_bauble"),
+                0.2f, new ItemStack(MaidItems.PROJECTILE_PROTECT_BAUBLE),
+                ItemDefinition.of(Blocks.NETHER_WART_BLOCK), dyeBlue, shield,
+                shield, shield, shield);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_magic_protect_bauble"),
+                0.2f, new ItemStack(MaidItems.MAGIC_PROTECT_BAUBLE),
+                ItemDefinition.of(Blocks.NETHER_WART_BLOCK), dyeCyan, sugar,
+                sugar, sugar, sugar);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_fall_protect_bauble"),
+                0.2f, new ItemStack(MaidItems.FALL_PROTECT_BAUBLE),
+                ItemDefinition.of(Blocks.NETHER_WART_BLOCK), dyeYellow, feather,
+                feather, feather, feather);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_drown_protect_bauble"),
+                0.2f, new ItemStack(MaidItems.DROWN_PROTECT_BAUBLE),
+                ItemDefinition.of(Blocks.NETHER_WART_BLOCK), dyeLime, puffer,
+                puffer, puffer, puffer);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_tombstone_bauble"),
+                0.3f, new ItemStack(MaidItems.TOMBSTONE_BAUBLE),
+                ItemDefinition.of(Blocks.CHEST), ItemDefinition.of(Blocks.RED_FLOWER), OreDictDefinition.of("enderpearl"),
+                cobblestone, cobblestone, cobblestone);
     }
 
     public static AltarRecipesManager instance() {
