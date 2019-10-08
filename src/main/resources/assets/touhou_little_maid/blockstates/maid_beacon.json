@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "touhou_little_maid:maid_beacon_up"
+  },
+  "variants": {
+    "position": {
+      "up_n_s": {},
+      "up_w_e": {"y": 90},
+      "down": {"model": "touhou_little_maid:maid_beacon_down"}
+    }
+  }
+}

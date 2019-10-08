@@ -27,6 +27,7 @@ item.touhou_little_maid.photo.name=Photo
 item.touhou_little_maid.chair.name=Chair
 item.touhou_little_maid.hata_sasimono.name=Hata Sasimono
 item.touhou_little_maid.album.name=Album
+item.touhou_little_maid.maid_beacon.name=Shrine Lamp
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit

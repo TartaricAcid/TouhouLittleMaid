@@ -4,9 +4,6 @@
     "model": "touhou_little_maid:tombstone"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
     "facing": {
       "north": {},
       "south": {"y": 180},

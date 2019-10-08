@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandle
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.DelayedTask;
@@ -46,7 +45,6 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "altar");
         setHardness(1.0f);
         setRegistryName("altar");
-        setCreativeTab(MaidItems.TABS);
     }
 
     @Nullable
