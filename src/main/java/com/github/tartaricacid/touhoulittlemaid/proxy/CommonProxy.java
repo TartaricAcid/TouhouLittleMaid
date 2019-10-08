@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
+import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
@@ -127,6 +128,10 @@ public class CommonProxy {
 
         // 注册祭坛合成
         ALTAR_RECIPES_MANAGER = new AltarRecipesManager();
+
+        if (Loader.isModLoaded("neat")) {
+            NeatCompat.init();
+        }
     }
 
     @Mod.EventHandler
