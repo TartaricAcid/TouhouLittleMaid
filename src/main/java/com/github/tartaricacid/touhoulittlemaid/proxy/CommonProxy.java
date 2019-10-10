@@ -218,6 +218,8 @@ public class CommonProxy {
         INSTANCE.registerMessage(SetMaidSasimonoCRC32.Handler.class, SetMaidSasimonoCRC32.class, 7, Side.SERVER);
         INSTANCE.registerMessage(SyncPowerMessage.Handler.class, SyncPowerMessage.class, 8, Side.CLIENT);
         INSTANCE.registerMessage(SyncPowerPointEntityData.Handler.class, SyncPowerPointEntityData.class, 9, Side.CLIENT);
+        INSTANCE.registerMessage(StorageAndTakePowerMessage.Handler.class, StorageAndTakePowerMessage.class, 10, Side.SERVER);
+        INSTANCE.registerMessage(SetBeaconPotionMessage.Handler.class, SetBeaconPotionMessage.class, 11, Side.SERVER);
     }
 
     /**

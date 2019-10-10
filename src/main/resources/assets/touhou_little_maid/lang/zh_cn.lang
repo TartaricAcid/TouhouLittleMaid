@@ -157,6 +157,13 @@ gui.touhou_little_maid.hata_select.apply=应用材质
 gui.touhou_little_maid.hata_select.close=关闭
 gui.touhou_little_maid.hata_select.display.true=显示旗指物
 gui.touhou_little_maid.hata_select.display.false=隐藏旗指物
+gui.touhou_little_maid.maid_beacon.player_power=玩家P点：%.2f
+gui.touhou_little_maid.maid_beacon.storage_power=存储P点：%.2f
+gui.touhou_little_maid.maid_beacon.cost_power=消耗P点：%.2f/h
+gui.touhou_little_maid.maid_beacon.add_one=存入一点
+gui.touhou_little_maid.maid_beacon.add_all=存入全部
+gui.touhou_little_maid.maid_beacon.min_one=取出一点
+gui.touhou_little_maid.maid_beacon.min_all=取出所有
 
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s

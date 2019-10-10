@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.block.MaidBeaconGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.AlbumGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidBaubleGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidInventoryGuiContainer;
@@ -7,12 +8,11 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidMainGui
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.inventory.AlbumContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.MaidBaubleContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.*;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
@@ -45,6 +45,10 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
             return new AlbumContainer(player.inventory, player.getHeldItemMainhand());
         }
+        // 此时的 entityId, taskIndex, z 代表的是方块的 x y z 值
+        if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, z)) instanceof TileEntityMaidBeacon) {
+            return new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, z)));
+        }
         return null;
     }
 
@@ -72,6 +76,10 @@ public class MaidGuiHandler implements IGuiHandler {
         }
         if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
             return new AlbumGuiContainer(player.inventory, player.getHeldItemMainhand());
+        }
+        // 此时的 entityId, taskIndex, z 代表的是方块的 x y z 值
+        if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, z)) instanceof TileEntityMaidBeacon) {
+            return new MaidBeaconGuiContainer(new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, z))));
         }
         return null;
     }
@@ -107,9 +115,11 @@ public class MaidGuiHandler implements IGuiHandler {
         // 无 GUI 的占位符
         NONE(-1),
         // 椅子的 GUI
-        CHAIR(4),
+        CHAIR(5),
         // 相册
-        ALBUM(5);
+        ALBUM(6),
+        // 女仆信标
+        MAID_BEACON(7);
 
         private int id;
 

@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -14,6 +15,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -43,6 +46,15 @@ public class BlockMaidBeacon extends Block implements ITileEntityProvider {
         setCreativeTab(MaidItems.TABS);
         setDefaultState(blockState.getBaseState().withProperty(POSITION, Position.DOWN));
         setLightLevel(1.0f);
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (worldIn.getTileEntity(pos) instanceof TileEntityMaidBeacon) {
+            playerIn.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.OTHER_GUI.MAID_BEACON.getId(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+            return true;
+        }
+        return false;
     }
 
     @Nonnull

@@ -24,6 +24,34 @@ public final class RenderHelper {
     private RenderHelper() {
     }
 
+    public static void drawSector(int x, int y, int r, double startAngle, double endAngle, int precision, int color) {
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        bufferbuilder.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(x, y, 0).color(red, green, blue, alpha).endVertex();
+        double precisionAngle = 2 * Math.PI / precision;
+        for (int i = (int) (endAngle / precisionAngle); i >= (int) (startAngle / precisionAngle); i--) {
+            bufferbuilder.pos(x + r * Math.cos(i * precisionAngle),
+                    y + r * Math.sin(i * precisionAngle),
+                    0).color(red, green, blue, alpha).endVertex();
+        }
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
+    public static void drawCircle(int x, int y, int r, int precision, int color) {
+        drawSector(x, y, r, 0, 2 * Math.PI, precision, color);
+    }
+
     public static void drawEntityPoint(EntityXPOrb entity, double x, double y, double z, RenderManager renderManager, Consumer<Entity> textureBindFunc) {
         GlStateManager.disableLighting();
         GlStateManager.pushMatrix();

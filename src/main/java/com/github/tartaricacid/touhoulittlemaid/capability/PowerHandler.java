@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
  * @date 2019/8/28 16:40
  **/
 public class PowerHandler {
-    private static final float MAX_POWER = 5.0f;
+    public static final float MAX_POWER = 5.0f;
     static Factory FACTORY = new Factory();
     private float power = 0.0f;
 
@@ -15,7 +15,7 @@ public class PowerHandler {
         if (points + this.power <= MAX_POWER) {
             this.power += points;
         } else {
-            this.power = 5.0f;
+            this.power = MAX_POWER;
         }
     }
 

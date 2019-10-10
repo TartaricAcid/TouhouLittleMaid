@@ -157,6 +157,13 @@ gui.touhou_little_maid.hata_select.apply=Apply Texture
 gui.touhou_little_maid.hata_select.close=Close
 gui.touhou_little_maid.hata_select.display.true=Show Sasimono
 gui.touhou_little_maid.hata_select.display.false=Hide Sasimono
+gui.touhou_little_maid.maid_beacon.player_power=Player: %.2f
+gui.touhou_little_maid.maid_beacon.storage_power=Storage: %.2f
+gui.touhou_little_maid.maid_beacon.cost_power=Cost: %.2f/h
+gui.touhou_little_maid.maid_beacon.add_one=Put One
+gui.touhou_little_maid.maid_beacon.add_all=Put All
+gui.touhou_little_maid.maid_beacon.min_one=Take One
+gui.touhou_little_maid.maid_beacon.min_all=Take All
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s
