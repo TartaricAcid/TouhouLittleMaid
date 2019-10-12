@@ -23,6 +23,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.Locale;
 
 /**
@@ -301,6 +304,44 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             fontRenderer.drawString(name, i - 32 - fontRenderer.getStringWidth(name) / 2, j + 29 + 21 * k, 0xdddddd, false);
         }
 
+        // 绘制女仆的药水效果
+        int spacing = 0;
+        Collection<PotionEffect> effects = maid.getActivePotionEffects();
+        for (PotionEffect effect : effects) {
+            if (effect.getDuration() <= 0) {
+                continue;
+            }
+
+            Potion potion = effect.getPotion();
+            int startX = i + 176;
+            int startY = j + 5 + spacing;
+            spacing += 12;
+
+            GlStateManager.pushMatrix();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.translate(startX, startY - 1.5, 0);
+            GlStateManager.scale(0.6, 0.6, 0.6);
+            this.mc.getTextureManager().bindTexture(INVENTORY_BACKGROUND);
+            if (potion.hasStatusIcon()) {
+                int index = potion.getStatusIconIndex();
+                this.drawTexturedModalRect(0, 0, index % 8 * 18, 198 + index / 8 * 18, 18, 18);
+            }
+            GlStateManager.popMatrix();
+            potion.renderInventoryEffect(i, j, effect, mc);
+            if (!potion.shouldRenderInvText(effect)) {
+                continue;
+            }
+            if (effect.getDuration() > 0) {
+                fontRenderer.drawString(String.format("%s %s %s %s%s",
+                        effect.getPotion().isBadEffect() ? TextFormatting.RED : TextFormatting.RESET,
+                        I18n.format(effect.getEffectName()),
+                        I18n.format("enchantment.level." + (effect.getAmplifier() + 1)),
+                        TextFormatting.GRAY,
+                        Potion.getPotionDurationString(effect, 1.0f)
+                ), startX + 9, startY, 0xffffffff, true);
+            }
+        }
+
         // 绘制物品的文本提示
         this.renderHoveredToolTip(mouseX, mouseY);
     }
@@ -356,6 +397,15 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.zLevel = 0.0F;
         this.itemRender.zLevel = 0.0F;
         RenderHelper.disableStandardItemLighting();
+    }
+
+    @Override
+    public int getXSize() {
+        if (maid.getActivePotionEffects().size() > 0) {
+            return super.getXSize() + 128;
+        } else {
+            return super.getXSize();
+        }
     }
 
     /**

@@ -220,6 +220,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(SyncPowerPointEntityData.Handler.class, SyncPowerPointEntityData.class, 9, Side.CLIENT);
         INSTANCE.registerMessage(StorageAndTakePowerMessage.Handler.class, StorageAndTakePowerMessage.class, 10, Side.SERVER);
         INSTANCE.registerMessage(SetBeaconPotionMessage.Handler.class, SetBeaconPotionMessage.class, 11, Side.SERVER);
+        INSTANCE.registerMessage(SyncMaidEffectMessage.Handler.class, SyncMaidEffectMessage.class, 12, Side.CLIENT);
     }
 
     /**
