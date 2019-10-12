@@ -63,6 +63,7 @@ tooltips.touhou_little_maid.grid.blacklist.true=Blacklist
 tooltips.touhou_little_maid.grid.blacklist.false=Whitelist
 tooltips.touhou_little_maid.hata_sasimono.desc=Right click on the maid to apply hata sasimono.
 tooltips.touhou_little_maid.album.desc=Storage Situation: %d/%d
+tooltips.touhou_little_maid.maid_beacon.desc=Storage Power: %s
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -157,9 +158,9 @@ gui.touhou_little_maid.hata_select.apply=Apply Texture
 gui.touhou_little_maid.hata_select.close=Close
 gui.touhou_little_maid.hata_select.display.true=Show Sasimono
 gui.touhou_little_maid.hata_select.display.false=Hide Sasimono
-gui.touhou_little_maid.maid_beacon.player_power=Player: %.2f
-gui.touhou_little_maid.maid_beacon.storage_power=Storage: %.2f
-gui.touhou_little_maid.maid_beacon.cost_power=Cost: %.2f/h
+gui.touhou_little_maid.maid_beacon.player_power=Player: %s
+gui.touhou_little_maid.maid_beacon.storage_power=Storage: %s
+gui.touhou_little_maid.maid_beacon.cost_power=Cost: %s/h
 gui.touhou_little_maid.maid_beacon.add_one=Put One
 gui.touhou_little_maid.maid_beacon.add_all=Put All
 gui.touhou_little_maid.maid_beacon.min_one=Take One

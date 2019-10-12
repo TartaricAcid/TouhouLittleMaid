@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.block.Block;
@@ -11,8 +12,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -27,7 +26,6 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * @author TartaricAcid
@@ -35,8 +33,8 @@ import java.util.Random;
  **/
 public class BlockMaidBeacon extends Block implements ITileEntityProvider {
     public static final PropertyEnum<Position> POSITION = PropertyEnum.create("position", Position.class);
-    private static final AxisAlignedBB UP_AABB = new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875);
-    private static final AxisAlignedBB DOWN_AABB = new AxisAlignedBB(0.40625, 0, 0.40625, 0.59375, 1, 0.59375);
+    private static final AxisAlignedBB UP_AABB = new AxisAlignedBB(0.1875, 0.0625, 0.1875, 0.8125, 1, 0.8125);
+    private static final AxisAlignedBB DOWN_AABB = new AxisAlignedBB(0.40625, 0, 0.40625, 0.59375, 1.0625, 0.59375);
 
     public BlockMaidBeacon() {
         super(Material.WOOD);
@@ -106,15 +104,24 @@ public class BlockMaidBeacon extends Block implements ITileEntityProvider {
 
         boolean isBeaconUp = state.getValue(POSITION) == Position.UP_N_S || state.getValue(POSITION) == Position.UP_W_E;
         if (player.isCreative() && isBeaconUp && worldIn.getBlockState(down).getBlock() == this) {
+            if (player.isCreative()) {
+                worldIn.setBlockToAir(pos);
+            }
             worldIn.setBlockToAir(down);
         }
 
         if (state.getValue(POSITION) == Position.DOWN && worldIn.getBlockState(up).getBlock() == this) {
-            if (player.isCreative()) {
-                worldIn.setBlockToAir(pos);
-            }
             worldIn.setBlockToAir(up);
         }
+    }
+
+    @Override
+    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileEntityMaidBeacon) {
+            Block.spawnAsEntity(worldIn, pos, ItemMaidBeacon.tileEntityToItemStack((TileEntityMaidBeacon) te));
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override
@@ -124,9 +131,6 @@ public class BlockMaidBeacon extends Block implements ITileEntityProvider {
             IBlockState blockStateUp = worldIn.getBlockState(blockPosUp);
             if (blockStateUp.getBlock() != this) {
                 worldIn.setBlockToAir(pos);
-                if (!worldIn.isRemote) {
-                    this.dropBlockAsItem(worldIn, pos, state, 0);
-                }
             }
         } else {
             BlockPos blockPosDown = pos.down();
@@ -144,12 +148,6 @@ public class BlockMaidBeacon extends Block implements ITileEntityProvider {
             return DOWN_AABB;
         }
         return UP_AABB;
-    }
-
-    @Nonnull
-    @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return state.getValue(POSITION) == Position.DOWN ? MaidItems.MAID_BEACON : Items.AIR;
     }
 
     @Override

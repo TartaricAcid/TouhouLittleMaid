@@ -63,6 +63,7 @@ tooltips.touhou_little_maid.grid.blacklist.true=黑名单
 tooltips.touhou_little_maid.grid.blacklist.false=白名单
 tooltips.touhou_little_maid.hata_sasimono.desc=右击女仆应用上旗指物。
 tooltips.touhou_little_maid.album.desc=存储情况：%d/%d
+tooltips.touhou_little_maid.maid_beacon.desc=存储P点：%s
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
@@ -157,9 +158,9 @@ gui.touhou_little_maid.hata_select.apply=应用材质
 gui.touhou_little_maid.hata_select.close=关闭
 gui.touhou_little_maid.hata_select.display.true=显示旗指物
 gui.touhou_little_maid.hata_select.display.false=隐藏旗指物
-gui.touhou_little_maid.maid_beacon.player_power=玩家P点：%.2f
-gui.touhou_little_maid.maid_beacon.storage_power=存储P点：%.2f
-gui.touhou_little_maid.maid_beacon.cost_power=消耗P点：%.2f/h
+gui.touhou_little_maid.maid_beacon.player_power=玩家P点：%s
+gui.touhou_little_maid.maid_beacon.storage_power=存储P点：%s
+gui.touhou_little_maid.maid_beacon.cost_power=消耗P点：%s/h
 gui.touhou_little_maid.maid_beacon.add_one=存入一点
 gui.touhou_little_maid.maid_beacon.add_all=存入全部
 gui.touhou_little_maid.maid_beacon.min_one=取出一点

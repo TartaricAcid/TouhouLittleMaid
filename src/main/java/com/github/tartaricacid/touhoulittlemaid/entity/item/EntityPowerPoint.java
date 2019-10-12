@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandle
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,7 +25,7 @@ public class EntityPowerPoint extends EntityXPOrb {
     /**
      * 生成 P 点
      *
-     * @param powerValue P 点值，传入数据将会 / 100 转换为玩家的 Power 数
+     * @param powerValue P 点值，传入数据将会 / 100.0f 转换为玩家的 Power 数
      */
     public EntityPowerPoint(World worldIn, double x, double y, double z, int powerValue) {
         super(worldIn, x, y, z, powerValue);
@@ -69,6 +70,32 @@ public class EntityPowerPoint extends EntityXPOrb {
                 }
                 this.setDead();
             }
+        }
+    }
+
+    @Override
+    public void handleStatusUpdate(byte id) {
+        if (id == 20) {
+            this.spawnExplosionParticle();
+        } else {
+            super.handleStatusUpdate(id);
+        }
+    }
+
+    public void spawnExplosionParticle() {
+        if (this.world.isRemote) {
+            for (int i = 0; i < 20; ++i) {
+                double x = this.rand.nextGaussian() * 0.02D;
+                double y = this.rand.nextGaussian() * 0.02D;
+                double z = this.rand.nextGaussian() * 0.02D;
+                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
+                        this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width - x * 10.0D,
+                        this.posY + (double) (this.rand.nextFloat() * this.height) - y * 10.0D,
+                        this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width - z * 10.0D,
+                        x, y, z);
+            }
+        } else {
+            this.world.setEntityState(this, (byte) 20);
         }
     }
 

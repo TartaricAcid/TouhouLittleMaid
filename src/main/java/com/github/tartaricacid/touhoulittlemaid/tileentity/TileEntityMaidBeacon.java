@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBeacon;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import net.minecraft.block.state.IBlockState;
@@ -27,8 +28,8 @@ import static com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaid
 public class TileEntityMaidBeacon extends TileEntity implements ITickable {
     public static final float MAX_STORAGE = 100f;
     public static final float COST = 0.001f;
-    private static final String POTION_INDEX_TAG = "PotionIndex";
-    private static final String STORAGE_POWER_TAG = "StoragePower";
+    public static final String POTION_INDEX_TAG = "PotionIndex";
+    public static final String STORAGE_POWER_TAG = "StoragePower";
     private int potionIndex = -1;
     private float storagePower;
 
@@ -39,17 +40,36 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
             if (state.getBlock() == MaidBlocks.MAID_BEACON && state.getValue(BlockMaidBeacon.POSITION) != BlockMaidBeacon.Position.DOWN) {
                 if (potionIndex != -1 && storagePower >= COST) {
                     storagePower = storagePower - COST;
-                    updateBeacon(getEffectByIndex(potionIndex).potion);
+                    updateBeaconEffect(getEffectByIndex(potionIndex).potion);
+                }
+                updateAbsorbPower();
+            }
+        }
+    }
+
+    private void updateBeaconEffect(Potion potion) {
+        if (this.world != null && !this.world.isRemote) {
+            List<EntityMaid> list = this.world.getEntitiesWithinAABB(EntityMaid.class, new AxisAlignedBB(pos).grow(8, 8, 8));
+            for (EntityMaid maid : list) {
+                if (maid.isEntityAlive()) {
+                    maid.addPotionEffect(new PotionEffect(potion, 90, 1, true, true));
                 }
             }
         }
     }
 
-    private void updateBeacon(Potion potion) {
-        if (this.world != null && !this.world.isRemote) {
-            List<EntityMaid> list = this.world.getEntitiesWithinAABB(EntityMaid.class, new AxisAlignedBB(pos).grow(8, 8, 8));
-            for (EntityMaid maid : list) {
-                maid.addPotionEffect(new PotionEffect(potion, 90, 1, true, true));
+    private void updateAbsorbPower() {
+        if (this.world != null) {
+            List<EntityPowerPoint> list = this.world.getEntitiesWithinAABB(EntityPowerPoint.class, new AxisAlignedBB(pos).grow(3, 3, 3));
+            for (EntityPowerPoint powerPoint : list) {
+                if (powerPoint.isEntityAlive()) {
+                    float addNum = this.getStoragePower() + powerPoint.xpValue / 100.0f;
+                    if (addNum <= MAX_STORAGE) {
+                        this.setStoragePower(addNum);
+                        powerPoint.spawnExplosionParticle();
+                        powerPoint.setDead();
+                    }
+                }
             }
         }
     }
@@ -76,20 +96,29 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        if (getTileData().hasKey(POTION_INDEX_TAG)) {
-            potionIndex = getTileData().getInteger(POTION_INDEX_TAG);
+        readBeaconNBT(getTileData());
+    }
+
+    public void readBeaconNBT(NBTTagCompound compound) {
+        if (compound.hasKey(POTION_INDEX_TAG)) {
+            potionIndex = compound.getInteger(POTION_INDEX_TAG);
         }
-        if (getTileData().hasKey(STORAGE_POWER_TAG)) {
-            storagePower = getTileData().getFloat(STORAGE_POWER_TAG);
+        if (compound.hasKey(STORAGE_POWER_TAG)) {
+            storagePower = compound.getFloat(STORAGE_POWER_TAG);
         }
     }
 
     @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        getTileData().setInteger(POTION_INDEX_TAG, potionIndex);
-        getTileData().setFloat(STORAGE_POWER_TAG, storagePower);
+        writeBeaconNBT(getTileData());
         return super.writeToNBT(compound);
+    }
+
+    public NBTTagCompound writeBeaconNBT(NBTTagCompound compound) {
+        compound.setInteger(POTION_INDEX_TAG, potionIndex);
+        compound.setFloat(STORAGE_POWER_TAG, storagePower);
+        return compound;
     }
 
     public int getPotionIndex() {
@@ -110,7 +139,7 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
         refresh();
     }
 
-    private void refresh() {
+    public void refresh() {
         markDirty();
         if (world != null) {
             IBlockState state = world.getBlockState(pos);
