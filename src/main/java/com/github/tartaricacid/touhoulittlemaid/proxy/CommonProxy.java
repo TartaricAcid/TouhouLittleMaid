@@ -24,6 +24,10 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.*;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ClientEffectHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectReply;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ServerEffectHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -220,7 +224,8 @@ public class CommonProxy {
         INSTANCE.registerMessage(SyncPowerPointEntityData.Handler.class, SyncPowerPointEntityData.class, 9, Side.CLIENT);
         INSTANCE.registerMessage(StorageAndTakePowerMessage.Handler.class, StorageAndTakePowerMessage.class, 10, Side.SERVER);
         INSTANCE.registerMessage(SetBeaconPotionMessage.Handler.class, SetBeaconPotionMessage.class, 11, Side.SERVER);
-        INSTANCE.registerMessage(SyncMaidEffectMessage.Handler.class, SyncMaidEffectMessage.class, 12, Side.CLIENT);
+        INSTANCE.registerMessage(ServerEffectHandler.class, EffectRequest.class, 12, Side.SERVER);
+        INSTANCE.registerMessage(ClientEffectHandler.class, EffectReply.class, 13, Side.CLIENT);
     }
 
     /**

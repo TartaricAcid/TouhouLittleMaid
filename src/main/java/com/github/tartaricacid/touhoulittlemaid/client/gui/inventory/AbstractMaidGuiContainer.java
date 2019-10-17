@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidHomeModeMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidPickupModeMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SwitchMaidGuiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -29,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,6 +38,9 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 女仆主 GUI 界面的集合，其他界面在此基础上拓展得到
@@ -47,6 +52,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     protected static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_side.png");
+    private static ScheduledExecutorService timer;
     private static int taskPageIndex;
     protected MaidMainContainer container;
     EntityMaid maid;
@@ -61,6 +67,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.container = inventorySlotsIn;
         this.maid = container.maid;
         this.taskPageTotal = LittleMaidAPI.getTasks().size() / 6;
+        syncEffectThread();
     }
 
     /**
@@ -313,7 +320,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             }
 
             Potion potion = effect.getPotion();
-            int startX = i + 176;
+            int startX = i + 178;
             int startY = j + 5 + spacing;
             spacing += 12;
 
@@ -401,11 +408,31 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
     @Override
     public int getXSize() {
-        if (maid.getActivePotionEffects().size() > 0) {
-            return super.getXSize() + 128;
-        } else {
+        if (maid.getActivePotionEffects().size() <= 0) {
             return super.getXSize();
+        } else {
+            int i = 0;
+            for (PotionEffect effect : maid.getActivePotionEffects()) {
+                i += effect.getDuration();
+            }
+            if (i == 0) {
+                return super.getXSize();
+            }
+            return super.getXSize() + 128;
         }
+    }
+
+    private void syncEffectThread() {
+        timer = new ScheduledThreadPoolExecutor(1, new BasicThreadFactory.Builder()
+                .namingPattern("sync-maid-effect-schedule").daemon(true).build());
+        timer.scheduleAtFixedRate(() -> CommonProxy.INSTANCE.sendToServer(new EffectRequest(maid.getUniqueID())),
+                0, 500, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public void onGuiClosed() {
+        // 关闭发包线程
+        timer.shutdown();
     }
 
     /**

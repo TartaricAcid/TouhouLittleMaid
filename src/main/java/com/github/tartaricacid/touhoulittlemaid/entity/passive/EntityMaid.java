@@ -21,7 +21,6 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncMaidEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -39,7 +38,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.*;
 import net.minecraft.inventory.InventoryHelper;
@@ -823,13 +821,6 @@ public class EntityMaid extends AbstractEntityMaid {
         // 否则打开 GUI
         if (!world.isRemote) {
             player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.MAIN_GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
-            // 我发现原版似乎不会主动同步女仆的药水效果，得自己实现同步
-            for (PotionEffect effect : this.getActivePotionEffects()) {
-                CommonProxy.INSTANCE.sendTo(new SyncMaidEffectMessage(this.getEntityId(), effect), (EntityPlayerMP) player);
-            }
-        } else {
-            // 清除客户端残留的药水效果
-            this.getActivePotionMap().clear();
         }
         return true;
     }

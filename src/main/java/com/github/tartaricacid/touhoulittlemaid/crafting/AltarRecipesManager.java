@@ -51,6 +51,7 @@ public class AltarRecipesManager {
         ProcessingInput feather = ItemDefinition.of(Items.FEATHER);
         ProcessingInput cobblestone = OreDictDefinition.of("cobblestone");
         ProcessingInput puffer = ItemDefinition.of(Items.FISH, 3);
+        ProcessingInput plankWood = OreDictDefinition.of("plankWood");
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_maid"),
                 new AltarRecipe(
@@ -131,6 +132,11 @@ public class AltarRecipesManager {
                 0.3f, new ItemStack(MaidItems.TOMBSTONE_BAUBLE),
                 ItemDefinition.of(Blocks.CHEST), ItemDefinition.of(Blocks.RED_FLOWER), OreDictDefinition.of("enderpearl"),
                 cobblestone, cobblestone, cobblestone);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_maid_beacon"),
+                0.3f, new ItemStack(MaidItems.MAID_BEACON),
+                plankWood, dyeRed, plankWood,
+                obsidian, OreDictDefinition.of("gemDiamond"), obsidian);
     }
 
     public static AltarRecipesManager instance() {

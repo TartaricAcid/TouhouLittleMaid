@@ -35,6 +35,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.AbstractS
 @SideOnly(Side.CLIENT)
 public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends GuiScreen {
     protected static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
+    private static ScheduledExecutorService timer;
 
     /**
      * 部分缩放，旋转所限制的范围
@@ -59,7 +60,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends
     protected ModelItem modelItem;
     protected volatile T guiEntity;
     protected volatile boolean isEnableWalk = false;
-    private ScheduledExecutorService timer;
     /**
      * 控制旋转、缩放和行走的变量
      */

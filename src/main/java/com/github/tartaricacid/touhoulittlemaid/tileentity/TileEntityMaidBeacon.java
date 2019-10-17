@@ -52,7 +52,7 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
             List<EntityMaid> list = this.world.getEntitiesWithinAABB(EntityMaid.class, new AxisAlignedBB(pos).grow(8, 8, 8));
             for (EntityMaid maid : list) {
                 if (maid.isEntityAlive()) {
-                    maid.addPotionEffect(new PotionEffect(potion, 90, 1, true, true));
+                    maid.addPotionEffect(new PotionEffect(potion, 100, 1, true, true));
                 }
             }
         }
