@@ -64,6 +64,8 @@ tooltips.touhou_little_maid.grid.blacklist.false=白名单
 tooltips.touhou_little_maid.hata_sasimono.desc=右击女仆应用上旗指物。
 tooltips.touhou_little_maid.album.desc=存储情况：%d/%d
 tooltips.touhou_little_maid.maid_beacon.desc=存储P点：%s
+tooltips.touhou_little_maid.maid_spawn_egg.desc.1=该物品无法合成，你需要构建祭坛来生成女仆。
+tooltips.touhou_little_maid.maid_spawn_egg.desc.2=你可以查询 JEI 来获取具体的合成表。
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！

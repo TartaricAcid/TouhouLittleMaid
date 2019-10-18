@@ -64,6 +64,8 @@ tooltips.touhou_little_maid.grid.blacklist.false=Whitelist
 tooltips.touhou_little_maid.hata_sasimono.desc=Right click on the maid to apply hata sasimono.
 tooltips.touhou_little_maid.album.desc=Storage Situation: %d/%d
 tooltips.touhou_little_maid.maid_beacon.desc=Storage Power: %s
+tooltips.touhou_little_maid.maid_spawn_egg.desc.1=The item can not be crafted, you need to build an altar to spawn a maid.
+tooltips.touhou_little_maid.maid_spawn_egg.desc.2=For craft details, please refer to JEI.
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!

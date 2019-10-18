@@ -1,0 +1,8 @@
+{
+  "sortnum": 3,
+  "name": "Skin",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "maid",
+  "pages": [
+  ]
+}

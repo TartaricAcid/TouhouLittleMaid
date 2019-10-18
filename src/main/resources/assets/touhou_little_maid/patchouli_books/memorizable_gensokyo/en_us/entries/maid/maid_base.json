@@ -1,0 +1,20 @@
+{
+  "sortnum": 1,
+  "name": "Maid Base",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The basic functions of the maid are very numerous, roughly as follows:$(li)By default, the maid will take the initiative to pick up the item, arrows and experience orbs around her. The main GUI has a button to switch pick up mode;$(li)By default, the maid will always follow the player."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Empty hand Shift right-clicking maid can switch sitting mode. In sitting mode, the maid does nothing, including avoiding harm.$(li) When the maid ride on other entities, empty hand Shift right click can remove it.$(li)The player can hold the potion or the golden apple to right-click the maid to use."
+    },
+    {
+      "type": "text",
+      "text": "$(li)The experience picked up by the maid can be converted into an enchanted bottle by the player holding the glass bottle and right clicking."
+    }
+  ]
+}
