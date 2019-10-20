@@ -1,0 +1,16 @@
+{
+  "sortnum": 1,
+  "name": "女仆基础介绍",
+  "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:kirisame_marisa'}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "女仆的基础功能非常多，大致如下：$(li)默认情况下，女仆会主动拾取其周围的物品，箭和经验球。女仆的主 GUI 有按钮可以切换拾物模式；$(li)默认情况下，女仆总是会跟随玩家。$(li)空手 Shift 右击女仆可以切换待命模式。在待命模式下，女仆什么也不做，包括规避伤害。"
+    },
+    {
+      "type": "text",
+      "text": "$(li)当女仆骑在其他实体上，空手 Shift 右击能够移除她。$(li)玩家手持药水和金苹果能够右击女仆进行使用。$(li)被女仆捡起的经验，可以通过玩家手持玻璃瓶右击转换为附魔之瓶。"
+    }
+  ]
+}

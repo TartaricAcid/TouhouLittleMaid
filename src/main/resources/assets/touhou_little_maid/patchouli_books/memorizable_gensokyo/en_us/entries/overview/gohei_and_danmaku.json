@@ -8,7 +8,7 @@
       "type": "spotlight",
       "item": "touhou_little_maid:hakurei_gohei",
       "link_recipe": true,
-      "text": "The gohei is a ranged weapon that can be used to shoot danmaku, and it also can be used as a normal melee weapon.$(br2)When you hold the gohei and press alt to slide the mouse wheel, you can switch the danmaku style of the shoot."
+      "text": "The gohei is a ranged weapon that can be used to shoot danmaku, and it also can be used as a normal melee weapon.$(br2)When you hold the gohei and press alt to scroll the mouse wheel, you can switch the danmaku style of the shoot."
     }, {
       "type": "crafting",
       "recipe": "touhou_little_maid:hakurei_gohei",

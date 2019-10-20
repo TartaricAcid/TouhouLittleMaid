@@ -1,8 +1,16 @@
 {
   "sortnum": 5,
-  "name": "Spawn Maid",
-  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "name": "Hata Sasimono",
+  "icon": "touhou_little_maid:hata_sasimono",
   "category": "maid",
   "pages": [
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:hata_sasimono",
+      "text": "The maid will hurt the player, and even other maids or pets. The hata sasimono is designed for this purpose."
+    }, {
+      "type": "text",
+      "text": "Craft a hata sasimono, then right-click on the maid can add hata sasimono to the maid. You can find the corresponding button to switch the style of hata sasimono in the main GUI.$(br2)You can also customize your own hata sasimono, and you can check the wiki for instructions."
+    }
   ]
 }

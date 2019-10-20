@@ -79,6 +79,7 @@ message.touhou_little_maid.photo.have_no_nbt_data=这鬼照片没有 NBT 数据�
 message.touhou_little_maid.altar.not_enough_power=你的 P 点不足。
 message.touhou_little_maid.tombstone.place_fail=墓碑放置失败！
 message.touhou_little_maid.tombstone.on_block_activated=墓碑已经被收回！
+message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"点击此处","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":"安装帕秋莉模组来获取手册","color":"yellow","bold":false}]
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
@@ -160,6 +161,7 @@ gui.touhou_little_maid.hata_select.apply=应用材质
 gui.touhou_little_maid.hata_select.close=关闭
 gui.touhou_little_maid.hata_select.display.true=显示旗指物
 gui.touhou_little_maid.hata_select.display.false=隐藏旗指物
+gui.touhou_little_maid.hata_select.scroll=滑动鼠标滚轮切换样式
 gui.touhou_little_maid.maid_beacon.player_power=玩家P点：%s
 gui.touhou_little_maid.maid_beacon.storage_power=存储P点：%s
 gui.touhou_little_maid.maid_beacon.cost_power=消耗P点：%s/h

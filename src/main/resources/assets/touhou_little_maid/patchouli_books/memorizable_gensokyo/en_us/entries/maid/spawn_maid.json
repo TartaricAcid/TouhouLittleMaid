@@ -10,7 +10,7 @@
     },
     {
       "type": "text",
-      "text": "Once the maid is tammed, you will need a cake to tame it. the tamed items can be changed in the configuration file, which is not repeated here.$(br2)The tamed maid is almost identical to the vanilla pet, and you can right-click to open her GUI."
+      "text": "Once the maid is spawned, you will need a cake to tame it. the tamed items can be changed in the configuration file, which is not repeated here.$(br2)The tamed maid is almost identical to the vanilla pet, and you can right-click to open her GUI."
     }
   ]
 }

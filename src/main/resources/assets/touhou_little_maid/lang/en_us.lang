@@ -43,7 +43,7 @@ commands.touhou_little_maid.main.power.info=Current Power: %.2f
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
-tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc=Press the Alt key and slide the mouse wheel to switch modes.
+tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc=Press the Alt key and scroll the mouse wheel to switch modes.
 tooltips.touhou_little_maid.kappa_compass.usage.desc=Right click on the block to set the coordinates, then right click on the maid binding coordinates.
 tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
 tooltips.touhou_little_maid.damageable.desc=Remaining Usage Times: %d
@@ -79,6 +79,7 @@ message.touhou_little_maid.photo.have_no_nbt_data=This damnable photo don't have
 message.touhou_little_maid.altar.not_enough_power=You don't have enough power.
 message.touhou_little_maid.tombstone.place_fail=Tombstone Place Fail!
 message.touhou_little_maid.tombstone.on_block_activated=Tombstone Has Been Taken Back!
+message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Click Here","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":" To Install Patchouli Mod To Get The Manual","color":"yellow","bold":false}]
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -160,6 +161,7 @@ gui.touhou_little_maid.hata_select.apply=Apply Texture
 gui.touhou_little_maid.hata_select.close=Close
 gui.touhou_little_maid.hata_select.display.true=Show Sasimono
 gui.touhou_little_maid.hata_select.display.false=Hide Sasimono
+gui.touhou_little_maid.hata_select.scroll=Scroll the mouse wheel to switch styles
 gui.touhou_little_maid.maid_beacon.player_power=Player: %s
 gui.touhou_little_maid.maid_beacon.storage_power=Storage: %s
 gui.touhou_little_maid.maid_beacon.cost_power=Cost: %s/h

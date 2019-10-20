@@ -63,8 +63,10 @@ public class MaidHataSelect extends GuiScreen {
             showHideButton.displayString = I18n.format("gui.touhou_little_maid.hata_select.display.false");
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
-        fontRenderer.drawString(String.format("%s%d/%d", TextFormatting.BOLD, index + 1, ClientProxy.HATA_NAME_MAP.size()),
-                width / 2, height / 9, 0xFFFFFF);
+        drawCenteredString(fontRenderer, String.format("%s%d/%d", TextFormatting.BOLD, index + 1, ClientProxy.HATA_NAME_MAP.size()),
+                width / 2, height / 17, 0xFFFFFF);
+        drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.hata_select.scroll"),
+                width / 2, height * 2 / 17, 0xFFFFFF);
     }
 
     private void drawTopListModel() {

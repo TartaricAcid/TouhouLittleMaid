@@ -1,0 +1,16 @@
+{
+  "sortnum": 0,
+  "name": "生成女仆",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "获取女仆的方式非常特殊，而且必须通过多方块祭坛才能获取。$(br2)因为合成表很有可能会在后续发生改变，所以请查询 JEI 的祭坛标签。"
+    },
+    {
+      "type": "text",
+      "text": "一旦女仆生成，你需要一块蛋糕才能驯服它。驯服的物品可在配置文件中进行更改，此处不再累述。$(br2)驯服的女仆和原版宠物行为几乎一致，你可以右击打开她的 GUI。"
+    }
+  ]
+}

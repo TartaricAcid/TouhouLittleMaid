@@ -1,8 +1,15 @@
 {
   "sortnum": 4,
   "name": "Bauble",
-  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "icon": "touhou_little_maid:ultramarine_orb_elixir",
   "category": "maid",
   "pages": [
+    {
+      "type": "text",
+      "text": "The third tab of the maid's GUI is the bauble inventory. This mod provides several baubles that can be triggered to protect the maid under certain conditions:$(li)Ultramarine Orb Elixir: 6 times to cancel the maid's death.$(li)Tombstone Bauble: Tombstones that generate preserved items when the maid dies."
+    }, {
+      "type": "text",
+      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is cancelled."
+    }
   ]
 }
