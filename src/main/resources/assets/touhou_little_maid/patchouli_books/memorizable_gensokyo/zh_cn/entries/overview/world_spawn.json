@@ -1,4 +1,5 @@
 {
+  "sortnum": 1,
   "name": "世界生成",
   "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
   "category": "overview",
