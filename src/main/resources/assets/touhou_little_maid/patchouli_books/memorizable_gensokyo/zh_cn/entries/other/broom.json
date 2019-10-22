@@ -4,5 +4,10 @@
   "icon": "touhou_little_maid:marisa_broom",
   "category": "other",
   "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:marisa_broom",
+      "text": "扫帚是一个方便的飞行工具，玩家可以右击骑上，配合鼠标视角、键盘的 AWSD 键进行飞行操作。$(br2)女仆在靠近扫帚时也会主动坐上去，坐上扫帚的女仆在绝大多数情况下将会以飞行模式进行移动。"
+    }
   ]
 }

@@ -4,5 +4,10 @@
   "icon": "touhou_little_maid:marisa_broom",
   "category": "other",
   "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:marisa_broom",
+      "text": "The broom is a convenient flying tool that allows the player to right click on the ride and use the AWSD keys on the keyboard to navigate. $(br2)The maid will also ride on broom when she is near the broom, and the maid who sits on the broom will move in flight status in most cases."
+    }
   ]
 }

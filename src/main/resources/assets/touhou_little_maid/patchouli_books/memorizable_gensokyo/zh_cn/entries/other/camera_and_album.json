@@ -4,5 +4,14 @@
   "icon": "touhou_little_maid:album",
   "category": "other",
   "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:camera",
+      "text": "在跨维度或者远距离携带女仆是一个麻烦的事情，相机就是为此设计的。$(br2)只需要用相机对着自己的女仆拍摄就能将其变成照片，之后拿着照片对着方块右击又可以将其释放出来。"
+    }, {
+      "type": "spotlight",
+      "item": "touhou_little_maid:album",
+      "text": "如果在玩家身上拥有相册时，使用相机，得到的照片会直接进入相册，而后拿着相册右击就可以逐次放置出女仆了。"
+    }
   ]
 }
