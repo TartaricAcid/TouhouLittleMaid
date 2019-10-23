@@ -4,5 +4,10 @@
   "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:kaenbyou_rin'}",
   "category": "other",
   "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:kaenbyou_rin'}",
+      "text": "手办是女仆死亡后的掉落物，记录了死亡女仆的所有 NBT 数据，在祭坛中再次合成可以复活原来死去的女仆。"
+    }
   ]
 }

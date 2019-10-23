@@ -4,5 +4,13 @@
   "icon": "touhou_little_maid:maid_beacon",
   "category": "other",
   "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_beacon",
+      "text": "The shrine lamp is a good decoration and has certain practical functions. Right click on the upper part of the shrine lamp to open the GUI, store the player's power point."
+    }, {
+      "type": "text",
+      "text": "It also can select effect, then will consume power points to bring the effect to the surrounding range of maids."
+    }
   ]
 }

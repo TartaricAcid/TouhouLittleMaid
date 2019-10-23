@@ -4,5 +4,10 @@
   "icon": "touhou_little_maid:maid_beacon",
   "category": "other",
   "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_beacon",
+      "text": "神社庭灯既是一个不错的装饰物，还具有一定的实用功能。$(br2)神社庭灯右击上部能够打开 GUI，存储玩家的 P 点，同时还能点击按钮选择相应的效果，这些效果会消耗 p 点来为周围范围的女仆带来对应增益效果。"
+    }
   ]
 }
