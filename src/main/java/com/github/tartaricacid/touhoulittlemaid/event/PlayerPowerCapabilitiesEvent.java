@@ -63,7 +63,7 @@ public class PlayerPowerCapabilitiesEvent {
     public static void playerTickEvent(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
         PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-        if (power != null && event.side == Side.SERVER) {
+        if (power != null && event.side == Side.SERVER && player instanceof EntityPlayerMP) {
             CommonProxy.INSTANCE.sendTo(new SyncPowerMessage(power.get()), (EntityPlayerMP) player);
         }
     }

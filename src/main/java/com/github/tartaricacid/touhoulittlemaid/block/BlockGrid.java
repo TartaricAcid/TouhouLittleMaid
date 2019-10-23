@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import com.github.tartaricacid.touhoulittlemaid.util.MatrixUtil;
@@ -74,7 +73,6 @@ public class BlockGrid extends Block {
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        NeatCompat.init();
         return true;
     }
 
