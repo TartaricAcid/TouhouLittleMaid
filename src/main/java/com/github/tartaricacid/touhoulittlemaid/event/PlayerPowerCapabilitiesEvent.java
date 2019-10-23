@@ -15,6 +15,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**
@@ -62,8 +63,8 @@ public class PlayerPowerCapabilitiesEvent {
     @SubscribeEvent
     public static void playerTickEvent(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
-        PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-        if (power != null && event.side == Side.SERVER && player instanceof EntityPlayerMP) {
+        if (event.side == Side.SERVER && event.phase == Phase.END && event.player.world.getTotalWorldTime() % 20 == 0 && player.hasCapability(CapabilityPowerHandler.POWER_CAP, null)) {
+            PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
             CommonProxy.INSTANCE.sendTo(new SyncPowerMessage(power.get()), (EntityPlayerMP) player);
         }
     }
