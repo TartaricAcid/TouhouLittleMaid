@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.concurrent.ScheduledExecutorService;
@@ -257,43 +258,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         boolean xInRange;
         boolean yInRange;
 
-        // 绘制不同标签页的提示文字
-        for (MaidGuiHandler.MAIN_GUI gui : MaidGuiHandler.MAIN_GUI.values()) {
-            xInRange = (i + 28 * (gui.getId() - 1)) < mouseX && mouseX < (i + 28 * gui.getId());
-            yInRange = (j - 28) < mouseY && mouseY < j;
-            if (xInRange && yInRange) {
-                this.drawHoveringText(I18n.format("gui.touhou_little_maid.tab." + gui.name().toLowerCase(Locale.US)), mouseX, mouseY);
-            }
-        }
-
-        // Home 模式的描述
-        xInRange = (i + 143) < mouseX && mouseX < (i + 169);
-        yInRange = (j + 63) < mouseY && mouseY < (j + 79);
-        if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pickup." + maid.isPickup()), mouseX, mouseY);
-        }
-
-        // 拾物模式描述
-        xInRange = (i + 116) < mouseX && mouseX < (i + 142);
-        yInRange = (j + 63) < mouseY && mouseY < (j + 79);
-        if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.home." + maid.isHome()), mouseX, mouseY);
-        }
-
-        // 切换皮肤描述
-        xInRange = (i + 65) < mouseX && mouseX < (i + 74);
-        yInRange = (j + 9) < mouseY && mouseY < (j + 18);
-        if (xInRange && yInRange) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.skin"), mouseX, mouseY);
-        }
-
-        // 切换皮肤描述
-        xInRange = (i + 26) < mouseX && mouseX < (i + 35);
-        yInRange = (j + 9) < mouseY && mouseY < (j + 18);
-        if (xInRange && yInRange && maid.hasSasimono()) {
-            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.hata_sasimono"), mouseX, mouseY);
-        }
-
         // 绘制侧边栏信息
         String currentModeName = TextFormatting.DARK_GRAY + I18n.format(container.task.getTranslationKey());
         fontRenderer.drawString(currentModeName, (float) (i - 39 - fontRenderer.getStringWidth(currentModeName) / 2), j + 9, 0xffffff, false);
@@ -347,6 +311,49 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
                         Potion.getPotionDurationString(effect, 1.0f)
                 ), startX + 9, startY, 0xffffffff, true);
             }
+        }
+
+        // 绘制不同标签页的提示文字
+        for (MaidGuiHandler.MAIN_GUI gui : MaidGuiHandler.MAIN_GUI.values()) {
+            xInRange = (i + 28 * (gui.getId() - 1)) < mouseX && mouseX < (i + 28 * gui.getId());
+            yInRange = (j - 28) < mouseY && mouseY < j;
+            if (xInRange && yInRange) {
+                this.drawHoveringText(I18n.format("gui.touhou_little_maid.tab." + gui.name().toLowerCase(Locale.US)), mouseX, mouseY);
+            }
+        }
+
+        // Home 模式的描述
+        xInRange = (i + 143) < mouseX && mouseX < (i + 169);
+        yInRange = (j + 63) < mouseY && mouseY < (j + 79);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(Arrays.asList(
+                    I18n.format("gui.touhou_little_maid.button.pickup." + maid.isPickup()),
+                    I18n.format("gui.touhou_little_maid.button.pickup.desc")
+            ), mouseX, mouseY);
+        }
+
+        // 拾物模式描述
+        xInRange = (i + 116) < mouseX && mouseX < (i + 142);
+        yInRange = (j + 63) < mouseY && mouseY < (j + 79);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(Arrays.asList(
+                    I18n.format("gui.touhou_little_maid.button.home." + maid.isHome()),
+                    I18n.format("gui.touhou_little_maid.button.home.desc")
+            ), mouseX, mouseY);
+        }
+
+        // 切换皮肤描述
+        xInRange = (i + 65) < mouseX && mouseX < (i + 74);
+        yInRange = (j + 9) < mouseY && mouseY < (j + 18);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.skin"), mouseX, mouseY);
+        }
+
+        // 切换皮肤描述
+        xInRange = (i + 26) < mouseX && mouseX < (i + 35);
+        yInRange = (j + 9) < mouseY && mouseY < (j + 18);
+        if (xInRange && yInRange && maid.hasSasimono()) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.hata_sasimono"), mouseX, mouseY);
         }
 
         // 绘制物品的文本提示

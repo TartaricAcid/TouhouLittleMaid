@@ -54,7 +54,8 @@ public class ItemKappaCompass extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         BlockPos pos = getPos(stack);
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc"));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc.1"));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc.2"));
         if (pos != null) {
             tooltip.add(TextFormatting.GOLD + I18n.format("tooltips.touhou_little_maid.kappa_compass.desc", pos.getX(), pos.getY(), pos.getZ()));
         }

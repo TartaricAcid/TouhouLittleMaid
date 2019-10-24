@@ -65,7 +65,7 @@ public class PlayerPowerCapabilitiesEvent {
         EntityPlayer player = event.player;
         if (event.side == Side.SERVER && event.phase == Phase.END && player.hasCapability(CapabilityPowerHandler.POWER_CAP, null)) {
             PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-            if (power.isDirty()) {
+            if (power != null && power.isDirty()) {
                 CommonProxy.INSTANCE.sendTo(new SyncPowerMessage(power.get()), (EntityPlayerMP) player);
                 power.setDirty(false);
             }
