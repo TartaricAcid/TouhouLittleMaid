@@ -10,6 +10,7 @@ public class PowerHandler {
     public static final float MAX_POWER = 5.0f;
     static Factory FACTORY = new Factory();
     private float power = 0.0f;
+    private boolean dirty;
 
     public void add(float points) {
         if (points + this.power <= MAX_POWER) {
@@ -17,6 +18,7 @@ public class PowerHandler {
         } else {
             this.power = MAX_POWER;
         }
+        markDirty();
     }
 
     public void min(float points) {
@@ -25,14 +27,28 @@ public class PowerHandler {
         } else {
             this.power = 0.0f;
         }
+        markDirty();
     }
 
     public void set(float points) {
         this.power = (points > MAX_POWER) ? MAX_POWER : points;
+        markDirty();
     }
 
     public float get() {
         return this.power;
+    }
+
+    public void markDirty() {
+        dirty = true;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 
     private static class Factory implements Callable<PowerHandler> {

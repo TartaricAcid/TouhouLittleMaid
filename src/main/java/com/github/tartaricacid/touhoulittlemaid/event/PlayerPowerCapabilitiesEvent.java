@@ -63,9 +63,12 @@ public class PlayerPowerCapabilitiesEvent {
     @SubscribeEvent
     public static void playerTickEvent(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
-        if (event.side == Side.SERVER && event.phase == Phase.END && event.player.world.getTotalWorldTime() % 20 == 0 && player.hasCapability(CapabilityPowerHandler.POWER_CAP, null)) {
+        if (event.side == Side.SERVER && event.phase == Phase.END && player.hasCapability(CapabilityPowerHandler.POWER_CAP, null)) {
             PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-            CommonProxy.INSTANCE.sendTo(new SyncPowerMessage(power.get()), (EntityPlayerMP) player);
+            if (power.isDirty()) {
+                CommonProxy.INSTANCE.sendTo(new SyncPowerMessage(power.get()), (EntityPlayerMP) player);
+                power.setDirty(false);
+            }
         }
     }
 
