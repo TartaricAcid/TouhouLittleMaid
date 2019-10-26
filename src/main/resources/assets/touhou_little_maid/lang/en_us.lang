@@ -247,6 +247,7 @@ model.touhou_little_maid.medicine_melancholy.name=Medicine Melancholy
 model.touhou_little_maid.aki_sizuha.name=Shizuha Aki
 model.touhou_little_maid.kagiyama_hina.name=Hina Kagiyama
 model.touhou_little_maid.kurodani_yamame.name=Yamame Kurodani
+model.touhou_little_maid.hoshiguma_yugi.name=Yuugi Hoshiguma
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -311,6 +312,7 @@ model.touhou_little_maid.medicine_melancholy.desc=§7Little Sweet Poison
 model.touhou_little_maid.aki_sizuha.desc=§7Symbol of Loneliness and Demise
 model.touhou_little_maid.kagiyama_hina.desc=§7Nagashi-bina of the Hidden God
 model.touhou_little_maid.kurodani_yamame.desc=§7The Bright Net in the Dark Cave
+model.touhou_little_maid.hoshiguma_yugi.desc=§7The So-Called Unexplainable Phenomenon
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

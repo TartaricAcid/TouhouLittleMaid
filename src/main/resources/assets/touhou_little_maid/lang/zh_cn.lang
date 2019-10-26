@@ -246,6 +246,7 @@ model.touhou_little_maid.medicine_melancholy.name=梅蒂欣·梅兰可莉
 model.touhou_little_maid.aki_sizuha.name=秋静叶
 model.touhou_little_maid.kagiyama_hina.name=键山雏
 model.touhou_little_maid.kurodani_yamame.name=黑谷山女
+model.touhou_little_maid.hoshiguma_yugi.name=星熊勇仪
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -310,6 +311,7 @@ model.touhou_little_maid.medicine_melancholy.desc=§7小小的甜蜜毒药
 model.touhou_little_maid.aki_sizuha.desc=§7寂寞与终焉的象征
 model.touhou_little_maid.kagiyama_hina.desc=§7秘神流雏
 model.touhou_little_maid.kurodani_yamame.desc=§7昏暗洞窟中明亮的网
+model.touhou_little_maid.hoshiguma_yugi.desc=§7人所谈论的怪力乱神
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

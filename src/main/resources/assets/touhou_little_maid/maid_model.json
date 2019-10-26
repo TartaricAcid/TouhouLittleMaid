@@ -208,6 +208,9 @@
     }, {
       "model_id": "touhou_little_maid:kurodani_yamame",
       "description": ["{model.touhou_little_maid.kurodani_yamame.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:hoshiguma_yugi",
+      "description": ["{model.touhou_little_maid.hoshiguma_yugi.desc}"]
     }
   ]
 }
