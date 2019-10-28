@@ -100,6 +100,18 @@ config.touhou_little_maid.vanilla_config=Vanilla Config
 config.touhou_little_maid.vanilla_config.change_xp_texture=Change XP Orb Texture
 config.touhou_little_maid.vanilla_config.change_slime_model=Change Slime Model To Yukkuri
 
+# Mob Config
+config.touhou_little_maid.mob_config=Mob Config
+config.touhou_little_maid.mob_config.maid_fairy_power_point=Maid Fairy Power Point
+config.touhou_little_maid.mob_config.maid_fairy_spawn_probability=Maid Fairy Spawn Probability
+config.touhou_little_maid.mob_config.rinnosuke_power_point=Rinnosuke Power Point
+config.touhou_little_maid.mob_config.rinnosuke_spawn_probability=Rinnosuke Spawn Probability
+
+# Misc Config
+config.touhou_little_maid.misc_config=Misc Config
+config.touhou_little_maid.misc_config.shrine_lamp.effect_cost=Shirne Lamp Effect Cost
+config.touhou_little_maid.misc_config.shrine_lamp.max_storage=Shrine Lamp Max Storage
+
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
 danmaku_type.touhou_little_maid.ball=Ball

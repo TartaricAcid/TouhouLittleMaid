@@ -100,6 +100,18 @@ config.touhou_little_maid.vanilla_config=原版相关配置
 config.touhou_little_maid.vanilla_config.change_xp_texture=改变经验球材质
 config.touhou_little_maid.vanilla_config.change_slime_model=将史莱姆模型变为油库里
 
+# Mob Config
+config.touhou_little_maid.mob_config=怪物设置
+config.touhou_little_maid.mob_config.maid_fairy_power_point=女仆妖精 P 点
+config.touhou_little_maid.mob_config.maid_fairy_spawn_probability=女仆妖精生成权重
+config.touhou_little_maid.mob_config.rinnosuke_power_point=铃之助 P 点
+config.touhou_little_maid.mob_config.rinnosuke_spawn_probability=铃之助生成权重
+
+# Misc Config
+config.touhou_little_maid.misc_config=杂项配置
+config.touhou_little_maid.misc_config.shrine_lamp.effect_cost=神社庭灯效果消耗
+config.touhou_little_maid.misc_config.shrine_lamp.max_storage=神社庭灯最大存储
+
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹
 danmaku_type.touhou_little_maid.ball=小玉

@@ -21,9 +21,7 @@ import net.minecraft.util.text.TextFormatting;
 import java.text.DecimalFormat;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.block.MaidBeaconGuiContainer.Button.*;
-import static com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon.COST;
 import static com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon.Effect.*;
-import static com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon.MAX_STORAGE;
 
 /**
  * @author TartaricAcid
@@ -97,11 +95,11 @@ public class MaidBeaconGuiContainer extends GuiContainer {
         if (beacon.getPotionIndex() == -1) {
             drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.maid_beacon.cost_power", DECIMAL_FORMAT.format(0)), guiLeft + 198, guiTop + 32, 0xffffff);
         } else {
-            drawCenteredString(fontRenderer, TextFormatting.RED + I18n.format("gui.touhou_little_maid.maid_beacon.cost_power", DECIMAL_FORMAT.format(COST * 900)), guiLeft + 198, guiTop + 32, 0xffffff);
+            drawCenteredString(fontRenderer, TextFormatting.RED + I18n.format("gui.touhou_little_maid.maid_beacon.cost_power", DECIMAL_FORMAT.format(beacon.getEffectCost() * 900)), guiLeft + 198, guiTop + 32, 0xffffff);
         }
         RenderHelper.drawCircle(guiLeft + 180, guiTop + 70, 20, 64, 0x22066b6d);
-        RenderHelper.drawSector(guiLeft + 180, guiTop + 70, 22, 0, beacon.getStoragePower() / MAX_STORAGE * 2 * Math.PI, 64, 0xff40e4e5);
-        drawCenteredString(fontRenderer, String.format("%.2f%%", beacon.getStoragePower() / TileEntityMaidBeacon.MAX_STORAGE * 100), guiLeft + 223, guiTop + 66, 0xffffff);
+        RenderHelper.drawSector(guiLeft + 180, guiTop + 70, 22, 0, beacon.getStoragePower() / beacon.getMaxStorage() * 2 * Math.PI, 64, 0xff40e4e5);
+        drawCenteredString(fontRenderer, String.format("%.2f%%", beacon.getStoragePower() / beacon.getMaxStorage() * 100), guiLeft + 223, guiTop + 66, 0xffffff);
     }
 
     @Override

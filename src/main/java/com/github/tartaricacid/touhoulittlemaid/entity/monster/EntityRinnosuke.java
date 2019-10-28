@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
+
 /**
  * @author TartaricAcid
  * @date 2019/8/29 15:06
@@ -27,7 +29,7 @@ public class EntityRinnosuke extends AbstractEntityTouhouMob {
 
     @Override
     public int getPowerPoint() {
-        return 128;
+        return (int) (MOB_CONFIG.rinnosukePowerPoint * 100);
     }
 
     @Override

@@ -17,6 +17,14 @@ public class GeneralConfig {
     @Config.Name("VanillaConfig")
     public static VanillaConfig VANILLA_CONFIG = new VanillaConfig();
 
+    @Config.LangKey("config.touhou_little_maid.mob_config")
+    @Config.Name("MobConfig")
+    public static MobConfig MOB_CONFIG = new MobConfig();
+
+    @Config.LangKey("config.touhou_little_maid.misc_config")
+    @Config.Name("MiscConfig")
+    public static MiscellaneousConfig MISC_CONFIG = new MiscellaneousConfig();
+
     public static class MaidConfig {
         @Config.Comment("The item that can tamed maid")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_tamed_item")
@@ -62,6 +70,48 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.vanilla_config.change_slime_model")
         @Config.Name("ChangeSlimeTexture")
         public boolean changeSlimeModel = false;
+    }
+
+    public static class MobConfig {
+        @Config.Comment("Maid Fairy's Power Point")
+        @Config.LangKey("config.touhou_little_maid.mob_config.maid_fairy_power_point")
+        @Config.Name("MaidFairyPowerPoint")
+        @Config.RangeDouble(min = 0, max = 5)
+        public double maidFairyPowerPoint = 0.16;
+
+        @Config.RequiresMcRestart
+        @Config.Comment("Maid Fairy's Spawn Probability (Zombie Is 100, Enderman Is 10)")
+        @Config.LangKey("config.touhou_little_maid.mob_config.maid_fairy_spawn_probability")
+        @Config.Name("MaidFairySpawnProbability")
+        @Config.RangeInt(min = 0)
+        public int maidFairySpawnProbability = 70;
+
+        @Config.Comment("Rinnosuke's Power Point")
+        @Config.LangKey("config.touhou_little_maid.mob_config.rinnosuke_power_point")
+        @Config.Name("RinnosukePowerPoint")
+        @Config.RangeDouble(min = 0, max = 5)
+        public double rinnosukePowerPoint = 0.64;
+
+        @Config.RequiresMcRestart
+        @Config.Comment("Rinnosuke's Spawn Probability (Zombie Is 100, Enderman Is 10)")
+        @Config.LangKey("config.touhou_little_maid.mob_config.rinnosuke_spawn_probability")
+        @Config.Name("RinnosukeSpawnProbability")
+        @Config.RangeInt(min = 0)
+        public int rinnosukeSpawnProbability = 30;
+    }
+
+    public static class MiscellaneousConfig {
+        @Config.Comment("Shrine Lamp Effect Cost (Power Point/Per Hour)")
+        @Config.LangKey("config.touhou_little_maid.misc_config.shrine_lamp.effect_cost")
+        @Config.Name("ShrineLampEffectCost")
+        @Config.RangeDouble(min = 0)
+        public double shrineLampEffectCost = 0.9;
+
+        @Config.Comment("Shrine Lamp Max Storage Power Point")
+        @Config.LangKey("config.touhou_little_maid.misc_config.shrine_lamp.max_storage")
+        @Config.Name("ShrineLampMaxStorage")
+        @Config.RangeDouble(min = 0)
+        public double shrineLampMaxStorage = 100.0;
     }
 
     /**

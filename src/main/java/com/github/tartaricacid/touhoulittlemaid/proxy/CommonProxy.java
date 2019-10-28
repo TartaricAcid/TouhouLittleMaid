@@ -56,6 +56,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
+
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
     /**
@@ -204,9 +206,9 @@ public class CommonProxy {
     }
 
     private void registerEntitySpawns() {
-        EntityRegistry.addSpawn(EntityRinnosuke.class, 50, 1, 1, EnumCreatureType.MONSTER,
+        EntityRegistry.addSpawn(EntityRinnosuke.class, MOB_CONFIG.rinnosukeSpawnProbability, 1, 1, EnumCreatureType.MONSTER,
                 BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).toArray(new Biome[0]));
-        EntityRegistry.addSpawn(EntityFairy.class, 80, 2, 6, EnumCreatureType.MONSTER,
+        EntityRegistry.addSpawn(EntityFairy.class, MOB_CONFIG.maidFairySpawnProbability, 2, 6, EnumCreatureType.MONSTER,
                 BiomeDictionary.getBiomes(BiomeDictionary.Type.PLAINS).toArray(new Biome[0]));
     }
 

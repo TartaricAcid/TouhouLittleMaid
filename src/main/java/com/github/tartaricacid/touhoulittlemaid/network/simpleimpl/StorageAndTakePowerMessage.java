@@ -83,14 +83,14 @@ public class StorageAndTakePowerMessage implements IMessage {
 
     private static void storageLogic(float powerNum, PowerHandler playerPower, TileEntityMaidBeacon beacon) {
         boolean playerPowerIsEnough = powerNum <= playerPower.get();
-        boolean beaconNotFull = powerNum + beacon.getStoragePower() <= TileEntityMaidBeacon.MAX_STORAGE;
+        boolean beaconNotFull = powerNum + beacon.getStoragePower() <= beacon.getMaxStorage();
         if (playerPowerIsEnough) {
             if (beaconNotFull) {
                 playerPower.min(powerNum);
                 beacon.setStoragePower(beacon.getStoragePower() + powerNum);
             } else {
-                playerPower.min(TileEntityMaidBeacon.MAX_STORAGE - beacon.getStoragePower());
-                beacon.setStoragePower(TileEntityMaidBeacon.MAX_STORAGE);
+                playerPower.min(beacon.getMaxStorage() - beacon.getStoragePower());
+                beacon.setStoragePower(beacon.getMaxStorage());
             }
         }
     }

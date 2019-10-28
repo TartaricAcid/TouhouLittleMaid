@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MISC_CONFIG;
 import static com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon.Effect.getEffectByIndex;
 
 /**
@@ -26,8 +27,6 @@ import static com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaid
  * @date 2019/10/8 15:09
  **/
 public class TileEntityMaidBeacon extends TileEntity implements ITickable {
-    public static final float MAX_STORAGE = 100f;
-    public static final float COST = 0.001f;
     public static final String POTION_INDEX_TAG = "PotionIndex";
     public static final String STORAGE_POWER_TAG = "StoragePower";
     private int potionIndex = -1;
@@ -38,8 +37,8 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
         if (this.world.getTotalWorldTime() % 80L == 0L) {
             IBlockState state = world.getBlockState(pos);
             if (state.getBlock() == MaidBlocks.MAID_BEACON && state.getValue(BlockMaidBeacon.POSITION) != BlockMaidBeacon.Position.DOWN) {
-                if (potionIndex != -1 && storagePower >= COST) {
-                    storagePower = storagePower - COST;
+                if (potionIndex != -1 && storagePower >= this.getEffectCost()) {
+                    storagePower = storagePower - this.getEffectCost();
                     updateBeaconEffect(getEffectByIndex(potionIndex).potion);
                 }
                 updateAbsorbPower();
@@ -64,7 +63,7 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
             for (EntityPowerPoint powerPoint : list) {
                 if (powerPoint.isEntityAlive()) {
                     float addNum = this.getStoragePower() + powerPoint.xpValue / 100.0f;
-                    if (addNum <= MAX_STORAGE) {
+                    if (addNum <= this.getMaxStorage()) {
                         this.setStoragePower(addNum);
                         powerPoint.spawnExplosionParticle();
                         powerPoint.setDead();
@@ -145,6 +144,14 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
             IBlockState state = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, state, state, 3);
         }
+    }
+
+    public float getEffectCost() {
+        return (float) (MISC_CONFIG.shrineLampEffectCost / 900);
+    }
+
+    public float getMaxStorage() {
+        return (float) MISC_CONFIG.shrineLampMaxStorage;
     }
 
     public enum Effect {

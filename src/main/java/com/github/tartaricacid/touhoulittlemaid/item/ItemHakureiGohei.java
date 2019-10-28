@@ -173,6 +173,9 @@ public class ItemHakureiGohei extends Item {
             DanmakuType type = getGoheiMode(stack);
 
             EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
+            danmaku.posX = danmaku.posX + player.getLookVec().x;
+            danmaku.posY = danmaku.posY + player.getLookVec().y;
+            danmaku.posZ = danmaku.posZ + player.getLookVec().z;
             danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
             worldIn.spawnEntity(danmaku);
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);

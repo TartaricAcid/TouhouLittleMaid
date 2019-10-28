@@ -27,6 +27,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
+
 /**
  * @author TartaricAcid
  * @date 2019/8/30 14:38
@@ -43,7 +45,7 @@ public class EntityFairy extends AbstractEntityTouhouMob implements IRangedAttac
 
     @Override
     public int getPowerPoint() {
-        return 32;
+        return (int) (MOB_CONFIG.maidFairyPowerPoint * 100);
     }
 
     @Override
