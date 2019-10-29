@@ -66,7 +66,14 @@ public class EntityPowerPoint extends EntityXPOrb {
                 player.xpCooldown = 2;
                 player.onItemPickup(this, 1);
                 if (this.xpValue > 0) {
-                    power.add(xpValue / 100.0f);
+                    if (power.get() + xpValue / 100.0f > PowerHandler.MAX_POWER) {
+                        power.add(PowerHandler.MAX_POWER - power.get());
+                        int residualValue = xpValue - (int) (PowerHandler.MAX_POWER * 100) + (int) (power.get() * 100);
+                        // 和原版设计不同，该数值过大，故缩小一些
+                        player.addExperience(residualValue / 4);
+                    } else {
+                        power.add(xpValue / 100.0f);
+                    }
                 }
                 this.setDead();
             }

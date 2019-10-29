@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.capability;
 
+import net.minecraft.util.math.MathHelper;
+
 import java.util.concurrent.Callable;
 
 /**
@@ -31,7 +33,7 @@ public class PowerHandler {
     }
 
     public void set(float points) {
-        this.power = (points > MAX_POWER) ? MAX_POWER : points;
+        this.power = MathHelper.clamp(points, 0, MAX_POWER);
         markDirty();
     }
 

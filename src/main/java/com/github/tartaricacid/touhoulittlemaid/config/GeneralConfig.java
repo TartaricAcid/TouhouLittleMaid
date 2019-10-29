@@ -112,6 +112,12 @@ public class GeneralConfig {
         @Config.Name("ShrineLampMaxStorage")
         @Config.RangeDouble(min = 0)
         public double shrineLampMaxStorage = 100.0;
+
+        @Config.Comment("Loss Power Point After Player Death")
+        @Config.LangKey("config.touhou_little_maid.misc_config.player_death_loss_power_point")
+        @Config.Name("PlayerDeathLossPowerPoint")
+        @Config.RangeDouble(min = 0, max = 5)
+        public double playerDeathLossPowerPoint = 1.0;
     }
 
     /**
