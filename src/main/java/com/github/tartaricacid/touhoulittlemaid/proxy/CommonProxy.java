@@ -40,6 +40,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -235,5 +237,9 @@ public class CommonProxy {
      */
     public String translate(String key, Object... format) {
         return I18n.translateToLocalFormatted(key, format);
+    }
+
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        ConfigManager.sync(TouhouLittleMaid.MOD_ID, Config.Type.INSTANCE);
     }
 }
