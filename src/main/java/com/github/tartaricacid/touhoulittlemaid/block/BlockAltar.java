@@ -10,7 +10,6 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.DelayedTask;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
@@ -31,7 +30,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -39,7 +37,7 @@ import java.util.Random;
  * @author TartaricAcid
  * @date 2019/8/31 21:57
  **/
-public class BlockAltar extends Block implements ITileEntityProvider {
+public class BlockAltar extends Block {
     public BlockAltar() {
         super(Material.ROCK);
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "altar");
@@ -47,9 +45,13 @@ public class BlockAltar extends Block implements ITileEntityProvider {
         setRegistryName("altar");
     }
 
-    @Nullable
     @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    public boolean hasTileEntity(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileEntityAltar();
     }
 

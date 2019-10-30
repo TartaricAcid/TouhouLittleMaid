@@ -2,12 +2,18 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.BeaconAbsorbMessage;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
@@ -62,7 +68,7 @@ public class EntityPowerPoint extends EntityXPOrb {
     public void onCollideWithPlayer(@Nonnull EntityPlayer player) {
         if (!this.world.isRemote) {
             PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-            if (this.delayBeforeCanPickup == 0 && player.xpCooldown == 0 && power != null) {
+            if (this.delayBeforeCanPickup == 0 && player.xpCooldown == 0 && power != null && power.get() < PowerHandler.MAX_POWER) {
                 player.xpCooldown = 2;
                 player.onItemPickup(this, 1);
                 if (this.xpValue > 0) {
@@ -73,29 +79,28 @@ public class EntityPowerPoint extends EntityXPOrb {
         }
     }
 
-    @Override
-    public void handleStatusUpdate(byte id) {
-        if (id == 20) {
-            this.spawnExplosionParticle();
+    public void spawnExplosionParticle() {
+        float x = (float) posX;
+        float y = (float) posY + .125F;
+        float z = (float) posZ;
+        if (world.isRemote) {
+            spawnExplosionParticle(world, x, y, z, rand);
         } else {
-            super.handleStatusUpdate(id);
+            CommonProxy.INSTANCE.sendToAllAround(new BeaconAbsorbMessage(x, y, z), new TargetPoint(dimension, x, y, z, 16));
         }
     }
 
-    public void spawnExplosionParticle() {
-        if (this.world.isRemote) {
-            for (int i = 0; i < 20; ++i) {
-                double x = this.rand.nextGaussian() * 0.02D;
-                double y = this.rand.nextGaussian() * 0.02D;
-                double z = this.rand.nextGaussian() * 0.02D;
-                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
-                        this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width - x * 10.0D,
-                        this.posY + (double) (this.rand.nextFloat() * this.height) - y * 10.0D,
-                        this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width - z * 10.0D,
-                        x, y, z);
-            }
-        } else {
-            this.world.setEntityState(this, (byte) 20);
+    public static void spawnExplosionParticle(World world, float x, float y, float z, Random rand) {
+        if (!world.isRemote) return;
+        for (int i = 0; i < 20; ++i) {
+            float mx = (rand.nextFloat() - .5F) * 0.02F;
+            float my = (rand.nextFloat() - .5F) * 0.02F;
+            float mz = (rand.nextFloat() - .5F) * 0.02F;
+            world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
+                    x + rand.nextFloat() - .5F,
+                    y + rand.nextFloat() - .5F,
+                    z + rand.nextFloat() - .5F,
+                    mx, my, mz);
         }
     }
 

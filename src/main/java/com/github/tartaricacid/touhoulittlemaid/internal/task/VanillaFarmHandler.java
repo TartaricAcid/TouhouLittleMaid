@@ -117,7 +117,7 @@ public class VanillaFarmHandler implements FarmHandler {
             for (EnumFacing facing : EnumFacing.HORIZONTALS) {
                 IBlockState state = world.getBlockState(pos.offset(facing));
                 if (state.getBlock() == Blocks.LOG && state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
-                    seedState = Blocks.COCOA.getDefaultState().withProperty(BlockCocoa.FACING, facing);
+                    seedState = Blocks.COCOA.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
                     break;
                 }
             }

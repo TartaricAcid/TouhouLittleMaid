@@ -204,7 +204,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
         MIN_ALL;
 
         int getIndex() {
-            return ordinal() + TileEntityMaidBeacon.Effect.values().length;
+            return ordinal() + TileEntityMaidBeacon.Effect.VALUES.length;
         }
     }
 }
