@@ -335,7 +335,7 @@
       },
       {
         "name": "ahoge",
-        "parent": "head",
+        "parent": "hat",
         "pivot": [0, 0, 0],
         "cubes": [
           {"origin": [-4.5, 29.98205, 0], "size": [9, 2, 0], "uv": [32, 19]}
