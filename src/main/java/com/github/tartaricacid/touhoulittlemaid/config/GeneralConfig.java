@@ -1,14 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Config(modid = TouhouLittleMaid.MOD_ID, name = "TouhouLittleMaid")
 public class GeneralConfig {
@@ -63,6 +63,7 @@ public class GeneralConfig {
         public boolean maidAlwaysShowHat = true;
 
         @Config.RequiresMcRestart
+        @Config.Comment("Decide which tasks are not enabled.")
         @Config.LangKey("config.touhou_little_maid.maid_config.enabled_tasks")
         @Config.Name("EnabledTasks")
         public Map<String, Boolean> enabledTasks = new HashMap<>();

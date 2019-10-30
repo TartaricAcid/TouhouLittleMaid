@@ -43,7 +43,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -142,7 +141,10 @@ public class CommonProxy {
         }
     }
 
-    @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        ConfigManager.sync(TouhouLittleMaid.MOD_ID, Config.Type.INSTANCE);
+    }
+
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new MainCommand());
     }
@@ -237,9 +239,5 @@ public class CommonProxy {
      */
     public String translate(String key, Object... format) {
         return I18n.translateToLocalFormatted(key, format);
-    }
-
-    public void loadComplete(FMLLoadCompleteEvent event) {
-        ConfigManager.sync(TouhouLittleMaid.MOD_ID, Config.Type.INSTANCE);
     }
 }

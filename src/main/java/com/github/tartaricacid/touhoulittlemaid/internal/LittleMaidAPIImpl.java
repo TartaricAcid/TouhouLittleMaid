@@ -73,7 +73,7 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
             String uid = task.getUid().toString();
             Map<String, Boolean> cfg = GeneralConfig.MAID_CONFIG.enabledTasks;
             if (cfg.containsKey(uid)) {
-                if (cfg.get(uid) == Boolean.FALSE) {
+                if (cfg.get(uid).equals(Boolean.FALSE)) {
                     TouhouLittleMaid.LOGGER.info("Disabled task " + uid + ", skipping");
                     return;
                 }

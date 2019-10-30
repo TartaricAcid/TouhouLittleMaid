@@ -95,6 +95,7 @@ config.touhou_little_maid.maid_config.maid_talk_interval=Maid Talk Interval (tic
 config.touhou_little_maid.maid_config.maid_pickup_sound_interval=Maid Pickup Sound Interval (Pickup Counts)
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound Interval (tick)
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
+config.touhou_little_maid.maid_config.enabled_tasks=Maid Enabled Tasks
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=Vanilla Config

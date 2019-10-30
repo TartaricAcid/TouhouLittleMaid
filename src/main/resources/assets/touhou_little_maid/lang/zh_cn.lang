@@ -95,6 +95,7 @@ config.touhou_little_maid.maid_config.maid_talk_interval=女仆发出声音的�
 config.touhou_little_maid.maid_config.maid_pickup_sound_interval=女仆拾物的声音间隔（拾取计数）
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=女仆受伤的声音间隔（tick）
 config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽子
+config.touhou_little_maid.maid_config.enabled_tasks=女仆启用的模式
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=原版相关配置
