@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandle
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.BeaconAbsorbMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
@@ -13,9 +12,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
+import java.util.Random;
 
 /**
  * 因为 P 点的逻辑和原版经验几乎一致，所以直接借用原版经验算法，省时省力
@@ -68,7 +66,7 @@ public class EntityPowerPoint extends EntityXPOrb {
     public void onCollideWithPlayer(@Nonnull EntityPlayer player) {
         if (!this.world.isRemote) {
             PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-            if (this.delayBeforeCanPickup == 0 && player.xpCooldown == 0 && power != null && power.get() < PowerHandler.MAX_POWER) {
+            if (this.delayBeforeCanPickup == 0 && player.xpCooldown == 0 && power != null) {
                 player.xpCooldown = 2;
                 player.onItemPickup(this, 1);
                 if (this.xpValue > 0) {
@@ -88,7 +86,7 @@ public class EntityPowerPoint extends EntityXPOrb {
 
     public void spawnExplosionParticle() {
         float x = (float) posX;
-        float y = (float) posY + .125F;
+        float y = (float) posY + 0.125F;
         float z = (float) posZ;
         if (world.isRemote) {
             spawnExplosionParticle(world, x, y, z, rand);
@@ -98,15 +96,17 @@ public class EntityPowerPoint extends EntityXPOrb {
     }
 
     public static void spawnExplosionParticle(World world, float x, float y, float z, Random rand) {
-        if (!world.isRemote) return;
+        if (!world.isRemote) {
+            return;
+        }
         for (int i = 0; i < 20; ++i) {
-            float mx = (rand.nextFloat() - .5F) * 0.02F;
-            float my = (rand.nextFloat() - .5F) * 0.02F;
-            float mz = (rand.nextFloat() - .5F) * 0.02F;
+            float mx = (rand.nextFloat() - 0.5F) * 0.02F;
+            float my = (rand.nextFloat() - 0.5F) * 0.02F;
+            float mz = (rand.nextFloat() - 0.5F) * 0.02F;
             world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
-                    x + rand.nextFloat() - .5F,
-                    y + rand.nextFloat() - .5F,
-                    z + rand.nextFloat() - .5F,
+                    x + rand.nextFloat() - 0.5F,
+                    y + rand.nextFloat() - 0.5F,
+                    z + rand.nextFloat() - 0.5F,
                     mx, my, mz);
         }
     }

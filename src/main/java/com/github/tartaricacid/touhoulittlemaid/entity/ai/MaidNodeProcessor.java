@@ -1,11 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -23,8 +18,9 @@ public class MaidNodeProcessor extends WalkNodeProcessor {
         Material material = iblockstate.getMaterial();
 
         PathNodeType type = block.getAiPathNodeType(iblockstate, p_189553_1_, blockpos);
-        if (type != null)
+        if (type != null) {
             return type;
+        }
 
         if (material == Material.AIR) {
             return PathNodeType.OPEN;

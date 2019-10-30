@@ -41,7 +41,6 @@ public class BlockMaidBeacon extends Block {
         setRegistryName("maid_beacon");
         setCreativeTab(MaidItems.TABS);
         setDefaultState(blockState.getBaseState().withProperty(POSITION, Position.DOWN));
-        setLightLevel(1.0f);
     }
 
     @Override
@@ -120,6 +119,15 @@ public class BlockMaidBeacon extends Block {
             Block.spawnAsEntity(worldIn, pos, ItemMaidBeacon.tileEntityToItemStack((TileEntityMaidBeacon) te));
         }
         super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (state.getValue(POSITION) == Position.DOWN) {
+            return 0;
+        } else {
+            return 15;
+        }
     }
 
     @Override

@@ -1,14 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.neat;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class NeatCompat {
 
@@ -37,7 +36,7 @@ public class NeatCompat {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals("neat")) {
+        if ("neat".equals(event.getModID())) {
             init();
         }
     }
