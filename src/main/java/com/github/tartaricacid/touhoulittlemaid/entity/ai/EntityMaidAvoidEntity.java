@@ -23,16 +23,24 @@ public class EntityMaidAvoidEntity<T extends Entity> extends EntityAIAvoidEntity
 
     @Override
     public boolean shouldExecute() {
-        if (entity instanceof EntityMaid && ((EntityMaid) entity).getTask().isAttack()) {
-            return false;
+        if (entity instanceof EntityMaid) {
+            boolean isAttack = ((EntityMaid) entity).getTask().isAttack();
+            boolean isSitting = ((EntityMaid) entity).isSitting();
+            if (isAttack || isSitting) {
+                return false;
+            }
         }
         return super.shouldExecute();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        if (entity instanceof EntityMaid && ((EntityMaid) entity).getTask().isAttack()) {
-            return false;
+        if (entity instanceof EntityMaid) {
+            boolean isAttack = ((EntityMaid) entity).getTask().isAttack();
+            boolean isSitting = ((EntityMaid) entity).isSitting();
+            if (isAttack || isSitting) {
+                return false;
+            }
         }
         return super.shouldContinueExecuting();
     }
