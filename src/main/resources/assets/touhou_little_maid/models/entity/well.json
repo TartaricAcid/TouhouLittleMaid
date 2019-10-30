@@ -2,8 +2,8 @@
   "format_version": "1.10.0",
   "geometry.model": {
     "texturewidth": 128,
-    "textureheight": "128",
-    "visible_bounds_width": 3,
+    "textureheight": 128,
+    "visible_bounds_width": 2,
     "visible_bounds_height": 2,
     "visible_bounds_offset": [0, 1, 0],
     "bones": [
@@ -176,33 +176,6 @@
         "rotation": [45, 0, 0],
         "cubes": [
           {"origin": [-1, 12.29289, -13.29289], "size": [2, 2, 13], "uv": [3, 0]}
-        ]
-      },
-      {
-        "name": "bone19",
-        "parent": "bone18",
-        "pivot": [0, 13, -1],
-        "rotation": [25, 0, 0],
-        "cubes": [
-          {"origin": [-0.5, 5.06031, -0.65798], "size": [1, 7, 0], "uv": [4, 1]}
-        ]
-      },
-      {
-        "name": "bone20",
-        "parent": "bone",
-        "pivot": [2, 22, -2.5],
-        "rotation": [0, 0, 25],
-        "cubes": [
-          {"origin": [2, 18, -3], "size": [0, 4, 1], "uv": [2, 0]}
-        ]
-      },
-      {
-        "name": "bone21",
-        "parent": "bone20",
-        "pivot": [2, 18, -2.5],
-        "rotation": [0, 0, -5],
-        "cubes": [
-          {"origin": [2, 3, -3], "size": [0, 15, 1], "uv": [0, 0]}
         ]
       }
     ]
