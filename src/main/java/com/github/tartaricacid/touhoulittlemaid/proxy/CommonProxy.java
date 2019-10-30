@@ -1,9 +1,28 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
+import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
-import com.github.tartaricacid.touhoulittlemaid.bauble.*;
+import com.github.tartaricacid.touhoulittlemaid.bauble.DrownProtectBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.ExplosionProtectBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.ExtraLifeBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.FallProtectBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.FireProtectBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.MagicProtectBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.ProjectileProtectBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.TombstoneBauble;
+import com.github.tartaricacid.touhoulittlemaid.bauble.UndyingTotemBauble;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
@@ -21,9 +40,31 @@ import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.internal.task.*;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttack;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackDanmaku;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackRanged;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskFarm;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskFeed;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskFeedAnimal;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskShears;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskTorch;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.VanillaFarmHandler;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.VanillaFeedHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyChairSkinDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyMaidSkinDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.BeaconAbsorbMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ChangeMaidTaskMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.GoheiModeMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidHomeModeMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidPickupModeMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SetBeaconPotionMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SetMaidSasimonoCRC32;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.StorageAndTakePowerMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SwitchMaidGuiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncPowerMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncPowerPointEntityData;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ClientEffectHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectReply;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
@@ -34,6 +75,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
@@ -48,16 +90,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-
-import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
@@ -186,34 +218,18 @@ public class CommonProxy {
     }
 
     private void registerModEntity() {
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),
-                EntityMaid.class, "touhou_little_maid.maid", 0, TouhouLittleMaid.INSTANCE, 80,
-                3, true, 0x4a6195, 0xffffff);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.projectile.danmaku"),
-                EntityDanmaku.class, "touhou_little_maid.danmaku", 1, TouhouLittleMaid.INSTANCE, 64,
-                10, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.marisa_broom"),
-                EntityMarisaBroom.class, "touhou_little_maid.marisa_broom", 2, TouhouLittleMaid.INSTANCE, 80,
-                3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.chair"),
-                EntityChair.class, "touhou_little_maid.chair", 3, TouhouLittleMaid.INSTANCE, 160,
-                3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.monster.rinnosuke"),
-                EntityRinnosuke.class, "touhou_little_maid.rinnosuke", 4, TouhouLittleMaid.INSTANCE, 80,
-                3, true, 0x515a9b, 0x535353);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.power_point"),
-                EntityPowerPoint.class, "touhou_little_maid.power_point", 5, TouhouLittleMaid.INSTANCE, 160,
-                20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.monster.fairy"),
-                EntityFairy.class, "touhou_little_maid.fairy", 6, TouhouLittleMaid.INSTANCE, 80,
-                3, true, 0x171c20, 0xffffff);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"), EntityMaid.class, "touhou_little_maid.maid", 0, TouhouLittleMaid.INSTANCE, 80, 3, true, 0x4a6195, 0xffffff);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.projectile.danmaku"), EntityDanmaku.class, "touhou_little_maid.danmaku", 1, TouhouLittleMaid.INSTANCE, 64, 10, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.marisa_broom"), EntityMarisaBroom.class, "touhou_little_maid.marisa_broom", 2, TouhouLittleMaid.INSTANCE, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.chair"), EntityChair.class, "touhou_little_maid.chair", 3, TouhouLittleMaid.INSTANCE, 160, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.monster.rinnosuke"), EntityRinnosuke.class, "touhou_little_maid.rinnosuke", 4, TouhouLittleMaid.INSTANCE, 80, 3, true, 0x515a9b, 0x535353);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.power_point"), EntityPowerPoint.class, "touhou_little_maid.power_point", 5, TouhouLittleMaid.INSTANCE, 160, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.monster.fairy"), EntityFairy.class, "touhou_little_maid.fairy", 6, TouhouLittleMaid.INSTANCE, 80, 3, true, 0x171c20, 0xffffff);
     }
 
     private void registerEntitySpawns() {
-        EntityRegistry.addSpawn(EntityRinnosuke.class, MOB_CONFIG.rinnosukeSpawnProbability, 1, 1, EnumCreatureType.MONSTER,
-                BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).toArray(new Biome[0]));
-        EntityRegistry.addSpawn(EntityFairy.class, MOB_CONFIG.maidFairySpawnProbability, 2, 6, EnumCreatureType.MONSTER,
-                BiomeDictionary.getBiomes(BiomeDictionary.Type.PLAINS).toArray(new Biome[0]));
+        EntityRegistry.addSpawn(EntityRinnosuke.class, MOB_CONFIG.rinnosukeSpawnProbability, 1, 1, EnumCreatureType.MONSTER, BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).toArray(new Biome[0]));
+        EntityRegistry.addSpawn(EntityFairy.class, MOB_CONFIG.maidFairySpawnProbability, 2, 6, EnumCreatureType.MONSTER, BiomeDictionary.getBiomes(BiomeDictionary.Type.PLAINS).toArray(new Biome[0]));
     }
 
     private void registerMessage() {
@@ -232,6 +248,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(SetBeaconPotionMessage.Handler.class, SetBeaconPotionMessage.class, 11, Side.SERVER);
         INSTANCE.registerMessage(ServerEffectHandler.class, EffectRequest.class, 12, Side.SERVER);
         INSTANCE.registerMessage(ClientEffectHandler.class, EffectReply.class, 13, Side.CLIENT);
+        INSTANCE.registerMessage(BeaconAbsorbMessage.Handler.class, BeaconAbsorbMessage.class, 14, Side.CLIENT);
     }
 
     /**

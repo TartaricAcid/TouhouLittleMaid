@@ -112,7 +112,7 @@ public class ItemMaidBeacon extends Item {
         if (te instanceof TileEntityMaidBeacon) {
             TileEntityMaidBeacon tileEntityMaidBeacon = (TileEntityMaidBeacon) te;
             itemStackToTileEntity(stack, tileEntityMaidBeacon);
-            tileEntityMaidBeacon.refresh();
+            tileEntityMaidBeacon.markDirty();
         }
     }
 

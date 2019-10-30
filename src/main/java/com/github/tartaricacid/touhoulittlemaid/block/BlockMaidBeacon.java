@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -24,14 +23,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
  * @author TartaricAcid
  * @date 2019/10/8 14:54
  **/
-public class BlockMaidBeacon extends Block implements ITileEntityProvider {
+public class BlockMaidBeacon extends Block {
     public static final PropertyEnum<Position> POSITION = PropertyEnum.create("position", Position.class);
     private static final AxisAlignedBB UP_AABB = new AxisAlignedBB(0.1875, 0.0625, 0.1875, 0.8125, 1, 0.8125);
     private static final AxisAlignedBB DOWN_AABB = new AxisAlignedBB(0.40625, 0, 0.40625, 0.59375, 1.0625, 0.59375);
@@ -72,14 +70,14 @@ public class BlockMaidBeacon extends Block implements ITileEntityProvider {
         return new BlockStateContainer(this, POSITION);
     }
 
-    @Nullable
     @Override
-    public TileEntity createNewTileEntity(@Nullable World worldIn, int meta) {
-        if (Position.byPositionIndex(meta) != Position.DOWN) {
-            return new TileEntityMaidBeacon();
-        } else {
-            return null;
-        }
+    public boolean hasTileEntity(IBlockState state) {
+        return state.getValue(BlockMaidBeacon.POSITION) != BlockMaidBeacon.Position.DOWN;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        return new TileEntityMaidBeacon();
     }
 
     @Nonnull
@@ -102,7 +100,7 @@ public class BlockMaidBeacon extends Block implements ITileEntityProvider {
         BlockPos down = pos.down();
         BlockPos up = pos.up();
 
-        boolean isBeaconUp = state.getValue(POSITION) == Position.UP_N_S || state.getValue(POSITION) == Position.UP_W_E;
+        boolean isBeaconUp = state.getValue(POSITION) != Position.DOWN;
         if (player.isCreative() && isBeaconUp && worldIn.getBlockState(down).getBlock() == this) {
             if (player.isCreative()) {
                 worldIn.setBlockToAir(pos);
@@ -110,7 +108,7 @@ public class BlockMaidBeacon extends Block implements ITileEntityProvider {
             worldIn.setBlockToAir(down);
         }
 
-        if (state.getValue(POSITION) == Position.DOWN && worldIn.getBlockState(up).getBlock() == this) {
+        if (!isBeaconUp && worldIn.getBlockState(up).getBlock() == this) {
             worldIn.setBlockToAir(up);
         }
     }

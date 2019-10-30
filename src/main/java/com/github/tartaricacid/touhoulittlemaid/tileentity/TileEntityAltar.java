@@ -110,9 +110,7 @@ public class TileEntityAltar extends TileEntity {
     @Nonnull
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbtTag = new NBTTagCompound();
-        writeToNBT(nbtTag);
-        return new SPacketUpdateTileEntity(getPos(), 1, nbtTag);
+        return new SPacketUpdateTileEntity(getPos(), -1, writeToNBT(new NBTTagCompound()));
     }
 
     @Override

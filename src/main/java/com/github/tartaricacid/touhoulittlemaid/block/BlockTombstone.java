@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityTombstone;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -19,13 +18,12 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * @author TartaricAcid
  * @date 2019/10/2 21:46
  **/
-public class BlockTombstone extends BlockHorizontal implements ITileEntityProvider {
+public class BlockTombstone extends BlockHorizontal {
     public BlockTombstone() {
         super(Material.ROCK);
         setHardness(1.0f);
@@ -65,9 +63,13 @@ public class BlockTombstone extends BlockHorizontal implements ITileEntityProvid
         return new BlockStateContainer(this, FACING);
     }
 
-    @Nullable
     @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    public boolean hasTileEntity(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileEntityTombstone();
     }
 

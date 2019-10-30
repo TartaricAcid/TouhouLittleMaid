@@ -1,10 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory;
 
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-
 import javax.annotation.Nonnull;
+
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 
 /**
  * @author TartaricAcid
@@ -24,5 +28,18 @@ public class MaidBeaconContainer extends Container {
 
     public TileEntityMaidBeacon getTileEntityMaidBeacon() {
         return tileEntityMaidBeacon;
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        for (IContainerListener listener : this.listeners) {
+            if (listener instanceof EntityPlayerMP) {
+                SPacketUpdateTileEntity packet = tileEntityMaidBeacon.getUpdatePacket();
+                if (packet != null) {
+                    ((EntityPlayerMP) listener).connection.sendPacket(packet);
+                }
+            }
+        }
     }
 }

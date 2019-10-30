@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
@@ -46,7 +45,7 @@ import java.util.List;
  * @author TartaricAcid
  * @date 2019/7/7 10:58
  **/
-public class BlockGarageKit extends Block implements ITileEntityProvider {
+public class BlockGarageKit extends Block {
     public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
     private static final String DEFAULT_ENTITY_ID = "touhou_little_maid:entity.passive.maid";
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
@@ -167,9 +166,13 @@ public class BlockGarageKit extends Block implements ITileEntityProvider {
         // 需要留空
     }
 
-    @Nullable
     @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    public boolean hasTileEntity(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileEntityGarageKit();
     }
 
