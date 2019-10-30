@@ -81,6 +81,7 @@ message.touhou_little_maid.altar.not_enough_power=You don't have enough power.
 message.touhou_little_maid.tombstone.place_fail=Tombstone Place Fail!
 message.touhou_little_maid.tombstone.on_block_activated=Tombstone Has Been Taken Back!
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Click Here","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":" To Install Patchouli Mod To Get The Manual","color":"yellow","bold":false}]
+message.touhou_little_maid.install_clumps=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Clumps mod will prevent power point from looting","color":"dark_red","bold":true}]
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -94,6 +95,7 @@ config.touhou_little_maid.maid_config.maid_talk_interval=Maid Talk Interval (tic
 config.touhou_little_maid.maid_config.maid_pickup_sound_interval=Maid Pickup Sound Interval (Pickup Counts)
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound Interval (tick)
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
+config.touhou_little_maid.maid_config.enabled_tasks=Maid Enabled Tasks
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=Vanilla Config
@@ -111,6 +113,7 @@ config.touhou_little_maid.mob_config.rinnosuke_spawn_probability=Rinnosuke Spawn
 config.touhou_little_maid.misc_config=Misc Config
 config.touhou_little_maid.misc_config.shrine_lamp.effect_cost=Shirne Lamp Effect Cost
 config.touhou_little_maid.misc_config.shrine_lamp.max_storage=Shrine Lamp Max Storage
+config.touhou_little_maid.misc_config.player_death_loss_power_point=Player Death Loss Power Point
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
@@ -260,6 +263,8 @@ model.touhou_little_maid.aki_sizuha.name=Shizuha Aki
 model.touhou_little_maid.kagiyama_hina.name=Hina Kagiyama
 model.touhou_little_maid.kurodani_yamame.name=Yamame Kurodani
 model.touhou_little_maid.hoshiguma_yugi.name=Yuugi Hoshiguma
+model.touhou_little_maid.minoriko_aki.name=Minoriko Aki
+model.touhou_little_maid.mizuhashi_parsee.name=Parsee Mizuhashi
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -325,6 +330,8 @@ model.touhou_little_maid.aki_sizuha.desc=§7Symbol of Loneliness and Demise
 model.touhou_little_maid.kagiyama_hina.desc=§7Nagashi-bina of the Hidden God
 model.touhou_little_maid.kurodani_yamame.desc=§7The Bright Net in the Dark Cave
 model.touhou_little_maid.hoshiguma_yugi.desc=§7The So-Called Unexplainable Phenomenon
+model.touhou_little_maid.minoriko_aki.desc=§7Symbol of Abundance and Plenty
+model.touhou_little_maid.mizuhashi_parsee.desc=§7The Jealousy Beneath the Earth's Crust
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

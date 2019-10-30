@@ -1,11 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.internal;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI.ILittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -66,6 +68,17 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
             if (!tasks.isEmpty()) {
                 tasks.add(0, task);
                 return;
+            }
+        } else {
+            String uid = task.getUid().toString();
+            Map<String, Boolean> cfg = GeneralConfig.MAID_CONFIG.enabledTasks;
+            if (cfg.containsKey(uid)) {
+                if (cfg.get(uid).equals(Boolean.FALSE)) {
+                    TouhouLittleMaid.LOGGER.info("Disabled task " + uid + ", skipping");
+                    return;
+                }
+            } else {
+                cfg.put(uid, Boolean.TRUE);
             }
         }
         tasks.add(task);

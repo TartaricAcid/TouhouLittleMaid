@@ -1,5 +1,5 @@
 # Touhou Little Mod Language File
-item_group.touhou_little_maid.name=Touhou Little Maid
+item_group.touhou_little_maid.name=车万女仆
 
 # Entity
 entity.touhou_little_maid.maid.name=小女仆
@@ -81,6 +81,7 @@ message.touhou_little_maid.altar.not_enough_power=你的 P 点不足。
 message.touhou_little_maid.tombstone.place_fail=墓碑放置失败！
 message.touhou_little_maid.tombstone.on_block_activated=墓碑已经被收回！
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"点击此处","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":"安装帕秋莉模组来获取手册","color":"yellow","bold":false}]
+message.touhou_little_maid.install_clumps=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Clumps 模组会导致 P 点无法掉落","color":"dark_red","bold":true}]
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
@@ -94,6 +95,7 @@ config.touhou_little_maid.maid_config.maid_talk_interval=女仆发出声音的�
 config.touhou_little_maid.maid_config.maid_pickup_sound_interval=女仆拾物的声音间隔（拾取计数）
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=女仆受伤的声音间隔（tick）
 config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽子
+config.touhou_little_maid.maid_config.enabled_tasks=女仆启用的模式
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=原版相关配置
@@ -111,6 +113,7 @@ config.touhou_little_maid.mob_config.rinnosuke_spawn_probability=铃之助生成
 config.touhou_little_maid.misc_config=杂项配置
 config.touhou_little_maid.misc_config.shrine_lamp.effect_cost=神社庭灯效果消耗
 config.touhou_little_maid.misc_config.shrine_lamp.max_storage=神社庭灯最大存储
+config.touhou_little_maid.misc_config.player_death_loss_power_point=玩家死亡后的 P 点损失
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹
@@ -259,6 +262,8 @@ model.touhou_little_maid.aki_sizuha.name=秋静叶
 model.touhou_little_maid.kagiyama_hina.name=键山雏
 model.touhou_little_maid.kurodani_yamame.name=黑谷山女
 model.touhou_little_maid.hoshiguma_yugi.name=星熊勇仪
+model.touhou_little_maid.minoriko_aki.name=秋穰子
+model.touhou_little_maid.mizuhashi_parsee.name=水桥帕露西
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -324,6 +329,8 @@ model.touhou_little_maid.aki_sizuha.desc=§7寂寞与终焉的象征
 model.touhou_little_maid.kagiyama_hina.desc=§7秘神流雏
 model.touhou_little_maid.kurodani_yamame.desc=§7昏暗洞窟中明亮的网
 model.touhou_little_maid.hoshiguma_yugi.desc=§7人所谈论的怪力乱神
+model.touhou_little_maid.minoriko_aki.desc=§7丰裕与收成的象征
+model.touhou_little_maid.mizuhashi_parsee.desc=§7地壳下的嫉妒心
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

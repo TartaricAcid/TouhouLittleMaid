@@ -23,7 +23,7 @@
     },
     "D": {
       "type": "forge:ore_dict",
-      "ore": "blockDiamond"
+      "ore": "gemDiamond"
     }
   }
 }

@@ -18,6 +18,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 
+import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MISC_CONFIG;
+
 /**
  * @author TartaricAcid
  * @date 2019/8/28 17:14
@@ -51,7 +53,7 @@ public class PlayerPowerCapabilitiesEvent {
         // 依据死亡或者切换维度进行不同的处理
         // 死亡 Power 减一
         if (event.isWasDeath()) {
-            power.set((oldPower.get() > 1.0f) ? (oldPower.get() - 1.0f) : 0.0f);
+            power.set(power.get() - (float) MISC_CONFIG.playerDeathLossPowerPoint);
         } else {
             power.set(oldPower.get());
         }

@@ -211,6 +211,12 @@
     }, {
       "model_id": "touhou_little_maid:hoshiguma_yugi",
       "description": ["{model.touhou_little_maid.hoshiguma_yugi.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:minoriko_aki",
+      "description": ["{model.touhou_little_maid.minoriko_aki.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:mizuhashi_parsee",
+      "description": ["{model.touhou_little_maid.mizuhashi_parsee.desc}"]
     }
   ]
 }

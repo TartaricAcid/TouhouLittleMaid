@@ -32,8 +32,12 @@ public class MaidMainContainer extends Container {
         addEntityArmorAndHandSlots(maid);
         addPlayerSlots(playerInventory);
         this.maid = maid;
-        this.taskIndex = taskIndex;
-        task = LittleMaidAPI.getTasks().get(taskIndex);
+        if (0 < taskIndex && taskIndex < LittleMaidAPI.getTasks().size()) {
+            this.taskIndex = taskIndex;
+        } else {
+            this.taskIndex = 0;
+        }
+        task = LittleMaidAPI.getTasks().get(this.taskIndex);
         maid.guiOpening = true;
         maid.setTask(LittleMaidAPI.getIdleTask());
     }

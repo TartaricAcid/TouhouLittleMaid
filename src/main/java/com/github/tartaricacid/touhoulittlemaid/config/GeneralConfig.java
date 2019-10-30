@@ -7,6 +7,9 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Config(modid = TouhouLittleMaid.MOD_ID, name = "TouhouLittleMaid")
 public class GeneralConfig {
     @Config.LangKey("config.touhou_little_maid.maid_config")
@@ -58,6 +61,12 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_always_show_hat")
         @Config.Name("MaidAlwaysShowHat")
         public boolean maidAlwaysShowHat = true;
+
+        @Config.RequiresMcRestart
+        @Config.Comment("Decide which tasks are not enabled.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.enabled_tasks")
+        @Config.Name("EnabledTasks")
+        public Map<String, Boolean> enabledTasks = new HashMap<>();
     }
 
     public static class VanillaConfig {
@@ -112,6 +121,12 @@ public class GeneralConfig {
         @Config.Name("ShrineLampMaxStorage")
         @Config.RangeDouble(min = 0)
         public double shrineLampMaxStorage = 100.0;
+
+        @Config.Comment("Loss Power Point After Player Death")
+        @Config.LangKey("config.touhou_little_maid.misc_config.player_death_loss_power_point")
+        @Config.Name("PlayerDeathLossPowerPoint")
+        @Config.RangeDouble(min = 0, max = 5)
+        public double playerDeathLossPowerPoint = 1.0;
     }
 
     /**

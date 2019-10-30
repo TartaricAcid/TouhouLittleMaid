@@ -234,6 +234,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
                 taskPageIndex++;
                 this.initGui();
             }
+            return;
         }
 
         if ((button.id >= BUTTON.values().length) && (button.id < BUTTON.values().length + 6)) {
@@ -440,6 +441,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     public void onGuiClosed() {
         // 关闭发包线程
         timer.shutdown();
+        super.onGuiClosed();
     }
 
     /**

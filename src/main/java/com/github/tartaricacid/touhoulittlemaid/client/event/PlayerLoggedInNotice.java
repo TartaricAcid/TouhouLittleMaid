@@ -16,17 +16,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  **/
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
-public class PatchouliInstallNotice {
-    private static boolean isFirst = true;
+public class PlayerLoggedInNotice {
+    private static boolean notFirst = false;
 
     @SubscribeEvent
     public static void onEnterGame(PlayerEvent.PlayerLoggedInEvent event) {
         boolean missingPatchouli = !Loader.isModLoaded("patchouli");
-        if (missingPatchouli && isFirst) {
+        boolean installClumps = Loader.isModLoaded("clumps");
+        if (notFirst) {
+            return;
+        }
+        if (missingPatchouli) {
             String json = I18n.format("message.touhou_little_maid.missing_patchouli");
             ITextComponent component = ITextComponent.Serializer.jsonToComponent(json);
             event.player.sendMessage(component);
-            isFirst = false;
         }
+        if (installClumps) {
+            String json = I18n.format("message.touhou_little_maid.install_clumps");
+            ITextComponent component = ITextComponent.Serializer.jsonToComponent(json);
+            event.player.sendMessage(component);
+        }
+        notFirst = true;
     }
 }
