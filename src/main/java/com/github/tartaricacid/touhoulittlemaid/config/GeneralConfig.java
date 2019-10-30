@@ -1,5 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -58,6 +61,11 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_always_show_hat")
         @Config.Name("MaidAlwaysShowHat")
         public boolean maidAlwaysShowHat = true;
+
+        @Config.RequiresMcRestart
+        @Config.LangKey("config.touhou_little_maid.maid_config.enabled_tasks")
+        @Config.Name("EnabledTasks")
+        public Map<String, Boolean> enabledTasks = new HashMap<>();
     }
 
     public static class VanillaConfig {
