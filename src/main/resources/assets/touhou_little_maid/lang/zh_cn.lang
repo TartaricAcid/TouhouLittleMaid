@@ -106,8 +106,8 @@ config.touhou_little_maid.vanilla_config.change_slime_model=将史莱姆模型�
 config.touhou_little_maid.mob_config=怪物设置
 config.touhou_little_maid.mob_config.maid_fairy_power_point=女仆妖精 P 点
 config.touhou_little_maid.mob_config.maid_fairy_spawn_probability=女仆妖精生成权重
-config.touhou_little_maid.mob_config.rinnosuke_power_point=铃之助 P 点
-config.touhou_little_maid.mob_config.rinnosuke_spawn_probability=铃之助生成权重
+config.touhou_little_maid.mob_config.rinnosuke_power_point=霖之助 P 点
+config.touhou_little_maid.mob_config.rinnosuke_spawn_probability=霖之助生成权重
 
 # Misc Config
 config.touhou_little_maid.misc_config=杂项配置

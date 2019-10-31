@@ -29,21 +29,22 @@ import javax.annotation.Nullable;
 public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static final EntityChairRender.Factory FACTORY = new EntityChairRender.Factory();
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
-    private static final String DEFAULT_CHAIR_TEXTURE = "touhou_little_maid:textures/entity/cushion.png";
+    private static final ResourceLocation DEFAULT_CHAIR_TEXTURE = new ResourceLocation("touhou_little_maid:textures/entity/cushion.png");
     private static final LayerChairDebugFloor DEBUG_FLOOR = new LayerChairDebugFloor(new DebugFloorModel());
     private static final LayerChairDebugCharacter DEBUG_CHARACTER = new LayerChairDebugCharacter(new DebugCharacterModel());
     private ResourceLocation modelRes;
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
         super(renderManager, mainModel, 0f);
-        modelRes = new ResourceLocation(DEFAULT_CHAIR_TEXTURE);
+        modelRes = DEFAULT_CHAIR_TEXTURE;
         addLayer(DEBUG_FLOOR);
         addLayer(DEBUG_CHARACTER);
     }
 
     @Override
     public void doRender(@Nonnull EntityChair chair, double x, double y, double z, float entityYaw, float partialTicks) {
-        // 尝试读取模型
+        // 尝试读取模
+        this.mainModel = ClientProxy.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).orElseThrow(NullPointerException::new);
         ClientProxy.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.mainModel = model);
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
@@ -56,6 +57,7 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityChair chair) {
+        this.modelRes = DEFAULT_CHAIR_TEXTURE;
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
         ClientProxy.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
