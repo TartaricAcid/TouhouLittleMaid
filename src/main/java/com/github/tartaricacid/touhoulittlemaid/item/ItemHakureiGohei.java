@@ -2,15 +2,14 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.IMultiBlock;
+import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -20,15 +19,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -44,14 +40,6 @@ import java.util.List;
 import java.util.Random;
 
 public class ItemHakureiGohei extends Item {
-    private static final ResourceLocation ALTAR_SOUTH = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_south");
-    private static final ResourceLocation ALTAR_NORTH = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_north");
-    private static final ResourceLocation ALTAR_EAST = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_east");
-    private static final ResourceLocation ALTAR_WEST = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_west");
-    private static final BlockPos SOUTH_POS = new BlockPos(-4, -3, 0);
-    private static final BlockPos NORTH_POS = new BlockPos(-3, -3, -7);
-    private static final BlockPos EAST_POS = new BlockPos(0, -3, -3);
-    private static final BlockPos WEST_POS = new BlockPos(-7, -3, -4);
     private static Random random = new Random();
     private double attackDamage;
     private double attackSpeed;
@@ -68,90 +56,23 @@ public class ItemHakureiGohei extends Item {
     @Nonnull
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        List<IMultiBlock> multiBlockList = LittleMaidAPI.getMultiBlockList();
         IBlockState blockState = worldIn.getBlockState(pos);
-        if (blockState.getBlock() == Blocks.WOOL && Blocks.WOOL.getMetaFromState(blockState) == EnumDyeColor.RED.getMetadata() && hand == EnumHand.MAIN_HAND) {
-            boolean facingIsSuitable = facing != EnumFacing.DOWN && facing != EnumFacing.UP;
-            if (!worldIn.isRemote && facingIsSuitable) {
-                applyBuildAltarLogic(worldIn, pos.add(getAltarCenterPos(facing)), facing);
-            }
-            return EnumActionResult.SUCCESS;
-        }
-        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
-    }
-
-    private void applyBuildAltarLogic(World worldIn, BlockPos posStart, EnumFacing facing) {
-        Template altarTemplate = getAltarTemplate(worldIn, facing);
-        if (areTemplateEqualWorldBlock(worldIn, posStart, altarTemplate)) {
-            List<BlockPos> posList = Lists.newArrayList();
-            List<BlockPos> canPlaceItemPosList = Lists.newArrayList();
-            for (Template.BlockInfo blockInfo : altarTemplate.blocks) {
-                posList.add(posStart.add(blockInfo.pos));
-                if (blockInfo.pos.getY() == 2 && blockInfo.blockState.equals(Blocks.LOG.getDefaultState())) {
-                    canPlaceItemPosList.add(posStart.add(blockInfo.pos));
-                }
-            }
-            for (Template.BlockInfo blockInfo : altarTemplate.blocks) {
-                BlockPos currentPos = posStart.add(blockInfo.pos);
-                worldIn.setBlockState(currentPos, MaidBlocks.ALTAR.getDefaultState());
-                TileEntity altarTileEntity = worldIn.getTileEntity(currentPos);
-                if (altarTileEntity instanceof TileEntityAltar) {
-                    if (currentPos.equals(posStart.subtract(getAltarCenterPos(facing)))) {
-                        ((TileEntityAltar) altarTileEntity).setForgeData(blockInfo.blockState, true,
-                                false, facing, posList, canPlaceItemPosList);
-                    } else if (blockInfo.pos.getY() == 2 && blockInfo.blockState.equals(Blocks.LOG.getDefaultState())) {
-                        ((TileEntityAltar) altarTileEntity).setForgeData(blockInfo.blockState, false,
-                                true, facing, posList, canPlaceItemPosList);
-                    } else {
-                        ((TileEntityAltar) altarTileEntity).setForgeData(blockInfo.blockState, false,
-                                false, facing, posList, canPlaceItemPosList);
+        for (IMultiBlock multiBlock : multiBlockList) {
+            boolean baseConditionIsOkay = hand == EnumHand.MAIN_HAND;
+            boolean multiBlockIsOkay = multiBlock.blockIsSuitable(blockState) && multiBlock.facingIsSuitable(facing);
+            if (baseConditionIsOkay && multiBlockIsOkay) {
+                if (!worldIn.isRemote) {
+                    BlockPos posStart = pos.add(multiBlock.getCenterPos(facing));
+                    Template altarTemplate = multiBlock.getTemplate(worldIn, facing);
+                    if (multiBlock.isMatch(worldIn, posStart, facing, altarTemplate)) {
+                        multiBlock.build(worldIn, posStart, facing, altarTemplate);
                     }
                 }
+                return EnumActionResult.SUCCESS;
             }
         }
-    }
-
-    private BlockPos getAltarCenterPos(EnumFacing facing) {
-        switch (facing) {
-            case SOUTH:
-                return NORTH_POS;
-            case NORTH:
-                return SOUTH_POS;
-            case EAST:
-                return WEST_POS;
-            case WEST:
-                return EAST_POS;
-            default:
-                return NORTH_POS;
-        }
-    }
-
-    private Template getAltarTemplate(World worldIn, EnumFacing facing) {
-        switch (facing) {
-            case SOUTH:
-                return getAltarTemplate(worldIn, ALTAR_NORTH);
-            case NORTH:
-                return getAltarTemplate(worldIn, ALTAR_SOUTH);
-            case EAST:
-                return getAltarTemplate(worldIn, ALTAR_WEST);
-            case WEST:
-                return getAltarTemplate(worldIn, ALTAR_EAST);
-            default:
-                return getAltarTemplate(worldIn, ALTAR_NORTH);
-        }
-    }
-
-    private Template getAltarTemplate(World worldIn, ResourceLocation resourceLocation) {
-        return worldIn.getSaveHandler().getStructureTemplateManager().getTemplate(worldIn.getMinecraftServer(), resourceLocation);
-    }
-
-    private boolean areTemplateEqualWorldBlock(World worldIn, BlockPos posStart, Template template) {
-        for (Template.BlockInfo blockInfo : template.blocks) {
-            if (worldIn.getBlockState(posStart.add(blockInfo.pos)).equals(blockInfo.blockState)) {
-                continue;
-            }
-            return false;
-        }
-        return true;
+        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override

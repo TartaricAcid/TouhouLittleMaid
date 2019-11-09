@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.internal;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.api.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI.ILittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
@@ -40,6 +41,8 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
     private final List<FarmHandler> farmHandlers = Lists.newArrayList();
 
     private final List<FeedHandler> feedHandlers = Lists.newArrayList();
+
+    private final List<IMultiBlock> multiBlockList = Lists.newArrayList();
     /**
      * 默认的 IMaidTask 对象
      */
@@ -114,4 +117,13 @@ public class LittleMaidAPIImpl implements ILittleMaidAPI {
         return feedHandlers;
     }
 
+    @Override
+    public void registerMultiBlock(IMultiBlock multiBlock) {
+        multiBlockList.add(multiBlock);
+    }
+
+    @Override
+    public List<IMultiBlock> getMultiBlockList() {
+        return multiBlockList;
+    }
 }

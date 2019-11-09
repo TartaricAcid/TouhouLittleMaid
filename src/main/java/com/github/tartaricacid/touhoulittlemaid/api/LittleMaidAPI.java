@@ -88,6 +88,15 @@ public class LittleMaidAPI {
         return INSTANCE.getFeedHandlers();
     }
 
+    public static void registerMultiBlock(IMultiBlock multiBlock) {
+        INSTANCE.registerMultiBlock(multiBlock);
+    }
+
+    public static List<IMultiBlock> getMultiBlockList() {
+        return INSTANCE.getMultiBlockList();
+    }
+
+
     /**
      * ILittleMaidAPI 用于饰品注册，寻找物品对应饰品对象等杂项性的内容
      */
@@ -195,5 +204,19 @@ public class LittleMaidAPI {
          * @return FeedHandler 列表
          */
         List<FeedHandler> getFeedHandlers();
+
+        /**
+         * 注册多方块结构
+         *
+         * @param multiBlock 多方块结构实例
+         */
+        void registerMultiBlock(IMultiBlock multiBlock);
+
+        /**
+         * 获取所有的多方块结构列表
+         *
+         * @return 多方块结构列表
+         */
+        List<IMultiBlock> getMultiBlockList();
     }
 }
