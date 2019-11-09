@@ -141,7 +141,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             this.buttonList.add(new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
                     11, 177, 0, 16, SIDE));
         }
-        if (taskPageIndex != taskPageTotal) {
+        if (taskPageIndex != taskPageTotal - 1) {
             this.buttonList.add(new GuiButtonImage(BUTTON.TASK_RIGHT_SWITCH.ordinal(), i - 17, j + 150, 7,
                     11, 165, 0, 16, SIDE));
         }
@@ -230,7 +230,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         }
 
         if (button.id == BUTTON.TASK_RIGHT_SWITCH.ordinal()) {
-            if (taskPageIndex <= taskPageTotal) {
+            if (taskPageIndex < taskPageTotal) {
                 taskPageIndex++;
                 this.initGui();
             }

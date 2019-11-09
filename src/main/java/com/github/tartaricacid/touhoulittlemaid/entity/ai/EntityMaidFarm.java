@@ -35,11 +35,16 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
      * 当前执行种植的种子
      */
     private ItemStack activeSeed = ItemStack.EMPTY;
+    /**
+     * 当前的农场模式
+     */
+    private FarmHandler.Mode mode;
     private TASK currentTask;
 
-    public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn) {
+    public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn, FarmHandler.Mode mode) {
         super(entityMaid, speedIn, 16);
         this.maid = entityMaid;
+        this.mode = mode;
     }
 
     @Override
@@ -58,8 +63,8 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         this.runDelay = 10 + this.maid.getRNG().nextInt(60);
         this.currentTask = TASK.NONE;
 
-        // 通过 LittleMaidAPI 获取开启了 canExecute 的 FarmHandlers
-        handlers = LittleMaidAPI.getFarmHandlers().stream().filter(h -> h.canExecute(maid)).collect(Collectors.toList());
+        // 通过 LittleMaidAPI 获取开启了 canExecute 且模式正确的 FarmHandlers
+        handlers = LittleMaidAPI.getFarmHandlers().stream().filter(h -> h.canExecute(maid) && h.getMode() == mode).collect(Collectors.toList());
         if (handlers.isEmpty()) {
             return false;
         }
@@ -92,7 +97,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         }
 
         // 先尝试移动到此处
-        tryMoveToDestination(9.0d, 40);
+        tryMoveToDestination(activeHandler.getMinDistanceSq(), 40);
         boolean shouldLook = true;
 
         // 先判定女仆是否在范围内

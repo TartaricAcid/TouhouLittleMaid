@@ -14,11 +14,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
 /**
- * @author Snownee
- * @date 2019/7/24 02:31
- */
-public class TaskFarm implements IMaidTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "farm");
+ * @author TartaricAcid
+ * @date 2019/11/9 14:26
+ **/
+public class TaskSugarCane implements IMaidTask {
+    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "sugar_cane");
 
     @Override
     public ResourceLocation getUid() {
@@ -27,7 +27,7 @@ public class TaskFarm implements IMaidTask {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(Items.IRON_HOE);
+        return new ItemStack(Items.REEDS);
     }
 
     @Override
@@ -37,6 +37,6 @@ public class TaskFarm implements IMaidTask {
 
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid) {
-        return new EntityMaidFarm(maid, 0.6f, FarmHandler.Mode.NORMAL);
+        return new EntityMaidFarm(maid, 0.6f, FarmHandler.Mode.SUGAR_CANE);
     }
 }

@@ -124,6 +124,9 @@ public class CommonProxy {
         LittleMaidAPI.registerTask(new TaskAttackRanged());
         LittleMaidAPI.registerTask(new TaskAttackDanmaku());
         LittleMaidAPI.registerTask(new TaskFarm());
+        LittleMaidAPI.registerTask(new TaskSugarCane());
+        LittleMaidAPI.registerTask(new TaskMelon());
+        LittleMaidAPI.registerTask(new TaskCocoa());
         LittleMaidAPI.registerTask(new TaskFeed());
         LittleMaidAPI.registerTask(new TaskIdle());
         LittleMaidAPI.registerTask(new TaskShears());
@@ -131,7 +134,10 @@ public class CommonProxy {
         LittleMaidAPI.registerTask(new TaskFeedAnimal());
 
         // 注册 FarmHandler 和 FeedHandler
-        LittleMaidAPI.registerFarmHandler(new VanillaFarmHandler());
+        LittleMaidAPI.registerFarmHandler(new VanillaNormalFarmHandler());
+        LittleMaidAPI.registerFarmHandler(new VanillaSugarCaneFarmHandler());
+        LittleMaidAPI.registerFarmHandler(new VanillaMelonHandler());
+        LittleMaidAPI.registerFarmHandler(new VanillaCocoaHandler());
         LittleMaidAPI.registerFeedHandler(new VanillaFeedHandler());
 
         // 注册祭坛多方块结构

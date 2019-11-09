@@ -75,4 +75,33 @@ public interface FarmHandler extends TaskHandler {
     default boolean canExecute(AbstractEntityMaid maid) {
         return true;
     }
+
+    /**
+     * 当前种植的作物模式
+     *
+     * @return 作物模式
+     */
+    default Mode getMode() {
+        return Mode.NORMAL;
+    }
+
+    /**
+     * 获取最小的种植，收获距离
+     *
+     * @return 距离
+     */
+    default double getMinDistanceSq() {
+        return 1.0;
+    }
+
+    enum Mode {
+        // 普通作物模式
+        NORMAL,
+        // 甘蔗作物模式
+        SUGAR_CANE,
+        // 西瓜南瓜模式
+        MELON,
+        // 可可豆模式
+        COCOA
+    }
 }

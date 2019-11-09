@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
+import com.github.tartaricacid.touhoulittlemaid.internal.task.VanillaNormalFarmHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 
 /**
- * 在 {@link com.github.tartaricacid.touhoulittlemaid.internal.task.VanillaFarmHandler#isSeed} 方法中充当 IBlockAccess 占位符的类
+ * 在 {@link VanillaNormalFarmHandler#isSeed} 方法中充当 IBlockAccess 占位符的类
  * 可以认为是空气方块
  *
  * @author Snownee
