@@ -514,12 +514,15 @@ public class EntityMaid extends AbstractEntityMaid {
      * 无法对抽象类使用 AT，所以通过反射获取箭
      */
     private ItemStack getArrowFromEntity(EntityArrow entity) {
-        Method method = ReflectionHelper.findMethod(entity.getClass(), "getArrowStack", "func_184550_j");
-        method.setAccessible(true);
         try {
+            Method method = ReflectionHelper.findMethod(entity.getClass(), "getArrowStack", "func_184550_j");
+            method.setAccessible(true);
             return (ItemStack) method.invoke(ItemStack.class);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             return new ItemStack(Items.ARROW);
+        } catch (ReflectionHelper.UnableToFindMethodException e) {
+            // 临时解决办法：直接清空此掉落物
+            return ItemStack.EMPTY;
         }
     }
 
