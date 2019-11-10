@@ -127,6 +127,11 @@ public class GeneralConfig {
         @Config.Name("PlayerDeathLossPowerPoint")
         @Config.RangeDouble(min = 0, max = 5)
         public double playerDeathLossPowerPoint = 1.0;
+
+        @Config.Comment("Only Creative Player Can Ride Broom")
+        @Config.LangKey("config.touhou_little_maid.misc_config.creative_player_can_ride_broom")
+        @Config.Name("CreativePlayerCanRideBroom")
+        public boolean creativePlayerCanRideBroom = true;
     }
 
     /**

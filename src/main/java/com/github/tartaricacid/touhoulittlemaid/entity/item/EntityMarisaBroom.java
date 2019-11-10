@@ -5,6 +5,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
  * @date 2019/7/5 22:38
  **/
 
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -170,7 +172,15 @@ public class EntityMarisaBroom extends EntityLivingBase {
             return false;
         }
         if (!player.isSneaking() && !this.world.isRemote && !this.isBeingRidden() && !this.isRiding()) {
-            player.startRiding(this);
+            if (GeneralConfig.MISC_CONFIG.creativePlayerCanRideBroom) {
+                if (player.isCreative()) {
+                    player.startRiding(this);
+                } else {
+                    player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.broom.message"));
+                }
+            } else {
+                player.startRiding(this);
+            }
             return true;
         }
         return super.processInitialInteract(player, hand);

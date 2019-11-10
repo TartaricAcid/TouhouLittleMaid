@@ -37,6 +37,6 @@ public class TaskTorch implements IMaidTask {
 
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid) {
-        return new EntityMaidPlaceTorch(maid, 7, 2, 0.6f);
+        return new EntityMaidPlaceTorch(maid, 0.6f, 8);
     }
 }
