@@ -49,7 +49,8 @@ public class EntityMaidShear extends EntityAIBase {
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(entityMaid, entityMaid.getEntityBoundingBox()
                 .grow(8, 2, 8), EntityMaid.CAN_SHEAR);
         for (Entity entity : entityList) {
-            if (entity instanceof IShearable && ((IShearable) entity).isShearable(mainhandItem, world, entity.getPosition())) {
+            if (entity instanceof IShearable && ((IShearable) entity).isShearable(mainhandItem, world, entity.getPosition())
+                    && entityMaid.getNavigator().getPathToEntityLiving(entity) != null) {
                 shearableEntity = entity;
                 return true;
             }
@@ -62,8 +63,8 @@ public class EntityMaidShear extends EntityAIBase {
         if (shearableEntity != null && shearableEntity.isEntityAlive() && shearableEntity instanceof IShearable
                 && ((IShearable) shearableEntity).isShearable(mainhandItem, world, shearableEntity.getPosition())) {
             // 先尝试移动到这只羊身边
-            entityMaid.getLookHelper().setLookPositionWithEntity(shearableEntity, 30f, entityMaid.getVerticalFaceSpeed());
             entityMaid.getNavigator().tryMoveToEntityLiving(shearableEntity, speed);
+            entityMaid.getLookHelper().setLookPositionWithEntity(shearableEntity, 30f, entityMaid.getVerticalFaceSpeed());
 
             // 如果距离太远，还是先跳过后面的剪羊毛过程吧
             if (entityMaid.getDistance(shearableEntity) > 3) {

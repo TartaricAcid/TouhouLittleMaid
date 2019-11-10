@@ -63,7 +63,8 @@ public class EntityMaidFeedAnimal extends EntityAIBase {
         // 选取第一个可喂养生物
         for (Entity entity : entityList) {
             if (entity instanceof EntityAnimal && entity.isEntityAlive() && ((EntityAnimal) entity).getGrowingAge() == 0 &&
-                    !((EntityAnimal) entity).isInLove() && ItemFindUtil.isStackIn(maid.getAvailableInv(false), ((EntityAnimal) entity)::isBreedingItem)) {
+                    !((EntityAnimal) entity).isInLove() && ItemFindUtil.isStackIn(maid.getAvailableInv(false),
+                    ((EntityAnimal) entity)::isBreedingItem) && maid.getNavigator().getPathToEntityLiving(entity) != null) {
                 entitySelected = (EntityAnimal) entity;
                 timeCount = 5;
                 return true;

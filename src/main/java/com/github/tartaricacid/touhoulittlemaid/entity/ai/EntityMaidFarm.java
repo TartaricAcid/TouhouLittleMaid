@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,7 +97,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             return;
         }
 
-        // 先尝试移动到此处
+        // 先尝试移动到此处的判定
         tryMoveToDestination(activeHandler.getMinDistanceSq(), 40);
         boolean shouldLook = true;
 
@@ -130,14 +131,13 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
 
     @Override
-    protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
-        // FIXME: 2019/7/26 目前的问题： 可可豆会挡住实体行走
+    protected boolean shouldMoveTo(@Nonnull World worldIn, @Nonnull BlockPos pos) {
         pos = pos.up();
         IBlockState stateUp = worldIn.getBlockState(pos);
         IBlockState stateUp2 = worldIn.getBlockState(pos.up());
 
         // 该位置不可到达时返回 false
-        if (!stateUp2.getBlock().isPassable(worldIn, pos.up())) {
+        if (maid.getNavigator().getPathToPos(pos) == null || !stateUp2.getBlock().isPassable(worldIn, pos.up())) {
             return false;
         }
 

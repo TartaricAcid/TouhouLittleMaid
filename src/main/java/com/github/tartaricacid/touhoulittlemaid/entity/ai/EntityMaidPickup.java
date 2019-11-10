@@ -50,7 +50,8 @@ public class EntityMaidPickup extends EntityAIBase {
     @Override
     public void updateTask() {
         // 检查拾取的对象
-        if (entityPickup != null && entityPickup.isEntityAlive() && !entityPickup.isInWater()) {
+        if (entityPickup != null && entityPickup.isEntityAlive() && !entityPickup.isInWater()
+                && entityMaid.getNavigator().getPathToEntityLiving(entityPickup) != null) {
             entityMaid.getLookHelper().setLookPositionWithEntity(entityPickup, 30f, entityMaid.getVerticalFaceSpeed());
             entityMaid.getNavigator().tryMoveToXYZ(entityPickup.posX, entityPickup.posY, entityPickup.posZ, speed);
         }
