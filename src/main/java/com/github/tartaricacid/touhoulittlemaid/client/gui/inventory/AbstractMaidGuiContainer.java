@@ -67,7 +67,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.guiId = guiId;
         this.container = inventorySlotsIn;
         this.maid = container.maid;
-        this.taskPageTotal = LittleMaidAPI.getTasks().size() / 6;
+        this.taskPageTotal = (LittleMaidAPI.getTasks().size() - 1) / 6;
         syncEffectThread();
     }
 
@@ -137,14 +137,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
                 21, 233, 0, 24, BACKGROUND));
 
         // 模式翻页
-        if (taskPageIndex != 0) {
-            this.buttonList.add(new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
-                    11, 177, 0, 16, SIDE));
-        }
-        if (taskPageIndex != taskPageTotal - 1) {
-            this.buttonList.add(new GuiButtonImage(BUTTON.TASK_RIGHT_SWITCH.ordinal(), i - 17, j + 150, 7,
-                    11, 165, 0, 16, SIDE));
-        }
+        this.buttonList.add(new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
+                11, 177, 0, 16, SIDE));
+        this.buttonList.add(new GuiButtonImage(BUTTON.TASK_RIGHT_SWITCH.ordinal(), i - 17, j + 150, 7,
+                11, 165, 0, 16, SIDE));
+
 
         // 模式
         for (int k = 0; k < 6; k++) {
@@ -159,7 +156,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
                         20, 98, 20, 20, SIDE));
             }
         }
-
     }
 
     @Override

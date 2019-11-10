@@ -102,6 +102,8 @@ public interface FarmHandler extends TaskHandler {
         // 西瓜南瓜模式
         MELON,
         // 可可豆模式
-        COCOA
+        COCOA,
+        // 花草模式
+        GRASS
     }
 }
