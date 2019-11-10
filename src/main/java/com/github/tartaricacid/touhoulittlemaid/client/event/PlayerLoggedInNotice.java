@@ -22,17 +22,11 @@ public class PlayerLoggedInNotice {
     @SubscribeEvent
     public static void onEnterGame(PlayerEvent.PlayerLoggedInEvent event) {
         boolean missingPatchouli = !Loader.isModLoaded("patchouli");
-        boolean installClumps = Loader.isModLoaded("clumps");
         if (notFirst) {
             return;
         }
         if (missingPatchouli) {
             String json = I18n.format("message.touhou_little_maid.missing_patchouli");
-            ITextComponent component = ITextComponent.Serializer.jsonToComponent(json);
-            event.player.sendMessage(component);
-        }
-        if (installClumps) {
-            String json = I18n.format("message.touhou_little_maid.install_clumps");
             ITextComponent component = ITextComponent.Serializer.jsonToComponent(json);
             event.player.sendMessage(component);
         }

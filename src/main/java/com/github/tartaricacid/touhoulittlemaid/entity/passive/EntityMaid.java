@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
@@ -80,7 +81,7 @@ import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
     public static final Predicate<Entity> IS_PICKUP = entity -> ((entity instanceof EntityItem && !isIllegalItem(((EntityItem) entity).getItem()))
-            || entity instanceof EntityXPOrb || entity instanceof EntityArrow) && !entity.isInWater();
+            || entity instanceof EntityXPOrb || entity instanceof EntityPowerPoint || entity instanceof EntityArrow) && !entity.isInWater();
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
 
@@ -399,6 +400,10 @@ public class EntityMaid extends AbstractEntityMaid {
                     if (entityPickup instanceof EntityXPOrb) {
                         pickupXPOrb((EntityXPOrb) entityPickup);
                     }
+                    // 如果是 P 点
+                    if (entityPickup instanceof EntityPowerPoint) {
+                        pickupPowerPoint((EntityPowerPoint) entityPickup);
+                    }
                     // 如果是箭
                     if (entityPickup instanceof EntityArrow) {
                         pickupArrow((EntityArrow) entityPickup, false);
@@ -475,6 +480,34 @@ public class EntityMaid extends AbstractEntityMaid {
                 this.addExp(entityXPOrb.xpValue);
             }
             entityXPOrb.setDead();
+        }
+    }
+
+    /**
+     * 捡起 P 点部分的逻辑
+     */
+    private void pickupPowerPoint(EntityPowerPoint powerPoint) {
+        if (!this.world.isRemote && powerPoint.isEntityAlive() && powerPoint.delayBeforeCanPickup == 0) {
+            // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
+            powerPoint.onPickup(this, 1);
+            pickupSoundCount--;
+            if (pickupSoundCount == 0) {
+                this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
+                pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
+            }
+
+            // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
+            int xpValue = EntityPowerPoint.transPowerValueToXpValue(powerPoint.powerValue);
+            ItemStack itemstack = EnchantmentHelper.getEnchantedItem(Enchantments.MENDING, this);
+            if (!itemstack.isEmpty() && itemstack.isItemDamaged()) {
+                int i = Math.min(xpValue * 2, itemstack.getItemDamage());
+                xpValue -= (i / 2);
+                itemstack.setItemDamage(itemstack.getItemDamage() - i);
+            }
+            if (xpValue > 0) {
+                this.addExp(xpValue);
+            }
+            powerPoint.setDead();
         }
     }
 
@@ -1011,6 +1044,14 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean isChild() {
+        return false;
+    }
+
+    /**
+     * 女仆不会踩坏农田，多么妙啊
+     */
+    @Override
+    protected boolean canTriggerWalking() {
         return false;
     }
 

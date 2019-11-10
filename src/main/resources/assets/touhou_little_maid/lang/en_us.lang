@@ -81,7 +81,6 @@ message.touhou_little_maid.altar.not_enough_power=You don't have enough power.
 message.touhou_little_maid.tombstone.place_fail=Tombstone Place Fail!
 message.touhou_little_maid.tombstone.on_block_activated=Tombstone Has Been Taken Back!
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Click Here","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":" To Install Patchouli Mod To Get The Manual","color":"yellow","bold":false}]
-message.touhou_little_maid.install_clumps=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Clumps mod will prevent power point from looting","color":"dark_red","bold":true}]
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos

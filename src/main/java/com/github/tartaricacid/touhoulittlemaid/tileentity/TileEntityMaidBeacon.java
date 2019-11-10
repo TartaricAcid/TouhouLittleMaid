@@ -53,7 +53,7 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
         List<EntityPowerPoint> list = this.world.getEntitiesWithinAABB(EntityPowerPoint.class, new AxisAlignedBB(pos).grow(3, 3, 3));
         for (EntityPowerPoint powerPoint : list) {
             if (powerPoint.isEntityAlive()) {
-                float addNum = this.getStoragePower() + powerPoint.xpValue / 100.0f;
+                float addNum = this.getStoragePower() + powerPoint.powerValue / 100.0f;
                 if (addNum <= this.getMaxStorage()) {
                     this.setStoragePower(addNum);
                     powerPoint.spawnExplosionParticle();

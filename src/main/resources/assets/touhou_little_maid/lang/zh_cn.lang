@@ -81,7 +81,6 @@ message.touhou_little_maid.altar.not_enough_power=你的 P 点不足。
 message.touhou_little_maid.tombstone.place_fail=墓碑放置失败！
 message.touhou_little_maid.tombstone.on_block_activated=墓碑已经被收回！
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"点击此处","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":"安装帕秋莉模组来获取手册","color":"yellow","bold":false}]
-message.touhou_little_maid.install_clumps=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Clumps 模组会导致 P 点无法掉落","color":"dark_red","bold":true}]
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标

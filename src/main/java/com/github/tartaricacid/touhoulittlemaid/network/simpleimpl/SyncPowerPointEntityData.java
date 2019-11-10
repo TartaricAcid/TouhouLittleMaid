@@ -23,7 +23,7 @@ public class SyncPowerPointEntityData implements IMessage {
 
     public SyncPowerPointEntityData(EntityPowerPoint powerPoint) {
         this.entityId = powerPoint.getEntityId();
-        this.xpValue = powerPoint.xpValue;
+        this.xpValue = powerPoint.powerValue;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class SyncPowerPointEntityData implements IMessage {
                 Minecraft.getMinecraft().addScheduledTask(() -> {
                     Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.entityId);
                     if (entity instanceof EntityPowerPoint) {
-                        ((EntityPowerPoint) entity).xpValue = message.xpValue;
+                        ((EntityPowerPoint) entity).powerValue = message.xpValue;
                     }
                 });
             }
