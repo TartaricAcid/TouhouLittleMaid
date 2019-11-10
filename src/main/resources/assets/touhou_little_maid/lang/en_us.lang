@@ -270,6 +270,8 @@ model.touhou_little_maid.kurodani_yamame.name=Yamame Kurodani
 model.touhou_little_maid.hoshiguma_yugi.name=Yuugi Hoshiguma
 model.touhou_little_maid.minoriko_aki.name=Minoriko Aki
 model.touhou_little_maid.mizuhashi_parsee.name=Parsee Mizuhashi
+model.touhou_little_maid.nazrin.name=Nazrin
+model.touhou_little_maid.murasa_minamitsu.name=Minamitsu Murasa
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -337,6 +339,8 @@ model.touhou_little_maid.kurodani_yamame.desc=§7The Bright Net in the Dark Cave
 model.touhou_little_maid.hoshiguma_yugi.desc=§7The So-Called Unexplainable Phenomenon
 model.touhou_little_maid.minoriko_aki.desc=§7Symbol of Abundance and Plenty
 model.touhou_little_maid.mizuhashi_parsee.desc=§7The Jealousy Beneath the Earth's Crust
+model.touhou_little_maid.nazrin.desc=§7The Little Dowser General
+model.touhou_little_maid.murasa_minamitsu.desc=§7The Ghost Left From the Shipwreck Accident
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -358,6 +362,7 @@ model.touhou_little_maid.parasol.name=Parasol
 model.touhou_little_maid.water_wheel.name=Water Wheel
 model.touhou_little_maid.saisen_bako.name=Saisen Bako
 model.touhou_little_maid.well.name=Well
+model.touhou_little_maid.torii.name=Torii
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

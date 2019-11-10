@@ -217,6 +217,12 @@
     }, {
       "model_id": "touhou_little_maid:mizuhashi_parsee",
       "description": ["{model.touhou_little_maid.mizuhashi_parsee.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:nazrin",
+      "description": ["{model.touhou_little_maid.nazrin.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:murasa_minamitsu",
+      "description": ["{model.touhou_little_maid.murasa_minamitsu.desc}"]
     }
   ]
 }

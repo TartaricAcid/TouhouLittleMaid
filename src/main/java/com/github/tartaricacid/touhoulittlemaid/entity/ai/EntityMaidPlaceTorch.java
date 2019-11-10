@@ -59,7 +59,8 @@ public class EntityMaidPlaceTorch extends EntityAIMoveToBlock {
         if (worldIn.getLightFromNeighbors(posUp) < 9 && entityMaid.canPlaceBlock(posUp, Blocks.TORCH.getDefaultState())) {
             IBlockState state = worldIn.getBlockState(pos);
             IBlockState stateUp = worldIn.getBlockState(posUp);
-            return Blocks.TORCH.canPlaceTorchOnTop(state, worldIn, pos) && !stateUp.getMaterial().isLiquid();
+            return Blocks.TORCH.canPlaceTorchOnTop(state, worldIn, pos) && !stateUp.getMaterial().isLiquid()
+                    && this.entityMaid.getNavigator().getPathToPos(posUp) != null;
         }
         return false;
     }

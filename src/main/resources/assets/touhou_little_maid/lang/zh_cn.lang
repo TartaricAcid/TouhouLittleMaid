@@ -269,6 +269,8 @@ model.touhou_little_maid.kurodani_yamame.name=黑谷山女
 model.touhou_little_maid.hoshiguma_yugi.name=星熊勇仪
 model.touhou_little_maid.minoriko_aki.name=秋穰子
 model.touhou_little_maid.mizuhashi_parsee.name=水桥帕露西
+model.touhou_little_maid.nazrin.name=娜兹玲
+model.touhou_little_maid.murasa_minamitsu.name=村纱水蜜
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -336,6 +338,8 @@ model.touhou_little_maid.kurodani_yamame.desc=§7昏暗洞窟中明亮的网
 model.touhou_little_maid.hoshiguma_yugi.desc=§7人所谈论的怪力乱神
 model.touhou_little_maid.minoriko_aki.desc=§7丰裕与收成的象征
 model.touhou_little_maid.mizuhashi_parsee.desc=§7地壳下的嫉妒心
+model.touhou_little_maid.nazrin.desc=§7探宝的小小大将
+model.touhou_little_maid.murasa_minamitsu.desc=§7水难事故的念缚灵
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -357,6 +361,7 @@ model.touhou_little_maid.parasol.name=遮阳伞
 model.touhou_little_maid.water_wheel.name=水车
 model.touhou_little_maid.saisen_bako.name=赛钱箱
 model.touhou_little_maid.well.name=水井
+model.touhou_little_maid.torii.name=鸟居
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
