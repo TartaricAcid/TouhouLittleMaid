@@ -139,6 +139,7 @@ task.touhou_little_maid.cocoa=Cocoa
 task.touhou_little_maid.grass=Grass
 task.touhou_little_maid.feed=Feed
 task.touhou_little_maid.shears=Shears
+task.touhou_little_maid.milk=Milk
 task.touhou_little_maid.torch=Torch
 task.touhou_little_maid.feed_animal=Breed
 
@@ -375,6 +376,7 @@ subtitle.touhou_little_maid.maid.mode.danmaku_attack=Maid Danmaku Sttack Sound
 subtitle.touhou_little_maid.maid.mode.farm=Maid Farm Sound
 subtitle.touhou_little_maid.maid.mode.feed=Maid Feed Sound
 subtitle.touhou_little_maid.maid.mode.shears=Maid Shears Sound
+subtitle.touhou_little_maid.maid.mode.milk=Maid Get Milk Sound
 subtitle.touhou_little_maid.maid.mode.torch=Maid Torch Sound
 subtitle.touhou_little_maid.maid.mode.feed_animal=Maid Feed Animal Sound
 subtitle.touhou_little_maid.maid.ai.find_target=Maid Find Target Sound

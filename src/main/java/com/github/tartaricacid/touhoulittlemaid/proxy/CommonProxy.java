@@ -131,6 +131,7 @@ public class CommonProxy {
         LittleMaidAPI.registerTask(new TaskFeed());
         LittleMaidAPI.registerTask(new TaskIdle());
         LittleMaidAPI.registerTask(new TaskShears());
+        LittleMaidAPI.registerTask(new TaskMilk());
         LittleMaidAPI.registerTask(new TaskTorch());
         LittleMaidAPI.registerTask(new TaskFeedAnimal());
 

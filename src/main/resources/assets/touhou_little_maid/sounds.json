@@ -80,6 +80,16 @@
       }
     ]
   },
+  "maid.mode.milk": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.milk",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
   "maid.mode.torch": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.torch",

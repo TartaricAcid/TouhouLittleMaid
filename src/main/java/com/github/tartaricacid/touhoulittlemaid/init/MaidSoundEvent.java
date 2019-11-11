@@ -25,6 +25,7 @@ public final class MaidSoundEvent {
     public static final SoundEvent MAID_FARM = registerSound("maid.mode.farm");
     public static final SoundEvent MAID_FEED = registerSound("maid.mode.feed");
     public static final SoundEvent MAID_SHEARS = registerSound("maid.mode.shears");
+    public static final SoundEvent MAID_MILK = registerSound("maid.mode.milk");
     public static final SoundEvent MAID_TORCH = registerSound("maid.mode.torch");
     public static final SoundEvent MAID_FEED_ANIMAL = registerSound("maid.mode.feed_animal");
     public static final SoundEvent MAID_FIND_TARGET = registerSound("maid.ai.find_target");

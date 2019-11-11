@@ -139,6 +139,7 @@ task.touhou_little_maid.cocoa=可可
 task.touhou_little_maid.grass=花草
 task.touhou_little_maid.feed=喂食
 task.touhou_little_maid.shears=剪刀
+task.touhou_little_maid.milk=牛奶
 task.touhou_little_maid.torch=火把
 task.touhou_little_maid.feed_animal=繁殖动物
 
@@ -374,6 +375,7 @@ subtitle.touhou_little_maid.maid.mode.danmaku_attack=女仆：弹幕攻击
 subtitle.touhou_little_maid.maid.mode.farm=女仆：农场
 subtitle.touhou_little_maid.maid.mode.feed=女仆：喂养
 subtitle.touhou_little_maid.maid.mode.shears=女仆：剪刀
+subtitle.touhou_little_maid.maid.mode.milk=女仆：获取牛奶
 subtitle.touhou_little_maid.maid.mode.torch=女仆：火把
 subtitle.touhou_little_maid.maid.mode.feed_animal=女仆：繁殖动物
 subtitle.touhou_little_maid.maid.ai.find_target=女仆：发现目标

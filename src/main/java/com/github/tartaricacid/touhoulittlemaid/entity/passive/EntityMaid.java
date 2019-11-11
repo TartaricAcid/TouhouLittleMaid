@@ -82,8 +82,10 @@ import java.util.List;
 public class EntityMaid extends AbstractEntityMaid {
     public static final Predicate<Entity> IS_PICKUP = entity -> ((entity instanceof EntityItem && !isIllegalItem(((EntityItem) entity).getItem()))
             || entity instanceof EntityXPOrb || entity instanceof EntityPowerPoint || entity instanceof EntityArrow) && !entity.isInWater();
-    public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob;
-    public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition());
+    public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob && entity.isEntityAlive();
+    public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition())
+            && entity.isEntityAlive();
+    public static final Predicate<Entity> IS_COW = entity -> entity instanceof EntityCow && !((EntityCow) entity).isChild() && entity.isEntityAlive();
 
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
