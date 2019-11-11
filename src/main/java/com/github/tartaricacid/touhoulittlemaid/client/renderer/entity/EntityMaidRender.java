@@ -3,10 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerHataSasimono;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugBroom;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidDebugFloor;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerMaidHeldItem;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -39,6 +36,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
         modelRes = DEFAULT_MODEL_TEXTURE;
+        this.addLayer(new LayerMaidArrow(this));
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(DEBUG_FLOOR);
         this.addLayer(DEBUG_BROOM);

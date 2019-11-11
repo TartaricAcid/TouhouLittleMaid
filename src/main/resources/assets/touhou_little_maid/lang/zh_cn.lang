@@ -176,6 +176,7 @@ gui.touhou_little_maid.skin_details.boots=显示靴子
 gui.touhou_little_maid.skin_details.main_hand=显示主手物品
 gui.touhou_little_maid.skin_details.off_hand=显示副手物品
 gui.touhou_little_maid.skin_details.hata_sasimono=显示旗指物
+gui.touhou_little_maid.skin_details.arrow=显示箭
 gui.touhou_little_maid.skin_details.apply_data=应用数据
 gui.touhou_little_maid.skin_details.mounted_height=高度
 gui.touhou_little_maid.skin_details.show_character=显示参考角色
@@ -271,6 +272,7 @@ model.touhou_little_maid.minoriko_aki.name=秋穰子
 model.touhou_little_maid.mizuhashi_parsee.name=水桥帕露西
 model.touhou_little_maid.nazrin.name=娜兹玲
 model.touhou_little_maid.murasa_minamitsu.name=村纱水蜜
+model.touhou_little_maid.tatara_kogasa.name=多多良小伞
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -340,6 +342,7 @@ model.touhou_little_maid.minoriko_aki.desc=§7丰裕与收成的象征
 model.touhou_little_maid.mizuhashi_parsee.desc=§7地壳下的嫉妒心
 model.touhou_little_maid.nazrin.desc=§7探宝的小小大将
 model.touhou_little_maid.murasa_minamitsu.desc=§7水难事故的念缚灵
+model.touhou_little_maid.tatara_kogasa.desc=§7愉快的遗忘之伞
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

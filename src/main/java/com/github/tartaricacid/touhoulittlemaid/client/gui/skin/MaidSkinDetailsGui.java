@@ -51,6 +51,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     private GuiButtonToggle mainHandButton;
     private GuiButtonToggle offHandButton;
     private GuiButtonToggle hataSasimonoButton;
+    private GuiButtonToggle arrowButton;
 
     MaidSkinDetailsGui(EntityMaid sourceMaid, ResourceLocation modelId) {
         super(sourceMaid, new EntityMaid(sourceMaid.world), ClientProxy.MAID_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
@@ -86,6 +87,8 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         offHandButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         hataSasimonoButton = new GuiButtonToggle(HATA_SASIMONO.ordinal(), 2, 17 + 13 * 11, 128, 12, guiEntity.isShowSasimono());
         hataSasimonoButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
+        arrowButton = new GuiButtonToggle(ARROW.ordinal(), 2, 17 + 13 * 12, 128, 12, guiEntity.getArrowCountInEntity() > 0);
+        arrowButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         addButton(begButton);
         addButton(walkButton);
         addButton(sitButton);
@@ -98,6 +101,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         addButton(mainHandButton);
         addButton(offHandButton);
         addButton(hataSasimonoButton);
+        addButton(arrowButton);
     }
 
     @Override
@@ -114,6 +118,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.main_hand"), 16, 19 + 13 * 9, 0xcacad4);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.off_hand"), 16, 19 + 13 * 10, 0xcacad4);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.hata_sasimono"), 16, 19 + 13 * 11, 0xcacad4);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.arrow"), 16, 19 + 13 * 12, 0xcacad4);
     }
 
     @Override
@@ -154,6 +159,9 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
                 return;
             case HATA_SASIMONO:
                 applyHataSasimonoButtonLogic();
+                return;
+            case ARROW:
+                applyArrowButtonLogic();
                 return;
             default:
                 super.applyCloseButtonLogic();
@@ -244,6 +252,15 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         }
     }
 
+    private void applyArrowButtonLogic() {
+        arrowButton.setStateTriggered(!arrowButton.isStateTriggered());
+        if (arrowButton.isStateTriggered()) {
+            guiEntity.setArrowCountInEntity(9);
+        } else {
+            guiEntity.setArrowCountInEntity(0);
+        }
+    }
+
     private void setEquipmentStateTriggered(EntityEquipmentSlot slot, boolean state) {
         switch (slot) {
             case HEAD:
@@ -322,7 +339,9 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
         // 副手持有物品
         OFF_HAND,
         // 旗指物
-        HATA_SASIMONO;
+        HATA_SASIMONO,
+        // 插得箭
+        ARROW;
 
         /**
          * 通过序号获取对应的 BUTTON 枚举类型

@@ -223,6 +223,9 @@
     }, {
       "model_id": "touhou_little_maid:murasa_minamitsu",
       "description": ["{model.touhou_little_maid.murasa_minamitsu.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:tatara_kogasa",
+      "description": ["{model.touhou_little_maid.tatara_kogasa.desc}"]
     }
   ]
 }
