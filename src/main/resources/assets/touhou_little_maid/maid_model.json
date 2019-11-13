@@ -226,6 +226,9 @@
     }, {
       "model_id": "touhou_little_maid:tatara_kogasa",
       "description": ["{model.touhou_little_maid.tatara_kogasa.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:houjuu_nue",
+      "description": ["{model.touhou_little_maid.houjuu_nue.desc}"]
     }
   ]
 }

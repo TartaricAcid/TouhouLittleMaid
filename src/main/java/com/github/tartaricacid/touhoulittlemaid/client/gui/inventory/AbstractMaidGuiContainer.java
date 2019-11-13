@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
@@ -123,8 +124,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.buttonList.add(toggleHome);
 
         // 切换模型的按钮
-        this.buttonList.add(new GuiButtonImage(BUTTON.SKIN.ordinal(), i + 65, j + 9, 9,
-                9, 178, 72, 10, BACKGROUND));
+        // FIXME: 2019/11/13 其实这个逻辑实现还是有点问题的
+        if (mc.player.isCreative() || !GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
+            this.buttonList.add(new GuiButtonImage(BUTTON.SKIN.ordinal(), i + 65, j + 9, 9,
+                    9, 178, 72, 10, BACKGROUND));
+        }
 
         // 切换旗指物的按钮
         if (maid.hasSasimono()) {
@@ -342,7 +346,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 切换皮肤描述
         xInRange = (i + 65) < mouseX && mouseX < (i + 74);
         yInRange = (j + 9) < mouseY && mouseY < (j + 18);
-        if (xInRange && yInRange) {
+        // FIXME: 2019/11/13 其实这个逻辑实现还是有点问题的
+        boolean canChangeMaidModel = mc.player.isCreative() || !GeneralConfig.MAID_CONFIG.maidCannotChangeModel;
+        if (xInRange && yInRange && canChangeMaidModel) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.skin"), mouseX, mouseY);
         }
 

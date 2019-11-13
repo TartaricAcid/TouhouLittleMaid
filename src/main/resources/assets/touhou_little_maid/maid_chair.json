@@ -97,6 +97,18 @@
       "mounted_height": 7,
       "render_item_scale": 0.15,
       "tameable_can_ride": false
+    }, {
+      "model_id": "touhou_little_maid:torii_3",
+      "texture": "touhou_little_maid:textures/entity/torii.png",
+      "name": "{model.touhou_little_maid.torii.name}",
+      "mounted_height": 7,
+      "render_item_scale": 0.12,
+      "tameable_can_ride": false
+    }, {
+      "model_id": "touhou_little_maid:ema",
+      "mounted_height": 0,
+      "render_item_scale": 0.6,
+      "tameable_can_ride": false
     }
   ]
 }

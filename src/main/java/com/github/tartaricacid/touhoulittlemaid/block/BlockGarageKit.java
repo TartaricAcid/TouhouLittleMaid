@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
@@ -250,7 +251,10 @@ public class BlockGarageKit extends Block {
             ((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
             // 女仆的话，需要应用上模型 ID
             if (entity instanceof EntityMaid) {
-                garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModelId(), new NBTTagCompound());
+                boolean playerCanChangeModel = playerIn.isCreative() || !GeneralConfig.MAID_CONFIG.maidCannotChangeModel;
+                if (playerCanChangeModel) {
+                    garageKit.setData(id.toString(), garageKit.getFacing(), ((EntityMaid) entity).getModelId(), new NBTTagCompound());
+                }
                 return true;
             }
         }

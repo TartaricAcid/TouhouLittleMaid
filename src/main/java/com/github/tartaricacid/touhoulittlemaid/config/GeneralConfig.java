@@ -67,6 +67,11 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.maid_config.enabled_tasks")
         @Config.Name("EnabledTasks")
         public Map<String, Boolean> enabledTasks = new HashMap<>();
+
+        @Config.Comment("Maid cannot switch models freely.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.maid_cannot_change_model")
+        @Config.Name("MaidCannotChangeModel")
+        public boolean maidCannotChangeModel = false;
     }
 
     public static class VanillaConfig {

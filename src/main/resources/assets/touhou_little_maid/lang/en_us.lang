@@ -96,6 +96,7 @@ config.touhou_little_maid.maid_config.maid_pickup_sound_interval=Maid Pickup Sou
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound Interval (tick)
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 config.touhou_little_maid.maid_config.enabled_tasks=Maid Enabled Tasks
+config.touhou_little_maid.maid_config.maid_cannot_change_model=Can Player Change Maid Skin
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=Vanilla Config
@@ -275,6 +276,7 @@ model.touhou_little_maid.mizuhashi_parsee.name=Parsee Mizuhashi
 model.touhou_little_maid.nazrin.name=Nazrin
 model.touhou_little_maid.murasa_minamitsu.name=Minamitsu Murasa
 model.touhou_little_maid.tatara_kogasa.name=Kogasa Tatara
+model.touhou_little_maid.houjuu_nue.name=Nue Houjuu
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -345,6 +347,7 @@ model.touhou_little_maid.mizuhashi_parsee.desc=§7The Jealousy Beneath the Earth
 model.touhou_little_maid.nazrin.desc=§7The Little Dowser General
 model.touhou_little_maid.murasa_minamitsu.desc=§7The Ghost Left From the Shipwreck Accident
 model.touhou_little_maid.tatara_kogasa.desc=§7The Cheery Forgotten Umbrella
+model.touhou_little_maid.houjuu_nue.desc=§7The Unidentified Fantastic Flying Girl
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -367,6 +370,7 @@ model.touhou_little_maid.water_wheel.name=Water Wheel
 model.touhou_little_maid.saisen_bako.name=Saisen Bako
 model.touhou_little_maid.well.name=Well
 model.touhou_little_maid.torii.name=Torii
+model.touhou_little_maid.ema.name=Ema
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
