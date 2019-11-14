@@ -6,6 +6,7 @@ entity.touhou_little_maid.maid.name=Touhou Little Maid
 entity.touhou_little_maid.danmaku.name=Danmaku
 entity.touhou_little_maid.marisa_broom.name=Marisa's Broom
 entity.touhou_little_maid.chair.name=Chair
+entity.touhou_little_maid.box.name=Cake Box
 entity.touhou_little_maid.rinnosuke.name=Rinnosuke Morichika
 entity.touhou_little_maid.fairy.name=Maid Fairy
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
@@ -403,6 +404,7 @@ subtitle.touhou_little_maid.block.altar_craft=Altar Craft Sound
 subtitle.touhou_little_maid.monster.rinnosuke_ambient=Rinnosuke Ambient Sound
 subtitle.touhou_little_maid.monster.rinnosuke_death=Rinnosuke Death Sound
 subtitle.touhou_little_maid.monster.rinnosuke_hurt=Rinnosuke Hurt Sound
+subtitle.touhou_little_maid.entity.box=Box Open Sound
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s

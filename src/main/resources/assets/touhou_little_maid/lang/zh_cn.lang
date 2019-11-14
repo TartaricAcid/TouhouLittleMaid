@@ -6,6 +6,7 @@ entity.touhou_little_maid.maid.name=小女仆
 entity.touhou_little_maid.danmaku.name=弹幕
 entity.touhou_little_maid.marisa_broom.name=魔理沙的扫帚
 entity.touhou_little_maid.chair.name=椅子
+entity.touhou_little_maid.box.name=蛋糕盒
 entity.touhou_little_maid.rinnosuke.name=森近霖之助
 entity.touhou_little_maid.fairy.name=妖精女仆
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
@@ -402,6 +403,7 @@ subtitle.touhou_little_maid.block.altar_craft=祭坛：合成
 subtitle.touhou_little_maid.monster.rinnosuke_ambient=霖之助：吼叫
 subtitle.touhou_little_maid.monster.rinnosuke_death=霖之助：死亡
 subtitle.touhou_little_maid.monster.rinnosuke_hurt=霖之助：受伤
+subtitle.touhou_little_maid.entity.box=盒子：打开
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s

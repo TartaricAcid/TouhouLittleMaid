@@ -54,9 +54,8 @@ public class AltarRecipesManager {
         ProcessingInput plankWood = OreDictDefinition.of("plankWood");
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_maid"),
-                new AltarRecipe(
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"),
-                        0.5f, ItemStack.EMPTY,
+                new SpawnMaidRecipe(
+                        0.5f,
                         OreDictDefinition.of("gemDiamond"), blockLapis, blockGold,
                         blockRedstone, blockIron, blockCoal));
 

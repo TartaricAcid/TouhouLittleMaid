@@ -272,5 +272,12 @@
       "touhou_little_maid:monster/rinnosuke_hurt_1",
       "touhou_little_maid:monster/rinnosuke_hurt_2"
     ]
+  },
+  "entity.box": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.entity.box",
+    "sounds": [
+      "touhou_little_maid:entity/box"
+    ]
   }
 }
