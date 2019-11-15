@@ -75,6 +75,8 @@ public final class MaidItems {
     public static Item ALBUM;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "maid_beacon")
     public static Item MAID_BEACON;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "spell_card")
+    public static Item SPELL_CARD;
 
     @SuppressWarnings("all")
     @SubscribeEvent
@@ -97,6 +99,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemHataSasimono().setRegistryName("hata_sasimono"));
         event.getRegistry().register(new ItemAlbum().setRegistryName("album"));
         event.getRegistry().register(new ItemMaidBeacon(MaidBlocks.MAID_BEACON).setRegistryName("maid_beacon"));
+        event.getRegistry().register(new ItemSpellCard().setRegistryName("spell_card"));
 
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));

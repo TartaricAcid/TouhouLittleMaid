@@ -92,15 +92,16 @@ public class ItemHakureiGohei extends Item {
             float velocity = 0.2f * (a + 1);
             DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
             DanmakuType type = getGoheiMode(stack);
-
             EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
             danmaku.posX = danmaku.posX + player.getLookVec().x;
             danmaku.posY = danmaku.posY + player.getLookVec().y;
             danmaku.posZ = danmaku.posZ + player.getLookVec().z;
-            danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
+            // danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
+            danmaku.setXFunction("x+Math.sin(t/20)*5");
+            danmaku.setZFunction("z+Math.cos(t/20)*5");
             worldIn.spawnEntity(danmaku);
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
-            player.getCooldownTracker().setCooldown(this, 11 - a);
+            player.getCooldownTracker().setCooldown(this, 0);
             stack.damageItem(1, player);
         }
     }

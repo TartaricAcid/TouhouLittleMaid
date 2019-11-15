@@ -52,6 +52,8 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.io.IOUtils;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,6 +65,8 @@ import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
+    public static final ScriptEngineManager SCRIPT_ENGINE_MANAGER = new ScriptEngineManager();
+    public static final ScriptEngine NASHORN = SCRIPT_ENGINE_MANAGER.getEngineByName("nashorn");
     /**
      * 服务端用模型列表，
      * 这个只会在服务器启动时候读取默认原版的列表，

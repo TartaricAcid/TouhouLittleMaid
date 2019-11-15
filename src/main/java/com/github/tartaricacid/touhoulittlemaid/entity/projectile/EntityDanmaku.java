@@ -15,16 +15,23 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.script.Bindings;
+import javax.script.ScriptException;
 
 import static com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku.NBT.*;
+import static com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy.NASHORN;
 
 public class EntityDanmaku extends EntityThrowable {
     private static final int MAX_TICKS_EXISTED = 200;
-
     private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.VARINT);
     private static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
     private static final DataParameter<Float> GRAVITY = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
+    private static final DataParameter<String> X_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
+    private static final DataParameter<String> Y_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
+    private static final DataParameter<String> Z_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
+
+    private Bindings bindings = NASHORN.createBindings();
 
     public EntityDanmaku(World worldIn) {
         super(worldIn);
@@ -65,6 +72,9 @@ public class EntityDanmaku extends EntityThrowable {
         this.getDataManager().register(COLOR, DanmakuColor.RED.getIndex());
         this.getDataManager().register(DAMAGE, 1.0f);
         this.getDataManager().register(GRAVITY, 0.01f);
+        this.getDataManager().register(X_FUNCTION, "");
+        this.getDataManager().register(Y_FUNCTION, "");
+        this.getDataManager().register(Z_FUNCTION, "");
     }
 
     @Override
@@ -116,9 +126,32 @@ public class EntityDanmaku extends EntityThrowable {
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if (ticksExisted == 1) {
+            bindings.put("x", this.posX);
+            bindings.put("z", this.posZ);
+        }
+        try {
+            bindings.put("t", this.ticksExisted);
+            if (!getXFunction().isEmpty()) {
+                this.posX = Double.parseDouble(NASHORN.eval(getXFunction(), bindings).toString());
+            }
+            if (!getYFunction().isEmpty()) {
+                this.posY = Double.parseDouble(NASHORN.eval(getYFunction(), bindings).toString());
+            }
+            if (!getZFunction().isEmpty()) {
+                this.posZ = Double.parseDouble(NASHORN.eval(getZFunction(), bindings).toString());
+            }
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+
         if (this.ticksExisted > MAX_TICKS_EXISTED) {
             this.setDead();
         }
+    }
+
+    public Bindings getBindings() {
+        return bindings;
     }
 
     @Override
@@ -136,6 +169,15 @@ public class EntityDanmaku extends EntityThrowable {
         if (compound.hasKey(DANMAKU_GRAVITY.getName())) {
             setGravityVelocity(compound.getFloat(DANMAKU_GRAVITY.getName()));
         }
+        if (compound.hasKey(DANMAKU_X_FUNCTION.getName())) {
+            setXFunction(compound.getString(DANMAKU_X_FUNCTION.getName()));
+        }
+        if (compound.hasKey(DANMAKU_Y_FUNCTION.getName())) {
+            setYFunction(compound.getString(DANMAKU_Y_FUNCTION.getName()));
+        }
+        if (compound.hasKey(DANMAKU_Z_FUNCTION.getName())) {
+            setZFunction(compound.getString(DANMAKU_Z_FUNCTION.getName()));
+        }
     }
 
     @Override
@@ -145,6 +187,9 @@ public class EntityDanmaku extends EntityThrowable {
         compound.setInteger(DANMAKU_COLOR.getName(), getColor().getIndex());
         compound.setFloat(DANMAKU_DAMAGE.getName(), getDamage());
         compound.setFloat(DANMAKU_GRAVITY.getName(), getGravityVelocity());
+        compound.setString(DANMAKU_X_FUNCTION.getName(), getXFunction());
+        compound.setString(DANMAKU_Y_FUNCTION.getName(), getYFunction());
+        compound.setString(DANMAKU_Z_FUNCTION.getName(), getZFunction());
         return compound;
     }
 
@@ -183,12 +228,42 @@ public class EntityDanmaku extends EntityThrowable {
         this.dataManager.set(DAMAGE, damage);
     }
 
+    public String getXFunction() {
+        return this.getDataManager().get(X_FUNCTION);
+    }
+
+    public void setXFunction(String xFunction) {
+        this.dataManager.set(X_FUNCTION, xFunction);
+    }
+
+
+    public String getYFunction() {
+        return this.getDataManager().get(Y_FUNCTION);
+    }
+
+    public void setYFunction(String yFunction) {
+        this.dataManager.set(Y_FUNCTION, yFunction);
+    }
+
+
+    public String getZFunction() {
+        return this.getDataManager().get(Z_FUNCTION);
+    }
+
+    public void setZFunction(String zFunction) {
+        this.dataManager.set(Z_FUNCTION, zFunction);
+    }
+
     enum NBT {
         // 弹幕相关参数
         DANMAKU_TYPE("DanmakuType"),
         DANMAKU_COLOR("DanmakuColor"),
         DANMAKU_DAMAGE("DanmakuDamage"),
-        DANMAKU_GRAVITY("DanmakuGravity");
+        DANMAKU_GRAVITY("DanmakuGravity"),
+        DANMAKU_X_FUNCTION("DanmakuXFunction"),
+        DANMAKU_Y_FUNCTION("DanmakuYFunction"),
+        DANMAKU_Z_FUNCTION("DanmakuZFunction");
+
 
         private String name;
 
