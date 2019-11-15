@@ -96,9 +96,13 @@ public class ItemHakureiGohei extends Item {
             danmaku.posX = danmaku.posX + player.getLookVec().x;
             danmaku.posY = danmaku.posY + player.getLookVec().y;
             danmaku.posZ = danmaku.posZ + player.getLookVec().z;
-            // danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
-            danmaku.setXFunction("x+Math.sin(t/20)*5");
-            danmaku.setZFunction("z+Math.cos(t/20)*5");
+            if (player.getHeldItemOffhand().getItem() == MaidItems.SPELL_CARD) {
+                danmaku.setOriginPos(danmaku.getPosition());
+                danmaku.setXFunction("x+Math.cos(t/20)*5");
+                danmaku.setZFunction("z+Math.sin(t/20)*5");
+            } else {
+                danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
+            }
             worldIn.spawnEntity(danmaku);
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
             player.getCooldownTracker().setCooldown(this, 0);

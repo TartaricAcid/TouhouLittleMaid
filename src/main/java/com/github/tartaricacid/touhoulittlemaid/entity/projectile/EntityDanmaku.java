@@ -7,10 +7,12 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -30,7 +32,7 @@ public class EntityDanmaku extends EntityThrowable {
     private static final DataParameter<String> X_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
     private static final DataParameter<String> Y_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
     private static final DataParameter<String> Z_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
-
+    private static final DataParameter<BlockPos> ORIGIN_POS = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.BLOCK_POS);
     private Bindings bindings = NASHORN.createBindings();
 
     public EntityDanmaku(World worldIn) {
@@ -75,6 +77,8 @@ public class EntityDanmaku extends EntityThrowable {
         this.getDataManager().register(X_FUNCTION, "");
         this.getDataManager().register(Y_FUNCTION, "");
         this.getDataManager().register(Z_FUNCTION, "");
+        this.getDataManager().register(ORIGIN_POS, BlockPos.ORIGIN);
+
     }
 
     @Override
@@ -126,12 +130,13 @@ public class EntityDanmaku extends EntityThrowable {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (ticksExisted == 1) {
-            bindings.put("x", this.posX);
-            bindings.put("z", this.posZ);
-        }
+
         try {
+            bindings.put("x", this.getOriginPos().getX());
+            bindings.put("y", this.getOriginPos().getY());
+            bindings.put("z", this.getOriginPos().getZ());
             bindings.put("t", this.ticksExisted);
+
             if (!getXFunction().isEmpty()) {
                 this.posX = Double.parseDouble(NASHORN.eval(getXFunction(), bindings).toString());
             }
@@ -142,16 +147,12 @@ public class EntityDanmaku extends EntityThrowable {
                 this.posZ = Double.parseDouble(NASHORN.eval(getZFunction(), bindings).toString());
             }
         } catch (ScriptException e) {
-            e.printStackTrace();
+            this.setDead();
         }
 
         if (this.ticksExisted > MAX_TICKS_EXISTED) {
             this.setDead();
         }
-    }
-
-    public Bindings getBindings() {
-        return bindings;
     }
 
     @Override
@@ -178,6 +179,9 @@ public class EntityDanmaku extends EntityThrowable {
         if (compound.hasKey(DANMAKU_Z_FUNCTION.getName())) {
             setZFunction(compound.getString(DANMAKU_Z_FUNCTION.getName()));
         }
+        if (compound.hasKey(DANMAKU_ORIGIN_POS.getName())) {
+            setOriginPos(NBTUtil.getPosFromTag(compound.getCompoundTag(DANMAKU_ORIGIN_POS.getName())));
+        }
     }
 
     @Override
@@ -190,6 +194,7 @@ public class EntityDanmaku extends EntityThrowable {
         compound.setString(DANMAKU_X_FUNCTION.getName(), getXFunction());
         compound.setString(DANMAKU_Y_FUNCTION.getName(), getYFunction());
         compound.setString(DANMAKU_Z_FUNCTION.getName(), getZFunction());
+        compound.setTag(DANMAKU_ORIGIN_POS.getName(), NBTUtil.createPosTag(getOriginPos()));
         return compound;
     }
 
@@ -254,6 +259,14 @@ public class EntityDanmaku extends EntityThrowable {
         this.dataManager.set(Z_FUNCTION, zFunction);
     }
 
+    public BlockPos getOriginPos() {
+        return this.dataManager.get(ORIGIN_POS);
+    }
+
+    public void setOriginPos(BlockPos pos) {
+        this.dataManager.set(ORIGIN_POS, pos);
+    }
+
     enum NBT {
         // 弹幕相关参数
         DANMAKU_TYPE("DanmakuType"),
@@ -262,7 +275,8 @@ public class EntityDanmaku extends EntityThrowable {
         DANMAKU_GRAVITY("DanmakuGravity"),
         DANMAKU_X_FUNCTION("DanmakuXFunction"),
         DANMAKU_Y_FUNCTION("DanmakuYFunction"),
-        DANMAKU_Z_FUNCTION("DanmakuZFunction");
+        DANMAKU_Z_FUNCTION("DanmakuZFunction"),
+        DANMAKU_ORIGIN_POS("DanmakuOriginPos");
 
 
         private String name;
