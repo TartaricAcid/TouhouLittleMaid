@@ -6,10 +6,14 @@ import com.github.tartaricacid.touhoulittlemaid.api.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.pojo.Danmaku;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.pojo.DanmakuFunction;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.DelayedTask;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -92,20 +96,38 @@ public class ItemHakureiGohei extends Item {
             float velocity = 0.2f * (a + 1);
             DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
             DanmakuType type = getGoheiMode(stack);
-            EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
-            danmaku.posX = danmaku.posX + player.getLookVec().x;
-            danmaku.posY = danmaku.posY + player.getLookVec().y;
-            danmaku.posZ = danmaku.posZ + player.getLookVec().z;
             if (player.getHeldItemOffhand().getItem() == MaidItems.SPELL_CARD) {
-                danmaku.setOriginPos(danmaku.getPosition());
-                danmaku.setXFunction("x+Math.cos(t/20)*5");
-                danmaku.setZFunction("z+Math.sin(t/20)*5");
+                Danmaku danmakuList = CommonProxy.CUSTOM_SPELL_CARD_MAP.get("odd_straight_line").getDanmaku();
+                for (DanmakuFunction function : danmakuList.getDanmakuFunction()) {
+                    for (int i = 0; i < danmakuList.getTimes(); i++) {
+                        DelayedTask.add(() -> {
+                                    if (player.isEntityAlive()) {
+                                        EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
+                                        danmaku.posX = danmaku.posX + player.getLookVec().x;
+                                        danmaku.posY = danmaku.posY + player.getLookVec().y;
+                                        danmaku.posZ = danmaku.posZ + player.getLookVec().z;
+                                        danmaku.setXFunction(function.getX());
+                                        danmaku.setYFunction(function.getY());
+                                        danmaku.setZFunction(function.getZ());
+                                        danmaku.setOriginPos(player.getPositionVector().add(0, player.getEyeHeight(), 0));
+                                        danmaku.setDanmakuYaw(player.rotationYaw);
+                                        worldIn.spawnEntity(danmaku);
+                                    }
+                                }
+                                , danmakuList.getDelay() * i);
+                    }
+                }
+                player.getCooldownTracker().setCooldown(this, danmakuList.getTimes() * danmakuList.getDelay() + 5);
             } else {
+                EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
+                danmaku.posX = danmaku.posX + player.getLookVec().x;
+                danmaku.posY = danmaku.posY + player.getLookVec().y;
+                danmaku.posZ = danmaku.posZ + player.getLookVec().z;
                 danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
+                worldIn.spawnEntity(danmaku);
+                player.getCooldownTracker().setCooldown(this, 11 - a);
             }
-            worldIn.spawnEntity(danmaku);
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
-            player.getCooldownTracker().setCooldown(this, 0);
             stack.damageItem(1, player);
         }
     }

@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

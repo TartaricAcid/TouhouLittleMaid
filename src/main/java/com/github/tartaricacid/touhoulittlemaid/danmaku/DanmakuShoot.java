@@ -1,5 +1,6 @@
-package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
+package com.github.tartaricacid.touhoulittlemaid.danmaku;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.Vec3d;

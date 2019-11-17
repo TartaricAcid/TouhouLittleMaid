@@ -8,12 +8,15 @@ import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
+import com.github.tartaricacid.touhoulittlemaid.command.ReloadSpellCardCommand;
 import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.pojo.CustomSpellCard;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
@@ -75,6 +78,7 @@ public class CommonProxy {
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
+    public static final Map<String, CustomSpellCard> CUSTOM_SPELL_CARD_MAP = Maps.newHashMap();
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
@@ -107,6 +111,7 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(TouhouLittleMaid.INSTANCE, new MaidGuiHandler());
         CapabilityPowerHandler.register();
+        CustomSpellCardManger.onCustomSpellCardReload();
         if (Loader.isModLoaded("patchouli")) {
             MultiblockRegistry.init();
         }
@@ -165,6 +170,7 @@ public class CommonProxy {
 
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new MainCommand());
+        event.registerServerCommand(new ReloadSpellCardCommand());
     }
 
     /**

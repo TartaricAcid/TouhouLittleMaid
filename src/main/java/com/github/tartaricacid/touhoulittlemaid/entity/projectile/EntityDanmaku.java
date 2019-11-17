@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -7,13 +9,12 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -32,7 +33,10 @@ public class EntityDanmaku extends EntityThrowable {
     private static final DataParameter<String> X_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
     private static final DataParameter<String> Y_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
     private static final DataParameter<String> Z_FUNCTION = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.STRING);
-    private static final DataParameter<BlockPos> ORIGIN_POS = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.BLOCK_POS);
+    private static final DataParameter<Float> ORIGIN_POS_X = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> ORIGIN_POS_Y = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> ORIGIN_POS_Z = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> DANMAKU_YAW = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
     private Bindings bindings = NASHORN.createBindings();
 
     public EntityDanmaku(World worldIn) {
@@ -77,7 +81,10 @@ public class EntityDanmaku extends EntityThrowable {
         this.getDataManager().register(X_FUNCTION, "");
         this.getDataManager().register(Y_FUNCTION, "");
         this.getDataManager().register(Z_FUNCTION, "");
-        this.getDataManager().register(ORIGIN_POS, BlockPos.ORIGIN);
+        this.getDataManager().register(ORIGIN_POS_X, 0.0f);
+        this.getDataManager().register(ORIGIN_POS_Y, 0.0f);
+        this.getDataManager().register(ORIGIN_POS_Z, 0.0f);
+        this.getDataManager().register(DANMAKU_YAW, 0.0f);
 
     }
 
@@ -130,29 +137,38 @@ public class EntityDanmaku extends EntityThrowable {
     @Override
     public void onUpdate() {
         super.onUpdate();
-
-        try {
-            bindings.put("x", this.getOriginPos().getX());
-            bindings.put("y", this.getOriginPos().getY());
-            bindings.put("z", this.getOriginPos().getZ());
-            bindings.put("t", this.ticksExisted);
-
-            if (!getXFunction().isEmpty()) {
-                this.posX = Double.parseDouble(NASHORN.eval(getXFunction(), bindings).toString());
+        boolean xyzFunctionIsEmpty = getXFunction().isEmpty() && getYFunction().isEmpty() && getZFunction().isEmpty();
+        if (!xyzFunctionIsEmpty) {
+            try {
+                applyCustomSpellCardLogic();
+            } catch (ScriptException e) {
+                this.setDead();
             }
-            if (!getYFunction().isEmpty()) {
-                this.posY = Double.parseDouble(NASHORN.eval(getYFunction(), bindings).toString());
-            }
-            if (!getZFunction().isEmpty()) {
-                this.posZ = Double.parseDouble(NASHORN.eval(getZFunction(), bindings).toString());
-            }
-        } catch (ScriptException e) {
-            this.setDead();
         }
 
         if (this.ticksExisted > MAX_TICKS_EXISTED) {
             this.setDead();
         }
+    }
+
+    private void applyCustomSpellCardLogic() throws ScriptException {
+        bindings.put("t", this.ticksExisted);
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
+        if (!getXFunction().isEmpty()) {
+            x = Double.parseDouble(NASHORN.eval(getXFunction(), bindings).toString());
+        }
+        if (!getYFunction().isEmpty()) {
+            y = Double.parseDouble(NASHORN.eval(getYFunction(), bindings).toString());
+        }
+        if (!getZFunction().isEmpty()) {
+            z = Double.parseDouble(NASHORN.eval(getZFunction(), bindings).toString());
+        }
+        Vec3d vec3d = (new Vec3d(x, y, z))
+                .rotateYaw(this.getDanmakuYaw() * -0.01745329251f)
+                .add(getOriginPos().x, getOriginPos().y, getOriginPos().z);
+        this.setPosition(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @Override
@@ -179,8 +195,16 @@ public class EntityDanmaku extends EntityThrowable {
         if (compound.hasKey(DANMAKU_Z_FUNCTION.getName())) {
             setZFunction(compound.getString(DANMAKU_Z_FUNCTION.getName()));
         }
-        if (compound.hasKey(DANMAKU_ORIGIN_POS.getName())) {
-            setOriginPos(NBTUtil.getPosFromTag(compound.getCompoundTag(DANMAKU_ORIGIN_POS.getName())));
+        if (compound.hasKey(DANMAKU_ORIGIN_POS_X.getName())
+                && compound.hasKey(DANMAKU_ORIGIN_POS_Y.getName())
+                && compound.hasKey(DANMAKU_ORIGIN_POS_Z.getName())) {
+            setOriginPos(new Vec3d(compound.getFloat(DANMAKU_ORIGIN_POS_X.getName()),
+                    compound.getFloat(DANMAKU_ORIGIN_POS_Y.getName()),
+                    compound.getFloat(DANMAKU_ORIGIN_POS_Z.getName())));
+
+        }
+        if (compound.hasKey(NBT.DANMAKU_YAW.getName())) {
+            setDanmakuYaw(compound.getFloat(NBT.DANMAKU_YAW.getName()));
         }
     }
 
@@ -194,7 +218,10 @@ public class EntityDanmaku extends EntityThrowable {
         compound.setString(DANMAKU_X_FUNCTION.getName(), getXFunction());
         compound.setString(DANMAKU_Y_FUNCTION.getName(), getYFunction());
         compound.setString(DANMAKU_Z_FUNCTION.getName(), getZFunction());
-        compound.setTag(DANMAKU_ORIGIN_POS.getName(), NBTUtil.createPosTag(getOriginPos()));
+        compound.setFloat(DANMAKU_ORIGIN_POS_X.getName(), (float) getOriginPos().x);
+        compound.setFloat(DANMAKU_ORIGIN_POS_Y.getName(), (float) getOriginPos().y);
+        compound.setFloat(DANMAKU_ORIGIN_POS_Z.getName(), (float) getOriginPos().z);
+        compound.setFloat(NBT.DANMAKU_YAW.getName(), getDanmakuYaw());
         return compound;
     }
 
@@ -259,12 +286,22 @@ public class EntityDanmaku extends EntityThrowable {
         this.dataManager.set(Z_FUNCTION, zFunction);
     }
 
-    public BlockPos getOriginPos() {
-        return this.dataManager.get(ORIGIN_POS);
+    public Vec3d getOriginPos() {
+        return new Vec3d(this.dataManager.get(ORIGIN_POS_X), this.dataManager.get(ORIGIN_POS_Y), this.dataManager.get(ORIGIN_POS_Z));
     }
 
-    public void setOriginPos(BlockPos pos) {
-        this.dataManager.set(ORIGIN_POS, pos);
+    public void setOriginPos(Vec3d pos) {
+        this.dataManager.set(ORIGIN_POS_X, (float) pos.x);
+        this.dataManager.set(ORIGIN_POS_Y, (float) pos.y);
+        this.dataManager.set(ORIGIN_POS_Z, (float) pos.z);
+    }
+
+    public float getDanmakuYaw() {
+        return this.dataManager.get(DANMAKU_YAW);
+    }
+
+    public void setDanmakuYaw(float yaw) {
+        this.dataManager.set(DANMAKU_YAW, yaw);
     }
 
     enum NBT {
@@ -276,7 +313,10 @@ public class EntityDanmaku extends EntityThrowable {
         DANMAKU_X_FUNCTION("DanmakuXFunction"),
         DANMAKU_Y_FUNCTION("DanmakuYFunction"),
         DANMAKU_Z_FUNCTION("DanmakuZFunction"),
-        DANMAKU_ORIGIN_POS("DanmakuOriginPos");
+        DANMAKU_ORIGIN_POS_X("DanmakuOriginPosX"),
+        DANMAKU_ORIGIN_POS_Y("DanmakuOriginPosY"),
+        DANMAKU_ORIGIN_POS_Z("DanmakuOriginPosZ"),
+        DANMAKU_YAW("DanmakuYaw");
 
 
         private String name;

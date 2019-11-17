@@ -1,10 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.monster;
 
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuShoot;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.EntityFairyAttack;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;

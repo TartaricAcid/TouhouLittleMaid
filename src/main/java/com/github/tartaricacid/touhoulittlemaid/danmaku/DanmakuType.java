@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
+package com.github.tartaricacid.touhoulittlemaid.danmaku;
 
 public enum DanmakuType {
     // 点弹
