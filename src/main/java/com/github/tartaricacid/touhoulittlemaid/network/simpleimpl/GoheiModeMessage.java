@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import io.netty.buffer.ByteBuf;

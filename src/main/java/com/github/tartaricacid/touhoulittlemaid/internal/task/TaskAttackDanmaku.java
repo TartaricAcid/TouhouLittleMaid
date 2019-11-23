@@ -2,10 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.internal.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuShoot;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import net.minecraft.entity.Entity;

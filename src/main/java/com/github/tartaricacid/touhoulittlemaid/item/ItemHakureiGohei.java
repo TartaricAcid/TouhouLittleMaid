@@ -6,10 +6,12 @@ import com.github.tartaricacid.touhoulittlemaid.api.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuColor;
-import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -36,6 +38,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.script.Invocable;
+import javax.script.ScriptException;
 import java.util.List;
 import java.util.Random;
 
@@ -79,30 +83,49 @@ public class ItemHakureiGohei extends Item {
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
         if (!worldIn.isRemote && entityLiving instanceof EntityPlayer && !entityLiving.isSneaking()) {
             EntityPlayer player = (EntityPlayer) entityLiving;
-            Vec3d v = player.getLookVec();
-            PowerHandler powerHandler = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
-            int power = powerHandler == null ? 0 : MathHelper.floor(powerHandler.get());
-
-            // 依据右键时长，Power 数来决定伤害和发射速度
-            // 右键有效时长为 0-5 s
-            // Power 有效范围 0-5
-            // a = 右键时长增益（0-5）+ Power 数（0-5）
-            int a = (((500 - timeLeft) > 100 ? 100 : (500 - timeLeft)) / 20) + power;
-            int damage = a + 4;
-            float velocity = 0.2f * (a + 1);
-            DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
-            DanmakuType type = getGoheiMode(stack);
-
-            EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
-            danmaku.posX = danmaku.posX + player.getLookVec().x;
-            danmaku.posY = danmaku.posY + player.getLookVec().y;
-            danmaku.posZ = danmaku.posZ + player.getLookVec().z;
-            danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
-            worldIn.spawnEntity(danmaku);
+            if (player.getHeldItemOffhand().getItem() == MaidItems.SPELL_CARD) {
+                spellCardShoot(worldIn, player);
+            } else {
+                normalShoot(stack, worldIn, player, timeLeft);
+            }
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
-            player.getCooldownTracker().setCooldown(this, 11 - a);
             stack.damageItem(1, player);
         }
+    }
+
+    private void spellCardShoot(World worldIn, EntityPlayer player) {
+        try {
+            CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand());
+            CommonProxy.NASHORN.eval(entry.getScript());
+            Invocable invocable = (Invocable) CommonProxy.NASHORN;
+            invocable.invokeFunction("spell_card", worldIn, player);
+            player.getCooldownTracker().setCooldown(this, entry.getCooldown());
+        } catch (NoSuchMethodException | ScriptException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void normalShoot(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft) {
+        Vec3d v = player.getLookVec();
+        PowerHandler powerHandler = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+        int power = powerHandler == null ? 0 : MathHelper.floor(powerHandler.get());
+
+        // 依据右键时长，Power 数来决定伤害和发射速度
+        // 右键有效时长为 0-5 s
+        // Power 有效范围 0-5
+        // a = 右键时长增益（0-5）+ Power 数（0-5）
+        int a = (((500 - timeLeft) > 100 ? 100 : (500 - timeLeft)) / 20) + power;
+        int damage = a + 4;
+        float velocity = 0.2f * (a + 1);
+        DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
+        DanmakuType type = getGoheiMode(stack);
+        EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
+        danmaku.setPosition(danmaku.posX + player.getLookVec().x,
+                danmaku.posY + player.getLookVec().y,
+                danmaku.posZ + player.getLookVec().z);
+        danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
+        worldIn.spawnEntity(danmaku);
+        player.getCooldownTracker().setCooldown(this, 11 - a);
     }
 
     @Nonnull

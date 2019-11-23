@@ -8,12 +8,15 @@ import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
+import com.github.tartaricacid.touhoulittlemaid.command.ReloadSpellCardCommand;
 import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
@@ -52,6 +55,8 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.io.IOUtils;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,6 +68,8 @@ import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
+    public static final ScriptEngineManager SCRIPT_ENGINE_MANAGER = new ScriptEngineManager();
+    public static final ScriptEngine NASHORN = SCRIPT_ENGINE_MANAGER.getEngineByName("nashorn");
     /**
      * 服务端用模型列表，
      * 这个只会在服务器启动时候读取默认原版的列表，
@@ -71,6 +78,7 @@ public class CommonProxy {
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
+    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP = Maps.newHashMap();
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
@@ -103,6 +111,7 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(TouhouLittleMaid.INSTANCE, new MaidGuiHandler());
         CapabilityPowerHandler.register();
+        CustomSpellCardManger.onCustomSpellCardReload();
         if (Loader.isModLoaded("patchouli")) {
             MultiblockRegistry.init();
         }
@@ -161,6 +170,7 @@ public class CommonProxy {
 
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new MainCommand());
+        event.registerServerCommand(new ReloadSpellCardCommand());
     }
 
     /**
@@ -201,7 +211,7 @@ public class CommonProxy {
 
     private void registerModEntity() {
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"), EntityMaid.class, "touhou_little_maid.maid", 0, TouhouLittleMaid.INSTANCE, 80, 3, true, 0x4a6195, 0xffffff);
-        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.projectile.danmaku"), EntityDanmaku.class, "touhou_little_maid.danmaku", 1, TouhouLittleMaid.INSTANCE, 64, 10, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.projectile.danmaku"), EntityDanmaku.class, "touhou_little_maid.danmaku", 1, TouhouLittleMaid.INSTANCE, 64, 200, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.marisa_broom"), EntityMarisaBroom.class, "touhou_little_maid.marisa_broom", 2, TouhouLittleMaid.INSTANCE, 80, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.chair"), EntityChair.class, "touhou_little_maid.chair", 3, TouhouLittleMaid.INSTANCE, 160, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.monster.rinnosuke"), EntityRinnosuke.class, "touhou_little_maid.rinnosuke", 4, TouhouLittleMaid.INSTANCE, 80, 3, true, 0x515a9b, 0x535353);
