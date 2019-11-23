@@ -1,15 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,7 +17,6 @@ import java.util.List;
  * @author TartaricAcid
  * @date 2019/8/17 15:03
  **/
-@SideOnly(Side.CLIENT)
 public class ReloadSpellCardCommand extends CommandBase {
     @Nonnull
     @Override
@@ -40,7 +36,7 @@ public class ReloadSpellCardCommand extends CommandBase {
     @Nonnull
     @Override
     public String getUsage(@Nonnull ICommandSender sender) {
-        return I18n.format("commands.touhou_little_maid.spell_card.usage");
+        return "commands.touhou_little_maid.spell_card.usage";
     }
 
     @Override

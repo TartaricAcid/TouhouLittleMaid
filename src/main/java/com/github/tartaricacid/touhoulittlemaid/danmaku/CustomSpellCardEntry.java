@@ -1,0 +1,72 @@
+package com.github.tartaricacid.touhoulittlemaid.danmaku;
+
+import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
+
+/**
+ * @author TartaricAcid
+ * @date 2019/11/22 20:53
+ **/
+public final class CustomSpellCardEntry {
+    private String id;
+    private String nameKey;
+    private String descriptionKey;
+    private String author;
+    private String version;
+    private String script;
+    private ResourceLocation icon;
+    private ResourceLocation snapshoot;
+    private int cooldown;
+
+    CustomSpellCardEntry(String id, String nameKey, String descriptionKey, String author, String version,
+                         String script, int cooldown, ResourceLocation icon, ResourceLocation snapshoot) {
+        this.id = id;
+        this.nameKey = nameKey;
+        this.descriptionKey = descriptionKey;
+        this.author = author;
+        this.version = version;
+        this.script = script;
+        this.cooldown = cooldown;
+        this.icon = icon;
+        this.snapshoot = snapshoot;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getNameKey() {
+        return nameKey;
+    }
+
+    public String getDescriptionKey() {
+        return descriptionKey;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getScript() {
+        return script;
+    }
+
+    public int getCooldown() {
+        return cooldown;
+    }
+
+    @Nullable
+    public ResourceLocation getIcon() {
+        return icon;
+    }
+
+    @Nullable
+    public ResourceLocation getSnapshoot() {
+        return snapshoot;
+    }
+}

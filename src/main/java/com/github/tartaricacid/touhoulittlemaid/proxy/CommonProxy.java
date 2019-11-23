@@ -15,8 +15,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeIn
 import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
-import com.github.tartaricacid.touhoulittlemaid.danmaku.pojo.CustomSpellCard;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
@@ -78,7 +78,7 @@ public class CommonProxy {
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
-    public static final Map<String, CustomSpellCard> CUSTOM_SPELL_CARD_MAP = Maps.newHashMap();
+    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP = Maps.newHashMap();
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;

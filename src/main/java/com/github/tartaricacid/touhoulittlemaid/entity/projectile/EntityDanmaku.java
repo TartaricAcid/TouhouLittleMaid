@@ -37,6 +37,7 @@ public class EntityDanmaku extends EntityThrowable {
     private static final DataParameter<Float> ORIGIN_POS_Y = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
     private static final DataParameter<Float> ORIGIN_POS_Z = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
     private static final DataParameter<Float> DANMAKU_YAW = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> DANMAKU_TICKS_EXISTED = EntityDataManager.createKey(EntityDanmaku.class, DataSerializers.VARINT);
     private Bindings bindings = NASHORN.createBindings();
 
     public EntityDanmaku(World worldIn) {
@@ -85,7 +86,7 @@ public class EntityDanmaku extends EntityThrowable {
         this.getDataManager().register(ORIGIN_POS_Y, 0.0f);
         this.getDataManager().register(ORIGIN_POS_Z, 0.0f);
         this.getDataManager().register(DANMAKU_YAW, 0.0f);
-
+        this.getDataManager().register(DANMAKU_TICKS_EXISTED, MAX_TICKS_EXISTED);
     }
 
     @Override
@@ -146,7 +147,7 @@ public class EntityDanmaku extends EntityThrowable {
             }
         }
 
-        if (this.ticksExisted > MAX_TICKS_EXISTED) {
+        if (this.ticksExisted > getDanmakuTicksExisted()) {
             this.setDead();
         }
     }
@@ -206,6 +207,9 @@ public class EntityDanmaku extends EntityThrowable {
         if (compound.hasKey(NBT.DANMAKU_YAW.getName())) {
             setDanmakuYaw(compound.getFloat(NBT.DANMAKU_YAW.getName()));
         }
+        if (compound.hasKey(NBT.DANMAKU_TICKS_EXISTED.getName())) {
+            setDanmakuTicksExisted(compound.getInteger(NBT.DANMAKU_TICKS_EXISTED.getName()));
+        }
     }
 
     @Override
@@ -222,6 +226,7 @@ public class EntityDanmaku extends EntityThrowable {
         compound.setFloat(DANMAKU_ORIGIN_POS_Y.getName(), (float) getOriginPos().y);
         compound.setFloat(DANMAKU_ORIGIN_POS_Z.getName(), (float) getOriginPos().z);
         compound.setFloat(NBT.DANMAKU_YAW.getName(), getDanmakuYaw());
+        compound.setInteger(NBT.DANMAKU_TICKS_EXISTED.getName(), getDanmakuTicksExisted());
         return compound;
     }
 
@@ -304,6 +309,14 @@ public class EntityDanmaku extends EntityThrowable {
         this.dataManager.set(DANMAKU_YAW, yaw);
     }
 
+    public int getDanmakuTicksExisted() {
+        return this.dataManager.get(DANMAKU_TICKS_EXISTED);
+    }
+
+    public void setDanmakuTicksExisted(int ticksExisted) {
+        this.dataManager.set(DANMAKU_TICKS_EXISTED, ticksExisted);
+    }
+
     enum NBT {
         // 弹幕相关参数
         DANMAKU_TYPE("DanmakuType"),
@@ -316,7 +329,8 @@ public class EntityDanmaku extends EntityThrowable {
         DANMAKU_ORIGIN_POS_X("DanmakuOriginPosX"),
         DANMAKU_ORIGIN_POS_Y("DanmakuOriginPosY"),
         DANMAKU_ORIGIN_POS_Z("DanmakuOriginPosZ"),
-        DANMAKU_YAW("DanmakuYaw");
+        DANMAKU_YAW("DanmakuYaw"),
+        DANMAKU_TICKS_EXISTED("DanmakuTicksExisted");
 
 
         private String name;
