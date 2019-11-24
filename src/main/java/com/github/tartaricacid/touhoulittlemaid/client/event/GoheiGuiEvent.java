@@ -27,10 +27,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Locale;
+
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
 public class GoheiGuiEvent {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/danmaku.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/singe_plane_danmaku.png");
     private static int timer = 0;
     private static int color = 0;
     private static boolean show = false;
@@ -85,19 +87,20 @@ public class GoheiGuiEvent {
             timer += 1;
 
             // 材质宽度
-            int w = 224;
+            int w = 416;
             // 材质长度
-            int l = 320;
+            int l = 192;
 
             // 依据类型颜色开始定位材质位置（材质块都是 32 * 32 大小）
             double pStartU = 32 * color;
-            double pStartV = 32 * type.getIndex();
+            double pStartV = 32 * type.ordinal();
 
             float sx = event.getResolution().getScaledWidth();
             float sy = event.getResolution().getScaledHeight();
 
             String text = I18n.format("tooltips.touhou_little_maid.hakurei_gohei.desc",
-                    I18n.format("danmaku_type.touhou_little_maid." + item.getGoheiMode(stack).getName()));
+                    I18n.format("danmaku_type.touhou_little_maid."
+                            + item.getGoheiMode(stack).name().toLowerCase(Locale.US)));
 
             mc.fontRenderer.drawString(text, (sx - mc.fontRenderer.getStringWidth(text)) / 2, sy * 0.30f, 0xffffff, true);
 

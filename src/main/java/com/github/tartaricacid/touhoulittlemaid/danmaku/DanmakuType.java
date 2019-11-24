@@ -2,63 +2,51 @@ package com.github.tartaricacid.touhoulittlemaid.danmaku;
 
 public enum DanmakuType {
     // 点弹
-    PELLET("pellet", 0.8d),
+    PELLET(0.8d),
     // 小玉
-    BALL("ball", 0.8d),
-    // 中玉
-    BIG_BALL("big_ball", 0.8d),
-    // 大玉
-    BUBBLE("bubble", 1.2d),
-    // 椭弹
-    JELLYBEAN("jellybean", 0.4d),
-    // 心弹
-    HEART("heart", 0.4d),
-    // 星弹
-    STAR("star", 0.3d),
-    // 札弹
-    AMULET("amulet", 0.3d),
+    BALL(0.8d),
     // 环玉
-    ORBS("orbs", 0.3d);
+    ORBS(0.3d),
+    // 中玉
+    BIG_BALL(0.8d),
+    // 大玉
+    BUBBLE(1.2d),
+    // 心弹
+    HEART(0.4d),
 
-    private static int length = values().length;
-    private String name;
-    private int index;
+    // TODO：完成下述弹幕渲染设计
+    // 星弹
+    STAR(0.3d),
+    // 椭弹
+    JELLYBEAN(0.4d),
+    // 札弹
+    AMULET(0.3d);
+
     private double size;
 
     /**
      * 弹幕类型枚举
      *
-     * @param name 弹幕名称
-     * @param size 弹幕大小
+     * @param size 弹幕渲染放大缩小倍数
      */
-    DanmakuType(String name, double size) {
-        this.name = name;
-        this.index = ordinal();
+    DanmakuType(double size) {
         this.size = size;
     }
 
     public static DanmakuType getType(int index) {
-        for (DanmakuType type : DanmakuType.values()) {
-            if (index == type.getIndex()) {
-                return type;
-            }
+        if (index < 0 || index >= values().length) {
+            return PELLET;
         }
-        return PELLET;
-    }
-
-    public static int getLength() {
-        return length;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getIndex() {
-        return index;
+        return values()[index];
     }
 
     public double getSize() {
         return size;
+    }
+
+    public static int getLength() {
+        // TODO：目前未完成其他几种类型渲染设计
+        return 6;
+        // return values().length;
     }
 }

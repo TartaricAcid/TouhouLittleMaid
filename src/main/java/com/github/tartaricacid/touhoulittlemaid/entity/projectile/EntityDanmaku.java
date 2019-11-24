@@ -52,8 +52,8 @@ public class EntityDanmaku extends EntityThrowable {
      */
     public EntityDanmaku(World worldIn, EntityLivingBase throwerIn, DanmakuType type, DanmakuColor color) {
         super(worldIn, throwerIn);
-        this.getDataManager().set(TYPE, type.getIndex());
-        this.getDataManager().set(COLOR, color.getIndex());
+        this.getDataManager().set(TYPE, type.ordinal());
+        this.getDataManager().set(COLOR, color.ordinal());
     }
 
     /**
@@ -66,8 +66,8 @@ public class EntityDanmaku extends EntityThrowable {
      */
     public EntityDanmaku(World worldIn, EntityLivingBase throwerIn, float damage, float gravity, DanmakuType type, DanmakuColor color) {
         super(worldIn, throwerIn);
-        this.getDataManager().set(TYPE, type.getIndex());
-        this.getDataManager().set(COLOR, color.getIndex());
+        this.getDataManager().set(TYPE, type.ordinal());
+        this.getDataManager().set(COLOR, color.ordinal());
         this.getDataManager().set(DAMAGE, damage);
         this.getDataManager().set(GRAVITY, gravity);
     }
@@ -75,8 +75,8 @@ public class EntityDanmaku extends EntityThrowable {
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.getDataManager().register(TYPE, DanmakuType.PELLET.getIndex());
-        this.getDataManager().register(COLOR, DanmakuColor.RED.getIndex());
+        this.getDataManager().register(TYPE, DanmakuType.PELLET.ordinal());
+        this.getDataManager().register(COLOR, DanmakuColor.RED.ordinal());
         this.getDataManager().register(DAMAGE, 1.0f);
         this.getDataManager().register(GRAVITY, 0.01f);
         this.getDataManager().register(X_FUNCTION, "");
@@ -215,8 +215,8 @@ public class EntityDanmaku extends EntityThrowable {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setInteger(DANMAKU_TYPE.getName(), getType().getIndex());
-        compound.setInteger(DANMAKU_COLOR.getName(), getColor().getIndex());
+        compound.setInteger(DANMAKU_TYPE.getName(), getType().ordinal());
+        compound.setInteger(DANMAKU_COLOR.getName(), getColor().ordinal());
         compound.setFloat(DANMAKU_DAMAGE.getName(), getDamage());
         compound.setFloat(DANMAKU_GRAVITY.getName(), getGravityVelocity());
         compound.setString(DANMAKU_X_FUNCTION.getName(), getXFunction());
@@ -246,7 +246,7 @@ public class EntityDanmaku extends EntityThrowable {
     }
 
     public void setType(DanmakuType type) {
-        this.dataManager.set(TYPE, type.getIndex());
+        this.dataManager.set(TYPE, type.ordinal());
     }
 
     public DanmakuColor getColor() {
@@ -254,7 +254,7 @@ public class EntityDanmaku extends EntityThrowable {
     }
 
     public void setColor(DanmakuColor color) {
-        this.dataManager.set(COLOR, color.getIndex());
+        this.dataManager.set(COLOR, color.ordinal());
     }
 
     public float getDamage() {
