@@ -137,7 +137,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         IBlockState stateUp2 = worldIn.getBlockState(pos.up());
 
         // 该位置不可到达时返回 false
-        if (maid.getNavigator().getPathToPos(pos) == null || !stateUp2.getBlock().isPassable(worldIn, pos.up())) {
+        if (!stateUp2.getBlock().isPassable(worldIn, pos.up())) {
             return false;
         }
 
@@ -145,7 +145,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         if (taskDestroyIsOkay && maid.canDestroyBlock(pos)) {
             // 遍历 FarmHandler 找到能够处理此作物的 FarmHandler
             for (FarmHandler handler : handlers) {
-                if (handler.canHarvest(maid, worldIn, pos, stateUp)) {
+                if (handler.canHarvest(maid, worldIn, pos, stateUp) && maid.getNavigator().getPathToPos(pos) != null) {
                     activeHandler = handler;
                     this.currentTask = TASK.HARVEST;
                     return true;
@@ -158,7 +158,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
             // 遍历 FarmHandler 的 seeds 找到能够处理种植 FarmHandler 和 Seed
             for (FarmHandler handler : handlers) {
                 for (ItemStack seed : seeds) {
-                    if (handler.isSeed(seed) && handler.canPlant(maid, worldIn, pos, seed)) {
+                    if (handler.isSeed(seed) && handler.canPlant(maid, worldIn, pos, seed) && maid.getNavigator().getPathToPos(pos) != null) {
                         this.currentTask = TASK.PLANT;
                         activeHandler = handler;
                         activeSeed = seed;
