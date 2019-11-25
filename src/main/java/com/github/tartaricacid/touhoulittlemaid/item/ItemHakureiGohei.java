@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class ItemHakureiGohei extends Item {
@@ -180,7 +181,9 @@ public class ItemHakureiGohei extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(I18n.format("tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc"));
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.hakurei_gohei.desc", I18n.format("danmaku_type.touhou_little_maid." + getGoheiMode(stack).getName())));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.hakurei_gohei.desc",
+                I18n.format("danmaku_type.touhou_little_maid."
+                        + getGoheiMode(stack).name().toLowerCase(Locale.US))));
     }
 
     // ------------------------------- 所有的 Get 和 Set 方法 ------------------------------- //
@@ -190,7 +193,7 @@ public class ItemHakureiGohei extends Item {
     }
 
     public void setGoheiMode(ItemStack stack, DanmakuType mode) {
-        getTagCompoundSafe(stack).setInteger(NBT.MODE.getName(), mode.getIndex());
+        getTagCompoundSafe(stack).setInteger(NBT.MODE.getName(), mode.ordinal());
     }
 
     private NBTTagCompound getTagCompoundSafe(ItemStack stack) {

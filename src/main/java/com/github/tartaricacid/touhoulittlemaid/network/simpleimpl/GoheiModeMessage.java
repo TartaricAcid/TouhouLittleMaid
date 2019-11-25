@@ -45,8 +45,8 @@ public class GoheiModeMessage implements IMessage {
                             // 一处稍微不太好理解的索引更改
                             // 如果 next 为 true，那么会增加索引，到尾部自动跳转到首部
                             // 如果 next 为 false，那么会减少索引，到首部会自动跳转到尾部
-                            int index = item.getGoheiMode(stack).getIndex() + DanmakuType.getLength() + (message.next ? 1 : -1);
-                            index %= DanmakuType.getLength();
+                            int index = item.getGoheiMode(stack).ordinal() + DanmakuType.getSinglePlaneDanmakuSize() + (message.next ? 1 : -1);
+                            index %= DanmakuType.getSinglePlaneDanmakuSize();
                             item.setGoheiMode(stack, DanmakuType.getType(index));
                         }
                     }
