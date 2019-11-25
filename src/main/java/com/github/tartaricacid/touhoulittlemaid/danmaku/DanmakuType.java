@@ -13,12 +13,12 @@ public enum DanmakuType {
     BUBBLE(1.2d),
     // 心弹
     HEART(0.4d),
+    // 椭弹
+    JELLYBEAN(0.4d),
 
     // TODO：完成下述弹幕渲染设计
     // 星弹
     STAR(0.3d),
-    // 椭弹
-    JELLYBEAN(0.4d),
     // 札弹
     AMULET(0.3d);
 
@@ -44,9 +44,11 @@ public enum DanmakuType {
         return size;
     }
 
-    public static int getLength() {
-        // TODO：目前未完成其他几种类型渲染设计
+    public static int getSinglePlaneDanmakuSize() {
         return 6;
-        // return values().length;
+    }
+
+    public static int getLength() {
+        return values().length;
     }
 }

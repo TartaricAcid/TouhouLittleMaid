@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -38,8 +39,12 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
             case BIG_BALL:
             case BUBBLE:
             case HEART:
+                renderSinglePlaneDanmaku(entity, x, y, z, type);
+                break;
+            case JELLYBEAN:
+                renderJellyBeanDanmaku(entity, x, y, z, entity.getColor());
+                break;
             default:
-                renderSinglePlaneDanmaku(entity, x, y, z, type, SINGLE_PLANE_DANMAKU);
         }
     }
 
@@ -48,7 +53,7 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         return SINGLE_PLANE_DANMAKU;
     }
 
-    private void renderSinglePlaneDanmaku(EntityDanmaku entity, double x, double y, double z, DanmakuType type, ResourceLocation textures) {
+    private void renderSinglePlaneDanmaku(EntityDanmaku entity, double x, double y, double z, DanmakuType type) {
         // 获取相关数据
         DanmakuColor color = entity.getColor();
         // 材质宽度
@@ -80,7 +85,7 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         BufferBuilder bufBuilder = tessellator.getBuffer();
 
         bufBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        this.renderManager.renderEngine.bindTexture(textures);
+        this.renderManager.renderEngine.bindTexture(SINGLE_PLANE_DANMAKU);
 
         bufBuilder.pos(-type.getSize(), type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 0) / l).endVertex();
         bufBuilder.pos(-type.getSize(), -type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 32) / l).endVertex();
@@ -93,6 +98,43 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
         GlStateManager.enableLighting();
+    }
+
+    private void renderJellyBeanDanmaku(EntityDanmaku entity, double x, double y, double z, DanmakuColor color) {
+        float yaw = entity.rotationYaw + 90;
+        float pitch = -entity.rotationPitch;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+        {
+            GlStateManager.translate(x, y + 0.3, z);
+            GlStateManager.rotate(yaw, 0, 1, 0);
+            GlStateManager.rotate(pitch, 0, 0, 1);
+            GlStateManager.scale(0.5f, 0.25f, 0.25f);
+            GlStateManager.color(255, 255, 255);
+            GlStateManager.callList(RenderHelper.SPHERE_OUT_INDEX);
+            GlStateManager.callList(RenderHelper.SPHERE_IN_INDEX);
+        }
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        {
+            GlStateManager.translate(x, y + 0.3, z);
+            GlStateManager.rotate(yaw, 0, 1, 0);
+            GlStateManager.rotate(pitch, 0, 0, 1);
+            GlStateManager.scale(0.6f, 0.3f, 0.3f);
+            GlStateManager.color(color.getFloatRed(), color.getFloatGreen(), color.getFloatBlue());
+            GlStateManager.callList(RenderHelper.SPHERE_OUT_INDEX);
+            GlStateManager.callList(RenderHelper.SPHERE_IN_INDEX);
+        }
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
     }
 
     public static class Factory implements IRenderFactory<EntityDanmaku> {
