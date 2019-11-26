@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 public class EntityDanmakuRender extends Render<EntityDanmaku> {
     public static final Factory FACTORY = new EntityDanmakuRender.Factory();
     private static final ResourceLocation SINGLE_PLANE_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/singe_plane_danmaku.png");
+    private static final ResourceLocation AMULET_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/amulet_danmaku.png");
 
     private EntityDanmakuRender(RenderManager renderManagerIn) {
         super(renderManagerIn);
@@ -42,7 +43,10 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
                 renderSinglePlaneDanmaku(entity, x, y, z, type);
                 break;
             case JELLYBEAN:
-                renderJellyBeanDanmaku(entity, x, y, z, entity.getColor());
+                renderJellyBeanDanmaku(entity, x, y, z);
+                break;
+            case AMULET:
+                renderAmuletDanmaku(entity, x, y, z);
                 break;
             default:
         }
@@ -100,7 +104,8 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         GlStateManager.enableLighting();
     }
 
-    private void renderJellyBeanDanmaku(EntityDanmaku entity, double x, double y, double z, DanmakuColor color) {
+    private void renderJellyBeanDanmaku(EntityDanmaku entity, double x, double y, double z) {
+        DanmakuColor color = entity.getColor();
         float yaw = entity.rotationYaw + 90;
         float pitch = -entity.rotationPitch;
 
@@ -135,6 +140,49 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         GlStateManager.enableTexture2D();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
+    }
+
+    private void renderAmuletDanmaku(EntityDanmaku entity, double x, double y, double z) {
+        DanmakuType type = DanmakuType.AMULET;
+        DanmakuColor color = entity.getColor();
+        float yaw = entity.rotationYaw;
+        float pitch = entity.rotationPitch;
+        // 材质宽度
+        int w = 416;
+        double pStartU = 32 * color.ordinal();
+
+        GlStateManager.disableLighting();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+
+        GlStateManager.translate(x, y + 0.12, z);
+        GlStateManager.rotate(yaw, 0, 1, 0);
+        GlStateManager.rotate(90 - pitch, 1, 0, 0);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufBuilder = tessellator.getBuffer();
+        this.renderManager.renderEngine.bindTexture(AMULET_DANMAKU);
+
+        bufBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bufBuilder.pos(-type.getSize(), type.getSize(), 0).tex((pStartU + 0) / w, 0).endVertex();
+        bufBuilder.pos(-type.getSize(), -type.getSize(), 0).tex((pStartU + 0) / w, 1).endVertex();
+        bufBuilder.pos(type.getSize(), -type.getSize(), 0).tex((pStartU + 32) / w, 1).endVertex();
+        bufBuilder.pos(type.getSize(), type.getSize(), 0).tex((pStartU + 32) / w, 0).endVertex();
+        tessellator.draw();
+
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
+        GlStateManager.enableLighting();
     }
 
     public static class Factory implements IRenderFactory<EntityDanmaku> {

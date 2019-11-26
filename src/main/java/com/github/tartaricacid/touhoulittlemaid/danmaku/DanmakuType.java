@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.danmaku;
 
 public enum DanmakuType {
     // 点弹
-    PELLET(0.8d),
+    PELLET(0.6d),
     // 小玉
     BALL(0.8d),
     // 环玉
@@ -15,12 +15,12 @@ public enum DanmakuType {
     HEART(0.4d),
     // 椭弹
     JELLYBEAN(0.4d),
+    // 札弹
+    AMULET(0.4d),
 
     // TODO：完成下述弹幕渲染设计
     // 星弹
-    STAR(0.3d),
-    // 札弹
-    AMULET(0.3d);
+    STAR(0.3d);
 
     private double size;
 
