@@ -9,6 +9,8 @@ import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.script.EntityLivingBaseWrapper;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.script.WorldWrapper;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -99,7 +101,7 @@ public class ItemHakureiGohei extends Item {
             CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand());
             CommonProxy.NASHORN.eval(entry.getScript());
             Invocable invocable = (Invocable) CommonProxy.NASHORN;
-            invocable.invokeFunction("spell_card", worldIn, player);
+            invocable.invokeFunction("spell_card", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
             player.getCooldownTracker().setCooldown(this, entry.getCooldown());
         } catch (NoSuchMethodException | ScriptException e) {
             e.printStackTrace();

@@ -68,8 +68,7 @@ import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
-    public static final ScriptEngineManager SCRIPT_ENGINE_MANAGER = new ScriptEngineManager(null);
-    public static final ScriptEngine NASHORN = SCRIPT_ENGINE_MANAGER.getEngineByName("nashorn");
+    public static final ScriptEngine NASHORN = new ScriptEngineManager(null).getEngineByName("nashorn");
     /**
      * 服务端用模型列表，
      * 这个只会在服务器启动时候读取默认原版的列表，
