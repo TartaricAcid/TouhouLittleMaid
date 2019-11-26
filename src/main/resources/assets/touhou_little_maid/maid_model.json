@@ -229,6 +229,15 @@
     }, {
       "model_id": "touhou_little_maid:houjuu_nue",
       "description": ["{model.touhou_little_maid.houjuu_nue.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:hijiri_byakuren",
+      "description": ["{model.touhou_little_maid.hijiri_byakuren.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kumoi_ichirin",
+      "description": ["{model.touhou_little_maid.kumoi_ichirin.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:toramaru_shou",
+      "description": ["{model.touhou_little_maid.toramaru_shou.desc}"]
     }
   ]
 }
