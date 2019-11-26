@@ -42,8 +42,8 @@ commands.touhou_little_maid.hata.usage=§c用法：/hata <reload>
 commands.touhou_little_maid.hata.reload=已经重载所有的旗指物材质
 commands.touhou_little_maid.main.usage=§c用法：/touhou_little_maid <power> <get|set|add|min> <玩家> [数值]
 commands.touhou_little_maid.main.power.info=当前 Power 数：%.2f
-commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
-commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
+commands.touhou_little_maid.spell_card.usage=§c用法：/spell_card <reload>
+commands.touhou_little_maid.spell_card.reload=已经重载所有的符卡
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -283,6 +283,9 @@ model.touhou_little_maid.nazrin.name=娜兹玲
 model.touhou_little_maid.murasa_minamitsu.name=村纱水蜜
 model.touhou_little_maid.tatara_kogasa.name=多多良小伞
 model.touhou_little_maid.houjuu_nue.name=封兽鵺
+model.touhou_little_maid.hijiri_byakuren.name=圣白莲
+model.touhou_little_maid.kumoi_ichirin.name=云居一轮
+model.touhou_little_maid.toramaru_shou.name=寅丸星
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -354,6 +357,9 @@ model.touhou_little_maid.nazrin.desc=§7探宝的小小大将
 model.touhou_little_maid.murasa_minamitsu.desc=§7水难事故的念缚灵
 model.touhou_little_maid.tatara_kogasa.desc=§7愉快的遗忘之伞
 model.touhou_little_maid.houjuu_nue.desc=§7未确认幻想飞行少女
+model.touhou_little_maid.hijiri_byakuren.desc=§7被封印的大魔法师
+model.touhou_little_maid.kumoi_ichirin.desc=§7守护与被守护的大轮
+model.touhou_little_maid.toramaru_shou.desc=§7毘沙门天的弟子
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

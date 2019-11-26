@@ -284,6 +284,9 @@ model.touhou_little_maid.nazrin.name=Nazrin
 model.touhou_little_maid.murasa_minamitsu.name=Minamitsu Murasa
 model.touhou_little_maid.tatara_kogasa.name=Kogasa Tatara
 model.touhou_little_maid.houjuu_nue.name=Nue Houjuu
+model.touhou_little_maid.hijiri_byakuren.name=Byakuren Hijiri
+model.touhou_little_maid.kumoi_ichirin.name=Ichirin Kumoi
+model.touhou_little_maid.toramaru_shou.name=Shou Toramaru
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -355,6 +358,9 @@ model.touhou_little_maid.nazrin.desc=§7The Little Dowser General
 model.touhou_little_maid.murasa_minamitsu.desc=§7The Ghost Left From the Shipwreck Accident
 model.touhou_little_maid.tatara_kogasa.desc=§7The Cheery Forgotten Umbrella
 model.touhou_little_maid.houjuu_nue.desc=§7The Unidentified Fantastic Flying Girl
+model.touhou_little_maid.hijiri_byakuren.desc=§7The Sealed Great Magician
+model.touhou_little_maid.kumoi_ichirin.desc=§7The Great Wheel, Having Guarded and Been Guarded
+model.touhou_little_maid.toramaru_shou.desc=§7Disciple of Bishamonten
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
