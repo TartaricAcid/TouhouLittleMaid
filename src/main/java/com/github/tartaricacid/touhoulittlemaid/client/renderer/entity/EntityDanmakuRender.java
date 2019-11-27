@@ -25,6 +25,7 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
     public static final Factory FACTORY = new EntityDanmakuRender.Factory();
     private static final ResourceLocation SINGLE_PLANE_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/singe_plane_danmaku.png");
     private static final ResourceLocation AMULET_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/amulet_danmaku.png");
+    private static final ResourceLocation STAR_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/star_danmaku.png");
 
     private EntityDanmakuRender(RenderManager renderManagerIn) {
         super(renderManagerIn);
@@ -47,6 +48,10 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
                 break;
             case AMULET:
                 renderAmuletDanmaku(entity, x, y, z);
+                break;
+            case STAR:
+            case BIG_STAR:
+                renderStarDanmaku(entity, x, y, z, partialTicks);
                 break;
             default:
         }
@@ -178,6 +183,55 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         tessellator.draw();
 
         GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
+        GlStateManager.enableLighting();
+    }
+
+    private void renderStarDanmaku(EntityDanmaku entity, double x, double y, double z, float partialTicks) {
+        // 获取相关数据
+        DanmakuColor color = entity.getColor();
+        DanmakuType type = entity.getType();
+        // 材质宽度
+        int w = 416;
+        // 材质长度
+        int l = 64;
+
+        // 依据类型颜色开始定位材质位置（材质块都是 32 * 32 大小）
+        double pStartU = 32 * color.ordinal();
+        double pStartV = 32 * (type == DanmakuType.BIG_STAR ? 0 : 1);
+
+        GlStateManager.disableLighting();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+
+        GlStateManager.translate(x, y, z);
+        GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX,
+                1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate((entity.ticksExisted + partialTicks) * 5, 0, 0, 1);
+        GlStateManager.rotate(180F, 0.0F, 1.0F, 0.0F);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufBuilder = tessellator.getBuffer();
+
+        bufBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        this.renderManager.renderEngine.bindTexture(STAR_DANMAKU);
+
+        bufBuilder.pos(-type.getSize(), type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 0) / l).endVertex();
+        bufBuilder.pos(-type.getSize(), -type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 32) / l).endVertex();
+        bufBuilder.pos(type.getSize(), -type.getSize(), 0).tex((pStartU + 32) / w, (pStartV + 32) / l).endVertex();
+        bufBuilder.pos(type.getSize(), type.getSize(), 0).tex((pStartU + 32) / w, (pStartV + 0) / l).endVertex();
+        tessellator.draw();
+
         GlStateManager.disableBlend();
         GlStateManager.shadeModel(GL11.GL_FLAT);
         GlStateManager.disableRescaleNormal();

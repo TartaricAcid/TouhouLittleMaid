@@ -89,7 +89,12 @@ public class ItemHakureiGohei extends Item {
             if (player.getHeldItemOffhand().getItem() == MaidItems.SPELL_CARD) {
                 spellCardShoot(worldIn, player);
             } else {
-                normalShoot(stack, worldIn, player, timeLeft);
+                //normalShoot(stack, worldIn, player, timeLeft);
+                Vec3d v = player.getLookVec();
+                DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
+                EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, 0, 0, DanmakuType.BIG_STAR, color);
+                danmaku.shoot(v.x, v.y, v.z, 0.1f, 5f);
+                worldIn.spawnEntity(danmaku);
             }
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
             stack.damageItem(1, player);

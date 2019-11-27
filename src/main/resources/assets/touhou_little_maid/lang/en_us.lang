@@ -388,6 +388,7 @@ model.touhou_little_maid.ema.name=Ema
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"
 spell_card.touhou_little_maid:metal_sign.metal_fatigue.name=Metal Sign "Metal Fatigue"
+spell_card.touhou_little_maid:magic_sign.milky_way.name=Magic Sign "Milky Way"
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

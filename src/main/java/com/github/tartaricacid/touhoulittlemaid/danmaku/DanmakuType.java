@@ -17,10 +17,10 @@ public enum DanmakuType {
     JELLYBEAN(0.4d),
     // 札弹
     AMULET(0.4d),
-
-    // TODO：完成下述弹幕渲染设计
     // 星弹
-    STAR(0.3d);
+    STAR(0.6d),
+    // 大星弹
+    BIG_STAR(1.2d);
 
     private double size;
 

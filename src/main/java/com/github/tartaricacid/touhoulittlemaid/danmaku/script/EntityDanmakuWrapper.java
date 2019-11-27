@@ -39,6 +39,10 @@ public class EntityDanmakuWrapper {
         this.danmaku.setType(type);
     }
 
+    public void setColor(DanmakuColor color) {
+        this.danmaku.setColor(color);
+    }
+
     public void shoot(EntityLivingBaseWrapper entityThrower, float rotationPitchIn, float rotationYawIn, float pitchOffset, float velocity, float inaccuracy) {
         this.danmaku.shoot(entityThrower.getLivingBase(), rotationPitchIn, rotationYawIn, pitchOffset, velocity, inaccuracy);
     }
