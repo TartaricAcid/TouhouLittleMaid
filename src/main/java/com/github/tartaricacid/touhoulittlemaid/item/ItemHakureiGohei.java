@@ -92,7 +92,7 @@ public class ItemHakureiGohei extends Item {
                 //normalShoot(stack, worldIn, player, timeLeft);
                 Vec3d v = player.getLookVec();
                 DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
-                EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, 0, 0, DanmakuType.BIG_STAR, color);
+                EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, 0, 0, DanmakuType.PETAL, color);
                 danmaku.shoot(v.x, v.y, v.z, 0.1f, 5f);
                 worldIn.spawnEntity(danmaku);
             }
@@ -106,7 +106,7 @@ public class ItemHakureiGohei extends Item {
             CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand());
             CommonProxy.NASHORN.eval(entry.getScript());
             Invocable invocable = (Invocable) CommonProxy.NASHORN;
-            invocable.invokeFunction("spell_card", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
+            invocable.invokeFunction("spellCard", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
             player.getCooldownTracker().setCooldown(this, entry.getCooldown());
         } catch (NoSuchMethodException | ScriptException e) {
             e.printStackTrace();

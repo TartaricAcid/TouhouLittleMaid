@@ -19,7 +19,7 @@ var cooldown = 170;
  * @param world 当前所处的世界
  * @param entity 释放符卡的实体
  */
-function spell_card(world, entity) {
+function spellCard(world, entity) {
     // 第一波角度和后面不一致
     Task.add(function () {
         for (var j = 0; j < 8; j++) {

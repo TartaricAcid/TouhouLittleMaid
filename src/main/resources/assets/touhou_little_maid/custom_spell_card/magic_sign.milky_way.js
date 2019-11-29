@@ -19,7 +19,7 @@ var cooldown = 250;
  * @param world 当前所处的世界
  * @param entity 释放符卡的实体
  */
-function spell_card(world, entity) {
+function spellCard(world, entity) {
     // 中心散发的大星弹
     for (var i = 0; i < 50; i++) {
         Task.add(function (times) {

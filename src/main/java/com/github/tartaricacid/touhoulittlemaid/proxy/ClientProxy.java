@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadHataCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
@@ -26,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.client.resource.VanillaResourceType;
@@ -58,6 +60,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+        OBJLoader.INSTANCE.addDomain(TouhouLittleMaid.MOD_ID);
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
         RenderingRegistry.registerEntityRenderingHandler(EntityMaid.class, EntityMaidRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityDanmaku.class, EntityDanmakuRender.FACTORY);

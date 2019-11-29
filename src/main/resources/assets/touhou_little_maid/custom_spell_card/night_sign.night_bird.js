@@ -19,7 +19,7 @@ var cooldown = 170;
  * @param world 当前所处的世界
  * @param entity 释放符卡的实体
  */
-function spell_card(world, entity) {
+function spellCard(world, entity) {
     for (var i = 0; i < 1; i++) {
         // 第 1，3 次左侧扇形弹幕
         Task.add(function () {

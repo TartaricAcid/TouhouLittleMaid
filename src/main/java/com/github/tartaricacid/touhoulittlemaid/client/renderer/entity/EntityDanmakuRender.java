@@ -9,16 +9,23 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class EntityDanmakuRender extends Render<EntityDanmaku> {
@@ -26,9 +33,18 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
     private static final ResourceLocation SINGLE_PLANE_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/singe_plane_danmaku.png");
     private static final ResourceLocation AMULET_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/amulet_danmaku.png");
     private static final ResourceLocation STAR_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/star_danmaku.png");
+    private static final ResourceLocation PETAL_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/petal.obj");
+    private static List<BakedQuad> PETAL_QUADS;
 
     private EntityDanmakuRender(RenderManager renderManagerIn) {
         super(renderManagerIn);
+        try {
+            IModel model = ModelLoaderRegistry.getModel(PETAL_DANMAKU);
+            IBakedModel bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter());
+            PETAL_QUADS = bakedModel.getQuads(null, null, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,6 +68,9 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
             case STAR:
             case BIG_STAR:
                 renderStarDanmaku(entity, x, y, z, partialTicks);
+                break;
+            case PETAL:
+                renderPetalDanmaku(entity, x, y, z);
                 break;
             default:
         }
@@ -237,6 +256,51 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
         GlStateManager.enableLighting();
+    }
+
+    private void renderPetalDanmaku(EntityDanmaku entity, double x, double y, double z) {
+        DanmakuColor color = entity.getColor();
+        float yaw = entity.rotationYaw;
+        float pitch = -entity.rotationPitch;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buff = tessellator.getBuffer();
+        {
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw - 90, 0, 1, 0);
+            GlStateManager.rotate(-pitch, 0, 0, 1);
+            GlStateManager.scale(0.1f, 0.1f, 0.1f);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : PETAL_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0xffffffff);
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y - 0.02, z);
+            GlStateManager.rotate(yaw - 90, 0, 1, 0);
+            GlStateManager.rotate(-pitch, 0, 0, 1);
+            GlStateManager.scale(0.12f, 0.12f, 0.12f);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : PETAL_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0xaa_00_00_00 + color.getRgb());
+            }
+            tessellator.draw();
+        }
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
     }
 
     public static class Factory implements IRenderFactory<EntityDanmaku> {
