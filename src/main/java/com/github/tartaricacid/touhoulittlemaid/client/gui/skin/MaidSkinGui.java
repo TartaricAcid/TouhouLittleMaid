@@ -8,8 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,9 +56,6 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid> {
         maid.hurtTime = 0;
         maid.deathTime = 0;
         maid.setSitting(false);
-        for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-            entity.setItemStackToSlot(slot, ItemStack.EMPTY);
-        }
         GuiInventory.drawEntityOnScreen(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
     }
 

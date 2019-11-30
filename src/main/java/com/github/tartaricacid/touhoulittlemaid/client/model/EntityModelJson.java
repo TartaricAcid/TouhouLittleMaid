@@ -106,10 +106,11 @@ public class EntityModelJson extends ModelBase {
                 List<Integer> uv = cubes.getUv();
                 List<Float> size = cubes.getSize();
                 boolean mirror = cubes.isMirror();
+                float inflate = cubes.getInflate();
 
                 model.cubeList.add(new ModelBoxFloat(model, uv.get(0), uv.get(1),
                         convertOrigin(bones, cubes, 0), convertOrigin(bones, cubes, 1), convertOrigin(bones, cubes, 2),
-                        size.get(0), size.get(1), size.get(2), 0, mirror));
+                        size.get(0), size.get(1), size.get(2), inflate, mirror));
             }
         }
     }

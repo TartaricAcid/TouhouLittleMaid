@@ -11,6 +11,9 @@ public class CubesItem {
     @SerializedName("mirror")
     private boolean mirror;
 
+    @SerializedName("inflate")
+    private float inflate;
+
     @SerializedName("size")
     private List<Float> size;
 
@@ -23,6 +26,10 @@ public class CubesItem {
 
     public boolean isMirror() {
         return mirror;
+    }
+
+    public float getInflate() {
+        return inflate;
     }
 
     /**
@@ -41,6 +48,7 @@ public class CubesItem {
         return
                 "CubesItem{" +
                         "uv = '" + uv + '\'' +
+                        ",inflate = '" + inflate + '\'' +
                         ",mirror = '" + mirror + '\'' +
                         ",size = '" + size + '\'' +
                         ",origin = '" + origin + '\'' +

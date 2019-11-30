@@ -22,7 +22,9 @@ public enum DanmakuType {
     // 大星弹
     BIG_STAR(1.2d),
     // 米弹
-    PETAL(0.6d);
+    PETAL(0.6d),
+    // 刀弹
+    KNIFE(0.6d);
 
     private double size;
 
