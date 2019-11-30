@@ -104,9 +104,8 @@ public class ItemHakureiGohei extends Item {
     private void spellCardShoot(World worldIn, EntityPlayer player) {
         try {
             CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand());
-            CommonProxy.NASHORN.eval(entry.getScript());
             Invocable invocable = (Invocable) CommonProxy.NASHORN;
-            invocable.invokeFunction("spellCard", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
+            invocable.invokeMethod(entry.getScript(), "spellCard", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
             player.getCooldownTracker().setCooldown(this, entry.getCooldown());
         } catch (NoSuchMethodException | ScriptException e) {
             e.printStackTrace();

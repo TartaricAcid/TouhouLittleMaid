@@ -28,11 +28,14 @@ public final class CustomSpellCardManger {
 
     public static void onCustomSpellCardReload() {
         CUSTOM_SPELL_CARD_MAP.clear();
+
         unzipCustomSpellCardFolder();
+
         File[] files = CONFIG_SPELL_CARD_FOLDER.toFile().listFiles((dir, name) -> name.endsWith(ACCEPTED_SPELL_CARD_SUFFIX));
         if (files == null || files.length < 1) {
             throw new NullPointerException();
         }
+
         for (File file : files) {
             try {
                 CustomSpellCardEntry entry = loadCustomSpellCard(file);
@@ -42,6 +45,7 @@ public final class CustomSpellCardManger {
                 return;
             }
         }
+
         TouhouLittleMaid.LOGGER.info("Loaded {} Custom Spell Cards", CUSTOM_SPELL_CARD_MAP.size());
     }
 
@@ -56,10 +60,15 @@ public final class CustomSpellCardManger {
     }
 
     private static CustomSpellCardEntry loadCustomSpellCard(File file) throws IOException, ScriptException {
-        String script = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         Bindings bindings = CommonProxy.NASHORN.createBindings();
-        CommonProxy.NASHORN.eval(script, bindings);
-        String id = (String) bindings.get(Args.ID.getName());
+        Object scriptObject = CommonProxy.NASHORN.eval(FileUtils.readFileToString(file, StandardCharsets.UTF_8), bindings);
+        return transObjectToEntry(scriptObject);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static CustomSpellCardEntry transObjectToEntry(Object scriptObject) {
+        Map<String, Object> scriptMaps = (Map<String, Object>) scriptObject;
+        String id = (String) scriptMaps.get(Args.ID.getName());
         String nameKey;
         String descriptionKey = "";
         String author = "";
@@ -68,37 +77,37 @@ public final class CustomSpellCardManger {
         ResourceLocation icon = null;
         ResourceLocation snapshot = null;
 
-        if (bindings.containsKey(Args.NAME_KEY.getName())) {
-            nameKey = (String) bindings.get(Args.NAME_KEY.getName());
+        if (scriptMaps.containsKey(Args.NAME_KEY.getName())) {
+            nameKey = (String) scriptMaps.get(Args.NAME_KEY.getName());
         } else {
             nameKey = String.format("spell_card.%s.name", id);
         }
-        if (bindings.containsKey(Args.DESC_KEY.getName())) {
-            descriptionKey = (String) bindings.get(Args.DESC_KEY.getName());
+        if (scriptMaps.containsKey(Args.DESC_KEY.getName())) {
+            descriptionKey = (String) scriptMaps.get(Args.DESC_KEY.getName());
         }
-        if (bindings.containsKey(Args.AUTHOR.getName())) {
-            author = (String) bindings.get(Args.AUTHOR.getName());
+        if (scriptMaps.containsKey(Args.AUTHOR.getName())) {
+            author = (String) scriptMaps.get(Args.AUTHOR.getName());
         }
-        if (bindings.containsKey(Args.VERSION.getName())) {
-            version = (String) bindings.get(Args.VERSION.getName());
+        if (scriptMaps.containsKey(Args.VERSION.getName())) {
+            version = (String) scriptMaps.get(Args.VERSION.getName());
         }
-        if (bindings.containsKey(Args.COOLDOWN.getName())) {
-            cooldown = (int) bindings.get(Args.COOLDOWN.getName());
+        if (scriptMaps.containsKey(Args.COOLDOWN.getName())) {
+            cooldown = (int) scriptMaps.get(Args.COOLDOWN.getName());
         }
-        if (bindings.containsKey(Args.ICON.getName())) {
-            icon = new ResourceLocation((String) bindings.get(Args.ICON.getName()));
+        if (scriptMaps.containsKey(Args.ICON.getName())) {
+            icon = new ResourceLocation((String) scriptMaps.get(Args.ICON.getName()));
         }
-        if (bindings.containsKey(Args.SNAPSHOT.getName())) {
-            snapshot = new ResourceLocation((String) bindings.get(Args.SNAPSHOT.getName()));
+        if (scriptMaps.containsKey(Args.SNAPSHOT.getName())) {
+            snapshot = new ResourceLocation((String) scriptMaps.get(Args.SNAPSHOT.getName()));
         }
-        return new CustomSpellCardEntry(id, nameKey, descriptionKey, author, version, script, cooldown, icon, snapshot);
+        return new CustomSpellCardEntry(id, nameKey, descriptionKey, author, version, scriptObject, cooldown, icon, snapshot);
     }
 
     enum Args {
         // 必要的脚本参数
         ID("id"),
-        NAME_KEY("name_key"),
-        DESC_KEY("desc_Key"),
+        NAME_KEY("nameKey"),
+        DESC_KEY("descKey"),
         AUTHOR("author"),
         VERSION("version"),
         COOLDOWN("cooldown"),
