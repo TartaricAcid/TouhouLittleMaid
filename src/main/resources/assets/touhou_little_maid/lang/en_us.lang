@@ -287,6 +287,8 @@ model.touhou_little_maid.houjuu_nue.name=Nue Houjuu
 model.touhou_little_maid.hijiri_byakuren.name=Byakuren Hijiri
 model.touhou_little_maid.kumoi_ichirin.name=Ichirin Kumoi
 model.touhou_little_maid.toramaru_shou.name=Shou Toramaru
+model.touhou_little_maid.toyosatomimi_no_miko.name=Toyosatomimi no Miko
+model.touhou_little_maid.kaku_seiga.name=Seiga Kaku
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -361,6 +363,8 @@ model.touhou_little_maid.houjuu_nue.desc=§7The Unidentified Fantastic Flying Gi
 model.touhou_little_maid.hijiri_byakuren.desc=§7The Sealed Great Magician
 model.touhou_little_maid.kumoi_ichirin.desc=§7The Great Wheel, Having Guarded and Been Guarded
 model.touhou_little_maid.toramaru_shou.desc=§7Disciple of Bishamonten
+model.touhou_little_maid.toyosatomimi_no_miko.desc=§7Shoutoku Taoist
+model.touhou_little_maid.kaku_seiga.desc=§7The Wicked Hermit Who Passes Through Walls
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -388,6 +392,8 @@ model.touhou_little_maid.ema.name=Ema
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"
 spell_card.touhou_little_maid:metal_sign.metal_fatigue.name=Metal Sign "Metal Fatigue"
+spell_card.touhou_little_maid:magic_sign.milky_way.name=Magic Sign "Milky Way"
+spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle.name=Border Sign "Boundary Between Wave and Particle"
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound

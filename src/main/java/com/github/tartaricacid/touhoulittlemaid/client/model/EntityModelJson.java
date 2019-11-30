@@ -106,10 +106,11 @@ public class EntityModelJson extends ModelBase {
                 List<Integer> uv = cubes.getUv();
                 List<Float> size = cubes.getSize();
                 boolean mirror = cubes.isMirror();
+                float inflate = cubes.getInflate();
 
                 model.cubeList.add(new ModelBoxFloat(model, uv.get(0), uv.get(1),
                         convertOrigin(bones, cubes, 0), convertOrigin(bones, cubes, 1), convertOrigin(bones, cubes, 2),
-                        size.get(0), size.get(1), size.get(2), 0, mirror));
+                        size.get(0), size.get(1), size.get(2), inflate, mirror));
             }
         }
     }
@@ -174,6 +175,19 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer leggingsRight = modelMap.get("leggingsRight");
         ModelRenderer bootsLeft = modelMap.get("bootsLeft");
         ModelRenderer bootsRight = modelMap.get("bootsRight");
+        // 反向隐藏护甲
+        ModelRenderer reverseHelmet = modelMap.get("-helmet");
+        ModelRenderer reverseHat = modelMap.get("-hat");
+        ModelRenderer reverseChestPlate = modelMap.get("-chestPlate");
+        ModelRenderer reverseChestPlateLeft = modelMap.get("-chestPlateLeft");
+        ModelRenderer reverseChestPlateMiddle = modelMap.get("-chestPlateMiddle");
+        ModelRenderer reverseChestPlateRight = modelMap.get("-chestPlateRight");
+        ModelRenderer reverseLeggings = modelMap.get("-leggings");
+        ModelRenderer reverseLeggingsLeft = modelMap.get("-leggingsLeft");
+        ModelRenderer reverseLeggingsMiddle = modelMap.get("-leggingsMiddle");
+        ModelRenderer reverseLeggingsRight = modelMap.get("-leggingsRight");
+        ModelRenderer reverseBootsLeft = modelMap.get("-bootsLeft");
+        ModelRenderer reverseBootsRight = modelMap.get("-bootsRight");
 
         // 动画和姿势
         headAnimation(head, netHeadYaw, headPitch);
@@ -185,6 +199,10 @@ public class EntityModelJson extends ModelBase {
         floatAnimation(sinFloat, cosFloat, negativeSinFloat, negativeCosFloat, ageInTicks);
         renderArmor(entityMaid, helmet, hat, chestPlate, chestPlateLeft, chestPlateMiddle, chestPlateRight,
                 leggings, leggingsLeft, leggingsMiddle, leggingsRight, bootsLeft, bootsRight);
+        renderReverseArmor(entityMaid, reverseHelmet, reverseHat,
+                reverseChestPlate, reverseChestPlateLeft, reverseChestPlateMiddle, reverseChestPlateRight,
+                reverseLeggings, reverseLeggingsLeft, reverseLeggingsMiddle, reverseLeggingsRight,
+                reverseBootsLeft, reverseBootsRight);
         beggingPosture(entityMaid, head, ahoge, ageInTicks);
         swingingArmsPosture(entityMaid, armLeft, armRight);
 
@@ -340,6 +358,49 @@ public class EntityModelJson extends ModelBase {
         }
         if (bootsRight != null) {
             bootsRight.isHidden = entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
+        }
+    }
+
+    private void renderReverseArmor(EntityMaid entityMaid, @Nullable ModelRenderer reverseHelmet, @Nullable ModelRenderer reverseHat,
+                                    @Nullable ModelRenderer reverseChestPlate, @Nullable ModelRenderer reverseChestPlateLeft, @Nullable ModelRenderer reverseChestPlateMiddle, @Nullable ModelRenderer reverseChestPlateRight,
+                                    @Nullable ModelRenderer reverseLeggings, @Nullable ModelRenderer reverseLeggingsLeft, @Nullable ModelRenderer reverseLeggingsMiddle, @Nullable ModelRenderer reverseLeggingsRight,
+                                    @Nullable ModelRenderer reverseBootsLeft, @Nullable ModelRenderer reverseBootsRight) {
+        // 护甲部分渲染
+        if (reverseHelmet != null) {
+            reverseHelmet.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
+        }
+        if (reverseHat != null) {
+            reverseHat.isHidden = GeneralConfig.MAID_CONFIG.maidAlwaysShowHat || !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
+        }
+        if (reverseChestPlate != null) {
+            reverseChestPlate.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
+        if (reverseChestPlateLeft != null) {
+            reverseChestPlateLeft.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
+        if (reverseChestPlateMiddle != null) {
+            reverseChestPlateMiddle.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
+        if (reverseChestPlateRight != null) {
+            reverseChestPlateRight.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+        }
+        if (reverseLeggings != null) {
+            reverseLeggings.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (reverseLeggingsLeft != null) {
+            reverseLeggingsLeft.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (reverseLeggingsMiddle != null) {
+            reverseLeggingsMiddle.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (reverseLeggingsRight != null) {
+            reverseLeggingsRight.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+        }
+        if (reverseBootsLeft != null) {
+            reverseBootsLeft.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
+        }
+        if (reverseBootsRight != null) {
+            reverseBootsRight.isHidden = !entityMaid.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
         }
     }
 

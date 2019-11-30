@@ -14,13 +14,13 @@ public final class CustomSpellCardEntry {
     private String descriptionKey;
     private String author;
     private String version;
-    private String script;
+    private Object script;
     private ResourceLocation icon;
     private ResourceLocation snapshoot;
     private int cooldown;
 
     CustomSpellCardEntry(String id, String nameKey, String descriptionKey, String author, String version,
-                         String script, int cooldown, ResourceLocation icon, ResourceLocation snapshoot) {
+                         Object script, int cooldown, ResourceLocation icon, ResourceLocation snapshoot) {
         this.id = id;
         this.nameKey = nameKey;
         this.descriptionKey = descriptionKey;
@@ -52,7 +52,7 @@ public final class CustomSpellCardEntry {
         return version;
     }
 
-    public String getScript() {
+    public Object getScript() {
         return script;
     }
 

@@ -16,6 +16,7 @@ public enum DanmakuColor {
     PINK(0xff007f),
     GRAY(0x8c8c8c);
 
+    private int rgb;
     private int red;
     private int green;
     private int blue;
@@ -24,6 +25,7 @@ public enum DanmakuColor {
     private int floatBlue;
 
     DanmakuColor(int color) {
+        this.rgb = color;
         this.red = color >> 16 & 255;
         this.green = color >> 8 & 255;
         this.blue = color & 255;
@@ -65,5 +67,9 @@ public enum DanmakuColor {
 
     public static int getLength() {
         return values().length;
+    }
+
+    public int getRgb() {
+        return rgb;
     }
 }

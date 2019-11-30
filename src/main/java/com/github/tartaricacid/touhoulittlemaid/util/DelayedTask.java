@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 
 import java.util.LinkedList;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 /**
  * @author TartaricAcid
@@ -21,6 +22,17 @@ public final class DelayedTask {
         SUPPLIERS.add(() -> {
             if (--tickArray[0] < 0) {
                 runnable.run();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public static void add(final Consumer<Integer> consumer, final int delayedTick, final int times) {
+        final int[] tickArray = {delayedTick};
+        SUPPLIERS.add(() -> {
+            if (--tickArray[0] < 0) {
+                consumer.accept(times);
                 return true;
             }
             return false;

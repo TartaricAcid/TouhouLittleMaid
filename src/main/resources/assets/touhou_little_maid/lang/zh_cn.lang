@@ -286,6 +286,8 @@ model.touhou_little_maid.houjuu_nue.name=封兽鵺
 model.touhou_little_maid.hijiri_byakuren.name=圣白莲
 model.touhou_little_maid.kumoi_ichirin.name=云居一轮
 model.touhou_little_maid.toramaru_shou.name=寅丸星
+model.touhou_little_maid.toyosatomimi_no_miko.name=丰聪耳神子
+model.touhou_little_maid.kaku_seiga.name=霍青娥
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -360,6 +362,8 @@ model.touhou_little_maid.houjuu_nue.desc=§7未确认幻想飞行少女
 model.touhou_little_maid.hijiri_byakuren.desc=§7被封印的大魔法师
 model.touhou_little_maid.kumoi_ichirin.desc=§7守护与被守护的大轮
 model.touhou_little_maid.toramaru_shou.desc=§7毘沙门天的弟子
+model.touhou_little_maid.toyosatomimi_no_miko.desc=§7圣德道士
+model.touhou_little_maid.kaku_seiga.desc=§7穿墙的邪仙
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -387,6 +391,8 @@ model.touhou_little_maid.ema.name=绘马墙
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=夜符「Night Bird」
 spell_card.touhou_little_maid:metal_sign.metal_fatigue.name=金符「Metal Fatigue」
+spell_card.touhou_little_maid:magic_sign.milky_way.name=魔符「Milky Way」
+spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle.name=境符「波与粒的境界」
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲

@@ -238,6 +238,12 @@
     }, {
       "model_id": "touhou_little_maid:toramaru_shou",
       "description": ["{model.touhou_little_maid.toramaru_shou.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:toyosatomimi_no_miko",
+      "description": ["{model.touhou_little_maid.toyosatomimi_no_miko.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kaku_seiga",
+      "description": ["{model.touhou_little_maid.kaku_seiga.desc}"]
     }
   ]
 }
