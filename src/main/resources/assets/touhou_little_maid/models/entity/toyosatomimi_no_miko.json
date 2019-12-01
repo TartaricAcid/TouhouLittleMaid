@@ -23,7 +23,7 @@
         ]
       },
       {
-        "name": "hat",
+        "name": "helmet",
         "parent": "head",
         "pivot": [0, 26, 0],
         "cubes": [
@@ -38,7 +38,7 @@
       },
       {
         "name": "hair",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [0, 26.5, 0],
         "rotation": [0, 0, -10]
       },
@@ -103,7 +103,7 @@
       },
       {
         "name": "hair2",
-        "parent": "hat",
+        "parent": "helmet",
         "pivot": [0, 26.5, 0],
         "rotation": [0, 0, 100]
       },
@@ -167,7 +167,7 @@
         ]
       },
       {
-        "name": "helmet",
+        "name": "-helmet",
         "parent": "head",
         "pivot": [0, 26, 0],
         "cubes": [
@@ -182,7 +182,7 @@
       },
       {
         "name": "hair3",
-        "parent": "helmet",
+        "parent": "-helmet",
         "pivot": [0, 26.5, 0],
         "rotation": [0, 0, -10]
       },
@@ -247,7 +247,7 @@
       },
       {
         "name": "hair4",
-        "parent": "helmet",
+        "parent": "-helmet",
         "pivot": [-1, 29.5, 0],
         "rotation": [0, 0, 100]
       },
@@ -360,7 +360,7 @@
         "name": "back",
         "parent": "body",
         "pivot": [0, 18, 3],
-        "rotation": [5, 0, 0],
+        "rotation": [14, 0, 0],
         "cubes": [
           {"origin": [-3, 14.999, 3], "size": [6, 3, 0], "uv": [21, 41]}
         ]

@@ -57,7 +57,7 @@ public class BlockGarageKit extends Block {
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "garage_kit");
         setHardness(0.5f);
         setRegistryName("garage_kit");
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.GARAGE_KIT_TABS);
     }
 
     /**

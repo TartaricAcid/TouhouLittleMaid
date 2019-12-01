@@ -1,9 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncCustomSpellCardData;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -41,14 +42,13 @@ public class ReloadSpellCardCommand extends CommandBase {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
-        if (sender instanceof EntityPlayerMP) {
-            if (args.length < 1 || !SUB.RELOAD.name().toLowerCase().equals(args[0])) {
-                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.spell_card.usage"));
-                return;
-            }
-            CustomSpellCardManger.onCustomSpellCardReload();
-            sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.spell_card.reload"));
+        if (args.length < 1 || !SUB.RELOAD.name().toLowerCase().equals(args[0])) {
+            sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.spell_card.usage"));
+            return;
         }
+        CustomSpellCardManger.onCustomSpellCardReload();
+        sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.spell_card.reload"));
+        CommonProxy.INSTANCE.sendToAll(new SyncCustomSpellCardData(CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER));
     }
 
     @Nonnull

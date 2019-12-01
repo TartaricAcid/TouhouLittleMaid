@@ -23,27 +23,6 @@ public final class MaidItems {
     public static Item KAPPA_COMPASS;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "hakurei_gohei")
     public static Item HAKUREI_GOHEI;
-    public static final CreativeTabs TABS = new CreativeTabs("touhou_little_maid.name") {
-        @Override
-        public ItemStack createIcon() {
-            return HAKUREI_GOHEI.getDefaultInstance();
-        }
-
-        @SideOnly(Side.CLIENT)
-        @Override
-        public String getTranslationKey() {
-            return "item_group." + getTabLabel();
-        }
-
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void displayAllRelevantItems(NonNullList<ItemStack> items) {
-            ItemStack egg = new ItemStack(Items.SPAWN_EGG);
-            ItemMonsterPlacer.applyEntityIdToItemStack(egg, new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"));
-            items.add(egg);
-            super.displayAllRelevantItems(items);
-        }
-    };
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "ultramarine_orb_elixir")
     public static Item ULTRAMARINE_ORB_ELIXIR;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "explosion_protect_bauble")
@@ -77,6 +56,46 @@ public final class MaidItems {
     public static Item MAID_BEACON;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "spell_card")
     public static Item SPELL_CARD;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "debug_danmaku")
+    public static Item DEBUG_DANMAKU;
+
+    public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
+        @SideOnly(Side.CLIENT)
+        @Override
+        public ItemStack getIcon() {
+            return HAKUREI_GOHEI.getDefaultInstance();
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void displayAllRelevantItems(NonNullList<ItemStack> items) {
+            ItemStack egg = new ItemStack(Items.SPAWN_EGG);
+            ItemMonsterPlacer.applyEntityIdToItemStack(egg, new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"));
+            items.add(egg);
+            super.displayAllRelevantItems(items);
+        }
+    };
+    public static CreativeTabs GARAGE_KIT_TABS = new MaidCreativeTabs("garage_kit") {
+        @SideOnly(Side.CLIENT)
+        @Override
+        public ItemStack getIcon() {
+            return new ItemStack(MaidBlocks.GARAGE_KIT);
+        }
+    };
+    public static CreativeTabs CHAIR_TABS = new MaidCreativeTabs("chair") {
+        @SideOnly(Side.CLIENT)
+        @Override
+        public ItemStack getIcon() {
+            return CHAIR.getDefaultInstance();
+        }
+    };
+    public static CreativeTabs SPELL_CARD_TABS = new MaidCreativeTabs("spell_card") {
+        @SideOnly(Side.CLIENT)
+        @Override
+        public ItemStack getIcon() {
+            return SPELL_CARD.getDefaultInstance();
+        }
+    };
 
     @SuppressWarnings("all")
     @SubscribeEvent
@@ -100,6 +119,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemAlbum().setRegistryName("album"));
         event.getRegistry().register(new ItemMaidBeacon(MaidBlocks.MAID_BEACON).setRegistryName("maid_beacon"));
         event.getRegistry().register(new ItemSpellCard().setRegistryName("spell_card"));
+        event.getRegistry().register(new ItemDebugDanmaku().setRegistryName("debug_danmaku"));
 
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));
@@ -110,7 +130,7 @@ public final class MaidItems {
                 .setRegistryName(id)
                 .setTranslationKey(TouhouLittleMaid.MOD_ID + "." + id)
                 .setMaxStackSize(1)
-                .setCreativeTab(MaidItems.TABS);
+                .setCreativeTab(MaidItems.MAIN_TABS);
     }
 
     private static Item getDamageableBaubles(int maxDamage, String id) {
@@ -119,6 +139,6 @@ public final class MaidItems {
                 .setTranslationKey(TouhouLittleMaid.MOD_ID + "." + id)
                 .setMaxStackSize(1)
                 .setNoRepair()
-                .setCreativeTab(MaidItems.TABS);
+                .setCreativeTab(MaidItems.MAIN_TABS);
     }
 }

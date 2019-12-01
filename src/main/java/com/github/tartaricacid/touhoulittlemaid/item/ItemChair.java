@@ -43,7 +43,7 @@ public class ItemChair extends Item {
     public ItemChair() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".chair");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.CHAIR_TABS);
     }
 
     public static String getChairModelId(ItemStack stack) {

@@ -19,8 +19,8 @@ public final class CustomSpellCardEntry {
     private ResourceLocation snapshoot;
     private int cooldown;
 
-    CustomSpellCardEntry(String id, String nameKey, String descriptionKey, String author, String version,
-                         Object script, int cooldown, ResourceLocation icon, ResourceLocation snapshoot) {
+    public CustomSpellCardEntry(String id, String nameKey, String descriptionKey, String author, String version,
+                                Object script, int cooldown, ResourceLocation icon, ResourceLocation snapshoot) {
         this.id = id;
         this.nameKey = nameKey;
         this.descriptionKey = descriptionKey;

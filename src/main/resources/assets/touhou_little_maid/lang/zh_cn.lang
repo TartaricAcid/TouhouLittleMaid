@@ -1,5 +1,8 @@
 # Touhou Little Mod Language File
-item_group.touhou_little_maid.name=车万女仆
+item_group.touhou_little_maid.main.name=车万女仆丨主体
+item_group.touhou_little_maid.garage_kit.name=车万女仆丨手办
+item_group.touhou_little_maid.chair.name=车万女仆丨坐垫
+item_group.touhou_little_maid.spell_card.name=车万女仆丨符卡
 
 # Entity
 entity.touhou_little_maid.maid.name=小女仆
@@ -30,6 +33,7 @@ item.touhou_little_maid.hata_sasimono.name=旗指物
 item.touhou_little_maid.album.name=相册
 item.touhou_little_maid.maid_beacon.name=神社庭灯
 item.touhou_little_maid.spell_card.name=符卡
+item.touhou_little_maid.debug_danmaku.name=调试弹幕工具
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -74,6 +78,7 @@ tooltips.touhou_little_maid.maid_spawn_egg.desc.2=你可以查询 JEI 来获取�
 tooltips.touhou_little_maid.spell_card.author=作者：%s
 tooltips.touhou_little_maid.spell_card.version=版本：%s
 tooltips.touhou_little_maid.spell_card.cooldown=符卡冷却时间：%d ticks
+tooltips.touhou_little_maid.debug_danmaku.desc=仅用于调试
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
@@ -89,6 +94,7 @@ message.touhou_little_maid.tombstone.place_fail=墓碑放置失败！
 message.touhou_little_maid.tombstone.on_block_activated=墓碑已经被收回！
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"点击此处","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":"安装帕秋莉模组来获取手册","color":"yellow","bold":false}]
 message.touhou_little_maid.broom.message=只有创造模式玩家可以骑乘，但是你可以修改配置文件关闭此限制
+message.touhou_little_maid.debug_danmaku.type=当前类型：%s
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
@@ -127,13 +133,16 @@ config.touhou_little_maid.misc_config.creative_player_can_ride_broom=只有创�
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹
 danmaku_type.touhou_little_maid.ball=小玉
+danmaku_type.touhou_little_maid.orbs=环玉
 danmaku_type.touhou_little_maid.big_ball=中玉
 danmaku_type.touhou_little_maid.bubble=大玉
-danmaku_type.touhou_little_maid.jellybean=椭弹
 danmaku_type.touhou_little_maid.heart=心弹
-danmaku_type.touhou_little_maid.star=星弹
+danmaku_type.touhou_little_maid.jellybean=椭弹
 danmaku_type.touhou_little_maid.amulet=札弹
-danmaku_type.touhou_little_maid.orbs=环玉
+danmaku_type.touhou_little_maid.star=星弹
+danmaku_type.touhou_little_maid.big_star=大星弹
+danmaku_type.touhou_little_maid.petal=米弹
+danmaku_type.touhou_little_maid.knife=刀弹
 
 # Task
 task.touhou_little_maid.idle=空闲
@@ -446,3 +455,5 @@ jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=生成闪电
 # Patchouli
 patchouli.touhou_little_maid.book.name=记忆中的幻想乡
 patchouli.touhou_little_maid.book.landing_text=一个与女仆和东方 Project 有关的模组。$(br2)感谢 Snownee 在代码方面的帮助。$(br)感谢 Succinum，ZeniCrow，Paulzzh，Tian_mi 以及其他美工制作了如此优秀的模型和材质。$(br)感谢 Little Maid Mob 的作者 Verclene。
+# Touhou Little Mod Language File
+item_group.touhou_little_maid.name=车万女仆

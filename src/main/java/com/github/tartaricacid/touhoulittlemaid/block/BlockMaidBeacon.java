@@ -39,7 +39,7 @@ public class BlockMaidBeacon extends Block {
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "maid_beacon");
         setHardness(1.0f);
         setRegistryName("maid_beacon");
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
         setDefaultState(blockState.getBaseState().withProperty(POSITION, Position.DOWN));
     }
 

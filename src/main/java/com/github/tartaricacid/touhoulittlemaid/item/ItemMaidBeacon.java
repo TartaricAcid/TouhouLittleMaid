@@ -37,7 +37,7 @@ public class ItemMaidBeacon extends Item {
 
     public ItemMaidBeacon(Block block) {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".maid_beacon");
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
         this.block = block;
     }
 
