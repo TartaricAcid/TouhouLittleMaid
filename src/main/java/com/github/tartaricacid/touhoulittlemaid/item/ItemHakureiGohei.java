@@ -47,7 +47,7 @@ import java.util.Locale;
 import java.util.Random;
 
 public class ItemHakureiGohei extends Item {
-    private static Random random = new Random();
+    private static final Random RANDOM = new Random();
     private double attackDamage;
     private double attackSpeed;
 
@@ -89,12 +89,7 @@ public class ItemHakureiGohei extends Item {
             if (player.getHeldItemOffhand().getItem() == MaidItems.SPELL_CARD) {
                 spellCardShoot(worldIn, player);
             } else {
-                //normalShoot(stack, worldIn, player, timeLeft);
-                Vec3d v = player.getLookVec();
-                DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
-                EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, 0, 0, DanmakuType.KNIFE, color);
-                danmaku.shoot(v.x, v.y, v.z, 0.1f, 5f);
-                worldIn.spawnEntity(danmaku);
+                normalShoot(stack, worldIn, player, timeLeft);
             }
             worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
             stack.damageItem(1, player);
@@ -124,12 +119,10 @@ public class ItemHakureiGohei extends Item {
         int a = (((500 - timeLeft) > 100 ? 100 : (500 - timeLeft)) / 20) + power;
         int damage = a + 4;
         float velocity = 0.2f * (a + 1);
-        DanmakuColor color = DanmakuColor.getColor(random.nextInt(DanmakuColor.getLength() + 1));
+        DanmakuColor color = DanmakuColor.getColor(RANDOM.nextInt(DanmakuColor.getLength() + 1));
         DanmakuType type = getGoheiMode(stack);
         EntityDanmaku danmaku = new EntityDanmaku(worldIn, player, damage, 0, type, color);
-        danmaku.setPosition(danmaku.posX + player.getLookVec().x,
-                danmaku.posY + player.getLookVec().y,
-                danmaku.posZ + player.getLookVec().z);
+        danmaku.setPosition(danmaku.posX + v.x, danmaku.posY + v.y, danmaku.posZ + v.z);
         danmaku.shoot(v.x, v.y, v.z, velocity, 5f);
         worldIn.spawnEntity(danmaku);
         player.getCooldownTracker().setCooldown(this, 11 - a);

@@ -60,6 +60,7 @@ public final class MaidModel {
         registerRender(MaidItems.HATA_SASIMONO);
         registerRender(MaidItems.ALBUM);
         registerRender(MaidItems.SPELL_CARD);
+        registerRender(MaidItems.DEBUG_DANMAKU);
     }
 
     private static void registerRender(Item item) {

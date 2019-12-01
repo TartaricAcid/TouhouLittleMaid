@@ -30,6 +30,7 @@ item.touhou_little_maid.hata_sasimono.name=Hata Sasimono
 item.touhou_little_maid.album.name=Album
 item.touhou_little_maid.maid_beacon.name=Shrine Lamp
 item.touhou_little_maid.spell_card.name=Spell Card
+item.touhou_little_maid.debug_danmaku.name=Debug Danmaku Tool
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -74,6 +75,7 @@ tooltips.touhou_little_maid.maid_spawn_egg.desc.2=For craft details, please refe
 tooltips.touhou_little_maid.spell_card.author=Author: %s
 tooltips.touhou_little_maid.spell_card.version=Version: %s
 tooltips.touhou_little_maid.spell_card.cooldown=Spell Cooldown: %d ticks
+tooltips.touhou_little_maid.debug_danmaku.desc=Only For Debug
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -89,6 +91,7 @@ message.touhou_little_maid.tombstone.place_fail=Tombstone Place Fail!
 message.touhou_little_maid.tombstone.on_block_activated=Tombstone Has Been Taken Back!
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Click Here","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":" To Install Patchouli Mod To Get The Manual","color":"yellow","bold":false}]
 message.touhou_little_maid.broom.message=Only creative mode player can ride it, but you can disable it by modifying the configuration.
+message.touhou_little_maid.debug_danmaku.type=Current Type: %s
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -127,13 +130,16 @@ config.touhou_little_maid.misc_config.creative_player_can_ride_broom=Only Creati
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
 danmaku_type.touhou_little_maid.ball=Ball
+danmaku_type.touhou_little_maid.orbs=Orbs
 danmaku_type.touhou_little_maid.big_ball=Big Ball
 danmaku_type.touhou_little_maid.bubble=Bubble
-danmaku_type.touhou_little_maid.jellybean=Jellybean
 danmaku_type.touhou_little_maid.heart=Heart
-danmaku_type.touhou_little_maid.star=Star
+danmaku_type.touhou_little_maid.jellybean=Jellybean
 danmaku_type.touhou_little_maid.amulet=Amulet
-danmaku_type.touhou_little_maid.orbs=Orbs
+danmaku_type.touhou_little_maid.star=Star
+danmaku_type.touhou_little_maid.big_star=Big Star
+danmaku_type.touhou_little_maid.petal=Petal
+danmaku_type.touhou_little_maid.knife=Knife
 
 # Task
 task.touhou_little_maid.idle=Idle
