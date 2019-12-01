@@ -77,7 +77,7 @@ public class CommonProxy {
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
-    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP = Maps.newHashMap();
+    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_SERVER = Maps.newHashMap();
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
@@ -241,6 +241,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(ServerEffectHandler.class, EffectRequest.class, 12, Side.SERVER);
         INSTANCE.registerMessage(ClientEffectHandler.class, EffectReply.class, 13, Side.CLIENT);
         INSTANCE.registerMessage(BeaconAbsorbMessage.Handler.class, BeaconAbsorbMessage.class, 14, Side.CLIENT);
+        INSTANCE.registerMessage(SyncCustomSpellCardData.Handler.class, SyncCustomSpellCardData.class, 15, Side.CLIENT);
     }
 
     /**

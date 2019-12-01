@@ -29,7 +29,7 @@ public class ItemMarisaBroom extends Item {
     public ItemMarisaBroom() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".marisa_broom");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
     }
 
     @Override

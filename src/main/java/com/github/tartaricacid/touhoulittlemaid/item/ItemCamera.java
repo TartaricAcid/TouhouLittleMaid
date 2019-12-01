@@ -36,7 +36,7 @@ public class ItemCamera extends Item {
     public ItemCamera() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".camera");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
         setMaxDamage(50);
     }
 

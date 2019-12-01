@@ -12,7 +12,6 @@ import java.util.function.BooleanSupplier;
  * @author TartaricAcid
  * @date 2019/9/8 1:11
  **/
-
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public class DelayedTaskEvent {
     @SubscribeEvent

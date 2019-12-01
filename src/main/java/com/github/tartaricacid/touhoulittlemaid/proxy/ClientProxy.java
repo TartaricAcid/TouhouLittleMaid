@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelResources;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
@@ -56,6 +57,11 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
      */
     public static final Map<Long, Integer> HATA_NAME_MAP = Maps.newHashMap();
     public static HataTextureManager HATA_TEXTURE_MANAGER;
+    /**
+     * 仅用于客户端显示文本提示
+     * 初始化时，先让其等于服务端数据，规避因为初始化物品此 Map 为空导致的崩溃问题
+     */
+    public static Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_CLIENT = CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {

@@ -29,7 +29,7 @@ public class ItemHataSasimono extends Item {
     public ItemHataSasimono() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".hata_sasimono");
         setMaxStackSize(16);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
     }
 
     @Override

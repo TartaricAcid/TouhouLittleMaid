@@ -25,7 +25,7 @@ public class ItemKappaCompass extends Item {
     public ItemKappaCompass() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "kappa_compass");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
     }
 
     @Nullable

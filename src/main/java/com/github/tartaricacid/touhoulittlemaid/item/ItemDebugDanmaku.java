@@ -39,7 +39,7 @@ public class ItemDebugDanmaku extends Item {
     public ItemDebugDanmaku() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".debug_danmaku");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
     }
 
     @Override

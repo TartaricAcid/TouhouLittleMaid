@@ -1,5 +1,8 @@
 # Touhou Little Mod Language File
-item_group.touhou_little_maid.name=车万女仆
+item_group.touhou_little_maid.main.name=车万女仆丨主体
+item_group.touhou_little_maid.garage_kit.name=车万女仆丨手办
+item_group.touhou_little_maid.chair.name=车万女仆丨坐垫
+item_group.touhou_little_maid.spell_card.name=车万女仆丨符卡
 
 # Entity
 entity.touhou_little_maid.maid.name=小女仆
@@ -452,3 +455,5 @@ jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=生成闪电
 # Patchouli
 patchouli.touhou_little_maid.book.name=记忆中的幻想乡
 patchouli.touhou_little_maid.book.landing_text=一个与女仆和东方 Project 有关的模组。$(br2)感谢 Snownee 在代码方面的帮助。$(br)感谢 Succinum，ZeniCrow，Paulzzh，Tian_mi 以及其他美工制作了如此优秀的模型和材质。$(br)感谢 Little Maid Mob 的作者 Verclene。
+# Touhou Little Mod Language File
+item_group.touhou_little_maid.name=车万女仆

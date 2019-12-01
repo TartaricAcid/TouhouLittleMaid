@@ -21,10 +21,11 @@ import java.util.Map;
  * @date 2019/11/16 9:55
  **/
 public final class CustomSpellCardManger {
-    private static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP = CommonProxy.CUSTOM_SPELL_CARD_MAP;
+    private static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP = CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
     private static final Path CONFIG_SPELL_CARD_FOLDER = Paths.get("config", TouhouLittleMaid.MOD_ID, "custom_spell_card");
     private static final String JAR_SPELL_CARD_FOLDER = "/assets/touhou_little_maid/custom_spell_card";
     private static final String ACCEPTED_SPELL_CARD_SUFFIX = ".js";
+    private static final ResourceLocation NULL = new ResourceLocation(TouhouLittleMaid.MOD_ID, "null");
 
     public static void onCustomSpellCardReload() {
         CUSTOM_SPELL_CARD_MAP.clear();
@@ -74,8 +75,8 @@ public final class CustomSpellCardManger {
         String author = "";
         String version = "";
         int cooldown = 60;
-        ResourceLocation icon = null;
-        ResourceLocation snapshot = null;
+        ResourceLocation icon = NULL;
+        ResourceLocation snapshot = NULL;
 
         if (scriptMaps.containsKey(Args.NAME_KEY.getName())) {
             nameKey = (String) scriptMaps.get(Args.NAME_KEY.getName());

@@ -1,5 +1,8 @@
 # Touhou Little Mod Language File
-item_group.touhou_little_maid.name=Touhou Little Maid
+item_group.touhou_little_maid.main.name=Touhou Little Maid: Main
+item_group.touhou_little_maid.garage_kit.name=Touhou Little Maid: Garage Kit
+item_group.touhou_little_maid.chair.name=Touhou Little Maid: Chair
+item_group.touhou_little_maid.spell_card.name=Touhou Little Maid: Spell Card
 
 # Entity
 entity.touhou_little_maid.maid.name=Touhou Little Maid

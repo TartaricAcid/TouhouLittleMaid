@@ -36,7 +36,7 @@ public class ItemAlbum extends Item {
     public ItemAlbum() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".album");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
     }
 
     public static ItemStackHandler getAlbumInv(ItemStack album) {

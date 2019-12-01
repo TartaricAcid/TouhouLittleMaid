@@ -55,7 +55,7 @@ public class ItemHakureiGohei extends Item {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".hakurei_gohei");
         setMaxStackSize(1);
         setMaxDamage(300);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
         this.attackDamage = 4;
         this.attackSpeed = -2;
     }
@@ -98,7 +98,7 @@ public class ItemHakureiGohei extends Item {
 
     private void spellCardShoot(World worldIn, EntityPlayer player) {
         try {
-            CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand());
+            CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand(), CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER);
             Invocable invocable = (Invocable) CommonProxy.NASHORN;
             invocable.invokeMethod(entry.getScript(), "spellCard", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
             player.getCooldownTracker().setCooldown(this, entry.getCooldown());

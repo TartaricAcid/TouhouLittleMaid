@@ -37,7 +37,7 @@ public class ItemPhoto extends Item {
     public ItemPhoto() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".photo");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.TABS);
+        setCreativeTab(MaidItems.MAIN_TABS);
     }
 
     static EnumActionResult onPhotoUse(EntityPlayer player, World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, ItemStack photo) {
