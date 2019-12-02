@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -44,6 +46,10 @@ public class MainCommand extends CommandBase {
                 commandPower(server, sender, args);
                 return;
             }
+            if ("maid_num".equals(args[0])) {
+                commandMaidNum(server, sender, args);
+                return;
+            }
         }
         sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.usage"));
     }
@@ -56,6 +62,7 @@ public class MainCommand extends CommandBase {
         switch (args.length) {
             case 1:
                 command.add("power");
+                command.add("maid_num");
                 break;
             case 2:
                 command.add("get");
@@ -94,6 +101,35 @@ public class MainCommand extends CommandBase {
             case "min":
                 power.min(num);
                 player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
+                break;
+            default:
+                player.sendMessage(new TextComponentTranslation(getUsage(sender)));
+        }
+    }
+
+    private void commandMaidNum(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        EntityPlayer player = getPlayer(server, sender, args[2]);
+        OwnerMaidNumHandler numHandler = player.getCapability(CapabilityOwnerMaidNumHandler.OWNER_MAID_NUM_CAP, null);
+        int num = (args.length >= 4) ? parseInt(args[3]) : 1;
+        if (numHandler == null) {
+            return;
+        }
+
+        switch (args[1]) {
+            case "get":
+                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
+                break;
+            case "set":
+                numHandler.set(num);
+                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
+                break;
+            case "add":
+                numHandler.add(num);
+                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
+                break;
+            case "min":
+                numHandler.min(num);
+                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
                 break;
             default:
                 player.sendMessage(new TextComponentTranslation(getUsage(sender)));

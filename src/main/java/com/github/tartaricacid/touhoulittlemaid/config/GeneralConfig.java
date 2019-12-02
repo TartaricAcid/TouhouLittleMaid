@@ -72,6 +72,12 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_cannot_change_model")
         @Config.Name("MaidCannotChangeModel")
         public boolean maidCannotChangeModel = false;
+
+        @Config.Comment("The maximum number of maids the player own.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.owner_max_maid_num")
+        @Config.Name("OwnerMaxMaidNum")
+        @Config.RangeInt(min = 0)
+        public int ownerMaxMaidNum = Integer.MAX_VALUE;
     }
 
     public static class VanillaConfig {

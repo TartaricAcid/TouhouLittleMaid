@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
@@ -110,6 +111,7 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(TouhouLittleMaid.INSTANCE, new MaidGuiHandler());
         CapabilityPowerHandler.register();
+        CapabilityOwnerMaidNumHandler.register();
         CustomSpellCardManger.onCustomSpellCardReload();
         if (Loader.isModLoaded("patchouli")) {
             MultiblockRegistry.init();
@@ -242,6 +244,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(ClientEffectHandler.class, EffectReply.class, 13, Side.CLIENT);
         INSTANCE.registerMessage(BeaconAbsorbMessage.Handler.class, BeaconAbsorbMessage.class, 14, Side.CLIENT);
         INSTANCE.registerMessage(SyncCustomSpellCardData.Handler.class, SyncCustomSpellCardData.class, 15, Side.CLIENT);
+        INSTANCE.registerMessage(SyncOwnerMaidNumMessage.Handler.class, SyncOwnerMaidNumMessage.class, 16, Side.CLIENT);
     }
 
     /**

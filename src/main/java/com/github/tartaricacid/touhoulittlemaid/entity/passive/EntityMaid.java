@@ -7,6 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
@@ -713,15 +715,20 @@ public class EntityMaid extends AbstractEntityMaid {
         Item tamedItem = Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem) == null ? Items.CAKE : Item.getByNameOrId(GeneralConfig.MAID_CONFIG.maidTamedItem);
         boolean isReloadTamedCondition = itemstack.getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_VOID);
         boolean isNormalTamedCondition = !this.isTamed() && itemstack.getItem() == tamedItem;
-        if (isReloadTamedCondition || isNormalTamedCondition) {
-            if (!world.isRemote) {
+        boolean isTamedCondition = isReloadTamedCondition || isNormalTamedCondition;
+        OwnerMaidNumHandler num = player.getCapability(CapabilityOwnerMaidNumHandler.OWNER_MAID_NUM_CAP, null);
+        if (!world.isRemote && isTamedCondition && num != null) {
+            if (num.canAdd()) {
                 consumeItemFromStack(player, itemstack);
                 this.setTamedBy(player);
                 this.playTameEffect(true);
                 this.getNavigator().clearPath();
                 this.world.setEntityState(this, (byte) 7);
                 this.playSound(MaidSoundEvent.MAID_TAMED, 1, 1);
+                num.add();
                 return true;
+            } else {
+                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.owner_maid_num.can_not_add", num.get(), num.getMaxNum()));
             }
         }
         return false;
