@@ -44,8 +44,9 @@ tile.touhou_little_maid.tombstone.name=墓碑
 # Command
 commands.touhou_little_maid.hata.usage=§c用法：/hata <reload>
 commands.touhou_little_maid.hata.reload=已经重载所有的旗指物材质
-commands.touhou_little_maid.main.usage=§c用法：/touhou_little_maid <power> <get|set|add|min> <玩家> [数值]
+commands.touhou_little_maid.main.usage=§c用法：/touhou_little_maid <power|maid_num> <get|set|add|min> <玩家> [数值]
 commands.touhou_little_maid.main.power.info=当前 Power 数：%.2f
+commands.touhou_little_maid.main.maid_num.info=当前女仆数：%d
 commands.touhou_little_maid.spell_card.usage=§c用法：/spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=已经重载所有的符卡
 
@@ -95,12 +96,13 @@ message.touhou_little_maid.tombstone.on_block_activated=墓碑已经被收回！
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"点击此处","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":"安装帕秋莉模组来获取手册","color":"yellow","bold":false}]
 message.touhou_little_maid.broom.message=只有创造模式玩家可以骑乘，但是你可以修改配置文件关闭此限制
 message.touhou_little_maid.debug_danmaku.type=当前类型：%s
+message.touhou_little_maid.owner_maid_num.can_not_add=你无法再驯服女仆，你已经达到了上限（%d/%d）
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
 info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
 
-# Main Config
+# Maid Config
 config.touhou_little_maid.maid_config=女仆相关配置
 config.touhou_little_maid.maid_config.maid_tamed_item=驯服女仆所使用的物品
 config.touhou_little_maid.maid_config.maid_temptation_item=诱惑女仆所使用的物品
@@ -110,6 +112,7 @@ config.touhou_little_maid.maid_config.maid_hurt_sound_interval=女仆受伤的�
 config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽子
 config.touhou_little_maid.maid_config.enabled_tasks=女仆启用的模式
 config.touhou_little_maid.maid_config.maid_cannot_change_model=玩家能否改变女仆皮肤
+config.touhou_little_maid.maid_config.owner_max_maid_num=可驯服的最大女仆数
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=原版相关配置

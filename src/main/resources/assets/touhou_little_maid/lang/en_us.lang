@@ -44,8 +44,9 @@ tile.touhou_little_maid.tombstone.name=Tombstone
 # Command
 commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>
 commands.touhou_little_maid.hata.reload=Has reloaded all hata texture
-commands.touhou_little_maid.main.usage=§cUsage: /touhou_little_maid <power> <get|set|add|min> <player> [value]
+commands.touhou_little_maid.main.usage=§cUsage: /touhou_little_maid <power|maid_num> <get|set|add|min> <player> [value]
 commands.touhou_little_maid.main.power.info=Current Power: %.2f
+commands.touhou_little_maid.main.maid_num.info=Current Maid Num: %d
 commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
 
@@ -95,12 +96,13 @@ message.touhou_little_maid.tombstone.on_block_activated=Tombstone Has Been Taken
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Click Here","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":" To Install Patchouli Mod To Get The Manual","color":"yellow","bold":false}]
 message.touhou_little_maid.broom.message=Only creative mode player can ride it, but you can disable it by modifying the configuration.
 message.touhou_little_maid.debug_danmaku.type=Current Type: %s
+message.touhou_little_maid.owner_maid_num.can_not_add=You can no longer tame maids, you have reached the limit (%d/%d)
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
 info.touhou_little_maid.maid.set_pos=§a§lMaid Pos: %d, %d, %d
 
-# Main Config
+# Maid Config
 config.touhou_little_maid.maid_config=Maid Config
 config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item
 config.touhou_little_maid.maid_config.maid_temptation_item=Maid Temptation Item
@@ -110,6 +112,7 @@ config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound I
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 config.touhou_little_maid.maid_config.enabled_tasks=Maid Enabled Tasks
 config.touhou_little_maid.maid_config.maid_cannot_change_model=Can Player Change Maid Skin
+config.touhou_little_maid.maid_config.owner_max_maid_num=Owner Max Maid Num
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=Vanilla Config
