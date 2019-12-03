@@ -97,6 +97,7 @@ message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","c
 message.touhou_little_maid.broom.message=Only creative mode player can ride it, but you can disable it by modifying the configuration.
 message.touhou_little_maid.debug_danmaku.type=Current Type: %s
 message.touhou_little_maid.owner_maid_num.can_not_add=You can no longer tame maids, you have reached the limit (%d/%d)
+message.touhou_little_maid.change_model.disabled=Skin switch is disabled.
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -111,7 +112,7 @@ config.touhou_little_maid.maid_config.maid_pickup_sound_interval=Maid Pickup Sou
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound Interval (tick)
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 config.touhou_little_maid.maid_config.enabled_tasks=Maid Enabled Tasks
-config.touhou_little_maid.maid_config.maid_cannot_change_model=Can Player Change Maid Skin
+config.touhou_little_maid.maid_config.maid_cannot_change_model=Disable Player Change Maid Skin
 config.touhou_little_maid.maid_config.owner_max_maid_num=Owner Max Maid Num
 
 # Vanilla Config
