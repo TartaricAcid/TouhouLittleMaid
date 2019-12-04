@@ -1,0 +1,12 @@
+{
+  "sortnum": 7,
+  "name": "指令",
+  "icon": "minecraft:command_block",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "本模组为服主也添加了几个常用的指令，这些指令都以 /touhou_little_maid 开头，你也可以将其简写为 /th。"
+    }
+  ]
+}

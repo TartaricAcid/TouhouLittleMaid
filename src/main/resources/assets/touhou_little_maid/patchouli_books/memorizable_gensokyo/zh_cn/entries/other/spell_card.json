@@ -1,0 +1,16 @@
+{
+  "sortnum": 9,
+  "name": "符卡",
+  "icon": "touhou_little_maid:spell_card",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:spell_card",
+      "text": "符卡是目前添加的测试性内容，由于其会占用大量服务器资源，使用时请注意。$(br2)当玩家副手持有符卡，而主手持有御币时，右击即可使用符卡。"
+    }, {
+      "type": "text",
+      "text": "符卡通过 javascript 脚本可以做到自定义，具体自定义方式可以参考本项目的 wiki 部分。"
+    }
+  ]
+}

@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "To get a maid is extremely special and needs to be done through the multi-blocks altar.$(br2)Since the craft table is likely to change later, please check it in the JEI altar label."
+      "text": "To get a maid is extremely special and needs to be done through the multi-blocks altar.$(br2)Since the craft table is likely to change later, please check it in the JEI altar label.$(br2)After the maid is successfully spawned in the multi-blocks altar, you will get a cake box wrapped with the maid. You can right-click the cake box to open it."
     },
     {
       "type": "text",
-      "text": "Once the maid is spawned, you will need a cake to tame it. the tamed items can be changed in the configuration file, which is not repeated here.$(br2)The tamed maid is almost identical to the vanilla pet, and you can right-click to open her GUI."
+      "text": "You need to right-click three times to trigger different opening stages, and finally the cake box will disappear.$(br2)You will need a cake to tame the maid. the tamed items can be changed in the configuration file, which is not repeated here.$(br2)The tamed maid is almost identical to the vanilla pet, and you can right-click to open her GUI."
     }
   ]
 }

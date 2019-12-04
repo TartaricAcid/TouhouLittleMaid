@@ -97,6 +97,7 @@ message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","c
 message.touhou_little_maid.broom.message=Only creative mode player can ride it, but you can disable it by modifying the configuration.
 message.touhou_little_maid.debug_danmaku.type=Current Type: %s
 message.touhou_little_maid.owner_maid_num.can_not_add=You can no longer tame maids, you have reached the limit (%d/%d)
+message.touhou_little_maid.change_model.disabled=Skin switch is disabled.
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -111,7 +112,7 @@ config.touhou_little_maid.maid_config.maid_pickup_sound_interval=Maid Pickup Sou
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=Maid Hurt Sound Interval (tick)
 config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 config.touhou_little_maid.maid_config.enabled_tasks=Maid Enabled Tasks
-config.touhou_little_maid.maid_config.maid_cannot_change_model=Can Player Change Maid Skin
+config.touhou_little_maid.maid_config.maid_cannot_change_model=Disable Player Change Maid Skin
 config.touhou_little_maid.maid_config.owner_max_maid_num=Owner Max Maid Num
 
 # Vanilla Config
@@ -301,6 +302,7 @@ model.touhou_little_maid.kumoi_ichirin.name=Ichirin Kumoi
 model.touhou_little_maid.toramaru_shou.name=Shou Toramaru
 model.touhou_little_maid.toyosatomimi_no_miko.name=Toyosatomimi no Miko
 model.touhou_little_maid.kaku_seiga.name=Seiga Kaku
+model.touhou_little_maid.mononobe_no_futo.name=Mononobe no Futo
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -377,6 +379,7 @@ model.touhou_little_maid.kumoi_ichirin.desc=§7The Great Wheel, Having Guarded a
 model.touhou_little_maid.toramaru_shou.desc=§7Disciple of Bishamonten
 model.touhou_little_maid.toyosatomimi_no_miko.desc=§7Shoutoku Taoist
 model.touhou_little_maid.kaku_seiga.desc=§7The Wicked Hermit Who Passes Through Walls
+model.touhou_little_maid.mononobe_no_futo.desc=§7The Shikaisen from Ancient Japan
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

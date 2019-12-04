@@ -1,0 +1,19 @@
+{
+  "sortnum": 8,
+  "name": "Vanilla Modify",
+  "icon": "minecraft:book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Modifications to the vanilla two entity models have been added to the configuration of this mod. $(br2)One can modify the vanilla slime model to yukkuri, and the other can modify the vanilla experience orb model to a score point."
+    }, {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/yukkuri.png"
+      ],
+      "title": "Yukkuri",
+      "border": true
+    }
+  ]
+}

@@ -1,9 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -38,7 +42,7 @@ public class ApplyMaidSkinDataMessage implements IMessage {
         ByteBufUtils.writeUTF8String(buf, modelId.toString());
     }
 
-    public UUID getEntityUuid() {
+    private UUID getEntityUuid() {
         return entityUuid;
     }
 
@@ -53,12 +57,29 @@ public class ApplyMaidSkinDataMessage implements IMessage {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
                     if (entity instanceof EntityMaid) {
-                        EntityMaid maid = (EntityMaid) entity;
-                        maid.setModelId(message.getModelId().toString());
+                        applyModelId((EntityMaid) entity, message.getModelId().toString());
                     }
                 });
             }
             return null;
+        }
+    }
+
+    private static void applyModelId(EntityMaid maid, String modelId) {
+        EntityLivingBase owner = maid.getOwner();
+        if (owner instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) owner;
+            if (player.isCreative() || !GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
+                maid.setModelId(modelId);
+            } else {
+                sendMessageToOwner(player);
+            }
+        }
+    }
+
+    private static void sendMessageToOwner(EntityPlayer entityPlayer) {
+        if (entityPlayer.isEntityAlive()) {
+            entityPlayer.sendMessage(new TextComponentTranslation("message.touhou_little_maid.change_model.disabled"));
         }
     }
 }

@@ -97,6 +97,7 @@ message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","c
 message.touhou_little_maid.broom.message=只有创造模式玩家可以骑乘，但是你可以修改配置文件关闭此限制
 message.touhou_little_maid.debug_danmaku.type=当前类型：%s
 message.touhou_little_maid.owner_maid_num.can_not_add=你无法再驯服女仆，你已经达到了上限（%d/%d）
+message.touhou_little_maid.change_model.disabled=皮肤切换功能已被禁止
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
@@ -111,7 +112,7 @@ config.touhou_little_maid.maid_config.maid_pickup_sound_interval=女仆拾物的
 config.touhou_little_maid.maid_config.maid_hurt_sound_interval=女仆受伤的声音间隔（tick）
 config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽子
 config.touhou_little_maid.maid_config.enabled_tasks=女仆启用的模式
-config.touhou_little_maid.maid_config.maid_cannot_change_model=玩家能否改变女仆皮肤
+config.touhou_little_maid.maid_config.maid_cannot_change_model=禁止玩家改变女仆皮肤
 config.touhou_little_maid.maid_config.owner_max_maid_num=可驯服的最大女仆数
 
 # Vanilla Config
@@ -300,6 +301,7 @@ model.touhou_little_maid.kumoi_ichirin.name=云居一轮
 model.touhou_little_maid.toramaru_shou.name=寅丸星
 model.touhou_little_maid.toyosatomimi_no_miko.name=丰聪耳神子
 model.touhou_little_maid.kaku_seiga.name=霍青娥
+model.touhou_little_maid.mononobe_no_futo.name=物部布都
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -376,6 +378,7 @@ model.touhou_little_maid.kumoi_ichirin.desc=§7守护与被守护的大轮
 model.touhou_little_maid.toramaru_shou.desc=§7毘沙门天的弟子
 model.touhou_little_maid.toyosatomimi_no_miko.desc=§7圣德道士
 model.touhou_little_maid.kaku_seiga.desc=§7穿墙的邪仙
+model.touhou_little_maid.mononobe_no_futo.desc=§7古代日本的尸解仙
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
