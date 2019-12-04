@@ -10,7 +10,7 @@
       "text": "The shrine lamp is a good decoration and has certain practical functions. Right click on the upper part of the shrine lamp to open the GUI, store the player's power point."
     }, {
       "type": "text",
-      "text": "It also can select effect, then will consume power points to bring the effect to the surrounding range of maids."
+      "text": "It also can select effect, then will consume power points to bring the effect to the surrounding range of maids.$(br2)The shrine lamp is also a good tool for automatically collecting power point. It can automatically collect power point within 3 blocks and store them."
     }
   ]
 }

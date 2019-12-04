@@ -78,7 +78,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         // 如果攻击目标不为空
         if (entitylivingbase != null) {
             // 到攻击目标的底部距离
-            double d0 = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
+            double distanceSq = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
             // 能否看见对方
             boolean canSee = this.entity.getEntitySenses().canSee(entitylivingbase);
             // 看见的时长是否大于 0
@@ -97,7 +97,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
             }
 
             // 如果在最大攻击距离之内，而且看见的时长足够长
-            if (d0 <= this.maxAttackDistance && this.seeTime >= 20) {
+            if (distanceSq <= this.maxAttackDistance && this.seeTime >= 20) {
                 // 清除先前的寻路路径，开始增加攻击时间
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
@@ -123,9 +123,9 @@ public class EntityMaidAttackRanged extends EntityAIBase {
             // 如果攻击时间大于 -1
             if (this.strafingTime > -1) {
                 // 依据距离远近决定是否前后走位
-                if (d0 > this.maxAttackDistance * 0.75F) {
+                if (distanceSq > this.maxAttackDistance * 0.75F) {
                     this.strafingBackwards = false;
-                } else if (d0 < this.maxAttackDistance * 0.25F) {
+                } else if (distanceSq < this.maxAttackDistance * 0.25F) {
                     this.strafingBackwards = true;
                 }
 

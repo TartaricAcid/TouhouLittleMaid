@@ -301,6 +301,7 @@ model.touhou_little_maid.kumoi_ichirin.name=云居一轮
 model.touhou_little_maid.toramaru_shou.name=寅丸星
 model.touhou_little_maid.toyosatomimi_no_miko.name=丰聪耳神子
 model.touhou_little_maid.kaku_seiga.name=霍青娥
+model.touhou_little_maid.mononobe_no_futo.name=物部布都
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -377,6 +378,7 @@ model.touhou_little_maid.kumoi_ichirin.desc=§7守护与被守护的大轮
 model.touhou_little_maid.toramaru_shou.desc=§7毘沙门天的弟子
 model.touhou_little_maid.toyosatomimi_no_miko.desc=§7圣德道士
 model.touhou_little_maid.kaku_seiga.desc=§7穿墙的邪仙
+model.touhou_little_maid.mononobe_no_futo.desc=§7古代日本的尸解仙
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

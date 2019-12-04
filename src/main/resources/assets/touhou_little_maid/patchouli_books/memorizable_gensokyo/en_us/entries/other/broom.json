@@ -17,6 +17,9 @@
       "title": "Marisa Broom",
       "border": true,
       "text": "Maid riding on a broom."
+    }, {
+      "type": "text",
+      "text": "However, currently only creative mode players are allowed to ride the broom. You can modify the configuration file to disable this feature."
     }
   ]
 }

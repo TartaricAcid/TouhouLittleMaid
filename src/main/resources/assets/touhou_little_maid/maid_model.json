@@ -244,6 +244,9 @@
     }, {
       "model_id": "touhou_little_maid:kaku_seiga",
       "description": ["{model.touhou_little_maid.kaku_seiga.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:mononobe_no_futo",
+      "description": ["{model.touhou_little_maid.mononobe_no_futo.desc}"]
     }
   ]
 }

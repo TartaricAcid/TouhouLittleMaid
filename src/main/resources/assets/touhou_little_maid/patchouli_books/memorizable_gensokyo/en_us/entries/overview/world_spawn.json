@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "This mod adds two mobs and a villager profession. $(br2)The looting of mob are important crafting ingredient, and villagers can trade some of the items in this mod."
+      "text": "This mod adds two mobs and a villager profession. $(br2)The looting of mob are important crafting ingredient, and villagers can trade some of the items in this mod.$(br2)The chance of spawn hostile creatures in this mod can be modified in the configuration file. When set to 0, these monsters can be prohibited from spawn."
     },
     {
       "type": "entity",

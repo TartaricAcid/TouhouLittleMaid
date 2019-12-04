@@ -302,6 +302,7 @@ model.touhou_little_maid.kumoi_ichirin.name=Ichirin Kumoi
 model.touhou_little_maid.toramaru_shou.name=Shou Toramaru
 model.touhou_little_maid.toyosatomimi_no_miko.name=Toyosatomimi no Miko
 model.touhou_little_maid.kaku_seiga.name=Seiga Kaku
+model.touhou_little_maid.mononobe_no_futo.name=Mononobe no Futo
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -378,6 +379,7 @@ model.touhou_little_maid.kumoi_ichirin.desc=§7The Great Wheel, Having Guarded a
 model.touhou_little_maid.toramaru_shou.desc=§7Disciple of Bishamonten
 model.touhou_little_maid.toyosatomimi_no_miko.desc=§7Shoutoku Taoist
 model.touhou_little_maid.kaku_seiga.desc=§7The Wicked Hermit Who Passes Through Walls
+model.touhou_little_maid.mononobe_no_futo.desc=§7The Shikaisen from Ancient Japan
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

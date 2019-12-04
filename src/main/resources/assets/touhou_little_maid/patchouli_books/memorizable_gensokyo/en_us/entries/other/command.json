@@ -1,0 +1,12 @@
+{
+  "sortnum": 7,
+  "name": "Command",
+  "icon": "minecraft:command_block",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This mod also adds a few command for the server owner. These command all start with /touhou_little_maid, you can also abbreviate it as /th."
+    }
+  ]
+}

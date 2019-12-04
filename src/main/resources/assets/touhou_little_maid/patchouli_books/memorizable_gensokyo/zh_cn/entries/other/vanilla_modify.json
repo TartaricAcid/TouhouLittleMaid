@@ -1,0 +1,19 @@
+{
+  "sortnum": 8,
+  "name": "原版修改",
+  "icon": "minecraft:book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "本模组的配置文件部分添加了对原版两个实体模型的修改。$(br2)一个可以将原版史莱姆修改为油库里模型，另一个可以将原版经验球模型修改为得分道具。"
+    }, {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/yukkuri.png"
+      ],
+      "title": "油库里",
+      "border": true
+    }
+  ]
+}
