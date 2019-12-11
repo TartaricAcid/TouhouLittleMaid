@@ -6,16 +6,16 @@
   "pages": [
     {
       "type": "text",
-      "text": "When you open the maid's GUI, you can see the list on the left side. This is the maid's task. The related functions are as follows:$(li)Idle: default task, do nothing.$(li)Attack: put a sword on maid's main hand, maid's behavior will be the same as the vanilla wolf, and actively attack hostile creatures."
+      "text": "When you open a maid's GUI, you can see a list on the left side. This is a maid's task bar. The related functions are as the following:$(li)Idle: default task; the maid does nothing.$(li)Attack: if you put a sword on a maid's main hand, the maid's behavior will be the same as a vanilla wolf, actively attacking hostile creatures."
     }, {
       "type": "text",
-      "text": "$(li)Bow: put a bow on maid's main hand, put an arrow at any other position, will actively attack hostile creatures.$(li)Danmaku: put the gohei in maid's main hand, she will shoot danmaku to attack the hostile creatures, and launch different number danmaku according to the number of hostile creatures around her.$(li)Farm: put crop seeds on maid, actively planting crops around her, and actively harvesting."
+      "text": "$(li)Bow: If you put a bow on a maid's main hand, and put arrows in any other inventory blocks, they will actively attack hostile creatures with bows.$(li)Danmaku: If you put the gohei in a maid's main hand, she will shoot danmaku to attack the hostile creatures, and launch different numbers of danmaku according to the number of hostile creatures around her.$(li)Farm: If you put crop seeds on the maid, she will actively plant crops around her, and actively harvest them."
     }, {
       "type": "text",
-      "text": "$(li)Sugarcane: plant and harvest sugarcane.$(li)Melons: harvest watermelons and pumpkins.$(li)Cocoa: plant and harvest cocoa.$(li)Grass: clean weeds and flowers around them.$(li)Feed: put food on maid and take the initiative to feed the food when the player's hunger value is low.$(li)Shears: put the shears in maid's main hand, will actively shears the wool around the sheep."
+      "text": "$(li)Sugarcane: plants and harvests sugarcanes.$(li)Melons: harvest watermelons and pumpkins.$(li)Cocoa: plant and harvest cocoas.$(li)Grass: clean weeds and flowers around them.$(li)Feed: if you put food in a maid's inventory, she will activly feed the player when the player's hunger value is low.$(li)Shears: if you put shears in a maid's main hand, she will actively shear sheep around her."
     }, {
       "type": "text",
-      "text": "$(li)Torch: put torch on maid, it will actively place the torch in the low brightness.$(li)Breed: put the items needed to breed animals and actively feeds the surrounding animals."
+      "text": "$(li)Torch: if you put torches on a maid, they will actively place torches in the low brightness areas.$(li)Breed: if you put the items needed to breed animals in a maid's inventory. She will actively feed the surrounding animals."
     }
   ]
 }

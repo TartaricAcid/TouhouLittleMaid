@@ -6,10 +6,10 @@
   "pages": [
     {
       "type": "text",
-      "text": "The third tab of the maid's GUI is the bauble inventory. This mod provides several baubles that can be triggered to protect the maid under certain conditions:$(li)Ultramarine Orb Elixir: 6 times to cancel the maid's death.$(li)Tombstone Bauble: Tombstones that generate preserved items when the maid dies."
+      "text": "The third tab of the maids' GUI is the bauble inventory. This mod provides several baubles that can be triggered to protect maids under certain conditions:$(li)Ultramarine Orb Elixir: Can be used 6 times to avoid a maid's death.$(li)Tombstone Bauble: Tombstones that generate upon a maid's death to preserve their items."
     }, {
       "type": "text",
-      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is cancelled."
+      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is canceled."
     }
   ]
 }
