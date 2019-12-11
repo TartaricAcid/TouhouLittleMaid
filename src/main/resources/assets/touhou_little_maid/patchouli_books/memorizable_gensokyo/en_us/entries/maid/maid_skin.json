@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "The maid's skin is completely customizable, you can easily switch the maid's skin in the game.$(br2)you can add a third-party resource pack to increase the style of the maid's skin."
+      "text": "The maids' skin is completely customizable, you can easily change the maids' skin in game.$(br2)you can also add a third-party resource pack to increase the style of the maid's skin."
     }, {
       "type": "image",
       "images": [
@@ -16,7 +16,7 @@
       "border": true
     }, {
       "type": "text",
-      "text": "Just use the $(l:https://blockbench.net/)Blockbench$(/l) software to create your own maid skin resource pack very easily. $(br2)Maid skin model is perfectly compatible with the 1.10.0 version of the bedrock edition entity model.$(br2)For more information on custom maid skins, check out the wiki."
+      "text": "Use the $(l:https://blockbench.net/)Blockbench$(/l) software to easily create your own maid skin resource pack. $(br2)The maid skin model perfectly compatible with the 1.10.0 version of the bedrock edition entity model.$(br2)For more information on custom maid skins, please check out the Wiki."
     }
   ]
 }

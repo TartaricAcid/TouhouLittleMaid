@@ -6,15 +6,15 @@
   "pages": [
     {
       "type": "text",
-      "text": "The basic functions of the maid are very numerous, roughly as follows:$(li)By default, the maid will take the initiative to pick up the item, arrows and experience orbs around her. The main GUI has a button to switch pick up mode;$(li)By default, the maid will always follow the player."
+      "text": "There are many basic functions that maids are able to perform, such as:$(li)By default, the maid will actively pick up items, arrows and experience orbs around her. The main GUI has a button to switch pick up mode;$(li)By default, the maid will always follow the player."
     },
     {
       "type": "text",
-      "text": "$(li)Empty hand Shift right-clicking maid can switch sitting mode. In sitting mode, the maid does nothing, including avoiding harm.$(li) When the maid ride on other entities, empty hand Shift right click can remove it.$(li)The player can hold the potion or the golden apple to right-click the maid to use."
+      "text": "$(li)Shift right-clicking maid with an empty hand can switch sitting mode. In sitting mode, the doesn't do anything, including avoiding danger.$(li) When the maid ride on other entities, Shift right-clicking with an empty hand can remove them.$(li)The player can use a golden apple or potion on a maid by right-clicking them while holding the item."
     },
     {
       "type": "text",
-      "text": "$(li)The experience picked up by the maid can be converted into an enchanted bottle by the player holding the glass bottle and right clicking."
+      "text": "$(li)The experience picked up by the maid can be converted into an Bottle o' Enchanting if the player right-click the maid while holding a bottle."
     }
   ]
 }
