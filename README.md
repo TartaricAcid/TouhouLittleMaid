@@ -4,7 +4,9 @@
 # 鸣谢
 - Verclene 等一系列日站前辈们接力做出的女仆 Mod；
 - Mojang 及 Forge 的开发者们；
-- 3TUSK，雪尼，Jack 等前辈们的指导；
+- 3TUSK，雪尼，Jack 等前辈们的悉心指导；
+- 美工 Succinum（琥珀酸），ZeniCrow（帕金伊），天顶乌，Paulzzh，Tian_mi，SQwatermark 等精湛绝伦的模型材质设计；
+- Lappland162 对英文文本的认真细致的校对修改；
 - McJty 等一系列国外的 Modder 们的教程；
 - 写模组中查询到的各种资料教程网站，包括但不限于[教你画像素画网站](https://32comic.com/)，Minecraft Wiki，Forge 论坛等。
 

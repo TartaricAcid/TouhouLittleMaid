@@ -24,7 +24,17 @@ public enum DanmakuType {
     // 米弹
     PETAL(0.6d),
     // 刀弹
-    KNIFE(0.6d);
+    KNIFE(0.6d),
+    // 魔炮
+    MASTER_SPARK(1.0d),
+    // 铳弹
+    BULLET(1.0d),
+    // 苦无弹
+    KUNAI(1.0d),
+    // 滴弹
+    RAINDROP(1.0d),
+    // 鳞弹
+    ARROWHEAD(1.0d);
 
     private double size;
 

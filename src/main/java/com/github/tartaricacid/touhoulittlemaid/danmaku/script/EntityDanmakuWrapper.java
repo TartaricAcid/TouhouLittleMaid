@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.danmaku.script;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
-import net.minecraft.util.math.Vec3d;
 
 /**
  * @author TartaricAcid
@@ -18,17 +17,6 @@ public class EntityDanmakuWrapper {
 
     public EntityDanmakuWrapper(WorldWrapper worldIn, EntityLivingBaseWrapper throwerIn, float damage, float gravity, DanmakuType type, DanmakuColor color) {
         this.danmaku = new EntityDanmaku(worldIn.getWorld(), throwerIn.getLivingBase(), damage, gravity, type, color);
-    }
-
-    public void setFunction(String xFunction, String yFunction, String zFunction) {
-        this.danmaku.setXFunction(xFunction);
-        this.danmaku.setYFunction(yFunction);
-        this.danmaku.setZFunction(zFunction);
-    }
-
-    public void setPosAndYaw(double x, double y, double z, float yaw) {
-        this.danmaku.setOriginPos(new Vec3d(x, y, z));
-        this.danmaku.setDanmakuYaw(yaw);
     }
 
     public void setTicksExisted(int ticksExisted) {
@@ -57,5 +45,9 @@ public class EntityDanmakuWrapper {
 
     public EntityDanmaku getDanmaku() {
         return this.danmaku;
+    }
+
+    public void setDamagesTerrain(boolean canDamages) {
+        this.danmaku.setDamagesTerrain(canDamages);
     }
 }
