@@ -12,10 +12,12 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -37,15 +39,37 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
     private static final ResourceLocation PETAL_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/petal.obj");
     private static final ResourceLocation KNIFE_TOP_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/knife_top.obj");
     private static final ResourceLocation KNIFE_BOTTOM_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/knife_bottom.obj");
+    private static final ResourceLocation BULLET_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/bullet_danmaku.obj");
+    private static final ResourceLocation RING = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/ring.obj");
+    private static final ResourceLocation GOSSIP = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/gossip.obj");
+    private static final ResourceLocation KUNAI_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/kunai.obj");
+    private static final ResourceLocation RAINDROP_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/raindrop.obj");
+    private static final ResourceLocation ARROWHEAD_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/arrowhead.obj");
+    private static final ResourceLocation BUTTERFLY_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity/butterfly.obj");
+    private static final ResourceLocation GLOWEY_BALL_DANMAKU = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/glowey_ball.png");
     private static List<BakedQuad> PETAL_QUADS;
     private static List<BakedQuad> KNIFE_TOP_QUADS;
     private static List<BakedQuad> KNIFE_BOTTOM_QUADS;
+    private static List<BakedQuad> BULLET_QUADS;
+    private static List<BakedQuad> RING_QUADS;
+    private static List<BakedQuad> GOSSIP_QUADS;
+    private static List<BakedQuad> KUNAI_QUADS;
+    private static List<BakedQuad> RAINDROP_QUADS;
+    private static List<BakedQuad> ARROWHEAD_QUADS;
+    private static List<BakedQuad> BUTTERFLY_QUADS;
 
     private EntityDanmakuRender(RenderManager renderManagerIn) {
         super(renderManagerIn);
         PETAL_QUADS = getObjQuads(PETAL_DANMAKU);
         KNIFE_TOP_QUADS = getObjQuads(KNIFE_TOP_DANMAKU);
         KNIFE_BOTTOM_QUADS = getObjQuads(KNIFE_BOTTOM_DANMAKU);
+        BULLET_QUADS = getObjQuads(BULLET_DANMAKU);
+        RING_QUADS = getObjQuads(RING);
+        GOSSIP_QUADS = getObjQuads(GOSSIP);
+        KUNAI_QUADS = getObjQuads(KUNAI_DANMAKU);
+        RAINDROP_QUADS = getObjQuads(RAINDROP_DANMAKU);
+        ARROWHEAD_QUADS = getObjQuads(ARROWHEAD_DANMAKU);
+        BUTTERFLY_QUADS = getObjQuads(BUTTERFLY_DANMAKU);
     }
 
     private static List<BakedQuad> getObjQuads(ResourceLocation obj) {
@@ -57,6 +81,19 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
             e.printStackTrace();
         }
         return Lists.newArrayList();
+    }
+
+    @Override
+    public boolean isMultipass() {
+        return super.isMultipass();
+    }
+
+    @Override
+    public boolean shouldRender(EntityDanmaku danmaku, @Nonnull ICamera camera, double camX, double camY, double camZ) {
+        if (danmaku.getType() == DanmakuType.MASTER_SPARK) {
+            return true;
+        }
+        return super.shouldRender(danmaku, camera, camX, camY, camZ);
     }
 
     @Override
@@ -86,6 +123,27 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
                 break;
             case KNIFE:
                 renderKnifeDanmaku(entity, x, y, z);
+                break;
+            case MASTER_SPARK:
+                renderMasterSparkDanmaku(entity, x, y, z, partialTicks);
+                break;
+            case BULLET:
+                renderObjDanmaku(entity, x, y, z, BULLET_QUADS, 0.2f, 0.25f, 180);
+                break;
+            case KUNAI:
+                renderObjDanmaku(entity, x, y, z, KUNAI_QUADS, 0.15f, 0.2f, 0);
+                break;
+            case RAINDROP:
+                renderObjDanmaku(entity, x, y, z, RAINDROP_QUADS, 0.25f, 0.3f, 0);
+                break;
+            case ARROWHEAD:
+                renderObjDanmaku(entity, x, y, z, ARROWHEAD_QUADS, 0.2f, 0.25f, 0);
+                break;
+            case BUTTERFLY:
+                renderButterflyDanmaku(entity, x, y, z, partialTicks);
+                break;
+            case GLOWEY_BALL:
+                renderGloweyBallDanmaku(entity, x, y, z, type);
                 break;
             default:
         }
@@ -320,8 +378,8 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
 
     private void renderKnifeDanmaku(EntityDanmaku entity, double x, double y, double z) {
         DanmakuColor color = entity.getColor();
-        float yaw = entity.rotationYaw + 180;
-        float pitch = entity.rotationPitch;
+        float yaw = entity.rotationYaw;
+        float pitch = -entity.rotationPitch;
 
         GlStateManager.pushMatrix();
         GlStateManager.disableTexture2D();
@@ -333,7 +391,8 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         GlStateManager.translate(x, y + 0.1, z);
         GlStateManager.rotate(yaw, 0, 1, 0);
         GlStateManager.rotate(pitch, 1, 0, 0);
-        GlStateManager.scale(0.04f, 0.04f, 0.04f);
+        GlStateManager.rotate(90, 0, 0, 1);
+        GlStateManager.scale(0.06f, 0.06f, 0.06f);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buff = tessellator.getBuffer();
         {
@@ -357,6 +416,267 @@ public class EntityDanmakuRender extends Render<EntityDanmaku> {
         GlStateManager.popMatrix();
     }
 
+    private void renderMasterSparkDanmaku(EntityDanmaku entity, double x, double y, double z, float partialTicks) {
+        DanmakuColor color = entity.getColor();
+        float yaw = entity.rotationYaw;
+        float pitch = 90 - entity.rotationPitch;
+        float num = (float) (20 * (Math.atan((entity.ticksExisted + partialTicks - 50) / 2) + 1.6));
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buff = tessellator.getBuffer();
+        {
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 1, 0);
+            GlStateManager.rotate(pitch, 1, 0, 0);
+            GlStateManager.scale(num * 0.1, 16f, num * 0.1);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : BULLET_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0xffffffff);
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 1, 0);
+            GlStateManager.rotate(pitch, 1, 0, 0);
+            GlStateManager.scale(num * 0.11, 16f, num * 0.11);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : BULLET_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0xaa_00_00_00 + color.getRgb());
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 1, 0);
+            GlStateManager.rotate(pitch, 1, 0, 0);
+            GlStateManager.scale(num * 0.115, 16f, num * 0.115);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : BULLET_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0x22_00_00_00 + color.getRgb());
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 0.5f, 0);
+            GlStateManager.rotate(pitch, 1, 0, 0);
+            GlStateManager.scale(num * 0.2, num * 0.2, num * 0.2);
+            GlStateManager.translate(0, 2, 0);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : RING_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0x33_000000 + DanmakuColor.RED.getRgb());
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 0.5f, 0);
+            GlStateManager.rotate(pitch, 1, 0, 0);
+            GlStateManager.scale(num * 0.15, num * 0.15, num * 0.15);
+            GlStateManager.translate(0, 1.2, 0);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : RING_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0x33_000000 + DanmakuColor.GREEN.getRgb());
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 0.5f, 0);
+            GlStateManager.rotate(pitch, 1, 0, 0);
+            GlStateManager.scale(num * 0.08, num * 0.08, num * 0.08);
+            GlStateManager.translate(0, 0.2, 0);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : RING_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0x33_000000 + DanmakuColor.YELLOW.getRgb());
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 0.5f, 0);
+            GlStateManager.rotate(pitch, 1, 0, 0);
+            GlStateManager.scale(0.6, 0.6, 0.6);
+            GlStateManager.translate(0, -0.6, 0);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : GOSSIP_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, 0xff_01_01_01);
+            }
+            tessellator.draw();
+        }
+
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
+    }
+
+    private void renderObjDanmaku(EntityDanmaku entity, double x, double y, double z, List<BakedQuad> quadList, float scaleIn, float scaleOut, float pitchOffset) {
+        DanmakuColor color = entity.getColor();
+        float yaw = entity.rotationYaw;
+        float pitch = 90 - entity.rotationPitch;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buff = tessellator.getBuffer();
+        {
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 1, 0);
+            GlStateManager.rotate(pitch + pitchOffset, 1, 0, 0);
+            GlStateManager.scale(scaleIn, scaleIn, scaleIn);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : quadList) {
+                LightUtil.renderQuadColor(buff, quad, 0xffffffff);
+            }
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
+            GlStateManager.rotate(yaw, 0, 1, 0);
+            GlStateManager.rotate(pitch + pitchOffset, 1, 0, 0);
+            GlStateManager.scale(scaleOut, scaleOut, scaleOut);
+            GlStateManager.translate(0, (scaleIn - scaleOut) * 8, 0);
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : quadList) {
+                LightUtil.renderQuadColor(buff, quad, 0xaa_00_00_00 + color.getRgb());
+            }
+            tessellator.draw();
+            GlStateManager.disableBlend();
+            GlStateManager.enableTexture2D();
+            GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
+        }
+    }
+
+    private void renderButterflyDanmaku(EntityDanmaku entity, double x, double y, double z, float partialTicks) {
+        DanmakuColor color = entity.getColor();
+        float yaw = entity.rotationYaw;
+        float pitch = 180 - entity.rotationPitch;
+        int argb = 0x99_00_00_00 + color.getRgb();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+
+        GlStateManager.translate(x, y + 0.1, z);
+        GlStateManager.rotate(yaw, 0, 1, 0);
+        GlStateManager.rotate(pitch, 1, 0, 0);
+        GlStateManager.scale(0.1f, 0.1f, 0.1f);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buff = tessellator.getBuffer();
+        GlStateManager.rotate(10 * MathHelper.cos((entity.ticksExisted + partialTicks) / 4) + 20, 0, 0, 1);
+        {
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : BUTTERFLY_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, argb);
+            }
+            tessellator.draw();
+        }
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y + 0.1, z);
+        GlStateManager.rotate(yaw, 0, 1, 0);
+        GlStateManager.rotate(pitch, 1, 0, 0);
+        GlStateManager.scale(0.1f, 0.1f, 0.1f);
+        GlStateManager.rotate(160 - 10 * MathHelper.cos((entity.ticksExisted + partialTicks) / 4), 0, 0, 1);
+        {
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+            for (BakedQuad quad : BUTTERFLY_QUADS) {
+                LightUtil.renderQuadColor(buff, quad, argb);
+            }
+            tessellator.draw();
+        }
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableCull();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
+    }
+
+    private void renderGloweyBallDanmaku(EntityDanmaku entity, double x, double y, double z, DanmakuType type) {
+        // 获取相关数据
+        DanmakuColor color = entity.getColor();
+        // 材质宽度
+        int w = 832;
+        // 材质长度
+        int l = 64;
+
+        // 依据类型颜色开始定位材质位置（材质块都是 32 * 32 大小）
+        double pStartU = 64 * color.ordinal();
+        double pStartV = 0;
+
+        GlStateManager.disableLighting();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.04f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+
+        GlStateManager.translate(x, y, z);
+        GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX,
+                1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(180F, 0.0F, 1.0F, 0.0F);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufBuilder = tessellator.getBuffer();
+
+        bufBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        this.renderManager.renderEngine.bindTexture(GLOWEY_BALL_DANMAKU);
+
+        bufBuilder.pos(-type.getSize(), type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 0) / l).endVertex();
+        bufBuilder.pos(-type.getSize(), -type.getSize(), 0).tex((pStartU + 0) / w, (pStartV + 64) / l).endVertex();
+        bufBuilder.pos(type.getSize(), -type.getSize(), 0).tex((pStartU + 64) / w, (pStartV + 64) / l).endVertex();
+        bufBuilder.pos(type.getSize(), type.getSize(), 0).tex((pStartU + 64) / w, (pStartV + 0) / l).endVertex();
+        tessellator.draw();
+
+        GlStateManager.disableBlend();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
+        GlStateManager.enableLighting();
+    }
 
     public static class Factory implements IRenderFactory<EntityDanmaku> {
         @Override

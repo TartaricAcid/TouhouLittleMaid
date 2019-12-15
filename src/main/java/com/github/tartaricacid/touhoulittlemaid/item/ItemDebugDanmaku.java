@@ -78,7 +78,7 @@ public class ItemDebugDanmaku extends Item {
         Vec3d v = player.getLookVec();
         EntityDanmaku danmaku = new EntityDanmaku(world, player, 2, 0, type, color);
         danmaku.setPosition(danmaku.posX + v.x, danmaku.posY + v.y, danmaku.posZ + v.z);
-        danmaku.shoot(v.x, v.y, v.z, 0.1f, 0f);
+        danmaku.shoot(v.x, v.y, v.z, 0.2f, 0f);
         world.spawnEntity(danmaku);
         world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
     }
