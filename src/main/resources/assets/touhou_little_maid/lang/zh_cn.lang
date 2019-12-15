@@ -133,6 +133,8 @@ config.touhou_little_maid.misc_config.shrine_lamp.effect_cost=神社庭灯效果
 config.touhou_little_maid.misc_config.shrine_lamp.max_storage=神社庭灯最大存储
 config.touhou_little_maid.misc_config.player_death_loss_power_point=玩家死亡后的 P 点损失
 config.touhou_little_maid.misc_config.creative_player_can_ride_broom=只有创造模式玩家可以骑乘扫帚
+config.touhou_little_maid.misc_config.power_point_hud_x=P 点 X 位置
+config.touhou_little_maid.misc_config.power_point_hud_y=P 点 Y 位置
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹

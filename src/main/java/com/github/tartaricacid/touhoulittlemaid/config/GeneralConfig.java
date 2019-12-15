@@ -143,6 +143,18 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.misc_config.creative_player_can_ride_broom")
         @Config.Name("CreativePlayerCanRideBroom")
         public boolean creativePlayerCanRideBroom = true;
+
+        @Config.Comment("Power Point HUD Position X")
+        @Config.LangKey("config.touhou_little_maid.misc_config.power_point_hud_x")
+        @Config.Name("PowerPointHudX")
+        @Config.RangeDouble(min = 0, max = 1)
+        public double PowerPointHudX = 0;
+
+        @Config.Comment("Power Point HUD Position Y")
+        @Config.LangKey("config.touhou_little_maid.misc_config.power_point_hud_y")
+        @Config.Name("PowerPointHudY")
+        @Config.RangeDouble(min = 0, max = 1)
+        public double PowerPointHudY = 0;
     }
 
     /**

@@ -133,6 +133,8 @@ config.touhou_little_maid.misc_config.shrine_lamp.effect_cost=Shirne Lamp Effect
 config.touhou_little_maid.misc_config.shrine_lamp.max_storage=Shrine Lamp Max Storage
 config.touhou_little_maid.misc_config.player_death_loss_power_point=Player Death Loss Power Point
 config.touhou_little_maid.misc_config.creative_player_can_ride_broom=Only Creative Player Can Ride Broom
+config.touhou_little_maid.misc_config.power_point_hud_x=Power Point HUD Position X
+config.touhou_little_maid.misc_config.power_point_hud_y=Power Point HUD Position Y
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
