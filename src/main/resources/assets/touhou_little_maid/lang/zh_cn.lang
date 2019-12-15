@@ -151,6 +151,8 @@ danmaku_type.touhou_little_maid.bullet=铳弹
 danmaku_type.touhou_little_maid.kunai=苦无弹
 danmaku_type.touhou_little_maid.raindrop=滴弹
 danmaku_type.touhou_little_maid.arrowhead=鳞弹
+danmaku_type.touhou_little_maid.butterfly=蝶弹
+danmaku_type.touhou_little_maid.glowey_ball=光玉
 
 # Task
 task.touhou_little_maid.idle=空闲

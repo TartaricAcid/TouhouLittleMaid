@@ -151,6 +151,8 @@ danmaku_type.touhou_little_maid.bullet=Bullet
 danmaku_type.touhou_little_maid.kunai=Kunai
 danmaku_type.touhou_little_maid.raindrop=Rain Drop
 danmaku_type.touhou_little_maid.arrowhead=Arrow Head
+danmaku_type.touhou_little_maid.butterfly=Butterfly
+danmaku_type.touhou_little_maid.glowey_ball=Glowey Ball
 
 # Task
 task.touhou_little_maid.idle=Idle

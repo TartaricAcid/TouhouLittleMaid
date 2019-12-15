@@ -34,7 +34,11 @@ public enum DanmakuType {
     // 滴弹
     RAINDROP(1.0d),
     // 鳞弹
-    ARROWHEAD(1.0d);
+    ARROWHEAD(1.0d),
+    // 蝶弹
+    BUTTERFLY(1.0d),
+    // 光玉
+    GLOWEY_BALL(1.0d);
 
     private double size;
 
