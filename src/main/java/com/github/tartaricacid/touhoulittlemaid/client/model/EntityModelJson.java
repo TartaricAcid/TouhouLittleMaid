@@ -19,8 +19,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -44,7 +44,7 @@ public class EntityModelJson extends ModelBase {
     /**
      * 哪些模型需要渲染。加载进父骨骼的子骨骼是不需要渲染的
      */
-    private List<ModelRenderer> shouldRender = new ArrayList<>();
+    private List<ModelRenderer> shouldRender = new LinkedList<>();
 
     public EntityModelJson(CustomModelPOJO pojo, int format) {
         this.format = format;
