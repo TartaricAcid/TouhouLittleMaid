@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author TartaricAcid
@@ -41,9 +42,10 @@ public final class CustomSpellCardManger {
             try {
                 CustomSpellCardEntry entry = loadCustomSpellCard(file);
                 CUSTOM_SPELL_CARD_MAP.put(entry.getId(), entry);
-            } catch (IOException | ScriptException e) {
-                TouhouLittleMaid.LOGGER.error(e);
-                return;
+            } catch (NullPointerException | IOException | ScriptException e) {
+                TouhouLittleMaid.LOGGER.error("Exception while loading spell in {}:", file);
+                TouhouLittleMaid.LOGGER.catching(e);
+                continue;
             }
         }
 
@@ -70,6 +72,7 @@ public final class CustomSpellCardManger {
     private static CustomSpellCardEntry transObjectToEntry(Object scriptObject) {
         Map<String, Object> scriptMaps = (Map<String, Object>) scriptObject;
         String id = (String) scriptMaps.get(Args.ID.getName());
+        Objects.requireNonNull(id);
         String nameKey;
         String descriptionKey = "";
         String author = "";
