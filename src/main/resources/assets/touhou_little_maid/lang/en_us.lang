@@ -417,7 +417,6 @@ spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"
 spell_card.touhou_little_maid:metal_sign.metal_fatigue.name=Metal Sign "Metal Fatigue"
 spell_card.touhou_little_maid:magic_sign.milky_way.name=Magic Sign "Milky Way"
 spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle.name=Border Sign "Boundary Between Wave and Particle"
-spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle_3d.name=Border Sign "Boundary Between Wave and Particle" 3D
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
