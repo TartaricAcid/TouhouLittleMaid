@@ -14,6 +14,10 @@ public class Vec3dWrapper {
         this.vec3d = vec3d;
     }
 
+    public Vec3dWrapper(Vec3dWrapper vec3d) {
+        this(vec3d.getX(), vec3d.getY(), vec3d.getZ());
+    }
+
     public Vec3dWrapper(double x, double y, double z) {
         this.vec3d = new Vec3d(x, y, z);
     }
