@@ -919,6 +919,7 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 掉落手办
      */
+    @SuppressWarnings("all")
     private void dropGarageKit() {
         // 先在死亡前获取女仆的 NBT 数据
         hurtResistantTime = 0;
@@ -935,7 +936,7 @@ public class EntityMaid extends AbstractEntityMaid {
         ItemStack stack = BlockGarageKit.getItemStackWithData("touhou_little_maid:entity.passive.maid",
                 this.getModelId(), entityTag);
         // 生成物品实体
-        entityDropItem(stack, 0);
+        entityDropItem(stack, 0).setEntityInvulnerable(true);
     }
 
     @Override
