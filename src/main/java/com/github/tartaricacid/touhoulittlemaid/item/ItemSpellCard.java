@@ -35,7 +35,6 @@ public class ItemSpellCard extends Item {
     }
 
     @SuppressWarnings("all")
-    @SideOnly(Side.CLIENT)
     public static ItemStack setCustomSpellCardEntry(String id, ItemStack spellCard) {
         if (spellCard.getItem() == MaidItems.SPELL_CARD && ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT.containsKey(id)) {
             NBTTagCompound tag;
@@ -62,8 +61,6 @@ public class ItemSpellCard extends Item {
         return defaultEntry;
     }
 
-
-    @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
