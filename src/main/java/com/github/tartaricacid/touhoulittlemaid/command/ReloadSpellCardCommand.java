@@ -12,6 +12,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class ReloadSpellCardCommand extends CommandBase {
     @Nonnull
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        return getListOfStringsMatchingLastWord(args, SUB.RELOAD.name().toLowerCase());
+        return args.length != 1 ? Collections.EMPTY_LIST : getListOfStringsMatchingLastWord(args, SUB.RELOAD.name().toLowerCase());
     }
 
     enum SUB {
