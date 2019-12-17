@@ -17,7 +17,12 @@ public class DelayedTaskEvent {
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            DelayedTask.SUPPLIERS.removeIf(BooleanSupplier::getAsBoolean);
+            try {
+                DelayedTask.SUPPLIERS.removeIf(BooleanSupplier::getAsBoolean);
+            } catch (Exception e) {
+                DelayedTask.SUPPLIERS.clear();
+                TouhouLittleMaid.LOGGER.catching(e);
+            }
         }
     }
 }

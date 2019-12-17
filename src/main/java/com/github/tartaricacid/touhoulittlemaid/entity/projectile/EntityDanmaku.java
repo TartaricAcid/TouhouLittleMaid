@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -107,7 +108,11 @@ public class EntityDanmaku extends EntityThrowable {
     private void applyNormalEntityHitLogic(@Nonnull RayTraceResult result) {
         // 投掷者不为空，也不为自己
         if (getThrower() != null && !result.entityHit.equals(this.thrower)) {
-            result.entityHit.attackEntityFrom(new EntityDamageSource("arrow", getThrower()), this.getDamage());
+            DamageSource source = new EntityDamageSource("magic", getThrower());
+            source.setDamageBypassesArmor();
+            source.setMagicDamage();
+            source.setProjectile();
+            result.entityHit.attackEntityFrom(source, this.getDamage());
             this.setDead();
         }
     }
