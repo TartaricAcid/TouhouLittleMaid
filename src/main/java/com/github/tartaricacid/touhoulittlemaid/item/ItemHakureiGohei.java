@@ -41,7 +41,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.script.Invocable;
-import javax.script.ScriptException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -102,7 +101,7 @@ public class ItemHakureiGohei extends Item {
             Invocable invocable = (Invocable) CommonProxy.NASHORN;
             invocable.invokeMethod(entry.getScript(), "spellCard", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
             player.getCooldownTracker().setCooldown(this, entry.getCooldown());
-        } catch (NoSuchMethodException | ScriptException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

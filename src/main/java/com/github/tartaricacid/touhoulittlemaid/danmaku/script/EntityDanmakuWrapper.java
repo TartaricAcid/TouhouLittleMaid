@@ -4,6 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 
+import net.minecraft.util.math.MathHelper;
+
 /**
  * @author TartaricAcid
  * @date 2019/11/26 14:41
@@ -41,6 +43,21 @@ public class EntityDanmakuWrapper {
 
     public void setPosition(Vec3dWrapper vec3d) {
         this.danmaku.setPosition(vec3d.getX(), vec3d.getY(), vec3d.getZ());
+    }
+
+    public void setMotion(Vec3dWrapper motion) {
+        danmaku.motionX = motion.getX();
+        danmaku.motionY = motion.getY();
+        danmaku.motionZ = motion.getZ();
+
+        if (danmaku.prevRotationPitch == 0.0F && danmaku.prevRotationYaw == 0.0F)
+        {
+            float f = MathHelper.sqrt(danmaku.motionX * danmaku.motionX + danmaku.motionZ * danmaku.motionZ);
+            danmaku.rotationYaw = (float)(MathHelper.atan2(danmaku.motionX, danmaku.motionZ) * (180D / Math.PI));
+            danmaku.rotationPitch = (float)(MathHelper.atan2(danmaku.motionY, (double)f) * (180D / Math.PI));
+            danmaku.prevRotationYaw = danmaku.rotationYaw;
+            danmaku.prevRotationPitch = danmaku.rotationPitch;
+        }
     }
 
     public EntityDanmaku getDanmaku() {
