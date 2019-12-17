@@ -416,6 +416,7 @@ spell_card.touhou_little_maid:night_sign.night_bird.name=夜符「Night Bird」
 spell_card.touhou_little_maid:metal_sign.metal_fatigue.name=金符「Metal Fatigue」
 spell_card.touhou_little_maid:magic_sign.milky_way.name=魔符「Milky Way」
 spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle.name=境符「波与粒的境界」
+spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle_3d.name=境符「波与粒的境界」3D
 
 # Subtitle
 subtitle.touhou_little_maid.maid.mode.idle=女仆：空闲
