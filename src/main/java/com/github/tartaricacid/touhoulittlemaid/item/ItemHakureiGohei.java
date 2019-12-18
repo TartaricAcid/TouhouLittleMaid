@@ -98,6 +98,9 @@ public class ItemHakureiGohei extends Item {
     private void spellCardShoot(World worldIn, EntityPlayer player) {
         try {
             CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand(), CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER);
+            if (entry == null) {
+                return;
+            }
             Invocable invocable = (Invocable) CommonProxy.NASHORN;
             invocable.invokeMethod(entry.getScript(), "spellCard", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
             player.getCooldownTracker().setCooldown(this, entry.getCooldown());
