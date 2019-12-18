@@ -15,6 +15,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityNPCMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -33,6 +34,7 @@ import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -81,6 +83,9 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntitySlime.class, EntityYukkuriSlimeRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityFairy.class, EntityFairyRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityBox.class, EntityBoxRender.FACTORY);
+        if (Loader.isModLoaded("customnpcs")) {
+            RenderingRegistry.registerEntityRenderingHandler(EntityNPCMaid.class, EntityMaidRender.FACTORY);
+        }
     }
 
     @Override

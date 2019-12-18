@@ -247,6 +247,9 @@
     }, {
       "model_id": "touhou_little_maid:mononobe_no_futo",
       "description": ["{model.touhou_little_maid.mononobe_no_futo.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:hutatsuiwa_mamizou",
+      "description": ["{model.touhou_little_maid.hutatsuiwa_mamizou.desc}"]
     }
   ]
 }

@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityNPCMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
@@ -47,7 +48,11 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public void doRender(@Nonnull EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模型
         this.mainModel = ClientProxy.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new);
-        ClientProxy.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
+        if (entity instanceof EntityNPCMaid) {
+            ClientProxy.MAID_MODEL.getModelByIndex(((EntityNPCMaid) entity).getModelIndex()).ifPresent(model -> this.mainModel = model);
+        } else {
+            ClientProxy.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
+        }
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -81,7 +86,11 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         this.modelRes = DEFAULT_MODEL_TEXTURE;
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
-        ClientProxy.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
+        if (entity instanceof EntityNPCMaid) {
+            ClientProxy.MAID_MODEL.getInfoByIndex(((EntityNPCMaid) entity).getModelIndex()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
+        } else {
+            ClientProxy.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
+        }
         return modelRes;
     }
 
