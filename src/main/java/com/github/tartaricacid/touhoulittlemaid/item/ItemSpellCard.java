@@ -82,6 +82,9 @@ public class ItemSpellCard extends Item {
     public String getItemStackDisplayName(ItemStack stack) {
         Map<String, CustomSpellCardEntry> map = FMLCommonHandler.instance().getSide().isClient() ? ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT : CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
         CustomSpellCardEntry entry = getCustomSpellCardEntry(stack, map);
+        if (entry == null) {
+            return "";
+        }
         return TextFormatting.GOLD + I18n.format(entry.getNameKey());
     }
 
@@ -89,6 +92,9 @@ public class ItemSpellCard extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         CustomSpellCardEntry entry = getCustomSpellCardEntry(stack, ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT);
+        if (entry == null) {
+            return;
+        }
         if (!entry.getDescriptionKey().isEmpty()) {
             tooltip.add(I18n.format(entry.getDescriptionKey()));
         }
