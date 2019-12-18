@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -53,9 +52,12 @@ public class ItemSpellCard extends Item {
         return spellCard;
     }
 
+    @Nullable
     @SuppressWarnings("all")
     public static CustomSpellCardEntry getCustomSpellCardEntry(ItemStack spellCard, Map<String, CustomSpellCardEntry> map) {
-        // FIXME: crash if map is empty
+        if (map.isEmpty()) {
+            return null;
+        }
         CustomSpellCardEntry defaultEntry = map.values().stream().findFirst().get();
         if (spellCard.getItem() == MaidItems.SPELL_CARD && spellCard.hasTagCompound()) {
             String id = spellCard.getTagCompound().getString(SPELL_CARD_ENTRY_TAG);
