@@ -65,6 +65,14 @@ public class CustomModelResources {
         return Optional.ofNullable(idModelMap.get(modelId));
     }
 
+    public Optional<EntityModelJson> getModelByIndex(int index) {
+        String key = "";
+        if (0 <= index && index < idInfoMap.size()) {
+            key = (String) idInfoMap.keySet().toArray()[index];
+        }
+        return Optional.ofNullable(idModelMap.get(key));
+    }
+
     public float getModelRenderItemScale(String modelId) {
         if (idInfoMap.containsKey(modelId)) {
             return idInfoMap.get(modelId).getRenderItemScale();
@@ -88,5 +96,13 @@ public class CustomModelResources {
 
     public Optional<ModelItem> getInfo(String modelId) {
         return Optional.ofNullable(idInfoMap.get(modelId));
+    }
+
+    public Optional<ModelItem> getInfoByIndex(int index) {
+        String key = "";
+        if (0 <= index && index < idInfoMap.size()) {
+            key = (String) idInfoMap.keySet().toArray()[index];
+        }
+        return Optional.ofNullable(idInfoMap.get(key));
     }
 }

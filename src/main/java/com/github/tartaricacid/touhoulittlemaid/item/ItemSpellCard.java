@@ -85,7 +85,7 @@ public class ItemSpellCard extends Item {
         if (entry == null) {
             return "";
         }
-        return TextFormatting.GOLD + I18n.format(entry.getNameKey());
+        return TextFormatting.GOLD + net.minecraft.util.text.translation.I18n.translateToLocal(entry.getNameKey());
     }
 
     @SideOnly(Side.CLIENT)
