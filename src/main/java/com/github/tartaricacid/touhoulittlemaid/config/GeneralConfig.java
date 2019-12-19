@@ -155,6 +155,12 @@ public class GeneralConfig {
         @Config.Name("PowerPointHudY")
         @Config.RangeDouble(min = 0, max = 1)
         public double PowerPointHudY = 0;
+
+        @Config.Comment("Override the render of Custom NPC mod")
+        @Config.LangKey("config.touhou_little_maid.misc_config.overrideNpcRender")
+        @Config.Name("OverrideNpcRender")
+        @Config.RequiresMcRestart
+        public boolean overrideNpcRender = true;
     }
 
     /**
