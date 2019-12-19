@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelResources;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -15,7 +16,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityNPCMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -40,6 +40,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import noppes.npcs.client.model.ModelPlayerAlt;
+import noppes.npcs.entity.EntityCustomNpc;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -83,9 +85,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntitySlime.class, EntityYukkuriSlimeRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityFairy.class, EntityFairyRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityBox.class, EntityBoxRender.FACTORY);
-        if (Loader.isModLoaded("customnpcs")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityNPCMaid.class, EntityMaidRender.FACTORY);
-        }
     }
 
     @Override
@@ -100,6 +99,9 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
+        if (Loader.isModLoaded("customnpcs") && GeneralConfig.MISC_CONFIG.overrideNpcRender) {
+            RenderingRegistry.registerEntityRenderingHandler(EntityCustomNpc.class, new EntityCustomNpcChangeRender<>(new ModelPlayerAlt(0.0F, false)));
+        }
     }
 
     /**
