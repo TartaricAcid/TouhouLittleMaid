@@ -46,6 +46,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.Loader;
@@ -245,6 +246,9 @@ public class CommonProxy {
         INSTANCE.registerMessage(BeaconAbsorbMessage.Handler.class, BeaconAbsorbMessage.class, 14, Side.CLIENT);
         INSTANCE.registerMessage(SyncCustomSpellCardData.Handler.class, SyncCustomSpellCardData.class, 15, Side.CLIENT);
         INSTANCE.registerMessage(SyncOwnerMaidNumMessage.Handler.class, SyncOwnerMaidNumMessage.class, 16, Side.CLIENT);
+        if (isNpcModLoad()) {
+            INSTANCE.registerMessage(SendNpcMaidModelMessage.Handler.class, SendNpcMaidModelMessage.class, 17, Side.SERVER);
+        }
     }
 
     /**
@@ -252,5 +256,9 @@ public class CommonProxy {
      */
     public String translate(String key, Object... format) {
         return I18n.translateToLocalFormatted(key, format);
+    }
+
+    public static boolean isNpcModLoad() {
+        return Loader.isModLoaded("customnpcs");
     }
 }

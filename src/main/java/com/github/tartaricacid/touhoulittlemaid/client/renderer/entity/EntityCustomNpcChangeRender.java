@@ -143,10 +143,11 @@ public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends Rend
             }
 
             if (isMaid(this.entity)) {
-                this.mainModel = ClientProxy.MAID_MODEL.getModel("touhou_little_maid:hakurei_reimu").orElseThrow(NullPointerException::new);
                 Optional<EntityModelJson> maidModel = ClientProxy.MAID_MODEL.getModel(((EntityMaid) entity).getModelId());
                 if (maidModel.isPresent()) {
                     model = maidModel.get();
+                } else {
+                    model = ClientProxy.MAID_MODEL.getModel("touhou_little_maid:hakurei_reimu").orElseThrow(NullPointerException::new);
                 }
             }
 
