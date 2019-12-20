@@ -34,7 +34,7 @@ import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -99,9 +99,14 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
-        if (Loader.isModLoaded("customnpcs") && GeneralConfig.MISC_CONFIG.overrideNpcRender) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityCustomNpc.class, new EntityCustomNpcChangeRender<>(new ModelPlayerAlt(0.0F, false)));
+        if (CommonProxy.isNpcModLoad() && GeneralConfig.MISC_CONFIG.overrideNpcRender) {
+            changeNpcRender();
         }
+    }
+
+    @Optional.Method(modid = "customnpcs")
+    private void changeNpcRender() {
+        RenderingRegistry.registerEntityRenderingHandler(EntityCustomNpc.class, new EntityCustomNpcChangeRender<>(new ModelPlayerAlt(0.0F, false)));
     }
 
     /**

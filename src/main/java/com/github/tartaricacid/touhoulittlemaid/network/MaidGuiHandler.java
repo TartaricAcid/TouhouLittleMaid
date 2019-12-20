@@ -6,15 +6,18 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidBaubleG
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidInventoryGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidMainGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.NpcMaidToolGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.*;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import noppes.npcs.entity.EntityCustomNpc;
 
 import javax.annotation.Nullable;
 
@@ -49,6 +52,10 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, z)) instanceof TileEntityMaidBeacon) {
             return new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, z)));
         }
+        if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && world.getEntityByID(entityId) instanceof EntityCustomNpc) {
+            // 服务端什么也不做
+            return null;
+        }
         return null;
     }
 
@@ -80,6 +87,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // 此时的 entityId, taskIndex, z 代表的是方块的 x y z 值
         if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, z)) instanceof TileEntityMaidBeacon) {
             return new MaidBeaconGuiContainer(new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, z))));
+        }
+        if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && world.getEntityByID(entityId) instanceof EntityCustomNpc) {
+            return new NpcMaidToolGui((EntityCustomNpc) world.getEntityByID(entityId));
         }
         return null;
     }
@@ -119,7 +129,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // 相册
         ALBUM(6),
         // 女仆信标
-        MAID_BEACON(7);
+        MAID_BEACON(7),
+        // NPC 模组的模型切换工具界面
+        NPC_MAID_TOOL(8);
 
         private int id;
 
