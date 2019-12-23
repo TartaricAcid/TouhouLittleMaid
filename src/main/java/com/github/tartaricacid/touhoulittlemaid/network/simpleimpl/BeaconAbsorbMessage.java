@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +15,8 @@ public class BeaconAbsorbMessage implements IMessage {
     private float y;
     private float z;
 
-    public BeaconAbsorbMessage() {}
+    public BeaconAbsorbMessage() {
+    }
 
     public BeaconAbsorbMessage(float x, float y, float z) {
         this.x = x;

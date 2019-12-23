@@ -43,10 +43,10 @@ import java.util.Optional;
 @SuppressWarnings("all")
 @SideOnly(Side.CLIENT)
 public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends RenderNPCInterface<T> {
+    public ModelBiped npcmodel;
     private float partialTicks;
     private EntityLivingBase entity;
     private RenderLivingBase renderEntity;
-    public ModelBiped npcmodel;
 
     public EntityCustomNpcChangeRender(ModelBiped model) {
         super(model, 0.5F);
@@ -64,6 +64,11 @@ public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends Rend
         this.addLayer(armor);
         ObfuscationReflectionHelper.setPrivateValue(LayerArmorBase.class, armor, new ModelBipedAlt(0.5F), 1);
         ObfuscationReflectionHelper.setPrivateValue(LayerArmorBase.class, armor, new ModelBipedAlt(1.0F), 2);
+    }
+
+    private static boolean isMaid(Entity entity) {
+        String s = EntityList.getEntityString(entity);
+        return s != null && s.contains("touhou_little_maid.maid");
     }
 
     @Override
@@ -224,10 +229,5 @@ public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends Rend
     @Override
     protected float handleRotationFloat(T par1EntityLivingBase, float par2) {
         return this.renderEntity != null ? NPCRendererHelper.handleRotationFloat(this.entity, par2, this.renderEntity) : super.handleRotationFloat(par1EntityLivingBase, par2);
-    }
-
-    private static boolean isMaid(Entity entity) {
-        String s = EntityList.getEntityString(entity);
-        return s != null && s.contains("touhou_little_maid.maid");
     }
 }

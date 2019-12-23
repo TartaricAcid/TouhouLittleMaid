@@ -33,43 +33,6 @@ public class StorageAndTakePowerMessage implements IMessage {
         this.isStorage = isStorage;
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        playerUuid = new UUID(buf.readLong(), buf.readLong());
-        pos = BlockPos.fromLong(buf.readLong());
-        powerNum = buf.readFloat();
-        isStorage = buf.readBoolean();
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeLong(playerUuid.getMostSignificantBits());
-        buf.writeLong(playerUuid.getLeastSignificantBits());
-        buf.writeLong(pos.toLong());
-        buf.writeFloat(powerNum);
-        buf.writeBoolean(isStorage);
-    }
-
-    public static class Handler implements IMessageHandler<StorageAndTakePowerMessage, IMessage> {
-        @Override
-        public IMessage onMessage(StorageAndTakePowerMessage message, MessageContext ctx) {
-            if (ctx.side == Side.SERVER) {
-                FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-                    Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.playerUuid);
-                    if (entity instanceof EntityPlayer) {
-                        EntityPlayer player = (EntityPlayer) entity;
-                        World world = player.world;
-                        TileEntity te = world.getTileEntity(message.pos);
-                        if (te instanceof TileEntityMaidBeacon) {
-                            onStorageAndTake((TileEntityMaidBeacon) te, player, message.powerNum, message.isStorage);
-                        }
-                    }
-                });
-            }
-            return null;
-        }
-    }
-
     private static void onStorageAndTake(TileEntityMaidBeacon beacon, EntityPlayer player, float powerNum, boolean isStorage) {
         PowerHandler powerHandler = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
         if (powerHandler != null) {
@@ -106,6 +69,43 @@ public class StorageAndTakePowerMessage implements IMessage {
                 beacon.setStoragePower(beacon.getStoragePower() - PowerHandler.MAX_POWER + playerPower.get());
                 playerPower.set(PowerHandler.MAX_POWER);
             }
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        playerUuid = new UUID(buf.readLong(), buf.readLong());
+        pos = BlockPos.fromLong(buf.readLong());
+        powerNum = buf.readFloat();
+        isStorage = buf.readBoolean();
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeLong(playerUuid.getMostSignificantBits());
+        buf.writeLong(playerUuid.getLeastSignificantBits());
+        buf.writeLong(pos.toLong());
+        buf.writeFloat(powerNum);
+        buf.writeBoolean(isStorage);
+    }
+
+    public static class Handler implements IMessageHandler<StorageAndTakePowerMessage, IMessage> {
+        @Override
+        public IMessage onMessage(StorageAndTakePowerMessage message, MessageContext ctx) {
+            if (ctx.side == Side.SERVER) {
+                FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+                    Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.playerUuid);
+                    if (entity instanceof EntityPlayer) {
+                        EntityPlayer player = (EntityPlayer) entity;
+                        World world = player.world;
+                        TileEntity te = world.getTileEntity(message.pos);
+                        if (te instanceof TileEntityMaidBeacon) {
+                            onStorageAndTake((TileEntityMaidBeacon) te, player, message.powerNum, message.isStorage);
+                        }
+                    }
+                });
+            }
+            return null;
         }
     }
 }

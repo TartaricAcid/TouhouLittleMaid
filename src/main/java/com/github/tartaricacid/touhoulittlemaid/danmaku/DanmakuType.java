@@ -58,15 +58,15 @@ public enum DanmakuType {
         return values()[index];
     }
 
-    public double getSize() {
-        return size;
-    }
-
     public static int getSinglePlaneDanmakuSize() {
         return 6;
     }
 
     public static int getLength() {
         return values().length;
+    }
+
+    public double getSize() {
+        return size;
     }
 }

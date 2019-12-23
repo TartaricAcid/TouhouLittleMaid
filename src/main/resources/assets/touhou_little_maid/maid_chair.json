@@ -109,6 +109,16 @@
       "mounted_height": 0,
       "render_item_scale": 0.6,
       "tameable_can_ride": false
+    }, {
+      "model_id": "touhou_little_maid:anti_collision_bucket",
+      "mounted_height": 14
+    }, {
+      "model_id": "touhou_little_maid:park_bench",
+      "mounted_height": 7,
+      "render_item_scale": 0.4
+    }, {
+      "model_id": "touhou_little_maid:rinnosuke_children_toys",
+      "mounted_height": 13
     }
   ]
 }

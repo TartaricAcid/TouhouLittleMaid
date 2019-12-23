@@ -28,8 +28,7 @@ public class NeatCompat {
                 blacklist.add("touhou_little_maid.chair");
             }
             field.set(null, blacklist);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

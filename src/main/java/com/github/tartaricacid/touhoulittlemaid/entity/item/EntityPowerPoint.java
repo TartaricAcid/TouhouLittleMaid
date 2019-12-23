@@ -34,11 +34,11 @@ import java.util.Random;
  * @date 2019/8/29 16:24
  **/
 public class EntityPowerPoint extends Entity {
+    public int delayBeforeCanPickup;
+    public int powerValue;
     private int powerColor;
     private int powerAge;
-    public int delayBeforeCanPickup;
     private int powerHealthy = 5;
-    public int powerValue;
     private EntityPlayer closestPlayer;
     private int powerTargetColor;
 
@@ -61,6 +61,56 @@ public class EntityPowerPoint extends Entity {
     public EntityPowerPoint(World worldIn) {
         super(worldIn);
         this.setSize(0.25F, 0.25F);
+    }
+
+    /**
+     * 划分 P 点数值
+     */
+    public static int getPowerSplit(int expValue) {
+        if (expValue >= 485) {
+            return 485;
+        } else if (expValue >= 385) {
+            return 385;
+        } else if (expValue >= 285) {
+            return 285;
+        } else if (expValue >= 185) {
+            return 185;
+        } else if (expValue >= 89) {
+            return 89;
+        } else if (expValue >= 36) {
+            return 34;
+        } else if (expValue >= 17) {
+            return 13;
+        } else if (expValue >= 7) {
+            return 7;
+        } else if (expValue >= 5) {
+            return 5;
+        } else {
+            return expValue >= 3 ? 3 : 1;
+        }
+    }
+
+    /**
+     * P 点可以向经验转换，转换比率为 4P = 1 XP
+     */
+    public static int transPowerValueToXpValue(int powerValue) {
+        return powerValue / 4;
+    }
+
+    public static void spawnExplosionParticle(World world, float x, float y, float z, Random rand) {
+        if (!world.isRemote) {
+            return;
+        }
+        for (int i = 0; i < 20; ++i) {
+            float mx = (rand.nextFloat() - 0.5F) * 0.02F;
+            float my = (rand.nextFloat() - 0.5F) * 0.02F;
+            float mz = (rand.nextFloat() - 0.5F) * 0.02F;
+            world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
+                    x + rand.nextFloat() - 0.5F,
+                    y + rand.nextFloat() - 0.5F,
+                    z + rand.nextFloat() - 0.5F,
+                    mx, my, mz);
+        }
     }
 
     @Override
@@ -211,33 +261,6 @@ public class EntityPowerPoint extends Entity {
         return false;
     }
 
-    /**
-     * 划分 P 点数值
-     */
-    public static int getPowerSplit(int expValue) {
-        if (expValue >= 485) {
-            return 485;
-        } else if (expValue >= 385) {
-            return 385;
-        } else if (expValue >= 285) {
-            return 285;
-        } else if (expValue >= 185) {
-            return 185;
-        } else if (expValue >= 89) {
-            return 89;
-        } else if (expValue >= 36) {
-            return 34;
-        } else if (expValue >= 17) {
-            return 13;
-        } else if (expValue >= 7) {
-            return 7;
-        } else if (expValue >= 5) {
-            return 5;
-        } else {
-            return expValue >= 3 ? 3 : 1;
-        }
-    }
-
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer player) {
         if (!this.world.isRemote) {
@@ -260,13 +283,6 @@ public class EntityPowerPoint extends Entity {
         }
     }
 
-    /**
-     * P 点可以向经验转换，转换比率为 4P = 1 XP
-     */
-    public static int transPowerValueToXpValue(int powerValue) {
-        return powerValue / 4;
-    }
-
     public void onPickup(EntityLivingBase base, int quantity) {
         if (!this.isDead && !this.world.isRemote) {
             EntityTracker entitytracker = ((WorldServer) this.world).getEntityTracker();
@@ -282,22 +298,6 @@ public class EntityPowerPoint extends Entity {
             spawnExplosionParticle(world, x, y, z, rand);
         } else {
             CommonProxy.INSTANCE.sendToAllAround(new BeaconAbsorbMessage(x, y, z), new TargetPoint(dimension, x, y, z, 16));
-        }
-    }
-
-    public static void spawnExplosionParticle(World world, float x, float y, float z, Random rand) {
-        if (!world.isRemote) {
-            return;
-        }
-        for (int i = 0; i < 20; ++i) {
-            float mx = (rand.nextFloat() - 0.5F) * 0.02F;
-            float my = (rand.nextFloat() - 0.5F) * 0.02F;
-            float mz = (rand.nextFloat() - 0.5F) * 0.02F;
-            world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
-                    x + rand.nextFloat() - 0.5F,
-                    y + rand.nextFloat() - 0.5F,
-                    z + rand.nextFloat() - 0.5F,
-                    mx, my, mz);
         }
     }
 

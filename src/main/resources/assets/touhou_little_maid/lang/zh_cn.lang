@@ -415,6 +415,9 @@ model.touhou_little_maid.saisen_bako.name=赛钱箱
 model.touhou_little_maid.well.name=惊鹿
 model.touhou_little_maid.torii.name=鸟居
 model.touhou_little_maid.ema.name=绘马墙
+model.touhou_little_maid.anti_collision_bucket.name=防撞桶
+model.touhou_little_maid.park_bench.name=公园长椅
+model.touhou_little_maid.rinnosuke_children_toys.name=霖之助牌儿童摇摇乐
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=夜符「Night Bird」

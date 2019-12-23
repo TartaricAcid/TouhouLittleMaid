@@ -416,6 +416,9 @@ model.touhou_little_maid.saisen_bako.name=Saisen Bako
 model.touhou_little_maid.well.name=Well
 model.touhou_little_maid.torii.name=Torii
 model.touhou_little_maid.ema.name=Ema
+model.touhou_little_maid.anti_collision_bucket.name=Anti-collision Bucket
+model.touhou_little_maid.park_bench.name=Park Bench
+model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"
