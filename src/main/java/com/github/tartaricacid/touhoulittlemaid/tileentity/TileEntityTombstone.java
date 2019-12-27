@@ -17,8 +17,8 @@ import javax.annotation.Nullable;
 public class TileEntityTombstone extends TileEntity {
     private static final String STORAGE_TAG_NAME = "StorageItem";
     private static final String OWNER_TAG_NAME = "OwnerName";
-    private String ownerName = "";
     public final ItemStackHandler handler = new ItemStackHandler(30);
+    private String ownerName = "";
 
     @Nonnull
     @Override
@@ -56,13 +56,13 @@ public class TileEntityTombstone extends TileEntity {
         return super.writeToNBT(compound);
     }
 
+    public String getOwnerName() {
+        return ownerName;
+    }
+
     public void setOwnerName(String name) {
         ownerName = name;
         refresh();
-    }
-
-    public String getOwnerName() {
-        return ownerName;
     }
 
     public void refresh() {

@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.danmaku.script;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
-
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -50,11 +49,10 @@ public class EntityDanmakuWrapper {
         danmaku.motionY = motion.getY();
         danmaku.motionZ = motion.getZ();
 
-        if (danmaku.prevRotationPitch == 0.0F && danmaku.prevRotationYaw == 0.0F)
-        {
+        if (danmaku.prevRotationPitch == 0.0F && danmaku.prevRotationYaw == 0.0F) {
             float f = MathHelper.sqrt(danmaku.motionX * danmaku.motionX + danmaku.motionZ * danmaku.motionZ);
-            danmaku.rotationYaw = (float)(MathHelper.atan2(danmaku.motionX, danmaku.motionZ) * (180D / Math.PI));
-            danmaku.rotationPitch = (float)(MathHelper.atan2(danmaku.motionY, (double)f) * (180D / Math.PI));
+            danmaku.rotationYaw = (float) (MathHelper.atan2(danmaku.motionX, danmaku.motionZ) * (180D / Math.PI));
+            danmaku.rotationPitch = (float) (MathHelper.atan2(danmaku.motionY, (double) f) * (180D / Math.PI));
             danmaku.prevRotationYaw = danmaku.rotationYaw;
             danmaku.prevRotationPitch = danmaku.rotationPitch;
         }

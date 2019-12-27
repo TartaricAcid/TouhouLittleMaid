@@ -42,6 +42,33 @@ public class ItemDebugDanmaku extends Item {
         setCreativeTab(MaidItems.MAIN_TABS);
     }
 
+    @SuppressWarnings("all")
+    private static void addType(ItemStack stack) {
+        NBTTagCompound tag;
+        if (stack.hasTagCompound()) {
+            tag = stack.getTagCompound();
+            if (tag.hasKey(TYPE_TAG_NAME)) {
+                tag.setInteger(TYPE_TAG_NAME, (tag.getInteger(TYPE_TAG_NAME) + 1) % DanmakuType.values().length);
+            } else {
+                tag.setInteger(TYPE_TAG_NAME, 0);
+            }
+        } else {
+            tag = new NBTTagCompound();
+            tag.setInteger(TYPE_TAG_NAME, 0);
+        }
+        stack.setTagCompound(tag);
+    }
+
+    @SuppressWarnings("all")
+    private static DanmakuType getType(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(TYPE_TAG_NAME)) {
+            int index = stack.getTagCompound().getInteger(TYPE_TAG_NAME);
+            return DanmakuType.getType(index);
+        } else {
+            return DanmakuType.PELLET;
+        }
+    }
+
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         ItemStack stack = new ItemStack(this);
@@ -81,33 +108,6 @@ public class ItemDebugDanmaku extends Item {
         danmaku.shoot(v.x, v.y, v.z, 0.2f, 0f);
         world.spawnEntity(danmaku);
         world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, player.getSoundCategory(), 1.0f, 0.8f);
-    }
-
-    @SuppressWarnings("all")
-    private static void addType(ItemStack stack) {
-        NBTTagCompound tag;
-        if (stack.hasTagCompound()) {
-            tag = stack.getTagCompound();
-            if (tag.hasKey(TYPE_TAG_NAME)) {
-                tag.setInteger(TYPE_TAG_NAME, (tag.getInteger(TYPE_TAG_NAME) + 1) % DanmakuType.values().length);
-            } else {
-                tag.setInteger(TYPE_TAG_NAME, 0);
-            }
-        } else {
-            tag = new NBTTagCompound();
-            tag.setInteger(TYPE_TAG_NAME, 0);
-        }
-        stack.setTagCompound(tag);
-    }
-
-    @SuppressWarnings("all")
-    private static DanmakuType getType(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(TYPE_TAG_NAME)) {
-            int index = stack.getTagCompound().getInteger(TYPE_TAG_NAME);
-            return DanmakuType.getType(index);
-        } else {
-            return DanmakuType.PELLET;
-        }
     }
 
     @SideOnly(Side.CLIENT)

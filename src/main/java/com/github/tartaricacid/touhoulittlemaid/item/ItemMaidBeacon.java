@@ -67,6 +67,27 @@ public class ItemMaidBeacon extends Item {
         }
     }
 
+    private static void placeBeacon(World worldIn, BlockPos pos, EnumFacing facing, Block beacon, ItemStack stack) {
+        BlockPos posUp = pos.up();
+        IBlockState stateUp;
+        if (facing == EnumFacing.SOUTH || facing == EnumFacing.NORTH) {
+            stateUp = beacon.getDefaultState().withProperty(BlockMaidBeacon.POSITION, BlockMaidBeacon.Position.UP_N_S);
+        } else {
+            stateUp = beacon.getDefaultState().withProperty(BlockMaidBeacon.POSITION, BlockMaidBeacon.Position.UP_W_E);
+        }
+        worldIn.setBlockState(pos, beacon.getDefaultState(), 2);
+        worldIn.setBlockState(posUp, stateUp, 2);
+        worldIn.notifyNeighborsOfStateChange(pos, beacon, false);
+        worldIn.notifyNeighborsOfStateChange(posUp, beacon, false);
+
+        TileEntity te = worldIn.getTileEntity(posUp);
+        if (te instanceof TileEntityMaidBeacon) {
+            TileEntityMaidBeacon tileEntityMaidBeacon = (TileEntityMaidBeacon) te;
+            itemStackToTileEntity(stack, tileEntityMaidBeacon);
+            tileEntityMaidBeacon.markDirty();
+        }
+    }
+
     @Nonnull
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -92,27 +113,6 @@ public class ItemMaidBeacon extends Item {
             } else {
                 return EnumActionResult.FAIL;
             }
-        }
-    }
-
-    private static void placeBeacon(World worldIn, BlockPos pos, EnumFacing facing, Block beacon, ItemStack stack) {
-        BlockPos posUp = pos.up();
-        IBlockState stateUp;
-        if (facing == EnumFacing.SOUTH || facing == EnumFacing.NORTH) {
-            stateUp = beacon.getDefaultState().withProperty(BlockMaidBeacon.POSITION, BlockMaidBeacon.Position.UP_N_S);
-        } else {
-            stateUp = beacon.getDefaultState().withProperty(BlockMaidBeacon.POSITION, BlockMaidBeacon.Position.UP_W_E);
-        }
-        worldIn.setBlockState(pos, beacon.getDefaultState(), 2);
-        worldIn.setBlockState(posUp, stateUp, 2);
-        worldIn.notifyNeighborsOfStateChange(pos, beacon, false);
-        worldIn.notifyNeighborsOfStateChange(posUp, beacon, false);
-
-        TileEntity te = worldIn.getTileEntity(posUp);
-        if (te instanceof TileEntityMaidBeacon) {
-            TileEntityMaidBeacon tileEntityMaidBeacon = (TileEntityMaidBeacon) te;
-            itemStackToTileEntity(stack, tileEntityMaidBeacon);
-            tileEntityMaidBeacon.markDirty();
         }
     }
 

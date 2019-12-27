@@ -31,6 +31,14 @@ public class SendNpcMaidModelMessage implements IMessage {
         this.modelRes = modelRes;
     }
 
+    private static void applyModel(EntityCustomNpc npc, String modelId, String modelRes) {
+        Entity entity = npc.modelData.getEntity(npc);
+        if (entity instanceof EntityMaid) {
+            npc.modelData.extra.setString("ModelId", modelId);
+            npc.display.setSkinTexture(modelRes);
+        }
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         entityUuid = new UUID(buf.readLong(), buf.readLong());
@@ -70,14 +78,6 @@ public class SendNpcMaidModelMessage implements IMessage {
                 });
             }
             return null;
-        }
-    }
-
-    private static void applyModel(EntityCustomNpc npc, String modelId, String modelRes) {
-        Entity entity = npc.modelData.getEntity(npc);
-        if (entity instanceof EntityMaid) {
-            npc.modelData.extra.setString("ModelId", modelId);
-            npc.display.setSkinTexture(modelRes);
         }
     }
 }

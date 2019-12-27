@@ -41,6 +41,10 @@ public enum DanmakuColor {
         return values()[index];
     }
 
+    public static int getLength() {
+        return values().length;
+    }
+
     public int getRed() {
         return red;
     }
@@ -63,10 +67,6 @@ public enum DanmakuColor {
 
     public int getFloatBlue() {
         return floatBlue;
-    }
-
-    public static int getLength() {
-        return values().length;
     }
 
     public int getRgb() {

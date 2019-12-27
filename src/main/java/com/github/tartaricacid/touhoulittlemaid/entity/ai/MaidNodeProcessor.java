@@ -24,8 +24,7 @@ public class MaidNodeProcessor extends WalkNodeProcessor {
 
         if (material == Material.AIR) {
             return PathNodeType.OPEN;
-        }
-        else if (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY) {
+        } else if (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY) {
             // ===THLM patch===
             if (block == Blocks.COCOA) {
                 return PathNodeType.BLOCKED;
@@ -34,38 +33,28 @@ public class MaidNodeProcessor extends WalkNodeProcessor {
 
             if (block == Blocks.FIRE) {
                 return PathNodeType.DAMAGE_FIRE;
-            }
-            else if (block == Blocks.CACTUS) {
+            } else if (block == Blocks.CACTUS) {
                 return PathNodeType.DAMAGE_CACTUS;
-            }
-            else if (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_WOOD_CLOSED;
-            }
-            else if (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_IRON_CLOSED;
-            }
-            else if (block instanceof BlockDoor && iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
+            } else if (block instanceof BlockDoor && iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_OPEN;
-            }
-            else if (block instanceof BlockRailBase) {
+            } else if (block instanceof BlockRailBase) {
                 return PathNodeType.RAIL;
-            }
-            else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN).booleanValue())) {
+            } else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN).booleanValue())) {
                 if (material == Material.WATER) {
                     return PathNodeType.WATER;
-                }
-                else if (material == Material.LAVA) {
+                } else if (material == Material.LAVA) {
                     return PathNodeType.LAVA;
-                }
-                else {
+                } else {
                     return block.isPassable(p_189553_1_, blockpos) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
                 }
-            }
-            else {
+            } else {
                 return PathNodeType.FENCE;
             }
-        }
-        else {
+        } else {
             return PathNodeType.TRAPDOOR;
         }
     }
