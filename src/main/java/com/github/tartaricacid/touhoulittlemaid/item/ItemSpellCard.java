@@ -39,7 +39,7 @@ public class ItemSpellCard extends Item {
 
     @SuppressWarnings("all")
     public static ItemStack setCustomSpellCardEntry(String id, ItemStack spellCard) {
-        if (spellCard.getItem() == MaidItems.SPELL_CARD && ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT.containsKey(id)) {
+        if (spellCard.getItem() == MaidItems.SPELL_CARD) {
             NBTTagCompound tag;
             if (spellCard.hasTagCompound()) {
                 tag = spellCard.getTagCompound();

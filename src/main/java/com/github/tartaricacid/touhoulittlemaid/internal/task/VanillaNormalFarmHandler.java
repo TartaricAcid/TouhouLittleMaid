@@ -69,7 +69,7 @@ public class VanillaNormalFarmHandler implements FarmHandler {
         // 此处同时应用到了地狱疣和普通作物
         IPlantable plantable = (IPlantable) seed.getItem();
         IBlockState soil = world.getBlockState(pos.down());
-        return soil.getBlock().canSustainPlant(soil, world, pos, EnumFacing.UP, plantable);
+        return soil.getBlock().canSustainPlant(soil, world, pos.down(), EnumFacing.UP, plantable);
     }
 
     @Override
