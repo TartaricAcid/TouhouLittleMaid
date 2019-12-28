@@ -296,22 +296,26 @@ public class EntityMaid extends AbstractEntityMaid {
      * 时时刻刻检查寻路算法
      */
     private void applyNavigatorAndMoveHelper() {
+        Entity passenger = getControllingPassenger();
+        boolean isRidingBroom = passenger instanceof EntityMarisaBroom;
+        boolean isFlyingNavigator = navigator instanceof PathNavigateFlying;
+        boolean isFlyHelper = moveHelper instanceof EntityFlyHelper;
         // 非骑扫帚状态，对应寻路算法也对劲
-        if (!(getControllingPassenger() instanceof EntityMarisaBroom) && !(navigator instanceof PathNavigateFlying) && !(moveHelper instanceof EntityFlyHelper)) {
+        if (!isRidingBroom && !isFlyingNavigator && !isFlyHelper) {
             return;
         }
         // 骑扫帚状态，对应寻路算法也对劲
-        if (getControllingPassenger() instanceof EntityMarisaBroom && navigator instanceof PathNavigateFlying && moveHelper instanceof EntityFlyHelper) {
+        if (isRidingBroom && isFlyingNavigator && isFlyHelper) {
             return;
         }
         // 否则，重置
-        if (getControllingPassenger() instanceof EntityMarisaBroom) {
+        if (isRidingBroom) {
             navigator = createNavigatorFlying(world);
             moveHelper = new EntityFlyHelper(this);
         } else {
             navigator = createNavigatorGround(world);
             moveHelper = new EntityMoveHelper(this);
-            // 以防万一清除重力
+            // 以防万一设置重力
             this.setNoGravity(false);
         }
     }
@@ -1054,14 +1058,6 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean isChild() {
-        return false;
-    }
-
-    /**
-     * 女仆不会踩坏农田，多么妙啊
-     */
-    @Override
-    protected boolean canTriggerWalking() {
         return false;
     }
 
