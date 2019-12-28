@@ -35,6 +35,7 @@ item.touhou_little_maid.maid_beacon.name=Shrine Lamp
 item.touhou_little_maid.spell_card.name=Spell Card
 item.touhou_little_maid.debug_danmaku.name=Debug Danmaku Tool
 item.touhou_little_maid.npc_maid_tool.name=NPC Maid Tool
+item.touhou_little_maid.substitute_jizo.name=Substitute Jizo
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
