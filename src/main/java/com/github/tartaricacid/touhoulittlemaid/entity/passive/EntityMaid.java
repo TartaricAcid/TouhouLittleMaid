@@ -100,6 +100,8 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> STRUCK_BY_LIGHTNING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> SASIMONO_CRC32 = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> SHOW_SASIMONO = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
+    // 无敌状态不会主动同步至客户端
+    private static final DataParameter<Boolean> INVULNERABLE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
 
     /**
      * 模式所应用的 AI 的优先级
@@ -230,6 +232,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(STRUCK_BY_LIGHTNING, false);
         this.dataManager.register(SASIMONO_CRC32, String.valueOf(0L));
         this.dataManager.register(SHOW_SASIMONO, false);
+        this.dataManager.register(INVULNERABLE, false);
     }
 
     @Override
@@ -255,11 +258,25 @@ public class EntityMaid extends AbstractEntityMaid {
         if (playerHurtSoundCount > 0) {
             playerHurtSoundCount--;
         }
+        spawnPortalParticle();
         // 随机回血
         this.randomRestoreHealth();
         super.onLivingUpdate();
         applyBroomRiding();
         applyNavigatorAndMoveHelper();
+    }
+
+    private void spawnPortalParticle() {
+        if (this.world.isRemote && this.getIsInvulnerable()) {
+            for (int i = 0; i < 2; ++i) {
+                this.world.spawnParticle(EnumParticleTypes.PORTAL,
+                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+                        this.posY + this.rand.nextDouble() * (double) this.height - 0.25D,
+                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+                        (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
+                        (this.rand.nextDouble() - 0.5D) * 2.0D);
+            }
+        }
     }
 
     /**
@@ -1022,6 +1039,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.SHOW_SASIMONO.getName())) {
             setShowSasimono(compound.getBoolean(NBT.SHOW_SASIMONO.getName()));
         }
+        if (compound.hasKey(NBT.INVULNERABLE.getName())) {
+            setEntityInvulnerable(compound.getBoolean(NBT.INVULNERABLE.getName()));
+        }
     }
 
     @Override
@@ -1038,6 +1058,18 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.STRUCK_BY_LIGHTNING.getName(), isStruckByLightning());
         compound.setLong(NBT.SASIMONO_CRC32.getName(), getSasimonoCRC32());
         compound.setBoolean(NBT.SHOW_SASIMONO.getName(), isShowSasimono());
+        compound.setBoolean(NBT.INVULNERABLE.getName(), getIsInvulnerable());
+    }
+
+    @Override
+    public boolean getIsInvulnerable() {
+        return this.dataManager.get(INVULNERABLE);
+    }
+
+    @Override
+    public void setEntityInvulnerable(boolean isInvulnerable) {
+        super.setEntityInvulnerable(isInvulnerable);
+        this.dataManager.set(INVULNERABLE, isInvulnerable);
     }
 
     @Override
@@ -1381,7 +1413,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 指物旗的 CRC32
         SASIMONO_CRC32("SasimonoCRC32"),
         // 是否显示指物旗
-        SHOW_SASIMONO("ShowSasimono");
+        SHOW_SASIMONO("ShowSasimono"),
+        // 无敌状态
+        INVULNERABLE("Invulnerable");
 
         private String name;
 

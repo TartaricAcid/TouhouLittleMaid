@@ -82,6 +82,7 @@ tooltips.touhou_little_maid.spell_card.author=作者：%s
 tooltips.touhou_little_maid.spell_card.version=版本：%s
 tooltips.touhou_little_maid.spell_card.cooldown=符卡冷却时间：%d ticks
 tooltips.touhou_little_maid.debug_danmaku.desc=仅用于调试
+tooltips.touhou_little_maid.substitute_jizo.desc=右击女仆使其无敌，仅限创造模式
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
@@ -153,6 +154,7 @@ danmaku_type.touhou_little_maid.amulet=札弹
 danmaku_type.touhou_little_maid.star=星弹
 danmaku_type.touhou_little_maid.big_star=大星弹
 danmaku_type.touhou_little_maid.petal=米弹
+danmaku_type.touhou_little_maid.knife=刀弹
 danmaku_type.touhou_little_maid.master_spark=魔炮
 danmaku_type.touhou_little_maid.bullet=铳弹
 danmaku_type.touhou_little_maid.kunai=苦无弹
@@ -464,9 +466,11 @@ subtitle.touhou_little_maid.entity.box=盒子：打开
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s
 hwyla.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物
+hwyla.touhou_little_maid.entity_maid.invulnerable=无敌
 hwyla.touhou_little_maid.tombstone.maid_owner=女仆主人：%s
 top.touhou_little_maid.entity_maid.task=当前模式：
 top.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物
+top.touhou_little_maid.entity_maid.invulnerable=无敌
 top.touhou_little_maid.tombstone.maid_owner=女仆主人：%s
 
 # JEI
@@ -480,6 +484,3 @@ jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=生成闪电
 # Patchouli
 patchouli.touhou_little_maid.book.name=记忆中的幻想乡
 patchouli.touhou_little_maid.book.landing_text=一个与女仆和东方 Project 有关的模组。$(br2)感谢 Snownee 在代码方面的帮助。$(br)感谢 Succinum，ZeniCrow，Paulzzh，Tian_mi 以及其他美工制作了如此优秀的模型和材质。$(br)感谢 Little Maid Mob 的作者 Verclene。
-danmaku_type.touhou_little_maid.knife=刀弹
-# Touhou Little Mod Language File
-item_group.touhou_little_maid.name=车万女仆
