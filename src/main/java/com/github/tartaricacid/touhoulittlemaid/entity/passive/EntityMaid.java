@@ -764,13 +764,17 @@ public class EntityMaid extends AbstractEntityMaid {
         if (itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
             BlockPos pos = ItemKappaCompass.getPos(itemstack);
             if (pos != null) {
-                this.setHomePos(pos);
-                if (!world.isRemote) {
-                    // 如果尝试移动失败，那就尝试传送
-                    if (!getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
-                        attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                if (player.isSneaking()) {
+                    setHomePos(BlockPos.ORIGIN);
+                } else {
+                    this.setHomePos(pos);
+                    if (!world.isRemote) {
+                        // 如果尝试移动失败，那就尝试传送
+                        if (!getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
+                            attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                        }
+                        player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
                     }
-                    player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
                 }
                 return true;
             }
