@@ -68,7 +68,7 @@ public class EntityBox extends Entity {
     }
 
     private void applyInvisibilityEffect(EntityTameable tameable, int stage) {
-        if (stage > SECOND_STAGE - 40) {
+        if (stage > FIRST_STAGE) {
             tameable.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 2, 1, false, false));
         }
     }
