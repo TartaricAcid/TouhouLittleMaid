@@ -30,6 +30,10 @@ public class MaidProvider implements IProbeInfoEntityProvider {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
                         .item(new ItemStack(MaidItems.HATA_SASIMONO)).text(text);
             }
+            if (maid.getIsInvulnerable()) {
+                String text = IProbeInfo.STARTLOC + "top.touhou_little_maid.entity_maid.invulnerable" + IProbeInfo.ENDLOC;
+                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(text);
+            }
         }
     }
 

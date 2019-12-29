@@ -35,6 +35,7 @@ item.touhou_little_maid.maid_beacon.name=Shrine Lamp
 item.touhou_little_maid.spell_card.name=Spell Card
 item.touhou_little_maid.debug_danmaku.name=Debug Danmaku Tool
 item.touhou_little_maid.npc_maid_tool.name=NPC Maid Tool
+item.touhou_little_maid.substitute_jizo.name=Substitute Jizo
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -55,7 +56,7 @@ commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
 tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc=Press the Alt key and scroll the mouse wheel to switch modes.
 tooltips.touhou_little_maid.kappa_compass.usage.desc.1=Right click on the block to set the coordinates, then right click on the maid binding coordinates.
-tooltips.touhou_little_maid.kappa_compass.usage.desc.2=Need to work with the maid's home mode.
+tooltips.touhou_little_maid.kappa_compass.usage.desc.2=Need to work with the maid's home mode, Shift right click on the maid clear the coordinates.
 tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
 tooltips.touhou_little_maid.damageable.desc=Remaining Usage Times: %d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=Entity Name: %s
@@ -81,6 +82,7 @@ tooltips.touhou_little_maid.spell_card.author=Author: %s
 tooltips.touhou_little_maid.spell_card.version=Version: %s
 tooltips.touhou_little_maid.spell_card.cooldown=Spell Cooldown: %d ticks
 tooltips.touhou_little_maid.debug_danmaku.desc=Only For Debug
+tooltips.touhou_little_maid.substitute_jizo.desc=Right click on the maid to make it invulnerability, creative only
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -152,6 +154,7 @@ danmaku_type.touhou_little_maid.amulet=Amulet
 danmaku_type.touhou_little_maid.star=Star
 danmaku_type.touhou_little_maid.big_star=Big Star
 danmaku_type.touhou_little_maid.petal=Petal
+danmaku_type.touhou_little_maid.knife=Knife
 danmaku_type.touhou_little_maid.master_spark=Master Spark
 danmaku_type.touhou_little_maid.bullet=Bullet
 danmaku_type.touhou_little_maid.kunai=Kunai
@@ -464,9 +467,11 @@ subtitle.touhou_little_maid.entity.box=Box Open Sound
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s
 hwyla.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
+hwyla.touhou_little_maid.entity_maid.invulnerable=Invulnerable
 hwyla.touhou_little_maid.tombstone.maid_owner=Maid Owner: %s
 top.touhou_little_maid.entity_maid.task=Mode:
 top.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
+top.touhou_little_maid.entity_maid.invulnerable=Invulnerable
 top.touhou_little_maid.tombstone.maid_owner=Maid Owner: %s
 
 # JEI

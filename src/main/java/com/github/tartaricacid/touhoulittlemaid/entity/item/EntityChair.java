@@ -124,7 +124,7 @@ public class EntityChair extends EntityLivingBase {
             }
             return true;
         } else {
-            if (!this.world.isRemote && !this.isBeingRidden()) {
+            if (!this.world.isRemote && !this.isBeingRidden() && !player.isRiding()) {
                 player.startRiding(this);
             }
             return true;
