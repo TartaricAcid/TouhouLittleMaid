@@ -29,6 +29,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -206,7 +207,7 @@ public class BlockGrid extends Block {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         NBTTagCompound nbttagcompound = stack.getTagCompound();
-        if (nbttagcompound == null || !nbttagcompound.hasKey("BlockEntityTag", 10)) {
+        if (nbttagcompound == null || !nbttagcompound.hasKey("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
             tooltip.add(getModeTooltip(true, false));
             return;
         }
@@ -215,7 +216,7 @@ public class BlockGrid extends Block {
 
         tooltip.add(getModeTooltip(tag.getBoolean("Input"), tag.getBoolean("Blacklist")));
 
-        if (tag.hasKey("Items", 9)) {
+        if (tag.hasKey("Items", Constants.NBT.TAG_LIST)) {
             NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(27, ItemStack.EMPTY);
             ItemStackHelper.loadAllItems(tag, nonnulllist);
             int i = 0;

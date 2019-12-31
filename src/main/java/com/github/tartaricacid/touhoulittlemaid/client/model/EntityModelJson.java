@@ -488,15 +488,17 @@ public class EntityModelJson extends ModelBase {
     }
 
     public void postRenderArm(float scale, EnumHandSide side) {
-        ModelRenderer arm = this.getArmForSide(side);
+        ModelRenderer arm = (side == EnumHandSide.LEFT ? modelMap.get("armLeft") : modelMap.get("armRight"));
         if (arm != null) {
             arm.postRender(scale);
         }
     }
 
-    @Nullable
-    private ModelRenderer getArmForSide(EnumHandSide side) {
-        return side == EnumHandSide.LEFT ? modelMap.get("armLeft") : modelMap.get("armRight");
+    public void postRenderCustomHead(float scale) {
+        ModelRenderer customHead = modelMap.get("head");
+        if (customHead != null) {
+            customHead.postRender(scale);
+        }
     }
 
     /**
