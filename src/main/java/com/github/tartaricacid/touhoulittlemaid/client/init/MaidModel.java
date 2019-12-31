@@ -63,6 +63,7 @@ public final class MaidModel {
         registerRender(MaidItems.SPELL_CARD);
         registerRender(MaidItems.DEBUG_DANMAKU);
         registerRender(MaidItems.NPC_MAID_TOOL);
+        registerRender(MaidItems.MAID_MODEL_COUPON);
     }
 
     private static void registerRender(Item item) {

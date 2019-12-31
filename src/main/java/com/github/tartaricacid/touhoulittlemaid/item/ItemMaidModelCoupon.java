@@ -1,0 +1,109 @@
+package com.github.tartaricacid.touhoulittlemaid.item;
+
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+
+/**
+ * @author TartaricAcid
+ * @date 2019/12/31 20:37
+ **/
+public class ItemMaidModelCoupon extends Item {
+    private static final String MODEL_DATA_TAG = "ModelData";
+
+    public ItemMaidModelCoupon() {
+        setTranslationKey(TouhouLittleMaid.MOD_ID + ".maid_model_coupon");
+        setMaxStackSize(1);
+        setCreativeTab(MaidItems.MODEL_COUPON_TABS);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
+        if (this.isInCreativeTab(tab)) {
+            for (String modelId : CommonProxy.VANILLA_ID_NAME_MAP.keySet()) {
+                items.add(setModelData(new ItemStack(this), modelId));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        if (event.getTarget() instanceof AbstractEntityMaid) {
+            AbstractEntityMaid maid = (AbstractEntityMaid) event.getTarget();
+            ItemStack stack = event.getItemStack();
+            boolean isYourMaid = maid.getOwnerId() != null && maid.getOwnerId().equals(event.getEntityPlayer().getUniqueID());
+            boolean stackIsRight = stack.getItem() == MaidItems.MAID_MODEL_COUPON && hasModelData(stack);
+            boolean modelIdNotSame = !getModelData(stack).equals(maid.getModelId());
+            if (isYourMaid && stackIsRight && modelIdNotSame) {
+                maid.setModelId(getModelData(stack));
+                stack.shrink(1);
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    private boolean hasModelData(ItemStack coupon) {
+        if (coupon.hasTagCompound()) {
+            NBTTagCompound tag = coupon.getTagCompound();
+            if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
+                return CommonProxy.VANILLA_ID_NAME_MAP.containsKey(tag.getString(MODEL_DATA_TAG));
+            }
+        }
+        return false;
+    }
+
+    private ItemStack setModelData(ItemStack coupon, String modelId) {
+        NBTTagCompound tag;
+        if (coupon.hasTagCompound()) {
+            tag = coupon.getTagCompound();
+        } else {
+            tag = new NBTTagCompound();
+        }
+        if (tag != null) {
+            tag.setString(MODEL_DATA_TAG, modelId);
+            coupon.setTagCompound(tag);
+        }
+        return coupon;
+    }
+
+    private String getModelData(ItemStack coupon) {
+        if (coupon.hasTagCompound()) {
+            NBTTagCompound tag = coupon.getTagCompound();
+            if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
+                return tag.getString(MODEL_DATA_TAG);
+            }
+        }
+        return "touhou_little_maid:hakurei_reimu";
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        if (ClientProxy.MAID_MODEL.getInfo(getModelData(stack)).isPresent()) {
+            tooltip.add(I18n.format("tooltips.touhou_little_maid.maid_model_coupon.desc",
+                    ParseI18n.parse(ClientProxy.MAID_MODEL.getInfo(getModelData(stack)).get().getName())));
+        }
+    }
+}

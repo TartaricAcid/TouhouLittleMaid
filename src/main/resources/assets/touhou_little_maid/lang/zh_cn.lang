@@ -3,6 +3,7 @@ item_group.touhou_little_maid.main.name=车万女仆丨主体
 item_group.touhou_little_maid.garage_kit.name=车万女仆丨手办
 item_group.touhou_little_maid.chair.name=车万女仆丨坐垫
 item_group.touhou_little_maid.spell_card.name=车万女仆丨符卡
+item_group.touhou_little_maid.model_coupon.name=车万女仆丨女仆模型券
 
 # Entity
 entity.touhou_little_maid.maid.name=小女仆
@@ -36,6 +37,7 @@ item.touhou_little_maid.spell_card.name=符卡
 item.touhou_little_maid.debug_danmaku.name=调试弹幕工具
 item.touhou_little_maid.npc_maid_tool.name=NPC 女仆工具
 item.touhou_little_maid.substitute_jizo.name=替身地藏
+item.touhou_little_maid.maid_model_coupon.name=女仆模型券
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -83,6 +85,7 @@ tooltips.touhou_little_maid.spell_card.version=版本：%s
 tooltips.touhou_little_maid.spell_card.cooldown=符卡冷却时间：%d ticks
 tooltips.touhou_little_maid.debug_danmaku.desc=仅用于调试
 tooltips.touhou_little_maid.substitute_jizo.desc=右击女仆使其无敌，仅限创造模式
+tooltips.touhou_little_maid.maid_model_coupon.desc=女仆模型：%s
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！

@@ -102,4 +102,11 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @return String
      */
     abstract public String getModelId();
+
+    /**
+     * 设置女仆的模型 id
+     *
+     * @param modelId String
+     */
+    abstract public void setModelId(String modelId);
 }

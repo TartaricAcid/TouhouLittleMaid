@@ -1327,6 +1327,7 @@ public class EntityMaid extends AbstractEntityMaid {
         return this.dataManager.get(MODEL_ID);
     }
 
+    @Override
     public void setModelId(String modelId) {
         this.dataManager.set(MODEL_ID, modelId);
     }

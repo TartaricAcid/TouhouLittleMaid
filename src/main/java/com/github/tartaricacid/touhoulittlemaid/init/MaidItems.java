@@ -62,6 +62,8 @@ public final class MaidItems {
     public static Item NPC_MAID_TOOL;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "substitute_jizo")
     public static Item SUBSTITUTE_JIZO;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "maid_model_coupon")
+    public static Item MAID_MODEL_COUPON;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -100,6 +102,13 @@ public final class MaidItems {
             return SPELL_CARD.getDefaultInstance();
         }
     };
+    public static CreativeTabs MODEL_COUPON_TABS = new MaidCreativeTabs("model_coupon") {
+        @SideOnly(Side.CLIENT)
+        @Override
+        public ItemStack getIcon() {
+            return MAID_MODEL_COUPON.getDefaultInstance();
+        }
+    };
 
     @SuppressWarnings("all")
     @SubscribeEvent
@@ -126,6 +135,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemDebugDanmaku().setRegistryName("debug_danmaku"));
         event.getRegistry().register(new ItemNpcMaidTool().setRegistryName("npc_maid_tool"));
         event.getRegistry().register(new ItemSubstituteJizo().setRegistryName("substitute_jizo"));
+        event.getRegistry().register(new ItemMaidModelCoupon().setRegistryName("maid_model_coupon"));
 
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));

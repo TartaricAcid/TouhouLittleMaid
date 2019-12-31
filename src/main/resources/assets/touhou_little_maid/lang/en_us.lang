@@ -3,6 +3,7 @@ item_group.touhou_little_maid.main.name=Touhou Little Maid: Main
 item_group.touhou_little_maid.garage_kit.name=Touhou Little Maid: Garage Kit
 item_group.touhou_little_maid.chair.name=Touhou Little Maid: Chair
 item_group.touhou_little_maid.spell_card.name=Touhou Little Maid: Spell Card
+item_group.touhou_little_maid.model_coupon.name=Touhou Little Maid: Maid Model Coupon
 
 # Entity
 entity.touhou_little_maid.maid.name=Touhou Little Maid
@@ -36,6 +37,7 @@ item.touhou_little_maid.spell_card.name=Spell Card
 item.touhou_little_maid.debug_danmaku.name=Debug Danmaku Tool
 item.touhou_little_maid.npc_maid_tool.name=NPC Maid Tool
 item.touhou_little_maid.substitute_jizo.name=Substitute Jizo
+item.touhou_little_maid.maid_model_coupon.name=Maid Model Coupon
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -83,6 +85,7 @@ tooltips.touhou_little_maid.spell_card.version=Version: %s
 tooltips.touhou_little_maid.spell_card.cooldown=Spell Cooldown: %d ticks
 tooltips.touhou_little_maid.debug_danmaku.desc=Only For Debug
 tooltips.touhou_little_maid.substitute_jizo.desc=Right click on the maid to make it invulnerability, creative only
+tooltips.touhou_little_maid.maid_model_coupon.desc=Maid Model: %s
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
