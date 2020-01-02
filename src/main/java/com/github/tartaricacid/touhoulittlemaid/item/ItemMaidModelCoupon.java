@@ -43,7 +43,17 @@ public class ItemMaidModelCoupon extends Item {
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             for (String modelId : CommonProxy.VANILLA_ID_NAME_MAP.keySet()) {
-                items.add(setModelData(new ItemStack(this), modelId));
+                ItemStack stack;
+                if (CommonProxy.MAID_MODEL_DRAW_DATA.containsKey(modelId)) {
+                    int meta = CommonProxy.MAID_MODEL_DRAW_DATA.get(modelId)[1];
+                    if (meta < 1 || meta > 5) {
+                        meta = 1;
+                    }
+                    stack = new ItemStack(this, 1, meta);
+                } else {
+                    stack = new ItemStack(this, 1, 1);
+                }
+                items.add(setModelData(stack, modelId));
             }
         }
     }
@@ -100,10 +110,41 @@ public class ItemMaidModelCoupon extends Item {
 
     @SideOnly(Side.CLIENT)
     @Override
+    public boolean hasEffect(ItemStack stack) {
+        if (stack.getMetadata() > 3) {
+            return true;
+        }
+        return super.hasEffect(stack);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if (ClientProxy.MAID_MODEL.getInfo(getModelData(stack)).isPresent()) {
             tooltip.add(I18n.format("tooltips.touhou_little_maid.maid_model_coupon.desc",
                     ParseI18n.parse(ClientProxy.MAID_MODEL.getInfo(getModelData(stack)).get().getName())));
         }
+        String star;
+        switch (stack.getMetadata()) {
+            case 1:
+                star = "§bB";
+                break;
+            case 2:
+                star = "§aA";
+                break;
+            case 3:
+                star = "§cS";
+                break;
+            case 4:
+                star = "§5SS";
+                break;
+            case 5:
+                star = "§6SSR";
+                break;
+            default:
+                star = "§bB";
+                break;
+        }
+        tooltip.add(star);
     }
 }

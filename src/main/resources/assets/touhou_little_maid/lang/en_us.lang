@@ -53,6 +53,7 @@ commands.touhou_little_maid.main.power.info=Current Power: %.2f
 commands.touhou_little_maid.main.maid_num.info=Current Maid Num: %d
 commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
+commands.touhou_little_maid.draw.info=Current Draw Info: %d Draws
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d

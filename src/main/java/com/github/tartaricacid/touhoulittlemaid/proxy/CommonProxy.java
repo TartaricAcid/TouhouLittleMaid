@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityDrawHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
@@ -79,6 +80,7 @@ public class CommonProxy {
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
     public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_SERVER = Maps.newHashMap();
+    public static final Map<String, Integer[]> MAID_MODEL_DRAW_DATA = Maps.newHashMap();
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
@@ -100,6 +102,8 @@ public class CommonProxy {
         initTradeList();
         // 初始化默认模型列表
         initModelList();
+        // 初始化抽卡概率表
+        initMaidModelDraw();
         // 注册实体
         registerModEntity();
         // 注册实体生成
@@ -116,6 +120,7 @@ public class CommonProxy {
         NetworkRegistry.INSTANCE.registerGuiHandler(TouhouLittleMaid.INSTANCE, new MaidGuiHandler());
         CapabilityPowerHandler.register();
         CapabilityOwnerMaidNumHandler.register();
+        CapabilityDrawHandler.register();
         CustomSpellCardManger.onCustomSpellCardReload();
         if (Loader.isModLoaded("patchouli")) {
             MultiblockRegistry.init();
@@ -208,6 +213,29 @@ public class CommonProxy {
                 pojo.getModelList().forEach(m -> VANILLA_ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));
             } catch (JsonSyntaxException e) {
                 TouhouLittleMaid.LOGGER.warn("Fail to parse model pack in domain {}", TouhouLittleMaid.MOD_ID);
+            }
+        }
+        // 别忘了关闭输入流
+        IOUtils.closeQuietly(input);
+    }
+
+    private void initMaidModelDraw() {
+        MAID_MODEL_DRAW_DATA.clear();
+        InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/draw.csv");
+        if (input != null) {
+            try {
+                List<String> lines = IOUtils.readLines(input, StandardCharsets.UTF_8);
+                for (String line : lines) {
+                    String[] data = line.split(",");
+                    if (data.length < 3) {
+                        throw new IOException();
+                    } else {
+                        Integer[] numData = {Integer.valueOf(data[1]), Integer.valueOf(data[2])};
+                        MAID_MODEL_DRAW_DATA.put(data[0], numData);
+                    }
+                }
+            } catch (IOException e) {
+                TouhouLittleMaid.LOGGER.warn("Fail to read csv file");
             }
         }
         // 别忘了关闭输入流

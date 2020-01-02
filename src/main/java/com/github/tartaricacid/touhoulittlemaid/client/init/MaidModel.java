@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -63,7 +64,30 @@ public final class MaidModel {
         registerRender(MaidItems.SPELL_CARD);
         registerRender(MaidItems.DEBUG_DANMAKU);
         registerRender(MaidItems.NPC_MAID_TOOL);
-        registerRender(MaidItems.MAID_MODEL_COUPON);
+
+        ModelResourceLocation maidModelCoupon1 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_1", "inventory");
+        ModelResourceLocation maidModelCoupon2 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_2", "inventory");
+        ModelResourceLocation maidModelCoupon3 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_3", "inventory");
+        ModelResourceLocation maidModelCoupon4 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_4", "inventory");
+        ModelResourceLocation maidModelCoupon5 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_5", "inventory");
+        ModelBakery.registerItemVariants(MaidItems.MAID_MODEL_COUPON, maidModelCoupon1, maidModelCoupon2,
+                maidModelCoupon3, maidModelCoupon4, maidModelCoupon5);
+        ModelLoader.setCustomMeshDefinition(MaidItems.MAID_MODEL_COUPON, stack -> {
+            switch (stack.getMetadata()) {
+                default:
+                    return maidModelCoupon1;
+                case 1:
+                    return maidModelCoupon1;
+                case 2:
+                    return maidModelCoupon2;
+                case 3:
+                    return maidModelCoupon3;
+                case 4:
+                    return maidModelCoupon4;
+                case 5:
+                    return maidModelCoupon5;
+            }
+        });
     }
 
     private static void registerRender(Item item) {
