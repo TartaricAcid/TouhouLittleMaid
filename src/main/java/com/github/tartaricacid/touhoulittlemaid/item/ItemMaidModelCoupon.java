@@ -74,7 +74,7 @@ public class ItemMaidModelCoupon extends Item {
         }
     }
 
-    private boolean hasModelData(ItemStack coupon) {
+    public static boolean hasModelData(ItemStack coupon) {
         if (coupon.hasTagCompound()) {
             NBTTagCompound tag = coupon.getTagCompound();
             if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
@@ -84,7 +84,7 @@ public class ItemMaidModelCoupon extends Item {
         return false;
     }
 
-    private ItemStack setModelData(ItemStack coupon, String modelId) {
+    public static ItemStack setModelData(ItemStack coupon, String modelId) {
         NBTTagCompound tag;
         if (coupon.hasTagCompound()) {
             tag = coupon.getTagCompound();
@@ -127,22 +127,22 @@ public class ItemMaidModelCoupon extends Item {
         String star;
         switch (stack.getMetadata()) {
             case 1:
-                star = "§bB";
+                star = "§bN";
                 break;
             case 2:
-                star = "§aA";
+                star = "§aR";
                 break;
             case 3:
-                star = "§cS";
+                star = "§cSR";
                 break;
             case 4:
-                star = "§5SS";
+                star = "§5SSR";
                 break;
             case 5:
-                star = "§6SSR";
+                star = "§6UR";
                 break;
             default:
-                star = "§bB";
+                star = "§bN";
                 break;
         }
         tooltip.add(star);

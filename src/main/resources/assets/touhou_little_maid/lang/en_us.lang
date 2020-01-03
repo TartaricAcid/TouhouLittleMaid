@@ -38,12 +38,14 @@ item.touhou_little_maid.debug_danmaku.name=Debug Danmaku Tool
 item.touhou_little_maid.npc_maid_tool.name=NPC Maid Tool
 item.touhou_little_maid.substitute_jizo.name=Substitute Jizo
 item.touhou_little_maid.maid_model_coupon.name=Maid Model Coupon
+item.touhou_little_maid.gashapon.name=Gashapon
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
 tile.touhou_little_maid.grid.name=Maid Interaction Panel
 tile.touhou_little_maid.altar.name=Altar
 tile.touhou_little_maid.tombstone.name=Tombstone
+tile.touhou_little_maid.gashapon_machines.name=Gashapon Machines
 
 # Command
 commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>
@@ -145,6 +147,16 @@ config.touhou_little_maid.misc_config.creative_player_can_ride_broom=Only Creati
 config.touhou_little_maid.misc_config.power_point_hud_x=Power Point HUD Position X
 config.touhou_little_maid.misc_config.power_point_hud_y=Power Point HUD Position Y
 config.touhou_little_maid.misc_config.override_npc_render=Override NPC Render
+
+# Gashapon Config
+config.touhou_little_maid.gashapon_config=Gashapon Config
+config.touhou_little_maid.gashapon_config.purchase_gashapon_item=Purchase Gashapon Item
+config.touhou_little_maid.gashapon_config.purchase_gashapon_price=Purchase Gashapon Price
+config.touhou_little_maid.gashapon_config.gashapon_weights_5=UR Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_4=SSR Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_3=SR Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_2=R Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_1=N Level Gashapon's Weights
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet

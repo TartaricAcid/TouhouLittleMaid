@@ -26,6 +26,8 @@ public final class MaidBlocks {
     public static Block TOMBSTONE;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":maid_beacon")
     public static Block MAID_BEACON;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":gashapon_machines")
+    public static Block GASHAPON_MACHINES;
 
     @SubscribeEvent
     public static void register(RegistryEvent.Register<Block> event) {
@@ -34,6 +36,7 @@ public final class MaidBlocks {
         event.getRegistry().register(new BlockAltar());
         event.getRegistry().register(new BlockTombstone());
         event.getRegistry().register(new BlockMaidBeacon());
+        event.getRegistry().register(new BlockGashaponMachines());
 
         GameRegistry.registerTileEntity(TileEntityGarageKit.class, new ResourceLocation(TouhouLittleMaid.MOD_ID, "garage_kit"));
         GameRegistry.registerTileEntity(TileEntityGrid.class, new ResourceLocation(TouhouLittleMaid.MOD_ID, "grid"));
