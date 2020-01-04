@@ -37,7 +37,6 @@ public class PlayerCapabilitiesEvent {
         if (event.getObject() instanceof EntityPlayer) {
             event.addCapability(POWER_CAP, new CapabilityPowerHandler());
             event.addCapability(OWNER_MAID_NUM_CAP, new CapabilityOwnerMaidNumHandler());
-            event.addCapability(DRAW_CAP, new CapabilityDrawHandler());
         }
     }
 
@@ -64,13 +63,6 @@ public class PlayerCapabilitiesEvent {
         OwnerMaidNumHandler oldNum = event.getOriginal().getCapability(CapabilityOwnerMaidNumHandler.OWNER_MAID_NUM_CAP, null);
         if (num != null && oldNum != null) {
             num.set(oldNum.get());
-        }
-
-        DrawHandler draw = player.getCapability(CapabilityDrawHandler.DRAW_CAP, null);
-        DrawHandler oldDraw = event.getOriginal().getCapability(CapabilityDrawHandler.DRAW_CAP, null);
-        if (draw != null && oldDraw != null) {
-            draw.setTotalDrawTimes(oldDraw.getTotalDrawTimes());
-            draw.setDrawInfoMaps(oldDraw.getDrawInfoMaps());
         }
     }
 

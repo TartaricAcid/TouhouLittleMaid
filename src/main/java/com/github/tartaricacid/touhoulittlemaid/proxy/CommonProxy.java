@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityDrawHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
@@ -35,6 +34,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.Client
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectReply;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ServerEffectHandler;
+import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -80,7 +80,6 @@ public class CommonProxy {
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
     public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_SERVER = Maps.newHashMap();
-    public static final Map<String, Integer[]> MAID_MODEL_DRAW_DATA = Maps.newHashMap();
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
@@ -120,7 +119,6 @@ public class CommonProxy {
         NetworkRegistry.INSTANCE.registerGuiHandler(TouhouLittleMaid.INSTANCE, new MaidGuiHandler());
         CapabilityPowerHandler.register();
         CapabilityOwnerMaidNumHandler.register();
-        CapabilityDrawHandler.register();
         CustomSpellCardManger.onCustomSpellCardReload();
         if (Loader.isModLoaded("patchouli")) {
             MultiblockRegistry.init();
@@ -220,7 +218,7 @@ public class CommonProxy {
     }
 
     private void initMaidModelDraw() {
-        MAID_MODEL_DRAW_DATA.clear();
+        DrawCalculation.clearAllData();
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/draw.csv");
         if (input != null) {
             try {
@@ -230,8 +228,7 @@ public class CommonProxy {
                     if (data.length < 3) {
                         throw new IOException();
                     } else {
-                        Integer[] numData = {Integer.valueOf(data[1]), Integer.valueOf(data[2])};
-                        MAID_MODEL_DRAW_DATA.put(data[0], numData);
+                        DrawCalculation.addData(data[0], Integer.valueOf(data[1]), Integer.valueOf(data[2]));
                     }
                 }
             } catch (IOException e) {

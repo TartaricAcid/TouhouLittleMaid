@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -43,16 +44,7 @@ public class ItemMaidModelCoupon extends Item {
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             for (String modelId : CommonProxy.VANILLA_ID_NAME_MAP.keySet()) {
-                ItemStack stack;
-                if (CommonProxy.MAID_MODEL_DRAW_DATA.containsKey(modelId)) {
-                    int meta = CommonProxy.MAID_MODEL_DRAW_DATA.get(modelId)[1];
-                    if (meta < 1 || meta > 5) {
-                        meta = 1;
-                    }
-                    stack = new ItemStack(this, 1, meta);
-                } else {
-                    stack = new ItemStack(this, 1, 1);
-                }
+                ItemStack stack = new ItemStack(this, 1, DrawCalculation.getModelLevel(modelId));
                 items.add(setModelData(stack, modelId));
             }
         }

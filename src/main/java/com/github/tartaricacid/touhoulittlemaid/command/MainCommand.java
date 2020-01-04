@@ -47,10 +47,6 @@ public class MainCommand extends CommandBase {
                 commandMaidNum(server, sender, args);
                 return;
             }
-            if ("draw".equals(args[0])) {
-                commandDrawInfo(server, sender, args);
-                return;
-            }
         }
         sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.usage"));
     }
@@ -136,15 +132,6 @@ public class MainCommand extends CommandBase {
             default:
                 player.sendMessage(new TextComponentTranslation(getUsage(sender)));
         }
-    }
-
-    private void commandDrawInfo(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityPlayer player = getPlayer(server, sender, args[2]);
-        DrawHandler draw = player.getCapability(CapabilityDrawHandler.DRAW_CAP, null);
-        if (draw == null) {
-            return;
-        }
-        player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.draw.info", draw.getTotalDrawTimes()));
     }
 
     @Nonnull

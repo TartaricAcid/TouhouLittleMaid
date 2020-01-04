@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,7 +21,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 
 /**
  * @author TartaricAcid
@@ -42,26 +42,10 @@ public class BlockGashaponMachines extends BlockHorizontal {
         boolean itemIsMatch = playerIn.getHeldItemMainhand().getItem() == purchaseItem;
         boolean amountIsMatch = playerIn.getHeldItemMainhand().getCount() >= GeneralConfig.GASHAPON_CONFIG.purchaseGashaponPrice;
         if (itemIsMatch && amountIsMatch) {
-            int[] weightArray = {
-                    GeneralConfig.GASHAPON_CONFIG.gashaponWeights1,
-                    GeneralConfig.GASHAPON_CONFIG.gashaponWeights2,
-                    GeneralConfig.GASHAPON_CONFIG.gashaponWeights3,
-                    GeneralConfig.GASHAPON_CONFIG.gashaponWeights4,
-                    GeneralConfig.GASHAPON_CONFIG.gashaponWeights5
-            };
-            int totalWeight = Arrays.stream(weightArray).sum();
-            int randomNum = RANDOM.nextInt(totalWeight);
-            int meta = 0;
-            for (int weight : weightArray) {
-                randomNum -= weight;
-                meta += 1;
-                if (randomNum < 0) {
-                    break;
-                }
-            }
             playerIn.getHeldItemMainhand().shrink(GeneralConfig.GASHAPON_CONFIG.purchaseGashaponPrice);
             if (!worldIn.isRemote) {
-                EntityItem item = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, new ItemStack(MaidItems.GASHAPON, 1, meta));
+                EntityItem item = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ,
+                        new ItemStack(MaidItems.GASHAPON, 1, DrawCalculation.getGashaponLevel()));
                 worldIn.spawnEntity(item);
             }
             return true;

@@ -2,8 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-import com.google.common.collect.Lists;
+import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +17,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * @author TartaricAcid
@@ -43,20 +41,15 @@ public class ItemGashapon extends Item {
     @Nonnull
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        int meta = playerIn.getHeldItem(handIn).getMetadata();
-        ItemStack itemStack = new ItemStack(MaidItems.MAID_MODEL_COUPON, 1, meta);
-        List<String> matchModelId = Lists.newArrayList();
-        for (String modelId : CommonProxy.MAID_MODEL_DRAW_DATA.keySet()) {
-            if (CommonProxy.MAID_MODEL_DRAW_DATA.get(modelId)[1] == meta) {
-                matchModelId.add(modelId);
-            }
-        }
-        // TODO: 还没有把奖池内的权重考虑在内
-        // TODO: 需要添加类似于保底一样的功能
-        ItemMaidModelCoupon.setModelData(itemStack, matchModelId.stream().skip(itemRand.nextInt(matchModelId.size())).findFirst().get());
-        EntityItem itemEntity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, itemStack);
         if (!worldIn.isRemote) {
-            worldIn.spawnEntity(itemEntity);
+            int meta = playerIn.getHeldItem(handIn).getMetadata();
+            int times = meta > 2 ? meta - 1 : 1;
+            for (int i = 0; i < times; i++) {
+                ItemStack itemStack = new ItemStack(MaidItems.MAID_MODEL_COUPON, 1, meta);
+                ItemMaidModelCoupon.setModelData(itemStack, DrawCalculation.getCouponModelId(meta));
+                EntityItem itemEntity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, itemStack);
+                worldIn.spawnEntity(itemEntity);
+            }
         }
         playerIn.getHeldItem(handIn).shrink(1);
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
