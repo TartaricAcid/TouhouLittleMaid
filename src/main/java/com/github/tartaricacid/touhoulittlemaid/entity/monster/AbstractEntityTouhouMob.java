@@ -25,16 +25,14 @@ public abstract class AbstractEntityTouhouMob extends EntityMob {
     @Override
     protected void onDeathUpdate() {
         super.onDeathUpdate();
-        if (this.deathTime == 20) {
-            if (!this.world.isRemote) {
-                int totalPowerPoint = getPowerPoint();
-                while (totalPowerPoint > 0) {
-                    int powerSplit = EntityPowerPoint.getPowerSplit(totalPowerPoint);
-                    totalPowerPoint -= powerSplit;
-                    EntityPowerPoint powerPoint = new EntityPowerPoint(this.world, this.posX, this.posY, this.posZ, powerSplit);
-                    this.world.spawnEntity(powerPoint);
-                    CommonProxy.INSTANCE.sendToAll(new SyncPowerPointEntityData(powerPoint));
-                }
+        if (this.deathTime == 20 && !this.world.isRemote) {
+            int totalPowerPoint = getPowerPoint();
+            while (totalPowerPoint > 0) {
+                int powerSplit = EntityPowerPoint.getPowerSplit(totalPowerPoint);
+                totalPowerPoint -= powerSplit;
+                EntityPowerPoint powerPoint = new EntityPowerPoint(this.world, this.posX, this.posY, this.posZ, powerSplit);
+                this.world.spawnEntity(powerPoint);
+                CommonProxy.INSTANCE.sendToAll(new SyncPowerPointEntityData(powerPoint));
             }
         }
     }

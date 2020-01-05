@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,11 +28,12 @@ public class ItemGashapon extends Item {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".gashapon");
         setMaxStackSize(1);
         setCreativeTab(MaidItems.MODEL_COUPON_TABS);
+        setHasSubtypes(true);
     }
 
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab) && GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
             for (int i = 1; i <= 5; i++) {
                 items.add(new ItemStack(this, 1, i));
             }

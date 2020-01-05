@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -37,12 +38,13 @@ public class ItemMaidModelCoupon extends Item {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".maid_model_coupon");
         setMaxStackSize(1);
         setCreativeTab(MaidItems.MODEL_COUPON_TABS);
+        setHasSubtypes(true);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab) && GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
             for (String modelId : CommonProxy.VANILLA_ID_NAME_MAP.keySet()) {
                 ItemStack stack = new ItemStack(this, 1, DrawCalculation.getModelLevel(modelId));
                 items.add(setModelData(stack, modelId));

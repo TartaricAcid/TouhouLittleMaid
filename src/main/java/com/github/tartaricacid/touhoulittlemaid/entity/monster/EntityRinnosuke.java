@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.monster;
 
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -54,6 +56,14 @@ public class EntityRinnosuke extends AbstractEntityTouhouMob {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(2.0D);
+    }
+
+    @Override
+    protected void onDeathUpdate() {
+        super.onDeathUpdate();
+        if (GeneralConfig.MAID_CONFIG.maidCannotChangeModel && this.deathTime == 20 && !this.world.isRemote) {
+            dropItem(MaidItems.GASHAPON_COIN, 1 + rand.nextInt(3));
+        }
     }
 
     @Nullable
