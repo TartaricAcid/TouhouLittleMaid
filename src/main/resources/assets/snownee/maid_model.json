@@ -24,6 +24,11 @@
       "model_id": "snownee:nana_daiba"
     }, {
       "model_id": "snownee:pajinyi"
+    }, {
+      "model_id": "snownee:ptilopsis"
+    }, {
+      "name": "Answer",
+      "model_id": "snownee:answer"
     }
   ]
 }

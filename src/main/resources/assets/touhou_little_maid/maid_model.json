@@ -203,6 +203,9 @@
       "model_id": "touhou_little_maid:houjuu_nue",
       "description": ["{model.touhou_little_maid.houjuu_nue.desc}"]
     }, {
+      "model_id": "touhou_little_maid:miyako_yoshika",
+      "description": ["{model.touhou_little_maid.miyako_yoshika.desc}"]
+    }, {
       "model_id": "touhou_little_maid:kaku_seiga",
       "description": ["{model.touhou_little_maid.kaku_seiga.desc}"]
     }, {
