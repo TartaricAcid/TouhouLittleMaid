@@ -56,6 +56,8 @@ commands.touhou_little_maid.main.power.info=Current Power: %.2f
 commands.touhou_little_maid.main.maid_num.info=Current Maid Num: %d
 commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
+commands.touhou_little_maid.draw_coupon.usage=§cUsage: /draw_coupon <reload>
+commands.touhou_little_maid.draw_coupon.reload=Has reloaded all draw coupon
 commands.touhou_little_maid.draw.info=Current Draw Info: %d Draws
 
 # Tooltips
@@ -339,6 +341,7 @@ model.touhou_little_maid.kaku_seiga.name=Seiga Kaku
 model.touhou_little_maid.mononobe_no_futo.name=Mononobe no Futo
 model.touhou_little_maid.hutatsuiwa_mamizou.name=Mamizou Futatsuiwa
 model.touhou_little_maid.miyako_yoshika.name=Yoshika Miyako
+model.touhou_little_maid.kasodani_kyouko.name=Kyouko Kasodani
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -418,6 +421,7 @@ model.touhou_little_maid.kaku_seiga.desc=§7The Wicked Hermit Who Passes Through
 model.touhou_little_maid.mononobe_no_futo.desc=§7The Shikaisen from Ancient Japan
 model.touhou_little_maid.hutatsuiwa_mamizou.desc=§7The Bake-danuki with Ten Transformations
 model.touhou_little_maid.miyako_yoshika.desc=§7Loyal Undead
+model.touhou_little_maid.kasodani_kyouko.desc=§7Sutra Chanting Yamabiko
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

@@ -338,6 +338,7 @@ model.touhou_little_maid.kaku_seiga.name=霍青娥
 model.touhou_little_maid.mononobe_no_futo.name=物部布都
 model.touhou_little_maid.hutatsuiwa_mamizou.name=二岩猯藏
 model.touhou_little_maid.miyako_yoshika.name=宫古芳香
+model.touhou_little_maid.kasodani_kyouko.name=幽谷响子
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -417,6 +418,7 @@ model.touhou_little_maid.kaku_seiga.desc=§7穿墙的邪仙
 model.touhou_little_maid.mononobe_no_futo.desc=§7古代日本的尸解仙
 model.touhou_little_maid.hutatsuiwa_mamizou.desc=§7狸猫怪 十变化
 model.touhou_little_maid.miyako_yoshika.desc=§7忠诚的尸体
+model.touhou_little_maid.kasodani_kyouko.desc=§7诵经的山彦
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

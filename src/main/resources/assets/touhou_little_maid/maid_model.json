@@ -200,6 +200,9 @@
       "model_id": "touhou_little_maid:hijiri_byakuren",
       "description": ["{model.touhou_little_maid.hijiri_byakuren.desc}"]
     }, {
+      "model_id": "touhou_little_maid:kasodani_kyouko",
+      "description": ["{model.touhou_little_maid.kasodani_kyouko.desc}"]
+    }, {
       "model_id": "touhou_little_maid:houjuu_nue",
       "description": ["{model.touhou_little_maid.houjuu_nue.desc}"]
     }, {

@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNu
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
+import com.github.tartaricacid.touhoulittlemaid.command.ReloadDrawCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadSpellCardCommand;
 import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
@@ -34,7 +35,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.Client
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectReply;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ServerEffectHandler;
-import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -67,6 +67,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
+import static com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation.readDrawCsvFile;
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
@@ -102,7 +103,7 @@ public class CommonProxy {
         // 初始化默认模型列表
         initModelList();
         // 初始化抽卡概率表
-        initMaidModelDraw();
+        readDrawCsvFile(this);
         // 注册实体
         registerModEntity();
         // 注册实体生成
@@ -179,6 +180,7 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new MainCommand());
         event.registerServerCommand(new ReloadSpellCardCommand());
+        event.registerServerCommand(new ReloadDrawCommand());
     }
 
     /**
@@ -211,28 +213,6 @@ public class CommonProxy {
                 pojo.getModelList().forEach(m -> VANILLA_ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));
             } catch (JsonSyntaxException e) {
                 TouhouLittleMaid.LOGGER.warn("Fail to parse model pack in domain {}", TouhouLittleMaid.MOD_ID);
-            }
-        }
-        // 别忘了关闭输入流
-        IOUtils.closeQuietly(input);
-    }
-
-    private void initMaidModelDraw() {
-        DrawCalculation.clearAllData();
-        InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/draw.csv");
-        if (input != null) {
-            try {
-                List<String> lines = IOUtils.readLines(input, StandardCharsets.UTF_8);
-                for (String line : lines) {
-                    String[] data = line.split(",");
-                    if (data.length < 3) {
-                        throw new IOException();
-                    } else {
-                        DrawCalculation.addData(data[0], Integer.valueOf(data[1]), Integer.valueOf(data[2]));
-                    }
-                }
-            } catch (IOException e) {
-                TouhouLittleMaid.LOGGER.warn("Fail to read csv file");
             }
         }
         // 别忘了关闭输入流
