@@ -3,6 +3,7 @@ item_group.touhou_little_maid.main.name=Touhou Little Maid: Main
 item_group.touhou_little_maid.garage_kit.name=Touhou Little Maid: Garage Kit
 item_group.touhou_little_maid.chair.name=Touhou Little Maid: Chair
 item_group.touhou_little_maid.spell_card.name=Touhou Little Maid: Spell Card
+item_group.touhou_little_maid.model_coupon.name=Touhou Little Maid: Maid Model Coupon
 
 # Entity
 entity.touhou_little_maid.maid.name=Touhou Little Maid
@@ -36,12 +37,16 @@ item.touhou_little_maid.spell_card.name=Spell Card
 item.touhou_little_maid.debug_danmaku.name=Debug Danmaku Tool
 item.touhou_little_maid.npc_maid_tool.name=NPC Maid Tool
 item.touhou_little_maid.substitute_jizo.name=Substitute Jizo
+item.touhou_little_maid.maid_model_coupon.name=Maid Model Coupon
+item.touhou_little_maid.gashapon.name=Gashapon
+item.touhou_little_maid.gashapon_coin.name=Gashapon Coin
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
 tile.touhou_little_maid.grid.name=Maid Interaction Panel
 tile.touhou_little_maid.altar.name=Altar
 tile.touhou_little_maid.tombstone.name=Tombstone
+tile.touhou_little_maid.gashapon_machines.name=Gashapon Machines
 
 # Command
 commands.touhou_little_maid.hata.usage=§cUsage: /hata <reload>
@@ -51,6 +56,7 @@ commands.touhou_little_maid.main.power.info=Current Power: %.2f
 commands.touhou_little_maid.main.maid_num.info=Current Maid Num: %d
 commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
+commands.touhou_little_maid.draw.info=Current Draw Info: %d Draws
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
@@ -83,6 +89,9 @@ tooltips.touhou_little_maid.spell_card.version=Version: %s
 tooltips.touhou_little_maid.spell_card.cooldown=Spell Cooldown: %d ticks
 tooltips.touhou_little_maid.debug_danmaku.desc=Only For Debug
 tooltips.touhou_little_maid.substitute_jizo.desc=Right click on the maid to make it invulnerability, creative only
+tooltips.touhou_little_maid.maid_model_coupon.desc=Maid Model: %s
+tooltips.touhou_little_maid.gashapon_machines.desc=Draw a gashapon by right-click on gashapon coin or emerald (default).
+tooltips.touhou_little_maid.bauble.desc=§a[Maid Bauble]
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
@@ -141,6 +150,16 @@ config.touhou_little_maid.misc_config.creative_player_can_ride_broom=Only Creati
 config.touhou_little_maid.misc_config.power_point_hud_x=Power Point HUD Position X
 config.touhou_little_maid.misc_config.power_point_hud_y=Power Point HUD Position Y
 config.touhou_little_maid.misc_config.override_npc_render=Override NPC Render
+
+# Gashapon Config
+config.touhou_little_maid.gashapon_config=Gashapon Config
+config.touhou_little_maid.gashapon_config.purchase_gashapon_item=Purchase Gashapon Item
+config.touhou_little_maid.gashapon_config.purchase_gashapon_price=Purchase Gashapon Price
+config.touhou_little_maid.gashapon_config.gashapon_weights_5=UR Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_4=SSR Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_3=SR Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_2=R Level Gashapon's Weights
+config.touhou_little_maid.gashapon_config.gashapon_weights_1=N Level Gashapon's Weights
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
@@ -319,6 +338,7 @@ model.touhou_little_maid.toyosatomimi_no_miko.name=Toyosatomimi no Miko
 model.touhou_little_maid.kaku_seiga.name=Seiga Kaku
 model.touhou_little_maid.mononobe_no_futo.name=Mononobe no Futo
 model.touhou_little_maid.hutatsuiwa_mamizou.name=Mamizou Futatsuiwa
+model.touhou_little_maid.miyako_yoshika.name=Yoshika Miyako
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -397,6 +417,7 @@ model.touhou_little_maid.toyosatomimi_no_miko.desc=§7Shoutoku Taoist
 model.touhou_little_maid.kaku_seiga.desc=§7The Wicked Hermit Who Passes Through Walls
 model.touhou_little_maid.mononobe_no_futo.desc=§7The Shikaisen from Ancient Japan
 model.touhou_little_maid.hutatsuiwa_mamizou.desc=§7The Bake-danuki with Ten Transformations
+model.touhou_little_maid.miyako_yoshika.desc=§7Loyal Undead
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair

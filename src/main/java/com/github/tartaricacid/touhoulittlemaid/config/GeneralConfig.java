@@ -28,6 +28,10 @@ public class GeneralConfig {
     @Config.Name("MiscConfig")
     public static MiscellaneousConfig MISC_CONFIG = new MiscellaneousConfig();
 
+    @Config.LangKey("config.touhou_little_maid.gashapon_config")
+    @Config.Name("GashaponConfig")
+    public static GashaponConfig GASHAPON_CONFIG = new GashaponConfig();
+
     public static class MaidConfig {
         @Config.Comment("The item that can tamed maid")
         @Config.LangKey("config.touhou_little_maid.maid_config.maid_tamed_item")
@@ -161,6 +165,49 @@ public class GeneralConfig {
         @Config.Name("OverrideNpcRender")
         @Config.RequiresMcRestart
         public boolean overrideNpcRender = true;
+    }
+
+    public static class GashaponConfig {
+        @Config.Comment("The item that can purchase for gashapon")
+        @Config.LangKey("config.touhou_little_maid.gashapon_config.purchase_gashapon_item")
+        @Config.Name("PurchaseGashaponItem")
+        public String purchaseGashaponItem = "minecraft:emerald";
+
+        @Config.Comment("Gashapon's purchase price")
+        @Config.LangKey("config.touhou_little_maid.gashapon_config.purchase_gashapon_price")
+        @Config.Name("PurchaseGashaponPrice")
+        @Config.RangeInt(min = 1)
+        public int purchaseGashaponPrice = 2;
+
+        @Config.Comment("UR Level Gashapon's Weights")
+        @Config.LangKey("config.touhou_little_maid.gashapon_config.gashapon_weights_5")
+        @Config.Name("GashaponWeights5")
+        @Config.RangeInt(min = 0)
+        public int gashaponWeights5 = 5;
+
+        @Config.Comment("SSR Level Gashapon's Weights")
+        @Config.LangKey("config.touhou_little_maid.gashapon_config.gashapon_weights_4")
+        @Config.Name("GashaponWeights4")
+        @Config.RangeInt(min = 0)
+        public int gashaponWeights4 = 10;
+
+        @Config.Comment("SR Level Gashapon's Weights")
+        @Config.LangKey("config.touhou_little_maid.gashapon_config.gashapon_weights_3")
+        @Config.Name("GashaponWeights3")
+        @Config.RangeInt(min = 0)
+        public int gashaponWeights3 = 20;
+
+        @Config.Comment("R Level Gashapon's Weights")
+        @Config.LangKey("config.touhou_little_maid.gashapon_config.gashapon_weights_2")
+        @Config.Name("GashaponWeights2")
+        @Config.RangeInt(min = 0)
+        public int gashaponWeights2 = 30;
+
+        @Config.Comment("N Level Gashapon's Weights")
+        @Config.LangKey("config.touhou_little_maid.gashapon_config.gashapon_weights_1")
+        @Config.Name("GashaponWeights1")
+        @Config.RangeInt(min = 0)
+        public int gashaponWeights1 = 50;
     }
 
     /**

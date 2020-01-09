@@ -3,6 +3,7 @@ item_group.touhou_little_maid.main.name=车万女仆丨主体
 item_group.touhou_little_maid.garage_kit.name=车万女仆丨手办
 item_group.touhou_little_maid.chair.name=车万女仆丨坐垫
 item_group.touhou_little_maid.spell_card.name=车万女仆丨符卡
+item_group.touhou_little_maid.model_coupon.name=车万女仆丨女仆模型券
 
 # Entity
 entity.touhou_little_maid.maid.name=小女仆
@@ -36,12 +37,16 @@ item.touhou_little_maid.spell_card.name=符卡
 item.touhou_little_maid.debug_danmaku.name=调试弹幕工具
 item.touhou_little_maid.npc_maid_tool.name=NPC 女仆工具
 item.touhou_little_maid.substitute_jizo.name=替身地藏
+item.touhou_little_maid.maid_model_coupon.name=女仆模型券
+item.touhou_little_maid.gashapon.name=扭蛋
+item.touhou_little_maid.gashapon_coin.name=扭蛋币
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
 tile.touhou_little_maid.grid.name=女仆交互面板
 tile.touhou_little_maid.altar.name=祭坛
 tile.touhou_little_maid.tombstone.name=墓碑
+tile.touhou_little_maid.gashapon_machines.name=扭蛋机
 
 # Command
 commands.touhou_little_maid.hata.usage=§c用法：/hata <reload>
@@ -51,6 +56,7 @@ commands.touhou_little_maid.main.power.info=当前 Power 数：%.2f
 commands.touhou_little_maid.main.maid_num.info=当前女仆数：%d
 commands.touhou_little_maid.spell_card.usage=§c用法：/spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=已经重载所有的符卡
+commands.touhou_little_maid.draw.info=当前抽卡信息：%d 次抽卡
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -83,6 +89,9 @@ tooltips.touhou_little_maid.spell_card.version=版本：%s
 tooltips.touhou_little_maid.spell_card.cooldown=符卡冷却时间：%d ticks
 tooltips.touhou_little_maid.debug_danmaku.desc=仅用于调试
 tooltips.touhou_little_maid.substitute_jizo.desc=右击女仆使其无敌，仅限创造模式
+tooltips.touhou_little_maid.maid_model_coupon.desc=女仆模型：%s
+tooltips.touhou_little_maid.gashapon_machines.desc=通过扭蛋币或绿宝石（默认）右击抽扭蛋
+tooltips.touhou_little_maid.bauble.desc=§a[女仆饰品]
 
 # Message
 message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
@@ -141,6 +150,16 @@ config.touhou_little_maid.misc_config.creative_player_can_ride_broom=只有创�
 config.touhou_little_maid.misc_config.power_point_hud_x=P 点 X 位置
 config.touhou_little_maid.misc_config.power_point_hud_y=P 点 Y 位置
 config.touhou_little_maid.misc_config.override_npc_render=覆盖 NPC 渲染
+
+# Gashapon Config
+config.touhou_little_maid.gashapon_config=扭蛋配置
+config.touhou_little_maid.gashapon_config.purchase_gashapon_item=扭蛋购入的代币
+config.touhou_little_maid.gashapon_config.purchase_gashapon_price=扭蛋购入的加个
+config.touhou_little_maid.gashapon_config.gashapon_weights_5=UR 等级扭蛋权重
+config.touhou_little_maid.gashapon_config.gashapon_weights_4=SSR 等级扭蛋权重
+config.touhou_little_maid.gashapon_config.gashapon_weights_3=SR 等级扭蛋权重
+config.touhou_little_maid.gashapon_config.gashapon_weights_2=R 等级扭蛋权重
+config.touhou_little_maid.gashapon_config.gashapon_weights_1=N 等级扭蛋权重
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹
@@ -318,6 +337,7 @@ model.touhou_little_maid.toyosatomimi_no_miko.name=丰聪耳神子
 model.touhou_little_maid.kaku_seiga.name=霍青娥
 model.touhou_little_maid.mononobe_no_futo.name=物部布都
 model.touhou_little_maid.hutatsuiwa_mamizou.name=二岩猯藏
+model.touhou_little_maid.miyako_yoshika.name=宫古芳香
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -396,6 +416,7 @@ model.touhou_little_maid.toyosatomimi_no_miko.desc=§7圣德道士
 model.touhou_little_maid.kaku_seiga.desc=§7穿墙的邪仙
 model.touhou_little_maid.mononobe_no_futo.desc=§7古代日本的尸解仙
 model.touhou_little_maid.hutatsuiwa_mamizou.desc=§7狸猫怪 十变化
+model.touhou_little_maid.miyako_yoshika.desc=§7忠诚的尸体
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

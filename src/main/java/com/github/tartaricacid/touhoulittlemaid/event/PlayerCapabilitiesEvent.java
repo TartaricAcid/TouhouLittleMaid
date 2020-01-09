@@ -1,10 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.*;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncOwnerMaidNumMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncPowerMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -30,6 +27,7 @@ import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MISC
 public class PlayerCapabilitiesEvent {
     private static final ResourceLocation POWER_CAP = new ResourceLocation(TouhouLittleMaid.MOD_ID, "power");
     private static final ResourceLocation OWNER_MAID_NUM_CAP = new ResourceLocation(TouhouLittleMaid.MOD_ID, "owner_maid_num");
+    private static final ResourceLocation DRAW_CAP = new ResourceLocation(TouhouLittleMaid.MOD_ID, "draw");
 
     /**
      * 附加 Capability 属性

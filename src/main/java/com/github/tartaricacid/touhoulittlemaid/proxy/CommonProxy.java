@@ -34,6 +34,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.Client
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectReply;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ServerEffectHandler;
+import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -100,6 +101,8 @@ public class CommonProxy {
         initTradeList();
         // 初始化默认模型列表
         initModelList();
+        // 初始化抽卡概率表
+        initMaidModelDraw();
         // 注册实体
         registerModEntity();
         // 注册实体生成
@@ -208,6 +211,28 @@ public class CommonProxy {
                 pojo.getModelList().forEach(m -> VANILLA_ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));
             } catch (JsonSyntaxException e) {
                 TouhouLittleMaid.LOGGER.warn("Fail to parse model pack in domain {}", TouhouLittleMaid.MOD_ID);
+            }
+        }
+        // 别忘了关闭输入流
+        IOUtils.closeQuietly(input);
+    }
+
+    private void initMaidModelDraw() {
+        DrawCalculation.clearAllData();
+        InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/draw.csv");
+        if (input != null) {
+            try {
+                List<String> lines = IOUtils.readLines(input, StandardCharsets.UTF_8);
+                for (String line : lines) {
+                    String[] data = line.split(",");
+                    if (data.length < 3) {
+                        throw new IOException();
+                    } else {
+                        DrawCalculation.addData(data[0], Integer.valueOf(data[1]), Integer.valueOf(data[2]));
+                    }
+                }
+            } catch (IOException e) {
+                TouhouLittleMaid.LOGGER.warn("Fail to read csv file");
             }
         }
         // 别忘了关闭输入流

@@ -1,9 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.*;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -63,6 +60,7 @@ public class MainCommand extends CommandBase {
             case 1:
                 command.add("power");
                 command.add("maid_num");
+                command.add("draw");
                 break;
             case 2:
                 command.add("get");

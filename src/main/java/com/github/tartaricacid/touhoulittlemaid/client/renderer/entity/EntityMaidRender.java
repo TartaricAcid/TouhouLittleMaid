@@ -41,6 +41,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         this.addLayer(DEBUG_FLOOR);
         this.addLayer(DEBUG_BROOM);
         this.addLayer(HATA_SASIMONO);
+        this.addLayer(new LayerMaidCustomHead(this));
     }
 
     @Override

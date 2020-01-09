@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "touhou_little_maid:gashapon_coin",
+    "count": 3
+  },
+  "ingredients": [
+    {
+      "item": "touhou_little_maid:maid_model_coupon",
+      "data": 4
+    },
+    {
+      "item": "touhou_little_maid:maid_model_coupon",
+      "data": 4
+    }
+  ]
+}
