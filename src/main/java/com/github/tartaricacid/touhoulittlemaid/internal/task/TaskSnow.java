@@ -16,8 +16,8 @@ import net.minecraft.util.SoundEvent;
  * @author TartaricAcid
  * @date 2019/11/10 14:00
  **/
-public class TaskGrass implements IMaidTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "grass");
+public class TaskSnow implements IMaidTask {
+    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "snow");
 
     @Override
     public ResourceLocation getUid() {
@@ -26,7 +26,7 @@ public class TaskGrass implements IMaidTask {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(Blocks.RED_FLOWER);
+        return new ItemStack(Blocks.SNOW_LAYER);
     }
 
     @Override

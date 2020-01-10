@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api.task;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author Snownee
@@ -14,4 +15,11 @@ public interface TaskHandler {
      * @return boolean
      */
     boolean canExecute(AbstractEntityMaid maid);
+
+    /**
+     * 当前 handler 名称
+     *
+     * @return 名称
+     */
+    ResourceLocation getName();
 }

@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
@@ -39,10 +40,10 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     /**
      * 当前的农场模式
      */
-    private FarmHandler.Mode mode;
+    private ResourceLocation mode;
     private TASK currentTask;
 
-    public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn, FarmHandler.Mode mode) {
+    public EntityMaidFarm(AbstractEntityMaid entityMaid, double speedIn, ResourceLocation mode) {
         super(entityMaid, speedIn, 16);
         this.maid = entityMaid;
         this.mode = mode;
@@ -65,7 +66,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
         this.currentTask = TASK.NONE;
 
         // 通过 LittleMaidAPI 获取开启了 canExecute 且模式正确的 FarmHandlers
-        handlers = LittleMaidAPI.getFarmHandlers().stream().filter(h -> h.canExecute(maid) && h.getMode() == mode).collect(Collectors.toList());
+        handlers = LittleMaidAPI.getFarmHandlers().stream().filter(h -> h.canExecute(maid) && h.getName().equals(mode)).collect(Collectors.toList());
         if (handlers.isEmpty()) {
             return false;
         }

@@ -58,7 +58,6 @@ commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
 commands.touhou_little_maid.draw_coupon.usage=§cUsage: /draw_coupon <reload>
 commands.touhou_little_maid.draw_coupon.reload=Has reloaded all draw coupon
-commands.touhou_little_maid.draw.info=Current Draw Info: %d Draws
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
@@ -194,6 +193,7 @@ task.touhou_little_maid.sugar_cane=Sugarcane
 task.touhou_little_maid.melon=Melon
 task.touhou_little_maid.cocoa=Cocoa
 task.touhou_little_maid.grass=Grass
+task.touhou_little_maid.snow=Snow
 task.touhou_little_maid.feed=Feed
 task.touhou_little_maid.shears=Shears
 task.touhou_little_maid.milk=Milk

@@ -56,7 +56,8 @@ commands.touhou_little_maid.main.power.info=当前 Power 数：%.2f
 commands.touhou_little_maid.main.maid_num.info=当前女仆数：%d
 commands.touhou_little_maid.spell_card.usage=§c用法：/spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=已经重载所有的符卡
-commands.touhou_little_maid.draw.info=当前抽卡信息：%d 次抽卡
+commands.touhou_little_maid.draw_coupon.usage=§c用法：/draw_coupon <reload>
+commands.touhou_little_maid.draw_coupon.reload=已经重载所有的抽卡数据
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -192,6 +193,7 @@ task.touhou_little_maid.sugar_cane=甘蔗
 task.touhou_little_maid.melon=瓜类
 task.touhou_little_maid.cocoa=可可
 task.touhou_little_maid.grass=花草
+task.touhou_little_maid.snow=清雪
 task.touhou_little_maid.feed=喂食
 task.touhou_little_maid.shears=剪刀
 task.touhou_little_maid.milk=牛奶

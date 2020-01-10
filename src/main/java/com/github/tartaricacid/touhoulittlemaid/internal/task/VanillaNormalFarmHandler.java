@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.internal.task;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.EmptyBlockReader;
@@ -12,6 +13,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -24,6 +26,13 @@ import net.minecraftforge.common.IPlantable;
  * @date 2019/7/25 21:41
  */
 public class VanillaNormalFarmHandler implements FarmHandler {
+    private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "farm");
+
+    @Override
+    public ResourceLocation getName() {
+        return NAME;
+    }
+
     @Override
     public boolean isSeed(ItemStack stack) {
         Item item = stack.getItem();

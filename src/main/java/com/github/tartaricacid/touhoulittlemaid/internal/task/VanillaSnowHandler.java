@@ -3,10 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.internal.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockTallGrass;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -17,8 +14,8 @@ import net.minecraft.world.World;
  * @author TartaricAcid
  * @date 2019/11/10 13:54
  **/
-public class VanillaGrassHandler implements FarmHandler {
-    private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "grass");
+public class VanillaSnowHandler implements FarmHandler {
+    private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "snow");
 
     @Override
     public ResourceLocation getName() {
@@ -27,7 +24,7 @@ public class VanillaGrassHandler implements FarmHandler {
 
     @Override
     public double getMinDistanceSq() {
-        return 1.0;
+        return 2.5;
     }
 
     @Override
@@ -37,8 +34,7 @@ public class VanillaGrassHandler implements FarmHandler {
 
     @Override
     public boolean canHarvest(AbstractEntityMaid maid, World world, BlockPos pos, IBlockState state) {
-        Block block = state.getBlock();
-        return block instanceof BlockTallGrass || block instanceof BlockFlower || block instanceof BlockDoublePlant;
+        return state.getBlock() instanceof BlockSnow;
     }
 
     @Override

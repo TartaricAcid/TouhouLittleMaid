@@ -37,6 +37,6 @@ public class TaskSugarCane implements IMaidTask {
 
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid) {
-        return new EntityMaidFarm(maid, 0.6f, FarmHandler.Mode.SUGAR_CANE);
+        return new EntityMaidFarm(maid, 0.6f, getUid());
     }
 }
