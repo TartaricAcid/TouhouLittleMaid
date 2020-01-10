@@ -1,0 +1,13 @@
+{
+  "sortnum": 10,
+  "name": "NPC 女仆工具",
+  "icon": "touhou_little_maid:npc_maid_tool",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:npc_maid_tool",
+      "text": "NPC 女仆工具是与自定义 NPC 模组兼容的工具。$(br2)当将 NPC 切换为本模组女仆模型时，你就可以使用此工具右击女仆切换自定义女仆模型。"
+    }
+  ]
+}
