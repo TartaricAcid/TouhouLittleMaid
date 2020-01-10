@@ -14,7 +14,7 @@
     },
     {
       "type": "text",
-      "text": "$(li)The experience picked up by the maid can be converted into an Bottle o' Enchanting if the player right-click the maid while holding a bottle."
+      "text": "$(li)The experience picked up by the maid can be converted into an Bottle o' Enchanting if the player right-click the maid while holding a bottle.$(li)The maid can equip the skull and render model of it."
     }
   ]
 }

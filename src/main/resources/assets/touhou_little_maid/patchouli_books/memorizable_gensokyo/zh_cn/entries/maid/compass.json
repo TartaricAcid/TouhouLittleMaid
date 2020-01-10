@@ -1,0 +1,13 @@
+{
+  "sortnum": 7,
+  "name": "河童的罗盘",
+  "icon": "touhou_little_maid:kappa_compass",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:kappa_compass",
+      "text": "罗盘是配合女仆的 Home 模式使用的，右击方块可以记录坐标，而后右击女仆可以为其设置坐标，Shift 右击女仆清除坐标。$(br2)设置了坐标的女仆在开启 Home 模式后，仅会在其坐标周围活动。"
+    }
+  ]
+}

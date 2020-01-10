@@ -1,0 +1,13 @@
+{
+  "sortnum": 10,
+  "name": "NPC Maid Tool",
+  "icon": "touhou_little_maid:npc_maid_tool",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:npc_maid_tool",
+      "text": "Npc maid tool is a tool compatible with the custom npc mod. $(br2)When the npc's model is set as touhou little maid, you can use this tool right-click the npc to set a custom maid model."
+    }
+  ]
+}
