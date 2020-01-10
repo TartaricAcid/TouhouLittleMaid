@@ -215,6 +215,9 @@
       "model_id": "touhou_little_maid:mononobe_no_futo",
       "description": ["{model.touhou_little_maid.mononobe_no_futo.desc}"]
     }, {
+      "model_id": "touhou_little_maid:soga_no_toziko",
+      "description": ["{model.touhou_little_maid.soga_no_toziko.desc}"]
+    }, {
       "model_id": "touhou_little_maid:toyosatomimi_no_miko",
       "description": ["{model.touhou_little_maid.toyosatomimi_no_miko.desc}"]
     }, {
@@ -229,6 +232,15 @@
     }, {
       "model_id": "touhou_little_maid:sekibanki",
       "description": ["{model.touhou_little_maid.sekibanki.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:imaizumi_kagerou",
+      "description": ["{model.touhou_little_maid.imaizumi_kagerou.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:kijin_seija",
+      "description": ["{model.touhou_little_maid.kijin_seija.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:sukuna_shinmyoumaru",
+      "description": ["{model.touhou_little_maid.sukuna_shinmyoumaru.desc}"]
     }, {
       "model_id": "touhou_little_maid:kisin_sagume",
       "description": ["{model.touhou_little_maid.kisin_sagume.desc}"]

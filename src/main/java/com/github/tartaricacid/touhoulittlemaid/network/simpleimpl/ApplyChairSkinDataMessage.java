@@ -19,15 +19,17 @@ public class ApplyChairSkinDataMessage implements IMessage {
     private ResourceLocation modelId;
     private float mountedHeight;
     private boolean tameableCanRide;
+    private boolean noGravity;
 
     public ApplyChairSkinDataMessage() {
     }
 
-    public ApplyChairSkinDataMessage(UUID entityUuid, ResourceLocation modelId, float mountedHeight, boolean tameableCanRide) {
+    public ApplyChairSkinDataMessage(UUID entityUuid, ResourceLocation modelId, float mountedHeight, boolean tameableCanRide, boolean noGravity) {
         this.entityUuid = entityUuid;
         this.modelId = modelId;
         this.mountedHeight = mountedHeight;
         this.tameableCanRide = tameableCanRide;
+        this.noGravity = noGravity;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class ApplyChairSkinDataMessage implements IMessage {
         modelId = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
         mountedHeight = buf.readFloat();
         tameableCanRide = buf.readBoolean();
+        noGravity = buf.readBoolean();
     }
 
     @Override
@@ -45,6 +48,7 @@ public class ApplyChairSkinDataMessage implements IMessage {
         ByteBufUtils.writeUTF8String(buf, modelId.toString());
         buf.writeFloat(mountedHeight);
         buf.writeBoolean(tameableCanRide);
+        buf.writeBoolean(noGravity);
     }
 
     public UUID getEntityUuid() {
@@ -63,6 +67,10 @@ public class ApplyChairSkinDataMessage implements IMessage {
         return tameableCanRide;
     }
 
+    public boolean isNoGravity() {
+        return noGravity;
+    }
+
     public static class Handler implements IMessageHandler<ApplyChairSkinDataMessage, IMessage> {
         @Override
         public IMessage onMessage(ApplyChairSkinDataMessage message, MessageContext ctx) {
@@ -74,6 +82,7 @@ public class ApplyChairSkinDataMessage implements IMessage {
                         chair.setModelId(message.getModelId().toString());
                         chair.setMountedHeight(message.getMountedHeight());
                         chair.setTameableCanRide(message.isTameableCanRide());
+                        chair.setNoGravity(message.isNoGravity());
                         if (!message.isTameableCanRide() && chair.getControllingPassenger() instanceof EntityMaid) {
                             chair.getControllingPassenger().dismountRidingEntity();
                         }

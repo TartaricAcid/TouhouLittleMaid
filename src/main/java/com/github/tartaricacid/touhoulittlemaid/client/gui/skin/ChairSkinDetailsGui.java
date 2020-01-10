@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
     private GuiButtonToggle characterButton;
     private ResourceLocation modelId;
+    private GuiButton setGravityButton;
 
     public ChairSkinDetailsGui(EntityChair sourceEntity, ResourceLocation modelId) {
         super(sourceEntity, new EntityChair(sourceEntity.world), ClientProxy.CHAIR_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
@@ -26,6 +27,7 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
         guiEntity.setModelId(modelId.toString());
         guiEntity.setMountedHeight(modelItem.getMountedYOffset());
         guiEntity.setTameableCanRide(modelItem.isTameableCanRide());
+        guiEntity.setNoGravity(modelItem.isNoGravity());
         guiEntity.isDebugFloorOpen = true;
     }
 
@@ -38,6 +40,9 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
         characterButton = new GuiButtonToggle(BUTTON.SHOW_CHARACTER.ordinal(), 2, 54, 128, 12, guiEntity.isDebugCharacterOpen);
         characterButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         addButton(characterButton);
+
+        setGravityButton = new GuiButton(BUTTON.SET_GRAVITY.ordinal(), 2, 68, 128, 20, getGravityButtonText(guiEntity.hasNoGravity()));
+        addButton(setGravityButton);
     }
 
     @Override
@@ -45,7 +50,7 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
         switch (BUTTON.getButtonFromOrdinal(button.id)) {
             case APPLY_DATA:
                 CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(sourceEntity.getUniqueID(),
-                        modelId, guiEntity.getMountedHeight(), guiEntity.isTameableCanRide()));
+                        modelId, guiEntity.getMountedHeight(), guiEntity.isTameableCanRide(), guiEntity.hasNoGravity()));
                 return;
             case MIN_HEIGHT:
                 // Shift 10 倍率减少
@@ -64,6 +69,9 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
                 return;
             case SHOW_CHARACTER:
                 applyShowCharacterLogic();
+                return;
+            case SET_GRAVITY:
+                applySetGravityLogic();
                 return;
             default:
         }
@@ -106,12 +114,22 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
         }
     }
 
+    private void applySetGravityLogic() {
+        guiEntity.setNoGravity(!guiEntity.hasNoGravity());
+        setGravityButton.displayString = getGravityButtonText(guiEntity.hasNoGravity());
+    }
+
+    private String getGravityButtonText(boolean isNoGravity) {
+        return I18n.format(String.format("gui.touhou_little_maid.skin_details.set_gravity.button.%s", isNoGravity));
+    }
+
     enum BUTTON {
         // 增加，减少高度
         MIN_HEIGHT,
         ADD_HEIGHT,
         SHOW_CHARACTER,
-        APPLY_DATA;
+        APPLY_DATA,
+        SET_GRAVITY;
 
         /**
          * 通过序号获取对应的 BUTTON 枚举类型

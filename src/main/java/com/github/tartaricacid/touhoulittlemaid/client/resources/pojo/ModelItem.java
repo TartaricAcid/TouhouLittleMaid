@@ -28,9 +28,13 @@ public class ModelItem {
     @SerializedName("render_item_scale")
     private float renderItemScale = 1.0f;
 
+    @SerializedName("no_gravity")
+    private boolean noGravity = false;
+
     /**
      * 用来为以后可能做改动的而设置的参数
      */
+    @Deprecated
     private int format = -1;
 
     public ResourceLocation getTexture() {
@@ -68,6 +72,11 @@ public class ModelItem {
         return renderItemScale;
     }
 
+    public boolean isNoGravity() {
+        return noGravity;
+    }
+
+    @Deprecated
     public int getFormat() {
         return format;
     }

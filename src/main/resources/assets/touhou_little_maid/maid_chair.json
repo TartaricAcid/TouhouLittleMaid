@@ -119,6 +119,10 @@
     }, {
       "model_id": "touhou_little_maid:rinnosuke_children_toys",
       "mounted_height": 13
+    }, {
+      "model_id": "touhou_little_maid:bowl",
+      "texture": "touhou_little_maid:textures/entity/sukuna_shinmyoumaru.png",
+      "mounted_height": 2
     }
   ]
 }
