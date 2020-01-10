@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomMode
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadDrawCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadSpellCardCommand;
+import com.github.tartaricacid.touhoulittlemaid.compat.crafttweaker.AltarZen;
 import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
@@ -41,6 +42,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import crafttweaker.CraftTweakerAPI;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
@@ -172,6 +174,11 @@ public class CommonProxy {
 
         if (Loader.isModLoaded("neat")) {
             NeatCompat.init();
+        }
+
+        if (Loader.isModLoaded("crafttweaker")) {
+            AltarZen.DELAYED_ACTIONS.forEach(CraftTweakerAPI::apply);
+            AltarZen.DELAYED_ACTIONS.clear();
         }
     }
 
