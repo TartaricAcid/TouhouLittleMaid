@@ -86,6 +86,13 @@ public class CustomModelResources {
         return true;
     }
 
+    public boolean getModelNoGravity(String modelId) {
+        if (idInfoMap.containsKey(modelId)) {
+            return idInfoMap.get(modelId).isNoGravity();
+        }
+        return false;
+    }
+
     public Optional<ModelItem> getInfo(String modelId) {
         return Optional.ofNullable(idInfoMap.get(modelId));
     }

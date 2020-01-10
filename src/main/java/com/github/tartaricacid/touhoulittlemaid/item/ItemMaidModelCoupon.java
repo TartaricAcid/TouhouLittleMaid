@@ -22,6 +22,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,7 +46,7 @@ public class ItemMaidModelCoupon extends Item {
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab) && GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
-            for (String modelId : CommonProxy.VANILLA_ID_NAME_MAP.keySet()) {
+            for (String modelId : DrawCalculation.getModelIdSet()) {
                 ItemStack stack = new ItemStack(this, 1, DrawCalculation.getModelLevel(modelId));
                 items.add(setModelData(stack, modelId));
             }
@@ -85,7 +86,7 @@ public class ItemMaidModelCoupon extends Item {
         } else {
             tag = new NBTTagCompound();
         }
-        if (tag != null) {
+        if (tag != null && StringUtils.isNotBlank(modelId)) {
             tag.setString(MODEL_DATA_TAG, modelId);
             coupon.setTagCompound(tag);
         }

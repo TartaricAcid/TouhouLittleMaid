@@ -163,8 +163,12 @@ public class AltarRecipesManager {
         ALTAR_RECIPES_MAP.put(id, altarRecipe);
     }
 
-    private void addItemCraftRecipe(ResourceLocation id, float powerCost, ItemStack output, ProcessingInput... inputs) {
+    public void addItemCraftRecipe(ResourceLocation id, float powerCost, ItemStack output, ProcessingInput... inputs) {
         addRecipe(id, new AltarRecipe(AltarRecipe.ENTITY_ITEM_ID, powerCost, output, inputs));
+    }
+
+    public void removeRecipe(ResourceLocation id) {
+        ALTAR_RECIPES_MAP.remove(id);
     }
 
     public Map<ResourceLocation, AltarRecipe> getAltarRecipesMap() {

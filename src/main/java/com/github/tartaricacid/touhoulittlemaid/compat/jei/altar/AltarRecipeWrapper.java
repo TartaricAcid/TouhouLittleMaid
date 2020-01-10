@@ -27,8 +27,9 @@ public class AltarRecipeWrapper implements IRecipeWrapper {
     private final List<ItemStack> outputs;
     private final float powerCost;
     private final String resultLanguageKey;
+    private final String recipeId;
 
-    AltarRecipeWrapper(List<ProcessingInput> inputs, List<ItemStack> outputs, float powerCost, String resultLanguageKey) {
+    AltarRecipeWrapper(List<ProcessingInput> inputs, List<ItemStack> outputs, float powerCost, String resultLanguageKey, String recipeId) {
         this.inputs = new ArrayList<>();
         this.outputs = outputs;
         for (ProcessingInput input : inputs) {
@@ -36,6 +37,7 @@ public class AltarRecipeWrapper implements IRecipeWrapper {
         }
         this.powerCost = powerCost;
         this.resultLanguageKey = resultLanguageKey;
+        this.recipeId = recipeId;
     }
 
     @Override
@@ -57,5 +59,6 @@ public class AltarRecipeWrapper implements IRecipeWrapper {
         String result = I18n.format("jei.touhou_little_maid.altar_craft.result", I18n.format(resultLanguageKey));
         fontRenderer.drawString(String.format("×%.2f", powerCost), 76, 49, Color.gray.getRGB());
         fontRenderer.drawString(result, (recipeWidth - fontRenderer.getStringWidth(result)) / 2, 85, Color.gray.getRGB());
+        fontRenderer.drawString(recipeId, (recipeWidth - fontRenderer.getStringWidth(recipeId)) / 2, 96, Color.gray.getRGB());
     }
 }

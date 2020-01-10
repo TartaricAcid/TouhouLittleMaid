@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.internal.task;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FeedHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.task.Trend;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +10,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * 用于女仆在农场模式下的判定收割、种植行为的接口
@@ -17,6 +19,13 @@ import net.minecraft.potion.PotionEffect;
  * @date 2019/7/25 21:41
  */
 public class VanillaFeedHandler implements FeedHandler {
+    private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "vanilla_feed");
+
+    @Override
+    public ResourceLocation getName() {
+        return NAME;
+    }
+
     @Override
     public boolean isFood(ItemStack stack, EntityPlayer owner) {
         // 牛奶桶也判定为食物，优先进行玩家负面效果剔除

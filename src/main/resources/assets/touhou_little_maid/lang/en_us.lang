@@ -56,7 +56,8 @@ commands.touhou_little_maid.main.power.info=Current Power: %.2f
 commands.touhou_little_maid.main.maid_num.info=Current Maid Num: %d
 commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
-commands.touhou_little_maid.draw.info=Current Draw Info: %d Draws
+commands.touhou_little_maid.draw_coupon.usage=§cUsage: /draw_coupon <reload>
+commands.touhou_little_maid.draw_coupon.reload=Has reloaded all draw coupon
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
@@ -192,6 +193,7 @@ task.touhou_little_maid.sugar_cane=Sugarcane
 task.touhou_little_maid.melon=Melon
 task.touhou_little_maid.cocoa=Cocoa
 task.touhou_little_maid.grass=Grass
+task.touhou_little_maid.snow=Snow
 task.touhou_little_maid.feed=Feed
 task.touhou_little_maid.shears=Shears
 task.touhou_little_maid.milk=Milk
@@ -237,6 +239,8 @@ gui.touhou_little_maid.skin_details.apply_data=Apply Data
 gui.touhou_little_maid.skin_details.mounted_height=Height
 gui.touhou_little_maid.skin_details.show_character=Show Ref Character
 gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift Click To Make Ten Times Modification
+gui.touhou_little_maid.skin_details.set_gravity.button.false=Gravity
+gui.touhou_little_maid.skin_details.set_gravity.button.true=Floating
 gui.touhou_little_maid.hata_select.apply=Apply Texture
 gui.touhou_little_maid.hata_select.close=Close
 gui.touhou_little_maid.hata_select.display.true=Show Sasimono
@@ -339,6 +343,11 @@ model.touhou_little_maid.kaku_seiga.name=Seiga Kaku
 model.touhou_little_maid.mononobe_no_futo.name=Mononobe no Futo
 model.touhou_little_maid.hutatsuiwa_mamizou.name=Mamizou Futatsuiwa
 model.touhou_little_maid.miyako_yoshika.name=Yoshika Miyako
+model.touhou_little_maid.kasodani_kyouko.name=Kyouko Kasodani
+model.touhou_little_maid.soga_no_toziko.name=Soga no Tojiko
+model.touhou_little_maid.imaizumi_kagerou.name=Kagerou Imaizumi
+model.touhou_little_maid.kijin_seija.name=Seija Kijin
+model.touhou_little_maid.sukuna_shinmyoumaru.name=Shinmyoumaru Sukuna
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -418,6 +427,11 @@ model.touhou_little_maid.kaku_seiga.desc=§7The Wicked Hermit Who Passes Through
 model.touhou_little_maid.mononobe_no_futo.desc=§7The Shikaisen from Ancient Japan
 model.touhou_little_maid.hutatsuiwa_mamizou.desc=§7The Bake-danuki with Ten Transformations
 model.touhou_little_maid.miyako_yoshika.desc=§7Loyal Undead
+model.touhou_little_maid.kasodani_kyouko.desc=§7Sutra Chanting Yamabiko
+model.touhou_little_maid.soga_no_toziko.desc=§7Ghost of the Descendant of the Gods
+model.touhou_little_maid.imaizumi_kagerou.desc=§7The Bamboo Forest's Loup-Garou
+model.touhou_little_maid.kijin_seija.desc=§7Counterattacking Amanojaku
+model.touhou_little_maid.sukuna_shinmyoumaru.desc=§7Descendent of the Inchlings
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -444,6 +458,7 @@ model.touhou_little_maid.ema.name=Ema
 model.touhou_little_maid.anti_collision_bucket.name=Anti-collision Bucket
 model.touhou_little_maid.park_bench.name=Park Bench
 model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
+model.touhou_little_maid.bowl.name=Bowl
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"

@@ -16,6 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 
@@ -48,9 +49,12 @@ public class ItemGashapon extends Item {
             int times = meta > 2 ? meta - 1 : 1;
             for (int i = 0; i < times; i++) {
                 ItemStack itemStack = new ItemStack(MaidItems.MAID_MODEL_COUPON, 1, meta);
-                ItemMaidModelCoupon.setModelData(itemStack, DrawCalculation.getCouponModelId(meta));
-                EntityItem itemEntity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, itemStack);
-                worldIn.spawnEntity(itemEntity);
+                String model = DrawCalculation.getCouponModelId(meta);
+                if (StringUtils.isNotBlank(model)) {
+                    ItemMaidModelCoupon.setModelData(itemStack, model);
+                    EntityItem itemEntity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, itemStack);
+                    worldIn.spawnEntity(itemEntity);
+                }
             }
         }
         playerIn.getHeldItem(handIn).shrink(1);

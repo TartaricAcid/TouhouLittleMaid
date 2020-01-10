@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.internal.task;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import net.minecraft.block.Block;
@@ -7,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -15,9 +17,11 @@ import net.minecraft.world.World;
  * @date 2019/11/9 14:59
  **/
 public class VanillaMelonHandler implements FarmHandler {
+    private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "melon");
+
     @Override
-    public Mode getMode() {
-        return Mode.MELON;
+    public ResourceLocation getName() {
+        return NAME;
     }
 
     @Override

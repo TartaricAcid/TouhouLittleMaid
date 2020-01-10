@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.internal.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.EntityMaidFarm;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -38,6 +37,6 @@ public class TaskCocoa implements IMaidTask {
 
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid) {
-        return new EntityMaidFarm(maid, 0.6f, FarmHandler.Mode.COCOA);
+        return new EntityMaidFarm(maid, 0.6f, getUid());
     }
 }

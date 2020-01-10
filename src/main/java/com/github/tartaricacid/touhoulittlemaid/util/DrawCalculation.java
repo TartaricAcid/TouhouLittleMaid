@@ -1,9 +1,18 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.google.common.collect.Maps;
 import net.minecraft.util.math.MathHelper;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -13,6 +22,7 @@ import java.util.*;
  * 抽奖的算法类
  **/
 public final class DrawCalculation {
+    private static final Path CONFIG_DRAW_CSV_FILE = Paths.get("config", TouhouLittleMaid.MOD_ID, "draw.csv");
     private static final HashMap<String, Integer> MODEL_TO_LEVEL = Maps.newHashMap();
     private static final HashMap<String, Integer> MODEL_TO_WEIGHT = Maps.newHashMap();
     private static final HashMap<Integer, List<String>> LEVEL_TO_MODEL = Maps.newHashMap();
@@ -52,6 +62,9 @@ public final class DrawCalculation {
      */
     public static String getCouponModelId(int level) {
         List<String> modelIdList = LEVEL_TO_MODEL.get(level);
+        if (modelIdList == null) {
+            return "";
+        }
         int totalWeight = 0;
         for (String modelId : modelIdList) {
             totalWeight += MODEL_TO_WEIGHT.get(modelId);
@@ -66,13 +79,13 @@ public final class DrawCalculation {
         return "";
     }
 
-    public static void clearAllData() {
+    private static void clearAllData() {
         MODEL_TO_LEVEL.clear();
         MODEL_TO_WEIGHT.clear();
         LEVEL_TO_MODEL.clear();
     }
 
-    public static void addData(String modelId, int weight, int level) {
+    private static void addData(String modelId, int weight, int level) {
         MODEL_TO_LEVEL.put(modelId, level);
         MODEL_TO_WEIGHT.put(modelId, weight);
         if (LEVEL_TO_MODEL.containsKey(level)) {
@@ -89,5 +102,39 @@ public final class DrawCalculation {
             return MathHelper.clamp(MODEL_TO_LEVEL.get(modelId), 1, 5);
         }
         return 1;
+    }
+
+    public static Set<String> getModelIdSet() {
+        return MODEL_TO_LEVEL.keySet();
+    }
+
+    public static void readDrawCsvFile(Object clz) {
+        DrawCalculation.clearAllData();
+        try {
+            InputStream input;
+            // 依据配置文件夹下是否有文件，进行读取
+            if (CONFIG_DRAW_CSV_FILE.toFile().isFile()) {
+                input = Files.newInputStream(CONFIG_DRAW_CSV_FILE);
+            } else {
+                input = clz.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/draw.csv");
+            }
+            if (input != null) {
+                List<String> lines = IOUtils.readLines(input, StandardCharsets.UTF_8);
+                for (String line : lines) {
+                    String[] data = line.split(",");
+                    if (data.length < 3) {
+                        throw new IOException();
+                    } else {
+                        DrawCalculation.addData(data[0],
+                                Integer.valueOf(StringUtils.deleteWhitespace(data[1])),
+                                Integer.valueOf(StringUtils.deleteWhitespace(data[2])));
+                    }
+                }
+            }
+            // 别忘了关闭输入流
+            IOUtils.closeQuietly(input);
+        } catch (IOException e) {
+            TouhouLittleMaid.LOGGER.warn("Fail to read csv file");
+        }
     }
 }

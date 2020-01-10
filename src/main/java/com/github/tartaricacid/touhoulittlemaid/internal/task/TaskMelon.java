@@ -37,6 +37,6 @@ public class TaskMelon implements IMaidTask {
 
     @Override
     public EntityAIBase createAI(AbstractEntityMaid maid) {
-        return new EntityMaidFarm(maid, 0.6f, FarmHandler.Mode.MELON);
+        return new EntityMaidFarm(maid, 0.6f, getUid());
     }
 }

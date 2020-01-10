@@ -10,7 +10,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public class NeatCompat {
-
     static {
         MinecraftForge.EVENT_BUS.register(NeatCompat.class);
     }

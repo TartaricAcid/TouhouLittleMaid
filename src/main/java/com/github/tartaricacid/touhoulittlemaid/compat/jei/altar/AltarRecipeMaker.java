@@ -34,7 +34,7 @@ public final class AltarRecipeMaker {
                         id.getPath().toLowerCase(Locale.US));
             }
             ItemStack output = altarRecipe.getOutputItemStack();
-            recipes.add(new AltarRecipeWrapper(altarRecipe.getRecipe(), Collections.singletonList(output), altarRecipe.getPowerCost(), key));
+            recipes.add(new AltarRecipeWrapper(altarRecipe.getRecipe(), Collections.singletonList(output), altarRecipe.getPowerCost(), key, id.toString()));
         }
         return recipes;
     }

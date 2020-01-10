@@ -28,7 +28,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
      */
     private static final ItemStack MAIN_HAND_SWORD = Items.DIAMOND_SWORD.getDefaultInstance();
     private static final ItemStack OFF_HAND_SHIELD = Items.SHIELD.getDefaultInstance();
-    private static final ItemStack ARMOR_ITEM = Items.GOLDEN_APPLE.getDefaultInstance();
+    private static final ItemStack ARMOR_ITEM = Items.GOLDEN_HELMET.getDefaultInstance();
     private static final Random RANDOM = new Random();
 
     /**

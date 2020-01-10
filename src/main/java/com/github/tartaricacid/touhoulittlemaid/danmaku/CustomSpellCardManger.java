@@ -45,7 +45,6 @@ public final class CustomSpellCardManger {
             } catch (NullPointerException | IOException | ScriptException e) {
                 TouhouLittleMaid.LOGGER.error("Exception while loading spell in {}:", file);
                 TouhouLittleMaid.LOGGER.catching(e);
-                continue;
             }
         }
 

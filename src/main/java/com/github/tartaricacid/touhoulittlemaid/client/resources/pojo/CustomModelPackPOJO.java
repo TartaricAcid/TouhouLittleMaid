@@ -22,6 +22,7 @@ public class CustomModelPackPOJO {
 
     private String version;
 
+    @Deprecated
     private int format;
 
     @Nullable

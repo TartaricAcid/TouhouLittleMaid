@@ -56,7 +56,8 @@ commands.touhou_little_maid.main.power.info=当前 Power 数：%.2f
 commands.touhou_little_maid.main.maid_num.info=当前女仆数：%d
 commands.touhou_little_maid.spell_card.usage=§c用法：/spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=已经重载所有的符卡
-commands.touhou_little_maid.draw.info=当前抽卡信息：%d 次抽卡
+commands.touhou_little_maid.draw_coupon.usage=§c用法：/draw_coupon <reload>
+commands.touhou_little_maid.draw_coupon.reload=已经重载所有的抽卡数据
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -192,6 +193,7 @@ task.touhou_little_maid.sugar_cane=甘蔗
 task.touhou_little_maid.melon=瓜类
 task.touhou_little_maid.cocoa=可可
 task.touhou_little_maid.grass=花草
+task.touhou_little_maid.snow=清雪
 task.touhou_little_maid.feed=喂食
 task.touhou_little_maid.shears=剪刀
 task.touhou_little_maid.milk=牛奶
@@ -237,6 +239,8 @@ gui.touhou_little_maid.skin_details.apply_data=应用数据
 gui.touhou_little_maid.skin_details.mounted_height=高度
 gui.touhou_little_maid.skin_details.show_character=显示参考角色
 gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift 点击能够进行十倍修改
+gui.touhou_little_maid.skin_details.set_gravity.button.false=重力
+gui.touhou_little_maid.skin_details.set_gravity.button.true=浮空
 gui.touhou_little_maid.hata_select.apply=应用材质
 gui.touhou_little_maid.hata_select.close=关闭
 gui.touhou_little_maid.hata_select.display.true=显示旗指物
@@ -338,6 +342,11 @@ model.touhou_little_maid.kaku_seiga.name=霍青娥
 model.touhou_little_maid.mononobe_no_futo.name=物部布都
 model.touhou_little_maid.hutatsuiwa_mamizou.name=二岩猯藏
 model.touhou_little_maid.miyako_yoshika.name=宫古芳香
+model.touhou_little_maid.kasodani_kyouko.name=幽谷响子
+model.touhou_little_maid.soga_no_toziko.name=苏我屠自古
+model.touhou_little_maid.imaizumi_kagerou.name=今泉影狼
+model.touhou_little_maid.kijin_seija.name=鬼人正邪
+model.touhou_little_maid.sukuna_shinmyoumaru.name=少名针妙丸
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -417,6 +426,11 @@ model.touhou_little_maid.kaku_seiga.desc=§7穿墙的邪仙
 model.touhou_little_maid.mononobe_no_futo.desc=§7古代日本的尸解仙
 model.touhou_little_maid.hutatsuiwa_mamizou.desc=§7狸猫怪 十变化
 model.touhou_little_maid.miyako_yoshika.desc=§7忠诚的尸体
+model.touhou_little_maid.kasodani_kyouko.desc=§7诵经的山彦
+model.touhou_little_maid.soga_no_toziko.desc=§7神明后裔的亡灵
+model.touhou_little_maid.imaizumi_kagerou.desc=§7竹林的狼人
+model.touhou_little_maid.kijin_seija.desc=§7逆袭的天邪鬼
+model.touhou_little_maid.sukuna_shinmyoumaru.desc=§7小人的后裔
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -443,6 +457,7 @@ model.touhou_little_maid.ema.name=绘马墙
 model.touhou_little_maid.anti_collision_bucket.name=防撞桶
 model.touhou_little_maid.park_bench.name=公园长椅
 model.touhou_little_maid.rinnosuke_children_toys.name=霖之助牌儿童摇摇乐
+model.touhou_little_maid.bowl.name=碗
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=夜符「Night Bird」
@@ -505,3 +520,4 @@ jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=生成闪电
 # Patchouli
 patchouli.touhou_little_maid.book.name=记忆中的幻想乡
 patchouli.touhou_little_maid.book.landing_text=一个与女仆和东方 Project 有关的模组。$(br2)感谢 Snownee 在代码方面的帮助。$(br)感谢 Succinum，ZeniCrow，Paulzzh，Tian_mi 以及其他美工制作了如此优秀的模型和材质。$(br)感谢 Little Maid Mob 的作者 Verclene。
+gui.touhou_little_maid.skin_details.set_gravity.button=重力：%s
