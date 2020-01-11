@@ -106,10 +106,31 @@ public class ItemChair extends Item {
         return stack;
     }
 
-    public static ItemStack setAllTagData(ItemStack stack, String modelId, float height, boolean canRide) {
+    public static boolean isNoGravity(ItemStack stack) {
+        if (stack.getItem() == MaidItems.CHAIR && stack.hasTagCompound() && stack.getTagCompound().hasKey(IS_NO_GRAVITY.getName())) {
+            return stack.getTagCompound().getBoolean(IS_NO_GRAVITY.getName());
+        }
+        return false;
+    }
+
+    private static ItemStack setNoGravity(ItemStack stack, boolean isNoGravity) {
+        if (stack.getItem() == MaidItems.CHAIR) {
+            if (stack.hasTagCompound()) {
+                stack.getTagCompound().setBoolean(IS_NO_GRAVITY.getName(), isNoGravity);
+            } else {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setBoolean(IS_NO_GRAVITY.getName(), isNoGravity);
+                stack.setTagCompound(tag);
+            }
+        }
+        return stack;
+    }
+
+    public static ItemStack setAllTagData(ItemStack stack, String modelId, float height, boolean canRide, boolean isNoGravity) {
         setChairModelId(stack, modelId);
         setMountedHeight(stack, height);
         setTameableCanRide(stack, canRide);
+        setNoGravity(stack, isNoGravity);
         return stack;
     }
 
@@ -123,6 +144,7 @@ public class ItemChair extends Item {
             chair.setModelId(getChairModelId(itemstack));
             chair.setMountedHeight(getMountedHeight(itemstack));
             chair.setTameableCanRide(isTameableCanRide(itemstack));
+            chair.setNoGravity(isNoGravity(itemstack));
             // 应用命名
             if (itemstack.hasDisplayName()) {
                 chair.setCustomNameTag(itemstack.getDisplayName());
@@ -146,7 +168,8 @@ public class ItemChair extends Item {
             for (String key : ClientProxy.CHAIR_MODEL.getModelIdSet()) {
                 float height = ClientProxy.CHAIR_MODEL.getModelMountedYOffset(key);
                 boolean canRide = ClientProxy.CHAIR_MODEL.getModelTameableCanRide(key);
-                items.add(setAllTagData(new ItemStack(this), key, height, canRide));
+                boolean isNoGravity = ClientProxy.CHAIR_MODEL.getModelNoGravity(key);
+                items.add(setAllTagData(new ItemStack(this), key, height, canRide, isNoGravity));
             }
         }
     }
@@ -173,6 +196,7 @@ public class ItemChair extends Item {
             tooltip.add(String.format("Model Id: %s", getChairModelId(stack)));
             tooltip.add(String.format("Mounted Height: %f", getMountedHeight(stack)));
             tooltip.add(String.format("Tameable Can Ride: %s", isTameableCanRide(stack)));
+            tooltip.add(String.format("Is No Gravity: %s", isNoGravity(stack)));
         }
     }
 
@@ -182,7 +206,9 @@ public class ItemChair extends Item {
         // 实体坐上去的高度
         MOUNTED_HEIGHT("MountedHeight"),
         // 女仆能坐上去么？
-        TAMEABLE_CAN_RIDE("TameableCanRide");
+        TAMEABLE_CAN_RIDE("TameableCanRide"),
+        // 是否受重力影响
+        IS_NO_GRAVITY("IsNoGravity");
 
         private String name;
 
