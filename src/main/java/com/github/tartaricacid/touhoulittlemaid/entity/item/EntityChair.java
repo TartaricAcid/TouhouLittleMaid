@@ -98,7 +98,7 @@ public class EntityChair extends EntityLivingBase {
     @Nonnull
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        return ItemChair.setAllTagData(new ItemStack(MaidItems.CHAIR), this.getModelId(), this.getMountedHeight(), this.isTameableCanRide());
+        return ItemChair.setAllTagData(new ItemStack(MaidItems.CHAIR), this.getModelId(), this.getMountedHeight(), this.isTameableCanRide(), this.hasNoGravity());
     }
 
     @Override
@@ -228,7 +228,7 @@ public class EntityChair extends EntityLivingBase {
         this.setDead();
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
             ItemStack itemstack = new ItemStack(MaidItems.CHAIR, 1);
-            ItemChair.setAllTagData(itemstack, this.getModelId(), this.getMountedHeight(), this.isTameableCanRide());
+            ItemChair.setAllTagData(itemstack, this.getModelId(), this.getMountedHeight(), this.isTameableCanRide(), this.hasNoGravity());
             if (this.hasCustomName()) {
                 itemstack.setStackDisplayName(this.getCustomNameTag());
             }

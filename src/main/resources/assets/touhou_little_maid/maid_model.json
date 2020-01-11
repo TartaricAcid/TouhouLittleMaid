@@ -242,6 +242,9 @@
       "model_id": "touhou_little_maid:sukuna_shinmyoumaru",
       "description": ["{model.touhou_little_maid.sukuna_shinmyoumaru.desc}"]
     }, {
+      "model_id": "touhou_little_maid:horikawa_raiko",
+      "description": ["{model.touhou_little_maid.horikawa_raiko.desc}"]
+    }, {
       "model_id": "touhou_little_maid:kisin_sagume",
       "description": ["{model.touhou_little_maid.kisin_sagume.desc}"]
     }, {

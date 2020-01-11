@@ -347,6 +347,7 @@ model.touhou_little_maid.soga_no_toziko.name=苏我屠自古
 model.touhou_little_maid.imaizumi_kagerou.name=今泉影狼
 model.touhou_little_maid.kijin_seija.name=鬼人正邪
 model.touhou_little_maid.sukuna_shinmyoumaru.name=少名针妙丸
+model.touhou_little_maid.horikawa_raiko.name=堀川雷鼓
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -431,6 +432,7 @@ model.touhou_little_maid.soga_no_toziko.desc=§7神明后裔的亡灵
 model.touhou_little_maid.imaizumi_kagerou.desc=§7竹林的狼人
 model.touhou_little_maid.kijin_seija.desc=§7逆袭的天邪鬼
 model.touhou_little_maid.sukuna_shinmyoumaru.desc=§7小人的后裔
+model.touhou_little_maid.horikawa_raiko.desc=§7梦幻的打击乐手
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅

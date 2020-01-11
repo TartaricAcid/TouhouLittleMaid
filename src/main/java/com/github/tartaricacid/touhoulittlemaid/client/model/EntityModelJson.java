@@ -162,6 +162,9 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer cosFloat = modelMap.get("cosFloat");
         ModelRenderer negativeSinFloat = modelMap.get("-sinFloat");
         ModelRenderer negativeCosFloat = modelMap.get("-cosFloat");
+        // 因为新版本 block bench 软件不支持 - 字符，故改为 _ 字符
+        ModelRenderer negativeSinFloat2 = modelMap.get("_sinFloat");
+        ModelRenderer negativeCosFloat2 = modelMap.get("_cosFloat");
         // 护甲
         ModelRenderer helmet = modelMap.get("helmet");
         ModelRenderer hat = modelMap.get("hat");
@@ -188,6 +191,19 @@ public class EntityModelJson extends ModelBase {
         ModelRenderer reverseLeggingsRight = modelMap.get("-leggingsRight");
         ModelRenderer reverseBootsLeft = modelMap.get("-bootsLeft");
         ModelRenderer reverseBootsRight = modelMap.get("-bootsRight");
+        // 因为新版本 block bench 软件不支持 - 字符，故改为 _ 字符
+        ModelRenderer reverseHelmet2 = modelMap.get("_helmet");
+        ModelRenderer reverseHat2 = modelMap.get("_hat");
+        ModelRenderer reverseChestPlate2 = modelMap.get("_chestPlate");
+        ModelRenderer reverseChestPlateLeft2 = modelMap.get("_chestPlateLeft");
+        ModelRenderer reverseChestPlateMiddle2 = modelMap.get("_chestPlateMiddle");
+        ModelRenderer reverseChestPlateRight2 = modelMap.get("_chestPlateRight");
+        ModelRenderer reverseLeggings2 = modelMap.get("_leggings");
+        ModelRenderer reverseLeggingsLeft2 = modelMap.get("_leggingsLeft");
+        ModelRenderer reverseLeggingsMiddle2 = modelMap.get("_leggingsMiddle");
+        ModelRenderer reverseLeggingsRight2 = modelMap.get("_leggingsRight");
+        ModelRenderer reverseBootsLeft2 = modelMap.get("_bootsLeft");
+        ModelRenderer reverseBootsRight2 = modelMap.get("_bootsRight");
 
         // 动画和姿势
         headAnimation(head, netHeadYaw, headPitch);
@@ -196,13 +212,17 @@ public class EntityModelJson extends ModelBase {
         wingAnimation(wingLeft, wingRight, ageInTicks);
         blinkAnimation(blink, ageInTicks);
         tailAnimation(tail, ageInTicks);
-        floatAnimation(sinFloat, cosFloat, negativeSinFloat, negativeCosFloat, ageInTicks);
+        floatAnimation(sinFloat, cosFloat, negativeSinFloat, negativeCosFloat, negativeSinFloat2, negativeCosFloat2, ageInTicks);
         renderArmor(entityMaid, helmet, hat, chestPlate, chestPlateLeft, chestPlateMiddle, chestPlateRight,
                 leggings, leggingsLeft, leggingsMiddle, leggingsRight, bootsLeft, bootsRight);
         renderReverseArmor(entityMaid, reverseHelmet, reverseHat,
                 reverseChestPlate, reverseChestPlateLeft, reverseChestPlateMiddle, reverseChestPlateRight,
                 reverseLeggings, reverseLeggingsLeft, reverseLeggingsMiddle, reverseLeggingsRight,
                 reverseBootsLeft, reverseBootsRight);
+        renderReverseArmor(entityMaid, reverseHelmet2, reverseHat2,
+                reverseChestPlate2, reverseChestPlateLeft2, reverseChestPlateMiddle2, reverseChestPlateRight2,
+                reverseLeggings2, reverseLeggingsLeft2, reverseLeggingsMiddle2, reverseLeggingsRight2,
+                reverseBootsLeft2, reverseBootsRight2);
         beggingPosture(entityMaid, head, ahoge, ageInTicks);
         swingingArmsPosture(entityMaid, armLeft, armRight);
 
@@ -303,7 +323,9 @@ public class EntityModelJson extends ModelBase {
     }
 
     private void floatAnimation(@Nullable ModelRenderer sinFloat, @Nullable ModelRenderer cosFloat,
-                                @Nullable ModelRenderer negativeSinFloat, @Nullable ModelRenderer negativeCosFloat, float ageInTicks) {
+                                @Nullable ModelRenderer negativeSinFloat, @Nullable ModelRenderer negativeCosFloat,
+                                @Nullable ModelRenderer negativeSinFloat2, @Nullable ModelRenderer negativeCosFloat2,
+                                float ageInTicks) {
         if (sinFloat != null) {
             sinFloat.offsetY = MathHelper.sin(ageInTicks * 0.1f) * 0.05f;
         }
@@ -313,8 +335,14 @@ public class EntityModelJson extends ModelBase {
         if (negativeSinFloat != null) {
             negativeSinFloat.offsetY = -MathHelper.sin(ageInTicks * 0.1f) * 0.05f;
         }
+        if (negativeSinFloat2 != null) {
+            negativeSinFloat2.offsetY = -MathHelper.sin(ageInTicks * 0.1f) * 0.05f;
+        }
         if (negativeCosFloat != null) {
             negativeCosFloat.offsetY = -MathHelper.cos(ageInTicks * 0.1f) * 0.05f;
+        }
+        if (negativeCosFloat2 != null) {
+            negativeCosFloat2.offsetY = -MathHelper.cos(ageInTicks * 0.1f) * 0.05f;
         }
     }
 
