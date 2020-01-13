@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.ResourcesDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -135,6 +136,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 显示声音版权的页面
         this.buttonList.add(new GuiButtonImage(BUTTON.SOUND_CREDIT.ordinal(), i + 3, j + 166, 21,
                 21, 233, 0, 24, BACKGROUND));
+        // 下载资源包按钮
+        this.buttonList.add(new GuiButtonImage(BUTTON.DOWNLOAD_RESOURCES.ordinal(), i + 24, j + 166, 21,
+                21, 233, 45, 24, BACKGROUND));
 
         // 模式翻页
         this.buttonList.add(new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
@@ -214,6 +218,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         if (button.id == BUTTON.SOUND_CREDIT.ordinal()) {
             mc.player.playSound(MaidSoundEvent.OTHER_CREDIT, 1, 1);
             mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSoundCredit(this)));
+            return;
+        }
+
+        if (button.id == BUTTON.DOWNLOAD_RESOURCES.ordinal()) {
+            mc.addScheduledTask(() -> mc.displayGuiScreen(new ResourcesDownloadGui()));
             return;
         }
 
@@ -463,7 +472,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 模式左翻页
         TASK_LEFT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 模式右翻页
-        TASK_RIGHT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId());
+        TASK_RIGHT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
+        // 下载资源包按钮
+        DOWNLOAD_RESOURCES(MaidGuiHandler.OTHER_GUI.NONE.getId());
 
         private int guiId;
 

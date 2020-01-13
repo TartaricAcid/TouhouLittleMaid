@@ -155,7 +155,7 @@ config.touhou_little_maid.misc_config.override_npc_render=覆盖 NPC 渲染
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=扭蛋配置
 config.touhou_little_maid.gashapon_config.purchase_gashapon_item=扭蛋购入的代币
-config.touhou_little_maid.gashapon_config.purchase_gashapon_price=扭蛋购入的加个
+config.touhou_little_maid.gashapon_config.purchase_gashapon_price=扭蛋购入的价格
 config.touhou_little_maid.gashapon_config.gashapon_weights_5=UR 等级扭蛋权重
 config.touhou_little_maid.gashapon_config.gashapon_weights_4=SSR 等级扭蛋权重
 config.touhou_little_maid.gashapon_config.gashapon_weights_3=SR 等级扭蛋权重
@@ -253,6 +253,13 @@ gui.touhou_little_maid.maid_beacon.add_one=存入一点
 gui.touhou_little_maid.maid_beacon.add_all=存入全部
 gui.touhou_little_maid.maid_beacon.min_one=取出一点
 gui.touhou_little_maid.maid_beacon.min_all=取出所有
+gui.touhou_little_maid.resources_download.not_download=未下载
+gui.touhou_little_maid.resources_download.downloaded=已下载
+gui.touhou_little_maid.resources_download.downloading=下载中
+gui.touhou_little_maid.resources_download.need_update=需更新
+gui.touhou_little_maid.resources_download.author=作者：%s
+gui.touhou_little_maid.resources_download.author.delimiter=，
+gui.touhou_little_maid.resources_download.file_size=大小：%s
 
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s

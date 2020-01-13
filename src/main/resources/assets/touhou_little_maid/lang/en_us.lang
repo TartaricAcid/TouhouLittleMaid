@@ -253,6 +253,13 @@ gui.touhou_little_maid.maid_beacon.add_one=Put One
 gui.touhou_little_maid.maid_beacon.add_all=Put All
 gui.touhou_little_maid.maid_beacon.min_one=Take One
 gui.touhou_little_maid.maid_beacon.min_all=Take All
+gui.touhou_little_maid.resources_download.not_download=Not Download
+gui.touhou_little_maid.resources_download.downloaded=Downloaded
+gui.touhou_little_maid.resources_download.downloading=Downloading
+gui.touhou_little_maid.resources_download.need_update=Need Update
+gui.touhou_little_maid.resources_download.author=Author: %s
+gui.touhou_little_maid.resources_download.author.delimiter=,
+gui.touhou_little_maid.resources_download.file_size=Size: %s
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s
