@@ -770,7 +770,7 @@ public class EntityMaid extends AbstractEntityMaid {
                     this.setHomePos(pos);
                     if (!world.isRemote) {
                         // 如果尝试移动失败，那就尝试传送
-                        if (!getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
+                        if (this.isSitting() || !getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
                             attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
                         }
                         player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
