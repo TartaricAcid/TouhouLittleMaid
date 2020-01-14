@@ -55,6 +55,7 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @param pos 破坏的方块坐标
      * @return 是否成功破坏
      */
+    @Deprecated
     abstract public boolean destroyBlock(BlockPos pos);
 
     /**
@@ -64,7 +65,6 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @param dropBlock 该破坏是否掉落方块
      * @return 是否成功破坏
      */
-    @Deprecated
     abstract public boolean destroyBlock(BlockPos pos, boolean dropBlock);
 
     /**

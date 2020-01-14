@@ -267,7 +267,7 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     private void spawnPortalParticle() {
-        if (this.world.isRemote && this.getIsInvulnerable()) {
+        if (this.world.isRemote && this.getIsInvulnerable() && this.getOwnerId() != null) {
             for (int i = 0; i < 2; ++i) {
                 this.world.spawnParticle(EnumParticleTypes.PORTAL,
                         this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
