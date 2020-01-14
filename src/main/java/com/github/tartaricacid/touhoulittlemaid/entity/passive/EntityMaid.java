@@ -1376,8 +1376,12 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean destroyBlock(BlockPos pos) {
-        // TODO 破坏进度
-        return canDestroyBlock(pos) && world.destroyBlock(pos, true);
+        return destroyBlock(pos, true);
+    }
+
+    @Override
+    public boolean destroyBlock(BlockPos pos, boolean dropBlock) {
+        return canDestroyBlock(pos) && world.destroyBlock(pos, dropBlock);
     }
 
     @Override
