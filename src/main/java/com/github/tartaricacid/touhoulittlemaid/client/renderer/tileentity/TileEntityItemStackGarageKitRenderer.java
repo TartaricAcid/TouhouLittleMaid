@@ -63,6 +63,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                     ((EntityMaid) entity).hurtTime = 0;
                     ((EntityMaid) entity).deathTime = 0;
                     ((EntityMaid) entity).setSitting(false);
+                    ((EntityMaid) entity).setBackpackLevel(EntityMaid.EnumBackPackLevel.EMPTY);
                     for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
                         entity.setItemStackToSlot(slot, ItemStack.EMPTY);
                     }

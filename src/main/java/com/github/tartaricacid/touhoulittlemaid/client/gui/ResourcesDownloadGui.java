@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.FileUtils;
@@ -29,13 +30,18 @@ public class ResourcesDownloadGui extends GuiScreen {
     private List<Long> crc32List = Lists.newArrayList();
 
     public ResourcesDownloadGui() {
-        getCrc32Info();
-        checkDownloadInfo();
+        if (InfoGetManager.DOWNLOAD_INFO_LIST != null && InfoGetManager.DOWNLOAD_INFO_LIST.size() != 0) {
+            getCrc32Info();
+            checkDownloadInfo();
+        }
     }
 
     @Override
     public void initGui() {
         this.buttonList.clear();
+        if (InfoGetManager.DOWNLOAD_INFO_LIST == null || InfoGetManager.DOWNLOAD_INFO_LIST.size() == 0) {
+            addButton(new GuiButton(-1, 5, 5, 60, 20, I18n.format("gui.touhou_little_maid.resources_download.reload")));
+        }
         for (int i = 0; i < InfoGetManager.DOWNLOAD_INFO_LIST.size(); i++) {
             DownloadInfo info = InfoGetManager.DOWNLOAD_INFO_LIST.get(i);
             addButton(new GuiDownloadButton(i, this.width - 80, i * 75 + 60 - SCROLL, 60, 20, info));
@@ -45,8 +51,13 @@ public class ResourcesDownloadGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        for (int i = 0; i < InfoGetManager.DOWNLOAD_INFO_LIST.size(); i++) {
-            addResInfo(i, InfoGetManager.DOWNLOAD_INFO_LIST.get(i));
+        if (InfoGetManager.DOWNLOAD_INFO_LIST == null || InfoGetManager.DOWNLOAD_INFO_LIST.size() == 0) {
+            drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.resources_download.fail.1"), this.width / 2, this.height / 2 - 15, 0xfffff);
+            drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.resources_download.fail.2"), this.width / 2, this.height / 2, 0xfffff);
+        } else {
+            for (int i = 0; i < InfoGetManager.DOWNLOAD_INFO_LIST.size(); i++) {
+                addResInfo(i, InfoGetManager.DOWNLOAD_INFO_LIST.get(i));
+            }
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -63,6 +74,12 @@ public class ResourcesDownloadGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
+        if (button.id == -1) {
+            InfoGetManager.downloadAndReadInfoJsonFile();
+            mc.player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.resources_download.reload"));
+            mc.addScheduledTask(() -> mc.displayGuiScreen(null));
+            return;
+        }
         if (button.id >= 0 && button.id < InfoGetManager.DOWNLOAD_INFO_LIST.size()) {
             DownloadInfo info = InfoGetManager.DOWNLOAD_INFO_LIST.get(button.id);
             if (DownloadStatus.canDownload(info.getStatus())) {
@@ -112,24 +129,25 @@ public class ResourcesDownloadGui extends GuiScreen {
         for (DownloadInfo info : InfoGetManager.DOWNLOAD_INFO_LIST) {
             // 如果当前状态为下载中，直接返回
             if (info.getStatus() == DownloadStatus.DOWNLOADING) {
-                return;
+                continue;
             }
+
+            // 先设置为未下载
+            info.setStatus(DownloadStatus.NOT_DOWNLOAD);
 
             // 已下载或需要更新
             for (Long crc32 : crc32List) {
                 // 检查已下载
                 if (crc32.equals(info.getChecksum())) {
                     info.setStatus(DownloadStatus.DOWNLOADED);
-                    return;
+                    break;
                 }
                 // 检查需更新
                 if (info.getHistory().contains(crc32)) {
                     info.setStatus(DownloadStatus.NEED_UPDATE);
-                    return;
+                    break;
                 }
             }
-
-            info.setStatus(DownloadStatus.NOT_DOWNLOAD);
         }
     }
 

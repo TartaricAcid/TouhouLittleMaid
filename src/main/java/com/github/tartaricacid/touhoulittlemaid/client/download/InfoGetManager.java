@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.download;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -32,7 +33,9 @@ public class InfoGetManager {
         Thread thread = new Thread(() -> {
             try {
                 File file = Minecraft.getMinecraft().gameDir.toPath().resolve("resourcepacks").resolve("info.json").toFile();
+                TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
                 FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
+                TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
                 DOWNLOAD_INFO_LIST = CommonProxy.GSON.fromJson(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8),
                         new TypeToken<List<DownloadInfo>>() {
                         }.getType());
@@ -51,7 +54,9 @@ public class InfoGetManager {
             try {
                 URL url = new URL(info.getUrl());
                 File file = Minecraft.getMinecraft().gameDir.toPath().resolve("resourcepacks").resolve(info.getFileName()).toFile();
+                TouhouLittleMaid.LOGGER.info("Downloading {} file...", info.getFileName());
                 FileUtils.copyURLToFile(url, file, 60_000, 60_000);
+                TouhouLittleMaid.LOGGER.info("Downloaded {} file", info.getFileName());
                 info.setStatus(DownloadStatus.DOWNLOADED);
             } catch (IOException e) {
                 info.setStatus(DownloadStatus.NOT_DOWNLOAD);

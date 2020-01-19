@@ -59,7 +59,7 @@ public class MaidMainContainer extends Container {
 
     @Override
     public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return this.maid.isTamed() && this.maid.getOwnerId().equals(playerIn.getUniqueID())
+        return this.maid.getOwnerId() != null && this.maid.getOwnerId().equals(playerIn.getUniqueID())
                 && this.maid.isEntityAlive() && this.maid.getDistance(playerIn) < 5.0F;
     }
 

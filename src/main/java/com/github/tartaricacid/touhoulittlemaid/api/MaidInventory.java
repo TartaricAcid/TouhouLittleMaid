@@ -13,5 +13,11 @@ public enum MaidInventory {
     // 护甲栏
     ARMOR,
     // 饰品栏
-    BAUBLE
+    BAUBLE,
+    // 小背包
+    SMALL_BACKPACK,
+    // 中背包
+    MIDDLE_BACKPACK,
+    // 大背包
+    BIG_BACKPACK
 }

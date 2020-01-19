@@ -28,15 +28,16 @@ public class MaidGuiHandler implements IGuiHandler {
      * @param world     世界
      * @param entityId  实体 ID
      * @param taskIndex 打开 MAIN_GUI 时缓存的 taskIndex
+     * @param startRow  滚动式 GUI 的滚动数据
      */
     @Nullable
     @Override
-    public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int z) {
+    public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int startRow) {
         if (guiId == MAIN_GUI.MAIN.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
         if (guiId == MAIN_GUI.INVENTORY.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
+            return new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex, startRow);
         }
         if (guiId == MAIN_GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
@@ -48,9 +49,9 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
             return new AlbumContainer(player.inventory, player.getHeldItemMainhand());
         }
-        // 此时的 entityId, taskIndex, z 代表的是方块的 x y z 值
-        if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, z)) instanceof TileEntityMaidBeacon) {
-            return new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, z)));
+        // 此时的 entityId, taskIndex, startRow 代表的是方块的 x y z 值
+        if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, startRow)) instanceof TileEntityMaidBeacon) {
+            return new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, startRow)));
         }
         if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && world.getEntityByID(entityId) instanceof EntityCustomNpc) {
             // 服务端什么也不做
@@ -65,15 +66,16 @@ public class MaidGuiHandler implements IGuiHandler {
      * @param world     世界
      * @param entityId  实体 ID
      * @param taskIndex 打开 MAIN_GUI 时缓存的 taskIndex
+     * @param startRow  滚动式 GUI 的滚动数据
      */
     @Nullable
     @Override
-    public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int z) {
+    public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int startRow) {
         if (guiId == MAIN_GUI.MAIN.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidMainGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
         }
         if (guiId == MAIN_GUI.INVENTORY.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidInventoryGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
+            return new MaidInventoryGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex, startRow);
         }
         if (guiId == MAIN_GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
             return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
@@ -84,9 +86,9 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
             return new AlbumGuiContainer(player.inventory, player.getHeldItemMainhand());
         }
-        // 此时的 entityId, taskIndex, z 代表的是方块的 x y z 值
-        if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, z)) instanceof TileEntityMaidBeacon) {
-            return new MaidBeaconGuiContainer(new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, z))));
+        // 此时的 entityId, taskIndex, startRow 代表的是方块的 x y z 值
+        if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, startRow)) instanceof TileEntityMaidBeacon) {
+            return new MaidBeaconGuiContainer(new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, startRow))));
         }
         if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && world.getEntityByID(entityId) instanceof EntityCustomNpc) {
             return new NpcMaidToolGui((EntityCustomNpc) world.getEntityByID(entityId));

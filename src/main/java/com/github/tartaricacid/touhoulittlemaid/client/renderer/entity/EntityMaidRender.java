@@ -1,8 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
@@ -28,9 +26,6 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final ResourceLocation DEFAULT_MODEL_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/hakurei_reimu.png");
-    private static final LayerMaidDebugFloor DEBUG_FLOOR = new LayerMaidDebugFloor(new DebugFloorModel());
-    private static final LayerMaidDebugBroom DEBUG_BROOM = new LayerMaidDebugBroom(new EntityMarisaBroomModel());
-    private static final LayerHataSasimono HATA_SASIMONO = new LayerHataSasimono();
     private ResourceLocation modelRes;
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
@@ -38,10 +33,11 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         modelRes = DEFAULT_MODEL_TEXTURE;
         this.addLayer(new LayerMaidArrow(this));
         this.addLayer(new LayerMaidHeldItem(this));
-        this.addLayer(DEBUG_FLOOR);
-        this.addLayer(DEBUG_BROOM);
-        this.addLayer(HATA_SASIMONO);
+        this.addLayer(new LayerMaidDebugFloor());
+        this.addLayer(new LayerMaidDebugBroom());
+        this.addLayer(new LayerHataSasimono());
         this.addLayer(new LayerMaidCustomHead(this));
+        this.addLayer(new LayerMaidBackpack());
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.internal.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.EntityMaidFarm;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;

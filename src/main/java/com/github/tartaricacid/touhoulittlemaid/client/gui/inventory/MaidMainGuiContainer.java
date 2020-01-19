@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -23,15 +24,35 @@ public class MaidMainGuiContainer extends AbstractMaidGuiContainer {
     public void drawCustomScreen(int mouseX, int mouseY, float partialTicks) {
         int i = this.guiLeft;
         int j = this.guiTop;
+        GlStateManager.pushMatrix();
+        mc.renderEngine.bindTexture(BACKGROUND);
+        GlStateManager.disableLighting();
+        drawTexturedModalRect(i + 80, j + 10, 178, 93, 9, 9);
+        drawTexturedModalRect(i + 80, j + 22, 188, 93, 9, 9);
+        drawTexturedModalRect(i + 105, j + 10, 178, 104, 64, 9);
+        drawTexturedModalRect(i + 105, j + 22, 178, 104, 64, 9);
+        drawTexturedModalRect(i + 107, j + 12, 180, 114, (int) (64 * maid.getHealth() / maid.getMaxHealth()), 5);
+        drawTexturedModalRect(i + 107, j + 24, 180, 120, (int) (64 * maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue() / 20), 5);
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
         // 绘制文字
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.healthy", DECIMAL_FORMAT.format(maid.getHealth()), DECIMAL_FORMAT.format(maid.getMaxHealth())), i + 82, j + 10, 0x555555, false);
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.armor", DECIMAL_FORMAT.format(maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue())), i + 82, j + 22, 0x555555, false);
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.attack", DECIMAL_FORMAT.format(maid.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())), i + 82, j + 34, 0x555555, false);
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.experience", maid.getExp()), i + 82, j + 46, 0x555555, false);
+        fontRenderer.drawString(String.valueOf(Math.round(maid.getHealth())), i + 91, j + 11, 0x555555, false);
+        fontRenderer.drawString(String.valueOf(Math.round(maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue())), i + 91, j + 23, 0x555555, false);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.attack", DECIMAL_FORMAT.format(maid.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())), i + 80, j + 35, 0x555555, false);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.experience", maid.getExp()), i + 80, j + 46, 0x555555, false);
     }
 
     @Override
     public void drawCustomBackground(int mouseX, int mouseY, float partialTicks) {
+    }
+
+    @Override
+    public void drawCustomTooltips(int mouseX, int mouseY, float partialTicks) {
+    }
+
+    @Override
+    public int getRenderPotionStartXOffset() {
+        return 0;
     }
 
     @Override

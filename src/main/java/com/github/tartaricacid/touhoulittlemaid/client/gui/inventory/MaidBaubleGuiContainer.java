@@ -27,7 +27,16 @@ public class MaidBaubleGuiContainer extends AbstractMaidGuiContainer {
     @Override
     public void drawCustomBackground(int mouseX, int mouseY, float partialTicks) {
         mc.getTextureManager().bindTexture(STORAGE_TEX);
-        drawTexturedModalRect(guiLeft + 79, guiTop + 7, 0, 0, 72, 36);
+        drawTexturedModalRect(guiLeft + 79, guiTop + 7, 0, 7, 72, 36);
+    }
+
+    @Override
+    public int getRenderPotionStartXOffset() {
+        return 0;
+    }
+
+    @Override
+    public void drawCustomTooltips(int mouseX, int mouseY, float partialTicks) {
     }
 
     @Override

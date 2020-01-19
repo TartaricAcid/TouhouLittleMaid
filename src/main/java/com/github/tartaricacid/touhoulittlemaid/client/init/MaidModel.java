@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.*;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
@@ -112,6 +113,25 @@ public final class MaidModel {
                     return gashapon4;
                 case 5:
                     return gashapon5;
+            }
+        });
+
+        ModelResourceLocation maidBackPack1 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_1", "inventory");
+        ModelResourceLocation maidBackPack2 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_2", "inventory");
+        ModelResourceLocation maidBackPack3 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_3", "inventory");
+        ModelBakery.registerItemVariants(MaidItems.MAID_BACKPACK, maidBackPack1, maidBackPack2, maidBackPack3);
+        ModelLoader.setCustomMeshDefinition(MaidItems.MAID_BACKPACK, stack -> {
+            switch (EntityMaid.EnumBackPackLevel.getEnumLevelByNum(stack.getMetadata())) {
+                default:
+                    return maidBackPack1;
+                case EMPTY:
+                    return maidBackPack1;
+                case SMALL:
+                    return maidBackPack1;
+                case MIDDLE:
+                    return maidBackPack2;
+                case BIG:
+                    return maidBackPack3;
             }
         });
     }

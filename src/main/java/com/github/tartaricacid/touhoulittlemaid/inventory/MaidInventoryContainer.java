@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -12,8 +13,11 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 public class MaidInventoryContainer extends MaidMainContainer {
-    public MaidInventoryContainer(IInventory playerInventory, EntityMaid maid, int taskIndex) {
+    private int startRow;
+
+    public MaidInventoryContainer(IInventory playerInventory, EntityMaid maid, int taskIndex, int startRow) {
         super(playerInventory, maid, taskIndex);
+        this.startRow = MathHelper.clamp(startRow, 0, maid.getBackLevel().getLevel() * 2);
         addMaidInventorySlots();
     }
 
@@ -22,8 +26,7 @@ public class MaidInventoryContainer extends MaidMainContainer {
         // 女仆物品栏
         for (int l = 0; l < 3; ++l) {
             for (int j = 0; j < 5; ++j) {
-                // 物品栏占用 6-20
-                this.addSlotToContainer(new SlotItemHandler(itemHandler, 6 + j + l * 5, 80 + j * 18, 8 + l * 18));
+                this.addSlotToContainer(new SlotItemHandler(itemHandler, 6 + j + (l + startRow) * 5, 80 + j * 18, 8 + l * 18));
             }
         }
     }

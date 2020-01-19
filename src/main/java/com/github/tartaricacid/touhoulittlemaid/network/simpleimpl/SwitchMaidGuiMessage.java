@@ -17,6 +17,7 @@ public class SwitchMaidGuiMessage implements IMessage {
     private int entityId;
     private int guiId;
     private int formTaskIndex;
+    private int startRow;
 
     public SwitchMaidGuiMessage() {
     }
@@ -28,12 +29,18 @@ public class SwitchMaidGuiMessage implements IMessage {
         this.formTaskIndex = formTaskIndex;
     }
 
+    public SwitchMaidGuiMessage(UUID playerUuid, int entityId, int guiId, int formTaskIndex, int startRow) {
+        this(playerUuid, entityId, guiId, formTaskIndex);
+        this.startRow = startRow;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         playerUuid = new UUID(buf.readLong(), buf.readLong());
         entityId = buf.readInt();
         guiId = buf.readInt();
         formTaskIndex = buf.readInt();
+        startRow = buf.readInt();
     }
 
     @Override
@@ -43,6 +50,7 @@ public class SwitchMaidGuiMessage implements IMessage {
         buf.writeInt(entityId);
         buf.writeInt(guiId);
         buf.writeInt(formTaskIndex);
+        buf.writeInt(startRow);
     }
 
     public UUID getUUID() {
@@ -57,6 +65,10 @@ public class SwitchMaidGuiMessage implements IMessage {
         return guiId;
     }
 
+    public int getStartRow() {
+        return startRow;
+    }
+
     public static class Handler implements IMessageHandler<SwitchMaidGuiMessage, IMessage> {
         @Override
         public IMessage onMessage(SwitchMaidGuiMessage message, MessageContext ctx) {
@@ -64,7 +76,7 @@ public class SwitchMaidGuiMessage implements IMessage {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity player = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getUUID());
                     if (player instanceof EntityPlayer) {
-                        ((EntityPlayer) player).openGui(TouhouLittleMaid.INSTANCE, message.getGuiId(), player.getEntityWorld(), message.getEntityId(), message.formTaskIndex, 0);
+                        ((EntityPlayer) player).openGui(TouhouLittleMaid.INSTANCE, message.getGuiId(), player.getEntityWorld(), message.getEntityId(), message.formTaskIndex, message.getStartRow());
                     }
                 });
             }

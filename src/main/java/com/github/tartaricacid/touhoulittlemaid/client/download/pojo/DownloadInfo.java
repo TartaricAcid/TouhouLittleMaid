@@ -38,6 +38,17 @@ public class DownloadInfo {
     @SerializedName("desc")
     private String desc = "";
 
+    /**
+     * 来自 https://stackoverflow.com/a/5599842
+     */
+    private static String readableFileSize(long size) {
+        if (size <= 0) {
+            return "0";
+        }
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + UNITS[digitGroups];
+    }
+
     public List<String> getAuthor() {
         return author;
     }
@@ -74,12 +85,12 @@ public class DownloadInfo {
         return history;
     }
 
-    public void setStatus(DownloadStatus status) {
-        this.status = status;
-    }
-
     public DownloadStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(DownloadStatus status) {
+        this.status = status;
     }
 
     public String getFormatFileSize() {
@@ -89,16 +100,5 @@ public class DownloadInfo {
     public DownloadInfo decorate() {
         this.formatFileSize = readableFileSize(getFileSize());
         return this;
-    }
-
-    /**
-     * 来自 https://stackoverflow.com/a/5599842
-     */
-    private static String readableFileSize(long size) {
-        if (size <= 0) {
-            return "0";
-        }
-        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + UNITS[digitGroups];
     }
 }

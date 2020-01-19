@@ -41,12 +41,12 @@ public class DrawHandler {
         this.drawInfo = drawInfo;
     }
 
-    public void setTotalDrawTimes(int times) {
-        this.totalDrawTimes = times;
-    }
-
     public int getTotalDrawTimes() {
         return totalDrawTimes;
+    }
+
+    public void setTotalDrawTimes(int times) {
+        this.totalDrawTimes = times;
     }
 
     private static class Factory implements Callable<DrawHandler> {
