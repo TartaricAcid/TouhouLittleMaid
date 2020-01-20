@@ -44,9 +44,9 @@ public class EntityMaidPlaceTorch extends EntityAIMoveToBlock {
         if (this.getIsAboveDestination()) {
             ItemStack torch = getTorchItem();
             if (!torch.isEmpty()) {
-                torch.shrink(1);
                 entityMaid.swingArm(EnumHand.MAIN_HAND);
                 entityMaid.placeBlock(destinationBlock.up(), ((ItemBlock) torch.getItem()).getBlock().getDefaultState());
+                torch.shrink(1);
                 entityMaid.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0f, 1.0f);
             }
             this.runDelay = 20;
