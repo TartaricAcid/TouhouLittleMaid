@@ -19,11 +19,12 @@ public class MaidBaubleContainer extends MaidMainContainer {
 
     private void addMaidBaubleSlots() {
         IItemHandler itemHandler = maid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        int startSlotIndex = 21 + maid.getBackLevel().getLevel() * 10;
         // 女仆饰品栏
         for (int l = 0; l < 2; ++l) {
             for (int j = 0; j < 4; ++j) {
                 // 物品栏占用 6-20
-                this.addSlotToContainer(new SlotItemHandler(itemHandler, 21 + j + l * 4, 80 + j * 18, 8 + l * 18) {
+                this.addSlotToContainer(new SlotItemHandler(itemHandler, startSlotIndex + j + l * 4, 80 + j * 18, 8 + l * 18) {
                     @Override
                     public int getSlotStackLimit() {
                         return 1;

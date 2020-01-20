@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -23,8 +24,8 @@ public class LayerMaidDebugFloor implements LayerRenderer<EntityMaid> {
     private static final ResourceLocation FLOOR_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/debug_floor.png");
     private ModelBase modelBase;
 
-    public LayerMaidDebugFloor(ModelBase modelBase) {
-        this.modelBase = modelBase;
+    public LayerMaidDebugFloor() {
+        this.modelBase = new DebugFloorModel();
     }
 
     @Override

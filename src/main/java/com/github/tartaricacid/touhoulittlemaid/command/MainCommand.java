@@ -1,6 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.*;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

@@ -1,8 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 
-import com.github.tartaricacid.touhoulittlemaid.client.model.DebugCharacterModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugCharacter;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugFloor;
@@ -30,15 +28,13 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static final EntityChairRender.Factory FACTORY = new EntityChairRender.Factory();
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
     private static final ResourceLocation DEFAULT_CHAIR_TEXTURE = new ResourceLocation("touhou_little_maid:textures/entity/cushion.png");
-    private static final LayerChairDebugFloor DEBUG_FLOOR = new LayerChairDebugFloor(new DebugFloorModel());
-    private static final LayerChairDebugCharacter DEBUG_CHARACTER = new LayerChairDebugCharacter(new DebugCharacterModel());
     private ResourceLocation modelRes;
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
         super(renderManager, mainModel, 0f);
         modelRes = DEFAULT_CHAIR_TEXTURE;
-        addLayer(DEBUG_FLOOR);
-        addLayer(DEBUG_CHARACTER);
+        addLayer(new LayerChairDebugFloor());
+        addLayer(new LayerChairDebugCharacter());
     }
 
     @Override

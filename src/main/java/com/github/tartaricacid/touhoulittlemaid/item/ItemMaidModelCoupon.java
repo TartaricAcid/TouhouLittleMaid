@@ -43,6 +43,30 @@ public class ItemMaidModelCoupon extends Item {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    public static boolean hasModelData(ItemStack coupon) {
+        if (coupon.hasTagCompound()) {
+            NBTTagCompound tag = coupon.getTagCompound();
+            if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
+                return CommonProxy.VANILLA_ID_NAME_MAP.containsKey(tag.getString(MODEL_DATA_TAG));
+            }
+        }
+        return false;
+    }
+
+    public static ItemStack setModelData(ItemStack coupon, String modelId) {
+        NBTTagCompound tag;
+        if (coupon.hasTagCompound()) {
+            tag = coupon.getTagCompound();
+        } else {
+            tag = new NBTTagCompound();
+        }
+        if (tag != null && StringUtils.isNotBlank(modelId)) {
+            tag.setString(MODEL_DATA_TAG, modelId);
+            coupon.setTagCompound(tag);
+        }
+        return coupon;
+    }
+
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab) && GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
@@ -67,30 +91,6 @@ public class ItemMaidModelCoupon extends Item {
                 event.setCanceled(true);
             }
         }
-    }
-
-    public static boolean hasModelData(ItemStack coupon) {
-        if (coupon.hasTagCompound()) {
-            NBTTagCompound tag = coupon.getTagCompound();
-            if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
-                return CommonProxy.VANILLA_ID_NAME_MAP.containsKey(tag.getString(MODEL_DATA_TAG));
-            }
-        }
-        return false;
-    }
-
-    public static ItemStack setModelData(ItemStack coupon, String modelId) {
-        NBTTagCompound tag;
-        if (coupon.hasTagCompound()) {
-            tag = coupon.getTagCompound();
-        } else {
-            tag = new NBTTagCompound();
-        }
-        if (tag != null && StringUtils.isNotBlank(modelId)) {
-            tag.setString(MODEL_DATA_TAG, modelId);
-            coupon.setTagCompound(tag);
-        }
-        return coupon;
     }
 
     private String getModelData(ItemStack coupon) {

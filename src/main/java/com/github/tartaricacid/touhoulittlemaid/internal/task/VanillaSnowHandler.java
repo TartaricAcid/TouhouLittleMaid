@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FarmHandler;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -39,7 +40,14 @@ public class VanillaSnowHandler implements FarmHandler {
 
     @Override
     public void harvest(AbstractEntityMaid maid, World world, BlockPos pos, IBlockState state) {
-        maid.destroyBlock(pos);
+        ItemStack itemStack = maid.getHeldItemMainhand();
+        if (itemStack.getItem() instanceof ItemSpade) {
+            if (maid.destroyBlock(pos)) {
+                itemStack.damageItem(1, maid);
+            }
+        } else {
+            maid.destroyBlock(pos, false);
+        }
     }
 
     @Override

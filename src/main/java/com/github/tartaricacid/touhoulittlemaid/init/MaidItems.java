@@ -68,6 +68,8 @@ public final class MaidItems {
     public static Item GASHAPON;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "gashapon_coin")
     public static Item GASHAPON_COIN;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "maid_backpack")
+    public static Item MAID_BACKPACK;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -142,6 +144,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemMaidModelCoupon().setRegistryName("maid_model_coupon"));
         event.getRegistry().register(new ItemGashapon().setRegistryName("gashapon"));
         event.getRegistry().register(new ItemGashaponCoin().setRegistryName("gashapon_coin"));
+        event.getRegistry().register(new ItemMaidBackpack().setRegistryName("maid_backpack"));
 
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GARAGE_KIT).setRegistryName(MaidBlocks.GARAGE_KIT.getRegistryName()));

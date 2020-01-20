@@ -33,7 +33,8 @@ public final class VillageTradeConfig {
             IOUtils.closeQuietly(fileOutputStream);
         }
         // 读取配置文件，进行解析
-        return CommonProxy.GSON.fromJson(new InputStreamReader(new FileInputStream(villageTradeFile)), new TypeToken<List<VillageTradePOJO>>() {
-        }.getType());
+        return CommonProxy.GSON.fromJson(new InputStreamReader(new FileInputStream(villageTradeFile), StandardCharsets.UTF_8),
+                new TypeToken<List<VillageTradePOJO>>() {
+                }.getType());
     }
 }

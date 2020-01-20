@@ -78,6 +78,9 @@ public class TombstoneBauble implements IMaidBauble {
         entityTag.removeTag("ArmorItems");
         entityTag.removeTag("HandItems");
         entityTag.removeTag(EntityMaid.NBT.MAID_INVENTORY.getName());
+        entityTag.removeTag(EntityMaid.NBT.MAID_SMALL_BACKPACK.getName());
+        entityTag.removeTag(EntityMaid.NBT.MAID_MIDDLE_BACKPACK.getName());
+        entityTag.removeTag(EntityMaid.NBT.MAID_BIG_BACKPACK.getName());
         entityTag.removeTag(EntityMaid.NBT.BAUBLE_INVENTORY.getName());
         // 女仆手办
         return BlockGarageKit.getItemStackWithData("touhou_little_maid:entity.passive.maid", maid.getModelId(), entityTag);

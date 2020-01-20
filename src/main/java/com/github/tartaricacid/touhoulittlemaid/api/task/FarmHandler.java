@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.api.task;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

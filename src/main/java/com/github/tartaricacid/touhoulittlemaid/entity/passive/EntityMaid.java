@@ -20,9 +20,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
+import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -46,7 +45,6 @@ import net.minecraft.init.*;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -82,7 +80,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
-    public static final Predicate<Entity> IS_PICKUP = entity -> ((entity instanceof EntityItem && !isIllegalItem(((EntityItem) entity).getItem()))
+    public static final Predicate<Entity> IS_PICKUP = entity -> ((entity instanceof EntityItem && !MaidInventoryItemHandler.isIllegalItem(((EntityItem) entity).getItem()))
             || entity instanceof EntityXPOrb || entity instanceof EntityPowerPoint || entity instanceof EntityArrow) && !entity.isInWater();
     public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob && entity.isEntityAlive();
     public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition())
@@ -102,6 +100,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> SHOW_SASIMONO = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     // 无敌状态不会主动同步至客户端
     private static final DataParameter<Boolean> INVULNERABLE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> BACKPACK_LEVEL = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
 
     /**
      * 模式所应用的 AI 的优先级
@@ -119,7 +118,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this) {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return !isIllegalItem(stack);
+            return !MaidInventoryItemHandler.isIllegalItem(stack);
         }
 
         @Override
@@ -133,23 +132,10 @@ public class EntityMaid extends AbstractEntityMaid {
             }
         }
     };
-    private final ItemStackHandler mainInv = new ItemStackHandler(15) {
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return !isIllegalItem(stack);
-        }
-
-        @Override
-        @Nonnull
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            // 物品合法才允许插入，否则原样返回
-            if (isItemValid(slot, stack)) {
-                return super.insertItem(slot, stack, simulate);
-            } else {
-                return stack;
-            }
-        }
-    };
+    private final ItemStackHandler mainInv = new MaidInventoryItemHandler(15);
+    private final ItemStackHandler smallBackpackInv = new MaidInventoryItemHandler(10);
+    private final ItemStackHandler middleBackpackInv = new MaidInventoryItemHandler(10);
+    private final ItemStackHandler bigBackpackInv = new MaidInventoryItemHandler(10);
     private final BaubleItemHandler baubleInv = new BaubleItemHandler(8);
     /**
      * 依据此变量，在打开 GUI 时暂时中断实体的 AI 执行
@@ -177,13 +163,6 @@ public class EntityMaid extends AbstractEntityMaid {
     public EntityMaid(World worldIn) {
         super(worldIn);
         setSize(0.6f, 1.5f);
-    }
-
-    /**
-     * 检查输入的物品是否是非法的
-     */
-    private static boolean isIllegalItem(ItemStack stack) {
-        return stack.getItem() instanceof ItemShulkerBox || stack.getItem() instanceof ItemPhoto || stack.getItem() instanceof ItemAlbum;
     }
 
     @SuppressWarnings("unchecked")
@@ -233,6 +212,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(SASIMONO_CRC32, String.valueOf(0L));
         this.dataManager.register(SHOW_SASIMONO, false);
         this.dataManager.register(INVULNERABLE, false);
+        this.dataManager.register(BACKPACK_LEVEL, EnumBackPackLevel.EMPTY.getLevel());
     }
 
     @Override
@@ -267,7 +247,7 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     private void spawnPortalParticle() {
-        if (this.world.isRemote && this.getIsInvulnerable()) {
+        if (this.world.isRemote && this.getIsInvulnerable() && this.getOwnerId() != null) {
             for (int i = 0; i < 2; ++i) {
                 this.world.spawnParticle(EnumParticleTypes.PORTAL,
                         this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
@@ -449,7 +429,7 @@ public class EntityMaid extends AbstractEntityMaid {
             // 获取实体的物品堆
             ItemStack itemstack = entityItem.getItem();
             // 检查物品是否合法
-            if (isIllegalItem(itemstack)) {
+            if (MaidInventoryItemHandler.isIllegalItem(itemstack)) {
                 return false;
             }
             // 获取数量，为后面方面用
@@ -770,7 +750,7 @@ public class EntityMaid extends AbstractEntityMaid {
                     this.setHomePos(pos);
                     if (!world.isRemote) {
                         // 如果尝试移动失败，那就尝试传送
-                        if (!getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
+                        if (this.isSitting() || !getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
                             attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
                         }
                         player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
@@ -1046,6 +1026,18 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.INVULNERABLE.getName())) {
             setEntityInvulnerable(compound.getBoolean(NBT.INVULNERABLE.getName()));
         }
+        if (compound.hasKey(NBT.BACKPACK_LEVEL.getName())) {
+            setBackpackLevel(EnumBackPackLevel.getEnumLevelByNum(compound.getInteger(NBT.BACKPACK_LEVEL.getName())));
+        }
+        if (compound.hasKey(NBT.MAID_SMALL_BACKPACK.getName())) {
+            smallBackpackInv.deserializeNBT((NBTTagCompound) compound.getTag(NBT.MAID_SMALL_BACKPACK.getName()));
+        }
+        if (compound.hasKey(NBT.MAID_MIDDLE_BACKPACK.getName())) {
+            middleBackpackInv.deserializeNBT((NBTTagCompound) compound.getTag(NBT.MAID_MIDDLE_BACKPACK.getName()));
+        }
+        if (compound.hasKey(NBT.MAID_BIG_BACKPACK.getName())) {
+            bigBackpackInv.deserializeNBT((NBTTagCompound) compound.getTag(NBT.MAID_BIG_BACKPACK.getName()));
+        }
     }
 
     @Override
@@ -1063,6 +1055,10 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setLong(NBT.SASIMONO_CRC32.getName(), getSasimonoCRC32());
         compound.setBoolean(NBT.SHOW_SASIMONO.getName(), isShowSasimono());
         compound.setBoolean(NBT.INVULNERABLE.getName(), getIsInvulnerable());
+        compound.setInteger(NBT.BACKPACK_LEVEL.getName(), getBackLevel().getLevel());
+        compound.setTag(NBT.MAID_SMALL_BACKPACK.getName(), smallBackpackInv.serializeNBT());
+        compound.setTag(NBT.MAID_MIDDLE_BACKPACK.getName(), middleBackpackInv.serializeNBT());
+        compound.setTag(NBT.MAID_BIG_BACKPACK.getName(), bigBackpackInv.serializeNBT());
     }
 
     @Override
@@ -1163,7 +1159,21 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv));
+            switch (this.getBackLevel()) {
+                default:
+                case EMPTY:
+                    return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(
+                            new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, baubleInv));
+                case SMALL:
+                    return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(
+                            new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, smallBackpackInv, baubleInv));
+                case MIDDLE:
+                    return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(
+                            new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, smallBackpackInv, middleBackpackInv, baubleInv));
+                case BIG:
+                    return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(
+                            new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, mainInv, smallBackpackInv, middleBackpackInv, bigBackpackInv, baubleInv));
+            }
         } else {
             return super.getCapability(capability, facing);
         }
@@ -1180,6 +1190,12 @@ public class EntityMaid extends AbstractEntityMaid {
                 return baubleInv;
             case ARMOR:
                 return armorInvWrapper;
+            case SMALL_BACKPACK:
+                return smallBackpackInv;
+            case MIDDLE_BACKPACK:
+                return middleBackpackInv;
+            case BIG_BACKPACK:
+                return bigBackpackInv;
             default:
                 return mainInv;
         }
@@ -1236,7 +1252,23 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
-        return handsFirst ? new CombinedInvWrapper(handsInvWrapper, mainInv) : new CombinedInvWrapper(mainInv, handsInvWrapper);
+        CombinedInvWrapper combinedInvWrapper;
+        switch (this.getBackLevel()) {
+            default:
+            case EMPTY:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv);
+                break;
+            case SMALL:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv);
+                break;
+            case MIDDLE:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv, middleBackpackInv);
+                break;
+            case BIG:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv, middleBackpackInv, bigBackpackInv);
+                break;
+        }
+        return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
     }
 
     public boolean isBegging() {
@@ -1361,6 +1393,15 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(SHOW_SASIMONO, isShow);
     }
 
+    public void setBackpackLevel(EnumBackPackLevel level) {
+        this.dataManager.set(BACKPACK_LEVEL,
+                MathHelper.clamp(level.getLevel(), EnumBackPackLevel.EMPTY.getLevel(), EnumBackPackLevel.BIG.getLevel()));
+    }
+
+    public EnumBackPackLevel getBackLevel() {
+        return EnumBackPackLevel.getEnumLevelByNum(this.dataManager.get(BACKPACK_LEVEL));
+    }
+
     @Override
     public boolean canDestroyBlock(BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
@@ -1376,8 +1417,12 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean destroyBlock(BlockPos pos) {
-        // TODO 破坏进度
-        return canDestroyBlock(pos) && world.destroyBlock(pos, true);
+        return destroyBlock(pos, true);
+    }
+
+    @Override
+    public boolean destroyBlock(BlockPos pos, boolean dropBlock) {
+        return canDestroyBlock(pos) && world.destroyBlock(pos, dropBlock);
     }
 
     @Override
@@ -1420,7 +1465,15 @@ public class EntityMaid extends AbstractEntityMaid {
         // 是否显示指物旗
         SHOW_SASIMONO("ShowSasimono"),
         // 无敌状态
-        INVULNERABLE("Invulnerable");
+        INVULNERABLE("Invulnerable"),
+        // 背包等级
+        BACKPACK_LEVEL("BackpackLevel"),
+        // 女仆小背包
+        MAID_SMALL_BACKPACK("MaidSmallBackpack"),
+        // 女仆中背包
+        MAID_MIDDLE_BACKPACK("MaidMiddleBackpack"),
+        // 女仆大背包
+        MAID_BIG_BACKPACK("MaidBigBackpack");
 
         private String name;
 
@@ -1435,6 +1488,29 @@ public class EntityMaid extends AbstractEntityMaid {
 
         public String getName() {
             return name;
+        }
+    }
+
+    public enum EnumBackPackLevel {
+        // 背包大小
+        EMPTY(0),
+        SMALL(1),
+        MIDDLE(2),
+        BIG(3);
+
+        private int level;
+
+        EnumBackPackLevel(int level) {
+            this.level = level;
+        }
+
+        public static EnumBackPackLevel getEnumLevelByNum(int num) {
+            int numClamp = MathHelper.clamp(num, EMPTY.getLevel(), BIG.getLevel());
+            return EnumBackPackLevel.values()[numClamp];
+        }
+
+        public int getLevel() {
+            return level;
         }
     }
 }

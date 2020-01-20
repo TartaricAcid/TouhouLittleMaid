@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.ResourcesDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -51,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 @SideOnly(Side.CLIENT)
 public abstract class AbstractMaidGuiContainer extends GuiContainer {
     protected static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
+    protected static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_side.png");
     private static ScheduledExecutorService timer;
     private static int taskPageIndex;
@@ -88,6 +89,15 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
      * @param partialTicks tick 插值
      */
     public abstract void drawCustomScreen(int mouseX, int mouseY, float partialTicks);
+
+    /**
+     * 绘制自定义的文本提示
+     *
+     * @param mouseX       鼠标 x 坐标
+     * @param mouseY       鼠标 y 坐标
+     * @param partialTicks tick 插值
+     */
+    public abstract void drawCustomTooltips(int mouseX, int mouseY, float partialTicks);
 
     /**
      * 该 GUI 的名称
@@ -135,13 +145,19 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 显示声音版权的页面
         this.buttonList.add(new GuiButtonImage(BUTTON.SOUND_CREDIT.ordinal(), i + 3, j + 166, 21,
                 21, 233, 0, 24, BACKGROUND));
+        // 下载资源包按钮
+        this.buttonList.add(new GuiButtonImage(BUTTON.DOWNLOAD_RESOURCES.ordinal(), i + 24, j + 166, 21,
+                21, 233, 45, 24, BACKGROUND));
 
         // 模式翻页
-        this.buttonList.add(new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
-                11, 177, 0, 16, SIDE));
-        this.buttonList.add(new GuiButtonImage(BUTTON.TASK_RIGHT_SWITCH.ordinal(), i - 17, j + 150, 7,
-                11, 165, 0, 16, SIDE));
-
+        GuiButtonImage leftSwitch = new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
+                11, 177, 0, 16, SIDE);
+        GuiButtonImage rightSwitch = new GuiButtonImage(BUTTON.TASK_RIGHT_SWITCH.ordinal(), i - 17, j + 150, 7,
+                11, 165, 0, 16, SIDE);
+        leftSwitch.visible = taskPageIndex > 0;
+        rightSwitch.visible = taskPageIndex < taskPageTotal;
+        this.buttonList.add(leftSwitch);
+        this.buttonList.add(rightSwitch);
 
         // 模式
         for (int k = 0; k < 6; k++) {
@@ -217,6 +233,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             return;
         }
 
+        if (button.id == BUTTON.DOWNLOAD_RESOURCES.ordinal()) {
+            mc.addScheduledTask(() -> mc.displayGuiScreen(new ResourcesDownloadGui()));
+            return;
+        }
+
         if (button.id == BUTTON.TASK_LEFT_SWITCH.ordinal()) {
             if (taskPageIndex > 0) {
                 taskPageIndex--;
@@ -281,7 +302,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             }
 
             Potion potion = effect.getPotion();
-            int startX = i + 178;
+            int startX = i + 178 + getRenderPotionStartXOffset();
             int startY = j + 5 + spacing;
             spacing += 12;
 
@@ -353,6 +374,8 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.hata_sasimono"), mouseX, mouseY);
         }
 
+        drawCustomTooltips(mouseX, mouseY, partialTicks);
+
         // 绘制物品的文本提示
         this.renderHoveredToolTip(mouseX, mouseY);
     }
@@ -410,19 +433,26 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         RenderHelper.disableStandardItemLighting();
     }
 
+    /**
+     * 渲染药水时距离左侧边距的距离
+     *
+     * @return 距离，单位为像素
+     */
+    abstract public int getRenderPotionStartXOffset();
+
     @Override
     public int getXSize() {
         if (maid.getActivePotionEffects().size() <= 0) {
-            return super.getXSize();
+            return super.getXSize() + getRenderPotionStartXOffset();
         } else {
             int i = 0;
             for (PotionEffect effect : maid.getActivePotionEffects()) {
                 i += effect.getDuration();
             }
             if (i == 0) {
-                return super.getXSize();
+                return super.getXSize() + getRenderPotionStartXOffset();
             }
-            return super.getXSize() + 128;
+            return super.getXSize() + 128 + getRenderPotionStartXOffset();
         }
     }
 
@@ -463,7 +493,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 模式左翻页
         TASK_LEFT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 模式右翻页
-        TASK_RIGHT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId());
+        TASK_RIGHT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
+        // 下载资源包按钮
+        DOWNLOAD_RESOURCES(MaidGuiHandler.OTHER_GUI.NONE.getId());
 
         private int guiId;
 

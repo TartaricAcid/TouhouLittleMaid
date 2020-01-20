@@ -1,7 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.*;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncOwnerMaidNumMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncPowerMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;

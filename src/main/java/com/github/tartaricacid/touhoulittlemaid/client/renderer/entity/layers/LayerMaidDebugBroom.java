@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaBroomModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -23,8 +24,8 @@ public class LayerMaidDebugBroom implements LayerRenderer<EntityMaid> {
     private static final ResourceLocation BROOM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/marisa_broom.png");
     private ModelBase modelBase;
 
-    public LayerMaidDebugBroom(ModelBase modelBase) {
-        this.modelBase = modelBase;
+    public LayerMaidDebugBroom() {
+        this.modelBase = new EntityMarisaBroomModel();
     }
 
     @Override
