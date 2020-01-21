@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -135,6 +136,10 @@ public class EntityModelJson extends ModelBase {
                                   float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
         if (entityIn instanceof EntityMaid) {
             setMaidRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, (EntityMaid) entityIn);
+            return;
+        }
+        if (entityIn instanceof EntityChair) {
+            setChairRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, (EntityChair) entityIn);
         }
     }
 
@@ -282,12 +287,12 @@ public class EntityModelJson extends ModelBase {
                 armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
                 armLeft.rotateAngleY = 0f;
                 armLeft.rotateAngleZ = MathHelper.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
-            }
 
-            // 手部使用动画
-            if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.LEFT) {
-                armLeft.rotateAngleX = (float) ((double) armLeft.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
-                armLeft.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
+                // 手部使用动画
+                if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.LEFT) {
+                    armLeft.rotateAngleX = (float) ((double) armLeft.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+                    armLeft.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
+                }
             }
         }
 
@@ -514,6 +519,85 @@ public class EntityModelJson extends ModelBase {
         }
 
         GlStateManager.translate(0, 0.3f, 0);
+    }
+
+    private void setChairRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
+                                        float netHeadYaw, float headPitch, float scaleFactor, EntityChair entityChair) {
+        ModelRenderer rRotationX5 = modelMap.get("rRotationX5");
+        ModelRenderer rRotationX10 = modelMap.get("rRotationX10");
+        ModelRenderer rRotationX20 = modelMap.get("rRotationX20");
+        ModelRenderer rRotationY5 = modelMap.get("rRotationY5");
+        ModelRenderer rRotationY10 = modelMap.get("rRotationY10");
+        ModelRenderer rRotationY20 = modelMap.get("rRotationY20");
+        ModelRenderer rRotationZ5 = modelMap.get("rRotationZ5");
+        ModelRenderer rRotationZ10 = modelMap.get("rRotationZ10");
+        ModelRenderer rRotationZ20 = modelMap.get("rRotationZ20");
+
+        ModelRenderer lRotationX5 = modelMap.get("lRotationX5");
+        ModelRenderer lRotationX10 = modelMap.get("lRotationX10");
+        ModelRenderer lRotationX20 = modelMap.get("lRotationX20");
+        ModelRenderer lRotationY5 = modelMap.get("lRotationY5");
+        ModelRenderer lRotationY10 = modelMap.get("lRotationY10");
+        ModelRenderer lRotationY20 = modelMap.get("lRotationY20");
+        ModelRenderer lRotationZ5 = modelMap.get("lRotationZ5");
+        ModelRenderer lRotationZ10 = modelMap.get("lRotationZ10");
+        ModelRenderer lRotationZ20 = modelMap.get("lRotationZ20");
+
+        if (rRotationX5 != null) {
+            rRotationX5.rotateAngleX = ageInTicks * (360f / 20f / 5) * 0.017453292F;
+        }
+        if (rRotationX10 != null) {
+            rRotationX10.rotateAngleX = ageInTicks * (360f / 20f / 10) * 0.017453292F;
+        }
+        if (rRotationX20 != null) {
+            rRotationX20.rotateAngleX = ageInTicks * (360f / 20f / 20) * 0.017453292F;
+        }
+        if (rRotationY5 != null) {
+            rRotationY5.rotateAngleY = ageInTicks * (360f / 20f / 5) * 0.017453292F;
+        }
+        if (rRotationY10 != null) {
+            rRotationY10.rotateAngleY = ageInTicks * (360f / 20f / 10) * 0.017453292F;
+        }
+        if (rRotationY20 != null) {
+            rRotationY20.rotateAngleY = ageInTicks * (360f / 20f / 20) * 0.017453292F;
+        }
+        if (rRotationZ5 != null) {
+            rRotationZ5.rotateAngleZ = ageInTicks * (360f / 20f / 5) * 0.017453292F;
+        }
+        if (rRotationZ10 != null) {
+            rRotationZ10.rotateAngleZ = ageInTicks * (360f / 20f / 10) * 0.017453292F;
+        }
+        if (rRotationZ20 != null) {
+            rRotationZ20.rotateAngleZ = ageInTicks * (360f / 20f / 20) * 0.017453292F;
+        }
+
+        if (lRotationX5 != null) {
+            lRotationX5.rotateAngleX = -ageInTicks * (360f / 20f / 5) * 0.017453292F;
+        }
+        if (lRotationX10 != null) {
+            lRotationX10.rotateAngleX = -ageInTicks * (360f / 20f / 10) * 0.017453292F;
+        }
+        if (lRotationX20 != null) {
+            lRotationX20.rotateAngleX = -ageInTicks * (360f / 20f / 20) * 0.017453292F;
+        }
+        if (lRotationY5 != null) {
+            lRotationY5.rotateAngleY = -ageInTicks * (360f / 20f / 5) * 0.017453292F;
+        }
+        if (lRotationY10 != null) {
+            lRotationY10.rotateAngleY = -ageInTicks * (360f / 20f / 10) * 0.017453292F;
+        }
+        if (lRotationY20 != null) {
+            lRotationY20.rotateAngleY = -ageInTicks * (360f / 20f / 20) * 0.017453292F;
+        }
+        if (lRotationZ5 != null) {
+            lRotationZ5.rotateAngleZ = -ageInTicks * (360f / 20f / 5) * 0.017453292F;
+        }
+        if (lRotationZ10 != null) {
+            lRotationZ10.rotateAngleZ = -ageInTicks * (360f / 20f / 10) * 0.017453292F;
+        }
+        if (lRotationZ20 != null) {
+            lRotationZ20.rotateAngleZ = -ageInTicks * (360f / 20f / 20) * 0.017453292F;
+        }
     }
 
     private void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
