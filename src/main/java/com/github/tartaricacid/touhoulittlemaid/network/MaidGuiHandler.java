@@ -1,18 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.network;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.block.MaidBeaconGuiContainer;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.AlbumGuiContainer;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidBaubleGuiContainer;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidInventoryGuiContainer;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.MaidMainGuiContainer;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.*;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.NpcMaidToolGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.*;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -33,16 +32,17 @@ public class MaidGuiHandler implements IGuiHandler {
     @Nullable
     @Override
     public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int startRow) {
-        if (guiId == MAIN_GUI.MAIN.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidMainContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
+        Entity entity = world.getEntityByID(entityId);
+        if (guiId == MAIN_GUI.MAIN.getId() && entity instanceof EntityMaid) {
+            return new MaidMainContainer(player.inventory, (EntityMaid) entity, taskIndex);
         }
-        if (guiId == MAIN_GUI.INVENTORY.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidInventoryContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex, startRow);
+        if (guiId == MAIN_GUI.INVENTORY.getId() && entity instanceof EntityMaid) {
+            return new MaidInventoryContainer(player.inventory, (EntityMaid) entity, taskIndex, startRow);
         }
-        if (guiId == MAIN_GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidBaubleContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
+        if (guiId == MAIN_GUI.BAUBLE.getId() && entity instanceof EntityMaid) {
+            return new MaidBaubleContainer(player.inventory, (EntityMaid) entity, taskIndex);
         }
-        if (guiId == OTHER_GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
+        if (guiId == OTHER_GUI.CHAIR.getId() && entity instanceof EntityChair) {
             // 服务端什么也不做
             return null;
         }
@@ -53,7 +53,10 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, startRow)) instanceof TileEntityMaidBeacon) {
             return new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, startRow)));
         }
-        if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && world.getEntityByID(entityId) instanceof EntityCustomNpc) {
+        if (guiId == OTHER_GUI.SUITCASE.getId() && entity instanceof EntitySuitcase) {
+            return new SuitcaseContainer(player.inventory, (EntitySuitcase) entity);
+        }
+        if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && entity instanceof EntityCustomNpc) {
             // 服务端什么也不做
             return null;
         }
@@ -71,17 +74,18 @@ public class MaidGuiHandler implements IGuiHandler {
     @Nullable
     @Override
     public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int entityId, int taskIndex, int startRow) {
-        if (guiId == MAIN_GUI.MAIN.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidMainGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
+        Entity entity = world.getEntityByID(entityId);
+        if (guiId == MAIN_GUI.MAIN.getId() && entity instanceof EntityMaid) {
+            return new MaidMainGuiContainer(player.inventory, (EntityMaid) entity, taskIndex);
         }
-        if (guiId == MAIN_GUI.INVENTORY.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidInventoryGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex, startRow);
+        if (guiId == MAIN_GUI.INVENTORY.getId() && entity instanceof EntityMaid) {
+            return new MaidInventoryGuiContainer(player.inventory, (EntityMaid) entity, taskIndex, startRow);
         }
-        if (guiId == MAIN_GUI.BAUBLE.getId() && world.getEntityByID(entityId) instanceof EntityMaid) {
-            return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) world.getEntityByID(entityId), taskIndex);
+        if (guiId == MAIN_GUI.BAUBLE.getId() && entity instanceof EntityMaid) {
+            return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) entity, taskIndex);
         }
-        if (guiId == OTHER_GUI.CHAIR.getId() && world.getEntityByID(entityId) instanceof EntityChair) {
-            return new ChairSkinGui((EntityChair) world.getEntityByID(entityId));
+        if (guiId == OTHER_GUI.CHAIR.getId() && entity instanceof EntityChair) {
+            return new ChairSkinGui((EntityChair) entity);
         }
         if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
             return new AlbumGuiContainer(player.inventory, player.getHeldItemMainhand());
@@ -90,8 +94,11 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.MAID_BEACON.getId() && world.getTileEntity(new BlockPos(entityId, taskIndex, startRow)) instanceof TileEntityMaidBeacon) {
             return new MaidBeaconGuiContainer(new MaidBeaconContainer((TileEntityMaidBeacon) world.getTileEntity(new BlockPos(entityId, taskIndex, startRow))));
         }
-        if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && world.getEntityByID(entityId) instanceof EntityCustomNpc) {
-            return new NpcMaidToolGui((EntityCustomNpc) world.getEntityByID(entityId));
+        if (guiId == OTHER_GUI.SUITCASE.getId() && entity instanceof EntitySuitcase) {
+            return new SuitcaseGuiContainer(player.inventory, (EntitySuitcase) entity);
+        }
+        if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && entity instanceof EntityCustomNpc) {
+            return new NpcMaidToolGui((EntityCustomNpc) entity);
         }
         return null;
     }
@@ -133,7 +140,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // 女仆信标
         MAID_BEACON(7),
         // NPC 模组的模型切换工具界面
-        NPC_MAID_TOOL(8);
+        NPC_MAID_TOOL(8),
+        // 行李箱
+        SUITCASE(9);
 
         private int id;
 

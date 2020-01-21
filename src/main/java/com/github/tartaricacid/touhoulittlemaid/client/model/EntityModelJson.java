@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -273,9 +274,15 @@ public class EntityModelJson extends ModelBase {
 
         if (armLeft != null) {
             // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
-            armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
-            armLeft.rotateAngleY = 0f;
-            armLeft.rotateAngleZ = MathHelper.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
+            if (entityMaid.getControllingPassenger() instanceof EntitySuitcase) {
+                armLeft.rotateAngleX = 0.5f;
+                armLeft.rotateAngleY = 0f;
+                armLeft.rotateAngleZ = -0.395f;
+            } else {
+                armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
+                armLeft.rotateAngleY = 0f;
+                armLeft.rotateAngleZ = MathHelper.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
+            }
 
             // 手部使用动画
             if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.LEFT) {

@@ -10,10 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextu
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelResources;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -87,6 +84,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntitySlime.class, EntityYukkuriSlimeRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityFairy.class, EntityFairyRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityBox.class, EntityBoxRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySuitcase.class, EntitySuitcaseRender.FACTORY);
     }
 
     @Override

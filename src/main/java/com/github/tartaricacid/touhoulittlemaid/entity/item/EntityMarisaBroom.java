@@ -5,6 +5,8 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
  * @date 2019/7/5 22:38
  **/
 
+import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.ICanRidingMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.block.state.IBlockState;
@@ -30,7 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 
-public class EntityMarisaBroom extends EntityLivingBase {
+public class EntityMarisaBroom extends EntityLivingBase implements ICanRidingMaid {
     private boolean keyForward = false;
     private boolean keyBack = false;
     private boolean keyLeft = false;
@@ -195,6 +197,23 @@ public class EntityMarisaBroom extends EntityLivingBase {
     @Override
     public double getMountedYOffset() {
         return 0.1d;
+    }
+
+    @Override
+    public void updatePassenger(AbstractEntityMaid maid) {
+        if (maid.isPassenger(this)) {
+            this.setPosition(maid.posX, maid.posY + 0.15, maid.posZ);
+            // 视线也必须同步，因为扫把的朝向受视线限制
+            // 只能以视线方向为中心左右各 90 度，不同步就会导致朝向错误
+            this.rotationYawHead = maid.rotationYawHead;
+            // 旋转方向同步，包括渲染的旋转方向
+            this.rotationPitch = maid.rotationPitch;
+            this.rotationYaw = maid.rotationYaw;
+            this.renderYawOffset = maid.renderYawOffset;
+            // fallDistance 永远为 0
+            maid.fallDistance = 0;
+            this.fallDistance = 0;
+        }
     }
 
     /**
