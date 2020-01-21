@@ -13,6 +13,7 @@ entity.touhou_little_maid.chair.name=Chair
 entity.touhou_little_maid.box.name=Cake Box
 entity.touhou_little_maid.rinnosuke.name=Rinnosuke Morichika
 entity.touhou_little_maid.fairy.name=Maid Fairy
+entity.touhou_little_maid.suitcase.name=Suitcase
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item

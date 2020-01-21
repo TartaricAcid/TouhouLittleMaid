@@ -202,7 +202,7 @@ public class EntityChair extends EntityLivingBase {
     }
 
     /**
-     * 击打扫帚逻辑
+     * 击打坐垫逻辑
      */
     private boolean applyHitChairLogic(EntityPlayer player) {
         boolean isPlayerCreativeMode = player.capabilities.isCreativeMode;
@@ -222,7 +222,7 @@ public class EntityChair extends EntityLivingBase {
     }
 
     /**
-     * 将扫帚从实体状态转变为物品状态
+     * 将坐垫从实体状态转变为物品状态
      */
     private void killChair() {
         this.setDead();

@@ -1,10 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-import com.github.tartaricacid.touhoulittlemaid.api.MaidInventory;
+import com.github.tartaricacid.touhoulittlemaid.api.*;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
@@ -25,6 +22,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
@@ -242,7 +240,7 @@ public class EntityMaid extends AbstractEntityMaid {
         // 随机回血
         this.randomRestoreHealth();
         super.onLivingUpdate();
-        applyBroomRiding();
+        applyEntityRiding();
         applyNavigatorAndMoveHelper();
     }
 
@@ -320,10 +318,10 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 将贴近的扫把附加到女仆身上去
      */
-    private void applyBroomRiding() {
+    private void applyEntityRiding() {
         // 取自原版船部分逻辑
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0, 0, 0),
-                entity -> entity instanceof EntityMarisaBroom);
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
+                entity -> entity instanceof ICanRidingMaid);
 
         if (list.isEmpty()) {
             return;
@@ -336,7 +334,8 @@ public class EntityMaid extends AbstractEntityMaid {
                 // 没有实体坐在女仆上，女仆也没有坐在别的实体上
                 boolean maidNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
                 // 服务端，女仆没有处于待命状态，而且尝试坐上去的实体是扫把
-                if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding && entity instanceof EntityMarisaBroom) {
+                if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding &&
+                        entity instanceof ICanRidingMaid && ((ICanRidingMaid) entity).canRiding(this)) {
                     entity.startRiding(this);
                 }
             }
@@ -348,38 +347,11 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
-        super.updatePassenger(passenger);
-        if (this.isPassenger(passenger)) {
-            if (passenger instanceof EntityMarisaBroom) {
-                EntityMarisaBroom broom = (EntityMarisaBroom) passenger;
-                // 视线也必须同步，因为扫把的朝向受视线限制
-                // 只能以视线方向为中心左右各 90 度，不同步就会导致朝向错误
-                broom.rotationYawHead = this.rotationYawHead;
-                // 旋转方向同步，包括渲染的旋转方向
-                broom.rotationPitch = this.rotationPitch;
-                broom.rotationYaw = this.rotationYaw;
-                broom.renderYawOffset = this.renderYawOffset;
-                // fallDistance 永远为 0
-                this.fallDistance = 0;
-                broom.fallDistance = 0;
-            }
+        if (passenger instanceof ICanRidingMaid) {
+            ((ICanRidingMaid) passenger).updatePassenger(this);
+        } else {
+            super.updatePassenger(passenger);
         }
-    }
-
-    /**
-     * 只有扫帚能骑上女仆，其他一概不允许
-     */
-    @Override
-    protected boolean canBeRidden(Entity entityIn) {
-        if (entityIn instanceof EntityMarisaBroom) {
-            return true;
-        }
-        return super.canBeRidden(entityIn);
-    }
-
-    @Override
-    public double getMountedYOffset() {
-        return 0.15;
     }
 
     @Nullable
@@ -908,14 +880,7 @@ public class EntityMaid extends AbstractEntityMaid {
         // 将女仆身上的物品进行掉落
         if (!world.isRemote) {
             IItemHandler itemHandler = this.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-            if (itemHandler != null) {
-                for (int i = 0; i < itemHandler.getSlots(); ++i) {
-                    ItemStack itemstack = itemHandler.getStackInSlot(i);
-                    if (!itemstack.isEmpty()) {
-                        InventoryHelper.spawnItemStack(world, this.posX, this.posY, this.posZ, itemstack);
-                    }
-                }
-            }
+            ItemDropUtil.dropItemHandlerItems(itemHandler, world, this.getPositionVector());
             // 最后掉落手办
             dropGarageKit();
         }

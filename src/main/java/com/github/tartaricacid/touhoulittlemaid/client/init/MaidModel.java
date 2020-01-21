@@ -67,6 +67,7 @@ public final class MaidModel {
         registerRender(MaidItems.DEBUG_DANMAKU);
         registerRender(MaidItems.NPC_MAID_TOOL);
         registerRender(MaidItems.GASHAPON_COIN);
+        registerRender(MaidItems.SUITCASE);
 
         ModelResourceLocation maidModelCoupon1 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_1", "inventory");
         ModelResourceLocation maidModelCoupon2 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_2", "inventory");
