@@ -12,6 +12,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -70,6 +71,17 @@ public class ItemPhoto extends Item {
         return EnumActionResult.SUCCESS;
     }
 
+    public static boolean hasMaidNbtData(ItemStack stack) {
+        return stack.hasTagCompound() && !Objects.requireNonNull(stack.getTagCompound()).getCompoundTag(MAID_INFO.getNbtName()).isEmpty();
+    }
+
+    public static NBTTagCompound getMaidNbtData(ItemStack stack) {
+        if (hasMaidNbtData(stack)) {
+            return Objects.requireNonNull(stack.getTagCompound()).getCompoundTag(MAID_INFO.getNbtName());
+        }
+        return new NBTTagCompound();
+    }
+
     @Nonnull
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -79,10 +91,7 @@ public class ItemPhoto extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        // 无数据时显示红色提醒信息
-        boolean haveNoData = !stack.hasTagCompound() ||
-                Objects.requireNonNull(stack.getTagCompound()).getCompoundTag(MAID_INFO.getNbtName()).isEmpty();
-        if (haveNoData) {
+        if (!hasMaidNbtData(stack)) {
             tooltip.add(TextFormatting.DARK_RED + I18n.format("tooltips.touhou_little_maid.photo.no_data.desc"));
         } else {
             String modelId = stack.getTagCompound().getCompoundTag(MAID_INFO.getNbtName()).getString(EntityMaid.NBT.MODEL_ID.getName());
