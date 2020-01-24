@@ -42,6 +42,7 @@ item.touhou_little_maid.maid_model_coupon.name=女仆模型券
 item.touhou_little_maid.gashapon.name=扭蛋
 item.touhou_little_maid.gashapon_coin.name=扭蛋币
 item.touhou_little_maid.maid_backpack.name=女仆背包
+item.touhou_little_maid.suitcase.name=行李箱
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -126,6 +127,11 @@ message.touhou_little_maid.resources_download.reload=重载资源信息中……
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
 info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
 
+# Death
+death.touhou_little_maid.attack.danmaku.1=%1$s被%2$s用弹幕干掉了
+death.touhou_little_maid.attack.danmaku.2=%1$s在躲避%2$s的弹幕时不慎 biu 了~
+death.touhou_little_maid.attack.danmaku.3=%1$s被%2$s的弹幕打的满身疮痍
+
 # Maid Config
 config.touhou_little_maid.maid_config=女仆相关配置
 config.touhou_little_maid.maid_config.maid_tamed_item=驯服女仆所使用的物品
@@ -159,6 +165,8 @@ config.touhou_little_maid.misc_config.creative_player_can_ride_broom=只有创�
 config.touhou_little_maid.misc_config.power_point_hud_x=P 点 X 位置
 config.touhou_little_maid.misc_config.power_point_hud_y=P 点 Y 位置
 config.touhou_little_maid.misc_config.override_npc_render=覆盖 NPC 渲染
+config.touhou_little_maid.misc_config.chair_cannot_change_model=只有创造模式玩家能够切换坐垫模型
+config.touhou_little_maid.misc_config.chair_cannot_be_destroied=只有创造模式玩家能够打掉坐垫
 
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=扭蛋配置

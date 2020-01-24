@@ -67,6 +67,16 @@ public class ItemMaidModelCoupon extends Item {
         return coupon;
     }
 
+    public static String getModelData(ItemStack coupon) {
+        if (coupon.hasTagCompound()) {
+            NBTTagCompound tag = coupon.getTagCompound();
+            if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
+                return tag.getString(MODEL_DATA_TAG);
+            }
+        }
+        return "touhou_little_maid:hakurei_reimu";
+    }
+
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab) && GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
@@ -91,16 +101,6 @@ public class ItemMaidModelCoupon extends Item {
                 event.setCanceled(true);
             }
         }
-    }
-
-    private String getModelData(ItemStack coupon) {
-        if (coupon.hasTagCompound()) {
-            NBTTagCompound tag = coupon.getTagCompound();
-            if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
-                return tag.getString(MODEL_DATA_TAG);
-            }
-        }
-        return "touhou_little_maid:hakurei_reimu";
     }
 
     @SideOnly(Side.CLIENT)

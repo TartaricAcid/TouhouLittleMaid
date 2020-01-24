@@ -42,6 +42,7 @@ item.touhou_little_maid.maid_model_coupon.name=Maid Model Coupon
 item.touhou_little_maid.gashapon.name=Gashapon
 item.touhou_little_maid.gashapon_coin.name=Gashapon Coin
 item.touhou_little_maid.maid_backpack.name=Maid Backpack
+item.touhou_little_maid.suitcase.name=Suitcase
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -126,6 +127,11 @@ message.touhou_little_maid.resources_download.reload=Reloading resource informat
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
 info.touhou_little_maid.maid.set_pos=§a§lMaid Pos: %d, %d, %d
 
+# Death
+death.touhou_little_maid.attack.danmaku.1=%1$s was killed by %2$s using danmaku
+death.touhou_little_maid.attack.danmaku.2=%1$s was shot by %2$s using danmaku
+death.touhou_little_maid.attack.danmaku.3=%1$s was pummeled by %2$s using danmaku
+
 # Maid Config
 config.touhou_little_maid.maid_config=Maid Config
 config.touhou_little_maid.maid_config.maid_tamed_item=Maid Tamed Item
@@ -159,6 +165,8 @@ config.touhou_little_maid.misc_config.creative_player_can_ride_broom=Only Creati
 config.touhou_little_maid.misc_config.power_point_hud_x=Power Point HUD Position X
 config.touhou_little_maid.misc_config.power_point_hud_y=Power Point HUD Position Y
 config.touhou_little_maid.misc_config.override_npc_render=Override NPC Render
+config.touhou_little_maid.misc_config.chair_cannot_change_model=Only creative player can change chair model
+config.touhou_little_maid.misc_config.chair_cannot_be_destroied=Only creative player can destroy chair
 
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=Gashapon Config
