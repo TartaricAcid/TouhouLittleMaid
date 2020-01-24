@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
@@ -215,7 +216,9 @@ public class EntityChair extends EntityLivingBase {
                 this.setDead();
             } else {
                 // 否则应用实体转物品逻辑
-                this.killChair();
+                if (!GeneralConfig.MISC_CONFIG.chairCannotBeDestroied || isPlayerCreativeMode) {
+                    this.killChair();
+                }
             }
         }
         return true;

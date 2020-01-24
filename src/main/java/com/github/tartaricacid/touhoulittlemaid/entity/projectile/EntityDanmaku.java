@@ -16,6 +16,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -108,7 +110,14 @@ public class EntityDanmaku extends EntityThrowable {
     private void applyNormalEntityHitLogic(@Nonnull RayTraceResult result) {
         // 投掷者不为空，也不为自己
         if (getThrower() != null && !result.entityHit.equals(this.thrower)) {
-            DamageSource source = new EntityDamageSource("magic", getThrower());
+            DamageSource source = new EntityDamageSource("magic", getThrower()) {
+                @Override
+                public ITextComponent getDeathMessage(EntityLivingBase victim) {
+                    int index = rand.nextInt(3) + 1;
+                    return new TextComponentTranslation(String.format("death.touhou_little_maid.attack.danmaku.%d", index),
+                            victim.getDisplayName(), getThrower().getDisplayName());
+                }
+            };
             source.setDamageBypassesArmor();
             source.setMagicDamage();
             source.setProjectile();

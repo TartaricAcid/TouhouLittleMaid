@@ -161,10 +161,20 @@ public class GeneralConfig {
         public double PowerPointHudY = 0;
 
         @Config.Comment("Override the render of Custom NPC mod")
-        @Config.LangKey("config.touhou_little_maid.misc_config.overrideNpcRender")
+        @Config.LangKey("config.touhou_little_maid.misc_config.override_npc_render")
         @Config.Name("OverrideNpcRender")
         @Config.RequiresMcRestart
         public boolean overrideNpcRender = true;
+
+        @Config.Comment("Only creative player can change chair model")
+        @Config.LangKey("config.touhou_little_maid.misc_config.chair_cannot_change_model")
+        @Config.Name("ChairCannotChangeModel")
+        public boolean chairCannotChangeModel = false;
+
+        @Config.Comment("Only creative player can destroy chair")
+        @Config.LangKey("config.touhou_little_maid.misc_config.chair_cannot_be_destroied")
+        @Config.Name("ChairCannotBeDestroied")
+        public boolean chairCannotBeDestroied = false;
     }
 
     public static class GashaponConfig {
