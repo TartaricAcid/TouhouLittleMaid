@@ -59,7 +59,7 @@ final class CTIngredientInput implements ProcessingInput
         return Optional.ofNullable(this.ingredient.getItems())
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(AltarZen::toItemStack)
+                .flatMap(AltarZen::toItemStacks)
                 .collect(Collectors.toList());
     }
 

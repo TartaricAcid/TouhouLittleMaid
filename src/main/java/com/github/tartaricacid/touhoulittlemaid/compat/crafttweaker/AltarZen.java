@@ -4,17 +4,23 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ProcessingInput;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
 import com.google.common.collect.Lists;
+
 import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nonnull;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author TartaricAcid
@@ -43,6 +49,21 @@ public class AltarZen {
             return ItemStack.EMPTY;
         }
         return (ItemStack) internal;
+    }
+
+    @Nonnull
+    public static Stream<ItemStack> toItemStacks(IItemStack itemStack) {
+        ItemStack raw = toItemStack(itemStack);
+        if (raw.getMetadata() == OreDictionary.WILDCARD_VALUE)
+        {
+            NonNullList<ItemStack> items = NonNullList.create();
+            raw.getItem().getSubItems(raw.getItem().getCreativeTab(), items);
+            return items.stream();
+        }
+        else
+        {
+            return raw.isEmpty() ? Collections.EMPTY_LIST.stream() : Collections.singletonList(raw).stream();
+        }
     }
 
     private static ProcessingInput[] toProcessingInput(IIngredient... ingredient) {
