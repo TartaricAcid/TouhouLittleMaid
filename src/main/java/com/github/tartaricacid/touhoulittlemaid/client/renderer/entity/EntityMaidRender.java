@@ -37,7 +37,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         this.addLayer(new LayerMaidDebugBroom());
         this.addLayer(new LayerHataSasimono());
         this.addLayer(new LayerMaidCustomHead(this));
-        this.addLayer(new LayerMaidBackpack());
+        this.addLayer(new LayerMaidBackpack(this));
     }
 
     @Override
