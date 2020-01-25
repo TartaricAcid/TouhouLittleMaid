@@ -375,7 +375,7 @@ model.touhou_little_maid.imaizumi_kagerou.name=今泉影狼
 model.touhou_little_maid.kijin_seija.name=鬼人正邪
 model.touhou_little_maid.sukuna_shinmyoumaru.name=少名针妙丸
 model.touhou_little_maid.horikawa_raiko.name=堀川雷鼓
-model.touhou_little_maid.haniyasushin_keiki.name=Keiki Haniyasushin
+model.touhou_little_maid.haniyasushin_keiki.name=埴安神袿姬
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -461,7 +461,7 @@ model.touhou_little_maid.imaizumi_kagerou.desc=§7竹林的狼人
 model.touhou_little_maid.kijin_seija.desc=§7逆袭的天邪鬼
 model.touhou_little_maid.sukuna_shinmyoumaru.desc=§7小人的后裔
 model.touhou_little_maid.horikawa_raiko.desc=§7梦幻的打击乐手
-model.touhou_little_maid.haniyasushin_keiki.desc=§7The Sculptor God Crafted by Utter Isolation
+model.touhou_little_maid.haniyasushin_keiki.desc=§7孤立无援造就的造形神
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.wheel_chair.name=轮椅
@@ -489,7 +489,7 @@ model.touhou_little_maid.anti_collision_bucket.name=防撞桶
 model.touhou_little_maid.park_bench.name=公园长椅
 model.touhou_little_maid.rinnosuke_children_toys.name=霖之助牌儿童摇摇乐
 model.touhou_little_maid.bowl.name=碗
-model.touhou_little_maid.moto.name=Moto
+model.touhou_little_maid.moto.name=摩托车
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=夜符「Night Bird」
