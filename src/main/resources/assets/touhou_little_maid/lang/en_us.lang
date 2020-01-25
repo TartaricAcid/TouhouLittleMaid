@@ -376,6 +376,7 @@ model.touhou_little_maid.imaizumi_kagerou.name=Kagerou Imaizumi
 model.touhou_little_maid.kijin_seija.name=Seija Kijin
 model.touhou_little_maid.sukuna_shinmyoumaru.name=Shinmyoumaru Sukuna
 model.touhou_little_maid.horikawa_raiko.name=Raiko Horikawa
+model.touhou_little_maid.haniyasushin_keiki.name=Keiki Haniyasushin
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -461,6 +462,7 @@ model.touhou_little_maid.imaizumi_kagerou.desc=§7The Bamboo Forest's Loup-Garou
 model.touhou_little_maid.kijin_seija.desc=§7Counterattacking Amanojaku
 model.touhou_little_maid.sukuna_shinmyoumaru.desc=§7Descendent of the Inchlings
 model.touhou_little_maid.horikawa_raiko.desc=§7Phantasmal Percussionist
+model.touhou_little_maid.haniyasushin_keiki.desc=§7The Sculptor God Crafted by Utter Isolation
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.wheel_chair.name=Wheel Chair
@@ -488,6 +490,7 @@ model.touhou_little_maid.anti_collision_bucket.name=Anti-collision Bucket
 model.touhou_little_maid.park_bench.name=Park Bench
 model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
 model.touhou_little_maid.bowl.name=Bowl
+model.touhou_little_maid.moto.name=Moto
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"

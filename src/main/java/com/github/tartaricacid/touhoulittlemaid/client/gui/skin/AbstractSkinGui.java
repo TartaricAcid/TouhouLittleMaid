@@ -157,6 +157,9 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
         PACK_COUNT = MODEL_PACK_LIST.size();
 
         // 计算出模型分页总数（用来刷新）
+        if (getPackIndex() >= MODEL_PACK_LIST.size()) {
+            setPackIndex(MODEL_PACK_LIST.size() - 1);
+        }
         PAGE_COUNT = (MODEL_PACK_LIST.get(getPackIndex()).getModelList().size() - 1) / PAGE_MAX_NUM + 1;
 
         // 中心点
