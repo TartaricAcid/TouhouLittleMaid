@@ -257,6 +257,9 @@
       "model_id": "touhou_little_maid:kitcho_yachie",
       "description": ["{model.touhou_little_maid.kitcho_yachie.desc}"]
     }, {
+      "model_id": "touhou_little_maid:haniyasushin_keiki",
+      "description": ["{model.touhou_little_maid.haniyasushin_keiki.desc}"]
+    }, {
       "model_id": "touhou_little_maid:sunny_milk",
       "description": ["{model.touhou_little_maid.sunny_milk.desc}"]
     }, {
