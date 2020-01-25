@@ -23,9 +23,9 @@ public class MaidBackpackBigModel extends ModelBase {
         bone.cubeList.add(new ModelBox(bone, 88, 30, -5.05F, -19.0F, 0.0F, 10, 4, 10, 0.0F, true));
         bone.cubeList.add(new ModelBox(bone, 88, 0, -5.0F, -26.0F, 0.0F, 10, 3, 7, 0.0F, false));
         bone.cubeList.add(new ModelBox(bone, 57, 0, -5.0F, -10.0F, 0.0F, 10, 10, 5, 0.0F, true));
-        bone.cubeList.add(new ModelBox(bone, 0, 0, -3.5F, -3.0F, -5.25F, 7, 1, 6, 0.0F, false));
-        bone.cubeList.add(new ModelBox(bone, 31, 0, 2.25F, -9.0F, -5.0F, 1, 8, 5, 0.0F, false));
-        bone.cubeList.add(new ModelBox(bone, 44, 0, -3.25F, -9.0F, -5.0F, 1, 8, 5, 0.0F, true));
+        bone.cubeList.add(new ModelBox(bone, 0, 0, -3.5F, -4.0F, -5.25F, 7, 1, 6, 0.0F, false));
+        bone.cubeList.add(new ModelBox(bone, 31, 0, 2.5F, -10.0F, -5.0F, 1, 8, 5, 0.0F, false));
+        bone.cubeList.add(new ModelBox(bone, 44, 0, -3.5F, -10.0F, -5.0F, 1, 8, 5, 0.0F, true));
         bone.cubeList.add(new ModelBox(bone, 76, 31, -2.0F, -9.5F, 10.0F, 4, 5, 1, 0.0F, false));
         bone.cubeList.add(new ModelBox(bone, 64, 32, -2.0F, -17.5F, 9.5F, 4, 1, 1, 0.0F, false));
         bone.cubeList.add(new ModelBox(bone, 76, 39, -1.5F, -2.25F, 10.0F, 3, 2, 1, 0.0F, false));
@@ -42,5 +42,11 @@ public class MaidBackpackBigModel extends ModelBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         bone.render(f5);
+    }
+
+    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+        modelRenderer.rotateAngleX = x;
+        modelRenderer.rotateAngleY = y;
+        modelRenderer.rotateAngleZ = z;
     }
 }

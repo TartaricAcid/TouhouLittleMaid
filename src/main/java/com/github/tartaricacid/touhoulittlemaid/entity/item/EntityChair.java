@@ -240,11 +240,6 @@ public class EntityChair extends EntityLivingBase {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
-    @Override
     public void readEntityFromNBT(@Nonnull NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         if (compound.hasKey(NBT.MODEL_ID.getName())) {

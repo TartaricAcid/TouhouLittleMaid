@@ -19,17 +19,8 @@ public class ModelItem {
     @SerializedName("model_id")
     private ResourceLocation modelId;
 
-    @SerializedName("mounted_height")
-    private float mountedYOffset;
-
-    @SerializedName("tameable_can_ride")
-    private boolean tameableCanRide = true;
-
     @SerializedName("render_item_scale")
     private float renderItemScale = 1.0f;
-
-    @SerializedName("no_gravity")
-    private boolean noGravity = false;
 
     /**
      * 用来为以后可能做改动的而设置的参数
@@ -48,6 +39,19 @@ public class ModelItem {
     public List<String> getDescription() {
         return description;
     }
+
+    /*--------------------------------- 坐垫部分数据 ------------------------------*/
+
+    @SerializedName("mounted_height")
+    private float mountedYOffset;
+
+    @SerializedName("tameable_can_ride")
+    private boolean tameableCanRide = true;
+
+    @SerializedName("no_gravity")
+    private boolean noGravity = false;
+
+    /*--------------------------------- 坐垫部分数据 ------------------------------*/
 
     /**
      * model id 必须存在

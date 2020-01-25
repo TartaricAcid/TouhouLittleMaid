@@ -30,32 +30,27 @@
 
 package com.github.tartaricacid.touhoulittlemaid.compat.crafttweaker;
 
+import com.github.tartaricacid.touhoulittlemaid.api.util.ProcessingInput;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
-
-import com.github.tartaricacid.touhoulittlemaid.api.util.ProcessingInput;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-final class CTIngredientInput implements ProcessingInput
-{
+final class CTIngredientInput implements ProcessingInput {
     private final IIngredient ingredient;
 
-    CTIngredientInput(IIngredient ingredient)
-    {
+    CTIngredientInput(IIngredient ingredient) {
         this.ingredient = ingredient;
     }
 
     @Nonnull
     @Override
-    public List<ItemStack> examples()
-    {
+    public List<ItemStack> examples() {
         return Optional.ofNullable(this.ingredient.getItems())
                 .orElse(Collections.emptyList())
                 .stream()
@@ -64,15 +59,12 @@ final class CTIngredientInput implements ProcessingInput
     }
 
     @Override
-    public boolean matches(@Nonnull ItemStack itemStack)
-    {
+    public boolean matches(@Nonnull ItemStack itemStack) {
         return this.ingredient.matches(CraftTweakerMC.getIItemStack(itemStack));
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return this.ingredient != null && this.ingredient.getAmount() > 0;
     }
-
 }

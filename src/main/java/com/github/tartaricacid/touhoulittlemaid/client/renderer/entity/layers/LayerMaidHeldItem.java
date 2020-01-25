@@ -38,15 +38,20 @@ public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
     private void renderHeldItem(EntityMaid entityMaid, ItemStack itemStack, ItemCameraTransforms.TransformType type, EnumHandSide handSide) {
         if (!itemStack.isEmpty()) {
             GlStateManager.pushMatrix();
-            if (entityMaid.isSneaking()) {
-                GlStateManager.translate(0.0F, 0.2F, 0.0F);
+            EntityModelJson mainModel = (EntityModelJson) this.livingEntityRenderer.getMainModel();
+            boolean isLeft = handSide == EnumHandSide.LEFT;
+            mainModel.postRenderArm(0.0625F, handSide);
+            if (mainModel.hasArmPositioningModel(handSide)) {
+                mainModel.postRenderArmPositioningModel(0.0625F, handSide);
+                GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.translate(0, 0.125f, -0.0625f);
+            } else {
+                GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.translate((float) (isLeft ? -1 : 1) / 16.0F, 0.125F, -0.525F);
             }
-            ((EntityModelJson) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, handSide);
-            GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-            boolean flag = handSide == EnumHandSide.LEFT;
-            GlStateManager.translate((float) (flag ? -1 : 1) / 16.0F, 0.125F, -0.525F);
-            Minecraft.getMinecraft().getItemRenderer().renderItemSide(entityMaid, itemStack, type, flag);
+            Minecraft.getMinecraft().getItemRenderer().renderItemSide(entityMaid, itemStack, type, isLeft);
             GlStateManager.popMatrix();
         }
     }

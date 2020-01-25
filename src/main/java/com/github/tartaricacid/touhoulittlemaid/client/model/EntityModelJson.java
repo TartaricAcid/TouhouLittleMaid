@@ -606,6 +606,26 @@ public class EntityModelJson extends ModelBase {
         modelRenderer.rotateAngleZ = z;
     }
 
+    public boolean hasBackpackPositioningModel() {
+        return modelMap.get("backpackPositioningBone") != null;
+    }
+
+    public ModelRenderer getBackpackPositioningModel() {
+        return modelMap.get("backpackPositioningBone");
+    }
+
+    public boolean hasArmPositioningModel(EnumHandSide side) {
+        ModelRenderer arm = (side == EnumHandSide.LEFT ? modelMap.get("armLeftPositioningBone") : modelMap.get("armRightPositioningBone"));
+        return arm != null;
+    }
+
+    public void postRenderArmPositioningModel(float scale, EnumHandSide side) {
+        ModelRenderer arm = (side == EnumHandSide.LEFT ? modelMap.get("armLeftPositioningBone") : modelMap.get("armRightPositioningBone"));
+        if (arm != null) {
+            arm.postRender(scale);
+        }
+    }
+
     public void postRenderArm(float scale, EnumHandSide side) {
         ModelRenderer arm = (side == EnumHandSide.LEFT ? modelMap.get("armLeft") : modelMap.get("armRight"));
         if (arm != null) {
