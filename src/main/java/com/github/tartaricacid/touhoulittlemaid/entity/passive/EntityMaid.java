@@ -1166,6 +1166,10 @@ public class EntityMaid extends AbstractEntityMaid {
         }
     }
 
+    public IItemHandlerModifiable getAllBackpackInv() {
+        return new CombinedInvWrapper(smallBackpackInv, middleBackpackInv, bigBackpackInv);
+    }
+
     @Nullable
     @Override
     public EntityLivingBase getAttackTarget() {

@@ -136,7 +136,7 @@ public class EntityBox extends Entity {
 
     @Override
     public boolean canBeCollidedWith() {
-        return true;
+        return !this.isDead;
     }
 
     public int getOpenStage() {

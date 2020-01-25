@@ -85,6 +85,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntityFairy.class, EntityFairyRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityBox.class, EntityBoxRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntitySuitcase.class, EntitySuitcaseRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityBackpack.class, EntityBackpackRender.FACTORY);
     }
 
     @Override
