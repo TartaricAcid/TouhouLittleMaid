@@ -30,7 +30,7 @@ public class EntityBackpack extends Entity {
 
     public EntityBackpack(World worldIn) {
         super(worldIn);
-        setSize(0.8f, 0.8f);
+        setSize(1.0f, 1.2f);
     }
 
     public EntityBackpack(World worldIn, EntityMaid.EnumBackPackLevel backPackLevel) {

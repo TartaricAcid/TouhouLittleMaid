@@ -1,0 +1,13 @@
+{
+  "sortnum": 11,
+  "name": "Suitcase",
+  "icon": "touhou_little_maid:suitcase",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:suitcase",
+      "text": "The suitcase is an entity that can store items. The maid can carry it when approaching the suitcase. Shift right-click the maid to remove the suitcase."
+    }
+  ]
+}

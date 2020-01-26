@@ -16,6 +16,9 @@
       "border": true
     }, {
       "type": "text",
+      "text": "Below the maid's gui, you can open the resource pack download gui, where you can download maid model resource packs made by other players.$(br2)Downloaded the resource pack, just load it in the game to use more maid models."
+    }, {
+      "type": "text",
       "text": "Use the $(l:https://blockbench.net/)Blockbench$(/l) software to easily create your own maid skin resource pack. $(br2)The maid skin model perfectly compatible with the 1.10.0 version of the bedrock edition entity model.$(br2)For more information on custom maid skins, please check out the Wiki."
     }
   ]

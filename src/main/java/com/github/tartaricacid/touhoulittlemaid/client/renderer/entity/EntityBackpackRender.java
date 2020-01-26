@@ -46,18 +46,21 @@ public class EntityBackpackRender extends Render<EntityBackpack> {
                 break;
             case SMALL:
                 GlStateManager.translate(x, y + 1.5, z);
+                GlStateManager.rotate(-entityYaw, 0, 1, 0);
                 GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
                 Minecraft.getMinecraft().renderEngine.bindTexture(SMALL);
                 smallModel.render(entity, 0, 0, 0, 0, 0, 0.0625f);
                 break;
             case MIDDLE:
-                GlStateManager.translate(x, y + 1.6875, z + 0.25);
+                GlStateManager.translate(x, y + 1.6875, z);
+                GlStateManager.rotate(-entityYaw, 0, 1, 0);
                 GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
                 Minecraft.getMinecraft().renderEngine.bindTexture(MIDDLE);
                 middleModel.render(entity, 0, 0, 0, 0, 0, 0.0625f);
                 break;
             case BIG:
-                GlStateManager.translate(x, y + 1.5, z + 0.3175);
+                GlStateManager.translate(x, y + 1.5, z);
+                GlStateManager.rotate(-entityYaw, 0, 1, 0);
                 GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
                 Minecraft.getMinecraft().renderEngine.bindTexture(BIG);
                 bigModel.render(entity, 0, 0, 0, 0, 0, 0.0625f);

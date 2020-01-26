@@ -53,7 +53,12 @@ public class AltarRecipesManager {
         ProcessingInput puffer = ItemDefinition.of(Items.FISH, 3);
         ProcessingInput plankWood = OreDictDefinition.of("plankWood");
         ProcessingInput ingotGold = OreDictDefinition.of("ingotGold");
+        ProcessingInput ingotIron = OreDictDefinition.of("ingotIron");
         ProcessingInput blockGlass = OreDictDefinition.of("blockGlass");
+        ProcessingInput blockRedWool = ItemDefinition.of(Blocks.WOOL, 14);
+        ProcessingInput blockPinkWool = ItemDefinition.of(Blocks.WOOL, 6);
+        ProcessingInput blockGrayWool = ItemDefinition.of(Blocks.WOOL, 8);
+        ProcessingInput blockYellowWool = ItemDefinition.of(Blocks.WOOL, 4);
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_maid"),
                 new SpawnMaidRecipe(
@@ -143,6 +148,26 @@ public class AltarRecipesManager {
                 0.3f, new ItemStack(MaidBlocks.GASHAPON_MACHINES),
                 blockGlass, blockGlass, ingotGold,
                 ingotGold, ingotGold, ingotGold);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_maid_backpack_small"),
+                0.1f, new ItemStack(MaidItems.MAID_BACKPACK, 1, 1),
+                blockRedWool, blockRedWool, blockRedWool,
+                blockRedWool, ingotIron, blockRedWool);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_maid_backpack_middle"),
+                0.2f, new ItemStack(MaidItems.MAID_BACKPACK, 1, 2),
+                blockPinkWool, blockPinkWool, blockPinkWool,
+                blockPinkWool, ingotGold, blockPinkWool);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_maid_backpack_big"),
+                0.3f, new ItemStack(MaidItems.MAID_BACKPACK, 1, 3),
+                blockGrayWool, blockGrayWool, blockGrayWool,
+                ItemDefinition.of(Blocks.WOOL, 5), OreDictDefinition.of("gemDiamond"), ItemDefinition.of(Blocks.WOOL, 4));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_suitcase"),
+                0.2f, new ItemStack(MaidItems.SUITCASE),
+                blockYellowWool, blockYellowWool, blockYellowWool,
+                blockYellowWool, ingotGold, blockYellowWool);
     }
 
     public static AltarRecipesManager instance() {
