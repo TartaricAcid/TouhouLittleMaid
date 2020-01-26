@@ -235,6 +235,7 @@ public class CommonProxy {
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.monster.fairy"), EntityFairy.class, "touhou_little_maid.fairy", 6, TouhouLittleMaid.INSTANCE, 80, 3, true, 0x171c20, 0xffffff);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.box"), EntityBox.class, "touhou_little_maid.box", 7, TouhouLittleMaid.INSTANCE, 80, 20, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.suitcase"), EntitySuitcase.class, "touhou_little_maid.suitcase", 8, TouhouLittleMaid.INSTANCE, 80, 10, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.backpack"), EntityBackpack.class, "touhou_little_maid.backpack", 9, TouhouLittleMaid.INSTANCE, 80, 10, true);
     }
 
     private void registerEntitySpawns() {

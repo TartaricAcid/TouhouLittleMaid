@@ -1,0 +1,13 @@
+{
+  "sortnum": 10,
+  "name": "背包",
+  "icon": "touhou_little_maid:maid_backpack",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_backpack",
+      "text": "背包可用于拓展女仆的物品栏，只需要手持背包右击女仆即可应用。背包有三个等级。$(br2)使用相机移除女仆的背包。"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBackpack;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -20,6 +21,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,13 +53,10 @@ public class ItemCamera extends Item {
             if (result.isPresent()) {
                 EntityMaid maid = result.get();
                 if (!worldIn.isRemote && maid.isEntityAlive() && maid.isOwner(playerIn)) {
-                    ItemStack photo = new ItemStack(MaidItems.PHOTO);
-                    NBTTagCompound photoTag = new NBTTagCompound();
-                    NBTTagCompound maidTag = new NBTTagCompound();
-                    maid.writeEntityToNBT(maidTag);
-                    photoTag.setTag(MAID_INFO.getNbtName(), maidTag);
-                    photo.setTagCompound(photoTag);
-                    InventoryHelper.spawnItemStack(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, photo);
+                    if (maid.getBackLevel() != EntityMaid.EnumBackPackLevel.EMPTY) {
+                        spawnMaidBackpack(worldIn, maid);
+                    }
+                    spawnMaidPhoto(worldIn, maid, playerIn);
                     maid.setDead();
                     playerIn.getCooldownTracker().setCooldown(this, 20);
                     camera.damageItem(1, playerIn);
@@ -67,6 +67,36 @@ public class ItemCamera extends Item {
             }
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
+    private void spawnMaidBackpack(World worldIn, EntityMaid maid) {
+        EntityBackpack backpack = new EntityBackpack(worldIn, maid.getBackLevel());
+        IItemHandlerModifiable maidBackpackInv = maid.getAllBackpackInv();
+        ItemStackHandler backpackInv = backpack.getInv();
+        for (int i = 0; i < maidBackpackInv.getSlots(); i++) {
+            backpackInv.setStackInSlot(i, maidBackpackInv.getStackInSlot(i));
+        }
+        backpack.setPositionAndRotation(maid.posX, maid.posY, maid.posZ, maid.renderYawOffset, maid.rotationPitch);
+        worldIn.spawnEntity(backpack);
+    }
+
+    private void spawnMaidPhoto(World worldIn, EntityMaid maid, EntityPlayer playerIn) {
+        ItemStack photo = new ItemStack(MaidItems.PHOTO);
+        NBTTagCompound photoTag = new NBTTagCompound();
+        NBTTagCompound maidTag = new NBTTagCompound();
+        maid.writeEntityToNBT(maidTag);
+        // 剔除背包数据
+        removeMaidBackpackTagData(maidTag);
+        photoTag.setTag(MAID_INFO.getNbtName(), maidTag);
+        photo.setTagCompound(photoTag);
+        InventoryHelper.spawnItemStack(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, photo);
+    }
+
+    private void removeMaidBackpackTagData(NBTTagCompound nbt) {
+        nbt.removeTag(EntityMaid.NBT.BACKPACK_LEVEL.getName());
+        nbt.removeTag(EntityMaid.NBT.MAID_SMALL_BACKPACK.getName());
+        nbt.removeTag(EntityMaid.NBT.MAID_MIDDLE_BACKPACK.getName());
+        nbt.removeTag(EntityMaid.NBT.MAID_BIG_BACKPACK.getName());
     }
 
     @Override

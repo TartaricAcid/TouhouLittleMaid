@@ -14,6 +14,7 @@ entity.touhou_little_maid.box.name=蛋糕盒
 entity.touhou_little_maid.rinnosuke.name=森近霖之助
 entity.touhou_little_maid.fairy.name=妖精女仆
 entity.touhou_little_maid.suitcase.name=拉杆箱
+entity.touhou_little_maid.backpack.name=背包
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item

@@ -1,0 +1,13 @@
+{
+  "sortnum": 11,
+  "name": "行李箱",
+  "icon": "touhou_little_maid:suitcase",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:suitcase",
+      "text": "行李箱是能够存储物品的实体，女仆在接近行李箱时能够携带它。Shift 右击女仆移除行李箱。"
+    }
+  ]
+}
