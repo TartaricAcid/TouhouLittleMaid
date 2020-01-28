@@ -108,7 +108,7 @@ jar {
         archiveName = archivesBaseName + "-1.12.2-jenkins-build-${System.getenv().BUILD_NUMBER}.jar"
     } else {
         // 默认环境为 touhoulittlemaid-1.12.2-1.1.4-alpha.jar 这样的
-        archiveName = archivesBaseName + "-1.12.2-${mod_version}-release.jar"
+        archiveName = archivesBaseName + "-1.12.2-${mod_version}-beta.jar"
     }
     // 打包 Access Transformers 文件
     manifest {

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -162,6 +163,11 @@ public class EntityDanmaku extends EntityThrowable {
                 world.createExplosion(this, v.x, v.y, v.z, 3 + rand.nextInt(2), isDamagesTerrain());
             }
         }
+    }
+
+    @Override
+    public boolean isInWater() {
+        return GeneralConfig.MISC_CONFIG.danmakuAffectedByFluid && super.isInWater();
     }
 
     @Override

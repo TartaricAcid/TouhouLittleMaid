@@ -168,6 +168,7 @@ config.touhou_little_maid.misc_config.power_point_hud_y=Power Point HUD Position
 config.touhou_little_maid.misc_config.override_npc_render=Override NPC Render
 config.touhou_little_maid.misc_config.chair_cannot_change_model=Only creative player can change chair model
 config.touhou_little_maid.misc_config.chair_cannot_be_destroied=Only creative player can destroy chair
+config.touhou_little_maid.misc_config.danmaku_affected_by_fluid=Will the danmaku be affected by the fluid?
 
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=Gashapon Config
