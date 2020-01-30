@@ -25,8 +25,8 @@ import javax.annotation.Nonnull;
 public class EntityBackpack extends Entity {
     private static final String INV_TAG_NAME = "BackpackInv";
     private static final String LEVEL_TAG_NAME = "BackpackLevel";
-    private final ItemStackHandler inv = new ItemStackHandler(30);
     private static final DataParameter<Integer> BACKPACK_LEVEL = EntityDataManager.createKey(EntityBackpack.class, DataSerializers.VARINT);
+    private final ItemStackHandler inv = new ItemStackHandler(30);
 
     public EntityBackpack(World worldIn) {
         super(worldIn);
@@ -111,11 +111,11 @@ public class EntityBackpack extends Entity {
         return EntityMaid.EnumBackPackLevel.getEnumLevelByNum(this.dataManager.get(BACKPACK_LEVEL));
     }
 
-    public void setBackpackLevel(EntityMaid.EnumBackPackLevel level) {
-        this.setBackpackLevel(level.getLevel());
-    }
-
     private void setBackpackLevel(int level) {
         this.dataManager.set(BACKPACK_LEVEL, level);
+    }
+
+    public void setBackpackLevel(EntityMaid.EnumBackPackLevel level) {
+        this.setBackpackLevel(level.getLevel());
     }
 }

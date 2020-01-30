@@ -1,5 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
+import com.github.tartaricacid.touhoulittlemaid.client.animation.pojo.AnimationItem;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.pojo.CustomAnimation;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.pojo.KeyFrameItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
@@ -8,6 +11,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.google.common.collect.Maps;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,9 +26,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
+import static com.github.tartaricacid.touhoulittlemaid.client.animation.EnumAnimationType.ALWAYS;
 
 /**
  * 通过解析基岩版 JSON 实体模型得到的 POJO，将其转换为 ModelBase 类
@@ -47,6 +52,8 @@ public class EntityModelJson extends ModelBase {
      * 哪些模型需要渲染。加载进父骨骼的子骨骼是不需要渲染的
      */
     private List<ModelRenderer> shouldRender = new LinkedList<>();
+
+    private HashMap<String, Float[]> cacheRotation = Maps.newHashMap();
 
     public EntityModelJson(CustomModelPOJO pojo, int format) {
         this.format = format;
@@ -88,6 +95,8 @@ public class EntityModelJson extends ModelBase {
             // Nullable 检查，设置旋转角度
             if (rotation != null) {
                 setRotationAngle(model, convertRotation(rotation.get(0)), convertRotation(rotation.get(1)), convertRotation(rotation.get(2)));
+                // 为自定义动画缓存的参数
+                cacheRotation.put(bones.getName(), new Float[]{model.rotateAngleX, model.rotateAngleY, model.rotateAngleZ});
             }
 
             // Null 检查，进行父骨骼绑定
@@ -139,8 +148,68 @@ public class EntityModelJson extends ModelBase {
             return;
         }
         if (entityIn instanceof EntityChair) {
-            setChairRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, (EntityChair) entityIn);
+            setChairRotationAndOffset((EntityChair) entityIn, ageInTicks);
         }
+    }
+
+    private void setChairRotationAndOffset(EntityChair entityIn, float ageInTicks) {
+        Optional<CustomAnimation> alwaysAnimation = ClientProxy.CHAIR_MODEL.getAnimation(entityIn.getModelId(), ALWAYS);
+        if (alwaysAnimation.isPresent()) {
+            float currentTime = ageInTicks / 20;
+            for (AnimationItem item : alwaysAnimation.get().getAnimations().values()) {
+                applyCustomAnimation(item, currentTime);
+            }
+        }
+    }
+
+    private void applyCustomAnimation(AnimationItem item, float currentTime) {
+        if (item.isLoop()) {
+            currentTime = currentTime % item.getAnimationLength();
+        }
+        for (String bone : item.getBones().keySet()) {
+            KeyFrameItem keyFrame = item.getBones().get(bone);
+            if (modelMap.containsKey(bone)) {
+                ModelRenderer renderer = modelMap.get(bone);
+                HashMap<Float, Float[]> rotationList = keyFrame.getRotationList();
+                HashMap<Float, Float[]> positionList = keyFrame.getPositionList();
+                if (rotationList != null && rotationList.size() > 0) {
+                    Float[] rotation = linearInterpolation(rotationList, currentTime);
+                    Float[] rotationPre = cacheRotation.get(bone);
+                    renderer.rotateAngleX = rotation[0] * 0.017453292F - rotationPre[0];
+                    renderer.rotateAngleY = rotation[1] * 0.017453292F - rotationPre[1];
+                    renderer.rotateAngleZ = rotation[2] * 0.017453292F - rotationPre[2];
+                }
+                if (positionList != null && positionList.size() > 0) {
+                    Float[] position = linearInterpolation(positionList, currentTime);
+                    renderer.offsetX = position[0] * 0.0625f;
+                    renderer.offsetY = position[1] * 0.0625f;
+                    renderer.offsetZ = position[2] * 0.0625f;
+                }
+            }
+        }
+    }
+
+    private Float[] linearInterpolation(HashMap<Float, Float[]> keyFrame, float currentTime) {
+        Iterator<Float> iterator = keyFrame.keySet().iterator();
+        // 因为 keyFrame 必然有至少一个元素，直接调用 next
+        Float nextTime = iterator.next();
+        for (float preTime : keyFrame.keySet()) {
+            // 当前处于第一关键帧的前面，或者最后关键帧的后面
+            // 直接返回最近的关键帧
+            if (currentTime <= preTime || !iterator.hasNext()) {
+                return keyFrame.get(preTime);
+            }
+            // 下一个关键帧
+            nextTime = iterator.next();
+            // 当前时间处于两个关键帧之间，就进行插值计算
+            if (currentTime <= nextTime) {
+                Float[] pre = keyFrame.get(preTime);
+                Float[] next = keyFrame.get(nextTime);
+                float coefficient = (nextTime - preTime) / currentTime;
+                return new Float[]{(next[0] - pre[0]) / coefficient + pre[0], (next[1] - pre[1]) / coefficient + pre[1], (next[2] - pre[2]) / coefficient + pre[2]};
+            }
+        }
+        return new Float[]{0f, 0f, 0f};
     }
 
 
@@ -519,85 +588,6 @@ public class EntityModelJson extends ModelBase {
         }
 
         GlStateManager.translate(0, 0.3f, 0);
-    }
-
-    private void setChairRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
-                                        float netHeadYaw, float headPitch, float scaleFactor, EntityChair entityChair) {
-        ModelRenderer rRotationX5 = modelMap.get("rRotationX5");
-        ModelRenderer rRotationX10 = modelMap.get("rRotationX10");
-        ModelRenderer rRotationX20 = modelMap.get("rRotationX20");
-        ModelRenderer rRotationY5 = modelMap.get("rRotationY5");
-        ModelRenderer rRotationY10 = modelMap.get("rRotationY10");
-        ModelRenderer rRotationY20 = modelMap.get("rRotationY20");
-        ModelRenderer rRotationZ5 = modelMap.get("rRotationZ5");
-        ModelRenderer rRotationZ10 = modelMap.get("rRotationZ10");
-        ModelRenderer rRotationZ20 = modelMap.get("rRotationZ20");
-
-        ModelRenderer lRotationX5 = modelMap.get("lRotationX5");
-        ModelRenderer lRotationX10 = modelMap.get("lRotationX10");
-        ModelRenderer lRotationX20 = modelMap.get("lRotationX20");
-        ModelRenderer lRotationY5 = modelMap.get("lRotationY5");
-        ModelRenderer lRotationY10 = modelMap.get("lRotationY10");
-        ModelRenderer lRotationY20 = modelMap.get("lRotationY20");
-        ModelRenderer lRotationZ5 = modelMap.get("lRotationZ5");
-        ModelRenderer lRotationZ10 = modelMap.get("lRotationZ10");
-        ModelRenderer lRotationZ20 = modelMap.get("lRotationZ20");
-
-        if (rRotationX5 != null) {
-            rRotationX5.rotateAngleX = ageInTicks * (360f / 20f / 5) * 0.017453292F;
-        }
-        if (rRotationX10 != null) {
-            rRotationX10.rotateAngleX = ageInTicks * (360f / 20f / 10) * 0.017453292F;
-        }
-        if (rRotationX20 != null) {
-            rRotationX20.rotateAngleX = ageInTicks * (360f / 20f / 20) * 0.017453292F;
-        }
-        if (rRotationY5 != null) {
-            rRotationY5.rotateAngleY = ageInTicks * (360f / 20f / 5) * 0.017453292F;
-        }
-        if (rRotationY10 != null) {
-            rRotationY10.rotateAngleY = ageInTicks * (360f / 20f / 10) * 0.017453292F;
-        }
-        if (rRotationY20 != null) {
-            rRotationY20.rotateAngleY = ageInTicks * (360f / 20f / 20) * 0.017453292F;
-        }
-        if (rRotationZ5 != null) {
-            rRotationZ5.rotateAngleZ = ageInTicks * (360f / 20f / 5) * 0.017453292F;
-        }
-        if (rRotationZ10 != null) {
-            rRotationZ10.rotateAngleZ = ageInTicks * (360f / 20f / 10) * 0.017453292F;
-        }
-        if (rRotationZ20 != null) {
-            rRotationZ20.rotateAngleZ = ageInTicks * (360f / 20f / 20) * 0.017453292F;
-        }
-
-        if (lRotationX5 != null) {
-            lRotationX5.rotateAngleX = -ageInTicks * (360f / 20f / 5) * 0.017453292F;
-        }
-        if (lRotationX10 != null) {
-            lRotationX10.rotateAngleX = -ageInTicks * (360f / 20f / 10) * 0.017453292F;
-        }
-        if (lRotationX20 != null) {
-            lRotationX20.rotateAngleX = -ageInTicks * (360f / 20f / 20) * 0.017453292F;
-        }
-        if (lRotationY5 != null) {
-            lRotationY5.rotateAngleY = -ageInTicks * (360f / 20f / 5) * 0.017453292F;
-        }
-        if (lRotationY10 != null) {
-            lRotationY10.rotateAngleY = -ageInTicks * (360f / 20f / 10) * 0.017453292F;
-        }
-        if (lRotationY20 != null) {
-            lRotationY20.rotateAngleY = -ageInTicks * (360f / 20f / 20) * 0.017453292F;
-        }
-        if (lRotationZ5 != null) {
-            lRotationZ5.rotateAngleZ = -ageInTicks * (360f / 20f / 5) * 0.017453292F;
-        }
-        if (lRotationZ10 != null) {
-            lRotationZ10.rotateAngleZ = -ageInTicks * (360f / 20f / 10) * 0.017453292F;
-        }
-        if (lRotationZ20 != null) {
-            lRotationZ20.rotateAngleZ = -ageInTicks * (360f / 20f / 20) * 0.017453292F;
-        }
     }
 
     private void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

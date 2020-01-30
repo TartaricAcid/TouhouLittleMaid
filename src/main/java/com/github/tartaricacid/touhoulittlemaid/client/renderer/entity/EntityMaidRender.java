@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -27,6 +28,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final ResourceLocation DEFAULT_MODEL_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/hakurei_reimu.png");
     private ResourceLocation modelRes;
+    private EntityPlayerSP playerSP;
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
@@ -46,10 +48,9 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         this.mainModel = ClientProxy.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new);
         ClientProxy.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
         GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
-        GlStateManager.disableBlend();
+        GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         GlStateManager.popMatrix();
     }
 

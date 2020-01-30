@@ -21,10 +21,10 @@ import javax.annotation.Nonnull;
  * @date 2020/1/17 21:55
  **/
 public class LayerMaidBackpack implements LayerRenderer<EntityMaid> {
-    private final RenderLiving<EntityMaid> livingEntityRenderer;
     private static final ResourceLocation SMALL = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
     private static final ResourceLocation MIDDLE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_middle.png");
     private static final ResourceLocation BIG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_big.png");
+    private final RenderLiving<EntityMaid> livingEntityRenderer;
     private ModelBase smallModel = new MaidBackpackSmallModel();
     private ModelBase middleModel = new MaidBackpackMiddleModel();
     private ModelBase bigModel = new MaidBackpackBigModel();
