@@ -168,6 +168,7 @@ config.touhou_little_maid.misc_config.power_point_hud_y=P 点 Y 位置
 config.touhou_little_maid.misc_config.override_npc_render=覆盖 NPC 渲染
 config.touhou_little_maid.misc_config.chair_cannot_change_model=只有创造模式玩家能够切换坐垫模型
 config.touhou_little_maid.misc_config.chair_cannot_be_destroied=只有创造模式玩家能够打掉坐垫
+config.touhou_little_maid.misc_config.danmaku_affected_by_fluid=弹幕会被流体影响么？
 
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=扭蛋配置

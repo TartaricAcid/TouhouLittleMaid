@@ -1,10 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 
+import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class ModelItem {
@@ -22,15 +24,25 @@ public class ModelItem {
     @SerializedName("render_item_scale")
     private float renderItemScale = 1.0f;
 
+    private HashMap<String, ResourceLocation> animations = Maps.newHashMap();
+
     /**
      * 用来为以后可能做改动的而设置的参数
      */
     @Deprecated
     private int format = -1;
+    @SerializedName("mounted_height")
+    private float mountedYOffset;
+    @SerializedName("tameable_can_ride")
+    private boolean tameableCanRide = true;
+    @SerializedName("no_gravity")
+    private boolean noGravity = false;
 
     public ResourceLocation getTexture() {
         return texture;
     }
+
+    /*--------------------------------- 坐垫部分数据 ------------------------------*/
 
     public String getName() {
         return name;
@@ -40,16 +52,9 @@ public class ModelItem {
         return description;
     }
 
-    /*--------------------------------- 坐垫部分数据 ------------------------------*/
-
-    @SerializedName("mounted_height")
-    private float mountedYOffset;
-
-    @SerializedName("tameable_can_ride")
-    private boolean tameableCanRide = true;
-
-    @SerializedName("no_gravity")
-    private boolean noGravity = false;
+    public HashMap<String, ResourceLocation> getAnimations() {
+        return animations;
+    }
 
     /*--------------------------------- 坐垫部分数据 ------------------------------*/
 

@@ -55,8 +55,8 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     /**
      * 自定义模型部分
      */
-    public static final CustomModelResources MAID_MODEL = new CustomModelResources("maid_model.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap());
-    public static final CustomModelResources CHAIR_MODEL = new CustomModelResources("maid_chair.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap());
+    public static final CustomModelResources MAID_MODEL = new CustomModelResources("maid_model.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
+    public static final CustomModelResources CHAIR_MODEL = new CustomModelResources("maid_chair.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
     /**
      * 指物旗部分
      */

@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.pojo.KeyFrameItem;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadDrawCommand;
@@ -69,7 +70,10 @@ import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_
 import static com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation.readDrawCsvFile;
 
 public class CommonProxy {
-    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .registerTypeAdapter(KeyFrameItem.class, new KeyFrameItem.Deserializer())
+            .create();
     public static final ScriptEngine NASHORN = new ScriptEngineManager(null).getEngineByName("nashorn");
     /**
      * 服务端用模型列表，

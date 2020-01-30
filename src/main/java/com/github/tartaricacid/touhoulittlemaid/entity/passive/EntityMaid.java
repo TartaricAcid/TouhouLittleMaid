@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
@@ -547,7 +548,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean canAttackClass(Class<? extends EntityLivingBase> cls) {
-        return cls != EntityChair.class && cls != EntityMarisaBroom.class && cls != EntityArmorStand.class && super.canAttackClass(cls);
+        return cls != EntitySuitcase.class && cls != EntityChair.class && cls != EntityMarisaBroom.class && cls != EntityArmorStand.class && super.canAttackClass(cls);
     }
 
     @Override

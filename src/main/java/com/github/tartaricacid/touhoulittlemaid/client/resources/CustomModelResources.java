@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resources;
 
+import com.github.tartaricacid.touhoulittlemaid.client.animation.EnumAnimationType;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.pojo.CustomAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
@@ -21,20 +23,24 @@ public class CustomModelResources {
     private List<CustomModelPackPOJO> packList;
     private HashMap<String, EntityModelJson> idModelMap;
     private HashMap<String, ModelItem> idInfoMap;
+    private HashMap<String, HashMap<EnumAnimationType, CustomAnimation>> idAnimationMap;
 
     public CustomModelResources(String jsonFileName, List<CustomModelPackPOJO> packList,
                                 HashMap<String, EntityModelJson> idToModel,
-                                HashMap<String, ModelItem> idToInfo) {
+                                HashMap<String, ModelItem> idToInfo,
+                                HashMap<String, HashMap<EnumAnimationType, CustomAnimation>> idAnimationMap) {
         this.jsonFileName = jsonFileName;
         this.packList = packList;
         this.idModelMap = idToModel;
         this.idInfoMap = idToInfo;
+        this.idAnimationMap = idAnimationMap;
     }
 
     public void clearAll() {
         this.packList.clear();
         this.idModelMap.clear();
         this.idInfoMap.clear();
+        this.idAnimationMap.clear();
     }
 
     public String getJsonFileName() {
@@ -59,6 +65,10 @@ public class CustomModelResources {
 
     public void putInfo(String modelId, ModelItem modelItem) {
         this.idInfoMap.put(modelId, modelItem);
+    }
+
+    public void putAnimation(String modelId, HashMap<EnumAnimationType, CustomAnimation> animationMap) {
+        this.idAnimationMap.put(modelId, animationMap);
     }
 
     public Optional<EntityModelJson> getModel(String modelId) {
@@ -91,6 +101,10 @@ public class CustomModelResources {
             return idInfoMap.get(modelId).isNoGravity();
         }
         return false;
+    }
+
+    public Optional<CustomAnimation> getAnimation(String modelId, EnumAnimationType animationType) {
+        return Optional.ofNullable(idAnimationMap.get(modelId).get(animationType));
     }
 
     public Optional<ModelItem> getInfo(String modelId) {

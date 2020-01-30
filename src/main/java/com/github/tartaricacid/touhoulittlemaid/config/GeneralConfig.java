@@ -175,6 +175,11 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.misc_config.chair_cannot_be_destroied")
         @Config.Name("ChairCannotBeDestroied")
         public boolean chairCannotBeDestroied = false;
+
+        @Config.Comment("Will the danmaku be affected by the fluid?")
+        @Config.LangKey("config.touhou_little_maid.misc_config.danmaku_affected_by_fluid")
+        @Config.Name("DanmakuAffectedByFluid")
+        public boolean danmakuAffectedByFluid = true;
     }
 
     public static class GashaponConfig {

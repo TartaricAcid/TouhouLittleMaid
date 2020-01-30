@@ -114,6 +114,16 @@ public class EntityChair extends EntityLivingBase {
     protected void collideWithEntity(Entity entityIn) {
     }
 
+    /**
+     * 此参数会影响钓鱼钩和客户端的渲染交互。
+     * 所以将其设计为仅修改服务端，避免影响客户端渲染交互，同时不会在服务端被钓鱼钩影响
+     */
+    @Override
+    @SideOnly(Side.SERVER)
+    public boolean canBeCollidedWith() {
+        return false;
+    }
+
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         if (player.isSneaking()) {
