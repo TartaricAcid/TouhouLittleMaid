@@ -72,7 +72,7 @@ import static com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation.read
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-            .registerTypeAdapter(KeyFrameItem.class, new KeyFrameItem.Serializer())
+            .registerTypeAdapter(KeyFrameItem.class, new KeyFrameItem.Deserializer())
             .create();
     public static final ScriptEngine NASHORN = new ScriptEngineManager(null).getEngineByName("nashorn");
     /**

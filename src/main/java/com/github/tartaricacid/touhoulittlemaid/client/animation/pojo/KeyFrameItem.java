@@ -24,7 +24,7 @@ public class KeyFrameItem {
         return positionList;
     }
 
-    public static class Serializer implements JsonDeserializer<KeyFrameItem> {
+    public static class Deserializer implements JsonDeserializer<KeyFrameItem> {
         @Override
         public KeyFrameItem deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
             JsonObject object = json.getAsJsonObject();
