@@ -6,21 +6,22 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * @author TartaricAcid
  * @date 2020/1/29 18:46
  **/
 public class KeyFrameItem {
-    private HashMap<Float, Float[]> rotationList = Maps.newHashMap();
+    private LinkedHashMap<Float, Float[]> rotationList = Maps.newLinkedHashMap();
 
-    private HashMap<Float, Float[]> positionList = Maps.newHashMap();
+    private LinkedHashMap<Float, Float[]> positionList = Maps.newLinkedHashMap();
 
-    public HashMap<Float, Float[]> getRotationList() {
+    public LinkedHashMap<Float, Float[]> getRotationList() {
         return rotationList;
     }
 
-    public HashMap<Float, Float[]> getPositionList() {
+    public LinkedHashMap<Float, Float[]> getPositionList() {
         return positionList;
     }
 
@@ -36,7 +37,7 @@ public class KeyFrameItem {
                 if (element.isJsonArray()) {
                     keyFrameItem.rotationList.put(0.0f, gson.fromJson(element, Float[].class));
                 } else {
-                    keyFrameItem.rotationList = gson.fromJson(element, new TypeToken<HashMap<Float, Float[]>>() {
+                    keyFrameItem.rotationList = gson.fromJson(element, new TypeToken<LinkedHashMap<Float, Float[]>>() {
                     }.getType());
                 }
             }
@@ -46,7 +47,7 @@ public class KeyFrameItem {
                 if (element.isJsonArray()) {
                     keyFrameItem.positionList.put(0.0f, gson.fromJson(element, Float[].class));
                 } else {
-                    keyFrameItem.positionList = gson.fromJson(element, new TypeToken<HashMap<Float, Float[]>>() {
+                    keyFrameItem.positionList = gson.fromJson(element, new TypeToken<LinkedHashMap<Float, Float[]>>() {
                     }.getType());
                 }
             }

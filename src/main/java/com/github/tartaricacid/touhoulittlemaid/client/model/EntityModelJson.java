@@ -24,9 +24,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.time.StopWatch;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.animation.EnumAnimationType.ALWAYS;
 
@@ -170,8 +172,8 @@ public class EntityModelJson extends ModelBase {
             KeyFrameItem keyFrame = item.getBones().get(bone);
             if (modelMap.containsKey(bone)) {
                 ModelRenderer renderer = modelMap.get(bone);
-                HashMap<Float, Float[]> rotationList = keyFrame.getRotationList();
-                HashMap<Float, Float[]> positionList = keyFrame.getPositionList();
+                LinkedHashMap<Float, Float[]> rotationList = keyFrame.getRotationList();
+                LinkedHashMap<Float, Float[]> positionList = keyFrame.getPositionList();
                 if (rotationList != null && rotationList.size() > 0) {
                     Float[] rotation = linearInterpolation(rotationList, currentTime);
                     Float[] rotationPre = cacheRotation.get(bone);
@@ -189,10 +191,12 @@ public class EntityModelJson extends ModelBase {
         }
     }
 
-    private Float[] linearInterpolation(HashMap<Float, Float[]> keyFrame, float currentTime) {
+    // TODO: 2020/2/1 现在还只是线性查找元素，后续应当优化算法，当关键帧大于阈值时，进行二分查找
+    private Float[] linearInterpolation(LinkedHashMap<Float, Float[]> keyFrame, float currentTime) {
         Iterator<Float> iterator = keyFrame.keySet().iterator();
         // 因为 keyFrame 必然有至少一个元素，直接调用 next
         Float nextTime = iterator.next();
+
         for (float preTime : keyFrame.keySet()) {
             // 当前处于第一关键帧的前面，或者最后关键帧的后面
             // 直接返回最近的关键帧
