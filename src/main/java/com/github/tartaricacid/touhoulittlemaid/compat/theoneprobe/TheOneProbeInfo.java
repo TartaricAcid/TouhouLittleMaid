@@ -15,6 +15,7 @@ public class TheOneProbeInfo implements Function<ITheOneProbe, Void> {
     public Void apply(@Nullable ITheOneProbe probe) {
         if (probe != null) {
             probe.registerEntityProvider(new MaidProvider());
+            probe.registerEntityProvider(new TrolleyAudioProvider());
             probe.registerProvider(new GridProvider());
             probe.registerBlockDisplayOverride(new AltarProvider());
             probe.registerProvider(new TombstoneProvider());

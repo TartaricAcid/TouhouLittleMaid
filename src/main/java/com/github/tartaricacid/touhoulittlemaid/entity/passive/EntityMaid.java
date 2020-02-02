@@ -322,7 +322,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private void applyEntityRiding() {
         // 取自原版船部分逻辑
         List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
-                entity -> entity instanceof ICanRidingMaid);
+                entity -> entity instanceof IEntityRidingMaid);
 
         if (list.isEmpty()) {
             return;
@@ -336,7 +336,7 @@ public class EntityMaid extends AbstractEntityMaid {
                 boolean maidNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
                 // 服务端，女仆没有处于待命状态，而且尝试坐上去的实体是扫把
                 if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding &&
-                        entity instanceof ICanRidingMaid && ((ICanRidingMaid) entity).canRiding(this)) {
+                        entity instanceof IEntityRidingMaid && ((IEntityRidingMaid) entity).canRiding(this)) {
                     entity.startRiding(this);
                 }
             }
@@ -348,8 +348,8 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
-        if (passenger instanceof ICanRidingMaid) {
-            ((ICanRidingMaid) passenger).updatePassenger(this);
+        if (passenger instanceof IEntityRidingMaid) {
+            ((IEntityRidingMaid) passenger).updatePassenger(this);
         } else {
             super.updatePassenger(passenger);
         }

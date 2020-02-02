@@ -6,7 +6,7 @@ package com.github.tartaricacid.touhoulittlemaid.api;
  * <p>
  * 拥有此接口的实体，可以主动骑上女仆
  **/
-public interface ICanRidingMaid {
+public interface IEntityRidingMaid {
     /**
      * 能否主动骑上女仆
      *

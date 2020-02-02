@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockAltar;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGrid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockTombstone;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTrolleyAudio;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;
@@ -24,9 +25,12 @@ public class WailaInfo implements IWailaPlugin {
     @Override
     public void register(IWailaRegistrar registrar) {
         registrar.registerBodyProvider(new MaidProvider(), EntityMaid.class);
+        registrar.registerBodyProvider(TrolleyAudioProvider.INSTANCE, EntityTrolleyAudio.class);
+        registrar.registerNBTProvider(TrolleyAudioProvider.INSTANCE, EntityTrolleyAudio.class);
         registrar.registerBodyProvider(new GridProvider(), BlockGrid.class);
         registrar.registerStackProvider(new AltarProvider(), BlockAltar.class);
-        // FIXME: 2019/10/5 这一块注册没用
-        registrar.registerBodyProvider(new TombstoneProvider(), BlockTombstone.class);
+        // FIXME: 2020/2/3 还是存在无法注册信息的问题
+        registrar.registerBodyProvider(TombstoneProvider.INSTANCE, BlockTombstone.class);
+        registrar.registerNBTProvider(TombstoneProvider.INSTANCE, BlockTombstone.class);
     }
 }

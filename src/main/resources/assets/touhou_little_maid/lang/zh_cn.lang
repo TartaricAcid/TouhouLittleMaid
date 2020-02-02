@@ -15,6 +15,7 @@ entity.touhou_little_maid.rinnosuke.name=森近霖之助
 entity.touhou_little_maid.fairy.name=妖精女仆
 entity.touhou_little_maid.suitcase.name=拉杆箱
 entity.touhou_little_maid.backpack.name=背包
+entity.touhou_little_maid.trolley_audio.name=便携式音响
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item
@@ -44,6 +45,7 @@ item.touhou_little_maid.gashapon.name=扭蛋
 item.touhou_little_maid.gashapon_coin.name=扭蛋币
 item.touhou_little_maid.maid_backpack.name=女仆背包
 item.touhou_little_maid.suitcase.name=行李箱
+item.touhou_little_maid.trolley_audio.name=便携式音响
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办

@@ -7,9 +7,9 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.AbstractEntityTrolley;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.google.common.collect.Maps;
@@ -24,11 +24,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.time.StopWatch;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.animation.EnumAnimationType.ALWAYS;
 
@@ -352,7 +350,7 @@ public class EntityModelJson extends ModelBase {
 
         if (armLeft != null) {
             // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
-            if (entityMaid.getControllingPassenger() instanceof EntitySuitcase) {
+            if (entityMaid.getControllingPassenger() instanceof AbstractEntityTrolley) {
                 armLeft.rotateAngleX = 0.5f;
                 armLeft.rotateAngleY = 0f;
                 armLeft.rotateAngleZ = -0.395f;

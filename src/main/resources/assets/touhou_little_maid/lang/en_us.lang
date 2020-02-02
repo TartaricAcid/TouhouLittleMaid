@@ -15,6 +15,7 @@ entity.touhou_little_maid.rinnosuke.name=Rinnosuke Morichika
 entity.touhou_little_maid.fairy.name=Maid Fairy
 entity.touhou_little_maid.suitcase.name=Suitcase
 entity.touhou_little_maid.backpack.name=Backpack
+entity.touhou_little_maid.trolley_audio.name=Trolley Audio
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item
@@ -44,6 +45,7 @@ item.touhou_little_maid.gashapon.name=Gashapon
 item.touhou_little_maid.gashapon_coin.name=Gashapon Coin
 item.touhou_little_maid.maid_backpack.name=Maid Backpack
 item.touhou_little_maid.suitcase.name=Suitcase
+item.touhou_little_maid.trolley_audio.name=Trolley Audio
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit

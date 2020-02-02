@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
  **/
 public class TileEntityTombstone extends TileEntity {
     private static final String STORAGE_TAG_NAME = "StorageItem";
-    private static final String OWNER_TAG_NAME = "OwnerName";
+    public static final String OWNER_TAG_NAME = "OwnerName";
     public final ItemStackHandler handler = new ItemStackHandler(60);
     private String ownerName = "";
 
