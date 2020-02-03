@@ -19,24 +19,26 @@ public class EntityTrolleyAudioModel extends ModelBase {
         textureHeight = 128;
 
         bone = new ModelRenderer(this);
-        bone.setRotationPoint(0.0F, 23.25F, 0.25F);
-        bone.cubeList.add(new ModelBox(bone, 0, 0, -15.0F, -20.75F, -11.25F, 30, 32, 28, -11.0F, false));
-        bone.cubeList.add(new ModelBox(bone, 16, 10, -3.5F, 0.0F, 3.5F, 1, 1, 2, -0.25F, false));
-        bone.cubeList.add(new ModelBox(bone, 4, 16, 2.5F, 0.0F, 3.5F, 1, 1, 2, -0.25F, false));
+        bone.setRotationPoint(0.0F, 24.0F, 0.0F);
+        bone.cubeList.add(new ModelBox(bone, 0, 0, -15.0F, -21.5F, -11.0F, 30, 32, 27, -11.0F, false));
+        bone.cubeList.add(new ModelBox(bone, 4, 62, -11.5F, -16.3F, -3.95F, 24, 24, 18, -9.0F, false));
+        bone.cubeList.add(new ModelBox(bone, 51, 105, -8.0F, -14.5F, 0.05F, 13, 13, 10, -5.0F, false));
+        bone.cubeList.add(new ModelBox(bone, 0, 0, -3.5F, -0.75F, 3.75F, 1, 1, 1, -0.25F, false));
+        bone.cubeList.add(new ModelBox(bone, 0, 0, 2.5F, -0.75F, 3.75F, 1, 1, 1, -0.25F, true));
 
         bone3 = new ModelRenderer(this);
-        bone3.setRotationPoint(0.0F, -13.9F, 0.3F);
+        bone3.setRotationPoint(0.0F, -14.65F, 0.55F);
         bone.addChild(bone3);
-        bone3.cubeList.add(new ModelBox(bone3, 0, 16, -2.0F, 0.65F, -0.4F, 1, 5, 1, 0.0F, false));
-        bone3.cubeList.add(new ModelBox(bone3, 14, 6, 1.0F, 0.65F, -0.4F, 1, 5, 1, 0.0F, false));
-        bone3.cubeList.add(new ModelBox(bone3, 14, 0, 1.0F, -3.35F, -0.4F, 1, 5, 1, -0.1F, false));
-        bone3.cubeList.add(new ModelBox(bone3, 14, 14, -2.0F, -3.35F, -0.4F, 1, 5, 1, -0.1F, false));
-        bone3.cubeList.add(new ModelBox(bone3, 0, 60, -7.0F, -8.85F, -5.4F, 14, 11, 11, -4.9F, false));
+        bone3.cubeList.add(new ModelBox(bone3, 124, 122, -2.0F, 0.65F, -0.5F, 1, 5, 1, -0.2F, true));
+        bone3.cubeList.add(new ModelBox(bone3, 124, 122, 1.0F, 0.65F, -0.5F, 1, 5, 1, -0.2F, false));
+        bone3.cubeList.add(new ModelBox(bone3, 118, 122, 1.0F, -3.35F, -0.5F, 1, 5, 1, -0.25F, false));
+        bone3.cubeList.add(new ModelBox(bone3, 118, 122, -2.0F, -3.35F, -0.5F, 1, 5, 1, -0.25F, true));
+        bone3.cubeList.add(new ModelBox(bone3, 0, 106, -7.0F, -8.85F, -5.5F, 14, 11, 11, -5.1F, false));
 
         bone2 = new ModelRenderer(this);
         bone2.setRotationPoint(0.0F, 23.0F, 0.0F);
-        bone2.cubeList.add(new ModelBox(bone2, 0, 8, -5.7F, -1.75F, -1.75F, 3, 4, 4, -1.25F, false));
-        bone2.cubeList.add(new ModelBox(bone2, 0, 0, 2.7F, -1.75F, -1.75F, 3, 4, 4, -1.25F, false));
+        bone2.cubeList.add(new ModelBox(bone2, 114, 108, -5.7F, -1.75F, -1.75F, 3, 4, 4, -1.25F, true));
+        bone2.cubeList.add(new ModelBox(bone2, 114, 108, 2.7F, -1.75F, -1.75F, 3, 4, 4, -1.25F, false));
     }
 
     @Override

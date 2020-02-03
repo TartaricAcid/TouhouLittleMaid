@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJ
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.AbstractEntityTrolley;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidVehicle;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -354,6 +355,11 @@ public class EntityModelJson extends ModelBase {
                 armLeft.rotateAngleX = 0.5f;
                 armLeft.rotateAngleY = 0f;
                 armLeft.rotateAngleZ = -0.395f;
+            } else if (entityMaid.getControllingPassenger() instanceof EntityMaidVehicle) {
+                float[] rotation = ((EntityMaidVehicle) entityMaid.getControllingPassenger()).getMaidHandRotation(EnumHand.OFF_HAND);
+                armLeft.rotateAngleX = rotation[0];
+                armLeft.rotateAngleY = rotation[1];
+                armLeft.rotateAngleZ = rotation[2];
             } else {
                 armLeft.rotateAngleX = -MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
                 armLeft.rotateAngleY = 0f;
@@ -368,15 +374,22 @@ public class EntityModelJson extends ModelBase {
         }
 
         if (armRight != null) {
-            // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
-            armRight.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
-            armRight.rotateAngleY = 0f;
-            armRight.rotateAngleZ = -MathHelper.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
+            if (entityMaid.getControllingPassenger() instanceof EntityMaidVehicle) {
+                float[] rotation = ((EntityMaidVehicle) entityMaid.getControllingPassenger()).getMaidHandRotation(EnumHand.MAIN_HAND);
+                armRight.rotateAngleX = rotation[0];
+                armRight.rotateAngleY = rotation[1];
+                armRight.rotateAngleZ = rotation[2];
+            } else {
+                // 左手右手的运动（这一处还有一个功能，即对数据进行归位）
+                armRight.rotateAngleX = MathHelper.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
+                armRight.rotateAngleY = 0f;
+                armRight.rotateAngleZ = -MathHelper.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
 
-            // 手部使用动画
-            if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.RIGHT) {
-                armRight.rotateAngleX = (float) ((double) armRight.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
-                armRight.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
+                // 手部使用动画
+                if (swingProgress > 0.0F && getSwingingHand(entityMaid) == EnumHandSide.RIGHT) {
+                    armRight.rotateAngleX = (float) ((double) armRight.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+                    armRight.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
+                }
             }
         }
     }

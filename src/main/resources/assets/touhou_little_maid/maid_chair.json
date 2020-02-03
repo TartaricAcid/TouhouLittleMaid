@@ -8,9 +8,6 @@
       "model_id": "touhou_little_maid:cushion",
       "mounted_height": 3
     }, {
-      "model_id": "touhou_little_maid:wheel_chair",
-      "mounted_height": 9
-    }, {
       "model_id": "touhou_little_maid:class_desk",
       "mounted_height": 15,
       "tameable_can_ride": false
@@ -25,13 +22,6 @@
     }, {
       "model_id": "touhou_little_maid:play_station",
       "mounted_height": 1,
-      "render_item_scale": 0.7
-    }, {
-      "model_id": "touhou_little_maid:cat_cart",
-      "mounted_height": 7
-    }, {
-      "model_id": "touhou_little_maid:rickshaw",
-      "mounted_height": 11,
       "render_item_scale": 0.7
     }, {
       "model_id": "touhou_little_maid:tall_stool",

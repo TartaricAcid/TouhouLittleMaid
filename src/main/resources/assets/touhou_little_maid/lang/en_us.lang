@@ -16,6 +16,7 @@ entity.touhou_little_maid.fairy.name=Maid Fairy
 entity.touhou_little_maid.suitcase.name=Suitcase
 entity.touhou_little_maid.backpack.name=Backpack
 entity.touhou_little_maid.trolley_audio.name=Trolley Audio
+entity.touhou_little_maid.maid_vehicle.name=Maid Vehicle
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item
@@ -46,6 +47,9 @@ item.touhou_little_maid.gashapon_coin.name=Gashapon Coin
 item.touhou_little_maid.maid_backpack.name=Maid Backpack
 item.touhou_little_maid.suitcase.name=Suitcase
 item.touhou_little_maid.trolley_audio.name=Trolley Audio
+item.touhou_little_maid.cat_cart.name=Cat Cart
+item.touhou_little_maid.wheel_chair.name=Wheel Chair
+item.touhou_little_maid.rickshaw.name=Rickshaw
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -469,13 +473,10 @@ model.touhou_little_maid.horikawa_raiko.desc=§7Phantasmal Percussionist
 model.touhou_little_maid.haniyasushin_keiki.desc=§7The Sculptor God Crafted by Utter Isolation
 
 model.touhou_little_maid.cushion.name=Cushion
-model.touhou_little_maid.wheel_chair.name=Wheel Chair
 model.touhou_little_maid.class_desk.name=Class Desk
 model.touhou_little_maid.class_chair.name=Class Chair
 model.touhou_little_maid.kotatsu.name=Kotatsu
 model.touhou_little_maid.play_station.name=Play Station
-model.touhou_little_maid.cat_cart.name=Cat Cart
-model.touhou_little_maid.rickshaw.name=Rickshaw
 model.touhou_little_maid.tall_stool.name=Tall Stool
 model.touhou_little_maid.low_stool.name=Low Stool
 model.touhou_little_maid.barbecue_booth.name=Barbecue Booth

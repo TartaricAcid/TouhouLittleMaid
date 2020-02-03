@@ -181,11 +181,11 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
 
-        this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 4.0F, 0.1f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityMaid.class, 4.0F, 0.2f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 4.0F, 0.1f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityOcelot.class, 4.0F, 0.1f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityParrot.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest2(this, EntityPlayer.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityMaid.class, 4.0F, 0.2f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityWolf.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityOcelot.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityParrot.class, 4.0F, 0.1f));
         this.tasks.addTask(10, new EntityAILookIdle(this));
         this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.4f));
 

@@ -16,6 +16,7 @@ entity.touhou_little_maid.fairy.name=妖精女仆
 entity.touhou_little_maid.suitcase.name=拉杆箱
 entity.touhou_little_maid.backpack.name=背包
 entity.touhou_little_maid.trolley_audio.name=便携式音响
+entity.touhou_little_maid.maid_vehicle.name=女仆载具
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item
@@ -46,6 +47,9 @@ item.touhou_little_maid.gashapon_coin.name=扭蛋币
 item.touhou_little_maid.maid_backpack.name=女仆背包
 item.touhou_little_maid.suitcase.name=行李箱
 item.touhou_little_maid.trolley_audio.name=便携式音响
+item.touhou_little_maid.cat_cart.name=猫车
+item.touhou_little_maid.wheel_chair.name=轮椅
+item.touhou_little_maid.rickshaw.name=黄包车
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -468,13 +472,10 @@ model.touhou_little_maid.horikawa_raiko.desc=§7梦幻的打击乐手
 model.touhou_little_maid.haniyasushin_keiki.desc=§7孤立无援造就的造形神
 
 model.touhou_little_maid.cushion.name=坐垫
-model.touhou_little_maid.wheel_chair.name=轮椅
 model.touhou_little_maid.class_desk.name=课桌
 model.touhou_little_maid.class_chair.name=课椅
 model.touhou_little_maid.kotatsu.name=被炉
 model.touhou_little_maid.play_station.name=游戏机
-model.touhou_little_maid.cat_cart.name=猫车
-model.touhou_little_maid.rickshaw.name=黄包车
 model.touhou_little_maid.tall_stool.name=高脚凳
 model.touhou_little_maid.low_stool.name=低脚凳
 model.touhou_little_maid.barbecue_booth.name=烧烤摊
