@@ -50,6 +50,7 @@ item.touhou_little_maid.trolley_audio.name=便携式音响
 item.touhou_little_maid.cat_cart.name=猫车
 item.touhou_little_maid.wheel_chair.name=轮椅
 item.touhou_little_maid.rickshaw.name=黄包车
+item.touhou_little_maid.bowl.name=碗
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办

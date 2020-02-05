@@ -72,6 +72,11 @@ dependencies {
     }
     deobfCompile "MCMultiPart2:MCMultiPart:${mcmp_version}"
     compile "vazkii.patchouli:Patchouli:${patchouli_version}"
+
+    // exp4j 库，一个字符串书写表达式解析库
+    // https://mvnrepository.com/artifact/net.objecthunter/exp4j
+    compile group: 'net.objecthunter', name: 'exp4j', version: '0.4.8'
+
     // 想要了解更多，可以查询如下网址
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html

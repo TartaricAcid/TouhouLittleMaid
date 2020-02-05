@@ -18,6 +18,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -146,6 +147,10 @@ public class EntityModelJson extends ModelBase {
                                   float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
         if (entityIn instanceof EntityMaid) {
             setMaidRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, (EntityMaid) entityIn);
+            if (entityIn.getRidingEntity() instanceof EntityPlayer) {
+                GlStateManager.scale(0.7, 0.7, 0.7);
+                GlStateManager.translate(0, 0.7, 0);
+            }
             return;
         }
         if (entityIn instanceof EntityChair) {

@@ -41,6 +41,7 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.*;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -242,6 +243,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.randomRestoreHealth();
         super.onLivingUpdate();
         applyEntityRiding();
+        checkMaidRidingPlayer();
         applyNavigatorAndMoveHelper();
     }
 
@@ -933,6 +935,27 @@ public class EntityMaid extends AbstractEntityMaid {
                 }
             }
             return super.getName();
+        }
+    }
+
+    private void checkMaidRidingPlayer() {
+        // 每秒检查一次
+        if (this.ticksExisted % 20 == 0) {
+            if (this.getRidingEntity() instanceof EntityPlayer) {
+                ItemStack head = ((EntityPlayer) this.getRidingEntity()).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+                if (head.getItem() != MaidItems.BOWL) {
+                    this.dismountRidingEntity();
+                }
+            }
+        }
+    }
+
+    @Override
+    public double getYOffset() {
+        if (this.getRidingEntity() instanceof EntityPlayer) {
+            return this.getRidingEntity().isSneaking() ? 0.7d : 0.9d;
+        } else {
+            return super.getYOffset();
         }
     }
 

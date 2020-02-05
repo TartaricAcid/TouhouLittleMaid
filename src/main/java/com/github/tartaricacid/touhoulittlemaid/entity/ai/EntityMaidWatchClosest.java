@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidVehicle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * @author TartaricAcid
@@ -21,7 +22,7 @@ public class EntityMaidWatchClosest extends EntityAIWatchClosest {
     @Override
     public boolean shouldExecute() {
         boolean controlNotWatch = !(entity.getControllingPassenger() instanceof EntityMaidVehicle);
-        boolean passengerNotWatch = !(entity.getRidingEntity() instanceof EntityMaidVehicle);
+        boolean passengerNotWatch = !(entity.getRidingEntity() instanceof EntityMaidVehicle || entity.getRidingEntity() instanceof EntityPlayer);
         return super.shouldExecute() && controlNotWatch && passengerNotWatch;
     }
 }

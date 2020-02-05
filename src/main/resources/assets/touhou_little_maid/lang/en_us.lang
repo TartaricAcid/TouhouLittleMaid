@@ -50,6 +50,7 @@ item.touhou_little_maid.trolley_audio.name=Trolley Audio
 item.touhou_little_maid.cat_cart.name=Cat Cart
 item.touhou_little_maid.wheel_chair.name=Wheel Chair
 item.touhou_little_maid.rickshaw.name=Rickshaw
+item.touhou_little_maid.bowl.name=Bowl
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
