@@ -75,6 +75,7 @@ public final class MaidModel {
         registerRender(MaidItems.GASHAPON_COIN);
         registerRender(MaidItems.SUITCASE);
         registerRender(MaidItems.TROLLEY_AUDIO);
+        registerRender(MaidItems.BOWL);
 
         ModelResourceLocation maidModelCoupon1 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_1", "inventory");
         ModelResourceLocation maidModelCoupon2 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_2", "inventory");
