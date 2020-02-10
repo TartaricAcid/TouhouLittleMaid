@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyChairSkinDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonToggle;
@@ -16,13 +17,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @date 2019/8/11 14:11
  **/
 @SideOnly(Side.CLIENT)
-public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair> {
+public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, ChairModelItem> {
     private GuiButtonToggle characterButton;
     private ResourceLocation modelId;
     private GuiButton setGravityButton;
 
     public ChairSkinDetailsGui(EntityChair sourceEntity, ResourceLocation modelId) {
-        super(sourceEntity, new EntityChair(sourceEntity.world), ClientProxy.CHAIR_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
+        super(sourceEntity, new EntityChair(sourceEntity.world), CustomModelLoader.CHAIR_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
         this.modelId = modelId;
         guiEntity.setModelId(modelId.toString());
         guiEntity.setMountedHeight(modelItem.getMountedYOffset());

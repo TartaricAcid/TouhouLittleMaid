@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -165,10 +165,10 @@ public class ItemChair extends Item {
     @SideOnly(Side.CLIENT)
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            for (String key : ClientProxy.CHAIR_MODEL.getModelIdSet()) {
-                float height = ClientProxy.CHAIR_MODEL.getModelMountedYOffset(key);
-                boolean canRide = ClientProxy.CHAIR_MODEL.getModelTameableCanRide(key);
-                boolean isNoGravity = ClientProxy.CHAIR_MODEL.getModelNoGravity(key);
+            for (String key : CustomModelLoader.CHAIR_MODEL.getModelIdSet()) {
+                float height = CustomModelLoader.CHAIR_MODEL.getModelMountedYOffset(key);
+                boolean canRide = CustomModelLoader.CHAIR_MODEL.getModelTameableCanRide(key);
+                boolean isNoGravity = CustomModelLoader.CHAIR_MODEL.getModelNoGravity(key);
                 items.add(setAllTagData(new ItemStack(this), key, height, canRide, isNoGravity));
             }
         }
@@ -178,8 +178,8 @@ public class ItemChair extends Item {
     @Override
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT &&
-                ClientProxy.CHAIR_MODEL.getInfo(getChairModelId(stack)).isPresent()) {
-            String name = ClientProxy.CHAIR_MODEL.getInfo(getChairModelId(stack)).get().getName();
+                CustomModelLoader.CHAIR_MODEL.getInfo(getChairModelId(stack)).isPresent()) {
+            String name = CustomModelLoader.CHAIR_MODEL.getInfo(getChairModelId(stack)).get().getName();
             return ParseI18n.parse(name);
         }
         return super.getItemStackDisplayName(stack);

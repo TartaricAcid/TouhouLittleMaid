@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -22,7 +24,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinD
  * @date 2019/8/3 19:58
  **/
 @SideOnly(Side.CLIENT)
-public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
+public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid, MaidModelItem> {
     /**
      * 相关物品实例，用于渲染实体持有效果，ARMOR_ITEM 仅为占位用物品
      */
@@ -54,7 +56,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     private GuiButtonToggle arrowButton;
 
     MaidSkinDetailsGui(EntityMaid sourceMaid, ResourceLocation modelId) {
-        super(sourceMaid, new EntityMaid(sourceMaid.world), ClientProxy.MAID_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
+        super(sourceMaid, new EntityMaid(sourceMaid.world), CustomModelLoader.MAID_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
         this.marisaBroom = new EntityMarisaBroom(sourceMaid.world);
         guiEntity.setModelId(modelId.toString());
         guiEntity.isDebugFloorOpen = true;

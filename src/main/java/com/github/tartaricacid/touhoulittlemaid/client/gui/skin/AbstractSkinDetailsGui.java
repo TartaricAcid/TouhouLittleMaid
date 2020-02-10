@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelItem;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -33,7 +33,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.AbstractS
  * @date 2019/8/3 19:58
  **/
 @SideOnly(Side.CLIENT)
-public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends GuiScreen {
+public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U extends IModelItem> extends GuiScreen {
     protected static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
     /**
      * 部分缩放，旋转所限制的范围
@@ -55,7 +55,7 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends
      * 必须的部分变量
      */
     protected T sourceEntity;
-    protected ModelItem modelItem;
+    protected U modelItem;
     protected volatile T guiEntity;
     protected volatile boolean isEnableWalk = false;
     /**
@@ -67,7 +67,7 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase> extends
     private float yaw = -45;
     private float pitch = -30;
 
-    public AbstractSkinDetailsGui(T sourceEntity, T guiEntity, ModelItem modelItem) {
+    public AbstractSkinDetailsGui(T sourceEntity, T guiEntity, U modelItem) {
         this.sourceEntity = sourceEntity;
         this.guiEntity = guiEntity;
         this.modelItem = modelItem;

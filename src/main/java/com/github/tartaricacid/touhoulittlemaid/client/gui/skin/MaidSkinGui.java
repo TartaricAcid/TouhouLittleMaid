@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyMaidSkinDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -19,22 +20,22 @@ import java.util.concurrent.ExecutionException;
  * @date 2019/7/12 12:27
  **/
 @SideOnly(Side.CLIENT)
-public class MaidSkinGui extends AbstractSkinGui<EntityMaid> {
+public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelItem> {
     private static int PACK_INDEX = 0;
     private static int PAGE_INDEX = 0;
 
     public MaidSkinGui(EntityMaid maid) {
-        super(maid, ClientProxy.MAID_MODEL.getPackList(), "touhou_little_maid:entity.passive.maid");
+        super(maid, CustomModelLoader.MAID_MODEL.getPackList(), "touhou_little_maid:entity.passive.maid");
     }
 
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
-        float renderItemScale = ClientProxy.MAID_MODEL.getModelRenderItemScale(entity.getModelId());
+        float renderItemScale = CustomModelLoader.MAID_MODEL.getModelRenderItemScale(entity.getModelId());
         GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, (int) (45 * renderItemScale), middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entity);
     }
 
     @Override
-    void drawRightEntity(int posX, int posY, ModelItem modelItem) {
+    void drawRightEntity(int posX, int posY, MaidModelItem modelItem) {
         EntityMaid maid;
         try {
             maid = (EntityMaid) ClientProxy.ENTITY_CACHE.get(ENTITY_ID, () -> {

@@ -169,7 +169,6 @@
       "model_id": "touhou_little_maid:hoshiguma_yugi",
       "description": ["{model.touhou_little_maid.hoshiguma_yugi.desc}"]
     }, {
-      "format": 1,
       "model_id": "touhou_little_maid:komeiji_satori",
       "description": ["{model.touhou_little_maid.komeiji_satori.desc}"]
     }, {

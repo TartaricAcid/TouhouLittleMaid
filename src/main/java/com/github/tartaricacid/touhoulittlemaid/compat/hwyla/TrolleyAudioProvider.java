@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.hwyla;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTrolleyAudio;
-import mcp.mobius.waila.addons.minecraft.HUDHandlerVillager;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaEntityAccessor;
 import mcp.mobius.waila.api.IWailaEntityProvider;

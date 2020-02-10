@@ -1,10 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resources;
 
-import com.github.tartaricacid.touhoulittlemaid.client.animation.EnumAnimationType;
-import com.github.tartaricacid.touhoulittlemaid.client.animation.pojo.CustomAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -13,22 +11,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * @author TartaricAcid
- * @date 2019/8/28 13:56
- **/
 @SideOnly(Side.CLIENT)
-public class CustomModelResources {
+public class CustomChairModelResources {
     private String jsonFileName;
-    private List<CustomModelPackPOJO> packList;
+    private List<CustomModelPack<ChairModelItem>> packList;
     private HashMap<String, EntityModelJson> idModelMap;
-    private HashMap<String, ModelItem> idInfoMap;
-    private HashMap<String, HashMap<EnumAnimationType, CustomAnimation>> idAnimationMap;
+    private HashMap<String, ChairModelItem> idInfoMap;
+    private HashMap<String, Object> idAnimationMap;
 
-    public CustomModelResources(String jsonFileName, List<CustomModelPackPOJO> packList,
-                                HashMap<String, EntityModelJson> idToModel,
-                                HashMap<String, ModelItem> idToInfo,
-                                HashMap<String, HashMap<EnumAnimationType, CustomAnimation>> idAnimationMap) {
+    public CustomChairModelResources(String jsonFileName, List<CustomModelPack<ChairModelItem>> packList,
+                                     HashMap<String, EntityModelJson> idToModel,
+                                     HashMap<String, ChairModelItem> idToInfo,
+                                     HashMap<String, Object> idAnimationMap) {
         this.jsonFileName = jsonFileName;
         this.packList = packList;
         this.idModelMap = idToModel;
@@ -47,7 +41,7 @@ public class CustomModelResources {
         return jsonFileName;
     }
 
-    public List<CustomModelPackPOJO> getPackList() {
+    public List<CustomModelPack<ChairModelItem>> getPackList() {
         return packList;
     }
 
@@ -55,7 +49,7 @@ public class CustomModelResources {
         return idInfoMap.keySet();
     }
 
-    public void addPack(CustomModelPackPOJO pack) {
+    public void addPack(CustomModelPack<ChairModelItem> pack) {
         this.packList.add(pack);
     }
 
@@ -63,12 +57,12 @@ public class CustomModelResources {
         this.idModelMap.put(modelId, modelJson);
     }
 
-    public void putInfo(String modelId, ModelItem modelItem) {
-        this.idInfoMap.put(modelId, modelItem);
+    public void putInfo(String modelId, ChairModelItem chairModelItem) {
+        this.idInfoMap.put(modelId, chairModelItem);
     }
 
-    public void putAnimation(String modelId, HashMap<EnumAnimationType, CustomAnimation> animationMap) {
-        this.idAnimationMap.put(modelId, animationMap);
+    public void putAnimation(String modelId, Object animationJs) {
+        this.idAnimationMap.put(modelId, animationJs);
     }
 
     public Optional<EntityModelJson> getModel(String modelId) {
@@ -103,11 +97,11 @@ public class CustomModelResources {
         return false;
     }
 
-    public Optional<CustomAnimation> getAnimation(String modelId, EnumAnimationType animationType) {
-        return Optional.ofNullable(idAnimationMap.get(modelId).get(animationType));
+    public Optional<Object> getAnimation(String modelId) {
+        return Optional.ofNullable(idAnimationMap.get(modelId));
     }
 
-    public Optional<ModelItem> getInfo(String modelId) {
+    public Optional<ChairModelItem> getInfo(String modelId) {
         return Optional.ofNullable(idInfoMap.get(modelId));
     }
 }

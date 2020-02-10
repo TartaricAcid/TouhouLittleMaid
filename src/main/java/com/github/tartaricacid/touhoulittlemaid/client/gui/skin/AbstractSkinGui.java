@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelItem;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -25,12 +25,12 @@ import java.util.List;
  * @date 2019/7/12 12:27
  **/
 @SideOnly(Side.CLIENT)
-public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScreen {
+public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IModelItem> extends GuiScreen {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
     /**
      * 按钮的 ID -> 模型 映射
      */
-    private static final HashMap<Integer, ModelItem> BUTTON_MODEL_MAP = Maps.newHashMap();
+    private static final HashMap<Integer, IModelItem> BUTTON_MODEL_MAP = Maps.newHashMap();
     /**
      * 一页最多能容纳 44 个模型
      */
@@ -50,12 +50,12 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
     /**
      * 使用的模型包列表
      */
-    private static List<CustomModelPackPOJO> MODEL_PACK_LIST = Lists.newArrayList();
+    private List<CustomModelPack<U>> modelPackList;
     protected T entity;
 
-    public AbstractSkinGui(T entity, List<CustomModelPackPOJO> listPack, String entityId) {
+    public AbstractSkinGui(T entity, List<CustomModelPack<U>> listPack, String entityId) {
         this.entity = entity;
-        MODEL_PACK_LIST = listPack;
+        modelPackList = listPack;
         ENTITY_ID = entityId;
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      * @param posY      实体所在的 y 坐标
      * @param modelItem 该实体应该对应的模型数据
      */
-    abstract void drawRightEntity(int posX, int posY, ModelItem modelItem);
+    abstract void drawRightEntity(int posX, int posY, U modelItem);
 
     /**
      * 打开详情界面
@@ -124,7 +124,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
         this.buttonList.add(new GuiButtonImage(id++, i + 104, j - 116, 21, 17, 58, 201, 18, BG));
 
         // 添加按键，顺便装填按键对应模型的索引
-        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(getPackIndex());
+        CustomModelPack<U> pojo = modelPackList.get(getPackIndex());
 
         // 起始坐标
         int x = -100;
@@ -132,10 +132,10 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
 
         // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
         int fromIndex = PAGE_MAX_NUM * getPageIndex();
-        int toIndex = PAGE_MAX_NUM * (getPageIndex() + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (getPageIndex() + 1);
+        int toIndex = Math.min(PAGE_MAX_NUM * (getPageIndex() + 1), pojo.getModelList().size());
 
         // 开始添加按键，顺便装填按键对应模型的索引
-        for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
+        for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
             this.buttonList.add(new GuiButtonImage(id, i + x - 8, j + y - 23, 15, 24, 41, 201, 24, BG));
             BUTTON_MODEL_MAP.put(id, modelItem);
 
@@ -154,13 +154,13 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         // 计算出包总数（用来刷新）
-        PACK_COUNT = MODEL_PACK_LIST.size();
+        PACK_COUNT = modelPackList.size();
 
         // 计算出模型分页总数（用来刷新）
-        if (getPackIndex() >= MODEL_PACK_LIST.size()) {
-            setPackIndex(MODEL_PACK_LIST.size() - 1);
+        if (getPackIndex() >= modelPackList.size()) {
+            setPackIndex(modelPackList.size() - 1);
         }
-        PAGE_COUNT = (MODEL_PACK_LIST.get(getPackIndex()).getModelList().size() - 1) / PAGE_MAX_NUM + 1;
+        PAGE_COUNT = (modelPackList.get(getPackIndex()).getModelList().size() - 1) / PAGE_MAX_NUM + 1;
 
         // 中心点
         int middleX = this.width / 2 + 50;
@@ -189,7 +189,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      */
     private void drawEntity(int middleX, int middleY) {
         // 获取当前包索引得到的模型列表
-        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(getPackIndex());
+        CustomModelPack<U> pojo = modelPackList.get(getPackIndex());
 
         // 绘制包信息
         drawPackInfoText(pojo, middleX, middleY);
@@ -200,10 +200,10 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
 
         // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
         int fromIndex = PAGE_MAX_NUM * getPageIndex();
-        int toIndex = PAGE_MAX_NUM * (getPageIndex() + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (getPageIndex() + 1);
+        int toIndex = Math.min(PAGE_MAX_NUM * (getPageIndex() + 1), pojo.getModelList().size());
 
         // 开始绘制实体图案，并往上添加对应模型和材质
-        for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
+        for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
             drawRightEntity(middleX + x, middleY + y, modelItem);
             // 往右绘制
             x = x + 20;
@@ -218,7 +218,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
     /**
      * 绘制包的文本信息
      */
-    private void drawPackInfoText(CustomModelPackPOJO pojo, int middleX, int middleY) {
+    private void drawPackInfoText(CustomModelPack<U> pojo, int middleX, int middleY) {
         int offSet = -80;
 
         // 绘制包名
@@ -267,7 +267,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
      */
     private void drawTooltips(int mouseX, int mouseY, int middleX, int middleY) {
         // 获取当前包索引得到的模型列表
-        CustomModelPackPOJO pojo = MODEL_PACK_LIST.get(getPackIndex());
+        CustomModelPack<U> pojo = modelPackList.get(getPackIndex());
 
         // 起始坐标
         int x = -100;
@@ -275,10 +275,10 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase> extends GuiScr
 
         // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
         int fromIndex = PAGE_MAX_NUM * getPageIndex();
-        int toIndex = PAGE_MAX_NUM * (getPageIndex() + 1) > pojo.getModelList().size() ? pojo.getModelList().size() : PAGE_MAX_NUM * (getPageIndex() + 1);
+        int toIndex = Math.min(PAGE_MAX_NUM * (getPageIndex() + 1), pojo.getModelList().size());
 
         // 开始绘制实体图案，并往上添加对应模型和材质
-        for (ModelItem modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
+        for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
             // 判定鼠标所在的位置
             boolean isxInRange = middleX + x - 8 < mouseX && mouseX < middleX + x + 7;
             boolean isyInRange = middleY + y - 23 < mouseY && mouseY < middleY + y + 1;

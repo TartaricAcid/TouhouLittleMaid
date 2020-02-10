@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -21,7 +22,6 @@ import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -926,8 +926,8 @@ public class EntityMaid extends AbstractEntityMaid {
         } else {
             String modelId = getModelId();
             if (world.isRemote) {
-                if (ClientProxy.MAID_MODEL.getInfo(modelId).isPresent()) {
-                    return ParseI18n.parse(ClientProxy.MAID_MODEL.getInfo(modelId).get().getName());
+                if (CustomModelLoader.MAID_MODEL.getInfo(modelId).isPresent()) {
+                    return ParseI18n.parse(CustomModelLoader.MAID_MODEL.getInfo(modelId).get().getName());
                 }
             } else {
                 if (CommonProxy.VANILLA_ID_NAME_MAP.containsKey(modelId)) {
@@ -1427,7 +1427,7 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        EntityModelJson modelJson = ClientProxy.MAID_MODEL.getModel(getModelId()).orElse(null);
+        EntityModelJson modelJson = CustomModelLoader.MAID_MODEL.getModel(getModelId()).orElse(null);
         if (modelJson == null) {
             return super.getRenderBoundingBox();
         }

@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
 import net.minecraft.client.gui.GuiScreen;
@@ -96,7 +96,7 @@ public class ItemPhoto extends Item {
         } else {
             String modelId = stack.getTagCompound().getCompoundTag(MAID_INFO.getNbtName()).getString(EntityMaid.NBT.MODEL_ID.getName());
             if (!"".equals(modelId)) {
-                ClientProxy.MAID_MODEL.getInfo(modelId).ifPresent(modelItem ->
+                CustomModelLoader.MAID_MODEL.getInfo(modelId).ifPresent(modelItem ->
                         tooltip.add(I18n.format("tooltips.touhou_little_maid.photo.maid.desc",
                                 ParseI18n.parse(modelItem.getName()))));
             }

@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntitySuitcaseModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityTrolleyAudioModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTrolleyAudio;
 import net.minecraft.client.model.ModelBase;

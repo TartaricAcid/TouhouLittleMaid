@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidModelCoupon;
@@ -102,7 +103,7 @@ public class MaidRenderTooltipsEvent {
             if (entity instanceof EntityMaid) {
                 EntityMaid maid = (EntityMaid) entity;
                 maid.setModelId(modelId);
-                renderItemScale = ClientProxy.MAID_MODEL.getModelRenderItemScale(modelId);
+                renderItemScale = CustomModelLoader.MAID_MODEL.getModelRenderItemScale(modelId);
                 // 缓存的对象往往有一些奇怪的东西，一并清除
                 maid.setShowSasimono(false);
                 maid.hurtResistantTime = 0;

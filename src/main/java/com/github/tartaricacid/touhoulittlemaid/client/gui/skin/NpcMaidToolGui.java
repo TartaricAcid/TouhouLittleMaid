@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SendNpcMaidModelMessage;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.gui.GuiButton;
@@ -24,7 +24,7 @@ public class NpcMaidToolGui extends GuiScreen {
 
     public NpcMaidToolGui(EntityCustomNpc npc) {
         this.npc = npc;
-        idArray = ClientProxy.MAID_MODEL.getModelIdSet().toArray(new String[0]);
+        idArray = CustomModelLoader.MAID_MODEL.getModelIdSet().toArray(new String[0]);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class NpcMaidToolGui extends GuiScreen {
             if (num >= idArray.length) {
                 break;
             }
-            Optional<ModelItem> item = ClientProxy.MAID_MODEL.getInfo(idArray[num]);
+            Optional<MaidModelItem> item = CustomModelLoader.MAID_MODEL.getInfo(idArray[num]);
             if (item.isPresent()) {
                 this.addButton(new GuiButton(i, x - 100, y - 100 + i * 20, ParseI18n.parse(item.get().getName())));
             }
@@ -60,9 +60,9 @@ public class NpcMaidToolGui extends GuiScreen {
     protected void actionPerformed(GuiButton button) {
         if (0 <= button.id && button.id < 9) {
             int num = button.id + index * 9;
-            Optional<ModelItem> item = ClientProxy.MAID_MODEL.getInfo(idArray[num]);
+            Optional<MaidModelItem> item = CustomModelLoader.MAID_MODEL.getInfo(idArray[num]);
             if (item.isPresent()) {
-                ModelItem modelItem = item.get();
+                MaidModelItem modelItem = item.get();
                 Entity entity = npc.modelData.getEntity(npc);
                 if (entity instanceof EntityMaid) {
                     // 客户端数据更改

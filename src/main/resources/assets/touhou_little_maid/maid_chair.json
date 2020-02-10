@@ -65,9 +65,7 @@
       "mounted_height": 3,
       "render_item_scale": 0.4,
       "tameable_can_ride": false,
-      "animations": {
-        "always": "touhou_little_maid:animation/water_wheel.rotation.json"
-      }
+      "animation": "touhou_little_maid:animation/water_wheel.rotation.js"
     }, {
       "model_id": "touhou_little_maid:saisen_bako",
       "mounted_height": 17,
