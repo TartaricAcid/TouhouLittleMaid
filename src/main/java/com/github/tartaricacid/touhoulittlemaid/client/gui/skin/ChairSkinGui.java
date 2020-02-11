@@ -21,8 +21,9 @@ import java.util.concurrent.ExecutionException;
  **/
 @SideOnly(Side.CLIENT)
 public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelItem> {
-    private static int PACK_INDEX = 0;
     private static int PAGE_INDEX = 0;
+    private static int PACK_INDEX = 0;
+    private static int ROW_INDEX = 0;
 
     public ChairSkinGui(EntityChair chair) {
         super(chair, CustomModelLoader.CHAIR_MODEL.getPackList(), "touhou_little_maid:entity.item.chair");
@@ -68,6 +69,16 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelItem> {
     }
 
     @Override
+    int getPageIndex() {
+        return PAGE_INDEX;
+    }
+
+    @Override
+    void setPageIndex(int pageIndex) {
+        PAGE_INDEX = pageIndex;
+    }
+
+    @Override
     int getPackIndex() {
         return PACK_INDEX;
     }
@@ -78,12 +89,12 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelItem> {
     }
 
     @Override
-    int getPageIndex() {
-        return PAGE_INDEX;
+    int getRowIndex() {
+        return ROW_INDEX;
     }
 
     @Override
-    void setPageIndex(int pageIndex) {
-        PAGE_INDEX = pageIndex;
+    void setRowIndex(int rowIndex) {
+        ROW_INDEX = rowIndex;
     }
 }

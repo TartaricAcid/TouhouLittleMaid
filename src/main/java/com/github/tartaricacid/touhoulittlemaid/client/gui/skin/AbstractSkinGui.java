@@ -9,13 +9,17 @@ import com.google.common.collect.Maps;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Mouse;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,26 +31,16 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IModelItem> extends GuiScreen {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
+    private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select_side.png");
     /**
      * 按钮的 ID -> 模型 映射
      */
     private static final HashMap<Integer, IModelItem> BUTTON_MODEL_MAP = Maps.newHashMap();
-    /**
-     * 一页最多能容纳 44 个模型
-     */
-    private static final int PAGE_MAX_NUM = 44;
+    private SkinGuiNumber<U> guiNumber;
     /**
      * 用来在子类中通过实体 id 获取缓存中的实体对象
      */
     protected static String ENTITY_ID;
-    /**
-     * 存储包的总数
-     */
-    private static int PACK_COUNT;
-    /**
-     * 存储页面的总数
-     */
-    private static int PAGE_COUNT = 1;
     /**
      * 使用的模型包列表
      */
@@ -56,6 +50,10 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
     public AbstractSkinGui(T entity, List<CustomModelPack<U>> listPack, String entityId) {
         this.entity = entity;
         modelPackList = listPack;
+        guiNumber = new SkinGuiNumber<>(modelPackList);
+        setPageIndex(MathHelper.clamp(getPageIndex(), 0, guiNumber.getPageSize() - 1));
+        setPackIndex(MathHelper.clamp(getPackIndex(), 0, guiNumber.getPackSize() - 1));
+        setRowIndex(MathHelper.clamp(getRowIndex(), 0, guiNumber.getRowSize(getPackIndex())));
         ENTITY_ID = entityId;
     }
 
@@ -98,9 +96,13 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
 
     abstract void setPackIndex(int packIndex);
 
+    abstract int getRowIndex();
+
+    abstract void setRowIndex(int rowIndex);
+
     abstract int getPageIndex();
 
-    abstract void setPageIndex(int pageIndex);
+    abstract void setPageIndex(int packIndex);
 
     @Override
     public void initGui() {
@@ -112,16 +114,33 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int j = this.height / 2 + 5;
         int id = 0;
 
-        // 添加切换模型包的按钮
-        this.buttonList.add(new GuiButtonImage(id++, i - 118, j - 89, 11, 17, 15, 201, 18, BG));
-        this.buttonList.add(new GuiButtonImage(id++, i + 107, j - 89, 11, 17, 1, 201, 18, BG));
+        // 模型包的分栏按钮
+        for (int index = 0; index < 7; index++) {
+            if (index == guiNumber.getTabIndex(getPackIndex())) {
+                this.buttonList.add(new GuiButtonImage(id++, i - 98 + 28 * index, j - 108, 28, 31, 116, 224, 0, BG));
+            } else if (index < guiNumber.getTabSize(getPackIndex())) {
+                this.buttonList.add(new GuiButtonImage(id++, i - 98 + 28 * index, j - 105, 28, 25, 116, 194, 0, BG));
+            } else {
+                GuiButtonImage buttonImage = new GuiButtonImage(id++, i - 98 + 28 * index, j - 105, 28, 25, 116, 194, 0, BG);
+                buttonImage.visible = false;
+                this.buttonList.add(buttonImage);
+            }
+        }
+        // 关闭当前界面的按键
+        this.buttonList.add(new GuiButtonImage(id++, i + 122, j - 97, 21, 17, 58, 201, 18, BG));
 
         // 添加切换页面的按钮
-        this.buttonList.add(new GuiButtonImage(id++, i - 118, j + 73, 11, 17, 15, 201, 18, BG));
-        this.buttonList.add(new GuiButtonImage(id++, i + 107, j + 73, 11, 17, 1, 201, 18, BG));
-
-        // 关闭当前界面的按键
-        this.buttonList.add(new GuiButtonImage(id++, i + 104, j - 116, 21, 17, 58, 201, 18, BG));
+        id = 8;
+        GuiButton prePage = new GuiButton(id++, i - 119, j - 101, 20, 20, "<");
+        GuiButton nextPage = new GuiButton(id++, i + 99, j - 101, 20, 20, ">");
+        if (getPageIndex() == 0) {
+            prePage.enabled = false;
+        }
+        if (getPageIndex() == guiNumber.getPageSize() - 1) {
+            nextPage.enabled = false;
+        }
+        this.buttonList.add(prePage);
+        this.buttonList.add(nextPage);
 
         // 添加按键，顺便装填按键对应模型的索引
         CustomModelPack<U> pojo = modelPackList.get(getPackIndex());
@@ -130,13 +149,13 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int x = -100;
         int y = -35;
 
-        // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
-        int fromIndex = PAGE_MAX_NUM * getPageIndex();
-        int toIndex = Math.min(PAGE_MAX_NUM * (getPageIndex() + 1), pojo.getModelList().size());
+        // 切割列表，让其一页最多显示 44 个模型，但是又不至于溢出
+        int fromIndex = guiNumber.modelFromIndex(getRowIndex());
+        int toIndex = guiNumber.modelToIndex(getPackIndex(), getRowIndex());
 
         // 开始添加按键，顺便装填按键对应模型的索引
         for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
-            this.buttonList.add(new GuiButtonImage(id, i + x - 8, j + y - 23, 15, 24, 41, 201, 24, BG));
+            this.buttonList.add(new GuiButtonImage(id, i + x - 8, j + y - 26, 15, 24, 41, 201, 24, BG));
             BUTTON_MODEL_MAP.put(id, modelItem);
 
             // 往右绘制
@@ -153,15 +172,6 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        // 计算出包总数（用来刷新）
-        PACK_COUNT = modelPackList.size();
-
-        // 计算出模型分页总数（用来刷新）
-        if (getPackIndex() >= modelPackList.size()) {
-            setPackIndex(modelPackList.size() - 1);
-        }
-        PAGE_COUNT = (modelPackList.get(getPackIndex()).getModelList().size() - 1) / PAGE_MAX_NUM + 1;
-
         // 中心点
         int middleX = this.width / 2 + 50;
         int middleY = this.height / 2 + 5;
@@ -171,10 +181,26 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
 
         // 绘制 GUI 背景
         mc.renderEngine.bindTexture(BG);
-        drawTexturedModalRect(middleX - 256 / 2, middleY - 100, 0, 0, 256, 200);
+        drawTexturedModalRect(middleX - 256 / 2, middleY - 80, 0, 0, 256, 180);
 
+        mc.renderEngine.bindTexture(SIDE);
+        drawTexturedModalRect(middleX - 256 / 2 + 250, middleY - 80, 0, 0, 24, 180);
+
+        if (guiNumber.canScroll(getPackIndex(), getRowIndex())) {
+            drawTexturedModalRect(middleX - 256 / 2 + 254,
+                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    24, 0, 12, 15);
+        } else {
+            drawTexturedModalRect(middleX - 256 / 2 + 254,
+                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    36, 0, 12, 15);
+        }
+
+        GlStateManager.pushMatrix();
         // 调用父类方法绘制按钮列表、标签列表
         super.drawScreen(mouseX, mouseY, partialTicks);
+        GlStateManager.color(1, 1, 1);
+        GlStateManager.popMatrix();
 
         // 绘制左边示例实体
         drawLeftEntity(middleX, middleY, mouseX, mouseY);
@@ -196,11 +222,11 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
 
         // 起始坐标
         int x = -100;
-        int y = -35;
+        int y = -38;
 
         // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
-        int fromIndex = PAGE_MAX_NUM * getPageIndex();
-        int toIndex = Math.min(PAGE_MAX_NUM * (getPageIndex() + 1), pojo.getModelList().size());
+        int fromIndex = guiNumber.modelFromIndex(getRowIndex());
+        int toIndex = guiNumber.modelToIndex(getPackIndex(), getRowIndex());
 
         // 开始绘制实体图案，并往上添加对应模型和材质
         for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
@@ -256,8 +282,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
 
 
         // 绘制最后的翻页数
-        drawCenteredString(fontRenderer, String.format("%s/%s", getPackIndex() + 1, PACK_COUNT), middleX, middleY - 84, 0xffffff);
-        drawCenteredString(fontRenderer, String.format("%s/%s", getPageIndex() + 1, PAGE_COUNT), middleX, middleY + 78, 0xffffff);
+        drawCenteredString(fontRenderer, String.format("%s/%s", getPageIndex() + 1, guiNumber.getPageSize()), middleX, middleY - 120, 0xffffff);
     }
 
     /**
@@ -273,9 +298,9 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int x = -100;
         int y = -35;
 
-        // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
-        int fromIndex = PAGE_MAX_NUM * getPageIndex();
-        int toIndex = Math.min(PAGE_MAX_NUM * (getPageIndex() + 1), pojo.getModelList().size());
+        // 切割列表，让其一页最多显示 44 个模型，但是又不至于溢出
+        int fromIndex = guiNumber.modelFromIndex(getRowIndex());
+        int toIndex = guiNumber.modelToIndex(getPackIndex(), getRowIndex());
 
         // 开始绘制实体图案，并往上添加对应模型和材质
         for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
@@ -309,8 +334,8 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         }
 
         // 绘制关闭按钮的文本提示
-        boolean xInRange = (middleX + 104) < mouseX && mouseX < (middleX + 125);
-        boolean yInRange = (middleY - 116) < mouseY && mouseY < (middleY - 99);
+        boolean xInRange = (middleX + 122) < mouseX && mouseX < (middleX + 143);
+        boolean yInRange = (middleY - 97) < mouseY && mouseY < (middleY - 80);
         if (xInRange && yInRange) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.skin.button.close"), mouseX, mouseY);
         }
@@ -318,50 +343,57 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        switch (button.id) {
-            // 向前翻包按钮
-            case 0:
-                // 重载包索引、重新计算该包分页总数、将页面索引重载成 0 ，同时重载所有的按键
-                setPackIndex((getPackIndex() <= 0) ? PACK_COUNT - 1 : getPackIndex() - 1);
-                setPageIndex(0);
+        if (0 <= button.id && button.id < guiNumber.getTabSize(getPackIndex())) {
+            setRowIndex(0);
+            setPackIndex(guiNumber.tabToPackIndex(button.id, getPageIndex()));
+            this.initGui();
+            return;
+        }
+        if (button.id == 7) {
+            mc.addScheduledTask(() -> mc.displayGuiScreen(null));
+            return;
+        }
+        if (button.id == 8) {
+            setRowIndex(0);
+            setPageIndex(MathHelper.clamp(getPageIndex() - 1, 0, guiNumber.getPageSize() - 1));
+            setPackIndex(guiNumber.tabToPackIndex(0, getPageIndex()));
+            this.initGui();
+            return;
+        }
+        if (button.id == 9) {
+            setRowIndex(0);
+            setPageIndex(MathHelper.clamp(getPageIndex() + 1, 0, guiNumber.getPageSize() - 1));
+            setPackIndex(guiNumber.tabToPackIndex(0, getPageIndex()));
+            this.initGui();
+            return;
+        }
+        if (isShiftKeyDown()) {
+            // shift 状态下打开详情页
+            openDetailsGui(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
+        } else {
+            // 进行模型更改的发包
+            notifyModelChange(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
+        }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int dWheel = Mouse.getEventDWheel();
+        if (dWheel != 0) {
+            // 向上滚
+            if (dWheel > 0) {
+                dWheel = 1;
+            }
+            // 向下滚
+            if (dWheel < 0) {
+                dWheel = -1;
+            }
+            int row = MathHelper.clamp(getRowIndex() - dWheel, 0, guiNumber.getRowSize(getPackIndex()));
+            if (row != getRowIndex()) {
+                setRowIndex(row);
                 this.initGui();
-                return;
-
-            // 向后翻包
-            case 1:
-                // 重载包索引、重新计算该包模型的总数、将页面索引重载成 0 ，同时重载所有的按键
-                setPackIndex((getPackIndex() >= PACK_COUNT - 1) ? 0 : getPackIndex() + 1);
-                setPageIndex(0);
-                this.initGui();
-                return;
-
-            // 向前翻页
-            case 2:
-                // 重载页面索引、重载所有的按键
-                setPageIndex((getPageIndex() <= 0) ? PAGE_COUNT - 1 : getPageIndex() - 1);
-                this.initGui();
-                return;
-
-            // 向后翻页
-            case 3:
-                // 重载页面索引、重载所有的按键
-                setPageIndex((getPageIndex() >= PAGE_COUNT - 1) ? 0 : getPageIndex() + 1);
-                this.initGui();
-                return;
-
-            case 4:
-                mc.addScheduledTask(() -> mc.displayGuiScreen(null));
-                return;
-
-            // 其他按键
-            default:
-                if (isShiftKeyDown()) {
-                    // shift 状态下打开详情页
-                    openDetailsGui(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
-                } else {
-                    // 进行模型更改的发包
-                    notifyModelChange(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
-                }
+            }
         }
     }
 
