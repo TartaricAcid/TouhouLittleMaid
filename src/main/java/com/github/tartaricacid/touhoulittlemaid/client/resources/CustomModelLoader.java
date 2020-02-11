@@ -132,7 +132,7 @@ public class CustomModelLoader {
     }
 
     @Nullable
-    private static EntityModelJson loadModel(ResourceLocation modelLocation) {
+    public static EntityModelJson loadModel(ResourceLocation modelLocation) {
         InputStream input = null;
         try {
             input = manager.getResource(modelLocation).getInputStream();

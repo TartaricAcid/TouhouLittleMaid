@@ -13,7 +13,6 @@ import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
@@ -134,19 +133,22 @@ public class EntityModelJson extends ModelBase {
         Invocable invocable = (Invocable) CommonProxy.NASHORN;
         if (entityIn instanceof EntityMaid) {
             entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
-            Optional<Object> objectOptional = CustomModelLoader.MAID_MODEL.getAnimation(((EntityMaid) entityIn).getModelId());
+            String modelId = ((EntityMaid) entityIn).getModelId();
+            Optional<Object> objectOptional = CustomModelLoader.MAID_MODEL.getAnimation(modelId);
             if (objectOptional.isPresent()) {
                 try {
                     invocable.invokeMethod(objectOptional.get(), "animation",
                             entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    CustomModelLoader.MAID_MODEL.removeAnimation(modelId);
                 }
             }
             return;
         }
         if (entityIn instanceof EntityChair) {
             entityChairWrapper.setChair((EntityChair) entityIn);
+            String modelId = ((EntityChair) entityIn).getModelId();
             Optional<Object> objectOptional = CustomModelLoader.CHAIR_MODEL.getAnimation(((EntityChair) entityIn).getModelId());
             if (objectOptional.isPresent()) {
                 try {
@@ -154,6 +156,7 @@ public class EntityModelJson extends ModelBase {
                             entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    CustomModelLoader.CHAIR_MODEL.removeAnimation(modelId);
                 }
             }
         }
@@ -197,14 +200,6 @@ public class EntityModelJson extends ModelBase {
         if (customHead != null) {
             customHead.postRender(scale);
         }
-    }
-
-    /**
-     * 获取现在使用的是主手还是副手<br>
-     * 如果是主手，那就返回右边
-     */
-    private EnumHandSide getSwingingHand(EntityMaid entityIn) {
-        return entityIn.swingingHand == EnumHand.MAIN_HAND ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
     }
 
     /**

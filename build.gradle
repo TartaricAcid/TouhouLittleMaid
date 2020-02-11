@@ -100,7 +100,7 @@ processResources {
     }
 }
 
-// 强制将编译环境的变化设置为 UTF-8 编码
+// 强制将编译环境的编码设置为 UTF-8 编码
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

@@ -3,9 +3,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
+import com.google.common.collect.Maps;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +20,7 @@ public class CustomMaidModelResources {
     private HashMap<String, EntityModelJson> idModelMap;
     private HashMap<String, MaidModelItem> idInfoMap;
     private HashMap<String, Object> idAnimationMap;
+    private HashMap<String, String> idDebugAnimationFile;
 
     public CustomMaidModelResources(String jsonFileName, List<CustomModelPack<MaidModelItem>> packList,
                                     HashMap<String, EntityModelJson> idToModel,
@@ -28,6 +31,7 @@ public class CustomMaidModelResources {
         this.idModelMap = idToModel;
         this.idInfoMap = idToInfo;
         this.idAnimationMap = idAnimationMap;
+        this.idDebugAnimationFile = Maps.newHashMap();
     }
 
     public void clearAll() {
@@ -65,6 +69,19 @@ public class CustomMaidModelResources {
         this.idAnimationMap.put(modelId, animationJs);
     }
 
+    public void putDebugAnimation(String modelId, String debugAnimationFilePath) {
+        this.idDebugAnimationFile.put(modelId, debugAnimationFilePath);
+    }
+
+    public void removeDebugAnimation(String modelId) {
+        this.idDebugAnimationFile.remove(modelId);
+    }
+
+    @Nullable
+    public String getDebugAnimationFilePath(String modelId) {
+        return this.idDebugAnimationFile.get(modelId);
+    }
+
     public Optional<EntityModelJson> getModel(String modelId) {
         return Optional.ofNullable(idModelMap.get(modelId));
     }
@@ -78,6 +95,10 @@ public class CustomMaidModelResources {
 
     public Optional<Object> getAnimation(String modelId) {
         return Optional.ofNullable(idAnimationMap.get(modelId));
+    }
+
+    public void removeAnimation(String modelId) {
+        idAnimationMap.remove(modelId);
     }
 
     public Optional<MaidModelItem> getInfo(String modelId) {

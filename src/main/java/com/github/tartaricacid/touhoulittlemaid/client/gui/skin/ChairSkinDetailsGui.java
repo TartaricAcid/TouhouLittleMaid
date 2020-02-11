@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
+import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -11,6 +12,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.io.File;
 
 /**
  * @author TartaricAcid
@@ -86,6 +90,41 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, Cha
     @Override
     void applyReturnButtonLogic() {
         mc.addScheduledTask(() -> mc.displayGuiScreen(new ChairSkinGui(sourceEntity)));
+    }
+
+    @Override
+    void loadAnimation(Object scriptObject) {
+        CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), scriptObject);
+    }
+
+    @Override
+    void reloadModel() {
+        CustomModelLoader.CHAIR_MODEL.putModel(modelItem.getModelId().toString(), CustomModelLoader.loadModel(modelItem.getModel()));
+    }
+
+    @Override
+    void resetAnimationAndModel() {
+        Object animation = CustomJsAnimationManger.getCustomAnimation(modelItem.getAnimation());
+        if (animation != null) {
+            CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), animation);
+        }
+        reloadModel();
+    }
+
+    @Override
+    void putDebugAnimation(File debugAnimationFile) {
+        CustomModelLoader.CHAIR_MODEL.putDebugAnimation(modelItem.getModelId().toString(), debugAnimationFile.getAbsolutePath());
+    }
+
+    @Nullable
+    @Override
+    String getDebugAnimationFile() {
+        return CustomModelLoader.CHAIR_MODEL.getDebugAnimationFilePath(modelItem.getModelId().toString());
+    }
+
+    @Override
+    void removeDebugAnimationFile() {
+        CustomModelLoader.CHAIR_MODEL.removeDebugAnimation(modelItem.getModelId().toString());
     }
 
     @Override

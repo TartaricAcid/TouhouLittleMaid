@@ -266,6 +266,11 @@ gui.touhou_little_maid.skin_details.show_character=Show Ref Character
 gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift Click To Make Ten Times Modification
 gui.touhou_little_maid.skin_details.set_gravity.button.false=Gravity
 gui.touhou_little_maid.skin_details.set_gravity.button.true=Floating
+gui.touhou_little_maid.skin_details.loaded_file=Loaded Animation File: %s
+gui.touhou_little_maid.skin_details.load_animation_file=Load Debug Animation File
+gui.touhou_little_maid.skin_details.file_alteration.enable=File Alteration: ON
+gui.touhou_little_maid.skin_details.file_alteration.disable=File Alteration: OFF
+gui.touhou_little_maid.skin_details.reset=Reset Animation
 gui.touhou_little_maid.hata_select.apply=Apply Texture
 gui.touhou_little_maid.hata_select.close=Close
 gui.touhou_little_maid.hata_select.display.true=Show Sasimono
@@ -289,6 +294,7 @@ gui.touhou_little_maid.resources_download.fail.1=There seems to be something wro
 gui.touhou_little_maid.resources_download.fail.2=Please click on the top left button and wait a few seconds
 gui.touhou_little_maid.resources_download.reload=Reload
 gui.touhou_little_maid.inventory.scroll.desc=Please slide the mouse wheel to scroll the inventory.
+gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript File
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s

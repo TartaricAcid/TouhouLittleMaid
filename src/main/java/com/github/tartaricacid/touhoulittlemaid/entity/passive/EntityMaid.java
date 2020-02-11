@@ -188,7 +188,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityOcelot.class, 4.0F, 0.1f));
         this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityParrot.class, 4.0F, 0.1f));
         this.tasks.addTask(10, new EntityAILookIdle(this));
-        this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.4f));
+        this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.5f));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityMob.class, true));
@@ -223,7 +223,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
         this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.5d);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5d);
     }
 
     @Override

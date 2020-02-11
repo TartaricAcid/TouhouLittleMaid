@@ -3,9 +3,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
+import com.google.common.collect.Maps;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +20,7 @@ public class CustomChairModelResources {
     private HashMap<String, EntityModelJson> idModelMap;
     private HashMap<String, ChairModelItem> idInfoMap;
     private HashMap<String, Object> idAnimationMap;
+    private HashMap<String, String> idDebugAnimationFile;
 
     public CustomChairModelResources(String jsonFileName, List<CustomModelPack<ChairModelItem>> packList,
                                      HashMap<String, EntityModelJson> idToModel,
@@ -28,6 +31,7 @@ public class CustomChairModelResources {
         this.idModelMap = idToModel;
         this.idInfoMap = idToInfo;
         this.idAnimationMap = idAnimationMap;
+        this.idDebugAnimationFile = Maps.newHashMap();
     }
 
     public void clearAll() {
@@ -65,6 +69,19 @@ public class CustomChairModelResources {
         this.idAnimationMap.put(modelId, animationJs);
     }
 
+    public void putDebugAnimation(String modelId, String debugAnimationFilePath) {
+        this.idDebugAnimationFile.put(modelId, debugAnimationFilePath);
+    }
+
+    public void removeDebugAnimation(String modelId) {
+        this.idDebugAnimationFile.remove(modelId);
+    }
+
+    @Nullable
+    public String getDebugAnimationFilePath(String modelId) {
+        return this.idDebugAnimationFile.get(modelId);
+    }
+
     public Optional<EntityModelJson> getModel(String modelId) {
         return Optional.ofNullable(idModelMap.get(modelId));
     }
@@ -99,6 +116,10 @@ public class CustomChairModelResources {
 
     public Optional<Object> getAnimation(String modelId) {
         return Optional.ofNullable(idAnimationMap.get(modelId));
+    }
+
+    public void removeAnimation(String modelId) {
+        idAnimationMap.remove(modelId);
     }
 
     public Optional<ChairModelItem> getInfo(String modelId) {

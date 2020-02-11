@@ -11,10 +11,13 @@ import org.apache.commons.io.IOUtils;
 import javax.annotation.Nullable;
 import javax.script.Bindings;
 import javax.script.ScriptException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @SideOnly(Side.CLIENT)
 public class CustomJsAnimationManger {
@@ -41,5 +44,21 @@ public class CustomJsAnimationManger {
             IOUtils.closeQuietly(stream);
         }
         return null;
+    }
+
+    public static void loadDebugAnimation(File file, Consumer<Object> consumer) {
+        InputStream stream = null;
+        try {
+            stream = new FileInputStream(file);
+            Bindings bindings = CommonProxy.NASHORN.createBindings();
+            Object scriptObject = CommonProxy.NASHORN.eval(IOUtils.toString(stream, StandardCharsets.UTF_8), bindings);
+            if (scriptObject != null) {
+                consumer.accept(scriptObject);
+            }
+        } catch (IOException | ScriptException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(stream);
+        }
     }
 }
