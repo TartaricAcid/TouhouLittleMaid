@@ -6,23 +6,21 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
  **/
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.ICanRidingMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.IEntityRidingMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,9 +28,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
 
-public class EntityMarisaBroom extends EntityLivingBase implements ICanRidingMaid {
+public class EntityMarisaBroom extends AbstractEntityFromItem implements IEntityRidingMaid {
     private boolean keyForward = false;
     private boolean keyBack = false;
     private boolean keyLeft = false;
@@ -65,58 +62,24 @@ public class EntityMarisaBroom extends EntityLivingBase implements ICanRidingMai
         return Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown();
     }
 
-    @Nonnull
     @Override
-    public ItemStack getPickedResult(RayTraceResult target) {
-        return new ItemStack(MaidItems.MARISA_BROOM);
-    }
-
-    @Override
-    public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        if (!this.world.isRemote && !this.isDead) {
-            // 如果实体是无敌的
-            if (this.isEntityInvulnerable(source)) {
-                return false;
-            }
-            // 应用打掉的逻辑
-            if (source.getTrueSource() instanceof EntityPlayer) {
-                return applyHitBroomLogic((EntityPlayer) source.getTrueSource());
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 击打扫帚逻辑
-     */
-    private boolean applyHitBroomLogic(EntityPlayer player) {
-        boolean isPlayerCreativeMode = player.capabilities.isCreativeMode;
-        // 潜行状态才会运用击打逻辑
-        if (player.isSneaking()) {
-            this.removePassengers();
-            if (isPlayerCreativeMode && !this.hasCustomName()) {
-                // 如果是创造模式，而且扫帚没有命名，直接消失
-                this.setDead();
-            } else {
-                // 否则应用实体转物品逻辑
-                this.killBroom();
-            }
-        }
+    protected boolean canKillEntity(EntityPlayer player) {
         return true;
     }
 
-    /**
-     * 将扫帚从实体状态转变为物品状态
-     */
-    private void killBroom() {
-        this.setDead();
-        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-            ItemStack itemstack = new ItemStack(MaidItems.MARISA_BROOM, 1);
-            if (this.hasCustomName()) {
-                itemstack.setStackDisplayName(this.getCustomNameTag());
-            }
-            this.entityDropItem(itemstack, 0.0F);
-        }
+    @Override
+    protected SoundEvent getHitSound() {
+        return SoundEvents.BLOCK_CLOTH_BREAK;
+    }
+
+    @Override
+    protected Item getWithItem() {
+        return MaidItems.MARISA_BROOM;
+    }
+
+    @Override
+    protected ItemStack getKilledStack() {
+        return new ItemStack(getWithItem());
     }
 
     /**
@@ -246,11 +209,6 @@ public class EntityMarisaBroom extends EntityLivingBase implements ICanRidingMai
     }
 
     @Override
-    public boolean attackable() {
-        return false;
-    }
-
-    @Override
     public void fall(float distance, float damageMultiplier) {
     }
 
@@ -264,29 +222,5 @@ public class EntityMarisaBroom extends EntityLivingBase implements ICanRidingMai
     @Override
     protected boolean canTriggerWalking() {
         return false;
-    }
-
-    // ------------ EntityLivingBase 要求实现的几个抽象方法，因为全用不上，故返回默认值 ----------- //
-
-    @Nonnull
-    @Override
-    public ItemStack getItemStackFromSlot(@Nonnull EntityEquipmentSlot slotIn) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void setItemStackToSlot(@Nonnull EntityEquipmentSlot slotIn, @Nonnull ItemStack stack) {
-    }
-
-    @Nonnull
-    @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
-        return Collections.emptyList();
-    }
-
-    @Nonnull
-    @Override
-    public EnumHandSide getPrimaryHand() {
-        return EnumHandSide.LEFT;
     }
 }

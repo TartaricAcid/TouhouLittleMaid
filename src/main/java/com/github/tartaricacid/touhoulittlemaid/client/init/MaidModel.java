@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.*;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidVehicle;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
@@ -11,6 +12,8 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -19,6 +22,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -68,6 +74,8 @@ public final class MaidModel {
         registerRender(MaidItems.NPC_MAID_TOOL);
         registerRender(MaidItems.GASHAPON_COIN);
         registerRender(MaidItems.SUITCASE);
+        registerRender(MaidItems.TROLLEY_AUDIO);
+        registerRender(MaidItems.BOWL);
 
         ModelResourceLocation maidModelCoupon1 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_1", "inventory");
         ModelResourceLocation maidModelCoupon2 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_2", "inventory");
@@ -135,6 +143,14 @@ public final class MaidModel {
                     return maidBackPack3;
             }
         });
+
+        List<ModelResourceLocation> maidVehicle = new ArrayList<>();
+        for (EntityMaidVehicle.Type type : EntityMaidVehicle.Type.values()) {
+            maidVehicle.add(new ModelResourceLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, type.name().toLowerCase(Locale.US)), "inventory"));
+        }
+        ModelBakery.registerItemVariants(MaidItems.MAID_VEHICLE, maidVehicle.toArray(new ModelResourceLocation[]{}));
+        ModelLoader.setCustomMeshDefinition(MaidItems.MAID_VEHICLE,
+                stack -> maidVehicle.get(MathHelper.clamp(stack.getMetadata(), 0, EntityMaidVehicle.Type.values().length - 1)));
     }
 
     private static void registerRender(Item item) {

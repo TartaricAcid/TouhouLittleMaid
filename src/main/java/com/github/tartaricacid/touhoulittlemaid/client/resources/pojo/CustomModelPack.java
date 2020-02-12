@@ -2,44 +2,43 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class CustomModelPackPOJO {
+public class CustomModelPack<T extends IModelItem> {
+    @SerializedName("date")
     private String date;
 
     @SerializedName("model_list")
-    private List<ModelItem> modelList;
+    private List<T> modelList;
 
     @SerializedName("pack_name")
     private String packName;
 
+    @SerializedName("author")
     private List<String> author;
 
+    @SerializedName("description")
     private List<String> description;
 
+    @SerializedName("version")
     private String version;
 
-    @Deprecated
-    private int format;
+    @SerializedName("icon")
+    private ResourceLocation icon;
 
     @Nullable
     public String getDate() {
         return date;
     }
 
-    /**
-     * 模型列表字段不为空
-     */
-    public List<ModelItem> getModelList() {
+    public List<T> getModelList() {
         return modelList;
     }
 
-    /**
-     * 包名不能为空
-     */
     public String getPackName() {
         return packName;
     }
@@ -57,20 +56,13 @@ public class CustomModelPackPOJO {
         return version;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
+    @Nullable
+    public ResourceLocation getIcon() {
+        return icon;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
-    /**
-     * 模型包 pojo 的二次修饰
-     */
-    public CustomModelPackPOJO decorate() {
+    @SuppressWarnings("unchecked")
+    public CustomModelPack<T> decorate() {
         // 包名和 model list 不能为空
         if (packName == null) {
             throw new JsonSyntaxException("Expected \"pack_name\" in pack");
@@ -86,7 +78,7 @@ public class CustomModelPackPOJO {
         }
 
         // 为此包的模型对象进行二次修饰
-        modelList.forEach(m -> m.decorate(format));
+        modelList.forEach(T::decorate);
         return this;
     }
 }

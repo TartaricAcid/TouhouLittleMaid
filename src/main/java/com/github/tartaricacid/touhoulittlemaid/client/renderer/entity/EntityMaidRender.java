@@ -2,9 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
@@ -45,8 +45,8 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     @Override
     public void doRender(@Nonnull EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模型
-        this.mainModel = ClientProxy.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new);
-        ClientProxy.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
+        this.mainModel = CustomModelLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new);
+        CustomModelLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
         GlStateManager.pushMatrix();
         GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
@@ -79,7 +79,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         this.modelRes = DEFAULT_MODEL_TEXTURE;
         // 皮之不存，毛将焉附？
         // 先判定模型在不在，模型都不在，直接返回默认材质
-        ClientProxy.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
+        CustomModelLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
         return modelRes;
     }
 
@@ -87,7 +87,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         @Override
         public Render<? super EntityMaid> createRenderFor(RenderManager manager) {
             // 加载默认的灵梦模型
-            return new EntityMaidRender(manager, ClientProxy.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new), 0.5f);
+            return new EntityMaidRender(manager, CustomModelLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new), 0.5f);
         }
     }
 }

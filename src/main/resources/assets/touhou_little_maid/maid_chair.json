@@ -3,13 +3,11 @@
   "author": ["Succinum", "Pajinyi"],
   "version": "1.0.0",
   "date": "2019-08-08",
+  "icon": "touhou_little_maid:textures/icon.png",
   "model_list": [
     {
       "model_id": "touhou_little_maid:cushion",
       "mounted_height": 3
-    }, {
-      "model_id": "touhou_little_maid:wheel_chair",
-      "mounted_height": 9
     }, {
       "model_id": "touhou_little_maid:class_desk",
       "mounted_height": 15,
@@ -25,13 +23,6 @@
     }, {
       "model_id": "touhou_little_maid:play_station",
       "mounted_height": 1,
-      "render_item_scale": 0.7
-    }, {
-      "model_id": "touhou_little_maid:cat_cart",
-      "mounted_height": 7
-    }, {
-      "model_id": "touhou_little_maid:rickshaw",
-      "mounted_height": 11,
       "render_item_scale": 0.7
     }, {
       "model_id": "touhou_little_maid:tall_stool",
@@ -75,9 +66,7 @@
       "mounted_height": 3,
       "render_item_scale": 0.4,
       "tameable_can_ride": false,
-      "animations": {
-        "always": "touhou_little_maid:animation/water_wheel.rotation.json"
-      }
+      "animation": "touhou_little_maid:animation/water_wheel.rotation.js"
     }, {
       "model_id": "touhou_little_maid:saisen_bako",
       "mounted_height": 17,
@@ -122,10 +111,6 @@
     }, {
       "model_id": "touhou_little_maid:rinnosuke_children_toys",
       "mounted_height": 13
-    }, {
-      "model_id": "touhou_little_maid:bowl",
-      "texture": "touhou_little_maid:textures/entity/sukuna_shinmyoumaru.png",
-      "mounted_height": 2
     }, {
       "model_id": "touhou_little_maid:moto",
       "mounted_height": 11,

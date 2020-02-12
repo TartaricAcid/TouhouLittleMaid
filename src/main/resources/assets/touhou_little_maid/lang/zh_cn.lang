@@ -15,6 +15,8 @@ entity.touhou_little_maid.rinnosuke.name=森近霖之助
 entity.touhou_little_maid.fairy.name=妖精女仆
 entity.touhou_little_maid.suitcase.name=拉杆箱
 entity.touhou_little_maid.backpack.name=背包
+entity.touhou_little_maid.trolley_audio.name=便携式音响
+entity.touhou_little_maid.maid_vehicle.name=女仆载具
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item
@@ -44,6 +46,11 @@ item.touhou_little_maid.gashapon.name=扭蛋
 item.touhou_little_maid.gashapon_coin.name=扭蛋币
 item.touhou_little_maid.maid_backpack.name=女仆背包
 item.touhou_little_maid.suitcase.name=行李箱
+item.touhou_little_maid.trolley_audio.name=便携式音响
+item.touhou_little_maid.cat_cart.name=猫车
+item.touhou_little_maid.wheel_chair.name=轮椅
+item.touhou_little_maid.rickshaw.name=黄包车
+item.touhou_little_maid.bowl.name=针妙丸的碗
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -259,6 +266,11 @@ gui.touhou_little_maid.skin_details.show_character=显示参考角色
 gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift 点击能够进行十倍修改
 gui.touhou_little_maid.skin_details.set_gravity.button.false=重力
 gui.touhou_little_maid.skin_details.set_gravity.button.true=浮空
+gui.touhou_little_maid.skin_details.loaded_file=已加载动画文件：%s
+gui.touhou_little_maid.skin_details.load_animation_file=加载调试性动画文件
+gui.touhou_little_maid.skin_details.file_alteration.enable=文件监控：开
+gui.touhou_little_maid.skin_details.file_alteration.disable=文件监控：关
+gui.touhou_little_maid.skin_details.reset=重置动画
 gui.touhou_little_maid.hata_select.apply=应用材质
 gui.touhou_little_maid.hata_select.close=关闭
 gui.touhou_little_maid.hata_select.display.true=显示旗指物
@@ -282,6 +294,7 @@ gui.touhou_little_maid.resources_download.fail.1=网络好像出了问题……
 gui.touhou_little_maid.resources_download.fail.2=请点击左上角按钮，并等待几秒钟
 gui.touhou_little_maid.resources_download.reload=重载
 gui.touhou_little_maid.inventory.scroll.desc=请滑动鼠标滚轮进行物品栏滚动。
+gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript 文件
 
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s
@@ -378,6 +391,11 @@ model.touhou_little_maid.kijin_seija.name=鬼人正邪
 model.touhou_little_maid.sukuna_shinmyoumaru.name=少名针妙丸
 model.touhou_little_maid.horikawa_raiko.name=堀川雷鼓
 model.touhou_little_maid.haniyasushin_keiki.name=埴安神袿姬
+model.touhou_little_maid.yatadera_narumi.name=矢田寺成美
+model.touhou_little_maid.seiran.name=清兰
+model.touhou_little_maid.junko.name=纯狐
+model.touhou_little_maid.ringo.name=铃瑚
+model.touhou_little_maid.tsukumo_yatsuhashi.name=九十九八桥
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -464,15 +482,17 @@ model.touhou_little_maid.kijin_seija.desc=§7逆袭的天邪鬼
 model.touhou_little_maid.sukuna_shinmyoumaru.desc=§7小人的后裔
 model.touhou_little_maid.horikawa_raiko.desc=§7梦幻的打击乐手
 model.touhou_little_maid.haniyasushin_keiki.desc=§7孤立无援造就的造形神
+model.touhou_little_maid.yatadera_narumi.desc=§7垂迹于森林的魔法地藏
+model.touhou_little_maid.seiran.desc=§7浅葱色的 Eagle Rabbit
+model.touhou_little_maid.junko.desc=§7-
+model.touhou_little_maid.ringo.desc=§7橘色的 Eagle Rabbit
+model.touhou_little_maid.tsukumo_yatsuhashi.desc=§7古旧的琴的付丧神
 
 model.touhou_little_maid.cushion.name=坐垫
-model.touhou_little_maid.wheel_chair.name=轮椅
 model.touhou_little_maid.class_desk.name=课桌
 model.touhou_little_maid.class_chair.name=课椅
 model.touhou_little_maid.kotatsu.name=被炉
 model.touhou_little_maid.play_station.name=游戏机
-model.touhou_little_maid.cat_cart.name=猫车
-model.touhou_little_maid.rickshaw.name=黄包车
 model.touhou_little_maid.tall_stool.name=高脚凳
 model.touhou_little_maid.low_stool.name=低脚凳
 model.touhou_little_maid.barbecue_booth.name=烧烤摊
@@ -490,7 +510,6 @@ model.touhou_little_maid.ema.name=绘马墙
 model.touhou_little_maid.anti_collision_bucket.name=防撞桶
 model.touhou_little_maid.park_bench.name=公园长椅
 model.touhou_little_maid.rinnosuke_children_toys.name=霖之助牌儿童摇摇乐
-model.touhou_little_maid.bowl.name=碗
 model.touhou_little_maid.moto.name=摩托车
 
 # Spell Card

@@ -86,5 +86,6 @@ public class EntitySuitcaseModel extends ModelBase {
         } else {
             bone.rotateAngleX = 0;
         }
+        bone.rotateAngleY = -netHeadYaw * 0.01745329251f / 8;
     }
 }

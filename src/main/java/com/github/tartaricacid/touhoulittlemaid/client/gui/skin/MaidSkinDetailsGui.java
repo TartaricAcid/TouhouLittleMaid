@@ -1,5 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
+import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -13,6 +16,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import java.io.File;
 import java.util.Random;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinDetailsGui.BUTTON.*;
@@ -22,7 +27,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinD
  * @date 2019/8/3 19:58
  **/
 @SideOnly(Side.CLIENT)
-public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
+public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid, MaidModelItem> {
     /**
      * 相关物品实例，用于渲染实体持有效果，ARMOR_ITEM 仅为占位用物品
      */
@@ -54,7 +59,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
     private GuiButtonToggle arrowButton;
 
     MaidSkinDetailsGui(EntityMaid sourceMaid, ResourceLocation modelId) {
-        super(sourceMaid, new EntityMaid(sourceMaid.world), ClientProxy.MAID_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
+        super(sourceMaid, new EntityMaid(sourceMaid.world), CustomModelLoader.MAID_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
         this.marisaBroom = new EntityMarisaBroom(sourceMaid.world);
         guiEntity.setModelId(modelId.toString());
         guiEntity.isDebugFloorOpen = true;
@@ -180,6 +185,41 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid> {
 
     @Override
     void drawSideButtonTooltips(int mouseX, int mouseY) {
+    }
+
+    @Override
+    void loadAnimation(Object scriptObject) {
+        CustomModelLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), scriptObject);
+    }
+
+    @Override
+    void reloadModel() {
+        CustomModelLoader.MAID_MODEL.putModel(modelItem.getModelId().toString(), CustomModelLoader.loadModel(modelItem.getModel()));
+    }
+
+    @Override
+    void resetAnimationAndModel() {
+        Object animation = CustomJsAnimationManger.getCustomAnimation(modelItem.getAnimation());
+        if (animation != null) {
+            CustomModelLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), animation);
+        }
+        reloadModel();
+    }
+
+    @Override
+    void putDebugAnimation(File debugAnimationFile) {
+        CustomModelLoader.MAID_MODEL.putDebugAnimation(modelItem.getModelId().toString(), debugAnimationFile.getAbsolutePath());
+    }
+
+    @Nullable
+    @Override
+    String getDebugAnimationFile() {
+        return CustomModelLoader.MAID_MODEL.getDebugAnimationFilePath(modelItem.getModelId().toString());
+    }
+
+    @Override
+    void removeDebugAnimationFile() {
+        CustomModelLoader.MAID_MODEL.removeDebugAnimation(modelItem.getModelId().toString());
     }
 
     private void applyBegButtonLogic() {

@@ -72,6 +72,11 @@ dependencies {
     }
     deobfCompile "MCMultiPart2:MCMultiPart:${mcmp_version}"
     compile "vazkii.patchouli:Patchouli:${patchouli_version}"
+
+    // exp4j 库，一个字符串书写表达式解析库
+    // https://mvnrepository.com/artifact/net.objecthunter/exp4j
+    compile group: 'net.objecthunter', name: 'exp4j', version: '0.4.8'
+
     // 想要了解更多，可以查询如下网址
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -95,7 +100,7 @@ processResources {
     }
 }
 
-// 强制将编译环境的变化设置为 UTF-8 编码
+// 强制将编译环境的编码设置为 UTF-8 编码
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -110,8 +115,10 @@ jar {
         // 默认环境为 touhoulittlemaid-1.12.2-1.1.4-alpha.jar 这样的
         archiveName = archivesBaseName + "-1.12.2-${mod_version}-beta.jar"
     }
-    // 打包 Access Transformers 文件
     manifest {
+        // 打包 Access Transformers 文件
         attributes 'FMLAT': 'touhou_little_maid_at.cfg'
+        // 将 exp4j 库打包进行模组中
+        attributes 'ContainedDeps': "exp4j-0.4.8.jar"
     }
 }

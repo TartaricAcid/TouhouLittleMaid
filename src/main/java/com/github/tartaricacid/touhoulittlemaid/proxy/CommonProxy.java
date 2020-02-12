@@ -7,8 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.bauble.*;
 import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
-import com.github.tartaricacid.touhoulittlemaid.client.animation.pojo.KeyFrameItem;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPackPOJO;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadDrawCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadSpellCardCommand;
@@ -40,6 +40,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import crafttweaker.CraftTweakerAPI;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Items;
@@ -70,10 +71,7 @@ import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_
 import static com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation.readDrawCsvFile;
 
 public class CommonProxy {
-    public static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-            .registerTypeAdapter(KeyFrameItem.class, new KeyFrameItem.Deserializer())
-            .create();
+    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
     public static final ScriptEngine NASHORN = new ScriptEngineManager(null).getEngineByName("nashorn");
     /**
      * 服务端用模型列表，
@@ -87,14 +85,6 @@ public class CommonProxy {
     public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
-
-    /**
-     * 通过输入流读取 CustomModelPackPOJO 对象，并进行二次修饰
-     */
-    public static CustomModelPackPOJO readModelPack(InputStream input) throws JsonSyntaxException {
-        CustomModelPackPOJO pojo = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPackPOJO.class);
-        return pojo.decorate();
-    }
 
     public static boolean isNpcModLoad() {
         return Loader.isModLoaded("customnpcs");
@@ -213,14 +203,16 @@ public class CommonProxy {
     /**
      * 初始化默认的模型列表
      */
-    void initModelList() {
+    public void initModelList() {
         VANILLA_ID_NAME_MAP.clear();
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/maid_model.json");
         if (input != null) {
             try {
                 // 将其转换为 pojo 对象
-                CustomModelPackPOJO pojo = readModelPack(input);
-                pojo.getModelList().forEach(m -> VANILLA_ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));
+                CustomModelPack<MaidModelItem> pack = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), new TypeToken<CustomModelPack<MaidModelItem>>() {
+                }.getType());
+                pack.decorate();
+                pack.getModelList().forEach(m -> VANILLA_ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));
             } catch (JsonSyntaxException e) {
                 TouhouLittleMaid.LOGGER.warn("Fail to parse model pack in domain {}", TouhouLittleMaid.MOD_ID);
             }
@@ -240,6 +232,8 @@ public class CommonProxy {
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.box"), EntityBox.class, "touhou_little_maid.box", 7, TouhouLittleMaid.INSTANCE, 80, 20, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.suitcase"), EntitySuitcase.class, "touhou_little_maid.suitcase", 8, TouhouLittleMaid.INSTANCE, 80, 10, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.backpack"), EntityBackpack.class, "touhou_little_maid.backpack", 9, TouhouLittleMaid.INSTANCE, 80, 10, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.trolley_audio"), EntityTrolleyAudio.class, "touhou_little_maid.trolley_audio", 10, TouhouLittleMaid.INSTANCE, 80, 10, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.maid_vehicle"), EntityMaidVehicle.class, "touhou_little_maid.maid_vehicle", 11, TouhouLittleMaid.INSTANCE, 80, 10, true);
     }
 
     private void registerEntitySpawns() {
@@ -269,6 +263,7 @@ public class CommonProxy {
         if (isNpcModLoad()) {
             INSTANCE.registerMessage(SendNpcMaidModelMessage.Handler.class, SendNpcMaidModelMessage.class, 17, Side.SERVER);
         }
+        INSTANCE.registerMessage(TrolleyAudioSoundMessage.Handler.class, TrolleyAudioSoundMessage.class, 18, Side.CLIENT);
     }
 
     /**

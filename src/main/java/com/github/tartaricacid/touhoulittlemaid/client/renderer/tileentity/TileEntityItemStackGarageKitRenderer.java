@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -56,7 +57,7 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
                 });
                 if (entity instanceof EntityMaid) {
                     ((EntityMaid) entity).setModelId(BlockGarageKit.getModelId(itemStackIn));
-                    renderItemScale = ClientProxy.MAID_MODEL.getModelRenderItemScale(BlockGarageKit.getModelId(itemStackIn));
+                    renderItemScale = CustomModelLoader.MAID_MODEL.getModelRenderItemScale(BlockGarageKit.getModelId(itemStackIn));
                     // 缓存的对象往往有一些奇怪的东西，一并清除
                     ((EntityMaid) entity).setShowSasimono(false);
                     ((EntityMaid) entity).hurtResistantTime = 0;

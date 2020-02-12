@@ -9,8 +9,10 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author TartaricAcid
@@ -18,12 +20,21 @@ import javax.annotation.Nonnull;
  **/
 public class AltarRecipeCategory implements IRecipeCategory<AltarRecipeWrapper> {
     public static final String ALTAR_CRAFTING = String.format("%s.altar", TouhouLittleMaid.MOD_ID);
+    private IDrawableStatic icon;
     private final IDrawableStatic background;
     private final IDrawable slotDrawable;
 
     public AltarRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createBlankDrawable(160, 125);
         this.slotDrawable = guiHelper.getSlotDrawable();
+        this.icon = guiHelper.createDrawable(new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/altar_icon.png"),
+                0, 0, 16, 16, 16, 16);
+    }
+
+    @Nullable
+    @Override
+    public IDrawable getIcon() {
+        return icon;
     }
 
     @Nonnull

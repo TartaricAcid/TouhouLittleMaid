@@ -15,6 +15,8 @@ entity.touhou_little_maid.rinnosuke.name=Rinnosuke Morichika
 entity.touhou_little_maid.fairy.name=Maid Fairy
 entity.touhou_little_maid.suitcase.name=Suitcase
 entity.touhou_little_maid.backpack.name=Backpack
+entity.touhou_little_maid.trolley_audio.name=Trolley Audio
+entity.touhou_little_maid.maid_vehicle.name=Maid Vehicle
 entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item
@@ -44,6 +46,11 @@ item.touhou_little_maid.gashapon.name=Gashapon
 item.touhou_little_maid.gashapon_coin.name=Gashapon Coin
 item.touhou_little_maid.maid_backpack.name=Maid Backpack
 item.touhou_little_maid.suitcase.name=Suitcase
+item.touhou_little_maid.trolley_audio.name=Trolley Audio
+item.touhou_little_maid.cat_cart.name=Cat Cart
+item.touhou_little_maid.wheel_chair.name=Wheel Chair
+item.touhou_little_maid.rickshaw.name=Rickshaw
+item.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -259,6 +266,11 @@ gui.touhou_little_maid.skin_details.show_character=Show Ref Character
 gui.touhou_little_maid.skin_details.mounted_height.button.tooltips=Shift Click To Make Ten Times Modification
 gui.touhou_little_maid.skin_details.set_gravity.button.false=Gravity
 gui.touhou_little_maid.skin_details.set_gravity.button.true=Floating
+gui.touhou_little_maid.skin_details.loaded_file=Loaded Animation File: %s
+gui.touhou_little_maid.skin_details.load_animation_file=Load Debug Animation File
+gui.touhou_little_maid.skin_details.file_alteration.enable=File Alteration: ON
+gui.touhou_little_maid.skin_details.file_alteration.disable=File Alteration: OFF
+gui.touhou_little_maid.skin_details.reset=Reset Animation
 gui.touhou_little_maid.hata_select.apply=Apply Texture
 gui.touhou_little_maid.hata_select.close=Close
 gui.touhou_little_maid.hata_select.display.true=Show Sasimono
@@ -282,6 +294,7 @@ gui.touhou_little_maid.resources_download.fail.1=There seems to be something wro
 gui.touhou_little_maid.resources_download.fail.2=Please click on the top left button and wait a few seconds
 gui.touhou_little_maid.resources_download.reload=Reload
 gui.touhou_little_maid.inventory.scroll.desc=Please slide the mouse wheel to scroll the inventory.
+gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript File
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s
@@ -379,6 +392,11 @@ model.touhou_little_maid.kijin_seija.name=Seija Kijin
 model.touhou_little_maid.sukuna_shinmyoumaru.name=Shinmyoumaru Sukuna
 model.touhou_little_maid.horikawa_raiko.name=Raiko Horikawa
 model.touhou_little_maid.haniyasushin_keiki.name=Keiki Haniyasushin
+model.touhou_little_maid.yatadera_narumi.name=Narumi Yatadera
+model.touhou_little_maid.seiran.name=Seiran
+model.touhou_little_maid.junko.name=Junko
+model.touhou_little_maid.ringo.name=Ringo
+model.touhou_little_maid.tsukumo_yatsuhashi.name=Yatsuhashi Tsukumo
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -465,15 +483,17 @@ model.touhou_little_maid.kijin_seija.desc=§7Counterattacking Amanojaku
 model.touhou_little_maid.sukuna_shinmyoumaru.desc=§7Descendent of the Inchlings
 model.touhou_little_maid.horikawa_raiko.desc=§7Phantasmal Percussionist
 model.touhou_little_maid.haniyasushin_keiki.desc=§7The Sculptor God Crafted by Utter Isolation
+model.touhou_little_maid.yatadera_narumi.desc=§7The Magical Jizo who Manifested in the Forest
+model.touhou_little_maid.seiran.desc=§7The Pale Blue Eagle Ravi
+model.touhou_little_maid.junko.desc=§7-
+model.touhou_little_maid.ringo.desc=§7The Orange Eagle Ravi
+model.touhou_little_maid.tsukumo_yatsuhashi.desc=§7Tsukumogami of an Aging Koto
 
 model.touhou_little_maid.cushion.name=Cushion
-model.touhou_little_maid.wheel_chair.name=Wheel Chair
 model.touhou_little_maid.class_desk.name=Class Desk
 model.touhou_little_maid.class_chair.name=Class Chair
 model.touhou_little_maid.kotatsu.name=Kotatsu
 model.touhou_little_maid.play_station.name=Play Station
-model.touhou_little_maid.cat_cart.name=Cat Cart
-model.touhou_little_maid.rickshaw.name=Rickshaw
 model.touhou_little_maid.tall_stool.name=Tall Stool
 model.touhou_little_maid.low_stool.name=Low Stool
 model.touhou_little_maid.barbecue_booth.name=Barbecue Booth
@@ -491,7 +511,6 @@ model.touhou_little_maid.ema.name=Ema
 model.touhou_little_maid.anti_collision_bucket.name=Anti-collision Bucket
 model.touhou_little_maid.park_bench.name=Park Bench
 model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
-model.touhou_little_maid.bowl.name=Bowl
 model.touhou_little_maid.moto.name=Moto
 
 # Spell Card

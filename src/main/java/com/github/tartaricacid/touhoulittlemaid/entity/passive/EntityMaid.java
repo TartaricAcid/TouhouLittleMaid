@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -21,7 +22,6 @@ import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -41,6 +41,7 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.*;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -181,13 +182,13 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
 
-        this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 4.0F, 0.1f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityMaid.class, 4.0F, 0.2f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityWolf.class, 4.0F, 0.1f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityOcelot.class, 4.0F, 0.1f));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityParrot.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest2(this, EntityPlayer.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityMaid.class, 4.0F, 0.2f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityWolf.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityOcelot.class, 4.0F, 0.1f));
+        this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityParrot.class, 4.0F, 0.1f));
         this.tasks.addTask(10, new EntityAILookIdle(this));
-        this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.4f));
+        this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.5f));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityMob.class, true));
@@ -222,7 +223,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
         this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.5d);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5d);
     }
 
     @Override
@@ -242,6 +243,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.randomRestoreHealth();
         super.onLivingUpdate();
         applyEntityRiding();
+        checkMaidRidingPlayer();
         applyNavigatorAndMoveHelper();
     }
 
@@ -322,7 +324,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private void applyEntityRiding() {
         // 取自原版船部分逻辑
         List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
-                entity -> entity instanceof ICanRidingMaid);
+                entity -> entity instanceof IEntityRidingMaid);
 
         if (list.isEmpty()) {
             return;
@@ -336,7 +338,7 @@ public class EntityMaid extends AbstractEntityMaid {
                 boolean maidNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
                 // 服务端，女仆没有处于待命状态，而且尝试坐上去的实体是扫把
                 if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding &&
-                        entity instanceof ICanRidingMaid && ((ICanRidingMaid) entity).canRiding(this)) {
+                        entity instanceof IEntityRidingMaid && ((IEntityRidingMaid) entity).canRiding(this)) {
                     entity.startRiding(this);
                 }
             }
@@ -348,8 +350,8 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
-        if (passenger instanceof ICanRidingMaid) {
-            ((ICanRidingMaid) passenger).updatePassenger(this);
+        if (passenger instanceof IEntityRidingMaid) {
+            ((IEntityRidingMaid) passenger).updatePassenger(this);
         } else {
             super.updatePassenger(passenger);
         }
@@ -924,8 +926,8 @@ public class EntityMaid extends AbstractEntityMaid {
         } else {
             String modelId = getModelId();
             if (world.isRemote) {
-                if (ClientProxy.MAID_MODEL.getInfo(modelId).isPresent()) {
-                    return ParseI18n.parse(ClientProxy.MAID_MODEL.getInfo(modelId).get().getName());
+                if (CustomModelLoader.MAID_MODEL.getInfo(modelId).isPresent()) {
+                    return ParseI18n.parse(CustomModelLoader.MAID_MODEL.getInfo(modelId).get().getName());
                 }
             } else {
                 if (CommonProxy.VANILLA_ID_NAME_MAP.containsKey(modelId)) {
@@ -933,6 +935,27 @@ public class EntityMaid extends AbstractEntityMaid {
                 }
             }
             return super.getName();
+        }
+    }
+
+    private void checkMaidRidingPlayer() {
+        // 每秒检查一次
+        if (this.ticksExisted % 20 == 0) {
+            if (this.getRidingEntity() instanceof EntityPlayer) {
+                ItemStack head = ((EntityPlayer) this.getRidingEntity()).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+                if (head.getItem() != MaidItems.BOWL) {
+                    this.dismountRidingEntity();
+                }
+            }
+        }
+    }
+
+    @Override
+    public double getYOffset() {
+        if (this.getRidingEntity() instanceof EntityPlayer) {
+            return this.getRidingEntity().isSneaking() ? 0.7d : 0.9d;
+        } else {
+            return super.getYOffset();
         }
     }
 
@@ -1404,7 +1427,7 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        EntityModelJson modelJson = ClientProxy.MAID_MODEL.getModel(getModelId()).orElse(null);
+        EntityModelJson modelJson = CustomModelLoader.MAID_MODEL.getModel(getModelId()).orElse(null);
         if (modelJson == null) {
             return super.getRenderBoundingBox();
         }

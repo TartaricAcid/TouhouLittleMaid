@@ -2,43 +2,40 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * @author TartaricAcid
  * @date 2019/8/8 11:34
  **/
-public class EntityChair extends EntityLivingBase {
+public class EntityChair extends AbstractEntityFromItem {
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityChair.class, DataSerializers.STRING);
     private static final DataParameter<Float> MOUNTED_HEIGHT = EntityDataManager.createKey(EntityChair.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> TAMEABLE_CAN_RIDE = EntityDataManager.createKey(EntityChair.class, DataSerializers.BOOLEAN);
@@ -60,6 +57,27 @@ public class EntityChair extends EntityLivingBase {
     public EntityChair(World worldIn, double x, double y, double z, float yaw) {
         this(worldIn);
         this.setLocationAndAngles(x, y, z, yaw, 0);
+    }
+
+    @Override
+    protected boolean canKillEntity(EntityPlayer player) {
+        return !GeneralConfig.MISC_CONFIG.chairCannotBeDestroied || player.isCreative();
+    }
+
+    @Override
+    protected SoundEvent getHitSound() {
+        return SoundEvents.BLOCK_CLOTH_BREAK;
+    }
+
+    @Override
+    protected Item getWithItem() {
+        return MaidItems.CHAIR;
+    }
+
+    @Override
+    protected ItemStack getKilledStack() {
+        ItemStack itemstack = new ItemStack(getWithItem());
+        return ItemChair.setAllTagData(itemstack, this.getModelId(), this.getMountedHeight(), this.isTameableCanRide(), this.hasNoGravity());
     }
 
     @Override
@@ -94,12 +112,6 @@ public class EntityChair extends EntityLivingBase {
                 }
             }
         }
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack getPickedResult(RayTraceResult target) {
-        return ItemChair.setAllTagData(new ItemStack(MaidItems.CHAIR), this.getModelId(), this.getMountedHeight(), this.isTameableCanRide(), this.hasNoGravity());
     }
 
     @Override
@@ -158,8 +170,8 @@ public class EntityChair extends EntityLivingBase {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         }
-        if (world.isRemote && ClientProxy.CHAIR_MODEL.getInfo(getModelId()).isPresent()) {
-            String name = ClientProxy.CHAIR_MODEL.getInfo(getModelId()).get().getName();
+        if (world.isRemote && CustomModelLoader.CHAIR_MODEL.getInfo(getModelId()).isPresent()) {
+            String name = CustomModelLoader.CHAIR_MODEL.getInfo(getModelId()).get().getName();
             return ParseI18n.parse(name);
         }
         return super.getName();
@@ -175,7 +187,7 @@ public class EntityChair extends EntityLivingBase {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        EntityModelJson modelJson = ClientProxy.CHAIR_MODEL.getModel(getModelId()).orElse(null);
+        EntityModelJson modelJson = CustomModelLoader.CHAIR_MODEL.getModel(getModelId()).orElse(null);
         if (modelJson == null) {
             return super.getRenderBoundingBox();
         }
@@ -190,63 +202,6 @@ public class EntityChair extends EntityLivingBase {
     @Override
     protected boolean canTriggerWalking() {
         return false;
-    }
-
-    @Override
-    public boolean attackable() {
-        return false;
-    }
-
-    @Override
-    public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        if (!this.world.isRemote && !this.isDead) {
-            // 如果实体是无敌的
-            if (this.isEntityInvulnerable(source)) {
-                return false;
-            }
-            // 应用打掉的逻辑
-            if (source.getTrueSource() instanceof EntityPlayer) {
-                return applyHitChairLogic((EntityPlayer) source.getTrueSource());
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 击打坐垫逻辑
-     */
-    private boolean applyHitChairLogic(EntityPlayer player) {
-        boolean isPlayerCreativeMode = player.capabilities.isCreativeMode;
-        // 潜行状态才会运用击打逻辑
-        if (player.isSneaking()) {
-            this.removePassengers();
-            this.playSound(SoundEvents.BLOCK_CLOTH_BREAK, 1.0f, 1.0f);
-            if (isPlayerCreativeMode && !this.hasCustomName()) {
-                // 如果是创造模式，而且坐垫没有命名，直接消失
-                this.setDead();
-            } else {
-                // 否则应用实体转物品逻辑
-                if (!GeneralConfig.MISC_CONFIG.chairCannotBeDestroied || isPlayerCreativeMode) {
-                    this.killChair();
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 将坐垫从实体状态转变为物品状态
-     */
-    private void killChair() {
-        this.setDead();
-        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-            ItemStack itemstack = new ItemStack(MaidItems.CHAIR, 1);
-            ItemChair.setAllTagData(itemstack, this.getModelId(), this.getMountedHeight(), this.isTameableCanRide(), this.hasNoGravity());
-            if (this.hasCustomName()) {
-                itemstack.setStackDisplayName(this.getCustomNameTag());
-            }
-            this.entityDropItem(itemstack, 0.0F);
-        }
     }
 
     @Override
@@ -295,30 +250,6 @@ public class EntityChair extends EntityLivingBase {
 
     public void setTameableCanRide(boolean canRide) {
         this.dataManager.set(TAMEABLE_CAN_RIDE, canRide);
-    }
-
-    // ------------ EntityLivingBase 要求实现的几个抽象方法，因为全用不上，故返回默认值 ----------- //
-
-    @Nonnull
-    @Override
-    public ItemStack getItemStackFromSlot(@Nonnull EntityEquipmentSlot slotIn) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void setItemStackToSlot(@Nonnull EntityEquipmentSlot slotIn, @Nonnull ItemStack stack) {
-    }
-
-    @Nonnull
-    @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
-        return Collections.emptyList();
-    }
-
-    @Nonnull
-    @Override
-    public EnumHandSide getPrimaryHand() {
-        return EnumHandSide.LEFT;
     }
 
     enum NBT {
