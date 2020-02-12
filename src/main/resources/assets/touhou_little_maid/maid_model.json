@@ -4,6 +4,7 @@
   "description": ["{pack.touhou_little_maid.maid.desc}"],
   "version": "1.0.0",
   "date": "2019-07-14",
+  "icon": "touhou_little_maid:textures/icon.png",
   "model_list": [
     {
       "model_id": "touhou_little_maid:hakurei_reimu",
@@ -282,6 +283,12 @@
     }, {
       "model_id": "touhou_little_maid:junko",
       "description": ["{model.touhou_little_maid.junko.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:ringo",
+      "description": ["{model.touhou_little_maid.ringo.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:tsukumo_yatsuhashi",
+      "description": ["{model.touhou_little_maid.tsukumo_yatsuhashi.desc}"]
     }
   ]
 }

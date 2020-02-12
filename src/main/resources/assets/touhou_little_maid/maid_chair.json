@@ -3,6 +3,7 @@
   "author": ["Succinum", "Pajinyi"],
   "version": "1.0.0",
   "date": "2019-08-08",
+  "icon": "touhou_little_maid:textures/icon.png",
   "model_list": [
     {
       "model_id": "touhou_little_maid:cushion",
@@ -110,10 +111,6 @@
     }, {
       "model_id": "touhou_little_maid:rinnosuke_children_toys",
       "mounted_height": 13
-    }, {
-      "model_id": "touhou_little_maid:bowl",
-      "texture": "touhou_little_maid:textures/entity/sukuna_shinmyoumaru.png",
-      "mounted_height": 2
     }, {
       "model_id": "touhou_little_maid:moto",
       "mounted_height": 11,

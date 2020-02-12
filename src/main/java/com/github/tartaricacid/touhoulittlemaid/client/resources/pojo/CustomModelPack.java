@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -25,6 +26,9 @@ public class CustomModelPack<T extends IModelItem> {
 
     @SerializedName("version")
     private String version;
+
+    @SerializedName("icon")
+    private ResourceLocation icon;
 
     @Nullable
     public String getDate() {
@@ -50,6 +54,11 @@ public class CustomModelPack<T extends IModelItem> {
     @Nullable
     public String getVersion() {
         return version;
+    }
+
+    @Nullable
+    public ResourceLocation getIcon() {
+        return icon;
     }
 
     @SuppressWarnings("unchecked")

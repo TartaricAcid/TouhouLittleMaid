@@ -50,7 +50,7 @@ item.touhou_little_maid.trolley_audio.name=Trolley Audio
 item.touhou_little_maid.cat_cart.name=Cat Cart
 item.touhou_little_maid.wheel_chair.name=Wheel Chair
 item.touhou_little_maid.rickshaw.name=Rickshaw
-item.touhou_little_maid.bowl.name=Bowl
+item.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -395,6 +395,8 @@ model.touhou_little_maid.haniyasushin_keiki.name=Keiki Haniyasushin
 model.touhou_little_maid.yatadera_narumi.name=Narumi Yatadera
 model.touhou_little_maid.seiran.name=Seiran
 model.touhou_little_maid.junko.name=Junko
+model.touhou_little_maid.ringo.name=Ringo
+model.touhou_little_maid.tsukumo_yatsuhashi.name=Yatsuhashi Tsukumo
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -484,6 +486,8 @@ model.touhou_little_maid.haniyasushin_keiki.desc=§7The Sculptor God Crafted by 
 model.touhou_little_maid.yatadera_narumi.desc=§7The Magical Jizo who Manifested in the Forest
 model.touhou_little_maid.seiran.desc=§7The Pale Blue Eagle Ravi
 model.touhou_little_maid.junko.desc=§7-
+model.touhou_little_maid.ringo.desc=§7The Orange Eagle Ravi
+model.touhou_little_maid.tsukumo_yatsuhashi.desc=§7Tsukumogami of an Aging Koto
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.class_desk.name=Class Desk
@@ -507,7 +511,6 @@ model.touhou_little_maid.ema.name=Ema
 model.touhou_little_maid.anti_collision_bucket.name=Anti-collision Bucket
 model.touhou_little_maid.park_bench.name=Park Bench
 model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
-model.touhou_little_maid.bowl.name=Bowl
 model.touhou_little_maid.moto.name=Moto
 
 # Spell Card

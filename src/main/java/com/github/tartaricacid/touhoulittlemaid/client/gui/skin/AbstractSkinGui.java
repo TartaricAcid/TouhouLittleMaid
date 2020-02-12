@@ -143,7 +143,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         this.buttonList.add(nextPage);
 
         // 添加按键，顺便装填按键对应模型的索引
-        CustomModelPack<U> pojo = modelPackList.get(getPackIndex());
+        CustomModelPack<U> pack = modelPackList.get(getPackIndex());
 
         // 起始坐标
         int x = -100;
@@ -154,7 +154,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int toIndex = guiNumber.modelToIndex(getPackIndex(), getRowIndex());
 
         // 开始添加按键，顺便装填按键对应模型的索引
-        for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
+        for (U modelItem : pack.getModelList().subList(fromIndex, toIndex)) {
             this.buttonList.add(new GuiButtonImage(id, i + x - 8, j + y - 26, 15, 24, 41, 201, 24, BG));
             BUTTON_MODEL_MAP.put(id, modelItem);
 
@@ -182,25 +182,17 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         // 绘制 GUI 背景
         mc.renderEngine.bindTexture(BG);
         drawTexturedModalRect(middleX - 256 / 2, middleY - 80, 0, 0, 256, 180);
-
         mc.renderEngine.bindTexture(SIDE);
         drawTexturedModalRect(middleX - 256 / 2 + 250, middleY - 80, 0, 0, 24, 180);
 
-        if (guiNumber.canScroll(getPackIndex(), getRowIndex())) {
-            drawTexturedModalRect(middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
-                    24, 0, 12, 15);
-        } else {
-            drawTexturedModalRect(middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
-                    36, 0, 12, 15);
-        }
+        // 绘制侧边的滚动条
+        drawScrollSide(middleX, middleY);
 
-        GlStateManager.pushMatrix();
         // 调用父类方法绘制按钮列表、标签列表
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        GlStateManager.color(1, 1, 1);
-        GlStateManager.popMatrix();
+        drawButton(mouseX, mouseY, partialTicks);
+
+        // 绘制标签栏图标
+        drawTabIcon(middleX, middleY);
 
         // 绘制左边示例实体
         drawLeftEntity(middleX, middleY, mouseX, mouseY);
@@ -210,15 +202,47 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         drawTooltips(mouseX, mouseY, middleX, middleY);
     }
 
+    private void drawButton(int mouseX, int mouseY, float partialTicks) {
+        GlStateManager.pushMatrix();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        GlStateManager.color(1, 1, 1);
+        GlStateManager.popMatrix();
+    }
+
+    private void drawScrollSide(int middleX, int middleY) {
+        if (guiNumber.canScroll(getPackIndex(), getRowIndex())) {
+            drawTexturedModalRect(middleX - 256 / 2 + 254,
+                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    24, 0, 12, 15);
+        } else {
+            drawTexturedModalRect(middleX - 256 / 2 + 254,
+                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    36, 0, 12, 15);
+        }
+    }
+
+    private void drawTabIcon(int middleX, int middleY) {
+        // 模型包的分栏按钮图标
+        int size = guiNumber.getTabSize(getPackIndex());
+        for (int index = 0; index < size; index++) {
+            CustomModelPack<U> pack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
+            ResourceLocation icon = pack.getIcon();
+            if (icon != null) {
+                mc.renderEngine.bindTexture(icon);
+                drawModalRectWithCustomSizedTexture(middleX - 92 + 28 * index, middleY - 98, 0, 0, 16, 16, 16, 16);
+            }
+        }
+    }
+
     /**
      * 绘制所有的模型实体图案
      */
     private void drawEntity(int middleX, int middleY) {
         // 获取当前包索引得到的模型列表
-        CustomModelPack<U> pojo = modelPackList.get(getPackIndex());
+        CustomModelPack<U> pack = modelPackList.get(getPackIndex());
 
         // 绘制包信息
-        drawPackInfoText(pojo, middleX, middleY);
+        drawPackInfoText(pack, middleX, middleY);
 
         // 起始坐标
         int x = -100;
@@ -229,7 +253,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int toIndex = guiNumber.modelToIndex(getPackIndex(), getRowIndex());
 
         // 开始绘制实体图案，并往上添加对应模型和材质
-        for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
+        for (U modelItem : pack.getModelList().subList(fromIndex, toIndex)) {
             drawRightEntity(middleX + x, middleY + y, modelItem);
             // 往右绘制
             x = x + 20;
@@ -244,21 +268,21 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
     /**
      * 绘制包的文本信息
      */
-    private void drawPackInfoText(CustomModelPack<U> pojo, int middleX, int middleY) {
+    private void drawPackInfoText(CustomModelPack<U> pack, int middleX, int middleY) {
         int offSet = -80;
 
         // 绘制包名
-        drawCenteredString(fontRenderer, ParseI18n.parse(pojo.getPackName()), middleX - 193, middleY + offSet, 0xffffff);
+        drawCenteredString(fontRenderer, ParseI18n.parse(pack.getPackName()), middleX - 193, middleY + offSet, 0xffffff);
 
         // 如果描述不为空，逐行绘制描述
-        for (String str : ParseI18n.parse(pojo.getDescription())) {
+        for (String str : ParseI18n.parse(pack.getDescription())) {
             offSet += 10;
             drawCenteredString(fontRenderer, TextFormatting.GRAY + str, middleX - 193, middleY + offSet, 0xffffff);
         }
 
         // 绘制作者列表
-        if (!pojo.getAuthor().isEmpty()) {
-            for (List<String> textList : Lists.partition(pojo.getAuthor(), 2)) {
+        if (!pack.getAuthor().isEmpty()) {
+            for (List<String> textList : Lists.partition(pack.getAuthor(), 2)) {
                 offSet += 10;
                 drawCenteredString(fontRenderer, TextFormatting.GOLD + textList.toString(),
                         middleX - 193, middleY + offSet, 0xffffff);
@@ -266,17 +290,17 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         }
 
         // 绘制版本信息
-        if (pojo.getVersion() != null) {
+        if (pack.getVersion() != null) {
             offSet += 10;
-            drawCenteredString(fontRenderer, TextFormatting.DARK_AQUA + I18n.format("gui.touhou_little_maid.skin.text.version", pojo.getVersion()),
+            drawCenteredString(fontRenderer, TextFormatting.DARK_AQUA + I18n.format("gui.touhou_little_maid.skin.text.version", pack.getVersion()),
                     middleX - 193, middleY + offSet, 0xffffff);
         }
 
 
         // 绘制日期信息
-        if (pojo.getDate() != null) {
+        if (pack.getDate() != null) {
             offSet += 10;
-            drawCenteredString(fontRenderer, TextFormatting.GREEN + I18n.format("gui.touhou_little_maid.skin.text.date", pojo.getDate()),
+            drawCenteredString(fontRenderer, TextFormatting.GREEN + I18n.format("gui.touhou_little_maid.skin.text.date", pack.getDate()),
                     middleX - 193, middleY + offSet, 0xffffff);
         }
 
@@ -292,7 +316,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
      */
     private void drawTooltips(int mouseX, int mouseY, int middleX, int middleY) {
         // 获取当前包索引得到的模型列表
-        CustomModelPack<U> pojo = modelPackList.get(getPackIndex());
+        CustomModelPack<U> pack = modelPackList.get(getPackIndex());
 
         // 起始坐标
         int x = -100;
@@ -303,7 +327,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int toIndex = guiNumber.modelToIndex(getPackIndex(), getRowIndex());
 
         // 开始绘制实体图案，并往上添加对应模型和材质
-        for (U modelItem : pojo.getModelList().subList(fromIndex, toIndex)) {
+        for (U modelItem : pack.getModelList().subList(fromIndex, toIndex)) {
             // 判定鼠标所在的位置
             boolean isxInRange = middleX + x - 8 < mouseX && mouseX < middleX + x + 7;
             boolean isyInRange = middleY + y - 23 < mouseY && mouseY < middleY + y + 1;
@@ -330,6 +354,17 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
             if (x > 105) {
                 x = -100;
                 y = y + 30;
+            }
+        }
+
+        // 绘制便签页的文本提示
+        int size = guiNumber.getTabSize(getPackIndex());
+        for (int index = 0; index < size; index++) {
+            boolean isxInRange = middleX - 98 + 28 * index < mouseX && mouseX < middleX - 98 + 28 * index + 28;
+            boolean isyInRange = middleY - 108 < mouseY && mouseY < middleY - 108 + 31;
+            if (isxInRange && isyInRange) {
+                CustomModelPack<U> hoverPack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
+                drawHoveringText(ParseI18n.parse(hoverPack.getPackName()), mouseX, mouseY);
             }
         }
 

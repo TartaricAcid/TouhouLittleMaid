@@ -155,6 +155,7 @@ public class CustomModelLoader {
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
             LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
+            ioe.printStackTrace();
         } finally {
             // 关闭输入流
             IOUtils.closeQuietly(input);
