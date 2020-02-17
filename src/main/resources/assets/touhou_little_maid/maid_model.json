@@ -292,6 +292,16 @@
     }, {
       "model_id": "touhou_little_maid:tsukumo_benben",
       "description": ["{model.touhou_little_maid.tsukumo_benben.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:miyoi_okunoda",
+      "description": ["{model.touhou_little_maid.miyoi_okunoda.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:hecatia_lapislazuli",
+      "description": ["{model.touhou_little_maid.hecatia_lapislazuli.desc}"],
+      "animation": [
+        "touhou_little_maid:animation/maid.default.js",
+        "touhou_little_maid:animation/hecatia.dimension.js"
+      ]
     }
   ]
 }
