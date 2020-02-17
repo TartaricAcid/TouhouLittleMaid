@@ -397,6 +397,7 @@ model.touhou_little_maid.seiran.name=Seiran
 model.touhou_little_maid.junko.name=Junko
 model.touhou_little_maid.ringo.name=Ringo
 model.touhou_little_maid.tsukumo_yatsuhashi.name=Yatsuhashi Tsukumo
+model.touhou_little_maid.tsukumo_benben.name=Benben Tsukumo
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -488,6 +489,7 @@ model.touhou_little_maid.seiran.desc=§7The Pale Blue Eagle Ravi
 model.touhou_little_maid.junko.desc=§7-
 model.touhou_little_maid.ringo.desc=§7The Orange Eagle Ravi
 model.touhou_little_maid.tsukumo_yatsuhashi.desc=§7Tsukumogami of an Aging Koto
+model.touhou_little_maid.tsukumo_benben.desc=§7Tsukumogami of an Aging Biwa
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.class_desk.name=Class Desk

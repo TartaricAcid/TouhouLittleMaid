@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.util.ResourceLocation;
 
@@ -29,6 +30,12 @@ public class CustomModelPack<T extends IModelItem> {
 
     @SerializedName("icon")
     private ResourceLocation icon;
+    @SerializedName("icon_delay")
+    private int iconDelay = 2;
+    @Expose(deserialize = false)
+    private AnimationState iconAnimation = AnimationState.UNCHECK;
+    @Expose(deserialize = false)
+    private int iconAspectRatio = 1;
 
     @Nullable
     public String getDate() {
@@ -61,6 +68,26 @@ public class CustomModelPack<T extends IModelItem> {
         return icon;
     }
 
+    public AnimationState getIconAnimation() {
+        return iconAnimation;
+    }
+
+    public void setIconAnimation(AnimationState iconAnimation) {
+        this.iconAnimation = iconAnimation;
+    }
+
+    public int getIconAspectRatio() {
+        return iconAspectRatio;
+    }
+
+    public void setIconAspectRatio(int iconAspectRatio) {
+        this.iconAspectRatio = iconAspectRatio;
+    }
+
+    public int getIconDelay() {
+        return iconDelay;
+    }
+
     @SuppressWarnings("unchecked")
     public CustomModelPack<T> decorate() {
         // 包名和 model list 不能为空
@@ -76,9 +103,21 @@ public class CustomModelPack<T extends IModelItem> {
         if (author == null) {
             author = Collections.EMPTY_LIST;
         }
+        if (iconDelay <= 0) {
+            iconDelay = 1;
+        }
 
         // 为此包的模型对象进行二次修饰
         modelList.forEach(T::decorate);
         return this;
+    }
+
+    public enum AnimationState {
+        // 拥有动画
+        TRUE,
+        // 没有动画
+        FALSE,
+        // 还未检查其是否拥有动画
+        UNCHECK
     }
 }

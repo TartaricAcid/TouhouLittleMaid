@@ -1,10 +1,10 @@
 {
   "pack_name": "{pack.touhou_little_maid.maid.name}",
-  "author": ["Succinum", "ZeniCrow", "Paulzzh", "Tian_mi"],
+  "author": ["Succinum", "Pajinyi", "ZeniCrow", "Paulzzh", "Tian_mi"],
   "description": ["{pack.touhou_little_maid.maid.desc}"],
   "version": "1.0.0",
   "date": "2019-07-14",
-  "icon": "touhou_little_maid:textures/icon.png",
+  "icon": "touhou_little_maid:textures/maid_icon.png",
   "model_list": [
     {
       "model_id": "touhou_little_maid:hakurei_reimu",
@@ -289,6 +289,9 @@
     }, {
       "model_id": "touhou_little_maid:tsukumo_yatsuhashi",
       "description": ["{model.touhou_little_maid.tsukumo_yatsuhashi.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:tsukumo_benben",
+      "description": ["{model.touhou_little_maid.tsukumo_benben.desc}"]
     }
   ]
 }

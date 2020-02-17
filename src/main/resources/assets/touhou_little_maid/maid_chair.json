@@ -3,7 +3,7 @@
   "author": ["Succinum", "Pajinyi"],
   "version": "1.0.0",
   "date": "2019-08-08",
-  "icon": "touhou_little_maid:textures/icon.png",
+  "icon": "touhou_little_maid:textures/chair_icon.png",
   "model_list": [
     {
       "model_id": "touhou_little_maid:cushion",
