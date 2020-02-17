@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -74,6 +75,7 @@ public class TrolleyAudioSoundMessage implements IMessage {
             return null;
         }
 
+        @SideOnly(Side.CLIENT)
         private void apply(String recordName, SoundEvent event, EntityTrolleyAudio trolleyAudio) {
             TrolleyAudioSound sound = new TrolleyAudioSound(event, trolleyAudio);
             Minecraft.getMinecraft().getSoundHandler().playSound(sound);

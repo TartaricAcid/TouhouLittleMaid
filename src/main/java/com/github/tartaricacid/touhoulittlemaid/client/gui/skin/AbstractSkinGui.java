@@ -17,9 +17,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.input.Mouse;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -228,9 +232,40 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
             CustomModelPack<U> pack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
             ResourceLocation icon = pack.getIcon();
             if (icon != null) {
-                mc.renderEngine.bindTexture(icon);
-                drawModalRectWithCustomSizedTexture(middleX - 92 + 28 * index, middleY - 98, 0, 0, 16, 16, 16, 16);
+                if (pack.getIconAnimation() == CustomModelPack.AnimationState.UNCHECK) {
+                    checkIconAnimation(pack, icon);
+                }
+                if (pack.getIconAnimation() == CustomModelPack.AnimationState.FALSE) {
+                    mc.renderEngine.bindTexture(icon);
+                    drawModalRectWithCustomSizedTexture(middleX - 92 + 28 * index, middleY - 98,
+                            0, 0, 16, 16, 16, 16);
+                } else {
+                    mc.renderEngine.bindTexture(icon);
+                    int time = (int) mc.world.getWorldTime() / pack.getIconDelay();
+                    int iconIndex = time % pack.getIconAspectRatio();
+                    drawModalRectWithCustomSizedTexture(middleX - 92 + 28 * index, middleY - 98,
+                            0, iconIndex * 16, 16,
+                            16, 16, 16 * pack.getIconAspectRatio());
+                }
             }
+        }
+    }
+
+    private void checkIconAnimation(CustomModelPack<U> pack, ResourceLocation icon) {
+        InputStream stream = null;
+        try {
+            stream = mc.getResourceManager().getResource(icon).getInputStream();
+            BufferedImage img = ImageIO.read(stream);
+            if (img.getWidth() == img.getHeight()) {
+                pack.setIconAnimation(CustomModelPack.AnimationState.FALSE);
+            } else {
+                pack.setIconAnimation(CustomModelPack.AnimationState.TRUE);
+                pack.setIconAspectRatio(img.getHeight() / img.getWidth());
+            }
+        } catch (IOException ignore) {
+            pack.setIconAnimation(CustomModelPack.AnimationState.FALSE);
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
     }
 

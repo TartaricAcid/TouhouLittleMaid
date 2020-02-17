@@ -396,6 +396,9 @@ model.touhou_little_maid.seiran.name=清兰
 model.touhou_little_maid.junko.name=纯狐
 model.touhou_little_maid.ringo.name=铃瑚
 model.touhou_little_maid.tsukumo_yatsuhashi.name=九十九八桥
+model.touhou_little_maid.tsukumo_benben.name=九十九弁弁
+model.touhou_little_maid.hecatia_lapislazuli.name=赫卡提亚·拉碧斯拉祖利
+model.touhou_little_maid.miyoi_okunoda.name=奥野田美宵
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -487,6 +490,9 @@ model.touhou_little_maid.seiran.desc=§7浅葱色的 Eagle Rabbit
 model.touhou_little_maid.junko.desc=§7-
 model.touhou_little_maid.ringo.desc=§7橘色的 Eagle Rabbit
 model.touhou_little_maid.tsukumo_yatsuhashi.desc=§7古旧的琴的付丧神
+model.touhou_little_maid.tsukumo_benben.desc=§7古旧琵琶的付丧神
+model.touhou_little_maid.hecatia_lapislazuli.desc=§7地狱的女神
+model.touhou_little_maid.miyoi_okunoda.desc=§7梦幻酒家「鲵吞亭」的店花
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.class_desk.name=课桌
