@@ -25,8 +25,8 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, ChairModelItem> {
     private GuiButtonToggle characterButton;
+    private GuiButtonToggle gravityButton;
     private ResourceLocation modelId;
-    private GuiButton setGravityButton;
 
     public ChairSkinDetailsGui(EntityChair sourceEntity, ResourceLocation modelId) {
         super(sourceEntity, new EntityChair(sourceEntity.world), CustomModelLoader.CHAIR_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
@@ -40,16 +40,18 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, Cha
 
     @Override
     void initSideButton() {
-        addButton(new GuiButton(BUTTON.APPLY_DATA.ordinal(), 2, 18, 128, 20, I18n.format("gui.touhou_little_maid.skin_details.apply_data")));
-        addButton(new GuiButton(BUTTON.MIN_HEIGHT.ordinal(), 58, 40, 12, 12, "-"));
-        addButton(new GuiButton(BUTTON.ADD_HEIGHT.ordinal(), 118, 40, 12, 12, "+"));
+        addButton(new GuiButton(BUTTON.MIN_HEIGHT.ordinal(), 58, 20, 12, 12, "-"));
+        addButton(new GuiButton(BUTTON.ADD_HEIGHT.ordinal(), 118, 20, 12, 12, "+"));
 
-        characterButton = new GuiButtonToggle(BUTTON.SHOW_CHARACTER.ordinal(), 2, 54, 128, 12, guiEntity.isDebugCharacterOpen);
+        characterButton = new GuiButtonToggle(BUTTON.SHOW_CHARACTER.ordinal(), 2, 34, 128, 12, guiEntity.isDebugCharacterOpen);
         characterButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
         addButton(characterButton);
 
-        setGravityButton = new GuiButton(BUTTON.SET_GRAVITY.ordinal(), 2, 68, 128, 20, getGravityButtonText(guiEntity.hasNoGravity()));
-        addButton(setGravityButton);
+        gravityButton = new GuiButtonToggle(BUTTON.SET_GRAVITY.ordinal(), 2, 48, 128, 12, guiEntity.hasNoGravity());
+        gravityButton.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
+        addButton(gravityButton);
+
+        addButton(new GuiButton(BUTTON.APPLY_DATA.ordinal(), 2, 62, 128, 20, I18n.format("gui.touhou_little_maid.skin_details.apply_data")));
     }
 
     @Override
@@ -131,34 +133,30 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, Cha
 
     @Override
     void drawSideButtonText() {
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.mounted_height"), 5, 43, 0xcacad4);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.mounted_height"), 5, 22, 0xcacad4);
         String data = String.format("%.2f", guiEntity.getMountedHeight() / 0.0625f + 3);
-        fontRenderer.drawString(data, (188 - fontRenderer.getStringWidth(data)) / 2, 43, 0xcacad4);
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.show_character"), 16, 57, 0xcacad4);
+        fontRenderer.drawString(data, (188 - fontRenderer.getStringWidth(data)) / 2, 22, 0xcacad4);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.show_character"), 16, 36, 0xcacad4);
+        fontRenderer.drawString(getGravityButtonText(guiEntity.hasNoGravity()), 16, 50, 0xcacad4);
     }
 
     @Override
     void drawSideButtonTooltips(int mouseX, int mouseY) {
-        boolean isInWidthRange = (58 < mouseX && mouseX < 70) || (118 < mouseX && mouseX < 138);
-        boolean isInHeightRange = 40 < mouseY && mouseY < 60;
+        boolean isInWidthRange = (58 < mouseX && mouseX < 70) || (118 < mouseX && mouseX < 130);
+        boolean isInHeightRange = 20 < mouseY && mouseY < 32;
         if (isInWidthRange && isInHeightRange) {
             drawHoveringText(I18n.format("gui.touhou_little_maid.skin_details.mounted_height.button.tooltips"), mouseX, mouseY);
         }
     }
 
     private void applyShowCharacterLogic() {
-        if (guiEntity.isDebugCharacterOpen) {
-            guiEntity.isDebugCharacterOpen = false;
-            characterButton.setStateTriggered(false);
-        } else {
-            guiEntity.isDebugCharacterOpen = true;
-            characterButton.setStateTriggered(true);
-        }
+        guiEntity.isDebugCharacterOpen = !guiEntity.isDebugCharacterOpen;
+        characterButton.setStateTriggered(guiEntity.isDebugCharacterOpen);
     }
 
     private void applySetGravityLogic() {
         guiEntity.setNoGravity(!guiEntity.hasNoGravity());
-        setGravityButton.displayString = getGravityButtonText(guiEntity.hasNoGravity());
+        gravityButton.setStateTriggered(guiEntity.hasNoGravity());
     }
 
     private String getGravityButtonText(boolean isNoGravity) {

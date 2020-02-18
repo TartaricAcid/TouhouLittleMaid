@@ -32,12 +32,13 @@ public class MaidMainGuiContainer extends AbstractMaidGuiContainer {
         drawTexturedModalRect(i + 105, j + 10, 178, 104, 64, 9);
         drawTexturedModalRect(i + 105, j + 22, 178, 104, 64, 9);
         drawTexturedModalRect(i + 107, j + 12, 180, 114, (int) (64 * maid.getHealth() / maid.getMaxHealth()), 5);
-        drawTexturedModalRect(i + 107, j + 24, 180, 120, (int) (64 * maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue() / 20), 5);
+        double armorNum = maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue();
+        drawTexturedModalRect(i + 107, j + 24, 180, 120, (int) (64 * (armorNum % 20.00000000001) / 20), 5);
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
         // 绘制文字
         fontRenderer.drawString(String.valueOf(Math.round(maid.getHealth())), i + 91, j + 11, 0x555555, false);
-        fontRenderer.drawString(String.valueOf(Math.round(maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue())), i + 91, j + 23, 0x555555, false);
+        fontRenderer.drawString(String.valueOf(Math.round(armorNum)), i + 91, j + 23, 0x555555, false);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.attack", DECIMAL_FORMAT.format(maid.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())), i + 80, j + 35, 0x555555, false);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.experience", maid.getExp()), i + 80, j + 46, 0x555555, false);
     }
