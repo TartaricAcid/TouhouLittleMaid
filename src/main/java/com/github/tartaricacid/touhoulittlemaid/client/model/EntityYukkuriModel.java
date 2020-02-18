@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,33 +31,33 @@ public class EntityYukkuriModel extends ModelBase {
         bone.setRotationPoint(0.0F, 24.0F, 0.0F);
         bone.cubeList.add(new ModelBox(bone, 0, 18, -4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F, false));
         bone.cubeList.add(new ModelBox(bone, 0, 0, -4.5F, -8.5F, -4.5F, 9, 9, 9, 0.0F, false));
-        bone.cubeList.add(new ModelBox(bone, 38, 0, -5.0F, -3.5F, -4.75F, 2, 3, 2, 0.0F, false));
-        bone.cubeList.add(new ModelBox(bone, 38, 0, 3.0F, -3.5F, -4.75F, 2, 3, 2, 0.0F, true));
+        bone.cubeList.add(new ModelBox(bone, 38, 0, 3.0F, -3.75F, -5.0F, 2, 4, 2, -0.35F, true));
+        bone.cubeList.add(new ModelBox(bone, 38, 0, -5.0F, -3.75F, -5.0F, 2, 4, 2, -0.35F, false));
         bone.cubeList.add(new ModelBox(bone, 0, 0, -1.5F, -11.0F, -2.0F, 2, 3, 0, 0.0F, false));
 
         bone2 = new ModelRenderer(this);
         bone2.setRotationPoint(0.0F, -6.5F, 4.0F);
         setRotationAngle(bone2, 0.0F, -0.1745F, -0.4363F);
         bone.addChild(bone2);
-        bone2.cubeList.add(new ModelBox(bone2, 48, 14, 0.25F, -2.0F, 0.5F, 7, 4, 1, 0.0F, false));
+        bone2.cubeList.add(new ModelBox(bone2, 48, 14, -0.8195F, -2.0F, 0.1061F, 7, 4, 1, -0.2F, false));
 
         bone3 = new ModelRenderer(this);
         bone3.setRotationPoint(0.0F, -6.5F, 4.0F);
         setRotationAngle(bone3, 0.0F, 0.1745F, 0.4363F);
         bone.addChild(bone3);
-        bone3.cubeList.add(new ModelBox(bone3, 48, 14, -7.25F, -2.0F, 0.5F, 7, 4, 1, 0.0F, true));
+        bone3.cubeList.add(new ModelBox(bone3, 48, 14, -6.1805F, -2.0F, 0.1061F, 7, 4, 1, -0.2F, true));
 
         bone4 = new ModelRenderer(this);
         bone4.setRotationPoint(0.0F, -6.5F, 4.0F);
         setRotationAngle(bone4, 0.0F, -0.1745F, 2.7053F);
         bone.addChild(bone4);
-        bone4.cubeList.add(new ModelBox(bone4, 50, 20, 0.25F, -2.0F, 0.5F, 6, 4, 1, 0.0F, false));
+        bone4.cubeList.add(new ModelBox(bone4, 50, 20, -0.3195F, -2.0F, 0.1061F, 6, 4, 1, -0.3F, false));
 
         bone5 = new ModelRenderer(this);
         bone5.setRotationPoint(0.0F, -6.5F, 4.0F);
         setRotationAngle(bone5, 0.0F, 0.1745F, -2.7053F);
         bone.addChild(bone5);
-        bone5.cubeList.add(new ModelBox(bone5, 50, 20, -6.25F, -2.0F, 0.5F, 6, 4, 1, 0.0F, true));
+        bone5.cubeList.add(new ModelBox(bone5, 50, 20, -5.6805F, -2.0F, 0.1061F, 6, 4, 1, -0.3F, true));
 
         bone6 = new ModelRenderer(this);
         bone6.setRotationPoint(3.0F, -3.0F, 1.0F);
@@ -76,15 +75,13 @@ public class EntityYukkuriModel extends ModelBase {
         bone8.setRotationPoint(0.0F, -8.0F, 6.0F);
         setRotationAngle(bone8, 0.1745F, 0.0F, 0.0F);
         bone.addChild(bone8);
-        bone8.cubeList.add(new ModelBox(bone8, 54, 35, -2.0F, -0.5F, -0.5F, 4, 9, 1, 0.0F, false));
+        bone8.cubeList.add(new ModelBox(bone8, 54, 35, -2.0F, -0.6042F, -1.0909F, 4, 9, 1, 0.0F, false));
     }
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        GlStateManager.translate(0.0F, 0.001F, 0.0F);
         bone.render(f5);
     }
-
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

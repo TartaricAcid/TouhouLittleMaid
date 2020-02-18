@@ -108,7 +108,7 @@ public class EntityModelJson extends ModelBase {
 
             // 塞入 Cube List
             for (CubesItem cubes : bones.getCubes()) {
-                List<Integer> uv = cubes.getUv();
+                List<Float> uv = cubes.getUv();
                 List<Float> size = cubes.getSize();
                 boolean mirror = cubes.isMirror();
                 float inflate = cubes.getInflate();
@@ -134,11 +134,13 @@ public class EntityModelJson extends ModelBase {
         if (entityIn instanceof EntityMaid) {
             entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
             String modelId = ((EntityMaid) entityIn).getModelId();
-            Optional<Object> objectOptional = CustomModelLoader.MAID_MODEL.getAnimation(modelId);
+            Optional<List<Object>> objectOptional = CustomModelLoader.MAID_MODEL.getAnimation(modelId);
             if (objectOptional.isPresent()) {
                 try {
-                    invocable.invokeMethod(objectOptional.get(), "animation",
-                            entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+                    for (Object animations : objectOptional.get()) {
+                        invocable.invokeMethod(animations, "animation",
+                                entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     CustomModelLoader.MAID_MODEL.removeAnimation(modelId);
@@ -149,11 +151,13 @@ public class EntityModelJson extends ModelBase {
         if (entityIn instanceof EntityChair) {
             entityChairWrapper.setChair((EntityChair) entityIn);
             String modelId = ((EntityChair) entityIn).getModelId();
-            Optional<Object> objectOptional = CustomModelLoader.CHAIR_MODEL.getAnimation(((EntityChair) entityIn).getModelId());
+            Optional<List<Object>> objectOptional = CustomModelLoader.CHAIR_MODEL.getAnimation(((EntityChair) entityIn).getModelId());
             if (objectOptional.isPresent()) {
                 try {
-                    invocable.invokeMethod(objectOptional.get(), "animation",
-                            entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+                    for (Object animations : objectOptional.get()) {
+                        invocable.invokeMethod(animations, "animation",
+                                entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     CustomModelLoader.CHAIR_MODEL.removeAnimation(modelId);

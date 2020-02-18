@@ -18,6 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinDetailsGui.BUTTON.*;
@@ -189,7 +191,7 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid, MaidM
 
     @Override
     void loadAnimation(Object scriptObject) {
-        CustomModelLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), scriptObject);
+        CustomModelLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), Collections.singletonList(scriptObject));
     }
 
     @Override
@@ -199,9 +201,9 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid, MaidM
 
     @Override
     void resetAnimationAndModel() {
-        Object animation = CustomJsAnimationManger.getCustomAnimation(modelItem.getAnimation());
-        if (animation != null) {
-            CustomModelLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), animation);
+        List<Object> animations = CustomJsAnimationManger.getCustomAnimation(modelItem);
+        if (animations != null && animations.size() > 0) {
+            CustomModelLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), animations);
         }
         reloadModel();
     }

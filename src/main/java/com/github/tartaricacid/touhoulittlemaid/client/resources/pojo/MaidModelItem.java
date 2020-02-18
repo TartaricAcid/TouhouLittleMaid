@@ -26,7 +26,7 @@ public class MaidModelItem implements IModelItem {
     @SerializedName("render_item_scale")
     private float renderItemScale = 1.0f;
 
-    private ResourceLocation animation;
+    private List<ResourceLocation> animation;
 
     @Override
     public ResourceLocation getTexture() {
@@ -44,7 +44,7 @@ public class MaidModelItem implements IModelItem {
     }
 
     @Override
-    public ResourceLocation getAnimation() {
+    public List<ResourceLocation> getAnimation() {
         return animation;
     }
 
@@ -85,8 +85,8 @@ public class MaidModelItem implements IModelItem {
         if (name == null) {
             name = String.format("{model.%s.%s.name}", modelId.getNamespace(), modelId.getPath());
         }
-        if (animation == null) {
-            animation = new ResourceLocation("touhou_little_maid:animation/maid.default.js");
+        if (animation == null || animation.size() == 0) {
+            animation = Collections.singletonList(new ResourceLocation("touhou_little_maid:animation/maid.default.js"));
         }
         return this;
     }

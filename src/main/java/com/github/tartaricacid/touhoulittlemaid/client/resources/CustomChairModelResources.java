@@ -19,13 +19,13 @@ public class CustomChairModelResources {
     private List<CustomModelPack<ChairModelItem>> packList;
     private HashMap<String, EntityModelJson> idModelMap;
     private HashMap<String, ChairModelItem> idInfoMap;
-    private HashMap<String, Object> idAnimationMap;
+    private HashMap<String, List<Object>> idAnimationMap;
     private HashMap<String, String> idDebugAnimationFile;
 
     public CustomChairModelResources(String jsonFileName, List<CustomModelPack<ChairModelItem>> packList,
                                      HashMap<String, EntityModelJson> idToModel,
                                      HashMap<String, ChairModelItem> idToInfo,
-                                     HashMap<String, Object> idAnimationMap) {
+                                     HashMap<String, List<Object>> idAnimationMap) {
         this.jsonFileName = jsonFileName;
         this.packList = packList;
         this.idModelMap = idToModel;
@@ -65,7 +65,7 @@ public class CustomChairModelResources {
         this.idInfoMap.put(modelId, chairModelItem);
     }
 
-    public void putAnimation(String modelId, Object animationJs) {
+    public void putAnimation(String modelId, List<Object> animationJs) {
         this.idAnimationMap.put(modelId, animationJs);
     }
 
@@ -114,7 +114,7 @@ public class CustomChairModelResources {
         return false;
     }
 
-    public Optional<Object> getAnimation(String modelId) {
+    public Optional<List<Object>> getAnimation(String modelId) {
         return Optional.ofNullable(idAnimationMap.get(modelId));
     }
 

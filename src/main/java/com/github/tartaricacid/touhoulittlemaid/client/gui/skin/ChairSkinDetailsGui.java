@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author TartaricAcid
@@ -94,7 +96,7 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, Cha
 
     @Override
     void loadAnimation(Object scriptObject) {
-        CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), scriptObject);
+        CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), Collections.singletonList(scriptObject));
     }
 
     @Override
@@ -104,9 +106,9 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, Cha
 
     @Override
     void resetAnimationAndModel() {
-        Object animation = CustomJsAnimationManger.getCustomAnimation(modelItem.getAnimation());
-        if (animation != null) {
-            CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), animation);
+        List<Object> animations = CustomJsAnimationManger.getCustomAnimation(modelItem);
+        if (animations != null && animations.size() > 0) {
+            CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), animations);
         }
         reloadModel();
     }

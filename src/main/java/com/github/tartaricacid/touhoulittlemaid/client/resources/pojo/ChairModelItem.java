@@ -28,7 +28,7 @@ public class ChairModelItem implements IModelItem {
     private float renderItemScale = 1.0f;
 
     @SerializedName("animation")
-    private ResourceLocation animation;
+    private List<ResourceLocation> animation;
 
     @SerializedName("mounted_height")
     private float mountedYOffset;
@@ -56,7 +56,7 @@ public class ChairModelItem implements IModelItem {
 
     @Override
     @Nullable
-    public ResourceLocation getAnimation() {
+    public List<ResourceLocation> getAnimation() {
         return animation;
     }
 

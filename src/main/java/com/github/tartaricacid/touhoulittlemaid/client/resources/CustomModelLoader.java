@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy.GSON;
 
@@ -65,13 +66,15 @@ public class CustomModelLoader {
                     // 尝试加载模型
                     EntityModelJson modelJson = loadModel(maidModelItem.getModel());
                     // 加载动画
-                    @Nullable Object animation = CustomJsAnimationManger.getCustomAnimation(maidModelItem.getAnimation());
+                    @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(maidModelItem);
                     if (modelJson != null) {
                         String id = maidModelItem.getModelId().toString();
                         // 如果加载的模型不为空
                         MAID_MODEL.putModel(id, modelJson);
                         MAID_MODEL.putInfo(id, maidModelItem);
-                        MAID_MODEL.putAnimation(id, animation);
+                        if (animations != null && animations.size() > 0) {
+                            MAID_MODEL.putAnimation(id, animations);
+                        }
                         // 打印日志
                         LOGGER.info(MARKER, "Loaded model: {}", maidModelItem.getModel());
                     }
@@ -107,13 +110,15 @@ public class CustomModelLoader {
                     // 尝试加载模型
                     EntityModelJson modelJson = loadModel(chairModelItem.getModel());
                     // 加载动画
-                    @Nullable Object animation = CustomJsAnimationManger.getCustomAnimation(chairModelItem.getAnimation());
+                    @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(chairModelItem);
                     if (modelJson != null) {
                         String id = chairModelItem.getModelId().toString();
                         // 如果加载的模型不为空
                         CHAIR_MODEL.putModel(id, modelJson);
                         CHAIR_MODEL.putInfo(id, chairModelItem);
-                        CHAIR_MODEL.putAnimation(id, animation);
+                        if (animations != null && animations.size() > 0) {
+                            CHAIR_MODEL.putAnimation(id, animations);
+                        }
                         // 打印日志
                         LOGGER.info(MARKER, "Loaded model: {}", chairModelItem.getModel());
                     }
