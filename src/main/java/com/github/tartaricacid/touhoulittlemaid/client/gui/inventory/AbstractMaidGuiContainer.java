@@ -54,6 +54,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     protected static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
     protected static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_side.png");
+    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_icon.png");
     private static ScheduledExecutorService timer;
     private static int taskPageIndex;
     protected MaidMainContainer container;
@@ -120,11 +121,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.buttonList.add(togglePickup);
 
         // 不同标签页切换按钮
-        this.buttonList.add(new GuiButtonImage(BUTTON.MAIN.ordinal(), i + 3, j - 25, 22,
+        this.buttonList.add(new GuiButtonImage(BUTTON.MAIN.ordinal(), i + 6, j - 25, 22,
                 22, 234, 234, 0, BACKGROUND));
-        this.buttonList.add(new GuiButtonImage(BUTTON.INVENTORY.ordinal(), i + 31, j - 25, 22,
+        this.buttonList.add(new GuiButtonImage(BUTTON.INVENTORY.ordinal(), i + 34, j - 25, 22,
                 22, 234, 234, 0, BACKGROUND));
-        this.buttonList.add(new GuiButtonImage(BUTTON.BAUBLE.ordinal(), i + 59, j - 25, 22,
+        this.buttonList.add(new GuiButtonImage(BUTTON.BAUBLE.ordinal(), i + 62, j - 25, 22,
                 22, 234, 234, 0, BACKGROUND));
 
         // 切换是否开启 home 模式的按钮
@@ -141,13 +142,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             this.buttonList.add(new GuiButtonImage(BUTTON.HATA_SASIMONO.ordinal(), i + 26, j + 9, 9,
                     9, 188, 72, 10, BACKGROUND));
         }
-
-        // 显示声音版权的页面
-        this.buttonList.add(new GuiButtonImage(BUTTON.SOUND_CREDIT.ordinal(), i + 3, j + 166, 21,
-                21, 233, 0, 24, BACKGROUND));
-        // 下载资源包按钮
-        this.buttonList.add(new GuiButtonImage(BUTTON.DOWNLOAD_RESOURCES.ordinal(), i + 24, j + 166, 21,
-                21, 233, 45, 24, BACKGROUND));
 
         // 模式翻页
         GuiButtonImage leftSwitch = new GuiButtonImage(BUTTON.TASK_LEFT_SWITCH.ordinal(), i - 70, j + 150, 7,
@@ -171,6 +165,15 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
                 this.buttonList.add(new GuiButtonImage(k + BUTTON.values().length, i - 70, j + 23 + 21 * k, 60,
                         20, 98, 20, 20, SIDE));
             }
+        }
+
+        // 显示声音版权的页面
+        this.buttonList.add(new GuiButton(BUTTON.SOUND_CREDIT.ordinal(), i + 5, j + 167, 20, 20, ""));
+        // 下载资源包按钮
+        this.buttonList.add(new GuiButton(BUTTON.DOWNLOAD_RESOURCES.ordinal(), i + 26, j + 167, 20, 20, ""));
+
+        for (int k = 0; k < 7; k++) {
+            this.buttonList.add(new GuiButton(405 + k, i + 26 + 21 * k, j + 167, 20, 20, ""));
         }
     }
 
@@ -290,8 +293,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             IMaidTask task = LittleMaidAPI.getTasks().get(k + taskPageIndex * 6);
             drawItemStack(task.getIcon(), i - 68, j + 25 + 21 * k);
             String name = I18n.format(task.getTranslationKey());
-            fontRenderer.drawString(name, i - 32 - fontRenderer.getStringWidth(name) / 2, j + 29 + 21 * k, 0xdddddd, false);
+            fontRenderer.drawString(name, i - 32 - fontRenderer.getStringWidth(name) / 2.0f, j + 29 + 21 * k, 0xdddddd, false);
         }
+
+        // 绘制下方按钮图标
+        mc.renderEngine.bindTexture(ICON);
+        drawModalRectWithCustomSizedTexture(i + 8, j + 170, 0, 0, 14, 14, 224, 224);
+        drawModalRectWithCustomSizedTexture(i + 29, j + 170, 14, 0, 14, 14, 224, 224);
 
         // 绘制女仆的药水效果
         int spacing = 0;
@@ -333,7 +341,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         // 绘制不同标签页的提示文字
         for (MaidGuiHandler.MAIN_GUI gui : MaidGuiHandler.MAIN_GUI.values()) {
-            xInRange = (i + 28 * (gui.getId() - 1)) < mouseX && mouseX < (i + 28 * gui.getId());
+            xInRange = (i + 3 + 28 * (gui.getId() - 1)) < mouseX && mouseX < (i + 3 + 28 * gui.getId());
             yInRange = (j - 28) < mouseY && mouseY < j;
             if (xInRange && yInRange) {
                 this.drawHoveringText(I18n.format("gui.touhou_little_maid.tab." + gui.name().toLowerCase(Locale.US)), mouseX, mouseY);
@@ -374,6 +382,20 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.hata_sasimono"), mouseX, mouseY);
         }
 
+        // 声音素材感谢描述
+        xInRange = (i + 3) < mouseX && mouseX < (i + 23);
+        yInRange = (j + 167) < mouseY && mouseY < (j + 187);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.sound_credit"), mouseX, mouseY);
+        }
+
+        // 自定义资源包下载
+        xInRange = (i + 24) < mouseX && mouseX < (i + 44);
+        yInRange = (j + 167) < mouseY && mouseY < (j + 187);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pack_download"), mouseX, mouseY);
+        }
+
         drawCustomTooltips(mouseX, mouseY, partialTicks);
 
         // 绘制物品的文本提示
@@ -391,7 +413,8 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 绘制选择图标背景
         GlStateManager.color(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(BACKGROUND);
-        this.drawTexturedModalRect(i, j - 28, 0, 193, 112, 32);
+        // this.drawTexturedModalRect(i, j - 28, 0, 193, 112, 32);
+        this.drawTexturedModalRect(i + 3, j - 28, 0, 193, 168, 32);
 
         // 绘制侧边栏
         mc.getTextureManager().bindTexture(SIDE);
@@ -406,13 +429,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         // 绘制选择图标前景
         mc.getTextureManager().bindTexture(BACKGROUND);
-        this.drawTexturedModalRect(i + 28 * (guiId - 1), j - 28, 28 * (guiId - 1), 224, 28, 32);
+        this.drawTexturedModalRect(i + 3 + 28 * (guiId - 1), j - 28, 28 * (guiId - 1), 224, 28, 32);
 
         // 绘制模式图标
-        this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 6, j - 19);
-        this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 34, j - 19);
-        this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 62, j - 19);
-        this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19);
+        this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 9, j - 19);
+        this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 37, j - 19);
+        this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 65, j - 19);
+        // this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19);
 
         // 绘制女仆
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 28,
@@ -514,16 +537,16 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     /**
      * 一个简单的打开连接的提示界面
      */
-    private class GuiSoundCredit extends GuiConfirmOpenLink {
+    private static class GuiSoundCredit extends GuiConfirmOpenLink {
         GuiSoundCredit(GuiYesNoCallback parentScreenIn) {
-            super(parentScreenIn, "https://www14.big.or.jp/~amiami/happy/index.html", BUTTON.SOUND_CREDIT.ordinal(), true);
+            super(parentScreenIn, I18n.format("gui.touhou_little_maid.credit.url"), BUTTON.SOUND_CREDIT.ordinal(), true);
         }
 
         @Override
         protected void actionPerformed(GuiButton button) {
             if (button.id == 0) {
                 try {
-                    super.openWebLink(new URI("https://www14.big.or.jp/~amiami/happy/index.html"));
+                    super.openWebLink(new URI(I18n.format("gui.touhou_little_maid.credit.url")));
                 } catch (URISyntaxException urisyntaxexception) {
                     TouhouLittleMaid.LOGGER.error("Can't open url for {}", urisyntaxexception);
                 }
