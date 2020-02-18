@@ -115,9 +115,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // 女仆物品栏界面
         INVENTORY(2),
         // 女仆饰品栏
-        BAUBLE(3),
+        BAUBLE(3);
         // 技能栏
-        SKILL(4);
+        // SKILL(4);
 
         private int id;
 

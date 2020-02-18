@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CubesItem {
     @SerializedName("uv")
-    private List<Integer> uv;
+    private List<Float> uv;
 
     @SerializedName("mirror")
     private boolean mirror;
@@ -20,7 +20,7 @@ public class CubesItem {
     @SerializedName("origin")
     private List<Float> origin;
 
-    public List<Integer> getUv() {
+    public List<Float> getUv() {
         return uv;
     }
 

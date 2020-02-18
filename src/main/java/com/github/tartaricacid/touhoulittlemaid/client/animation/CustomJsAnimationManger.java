@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation;
 
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelItem;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -16,12 +18,28 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 @SideOnly(Side.CLIENT)
 public class CustomJsAnimationManger {
     private static final Map<ResourceLocation, Object> CUSTOM_ANIMATION_MAP = Maps.newHashMap();
+
+    @Nullable
+    public static List<Object> getCustomAnimation(IModelItem item) {
+        List<Object> animations = Lists.newArrayList();
+        if (item.getAnimation() != null && item.getAnimation().size() > 0) {
+            for (ResourceLocation res : item.getAnimation()) {
+                Object animation = CustomJsAnimationManger.getCustomAnimation(res);
+                if (animation != null) {
+                    animations.add(animation);
+                }
+            }
+            return animations;
+        }
+        return null;
+    }
 
     @Nullable
     public static Object getCustomAnimation(@Nullable ResourceLocation resourceLocation) {

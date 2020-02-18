@@ -19,13 +19,13 @@ public class CustomMaidModelResources {
     private List<CustomModelPack<MaidModelItem>> packList;
     private HashMap<String, EntityModelJson> idModelMap;
     private HashMap<String, MaidModelItem> idInfoMap;
-    private HashMap<String, Object> idAnimationMap;
+    private HashMap<String, List<Object>> idAnimationMap;
     private HashMap<String, String> idDebugAnimationFile;
 
     public CustomMaidModelResources(String jsonFileName, List<CustomModelPack<MaidModelItem>> packList,
                                     HashMap<String, EntityModelJson> idToModel,
                                     HashMap<String, MaidModelItem> idToInfo,
-                                    HashMap<String, Object> idAnimationMap) {
+                                    HashMap<String, List<Object>> idAnimationMap) {
         this.jsonFileName = jsonFileName;
         this.packList = packList;
         this.idModelMap = idToModel;
@@ -65,7 +65,7 @@ public class CustomMaidModelResources {
         this.idInfoMap.put(modelId, maidModelItem);
     }
 
-    public void putAnimation(String modelId, Object animationJs) {
+    public void putAnimation(String modelId, List<Object> animationJs) {
         this.idAnimationMap.put(modelId, animationJs);
     }
 
@@ -93,7 +93,7 @@ public class CustomMaidModelResources {
         return 1.0f;
     }
 
-    public Optional<Object> getAnimation(String modelId) {
+    public Optional<List<Object>> getAnimation(String modelId) {
         return Optional.ofNullable(idAnimationMap.get(modelId));
     }
 

@@ -88,4 +88,8 @@ public class EntityMaidWrapper {
         }
         return new float[]{0, 0, 0};
     }
+
+    public int getDim() {
+        return maid.dimension;
+    }
 }

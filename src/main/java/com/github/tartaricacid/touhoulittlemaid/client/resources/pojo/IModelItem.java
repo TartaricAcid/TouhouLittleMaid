@@ -11,7 +11,7 @@ public interface IModelItem {
 
     ResourceLocation getModel();
 
-    ResourceLocation getAnimation();
+    List<ResourceLocation> getAnimation();
 
     ResourceLocation getTexture();
 
