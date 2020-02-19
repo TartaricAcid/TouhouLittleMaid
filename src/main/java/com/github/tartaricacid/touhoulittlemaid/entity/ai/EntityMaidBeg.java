@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.ObjectUtil;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -26,7 +27,8 @@ public class EntityMaidBeg extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         this.player = this.world.getClosestPlayerToEntity(this.entityMaid, this.maxPlayerDistance);
-        return !entityMaid.guiOpening && this.player != null && this.hasTemptationItemInHand(this.player);
+        return !entityMaid.guiOpening && this.player != null && this.hasTemptationItemInHand(this.player)
+                && !ObjectUtil.equalNotNull(player.getRidingEntity(), entityMaid.getControllingPassenger());
     }
 
     @Override
@@ -35,6 +37,12 @@ public class EntityMaidBeg extends EntityAIBase {
         if (entityMaid.guiOpening || !this.player.isEntityAlive()) {
             return false;
         }
+
+        // 玩家坐在女仆驾驶的载具上，不执行
+        if (ObjectUtil.equalNotNull(player.getRidingEntity(), entityMaid.getControllingPassenger())) {
+            return false;
+        }
+
         // 女仆大于最大吸引距离了，也不执行
         if (this.entityMaid.getDistance(this.player) > this.maxPlayerDistance) {
             return false;

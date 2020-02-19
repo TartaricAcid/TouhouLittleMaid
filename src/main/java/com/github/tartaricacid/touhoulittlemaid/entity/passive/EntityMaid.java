@@ -319,7 +319,7 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     /**
-     * 将贴近的扫把附加到女仆身上去
+     * 将贴近的实体附加到女仆身上去
      */
     private void applyEntityRiding() {
         // 取自原版船部分逻辑
@@ -335,9 +335,10 @@ public class EntityMaid extends AbstractEntityMaid {
             // 如果选择的实体不是已经坐上去的乘客
             if (!entity.isPassenger(this)) {
                 // 没有实体坐在女仆上，女仆也没有坐在别的实体上
-                boolean maidNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
-                // 服务端，女仆没有处于待命状态，而且尝试坐上去的实体是扫把
-                if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding &&
+                boolean maidNotRiddenAndRiding = !this.isBeingRidden() && !this.isRiding();
+                boolean passengerNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
+                // 服务端，女仆没有处于待命状态，而且尝试坐上去的实体是 IEntityRidingMaid
+                if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding && passengerNotRiddenAndRiding &&
                         entity instanceof IEntityRidingMaid && ((IEntityRidingMaid) entity).canRiding(this)) {
                     entity.startRiding(this);
                 }
@@ -346,7 +347,7 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     /**
-     * 与旋转有关系的一堆东西，用来控制扫帚朝向
+     * 与旋转有关系的一堆东西，用来控制 IEntityRidingMaid 朝向
      */
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
