@@ -55,6 +55,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     protected static final ResourceLocation BACKGROUND = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_side.png");
     private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/inventory_icon.png");
+    private static ItemStack BARRIER = new ItemStack(Blocks.BARRIER);
     private static ScheduledExecutorService timer;
     private static int taskPageIndex;
     protected MaidMainContainer container;
@@ -172,6 +173,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 下载资源包按钮
         this.buttonList.add(new GuiButton(BUTTON.DOWNLOAD_RESOURCES.ordinal(), i + 26, j + 167, 20, 20, ""));
 
+        // 占位按钮
         for (int k = 0; k < 7; k++) {
             this.buttonList.add(new GuiButton(405 + k, i + 26 + 21 * k, j + 167, 20, 20, ""));
         }
@@ -298,8 +300,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         // 绘制下方按钮图标
         mc.renderEngine.bindTexture(ICON);
-        drawModalRectWithCustomSizedTexture(i + 8, j + 170, 0, 0, 14, 14, 224, 224);
-        drawModalRectWithCustomSizedTexture(i + 29, j + 170, 14, 0, 14, 14, 224, 224);
+        drawModalRectWithCustomSizedTexture(i + 8, j + 170, 0, 0, 14, 14, 256, 256);
+        drawModalRectWithCustomSizedTexture(i + 29, j + 170, 14, 0, 14, 14, 256, 256);
+
+        // 占位按钮图标
+        for (int k = 0; k < 6; k++) {
+            drawItemStack(BARRIER, i + 49 + 21 * k, j + 169);
+        }
 
         // 绘制女仆的药水效果
         int spacing = 0;
@@ -413,7 +420,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 绘制选择图标背景
         GlStateManager.color(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(BACKGROUND);
-        // this.drawTexturedModalRect(i, j - 28, 0, 193, 112, 32);
         this.drawTexturedModalRect(i + 3, j - 28, 0, 193, 168, 32);
 
         // 绘制侧边栏
@@ -435,7 +441,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.drawItemStack(Items.WRITABLE_BOOK.getDefaultInstance(), i + 9, j - 19);
         this.drawItemStack(Item.getItemFromBlock(Blocks.CHEST).getDefaultInstance(), i + 37, j - 19);
         this.drawItemStack(new ItemStack(Items.DYE, 1, 4), i + 65, j - 19);
-        // this.drawItemStack(Items.DIAMOND_SWORD.getDefaultInstance(), i + 90, j - 19);
+        this.drawItemStack(BARRIER, i + 93, j - 19);
+        this.drawItemStack(BARRIER, i + 121, j - 19);
+        this.drawItemStack(BARRIER, i + 149, j - 19);
 
         // 绘制女仆
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 28,

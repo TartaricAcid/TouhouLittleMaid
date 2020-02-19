@@ -331,14 +331,12 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
                     middleX - 193, middleY + offSet, 0xffffff);
         }
 
-
         // 绘制日期信息
         if (pack.getDate() != null) {
             offSet += 10;
             drawCenteredString(fontRenderer, TextFormatting.GREEN + I18n.format("gui.touhou_little_maid.skin.text.date", pack.getDate()),
                     middleX - 193, middleY + offSet, 0xffffff);
         }
-
 
         // 绘制最后的翻页数
         drawCenteredString(fontRenderer, String.format("%s/%s", getPageIndex() + 1, guiNumber.getPageSize()), middleX, middleY - 120, 0xffffff);

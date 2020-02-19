@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.network;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.block.MaidBeaconGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.*;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.NpcMaidToolGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.NpcMaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
@@ -13,6 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -101,7 +102,11 @@ public class MaidGuiHandler implements IGuiHandler {
             return new SuitcaseGuiContainer(player.inventory, (EntitySuitcase) entity);
         }
         if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && entity instanceof EntityCustomNpc) {
-            return new NpcMaidToolGui((EntityCustomNpc) entity);
+            EntityCustomNpc npc = (EntityCustomNpc) entity;
+            EntityLivingBase entityInNpc = npc.modelData.getEntity(npc);
+            if (entityInNpc instanceof EntityMaid) {
+                return new NpcMaidSkinGui((EntityCustomNpc) entity, (EntityMaid) entityInNpc);
+            }
         }
         return null;
     }

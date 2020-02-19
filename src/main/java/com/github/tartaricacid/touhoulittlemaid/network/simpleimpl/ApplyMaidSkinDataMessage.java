@@ -29,18 +29,6 @@ public class ApplyMaidSkinDataMessage implements IMessage {
         this.modelId = modelId;
     }
 
-    private static void applyModelId(EntityMaid maid, String modelId) {
-        EntityLivingBase owner = maid.getOwner();
-        if (owner instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) owner;
-            if (player.isCreative() || !GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
-                maid.setModelId(modelId);
-            } else {
-                sendMessageToOwner(player);
-            }
-        }
-    }
-
     private static void sendMessageToOwner(EntityPlayer entityPlayer) {
         if (entityPlayer.isEntityAlive()) {
             entityPlayer.sendMessage(new TextComponentTranslation("message.touhou_little_maid.change_model.disabled"));
@@ -80,6 +68,18 @@ public class ApplyMaidSkinDataMessage implements IMessage {
                 });
             }
             return null;
+        }
+
+        private static void applyModelId(EntityMaid maid, String modelId) {
+            EntityLivingBase owner = maid.getOwner();
+            if (owner instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) owner;
+                if (player.isCreative() || !GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
+                    maid.setModelId(modelId);
+                } else {
+                    sendMessageToOwner(player);
+                }
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelItem> {
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomModelLoader.MAID_MODEL.getModelRenderItemScale(entity.getModelId());
-        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, (int) (45 * renderItemScale), middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entity);
+        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 90, (int) (45 * renderItemScale), middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entity);
     }
 
     @Override

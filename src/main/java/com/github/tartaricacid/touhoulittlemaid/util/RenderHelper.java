@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -96,5 +97,22 @@ public final class RenderHelper {
 
     public static void drawCircle(int x, int y, int r, int precision, int color) {
         drawSector(x, y, r, 0, 2 * Math.PI, precision, color);
+    }
+
+    public static void renderBackground(int x, int y, int width, int height) {
+        x = x - width;
+        y = y - height;
+        int backgroundColor = 0xF0100010;
+        int borderColorStart = 0x505000FF;
+        int borderColorEnd = 0x5028007f;
+        GuiUtils.drawGradientRect(300, x - 3, y - 4, x + width + 3, y - 3, backgroundColor, backgroundColor);
+        GuiUtils.drawGradientRect(300, x - 3, y + height + 3, x + width + 3, y + height + 4, backgroundColor, backgroundColor);
+        GuiUtils.drawGradientRect(300, x - 3, y - 3, x + width + 3, y + height + 3, backgroundColor, backgroundColor);
+        GuiUtils.drawGradientRect(300, x - 4, y - 3, x - 3, y + height + 3, backgroundColor, backgroundColor);
+        GuiUtils.drawGradientRect(300, x + width + 3, y - 3, x + width + 4, y + height + 3, backgroundColor, backgroundColor);
+        GuiUtils.drawGradientRect(300, x - 3, y - 3 + 1, x - 3 + 1, y + height + 3 - 1, borderColorStart, borderColorEnd);
+        GuiUtils.drawGradientRect(300, x + width + 2, y - 3 + 1, x + width + 3, y + height + 3 - 1, borderColorStart, borderColorEnd);
+        GuiUtils.drawGradientRect(300, x - 3, y - 3, x + width + 3, y - 3 + 1, borderColorStart, borderColorStart);
+        GuiUtils.drawGradientRect(300, x - 3, y + height + 2, x + width + 3, y + height + 3, borderColorEnd, borderColorEnd);
     }
 }

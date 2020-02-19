@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidModelCoupon;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,29 +49,12 @@ public class MaidRenderTooltipsEvent {
         }
     }
 
-    private static void onRenderBackground(int x, int y, int width, int height) {
-        x = x - width;
-        y = y - height;
-        int backgroundColor = 0xF0100010;
-        int borderColorStart = 0x505000FF;
-        int borderColorEnd = 0x5028007f;
-        GuiUtils.drawGradientRect(300, x - 3, y - 4, x + width + 3, y - 3, backgroundColor, backgroundColor);
-        GuiUtils.drawGradientRect(300, x - 3, y + height + 3, x + width + 3, y + height + 4, backgroundColor, backgroundColor);
-        GuiUtils.drawGradientRect(300, x - 3, y - 3, x + width + 3, y + height + 3, backgroundColor, backgroundColor);
-        GuiUtils.drawGradientRect(300, x - 4, y - 3, x - 3, y + height + 3, backgroundColor, backgroundColor);
-        GuiUtils.drawGradientRect(300, x + width + 3, y - 3, x + width + 4, y + height + 3, backgroundColor, backgroundColor);
-        GuiUtils.drawGradientRect(300, x - 3, y - 3 + 1, x - 3 + 1, y + height + 3 - 1, borderColorStart, borderColorEnd);
-        GuiUtils.drawGradientRect(300, x + width + 2, y - 3 + 1, x + width + 3, y + height + 3 - 1, borderColorStart, borderColorEnd);
-        GuiUtils.drawGradientRect(300, x - 3, y - 3, x + width + 3, y - 3 + 1, borderColorStart, borderColorStart);
-        GuiUtils.drawGradientRect(300, x - 3, y + height + 2, x + width + 3, y + height + 3, borderColorEnd, borderColorEnd);
-    }
-
     private static void onRenderMaidTooltips(String modelId, int x, int y, @Nullable NBTTagCompound compound) {
         x = x - 20;
         if (y < 65) {
             y = 65;
         }
-        onRenderBackground(x, y, 60, 60);
+        RenderHelper.renderBackground(x, y, 60, 60);
         World world = Minecraft.getMinecraft().world;
 
         GlStateManager.enableDepth();
