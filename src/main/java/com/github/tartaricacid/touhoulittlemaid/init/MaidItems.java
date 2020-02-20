@@ -39,6 +39,8 @@ public final class MaidItems {
     public static Item DROWN_PROTECT_BAUBLE;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "tombstone_bauble")
     public static Item TOMBSTONE_BAUBLE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "nimble_fabric")
+    public static Item NIMBLE_FABRIC;
 
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "marisa_broom")
     public static Item MARISA_BROOM;
@@ -134,6 +136,7 @@ public final class MaidItems {
         event.getRegistry().register(getDamageableBaubles(128, "magic_protect_bauble"));
         event.getRegistry().register(getDamageableBaubles(32, "fall_protect_bauble"));
         event.getRegistry().register(getDamageableBaubles(64, "drown_protect_bauble"));
+        event.getRegistry().register(getDamageableBaubles(64, "nimble_fabric"));
         event.getRegistry().register(getNormalBaubles("tombstone_bauble"));
 
         event.getRegistry().register(new ItemKappaCompass().setRegistryName("kappa_compass"));

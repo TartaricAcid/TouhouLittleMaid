@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.EntityDamageSourceDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,11 +15,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -111,17 +109,7 @@ public class EntityDanmaku extends EntityThrowable {
     private void applyNormalEntityHitLogic(@Nonnull RayTraceResult result) {
         // 投掷者不为空，也不为自己
         if (getThrower() != null && !result.entityHit.equals(this.thrower)) {
-            DamageSource source = new EntityDamageSource("magic", getThrower()) {
-                @Override
-                public ITextComponent getDeathMessage(EntityLivingBase victim) {
-                    int index = rand.nextInt(3) + 1;
-                    return new TextComponentTranslation(String.format("death.touhou_little_maid.attack.danmaku.%d", index),
-                            victim.getDisplayName(), getThrower().getDisplayName());
-                }
-            };
-            source.setDamageBypassesArmor();
-            source.setMagicDamage();
-            source.setProjectile();
+            DamageSource source = new EntityDamageSourceDanmaku(this, getThrower());
             result.entityHit.attackEntityFrom(source, this.getDamage());
             this.setDead();
         }
