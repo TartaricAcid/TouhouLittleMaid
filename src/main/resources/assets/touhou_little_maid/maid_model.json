@@ -302,6 +302,9 @@
         "touhou_little_maid:animation/maid.default.js",
         "touhou_little_maid:animation/hecatia.dimension.js"
       ]
+    }, {
+      "model_id": "touhou_little_maid:yumemi_okazaki",
+      "description": ["{model.touhou_little_maid.yumemi_okazaki.desc}"]
     }
   ]
 }

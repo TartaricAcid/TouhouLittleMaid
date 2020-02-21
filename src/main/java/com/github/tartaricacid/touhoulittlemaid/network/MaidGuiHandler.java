@@ -17,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import noppes.npcs.entity.EntityCustomNpc;
 
@@ -102,11 +103,17 @@ public class MaidGuiHandler implements IGuiHandler {
             return new SuitcaseGuiContainer(player.inventory, (EntitySuitcase) entity);
         }
         if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && entity instanceof EntityCustomNpc) {
-            EntityCustomNpc npc = (EntityCustomNpc) entity;
-            EntityLivingBase entityInNpc = npc.modelData.getEntity(npc);
-            if (entityInNpc instanceof EntityMaid) {
-                return new NpcMaidSkinGui((EntityCustomNpc) entity, (EntityMaid) entityInNpc);
-            }
+            return returnNpcClientGui(entity);
+        }
+        return null;
+    }
+
+    @Optional.Method(modid = "customnpcs")
+    private Object returnNpcClientGui(Entity entity) {
+        EntityCustomNpc npc = (EntityCustomNpc) entity;
+        EntityLivingBase entityInNpc = npc.modelData.getEntity(npc);
+        if (entityInNpc instanceof EntityMaid) {
+            return new NpcMaidSkinGui((EntityCustomNpc) entity, (EntityMaid) entityInNpc);
         }
         return null;
     }

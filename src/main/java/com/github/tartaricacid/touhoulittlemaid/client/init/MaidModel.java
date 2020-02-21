@@ -78,17 +78,16 @@ public final class MaidModel {
         registerRender(MaidItems.TROLLEY_AUDIO);
         registerRender(MaidItems.BOWL);
 
-        ModelResourceLocation maidModelCoupon1 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_1", "inventory");
-        ModelResourceLocation maidModelCoupon2 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_2", "inventory");
-        ModelResourceLocation maidModelCoupon3 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_3", "inventory");
-        ModelResourceLocation maidModelCoupon4 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_4", "inventory");
-        ModelResourceLocation maidModelCoupon5 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_5", "inventory");
+        ModelResourceLocation maidModelCoupon1 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_1");
+        ModelResourceLocation maidModelCoupon2 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_2");
+        ModelResourceLocation maidModelCoupon3 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_3");
+        ModelResourceLocation maidModelCoupon4 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_4");
+        ModelResourceLocation maidModelCoupon5 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_5");
         ModelBakery.registerItemVariants(MaidItems.MAID_MODEL_COUPON, maidModelCoupon1, maidModelCoupon2,
                 maidModelCoupon3, maidModelCoupon4, maidModelCoupon5);
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_MODEL_COUPON, stack -> {
             switch (stack.getMetadata()) {
                 default:
-                    return maidModelCoupon1;
                 case 1:
                     return maidModelCoupon1;
                 case 2:
@@ -102,17 +101,16 @@ public final class MaidModel {
             }
         });
 
-        ModelResourceLocation gashapon1 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_1", "inventory");
-        ModelResourceLocation gashapon2 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_2", "inventory");
-        ModelResourceLocation gashapon3 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_3", "inventory");
-        ModelResourceLocation gashapon4 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_4", "inventory");
-        ModelResourceLocation gashapon5 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_5", "inventory");
+        ModelResourceLocation gashapon1 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_1");
+        ModelResourceLocation gashapon2 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_2");
+        ModelResourceLocation gashapon3 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_3");
+        ModelResourceLocation gashapon4 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_4");
+        ModelResourceLocation gashapon5 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_5");
         ModelBakery.registerItemVariants(MaidItems.GASHAPON, gashapon1, gashapon2,
                 gashapon3, gashapon4, gashapon5);
         ModelLoader.setCustomMeshDefinition(MaidItems.GASHAPON, stack -> {
             switch (stack.getMetadata()) {
                 default:
-                    return gashapon1;
                 case 1:
                     return gashapon1;
                 case 2:
@@ -126,16 +124,14 @@ public final class MaidModel {
             }
         });
 
-        ModelResourceLocation maidBackPack1 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_1", "inventory");
-        ModelResourceLocation maidBackPack2 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_2", "inventory");
-        ModelResourceLocation maidBackPack3 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_3", "inventory");
+        ModelResourceLocation maidBackPack1 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_1");
+        ModelResourceLocation maidBackPack2 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_2");
+        ModelResourceLocation maidBackPack3 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_3");
         ModelBakery.registerItemVariants(MaidItems.MAID_BACKPACK, maidBackPack1, maidBackPack2, maidBackPack3);
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_BACKPACK, stack -> {
             switch (EntityMaid.EnumBackPackLevel.getEnumLevelByNum(stack.getMetadata())) {
                 default:
-                    return maidBackPack1;
                 case EMPTY:
-                    return maidBackPack1;
                 case SMALL:
                     return maidBackPack1;
                 case MIDDLE:
@@ -147,7 +143,7 @@ public final class MaidModel {
 
         List<ModelResourceLocation> maidVehicle = new ArrayList<>();
         for (EntityMaidVehicle.Type type : EntityMaidVehicle.Type.values()) {
-            maidVehicle.add(new ModelResourceLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, type.name().toLowerCase(Locale.US)), "inventory"));
+            maidVehicle.add(new ModelResourceLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, type.name().toLowerCase(Locale.US)), null));
         }
         ModelBakery.registerItemVariants(MaidItems.MAID_VEHICLE, maidVehicle.toArray(new ModelResourceLocation[]{}));
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_VEHICLE,

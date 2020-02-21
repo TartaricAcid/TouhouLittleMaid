@@ -404,6 +404,7 @@ model.touhou_little_maid.tsukumo_yatsuhashi.name=Yatsuhashi Tsukumo
 model.touhou_little_maid.tsukumo_benben.name=Benben Tsukumo
 model.touhou_little_maid.hecatia_lapislazuli.name=Hecatia Lapislazuli
 model.touhou_little_maid.miyoi_okunoda.name=Miyoi Okunoda
+model.touhou_little_maid.yumemi_okazaki.name=Yumemi Okazaki
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -498,6 +499,7 @@ model.touhou_little_maid.tsukumo_yatsuhashi.desc=§7Tsukumogami of an Aging Koto
 model.touhou_little_maid.tsukumo_benben.desc=§7Tsukumogami of an Aging Biwa
 model.touhou_little_maid.hecatia_lapislazuli.desc=§7Goddess of Hell
 model.touhou_little_maid.miyoi_okunoda.desc=§7The Poster Girl of Geidontei, the Fantasy Pub
+model.touhou_little_maid.yumemi_okazaki.desc=§7Fantasy Legend
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.class_desk.name=Class Desk
