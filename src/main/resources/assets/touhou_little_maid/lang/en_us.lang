@@ -294,6 +294,7 @@ gui.touhou_little_maid.resources_download.need_update=Need Update
 gui.touhou_little_maid.resources_download.author=Author: %s
 gui.touhou_little_maid.resources_download.author.delimiter=,
 gui.touhou_little_maid.resources_download.file_size=Size: %s
+gui.touhou_little_maid.resources_download.upload_time=Upload Time: %s
 gui.touhou_little_maid.resources_download.fail.1=There seems to be something wrong with the network...
 gui.touhou_little_maid.resources_download.fail.2=Please click on the top left button and wait a few seconds
 gui.touhou_little_maid.resources_download.reload=Reload

@@ -1,21 +1,27 @@
 package com.github.tartaricacid.touhoulittlemaid.client.download.pojo;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class DownloadInfo {
     private static final String[] UNITS = new String[]{"B", "kB", "MB", "GB", "TB"};
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private volatile DownloadStatus status = DownloadStatus.NOT_DOWNLOAD;
     private String formatFileSize = "";
 
+    @SerializedName("language")
+    private HashMap<String, HashMap<String, String>> language = Maps.newHashMap();
+
     @SerializedName("author")
     private List<String> author = Lists.newArrayList();
-
-    @SerializedName("history")
-    private List<Long> history = Lists.newArrayList();
 
     @SerializedName("file_name")
     private String fileName = "";
@@ -25,6 +31,9 @@ public class DownloadInfo {
 
     @SerializedName("checksum")
     private long checksum;
+
+    @SerializedName("upload_time")
+    private long uploadTime;
 
     @SerializedName("name")
     private String name = "";
@@ -37,6 +46,9 @@ public class DownloadInfo {
 
     @SerializedName("desc")
     private String desc = "";
+
+    @Expose(deserialize = false)
+    private String formatData;
 
     /**
      * 来自 https://stackoverflow.com/a/5599842
@@ -81,12 +93,16 @@ public class DownloadInfo {
         return desc;
     }
 
-    public List<Long> getHistory() {
-        return history;
+    public HashMap<String, String> getLanguage(String region) {
+        return language.get(region);
     }
 
     public DownloadStatus getStatus() {
         return status;
+    }
+
+    public String getFormatData() {
+        return formatData;
     }
 
     public void setStatus(DownloadStatus status) {
@@ -99,6 +115,7 @@ public class DownloadInfo {
 
     public DownloadInfo decorate() {
         this.formatFileSize = readableFileSize(getFileSize());
+        this.formatData = DATE_FORMAT.format(new Date(this.uploadTime));
         return this;
     }
 }

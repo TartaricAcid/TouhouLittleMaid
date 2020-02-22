@@ -64,7 +64,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        InfoGetManager.downloadAndReadInfoJsonFile();
+        InfoGetManager.checkInfoJsonFile();
         OBJLoader.INSTANCE.addDomain(TouhouLittleMaid.MOD_ID);
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
         RenderingRegistry.registerEntityRenderingHandler(EntityMaid.class, EntityMaidRender.FACTORY);

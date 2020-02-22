@@ -294,6 +294,7 @@ gui.touhou_little_maid.resources_download.need_update=需更新
 gui.touhou_little_maid.resources_download.author=作者：%s
 gui.touhou_little_maid.resources_download.author.delimiter=，
 gui.touhou_little_maid.resources_download.file_size=大小：%s
+gui.touhou_little_maid.resources_download.upload_time=上传时间：%s
 gui.touhou_little_maid.resources_download.fail.1=网络好像出了问题……
 gui.touhou_little_maid.resources_download.fail.2=请点击左上角按钮，并等待几秒钟
 gui.touhou_little_maid.resources_download.reload=重载

@@ -7,16 +7,30 @@ import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,18 +38,65 @@ import java.util.List;
  * @date 2020/1/12 15:32
  **/
 @SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public class InfoGetManager {
-    private static final String INFO_JSON_URL = "https://gitlab.com/TartaricAcid/download/raw/master/info.json";
+    private static final String ROOT_URL = "http://115.231.219.184:29432/";
+    private static final String INFO_JSON_URL = ROOT_URL + "info.json";
+    private static final String INFO_JSON_MD5_URL = ROOT_URL + "info.json.md5";
+
+    private static final Path ROOT_FOLDER = Paths.get(System.getProperty("user.home")).resolve("touhou_little_maid");
+    private static final Path INFO_JSON_FILE = ROOT_FOLDER.resolve("info.json");
+    private static final Path PACK_FOLDER = ROOT_FOLDER.resolve("file");
+
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST = Lists.newArrayList();
 
+    public static void checkInfoJsonFile() {
+        // 判定文件夹是否存在
+        if (!ROOT_FOLDER.toFile().isDirectory()) {
+            try {
+                Files.createDirectories(ROOT_FOLDER);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+                return;
+            }
+        }
+
+        // 检查文件是否存在
+        if (!INFO_JSON_FILE.toFile().isFile()) {
+            downloadAndReadInfoJsonFile();
+        } else {
+            try {
+                FileInputStream stream = new FileInputStream(INFO_JSON_FILE.toFile());
+                downloadAndReadInfoJsonFile(DigestUtils.md5Hex(stream));
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+    }
+
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
-    public static void downloadAndReadInfoJsonFile() {
+    private static void downloadAndReadInfoJsonFile() {
+        downloadAndReadInfoJsonFile(null);
+    }
+
+    private static void downloadAndReadInfoJsonFile(@Nullable String md5) {
         Thread thread = new Thread(() -> {
             try {
-                File file = Minecraft.getMinecraft().gameDir.toPath().resolve("resourcepacks").resolve("info.json").toFile();
-                TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
-                FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
-                TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
+                File file = INFO_JSON_FILE.toFile();
+                if (StringUtils.isNotBlank(md5)) {
+                    String md5Remote = IOUtils.toString(new URL(INFO_JSON_MD5_URL), StandardCharsets.UTF_8);
+                    if (md5Remote.equals(md5)) {
+                        TouhouLittleMaid.LOGGER.info("info.json file no update required");
+                    } else {
+                        TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
+                        FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
+                        TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
+                    }
+                } else {
+                    TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
+                    FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
+                    TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
+                }
                 DOWNLOAD_INFO_LIST = CommonProxy.GSON.fromJson(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8),
                         new TypeToken<List<DownloadInfo>>() {
                         }.getType());
@@ -47,16 +108,40 @@ public class InfoGetManager {
         thread.start();
     }
 
+    @SubscribeEvent
+    public static void onResourceReload(TextureStitchEvent.Post event) {
+        for (DownloadInfo info : DOWNLOAD_INFO_LIST) {
+            @Nonnull HashMap<String, String> langMap = info.getLanguage("en_us");
+            for (String key : langMap.keySet()) {
+                I18n.i18nLocale.properties.put(key, langMap.get(key));
+            }
+
+            String currentLanguage = Minecraft.getMinecraft().gameSettings.language;
+            @Nullable HashMap<String, String> currentLangMap = info.getLanguage(currentLanguage);
+            if (currentLangMap != null) {
+                for (String key : currentLangMap.keySet()) {
+                    I18n.i18nLocale.properties.put(key, currentLangMap.get(key));
+                }
+            }
+        }
+    }
+
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
     public static void downloadResourcesPack(DownloadInfo info) {
         Thread thread = new Thread(() -> {
             info.setStatus(DownloadStatus.DOWNLOADING);
             try {
-                URL url = new URL(info.getUrl());
-                File file = Minecraft.getMinecraft().gameDir.toPath().resolve("resourcepacks").resolve(info.getFileName()).toFile();
-                TouhouLittleMaid.LOGGER.info("Downloading {} file...", info.getFileName());
-                FileUtils.copyURLToFile(url, file, 60_000, 60_000);
-                TouhouLittleMaid.LOGGER.info("Downloaded {} file", info.getFileName());
+                URL url = new URL(new URL(ROOT_URL), info.getUrl());
+                File fileInMinecraft = Minecraft.getMinecraft().gameDir.toPath().resolve("resourcepacks").resolve(info.getFileName()).toFile();
+                File fileInCache = PACK_FOLDER.resolve(info.getFileName()).toFile();
+                if (!fileInCache.isFile() || FileUtils.checksumCRC32(fileInCache) != info.getChecksum()) {
+                    TouhouLittleMaid.LOGGER.info("Downloading {} file...", info.getFileName());
+                    FileUtils.copyURLToFile(url, fileInCache, 60_000, 60_000);
+                    TouhouLittleMaid.LOGGER.info("Downloaded {} file", info.getFileName());
+                } else {
+                    TouhouLittleMaid.LOGGER.info("file {} existed in cache folder", info.getFileName());
+                }
+                Files.copy(fileInCache.toPath(), fileInMinecraft.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 info.setStatus(DownloadStatus.DOWNLOADED);
             } catch (IOException e) {
                 info.setStatus(DownloadStatus.NOT_DOWNLOAD);
