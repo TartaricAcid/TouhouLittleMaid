@@ -157,6 +157,7 @@ config.touhou_little_maid.maid_config.owner_max_maid_num=可驯服的最大女�
 config.touhou_little_maid.vanilla_config=原版相关配置
 config.touhou_little_maid.vanilla_config.change_xp_texture=改变经验球材质
 config.touhou_little_maid.vanilla_config.change_slime_model=将史莱姆模型变为油库里
+config.touhou_little_maid.vanilla_config.change_totem_model=将图腾模型变为命点
 
 # Mob Config
 config.touhou_little_maid.mob_config=怪物设置

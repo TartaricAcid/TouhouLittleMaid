@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.danmaku;
 
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * @author TartaricAcid
@@ -60,12 +60,12 @@ public final class CustomSpellCardEntry {
         return cooldown;
     }
 
-    @Nullable
+    @Nonnull
     public ResourceLocation getIcon() {
         return icon;
     }
 
-    @Nullable
+    @Nonnull
     public ResourceLocation getSnapshoot() {
         return snapshoot;
     }

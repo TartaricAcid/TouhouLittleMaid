@@ -25,6 +25,7 @@ Java.asJSONCompatible({
     author: "snownee",
     version: "1.0.0",
     cooldown: 150,
+    icon: "touhou_little_maid:textures/items/spell_card/boundary_between_wave_and_particle_3d.png",
     /**
      * 执行的符卡逻辑，函数签名固定，会直接调用
      * @param world 当前所处的世界

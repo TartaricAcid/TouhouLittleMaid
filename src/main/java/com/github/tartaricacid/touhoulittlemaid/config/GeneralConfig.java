@@ -94,6 +94,11 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.vanilla_config.change_slime_model")
         @Config.Name("ChangeSlimeTexture")
         public boolean changeSlimeModel = false;
+
+        @Config.Comment("Whether to replace the vanilla totem model with the life point.")
+        @Config.LangKey("config.touhou_little_maid.vanilla_config.change_totem_model")
+        @Config.Name("ChangeTotemTexture")
+        public boolean changeTotemModel = false;
     }
 
     public static class MobConfig {

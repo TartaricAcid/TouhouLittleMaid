@@ -9,8 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
-import com.github.tartaricacid.touhoulittlemaid.danmaku.script.EntityLivingBaseWrapper;
-import com.github.tartaricacid.touhoulittlemaid.danmaku.script.WorldWrapper;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -40,9 +38,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.script.Invocable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 public class ItemHakureiGohei extends Item {
@@ -86,7 +84,7 @@ public class ItemHakureiGohei extends Item {
         if (!worldIn.isRemote && entityLiving instanceof EntityPlayer && !entityLiving.isSneaking()) {
             EntityPlayer player = (EntityPlayer) entityLiving;
             if (player.getHeldItemOffhand().getItem() == MaidItems.SPELL_CARD) {
-                spellCardShoot(worldIn, player);
+                spellCardShoot(player);
             } else {
                 normalShoot(stack, worldIn, player, timeLeft);
             }
@@ -95,17 +93,10 @@ public class ItemHakureiGohei extends Item {
         }
     }
 
-    private void spellCardShoot(World worldIn, EntityPlayer player) {
-        try {
-            CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand(), CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER);
-            if (entry == null) {
-                return;
-            }
-            Invocable invocable = (Invocable) CommonProxy.NASHORN;
-            invocable.invokeMethod(entry.getScript(), "spellCard", new WorldWrapper(worldIn), new EntityLivingBaseWrapper(player));
-            player.getCooldownTracker().setCooldown(this, entry.getCooldown());
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void spellCardShoot(EntityPlayer player) {
+        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand(), CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER);
+        if (ItemSpellCard.useSpellCard(player, entry)) {
+            player.getCooldownTracker().setCooldown(this, Objects.requireNonNull(entry).getCooldown());
         }
     }
 
@@ -118,7 +109,7 @@ public class ItemHakureiGohei extends Item {
         // 右键有效时长为 0-5 s
         // Power 有效范围 0-5
         // a = 右键时长增益（0-5）+ Power 数（0-5）
-        int a = (((500 - timeLeft) > 100 ? 100 : (500 - timeLeft)) / 20) + power;
+        int a = Math.min((500 - timeLeft), 100) / 20 + power;
         int damage = a + 4;
         float velocity = 0.2f * (a + 1);
         DanmakuColor color = DanmakuColor.getColor(RANDOM.nextInt(DanmakuColor.getLength() + 1));

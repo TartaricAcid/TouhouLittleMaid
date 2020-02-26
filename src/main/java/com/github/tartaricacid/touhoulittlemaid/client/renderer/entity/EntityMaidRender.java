@@ -54,19 +54,25 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
 
     @Override
     protected boolean canRenderName(EntityMaid entity) {
-        return Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() == MaidItems.KAPPA_COMPASS &&
-                entity.getOwnerId() != null && entity.getOwnerId().equals(Minecraft.getMinecraft().player.getUniqueID());
+        boolean hasCompass = Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() == MaidItems.KAPPA_COMPASS;
+        boolean isYourMaid = entity.getOwnerId() != null && entity.getOwnerId().equals(Minecraft.getMinecraft().player.getUniqueID());
+        return (hasCompass && isYourMaid) || super.canRenderName(entity);
     }
 
     @Override
-    protected void renderEntityName(@Nonnull EntityMaid entityIn, double x, double y, double z, String name, double distanceSq) {
+    protected void renderEntityName(@Nonnull EntityMaid entityIn, double x, double y, double z, @Nonnull String name, double distanceSq) {
+        boolean hasCompass = Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() == MaidItems.KAPPA_COMPASS;
         String str;
-        BlockPos pos = entityIn.getHomePos();
-        // 判断坐标是否为 0,0,0，显示不同的字符
-        if (pos.equals(BlockPos.ORIGIN)) {
-            str = I18n.format("info.touhou_little_maid.maid.unset_pos");
+        if (hasCompass) {
+            BlockPos pos = entityIn.getHomePos();
+            // 判断坐标是否为 0,0,0，显示不同的字符
+            if (pos.equals(BlockPos.ORIGIN)) {
+                str = I18n.format("info.touhou_little_maid.maid.unset_pos");
+            } else {
+                str = I18n.format("info.touhou_little_maid.maid.set_pos", pos.getX(), pos.getY(), pos.getZ());
+            }
         } else {
-            str = I18n.format("info.touhou_little_maid.maid.set_pos", pos.getX(), pos.getY(), pos.getZ());
+            str = name;
         }
         super.renderEntityName(entityIn, x, y, z, str, 16);
     }

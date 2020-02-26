@@ -7,7 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.EntityMaidFarm;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -26,7 +26,7 @@ public class TaskSnow implements IMaidTask {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(Blocks.SNOW_LAYER);
+        return new ItemStack(Items.SNOWBALL);
     }
 
     @Override

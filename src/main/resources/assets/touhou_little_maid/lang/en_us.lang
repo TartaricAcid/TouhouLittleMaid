@@ -157,6 +157,7 @@ config.touhou_little_maid.maid_config.owner_max_maid_num=Owner Max Maid Num
 config.touhou_little_maid.vanilla_config=Vanilla Config
 config.touhou_little_maid.vanilla_config.change_xp_texture=Change XP Orb Texture
 config.touhou_little_maid.vanilla_config.change_slime_model=Change Slime Model To Yukkuri
+config.touhou_little_maid.vanilla_config.change_totem_model=Change Totem Model To Life Point
 
 # Mob Config
 config.touhou_little_maid.mob_config=Mob Config

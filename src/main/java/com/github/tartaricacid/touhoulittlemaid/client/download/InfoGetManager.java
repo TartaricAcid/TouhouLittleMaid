@@ -40,7 +40,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public class InfoGetManager {
-    private static final String ROOT_URL = "http://115.231.219.184:29432/";
+    private static final String ROOT_URL = "http://tlm.cfpa.team:29432/";
     private static final String INFO_JSON_URL = ROOT_URL + "info.json";
     private static final String INFO_JSON_MD5_URL = ROOT_URL + "info.json.md5";
 

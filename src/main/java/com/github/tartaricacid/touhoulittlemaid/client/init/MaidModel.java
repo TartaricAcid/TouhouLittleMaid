@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.*;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidVehicle;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
@@ -11,8 +12,8 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -25,7 +26,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.ItemRenderRegisterUtils.*;
 
 /**
  * 这个类似乎名称容易产生误解，
@@ -45,9 +47,11 @@ public final class MaidModel {
         // Block Item
         Item.getItemFromBlock(MaidBlocks.GARAGE_KIT).setTileEntityItemStackRenderer(TileEntityItemStackGarageKitRenderer.INSTANCE);
         MaidItems.CHAIR.setTileEntityItemStackRenderer(TileEntityItemStackChairRenderer.INSTANCE);
-        registerRender(Item.getItemFromBlock(MaidBlocks.GARAGE_KIT));
-        registerRender(Item.getItemFromBlock(MaidBlocks.GRID));
-        registerRender(Item.getItemFromBlock(MaidBlocks.GASHAPON_MACHINES));
+        MaidItems.SPELL_CARD.setTileEntityItemStackRenderer(TileEntityItemStackSpellCardRenderer.INSTANCE);
+
+        registerRender(MaidBlocks.GARAGE_KIT);
+        registerRender(MaidBlocks.GRID);
+        registerRender(MaidBlocks.GASHAPON_MACHINES);
 
         // Item
         registerRender(MaidItems.ULTRAMARINE_ORB_ELIXIR);
@@ -60,12 +64,9 @@ public final class MaidModel {
         registerRender(MaidItems.TOMBSTONE_BAUBLE);
         registerRender(MaidItems.NIMBLE_FABRIC);
         registerRender(MaidItems.SUBSTITUTE_JIZO);
-        registerRender(MaidItems.MAID_BEACON);
 
         registerRender(MaidItems.KAPPA_COMPASS);
-        registerRender(MaidItems.HAKUREI_GOHEI);
         registerRender(MaidItems.MARISA_BROOM);
-        registerRender(MaidItems.CAMERA);
         registerRender(MaidItems.PHOTO);
         registerRender(MaidItems.CHAIR);
         registerRender(MaidItems.HATA_SASIMONO);
@@ -78,11 +79,20 @@ public final class MaidModel {
         registerRender(MaidItems.TROLLEY_AUDIO);
         registerRender(MaidItems.BOWL);
 
-        ModelResourceLocation maidModelCoupon1 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_1");
-        ModelResourceLocation maidModelCoupon2 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_2");
-        ModelResourceLocation maidModelCoupon3 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_3");
-        ModelResourceLocation maidModelCoupon4 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_4");
-        ModelResourceLocation maidModelCoupon5 = new ModelResourceLocation(MaidItems.MAID_MODEL_COUPON.getRegistryName() + "_5");
+        register2d3dRender(MaidItems.HAKUREI_GOHEI);
+        register2d3dRender(MaidItems.MAID_BEACON);
+        register2d3dRender(MaidItems.CAMERA);
+        registerReplaceRender(Items.TOTEM_OF_UNDYING,
+                new ModelResourceLocation("totem", "inventory"),
+                getModelRl(TouhouLittleMaid.MOD_ID, "life_point"),
+                () -> GeneralConfig.VANILLA_CONFIG.changeTotemModel
+        );
+
+        ModelResourceLocation maidModelCoupon1 = getModelRl(MaidItems.MAID_MODEL_COUPON, 1);
+        ModelResourceLocation maidModelCoupon2 = getModelRl(MaidItems.MAID_MODEL_COUPON, 2);
+        ModelResourceLocation maidModelCoupon3 = getModelRl(MaidItems.MAID_MODEL_COUPON, 3);
+        ModelResourceLocation maidModelCoupon4 = getModelRl(MaidItems.MAID_MODEL_COUPON, 4);
+        ModelResourceLocation maidModelCoupon5 = getModelRl(MaidItems.MAID_MODEL_COUPON, 5);
         ModelBakery.registerItemVariants(MaidItems.MAID_MODEL_COUPON, maidModelCoupon1, maidModelCoupon2,
                 maidModelCoupon3, maidModelCoupon4, maidModelCoupon5);
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_MODEL_COUPON, stack -> {
@@ -101,11 +111,11 @@ public final class MaidModel {
             }
         });
 
-        ModelResourceLocation gashapon1 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_1");
-        ModelResourceLocation gashapon2 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_2");
-        ModelResourceLocation gashapon3 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_3");
-        ModelResourceLocation gashapon4 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_4");
-        ModelResourceLocation gashapon5 = new ModelResourceLocation(MaidItems.GASHAPON.getRegistryName() + "_5");
+        ModelResourceLocation gashapon1 = getModelRl(MaidItems.GASHAPON, 1);
+        ModelResourceLocation gashapon2 = getModelRl(MaidItems.GASHAPON, 2);
+        ModelResourceLocation gashapon3 = getModelRl(MaidItems.GASHAPON, 3);
+        ModelResourceLocation gashapon4 = getModelRl(MaidItems.GASHAPON, 4);
+        ModelResourceLocation gashapon5 = getModelRl(MaidItems.GASHAPON, 5);
         ModelBakery.registerItemVariants(MaidItems.GASHAPON, gashapon1, gashapon2,
                 gashapon3, gashapon4, gashapon5);
         ModelLoader.setCustomMeshDefinition(MaidItems.GASHAPON, stack -> {
@@ -124,9 +134,9 @@ public final class MaidModel {
             }
         });
 
-        ModelResourceLocation maidBackPack1 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_1");
-        ModelResourceLocation maidBackPack2 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_2");
-        ModelResourceLocation maidBackPack3 = new ModelResourceLocation(MaidItems.MAID_BACKPACK.getRegistryName() + "_3");
+        ModelResourceLocation maidBackPack1 = getModelRl(MaidItems.MAID_BACKPACK, 1);
+        ModelResourceLocation maidBackPack2 = getModelRl(MaidItems.MAID_BACKPACK, 2);
+        ModelResourceLocation maidBackPack3 = getModelRl(MaidItems.MAID_BACKPACK, 3);
         ModelBakery.registerItemVariants(MaidItems.MAID_BACKPACK, maidBackPack1, maidBackPack2, maidBackPack3);
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_BACKPACK, stack -> {
             switch (EntityMaid.EnumBackPackLevel.getEnumLevelByNum(stack.getMetadata())) {
@@ -143,16 +153,10 @@ public final class MaidModel {
 
         List<ModelResourceLocation> maidVehicle = new ArrayList<>();
         for (EntityMaidVehicle.Type type : EntityMaidVehicle.Type.values()) {
-            maidVehicle.add(new ModelResourceLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, type.name().toLowerCase(Locale.US)), null));
+            maidVehicle.add(getModelRl(TouhouLittleMaid.MOD_ID, type.name().toLowerCase(Locale.US)));
         }
         ModelBakery.registerItemVariants(MaidItems.MAID_VEHICLE, maidVehicle.toArray(new ModelResourceLocation[]{}));
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_VEHICLE,
                 stack -> maidVehicle.get(MathHelper.clamp(stack.getMetadata(), 0, EntityMaidVehicle.Type.values().length - 1)));
-    }
-
-    private static void registerRender(Item item) {
-        ModelLoader.setCustomModelResourceLocation(item, 0,
-                new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()),
-                        "inventory"));
     }
 }

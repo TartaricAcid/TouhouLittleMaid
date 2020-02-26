@@ -62,6 +62,10 @@
       },
       "false": {}
     },
-    "inventory": [{}]
+    "inventory": [
+      {
+        "model": "touhou_little_maid:item/grid"
+      }
+    ]
   }
 }

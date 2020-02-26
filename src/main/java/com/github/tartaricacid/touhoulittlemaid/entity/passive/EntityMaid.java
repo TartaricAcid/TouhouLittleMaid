@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.*;
+import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
@@ -20,7 +21,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
@@ -40,9 +40,10 @@ import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.*;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -54,7 +55,6 @@ import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -63,6 +63,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -672,10 +673,11 @@ public class EntityMaid extends AbstractEntityMaid {
             boolean isYourMaid = this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID());
             ItemStack itemstack = player.getHeldItem(hand);
             if (isYourMaid) {
+                // 事件系统实现更清晰的交互
                 // 利用短路原理，逐个触发对应的交互事件
-                return writeHomePos(itemstack, player) || applyPotionEffect(itemstack, player) || applyGoldenApple(itemstack, player)
-                        || getExpBottle(itemstack, player) || dismountMaid(player) || switchSitting(player)
-                        || itemstack.interactWithEntity(player, this, EnumHand.MAIN_HAND) || openMaidGui(player);
+                return MinecraftForge.EVENT_BUS.post(new InteractMaidEvent(player, this, itemstack))
+                        || itemstack.interactWithEntity(player, this, EnumHand.MAIN_HAND)
+                        || openMaidGui(player);
             } else {
                 return tamedMaid(itemstack, player);
             }
@@ -707,133 +709,6 @@ public class EntityMaid extends AbstractEntityMaid {
             } else {
                 player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.owner_maid_num.can_not_add", num.get(), num.getMaxNum()));
             }
-        }
-        return false;
-    }
-
-    /**
-     * 对女仆应用坐标
-     *
-     * @return 该逻辑是否成功应用
-     */
-    private boolean writeHomePos(ItemStack itemstack, EntityPlayer player) {
-        if (itemstack.getItem() == MaidItems.KAPPA_COMPASS) {
-            BlockPos pos = ItemKappaCompass.getPos(itemstack);
-            if (pos != null) {
-                if (player.isSneaking()) {
-                    setHomePos(BlockPos.ORIGIN);
-                } else {
-                    this.setHomePos(pos);
-                    if (!world.isRemote) {
-                        // 如果尝试移动失败，那就尝试传送
-                        if (this.isSitting() || !getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
-                            attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-                        }
-                        player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_success"));
-                    }
-                }
-                return true;
-            }
-            if (!world.isRemote) {
-                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.write_fail"));
-            }
-        }
-        return false;
-    }
-
-    private boolean applyPotionEffect(ItemStack itemstack, EntityPlayer player) {
-        if (itemstack.getItem() == Items.POTIONITEM) {
-            if (player.capabilities.isCreativeMode) {
-                itemstack.getItem().onItemUseFinish(itemstack.copy(), world, this);
-            } else {
-                player.setHeldItem(EnumHand.MAIN_HAND, itemstack.getItem().onItemUseFinish(itemstack, world, this));
-            }
-            this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.6f, 0.8F + rand.nextFloat() * 0.4F);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean applyGoldenApple(ItemStack itemstack, EntityPlayer player) {
-        if (itemstack.getItem() == Items.GOLDEN_APPLE) {
-            if (!world.isRemote) {
-                // 作用效果
-                if (itemstack.getMetadata() > 0) {
-                    this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 400, 1));
-                    this.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 6000, 0));
-                    this.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 6000, 0));
-                    this.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 2400, 3));
-                } else {
-                    this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 1));
-                    this.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 2400, 0));
-                }
-            }
-
-            // 物品消耗判定
-            if (!player.capabilities.isCreativeMode) {
-                itemstack.shrink(1);
-            }
-
-            // 播放音效
-            this.playSound(SoundEvents.ENTITY_PLAYER_BURP, 0.5F, rand.nextFloat() * 0.1F + 0.9F);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean getExpBottle(ItemStack itemstack, EntityPlayer player) {
-        // WIKI 上说附魔之瓶会掉落 3-11 的经验
-        // 那么我们就让其消耗 12 点经验获得一个附魔之瓶吧
-        int costNum = 12;
-        if (itemstack.getItem() == Items.GLASS_BOTTLE && this.getExp() / costNum > 0) {
-            this.setExp(this.getExp() - costNum);
-            itemstack.shrink(1);
-            if (!world.isRemote) {
-                InventoryHelper.spawnItemStack(world, player.posX, player.posY, player.posZ, new ItemStack(Items.EXPERIENCE_BOTTLE));
-            }
-            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 解除女仆的所有骑乘，被骑乘状态
-     */
-    private boolean dismountMaid(EntityPlayer player) {
-        if (player.isSneaking()) {
-            // 满足其一，返回 true
-            if (this.getRidingEntity() != null || this.getControllingPassenger() != null) {
-                // 取消骑乘状态
-                if (this.getRidingEntity() != null) {
-                    this.dismountRidingEntity();
-                }
-                // 取消被骑乘状态
-                if (this.getControllingPassenger() != null) {
-                    this.getControllingPassenger().dismountRidingEntity();
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 切换待命状态
-     */
-    private boolean switchSitting(EntityPlayer player) {
-        if (player.isSneaking()) {
-            this.setSitting(!this.isSitting());
-            if (this.isSitting()) {
-                // 清除寻路逻辑
-                this.getNavigator().clearPath();
-                // 清除所有的攻击目标
-                this.setAttackTarget(null);
-                this.setRevengeTarget(null);
-            }
-            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
-                    ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            return true;
         }
         return false;
     }
@@ -1310,14 +1185,17 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(TASK, task.getUid().toString());
     }
 
+    @Override
     public int getExp() {
         return this.dataManager.get(EXP);
     }
 
+    @Override
     public void setExp(int expIn) {
         this.dataManager.set(EXP, expIn);
     }
 
+    @Override
     public void addExp(int expIn) {
         setExp(getExp() + expIn);
     }
@@ -1326,6 +1204,7 @@ public class EntityMaid extends AbstractEntityMaid {
         return this.dataManager.get(HOME_POS);
     }
 
+    @Override
     public void setHomePos(BlockPos home) {
         this.dataManager.set(HOME_POS, home);
     }

@@ -2,12 +2,15 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.script.EntityLivingBaseWrapper;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.script.WorldWrapper;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.script.Invocable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +39,28 @@ public class ItemSpellCard extends Item {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".spell_card");
         setMaxStackSize(1);
         setCreativeTab(MaidItems.SPELL_CARD_TABS);
+    }
+
+    /**
+     * 使用符卡
+     *
+     * @param user  使用者
+     * @param entry 具体的符卡条目
+     * @return 是否使用成功
+     */
+    public static boolean useSpellCard(EntityLivingBase user, CustomSpellCardEntry entry) {
+        try {
+            if (entry == null) {
+                return false;
+            }
+            Invocable invocable = (Invocable) CommonProxy.NASHORN;
+            invocable.invokeMethod(entry.getScript(), "spellCard",
+                    new WorldWrapper(user.getEntityWorld()), new EntityLivingBaseWrapper(user));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @SuppressWarnings("all")
@@ -78,8 +104,9 @@ public class ItemSpellCard extends Item {
         }
     }
 
+    @Nonnull
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
+    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
         Map<String, CustomSpellCardEntry> map = FMLCommonHandler.instance().getSide().isClient() ? ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT : CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
         CustomSpellCardEntry entry = getCustomSpellCardEntry(stack, map);
         if (entry == null) {

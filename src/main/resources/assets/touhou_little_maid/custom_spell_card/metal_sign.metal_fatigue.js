@@ -14,6 +14,8 @@ Java.asJSONCompatible({
     version: "1.0.0",
     // 冷却时间，整型数
     cooldown: 170,
+    // 符卡图标
+    icon: "touhou_little_maid:textures/items/spell_card/metal_fatigue.png",
     /**
      * 执行的符卡逻辑，函数签名固定，会直接调用
      * @param world 当前所处的世界
