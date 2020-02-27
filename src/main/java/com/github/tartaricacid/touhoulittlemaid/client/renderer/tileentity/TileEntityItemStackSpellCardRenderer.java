@@ -22,7 +22,7 @@ public class TileEntityItemStackSpellCardRenderer extends TileEntityItemStackRen
 
     @Override
     public void renderByItem(@Nullable ItemStack itemStackIn) {
-        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(itemStackIn);
+         CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(itemStackIn, Minecraft.getMinecraft().player);
         if (entry != null) {
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();

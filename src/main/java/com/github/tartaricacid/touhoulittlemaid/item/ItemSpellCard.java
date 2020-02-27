@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.danmaku.script.EntityLivingBaseW
 import com.github.tartaricacid.touhoulittlemaid.danmaku.script.WorldWrapper;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -78,8 +79,13 @@ public class ItemSpellCard extends Item {
 
     @Nullable
     @SuppressWarnings("all")
-    public static CustomSpellCardEntry getCustomSpellCardEntry(ItemStack spellCard) {
-        Map<String, CustomSpellCardEntry> map = TouhouLittleMaid.PROXY.getSpellCard();
+    public static CustomSpellCardEntry getCustomSpellCardEntry(ItemStack spellCard, @Nullable EntityLivingBase user) {
+        Map<String, CustomSpellCardEntry> map;
+        if (user != null && user.world.isRemote) {
+            map = TouhouLittleMaid.PROXY.getSpellCard();
+        } else {
+            map = CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
+        }
         if (map.isEmpty()) {
             return null;
         }
@@ -106,7 +112,7 @@ public class ItemSpellCard extends Item {
     @Nonnull
     @Override
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
-        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack);
+        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack, null);
         if (entry == null) {
             return "";
         }
@@ -116,7 +122,7 @@ public class ItemSpellCard extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack);
+        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack, Minecraft.getMinecraft().player);
         if (entry == null) {
             return;
         }

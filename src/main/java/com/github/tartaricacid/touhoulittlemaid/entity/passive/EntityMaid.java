@@ -113,6 +113,12 @@ public class EntityMaid extends AbstractEntityMaid {
      * 玩家伤害女仆后的声音延时计数器
      */
     private static int playerHurtSoundCount = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
+
+    /**
+     * 冷却时间计数器
+     */
+    private final CooldownTracker cooldownTracker = new CooldownTracker();
+
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this) {
         @Override
@@ -243,6 +249,8 @@ public class EntityMaid extends AbstractEntityMaid {
         super.onLivingUpdate();
         applyEntityRiding();
         applyNavigatorAndMoveHelper();
+        // 计数器 tick
+        cooldownTracker.tick();
     }
 
     private void spawnPortalParticle() {
@@ -1258,6 +1266,11 @@ public class EntityMaid extends AbstractEntityMaid {
 
     public EnumBackPackLevel getBackLevel() {
         return EnumBackPackLevel.getEnumLevelByNum(this.dataManager.get(BACKPACK_LEVEL));
+    }
+
+    @Override
+    public CooldownTracker getCooldownTracker() {
+        return cooldownTracker;
     }
 
     @Override

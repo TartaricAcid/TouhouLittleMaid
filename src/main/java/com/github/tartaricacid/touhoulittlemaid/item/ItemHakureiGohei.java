@@ -93,7 +93,7 @@ public class ItemHakureiGohei extends Item {
     }
 
     private void spellCardShoot(EntityPlayer player) {
-        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand());
+        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand(), player);
         if (ItemSpellCard.useSpellCard(player, entry)) {
             player.getCooldownTracker().setCooldown(this, Objects.requireNonNull(entry).getCooldown());
         }
