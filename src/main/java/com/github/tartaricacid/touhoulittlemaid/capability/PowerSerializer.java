@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
  * @author TartaricAcid
  * @date 2019/8/28 16:34
  **/
-public class CapabilityPowerHandler implements ICapabilitySerializable<NBTBase> {
+public class PowerSerializer implements ICapabilitySerializable<NBTBase> {
     @CapabilityInject(PowerHandler.class)
     public static Capability<PowerHandler> POWER_CAP = null;
     private PowerHandler instance = POWER_CAP.getDefaultInstance();

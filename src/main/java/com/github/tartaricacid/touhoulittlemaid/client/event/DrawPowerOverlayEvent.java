@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.client.Minecraft;
@@ -30,7 +30,7 @@ public class DrawPowerOverlayEvent {
     public static void onRenderOverlay(RenderGameOverlayEvent event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
             ItemStack stack = Minecraft.getMinecraft().player.getHeldItemMainhand();
-            PowerHandler powerHandler = Minecraft.getMinecraft().player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+            PowerHandler powerHandler = Minecraft.getMinecraft().player.getCapability(PowerSerializer.POWER_CAP, null);
             if (stack.getItem() == MaidItems.HAKUREI_GOHEI && powerHandler != null) {
                 int x = (int) (GeneralConfig.MISC_CONFIG.PowerPointHudX * Minecraft.getMinecraft().displayWidth);
                 int y = (int) (GeneralConfig.MISC_CONFIG.PowerPointHudY * Minecraft.getMinecraft().displayHeight);

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +49,7 @@ public class SyncPowerMessage implements IMessage {
                     if (player == null) {
                         return;
                     }
-                    PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+                    PowerHandler power = player.getCapability(PowerSerializer.POWER_CAP, null);
                     if (power != null) {
                         power.set(message.getPower());
                     }

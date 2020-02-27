@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumSerializer;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -81,7 +81,7 @@ public class MainCommand extends CommandBase {
 
     private void commandPower(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayer player = getPlayer(server, sender, args[2]);
-        PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+        PowerHandler power = player.getCapability(PowerSerializer.POWER_CAP, null);
         float num = (args.length >= 4) ? (float) parseDouble(args[3]) : 1;
         if (power == null) {
             return;
@@ -110,7 +110,7 @@ public class MainCommand extends CommandBase {
 
     private void commandMaidNum(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayer player = getPlayer(server, sender, args[2]);
-        OwnerMaidNumHandler numHandler = player.getCapability(CapabilityOwnerMaidNumHandler.OWNER_MAID_NUM_CAP, null);
+        MaidNumHandler numHandler = player.getCapability(MaidNumSerializer.MAID_NUM_CAP, null);
         int num = (args.length >= 4) ? parseInt(args[3]) : 1;
         if (numHandler == null) {
             return;

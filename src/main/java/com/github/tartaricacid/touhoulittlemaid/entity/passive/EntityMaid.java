@@ -5,8 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.*;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumSerializer;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
@@ -17,7 +17,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryItemHandler;
@@ -43,7 +42,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -244,7 +242,6 @@ public class EntityMaid extends AbstractEntityMaid {
         this.randomRestoreHealth();
         super.onLivingUpdate();
         applyEntityRiding();
-        checkMaidRidingPlayer();
         applyNavigatorAndMoveHelper();
     }
 
@@ -695,7 +692,7 @@ public class EntityMaid extends AbstractEntityMaid {
         boolean isReloadTamedCondition = itemstack.getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_VOID);
         boolean isNormalTamedCondition = !this.isTamed() && itemstack.getItem() == tamedItem;
         boolean isTamedCondition = isReloadTamedCondition || isNormalTamedCondition;
-        OwnerMaidNumHandler num = player.getCapability(CapabilityOwnerMaidNumHandler.OWNER_MAID_NUM_CAP, null);
+        MaidNumHandler num = player.getCapability(MaidNumSerializer.MAID_NUM_CAP, null);
         if (!world.isRemote && isTamedCondition && num != null) {
             if (num.canAdd()) {
                 consumeItemFromStack(player, itemstack);
@@ -811,18 +808,6 @@ public class EntityMaid extends AbstractEntityMaid {
                 }
             }
             return super.getName();
-        }
-    }
-
-    private void checkMaidRidingPlayer() {
-        // 每秒检查一次
-        if (this.ticksExisted % 20 == 0) {
-            if (this.getRidingEntity() instanceof EntityPlayer) {
-                ItemStack head = ((EntityPlayer) this.getRidingEntity()).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-                if (head.getItem() != MaidItems.BOWL) {
-                    this.dismountRidingEntity();
-                }
-            }
         }
     }
 

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.BeaconAbsorbMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.block.material.Material;
@@ -264,7 +264,7 @@ public class EntityPowerPoint extends Entity {
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer player) {
         if (!this.world.isRemote) {
-            PowerHandler power = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+            PowerHandler power = player.getCapability(PowerSerializer.POWER_CAP, null);
             if (this.delayBeforeCanPickup == 0 && player.xpCooldown == 0 && power != null) {
                 player.xpCooldown = 2;
                 this.onPickup(player, 1);

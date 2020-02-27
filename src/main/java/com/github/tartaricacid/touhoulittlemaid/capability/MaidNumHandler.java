@@ -9,8 +9,8 @@ import java.util.concurrent.Callable;
  * @author TartaricAcid
  * @date 2019/12/2 13:13
  **/
-public class OwnerMaidNumHandler {
-    static OwnerMaidNumHandler.Factory FACTORY = new OwnerMaidNumHandler.Factory();
+public class MaidNumHandler {
+    static MaidNumHandler.Factory FACTORY = new MaidNumHandler.Factory();
     private int num = 0;
     private boolean dirty;
 
@@ -65,10 +65,10 @@ public class OwnerMaidNumHandler {
         this.dirty = dirty;
     }
 
-    private static class Factory implements Callable<OwnerMaidNumHandler> {
+    private static class Factory implements Callable<MaidNumHandler> {
         @Override
-        public OwnerMaidNumHandler call() {
-            return new OwnerMaidNumHandler();
+        public MaidNumHandler call() {
+            return new MaidNumHandler();
         }
     }
 }

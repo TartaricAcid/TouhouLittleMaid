@@ -78,8 +78,6 @@ public final class MaidItems {
     public static Item TROLLEY_AUDIO;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "maid_vehicle")
     public static Item MAID_VEHICLE;
-    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "bowl")
-    public static Item BOWL;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -158,7 +156,6 @@ public final class MaidItems {
         event.getRegistry().register(new ItemMaidBackpack().setRegistryName("maid_backpack"));
         event.getRegistry().register(new ItemSuitcase().setRegistryName("suitcase"));
         event.getRegistry().register(new ItemTrolleyAudio().setRegistryName("trolley_audio"));
-        event.getRegistry().register(new ItemBowl().setRegistryName("bowl"));
 
         event.getRegistry().register(new ItemMaidVehicle().setRegistryName("maid_vehicle"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));

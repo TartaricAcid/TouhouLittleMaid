@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -105,7 +105,7 @@ public class BlockAltar extends Block {
         }
         if (!inputStackList.isEmpty()) {
             AltarRecipe altarRecipe = AltarRecipesManager.instance().getMatchRecipe(inputStackList);
-            PowerHandler power = playerIn.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+            PowerHandler power = playerIn.getCapability(PowerSerializer.POWER_CAP, null);
             if (altarRecipe != null && power != null) {
                 spawnResultEntity(world, playerIn, power, altarRecipe, inputStackList, altar);
             }

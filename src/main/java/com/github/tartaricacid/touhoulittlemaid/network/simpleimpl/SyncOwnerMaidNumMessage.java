@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityOwnerMaidNumHandler;
-import com.github.tartaricacid.touhoulittlemaid.capability.OwnerMaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumSerializer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +49,7 @@ public class SyncOwnerMaidNumMessage implements IMessage {
                     if (player == null) {
                         return;
                     }
-                    OwnerMaidNumHandler num = player.getCapability(CapabilityOwnerMaidNumHandler.OWNER_MAID_NUM_CAP, null);
+                    MaidNumHandler num = player.getCapability(MaidNumSerializer.MAID_NUM_CAP, null);
                     if (num != null) {
                         num.set(message.getNum());
                     }

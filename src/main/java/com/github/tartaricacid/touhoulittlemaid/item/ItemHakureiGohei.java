@@ -4,8 +4,8 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
@@ -101,7 +101,7 @@ public class ItemHakureiGohei extends Item {
 
     private void normalShoot(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft) {
         Vec3d v = player.getLookVec();
-        PowerHandler powerHandler = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+        PowerHandler powerHandler = player.getCapability(PowerSerializer.POWER_CAP, null);
         int power = powerHandler == null ? 0 : MathHelper.floor(powerHandler.get());
 
         // 依据右键时长，Power 数来决定伤害和发射速度

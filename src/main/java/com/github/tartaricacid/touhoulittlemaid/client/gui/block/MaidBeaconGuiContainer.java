@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidBeaconContainer;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SetBeaconPotionMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.StorageAndTakePowerMessage;
@@ -85,7 +85,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
         mc.getTextureManager().bindTexture(BG);
         this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, 256, 105);
 
-        PowerHandler powerHandler = Minecraft.getMinecraft().player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+        PowerHandler powerHandler = Minecraft.getMinecraft().player.getCapability(PowerSerializer.POWER_CAP, null);
         if (powerHandler != null) {
             drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.maid_beacon.player_power",
                     DECIMAL_FORMAT.format(powerHandler.get())), guiLeft + 198, guiTop + 10 + 2, 0xffffff);
@@ -104,7 +104,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        PowerHandler powerHandler = Minecraft.getMinecraft().player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+        PowerHandler powerHandler = Minecraft.getMinecraft().player.getCapability(PowerSerializer.POWER_CAP, null);
         if (powerHandler == null) {
             return;
         }

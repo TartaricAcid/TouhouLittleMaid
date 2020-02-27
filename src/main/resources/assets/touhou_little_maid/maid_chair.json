@@ -115,6 +115,10 @@
       "model_id": "touhou_little_maid:moto",
       "mounted_height": 11,
       "render_item_scale": 0.7
+    }, {
+      "model_id": "touhou_little_maid:bowl",
+      "texture": "touhou_little_maid:textures/entity/sukuna_shinmyoumaru.png",
+      "mounted_height": 2
     }
   ]
 }

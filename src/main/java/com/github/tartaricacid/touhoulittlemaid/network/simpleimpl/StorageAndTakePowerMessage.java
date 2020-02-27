@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.CapabilityPowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -34,7 +34,7 @@ public class StorageAndTakePowerMessage implements IMessage {
     }
 
     private static void onStorageAndTake(TileEntityMaidBeacon beacon, EntityPlayer player, float powerNum, boolean isStorage) {
-        PowerHandler powerHandler = player.getCapability(CapabilityPowerHandler.POWER_CAP, null);
+        PowerHandler powerHandler = player.getCapability(PowerSerializer.POWER_CAP, null);
         if (powerHandler != null) {
             if (isStorage) {
                 storageLogic(powerNum, powerHandler, beacon);

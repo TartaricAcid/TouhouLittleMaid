@@ -77,7 +77,6 @@ public final class MaidModel {
         registerRender(MaidItems.GASHAPON_COIN);
         registerRender(MaidItems.SUITCASE);
         registerRender(MaidItems.TROLLEY_AUDIO);
-        registerRender(MaidItems.BOWL);
 
         register2d3dRender(MaidItems.HAKUREI_GOHEI);
         register2d3dRender(MaidItems.MAID_BEACON);

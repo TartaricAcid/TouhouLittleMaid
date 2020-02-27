@@ -51,7 +51,6 @@ item.touhou_little_maid.trolley_audio.name=Trolley Audio
 item.touhou_little_maid.cat_cart.name=Cat Cart
 item.touhou_little_maid.wheel_chair.name=Wheel Chair
 item.touhou_little_maid.rickshaw.name=Rickshaw
-item.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -526,6 +525,7 @@ model.touhou_little_maid.anti_collision_bucket.name=Anti-collision Bucket
 model.touhou_little_maid.park_bench.name=Park Bench
 model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
 model.touhou_little_maid.moto.name=Moto
+model.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"

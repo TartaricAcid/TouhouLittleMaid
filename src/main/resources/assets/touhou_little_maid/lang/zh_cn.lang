@@ -51,7 +51,6 @@ item.touhou_little_maid.trolley_audio.name=便携式音响
 item.touhou_little_maid.cat_cart.name=猫车
 item.touhou_little_maid.wheel_chair.name=轮椅
 item.touhou_little_maid.rickshaw.name=黄包车
-item.touhou_little_maid.bowl.name=针妙丸的碗
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -525,6 +524,7 @@ model.touhou_little_maid.anti_collision_bucket.name=防撞桶
 model.touhou_little_maid.park_bench.name=公园长椅
 model.touhou_little_maid.rinnosuke_children_toys.name=霖之助牌儿童摇摇乐
 model.touhou_little_maid.moto.name=摩托车
+model.touhou_little_maid.bowl.name=针妙丸的碗
 
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=夜符「Night Bird」
