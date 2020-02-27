@@ -17,7 +17,6 @@ entity.touhou_little_maid.suitcase.name=Suitcase
 entity.touhou_little_maid.backpack.name=Backpack
 entity.touhou_little_maid.trolley_audio.name=Trolley Audio
 entity.touhou_little_maid.maid_vehicle.name=Maid Vehicle
-entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=Store Owner Of Kourindou
 
 # Item
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass

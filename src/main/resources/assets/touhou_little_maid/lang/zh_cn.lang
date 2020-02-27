@@ -17,7 +17,6 @@ entity.touhou_little_maid.suitcase.name=拉杆箱
 entity.touhou_little_maid.backpack.name=背包
 entity.touhou_little_maid.trolley_audio.name=便携式音响
 entity.touhou_little_maid.maid_vehicle.name=女仆载具
-entity.Villager.touhou_little_maid.store_owner_of_kourindou.name=香霖堂店主
 
 # Item
 item.touhou_little_maid.kappa_compass.name=河童的罗盘

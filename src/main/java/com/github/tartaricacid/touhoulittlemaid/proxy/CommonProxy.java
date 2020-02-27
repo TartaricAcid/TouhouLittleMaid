@@ -16,8 +16,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.crafttweaker.AltarZen;
 import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
-import com.github.tartaricacid.touhoulittlemaid.config.VillageTradeConfig;
-import com.github.tartaricacid.touhoulittlemaid.config.pojo.VillageTradePOJO;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
@@ -35,7 +33,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.Effect
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ServerEffectHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -60,11 +57,9 @@ import org.apache.commons.io.IOUtils;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
@@ -82,7 +77,6 @@ public class CommonProxy {
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
     public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_SERVER = Maps.newHashMap();
-    public static final List<VillageTradePOJO> VILLAGE_TRADE = Lists.newArrayList();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
 
@@ -91,8 +85,6 @@ public class CommonProxy {
     }
 
     public void preInit(FMLPreInitializationEvent event) {
-        // 获取村民交易的配置
-        initTradeList();
         // 初始化默认模型列表
         initModelList();
         // 初始化抽卡概率表
@@ -182,23 +174,6 @@ public class CommonProxy {
         event.registerServerCommand(new MainCommand());
         event.registerServerCommand(new ReloadSpellCardCommand());
         event.registerServerCommand(new ReloadDrawCommand());
-    }
-
-    /**
-     * 初始化默认的交易列表
-     */
-    private void initTradeList() {
-        InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/touhou_little_maid/village/village_trade.json");
-        if (input != null) {
-            try {
-                // 将其转换为 pojo 对象
-                VILLAGE_TRADE.addAll(VillageTradeConfig.getPOJO(input));
-            } catch (IOException e) {
-                TouhouLittleMaid.LOGGER.warn("Fail to parse village trade config file");
-            }
-        }
-        // 别忘了关闭输入流
-        IOUtils.closeQuietly(input);
     }
 
     /**
