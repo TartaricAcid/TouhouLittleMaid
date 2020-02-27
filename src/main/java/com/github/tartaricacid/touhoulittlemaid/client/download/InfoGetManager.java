@@ -38,7 +38,7 @@ import java.util.List;
  * @date 2020/1/12 15:32
  **/
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
+@Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
 public class InfoGetManager {
     private static final String ROOT_URL = "http://tlm.cfpa.team:29432/";
     private static final String INFO_JSON_URL = ROOT_URL + "info.json";

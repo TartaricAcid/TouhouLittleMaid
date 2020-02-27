@@ -11,7 +11,6 @@ import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -94,7 +93,7 @@ public class ItemHakureiGohei extends Item {
     }
 
     private void spellCardShoot(EntityPlayer player) {
-        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand(), CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER);
+        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(player.getHeldItemOffhand());
         if (ItemSpellCard.useSpellCard(player, entry)) {
             player.getCooldownTracker().setCooldown(this, Objects.requireNonNull(entry).getCooldown());
         }

@@ -34,7 +34,7 @@ public final class ParseI18n {
         // 如果是“{ ”开头，“} ”结尾
         if (strIn.startsWith(I18N_START_CHAR) && strIn.endsWith(I18N_END_CHAR)) {
             // 将剔除大括号后的字符进行国际化
-            return TouhouLittleMaid.proxy.translate(strIn.substring(1, strIn.length() - 1));
+            return TouhouLittleMaid.PROXY.translate(strIn.substring(1, strIn.length() - 1));
         } else {
             // 否则装填原字符串（这算硬编码么？）
             return strIn;

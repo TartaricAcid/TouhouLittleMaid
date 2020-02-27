@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.script.EntityLivingBaseWrapper;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.script.WorldWrapper;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -80,7 +78,8 @@ public class ItemSpellCard extends Item {
 
     @Nullable
     @SuppressWarnings("all")
-    public static CustomSpellCardEntry getCustomSpellCardEntry(ItemStack spellCard, Map<String, CustomSpellCardEntry> map) {
+    public static CustomSpellCardEntry getCustomSpellCardEntry(ItemStack spellCard) {
+        Map<String, CustomSpellCardEntry> map = TouhouLittleMaid.PROXY.getSpellCard();
         if (map.isEmpty()) {
             return null;
         }
@@ -97,7 +96,7 @@ public class ItemSpellCard extends Item {
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            Set<String> ids = FMLCommonHandler.instance().getSide().isClient() ? ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT.keySet() : CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER.keySet();
+            Set<String> ids = TouhouLittleMaid.PROXY.getSpellCard().keySet();
             for (String id : ids) {
                 items.add(setCustomSpellCardEntry(id, new ItemStack(this)));
             }
@@ -107,8 +106,7 @@ public class ItemSpellCard extends Item {
     @Nonnull
     @Override
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
-        Map<String, CustomSpellCardEntry> map = FMLCommonHandler.instance().getSide().isClient() ? ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT : CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
-        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack, map);
+        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack);
         if (entry == null) {
             return "";
         }
@@ -118,7 +116,7 @@ public class ItemSpellCard extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack, ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT);
+        CustomSpellCardEntry entry = getCustomSpellCardEntry(stack);
         if (entry == null) {
             return;
         }

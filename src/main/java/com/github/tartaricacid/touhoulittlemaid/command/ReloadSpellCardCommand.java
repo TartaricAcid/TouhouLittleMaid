@@ -49,9 +49,10 @@ public class ReloadSpellCardCommand extends CommandBase {
         }
         CustomSpellCardManger.onCustomSpellCardReload();
         sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.spell_card.reload"));
-        CommonProxy.INSTANCE.sendToAll(new SyncCustomSpellCardData(CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER));
+        CommonProxy.INSTANCE.sendToAll(new SyncCustomSpellCardData());
     }
 
+    @SuppressWarnings("unchecked")
     @Nonnull
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {

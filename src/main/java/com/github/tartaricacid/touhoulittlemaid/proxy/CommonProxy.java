@@ -273,4 +273,11 @@ public class CommonProxy {
     public String translate(String key, Object... format) {
         return I18n.translateToLocalFormatted(key, format);
     }
+
+    public Map<String, CustomSpellCardEntry> getSpellCard() {
+        return CUSTOM_SPELL_CARD_MAP_SERVER;
+    }
+
+    public void setSpellCard(Map<String, CustomSpellCardEntry> entryMap) {
+    }
 }

@@ -24,7 +24,7 @@ public class TouhouLittleMaid {
 
     @SidedProxy(serverSide = "com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy",
             clientSide = "com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy")
-    public static CommonProxy proxy;
+    public static CommonProxy PROXY;
 
     public static boolean MCMPCompat = false;
 
@@ -37,26 +37,26 @@ public class TouhouLittleMaid {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
+        PROXY.preInit(event);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        proxy.init(event);
+        PROXY.init(event);
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
+        PROXY.postInit(event);
     }
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        proxy.serverStarting(event);
+        PROXY.serverStarting(event);
     }
 
     @Mod.EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
-        proxy.loadComplete(event);
+        PROXY.loadComplete(event);
     }
 }

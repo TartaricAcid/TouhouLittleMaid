@@ -19,7 +19,7 @@ public class PlayerEnterServer {
         if (event.player instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             TouhouLittleMaid.LOGGER.info("Sending custom spell data to {}", player.getDisplayNameString());
-            CommonProxy.INSTANCE.sendTo(new SyncCustomSpellCardData(CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER), player);
+            CommonProxy.INSTANCE.sendTo(new SyncCustomSpellCardData(), player);
         }
     }
 }

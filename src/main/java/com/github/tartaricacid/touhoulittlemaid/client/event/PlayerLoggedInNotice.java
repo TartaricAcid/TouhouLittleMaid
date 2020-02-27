@@ -45,7 +45,7 @@ public class PlayerLoggedInNotice {
     private static void javaVersionNotice(PlayerEvent.PlayerLoggedInEvent event) {
         Matcher matcher = pattern.matcher(System.getProperty("java.version"));
         if (matcher.find()) {
-            int version = Integer.valueOf(matcher.group(1));
+            int version = Integer.parseInt(matcher.group(1));
             if (version < 60) {
                 String json = I18n.format("message.touhou_little_maid.java_version_old");
                 ITextComponent component = ITextComponent.Serializer.jsonToComponent(json);

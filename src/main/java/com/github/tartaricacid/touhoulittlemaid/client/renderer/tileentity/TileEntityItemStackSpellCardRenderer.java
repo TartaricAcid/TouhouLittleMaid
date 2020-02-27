@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemSpellCard;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,16 +10,19 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
+@SideOnly(Side.CLIENT)
 public class TileEntityItemStackSpellCardRenderer extends TileEntityItemStackRenderer {
     public static final TileEntityItemStackSpellCardRenderer INSTANCE = new TileEntityItemStackSpellCardRenderer();
 
     @Override
     public void renderByItem(@Nullable ItemStack itemStackIn) {
-        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(itemStackIn, ClientProxy.CUSTOM_SPELL_CARD_MAP_CLIENT);
+        CustomSpellCardEntry entry = ItemSpellCard.getCustomSpellCardEntry(itemStackIn);
         if (entry != null) {
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
