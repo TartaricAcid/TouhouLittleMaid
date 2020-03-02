@@ -109,7 +109,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
             return;
         }
         if (button.id == speed.id) {
-            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(mc.player.getUniqueID(), beacon.getPos(), speed.isStateTriggered() ? -1 : button.id));
+            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(beacon.getPos(), speed.isStateTriggered() ? -1 : button.id));
             speed.setStateTriggered(!speed.isStateTriggered());
             if (speed.isStateTriggered()) {
                 fireResistance.setStateTriggered(false);
@@ -120,7 +120,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
             return;
         }
         if (button.id == fireResistance.id) {
-            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(mc.player.getUniqueID(), beacon.getPos(), fireResistance.isStateTriggered() ? -1 : button.id));
+            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(beacon.getPos(), fireResistance.isStateTriggered() ? -1 : button.id));
             fireResistance.setStateTriggered(!fireResistance.isStateTriggered());
             if (fireResistance.isStateTriggered()) {
                 speed.setStateTriggered(false);
@@ -131,7 +131,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
             return;
         }
         if (button.id == strength.id) {
-            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(mc.player.getUniqueID(), beacon.getPos(), strength.isStateTriggered() ? -1 : button.id));
+            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(beacon.getPos(), strength.isStateTriggered() ? -1 : button.id));
             strength.setStateTriggered(!strength.isStateTriggered());
             if (strength.isStateTriggered()) {
                 speed.setStateTriggered(false);
@@ -142,7 +142,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
             return;
         }
         if (button.id == resistance.id) {
-            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(mc.player.getUniqueID(), beacon.getPos(), resistance.isStateTriggered() ? -1 : button.id));
+            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(beacon.getPos(), resistance.isStateTriggered() ? -1 : button.id));
             resistance.setStateTriggered(!resistance.isStateTriggered());
             if (resistance.isStateTriggered()) {
                 speed.setStateTriggered(false);
@@ -153,7 +153,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
             return;
         }
         if (button.id == regeneration.id) {
-            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(mc.player.getUniqueID(), beacon.getPos(), regeneration.isStateTriggered() ? -1 : button.id));
+            CommonProxy.INSTANCE.sendToServer(new SetBeaconPotionMessage(beacon.getPos(), regeneration.isStateTriggered() ? -1 : button.id));
             regeneration.setStateTriggered(!regeneration.isStateTriggered());
             if (regeneration.isStateTriggered()) {
                 speed.setStateTriggered(false);
@@ -164,19 +164,19 @@ public class MaidBeaconGuiContainer extends GuiContainer {
             return;
         }
         if (button.id == Button.ADD_ONE.getIndex()) {
-            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(mc.player.getUniqueID(), beacon.getPos(), 1, true));
+            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(beacon.getPos(), 1, true));
             return;
         }
         if (button.id == Button.ADD_ALL.getIndex()) {
-            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(mc.player.getUniqueID(), beacon.getPos(), powerHandler.get(), true));
+            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(beacon.getPos(), powerHandler.get(), true));
             return;
         }
         if (button.id == Button.MIN_ONE.getIndex()) {
-            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(mc.player.getUniqueID(), beacon.getPos(), 1, false));
+            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(beacon.getPos(), 1, false));
             return;
         }
         if (button.id == Button.MIN_ALL.getIndex()) {
-            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(mc.player.getUniqueID(), beacon.getPos(), beacon.getStoragePower(), false));
+            CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(beacon.getPos(), beacon.getStoragePower(), false));
         }
     }
 

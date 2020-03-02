@@ -240,6 +240,7 @@ public class CommonProxy {
             INSTANCE.registerMessage(SendNpcMaidModelMessage.Handler.class, SendNpcMaidModelMessage.class, 17, Side.SERVER);
         }
         INSTANCE.registerMessage(TrolleyAudioSoundMessage.Handler.class, TrolleyAudioSoundMessage.class, 18, Side.CLIENT);
+        INSTANCE.registerMessage(SetCompassModeMessage.Handler.class, SetCompassModeMessage.class, 19, Side.SERVER);
     }
 
     /**
@@ -253,6 +254,9 @@ public class CommonProxy {
         return CUSTOM_SPELL_CARD_MAP_SERVER;
     }
 
+    /**
+     * 使用代理机制的，仅用于客户端的符卡数据设置
+     */
     public void setSpellCard(Map<String, CustomSpellCardEntry> entryMap) {
     }
 }

@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.download;
 
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;

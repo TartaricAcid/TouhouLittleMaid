@@ -74,7 +74,7 @@ tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
 tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc=Press the Alt key and scroll the mouse wheel to switch modes.
 tooltips.touhou_little_maid.kappa_compass.usage.desc.1=Right click on the block to set the coordinates, then right click on the maid binding coordinates.
 tooltips.touhou_little_maid.kappa_compass.usage.desc.2=Need to work with the maid's home mode, Shift right click on the maid clear the coordinates.
-tooltips.touhou_little_maid.kappa_compass.desc=Pos: %d, %d, %d
+tooltips.touhou_little_maid.kappa_compass.mode=Current Mode: %s
 tooltips.touhou_little_maid.damageable.desc=Remaining Usage Times: %d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=Entity Name: %s
 tooltips.touhou_little_maid.garage_kit.name.desc=Model Name: %s
@@ -105,8 +105,12 @@ tooltips.touhou_little_maid.gashapon_machines.desc=Draw a gashapon by right-clic
 tooltips.touhou_little_maid.bauble.desc=§a[Maid Bauble]
 
 # Message
-message.touhou_little_maid.kappa_compass.write_success=Write Position Success!
-message.touhou_little_maid.kappa_compass.write_fail=Write Position Fail!
+message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!
+message.touhou_little_maid.kappa_compass.usage.result.fail=Write point fail!
+message.touhou_little_maid.kappa_compass.usage.result.duplicate=§4Write fail: dupplicate point!
+message.touhou_little_maid.kappa_compass.usage.result.too_far=§4Write fail: point is too far!
+message.touhou_little_maid.kappa_compass.usage.result.full=§4Write fail: point list is full!
+message.touhou_little_maid.kappa_compass.usage.result.reset=Mode is reseted!
 message.touhou_little_maid.grid.input.true=IO Mode: Input
 message.touhou_little_maid.grid.input.false=IO Mode: Output
 message.touhou_little_maid.grid.blacklist.true=Filter Mode: Blacklist
@@ -129,6 +133,13 @@ message.touhou_little_maid.maid_backpack.big=§c[Big BackPack]
 message.touhou_little_maid.maid_backpack.level_not_match=Backpack level not match, need %s§r but is %s§r.
 message.touhou_little_maid.maid_backpack.level_is_biggest=Backpack level is biggest.
 message.touhou_little_maid.resources_download.reload=Reloading resource information...
+
+# Compass Mode
+compass.touhou_little_maid.mode.single_point=Single Point
+compass.touhou_little_maid.mode.multi_point_reentry=Muti-Point Reentry
+compass.touhou_little_maid.mode.multi_point_closure=Muti-Point Closure
+compass.touhou_little_maid.mode.set_range=Set Range
+compass.touhou_little_maid.mode.none=None
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -299,6 +310,7 @@ gui.touhou_little_maid.resources_download.fail.2=Please click on the top left bu
 gui.touhou_little_maid.resources_download.reload=Reload
 gui.touhou_little_maid.inventory.scroll.desc=Please slide the mouse wheel to scroll the inventory.
 gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript File
+gui.touhou_little_maid.compass.close=Close
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s

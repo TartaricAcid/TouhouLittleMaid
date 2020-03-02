@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.download;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;

@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.proxy;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadHataCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
-import com.github.tartaricacid.touhoulittlemaid.client.particle.ParticleEnum;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
@@ -57,7 +56,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     public static HataTextureManager HATA_TEXTURE_MANAGER;
     /**
      * 仅用于客户端显示文本提示
-     * 初始化时，先让其等于服务端数据，规避因为初始化物品此 Map 为空导致的崩溃问题
      */
     public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_CLIENT = Maps.newHashMap();
 
@@ -86,7 +84,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-        Minecraft.getMinecraft().effectRenderer.registerParticle(ParticleEnum.FLAG.getId(), ParticleEnum.FLAG.getParticle());
         HATA_TEXTURE_MANAGER = new HataTextureManager(Minecraft.getMinecraft().getResourceManager());
         CustomHataTextureLoader.onHataTextureReload();
         ClientCommandHandler.instance.registerCommand(new ReloadHataCommand());

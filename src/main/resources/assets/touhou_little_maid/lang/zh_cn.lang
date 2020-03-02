@@ -74,7 +74,7 @@ tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
 tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc=按下 Alt 键并滑动鼠标滚轮切换模式。
 tooltips.touhou_little_maid.kappa_compass.usage.desc.1=右击方块设定坐标，而后右击女仆绑定坐标
 tooltips.touhou_little_maid.kappa_compass.usage.desc.2=需要配合女仆的 Home 模式使用，Shift 右击女仆清除坐标
-tooltips.touhou_little_maid.kappa_compass.desc=坐标：%d，%d，%d
+tooltips.touhou_little_maid.kappa_compass.mode=Current Mode: %s
 tooltips.touhou_little_maid.damageable.desc=剩余使用次数：%d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=实体名称：%s
 tooltips.touhou_little_maid.garage_kit.name.desc=模型名称：%s
@@ -105,8 +105,12 @@ tooltips.touhou_little_maid.gashapon_machines.desc=通过扭蛋币或绿宝石�
 tooltips.touhou_little_maid.bauble.desc=§a[女仆饰品]
 
 # Message
-message.touhou_little_maid.kappa_compass.write_success=坐标写入成功！
-message.touhou_little_maid.kappa_compass.write_fail=坐标写入失败！
+message.touhou_little_maid.kappa_compass.usage.result.success=坐标写入成功！
+message.touhou_little_maid.kappa_compass.usage.result.fail=坐标写入失败！
+message.touhou_little_maid.kappa_compass.usage.result.duplicate=§4写入失败：重复的点！
+message.touhou_little_maid.kappa_compass.usage.result.too_far=§4写入失败：点过远！
+message.touhou_little_maid.kappa_compass.usage.result.full=§4写入失败：点已经满了！
+message.touhou_little_maid.kappa_compass.usage.result.reset=模式已经复位
 message.touhou_little_maid.grid.input.true=物流模式：输入
 message.touhou_little_maid.grid.input.false=物流模式：输出
 message.touhou_little_maid.grid.blacklist.true=过滤模式：黑名单
@@ -129,6 +133,13 @@ message.touhou_little_maid.maid_backpack.big=§c[大背包]
 message.touhou_little_maid.maid_backpack.level_not_match=背包等级不匹配，需要 %s§r 但却是 %s§r。
 message.touhou_little_maid.maid_backpack.level_is_biggest=背包等级已经最大
 message.touhou_little_maid.resources_download.reload=重载资源信息中……
+
+# Compass Mode
+compass.touhou_little_maid.mode.single_point=单点模式
+compass.touhou_little_maid.mode.multi_point_reentry=多点折返
+compass.touhou_little_maid.mode.multi_point_closure=多点闭合
+compass.touhou_little_maid.mode.set_range=设置范围
+compass.touhou_little_maid.mode.none=无模式
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
@@ -299,6 +310,7 @@ gui.touhou_little_maid.resources_download.fail.2=请点击左上角按钮，并�
 gui.touhou_little_maid.resources_download.reload=重载
 gui.touhou_little_maid.inventory.scroll.desc=请滑动鼠标滚轮进行物品栏滚动。
 gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript 文件
+gui.touhou_little_maid.compass.close=关闭
 
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s
@@ -586,3 +598,4 @@ jei.touhou_little_maid.altar_craft.spawn_light_bolt.result=生成闪电
 # Patchouli
 patchouli.touhou_little_maid.book.name=记忆中的幻想乡
 patchouli.touhou_little_maid.book.landing_text=一个与女仆和东方 Project 有关的模组。$(br2)感谢 Snownee 在代码方面的帮助。$(br)感谢 Succinum，ZeniCrow，Paulzzh，Tian_mi 以及其他美工制作了如此优秀的模型和材质。$(br)感谢 Little Maid Mob 的作者 Verclene。
+tooltips.touhou_little_maid.kappa_compass.desc=坐标：%d，%d，%d

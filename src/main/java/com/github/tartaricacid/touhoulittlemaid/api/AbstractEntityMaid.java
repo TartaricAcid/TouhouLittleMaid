@@ -87,13 +87,6 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
     abstract public boolean placeBlock(BlockPos pos, IBlockState state);
 
     /**
-     * 设置当前女仆的 Home 坐标
-     *
-     * @param home Home 坐标
-     */
-    abstract public void setHomePos(BlockPos home);
-
-    /**
      * 当前女仆是否处于 Home 模式
      *
      * @return boolean

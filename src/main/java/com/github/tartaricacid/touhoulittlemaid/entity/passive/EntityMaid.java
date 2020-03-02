@@ -19,12 +19,15 @@ import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
+import com.github.tartaricacid.touhoulittlemaid.inventory.MaidHandsItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryItemHandler;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -46,6 +49,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -63,6 +68,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -76,6 +82,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
@@ -100,6 +107,8 @@ public class EntityMaid extends AbstractEntityMaid {
     // 无敌状态不会主动同步至客户端
     private static final DataParameter<Boolean> INVULNERABLE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> BACKPACK_LEVEL = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+    // 要在客户端显示女仆当前所处的模式，所以需要同步客户端
+    private static final DataParameter<Integer> COMPASS_MODE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
 
     /**
      * 模式所应用的 AI 的优先级
@@ -113,30 +122,15 @@ public class EntityMaid extends AbstractEntityMaid {
      * 玩家伤害女仆后的声音延时计数器
      */
     private static int playerHurtSoundCount = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
-
     /**
      * 冷却时间计数器
      */
     private final CooldownTracker cooldownTracker = new CooldownTracker();
-
+    /**
+     * 各种物品栏
+     */
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
-    private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this) {
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return !MaidInventoryItemHandler.isIllegalItem(stack);
-        }
-
-        @Override
-        @Nonnull
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            // 物品合法才允许插入，否则原样返回
-            if (isItemValid(slot, stack)) {
-                return super.insertItem(slot, stack, simulate);
-            } else {
-                return stack;
-            }
-        }
-    };
+    private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsItemHandler(this);
     private final ItemStackHandler mainInv = new MaidInventoryItemHandler(15);
     private final ItemStackHandler smallBackpackInv = new MaidInventoryItemHandler(10);
     private final ItemStackHandler middleBackpackInv = new MaidInventoryItemHandler(10);
@@ -165,6 +159,13 @@ public class EntityMaid extends AbstractEntityMaid {
     @Nullable
     private EntityAIBase taskAI;
 
+    /**
+     * 罗盘存储的坐标
+     */
+    private List<BlockPos> compassPosList = Lists.newArrayList();
+    private int currentIndex = 0;
+    private boolean descending = false;
+
     public EntityMaid(World worldIn) {
         super(worldIn);
         setSize(0.6f, 1.5f);
@@ -179,7 +180,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityRinnosuke.class, 3.0f, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityFairy.class, 3.0f, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityCreeper.class, 6.0F, 0.8d, 0.9d));
-        this.tasks.addTask(3, new EntityMaidReturnHome(this, 0.6f, 200));
+        this.tasks.addTask(3, new EntityMaidCompassSetting(this, 0.6f));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
         this.tasks.addTask(4, new EntityMaidGridInteract(this, 0.6f));
         this.tasks.addTask(4, new EntityMaidOpenDoor(this, true));
@@ -218,6 +219,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(SHOW_SASIMONO, false);
         this.dataManager.register(INVULNERABLE, false);
         this.dataManager.register(BACKPACK_LEVEL, EnumBackPackLevel.EMPTY.getLevel());
+        this.dataManager.register(COMPASS_MODE, ItemKappaCompass.Mode.NONE.ordinal());
     }
 
     @Override
@@ -228,7 +230,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
         this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.5d);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5d);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4d);
     }
 
     @Override
@@ -862,10 +864,6 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MAID_EXP.getName())) {
             setExp(compound.getInteger(NBT.MAID_EXP.getName()));
         }
-        if (compound.hasKey(NBT.HOME_POS.getName())) {
-            int[] pos = compound.getIntArray(NBT.HOME_POS.getName());
-            setHomePos(new BlockPos(pos[0], pos[1], pos[2]));
-        }
         if (compound.hasKey(NBT.MAID_HOME.getName())) {
             setHome(compound.getBoolean(NBT.MAID_HOME.getName()));
         }
@@ -896,6 +894,24 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.MAID_BIG_BACKPACK.getName())) {
             bigBackpackInv.deserializeNBT((NBTTagCompound) compound.getTag(NBT.MAID_BIG_BACKPACK.getName()));
         }
+        if (compound.hasKey(NBT.COMPASS_MODE.getName())) {
+            setCompassMode(ItemKappaCompass.Mode.getModeByIndex(compound.getInteger(NBT.COMPASS_MODE.getName())));
+        }
+        if (compound.hasKey(NBT.COMPASS_POS_LIST.getName())) {
+            NBTTagList tagList = compound.getTagList(NBT.COMPASS_POS_LIST.getName(), Constants.NBT.TAG_COMPOUND);
+            List<BlockPos> posList = Lists.newArrayList();
+            for (int i = 0; i < tagList.tagCount(); i++) {
+                BlockPos pos = NBTUtil.getPosFromTag(tagList.getCompoundTagAt(i));
+                posList.add(pos);
+            }
+            compassPosList = posList;
+        }
+        if (compound.hasKey(NBT.CURRENT_INDEX.getName())) {
+            currentIndex = compound.getInteger(NBT.CURRENT_INDEX.getName());
+        }
+        if (compound.hasKey(NBT.DESCENDING.getName())) {
+            descending = compound.getBoolean(NBT.DESCENDING.getName());
+        }
     }
 
     @Override
@@ -906,7 +922,6 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.IS_PICKUP.getName(), isPickup());
         compound.setString(NBT.MAID_TASK.getName(), task.getUid().toString());
         compound.setInteger(NBT.MAID_EXP.getName(), getExp());
-        compound.setIntArray(NBT.HOME_POS.getName(), new int[]{getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()});
         compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
         compound.setString(NBT.MODEL_ID.getName(), getModelId());
         compound.setBoolean(NBT.STRUCK_BY_LIGHTNING.getName(), isStruckByLightning());
@@ -917,6 +932,15 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setTag(NBT.MAID_SMALL_BACKPACK.getName(), smallBackpackInv.serializeNBT());
         compound.setTag(NBT.MAID_MIDDLE_BACKPACK.getName(), middleBackpackInv.serializeNBT());
         compound.setTag(NBT.MAID_BIG_BACKPACK.getName(), bigBackpackInv.serializeNBT());
+
+        NBTTagList tagList = new NBTTagList();
+        for (BlockPos pos : compassPosList) {
+            tagList.appendTag(NBTUtil.createPosTag(pos));
+        }
+        compound.setTag(NBT.COMPASS_POS_LIST.getName(), tagList);
+
+        compound.setInteger(NBT.CURRENT_INDEX.getName(), currentIndex);
+        compound.setBoolean(NBT.DESCENDING.getName(), descending);
     }
 
     @Override
@@ -1040,8 +1064,6 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public IItemHandlerModifiable getInv(MaidInventory type) {
         switch (type) {
-            case MAIN:
-                return mainInv;
             case HAND:
                 return handsInvWrapper;
             case BAUBLE:
@@ -1054,9 +1076,36 @@ public class EntityMaid extends AbstractEntityMaid {
                 return middleBackpackInv;
             case BIG_BACKPACK:
                 return bigBackpackInv;
+            case MAIN:
             default:
                 return mainInv;
         }
+    }
+
+    @Override
+    public BaubleItemHandler getBaubleInv() {
+        return baubleInv;
+    }
+
+    @Override
+    public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
+        CombinedInvWrapper combinedInvWrapper;
+        switch (this.getBackLevel()) {
+            default:
+            case EMPTY:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv);
+                break;
+            case SMALL:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv);
+                break;
+            case MIDDLE:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv, middleBackpackInv);
+                break;
+            case BIG:
+                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv, middleBackpackInv, bigBackpackInv);
+                break;
+        }
+        return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
     }
 
     public IItemHandlerModifiable getAllBackpackInv() {
@@ -1105,32 +1154,6 @@ public class EntityMaid extends AbstractEntityMaid {
         } else {
             super.setRevengeTarget(entityLivingBase);
         }
-    }
-
-    @Override
-    public BaubleItemHandler getBaubleInv() {
-        return baubleInv;
-    }
-
-    @Override
-    public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
-        CombinedInvWrapper combinedInvWrapper;
-        switch (this.getBackLevel()) {
-            default:
-            case EMPTY:
-                combinedInvWrapper = new CombinedInvWrapper(mainInv);
-                break;
-            case SMALL:
-                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv);
-                break;
-            case MIDDLE:
-                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv, middleBackpackInv);
-                break;
-            case BIG:
-                combinedInvWrapper = new CombinedInvWrapper(mainInv, smallBackpackInv, middleBackpackInv, bigBackpackInv);
-                break;
-        }
-        return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
     }
 
     public boolean isBegging() {
@@ -1191,15 +1214,6 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public void addExp(int expIn) {
         setExp(getExp() + expIn);
-    }
-
-    public BlockPos getHomePos() {
-        return this.dataManager.get(HOME_POS);
-    }
-
-    @Override
-    public void setHomePos(BlockPos home) {
-        this.dataManager.set(HOME_POS, home);
     }
 
     @Override
@@ -1301,6 +1315,87 @@ public class EntityMaid extends AbstractEntityMaid {
         return canPlaceBlock(pos, state) && world.setBlockState(pos, state);
     }
 
+    public ItemKappaCompass.Mode getCompassMode() {
+        return ItemKappaCompass.Mode.getModeByIndex(this.dataManager.get(COMPASS_MODE));
+    }
+
+    public void setCompassMode(ItemKappaCompass.Mode mode) {
+        this.dataManager.set(COMPASS_MODE, mode.ordinal());
+    }
+
+    public boolean setCompassPosList(List<BlockPos> posList, ItemKappaCompass.Mode mode) {
+        int size = posList.size();
+        if (size <= 0) {
+            return false;
+        }
+        switch (mode) {
+            case SINGLE_POINT:
+                compassPosList = Collections.singletonList(posList.get(size - 1));
+                return true;
+            case MULTI_POINT_CLOSURE:
+                if (size > 1) {
+                    BlockPos pos1 = posList.get(size - 1);
+                    BlockPos pos2 = posList.get(0);
+                    if (pos1.distanceSq(pos2) <= Math.pow(ItemKappaCompass.MAX_DISTANCE, 2)) {
+                        compassPosList = posList;
+                        return true;
+                    }
+                }
+                return false;
+            case MULTI_POINT_REENTRY:
+                if (size > 1) {
+                    compassPosList = posList;
+                    return true;
+                }
+                return false;
+            case SET_RANGE:
+                if (size > 1) {
+                    compassPosList = Lists.newArrayList(posList.get(size - 1), posList.get(size - 2));
+                    return true;
+                }
+                return false;
+            case NONE:
+            default:
+                return false;
+        }
+    }
+
+    public List<BlockPos> getCompassPosList(ItemKappaCompass.Mode mode) {
+        int size = compassPosList.size();
+        switch (mode) {
+            case SINGLE_POINT:
+                if (size > 0) {
+                    return Collections.singletonList(compassPosList.get(size - 1));
+                }
+            case MULTI_POINT_REENTRY:
+            case MULTI_POINT_CLOSURE:
+                return compassPosList;
+            case SET_RANGE:
+                if (size > 1) {
+                    return Lists.newArrayList(compassPosList.get(size - 1), compassPosList.get(size - 2));
+                }
+            case NONE:
+            default:
+                return Lists.newArrayList();
+        }
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = MathHelper.clamp(currentIndex, 0, compassPosList.size());
+    }
+
+    public boolean isDescending() {
+        return descending;
+    }
+
+    public void setDescending(boolean descending) {
+        this.descending = descending;
+    }
+
     @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
@@ -1323,8 +1418,6 @@ public class EntityMaid extends AbstractEntityMaid {
         MAID_TASK("MaidTask"),
         // 女仆经验
         MAID_EXP("MaidExp"),
-        // Home 的坐标
-        HOME_POS("HomePos"),
         // 是否开启 Home 模式
         MAID_HOME("MaidHome"),
         // 模型
@@ -1344,7 +1437,15 @@ public class EntityMaid extends AbstractEntityMaid {
         // 女仆中背包
         MAID_MIDDLE_BACKPACK("MaidMiddleBackpack"),
         // 女仆大背包
-        MAID_BIG_BACKPACK("MaidBigBackpack");
+        MAID_BIG_BACKPACK("MaidBigBackpack"),
+        // 女仆罗盘模式
+        COMPASS_MODE("MaidCompassMode"),
+        // 女仆罗盘坐标列表
+        COMPASS_POS_LIST("MaidCompassPosList"),
+        // 女仆当前寻路的坐标索引
+        CURRENT_INDEX("MaidCurrentIndex"),
+        // 当前寻路顺序是升序还是降序
+        DESCENDING("MaidCurrentDescending");
 
         private String name;
 

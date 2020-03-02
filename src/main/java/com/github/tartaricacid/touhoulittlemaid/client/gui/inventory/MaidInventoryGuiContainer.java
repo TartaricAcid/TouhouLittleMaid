@@ -78,7 +78,7 @@ public class MaidInventoryGuiContainer extends AbstractMaidGuiContainer {
             int maxStartRow = maid.getBackLevel().getLevel() * 2;
             this.startRow = MathHelper.clamp(this.startRow - dWheel, 0, maxStartRow);
             this.currentScroll = (float) MathHelper.clamp(startRow * (1.0 / maxStartRow), 0.0, 1.0);
-            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(mc.player.getUniqueID(), maid.getEntityId(),
+            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(maid.getEntityId(),
                     BUTTON.INVENTORY.getGuiId(), container.taskIndex, this.startRow));
         }
     }

@@ -20,12 +20,14 @@ import org.lwjgl.util.glu.Sphere;
 public final class RenderHelper {
     public static int SPHERE_OUT_INDEX;
     public static int SPHERE_IN_INDEX;
+    public static int SPHERE_LINE;
     public static int CYLINDER_OUT_INDEX;
     public static int CYLINDER_IN_INDEX;
 
     static {
         genSphere();
         genCylinder();
+        genSphereLine();
     }
 
     private RenderHelper() {
@@ -51,6 +53,10 @@ public final class RenderHelper {
         GlStateManager.glEndList();
     }
 
+    private static void gen() {
+
+    }
+
     private static void genCylinder() {
         Cylinder cylinder = new Cylinder();
 
@@ -68,6 +74,19 @@ public final class RenderHelper {
         CYLINDER_IN_INDEX = GlStateManager.glGenLists(1);
         GlStateManager.glNewList(CYLINDER_IN_INDEX, GL11.GL_COMPILE);
         cylinder.draw(1, 1, 1, 16, 16);
+        GlStateManager.glEndList();
+    }
+
+    private static void genSphereLine() {
+        Sphere sphere = new Sphere();
+
+        sphere.setDrawStyle(GLU.GLU_LINE);
+        sphere.setNormals(GLU.GLU_SMOOTH);
+        sphere.setOrientation(GLU.GLU_OUTSIDE);
+
+        SPHERE_LINE = GlStateManager.glGenLists(1);
+        GlStateManager.glNewList(SPHERE_LINE, GL11.GL_COMPILE);
+        sphere.draw(1, 32, 32);
         GlStateManager.glEndList();
     }
 

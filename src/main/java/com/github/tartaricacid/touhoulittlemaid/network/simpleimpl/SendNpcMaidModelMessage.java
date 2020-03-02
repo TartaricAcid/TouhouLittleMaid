@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -63,8 +64,9 @@ public class SendNpcMaidModelMessage implements IMessage {
         public IMessage onMessage(SendNpcMaidModelMessage message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+                    EntityPlayerMP player = ctx.getServerHandler().player;
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
-                    if (entity instanceof EntityCustomNpc) {
+                    if (entity instanceof EntityCustomNpc && player.canUseCommand(2, "")) {
                         applyModel((EntityCustomNpc) entity, message.getModelId(), message.getModelRes());
                     }
                 });

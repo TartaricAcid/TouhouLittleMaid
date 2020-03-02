@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Locale;
 
 @SideOnly(Side.CLIENT)
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
@@ -64,13 +64,8 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         boolean hasCompass = Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() == MaidItems.KAPPA_COMPASS;
         String str;
         if (hasCompass) {
-            BlockPos pos = entityIn.getHomePos();
-            // 判断坐标是否为 0,0,0，显示不同的字符
-            if (pos.equals(BlockPos.ORIGIN)) {
-                str = I18n.format("info.touhou_little_maid.maid.unset_pos");
-            } else {
-                str = I18n.format("info.touhou_little_maid.maid.set_pos", pos.getX(), pos.getY(), pos.getZ());
-            }
+            str = I18n.format(String.format("compass.touhou_little_maid.mode.%s",
+                    entityIn.getCompassMode().name().toLowerCase(Locale.US)));
         } else {
             str = name;
         }

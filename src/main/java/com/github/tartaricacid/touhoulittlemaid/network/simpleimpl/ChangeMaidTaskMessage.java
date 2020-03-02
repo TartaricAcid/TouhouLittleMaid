@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -58,8 +59,9 @@ public class ChangeMaidTaskMessage implements IMessage {
         public IMessage onMessage(ChangeMaidTaskMessage message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+                    EntityPlayerMP player = ctx.getServerHandler().player;
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
-                    if (entity instanceof EntityMaid) {
+                    if (entity instanceof EntityMaid && player.equals(((EntityMaid) entity).getOwner())) {
                         ((EntityMaid) entity).setTask(message.task);
                     }
                 });

@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -62,7 +63,8 @@ public class ApplyMaidSkinDataMessage implements IMessage {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
-                    if (entity instanceof EntityMaid) {
+                    EntityPlayerMP player = ctx.getServerHandler().player;
+                    if (entity instanceof EntityMaid && player.equals(((EntityMaid) entity).getOwner())) {
                         applyModelId((EntityMaid) entity, message.getModelId().toString());
                     }
                 });

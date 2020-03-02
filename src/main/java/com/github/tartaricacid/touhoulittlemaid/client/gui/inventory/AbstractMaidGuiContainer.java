@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.ResourcesDownloadGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.download.ResourcesDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -197,15 +197,15 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         // 切换标签页
         if (button.id == BUTTON.MAIN.ordinal()) {
-            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.MAIN.getGuiId(), container.taskIndex));
+            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(maid.getEntityId(), BUTTON.MAIN.getGuiId(), container.taskIndex));
             return;
         }
         if (button.id == BUTTON.INVENTORY.ordinal()) {
-            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.INVENTORY.getGuiId(), container.taskIndex));
+            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(maid.getEntityId(), BUTTON.INVENTORY.getGuiId(), container.taskIndex));
             return;
         }
         if (button.id == BUTTON.BAUBLE.ordinal()) {
-            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(mc.player.getUniqueID(), maid.getEntityId(), BUTTON.BAUBLE.getGuiId(), container.taskIndex));
+            CommonProxy.INSTANCE.sendToServer(new SwitchMaidGuiMessage(maid.getEntityId(), BUTTON.BAUBLE.getGuiId(), container.taskIndex));
             return;
         }
 

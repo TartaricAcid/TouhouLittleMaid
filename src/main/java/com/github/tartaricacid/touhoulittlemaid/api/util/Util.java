@@ -60,9 +60,9 @@ public final class Util {
         if (stack.isEmpty() || !OreDictionary.doesOreNameExist(ore)) {
             return false;
         }
-        int oreid = OreDictionary.getOreID(ore);
+        int oreId = OreDictionary.getOreID(ore);
         for (int id : OreDictionary.getOreIDs(stack)) {
-            if (oreid == id) {
+            if (oreId == id) {
                 return true;
             }
         }
