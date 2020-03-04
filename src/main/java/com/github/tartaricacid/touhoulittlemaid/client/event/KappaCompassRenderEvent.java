@@ -70,7 +70,6 @@ public class KappaCompassRenderEvent {
         {
             switch (mode) {
                 case SINGLE_POINT:
-                    GlStateManager.resetColor();
                     List<BlockPos> singlePos = Collections.singletonList(blockPosList.get(size - 1));
                     drawRangeLine(playerVec3d, blockPosList, 8, 0xffaaaa00);
                     drawRangeLine(playerVec3d, blockPosList, 16, 0xffaa0000);

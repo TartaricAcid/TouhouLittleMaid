@@ -48,6 +48,10 @@ public final class WriteCompassPosEvent {
                 player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.usage.result.success"));
             } else {
                 player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.usage.result.fail"));
+                ItemKappaCompass.setMode(itemstack, maid.getCompassMode());
+                for (BlockPos pos : maid.getCompassPosList(maid.getCompassMode())) {
+                    ItemKappaCompass.setPos(itemstack, pos);
+                }
             }
         }
     }

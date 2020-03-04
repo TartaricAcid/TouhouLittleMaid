@@ -932,6 +932,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setTag(NBT.MAID_SMALL_BACKPACK.getName(), smallBackpackInv.serializeNBT());
         compound.setTag(NBT.MAID_MIDDLE_BACKPACK.getName(), middleBackpackInv.serializeNBT());
         compound.setTag(NBT.MAID_BIG_BACKPACK.getName(), bigBackpackInv.serializeNBT());
+        compound.setInteger(NBT.COMPASS_MODE.getName(), getCompassMode().ordinal());
 
         NBTTagList tagList = new NBTTagList();
         for (BlockPos pos : compassPosList) {
@@ -1110,6 +1111,94 @@ public class EntityMaid extends AbstractEntityMaid {
 
     public IItemHandlerModifiable getAllBackpackInv() {
         return new CombinedInvWrapper(smallBackpackInv, middleBackpackInv, bigBackpackInv);
+    }
+
+    private static final float INFINITY_LEASHED_DISTANCE = -1.0f;
+    private BlockPos leashedPosition = BlockPos.ORIGIN;
+    private float maximumLeashedDistance = INFINITY_LEASHED_DISTANCE;
+
+    @Override
+    public boolean isWithinHomeDistanceCurrentPosition() {
+        return this.isWithinHomeDistanceFromPosition(new BlockPos(this));
+    }
+
+    @Override
+    public boolean isWithinHomeDistanceFromPosition(@Nonnull BlockPos pos) {
+        float maxDistance = getMaximumHomeDistance();
+        BlockPos homePos = getHomePosition();
+        if (maxDistance == INFINITY_LEASHED_DISTANCE) {
+            return true;
+        } else {
+            return homePos.distanceSq(pos) < (double) (maxDistance * maxDistance);
+        }
+    }
+
+    /**
+     * 对于女仆来说，此方法只会被栓绳调用
+     */
+    @Override
+    public void setHomePosAndDistance(@Nonnull BlockPos pos, int distance) {
+        this.leashedPosition = pos;
+        this.maximumLeashedDistance = (float) distance;
+    }
+
+    @Nonnull
+    @Override
+    public BlockPos getHomePosition() {
+        if (isLeashedAndInSameWorld()) {
+            return leashedPosition;
+        }
+        List<BlockPos> posList = getCompassPosList(getCompassMode());
+        if (posList.size() > 0) {
+            switch (getCompassMode()) {
+                case SINGLE_POINT:
+                    return posList.get(0);
+                case MULTI_POINT_CLOSURE:
+                case MULTI_POINT_REENTRY:
+                    return posList.get(getCurrentIndex());
+                case SET_RANGE:
+                case NONE:
+                    // TODO: 2020/3/4 完善范围设置
+            }
+        }
+        return BlockPos.ORIGIN;
+    }
+
+    @Override
+    public float getMaximumHomeDistance() {
+        if (isLeashedAndInSameWorld()) {
+            return maximumLeashedDistance;
+        }
+        List<BlockPos> posList = getCompassPosList(getCompassMode());
+        if (posList.size() > 0) {
+            switch (getCompassMode()) {
+                case SINGLE_POINT:
+                case MULTI_POINT_CLOSURE:
+                case MULTI_POINT_REENTRY:
+                    return ItemKappaCompass.MAX_DISTANCE / 2.0f;
+                case SET_RANGE:
+                case NONE:
+                    // TODO: 2020/3/4 完善范围设置
+            }
+        }
+        return INFINITY_LEASHED_DISTANCE;
+    }
+
+    @Override
+    public boolean hasHome() {
+        if (isLeashedAndInSameWorld()) {
+            return maximumLeashedDistance == INFINITY_LEASHED_DISTANCE;
+        }
+        return getCompassMode() != ItemKappaCompass.Mode.NONE;
+    }
+
+    private boolean isLeashedAndInSameWorld() {
+        return getLeashed() && getLeashHolder() != null && getLeashHolder().world == world;
+    }
+
+    @Override
+    public boolean canBeLeashedTo(EntityPlayer player) {
+        return player.equals(this.getOwner()) && super.canBeLeashedTo(player);
     }
 
     @Nullable

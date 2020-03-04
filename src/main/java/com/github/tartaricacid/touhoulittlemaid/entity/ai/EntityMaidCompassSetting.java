@@ -36,7 +36,7 @@ public class EntityMaidCompassSetting extends EntityAIBase {
     public void startExecuting() {
         this.timeCount = 200;
         // 如果女仆正在寻路，等待 1s 后再尝试
-        if (!entityMaid.getNavigator().noPath()) {
+        if (entityMaid.hasPath()) {
             this.timeCount = 20;
             return;
         }
@@ -67,7 +67,7 @@ public class EntityMaidCompassSetting extends EntityAIBase {
         int currentIndex = entityMaid.getCurrentIndex();
         BlockPos pos = posList.get(currentIndex);
 
-        if (entityMaid.getPosition().equals(pos)) {
+        if (entityMaid.getPosition().distanceSq(pos) <= 1.2) {
             int nextIndex = (currentIndex + 1) % posList.size();
             BlockPos nextPos = posList.get(nextIndex);
             if (entityMaid.getNavigator().tryMoveToXYZ(nextPos.getX(), nextPos.getY(), nextPos.getZ(), movementSpeed)) {
@@ -89,7 +89,7 @@ public class EntityMaidCompassSetting extends EntityAIBase {
         int currentIndex = entityMaid.getCurrentIndex();
         boolean descending = entityMaid.isDescending();
         BlockPos pos = posList.get(currentIndex);
-        if (entityMaid.getPosition().equals(pos)) {
+        if (entityMaid.getPosition().distanceSq(pos) <= 1.2) {
             if (currentIndex == 0) {
                 descending = false;
             }
