@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityMaidGridInteract extends EntityAIMoveToBlock {
@@ -78,7 +79,7 @@ public class EntityMaidGridInteract extends EntityAIMoveToBlock {
     }
 
     @Override
-    protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
+    protected boolean shouldMoveTo(World worldIn, @Nonnull BlockPos pos) {
         pos = pos.up();
         IBlockState stateUp2 = worldIn.getBlockState(pos.up());
 

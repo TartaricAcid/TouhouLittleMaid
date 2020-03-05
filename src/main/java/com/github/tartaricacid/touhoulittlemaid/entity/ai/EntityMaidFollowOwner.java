@@ -24,28 +24,36 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
     @Override
     public void updateTask() {
         this.entityMaid.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
+        if (entityMaid.isSitting()) {
+            return;
+        }
+        if (--timeToRecalcPath > 0) {
+            return;
+        }
+        timeToRecalcPath = 10;
+        if (entityMaid.getNavigator().tryMoveToEntityLiving(this.owner, this.followSpeed)) {
+            return;
+        }
+        if (entityMaid.getLeashed() || entityMaid.isRiding()) {
+            return;
+        }
+        if (this.entityMaid.getDistanceSq(this.owner) >= 144.0D) {
+            int x = MathHelper.floor(this.owner.posX) - 2;
+            int y = MathHelper.floor(this.owner.posZ) - 2;
+            int z = MathHelper.floor(this.owner.getEntityBoundingBox().minY);
+            tryToTeleport(x, y, z);
+        }
+    }
 
-        if (!this.entityMaid.isSitting()) {
-            if (--this.timeToRecalcPath <= 0) {
-                this.timeToRecalcPath = 10;
-                if (!this.entityMaid.getNavigator().tryMoveToEntityLiving(this.owner, this.followSpeed)) {
-                    if (!this.entityMaid.getLeashed() && !this.entityMaid.isRiding()) {
-                        if (this.entityMaid.getDistanceSq(this.owner) >= 144.0D) {
-                            int i = MathHelper.floor(this.owner.posX) - 2;
-                            int j = MathHelper.floor(this.owner.posZ) - 2;
-                            int k = MathHelper.floor(this.owner.getEntityBoundingBox().minY);
-
-                            for (int l = 0; l <= 4; ++l) {
-                                for (int i1 = 0; i1 <= 4; ++i1) {
-                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isTeleportFriendlyBlock(i, j, k, l, i1)) {
-                                        this.entityMaid.setLocationAndAngles((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.entityMaid.rotationYaw, this.entityMaid.rotationPitch);
-                                        this.entityMaid.getNavigator().clearPath();
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
+    private void tryToTeleport(int x, int y, int z) {
+        for (int xOffset = 0; xOffset <= 4; ++xOffset) {
+            for (int zOffset = 0; zOffset <= 4; ++zOffset) {
+                boolean offsetIsOkay = xOffset < 1 || zOffset < 1 || xOffset > 3 || zOffset > 3;
+                if (offsetIsOkay && this.isTeleportFriendlyBlock(x, y, z, xOffset, zOffset)) {
+                    this.entityMaid.setLocationAndAngles(((float) (x + xOffset) + 0.5F), z, ((float) (y + zOffset) + 0.5F),
+                            this.entityMaid.rotationYaw, this.entityMaid.rotationPitch);
+                    this.entityMaid.getNavigator().clearPath();
+                    return;
                 }
             }
         }
@@ -53,7 +61,9 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.isHome() && !this.entityMaid.getNavigator().noPath() && this.entityMaid.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.entityMaid.isSitting();
+        return !entityMaid.isHome() && !this.entityMaid.getNavigator().noPath()
+                && this.entityMaid.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist)
+                && !this.entityMaid.isSitting();
     }
 
     @Override

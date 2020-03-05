@@ -18,7 +18,7 @@ public class EntityMaidCompassSetting extends EntityAIBase {
         this.movementSpeed = speedIn;
         this.mode = entityMaid.getCompassMode();
         this.timeCount = 200;
-        this.setMutexBits(5);
+        this.setMutexBits(1 | 4);
     }
 
     @Override
@@ -59,7 +59,18 @@ public class EntityMaidCompassSetting extends EntityAIBase {
                 break;
             }
             case SET_RANGE:
+                setRangeAi();
+                break;
             default:
+        }
+    }
+
+    private void setRangeAi() {
+        if (!entityMaid.isWithinHomeDistanceCurrentPosition()) {
+            BlockPos home = entityMaid.getHomePosition();
+            if (!home.equals(BlockPos.ORIGIN)) {
+                entityMaid.getNavigator().tryMoveToXYZ(home.getX(), home.getY(), home.getZ(), movementSpeed);
+            }
         }
     }
 

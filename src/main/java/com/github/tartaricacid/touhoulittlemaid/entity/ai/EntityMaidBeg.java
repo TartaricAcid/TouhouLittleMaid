@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityMaidBeg extends EntityAIBase {
@@ -28,6 +29,7 @@ public class EntityMaidBeg extends EntityAIBase {
     public boolean shouldExecute() {
         this.player = this.world.getClosestPlayerToEntity(this.entityMaid, this.maxPlayerDistance);
         return !entityMaid.guiOpening && this.player != null && this.hasTemptationItemInHand(this.player)
+                && entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(this.player))
                 && !ObjectUtil.equalNotNull(player.getRidingEntity(), entityMaid.getControllingPassenger());
     }
 
@@ -45,6 +47,11 @@ public class EntityMaidBeg extends EntityAIBase {
 
         // 女仆大于最大吸引距离了，也不执行
         if (this.entityMaid.getDistance(this.player) > this.maxPlayerDistance) {
+            return false;
+        }
+
+        // 女仆超出范围模式的范围
+        if (!entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(this.player))) {
             return false;
         }
 

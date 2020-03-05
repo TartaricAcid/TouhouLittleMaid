@@ -6,6 +6,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -51,39 +52,39 @@ public class EntityMaidPickup extends EntityAIBase {
     public void updateTask() {
         // 检查拾取的对象
         if (entityPickup != null && entityPickup.isEntityAlive() && !entityPickup.isInWater()
+                && entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(entityPickup))
                 && entityMaid.getNavigator().getPathToEntityLiving(entityPickup) != null) {
             entityMaid.getLookHelper().setLookPositionWithEntity(entityPickup, 30f, entityMaid.getVerticalFaceSpeed());
             entityMaid.getNavigator().tryMoveToXYZ(entityPickup.posX, entityPickup.posY, entityPickup.posZ, speed);
+            return;
         }
-
+        // 移除不符合的实体对象
+        if (entityPickup != null) {
+            list.remove(entityPickup);
+        }
         // 拾取对象为空，或者没活着，那就遍历获取下一个
-        else {
-            for (Entity entity : list) {
-                if (entity.isDead || !entityMaid.canEntityBeSeen(entity)) {
-                    continue;
-                }
-                // 物品
-                if (entity instanceof EntityItem && entityMaid.pickupItem((EntityItem) entity, true)) {
-                    entityPickup = entity;
-                    return;
-                }
-
-                // 经验球
-                if (entity instanceof EntityXPOrb) {
-                    entityPickup = entity;
-                    return;
-                }
-
-                // 弓箭
-                if (entity instanceof EntityArrow && entityMaid.pickupArrow((EntityArrow) entity, true)) {
-                    entityPickup = entity;
-                    return;
-                }
+        for (Entity entity : list) {
+            if (entity.isDead || !entityMaid.canEntityBeSeen(entity)) {
+                continue;
             }
-
-            // 如果都不符合，那就清空列表
-            list.clear();
+            // 物品
+            if (entity instanceof EntityItem && entityMaid.pickupItem((EntityItem) entity, true)) {
+                entityPickup = entity;
+                return;
+            }
+            // 经验球
+            if (entity instanceof EntityXPOrb) {
+                entityPickup = entity;
+                return;
+            }
+            // 弓箭
+            if (entity instanceof EntityArrow && entityMaid.pickupArrow((EntityArrow) entity, true)) {
+                entityPickup = entity;
+                return;
+            }
         }
+        // 如果都不符合，那就清空列表
+        list.clear();
     }
 
     @Override

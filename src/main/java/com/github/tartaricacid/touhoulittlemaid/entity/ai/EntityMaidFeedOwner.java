@@ -24,6 +24,7 @@ public class EntityMaidFeedOwner extends EntityAIBase {
         this.entityMaid = entityMaid;
         timeCount = 60;
         this.distance = distance;
+        this.setMutexBits(1 | 2);
     }
 
     @Override

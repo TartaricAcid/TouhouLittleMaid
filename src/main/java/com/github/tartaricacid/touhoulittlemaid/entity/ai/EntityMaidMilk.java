@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -28,9 +29,10 @@ public class EntityMaidMilk extends EntityAIBase {
 
     public EntityMaidMilk(AbstractEntityMaid entityMaid, float speed) {
         this.entityMaid = entityMaid;
-        this.speed = speed;
-        timeCount = 20;
         this.world = entityMaid.world;
+        this.speed = speed;
+        this.timeCount = 20;
+        this.setMutexBits(1 | 2);
     }
 
     @Override
@@ -57,11 +59,12 @@ public class EntityMaidMilk extends EntityAIBase {
             return false;
         }
 
-        // 开始判定 16 范围内的可剪生物
+        // 开始判定 16 范围内的适合生物
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(entityMaid, entityMaid.getEntityBoundingBox()
                 .grow(8, 2, 8), EntityMaid.IS_COW);
         for (Entity entity : entityList) {
-            if (entityMaid.getNavigator().getPathToEntityLiving(entity) != null) {
+            if (entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(entity)) &&
+                    entityMaid.getNavigator().getPathToEntityLiving(entity) != null) {
                 milkTarget = entity;
                 return true;
             }

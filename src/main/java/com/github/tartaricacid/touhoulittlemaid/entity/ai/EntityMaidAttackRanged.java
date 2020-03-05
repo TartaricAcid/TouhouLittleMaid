@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemBow;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 
 public class EntityMaidAttackRanged extends EntityAIBase {
     private final AbstractEntityMaid entity;
@@ -24,7 +25,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         this.moveSpeedAmp = moveSpeedAmpIn;
         this.attackCooldown = attackCooldownIn;
         this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
-        this.setMutexBits(3);
+        this.setMutexBits(1 | 2);
     }
 
     public void setAttackCooldown(int cooldown) {
@@ -38,7 +39,9 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         // 能够弹幕攻击：模式正确、主手持御币
         boolean canDanmakuAttack = this.isGoheiInMainhand();
         // 能够处理攻击：攻击目标不为空、上述两者攻击存在一个
-        boolean canAttack = this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive()
+        EntityLivingBase target = this.entity.getAttackTarget();
+        boolean canAttack = target != null && target.isEntityAlive()
+                && entity.isWithinHomeDistanceFromPosition(new BlockPos(target))
                 && (canRangeAttack || canDanmakuAttack);
         return !entity.isSitting() && canAttack;
     }

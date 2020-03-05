@@ -21,7 +21,7 @@ public class EntityFairyAttack extends EntityAIBase {
         this.entityFairy = entityFairy;
         this.minDistance = minDistance;
         this.speedIn = speedIn;
-        this.setMutexBits(3);
+        this.setMutexBits(1 | 2);
     }
 
     @Override

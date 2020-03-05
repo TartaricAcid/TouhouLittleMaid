@@ -10,6 +10,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 
@@ -26,9 +27,10 @@ public class EntityMaidShear extends EntityAIBase {
     public EntityMaidShear(AbstractEntityMaid entityMaid, float speed) {
         this.entityMaid = entityMaid;
         this.speed = speed;
-        timeCount = 10;
+        this.timeCount = 10;
         this.world = entityMaid.world;
         this.mainhandItem = entityMaid.getHeldItemMainhand();
+        this.setMutexBits(1 | 2);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class EntityMaidShear extends EntityAIBase {
                 .grow(8, 2, 8), EntityMaid.CAN_SHEAR);
         for (Entity entity : entityList) {
             if (entity instanceof IShearable && ((IShearable) entity).isShearable(mainhandItem, world, entity.getPosition())
+                    && entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(entity))
                     && entityMaid.getNavigator().getPathToEntityLiving(entity) != null) {
                 shearableEntity = entity;
                 return true;

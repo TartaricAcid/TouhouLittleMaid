@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -62,12 +63,16 @@ public class EntityMaidFeedAnimal extends EntityAIBase {
         }
         // 选取第一个可喂养生物
         for (Entity entity : entityList) {
-            if (entity instanceof EntityAnimal && entity.isEntityAlive() && ((EntityAnimal) entity).getGrowingAge() == 0 &&
-                    !((EntityAnimal) entity).isInLove() && ItemFindUtil.isStackIn(maid.getAvailableInv(false),
-                    ((EntityAnimal) entity)::isBreedingItem) && maid.getNavigator().getPathToEntityLiving(entity) != null) {
-                entitySelected = (EntityAnimal) entity;
-                timeCount = 5;
-                return true;
+            if (entity instanceof EntityAnimal) {
+                EntityAnimal animal = (EntityAnimal) entity;
+                boolean animalIsOkay = animal.isEntityAlive() && animal.getGrowingAge() == 0 && !animal.isInLove();
+                if (animalIsOkay && maid.isWithinHomeDistanceFromPosition(new BlockPos(animal))
+                        && ItemFindUtil.isStackIn(maid.getAvailableInv(false), animal::isBreedingItem)
+                        && maid.getNavigator().getPathToEntityLiving(entity) != null) {
+                    entitySelected = animal;
+                    timeCount = 5;
+                    return true;
+                }
             }
         }
         return false;

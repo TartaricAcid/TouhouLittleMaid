@@ -10,23 +10,20 @@ import net.minecraft.entity.ai.EntityAIAvoidEntity;
  * @author TartaricAcid
  * @date 2019/9/10 18:43
  **/
-public class EntityMaidAvoidEntity<T extends Entity> extends EntityAIAvoidEntity {
-    @SuppressWarnings("unchecked")
-    public EntityMaidAvoidEntity(EntityCreature entityIn, Class classToAvoidIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
+public class EntityMaidAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T> {
+    public EntityMaidAvoidEntity(EntityCreature entityIn, Class<T> classToAvoidIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
         super(entityIn, classToAvoidIn, avoidDistanceIn, farSpeedIn, nearSpeedIn);
     }
 
-    @SuppressWarnings("unchecked")
-    public EntityMaidAvoidEntity(EntityCreature entityIn, Class classToAvoidIn, Predicate avoidTargetSelectorIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
+    public EntityMaidAvoidEntity(EntityCreature entityIn, Class<T> classToAvoidIn, Predicate<? super T> avoidTargetSelectorIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
         super(entityIn, classToAvoidIn, avoidTargetSelectorIn, avoidDistanceIn, farSpeedIn, nearSpeedIn);
     }
 
     @Override
     public boolean shouldExecute() {
         if (entity instanceof EntityMaid) {
-            boolean isAttack = ((EntityMaid) entity).getTask().isAttack();
-            boolean isSitting = ((EntityMaid) entity).isSitting();
-            if (isAttack || isSitting) {
+            EntityMaid maid = (EntityMaid) entity;
+            if (maid.getTask().isAttack()) {
                 return false;
             }
         }
@@ -34,11 +31,21 @@ public class EntityMaidAvoidEntity<T extends Entity> extends EntityAIAvoidEntity
     }
 
     @Override
+    public void updateTask() {
+        super.updateTask();
+        if (entity instanceof EntityMaid) {
+            EntityMaid maid = (EntityMaid) entity;
+            if (maid.isSitting()) {
+                maid.setSitting(false);
+            }
+        }
+    }
+
+    @Override
     public boolean shouldContinueExecuting() {
         if (entity instanceof EntityMaid) {
-            boolean isAttack = ((EntityMaid) entity).getTask().isAttack();
-            boolean isSitting = ((EntityMaid) entity).isSitting();
-            if (isAttack || isSitting) {
+            EntityMaid maid = (EntityMaid) entity;
+            if (maid.getTask().isAttack()) {
                 return false;
             }
         }

@@ -175,7 +175,6 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityMaidSit(this));
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityRinnosuke.class, 3.0f, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityFairy.class, 3.0f, 0.8d, 0.9d));
@@ -1126,6 +1125,16 @@ public class EntityMaid extends AbstractEntityMaid {
     public boolean isWithinHomeDistanceFromPosition(@Nonnull BlockPos pos) {
         float maxDistance = getMaximumHomeDistance();
         BlockPos homePos = getHomePosition();
+        if (getCompassMode() == ItemKappaCompass.Mode.SET_RANGE && maxDistance != INFINITY_LEASHED_DISTANCE) {
+            List<BlockPos> posList = getCompassPosList(getCompassMode());
+            int index = posList.size() - 1;
+            BlockPos pos1 = posList.get(index);
+            BlockPos pos2 = posList.get(--index);
+            boolean xIsOkay = Math.min(pos1.getX(), pos2.getX()) <= pos.getX() && pos.getX() <= Math.max(pos1.getX(), pos2.getX());
+            boolean yIsOkay = Math.min(pos1.getY(), pos2.getY()) <= pos.getY() && pos.getY() <= Math.max(pos1.getY(), pos2.getY());
+            boolean zIsOkay = Math.min(pos1.getZ(), pos2.getZ()) <= pos.getZ() && pos.getZ() <= Math.max(pos1.getZ(), pos2.getZ());
+            return xIsOkay && yIsOkay && zIsOkay;
+        }
         if (maxDistance == INFINITY_LEASHED_DISTANCE) {
             return true;
         } else {
@@ -1157,8 +1166,13 @@ public class EntityMaid extends AbstractEntityMaid {
                 case MULTI_POINT_REENTRY:
                     return posList.get(getCurrentIndex());
                 case SET_RANGE:
+                    if (posList.size() > 1) {
+                        int index = posList.size() - 1;
+                        BlockPos tmpPos = posList.get(index).add(posList.get(--index));
+                        return new BlockPos(tmpPos.getX() / 2, tmpPos.getY() / 2, tmpPos.getZ() / 2);
+                    }
                 case NONE:
-                    // TODO: 2020/3/4 完善范围设置
+                    return BlockPos.ORIGIN;
             }
         }
         return BlockPos.ORIGIN;
@@ -1177,8 +1191,12 @@ public class EntityMaid extends AbstractEntityMaid {
                 case MULTI_POINT_REENTRY:
                     return ItemKappaCompass.MAX_DISTANCE / 2.0f;
                 case SET_RANGE:
+                    if (posList.size() > 1) {
+                        int index = posList.size() - 1;
+                        return MathHelper.sqrt(posList.get(index).distanceSq(posList.get(--index)));
+                    }
                 case NONE:
-                    // TODO: 2020/3/4 完善范围设置
+                    return INFINITY_LEASHED_DISTANCE;
             }
         }
         return INFINITY_LEASHED_DISTANCE;

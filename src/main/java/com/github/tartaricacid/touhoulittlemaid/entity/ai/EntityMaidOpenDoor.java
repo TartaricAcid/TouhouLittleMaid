@@ -62,7 +62,7 @@ public class EntityMaidOpenDoor extends EntityAIBase {
                     PathPoint pathpoint = path.getPathPointFromIndex(i);
                     this.doorPosition = new BlockPos(pathpoint.x, pathpoint.y + 1, pathpoint.z);
                     // 水平面距离小于 1.5
-                    if (this.entityMaid.getDistanceSq((double) this.doorPosition.getX(), this.entityMaid.posY, (double) this.doorPosition.getZ()) <= 2.25D) {
+                    if (this.entityMaid.getDistanceSq(this.doorPosition.getX(), this.entityMaid.posY, this.doorPosition.getZ()) <= 2.25D) {
                         // 尝试获取此方块是否为门
                         this.doorBlock = this.getBlockDoor(this.doorPosition);
                         // 为门的情况下，执行后续逻辑
