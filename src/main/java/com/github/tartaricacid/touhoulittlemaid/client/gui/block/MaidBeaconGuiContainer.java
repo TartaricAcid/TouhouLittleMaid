@@ -47,6 +47,7 @@ public class MaidBeaconGuiContainer extends GuiContainer {
     @Override
     public void initGui() {
         super.initGui();
+        buttonList.clear();
         int i = this.guiLeft;
         int j = this.guiTop;
         int start = i + 16;

@@ -239,6 +239,7 @@ public class CommonProxy {
         }
         INSTANCE.registerMessage(TrolleyAudioSoundMessage.Handler.class, TrolleyAudioSoundMessage.class, 18, Side.CLIENT);
         INSTANCE.registerMessage(SetCompassModeMessage.Handler.class, SetCompassModeMessage.class, 19, Side.SERVER);
+        INSTANCE.registerMessage(SendNameTagMessage.Handler.class, SendNameTagMessage.class, 20, Side.SERVER);
     }
 
     /**
