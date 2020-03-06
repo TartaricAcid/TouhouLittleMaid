@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.danmaku;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.google.common.collect.Maps;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 
@@ -23,18 +24,26 @@ import java.util.Objects;
  * @date 2019/11/16 9:55
  **/
 public final class CustomSpellCardManger {
-    private static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP = CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
+    /**
+     * 用于客户端显示的符卡条目，会从所处服务端获取数据
+     */
+    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_CLIENT = Maps.newHashMap();
+    /**
+     * 用于服务端的符卡条目，会同步客户端数据
+     */
+    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_SERVER = Maps.newHashMap();
+
     private static final Path CONFIG_SPELL_CARD_FOLDER = Paths.get("config", TouhouLittleMaid.MOD_ID, "custom_spell_card");
     private static final String JAR_SPELL_CARD_FOLDER = "/assets/touhou_little_maid/custom_spell_card";
     private static final String ACCEPTED_SPELL_CARD_SUFFIX = ".js";
     private static final ResourceLocation DEFAULT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/items/spell_card/spellcard_default.png");
 
     public static void onCustomSpellCardReload() {
-        CUSTOM_SPELL_CARD_MAP.clear();
+        CUSTOM_SPELL_CARD_SERVER.clear();
         checkCustomSpellCardFolder();
         loadInternalSpellCard();
         loadConfigSpellCard();
-        TouhouLittleMaid.LOGGER.info("Loaded {} Custom Spell Cards", CUSTOM_SPELL_CARD_MAP.size());
+        TouhouLittleMaid.LOGGER.info("Loaded {} Custom Spell Cards", CUSTOM_SPELL_CARD_SERVER.size());
     }
 
     /**
@@ -57,10 +66,10 @@ public final class CustomSpellCardManger {
         for (File file : files) {
             try {
                 CustomSpellCardEntry entry = loadCustomSpellCard(file);
-                if (CUSTOM_SPELL_CARD_MAP.containsKey(entry.getId())) {
+                if (CUSTOM_SPELL_CARD_SERVER.containsKey(entry.getId())) {
                     TouhouLittleMaid.LOGGER.warn("Have a spell card of the same id: {}", entry.getId());
                 } else {
-                    CUSTOM_SPELL_CARD_MAP.put(entry.getId(), entry);
+                    CUSTOM_SPELL_CARD_SERVER.put(entry.getId(), entry);
                 }
             } catch (NullPointerException | IOException | ScriptException e) {
                 TouhouLittleMaid.LOGGER.error("Exception while loading spell in {}:", file);
@@ -74,7 +83,7 @@ public final class CustomSpellCardManger {
                 JAR_SPELL_CARD_FOLDER, spellcardName));
         try {
             CustomSpellCardEntry entry = loadCustomSpellCard(stream);
-            CUSTOM_SPELL_CARD_MAP.put(entry.getId(), entry);
+            CUSTOM_SPELL_CARD_SERVER.put(entry.getId(), entry);
         } catch (NullPointerException | IOException | ScriptException e) {
             TouhouLittleMaid.LOGGER.error("Exception while loading spell in {}:", spellcardName);
             TouhouLittleMaid.LOGGER.catching(e);

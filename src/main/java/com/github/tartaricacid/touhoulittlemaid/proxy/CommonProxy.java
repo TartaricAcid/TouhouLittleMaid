@@ -17,7 +17,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
-import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
@@ -76,7 +75,6 @@ public class CommonProxy {
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
-    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_SERVER = Maps.newHashMap();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
 
@@ -248,15 +246,5 @@ public class CommonProxy {
      */
     public String translate(String key, Object... format) {
         return I18n.translateToLocalFormatted(key, format);
-    }
-
-    public Map<String, CustomSpellCardEntry> getSpellCard() {
-        return CUSTOM_SPELL_CARD_MAP_SERVER;
-    }
-
-    /**
-     * 使用代理机制的，仅用于客户端的符卡数据设置
-     */
-    public void setSpellCard(Map<String, CustomSpellCardEntry> entryMap) {
     }
 }

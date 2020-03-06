@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
-import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
@@ -54,10 +53,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
      */
     public static final Map<Long, Integer> HATA_NAME_MAP = Maps.newHashMap();
     public static HataTextureManager HATA_TEXTURE_MANAGER;
-    /**
-     * 仅用于客户端显示文本提示
-     */
-    public static final Map<String, CustomSpellCardEntry> CUSTOM_SPELL_CARD_MAP_CLIENT = Maps.newHashMap();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
@@ -108,17 +103,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public String translate(String key, Object... format) {
         return I18n.format(key, format);
-    }
-
-    @Override
-    public Map<String, CustomSpellCardEntry> getSpellCard() {
-        return CUSTOM_SPELL_CARD_MAP_CLIENT;
-    }
-
-    @Override
-    public void setSpellCard(Map<String, CustomSpellCardEntry> entryMap) {
-        CUSTOM_SPELL_CARD_MAP_CLIENT.clear();
-        CUSTOM_SPELL_CARD_MAP_CLIENT.putAll(entryMap);
     }
 
     /**

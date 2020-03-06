@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
-import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
 import com.google.common.collect.Maps;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -26,7 +25,7 @@ public class SyncCustomSpellCardData implements IMessage {
 
     public SyncCustomSpellCardData() {
         map.clear();
-        map.putAll(CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER);
+        map.putAll(CustomSpellCardManger.CUSTOM_SPELL_CARD_SERVER);
         this.size = map.size();
     }
 
@@ -72,7 +71,10 @@ public class SyncCustomSpellCardData implements IMessage {
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(SyncCustomSpellCardData message, MessageContext ctx) {
             if (ctx.side == Side.CLIENT) {
-                Minecraft.getMinecraft().addScheduledTask(() -> TouhouLittleMaid.PROXY.setSpellCard(message.map));
+                Minecraft.getMinecraft().addScheduledTask(() -> {
+                    CustomSpellCardManger.CUSTOM_SPELL_CARD_CLIENT.clear();
+                    CustomSpellCardManger.CUSTOM_SPELL_CARD_CLIENT.putAll(message.map);
+                });
             }
             return null;
         }

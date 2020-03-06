@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardEntry;
+import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.script.EntityLivingBaseWrapper;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.script.WorldWrapper;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
@@ -82,9 +83,9 @@ public class ItemSpellCard extends Item {
     public static CustomSpellCardEntry getCustomSpellCardEntry(ItemStack spellCard, @Nullable EntityLivingBase user) {
         Map<String, CustomSpellCardEntry> map;
         if (user != null && user.world.isRemote) {
-            map = TouhouLittleMaid.PROXY.getSpellCard();
+            map = CustomSpellCardManger.CUSTOM_SPELL_CARD_CLIENT;
         } else {
-            map = CommonProxy.CUSTOM_SPELL_CARD_MAP_SERVER;
+            map = CustomSpellCardManger.CUSTOM_SPELL_CARD_SERVER;
         }
         if (map.isEmpty()) {
             return null;
@@ -102,7 +103,7 @@ public class ItemSpellCard extends Item {
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            Set<String> ids = TouhouLittleMaid.PROXY.getSpellCard().keySet();
+            Set<String> ids = CustomSpellCardManger.CUSTOM_SPELL_CARD_CLIENT.keySet();
             for (String id : ids) {
                 items.add(setCustomSpellCardEntry(id, new ItemStack(this)));
             }
