@@ -15,7 +15,7 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
 
     @Override
     public boolean shouldExecute() {
-        return !entityMaid.isHome() && super.shouldExecute();
+        return !entityMaid.isHomeModeEnable() && super.shouldExecute();
     }
 
     /**
@@ -61,7 +61,7 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.isHome() && !this.entityMaid.getNavigator().noPath()
+        return !entityMaid.isHomeModeEnable() && !this.entityMaid.getNavigator().noPath()
                 && this.entityMaid.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist)
                 && !this.entityMaid.isSitting();
     }

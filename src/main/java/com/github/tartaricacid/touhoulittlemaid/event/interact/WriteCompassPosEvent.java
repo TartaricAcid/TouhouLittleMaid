@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,12 +27,9 @@ public final class WriteCompassPosEvent {
         if (itemstack.getItem() == MaidItems.KAPPA_COMPASS && event.getMaid() instanceof EntityMaid) {
             event.setCanceled(true);
             EntityMaid maid = (EntityMaid) event.getMaid();
-            if (world.isRemote) {
-                return;
-            }
             if (player.isSneaking()) {
                 maid.setCompassMode(ItemKappaCompass.Mode.NONE);
-                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.usage.result.reset"));
+                sendMessageFromServer(world, player, "message.touhou_little_maid.kappa_compass.usage.result.reset");
                 return;
             }
             ItemKappaCompass.Mode mode = ItemKappaCompass.getMode(itemstack);
@@ -45,14 +43,17 @@ public final class WriteCompassPosEvent {
                 if (maid.isSitting() || !maid.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.6f)) {
                     maid.attemptTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
                 }
-                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.usage.result.success"));
+                sendMessageFromServer(world, player, "message.touhou_little_maid.kappa_compass.usage.result.success");
+                player.playSound(MaidSoundEvent.COMPASS_POINT, 0.8f, 0.8f);
             } else {
-                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.usage.result.fail"));
-                ItemKappaCompass.setMode(itemstack, maid.getCompassMode());
-                for (BlockPos pos : maid.getCompassPosList(maid.getCompassMode())) {
-                    ItemKappaCompass.setPos(itemstack, pos);
-                }
+                sendMessageFromServer(world, player, "message.touhou_little_maid.kappa_compass.usage.result.fail");
             }
+        }
+    }
+
+    private static void sendMessageFromServer(World world, EntityPlayer player, String i18nKey) {
+        if (!world.isRemote) {
+            player.sendMessage(new TextComponentTranslation(i18nKey));
         }
     }
 }

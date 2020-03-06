@@ -23,7 +23,7 @@ public class EntityMaidCompassSetting extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        return !entityMaid.guiOpening && --timeCount < 0 && entityMaid.isHome() && !entityMaid.isSitting()
+        return !entityMaid.guiOpening && --timeCount < 0 && entityMaid.isHomeModeEnable() && !entityMaid.isSitting()
                 && entityMaid.getCompassMode() != ItemKappaCompass.Mode.NONE;
     }
 

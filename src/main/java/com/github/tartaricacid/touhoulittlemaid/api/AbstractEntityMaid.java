@@ -91,7 +91,7 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      *
      * @return boolean
      */
-    abstract public boolean isHome();
+    abstract public boolean isHomeModeEnable();
 
     /**
      * 获取经验值

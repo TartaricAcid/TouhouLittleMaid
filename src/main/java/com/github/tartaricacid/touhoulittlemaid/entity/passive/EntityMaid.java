@@ -864,7 +864,7 @@ public class EntityMaid extends AbstractEntityMaid {
             setExp(compound.getInteger(NBT.MAID_EXP.getName()));
         }
         if (compound.hasKey(NBT.MAID_HOME.getName())) {
-            setHome(compound.getBoolean(NBT.MAID_HOME.getName()));
+            setHomeModeEnable(compound.getBoolean(NBT.MAID_HOME.getName()));
         }
         if (compound.hasKey(NBT.MODEL_ID.getName())) {
             setModelId(compound.getString(NBT.MODEL_ID.getName()));
@@ -921,7 +921,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.IS_PICKUP.getName(), isPickup());
         compound.setString(NBT.MAID_TASK.getName(), task.getUid().toString());
         compound.setInteger(NBT.MAID_EXP.getName(), getExp());
-        compound.setBoolean(NBT.MAID_HOME.getName(), isHome());
+        compound.setBoolean(NBT.MAID_HOME.getName(), isHomeModeEnable());
         compound.setString(NBT.MODEL_ID.getName(), getModelId());
         compound.setBoolean(NBT.STRUCK_BY_LIGHTNING.getName(), isStruckByLightning());
         compound.setLong(NBT.SASIMONO_CRC32.getName(), getSasimonoCRC32());
@@ -1123,6 +1123,9 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean isWithinHomeDistanceFromPosition(@Nonnull BlockPos pos) {
+        if (!isHomeModeEnable()) {
+            return true;
+        }
         float maxDistance = getMaximumHomeDistance();
         BlockPos homePos = getHomePosition();
         if (getCompassMode() == ItemKappaCompass.Mode.SET_RANGE && maxDistance != INFINITY_LEASHED_DISTANCE) {
@@ -1133,7 +1136,7 @@ public class EntityMaid extends AbstractEntityMaid {
             boolean xIsOkay = Math.min(pos1.getX(), pos2.getX()) <= pos.getX() && pos.getX() <= Math.max(pos1.getX(), pos2.getX());
             boolean yIsOkay = Math.min(pos1.getY(), pos2.getY()) <= pos.getY() && pos.getY() <= Math.max(pos1.getY(), pos2.getY());
             boolean zIsOkay = Math.min(pos1.getZ(), pos2.getZ()) <= pos.getZ() && pos.getZ() <= Math.max(pos1.getZ(), pos2.getZ());
-            return xIsOkay && yIsOkay && zIsOkay;
+            return xIsOkay && yIsOkay && zIsOkay && this.isHomeModeEnable();
         }
         if (maxDistance == INFINITY_LEASHED_DISTANCE) {
             return true;
@@ -1156,6 +1159,9 @@ public class EntityMaid extends AbstractEntityMaid {
     public BlockPos getHomePosition() {
         if (isLeashedAndInSameWorld()) {
             return leashedPosition;
+        }
+        if (!isHomeModeEnable()) {
+            return BlockPos.ORIGIN;
         }
         List<BlockPos> posList = getCompassPosList(getCompassMode());
         if (posList.size() > 0) {
@@ -1183,6 +1189,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (isLeashedAndInSameWorld()) {
             return maximumLeashedDistance;
         }
+        if (!isHomeModeEnable()) {
+            return INFINITY_LEASHED_DISTANCE;
+        }
         List<BlockPos> posList = getCompassPosList(getCompassMode());
         if (posList.size() > 0) {
             switch (getCompassMode()) {
@@ -1207,7 +1216,7 @@ public class EntityMaid extends AbstractEntityMaid {
         if (isLeashedAndInSameWorld()) {
             return maximumLeashedDistance == INFINITY_LEASHED_DISTANCE;
         }
-        return getCompassMode() != ItemKappaCompass.Mode.NONE;
+        return (getCompassMode() != ItemKappaCompass.Mode.NONE) && isHomeModeEnable();
     }
 
     private boolean isLeashedAndInSameWorld() {
@@ -1324,12 +1333,12 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     @Override
-    public boolean isHome() {
+    public boolean isHomeModeEnable() {
         return this.dataManager.get(HOME);
     }
 
-    public void setHome(boolean isHome) {
-        this.dataManager.set(HOME, isHome);
+    public void setHomeModeEnable(boolean enable) {
+        this.dataManager.set(HOME, enable);
     }
 
     public boolean isSwingingArms() {

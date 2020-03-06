@@ -279,5 +279,12 @@
     "sounds": [
       "touhou_little_maid:entity/box"
     ]
+  },
+  "item.compass": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.item.compass",
+    "sounds": [
+      "touhou_little_maid:item/point"
+    ]
   }
 }

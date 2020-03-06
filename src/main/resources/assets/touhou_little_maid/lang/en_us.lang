@@ -140,6 +140,7 @@ compass.touhou_little_maid.mode.multi_point_reentry=Muti-Point Reentry
 compass.touhou_little_maid.mode.multi_point_closure=Muti-Point Closure
 compass.touhou_little_maid.mode.set_range=Set Range
 compass.touhou_little_maid.mode.none=None
+compass.touhou_little_maid.mode.home.disable=§4§lHOME MODE IS DISABLE
 
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
@@ -577,6 +578,7 @@ subtitle.touhou_little_maid.monster.rinnosuke_ambient=Rinnosuke Ambient Sound
 subtitle.touhou_little_maid.monster.rinnosuke_death=Rinnosuke Death Sound
 subtitle.touhou_little_maid.monster.rinnosuke_hurt=Rinnosuke Hurt Sound
 subtitle.touhou_little_maid.entity.box=Box Open Sound
+subtitle.touhou_little_maid.item.compass=Compass Select Point Sound
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s

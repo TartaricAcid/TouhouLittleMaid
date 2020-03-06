@@ -53,7 +53,7 @@ public class MaidHomeModeMessage implements IMessage {
                     EntityPlayerMP player = ctx.getServerHandler().player;
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
                     if (entity instanceof EntityMaid && player.equals(((EntityMaid) entity).getOwner())) {
-                        ((EntityMaid) entity).setHome(message.isHome());
+                        ((EntityMaid) entity).setHomeModeEnable(message.isHome());
                     }
                 });
             }

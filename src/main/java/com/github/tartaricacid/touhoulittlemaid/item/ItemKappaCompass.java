@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.compass.GuiKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -123,10 +124,14 @@ public class ItemKappaCompass extends Item {
                 removePos(stack);
             } else {
                 Result result = setPosAndSendMessage(pos, facing, stack);
-                if (!worldIn.isRemote && result != Result.SUCCESS) {
-                    String message = String.format("message.touhou_little_maid.kappa_compass.usage.result.%s",
-                            result.name().toLowerCase(Locale.US));
-                    player.sendMessage(new TextComponentTranslation(message));
+                if (result != Result.SUCCESS) {
+                    if (!worldIn.isRemote) {
+                        String message = String.format("message.touhou_little_maid.kappa_compass.usage.result.%s",
+                                result.name().toLowerCase(Locale.US));
+                        player.sendMessage(new TextComponentTranslation(message));
+                    }
+                } else {
+                    player.playSound(MaidSoundEvent.COMPASS_POINT, 0.8f, 1.5f);
                 }
             }
             return EnumActionResult.SUCCESS;

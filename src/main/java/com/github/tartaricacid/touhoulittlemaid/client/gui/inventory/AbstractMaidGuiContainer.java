@@ -130,7 +130,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
                 22, 234, 234, 0, BACKGROUND));
 
         // 切换是否开启 home 模式的按钮
-        toggleHome = new GuiButtonToggle(BUTTON.HOME.ordinal(), i + 116, j + 63, 26, 16, maid.isHome());
+        toggleHome = new GuiButtonToggle(BUTTON.HOME.ordinal(), i + 116, j + 63, 26, 16, maid.isHomeModeEnable());
         toggleHome.initTextureValues(178, 36, 28, 18, BACKGROUND);
         this.buttonList.add(toggleHome);
 
@@ -210,7 +210,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         }
 
         if (button.id == BUTTON.HOME.ordinal()) {
-            if (maid.isHome()) {
+            if (maid.isHomeModeEnable()) {
                 toggleHome.setStateTriggered(false);
                 CommonProxy.INSTANCE.sendToServer(new MaidHomeModeMessage(maid.getUniqueID(), false));
                 return;
@@ -370,7 +370,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         yInRange = (j + 63) < mouseY && mouseY < (j + 79);
         if (xInRange && yInRange) {
             this.drawHoveringText(Arrays.asList(
-                    I18n.format("gui.touhou_little_maid.button.home." + maid.isHome()),
+                    I18n.format("gui.touhou_little_maid.button.home." + maid.isHomeModeEnable()),
                     I18n.format("gui.touhou_little_maid.button.home.desc")
             ), mouseX, mouseY);
         }

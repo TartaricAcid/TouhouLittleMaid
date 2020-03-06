@@ -64,8 +64,12 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         boolean hasCompass = Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() == MaidItems.KAPPA_COMPASS;
         String str;
         if (hasCompass) {
-            str = I18n.format(String.format("compass.touhou_little_maid.mode.%s",
-                    entityIn.getCompassMode().name().toLowerCase(Locale.US)));
+            String modeKey = String.format("compass.touhou_little_maid.mode.%s", entityIn.getCompassMode().name().toLowerCase(Locale.US));
+            str = I18n.format("tooltips.touhou_little_maid.kappa_compass.mode", I18n.format(modeKey));
+            if (!entityIn.isHomeModeEnable()) {
+                super.renderEntityName(entityIn, x, y + 0.25, z,
+                        I18n.format("compass.touhou_little_maid.mode.home.disable"), 16);
+            }
         } else {
             str = name;
         }
