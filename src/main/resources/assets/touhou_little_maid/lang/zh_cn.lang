@@ -133,6 +133,7 @@ message.touhou_little_maid.maid_backpack.big=§c[大背包]
 message.touhou_little_maid.maid_backpack.level_not_match=背包等级不匹配，需要 %s§r 但却是 %s§r。
 message.touhou_little_maid.maid_backpack.level_is_biggest=背包等级已经最大
 message.touhou_little_maid.resources_download.reload=重载资源信息中……
+message.touhou_little_maid.slashblade.position=拔刀剑位置已经修改！
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=单点模式

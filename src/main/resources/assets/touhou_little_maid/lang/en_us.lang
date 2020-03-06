@@ -133,6 +133,7 @@ message.touhou_little_maid.maid_backpack.big=§c[Big BackPack]
 message.touhou_little_maid.maid_backpack.level_not_match=Backpack level not match, need %s§r but is %s§r.
 message.touhou_little_maid.maid_backpack.level_is_biggest=Backpack level is biggest.
 message.touhou_little_maid.resources_download.reload=Reloading resource information...
+message.touhou_little_maid.slashblade.position=Slash blade position is changed!
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=Single Point
