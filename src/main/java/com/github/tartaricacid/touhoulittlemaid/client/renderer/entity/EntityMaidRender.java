@@ -27,6 +27,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final ResourceLocation DEFAULT_MODEL_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/hakurei_reimu.png");
     private ResourceLocation modelRes;
+    private float scale = 1.0f;
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
@@ -45,11 +46,17 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         // 尝试读取模型
         this.mainModel = CustomModelLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new);
         CustomModelLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
+        CustomModelLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> scale = info.getRenderEntityScale());
         GlStateManager.pushMatrix();
         GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
         GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         GlStateManager.popMatrix();
+    }
+
+    @Override
+    protected void preRenderCallback(EntityMaid entitylivingbaseIn, float partialTickTime) {
+        GlStateManager.scale(scale, scale, scale);
     }
 
     @Override
@@ -63,6 +70,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     protected void renderEntityName(@Nonnull EntityMaid entityIn, double x, double y, double z, @Nonnull String name, double distanceSq) {
         boolean hasCompass = Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() == MaidItems.KAPPA_COMPASS;
         String str;
+        y = y + scale - 1;
         if (hasCompass) {
             String modeKey = String.format("compass.touhou_little_maid.mode.%s", entityIn.getCompassMode().name().toLowerCase(Locale.US));
             str = I18n.format("tooltips.touhou_little_maid.kappa_compass.mode", I18n.format(modeKey));

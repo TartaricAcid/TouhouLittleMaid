@@ -43,9 +43,9 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
         this.mainModel = CustomModelLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).orElseThrow(NullPointerException::new);
         CustomModelLoader.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.mainModel = model);
         GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         super.doRender(chair, x, y, z, entityYaw, partialTicks);
+        GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }

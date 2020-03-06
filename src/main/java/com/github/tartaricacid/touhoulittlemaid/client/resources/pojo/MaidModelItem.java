@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources.pojo;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,9 @@ public class MaidModelItem implements IModelItem {
 
     @SerializedName("render_item_scale")
     private float renderItemScale = 1.0f;
+
+    @SerializedName("render_entity_scale")
+    private float renderEntityScale = 1.0f;
 
     private List<ResourceLocation> animation;
 
@@ -63,6 +67,10 @@ public class MaidModelItem implements IModelItem {
         return renderItemScale;
     }
 
+    public float getRenderEntityScale() {
+        return renderEntityScale;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public MaidModelItem decorate() {
@@ -88,6 +96,7 @@ public class MaidModelItem implements IModelItem {
         if (animation == null || animation.size() == 0) {
             animation = Collections.singletonList(new ResourceLocation("touhou_little_maid:animation/maid.default.js"));
         }
+        renderEntityScale = MathHelper.clamp(renderEntityScale, 0.7f, 1.3f);
         return this;
     }
 }

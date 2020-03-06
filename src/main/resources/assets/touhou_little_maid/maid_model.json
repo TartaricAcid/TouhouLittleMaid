@@ -240,7 +240,8 @@
       "description": ["{model.touhou_little_maid.kijin_seija.desc}"]
     }, {
       "model_id": "touhou_little_maid:sukuna_shinmyoumaru",
-      "description": ["{model.touhou_little_maid.sukuna_shinmyoumaru.desc}"]
+      "description": ["{model.touhou_little_maid.sukuna_shinmyoumaru.desc}"],
+      "render_entity_scale": 0.7
     }, {
       "model_id": "touhou_little_maid:horikawa_raiko",
       "description": ["{model.touhou_little_maid.horikawa_raiko.desc}"]
