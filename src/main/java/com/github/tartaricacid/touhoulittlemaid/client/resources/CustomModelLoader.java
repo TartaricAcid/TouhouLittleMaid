@@ -41,6 +41,7 @@ public class CustomModelLoader {
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
     public static void reloadModelPack() {
+        CustomJsAnimationManger.clearAll();
         MAID_MODEL.clearAll();
         CHAIR_MODEL.clearAll();
         // 重载数据

@@ -62,7 +62,6 @@ public class LayerMaidBackpack implements LayerRenderer<EntityMaid> {
             case BIG:
                 Minecraft.getMinecraft().renderEngine.bindTexture(BIG);
                 bigModel.render(entityMaid, 0, 0, 0, 0, 0, 0.0625f);
-                return;
         }
     }
 

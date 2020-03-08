@@ -174,8 +174,8 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.buttonList.add(new GuiButton(BUTTON.DOWNLOAD_RESOURCES.ordinal(), i + 26, j + 167, 20, 20, ""));
 
         // 占位按钮
-        for (int k = 0; k < 7; k++) {
-            this.buttonList.add(new GuiButton(405 + k, i + 26 + 21 * k, j + 167, 20, 20, ""));
+        for (int k = 0; k < 6; k++) {
+            this.buttonList.add(new GuiButton(405 + k, i + 47 + 21 * k, j + 167, 20, 20, ""));
         }
     }
 

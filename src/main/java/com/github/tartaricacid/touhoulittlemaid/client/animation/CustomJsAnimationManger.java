@@ -79,4 +79,8 @@ public class CustomJsAnimationManger {
             IOUtils.closeQuietly(stream);
         }
     }
+
+    public static void clearAll() {
+        CUSTOM_ANIMATION_MAP.clear();
+    }
 }
