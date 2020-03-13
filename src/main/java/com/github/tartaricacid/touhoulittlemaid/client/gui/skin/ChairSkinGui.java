@@ -61,11 +61,10 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelItem> {
     }
 
     @Override
-    void notifyModelChange(EntityChair chair, ResourceLocation modelId) {
-        float mountedYOffset = CustomModelLoader.CHAIR_MODEL.getModelMountedYOffset(modelId.toString());
-        boolean isTameableCanRide = CustomModelLoader.CHAIR_MODEL.getModelTameableCanRide(modelId.toString());
-        boolean isNoGravity = CustomModelLoader.CHAIR_MODEL.getModelNoGravity(modelId.toString());
-        CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(chair.getUniqueID(), modelId, mountedYOffset, isTameableCanRide, isNoGravity));
+    void notifyModelChange(EntityChair chair, ChairModelItem info) {
+        CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(chair.getUniqueID(),
+                info.getModelId(), info.getMountedYOffset(),
+                info.isTameableCanRide(), info.isNoGravity()));
     }
 
     @Override

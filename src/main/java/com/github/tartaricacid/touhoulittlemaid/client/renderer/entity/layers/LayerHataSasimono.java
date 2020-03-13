@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.HataSasimonoFlagModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.HataSasimonoFrameModel;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
@@ -19,17 +20,19 @@ import javax.annotation.Nonnull;
  **/
 public class LayerHataSasimono implements LayerRenderer<EntityMaid> {
     private static final ResourceLocation FRAME_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/hata_sasimono.png");
+    private final EntityMaidRender renderer;
     private ModelBase modelBase;
     private ModelBase modelFlag;
 
-    public LayerHataSasimono() {
+    public LayerHataSasimono(EntityMaidRender renderer) {
         this.modelBase = new HataSasimonoFrameModel();
         this.modelFlag = new HataSasimonoFlagModel();
+        this.renderer = renderer;
     }
 
     @Override
     public void doRenderLayer(@Nonnull EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (maid.hasSasimono() && maid.isShowSasimono()) {
+        if (renderer.getMainInfo().isShowHata() && maid.hasSasimono() && maid.isShowSasimono()) {
             int texture;
 
             // 先判定 size

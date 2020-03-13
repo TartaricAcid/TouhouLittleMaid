@@ -26,7 +26,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -65,7 +64,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -86,30 +84,25 @@ import java.util.Collections;
 import java.util.List;
 
 public class EntityMaid extends AbstractEntityMaid {
-    public static final Predicate<Entity> IS_PICKUP = entity -> ((entity instanceof EntityItem && !MaidInventoryItemHandler.isIllegalItem(((EntityItem) entity).getItem()))
-            || entity instanceof EntityXPOrb || entity instanceof EntityPowerPoint || entity instanceof EntityArrow) && !entity.isInWater();
-    public static final Predicate<Entity> IS_MOB = entity -> entity instanceof EntityMob && entity.isEntityAlive();
-    public static final Predicate<Entity> CAN_SHEAR = entity -> entity instanceof IShearable && ((IShearable) entity).isShearable(new ItemStack(Items.SHEARS), entity.world, entity.getPosition())
-            && entity.isEntityAlive();
-    public static final Predicate<Entity> IS_COW = entity -> entity instanceof EntityCow && !((EntityCow) entity).isChild() && entity.isEntityAlive();
-
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> PICKUP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> TASK = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Integer> EXP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
-    private static final DataParameter<BlockPos> HOME_POS = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Boolean> HOME = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ARM_RISE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> MODEL_ID = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> STRUCK_BY_LIGHTNING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> SASIMONO_CRC32 = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> SHOW_SASIMONO = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
-    // 无敌状态不会主动同步至客户端
+    /**
+     * 无敌状态不会主动同步至客户端
+     */
     private static final DataParameter<Boolean> INVULNERABLE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> BACKPACK_LEVEL = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
-    // 要在客户端显示女仆当前所处的模式，所以需要同步客户端
+    /**
+     * 要在客户端显示女仆当前所处的模式，所以需要同步客户端
+     */
     private static final DataParameter<Integer> COMPASS_MODE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
-
     /**
      * 模式所应用的 AI 的优先级
      */
@@ -117,11 +110,11 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 拾起物品声音的延时计数器
      */
-    private static int pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
+    private static int PICKUP_SOUND_COUNT = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
     /**
      * 玩家伤害女仆后的声音延时计数器
      */
-    private static int playerHurtSoundCount = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
+    private static int PLAYER_HURT_SOUND_COUNT = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
     /**
      * 冷却时间计数器
      */
@@ -143,10 +136,12 @@ public class EntityMaid extends AbstractEntityMaid {
     /**
      * 是否开启 debug 模式下的地面显示，仅在客户端调用
      */
+    @SideOnly(Side.CLIENT)
     public boolean isDebugFloorOpen = false;
     /**
      * 是否开启 debug 模式下的扫帚显示，仅在客户端调用
      */
+    @SideOnly(Side.CLIENT)
     public boolean isDebugBroomShow = false;
     /**
      * 用来暂存当前实体所调用的 IMaidTask 对象
@@ -158,13 +153,18 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     @Nullable
     private EntityAIBase taskAI;
-
     /**
      * 罗盘存储的坐标
      */
     private List<BlockPos> compassPosList = Lists.newArrayList();
     private int currentIndex = 0;
     private boolean descending = false;
+    /**
+     * 部分功能开启或者关闭
+     */
+    private boolean canHoldTrolley = true;
+    private boolean canHoldVehicle = true;
+    private boolean canRidingBroom = true;
 
     public EntityMaid(World worldIn) {
         super(worldIn);
@@ -209,7 +209,6 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(PICKUP, Boolean.TRUE);
         this.dataManager.register(TASK, TaskIdle.UID.toString());
         this.dataManager.register(EXP, 0);
-        this.dataManager.register(HOME_POS, BlockPos.ORIGIN);
         this.dataManager.register(HOME, Boolean.FALSE);
         this.dataManager.register(ARM_RISE, Boolean.FALSE);
         this.dataManager.register(MODEL_ID, "touhou_little_maid:hakurei_reimu");
@@ -241,8 +240,8 @@ public class EntityMaid extends AbstractEntityMaid {
         // 更新手部使用
         this.updateArmSwingProgress();
         // 计数器自减
-        if (playerHurtSoundCount > 0) {
-            playerHurtSoundCount--;
+        if (PLAYER_HURT_SOUND_COUNT > 0) {
+            PLAYER_HURT_SOUND_COUNT--;
         }
         spawnPortalParticle();
         // 随机回血
@@ -377,7 +376,7 @@ public class EntityMaid extends AbstractEntityMaid {
         // 只有拾物模式开启，驯服状态下才可以捡起物品
         if (this.isPickup() && this.isTamed()) {
             List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this,
-                    this.getEntityBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), IS_PICKUP);
+                    this.getEntityBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), EntityMaidPredicate.IS_PICKUP);
             if (!entityList.isEmpty() && this.isEntityAlive()) {
                 for (Entity entityPickup : entityList) {
                     // 如果是物品
@@ -424,10 +423,10 @@ public class EntityMaid extends AbstractEntityMaid {
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(entityItem, count - itemstack.getCount());
-                pickupSoundCount--;
-                if (pickupSoundCount == 0) {
+                PICKUP_SOUND_COUNT--;
+                if (PICKUP_SOUND_COUNT == 0) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                    pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
+                    PICKUP_SOUND_COUNT = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
                 }
                 // 如果遍历塞完后发现为空了
                 if (itemstack.isEmpty()) {
@@ -451,10 +450,10 @@ public class EntityMaid extends AbstractEntityMaid {
         if (!this.world.isRemote && entityXPOrb.isEntityAlive() && entityXPOrb.delayBeforeCanPickup == 0) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.onItemPickup(entityXPOrb, 1);
-            pickupSoundCount--;
-            if (pickupSoundCount == 0) {
+            PICKUP_SOUND_COUNT--;
+            if (PICKUP_SOUND_COUNT == 0) {
                 this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
+                PICKUP_SOUND_COUNT = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
@@ -478,10 +477,10 @@ public class EntityMaid extends AbstractEntityMaid {
         if (!this.world.isRemote && powerPoint.isEntityAlive() && powerPoint.delayBeforeCanPickup == 0) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             powerPoint.onPickup(this, 1);
-            pickupSoundCount--;
-            if (pickupSoundCount == 0) {
+            PICKUP_SOUND_COUNT--;
+            if (PICKUP_SOUND_COUNT == 0) {
                 this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
+                PICKUP_SOUND_COUNT = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
@@ -519,10 +518,10 @@ public class EntityMaid extends AbstractEntityMaid {
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.onItemPickup(arrow, 1);
-                pickupSoundCount--;
-                if (pickupSoundCount == 0) {
+                PICKUP_SOUND_COUNT--;
+                if (PICKUP_SOUND_COUNT == 0) {
                     this.playSound(MaidSoundEvent.MAID_ITEM_GET, 1, 1);
-                    pickupSoundCount = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
+                    PICKUP_SOUND_COUNT = GeneralConfig.MAID_CONFIG.maidPickupSoundInterval;
                 }
                 arrow.setDead();
             }
@@ -911,6 +910,15 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.DESCENDING.getName())) {
             descending = compound.getBoolean(NBT.DESCENDING.getName());
         }
+        if (compound.hasKey(NBT.CAN_HOLD_TROLLEY.getName())) {
+            canHoldTrolley = compound.getBoolean(NBT.CAN_HOLD_TROLLEY.getName());
+        }
+        if (compound.hasKey(NBT.CAN_HOLD_VEHICLE.getName())) {
+            canHoldVehicle = compound.getBoolean(NBT.CAN_HOLD_VEHICLE.getName());
+        }
+        if (compound.hasKey(NBT.CAN_RIDING_BROOM.getName())) {
+            canRidingBroom = compound.getBoolean(NBT.CAN_RIDING_BROOM.getName());
+        }
     }
 
     @Override
@@ -941,6 +949,9 @@ public class EntityMaid extends AbstractEntityMaid {
 
         compound.setInteger(NBT.CURRENT_INDEX.getName(), currentIndex);
         compound.setBoolean(NBT.DESCENDING.getName(), descending);
+        compound.setBoolean(NBT.CAN_HOLD_TROLLEY.getName(), canHoldTrolley);
+        compound.setBoolean(NBT.CAN_HOLD_VEHICLE.getName(), canHoldVehicle);
+        compound.setBoolean(NBT.CAN_RIDING_BROOM.getName(), canRidingBroom);
     }
 
     @Override
@@ -981,8 +992,8 @@ public class EntityMaid extends AbstractEntityMaid {
         if (damageSourceIn.isFireDamage()) {
             return MaidSoundEvent.MAID_HURT_FIRE;
         } else if (damageSourceIn.getTrueSource() instanceof EntityPlayer) {
-            if (playerHurtSoundCount == 0) {
-                playerHurtSoundCount = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
+            if (PLAYER_HURT_SOUND_COUNT == 0) {
+                PLAYER_HURT_SOUND_COUNT = GeneralConfig.MAID_CONFIG.maidHurtSoundInterval;
                 return MaidSoundEvent.MAID_PLAYER;
             } else {
                 return null;
@@ -1512,6 +1523,33 @@ public class EntityMaid extends AbstractEntityMaid {
         this.descending = descending;
     }
 
+    @Override
+    public boolean isCanHoldTrolley() {
+        return canHoldTrolley;
+    }
+
+    public void setCanHoldTrolley(boolean canHoldTrolley) {
+        this.canHoldTrolley = canHoldTrolley;
+    }
+
+    @Override
+    public boolean isCanHoldVehicle() {
+        return canHoldVehicle;
+    }
+
+    public void setCanHoldVehicle(boolean canHoldVehicle) {
+        this.canHoldVehicle = canHoldVehicle;
+    }
+
+    @Override
+    public boolean isCanRidingBroom() {
+        return canRidingBroom;
+    }
+
+    public void setCanRidingBroom(boolean canRidingBroom) {
+        this.canRidingBroom = canRidingBroom;
+    }
+
     @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
@@ -1561,7 +1599,13 @@ public class EntityMaid extends AbstractEntityMaid {
         // 女仆当前寻路的坐标索引
         CURRENT_INDEX("MaidCurrentIndex"),
         // 当前寻路顺序是升序还是降序
-        DESCENDING("MaidCurrentDescending");
+        DESCENDING("MaidCurrentDescending"),
+        // 能否持有拉杆箱
+        CAN_HOLD_TROLLEY("MaidCanHoldTrolley"),
+        // 能够持有载具
+        CAN_HOLD_VEHICLE("MaidCanHoldVehicle"),
+        // 能够使用扫帚
+        CAN_RIDING_BROOM("MaidCanRidingBroom");
 
         private String name;
 

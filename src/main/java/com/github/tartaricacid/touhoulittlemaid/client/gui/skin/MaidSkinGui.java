@@ -67,8 +67,11 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelItem> {
     }
 
     @Override
-    void notifyModelChange(EntityMaid maid, ResourceLocation modelId) {
-        CommonProxy.INSTANCE.sendToServer(new ApplyMaidSkinDataMessage(maid.getUniqueID(), modelId));
+    void notifyModelChange(EntityMaid maid, MaidModelItem info) {
+        CommonProxy.INSTANCE.sendToServer(new ApplyMaidSkinDataMessage(
+                maid.getUniqueID(), info.getModelId(),
+                info.isCanHoldTrolley(), info.isCanHoldVehicle(),
+                info.isCanRidingBroom()));
     }
 
     @Override

@@ -91,10 +91,10 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
     /**
      * 发包通知模型更改
      *
-     * @param entity  实体
-     * @param modelId 该实体应该对应的模型数据
+     * @param entity    实体
+     * @param modelInfo 该实体应该对应的模型数据
      */
-    abstract void notifyModelChange(T entity, ResourceLocation modelId);
+    abstract void notifyModelChange(T entity, U modelInfo);
 
     abstract int getPackIndex();
 
@@ -158,6 +158,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int toIndex = guiNumber.modelToIndex(getPackIndex(), getRowIndex());
 
         // 开始添加按键，顺便装填按键对应模型的索引
+        BUTTON_MODEL_MAP.clear();
         for (U modelItem : pack.getModelList().subList(fromIndex, toIndex)) {
             this.buttonList.add(new GuiButtonImage(id, i + x - 8, j + y - 26, 15, 24, 41, 201, 24, BG));
             BUTTON_MODEL_MAP.put(id, modelItem);
@@ -409,6 +410,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void actionPerformed(GuiButton button) {
         if (0 <= button.id && button.id < guiNumber.getTabSize(getPackIndex())) {
@@ -440,7 +442,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
             openDetailsGui(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
         } else {
             // 进行模型更改的发包
-            notifyModelChange(entity, BUTTON_MODEL_MAP.get(button.id).getModelId());
+            notifyModelChange(entity, (U) BUTTON_MODEL_MAP.get(button.id));
         }
     }
 

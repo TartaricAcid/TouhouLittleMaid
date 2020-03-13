@@ -57,6 +57,11 @@ public class EntityMaidVehicle extends AbstractEntityFromItem implements IEntity
     }
 
     @Override
+    public boolean canRiding(AbstractEntityMaid maid) {
+        return maid.isCanHoldVehicle();
+    }
+
+    @Override
     protected void entityInit() {
         super.entityInit();
         dataManager.register(MODEL_ID, 0);

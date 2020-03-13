@@ -148,4 +148,19 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @return 冷却时间计数器
      */
     abstract public CooldownTracker getCooldownTracker();
+
+    /**
+     * 能够持有拉杆箱
+     */
+    abstract public boolean isCanHoldTrolley();
+
+    /**
+     * 能够持有载具
+     */
+    abstract public boolean isCanHoldVehicle();
+
+    /**
+     * 能够骑乘扫帚
+     */
+    abstract public boolean isCanRidingBroom();
 }

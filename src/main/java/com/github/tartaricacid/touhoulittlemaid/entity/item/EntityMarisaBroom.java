@@ -200,6 +200,11 @@ public class EntityMarisaBroom extends AbstractEntityFromItem implements IEntity
         }
     }
 
+    @Override
+    public boolean canRiding(AbstractEntityMaid maid) {
+        return maid.isCanRidingBroom();
+    }
+
     /**
      * 永远不允许被其他实体推动
      */

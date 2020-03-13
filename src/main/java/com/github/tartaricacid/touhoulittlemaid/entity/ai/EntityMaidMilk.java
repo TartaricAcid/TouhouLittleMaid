@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaidPredicate;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -61,7 +61,7 @@ public class EntityMaidMilk extends EntityAIBase {
 
         // 开始判定 16 范围内的适合生物
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(entityMaid, entityMaid.getEntityBoundingBox()
-                .grow(8, 2, 8), EntityMaid.IS_COW);
+                .grow(8, 2, 8), EntityMaidPredicate.IS_COW);
         for (Entity entity : entityList) {
             if (entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(entity)) &&
                     entityMaid.getNavigator().getPathToEntityLiving(entity) != null) {

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaidPredicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
@@ -42,7 +43,7 @@ public class EntityMaidPickup extends EntityAIBase {
         // 获取初始拾取列表
         list = this.entityMaid.world.getEntitiesInAABBexcluding(entityMaid,
                 this.entityMaid.getEntityBoundingBox().grow(8, 2, 8),
-                EntityMaid.IS_PICKUP);
+                EntityMaidPredicate.IS_PICKUP);
 
         // 列表不为空，就执行
         return !list.isEmpty();

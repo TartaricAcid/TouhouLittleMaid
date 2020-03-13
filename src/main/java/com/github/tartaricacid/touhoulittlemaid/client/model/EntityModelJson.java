@@ -23,7 +23,6 @@ import javax.script.Invocable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 通过解析基岩版 JSON 实体模型得到的 POJO，将其转换为 ModelBase 类
@@ -36,6 +35,7 @@ public class EntityModelJson extends ModelBase {
     public final AxisAlignedBB renderBoundingBox;
     private EntityMaidWrapper entityMaidWrapper;
     private EntityChairWrapper entityChairWrapper;
+    private List<Object> animations;
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -134,34 +134,28 @@ public class EntityModelJson extends ModelBase {
         if (entityIn instanceof EntityMaid) {
             entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
             String modelId = ((EntityMaid) entityIn).getModelId();
-            Optional<List<Object>> objectOptional = CustomModelLoader.MAID_MODEL.getAnimation(modelId);
-            if (objectOptional.isPresent()) {
-                try {
-                    for (Object animations : objectOptional.get()) {
-                        invocable.invokeMethod(animations, "animation",
-                                entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    CustomModelLoader.MAID_MODEL.removeAnimation(modelId);
+            try {
+                for (Object animation : animations) {
+                    invocable.invokeMethod(animation, "animation",
+                            entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomModelLoader.MAID_MODEL.removeAnimation(modelId);
             }
             return;
         }
         if (entityIn instanceof EntityChair) {
             entityChairWrapper.setChair((EntityChair) entityIn);
             String modelId = ((EntityChair) entityIn).getModelId();
-            Optional<List<Object>> objectOptional = CustomModelLoader.CHAIR_MODEL.getAnimation(((EntityChair) entityIn).getModelId());
-            if (objectOptional.isPresent()) {
-                try {
-                    for (Object animations : objectOptional.get()) {
-                        invocable.invokeMethod(animations, "animation",
-                                entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    CustomModelLoader.CHAIR_MODEL.removeAnimation(modelId);
+            try {
+                for (Object animation : animations) {
+                    invocable.invokeMethod(animation, "animation",
+                            entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomModelLoader.CHAIR_MODEL.removeAnimation(modelId);
             }
         }
     }
@@ -204,6 +198,10 @@ public class EntityModelJson extends ModelBase {
         if (customHead != null) {
             customHead.postRender(scale);
         }
+    }
+
+    public void setAnimations(List<Object> animations) {
+        this.animations = animations;
     }
 
     /**

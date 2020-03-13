@@ -30,7 +30,23 @@ public class MaidModelItem implements IModelItem {
     @SerializedName("render_entity_scale")
     private float renderEntityScale = 1.0f;
 
+    @SerializedName("animation")
     private List<ResourceLocation> animation;
+
+    @SerializedName("show_hata")
+    private boolean showHata = true;
+
+    @SerializedName("show_backpack")
+    private boolean showBackpack = true;
+
+    @SerializedName("can_hold_trolley")
+    private boolean canHoldTrolley = true;
+
+    @SerializedName("can_hold_vehicle")
+    private boolean canHoldVehicle = true;
+
+    @SerializedName("can_riding_broom")
+    private boolean canRidingBroom = true;
 
     @Override
     public ResourceLocation getTexture() {
@@ -69,6 +85,26 @@ public class MaidModelItem implements IModelItem {
 
     public float getRenderEntityScale() {
         return renderEntityScale;
+    }
+
+    public boolean isShowHata() {
+        return showHata;
+    }
+
+    public boolean isShowBackpack() {
+        return showBackpack;
+    }
+
+    public boolean isCanHoldTrolley() {
+        return canHoldTrolley;
+    }
+
+    public boolean isCanHoldVehicle() {
+        return canHoldVehicle;
+    }
+
+    public boolean isCanRidingBroom() {
+        return canRidingBroom;
     }
 
     @SuppressWarnings("unchecked")

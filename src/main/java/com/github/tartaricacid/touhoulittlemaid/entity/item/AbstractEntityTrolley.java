@@ -37,4 +37,9 @@ public abstract class AbstractEntityTrolley extends AbstractEntityFromItem imple
             super.dismountEntity(entityIn);
         }
     }
+
+    @Override
+    public boolean canRiding(AbstractEntityMaid maid) {
+        return maid.isCanHoldTrolley();
+    }
 }

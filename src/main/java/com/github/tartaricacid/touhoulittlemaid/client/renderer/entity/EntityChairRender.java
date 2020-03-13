@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugCharacter;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugFloor;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author TartaricAcid
@@ -27,12 +29,11 @@ import javax.annotation.Nullable;
 public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static final EntityChairRender.Factory FACTORY = new EntityChairRender.Factory();
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
-    private static final ResourceLocation DEFAULT_CHAIR_TEXTURE = new ResourceLocation("touhou_little_maid:textures/entity/cushion.png");
-    private ResourceLocation modelRes;
+    private ChairModelItem mainInfo;
+    private List<Object> mainAnimations;
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
         super(renderManager, mainModel, 0f);
-        modelRes = DEFAULT_CHAIR_TEXTURE;
         addLayer(new LayerChairDebugFloor());
         addLayer(new LayerChairDebugCharacter());
     }
@@ -40,24 +41,30 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     @Override
     public void doRender(@Nonnull EntityChair chair, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模
-        this.mainModel = CustomModelLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).orElseThrow(NullPointerException::new);
+        CustomModelLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.mainModel = model);
+        CustomModelLoader.CHAIR_MODEL.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
+        CustomModelLoader.CHAIR_MODEL.getAnimation(DEFAULT_CHAIR_ID).ifPresent(animations -> this.mainAnimations = animations);
+
+        // 通过模型 id 获取对应数据
         CustomModelLoader.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.mainModel = model);
+        CustomModelLoader.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(info -> this.mainInfo = info);
+        CustomModelLoader.CHAIR_MODEL.getAnimation(chair.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+
+        // 模型动画设置
+        ((EntityModelJson) this.mainModel).setAnimations(this.mainAnimations);
+
+        // 实体渲染
         GlStateManager.pushMatrix();
         GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         super.doRender(chair, x, y, z, entityYaw, partialTicks);
         GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
-        GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
 
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityChair chair) {
-        this.modelRes = DEFAULT_CHAIR_TEXTURE;
-        // 皮之不存，毛将焉附？
-        // 先判定模型在不在，模型都不在，直接返回默认材质
-        CustomModelLoader.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
-        return modelRes;
+        return mainInfo.getTexture();
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuShoot;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaidPredicate;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import net.minecraft.entity.Entity;
@@ -47,7 +47,7 @@ public class TaskAttackDanmaku extends TaskAttackRanged {
         // 获取周围 -10~10 范围内怪物数量
         World world = maid.world;
         Random rand = maid.getRNG();
-        List<Entity> entityList = world.getEntitiesInAABBexcluding(maid, maid.getEntityBoundingBox().expand(8, 3, 8).expand(-8, -3, -8), EntityMaid.IS_MOB);
+        List<Entity> entityList = world.getEntitiesInAABBexcluding(maid, maid.getEntityBoundingBox().expand(8, 3, 8).expand(-8, -3, -8), EntityMaidPredicate.IS_MOB);
 
         if (maid.hasSasimono()) {
             boolean targetIsTameableHasSameOwner = target instanceof EntityTameable && ((EntityTameable) target).getOwnerId() != null &&

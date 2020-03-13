@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import net.minecraft.client.Minecraft;
@@ -19,34 +20,43 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Locale;
 
 @SideOnly(Side.CLIENT)
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private static final ResourceLocation DEFAULT_MODEL_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/hakurei_reimu.png");
-    private ResourceLocation modelRes;
-    private float scale = 1.0f;
+    private MaidModelItem mainInfo;
+    private List<Object> mainAnimations;
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
-        modelRes = DEFAULT_MODEL_TEXTURE;
         this.addLayer(new LayerMaidArrow(this));
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(new LayerMaidDebugFloor());
         this.addLayer(new LayerMaidDebugBroom());
-        this.addLayer(new LayerHataSasimono());
+        this.addLayer(new LayerHataSasimono(this));
         this.addLayer(new LayerMaidCustomHead(this));
         this.addLayer(new LayerMaidBackpack(this));
     }
 
     @Override
     public void doRender(@Nonnull EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        // 尝试读取模型
-        this.mainModel = CustomModelLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new);
+        // 读取默认模型，用于清除不存在模型的缓存残留
+        CustomModelLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.mainModel = model);
+        CustomModelLoader.MAID_MODEL.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
+        CustomModelLoader.MAID_MODEL.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
+
+        // 通过模型 id 获取对应数据
         CustomModelLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
-        CustomModelLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> scale = info.getRenderEntityScale());
+        CustomModelLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
+        CustomModelLoader.MAID_MODEL.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+
+        // 模型动画设置
+        ((EntityModelJson) this.mainModel).setAnimations(this.mainAnimations);
+
+        // 实体渲染
         GlStateManager.pushMatrix();
         GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
@@ -55,7 +65,8 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     }
 
     @Override
-    protected void preRenderCallback(EntityMaid entitylivingbaseIn, float partialTickTime) {
+    protected void preRenderCallback(EntityMaid entityMaid, float partialTickTime) {
+        float scale = mainInfo.getRenderEntityScale();
         GlStateManager.scale(scale, scale, scale);
     }
 
@@ -70,7 +81,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     protected void renderEntityName(@Nonnull EntityMaid entityIn, double x, double y, double z, @Nonnull String name, double distanceSq) {
         boolean hasCompass = Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() == MaidItems.KAPPA_COMPASS;
         String str;
-        y = y + scale - 1;
+        y = y + mainInfo.getRenderEntityScale() - 1;
         if (hasCompass) {
             String modeKey = String.format("compass.touhou_little_maid.mode.%s", entityIn.getCompassMode().name().toLowerCase(Locale.US));
             str = I18n.format("tooltips.touhou_little_maid.kappa_compass.mode", I18n.format(modeKey));
@@ -87,11 +98,11 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityMaid entity) {
-        this.modelRes = DEFAULT_MODEL_TEXTURE;
-        // 皮之不存，毛将焉附？
-        // 先判定模型在不在，模型都不在，直接返回默认材质
-        CustomModelLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(modelItem -> this.modelRes = modelItem.getTexture());
-        return modelRes;
+        return mainInfo.getTexture();
+    }
+
+    public MaidModelItem getMainInfo() {
+        return mainInfo;
     }
 
     public static class Factory implements IRenderFactory<EntityMaid> {

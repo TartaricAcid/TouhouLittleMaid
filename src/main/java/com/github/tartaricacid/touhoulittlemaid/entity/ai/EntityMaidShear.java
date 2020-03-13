@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaidPredicate;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -49,7 +49,7 @@ public class EntityMaidShear extends EntityAIBase {
 
         // 开始判定 16 范围内的可剪生物
         List<Entity> entityList = this.world.getEntitiesInAABBexcluding(entityMaid, entityMaid.getEntityBoundingBox()
-                .grow(8, 2, 8), EntityMaid.CAN_SHEAR);
+                .grow(8, 2, 8), EntityMaidPredicate.CAN_SHEAR);
         for (Entity entity : entityList) {
             if (entity instanceof IShearable && ((IShearable) entity).isShearable(mainhandItem, world, entity.getPosition())
                     && entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(entity))
