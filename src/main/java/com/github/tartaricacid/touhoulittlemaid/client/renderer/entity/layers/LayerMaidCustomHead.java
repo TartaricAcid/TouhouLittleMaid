@@ -38,7 +38,7 @@ public class LayerMaidCustomHead implements LayerRenderer<EntityMaid> {
     @Override
     public void doRenderLayer(@Nonnull EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         ItemStack head = maid.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (!head.isEmpty()) {
+        if (!head.isEmpty() && ((EntityModelJson) this.livingEntityRenderer.getMainModel()).hasHead()) {
             Item item = head.getItem();
             Minecraft minecraft = Minecraft.getMinecraft();
             GlStateManager.pushMatrix();

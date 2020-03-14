@@ -197,6 +197,18 @@ public class EntityModelJson extends ModelBase {
         }
     }
 
+    public boolean hasLeftArm() {
+        return modelMap.containsKey("armLeft");
+    }
+
+    public boolean hasRightArm() {
+        return modelMap.containsKey("armRight");
+    }
+
+    public boolean hasHead() {
+        return modelMap.containsKey("head");
+    }
+
     public void postRenderCustomHead(float scale) {
         ModelRenderer customHead = modelMap.get("head").getModelRenderer();
         if (customHead != null) {

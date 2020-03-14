@@ -26,19 +26,18 @@ public class LayerMaidHeldItem implements LayerRenderer<EntityMaid> {
     public void doRenderLayer(@Nonnull EntityMaid entityMaid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         ItemStack mainRightItem = entityMaid.getHeldItemMainhand();
         ItemStack offLeftItem = entityMaid.getHeldItemOffhand();
-
-        if (!mainRightItem.isEmpty() || !offLeftItem.isEmpty()) {
-            GlStateManager.pushMatrix();
-            this.renderHeldItem(entityMaid, mainRightItem, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, EnumHandSide.RIGHT);
-            this.renderHeldItem(entityMaid, offLeftItem, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, EnumHandSide.LEFT);
-            GlStateManager.popMatrix();
+        EntityModelJson mainModel = (EntityModelJson) this.livingEntityRenderer.getMainModel();
+        if (!mainRightItem.isEmpty() && mainModel.hasRightArm()) {
+            this.renderHeldItem(entityMaid, mainRightItem, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, EnumHandSide.RIGHT, mainModel);
+        }
+        if (!offLeftItem.isEmpty() && mainModel.hasLeftArm()) {
+            this.renderHeldItem(entityMaid, offLeftItem, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, EnumHandSide.LEFT, mainModel);
         }
     }
 
-    private void renderHeldItem(EntityMaid entityMaid, ItemStack itemStack, ItemCameraTransforms.TransformType type, EnumHandSide handSide) {
+    private void renderHeldItem(EntityMaid entityMaid, ItemStack itemStack, ItemCameraTransforms.TransformType type, EnumHandSide handSide, EntityModelJson mainModel) {
         if (!itemStack.isEmpty()) {
             GlStateManager.pushMatrix();
-            EntityModelJson mainModel = (EntityModelJson) this.livingEntityRenderer.getMainModel();
             boolean isLeft = handSide == EnumHandSide.LEFT;
             mainModel.postRenderArm(0.0625F, handSide);
             if (mainModel.hasArmPositioningModel(handSide)) {
