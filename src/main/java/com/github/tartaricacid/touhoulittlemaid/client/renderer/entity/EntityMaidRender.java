@@ -2,10 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -27,8 +28,8 @@ import java.util.Locale;
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private MaidModelItem mainInfo;
-    private List<Object> mainAnimations;
+    private MaidModelInfo mainInfo;
+    private List<Object> mainAnimations = Lists.newArrayList();
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
@@ -44,14 +45,14 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     @Override
     public void doRender(@Nonnull EntityMaid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         // 读取默认模型，用于清除不存在模型的缓存残留
-        CustomModelLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.mainModel = model);
-        CustomModelLoader.MAID_MODEL.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
-        CustomModelLoader.MAID_MODEL.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
+        CustomResourcesLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.mainModel = model);
+        CustomResourcesLoader.MAID_MODEL.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
+        CustomResourcesLoader.MAID_MODEL.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
 
         // 通过模型 id 获取对应数据
-        CustomModelLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
-        CustomModelLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
-        CustomModelLoader.MAID_MODEL.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+        CustomResourcesLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
+        CustomResourcesLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
+        CustomResourcesLoader.MAID_MODEL.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
 
         // 模型动画设置
         ((EntityModelJson) this.mainModel).setAnimations(this.mainAnimations);
@@ -101,7 +102,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         return mainInfo.getTexture();
     }
 
-    public MaidModelItem getMainInfo() {
+    public MaidModelInfo getMainInfo() {
         return mainInfo;
     }
 
@@ -109,7 +110,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         @Override
         public Render<? super EntityMaid> createRenderFor(RenderManager manager) {
             // 加载默认的灵梦模型
-            return new EntityMaidRender(manager, CustomModelLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new), 0.5f);
+            return new EntityMaidRender(manager, CustomResourcesLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).orElseThrow(NullPointerException::new), 0.5f);
         }
     }
 }

@@ -4,9 +4,10 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.SoundPackInfo;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -32,11 +33,12 @@ import java.util.List;
 import static com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy.GSON;
 
 @SideOnly(Side.CLIENT)
-public class CustomModelLoader {
+public class CustomResourcesLoader {
     public static final CustomMaidModelResources MAID_MODEL = new CustomMaidModelResources("maid_model.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
     public static final CustomChairModelResources CHAIR_MODEL = new CustomChairModelResources("maid_chair.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
+    public static final CustomSoundResources SOUND_INFO = new CustomSoundResources("maid_sound.json", Lists.newArrayList());
     private static final Logger LOGGER = TouhouLittleMaid.LOGGER;
-    private static final Marker MARKER = MarkerManager.getMarker("ModelLoader");
+    private static final Marker MARKER = MarkerManager.getMarker("ResourcesLoader");
     private static final String OLD_BEDROCK_VERSION = "1.10.0";
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
@@ -44,9 +46,11 @@ public class CustomModelLoader {
         CustomJsAnimationManger.clearAll();
         MAID_MODEL.clearAll();
         CHAIR_MODEL.clearAll();
+        SOUND_INFO.clearAll();
         // 重载数据
         loadMaidModelPack();
         loadChairModelPack();
+        loadSoundInfo();
     }
 
     private static void loadMaidModelPack() {
@@ -60,10 +64,10 @@ public class CustomModelLoader {
                 input = manager.getResource(res).getInputStream();
                 // 将其转换为 pojo 对象
                 // 这个 pojo 是二次修饰的过的对象，所以一部分数据异常已经进行了处理或者抛出
-                CustomModelPack<MaidModelItem> pack = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), new TypeToken<CustomModelPack<MaidModelItem>>() {
+                CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), new TypeToken<CustomModelPack<MaidModelInfo>>() {
                 }.getType());
                 pack.decorate();
-                for (MaidModelItem maidModelItem : pack.getModelList()) {
+                for (MaidModelInfo maidModelItem : pack.getModelList()) {
                     // 尝试加载模型
                     EntityModelJson modelJson = loadModel(maidModelItem.getModel());
                     // 加载动画
@@ -104,10 +108,10 @@ public class CustomModelLoader {
                 input = manager.getResource(res).getInputStream();
                 // 将其转换为 pojo 对象
                 // 这个 pojo 是二次修饰的过的对象，所以一部分数据异常已经进行了处理或者抛出
-                CustomModelPack<ChairModelItem> pack = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), new TypeToken<CustomModelPack<ChairModelItem>>() {
+                CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), new TypeToken<CustomModelPack<ChairModelInfo>>() {
                 }.getType());
                 pack.decorate();
-                for (ChairModelItem chairModelItem : pack.getModelList()) {
+                for (ChairModelInfo chairModelItem : pack.getModelList()) {
                     // 尝试加载模型
                     EntityModelJson modelJson = loadModel(chairModelItem.getModel());
                     // 加载动画
@@ -169,5 +173,32 @@ public class CustomModelLoader {
 
         // 如果前面出了错，返回 Null
         return null;
+    }
+
+    public static void loadSoundInfo() {
+        LOGGER.info(MARKER, "Touhou little maid mod's sound info is loading...");
+        // 遍历所有的资源包，获取到模型文件
+        for (String domain : manager.getResourceDomains()) {
+            InputStream input = null;
+            try {
+                // 获取所有资源域下的指定文件
+                ResourceLocation res = new ResourceLocation(domain, SOUND_INFO.getJsonFileName());
+                input = manager.getResource(res).getInputStream();
+                // 将其转换为 pojo 对象
+                // 这个 pojo 是二次修饰的过的对象，所以一部分数据异常已经进行了处理或者抛出
+                SoundPackInfo info = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), SoundPackInfo.class);
+                SOUND_INFO.putInfo(info.decorate());
+                // 打印日志
+                LOGGER.info(MARKER, "Loaded sound info from: {}", domain);
+            } catch (IOException ignore) {
+                // 忽略错误，因为资源域很多
+            } catch (JsonSyntaxException e) {
+                LOGGER.warn(MARKER, "Fail to parse sound info from domain {}", domain);
+                e.printStackTrace();
+            } finally {
+                IOUtils.closeQuietly(input);
+            }
+        }
+        LOGGER.info(MARKER, "Touhou little maid mod's sound info is loaded");
     }
 }

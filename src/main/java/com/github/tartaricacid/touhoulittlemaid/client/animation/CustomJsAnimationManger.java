@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation;
 
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -27,7 +27,7 @@ public class CustomJsAnimationManger {
     private static final Map<ResourceLocation, Object> CUSTOM_ANIMATION_MAP = Maps.newHashMap();
 
     @Nullable
-    public static List<Object> getCustomAnimation(IModelItem item) {
+    public static List<Object> getCustomAnimation(IModelInfo item) {
         List<Object> animations = Lists.newArrayList();
         if (item.getAnimation() != null && item.getAnimation().size() > 0) {
             for (ResourceLocation res : item.getAnimation()) {

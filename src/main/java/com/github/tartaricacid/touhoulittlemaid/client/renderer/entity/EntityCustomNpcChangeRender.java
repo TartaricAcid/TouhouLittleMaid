@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -148,11 +148,11 @@ public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends Rend
             }
 
             if (isMaid(this.entity)) {
-                Optional<EntityModelJson> maidModel = CustomModelLoader.MAID_MODEL.getModel(((EntityMaid) entity).getModelId());
+                Optional<EntityModelJson> maidModel = CustomResourcesLoader.MAID_MODEL.getModel(((EntityMaid) entity).getModelId());
                 if (maidModel.isPresent()) {
                     model = maidModel.get();
                 } else {
-                    model = CustomModelLoader.MAID_MODEL.getModel("touhou_little_maid:hakurei_reimu").orElseThrow(NullPointerException::new);
+                    model = CustomResourcesLoader.MAID_MODEL.getModel("touhou_little_maid:hakurei_reimu").orElseThrow(NullPointerException::new);
                 }
             }
 

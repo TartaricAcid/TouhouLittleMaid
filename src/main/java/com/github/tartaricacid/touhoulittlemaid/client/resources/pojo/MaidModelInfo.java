@@ -8,7 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import java.util.Collections;
 import java.util.List;
 
-public class MaidModelItem implements IModelItem {
+public class MaidModelInfo implements IModelInfo {
     @SerializedName("name")
     private String name;
 
@@ -109,7 +109,7 @@ public class MaidModelItem implements IModelItem {
 
     @SuppressWarnings("unchecked")
     @Override
-    public MaidModelItem decorate() {
+    public MaidModelInfo decorate() {
         // description 设置为空列表
         if (description == null) {
             description = Collections.EMPTY_LIST;

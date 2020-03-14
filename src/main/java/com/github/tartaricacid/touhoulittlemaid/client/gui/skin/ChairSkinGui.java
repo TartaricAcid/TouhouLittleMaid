@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyChairSkinDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
@@ -20,23 +20,23 @@ import java.util.concurrent.ExecutionException;
  * @date 2019/7/12 12:27
  **/
 @SideOnly(Side.CLIENT)
-public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelItem> {
+public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelInfo> {
     private static int PAGE_INDEX = 0;
     private static int PACK_INDEX = 0;
     private static int ROW_INDEX = 0;
 
     public ChairSkinGui(EntityChair chair) {
-        super(chair, CustomModelLoader.CHAIR_MODEL.getPackList(), "touhou_little_maid:entity.item.chair");
+        super(chair, CustomResourcesLoader.CHAIR_MODEL.getPackList(), "touhou_little_maid:entity.item.chair");
     }
 
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
-        float renderItemScale = CustomModelLoader.CHAIR_MODEL.getModelRenderItemScale(entity.getModelId());
+        float renderItemScale = CustomResourcesLoader.CHAIR_MODEL.getModelRenderItemScale(entity.getModelId());
         GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
     }
 
     @Override
-    void drawRightEntity(int posX, int posY, ChairModelItem modelItem) {
+    void drawRightEntity(int posX, int posY, ChairModelInfo modelItem) {
         EntityChair chair;
         try {
             chair = (EntityChair) ClientProxy.ENTITY_CACHE.get(ENTITY_ID, () -> {
@@ -61,7 +61,7 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelItem> {
     }
 
     @Override
-    void notifyModelChange(EntityChair chair, ChairModelItem info) {
+    void notifyModelChange(EntityChair chair, ChairModelInfo info) {
         CommonProxy.INSTANCE.sendToServer(new ApplyChairSkinDataMessage(chair.getUniqueID(),
                 info.getModelId(), info.getMountedYOffset(),
                 info.isTameableCanRide(), info.isNoGravity()));

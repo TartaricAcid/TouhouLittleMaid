@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resources;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
 import com.google.common.collect.Maps;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,15 +16,15 @@ import java.util.Set;
 @SideOnly(Side.CLIENT)
 public class CustomChairModelResources {
     private String jsonFileName;
-    private List<CustomModelPack<ChairModelItem>> packList;
+    private List<CustomModelPack<ChairModelInfo>> packList;
     private HashMap<String, EntityModelJson> idModelMap;
-    private HashMap<String, ChairModelItem> idInfoMap;
+    private HashMap<String, ChairModelInfo> idInfoMap;
     private HashMap<String, List<Object>> idAnimationMap;
     private HashMap<String, String> idDebugAnimationFile;
 
-    public CustomChairModelResources(String jsonFileName, List<CustomModelPack<ChairModelItem>> packList,
+    public CustomChairModelResources(String jsonFileName, List<CustomModelPack<ChairModelInfo>> packList,
                                      HashMap<String, EntityModelJson> idToModel,
-                                     HashMap<String, ChairModelItem> idToInfo,
+                                     HashMap<String, ChairModelInfo> idToInfo,
                                      HashMap<String, List<Object>> idAnimationMap) {
         this.jsonFileName = jsonFileName;
         this.packList = packList;
@@ -45,7 +45,7 @@ public class CustomChairModelResources {
         return jsonFileName;
     }
 
-    public List<CustomModelPack<ChairModelItem>> getPackList() {
+    public List<CustomModelPack<ChairModelInfo>> getPackList() {
         return packList;
     }
 
@@ -53,7 +53,7 @@ public class CustomChairModelResources {
         return idInfoMap.keySet();
     }
 
-    public void addPack(CustomModelPack<ChairModelItem> pack) {
+    public void addPack(CustomModelPack<ChairModelInfo> pack) {
         this.packList.add(pack);
     }
 
@@ -61,7 +61,7 @@ public class CustomChairModelResources {
         this.idModelMap.put(modelId, modelJson);
     }
 
-    public void putInfo(String modelId, ChairModelItem chairModelItem) {
+    public void putInfo(String modelId, ChairModelInfo chairModelItem) {
         this.idInfoMap.put(modelId, chairModelItem);
     }
 
@@ -122,7 +122,7 @@ public class CustomChairModelResources {
         idAnimationMap.remove(modelId);
     }
 
-    public Optional<ChairModelItem> getInfo(String modelId) {
+    public Optional<ChairModelInfo> getInfo(String modelId) {
         return Optional.ofNullable(idInfoMap.get(modelId));
     }
 }

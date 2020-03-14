@@ -256,8 +256,6 @@ gui.touhou_little_maid.button.home.desc=Click this button to set whether the mai
 gui.touhou_little_maid.button.skin=Change Skin
 gui.touhou_little_maid.button.hata_sasimono=Change Hata Sasimono
 gui.touhou_little_maid.skin.button.close=Close
-gui.touhou_little_maid.credit.url=https://www14.big.or.jp/~amiami/happy/index.html
-gui.touhou_little_maid.credit.url.close=This voice was delivered by Amitoro's Voice Material Studio
 gui.touhou_little_maid.button.sound_credit=Open Sound Credit GUI
 gui.touhou_little_maid.button.pack_download=Open Maid Resources Pack Download GUI
 gui.touhou_little_maid.skin_details.close=Close
@@ -318,6 +316,13 @@ gui.touhou_little_maid.compass.close=Close
 gui.touhou_little_maid.skin.text.version=Version: %s
 gui.touhou_little_maid.skin.text.date=Date: %s
 gui.touhou_little_maid.skin.tooltips.show_details=Shift Click To Open The Details GUI
+
+# Sound Info Gui
+gui.touhou_little_maid.sound_info.title=Sound Pack List
+gui.touhou_little_maid.sound_info.url.desc=Double Click Open The Url
+gui.touhou_little_maid.sound_info.play.desc=Double Click Play The Sound
+gui.touhou_little_maid.sound_info.sound.name=Name
+gui.touhou_little_maid.sound_info.sound.count=Count
 
 # Model Pack
 pack.touhou_little_maid.maid.name=Touhou Project Model
@@ -540,6 +545,10 @@ model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
 model.touhou_little_maid.moto.name=Moto
 model.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
 
+# Sound Info
+pack.touhou_little_maid.sound.name=Default Sound
+pack.touhou_little_maid.sound.desc=This voice was delivered by Amitoro's Voice Material Studio
+
 # Spell Card
 spell_card.touhou_little_maid:night_sign.night_bird.name=Night Sign "Night Bird"
 spell_card.touhou_little_maid:metal_sign.metal_fatigue.name=Metal Sign "Metal Fatigue"
@@ -571,7 +580,7 @@ subtitle.touhou_little_maid.maid.environment.rain=Maid Rain Sound
 subtitle.touhou_little_maid.maid.environment.snow=Maid Snow Sound
 subtitle.touhou_little_maid.maid.environment.morning=Maid Morning Sound
 subtitle.touhou_little_maid.maid.environment.night=Maid Night Sound
-subtitle.touhou_little_maid.other.credit=Credit: Amitoro's Voice Material Studio
+subtitle.touhou_little_maid.other.credit=Credit Sound
 subtitle.touhou_little_maid.item.camera_use=Camera Use Sound
 subtitle.touhou_little_maid.item.album_open=Album Open Sound
 subtitle.touhou_little_maid.block.altar_craft=Altar Craft Sound

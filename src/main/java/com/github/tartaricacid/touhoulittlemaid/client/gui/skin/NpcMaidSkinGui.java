@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SendNpcMaidModelMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -16,7 +16,7 @@ public class NpcMaidSkinGui extends MaidSkinGui {
     }
 
     @Override
-    void notifyModelChange(EntityMaid maid, MaidModelItem info) {
+    void notifyModelChange(EntityMaid maid, MaidModelInfo info) {
         ResourceLocation texture = info.getTexture();
         // 客户端数据更改
         // 虽然不更改也会在半秒后自动同步，但是强迫症使然

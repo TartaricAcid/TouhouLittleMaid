@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelInfo;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 
-public final class SkinGuiNumber<T extends IModelItem> {
+public final class SkinGuiNumber<T extends IModelInfo> {
     private static final int PACK_INTERVAL = 7;
     private static final int MODEL_PER_ROW = 11;
     private static final int MODEL_TOTAL_ROW = 5;

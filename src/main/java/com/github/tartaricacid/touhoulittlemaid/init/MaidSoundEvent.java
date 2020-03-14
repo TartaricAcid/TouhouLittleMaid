@@ -64,4 +64,8 @@ public final class MaidSoundEvent {
         SOUND_LIST.add(event);
         return event;
     }
+
+    public static List<SoundEvent> getSoundList() {
+        return SOUND_LIST.subList(0, 24);
+    }
 }

@@ -6,10 +6,11 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRen
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.google.common.collect.Lists;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -35,7 +36,7 @@ public class EntityModelJson extends ModelBase {
     public final AxisAlignedBB renderBoundingBox;
     private EntityMaidWrapper entityMaidWrapper;
     private EntityChairWrapper entityChairWrapper;
-    private List<Object> animations;
+    private List<Object> animations = Lists.newArrayList();
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -130,6 +131,9 @@ public class EntityModelJson extends ModelBase {
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
                                   float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+        if (animations == null) {
+            return;
+        }
         Invocable invocable = (Invocable) CommonProxy.NASHORN;
         if (entityIn instanceof EntityMaid) {
             entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
@@ -141,7 +145,7 @@ public class EntityModelJson extends ModelBase {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                CustomModelLoader.MAID_MODEL.removeAnimation(modelId);
+                CustomResourcesLoader.MAID_MODEL.removeAnimation(modelId);
             }
             return;
         }
@@ -155,7 +159,7 @@ public class EntityModelJson extends ModelBase {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                CustomModelLoader.CHAIR_MODEL.removeAnimation(modelId);
+                CustomResourcesLoader.CHAIR_MODEL.removeAnimation(modelId);
             }
         }
     }

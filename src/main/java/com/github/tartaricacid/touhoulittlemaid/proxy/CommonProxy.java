@@ -8,7 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.muiltblock.MuiltBlockAltar
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumSerializer;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadDrawCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadSpellCardCommand;
@@ -183,7 +183,7 @@ public class CommonProxy {
         if (input != null) {
             try {
                 // 将其转换为 pojo 对象
-                CustomModelPack<MaidModelItem> pack = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), new TypeToken<CustomModelPack<MaidModelItem>>() {
+                CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), new TypeToken<CustomModelPack<MaidModelInfo>>() {
                 }.getType());
                 pack.decorate();
                 pack.getModelList().forEach(m -> VANILLA_ID_NAME_MAP.put(m.getModelId().toString(), ParseI18n.parse(m.getName())));

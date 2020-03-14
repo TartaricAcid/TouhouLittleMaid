@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
@@ -150,7 +150,7 @@ public class BlockGarageKit extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        for (String modelId : CustomModelLoader.MAID_MODEL.getModelIdSet()) {
+        for (String modelId : CustomResourcesLoader.MAID_MODEL.getModelIdSet()) {
             items.add(getItemStackWithData(DEFAULT_ENTITY_ID, modelId, DEFAULT_DATA));
         }
     }
@@ -196,7 +196,7 @@ public class BlockGarageKit extends Block {
 
         // 如果是女仆，才会显示对应的模型名称
         if (entityId.equals(DEFAULT_ENTITY_ID)) {
-            CustomModelLoader.MAID_MODEL.getInfo(getModelId(stack)).ifPresent(info ->
+            CustomResourcesLoader.MAID_MODEL.getInfo(getModelId(stack)).ifPresent(info ->
                     tooltip.add(I18n.format("tooltips.touhou_little_maid.garage_kit.name.desc", ParseI18n.parse(info.getName()))));
         }
 

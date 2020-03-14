@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -115,9 +115,9 @@ public class ItemMaidModelCoupon extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (CustomModelLoader.MAID_MODEL.getInfo(getModelData(stack)).isPresent()) {
+        if (CustomResourcesLoader.MAID_MODEL.getInfo(getModelData(stack)).isPresent()) {
             tooltip.add(I18n.format("tooltips.touhou_little_maid.maid_model_coupon.desc",
-                    ParseI18n.parse(CustomModelLoader.MAID_MODEL.getInfo(getModelData(stack)).get().getName())));
+                    ParseI18n.parse(CustomResourcesLoader.MAID_MODEL.getInfo(getModelData(stack)).get().getName())));
         }
         String star;
         switch (stack.getMetadata()) {

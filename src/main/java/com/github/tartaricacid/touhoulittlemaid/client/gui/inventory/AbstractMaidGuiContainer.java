@@ -6,8 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.download.ResourcesDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.GuiMaidSound;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidHomeModeMessage;
@@ -15,7 +15,9 @@ import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidPickupMod
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SwitchMaidGuiMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiButtonImage;
+import net.minecraft.client.gui.GuiButtonToggle;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,8 +36,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -233,8 +233,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         }
 
         if (button.id == BUTTON.SOUND_CREDIT.ordinal()) {
-            mc.player.playSound(MaidSoundEvent.OTHER_CREDIT, 1, 1);
-            mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSoundCredit(this)));
+            mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiMaidSound()));
             return;
         }
 
@@ -539,42 +538,6 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         public int getGuiId() {
             return guiId;
-        }
-    }
-
-    /**
-     * 一个简单的打开连接的提示界面
-     */
-    private static class GuiSoundCredit extends GuiConfirmOpenLink {
-        GuiSoundCredit(GuiYesNoCallback parentScreenIn) {
-            super(parentScreenIn, I18n.format("gui.touhou_little_maid.credit.url"), BUTTON.SOUND_CREDIT.ordinal(), true);
-        }
-
-        @Override
-        protected void actionPerformed(GuiButton button) {
-            if (button.id == 0) {
-                try {
-                    super.openWebLink(new URI(I18n.format("gui.touhou_little_maid.credit.url")));
-                } catch (URISyntaxException urisyntaxexception) {
-                    TouhouLittleMaid.LOGGER.error("Can't open url for {}", urisyntaxexception);
-                }
-                return;
-            }
-            if (button.id == 1) {
-                mc.addScheduledTask(() -> mc.displayGuiScreen(null));
-                return;
-            }
-            if (button.id == 2) {
-                this.copyLinkToClipboard();
-            }
-        }
-
-        @Override
-        public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-            super.disableSecurityWarning();
-            super.drawScreen(mouseX, mouseY, partialTicks);
-            this.drawCenteredString(this.fontRenderer, TextFormatting.GOLD.toString() + TextFormatting.BOLD.toString() +
-                    I18n.format("gui.touhou_little_maid.credit.url.close"), this.width / 2, 110, 0xffcccc);
         }
     }
 }

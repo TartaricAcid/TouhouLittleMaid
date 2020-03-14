@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class CustomModelPack<T extends IModelItem> {
+public class CustomModelPack<T extends IModelInfo> {
     @SerializedName("date")
     private String date;
 

@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class ChairModelItem implements IModelItem {
+public class ChairModelInfo implements IModelInfo {
     @SerializedName("name")
     private String name;
 
@@ -89,7 +89,7 @@ public class ChairModelItem implements IModelItem {
 
     @SuppressWarnings("unchecked")
     @Override
-    public ChairModelItem decorate() {
+    public ChairModelInfo decorate() {
         // description 设置为空列表
         if (description == null) {
             description = Collections.EMPTY_LIST;

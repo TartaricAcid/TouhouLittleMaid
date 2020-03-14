@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
@@ -170,8 +170,8 @@ public class EntityChair extends AbstractEntityFromItem {
         if (this.hasCustomName()) {
             return this.getCustomNameTag();
         }
-        if (world.isRemote && CustomModelLoader.CHAIR_MODEL.getInfo(getModelId()).isPresent()) {
-            String name = CustomModelLoader.CHAIR_MODEL.getInfo(getModelId()).get().getName();
+        if (world.isRemote && CustomResourcesLoader.CHAIR_MODEL.getInfo(getModelId()).isPresent()) {
+            String name = CustomResourcesLoader.CHAIR_MODEL.getInfo(getModelId()).get().getName();
             return ParseI18n.parse(name);
         }
         return super.getName();
@@ -187,7 +187,7 @@ public class EntityChair extends AbstractEntityFromItem {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        EntityModelJson modelJson = CustomModelLoader.CHAIR_MODEL.getModel(getModelId()).orElse(null);
+        EntityModelJson modelJson = CustomResourcesLoader.CHAIR_MODEL.getModel(getModelId()).orElse(null);
         if (modelJson == null) {
             return super.getRenderBoundingBox();
         }

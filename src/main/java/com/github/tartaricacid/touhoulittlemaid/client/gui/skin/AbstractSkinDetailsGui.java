@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -46,7 +46,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.AbstractS
  * @date 2019/8/3 19:58
  **/
 @SideOnly(Side.CLIENT)
-public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U extends IModelItem> extends GuiScreen {
+public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U extends IModelInfo> extends GuiScreen {
     protected static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
     /**
      * 文件监控相关

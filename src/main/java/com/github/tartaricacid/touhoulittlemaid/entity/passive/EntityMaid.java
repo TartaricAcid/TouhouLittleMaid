@@ -8,7 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumSerializer;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -807,8 +807,8 @@ public class EntityMaid extends AbstractEntityMaid {
         } else {
             String modelId = getModelId();
             if (world.isRemote) {
-                if (CustomModelLoader.MAID_MODEL.getInfo(modelId).isPresent()) {
-                    return ParseI18n.parse(CustomModelLoader.MAID_MODEL.getInfo(modelId).get().getName());
+                if (CustomResourcesLoader.MAID_MODEL.getInfo(modelId).isPresent()) {
+                    return ParseI18n.parse(CustomResourcesLoader.MAID_MODEL.getInfo(modelId).get().getName());
                 }
             } else {
                 if (CommonProxy.VANILLA_ID_NAME_MAP.containsKey(modelId)) {
@@ -1554,7 +1554,7 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        EntityModelJson modelJson = CustomModelLoader.MAID_MODEL.getModel(getModelId()).orElse(null);
+        EntityModelJson modelJson = CustomResourcesLoader.MAID_MODEL.getModel(getModelId()).orElse(null);
         if (modelJson == null) {
             return super.getRenderBoundingBox();
         }

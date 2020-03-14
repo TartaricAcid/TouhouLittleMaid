@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -33,13 +33,13 @@ import java.util.List;
  * @date 2019/7/12 12:27
  **/
 @SideOnly(Side.CLIENT)
-public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IModelItem> extends GuiScreen {
+public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IModelInfo> extends GuiScreen {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select_side.png");
     /**
      * 按钮的 ID -> 模型 映射
      */
-    private static final HashMap<Integer, IModelItem> BUTTON_MODEL_MAP = Maps.newHashMap();
+    private static final HashMap<Integer, IModelInfo> BUTTON_MODEL_MAP = Maps.newHashMap();
     private SkinGuiNumber<U> guiNumber;
     /**
      * 用来在子类中通过实体 id 获取缓存中的实体对象

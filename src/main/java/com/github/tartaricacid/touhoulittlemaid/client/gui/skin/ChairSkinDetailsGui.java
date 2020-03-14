@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyChairSkinDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -23,13 +23,13 @@ import java.util.List;
  * @date 2019/8/11 14:11
  **/
 @SideOnly(Side.CLIENT)
-public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, ChairModelItem> {
+public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, ChairModelInfo> {
     private GuiButtonToggle characterButton;
     private GuiButtonToggle gravityButton;
     private ResourceLocation modelId;
 
     public ChairSkinDetailsGui(EntityChair sourceEntity, ResourceLocation modelId) {
-        super(sourceEntity, new EntityChair(sourceEntity.world), CustomModelLoader.CHAIR_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
+        super(sourceEntity, new EntityChair(sourceEntity.world), CustomResourcesLoader.CHAIR_MODEL.getInfo(modelId.toString()).orElseThrow(NullPointerException::new));
         this.modelId = modelId;
         guiEntity.setModelId(modelId.toString());
         guiEntity.setMountedHeight(modelItem.getMountedYOffset());
@@ -98,37 +98,37 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, Cha
 
     @Override
     void loadAnimation(Object scriptObject) {
-        CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), Collections.singletonList(scriptObject));
+        CustomResourcesLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), Collections.singletonList(scriptObject));
     }
 
     @Override
     void reloadModel() {
-        CustomModelLoader.CHAIR_MODEL.putModel(modelItem.getModelId().toString(), CustomModelLoader.loadModel(modelItem.getModel()));
+        CustomResourcesLoader.CHAIR_MODEL.putModel(modelItem.getModelId().toString(), CustomResourcesLoader.loadModel(modelItem.getModel()));
     }
 
     @Override
     void resetAnimationAndModel() {
         List<Object> animations = CustomJsAnimationManger.getCustomAnimation(modelItem);
         if (animations != null && animations.size() > 0) {
-            CustomModelLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), animations);
+            CustomResourcesLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), animations);
         }
         reloadModel();
     }
 
     @Override
     void putDebugAnimation(File debugAnimationFile) {
-        CustomModelLoader.CHAIR_MODEL.putDebugAnimation(modelItem.getModelId().toString(), debugAnimationFile.getAbsolutePath());
+        CustomResourcesLoader.CHAIR_MODEL.putDebugAnimation(modelItem.getModelId().toString(), debugAnimationFile.getAbsolutePath());
     }
 
     @Nullable
     @Override
     String getDebugAnimationFile() {
-        return CustomModelLoader.CHAIR_MODEL.getDebugAnimationFilePath(modelItem.getModelId().toString());
+        return CustomResourcesLoader.CHAIR_MODEL.getDebugAnimationFilePath(modelItem.getModelId().toString());
     }
 
     @Override
     void removeDebugAnimationFile() {
-        CustomModelLoader.CHAIR_MODEL.removeDebugAnimation(modelItem.getModelId().toString());
+        CustomResourcesLoader.CHAIR_MODEL.removeDebugAnimation(modelItem.getModelId().toString());
     }
 
     @Override

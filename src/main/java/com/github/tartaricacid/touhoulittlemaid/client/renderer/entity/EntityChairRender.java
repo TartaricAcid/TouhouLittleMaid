@@ -4,8 +4,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugCharacter;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerChairDebugFloor;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -29,7 +29,7 @@ import java.util.List;
 public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static final EntityChairRender.Factory FACTORY = new EntityChairRender.Factory();
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
-    private ChairModelItem mainInfo;
+    private ChairModelInfo mainInfo;
     private List<Object> mainAnimations;
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
@@ -41,14 +41,14 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     @Override
     public void doRender(@Nonnull EntityChair chair, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模
-        CustomModelLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.mainModel = model);
-        CustomModelLoader.CHAIR_MODEL.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
-        CustomModelLoader.CHAIR_MODEL.getAnimation(DEFAULT_CHAIR_ID).ifPresent(animations -> this.mainAnimations = animations);
+        CustomResourcesLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.mainModel = model);
+        CustomResourcesLoader.CHAIR_MODEL.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
+        CustomResourcesLoader.CHAIR_MODEL.getAnimation(DEFAULT_CHAIR_ID).ifPresent(animations -> this.mainAnimations = animations);
 
         // 通过模型 id 获取对应数据
-        CustomModelLoader.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.mainModel = model);
-        CustomModelLoader.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(info -> this.mainInfo = info);
-        CustomModelLoader.CHAIR_MODEL.getAnimation(chair.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+        CustomResourcesLoader.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.mainModel = model);
+        CustomResourcesLoader.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(info -> this.mainInfo = info);
+        CustomResourcesLoader.CHAIR_MODEL.getAnimation(chair.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
 
         // 模型动画设置
         ((EntityModelJson) this.mainModel).setAnimations(this.mainAnimations);
@@ -80,7 +80,7 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static class Factory implements IRenderFactory<EntityChair> {
         @Override
         public Render<? super EntityChair> createRenderFor(RenderManager manager) {
-            return new EntityChairRender(manager, CustomModelLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).orElseThrow(NullPointerException::new));
+            return new EntityChairRender(manager, CustomResourcesLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).orElseThrow(NullPointerException::new));
         }
     }
 }

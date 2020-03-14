@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resources;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelItem;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.google.common.collect.Maps;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,15 +16,15 @@ import java.util.Set;
 @SideOnly(Side.CLIENT)
 public class CustomMaidModelResources {
     private String jsonFileName;
-    private List<CustomModelPack<MaidModelItem>> packList;
+    private List<CustomModelPack<MaidModelInfo>> packList;
     private HashMap<String, EntityModelJson> idModelMap;
-    private HashMap<String, MaidModelItem> idInfoMap;
+    private HashMap<String, MaidModelInfo> idInfoMap;
     private HashMap<String, List<Object>> idAnimationMap;
     private HashMap<String, String> idDebugAnimationFile;
 
-    public CustomMaidModelResources(String jsonFileName, List<CustomModelPack<MaidModelItem>> packList,
+    public CustomMaidModelResources(String jsonFileName, List<CustomModelPack<MaidModelInfo>> packList,
                                     HashMap<String, EntityModelJson> idToModel,
-                                    HashMap<String, MaidModelItem> idToInfo,
+                                    HashMap<String, MaidModelInfo> idToInfo,
                                     HashMap<String, List<Object>> idAnimationMap) {
         this.jsonFileName = jsonFileName;
         this.packList = packList;
@@ -45,7 +45,7 @@ public class CustomMaidModelResources {
         return jsonFileName;
     }
 
-    public List<CustomModelPack<MaidModelItem>> getPackList() {
+    public List<CustomModelPack<MaidModelInfo>> getPackList() {
         return packList;
     }
 
@@ -53,7 +53,7 @@ public class CustomMaidModelResources {
         return idInfoMap.keySet();
     }
 
-    public void addPack(CustomModelPack<MaidModelItem> pack) {
+    public void addPack(CustomModelPack<MaidModelInfo> pack) {
         this.packList.add(pack);
     }
 
@@ -61,7 +61,7 @@ public class CustomMaidModelResources {
         this.idModelMap.put(modelId, modelJson);
     }
 
-    public void putInfo(String modelId, MaidModelItem maidModelItem) {
+    public void putInfo(String modelId, MaidModelInfo maidModelItem) {
         this.idInfoMap.put(modelId, maidModelItem);
     }
 
@@ -101,7 +101,7 @@ public class CustomMaidModelResources {
         idAnimationMap.remove(modelId);
     }
 
-    public Optional<MaidModelItem> getInfo(String modelId) {
+    public Optional<MaidModelInfo> getInfo(String modelId) {
         return Optional.ofNullable(idInfoMap.get(modelId));
     }
 }

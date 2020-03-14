@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,6 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ReloadResourceEvent {
     @SubscribeEvent
     public static void onTextureStitchEvent(TextureStitchEvent.Post event) {
-        CustomModelLoader.reloadModelPack();
+        CustomResourcesLoader.reloadModelPack();
     }
 }

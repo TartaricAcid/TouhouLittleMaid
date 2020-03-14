@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-public interface IModelItem {
+public interface IModelInfo {
     ResourceLocation getModelId();
 
     String getName();
@@ -19,5 +19,5 @@ public interface IModelItem {
 
     float getRenderItemScale();
 
-    <T extends IModelItem> T decorate();
+    <T extends IModelInfo> T decorate();
 }
