@@ -301,6 +301,7 @@ gui.touhou_little_maid.resources_download.not_download=未下载
 gui.touhou_little_maid.resources_download.downloaded=已下载
 gui.touhou_little_maid.resources_download.downloading=下载中
 gui.touhou_little_maid.resources_download.need_update=需更新
+gui.touhou_little_maid.resources_download.downloaded.tip=** 下载后请记得加载资源包 **
 gui.touhou_little_maid.resources_download.author=作者：%s
 gui.touhou_little_maid.resources_download.author.delimiter=，
 gui.touhou_little_maid.resources_download.file_size=大小：%s

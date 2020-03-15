@@ -301,6 +301,7 @@ gui.touhou_little_maid.resources_download.not_download=Not Download
 gui.touhou_little_maid.resources_download.downloaded=Downloaded
 gui.touhou_little_maid.resources_download.downloading=Downloading
 gui.touhou_little_maid.resources_download.need_update=Need Update
+gui.touhou_little_maid.resources_download.downloaded.tip=REMEMBER TO LOAD THE PACK
 gui.touhou_little_maid.resources_download.author=Author: %s
 gui.touhou_little_maid.resources_download.author.delimiter=,
 gui.touhou_little_maid.resources_download.file_size=Size: %s
