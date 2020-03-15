@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
 import net.minecraft.init.Items;
@@ -29,21 +29,22 @@ import javax.annotation.Nonnull;
  **/
 public class LayerMaidCustomHead implements LayerRenderer<EntityMaid> {
     private static final String SKULL_OWNER_TAG = "SkullOwner";
-    private final RenderLiving<EntityMaid> livingEntityRenderer;
+    private final EntityMaidRender maidRender;
 
-    public LayerMaidCustomHead(RenderLiving<EntityMaid> livingEntityRenderer) {
-        this.livingEntityRenderer = livingEntityRenderer;
+    public LayerMaidCustomHead(EntityMaidRender maidRender) {
+        this.maidRender = maidRender;
     }
 
     @Override
     public void doRenderLayer(@Nonnull EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         ItemStack head = maid.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (!head.isEmpty() && ((EntityModelJson) this.livingEntityRenderer.getMainModel()).hasHead()) {
+        EntityModelJson modelJson = (EntityModelJson) this.maidRender.getMainModel();
+        if (!head.isEmpty() && maidRender.getMainInfo().isShowCustomHead() && modelJson.hasHead()) {
             Item item = head.getItem();
             Minecraft minecraft = Minecraft.getMinecraft();
             GlStateManager.pushMatrix();
 
-            ((EntityModelJson) this.livingEntityRenderer.getMainModel()).postRenderCustomHead(0.0625F);
+            modelJson.postRenderCustomHead(0.0625F);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
             if (item == Items.SKULL) {

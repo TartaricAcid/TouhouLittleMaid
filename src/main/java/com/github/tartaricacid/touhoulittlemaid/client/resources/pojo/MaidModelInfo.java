@@ -39,6 +39,9 @@ public class MaidModelInfo implements IModelInfo {
     @SerializedName("show_backpack")
     private boolean showBackpack = true;
 
+    @SerializedName("show_custom_head")
+    private boolean showCustomHead = true;
+
     @SerializedName("can_hold_trolley")
     private boolean canHoldTrolley = true;
 
@@ -93,6 +96,10 @@ public class MaidModelInfo implements IModelInfo {
 
     public boolean isShowBackpack() {
         return showBackpack;
+    }
+
+    public boolean isShowCustomHead() {
+        return showCustomHead;
     }
 
     public boolean isCanHoldTrolley() {
