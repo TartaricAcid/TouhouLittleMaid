@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -99,6 +100,11 @@ public abstract class AbstractEntityFromItem extends EntityLivingBase {
             }
             this.entityDropItem(itemstack, 0.0F);
         }
+    }
+
+    @Override
+    public void knockBack(@Nonnull Entity entityIn, float strength, double xRatio, double zRatio) {
+        // 均不允许被击退效果影响
     }
 
     @Nonnull
