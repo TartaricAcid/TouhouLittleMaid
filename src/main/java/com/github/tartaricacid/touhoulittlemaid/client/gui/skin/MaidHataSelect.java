@@ -160,7 +160,8 @@ public class MaidHataSelect extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.addButton(new GuiButton(BUTTON.APPLY.ordinal(), width * 2 / 5, height * 4 / 5 - 36, 204, 20, I18n.format("gui.touhou_little_maid.hata_select.apply")));
+        this.addButton(new GuiButton(BUTTON.APPLY.ordinal(), width * 2 / 5, height * 4 / 5 - 36, 100, 20, I18n.format("gui.touhou_little_maid.hata_select.apply")));
+        this.addButton(new GuiButton(BUTTON.DISASSEMBLY.ordinal(), width * 2 / 5 + 104, height * 4 / 5 - 36, 100, 20, I18n.format("gui.touhou_little_maid.hata_select.disassembly")));
         this.addButton(new GuiButton(BUTTON.CLOSE.ordinal(), width * 2 / 5, height * 4 / 5 - 12, 100, 20, I18n.format("gui.touhou_little_maid.hata_select.close")));
         showHideButton = new GuiButton(BUTTON.SHOW_HIDE.ordinal(), width * 2 / 5 + 104, height * 4 / 5 - 12, 100, 20, "");
         this.addButton(showHideButton);
@@ -179,6 +180,10 @@ public class MaidHataSelect extends GuiScreen {
             isShowSasimono = !isShowSasimono;
             CommonProxy.INSTANCE.sendToServer(new SetMaidSasimonoCRC32(maid.getUniqueID(), maid.getSasimonoCRC32(), isShowSasimono));
         }
+        if (button.id == BUTTON.DISASSEMBLY.ordinal()) {
+            CommonProxy.INSTANCE.sendToServer(new SetMaidSasimonoCRC32(maid.getUniqueID(), Long.MIN_VALUE, isShowSasimono));
+            mc.addScheduledTask(() -> mc.displayGuiScreen(null));
+        }
     }
 
     @Override
@@ -192,6 +197,8 @@ public class MaidHataSelect extends GuiScreen {
         // 应用材质按钮
         APPLY,
         // 显示/隐藏按钮
-        SHOW_HIDE
+        SHOW_HIDE,
+        // 拆卸
+        DISASSEMBLY
     }
 }

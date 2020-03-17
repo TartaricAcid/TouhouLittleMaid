@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -34,10 +35,19 @@ import static org.lwjgl.opengl.GL11.*;
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
 public class KappaCompassRenderEvent {
     private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/particle/flag.png");
+    private static List<BlockPos> TMP_DISPLAY_POS = Lists.newArrayList();
+    private static ItemKappaCompass.Mode TMP_DISPLAY_MODE = ItemKappaCompass.Mode.NONE;
+    private static long TIME;
 
     @SubscribeEvent
     public static void onRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
+
+        if (Minecraft.getSystemTime() <= (TIME + TimeUnit.SECONDS.toMillis(9))
+                && TMP_DISPLAY_POS.size() > 0 && TMP_DISPLAY_MODE != ItemKappaCompass.Mode.NONE) {
+            renderWorldPos(mc, TMP_DISPLAY_POS, TMP_DISPLAY_MODE);
+        }
+
         ItemStack mainStack = mc.player.getHeldItemMainhand();
         ItemStack offStack = mc.player.getHeldItemOffhand();
         if (mainStack.getItem() != MaidItems.KAPPA_COMPASS && offStack.getItem() != MaidItems.KAPPA_COMPASS) {
@@ -56,6 +66,16 @@ public class KappaCompassRenderEvent {
             }
         }
 
+        renderWorldPos(mc, blockPosList, mode);
+    }
+
+    public static void setTmpDisplay(List<BlockPos> tmpPos, ItemKappaCompass.Mode tmpMode) {
+        TMP_DISPLAY_POS = tmpPos;
+        TMP_DISPLAY_MODE = tmpMode;
+        TIME = Minecraft.getSystemTime();
+    }
+
+    private static void renderWorldPos(Minecraft mc, List<BlockPos> blockPosList, ItemKappaCompass.Mode mode) {
         Vec3d playerVec3d = new Vec3d(-TileEntityRendererDispatcher.staticPlayerX,
                 -TileEntityRendererDispatcher.staticPlayerY + mc.player.getEyeHeight() - 0.1,
                 -TileEntityRendererDispatcher.staticPlayerZ);

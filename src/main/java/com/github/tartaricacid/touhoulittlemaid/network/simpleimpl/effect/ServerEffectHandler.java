@@ -15,6 +15,9 @@ public class ServerEffectHandler implements IMessageHandler<EffectRequest, Effec
     @Override
     public EffectReply onMessage(EffectRequest message, MessageContext ctx) {
         if (ctx.side == Side.SERVER) {
+            if (ctx.getServerHandler().player == null || !ctx.getServerHandler().player.isEntityAlive()) {
+                return null;
+            }
             Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
             if (entity instanceof EntityMaid && entity.isEntityAlive()) {
                 EntityMaid maid = (EntityMaid) entity;

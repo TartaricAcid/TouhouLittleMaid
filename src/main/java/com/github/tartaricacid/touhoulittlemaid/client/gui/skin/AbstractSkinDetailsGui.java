@@ -246,7 +246,7 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
 
     private void closeThread() {
         // 关闭模拟线程
-        TIMER.shutdown();
+        TIMER.shutdownNow();
         // 关闭文件监控
         try {
             FILE_ALTERATION_MONITOR.stop();

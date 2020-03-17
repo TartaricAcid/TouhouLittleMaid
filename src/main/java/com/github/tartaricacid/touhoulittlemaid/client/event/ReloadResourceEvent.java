@@ -17,6 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ReloadResourceEvent {
     @SubscribeEvent
     public static void onTextureStitchEvent(TextureStitchEvent.Post event) {
-        CustomResourcesLoader.reloadModelPack();
+        CustomResourcesLoader.reloadResources();
     }
 }

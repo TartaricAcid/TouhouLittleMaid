@@ -15,7 +15,6 @@ public class DownloadInfo {
     private static final String[] UNITS = new String[]{"B", "kB", "MB", "GB", "TB"};
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private volatile DownloadStatus status = DownloadStatus.NOT_DOWNLOAD;
-    private String formatFileSize = "";
 
     @SerializedName("language")
     private HashMap<String, HashMap<String, String>> language = Maps.newHashMap();
@@ -46,6 +45,12 @@ public class DownloadInfo {
 
     @SerializedName("desc")
     private String desc = "";
+
+    @SerializedName("license")
+    private String license = "All Right Reserved";
+
+    @Expose(deserialize = false)
+    private String formatFileSize = "";
 
     @Expose(deserialize = false)
     private String formatData;
@@ -103,6 +108,10 @@ public class DownloadInfo {
 
     public String getFormatData() {
         return formatData;
+    }
+
+    public String getLicense() {
+        return license;
     }
 
     public void setStatus(DownloadStatus status) {

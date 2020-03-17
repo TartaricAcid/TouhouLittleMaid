@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.proxy;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadHataCommand;
+import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadMaidResCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
@@ -82,6 +83,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         HATA_TEXTURE_MANAGER = new HataTextureManager(Minecraft.getMinecraft().getResourceManager());
         CustomHataTextureLoader.onHataTextureReload();
         ClientCommandHandler.instance.registerCommand(new ReloadHataCommand());
+        ClientCommandHandler.instance.registerCommand(new ReloadMaidResCommand());
     }
 
     @Override

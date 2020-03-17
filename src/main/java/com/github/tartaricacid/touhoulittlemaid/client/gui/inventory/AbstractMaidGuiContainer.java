@@ -3,18 +3,22 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.client.event.KappaCompassRenderEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.download.ResourcesDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.GuiMaidSound;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidMainContainer;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ClearMaidPosMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidHomeModeMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.MaidPickupModeMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SwitchMaidGuiMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiButtonToggle;
@@ -172,9 +176,13 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.buttonList.add(new GuiButton(BUTTON.SOUND_CREDIT.ordinal(), i + 5, j + 167, 20, 20, ""));
         // 下载资源包按钮
         this.buttonList.add(new GuiButton(BUTTON.DOWNLOAD_RESOURCES.ordinal(), i + 26, j + 167, 20, 20, ""));
+        // 显示坐标按钮
+        this.buttonList.add(new GuiButton(BUTTON.SHOW_POS.ordinal(), i + 47, j + 167, 20, 20, ""));
+        // 清除界面按钮
+        this.buttonList.add(new GuiButton(BUTTON.CLEAR_POS.ordinal(), i + 68, j + 167, 20, 20, ""));
 
         // 占位按钮
-        for (int k = 0; k < 6; k++) {
+        for (int k = 2; k < 6; k++) {
             this.buttonList.add(new GuiButton(405 + k, i + 47 + 21 * k, j + 167, 20, 20, ""));
         }
     }
@@ -239,6 +247,17 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
 
         if (button.id == BUTTON.DOWNLOAD_RESOURCES.ordinal()) {
             mc.addScheduledTask(() -> mc.displayGuiScreen(new ResourcesDownloadGui()));
+            return;
+        }
+
+        if (button.id == BUTTON.SHOW_POS.ordinal()) {
+            KappaCompassRenderEvent.setTmpDisplay(maid.getCompassPosList(maid.getCompassMode()), maid.getCompassMode());
+            return;
+        }
+
+        if (button.id == BUTTON.CLEAR_POS.ordinal()) {
+            KappaCompassRenderEvent.setTmpDisplay(Lists.newArrayList(), ItemKappaCompass.Mode.NONE);
+            CommonProxy.INSTANCE.sendToServer(new ClearMaidPosMessage(maid.getUniqueID()));
             return;
         }
 
@@ -402,6 +421,20 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.pack_download"), mouseX, mouseY);
         }
 
+        // 显示坐标
+        xInRange = (i + 45) < mouseX && mouseX < (i + 65);
+        yInRange = (j + 167) < mouseY && mouseY < (j + 187);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.show_pos"), mouseX, mouseY);
+        }
+
+        // 清除坐标
+        xInRange = (i + 67) < mouseX && mouseX < (i + 86);
+        yInRange = (j + 167) < mouseY && mouseY < (j + 187);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.clear_pos"), mouseX, mouseY);
+        }
+
         drawCustomTooltips(mouseX, mouseY, partialTicks);
 
         // 绘制物品的文本提示
@@ -496,7 +529,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     @Override
     public void onGuiClosed() {
         // 关闭发包线程
-        timer.shutdown();
+        timer.shutdownNow();
         super.onGuiClosed();
     }
 
@@ -525,7 +558,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 模式右翻页
         TASK_RIGHT_SWITCH(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 下载资源包按钮
-        DOWNLOAD_RESOURCES(MaidGuiHandler.OTHER_GUI.NONE.getId());
+        DOWNLOAD_RESOURCES(MaidGuiHandler.OTHER_GUI.NONE.getId()),
+        // 显示坐标按钮
+        SHOW_POS(MaidGuiHandler.OTHER_GUI.NONE.getId()),
+        // 清除坐标按钮
+        CLEAR_POS(MaidGuiHandler.OTHER_GUI.NONE.getId());
 
         private int guiId;
 

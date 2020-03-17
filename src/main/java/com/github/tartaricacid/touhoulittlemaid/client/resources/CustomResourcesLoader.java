@@ -42,7 +42,7 @@ public class CustomResourcesLoader {
     private static final String OLD_BEDROCK_VERSION = "1.10.0";
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
-    public static void reloadModelPack() {
+    public static void reloadResources() {
         CustomJsAnimationManger.clearAll();
         MAID_MODEL.clearAll();
         CHAIR_MODEL.clearAll();

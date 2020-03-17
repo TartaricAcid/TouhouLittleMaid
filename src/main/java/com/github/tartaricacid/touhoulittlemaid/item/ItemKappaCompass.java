@@ -122,6 +122,9 @@ public class ItemKappaCompass extends Item {
             ItemStack stack = player.getHeldItem(hand);
             if (player.isSneaking()) {
                 removePos(stack);
+                if (!worldIn.isRemote) {
+                    player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.kappa_compass.usage.result.clear"));
+                }
             } else {
                 Result result = setPosAndSendMessage(pos, facing, stack);
                 if (result != Result.SUCCESS) {

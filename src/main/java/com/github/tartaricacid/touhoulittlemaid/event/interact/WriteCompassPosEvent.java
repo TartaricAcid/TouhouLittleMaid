@@ -27,11 +27,6 @@ public final class WriteCompassPosEvent {
         if (itemstack.getItem() == MaidItems.KAPPA_COMPASS && event.getMaid() instanceof EntityMaid) {
             event.setCanceled(true);
             EntityMaid maid = (EntityMaid) event.getMaid();
-            if (player.isSneaking()) {
-                maid.setCompassMode(ItemKappaCompass.Mode.NONE);
-                sendMessageFromServer(world, player, "message.touhou_little_maid.kappa_compass.usage.result.reset");
-                return;
-            }
             ItemKappaCompass.Mode mode = ItemKappaCompass.getMode(itemstack);
             List<BlockPos> posList = ItemKappaCompass.getPos(itemstack);
             if (maid.setCompassPosList(posList, mode)) {

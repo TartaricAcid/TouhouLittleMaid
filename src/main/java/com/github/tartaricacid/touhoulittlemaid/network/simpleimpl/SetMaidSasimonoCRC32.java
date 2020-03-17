@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -64,9 +65,18 @@ public class SetMaidSasimonoCRC32 implements IMessage {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
                     EntityPlayerMP player = ctx.getServerHandler().player;
-                    if (entity instanceof EntityMaid && player.equals(((EntityMaid) entity).getOwner())) {
-                        ((EntityMaid) entity).setSasimonoCRC32(message.getCRC32());
-                        ((EntityMaid) entity).setShowSasimono(message.isShow());
+                    if (entity instanceof EntityMaid) {
+                        EntityMaid maid = (EntityMaid) entity;
+                        if (player.equals(maid.getOwner())) {
+                            if (maid.hasSasimono() && message.getCRC32() == Long.MIN_VALUE) {
+                                maid.setSasimonoCRC32(0L);
+                                maid.setShowSasimono(false);
+                                maid.dropItem(MaidItems.HATA_SASIMONO, 1);
+                            } else {
+                                maid.setSasimonoCRC32(message.getCRC32());
+                                maid.setShowSasimono(message.isShow());
+                            }
+                        }
                     }
                 });
             }

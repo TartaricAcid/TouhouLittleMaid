@@ -17,6 +17,9 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ClientEffectHandler implements IMessageHandler<EffectReply, IMessage> {
     @Override
     public IMessage onMessage(EffectReply message, MessageContext ctx) {
+        if (Minecraft.getMinecraft().player == null || !Minecraft.getMinecraft().player.isEntityAlive()) {
+            return null;
+        }
         if (ctx.side == Side.CLIENT) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.getEntityId());

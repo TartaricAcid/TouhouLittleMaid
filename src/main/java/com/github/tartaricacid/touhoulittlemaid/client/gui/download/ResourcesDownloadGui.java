@@ -94,10 +94,11 @@ public class ResourcesDownloadGui extends GuiScreen {
         String name = I18n.format(info.getName());
         drawString(fontRenderer, name, startX, startY, 0xFFAA00);
         drawString(fontRenderer, info.getVersion(), startX + fontRenderer.getStringWidth(name) + 4, startY, 0x55FF55);
-        drawString(fontRenderer, getI18nFormatFileSize(info.getFormatFileSize()), startX, startY + 12, 0x55FFFF);
+        drawString(fontRenderer, getI18nFormatFileSize(info.getFormatFileSize()), startX, startY + 12, 0x3A8FB7);
         drawString(fontRenderer, getI18nFormatFileTime(info.getFormatData()), startX, startY + 24, 0x55FFFF);
-        drawString(fontRenderer, getI18nFormatAuthor(info.getAuthor()), startX, startY + 36, 0x55FFFF);
-        fontRenderer.drawSplitString(I18n.format(info.getDesc()), startX, startY + 60, 195, 0x6a6a6a);
+        drawString(fontRenderer, getI18nFormatAuthor(info.getAuthor()), startX, startY + 36, 0x00896C);
+        drawString(fontRenderer, getI18nFormatLicense(info.getLicense()), startX, startY + 48, 0xF7D94C);
+        fontRenderer.drawSplitString(I18n.format(info.getDesc()), startX, startY + 72, 195, 0x7a7a7a);
     }
 
     @Override
@@ -200,5 +201,9 @@ public class ResourcesDownloadGui extends GuiScreen {
 
     private String getI18nFormatFileTime(String time) {
         return I18n.format("gui.touhou_little_maid.resources_download.upload_time", time);
+    }
+
+    private String getI18nFormatLicense(String license) {
+        return I18n.format("gui.touhou_little_maid.resources_download.license", license);
     }
 }

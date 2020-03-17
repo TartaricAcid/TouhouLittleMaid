@@ -36,13 +36,7 @@ public class ItemHataSasimono extends Item {
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         if (stack.getItem() == this && target instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) target;
-            if (maid.hasSasimono()) {
-                if (!playerIn.world.isRemote) {
-                    maid.setSasimonoCRC32(0L);
-                    maid.setShowSasimono(false);
-                    maid.dropItem(this, 1);
-                }
-            } else {
+            if (!maid.hasSasimono()) {
                 if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
                     Long crc32 = ClientProxy.HATA_NAME_MAP.keySet().stream().skip(itemRand.nextInt(ClientProxy.HATA_NAME_MAP.size())).findFirst().get();
                     CommonProxy.INSTANCE.sendToServer(new SetMaidSasimonoCRC32(target.getUniqueID(), crc32, true));
