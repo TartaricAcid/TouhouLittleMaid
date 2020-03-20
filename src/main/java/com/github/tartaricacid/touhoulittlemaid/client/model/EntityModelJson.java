@@ -178,6 +178,14 @@ public class EntityModelJson extends ModelBase {
         return modelMap.get("backpackPositioningBone").getModelRenderer();
     }
 
+    public boolean hasHataSasimonoPositioningModel() {
+        return modelMap.get("hasHataSasimonoPositioningBone") != null;
+    }
+
+    public ModelRenderer getHataSasimonoPositioningModel() {
+        return modelMap.get("hasHataSasimonoPositioningBone").getModelRenderer();
+    }
+
     public boolean hasArmPositioningModel(EnumHandSide side) {
         ModelRendererWrapper arm = (side == EnumHandSide.LEFT ? modelMap.get("armLeftPositioningBone") : modelMap.get("armRightPositioningBone"));
         return arm != null;

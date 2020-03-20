@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.model.HataSasimonoFlagModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.HataSasimonoFrameModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRender;
@@ -8,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -48,9 +50,16 @@ public class LayerHataSasimono implements LayerRenderer<EntityMaid> {
             }
 
             // 渲染
+            GlStateManager.pushMatrix();
+            EntityModelJson mainModel = (EntityModelJson) this.renderer.getMainModel();
+            if (mainModel.hasHataSasimonoPositioningModel()) {
+                ModelRenderer renderer = mainModel.getHataSasimonoPositioningModel();
+                GlStateManager.translate(renderer.rotationPointX * 0.0625,
+                        (renderer.rotationPointY - 15) * 0.0625,
+                        (renderer.rotationPointZ - 3.25) * 0.0625);
+            }
             Minecraft.getMinecraft().renderEngine.bindTexture(FRAME_TEXTURE);
             modelBase.render(maid, 0, 0, 0, 0, 0, 0.0625f);
-            GlStateManager.pushMatrix();
             GlStateManager.enableCull();
             GlStateManager.bindTexture(texture);
             modelFlag.render(maid, 0, 0, 0, 0, 0, 0.0625f);
