@@ -40,7 +40,7 @@ public class BlockGashaponMachines extends BlockHorizontal {
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "gashapon_machines");
         setHardness(1.0f);
         setRegistryName("gashapon_machines");
-        setCreativeTab(MaidItems.MAIN_TABS);
+        setCreativeTab(MaidItems.MODEL_COUPON_TABS);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 

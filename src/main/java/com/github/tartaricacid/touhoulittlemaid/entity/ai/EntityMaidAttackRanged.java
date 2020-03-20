@@ -71,6 +71,8 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         this.entity.resetActiveHand();
         this.entity.setSwingingArms(false);
         this.entity.getNavigator().clearPath();
+        this.entity.setMoveForward(0.0F);
+        this.entity.setMoveStrafing(0.0F);
     }
 
     @Override

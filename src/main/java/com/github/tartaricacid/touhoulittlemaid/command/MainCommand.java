@@ -63,7 +63,6 @@ public class MainCommand extends CommandBase {
             case 1:
                 command.add("power");
                 command.add("maid_num");
-                command.add("draw");
                 break;
             case 2:
                 command.add("get");
@@ -89,22 +88,22 @@ public class MainCommand extends CommandBase {
 
         switch (args[1]) {
             case "get":
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
                 break;
             case "set":
                 power.set(num);
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
                 break;
             case "add":
                 power.add(num);
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
                 break;
             case "min":
                 power.min(num);
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.power.info", power.get()));
                 break;
             default:
-                player.sendMessage(new TextComponentTranslation(getUsage(sender)));
+                sender.sendMessage(new TextComponentTranslation(getUsage(sender)));
         }
     }
 
@@ -118,22 +117,22 @@ public class MainCommand extends CommandBase {
 
         switch (args[1]) {
             case "get":
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
                 break;
             case "set":
                 numHandler.set(num);
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
                 break;
             case "add":
                 numHandler.add(num);
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
                 break;
             case "min":
                 numHandler.min(num);
-                player.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.main.maid_num.info", numHandler.get()));
                 break;
             default:
-                player.sendMessage(new TextComponentTranslation(getUsage(sender)));
+                sender.sendMessage(new TextComponentTranslation(getUsage(sender)));
         }
     }
 

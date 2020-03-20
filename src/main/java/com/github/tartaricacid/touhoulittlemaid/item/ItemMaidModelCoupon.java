@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.resources.I18n;
@@ -44,11 +43,9 @@ public class ItemMaidModelCoupon extends Item {
     }
 
     public static boolean hasModelData(ItemStack coupon) {
-        if (coupon.hasTagCompound()) {
+        if (coupon.getItem() == MaidItems.MAID_MODEL_COUPON && coupon.hasTagCompound()) {
             NBTTagCompound tag = coupon.getTagCompound();
-            if (tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING)) {
-                return CommonProxy.VANILLA_ID_NAME_MAP.containsKey(tag.getString(MODEL_DATA_TAG));
-            }
+            return tag != null && tag.hasKey(MODEL_DATA_TAG, Constants.NBT.TAG_STRING);
         }
         return false;
     }

@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.block.MaidBeaconGuiCo
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.*;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.NpcMaidSkinGui;
-import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -88,9 +87,7 @@ public class MaidGuiHandler implements IGuiHandler {
             return new MaidBaubleGuiContainer(player.inventory, (EntityMaid) entity, taskIndex);
         }
         if (guiId == OTHER_GUI.CHAIR.getId() && entity instanceof EntityChair) {
-            if (!GeneralConfig.MISC_CONFIG.chairCannotChangeModel || player.isCreative()) {
-                return new ChairSkinGui((EntityChair) entity);
-            }
+            return new ChairSkinGui((EntityChair) entity);
         }
         if (guiId == OTHER_GUI.ALBUM.getId() && player.getHeldItemMainhand().getItem() instanceof ItemAlbum) {
             return new AlbumGuiContainer(player.inventory, player.getHeldItemMainhand());

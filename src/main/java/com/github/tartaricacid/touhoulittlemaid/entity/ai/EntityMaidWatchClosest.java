@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidVehicle;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -11,18 +12,23 @@ import net.minecraft.entity.player.EntityPlayer;
  * @date 2020/2/3 17:47
  **/
 public class EntityMaidWatchClosest extends EntityAIWatchClosest {
-    public EntityMaidWatchClosest(EntityLiving entityIn, Class<? extends Entity> watchTargetClass, float maxDistance) {
-        super(entityIn, watchTargetClass, maxDistance);
+    private EntityMaid maid;
+
+    public EntityMaidWatchClosest(EntityMaid maid, Class<? extends Entity> watchTargetClass, float maxDistance) {
+        super(maid, watchTargetClass, maxDistance);
+        this.maid = maid;
     }
 
-    public EntityMaidWatchClosest(EntityLiving entityIn, Class<? extends Entity> watchTargetClass, float maxDistance, float chanceIn) {
-        super(entityIn, watchTargetClass, maxDistance, chanceIn);
+    public EntityMaidWatchClosest(EntityMaid maid, Class<? extends Entity> watchTargetClass, float maxDistance, float chanceIn) {
+        super(maid, watchTargetClass, maxDistance, chanceIn);
+        this.maid = maid;
     }
 
     @Override
     public boolean shouldExecute() {
-        boolean controlNotWatch = !(entity.getControllingPassenger() instanceof EntityMaidVehicle);
-        boolean passengerNotWatch = !(entity.getRidingEntity() instanceof EntityMaidVehicle || entity.getRidingEntity() instanceof EntityPlayer);
-        return super.shouldExecute() && controlNotWatch && passengerNotWatch;
+        boolean taskIsIdle = maid.getTask() instanceof TaskIdle;
+        boolean controlNotWatch = !(maid.getControllingPassenger() instanceof EntityMaidVehicle);
+        boolean passengerNotWatch = !(maid.getRidingEntity() instanceof EntityMaidVehicle || maid.getRidingEntity() instanceof EntityPlayer);
+        return super.shouldExecute() && taskIsIdle && controlNotWatch && passengerNotWatch;
     }
 }

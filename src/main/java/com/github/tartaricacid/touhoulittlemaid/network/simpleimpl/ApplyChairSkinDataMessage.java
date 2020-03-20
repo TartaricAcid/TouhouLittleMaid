@@ -1,10 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -77,14 +80,22 @@ public class ApplyChairSkinDataMessage implements IMessage {
             if (ctx.side == Side.SERVER) {
                 FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
                     Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(message.getEntityUuid());
+                    EntityPlayer player = ctx.getServerHandler().player;
+                    boolean canChangeModel = !GeneralConfig.MISC_CONFIG.chairCannotChangeModel || player.isCreative();
                     if (entity instanceof EntityChair) {
-                        EntityChair chair = (EntityChair) entity;
-                        chair.setModelId(message.getModelId().toString());
-                        chair.setMountedHeight(message.getMountedHeight());
-                        chair.setTameableCanRide(message.isTameableCanRide());
-                        chair.setNoGravity(message.isNoGravity());
-                        if (!message.isTameableCanRide() && chair.getControllingPassenger() instanceof EntityMaid) {
-                            chair.getControllingPassenger().dismountRidingEntity();
+                        if (canChangeModel) {
+                            EntityChair chair = (EntityChair) entity;
+                            chair.setModelId(message.getModelId().toString());
+                            chair.setMountedHeight(message.getMountedHeight());
+                            chair.setTameableCanRide(message.isTameableCanRide());
+                            chair.setNoGravity(message.isNoGravity());
+                            if (!message.isTameableCanRide() && chair.getControllingPassenger() instanceof EntityMaid) {
+                                chair.getControllingPassenger().dismountRidingEntity();
+                            }
+                        } else {
+                            if (player.isEntityAlive()) {
+                                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.change_model.disabled"));
+                            }
                         }
                     }
                 });

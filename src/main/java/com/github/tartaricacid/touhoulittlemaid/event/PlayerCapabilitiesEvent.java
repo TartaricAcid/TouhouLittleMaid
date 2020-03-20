@@ -55,7 +55,7 @@ public class PlayerCapabilitiesEvent {
             // 依据死亡或者切换维度进行不同的处理
             // 死亡 Power 减一
             if (event.isWasDeath()) {
-                power.set(power.get() - (float) MISC_CONFIG.playerDeathLossPowerPoint);
+                power.set(oldPower.get() - (float) MISC_CONFIG.playerDeathLossPowerPoint);
             } else {
                 power.set(oldPower.get());
             }
