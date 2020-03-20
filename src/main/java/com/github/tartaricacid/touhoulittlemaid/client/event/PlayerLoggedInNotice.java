@@ -36,7 +36,7 @@ public class PlayerLoggedInNotice {
         }
         if (missingPatchouli) {
             String json = I18n.format("message.touhou_little_maid.missing_patchouli");
-            ITextComponent component = ITextComponent.Serializer.jsonToComponent(json);
+            ITextComponent component = ITextComponent.Serializer.fromJsonLenient(json);
             event.player.sendMessage(component);
         }
         notFirst = true;
