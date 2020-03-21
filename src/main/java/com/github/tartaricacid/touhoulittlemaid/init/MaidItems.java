@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public final class MaidItems {
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "kappa_compass")
@@ -88,10 +90,10 @@ public final class MaidItems {
 
         @Override
         @SideOnly(Side.CLIENT)
-        public void displayAllRelevantItems(NonNullList<ItemStack> items) {
-            ItemStack egg = new ItemStack(Items.SPAWN_EGG);
-            ItemMonsterPlacer.applyEntityIdToItemStack(egg, new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid"));
-            items.add(egg);
+        public void displayAllRelevantItems(@Nonnull NonNullList<ItemStack> items) {
+            addSpawnEgg("entity.passive.maid", items);
+            addSpawnEgg("entity.monster.rinnosuke", items);
+            addSpawnEgg("entity.monster.fairy", items);
             super.displayAllRelevantItems(items);
         }
     };
@@ -178,5 +180,11 @@ public final class MaidItems {
                 .setMaxStackSize(1)
                 .setNoRepair()
                 .setCreativeTab(MaidItems.MAIN_TABS);
+    }
+
+    private static void addSpawnEgg(String id, NonNullList<ItemStack> items) {
+        ItemStack egg = new ItemStack(Items.SPAWN_EGG);
+        ItemMonsterPlacer.applyEntityIdToItemStack(egg, new ResourceLocation(TouhouLittleMaid.MOD_ID, id));
+        items.add(egg);
     }
 }

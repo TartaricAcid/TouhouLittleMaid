@@ -56,9 +56,14 @@ public class AltarRecipesManager {
         ProcessingInput ingotIron = OreDictDefinition.of("ingotIron");
         ProcessingInput blockGlass = OreDictDefinition.of("blockGlass");
         ProcessingInput blockRedWool = ItemDefinition.of(Blocks.WOOL, 14);
+        ProcessingInput blockBrownWool = ItemDefinition.of(Blocks.WOOL, 12);
         ProcessingInput blockPinkWool = ItemDefinition.of(Blocks.WOOL, 6);
         ProcessingInput blockGrayWool = ItemDefinition.of(Blocks.WOOL, 8);
         ProcessingInput blockYellowWool = ItemDefinition.of(Blocks.WOOL, 4);
+        ProcessingInput minecart = ItemDefinition.of(Items.MINECART);
+        ProcessingInput blockBrownConcrete = ItemDefinition.of(Blocks.CONCRETE, 7);
+        ProcessingInput blockLightBlueConcrete = ItemDefinition.of(Blocks.CONCRETE, 3);
+        ProcessingInput blockRedConcrete = ItemDefinition.of(Blocks.CONCRETE, 14);
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_maid"),
                 new SpawnMaidRecipe(
@@ -168,6 +173,31 @@ public class AltarRecipesManager {
                 0.2f, new ItemStack(MaidItems.SUITCASE),
                 blockYellowWool, blockYellowWool, blockYellowWool,
                 blockYellowWool, ingotGold, blockYellowWool);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_marisa_broom"),
+                0.2f, new ItemStack(MaidItems.MARISA_BROOM),
+                ItemDefinition.of(Blocks.HAY_BLOCK), ItemDefinition.of(Blocks.HAY_BLOCK), ItemDefinition.of(Items.ENDER_EYE),
+                stick, stick);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_trolley_audio"),
+                0.2f, new ItemStack(MaidItems.TROLLEY_AUDIO),
+                ItemDefinition.of(Blocks.JUKEBOX), blockBrownWool, blockBrownWool,
+                blockBrownWool, blockBrownWool, blockBrownWool);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_cat_cart"),
+                0.2f, new ItemStack(MaidItems.MAID_VEHICLE, 1, 0),
+                blockBrownConcrete, minecart, blockBrownConcrete,
+                blockBrownConcrete, blockBrownConcrete, blockBrownConcrete);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_wheel_chair"),
+                0.2f, new ItemStack(MaidItems.MAID_VEHICLE, 1, 1),
+                blockLightBlueConcrete, minecart, blockLightBlueConcrete,
+                blockLightBlueConcrete, blockLightBlueConcrete, blockLightBlueConcrete);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_rickshaw"),
+                0.2f, new ItemStack(MaidItems.MAID_VEHICLE, 1, 2),
+                blockRedConcrete, minecart, blockRedConcrete,
+                blockRedConcrete, blockRedConcrete, blockRedConcrete);
     }
 
     public static AltarRecipesManager instance() {

@@ -75,8 +75,9 @@ commands.touhou_little_maid.maid_res.time=重载耗时：%.3f ms
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
 tooltips.touhou_little_maid.hakurei_gohei.switch_mode.desc=按下 Alt 键并滑动鼠标滚轮切换模式。
-tooltips.touhou_little_maid.kappa_compass.usage.desc.1=右击方块设定坐标，而后右击女仆绑定坐标
-tooltips.touhou_little_maid.kappa_compass.usage.desc.2=需要配合女仆的 Home 模式使用，Shift 右击地面清除坐标
+tooltips.touhou_little_maid.kappa_compass.usage.desc.1=右击方块设定坐标，而后右击女仆绑定坐标。
+tooltips.touhou_little_maid.kappa_compass.usage.desc.2=Shift 右击地面清除坐标。
+tooltips.touhou_little_maid.kappa_compass.usage.desc.3=需要配合女仆的 Home 模式使用。
 tooltips.touhou_little_maid.kappa_compass.mode=当前模式：%s
 tooltips.touhou_little_maid.damageable.desc=剩余使用次数：%d
 tooltips.touhou_little_maid.garage_kit.entity_id.desc=实体名称：%s
@@ -106,6 +107,7 @@ tooltips.touhou_little_maid.substitute_jizo.desc=右击女仆使其无敌，仅�
 tooltips.touhou_little_maid.maid_model_coupon.desc=女仆模型：%s
 tooltips.touhou_little_maid.gashapon_machines.desc=通过扭蛋币或绿宝石（默认）右击抽扭蛋
 tooltips.touhou_little_maid.bauble.desc=§a[女仆饰品]
+tooltips.touhou_little_maid.bauble.usage=需要放置在女仆的饰品栏中
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=坐标写入成功！

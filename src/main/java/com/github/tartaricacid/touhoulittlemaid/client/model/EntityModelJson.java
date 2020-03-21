@@ -86,6 +86,9 @@ public class EntityModelJson extends ModelBase {
             // 塞进 HashMap 里面的模型对象
             ModelRenderer model = modelMap.get(name).getModelRenderer();
 
+            // 镜像参数
+            model.mirror = bones.isMirror();
+
             // 旋转点
             model.setRotationPoint(convertPivot(bones, 0), convertPivot(bones, 1), convertPivot(bones, 2));
 

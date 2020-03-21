@@ -20,7 +20,9 @@ public class AddBaubleInformationEvent {
     @SubscribeEvent
     public static void onRenderTooltips(ItemTooltipEvent event) {
         if (LittleMaidAPI.getBauble(event.getItemStack()) != null) {
+            event.getToolTip().add("");
             event.getToolTip().add(I18n.format("tooltips.touhou_little_maid.bauble.desc"));
+            event.getToolTip().add(I18n.format("tooltips.touhou_little_maid.bauble.usage"));
         }
     }
 }

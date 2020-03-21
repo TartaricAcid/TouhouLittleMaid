@@ -22,6 +22,9 @@ public class BonesItem {
     @SerializedName("parent")
     private String parent;
 
+    @SerializedName("mirror")
+    private boolean mirror = false;
+
     @Nullable
     public List<CubesItem> getCubes() {
         return cubes;
@@ -41,6 +44,10 @@ public class BonesItem {
 
     public String getParent() {
         return parent;
+    }
+
+    public boolean isMirror() {
+        return mirror;
     }
 
     @Override

@@ -182,10 +182,12 @@ public class ItemKappaCompass extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String modeKey = String.format("compass.touhou_little_maid.mode.%s", getMode(stack).name().toLowerCase(Locale.US));
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc.1"));
-        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc.2"));
         tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.mode",
                 I18n.format(modeKey)));
+        tooltip.add("");
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc.1"));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc.2"));
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.kappa_compass.usage.desc.3"));
     }
 
     public enum Mode {

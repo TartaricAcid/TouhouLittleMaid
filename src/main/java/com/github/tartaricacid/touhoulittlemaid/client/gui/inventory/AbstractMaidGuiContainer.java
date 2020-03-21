@@ -22,6 +22,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiButtonToggle;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,6 +39,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -478,8 +480,14 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.drawItemStack(BARRIER, i + 149, j - 19);
 
         // 绘制女仆
+        ScaledResolution res = new ScaledResolution(mc);
+        double scaleW = mc.displayWidth / res.getScaledWidth_double();
+        double scaleH = mc.displayHeight / res.getScaledHeight_double();
+        GL11.glScissor((int) ((i + 26) * scaleW), (int) ((j + 87.5) * scaleH), (int) (49 * scaleW), (int) (70 * scaleH));
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GuiInventory.drawEntityOnScreen(i + 51, j + 70, 28,
                 (float) (i + 51) - mouseX, (float) (j + 70 - 45) - mouseY, maid);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
     /**

@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
@@ -54,8 +55,15 @@ public class MaidRenderTooltipsEvent {
         if (y < 65) {
             y = 65;
         }
+        Minecraft mc = Minecraft.getMinecraft();
         RenderHelper.renderBackground(x, y, 60, 60);
-        World world = Minecraft.getMinecraft().world;
+        World world = mc.world;
+
+        ScaledResolution res = new ScaledResolution(mc);
+        double scaleW = mc.displayWidth / res.getScaledWidth_double();
+        double scaleH = mc.displayHeight / res.getScaledHeight_double();
+        GL11.glScissor((int) ((x - 62) * scaleW), (int) ((-y - 2) * scaleH + mc.displayHeight),
+                (int) (64 * scaleW), (int) (64 * scaleH));
 
         GlStateManager.enableDepth();
         GlStateManager.color(1, 1, 1);
@@ -110,11 +118,13 @@ public class MaidRenderTooltipsEvent {
         final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GlStateManager.scale(renderItemScale, renderItemScale, renderItemScale);
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(false);
         Minecraft.getMinecraft().getRenderManager().renderEntity(entity,
                 0, 0, 0, 0, 0, true);
         Minecraft.getMinecraft().getRenderManager().setRenderShadow(true);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         GlStateManager.popMatrix();
 
