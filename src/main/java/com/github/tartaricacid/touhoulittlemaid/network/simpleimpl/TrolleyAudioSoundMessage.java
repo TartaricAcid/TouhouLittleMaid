@@ -6,6 +6,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemRecord;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -22,38 +24,38 @@ import org.apache.commons.lang3.StringUtils;
  **/
 public class TrolleyAudioSoundMessage implements IMessage {
     private int entityId;
-    private String soundName;
-    private String recordName;
+    private String recordId;
+    private String recordDisplayName;
 
     public TrolleyAudioSoundMessage() {
     }
 
-    public TrolleyAudioSoundMessage(String recordName, SoundEvent soundEvent, EntityTrolleyAudio trolleyAudio) {
-        this.recordName = recordName;
-        this.soundName = soundEvent.getSoundName().toString();
+    public TrolleyAudioSoundMessage(String recordDisplayName, ResourceLocation registerName, EntityTrolleyAudio trolleyAudio) {
+        this.recordDisplayName = recordDisplayName;
+        this.recordId = registerName.toString();
         this.entityId = trolleyAudio.getEntityId();
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.recordName = ByteBufUtils.readUTF8String(buf);
-        this.soundName = ByteBufUtils.readUTF8String(buf);
+        this.recordDisplayName = ByteBufUtils.readUTF8String(buf);
+        this.recordId = ByteBufUtils.readUTF8String(buf);
         this.entityId = buf.readInt();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeUTF8String(buf, this.recordName);
-        ByteBufUtils.writeUTF8String(buf, this.soundName);
+        ByteBufUtils.writeUTF8String(buf, this.recordDisplayName);
+        ByteBufUtils.writeUTF8String(buf, this.recordId);
         buf.writeInt(this.entityId);
     }
 
-    public String getRecordName() {
-        return recordName;
+    public String getRecordDisplayName() {
+        return recordDisplayName;
     }
 
-    public SoundEvent getSoundEvent() {
-        return new SoundEvent(new ResourceLocation(soundName));
+    public String getRecordId() {
+        return recordId;
     }
 
     public int getEntityId() {
@@ -68,7 +70,10 @@ public class TrolleyAudioSoundMessage implements IMessage {
                 mc.addScheduledTask(() -> {
                     Entity entity = mc.world.getEntityByID(message.getEntityId());
                     if (entity instanceof EntityTrolleyAudio) {
-                        apply(message.recordName, message.getSoundEvent(), (EntityTrolleyAudio) entity);
+                        Item item = Item.getByNameOrId(message.getRecordId());
+                        if (item instanceof ItemRecord) {
+                            apply(message.recordDisplayName, ((ItemRecord) item).getSound(), (EntityTrolleyAudio) entity);
+                        }
                     }
                 });
             }

@@ -322,9 +322,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         mc.renderEngine.bindTexture(ICON);
         drawModalRectWithCustomSizedTexture(i + 8, j + 170, 0, 0, 14, 14, 256, 256);
         drawModalRectWithCustomSizedTexture(i + 29, j + 170, 14, 0, 14, 14, 256, 256);
+        drawModalRectWithCustomSizedTexture(i + 50, j + 170, 28, 0, 14, 14, 256, 256);
+        drawModalRectWithCustomSizedTexture(i + 71, j + 170, 42, 0, 14, 14, 256, 256);
 
         // 占位按钮图标
-        for (int k = 0; k < 6; k++) {
+        for (int k = 2; k < 6; k++) {
             drawItemStack(BARRIER, i + 49 + 21 * k, j + 169);
         }
 

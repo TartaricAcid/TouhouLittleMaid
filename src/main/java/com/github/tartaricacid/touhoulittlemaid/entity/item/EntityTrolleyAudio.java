@@ -96,7 +96,10 @@ public class EntityTrolleyAudio extends AbstractEntityTrolley {
                 ItemRecord record = (ItemRecord) stack.getItem();
                 this.recordInv.setStackInSlot(0, stack.copy());
                 this.setStop(false);
-                CommonProxy.INSTANCE.sendToDimension(new TrolleyAudioSoundMessage(record.displayName, record.getSound(), this), world.provider.getDimension());
+                if (record.getRegistryName() != null) {
+                    CommonProxy.INSTANCE.sendToDimension(new TrolleyAudioSoundMessage(record.displayName,
+                            record.getRegistryName(), this), world.provider.getDimension());
+                }
                 if (!player.isCreative()) {
                     stack.shrink(1);
                 }
