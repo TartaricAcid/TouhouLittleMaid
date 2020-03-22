@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "This mod also adds a few command for the server owner. These command all start with /touhou_little_maid, you can also abbreviate it as /th."
+      "text": "/hata reload 重载旗指物材质$(br)/maid_res reload 重载女仆资源包。此指令并不能完全重载部分资源，建议使用 F3+T 快捷键。$(br)/draw_coupon reload 重载抽卡概率表$(br)/spell_card reload 重载符卡数据$(br)/touhou_little_maid power 设置玩家 power 数值$(br)/touhou_little_maid maid_num 设置玩家女仆数值"
     }
   ]
 }

@@ -21,12 +21,6 @@
       "offset": 0.125,
       "text": "Spawn in the forest biome at night, it will attack players and maids.",
       "anchor": "rinnosuke"
-    },
-    {
-      "type": "entity",
-      "entity": "minecraft:villager{ProfessionName:'touhou_little_maid:store_owner_of_kourindou'}",
-      "offset": 0.125,
-      "text": "Spawn in the vanilla village, can carry out some trading of this mod's item."
     }
   ]
 }

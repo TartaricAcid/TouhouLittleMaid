@@ -1,0 +1,13 @@
+{
+  "sortnum": 12,
+  "name": "便携式音响",
+  "icon": "touhou_little_maid:trolley_audio",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:trolley_audio",
+      "text": "便携式音响和行李箱很像，其使用方式和原版的唱片机也完全一致。"
+    }
+  ]
+}

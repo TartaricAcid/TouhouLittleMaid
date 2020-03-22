@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_backpack",
-      "text": "The backpack can be used to expand the inventory of the maid. It can be applied by holding the backpack and right-click on the maid. The backpack has three levels. $(br2)Use the camera to remove the maid's backpack."
+      "text": "The backpack can be used to expand the inventory of the maid. It can be applied by holding the backpack and right-click on the maid. The backpack has three levels. $(br2)Use the camera to remove the maid's backpack, and backpack can be remove by shift left-click."
     }
   ]
 }
