@@ -8,9 +8,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -94,6 +96,16 @@ public final class MaidItems {
             addSpawnEgg("entity.passive.maid", items);
             addSpawnEgg("entity.monster.rinnosuke", items);
             addSpawnEgg("entity.monster.fairy", items);
+            if (Loader.isModLoaded("patchouli")) {
+                Item book = Item.getByNameOrId("patchouli:guide_book");
+                if (book != null) {
+                    NBTTagCompound tag = new NBTTagCompound();
+                    tag.setString("patchouli:book", "touhou_little_maid:memorizable_gensokyo");
+                    ItemStack stack = new ItemStack(book);
+                    stack.setTagCompound(tag);
+                    items.add(stack);
+                }
+            }
             super.displayAllRelevantItems(items);
         }
     };
