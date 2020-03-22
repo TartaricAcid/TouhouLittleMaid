@@ -24,7 +24,7 @@
 
 # 协议
 本模组的代码中包含了少量原版和其他模组的代码。其余原创部分部分，采用 [MIT](https://baike.baidu.com/item/MIT%E8%AE%B8%E5%8F%AF%E8%AF%81) 协议进行分发。       
-本模组的美术资源由 Succinum（琥珀酸），Pajinyi（帕金伊），ZeniCrow（天顶乌），Tian_mi（天幂），Paulzzh 制作，采用 [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 协议许可。         
+本模组的美术资源由 Succinum（琥珀酸），Pajinyi（帕金伊），ZeniCrow（天顶乌），Tian_mi（天幂），Paulzzh，YurisCat（尤里的猫）制作，采用 [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 协议许可。         
 ![cc](https://creativecommons.org/images/deed/cc_icon_white_x2.png)
 ![by](https://creativecommons.org/images/deed/attribution_icon_white_x2.png)
 ![nc](https://creativecommons.org/images/deed/nc_white_x2.png)
