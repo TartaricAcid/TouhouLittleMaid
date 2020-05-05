@@ -206,6 +206,8 @@ public class BlockGrid extends Block {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.grid.deprecated"));
+        tooltip.add("");
         NBTTagCompound nbttagcompound = stack.getTagCompound();
         if (nbttagcompound == null || !nbttagcompound.hasKey("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
             tooltip.add(getModeTooltip(true, false));

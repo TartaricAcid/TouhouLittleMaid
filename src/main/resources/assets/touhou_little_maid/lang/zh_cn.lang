@@ -94,6 +94,7 @@ tooltips.touhou_little_maid.grid.input.true=输入
 tooltips.touhou_little_maid.grid.input.false=输出
 tooltips.touhou_little_maid.grid.blacklist.true=黑名单
 tooltips.touhou_little_maid.grid.blacklist.false=白名单
+tooltips.touhou_little_maid.grid.deprecated=§4警告：此物品存在诸多问题，将会在未来版本移除。请勿使用与合成！
 tooltips.touhou_little_maid.hata_sasimono.desc=右击女仆应用上旗指物。
 tooltips.touhou_little_maid.album.desc=存储情况：%d/%d
 tooltips.touhou_little_maid.maid_beacon.desc=存储P点：%s
