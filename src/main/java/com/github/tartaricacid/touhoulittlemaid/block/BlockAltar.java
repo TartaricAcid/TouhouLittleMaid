@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.event.AltarCraftEvent;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -107,7 +109,9 @@ public class BlockAltar extends Block {
             AltarRecipe altarRecipe = AltarRecipesManager.instance().getMatchRecipe(inputStackList);
             PowerHandler power = playerIn.getCapability(PowerSerializer.POWER_CAP, null);
             if (altarRecipe != null && power != null) {
-                spawnResultEntity(world, playerIn, power, altarRecipe, inputStackList, altar);
+                if (!MinecraftForge.EVENT_BUS.post(new AltarCraftEvent(world, playerIn, power, altarRecipe, inputStackList, altar))) {
+                    spawnResultEntity(world, playerIn, power, altarRecipe, inputStackList, altar);
+                }
             }
         }
     }

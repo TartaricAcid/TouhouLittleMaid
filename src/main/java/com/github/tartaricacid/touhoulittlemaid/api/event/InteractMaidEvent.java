@@ -14,10 +14,10 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  */
 @Cancelable
 public class InteractMaidEvent extends Event {
-    private World world;
-    private EntityPlayer player;
-    private AbstractEntityMaid maid;
-    private ItemStack stack;
+    private final World world;
+    private final EntityPlayer player;
+    private final AbstractEntityMaid maid;
+    private final ItemStack stack;
 
     public InteractMaidEvent(EntityPlayer player, AbstractEntityMaid maid, ItemStack stack) {
         this.player = player;

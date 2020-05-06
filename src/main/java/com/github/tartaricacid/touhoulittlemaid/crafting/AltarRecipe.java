@@ -77,4 +77,8 @@ public class AltarRecipe {
     public boolean matches(List<ItemStack> stacks) {
         return RecipeMatcher.findMatches(stacks, inputs) != null;
     }
+
+    public ResourceLocation getEntityId() {
+        return entityId;
+    }
 }
