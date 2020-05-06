@@ -180,6 +180,11 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.misc_config.danmaku_affected_by_fluid")
         @Config.Name("DanmakuAffectedByFluid")
         public boolean danmakuAffectedByFluid = true;
+
+        @Config.Comment("Whether to give guide book when entering the game for the first time?")
+        @Config.LangKey("config.touhou_little_maid.misc_config.give_guide_book_first")
+        @Config.Name("GiveGuideBookFirst")
+        public boolean giveGuideBookFirst = true;
     }
 
     public static class GashaponConfig {
