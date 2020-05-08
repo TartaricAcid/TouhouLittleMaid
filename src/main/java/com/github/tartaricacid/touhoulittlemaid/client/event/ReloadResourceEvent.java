@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.PlayerMaidResources;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,5 +19,6 @@ public class ReloadResourceEvent {
     @SubscribeEvent
     public static void onTextureStitchEvent(TextureStitchEvent.Post event) {
         CustomResourcesLoader.reloadResources();
+        PlayerMaidResources.reloadResources();
     }
 }

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.RenderMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,6 +32,7 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
+    private RenderMaidEvent.ModelData eventModelData;
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
@@ -49,10 +52,18 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         CustomResourcesLoader.MAID_MODEL.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
         CustomResourcesLoader.MAID_MODEL.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
 
-        // 通过模型 id 获取对应数据
-        CustomResourcesLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
-        CustomResourcesLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
-        CustomResourcesLoader.MAID_MODEL.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+        eventModelData = new RenderMaidEvent.ModelData((EntityModelJson) mainModel, mainInfo, mainAnimations);
+        if (MinecraftForge.EVENT_BUS.post(new RenderMaidEvent(entity, eventModelData))) {
+            // 通过模型 id 获取对应数据
+            this.mainModel = eventModelData.getModel();
+            this.mainInfo = eventModelData.getInfo();
+            this.mainAnimations = eventModelData.getAnimations();
+        } else {
+            // 通过模型 id 获取对应数据
+            CustomResourcesLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.mainModel = model);
+            CustomResourcesLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
+            CustomResourcesLoader.MAID_MODEL.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+        }
 
         // 模型动画设置
         ((EntityModelJson) this.mainModel).setAnimations(this.mainAnimations);
