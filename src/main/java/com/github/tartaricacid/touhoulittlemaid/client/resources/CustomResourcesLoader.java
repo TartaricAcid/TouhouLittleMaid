@@ -4,10 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.SoundPackInfo;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -73,17 +71,19 @@ public class CustomResourcesLoader {
                     // 加载动画
                     @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(maidModelItem);
                     if (modelJson != null) {
-                        String id = maidModelItem.getModelId().toString();
-                        // 如果加载的模型不为空
-                        MAID_MODEL.putModel(id, modelJson);
-                        MAID_MODEL.putInfo(id, maidModelItem);
-                        if (animations != null && animations.size() > 0) {
-                            MAID_MODEL.putAnimation(id, animations);
+                        // 加载彩蛋，彩蛋不允许为空
+                        if (maidModelItem.getEasterEgg() != null
+                                && StringUtils.isNotBlank(maidModelItem.getEasterEgg().getTag())) {
+                            putMaidEasterEggData(maidModelItem, modelJson, animations);
+                        } else {
+                            putMaidModelData(maidModelItem, modelJson, animations);
                         }
                         // 打印日志
                         LOGGER.info(MARKER, "Loaded model: {}", maidModelItem.getModel());
                     }
                 }
+                // 加入包之前，移除那些彩蛋模型
+                pack.getModelList().removeIf(maidModelInfo -> maidModelInfo.getEasterEgg() != null);
                 MAID_MODEL.addPack(pack);
             } catch (IOException ignore) {
                 // 忽略错误，因为资源域很多
@@ -95,6 +95,26 @@ public class CustomResourcesLoader {
             }
         }
         LOGGER.info(MARKER, "Touhou little maid mod's model is loaded");
+    }
+
+    private static void putMaidEasterEggData(MaidModelInfo maidModelItem, EntityModelJson modelJson, List<Object> animations) {
+        EasterEgg easterEgg = maidModelItem.getEasterEgg();
+        ModelData data = new ModelData(modelJson, maidModelItem, animations);
+        if (easterEgg.isEncrypt()) {
+            MAID_MODEL.putEasterEggEncryptTagModel(easterEgg.getTag(), data);
+        } else {
+            MAID_MODEL.putEasterEggNormalTagModel(easterEgg.getTag(), data);
+        }
+    }
+
+    private static void putMaidModelData(MaidModelInfo maidModelItem, EntityModelJson modelJson, List<Object> animations) {
+        String id = maidModelItem.getModelId().toString();
+        // 如果加载的模型不为空
+        MAID_MODEL.putModel(id, modelJson);
+        MAID_MODEL.putInfo(id, maidModelItem);
+        if (animations != null && animations.size() > 0) {
+            MAID_MODEL.putAnimation(id, animations);
+        }
     }
 
     private static void loadChairModelPack() {

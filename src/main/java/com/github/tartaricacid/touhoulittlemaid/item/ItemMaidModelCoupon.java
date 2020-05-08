@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2019/12/31 20:37
  **/
 public class ItemMaidModelCoupon extends Item {
-    private static final String MODEL_DATA_TAG = "ModelData";
+    private static final String MODEL_DATA_TAG = "com.github.tartaricacid.touhoulittlemaid.client.resources.ModelData";
 
     public ItemMaidModelCoupon() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".maid_model_coupon");

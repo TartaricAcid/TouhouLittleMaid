@@ -22,6 +22,9 @@ public class CustomMaidModelResources {
     private HashMap<String, List<Object>> idAnimationMap;
     private HashMap<String, String> idDebugAnimationFile;
 
+    private HashMap<String, ModelData> easterEggNormalTagModelMap;
+    private HashMap<String, ModelData> easterEggEncryptTagModelMap;
+
     public CustomMaidModelResources(String jsonFileName, List<CustomModelPack<MaidModelInfo>> packList,
                                     HashMap<String, EntityModelJson> idToModel,
                                     HashMap<String, MaidModelInfo> idToInfo,
@@ -32,6 +35,8 @@ public class CustomMaidModelResources {
         this.idInfoMap = idToInfo;
         this.idAnimationMap = idAnimationMap;
         this.idDebugAnimationFile = Maps.newHashMap();
+        this.easterEggNormalTagModelMap = Maps.newHashMap();
+        this.easterEggEncryptTagModelMap = Maps.newHashMap();
     }
 
     public void clearAll() {
@@ -39,6 +44,8 @@ public class CustomMaidModelResources {
         this.idModelMap.clear();
         this.idInfoMap.clear();
         this.idAnimationMap.clear();
+        this.easterEggNormalTagModelMap.clear();
+        this.easterEggEncryptTagModelMap.clear();
     }
 
     public String getJsonFileName() {
@@ -103,5 +110,21 @@ public class CustomMaidModelResources {
 
     public Optional<MaidModelInfo> getInfo(String modelId) {
         return Optional.ofNullable(idInfoMap.get(modelId));
+    }
+
+    public Optional<ModelData> getEasterEggNormalTagModel(String tag) {
+        return Optional.ofNullable(this.easterEggNormalTagModelMap.get(tag));
+    }
+
+    public Optional<ModelData> getEasterEggEncryptTagModel(String tag) {
+        return Optional.ofNullable(this.easterEggEncryptTagModelMap.get(tag));
+    }
+
+    public void putEasterEggNormalTagModel(String tag, ModelData data) {
+        this.easterEggNormalTagModelMap.put(tag, data);
+    }
+
+    public void putEasterEggEncryptTagModel(String tag, ModelData data) {
+        this.easterEggEncryptTagModelMap.put(tag, data);
     }
 }

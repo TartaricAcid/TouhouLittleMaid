@@ -51,6 +51,9 @@ public class MaidModelInfo implements IModelInfo {
     @SerializedName("can_riding_broom")
     private boolean canRidingBroom = true;
 
+    @SerializedName("easter_egg")
+    private EasterEgg easterEgg = null;
+
     @Override
     public ResourceLocation getTexture() {
         return texture;
@@ -112,6 +115,10 @@ public class MaidModelInfo implements IModelInfo {
 
     public boolean isCanRidingBroom() {
         return canRidingBroom;
+    }
+
+    public EasterEgg getEasterEgg() {
+        return easterEgg;
     }
 
     @SuppressWarnings("unchecked")
