@@ -23,7 +23,7 @@
 				"name": "bone30",
 				"parent": "hair",
 				"pivot": [0, 23, 4],
-				"rotation": [7, 0, 0],
+				"rotation": [6.5, 0, 0],
 				"cubes": [
 					{"origin": [-4, 6, 4], "size": [8, 17, 0], "uv": [96, 0]}
 				]
@@ -32,7 +32,7 @@
 				"name": "bone31",
 				"parent": "hair",
 				"pivot": [4, 23, 4],
-				"rotation": [5, 10, -15],
+				"rotation": [5, 10, -10],
 				"cubes": [
 					{"origin": [-1, 7, 4], "size": [8, 16, 0], "uv": [80, 0]}
 				]
@@ -41,7 +41,7 @@
 				"name": "bone33",
 				"parent": "hair",
 				"pivot": [-4, 23, 4],
-				"rotation": [5, -10, 15],
+				"rotation": [5, -10, 10],
 				"cubes": [
 					{"origin": [-7, 7, 4], "size": [8, 16, 0], "uv": [112, 0]}
 				]
@@ -51,7 +51,7 @@
 				"parent": "head",
 				"pivot": [0, 0, 0],
 				"cubes": [
-					{"origin": [-4, 18, -4.001], "size": [8, 4, 0], "uv": [31, 0]}
+					{"origin": [-3, 19, -4.001], "size": [6, 2, 0], "uv": [32, 1]}
 				]
 			},
 			{
