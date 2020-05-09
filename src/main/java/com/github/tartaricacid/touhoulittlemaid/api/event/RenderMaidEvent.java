@@ -25,5 +25,4 @@ public class RenderMaidEvent extends Event {
     public ModelData getModelData() {
         return modelData;
     }
-
 }

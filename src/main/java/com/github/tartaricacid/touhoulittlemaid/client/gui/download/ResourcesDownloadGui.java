@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadSta
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -33,10 +34,13 @@ public class ResourcesDownloadGui extends GuiScreen {
     private static float scroll;
     private static int startIndex;
     private static int index;
+    private static int currentPage;
     private List<Long> crc32List = Lists.newArrayList();
+    private List<DownloadInfo> showInfoList;
 
-    public ResourcesDownloadGui() {
-        if (InfoGetManager.DOWNLOAD_INFO_LIST != null && InfoGetManager.DOWNLOAD_INFO_LIST.size() != 0) {
+    public ResourcesDownloadGui(List<DownloadInfo> showInfoList) {
+        this.showInfoList = showInfoList;
+        if (showInfoList != null && !showInfoList.isEmpty()) {
             getCrc32Info();
             checkDownloadInfo();
             calculationStartIndex();
@@ -48,16 +52,16 @@ public class ResourcesDownloadGui extends GuiScreen {
         this.buttonList.clear();
 
         int startX = this.width / 2 - 194;
-        int startY = this.height / 2 - 94;
+        int startY = this.height / 2 - 79;
 
-        if (InfoGetManager.DOWNLOAD_INFO_LIST == null || InfoGetManager.DOWNLOAD_INFO_LIST.size() == 0) {
+        if (showInfoList == null || showInfoList.isEmpty()) {
             addButton(new GuiButton(-1, 5, 5, 60, 20, I18n.format("gui.touhou_little_maid.resources_download.reload")));
             return;
         }
 
         for (int i = startIndex; i < 9 + startIndex; i++) {
-            if (i < InfoGetManager.DOWNLOAD_INFO_LIST.size()) {
-                DownloadInfo info = InfoGetManager.DOWNLOAD_INFO_LIST.get(i);
+            if (i < showInfoList.size()) {
+                DownloadInfo info = showInfoList.get(i);
                 GuiButton button = new GuiButton(i - startIndex, startX, startY + 21 * (i - startIndex), 171, 20, I18n.format(info.getName()));
                 if (i == index) {
                     button.enabled = false;
@@ -65,7 +69,12 @@ public class ResourcesDownloadGui extends GuiScreen {
                 addButton(button);
             }
         }
-        addButton(new GuiDownloadButton(9, startX + 184, startY + 165, 200, 20, InfoGetManager.DOWNLOAD_INFO_LIST.get(index)));
+        addButton(new GuiDownloadButton(9, startX + 184, startY + 165, 200, 20, showInfoList.get(index)));
+        for (int i = 0; i < 4; i++) {
+            addButton(new GuiButtonImage(10 + i, startX - 1 + (28 * i),
+                    startY - 30, 25, 25, 480, 0, 0, BG));
+        }
+        addButton(new GuiButton(-2, startX + 287, startY - 30, 100, 20, I18n.format("spectatorMenu.close")));
     }
 
     @Override
@@ -75,21 +84,34 @@ public class ResourcesDownloadGui extends GuiScreen {
         int middleY = this.height / 2;
 
         drawDefaultBackground();
-        if (InfoGetManager.DOWNLOAD_INFO_LIST == null || InfoGetManager.DOWNLOAD_INFO_LIST.size() == 0) {
+        if (showInfoList == null || showInfoList.isEmpty()) {
             drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.resources_download.fail.1"), this.width / 2, this.height / 2 - 15, 0xfffff);
             drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.resources_download.fail.2"), this.width / 2, this.height / 2, 0xfffff);
         } else {
             mc.renderEngine.bindTexture(BG);
-            drawModalRectWithCustomSizedTexture(middleX - 200, middleY - 100, 0, 0, 400, 256, 484, 256);
-            drawModalRectWithCustomSizedTexture(middleX - 19, middleY - 92 + (int) (169 * scroll), 400, 0, 4, 15, 484, 256);
-            addResInfo(InfoGetManager.DOWNLOAD_INFO_LIST.get(index));
+            drawModalRectWithCustomSizedTexture(middleX - 200, middleY - 85, 0, 0, 400, 256, 484, 256);
+            drawModalRectWithCustomSizedTexture(middleX - 19, middleY - 77 + (int) (169 * scroll), 400, 0, 4, 15, 484, 256);
+            for (int i = 0; i < 4; i++) {
+                drawModalRectWithCustomSizedTexture(middleX - 196 + (28 * i), middleY - 110, 456, 194, 28, 25, 484, 256);
+            }
+            drawModalRectWithCustomSizedTexture(middleX - 196 + (28 * currentPage), middleY - 113, 456, 224, 28, 32, 484, 256);
+            for (int i = 0; i < 4; i++) {
+                drawScaledCustomSizeModalRect(middleX - 192 + (28 * i), middleY - 106, i * 32, 224, 32, 32, 20, 20, 484, 256);
+            }
+            addResInfo(showInfoList.get(index));
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
+        boolean inRangeX = (middleX - 196) <= mouseX && mouseX < (middleX - 196 + 28 * 4);
+        boolean inRangeY = (middleY - 110) <= mouseY && mouseY < (middleY - 110 + 25);
+        if (inRangeX && inRangeY) {
+            int index = (mouseX - (middleX - 196)) / 28;
+            drawHoveringText(I18n.format("gui.touhou_little_maid.resources_download.tab." + index), mouseX, mouseY);
+        }
     }
 
     private void addResInfo(DownloadInfo info) {
         int startX = this.width / 2 - 7;
-        int startY = this.height / 2 - 88;
+        int startY = this.height / 2 - 73;
 
         String name = I18n.format(info.getName());
         drawString(fontRenderer, name, startX, startY, 0xFFAA00);
@@ -103,6 +125,10 @@ public class ResourcesDownloadGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
+        if (button.id == -2) {
+            mc.addScheduledTask(() -> mc.displayGuiScreen(null));
+            return;
+        }
         if (button.id == -1) {
             InfoGetManager.checkInfoJsonFile();
             mc.player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.resources_download.reload"));
@@ -115,9 +141,21 @@ public class ResourcesDownloadGui extends GuiScreen {
             return;
         }
         if (button.id == 9) {
-            DownloadInfo info = InfoGetManager.DOWNLOAD_INFO_LIST.get(index);
+            DownloadInfo info = showInfoList.get(index);
             if (DownloadStatus.canDownload(info.getStatus())) {
                 InfoGetManager.downloadResourcesPack(info);
+            }
+            return;
+        }
+        if (10 <= button.id && button.id <= 13) {
+            int pageIndex = button.id - 10;
+            if (currentPage != pageIndex) {
+                currentPage = pageIndex;
+                startIndex = 0;
+                scroll = 0;
+                DownloadInfo.TypeEnum typeEnum = DownloadInfo.TypeEnum.getTypeByIndex(pageIndex - 1);
+                List<DownloadInfo> downloadInfos = InfoGetManager.getTypedDownloadInfoList(typeEnum);
+                mc.addScheduledTask(() -> mc.displayGuiScreen(new ResourcesDownloadGui(downloadInfos)));
             }
         }
     }
@@ -128,17 +166,17 @@ public class ResourcesDownloadGui extends GuiScreen {
         // 鼠标滚轮改变大小
         if (Mouse.getEventDWheel() != 0) {
             // 小于等于 ⑨ 个就不要滚动了
-            if (InfoGetManager.DOWNLOAD_INFO_LIST.size() <= 9) {
+            if (showInfoList.size() <= 9) {
                 return;
             }
             float num = Mouse.getEventDWheel() < 0 ? 1.0f : -1.0f;
-            scroll = MathHelper.clamp(scroll + num / (InfoGetManager.DOWNLOAD_INFO_LIST.size() - 9), 0, 1);
+            scroll = MathHelper.clamp(scroll + num / (showInfoList.size() - 9), 0, 1);
             startIndex = startIndex + (int) num;
             if (startIndex < 0) {
                 startIndex = 0;
             }
-            if (startIndex > InfoGetManager.DOWNLOAD_INFO_LIST.size() - 9) {
-                startIndex = InfoGetManager.DOWNLOAD_INFO_LIST.size() - 9;
+            if (startIndex > showInfoList.size() - 9) {
+                startIndex = showInfoList.size() - 9;
             }
             this.initGui();
         }
@@ -162,7 +200,7 @@ public class ResourcesDownloadGui extends GuiScreen {
     }
 
     private void checkDownloadInfo() {
-        for (DownloadInfo info : InfoGetManager.DOWNLOAD_INFO_LIST) {
+        for (DownloadInfo info : showInfoList) {
             // 如果当前状态为下载中，直接返回
             if (info.getStatus() == DownloadStatus.DOWNLOADING) {
                 continue;
@@ -183,7 +221,7 @@ public class ResourcesDownloadGui extends GuiScreen {
     }
 
     private void calculationStartIndex() {
-        int size = InfoGetManager.DOWNLOAD_INFO_LIST.size();
+        int size = showInfoList.size();
         index = MathHelper.clamp(index, 0, size - 1);
         if (size - 9 > 0 && startIndex > size - 9) {
             startIndex = size - 9;
@@ -205,5 +243,9 @@ public class ResourcesDownloadGui extends GuiScreen {
 
     private String getI18nFormatLicense(String license) {
         return I18n.format("gui.touhou_little_maid.resources_download.license", license);
+    }
+
+    public static int getCurrentPage() {
+        return currentPage;
     }
 }

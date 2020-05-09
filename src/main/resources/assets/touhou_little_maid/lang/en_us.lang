@@ -321,6 +321,10 @@ gui.touhou_little_maid.resources_download.license=License: %s
 gui.touhou_little_maid.resources_download.fail.1=There seems to be something wrong with the network...
 gui.touhou_little_maid.resources_download.fail.2=Please click on the top left button and wait a few seconds
 gui.touhou_little_maid.resources_download.reload=Reload
+gui.touhou_little_maid.resources_download.tab.0=All Resources Pack
+gui.touhou_little_maid.resources_download.tab.1=Maid Resources Pack
+gui.touhou_little_maid.resources_download.tab.2=Chair Resources Pack
+gui.touhou_little_maid.resources_download.tab.3=Sound Resources Pack
 gui.touhou_little_maid.inventory.scroll.desc=Please slide the mouse wheel to scroll the inventory.
 gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript File
 gui.touhou_little_maid.compass.close=Close
@@ -437,6 +441,7 @@ model.touhou_little_maid.tsukumo_benben.name=Benben Tsukumo
 model.touhou_little_maid.hecatia_lapislazuli.name=Hecatia Lapislazuli
 model.touhou_little_maid.miyoi_okunoda.name=Miyoi Okunoda
 model.touhou_little_maid.yumemi_okazaki.name=Yumemi Okazaki
+model.touhou_little_maid.niwatari_kutaka.name=Kutaka Niwatari
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -532,6 +537,7 @@ model.touhou_little_maid.tsukumo_benben.desc=§7Tsukumogami of an Aging Biwa
 model.touhou_little_maid.hecatia_lapislazuli.desc=§7Goddess of Hell
 model.touhou_little_maid.miyoi_okunoda.desc=§7The Poster Girl of Geidontei, the Fantasy Pub
 model.touhou_little_maid.yumemi_okazaki.desc=§7Fantasy Legend
+model.touhou_little_maid.niwatari_kutaka.desc=§7Clerical God of Hell's Checkpoint
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.class_desk.name=Class Desk

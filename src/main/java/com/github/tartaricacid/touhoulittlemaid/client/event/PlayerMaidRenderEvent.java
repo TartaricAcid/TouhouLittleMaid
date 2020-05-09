@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader.MAID_MODEL;
 
@@ -25,7 +26,7 @@ public class PlayerMaidRenderEvent {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRenderPlayerNamedMaid(RenderMaidEvent event) {
         String name = event.getMaid().getCustomNameTag();
-        if (name.startsWith(PLAYER_NAME_PREFIX)) {
+        if (StringUtils.isNotBlank(name) && name.startsWith(PLAYER_NAME_PREFIX)) {
             ModelData data = event.getModelData();
             data.setModel(PlayerMaidResources.getPlayerMaidModel());
             data.setAnimations(PlayerMaidResources.getPlayerMaidAnimations());
@@ -37,13 +38,17 @@ public class PlayerMaidRenderEvent {
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void onRenderEncryptNamedMaid(RenderMaidEvent event) {
         String name = event.getMaid().getCustomNameTag();
-        MAID_MODEL.getEasterEggEncryptTagModel(DigestUtils.sha1Hex(name)).ifPresent(data -> modelDataSet(event, data));
+        if (StringUtils.isNotBlank(name)) {
+            MAID_MODEL.getEasterEggEncryptTagModel(DigestUtils.sha1Hex(name)).ifPresent(data -> modelDataSet(event, data));
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRenderNormalNamedMaid(RenderMaidEvent event) {
         String name = event.getMaid().getCustomNameTag();
-        MAID_MODEL.getEasterEggNormalTagModel(name).ifPresent(data -> modelDataSet(event, data));
+        if (StringUtils.isNotBlank(name)) {
+            MAID_MODEL.getEasterEggNormalTagModel(name).ifPresent(data -> modelDataSet(event, data));
+        }
     }
 
     private static void modelDataSet(RenderMaidEvent event, ModelData data) {

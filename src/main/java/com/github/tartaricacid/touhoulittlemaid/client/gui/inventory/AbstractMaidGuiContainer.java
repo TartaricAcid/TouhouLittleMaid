@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.inventory;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidAPI;
+import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
+import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.event.KappaCompassRenderEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.download.ResourcesDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.MaidHataSelect;
@@ -45,6 +47,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -248,7 +251,15 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         }
 
         if (button.id == BUTTON.DOWNLOAD_RESOURCES.ordinal()) {
-            mc.addScheduledTask(() -> mc.displayGuiScreen(new ResourcesDownloadGui()));
+            List<DownloadInfo> downloadInfoList;
+            int page = ResourcesDownloadGui.getCurrentPage();
+            if (page == 0) {
+                downloadInfoList = InfoGetManager.DOWNLOAD_INFO_LIST_ALL;
+            } else {
+                DownloadInfo.TypeEnum typeEnum = DownloadInfo.TypeEnum.getTypeByIndex(page - 1);
+                downloadInfoList = InfoGetManager.getTypedDownloadInfoList(typeEnum);
+            }
+            mc.addScheduledTask(() -> mc.displayGuiScreen(new ResourcesDownloadGui(downloadInfoList)));
             return;
         }
 

@@ -321,6 +321,10 @@ gui.touhou_little_maid.resources_download.license=协议：%s
 gui.touhou_little_maid.resources_download.fail.1=网络好像出了问题……
 gui.touhou_little_maid.resources_download.fail.2=请点击左上角按钮，并等待几秒钟
 gui.touhou_little_maid.resources_download.reload=重载
+gui.touhou_little_maid.resources_download.tab.0=全部资源包
+gui.touhou_little_maid.resources_download.tab.1=女仆资源包
+gui.touhou_little_maid.resources_download.tab.2=坐垫资源包
+gui.touhou_little_maid.resources_download.tab.3=声音资源包
 gui.touhou_little_maid.inventory.scroll.desc=请滑动鼠标滚轮进行物品栏滚动。
 gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript 文件
 gui.touhou_little_maid.compass.close=关闭
@@ -436,6 +440,7 @@ model.touhou_little_maid.tsukumo_benben.name=九十九弁弁
 model.touhou_little_maid.hecatia_lapislazuli.name=赫卡提亚·拉碧斯拉祖利
 model.touhou_little_maid.miyoi_okunoda.name=奥野田美宵
 model.touhou_little_maid.yumemi_okazaki.name=冈崎梦美
+model.touhou_little_maid.niwatari_kutaka.name=庭渡久侘歌
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -531,6 +536,7 @@ model.touhou_little_maid.tsukumo_benben.desc=§7古旧琵琶的付丧神
 model.touhou_little_maid.hecatia_lapislazuli.desc=§7地狱的女神
 model.touhou_little_maid.miyoi_okunoda.desc=§7梦幻酒家「鲵吞亭」的店花
 model.touhou_little_maid.yumemi_okazaki.desc=§7梦幻传说
+model.touhou_little_maid.niwatari_kutaka.desc=§7地狱口岸的守护神
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.class_desk.name=课桌

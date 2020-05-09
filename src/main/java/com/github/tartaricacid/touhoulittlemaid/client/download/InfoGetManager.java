@@ -48,7 +48,10 @@ public class InfoGetManager {
     private static final Path INFO_JSON_FILE = ROOT_FOLDER.resolve("info.json");
     private static final Path PACK_FOLDER = ROOT_FOLDER.resolve("file");
 
-    public static List<DownloadInfo> DOWNLOAD_INFO_LIST = Lists.newArrayList();
+    public static List<DownloadInfo> DOWNLOAD_INFO_LIST_ALL = Lists.newArrayList();
+    public static List<DownloadInfo> DOWNLOAD_INFO_LIST_MAID = Lists.newArrayList();
+    public static List<DownloadInfo> DOWNLOAD_INFO_LIST_CHAIR = Lists.newArrayList();
+    public static List<DownloadInfo> DOWNLOAD_INFO_LIST_SOUND = Lists.newArrayList();
 
     public static void checkInfoJsonFile() {
         // 判定文件夹是否存在
@@ -97,10 +100,22 @@ public class InfoGetManager {
                     FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
                     TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
                 }
-                DOWNLOAD_INFO_LIST = CommonProxy.GSON.fromJson(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8),
+                DOWNLOAD_INFO_LIST_ALL = CommonProxy.GSON.fromJson(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8),
                         new TypeToken<List<DownloadInfo>>() {
                         }.getType());
-                DOWNLOAD_INFO_LIST.forEach(DownloadInfo::decorate);
+                DOWNLOAD_INFO_LIST_ALL.forEach(DownloadInfo::decorate);
+                // 分类
+                DOWNLOAD_INFO_LIST_ALL.forEach(downloadInfo -> {
+                    if (downloadInfo.hasType(DownloadInfo.TypeEnum.MAID)) {
+                        DOWNLOAD_INFO_LIST_MAID.add(downloadInfo);
+                    }
+                    if (downloadInfo.hasType(DownloadInfo.TypeEnum.CHAIR)) {
+                        DOWNLOAD_INFO_LIST_CHAIR.add(downloadInfo);
+                    }
+                    if (downloadInfo.hasType(DownloadInfo.TypeEnum.SOUND)) {
+                        DOWNLOAD_INFO_LIST_SOUND.add(downloadInfo);
+                    }
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -110,7 +125,7 @@ public class InfoGetManager {
 
     @SubscribeEvent
     public static void onResourceReload(TextureStitchEvent.Post event) {
-        for (DownloadInfo info : DOWNLOAD_INFO_LIST) {
+        for (DownloadInfo info : DOWNLOAD_INFO_LIST_ALL) {
             @Nonnull HashMap<String, String> langMap = info.getLanguage("en_us");
             for (String key : langMap.keySet()) {
                 I18n.i18nLocale.properties.put(key, langMap.get(key));
@@ -149,5 +164,17 @@ public class InfoGetManager {
             }
         }, String.format("Download-Resources-Pack-File-%s", info.getName()));
         thread.start();
+    }
+
+    public static List<DownloadInfo> getTypedDownloadInfoList(DownloadInfo.TypeEnum typeEnum) {
+        switch (typeEnum) {
+            default:
+            case MAID:
+                return DOWNLOAD_INFO_LIST_MAID;
+            case CHAIR:
+                return DOWNLOAD_INFO_LIST_CHAIR;
+            case SOUND:
+                return DOWNLOAD_INFO_LIST_SOUND;
+        }
     }
 }

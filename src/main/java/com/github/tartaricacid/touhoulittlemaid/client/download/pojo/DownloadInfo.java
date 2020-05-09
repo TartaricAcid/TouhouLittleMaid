@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.util.math.MathHelper;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class DownloadInfo {
     private static final String[] UNITS = new String[]{"B", "kB", "MB", "GB", "TB"};
@@ -48,6 +50,12 @@ public class DownloadInfo {
 
     @SerializedName("license")
     private String license = "All Right Reserved";
+
+    /**
+     * type: maid, chair, sound
+     */
+    @SerializedName("type")
+    private List<String> type = Lists.newArrayList();
 
     @Expose(deserialize = false)
     private String formatFileSize = "";
@@ -126,5 +134,22 @@ public class DownloadInfo {
         this.formatFileSize = readableFileSize(getFileSize());
         this.formatData = DATE_FORMAT.format(new Date(this.uploadTime));
         return this;
+    }
+
+    public boolean hasType(TypeEnum typeEnum) {
+        return type.contains(typeEnum.getName());
+    }
+
+    public enum TypeEnum {
+        // 资源包的类型
+        MAID, CHAIR, SOUND;
+
+        public static TypeEnum getTypeByIndex(int index) {
+            return TypeEnum.values()[MathHelper.clamp(index, 0, TypeEnum.values().length)];
+        }
+
+        public String getName() {
+            return this.name().toLowerCase(Locale.US);
+        }
     }
 }
