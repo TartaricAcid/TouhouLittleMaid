@@ -243,6 +243,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(SetCompassModeMessage.Handler.class, SetCompassModeMessage.class, 19, Side.SERVER);
         INSTANCE.registerMessage(SendNameTagMessage.Handler.class, SendNameTagMessage.class, 20, Side.SERVER);
         INSTANCE.registerMessage(ClearMaidPosMessage.Handler.class, ClearMaidPosMessage.class, 21, Side.SERVER);
+        INSTANCE.registerMessage(SetMaidRidingMessage.Handler.class, SetMaidRidingMessage.class, 22, Side.SERVER);
     }
 
     /**

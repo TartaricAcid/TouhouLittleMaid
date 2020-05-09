@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
@@ -106,6 +107,9 @@ public class EntityChair extends AbstractEntityFromItem {
                 if (!world.isRemote && notRiddenAndRiding && entity instanceof EntityTameable && isTameableCanRide()) {
                     // 待命状态的生物不执行坐的逻辑
                     if (((EntityTameable) entity).isSitting()) {
+                        return;
+                    }
+                    if (entity instanceof EntityMaid && !((EntityMaid) entity).isCanRiding()) {
                         return;
                     }
                     entity.startRiding(this);

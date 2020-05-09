@@ -163,6 +163,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private boolean canHoldTrolley = true;
     private boolean canHoldVehicle = true;
     private boolean canRidingBroom = true;
+    private boolean canRiding = true;
 
     public EntityMaid(World worldIn) {
         super(worldIn);
@@ -341,8 +342,10 @@ public class EntityMaid extends AbstractEntityMaid {
                 // 没有实体坐在女仆上，女仆也没有坐在别的实体上
                 boolean maidNotRiddenAndRiding = !this.isBeingRidden() && !this.isRiding();
                 boolean passengerNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
-                // 服务端，女仆没有处于待命状态，而且尝试坐上去的实体是 IEntityRidingMaid
-                if (!world.isRemote && !this.isSitting() && maidNotRiddenAndRiding && passengerNotRiddenAndRiding &&
+                // 女仆处于待命或设置了不骑乘状态
+                boolean stateIsForbid = this.isSitting() || !this.isCanRiding();
+                // 服务端，而且尝试坐上去的实体是 IEntityRidingMaid
+                if (!world.isRemote && !stateIsForbid && maidNotRiddenAndRiding && passengerNotRiddenAndRiding &&
                         entity instanceof IEntityRidingMaid && ((IEntityRidingMaid) entity).canRiding(this)) {
                     entity.startRiding(this);
                 }
@@ -917,6 +920,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.CAN_RIDING_BROOM.getName())) {
             canRidingBroom = compound.getBoolean(NBT.CAN_RIDING_BROOM.getName());
         }
+        if (compound.hasKey(NBT.CAN_RIDING.getName())) {
+            canRiding = compound.getBoolean(NBT.CAN_RIDING.getName());
+        }
     }
 
     @Override
@@ -950,6 +956,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.CAN_HOLD_TROLLEY.getName(), canHoldTrolley);
         compound.setBoolean(NBT.CAN_HOLD_VEHICLE.getName(), canHoldVehicle);
         compound.setBoolean(NBT.CAN_RIDING_BROOM.getName(), canRidingBroom);
+        compound.setBoolean(NBT.CAN_RIDING.getName(), canRiding);
     }
 
     @Override
@@ -1548,6 +1555,14 @@ public class EntityMaid extends AbstractEntityMaid {
         this.canRidingBroom = canRidingBroom;
     }
 
+    public boolean isCanRiding() {
+        return canRiding;
+    }
+
+    public void setCanRiding(boolean canRiding) {
+        this.canRiding = canRiding;
+    }
+
     @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
@@ -1603,7 +1618,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 能够持有载具
         CAN_HOLD_VEHICLE("MaidCanHoldVehicle"),
         // 能够使用扫帚
-        CAN_RIDING_BROOM("MaidCanRidingBroom");
+        CAN_RIDING_BROOM("MaidCanRidingBroom"),
+        // 能够主动坐上坐垫之类的
+        CAN_RIDING("MaidCanRidingEntity");
 
         private String name;
 

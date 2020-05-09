@@ -141,6 +141,8 @@ message.touhou_little_maid.maid_backpack.level_is_biggest=背包等级已经最�
 message.touhou_little_maid.resources_download.reload=重载资源信息中……
 message.touhou_little_maid.slashblade.position=拔刀剑位置已经修改！
 message.touhou_little_maid.maid_pos.clear=女仆坐标已清除！
+message.touhou_little_maid.maid_riding_set.true=实体骑乘：开
+message.touhou_little_maid.maid_riding_set.false=实体骑乘：关
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=单点模式
@@ -268,6 +270,7 @@ gui.touhou_little_maid.button.sound_credit=打开音效的鸣谢界面
 gui.touhou_little_maid.button.pack_download=打开女仆资源包的下载界面
 gui.touhou_little_maid.button.show_pos=显示女仆坐标
 gui.touhou_little_maid.button.clear_pos=清除女仆坐标
+gui.touhou_little_maid.button.riding_set=女仆骑乘设置
 gui.touhou_little_maid.skin_details.close=关闭
 gui.touhou_little_maid.skin_details.floor=显示/隐藏地面网格
 gui.touhou_little_maid.skin_details.return=返回

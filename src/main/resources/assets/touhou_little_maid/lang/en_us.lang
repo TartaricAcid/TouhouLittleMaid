@@ -141,6 +141,8 @@ message.touhou_little_maid.maid_backpack.level_is_biggest=Backpack level is bigg
 message.touhou_little_maid.resources_download.reload=Reloading resource information...
 message.touhou_little_maid.slashblade.position=Slash blade position is changed!
 message.touhou_little_maid.maid_pos.clear=Maid Pos Cleared!
+message.touhou_little_maid.maid_riding_set.true=Entity Riding: ON
+message.touhou_little_maid.maid_riding_set.false=Entity Riding: OFF
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=Single Point
@@ -268,6 +270,7 @@ gui.touhou_little_maid.button.sound_credit=Open Sound Credit GUI
 gui.touhou_little_maid.button.pack_download=Open Maid Resources Pack Download GUI
 gui.touhou_little_maid.button.show_pos=Show Maid Pos
 gui.touhou_little_maid.button.clear_pos=Clear Maid Pos
+gui.touhou_little_maid.button.riding_set=Maid Riding Setting
 gui.touhou_little_maid.skin_details.close=Close
 gui.touhou_little_maid.skin_details.floor=Show/Hide Floor
 gui.touhou_little_maid.skin_details.return=Return
