@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiScreenResourcePacks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -75,11 +76,12 @@ public class ResourcesDownloadGui extends GuiScreen {
                     startY - 30, 25, 25, 480, 0, 0, BG));
         }
         addButton(new GuiButton(-2, startX + 287, startY - 30, 100, 20, I18n.format("spectatorMenu.close")));
+        addButton(new GuiButton(-3, startX + 184, startY + 143, 200, 20, I18n.format("gui.touhou_little_maid.resources_download.open_resources_gui")));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        // 中心点
+        // 中心点e
         int middleX = this.width / 2;
         int middleY = this.height / 2;
 
@@ -125,6 +127,10 @@ public class ResourcesDownloadGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
+        if (button.id == -3) {
+            this.mc.displayGuiScreen(new GuiScreenResourcePacks(this));
+            return;
+        }
         if (button.id == -2) {
             mc.addScheduledTask(() -> mc.displayGuiScreen(null));
             return;

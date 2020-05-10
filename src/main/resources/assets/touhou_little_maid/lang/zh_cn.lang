@@ -328,6 +328,7 @@ gui.touhou_little_maid.resources_download.tab.0=全部资源包
 gui.touhou_little_maid.resources_download.tab.1=女仆资源包
 gui.touhou_little_maid.resources_download.tab.2=坐垫资源包
 gui.touhou_little_maid.resources_download.tab.3=声音资源包
+gui.touhou_little_maid.resources_download.open_resources_gui=打开资源包加载界面
 gui.touhou_little_maid.inventory.scroll.desc=请滑动鼠标滚轮进行物品栏滚动。
 gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript 文件
 gui.touhou_little_maid.compass.close=关闭

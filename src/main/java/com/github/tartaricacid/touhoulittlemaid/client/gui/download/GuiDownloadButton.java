@@ -50,7 +50,7 @@ public class GuiDownloadButton extends GuiButton {
             this.drawCenteredString(fontrenderer, getButtonI18n(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j);
             if (info.getStatus() == DownloadStatus.DOWNLOADED) {
                 this.drawCenteredString(fontrenderer, I18n.format("gui.touhou_little_maid.resources_download.downloaded.tip"),
-                        this.x + this.width / 2, this.y + (this.height - 8) / 2 - this.height, 0xffbb1010);
+                        this.x + this.width / 2, this.y + (this.height - 8) / 2 - this.height * 2, 0xffbb1010);
             }
         }
     }
