@@ -73,10 +73,6 @@ dependencies {
     deobfCompile "MCMultiPart2:MCMultiPart:${mcmp_version}"
     compile "vazkii.patchouli:Patchouli:${patchouli_version}"
 
-    // exp4j 库，一个字符串书写表达式解析库
-    // https://mvnrepository.com/artifact/net.objecthunter/exp4j
-    compile group: 'net.objecthunter', name: 'exp4j', version: '0.4.8'
-
     // 想要了解更多，可以查询如下网址
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -118,7 +114,7 @@ jar {
     manifest {
         // 打包 Access Transformers 文件
         attributes 'FMLAT': 'touhou_little_maid_at.cfg'
-        // 将 exp4j 库打包进行模组中
-        // attributes 'ContainedDeps': "exp4j-0.4.8.jar"
+        // 将 CodecJLayerMP3 库打包进行模组中
+        attributes 'ContainedDeps': "codecjlayermp3-1.0.0-SNAPSHOT.jar"
     }
 }

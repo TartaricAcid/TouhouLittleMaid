@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuColor;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuShoot;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.DanmakuType;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.EntityFairyAttack;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityScarecrow;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -49,9 +50,10 @@ public class EntityFairy extends AbstractEntityTouhouMob implements IRangedAttac
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
+        this.tasks.addTask(0, new EntityAIAvoidEntity(this, EntityScarecrow.class, 10.0F, 1.0D, 1.2D));
         this.tasks.addTask(1, new EntityFairyAttack(this, 6.0d, 1.0));
         this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
         this.tasks.addTask(3, new EntityAIWanderAvoidWater(this, 1.0D));

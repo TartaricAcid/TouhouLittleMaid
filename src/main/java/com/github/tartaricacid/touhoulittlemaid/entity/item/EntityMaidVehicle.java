@@ -21,6 +21,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -129,6 +130,12 @@ public class EntityMaidVehicle extends AbstractEntityFromItem implements IEntity
                 }
             }
         }
+    }
+
+    @Override
+    protected boolean canBeRidden(@Nonnull Entity passage) {
+        return super.canBeRidden(passage) && this.getPassengers().isEmpty()
+                && !passage.isBeingRidden() && !passage.isRiding();
     }
 
     @Override

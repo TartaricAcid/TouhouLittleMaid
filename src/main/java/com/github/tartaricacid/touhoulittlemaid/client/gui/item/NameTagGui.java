@@ -6,7 +6,9 @@ import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
@@ -20,14 +22,14 @@ public class NameTagGui extends GuiScreen {
 
     @Override
     public void initGui() {
+        Keyboard.enableRepeatEvents(true);
         buttonList.clear();
         int middleX = this.width / 2;
         int middleY = this.height / 2;
         textField = new GuiTextField(0, mc.fontRenderer, middleX - 99, middleY - 26, 198, 20);
         textField.setFocused(true);
-        textField.setCanLoseFocus(true);
-        buttonList.add(new GuiButton(1, middleX - 100, middleY, 98, 20, "确认"));
-        buttonList.add(new GuiButton(2, middleX + 2, middleY, 98, 20, "取消"));
+        buttonList.add(new GuiButton(1, middleX - 100, middleY, 98, 20, I18n.format("gui.done")));
+        buttonList.add(new GuiButton(2, middleX + 2, middleY, 98, 20, I18n.format("gui.cancel")));
     }
 
     @Override

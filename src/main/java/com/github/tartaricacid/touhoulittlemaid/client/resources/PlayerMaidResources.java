@@ -56,7 +56,11 @@ public class PlayerMaidResources {
     }
 
     public static MaidModelInfo getPlayerMaidInfo(String name) {
-        playerSkin = TEXTURE_ALEX;
+        playerSkin = getPlayerSkin(name);
+        return playerMaidInfo;
+    }
+
+    public static ResourceLocation getPlayerSkin(String name) {
         GameProfile newProfile = null;
         Minecraft minecraft = Minecraft.getMinecraft();
 
@@ -75,13 +79,13 @@ public class PlayerMaidResources {
         if (newProfile != null) {
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().loadSkinFromCache(newProfile);
             if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
-                playerSkin = minecraft.getSkinManager().loadSkin(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+                return minecraft.getSkinManager().loadSkin(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
             } else {
                 UUID uuid = EntityPlayer.getUUID(newProfile);
-                playerSkin = DefaultPlayerSkin.getDefaultSkin(uuid);
+                return DefaultPlayerSkin.getDefaultSkin(uuid);
             }
         }
 
-        return playerMaidInfo;
+        return TEXTURE_ALEX;
     }
 }

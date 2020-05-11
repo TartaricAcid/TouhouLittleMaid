@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.monster;
 
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityScarecrow;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -35,9 +36,10 @@ public class EntityRinnosuke extends AbstractEntityTouhouMob {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
+        this.tasks.addTask(0, new EntityAIAvoidEntity(this, EntityScarecrow.class, 10.0F, 1.0D, 1.2D));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0d, false));
         this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
         this.tasks.addTask(3, new EntityAIWanderAvoidWater(this, 1.0D));

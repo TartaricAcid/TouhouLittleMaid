@@ -17,6 +17,7 @@ entity.touhou_little_maid.suitcase.name=Suitcase
 entity.touhou_little_maid.backpack.name=Backpack
 entity.touhou_little_maid.trolley_audio.name=Trolley Audio
 entity.touhou_little_maid.maid_vehicle.name=Maid Vehicle
+entity.touhou_little_maid.scarecrow.name=Scarecrow
 
 # Item
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass
@@ -50,6 +51,7 @@ item.touhou_little_maid.trolley_audio.name=Trolley Audio
 item.touhou_little_maid.cat_cart.name=Cat Cart
 item.touhou_little_maid.wheel_chair.name=Wheel Chair
 item.touhou_little_maid.rickshaw.name=Rickshaw
+item.touhou_little_maid.scarecrow.name=Scarecrow
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -109,6 +111,9 @@ tooltips.touhou_little_maid.maid_model_coupon.desc=Maid Model: %s
 tooltips.touhou_little_maid.gashapon_machines.desc=Draw a gashapon by right-click on gashapon coin or emerald (default).
 tooltips.touhou_little_maid.bauble.desc=§a[Maid Bauble]
 tooltips.touhou_little_maid.bauble.usage=Need to be placed in the maid's bauble inventory
+tooltips.touhou_little_maid.scarecrow.name=Player Name: %s
+tooltips.touhou_little_maid.scarecrow.text=Text: %s
+tooltips.touhou_little_maid.scarecrow.special=[Special]
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!
@@ -332,6 +337,8 @@ gui.touhou_little_maid.resources_download.open_resources_gui=Open Resources Gui
 gui.touhou_little_maid.inventory.scroll.desc=Please slide the mouse wheel to scroll the inventory.
 gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript File
 gui.touhou_little_maid.compass.close=Close
+gui.touhou_little_maid.scarecrow_gui.name.desc=The name of the player skin you want to use:
+gui.touhou_little_maid.scarecrow_gui.text.desc=The display text on the scarecrow brand:
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s

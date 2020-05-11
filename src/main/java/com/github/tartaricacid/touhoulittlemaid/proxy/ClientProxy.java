@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadHataCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadMaidResCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityScarecrowRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
@@ -75,6 +76,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntityBackpack.class, EntityBackpackRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityTrolleyAudio.class, EntityTrolleyAudioRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityMaidVehicle.class, EntityMaidVehicleRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityScarecrow.class, EntityScarecrowRender.FACTORY);
     }
 
     @Override
