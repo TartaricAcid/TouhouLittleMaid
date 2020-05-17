@@ -180,7 +180,6 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityCreeper.class, 6.0F, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidCompassSetting(this, 0.6f));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
-        this.tasks.addTask(4, new EntityMaidGridInteract(this, 0.6f));
         this.tasks.addTask(4, new EntityMaidOpenDoor(this, true));
 
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));

@@ -2,9 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.network;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.block.MaidBeaconGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.*;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.item.PortableAudioGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.ChairSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.skin.NpcMaidSkinGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPortableAudio;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.*;
@@ -58,6 +60,9 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.SUITCASE.getId() && entity instanceof EntitySuitcase) {
             return new SuitcaseContainer(player.inventory, (EntitySuitcase) entity);
         }
+        if (guiId == OTHER_GUI.PORTABLE_AUDIO.getId()) {
+            return null;
+        }
         if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && entity instanceof EntityCustomNpc) {
             // 服务端什么也不做
             return null;
@@ -98,6 +103,9 @@ public class MaidGuiHandler implements IGuiHandler {
         }
         if (guiId == OTHER_GUI.SUITCASE.getId() && entity instanceof EntitySuitcase) {
             return new SuitcaseGuiContainer(player.inventory, (EntitySuitcase) entity);
+        }
+        if (guiId == OTHER_GUI.PORTABLE_AUDIO.getId() && entity instanceof EntityPortableAudio) {
+            return new PortableAudioGui((EntityPortableAudio) entity);
         }
         if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && entity instanceof EntityCustomNpc) {
             return returnNpcClientGui(entity);
@@ -154,7 +162,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // NPC 模组的模型切换工具界面
         NPC_MAID_TOOL(8),
         // 行李箱
-        SUITCASE(9);
+        SUITCASE(9),
+        // 手提音响
+        PORTABLE_AUDIO(10);
 
         private int id;
 

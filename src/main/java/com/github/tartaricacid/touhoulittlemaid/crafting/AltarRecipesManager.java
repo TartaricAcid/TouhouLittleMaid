@@ -55,6 +55,7 @@ public class AltarRecipesManager {
         ProcessingInput ingotGold = OreDictDefinition.of("ingotGold");
         ProcessingInput ingotIron = OreDictDefinition.of("ingotIron");
         ProcessingInput blockGlass = OreDictDefinition.of("blockGlass");
+        ProcessingInput blockBlackWool = ItemDefinition.of(Blocks.WOOL, 15);
         ProcessingInput blockRedWool = ItemDefinition.of(Blocks.WOOL, 14);
         ProcessingInput blockBrownWool = ItemDefinition.of(Blocks.WOOL, 12);
         ProcessingInput blockPinkWool = ItemDefinition.of(Blocks.WOOL, 6);
@@ -198,6 +199,16 @@ public class AltarRecipesManager {
                 0.2f, new ItemStack(MaidItems.MAID_VEHICLE, 1, 2),
                 blockRedConcrete, minecart, blockRedConcrete,
                 blockRedConcrete, blockRedConcrete, blockRedConcrete);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_scarecrow"),
+                0.5f, new ItemStack(MaidItems.SCARECROW),
+                ItemDefinition.of(Blocks.HAY_BLOCK), ItemDefinition.of(Blocks.OAK_FENCE), ItemDefinition.of(Blocks.OAK_FENCE),
+                ItemDefinition.of(Blocks.OAK_FENCE), ItemDefinition.of(Blocks.PUMPKIN), OreDictDefinition.of("gemDiamond"));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_portable_audio"),
+                0.3f, new ItemStack(MaidItems.PORTABLE_AUDIO),
+                ItemDefinition.of(Blocks.JUKEBOX), blockBlackWool, blockBlackWool,
+                blockBlackWool, blockBlackWool, blockBlackWool);
     }
 
     public static AltarRecipesManager instance() {

@@ -16,6 +16,8 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
@@ -83,6 +85,7 @@ public class EntityScarecrow extends AbstractEntityFromItem {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         if (world.isRemote) {

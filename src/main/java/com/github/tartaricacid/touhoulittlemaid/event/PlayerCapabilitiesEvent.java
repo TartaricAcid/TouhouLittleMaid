@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -42,7 +43,7 @@ public class PlayerCapabilitiesEvent {
     }
 
     /**
-     * 玩家跨越维度或者死亡时的属性变化
+     * 玩家从末地回到主世界，或者死亡时的属性变化
      */
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
@@ -70,6 +71,26 @@ public class PlayerCapabilitiesEvent {
         HasGuideHandler oldHasGuide = event.getOriginal().getCapability(HasGuideSerializer.HAS_GUIDE_CAP, null);
         if (hasGuide != null && oldHasGuide != null) {
             hasGuide.setFirst(oldHasGuide.isFirst());
+        }
+    }
+
+    /**
+     * 其他跨越维度时候的更新提醒
+     */
+    @SubscribeEvent
+    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.getEntity();
+
+            PowerHandler power = player.getCapability(PowerSerializer.POWER_CAP, null);
+            if (power != null) {
+                power.markDirty();
+            }
+
+            MaidNumHandler num = player.getCapability(MaidNumSerializer.MAID_NUM_CAP, null);
+            if (num != null) {
+                num.markDirty();
+            }
         }
     }
 

@@ -70,7 +70,7 @@ public class PortableAudioMessageToServer implements IMessage {
                         PortableAudioMessageToClient msg = new PortableAudioMessageToClient(audio.getEntityId(), message.songId);
                         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(
                                 audio.world.provider.getDimension(),
-                                audio.posX, audio.posY, audio.posZ, 128);
+                                audio.posX, audio.posY, audio.posZ, 96);
                         CommonProxy.INSTANCE.sendToAllAround(msg, point);
                     }, 20);
                 }

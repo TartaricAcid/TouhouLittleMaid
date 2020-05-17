@@ -31,9 +31,9 @@ import java.util.Locale;
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private MaidModelInfo mainInfo;
-    private List<Object> mainAnimations = Lists.newArrayList();
-    private ModelData eventModelData;
+    public MaidModelInfo mainInfo;
+    public List<Object> mainAnimations = Lists.newArrayList();
+    public ModelData eventModelData;
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
@@ -115,6 +115,10 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
 
     public MaidModelInfo getMainInfo() {
         return mainInfo;
+    }
+
+    public void setMainModel(EntityModelJson mainModel) {
+        this.mainModel = mainModel;
     }
 
     public static class Factory implements IRenderFactory<EntityMaid> {

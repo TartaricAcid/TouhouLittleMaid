@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -44,6 +45,7 @@ public class PortableAudioMessageToClient implements IMessage {
 
     public static class Handler implements IMessageHandler<PortableAudioMessageToClient, IMessage> {
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(PortableAudioMessageToClient message, MessageContext ctx) {
             if (ctx.side == Side.CLIENT && GeneralConfig.MUSIC_CONFIG.receiveMusic) {
                 try {

@@ -11,8 +11,6 @@ import net.minecraft.client.renderer.entity.NPCRendererHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
@@ -30,7 +28,6 @@ import noppes.npcs.entity.EntityNPCInterface;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author TartaricAcid
@@ -43,6 +40,7 @@ import java.util.Optional;
 @SuppressWarnings("all")
 @SideOnly(Side.CLIENT)
 public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends RenderNPCInterface<T> {
+    private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     public ModelBiped npcmodel;
     private float partialTicks;
     private EntityLivingBase entity;
@@ -66,11 +64,6 @@ public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends Rend
         ObfuscationReflectionHelper.setPrivateValue(LayerArmorBase.class, armor, new ModelBipedAlt(1.0F), 2);
     }
 
-    private static boolean isMaid(Entity entity) {
-        String s = EntityList.getEntityString(entity);
-        return s != null && s.contains("touhou_little_maid.maid");
-    }
-
     @Override
     public void doRender(T npc, double d, double d1, double d2, float f, float partialTicks) {
         this.partialTicks = partialTicks;
@@ -79,6 +72,23 @@ public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends Rend
             Render render = this.renderManager.getEntityRenderObject(this.entity);
             if (render instanceof RenderLivingBase) {
                 this.renderEntity = (RenderLivingBase) render;
+                if (this.renderEntity instanceof EntityMaidRender && this.entity instanceof EntityMaid) {
+                    EntityMaidRender maidRender = (EntityMaidRender) this.renderEntity;
+                    EntityMaid maid = (EntityMaid) entity;
+
+                    // 读取默认模型，用于清除不存在模型的缓存残留
+                    CustomResourcesLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).ifPresent(model -> maidRender.setMainModel(model));
+                    CustomResourcesLoader.MAID_MODEL.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> maidRender.mainInfo = info);
+                    CustomResourcesLoader.MAID_MODEL.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> maidRender.mainAnimations = animations);
+
+                    // 通过模型 id 获取对应数据
+                    CustomResourcesLoader.MAID_MODEL.getModel(maid.getModelId()).ifPresent(model -> maidRender.setMainModel(model));
+                    CustomResourcesLoader.MAID_MODEL.getInfo(maid.getModelId()).ifPresent(info -> maidRender.mainInfo = info);
+                    CustomResourcesLoader.MAID_MODEL.getAnimation(maid.getModelId()).ifPresent(animations -> maidRender.mainAnimations = animations);
+
+                    // 模型动画设置
+                    ((EntityModelJson) maidRender.getMainModel()).setAnimations(maidRender.mainAnimations);
+                }
             } else {
                 this.renderEntity = null;
                 this.entity = null;
@@ -144,15 +154,6 @@ public class EntityCustomNpcChangeRender<T extends EntityCustomNpc> extends Rend
                 if (pixModel != null) {
                     model = pixModel;
                     PixelmonHelper.setupModel(this.entity, pixModel);
-                }
-            }
-
-            if (isMaid(this.entity)) {
-                Optional<EntityModelJson> maidModel = CustomResourcesLoader.MAID_MODEL.getModel(((EntityMaid) entity).getModelId());
-                if (maidModel.isPresent()) {
-                    model = maidModel.get();
-                } else {
-                    model = CustomResourcesLoader.MAID_MODEL.getModel("touhou_little_maid:hakurei_reimu").orElseThrow(NullPointerException::new);
                 }
             }
 

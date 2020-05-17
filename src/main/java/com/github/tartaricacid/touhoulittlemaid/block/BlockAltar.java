@@ -44,6 +44,7 @@ public class BlockAltar extends Block {
         super(Material.ROCK);
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "altar");
         setHardness(1.0f);
+        setResistance(2000.0F);
         setRegistryName("altar");
     }
 

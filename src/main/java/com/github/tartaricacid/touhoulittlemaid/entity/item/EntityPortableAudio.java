@@ -16,6 +16,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityPortableAudio extends AbstractEntityTrolley {
     private static final String PLAYING_TAG_NAME = "IsSongPlaying";
@@ -76,14 +78,13 @@ public class EntityPortableAudio extends AbstractEntityTrolley {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
-            return true;
-        }
         if (world.isRemote) {
             Minecraft.getMinecraft().displayGuiScreen(new PortableAudioGui(this));
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

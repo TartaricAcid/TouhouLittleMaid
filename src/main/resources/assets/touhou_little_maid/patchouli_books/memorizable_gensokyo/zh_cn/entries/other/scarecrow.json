@@ -1,0 +1,13 @@
+{
+  "sortnum": 14,
+  "name": "稻草人",
+  "icon": "touhou_little_maid:scarecrow",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:scarecrow",
+      "text": "稻草人可以驱散周围 10 格内的妖精女仆，森近霖之助和爬行者。$(br2)稻草人可以输入玩家 ID，替换成指定玩家的头颅材质，还能在胸前的牌子上写上文字。$(br2)稻草人有一个雷击彩蛋。"
+    }
+  ]
+}

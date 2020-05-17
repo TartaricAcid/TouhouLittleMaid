@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class NetWorker {
         connection.setConnectTimeout(12000);
         connection.setDoInput(true);
 
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             result.append(line);
@@ -59,7 +60,7 @@ public class NetWorker {
         printWriter.print(param);
         printWriter.flush();
 
-        bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             result.append(line);
