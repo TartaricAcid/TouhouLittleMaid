@@ -7,12 +7,18 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
+/**
+ * @author TartaricAcid
+ */
+@SideOnly(Side.CLIENT)
 public class ScarecrowGui extends GuiScreen {
-    private EntityScarecrow scarecrow;
+    private final EntityScarecrow scarecrow;
     private GuiTextField nameField;
     private GuiTextField textField;
 

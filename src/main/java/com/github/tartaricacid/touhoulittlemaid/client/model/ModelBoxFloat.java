@@ -39,6 +39,9 @@ public class ModelBoxFloat extends ModelBox {
         this.vertexPositions[5].vector3D = new Vec3d(f, y, f2);
         this.vertexPositions[6].vector3D = new Vec3d(f, f1, f2);
         this.vertexPositions[7].vector3D = new Vec3d(x, f1, f2);
+        dx = (int) dx;
+        dy = (int) dy;
+        dz = (int) dz;
         this.quadList[0] = new TexturedQuadFloat(new PositionTextureVertex[]{vertexPositions[5], vertexPositions[1], vertexPositions[2], vertexPositions[6]}, texU + dz + dx, texV + dz, texU + dz + dx + dz, texV + dz + dy, renderer.textureWidth, renderer.textureHeight);
         this.quadList[1] = new TexturedQuadFloat(new PositionTextureVertex[]{vertexPositions[0], vertexPositions[4], vertexPositions[7], vertexPositions[3]}, texU, texV + dz, texU + dz, texV + dz + dy, renderer.textureWidth, renderer.textureHeight);
         this.quadList[2] = new TexturedQuadFloat(new PositionTextureVertex[]{vertexPositions[5], vertexPositions[4], vertexPositions[0], vertexPositions[1]}, texU + dz, texV, texU + dz + dx, texV + dz, renderer.textureWidth, renderer.textureHeight);

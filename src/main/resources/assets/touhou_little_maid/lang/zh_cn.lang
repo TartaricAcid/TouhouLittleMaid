@@ -18,6 +18,7 @@ entity.touhou_little_maid.backpack.name=背包
 entity.touhou_little_maid.trolley_audio.name=便携式音响
 entity.touhou_little_maid.maid_vehicle.name=女仆载具
 entity.touhou_little_maid.scarecrow.name=稻草人
+entity.touhou_little_maid.portable_audio.name=手提音响
 
 # Item
 item.touhou_little_maid.kappa_compass.name=河童的罗盘
@@ -52,6 +53,7 @@ item.touhou_little_maid.cat_cart.name=猫车
 item.touhou_little_maid.wheel_chair.name=轮椅
 item.touhou_little_maid.rickshaw.name=黄包车
 item.touhou_little_maid.scarecrow.name=稻草人
+item.touhou_little_maid.portable_audio.name=手提音响
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -160,6 +162,8 @@ compass.touhou_little_maid.mode.home.disable=§4§lHome 模式未开启
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
 info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
+info.touhou_little_maid.portable_audio.playing=歌曲已经在播放了哦~
+info.touhou_little_maid.portable_audio.404=此歌曲不存在，请检查是否被下架
 
 # Death
 death.touhou_little_maid.attack.danmaku.1=%1$s被%2$s用弹幕干掉了
@@ -214,6 +218,11 @@ config.touhou_little_maid.gashapon_config.gashapon_weights_4=SSR 等级扭蛋权
 config.touhou_little_maid.gashapon_config.gashapon_weights_3=SR 等级扭蛋权重
 config.touhou_little_maid.gashapon_config.gashapon_weights_2=R 等级扭蛋权重
 config.touhou_little_maid.gashapon_config.gashapon_weights_1=N 等级扭蛋权重
+
+# Music Config
+config.touhou_little_maid.music_config=音乐配置
+config.touhou_little_maid.music_config.player_name_reg=玩家名正则过滤
+config.touhou_little_maid.music_config.receive_music=是否接收音乐
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹
@@ -339,6 +348,20 @@ gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript 文�
 gui.touhou_little_maid.compass.close=关闭
 gui.touhou_little_maid.scarecrow_gui.name.desc=想要使用的玩家皮肤名称：
 gui.touhou_little_maid.scarecrow_gui.text.desc=稻草人牌子上的显示文字：
+gui.touhou_little_maid.portable_audio.song_id.illegal=歌曲 ID 不合法
+gui.touhou_little_maid.portable_audio.play_list.importer=歌单导入者：%s
+gui.touhou_little_maid.portable_audio.play_list.name=§c§l[歌单] §6§l%s
+gui.touhou_little_maid.portable_audio.play_list.creator=%s %s 创建
+gui.touhou_little_maid.portable_audio.play_list.track_count=歌曲数
+gui.touhou_little_maid.portable_audio.play_list.play_count=播放数
+gui.touhou_little_maid.portable_audio.play_list.tags=标签：%s
+gui.touhou_little_maid.portable_audio.play_list.description=简介：%s
+gui.touhou_little_maid.portable_audio.play_list.loading_situation=§n加载情况：%d/%d
+gui.touhou_little_maid.portable_audio.track.name=§l音乐标题
+gui.touhou_little_maid.portable_audio.track.artists=§l歌手
+gui.touhou_little_maid.portable_audio.track.album=§l专辑
+gui.touhou_little_maid.portable_audio.track.duration=§l时长
+gui.touhou_little_maid.portable_audio.play_list.empty=模组检测到网易云歌单列表为空，原因可能如下：\n\n- 网易云音乐未在你所处地区开放使用\n- 你当前的网络环境无法连接到网易云音乐服务器\n- 网易云音乐屏蔽了你所用的 IP\n- 其他未知的网络问题\n\n当前仅支持网易云音乐，所以只有中国大陆玩家可以使用，对此深表歉意。\n不过我们后续会增加更多其他音乐网站的支持，敬请期待。\n\n请注意：这是你和网易云音乐之间的网络问题，并非模组 BUG！\n\n【按 Esc 键退出此界面】
 
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s
@@ -618,6 +641,7 @@ subtitle.touhou_little_maid.monster.rinnosuke_death=霖之助：死亡
 subtitle.touhou_little_maid.monster.rinnosuke_hurt=霖之助：受伤
 subtitle.touhou_little_maid.entity.box=盒子：打开
 subtitle.touhou_little_maid.item.compass=罗盘：选择点
+subtitle.touhou_little_maid.item.portable_audio=音响：音乐
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s

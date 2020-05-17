@@ -50,6 +50,7 @@ public final class MaidSoundEvent {
     public static final SoundEvent RINNOSUKE_HURT = registerSound("monster.rinnosuke_hurt");
     public static final SoundEvent BOX_OPEN = registerSound("entity.box");
     public static final SoundEvent COMPASS_POINT = registerSound("item.compass");
+    public static final SoundEvent PORTABLE_AUDIO = registerSound("item.portable_audio");
 
     @SubscribeEvent
     public static void register(RegistryEvent.Register<SoundEvent> event) {

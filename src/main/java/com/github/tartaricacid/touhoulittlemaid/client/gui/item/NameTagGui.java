@@ -7,13 +7,19 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
+/**
+ * @author TartaricAcid
+ */
+@SideOnly(Side.CLIENT)
 public class NameTagGui extends GuiScreen {
-    private EntityMaid maid;
+    private final EntityMaid maid;
     private GuiTextField textField;
 
     public NameTagGui(EntityMaid maid) {

@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.ZunModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.LayerScarecrowAnnex;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityScarecrow;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;

@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;

@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityScarecrow;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import ibxm.Player;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -23,8 +22,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sun.audio.AudioDevice;
-import sun.misc.CRC16;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -95,6 +92,7 @@ public class ItemScarecrow extends Item {
             worldIn.spawnEntity(scarecrow);
             worldIn.playSound(null, scarecrow.posX, scarecrow.posY, scarecrow.posZ, SoundEvents.ENTITY_ARMORSTAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
         }
+        scarecrow.rotationYawHead = yaw;
         stack.shrink(1);
     }
 

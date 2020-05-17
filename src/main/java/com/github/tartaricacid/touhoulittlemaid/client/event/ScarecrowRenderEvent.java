@@ -20,8 +20,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_ZERO;
 
+/**
+ * @author TartaricAcid
+ */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
 public class ScarecrowRenderEvent {

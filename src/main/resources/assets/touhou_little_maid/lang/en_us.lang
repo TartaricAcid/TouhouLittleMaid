@@ -18,6 +18,7 @@ entity.touhou_little_maid.backpack.name=Backpack
 entity.touhou_little_maid.trolley_audio.name=Trolley Audio
 entity.touhou_little_maid.maid_vehicle.name=Maid Vehicle
 entity.touhou_little_maid.scarecrow.name=Scarecrow
+entity.touhou_little_maid.portable_audio.name=Portable Audio
 
 # Item
 item.touhou_little_maid.kappa_compass.name=Kappa's Compass
@@ -52,6 +53,7 @@ item.touhou_little_maid.cat_cart.name=Cat Cart
 item.touhou_little_maid.wheel_chair.name=Wheel Chair
 item.touhou_little_maid.rickshaw.name=Rickshaw
 item.touhou_little_maid.scarecrow.name=Scarecrow
+item.touhou_little_maid.portable_audio.name=Portable Audio
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -160,6 +162,8 @@ compass.touhou_little_maid.mode.home.disable=§4§lHOME MODE IS DISABLE
 # Info
 info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
 info.touhou_little_maid.maid.set_pos=§a§lMaid Pos: %d, %d, %d
+info.touhou_little_maid.portable_audio.playing=The song is already playing ~
+info.touhou_little_maid.portable_audio.404=This song does not exist, please check whether it is removed
 
 # Death
 death.touhou_little_maid.attack.danmaku.1=%1$s was killed by %2$s using danmaku
@@ -214,6 +218,11 @@ config.touhou_little_maid.gashapon_config.gashapon_weights_4=SSR Level Gashapon'
 config.touhou_little_maid.gashapon_config.gashapon_weights_3=SR Level Gashapon's Weights
 config.touhou_little_maid.gashapon_config.gashapon_weights_2=R Level Gashapon's Weights
 config.touhou_little_maid.gashapon_config.gashapon_weights_1=N Level Gashapon's Weights
+
+# Music Config
+config.touhou_little_maid.music_config=Music Config
+config.touhou_little_maid.music_config.player_name_reg=Player Name Reg
+config.touhou_little_maid.music_config.receive_music=Receive Music
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet
@@ -339,6 +348,20 @@ gui.touhou_little_maid.animation_choose.file_filter.description=JavaScript File
 gui.touhou_little_maid.compass.close=Close
 gui.touhou_little_maid.scarecrow_gui.name.desc=The name of the player skin you want to use:
 gui.touhou_little_maid.scarecrow_gui.text.desc=The display text on the scarecrow brand:
+gui.touhou_little_maid.portable_audio.song_id.illegal=ID Illegal
+gui.touhou_little_maid.portable_audio.play_list.importer=Importer: %s
+gui.touhou_little_maid.portable_audio.play_list.name=§c§l[LIST] §6§l%s
+gui.touhou_little_maid.portable_audio.play_list.creator=%s %s Create
+gui.touhou_little_maid.portable_audio.play_list.track_count=Track
+gui.touhou_little_maid.portable_audio.play_list.play_count=Play
+gui.touhou_little_maid.portable_audio.play_list.tags=Tags: §9%s
+gui.touhou_little_maid.portable_audio.play_list.description=Description: %s
+gui.touhou_little_maid.portable_audio.play_list.loading_situation=§nSchedule: %d/%d
+gui.touhou_little_maid.portable_audio.track.name=Track Name
+gui.touhou_little_maid.portable_audio.track.artists=Artists
+gui.touhou_little_maid.portable_audio.track.album=Album
+gui.touhou_little_maid.portable_audio.track.duration=Time
+gui.touhou_little_maid.portable_audio.play_list.empty=The mod detects that the NetEase Cloud Music playlist is empty. The reasons may be as follows:\n\n- NetEase Cloud Music is not open for use in your region\n- Your current network environment cannot connect to NetEase Cloud Music server\n- Netease Cloud Music blocks the IP you use\n- Other unknown network issues\n\nCurrently, only NetEase Cloud Music is supported, so only players from China Mainland can use it, we apologize for this.\nHowever, we will add more support from other music websites in the future, so stay tuned.\n\nPlease note: This is a network problem between you and NetEase Cloud Music, not a mod bug!\n\n[Press Esc to exit this interface]
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s
@@ -619,6 +642,7 @@ subtitle.touhou_little_maid.monster.rinnosuke_death=Rinnosuke Death Sound
 subtitle.touhou_little_maid.monster.rinnosuke_hurt=Rinnosuke Hurt Sound
 subtitle.touhou_little_maid.entity.box=Box Open Sound
 subtitle.touhou_little_maid.item.compass=Compass Select Point Sound
+subtitle.touhou_little_maid.item.portable_audio=Audio Music Sound
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s

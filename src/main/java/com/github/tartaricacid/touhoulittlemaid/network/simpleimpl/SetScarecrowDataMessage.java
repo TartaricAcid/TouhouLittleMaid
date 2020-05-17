@@ -1,11 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityScarecrow;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

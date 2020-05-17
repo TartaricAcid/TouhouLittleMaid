@@ -211,6 +211,7 @@ public class CommonProxy {
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.trolley_audio"), EntityTrolleyAudio.class, "touhou_little_maid.trolley_audio", 10, TouhouLittleMaid.INSTANCE, 80, 10, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.maid_vehicle"), EntityMaidVehicle.class, "touhou_little_maid.maid_vehicle", 11, TouhouLittleMaid.INSTANCE, 80, 10, true);
         EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.scarecrow"), EntityScarecrow.class, "touhou_little_maid.scarecrow", 12, TouhouLittleMaid.INSTANCE, 80, 10, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.item.portable_audio"), EntityPortableAudio.class, "touhou_little_maid.portable_audio", 13, TouhouLittleMaid.INSTANCE, 80, 10, true);
     }
 
     private void registerEntitySpawns() {
@@ -246,6 +247,8 @@ public class CommonProxy {
         INSTANCE.registerMessage(ClearMaidPosMessage.Handler.class, ClearMaidPosMessage.class, 21, Side.SERVER);
         INSTANCE.registerMessage(SetMaidRidingMessage.Handler.class, SetMaidRidingMessage.class, 22, Side.SERVER);
         INSTANCE.registerMessage(SetScarecrowDataMessage.Handler.class, SetScarecrowDataMessage.class, 23, Side.SERVER);
+        INSTANCE.registerMessage(PortableAudioMessageToServer.Handler.class, PortableAudioMessageToServer.class, 24, Side.SERVER);
+        INSTANCE.registerMessage(PortableAudioMessageToClient.Handler.class, PortableAudioMessageToClient.class, 25, Side.CLIENT);
     }
 
     /**

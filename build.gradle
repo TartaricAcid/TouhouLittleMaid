@@ -109,12 +109,12 @@ jar {
         archiveName = archivesBaseName + "-1.12.2-jenkins-build-${System.getenv().BUILD_NUMBER}.jar"
     } else {
         // 默认环境为 touhoulittlemaid-1.12.2-1.1.4-alpha.jar 这样的
-        archiveName = archivesBaseName + "-1.12.2-${mod_version}-alpha.jar"
+        archiveName = archivesBaseName + "-1.12.2-${mod_version}-beta.jar"
     }
     manifest {
         // 打包 Access Transformers 文件
         attributes 'FMLAT': 'touhou_little_maid_at.cfg'
         // 将 CodecJLayerMP3 库打包进行模组中
-        attributes 'ContainedDeps': "codecjlayermp3-1.0.0-SNAPSHOT.jar"
+        attributes 'ContainedDeps': "codecjlayermp3-1.0.0-SNAPSHOT.jar jlayer-1.0.1.jar"
     }
 }

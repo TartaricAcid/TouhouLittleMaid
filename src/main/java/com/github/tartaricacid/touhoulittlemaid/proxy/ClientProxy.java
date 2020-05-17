@@ -1,10 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.proxy;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.audio.music.MusicManger;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadHataCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadMaidResCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityScarecrowRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
@@ -59,7 +59,12 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+
+        // 加载音乐歌单
+        MusicManger.loadMusicList();
+        // 加载游戏内资源包下载
         InfoGetManager.checkInfoJsonFile();
+
         OBJLoader.INSTANCE.addDomain(TouhouLittleMaid.MOD_ID);
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
         RenderingRegistry.registerEntityRenderingHandler(EntityMaid.class, EntityMaidRender.FACTORY);
@@ -77,6 +82,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntityTrolleyAudio.class, EntityTrolleyAudioRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityMaidVehicle.class, EntityMaidVehicleRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityScarecrow.class, EntityScarecrowRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityPortableAudio.class, EntityPortableAudioRender.FACTORY);
     }
 
     @Override
