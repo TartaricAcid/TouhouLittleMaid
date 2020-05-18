@@ -18,15 +18,11 @@ public class MaidCraftCheckEvent {
         ResourceLocation maid = new ResourceLocation(TouhouLittleMaid.MOD_ID, "entity.passive.maid");
         if (event.getAltarRecipe().getEntityId().equals(maid)) {
             MaidNumHandler num = event.getPlayer().getCapability(MaidNumSerializer.MAID_NUM_CAP, null);
-            if (num != null) {
-                if (num.canAdd()) {
-                    num.add();
-                } else {
-                    if (!event.getWorld().isRemote) {
-                        event.getPlayer().sendMessage(new TextComponentTranslation("message.touhou_little_maid.owner_maid_num.can_not_add", num.get(), num.getMaxNum()));
-                    }
-                    event.setCanceled(true);
+            if (num != null && !num.canAdd()) {
+                if (!event.getWorld().isRemote) {
+                    event.getPlayer().sendMessage(new TextComponentTranslation("message.touhou_little_maid.owner_maid_num.can_not_add", num.get(), num.getMaxNum()));
                 }
+                event.setCanceled(true);
             }
         }
     }
