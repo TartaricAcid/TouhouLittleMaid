@@ -6,19 +6,26 @@ import com.github.tartaricacid.touhoulittlemaid.client.audio.music.NetEaseMusicL
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPortableAudio;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.PortableAudioMessageToServer;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiButtonImage;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.audio.music.MusicManger.MUSIC_LIST_GROUP;
@@ -50,7 +57,7 @@ public class PortableAudioGui extends GuiScreen {
         }
         Keyboard.enableRepeatEvents(true);
         buttonList.clear();
-        songField = new GuiTextField(0, mc.fontRenderer, width - 86, height - 19, 80, 14) {
+        songField = new GuiTextField(0, mc.fontRenderer, width - 86, 5, 80, 14) {
             @Override
             public boolean getEnableBackgroundDrawing() {
                 return false;
@@ -60,14 +67,15 @@ public class PortableAudioGui extends GuiScreen {
         songField.setMaxStringLength(10);
         this.guiMusicList = new GuiMusicList(this);
         this.guiMusicListGroup = new GuiMusicListGroup(this);
-        this.buttonList.add(new GuiButtonImage(1, 16, height - 19, 16, 16,
+        this.buttonList.add(new GuiButtonImage(1, width / 2 - 33, height - 19, 16, 16,
                 32, 0, 16, ICON));
-        this.buttonList.add(new GuiButtonImage(2, 41, height - 19, 16, 16,
+        this.buttonList.add(new GuiButtonImage(2, width / 2 - 8, height - 19, 16, 16,
                 0, 0, 16, ICON));
-        this.buttonList.add(new GuiButtonImage(3, 66, height - 19, 16, 16,
+        this.buttonList.add(new GuiButtonImage(3, width / 2 + 17, height - 19, 16, 16,
                 16, 0, 16, ICON));
-        this.buttonList.add(new GuiButtonImage(4, width - 105, height - 20, 16, 16,
+        this.buttonList.add(new GuiButtonImage(4, width - 105, 4, 16, 16,
                 48, 0, 16, ICON));
+        this.buttonList.add(new VolumeButton(5, width - 110, height - 22));
     }
 
     @Override
@@ -88,17 +96,35 @@ public class PortableAudioGui extends GuiScreen {
             super.drawScreen(mouseX, mouseY, partialTicks);
             return;
         }
-        this.drawGradientRect(0, 0, this.width, this.height, 0xff23262c, 0xff23262c);
+        this.drawGradientRect(0, 0, this.width, this.height, 0xff555555, 0xff555555);
         guiMusicList.drawScreen(mouseX, mouseY, partialTicks);
         guiMusicListGroup.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawGradientRect(0, this.height - 23, this.width, this.height, 0xff212124, 0xff212124);
-        this.drawGradientRect(width - 86, height - 19, width - 6, height - 5, 0xff161618, 0xff161618);
+        this.drawGradientRect(0, this.height - 23, this.width, this.height, 0xff282c34, 0xff282c34);
+        this.drawGradientRect(0, 0, width, 23, 0xff282c34, 0xff282c34);
+        this.drawGradientRect(width - 86, 5, width - 6, 19, 0xff3c414e, 0xff3c414e);
         songField.drawTextBox();
         drawString(mc.fontRenderer, promptMsg,
-                width - 110 - mc.fontRenderer.getStringWidth(promptMsg), height - 17, 0xbe3a3a);
+                width - 110 - mc.fontRenderer.getStringWidth(promptMsg), 8, 0xbe3a3a);
         MusicJsonInfo info = MUSIC_LIST_GROUP.get(LIST_INDEX).getMusicJsonInfo();
         drawString(mc.fontRenderer, I18n.format("gui.touhou_little_maid.portable_audio.play_list.importer", info.getCreator()),
-                105, height - 16, 0x7e7c7e);
+                8, 8, 0x7e7c7e);
+        NetEaseMusicList.PlayList playList = MUSIC_LIST_GROUP.get(Math.min(PortableAudioGui.LIST_INDEX, MUSIC_LIST_GROUP.size() - 1)).getPlayList();
+        if (MUSIC_INDEX < playList.getTrackCount()) {
+            FontRenderer fontRenderer = mc.fontRenderer;
+            RenderHelper.enableGUIStandardItemLighting();
+            mc.getRenderItem().renderItemAndEffectIntoGUI(
+                    new ItemStack(Blocks.STAINED_GLASS_PANE, 1, 0),
+                    3, height - 19);
+            mc.getRenderItem().renderItemAndEffectIntoGUI(
+                    new ItemStack(Blocks.DOUBLE_PLANT, 1, 0),
+                    3, height - 19);
+            RenderHelper.disableStandardItemLighting();
+            NetEaseMusicList.Track track = playList.getTracks().get(MUSIC_INDEX);
+            drawString(fontRenderer, fontRenderer.trimStringToWidth(track.getName(), width / 2 - 63),
+                    23, height - 20, 0xdcdde4);
+            drawString(fontRenderer, fontRenderer.trimStringToWidth(track.getArtists(), width / 2 - 63),
+                    23, height - 10, 0x757775);
+        }
         GlStateManager.color(1, 1, 1);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -195,5 +221,61 @@ public class PortableAudioGui extends GuiScreen {
 
     public EntityPortableAudio getAudio() {
         return audio;
+    }
+
+    private static class VolumeButton extends GuiButton {
+        public float volume = 1.0F;
+        public boolean pressed;
+
+        public VolumeButton(int buttonId, int x, int y) {
+            super(buttonId, x, y, 100, 20, "");
+            this.volume = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.RECORDS);
+        }
+
+        @Override
+        public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+            this.mouseDragged(mc, mouseX, mouseY);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            Gui.drawRect(x, y + 10, x + width, y + 11, 0xffafb1b3);
+            Gui.drawRect(x, y + 10, x + (int) (volume * width), y + 11, 0xffaf0000);
+            Gui.drawRect(x + (int) (volume * width) - 6, y + 7, x + (int) (volume * width), y + 14, 0xffafb1b3);
+        }
+
+        @Override
+        protected void mouseDragged(@Nonnull Minecraft mc, int mouseX, int mouseY) {
+            if (this.pressed) {
+                this.volume = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
+                this.volume = MathHelper.clamp(this.volume, 0.05F, 1.0F);
+                mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, this.volume);
+                mc.gameSettings.saveOptions();
+            }
+        }
+
+        @Override
+        public boolean mousePressed(@Nonnull Minecraft mc, int mouseX, int mouseY) {
+            boolean isInRange = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+            if (isInRange) {
+                this.volume = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
+                this.volume = MathHelper.clamp(this.volume, 0.05F, 1.0F);
+                mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, this.volume);
+                mc.gameSettings.saveOptions();
+                this.pressed = true;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public void playPressSound(@Nonnull SoundHandler soundHandlerIn) {
+        }
+
+        @Override
+        public void mouseReleased(int mouseX, int mouseY) {
+            if (this.pressed) {
+                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            }
+            this.pressed = false;
+        }
     }
 }

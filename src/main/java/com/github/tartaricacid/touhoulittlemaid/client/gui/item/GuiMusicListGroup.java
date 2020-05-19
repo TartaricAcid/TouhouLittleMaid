@@ -20,7 +20,7 @@ public class GuiMusicListGroup extends GuiScrollingList {
     private final PortableAudioGui parent;
 
     public GuiMusicListGroup(PortableAudioGui parent) {
-        super(parent.mc, 100, parent.height - 53, 0, parent.height - 53,
+        super(parent.mc, 100, parent.height - 48, 24, parent.height - 24,
                 0, 16, parent.width, parent.height);
         this.parent = parent;
         setHeaderInfo(true, 15);
@@ -47,7 +47,7 @@ public class GuiMusicListGroup extends GuiScrollingList {
 
     @Override
     protected void drawHeader(int entryRight, int relativeY, Tessellator tess) {
-        Gui.drawRect(0, 0, 100, parent.height - 24, 0xff191b1f);
+        Gui.drawRect(0, 0, 100, parent.height - 24, 0xff282c34);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         String loadInfo = I18n.format("gui.touhou_little_maid.portable_audio.play_list.loading_situation",
                 MusicManger.getCompletedTaskCount(), MusicManger.getTaskCount());
@@ -62,8 +62,8 @@ public class GuiMusicListGroup extends GuiScrollingList {
     protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
         NetEaseMusicList neteaseMusicList = MUSIC_LIST_GROUP.get(slotIdx);
         if (isSelected(slotIdx)) {
-            Gui.drawRect(0, slotTop - 2, parent.width, slotTop + slotHeight - 2, 0xff26282c);
-            Gui.drawRect(0, slotTop - 2, 2, slotTop + slotHeight - 2, 0xffb82525);
+            Gui.drawRect(0, slotTop - 2, parent.width, slotTop + slotHeight - 2, 0xff383e49);
+            Gui.drawRect(0, slotTop - 2, 2, slotTop + slotHeight - 2, 0xff7ecb6b);
         }
         parent.drawString(parent.mc.fontRenderer,
                 parent.mc.fontRenderer.trimStringToWidth(neteaseMusicList.getPlayList().getName(), 86),
