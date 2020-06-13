@@ -53,6 +53,11 @@ public final class MusicManger {
                     }.getType());
             for (MusicJsonInfo info : infos) {
                 for (long id : info.getContent().getPlayList()) {
+                    for (NetEaseMusicList list : MUSIC_LIST_GROUP) {
+                        if (id == list.getListId()) {
+                            break;
+                        }
+                    }
                     insertMusicListInfo(netEaseWebApi, id, info);
                 }
             }
@@ -72,6 +77,7 @@ public final class MusicManger {
                 } else {
                     neteaseMusicList.setMusicJsonInfo(info);
                     neteaseMusicList.getPlayList().deco();
+                    neteaseMusicList.setListId(id);
                     MUSIC_LIST_GROUP.add(neteaseMusicList);
                     TouhouLittleMaid.LOGGER.info("{} NetEase cloud music information obtained successfully", id);
                 }

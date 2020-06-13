@@ -27,6 +27,8 @@ import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.audio.music.MusicManger.MUSIC_LIST_GROUP;
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.item.GuiMusicList.MUSIC_INDEX;
@@ -64,7 +66,7 @@ public class PortableAudioGui extends GuiScreen {
             }
         };
         songField.setText(String.valueOf(audio.getSongId()));
-        songField.setMaxStringLength(10);
+        songField.setMaxStringLength(19);
         this.guiMusicList = new GuiMusicList(this);
         this.guiMusicListGroup = new GuiMusicListGroup(this);
         this.buttonList.add(new GuiButtonImage(1, width / 2 - 33, height - 19, 16, 16,
@@ -76,6 +78,8 @@ public class PortableAudioGui extends GuiScreen {
         this.buttonList.add(new GuiButtonImage(4, width - 105, 4, 16, 16,
                 48, 0, 16, ICON));
         this.buttonList.add(new VolumeButton(5, width - 110, height - 22));
+        this.buttonList.add(new GuiButtonImage(6, width / 2 + 42, height - 19, 16, 16,
+                64, 0, 16, ICON));
     }
 
     @Override
@@ -170,12 +174,35 @@ public class PortableAudioGui extends GuiScreen {
         if (button.id == 4) {
             if (StringUtils.isNotBlank(songField.getText())) {
                 try {
-                    int id = Integer.parseUnsignedInt(songField.getText());
+                    long id = Long.parseUnsignedLong(songField.getText());
                     CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(audio.getUniqueID(), id));
                 } catch (NumberFormatException ignore) {
                     promptMsg = I18n.format("gui.touhou_little_maid.portable_audio.song_id.illegal");
                 }
             }
+            return;
+        }
+
+        if (button.id == 6) {
+            NetEaseMusicList playList = MUSIC_LIST_GROUP.get(LIST_INDEX);
+            String listUrl = "https://music.163.com/#/playlist?id=" + playList.getListId();
+            GuiConfirmOpenLink openLink = new GuiConfirmOpenLink(this, listUrl, 31102009, true);
+            mc.displayGuiScreen(openLink);
+        }
+    }
+
+    @Override
+    public void confirmClicked(boolean result, int id) {
+        if (id == 31102009) {
+            if (result) {
+                try {
+                    NetEaseMusicList playList = MUSIC_LIST_GROUP.get(LIST_INDEX);
+                    URI uri = new URI("https://music.163.com/#/playlist?id=" + playList.getListId());
+                    this.openWebLink(uri);
+                } catch (URISyntaxException ignore) {
+                }
+            }
+            this.mc.displayGuiScreen(this);
         }
     }
 

@@ -18,12 +18,12 @@ import java.util.regex.Pattern;
 
 public class PortableAudioMessageToServer implements IMessage {
     private UUID uuid;
-    private int songId;
+    private long songId;
 
     public PortableAudioMessageToServer() {
     }
 
-    public PortableAudioMessageToServer(UUID uuid, int songId) {
+    public PortableAudioMessageToServer(UUID uuid, long songId) {
         this.uuid = uuid;
         this.songId = songId;
     }
@@ -31,14 +31,14 @@ public class PortableAudioMessageToServer implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) {
         uuid = new UUID(buf.readLong(), buf.readLong());
-        songId = buf.readInt();
+        songId = buf.readLong();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeLong(uuid.getMostSignificantBits());
         buf.writeLong(uuid.getLeastSignificantBits());
-        buf.writeInt(songId);
+        buf.writeLong(songId);
     }
 
     public static class Handler implements IMessageHandler<PortableAudioMessageToServer, IMessage> {

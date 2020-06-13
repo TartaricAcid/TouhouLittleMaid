@@ -23,6 +23,9 @@ public class NetEaseMusicList {
     private int code;
 
     @Expose(deserialize = false)
+    private long listId;
+
+    @Expose(deserialize = false)
     private MusicJsonInfo musicJsonInfo;
 
     public PlayList getPlayList() {
@@ -37,13 +40,21 @@ public class NetEaseMusicList {
         return musicJsonInfo;
     }
 
+    public long getListId() {
+        return listId;
+    }
+
+    public void setListId(long listId) {
+        this.listId = listId;
+    }
+
     public void setMusicJsonInfo(MusicJsonInfo musicJsonInfo) {
         this.musicJsonInfo = musicJsonInfo;
     }
 
     public static class Track {
         @SerializedName("id")
-        private int id;
+        private long id;
 
         @SerializedName("name")
         private String name;
@@ -66,7 +77,7 @@ public class NetEaseMusicList {
         @Expose(deserialize = false)
         private String time;
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 

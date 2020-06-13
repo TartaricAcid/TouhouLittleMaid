@@ -23,7 +23,7 @@ public class EntityPortableAudio extends AbstractEntityTrolley {
     private static final String PLAYING_TAG_NAME = "IsSongPlaying";
     private static final String SONG_ID_TAG_NAME = "SongId";
     private static final DataParameter<Boolean> PLAYING = EntityDataManager.createKey(EntityPortableAudio.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> SONG_ID = EntityDataManager.createKey(EntityPortableAudio.class, DataSerializers.VARINT);
+    private static final DataParameter<String> SONG_ID = EntityDataManager.createKey(EntityPortableAudio.class, DataSerializers.STRING);
 
     public EntityPortableAudio(World worldIn) {
         super(worldIn);
@@ -39,7 +39,7 @@ public class EntityPortableAudio extends AbstractEntityTrolley {
     protected void entityInit() {
         super.entityInit();
         dataManager.register(PLAYING, false);
-        dataManager.register(SONG_ID, 0);
+        dataManager.register(SONG_ID, "0");
     }
 
     @Override
@@ -98,7 +98,7 @@ public class EntityPortableAudio extends AbstractEntityTrolley {
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean(PLAYING_TAG_NAME, isPlaying());
-        compound.setInteger(SONG_ID_TAG_NAME, getSongId());
+        compound.setLong(SONG_ID_TAG_NAME, getSongId());
     }
 
     public boolean isPlaying() {
@@ -109,11 +109,11 @@ public class EntityPortableAudio extends AbstractEntityTrolley {
         this.dataManager.set(PLAYING, playing);
     }
 
-    public int getSongId() {
-        return this.dataManager.get(SONG_ID);
+    public long getSongId() {
+        return Long.parseUnsignedLong(this.dataManager.get(SONG_ID));
     }
 
-    public void setSongId(int songId) {
-        this.dataManager.set(SONG_ID, songId);
+    public void setSongId(long songId) {
+        this.dataManager.set(SONG_ID, String.valueOf(songId));
     }
 }

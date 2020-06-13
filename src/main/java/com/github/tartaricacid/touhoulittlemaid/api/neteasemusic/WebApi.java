@@ -1,6 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.api.neteasemusic;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -41,7 +44,8 @@ public final class WebApi {
     }
 
     public String songs(long... songIds) throws IOException {
-        String url = "http://music.163.com/api/song/detail/?ids=" + Arrays.toString(songIds);
+        String ids = StringUtils.deleteWhitespace(Arrays.toString(songIds));
+        String url = "http://music.163.com/api/song/detail/?ids=" + URLEncoder.encode(ids, "utf-8");
         return NetWorker.get(url, requestPropertyData);
     }
 
@@ -72,8 +76,8 @@ public final class WebApi {
     }
 
     public String list(long listId) throws Exception {
-        String url = "https://music.163.com/weapi/playlist/detail";
-        String param = "{\"id\":" + listId + "}";
+        String url = "http://music.163.com/weapi/v3/playlist/detail?csrf_token=";
+        String param = "{\"id\":" + listId + ",\"csrf_token\":\"\"}";
         String encrypt = EncryptUtils.encryptedParam(param);
         return NetWorker.post(url, encrypt, requestPropertyData);
     }

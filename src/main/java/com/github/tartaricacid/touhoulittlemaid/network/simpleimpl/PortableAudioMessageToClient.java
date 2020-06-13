@@ -21,12 +21,12 @@ public class PortableAudioMessageToClient implements IMessage {
     private static final String ERROR_404 = "http://music.163.com/404";
 
     private int entityId;
-    private int songId;
+    private long songId;
 
     public PortableAudioMessageToClient() {
     }
 
-    public PortableAudioMessageToClient(int entityId, int songId) {
+    public PortableAudioMessageToClient(int entityId, long songId) {
         this.entityId = entityId;
         this.songId = songId;
     }
@@ -34,13 +34,13 @@ public class PortableAudioMessageToClient implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) {
         entityId = buf.readInt();
-        songId = buf.readInt();
+        songId = buf.readLong();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(entityId);
-        buf.writeInt(songId);
+        buf.writeLong(songId);
     }
 
     public static class Handler implements IMessageHandler<PortableAudioMessageToClient, IMessage> {

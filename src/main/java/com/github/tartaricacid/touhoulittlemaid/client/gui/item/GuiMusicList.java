@@ -8,16 +8,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.GuiScrollingList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
@@ -50,7 +46,7 @@ public class GuiMusicList extends GuiScrollingList {
     @Override
     protected void elementClicked(int index, boolean doubleClick) {
         if (doubleClick) {
-            int id = playList.getTracks().get(index).getId();
+            long id = playList.getTracks().get(index).getId();
             CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(parent.getAudio().getUniqueID(), id));
         } else {
             MUSIC_INDEX = index;

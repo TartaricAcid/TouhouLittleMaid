@@ -2,10 +2,12 @@ package com.github.tartaricacid.touhoulittlemaid.compat.jei;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.jei.altar.AltarRecipeCategory;
 import com.github.tartaricacid.touhoulittlemaid.compat.jei.altar.AltarRecipeMaker;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author TartaricAcid
@@ -21,5 +23,6 @@ public class JEIModPlugin implements IModPlugin {
     @Override
     public void register(IModRegistry registry) {
         registry.addRecipes(AltarRecipeMaker.getAltarRecipes(), AltarRecipeCategory.ALTAR_CRAFTING);
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(MaidBlocks.GRID));
     }
 }
