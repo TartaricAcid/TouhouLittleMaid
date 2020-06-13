@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.audio.music.MusicJsonInfo;
+import com.github.tartaricacid.touhoulittlemaid.client.audio.music.MusicManger;
 import com.github.tartaricacid.touhoulittlemaid.client.audio.music.NetEaseMusicList;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPortableAudio;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.PortableAudioMessageToServer;
@@ -44,7 +45,7 @@ public class PortableAudioGui extends GuiScreen {
     private final boolean isMusicListEmpty;
     protected GuiMusicList guiMusicList;
     private GuiMusicListGroup guiMusicListGroup;
-    private GuiTextField songField;
+    private GuiTextField musicListField;
     private String promptMsg = "";
 
     public PortableAudioGui(EntityPortableAudio audio) {
@@ -59,14 +60,14 @@ public class PortableAudioGui extends GuiScreen {
         }
         Keyboard.enableRepeatEvents(true);
         buttonList.clear();
-        songField = new GuiTextField(0, mc.fontRenderer, width - 86, 5, 80, 14) {
+        musicListField = new GuiTextField(0, mc.fontRenderer, width - 86, 5, 80, 14) {
             @Override
             public boolean getEnableBackgroundDrawing() {
                 return false;
             }
         };
-        songField.setText(String.valueOf(audio.getSongId()));
-        songField.setMaxStringLength(19);
+        musicListField.setText(String.valueOf(MUSIC_LIST_GROUP.get(LIST_INDEX).getListId()));
+        musicListField.setMaxStringLength(19);
         this.guiMusicList = new GuiMusicList(this);
         this.guiMusicListGroup = new GuiMusicListGroup(this);
         this.buttonList.add(new GuiButtonImage(1, width / 2 - 33, height - 19, 16, 16,
@@ -80,6 +81,8 @@ public class PortableAudioGui extends GuiScreen {
         this.buttonList.add(new VolumeButton(5, width - 110, height - 22));
         this.buttonList.add(new GuiButtonImage(6, width / 2 + 42, height - 19, 16, 16,
                 64, 0, 16, ICON));
+        this.buttonList.add(new GuiButtonImage(7, width - 122, 4, 16, 16,
+                80, 0, 16, ICON));
     }
 
     @Override
@@ -87,7 +90,7 @@ public class PortableAudioGui extends GuiScreen {
         if (isMusicListEmpty) {
             return;
         }
-        songField.updateCursorCounter();
+        musicListField.updateCursorCounter();
     }
 
     @Override
@@ -106,7 +109,7 @@ public class PortableAudioGui extends GuiScreen {
         this.drawGradientRect(0, this.height - 23, this.width, this.height, 0xff282c34, 0xff282c34);
         this.drawGradientRect(0, 0, width, 23, 0xff282c34, 0xff282c34);
         this.drawGradientRect(width - 86, 5, width - 6, 19, 0xff3c414e, 0xff3c414e);
-        songField.drawTextBox();
+        musicListField.drawTextBox();
         drawString(mc.fontRenderer, promptMsg,
                 width - 110 - mc.fontRenderer.getStringWidth(promptMsg), 8, 0xbe3a3a);
         MusicJsonInfo info = MUSIC_LIST_GROUP.get(LIST_INDEX).getMusicJsonInfo();
@@ -147,13 +150,13 @@ public class PortableAudioGui extends GuiScreen {
                     MUSIC_INDEX -= 1;
                 }
                 CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(audio.getUniqueID(),
-                        playList.getTracks().get(MUSIC_INDEX).getId()));
+                        playList, MUSIC_INDEX));
             }
             return;
         }
 
         if (button.id == 2) {
-            CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(audio.getUniqueID(), -1));
+            CommonProxy.INSTANCE.sendToServer(PortableAudioMessageToServer.getStopMessage(audio.getUniqueID()));
             return;
         }
 
@@ -166,16 +169,16 @@ public class PortableAudioGui extends GuiScreen {
                     MUSIC_INDEX = 0;
                 }
                 CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(audio.getUniqueID(),
-                        playList.getTracks().get(MUSIC_INDEX).getId()));
+                        playList, MUSIC_INDEX));
             }
             return;
         }
 
         if (button.id == 4) {
-            if (StringUtils.isNotBlank(songField.getText())) {
+            if (StringUtils.isNotBlank(musicListField.getText())) {
                 try {
-                    long id = Long.parseUnsignedLong(songField.getText());
-                    CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(audio.getUniqueID(), id));
+                    long id = Long.parseUnsignedLong(musicListField.getText());
+                    MusicManger.addSingleList(id);
                 } catch (NumberFormatException ignore) {
                     promptMsg = I18n.format("gui.touhou_little_maid.portable_audio.song_id.illegal");
                 }
@@ -188,6 +191,15 @@ public class PortableAudioGui extends GuiScreen {
             String listUrl = "https://music.163.com/#/playlist?id=" + playList.getListId();
             GuiConfirmOpenLink openLink = new GuiConfirmOpenLink(this, listUrl, 31102009, true);
             mc.displayGuiScreen(openLink);
+            return;
+        }
+
+        if (button.id == 7) {
+            NetEaseMusicList playList = MUSIC_LIST_GROUP.get(LIST_INDEX);
+            if (MusicManger.removeSingleList(playList.getListId())) {
+                LIST_INDEX = 0;
+                guiMusicList = new GuiMusicList(this);
+            }
         }
     }
 
@@ -212,7 +224,7 @@ public class PortableAudioGui extends GuiScreen {
         if (isMusicListEmpty) {
             return;
         }
-        songField.mouseClicked(mouseX, mouseY, mouseButton);
+        musicListField.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
@@ -237,7 +249,7 @@ public class PortableAudioGui extends GuiScreen {
                 || keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT
                 || GuiScreen.isKeyComboCtrlA(keyCode) || GuiScreen.isKeyComboCtrlC(keyCode)
                 || GuiScreen.isKeyComboCtrlV(keyCode) || GuiScreen.isKeyComboCtrlX(keyCode)) {
-            songField.textboxKeyTyped(c, keyCode);
+            musicListField.textboxKeyTyped(c, keyCode);
         }
     }
 

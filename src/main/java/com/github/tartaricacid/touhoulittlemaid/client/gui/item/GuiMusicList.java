@@ -46,8 +46,7 @@ public class GuiMusicList extends GuiScrollingList {
     @Override
     protected void elementClicked(int index, boolean doubleClick) {
         if (doubleClick) {
-            long id = playList.getTracks().get(index).getId();
-            CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(parent.getAudio().getUniqueID(), id));
+            CommonProxy.INSTANCE.sendToServer(new PortableAudioMessageToServer(parent.getAudio().getUniqueID(), playList, index));
         } else {
             MUSIC_INDEX = index;
         }

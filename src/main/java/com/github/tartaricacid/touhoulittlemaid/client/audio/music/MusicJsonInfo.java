@@ -27,6 +27,16 @@ public class MusicJsonInfo {
     @SerializedName("content")
     private Content content;
 
+    public static MusicJsonInfo getDefaultInstance() {
+        MusicJsonInfo info = new MusicJsonInfo();
+        info.site = "netease";
+        info.creator = "null";
+        info.version = "1.0.0";
+        info.date = "1970-01-01";
+        info.desc = "";
+        return info;
+    }
+
     public String getSite() {
         return site;
     }

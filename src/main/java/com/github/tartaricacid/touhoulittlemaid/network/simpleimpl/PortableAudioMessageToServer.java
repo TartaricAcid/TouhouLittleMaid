@@ -1,44 +1,71 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
+import com.github.tartaricacid.touhoulittlemaid.client.audio.music.NetEaseMusicList;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPortableAudio;
-import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
-import com.github.tartaricacid.touhoulittlemaid.util.DelayedTask;
+import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class PortableAudioMessageToServer implements IMessage {
     private UUID uuid;
-    private long songId;
+    private List<EntityPortableAudio.MusicListData> musicListData = Lists.newArrayList();
+    private int listSize;
+    private int index;
 
     public PortableAudioMessageToServer() {
     }
 
-    public PortableAudioMessageToServer(UUID uuid, long songId) {
+    public PortableAudioMessageToServer(UUID uuid, NetEaseMusicList.PlayList playList, int index) {
         this.uuid = uuid;
-        this.songId = songId;
+        this.listSize = playList.getTracks().size();
+        for (NetEaseMusicList.Track track : playList.getTracks()) {
+            this.musicListData.add(new EntityPortableAudio.MusicListData(track.getId(), track.getDurationInTicks()));
+        }
+        this.index = index;
+    }
+
+    private PortableAudioMessageToServer(UUID uuid) {
+        this.uuid = uuid;
+        this.listSize = 0;
+        this.index = -1;
+    }
+
+    public static PortableAudioMessageToServer getStopMessage(UUID uuid) {
+        return new PortableAudioMessageToServer(uuid);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         uuid = new UUID(buf.readLong(), buf.readLong());
-        songId = buf.readLong();
+        listSize = buf.readInt();
+        for (int i = 0; i < listSize; i++) {
+            long musicId = buf.readLong();
+            int nextTime = buf.readInt();
+            musicListData.add(new EntityPortableAudio.MusicListData(musicId, nextTime));
+        }
+        index = Math.min(buf.readInt(), musicListData.size());
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeLong(uuid.getMostSignificantBits());
         buf.writeLong(uuid.getLeastSignificantBits());
-        buf.writeLong(songId);
+        buf.writeInt(listSize);
+        for (EntityPortableAudio.MusicListData data : musicListData) {
+            buf.writeLong(data.getMusicId());
+            buf.writeInt(data.getNextTime());
+        }
+        buf.writeInt(Math.min(index, musicListData.size()));
     }
 
     public static class Handler implements IMessageHandler<PortableAudioMessageToServer, IMessage> {
@@ -59,20 +86,13 @@ public class PortableAudioMessageToServer implements IMessage {
                 if (entity instanceof EntityPortableAudio) {
                     EntityPortableAudio audio = (EntityPortableAudio) entity;
                     audio.setPlaying(false);
+                    audio.clearAllMusicListData();
                     // 特殊 id，直接停止播放
-                    if (message.songId == -1) {
+                    if (message.index == -1) {
                         return;
                     }
-                    // 一秒钟后执行新歌曲装载发包
-                    DelayedTask.add(() -> {
-                        audio.setPlaying(true);
-                        audio.setSongId(message.songId);
-                        PortableAudioMessageToClient msg = new PortableAudioMessageToClient(audio.getEntityId(), message.songId);
-                        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(
-                                audio.world.provider.getDimension(),
-                                audio.posX, audio.posY, audio.posZ, 96);
-                        CommonProxy.INSTANCE.sendToAllAround(msg, point);
-                    }, 20);
+                    audio.setMusicListData(message.musicListData);
+                    audio.setMusicIndex(message.index);
                 }
             });
         }

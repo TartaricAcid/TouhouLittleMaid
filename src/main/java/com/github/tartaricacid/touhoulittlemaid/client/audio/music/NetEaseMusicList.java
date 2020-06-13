@@ -77,6 +77,9 @@ public class NetEaseMusicList {
         @Expose(deserialize = false)
         private String time;
 
+        @Expose(deserialize = false)
+        private int timeInTicks;
+
         public long getId() {
             return id;
         }
@@ -97,6 +100,10 @@ public class NetEaseMusicList {
             return time;
         }
 
+        public int getDurationInTicks() {
+            return timeInTicks;
+        }
+
         public Track deco() {
             List<String> artistsTmp = Lists.newArrayList();
             artists.forEach(artist -> artistsTmp.add(artist.name));
@@ -109,6 +116,8 @@ public class NetEaseMusicList {
             String minStr = min <= 9 ? ("0" + min) : ("" + min);
             String secStr = sec <= 9 ? ("0" + sec) : ("" + sec);
             time = String.format("%s:%s", minStr, secStr);
+
+            timeInTicks = duration / 50;
             return this;
         }
     }

@@ -3,6 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.PortableAudioGui;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.PortableAudioMessageToClient;
+import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -16,14 +19,20 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityPortableAudio extends AbstractEntityTrolley {
     private static final String PLAYING_TAG_NAME = "IsSongPlaying";
     private static final String SONG_ID_TAG_NAME = "SongId";
     private static final DataParameter<Boolean> PLAYING = EntityDataManager.createKey(EntityPortableAudio.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> SONG_ID = EntityDataManager.createKey(EntityPortableAudio.class, DataSerializers.STRING);
+    private List<MusicListData> musicListData = Lists.newArrayList();
+    private int index = -1;
+    private int nextTime = 0;
 
     public EntityPortableAudio(World worldIn) {
         super(worldIn);
@@ -33,6 +42,34 @@ public class EntityPortableAudio extends AbstractEntityTrolley {
     public EntityPortableAudio(World worldIn, double x, double y, double z, float yaw) {
         this(worldIn);
         this.setLocationAndAngles(x, y, z, yaw, 0);
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (musicListData.size() != 0) {
+            nextTime--;
+
+            if (nextTime < -40) {
+                setPlaying(false);
+            }
+
+            if (nextTime < -50) {
+                if (index >= musicListData.size()) {
+                    index = 0;
+                }
+                nextTime = musicListData.get(index).nextTime;
+                long nextId = musicListData.get(index).musicId;
+                setPlaying(true);
+                setSongId(nextId);
+                PortableAudioMessageToClient msg = new PortableAudioMessageToClient(getEntityId(), nextId);
+                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(
+                        world.provider.getDimension(),
+                        posX, posY, posZ, 96);
+                CommonProxy.INSTANCE.sendToAllAround(msg, point);
+                index++;
+            }
+        }
     }
 
     @Override
@@ -115,5 +152,37 @@ public class EntityPortableAudio extends AbstractEntityTrolley {
 
     public void setSongId(long songId) {
         this.dataManager.set(SONG_ID, String.valueOf(songId));
+    }
+
+    public void clearAllMusicListData() {
+        musicListData.clear();
+        index = 0;
+        nextTime = 0;
+    }
+
+    public void setMusicListData(List<MusicListData> musicList) {
+        musicListData = musicList;
+    }
+
+    public void setMusicIndex(int index) {
+        this.index = index;
+    }
+
+    public static class MusicListData {
+        public MusicListData(long musicId, int nextTime) {
+            this.musicId = musicId;
+            this.nextTime = nextTime;
+        }
+
+        private long musicId;
+        private int nextTime;
+
+        public long getMusicId() {
+            return musicId;
+        }
+
+        public int getNextTime() {
+            return nextTime;
+        }
     }
 }
