@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,7 +25,7 @@ public class ChangeDimEvent {
             int dim = event.getEntity().world.provider.getDimension();
             if (dim != dimAt) {
                 dimAt = dim;
-                ClientProxy.ENTITY_CACHE.invalidateAll();
+                EntityCacheUtil.ENTITY_CACHE.invalidateAll();
             }
         }
     }

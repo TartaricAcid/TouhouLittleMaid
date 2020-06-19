@@ -89,6 +89,9 @@ public class ItemCamera extends Item {
         removeMaidBackpackTagData(maidTag);
         photoTag.setTag(MAID_INFO.getNbtName(), maidTag);
         photo.setTagCompound(photoTag);
+        if (maid.hasCustomName()) {
+            photo.setStackDisplayName(maid.getCustomNameTag());
+        }
         InventoryHelper.spawnItemStack(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, photo);
     }
 

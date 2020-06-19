@@ -47,10 +47,6 @@ import java.util.function.Predicate;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy implements ISelectiveResourceReloadListener {
     /**
-     * 实体缓存，在客户端会大量运用实体渲染，这个缓存可以减少重复创建实体带来的性能问题
-     */
-    public static final Cache<String, Entity> ENTITY_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
-    /**
      * 指物旗部分
      */
     public static final Map<Long, Integer> HATA_NAME_MAP = Maps.newHashMap();

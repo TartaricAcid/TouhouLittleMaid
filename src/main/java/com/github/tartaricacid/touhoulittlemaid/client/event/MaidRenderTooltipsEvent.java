@@ -6,7 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidModelCoupon;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemPhoto;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -14,9 +14,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderTooltipEvent;
@@ -28,6 +26,8 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 /**
  * @author TartaricAcid
@@ -46,11 +46,11 @@ public class MaidRenderTooltipsEvent {
             return;
         }
         if (stack.getItem() == MaidItems.PHOTO && ItemPhoto.hasMaidNbtData(stack)) {
-            onRenderMaidTooltips("", event.getX(), event.getY(), ItemPhoto.getMaidNbtData(stack));
+            onRenderMaidTooltips("", event.getX(), event.getY(), stack);
         }
     }
 
-    private static void onRenderMaidTooltips(String modelId, int x, int y, @Nullable NBTTagCompound compound) {
+    private static void onRenderMaidTooltips(String modelId, int x, int y, @Nullable ItemStack photo) {
         x = x - 20;
         if (y < 65) {
             y = 65;
@@ -83,7 +83,7 @@ public class MaidRenderTooltipsEvent {
 
         Entity entity;
         try {
-            entity = ClientProxy.ENTITY_CACHE.get(MAID_ID, () -> {
+            entity = EntityCacheUtil.ENTITY_CACHE.get(MAID_ID, () -> {
                 Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(MAID_ID), world);
                 if (e == null) {
                     return new EntityMaid(world);
@@ -93,20 +93,14 @@ public class MaidRenderTooltipsEvent {
             });
             if (entity instanceof EntityMaid) {
                 EntityMaid maid = (EntityMaid) entity;
+                clearMaidDataResidue(maid, true);
                 maid.setModelId(modelId);
                 renderItemScale = CustomResourcesLoader.MAID_MODEL.getModelRenderItemScale(modelId);
-                // 缓存的对象往往有一些奇怪的东西，一并清除
-                maid.setShowSasimono(false);
-                maid.hurtResistantTime = 0;
-                maid.hurtTime = 0;
-                maid.deathTime = 0;
-                maid.setSitting(false);
-                maid.setBackpackLevel(EntityMaid.EnumBackPackLevel.EMPTY);
-                for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-                    maid.setItemStackToSlot(slot, ItemStack.EMPTY);
-                }
-                if (compound != null) {
-                    maid.readEntityFromNBT(compound);
+                if (photo != null) {
+                    maid.readEntityFromNBT(ItemPhoto.getMaidNbtData(photo));
+                    if (photo.hasDisplayName()) {
+                        maid.setCustomNameTag(photo.getDisplayName());
+                    }
                 }
             }
         } catch (ExecutionException e) {

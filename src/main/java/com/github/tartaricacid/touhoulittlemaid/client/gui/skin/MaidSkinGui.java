@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyMaidSkinDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -14,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.concurrent.ExecutionException;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 /**
  * @author TartaricAcid
@@ -39,7 +42,7 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelInfo> {
     void drawRightEntity(int posX, int posY, MaidModelInfo modelItem) {
         EntityMaid maid;
         try {
-            maid = (EntityMaid) ClientProxy.ENTITY_CACHE.get(ENTITY_ID, () -> {
+            maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(ENTITY_ID, () -> {
                 Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(ENTITY_ID), mc.world);
                 if (e == null) {
                     return new EntityMaid(mc.world);
@@ -51,13 +54,8 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelInfo> {
             e.printStackTrace();
             return;
         }
-        // 缓存的对象往往有一些奇怪的东西，一并清除
+        clearMaidDataResidue(maid, false);
         maid.setModelId(modelItem.getModelId().toString());
-        maid.setShowSasimono(false);
-        maid.hurtResistantTime = 0;
-        maid.hurtTime = 0;
-        maid.deathTime = 0;
-        maid.setSitting(false);
         GuiInventory.drawEntityOnScreen(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
     }
 

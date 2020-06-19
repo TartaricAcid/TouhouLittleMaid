@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -64,7 +65,24 @@ public class VanillaNormalFarmHandler implements FarmHandler {
 
     @Override
     public void harvest(AbstractEntityMaid maid, World world, BlockPos pos, IBlockState state) {
-        maid.destroyBlock(pos);
+        if (maid.getHeldItemMainhand().getItem() instanceof ItemHoe) {
+            maid.destroyBlock(pos);
+        } else {
+            Block block = state.getBlock();
+
+            if (block instanceof BlockCrops) {
+                BlockCrops crop = (BlockCrops) block;
+                Item cropItemDropped = crop.getItemDropped(state, world.rand, 0);
+                Block.spawnAsEntity(world, pos, new ItemStack(cropItemDropped));
+                world.setBlockState(pos, crop.getDefaultState());
+                return;
+            }
+
+            if (block == Blocks.NETHER_WART) {
+                world.setBlockState(pos, Blocks.NETHER_WART.getDefaultState());
+                Block.spawnAsEntity(world, pos, new ItemStack(Items.NETHER_WART));
+            }
+        }
     }
 
     @Override

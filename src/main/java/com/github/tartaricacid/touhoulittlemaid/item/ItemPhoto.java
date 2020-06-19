@@ -62,6 +62,9 @@ public class ItemPhoto extends Item {
         EntityMaid maid = new EntityMaid(worldIn);
         maid.readEntityFromNBT(photo.getTagCompound().getCompoundTag(MAID_INFO.getNbtName()));
         maid.setPosition(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
+        if (photo.hasDisplayName()) {
+            maid.setCustomNameTag(photo.getDisplayName());
+        }
         // 实体生成必须在服务端应用
         if (!worldIn.isRemote) {
             worldIn.spawnEntity(maid);

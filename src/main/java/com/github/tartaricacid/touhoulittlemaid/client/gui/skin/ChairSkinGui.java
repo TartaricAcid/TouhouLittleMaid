@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyChairSkinDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -39,7 +40,7 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelInfo> {
     void drawRightEntity(int posX, int posY, ChairModelInfo modelItem) {
         EntityChair chair;
         try {
-            chair = (EntityChair) ClientProxy.ENTITY_CACHE.get(ENTITY_ID, () -> {
+            chair = (EntityChair) EntityCacheUtil.ENTITY_CACHE.get(ENTITY_ID, () -> {
                 Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(ENTITY_ID), mc.world);
                 if (e == null) {
                     return new EntityChair(mc.world);

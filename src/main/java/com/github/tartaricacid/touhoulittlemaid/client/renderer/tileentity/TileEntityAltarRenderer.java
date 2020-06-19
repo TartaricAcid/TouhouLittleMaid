@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.AltarModel;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
+import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -74,7 +75,7 @@ public class TileEntityAltarRenderer extends TileEntitySpecialRenderer<TileEntit
         if (te.isCanPlaceItem() && !te.handler.getStackInSlot(0).isEmpty()) {
             Entity entity;
             try {
-                entity = ClientProxy.ENTITY_CACHE.get(ENTITY_ITEM_ID, () -> {
+                entity = EntityCacheUtil.ENTITY_CACHE.get(ENTITY_ITEM_ID, () -> {
                     Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(ENTITY_ITEM_ID), getWorld());
                     if (e == null) {
                         return new EntityItem(getWorld());

@@ -1,15 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,6 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.concurrent.ExecutionException;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 /**
  * @author TartaricAcid
@@ -31,7 +31,7 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
         String name = te.getEntityId();
         Entity entity;
         try {
-            entity = ClientProxy.ENTITY_CACHE.get(name, () -> {
+            entity = EntityCacheUtil.ENTITY_CACHE.get(name, () -> {
                 Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(name), getWorld());
                 if (e == null) {
                     return new EntityMaid(getWorld());
@@ -40,18 +40,10 @@ public class TileEntityGarageKitRenderer extends TileEntitySpecialRenderer<TileE
                 }
             });
             if (entity instanceof EntityMaid) {
+                EntityMaid maid = (EntityMaid) entity;
+                clearMaidDataResidue(maid, true);
                 if (te.getModelId() != null) {
-                    ((EntityMaid) entity).setModelId(te.getModelId());
-                }
-                // 缓存的对象往往有一些奇怪的东西，一并清除
-                ((EntityMaid) entity).setShowSasimono(false);
-                ((EntityMaid) entity).hurtResistantTime = 0;
-                ((EntityMaid) entity).hurtTime = 0;
-                ((EntityMaid) entity).deathTime = 0;
-                ((EntityMaid) entity).setSitting(false);
-                ((EntityMaid) entity).setBackpackLevel(EntityMaid.EnumBackPackLevel.EMPTY);
-                for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-                    entity.setItemStackToSlot(slot, ItemStack.EMPTY);
+                    maid.setModelId(te.getModelId());
                 }
             }
             entity.readFromNBT(te.getMaidData());

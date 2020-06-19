@@ -107,6 +107,7 @@ public class EntityMaid extends AbstractEntityMaid {
      * 模式所应用的 AI 的优先级
      */
     private static final int TASK_PRIORITY = 5;
+    private static final float INFINITY_LEASHED_DISTANCE = -1.0f;
     /**
      * 拾起物品声音的延时计数器
      */
@@ -164,6 +165,8 @@ public class EntityMaid extends AbstractEntityMaid {
     private boolean canHoldVehicle = true;
     private boolean canRidingBroom = true;
     private boolean canRiding = true;
+    private BlockPos leashedPosition = BlockPos.ORIGIN;
+    private float maximumLeashedDistance = INFINITY_LEASHED_DISTANCE;
 
     public EntityMaid(World worldIn) {
         super(worldIn);
@@ -182,6 +185,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
         this.tasks.addTask(4, new EntityMaidOpenDoor(this, true));
 
+        this.tasks.addTask(5, new EntityMaidStorage(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
 
@@ -1126,10 +1130,6 @@ public class EntityMaid extends AbstractEntityMaid {
     public IItemHandlerModifiable getAllBackpackInv() {
         return new CombinedInvWrapper(smallBackpackInv, middleBackpackInv, bigBackpackInv);
     }
-
-    private static final float INFINITY_LEASHED_DISTANCE = -1.0f;
-    private BlockPos leashedPosition = BlockPos.ORIGIN;
-    private float maximumLeashedDistance = INFINITY_LEASHED_DISTANCE;
 
     @Override
     public boolean isWithinHomeDistanceCurrentPosition() {

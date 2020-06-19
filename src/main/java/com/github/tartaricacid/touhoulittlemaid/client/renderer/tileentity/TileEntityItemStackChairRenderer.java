@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResources
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
+import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -36,7 +37,7 @@ public class TileEntityItemStackChairRenderer extends TileEntityItemStackRendere
         float renderItemScale = CustomResourcesLoader.CHAIR_MODEL.getModelRenderItemScale(ItemChair.getChairModelId(itemStackIn));
         EntityChair entityChair;
         try {
-            entityChair = (EntityChair) ClientProxy.ENTITY_CACHE.get(entityId, () -> {
+            entityChair = (EntityChair) EntityCacheUtil.ENTITY_CACHE.get(entityId, () -> {
                 Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(entityId), world);
                 if (e == null) {
                     return new EntityChair(world);
