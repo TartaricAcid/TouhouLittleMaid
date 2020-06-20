@@ -56,7 +56,7 @@ public final class SkinGuiNumber<T extends IModelInfo> {
 
     public int getRowSize(int packIndex) {
         int row = (getModelSize(packIndex) - 1) / MODEL_PER_ROW + 1;
-        return MathHelper.clamp(row - MODEL_TOTAL_ROW, 0, MODEL_TOTAL_ROW);
+        return Math.max(row - MODEL_TOTAL_ROW, 0);
     }
 
     public boolean canScroll(int packIndex, int rowIndex) {
