@@ -30,7 +30,7 @@ import java.util.Locale;
 @SideOnly(Side.CLIENT)
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
-    private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
+    public static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     public MaidModelInfo mainInfo;
     public List<Object> mainAnimations = Lists.newArrayList();
     public ModelData eventModelData;

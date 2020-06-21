@@ -54,6 +54,7 @@ item.touhou_little_maid.wheel_chair.name=轮椅
 item.touhou_little_maid.rickshaw.name=黄包车
 item.touhou_little_maid.scarecrow.name=稻草人
 item.touhou_little_maid.portable_audio.name=手提音响
+item.touhou_little_maid.chisel.name=雕刻刀
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办

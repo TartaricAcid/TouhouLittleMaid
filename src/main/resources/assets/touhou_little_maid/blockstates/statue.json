@@ -1,0 +1,11 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "touhou_little_maid:statue"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ]
+  }
+}
