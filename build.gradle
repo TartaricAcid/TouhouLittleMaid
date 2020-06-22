@@ -115,6 +115,7 @@ jar {
         // 打包 Access Transformers 文件
         attributes 'FMLAT': 'touhou_little_maid_at.cfg'
         // 将 CodecJLayerMP3 库打包进行模组中
-        attributes 'ContainedDeps': "codecjlayermp3-1.0.0-SNAPSHOT.jar jlayer-1.0.1.jar"
+        // 将 Nashorn 库打包进行模组中，因为很多玩家更新 Java 版本太困难了
+        attributes 'ContainedDeps': "codecjlayermp3-1.0.0-SNAPSHOT.jar jlayer-1.0.1.jar nashorn.jar"
     }
 }
