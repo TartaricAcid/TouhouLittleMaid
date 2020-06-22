@@ -14,14 +14,11 @@ import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -41,7 +38,6 @@ import noppes.npcs.entity.EntityCustomNpc;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 @SideOnly(Side.CLIENT)
@@ -79,6 +75,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         RenderingRegistry.registerEntityRenderingHandler(EntityMaidVehicle.class, EntityMaidVehicleRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityScarecrow.class, EntityScarecrowRender.FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityPortableAudio.class, EntityPortableAudioRender.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityExtinguishingAgent.class, EntityExtinguishingAgentRender.FACTORY);
     }
 
     @Override
