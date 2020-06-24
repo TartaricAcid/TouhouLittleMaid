@@ -5,9 +5,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -25,6 +27,11 @@ public class EntityExtinguishingAgent extends Entity {
         setSize(0.2f, 0.2f);
     }
 
+    public EntityExtinguishingAgent(World worldIn, Vec3d position) {
+        this(worldIn);
+        this.setPosition(position.x, position.y, position.z);
+    }
+
     @Override
     protected void entityInit() {
     }
@@ -37,10 +44,6 @@ public class EntityExtinguishingAgent extends Entity {
             return;
         }
         if (!isCheck && ticksExisted == 5) {
-            List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(2, 1, 2));
-            for (EntityLivingBase entity : list) {
-                entity.extinguish();
-            }
             for (int i = -2; i <= 2; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -2; k <= 2; k++) {
@@ -55,6 +58,12 @@ public class EntityExtinguishingAgent extends Entity {
                     }
                 }
             }
+
+            List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(2, 1, 2));
+            for (EntityLivingBase entity : list) {
+                entity.extinguish();
+            }
+
             isCheck = true;
         }
         if (world.isRemote) {
@@ -67,6 +76,8 @@ public class EntityExtinguishingAgent extends Entity {
                         0, 0.1, 0);
             }
         }
+        // FIXME: 2020/6/24 用更加真实的声音替代羊毛声音
+        this.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 2.0f - (1.8f / MAX_AGE) * ticksExisted, 0.1f);
     }
 
     @Override
