@@ -55,6 +55,7 @@ item.touhou_little_maid.rickshaw.name=Rickshaw
 item.touhou_little_maid.scarecrow.name=Scarecrow
 item.touhou_little_maid.portable_audio.name=Portable Audio
 item.touhou_little_maid.chisel.name=Chisel
+item.touhou_little_maid.extinguisher.name=Extinguisher
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -151,6 +152,9 @@ message.touhou_little_maid.slashblade.position=Slash blade position is changed!
 message.touhou_little_maid.maid_pos.clear=Maid Pos Cleared!
 message.touhou_little_maid.maid_riding_set.true=Entity Riding: ON
 message.touhou_little_maid.maid_riding_set.false=Entity Riding: OFF
+message.touhou_little_maid.extinguisher.player_cannot_use=Your lack of knowledge does not know how to use this item
+message.touhou_little_maid.chisel.hit_block_error=Please right click on the clay block
+message.touhou_little_maid.chisel.offhand_not_photo=Please have a photo of the maid in your offhand
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=Single Point
@@ -262,6 +266,7 @@ task.touhou_little_maid.shears=Shears
 task.touhou_little_maid.milk=Milk
 task.touhou_little_maid.torch=Torch
 task.touhou_little_maid.feed_animal=Breed
+task.touhou_little_maid.extinguishing=Extinguishing
 
 # GUI
 gui.touhou_little_maid.info.healthy=HP: %f/%f
@@ -665,6 +670,7 @@ subtitle.touhou_little_maid.maid.mode.shears=Maid Shears Sound
 subtitle.touhou_little_maid.maid.mode.milk=Maid Get Milk Sound
 subtitle.touhou_little_maid.maid.mode.torch=Maid Torch Sound
 subtitle.touhou_little_maid.maid.mode.feed_animal=Maid Feed Animal Sound
+subtitle.touhou_little_maid.maid.mode.extinguishing=Extinguishing Sound
 subtitle.touhou_little_maid.maid.ai.find_target=Maid Find Target Sound
 subtitle.touhou_little_maid.maid.ai.hurt=Maid Hurt Sound
 subtitle.touhou_little_maid.maid.ai.hurt_fire=Maid Fire Hurt Sound

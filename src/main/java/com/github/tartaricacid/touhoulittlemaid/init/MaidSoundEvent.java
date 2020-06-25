@@ -28,6 +28,7 @@ public final class MaidSoundEvent {
     public static final SoundEvent MAID_MILK = registerSound("maid.mode.milk");
     public static final SoundEvent MAID_TORCH = registerSound("maid.mode.torch");
     public static final SoundEvent MAID_FEED_ANIMAL = registerSound("maid.mode.feed_animal");
+    public static final SoundEvent MAID_EXTINGUISHING = registerSound("maid.mode.extinguishing");
     public static final SoundEvent MAID_FIND_TARGET = registerSound("maid.ai.find_target");
     public static final SoundEvent MAID_HURT = registerSound("maid.ai.hurt");
     public static final SoundEvent MAID_HURT_FIRE = registerSound("maid.ai.hurt_fire");
@@ -35,7 +36,6 @@ public final class MaidSoundEvent {
     public static final SoundEvent MAID_TAMED = registerSound("maid.ai.tamed");
     public static final SoundEvent MAID_ITEM_GET = registerSound("maid.ai.item_get");
     public static final SoundEvent MAID_DEATH = registerSound("maid.ai.death");
-    public static final SoundEvent MAID_EXTINGUISHING = registerSound("maid.ai.extinguishing");
     public static final SoundEvent MAID_HOT = registerSound("maid.environment.hot");
     public static final SoundEvent MAID_COLD = registerSound("maid.environment.cold");
     public static final SoundEvent MAID_RAIN = registerSound("maid.environment.rain");

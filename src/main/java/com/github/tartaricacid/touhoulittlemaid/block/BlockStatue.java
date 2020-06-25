@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
@@ -27,11 +28,12 @@ import java.util.Random;
 
 public class BlockStatue extends Block {
     public BlockStatue() {
-        super(Material.ROCK);
+        super(Material.CLAY);
         setTranslationKey(TouhouLittleMaid.MOD_ID + "." + "statue");
         setHardness(1.0f);
         setResistance(2000.0F);
         setRegistryName("statue");
+        setSoundType(SoundType.GROUND);
     }
 
     @Override

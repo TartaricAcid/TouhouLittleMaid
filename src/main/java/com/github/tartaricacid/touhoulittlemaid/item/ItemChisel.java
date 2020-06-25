@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -14,6 +15,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -24,37 +26,54 @@ public class ItemChisel extends Item {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".chisel");
         setMaxStackSize(1);
         setCreativeTab(MaidItems.MAIN_TABS);
-        setMaxDamage(128);
+        setMaxDamage(64);
     }
 
     @Override
     @Nonnull
     public EnumActionResult onItemUse(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos,
                                       @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.getBlockState(pos).getBlock() == Blocks.CLAY && hand == EnumHand.MAIN_HAND
-                && player.getHeldItemOffhand().getItem() == MaidItems.PHOTO) {
-            TileEntityStatue.Size[] sizes = TileEntityStatue.Size.values();
-            String modeId = ItemPhoto.getMaidNbtData(player.getHeldItemOffhand()).getString("ModelId");
-            for (int i = sizes.length - 1; i >= 0; i--) {
-                TileEntityStatue.Size size = sizes[i];
-                Vec3i dimension = size.getDimension();
-                BlockPos[] posList = checkBlocks(worldIn, pos, dimension, facing);
-                if (posList != null) {
-                    for (BlockPos posIn : posList) {
-                        worldIn.setBlockState(posIn, MaidBlocks.STATUE.getDefaultState());
-                        TileEntity te = worldIn.getTileEntity(posIn);
-                        if (te instanceof TileEntityStatue) {
-                            TileEntityStatue statue = (TileEntityStatue) te;
-                            statue.setForgeData(size, posIn == pos, pos, facing, Lists.newArrayList(posList),
-                                    modeId);
-                            player.getHeldItemMainhand().damageItem(size.ordinal() + 1, player);
-                        }
-                    }
-                    return EnumActionResult.SUCCESS;
+        if (hand == EnumHand.MAIN_HAND) {
+            if (worldIn.getBlockState(pos).getBlock() != Blocks.CLAY) {
+                if (!worldIn.isRemote) {
+                    player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.chisel.hit_block_error"));
                 }
+                return EnumActionResult.PASS;
             }
+            if (player.getHeldItemOffhand().getItem() != MaidItems.PHOTO) {
+                if (!worldIn.isRemote) {
+                    player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.chisel.offhand_not_photo"));
+                }
+                return EnumActionResult.PASS;
+            }
+            genStatueBlocks(player, worldIn, pos, facing);
+            return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;
+    }
+
+    private void genStatueBlocks(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumFacing facing) {
+        String modeId = ItemPhoto.getMaidNbtData(player.getHeldItemOffhand()).getString("ModelId");
+        TileEntityStatue.Size[] sizes = TileEntityStatue.Size.values();
+        for (int i = sizes.length - 1; i >= 0; i--) {
+            TileEntityStatue.Size size = sizes[i];
+            Vec3i dimension = size.getDimension();
+            BlockPos[] posList = checkBlocks(worldIn, pos, dimension, facing);
+            if (posList != null) {
+                for (BlockPos posIn : posList) {
+                    worldIn.setBlockState(posIn, MaidBlocks.STATUE.getDefaultState());
+                    TileEntity te = worldIn.getTileEntity(posIn);
+                    if (te instanceof TileEntityStatue) {
+                        TileEntityStatue statue = (TileEntityStatue) te;
+                        statue.setForgeData(size, posIn == pos, pos, facing,
+                                Lists.newArrayList(posList), modeId);
+                    }
+                }
+                player.getHeldItemMainhand().damageItem(size.ordinal() + 1, player);
+                player.playSound(SoundEvents.BLOCK_ANVIL_LAND, 0.5f, 1.5f);
+                return;
+            }
+        }
     }
 
     @Nullable

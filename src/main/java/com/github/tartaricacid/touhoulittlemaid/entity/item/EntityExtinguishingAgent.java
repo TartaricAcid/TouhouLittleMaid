@@ -51,9 +51,6 @@ public class EntityExtinguishingAgent extends Entity {
                         IBlockState state = world.getBlockState(pos);
                         if (state.getBlock() == Blocks.FIRE) {
                             world.setBlockToAir(pos);
-                        } else if (state.getBlock() == Blocks.LAVA) {
-                            world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
-                            // TODO: 2020/6/22 熔岩转换待优化
                         }
                     }
                 }
