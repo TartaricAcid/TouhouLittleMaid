@@ -158,7 +158,7 @@ public class MaidModelInfo implements IModelInfo {
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/armor/reverse.js"),
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/wing/default.js"),
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/tail/default.js"),
-                    new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/base/float.js")
+                    new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/base/float/default.js")
             );
         }
         renderEntityScale = MathHelper.clamp(renderEntityScale, 0.7f, 1.3f);

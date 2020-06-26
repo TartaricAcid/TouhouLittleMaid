@@ -9,14 +9,24 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHand;
 
 public class EntityMaidWrapper {
-    private EntityMaid maid;
     public float swingProgress;
     public boolean isRiding;
+    private EntityMaid maid;
+    private WorldWrapper world;
 
     public void setData(EntityMaid maid, float swingProgress, boolean isRiding) {
         this.maid = maid;
         this.swingProgress = swingProgress;
         this.isRiding = isRiding;
+        this.world = new WorldWrapper(maid.world);
+    }
+
+    public WorldWrapper getWorld() {
+        return world;
+    }
+
+    public String getTask() {
+        return maid.getTask().getUid().getPath();
     }
 
     public boolean hasHelmet() {
