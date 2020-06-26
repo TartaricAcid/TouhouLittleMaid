@@ -602,13 +602,13 @@
         ]
       },
       {
-        "name": "-chestPlate",
+        "name": "_chestPlate",
         "parent": "body",
         "pivot": [-1, -1, -10]
       },
       {
         "name": "band1",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [-1, -1, -10],
         "rotation": [90, -90, 0],
         "cubes": [
@@ -618,7 +618,7 @@
       },
       {
         "name": "band2",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [-1, -1, -10],
         "rotation": [0, 0, -135],
         "cubes": [
@@ -627,7 +627,7 @@
       },
       {
         "name": "band3",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [1, -1, -10],
         "rotation": [0, 0, 135],
         "cubes": [
@@ -636,7 +636,7 @@
       },
       {
         "name": "band4",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [-1, -1, -10],
         "cubes": [
           {"origin": [10.5, 15.75636, -6.24164], "size": [5, 0, 5], "uv": [19, 40]},
@@ -645,7 +645,7 @@
       },
       {
         "name": "band5",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [-1, -1, -10],
         "rotation": [45, 0, 0],
         "cubes": [
@@ -655,7 +655,7 @@
       },
       {
         "name": "band6",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [-1, -1, -10],
         "rotation": [90, 0, 0],
         "cubes": [

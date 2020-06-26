@@ -1111,13 +1111,13 @@
         ]
       },
       {
-        "name": "-cosFloat",
+        "name": "_cosFloat",
         "pivot": [12, 22, -8],
         "rotation": [-130, 0, 0]
       },
       {
         "name": "wingRight3",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [12.5, 22, -8],
         "rotation": [0, 60, 0]
       },
@@ -1216,7 +1216,7 @@
       },
       {
         "name": "wingLeft3",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [12.5, 22, -8],
         "rotation": [0, -60, 0]
       },
@@ -1314,13 +1314,13 @@
         ]
       },
       {
-        "name": "-sinFloat",
+        "name": "_sinFloat",
         "pivot": [-11, 9, 16],
         "rotation": [-130, 0, 0]
       },
       {
         "name": "wingRight4",
-        "parent": "-sinFloat",
+        "parent": "_sinFloat",
         "pivot": [-10.5, 9, 16],
         "rotation": [0, 60, 0]
       },
@@ -1420,7 +1420,7 @@
       },
       {
         "name": "wingLeft4",
-        "parent": "-sinFloat",
+        "parent": "_sinFloat",
         "pivot": [-10.5, 9, 16],
         "rotation": [0, -60, 0]
       },

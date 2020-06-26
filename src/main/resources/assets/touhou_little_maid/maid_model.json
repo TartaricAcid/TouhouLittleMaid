@@ -229,7 +229,14 @@
     }, {
       "model_id": "touhou_little_maid:wakasagihime",
       "description": ["{model.touhou_little_maid.wakasagihime.desc}"],
-      "animation": ["touhou_little_maid:animation/maid.wakasagihime.js"],
+      "animation": [
+        "touhou_little_maid:animation/maid/default/head/default.js",
+        "touhou_little_maid:animation/maid/default/head/blink.js",
+        "touhou_little_maid:animation/maid/default/head/beg.js",
+        "touhou_little_maid:animation/maid/default/arm/default.js",
+        "touhou_little_maid:animation/maid/default/arm/swing.js",
+        "touhou_little_maid:animation/special/wakasagihime_sit.js"
+      ],
       "can_riding_broom": false
     }, {
       "model_id": "touhou_little_maid:sekibanki",
@@ -275,8 +282,15 @@
       "model_id": "touhou_little_maid:hecatia_lapislazuli",
       "description": ["{model.touhou_little_maid.hecatia_lapislazuli.desc}"],
       "animation": [
-        "touhou_little_maid:animation/maid.default.js",
-        "touhou_little_maid:animation/hecatia.dimension.js"
+        "touhou_little_maid:animation/maid/default/head/default.js",
+        "touhou_little_maid:animation/maid/default/head/blink.js",
+        "touhou_little_maid:animation/maid/default/head/beg.js",
+        "touhou_little_maid:animation/maid/default/leg/default.js",
+        "touhou_little_maid:animation/maid/default/arm/default.js",
+        "touhou_little_maid:animation/maid/default/arm/swing.js",
+        "touhou_little_maid:animation/maid/default/sit/default.js",
+        "touhou_little_maid:animation/maid/default/armor/default.js",
+        "touhou_little_maid:animation/special/hecatia_dimension.js"
       ]
     },  {
       "model_id": "touhou_little_maid:eternity_larva",

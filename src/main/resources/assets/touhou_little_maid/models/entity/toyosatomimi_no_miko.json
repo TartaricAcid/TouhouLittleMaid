@@ -167,7 +167,7 @@
         ]
       },
       {
-        "name": "-helmet",
+        "name": "_helmet",
         "parent": "head",
         "pivot": [0, 26, 0],
         "cubes": [
@@ -182,7 +182,7 @@
       },
       {
         "name": "hair3",
-        "parent": "-helmet",
+        "parent": "_helmet",
         "pivot": [0, 26.5, 0],
         "rotation": [0, 0, -10]
       },
@@ -247,7 +247,7 @@
       },
       {
         "name": "hair4",
-        "parent": "-helmet",
+        "parent": "_helmet",
         "pivot": [-1, 29.5, 0],
         "rotation": [0, 0, 100]
       },
@@ -322,7 +322,7 @@
         ]
       },
       {
-        "name": "-chestPlateRight",
+        "name": "_chestPlateRight",
         "parent": "armRight",
         "pivot": [-5, 17.5, 0],
         "cubes": [
@@ -341,7 +341,7 @@
         ]
       },
       {
-        "name": "-chestPlateLeft",
+        "name": "_chestPlateLeft",
         "parent": "armLeft",
         "pivot": [3, 17.5, 0],
         "cubes": [
@@ -453,7 +453,7 @@
         ]
       },
       {
-        "name": "-leggings",
+        "name": "_leggings",
         "parent": "body",
         "pivot": [0, 10.5, 0],
         "cubes": [
@@ -466,7 +466,7 @@
       },
       {
         "name": "bone3",
-        "parent": "-leggings",
+        "parent": "_leggings",
         "pivot": [-1, 13, -3.5],
         "rotation": [-22, 0, 0]
       },
@@ -544,7 +544,7 @@
       },
       {
         "name": "bone33",
-        "parent": "-leggings",
+        "parent": "_leggings",
         "pivot": [-1, 12, -3.5],
         "rotation": [-25, 10, 25],
         "cubes": [
@@ -553,7 +553,7 @@
       },
       {
         "name": "skirt",
-        "parent": "-leggings",
+        "parent": "_leggings",
         "pivot": [0, 10.5, 0]
       },
       {
@@ -719,13 +719,13 @@
         ]
       },
       {
-        "name": "-chestPlate",
+        "name": "_chestPlate",
         "parent": "body",
         "pivot": [0, 0, 0]
       },
       {
         "name": "bone24",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [0, 17, -3],
         "rotation": [0, 0, 58],
         "cubes": [
@@ -734,7 +734,7 @@
       },
       {
         "name": "bone21",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [0, 17, -3],
         "rotation": [0, 0, -58],
         "cubes": [
@@ -743,7 +743,7 @@
       },
       {
         "name": "bone23",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [0, 15.5, -3],
         "cubes": [
           {"origin": [-1, 12, -3.5], "size": [2, 5, 1], "uv": [0, 39]}
@@ -751,7 +751,7 @@
       },
       {
         "name": "cape",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [0, 18, 3]
       },
       {
@@ -765,7 +765,7 @@
       },
       {
         "name": "belt2",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [0, 13, 0]
       },
       {
@@ -789,7 +789,7 @@
       },
       {
         "name": "belt3",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [0, 13, 0],
         "rotation": [0, 0, -10],
         "cubes": [
@@ -799,7 +799,7 @@
       },
       {
         "name": "sword",
-        "parent": "-chestPlate",
+        "parent": "_chestPlate",
         "pivot": [5, 10, -8],
         "rotation": [0, 0, -25],
         "cubes": [
@@ -936,7 +936,7 @@
         ]
       },
       {
-        "name": "-leggingsLeft",
+        "name": "_leggingsLeft",
         "parent": "legLeft",
         "pivot": [2, 9, 0],
         "cubes": [
@@ -974,7 +974,7 @@
         ]
       },
       {
-        "name": "-leggingsRight",
+        "name": "_leggingsRight",
         "parent": "legRight",
         "pivot": [-2, 9, 0],
         "cubes": [

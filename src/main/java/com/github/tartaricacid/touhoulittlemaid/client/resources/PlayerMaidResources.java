@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
@@ -16,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -29,16 +29,26 @@ public class PlayerMaidResources {
 
     private static final GameProfile EMPTY_GAME_PROFILE = new GameProfile(null, "EMPTY");
     private static final ResourceLocation PLAYER_MAID_MODEL_RES = new ResourceLocation(TouhouLittleMaid.MOD_ID, "models/entity/player_maid.json");
-    private static final ResourceLocation PLAYER_MAID_ANIMATION_RES = new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/player_maid.default.js");
+    private static final List<ResourceLocation> PLAYER_MAID_ANIMATION_RES = Lists.newArrayList(
+            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
+            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
+            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/leg/default.js"),
+            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/player/arm/default.js"),
+            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/swing.js"),
+            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/player/sit/default.js")
+    );
     private static final ResourceLocation TEXTURE_ALEX = new ResourceLocation("textures/entity/alex.png");
+    private static final List<Object> PLAYER_MAID_ANIMATIONS = Lists.newArrayList();
     private static EntityModelJson playerMaidModel;
     private static MaidModelInfo playerMaidInfo;
     private static ResourceLocation playerSkin;
-    private static List<Object> playerMaidAnimations;
 
     public static void reloadResources() {
         playerMaidModel = CustomResourcesLoader.loadModel(PLAYER_MAID_MODEL_RES);
-        playerMaidAnimations = Collections.singletonList(CustomJsAnimationManger.getCustomAnimation(PLAYER_MAID_ANIMATION_RES));
+        PLAYER_MAID_ANIMATIONS.clear();
+        for (ResourceLocation res : PLAYER_MAID_ANIMATION_RES) {
+            PLAYER_MAID_ANIMATIONS.add(CustomJsAnimationManger.getCustomAnimation(res));
+        }
         playerMaidInfo = new MaidModelInfo() {
             @Override
             public ResourceLocation getTexture() {
@@ -52,7 +62,7 @@ public class PlayerMaidResources {
     }
 
     public static List<Object> getPlayerMaidAnimations() {
-        return playerMaidAnimations;
+        return PLAYER_MAID_ANIMATIONS;
     }
 
     public static MaidModelInfo getPlayerMaidInfo(String name) {

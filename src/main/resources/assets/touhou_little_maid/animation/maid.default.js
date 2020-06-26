@@ -1,3 +1,6 @@
+// 用来和旧版本资源包保持兼容的残留文件
+// 其他情况下不建议使用
+
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
@@ -83,11 +86,6 @@ Java.asJSONCompatible({
             ridingPosture(legLeft, legRight);
         } else if (maid.isSitting()) {
             sittingPosture(armLeft, armRight, legLeft, legRight);
-        }
-
-        if (maid.isRidingPlayer()) {
-            GlWrapper.scale(0.7, 0.7, 0.7);
-            GlWrapper.translate(0, 0.7, 0);
         }
     }
 })
@@ -235,8 +233,8 @@ function renderArmor(maid, helmet, chestPlate, chestPlateLeft, chestPlateMiddle,
 }
 
 function renderReverseArmor(maid, reverseHelmet, reverseChestPlate, reverseChestPlateLeft, reverseChestPlateMiddle, reverseChestPlateRight,
-    reverseLeggings, reverseLeggingsLeft, reverseLeggingsMiddle, reverseLeggingsRight,
-    reverseBootsLeft, reverseBootsRight) {
+                            reverseLeggings, reverseLeggingsLeft, reverseLeggingsMiddle, reverseLeggingsRight,
+                            reverseBootsLeft, reverseBootsRight) {
 
     if (reverseHelmet != undefined) {
         reverseHelmet.setHidden(maid.hasHelmet());
@@ -292,15 +290,7 @@ function beggingPosture(maid, head, ahoge, ageInTicks) {
     }
 }
 
-function sittingPosture(armLeft, armRight, legLeft, legRight) {
-    if (armLeft != undefined) {
-        armLeft.setRotateAngleX(-0.798);
-        armLeft.setRotateAngleZ(0.274);
-    }
-    if (armRight != undefined) {
-        armRight.setRotateAngleX(-0.798);
-        armRight.setRotateAngleZ(-0.274);
-    }
+function ridingPosture(legLeft, legRight) {
     if (legLeft != undefined) {
         legLeft.setRotateAngleX(-0.960);
         legLeft.setRotateAngleZ(-0.523);
@@ -310,6 +300,28 @@ function sittingPosture(armLeft, armRight, legLeft, legRight) {
         legRight.setRotateAngleZ(0.523);
     }
     GlWrapper.translate(0, 0.3, 0);
+}
+
+function sittingPosture(armLeft, armRight, legLeft, legRight) {
+    if (armLeft != undefined) {
+        armLeft.setRotateAngleX(-0.798);
+        armLeft.setRotateAngleZ(0.274);
+    }
+    if (armRight != undefined) {
+        armRight.setRotateAngleX(-0.798);
+        armRight.setRotateAngleZ(-0.274);
+    }
+    ridingPosture(legLeft, legRight);
+}
+
+function ridingBroomPosture(head, armLeft, armRight, legLeft, legRight) {
+    sittingPosture(armLeft, armRight, legLeft, legRight);
+    if (head != undefined) {
+        head.setRotateAngleX(head.getRotateAngleX() - 30 * Math.PI / 180);
+        head.setOffsetY(0.0625);
+    }
+    GlWrapper.rotate(30, 1, 0, 0);
+    GlWrapper.translate(0, -0.4, -0.3);
 }
 
 function swingingArmsPosture(maid, armLeft, armRight) {
@@ -323,26 +335,4 @@ function swingingArmsPosture(maid, armLeft, armRight) {
             armRight.setRotateAngleY(-0.174);
         }
     }
-}
-
-function ridingBroomPosture(head, armLeft, armRight, legLeft, legRight) {
-    sittingPosture(armLeft, armRight, legLeft, legRight);
-    if (head != undefined) {
-        head.setRotateAngleX(head.getRotateAngleX() - 30 * Math.PI / 180);
-        head.setOffsetY(0.0625);
-    }
-    GlWrapper.rotate(30, 1, 0, 0);
-    GlWrapper.translate(0, -0.4, -0.3);
-}
-
-function ridingPosture(legLeft, legRight) {
-    if (legLeft != undefined) {
-        legLeft.setRotateAngleX(-0.960);
-        legLeft.setRotateAngleZ(-0.523);
-    }
-    if (legRight != undefined) {
-        legRight.setRotateAngleX(-0.960);
-        legRight.setRotateAngleZ(0.523);
-    }
-    GlWrapper.translate(0, 0.3, 0);
 }

@@ -554,7 +554,7 @@
         ]
       },
       {
-        "name": "-cosFloat",
+        "name": "_cosFloat",
         "pivot": [-5.1, 9.5, 1],
         "rotation": [0, 90, 0],
         "cubes": [
@@ -564,7 +564,7 @@
       },
       {
         "name": "bone7",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [-5.1, 8.5, 0]
       },
       {
@@ -605,7 +605,7 @@
       },
       {
         "name": "bone25",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [-5.1, 8.5, 0]
       },
       {
@@ -646,7 +646,7 @@
       },
       {
         "name": "bone30",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [-5.1, 8.5, 0]
       },
       {
@@ -687,7 +687,7 @@
       },
       {
         "name": "bone35",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [-5.1, 8.5, 0]
       },
       {
@@ -728,7 +728,7 @@
       },
       {
         "name": "bone40",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [-5.1, 8.5, 0]
       },
       {
@@ -769,7 +769,7 @@
       },
       {
         "name": "bone47",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [-5.6, 10.5, 0],
         "rotation": [-10, 0, 0],
         "cubes": [
@@ -778,7 +778,7 @@
       },
       {
         "name": "bone48",
-        "parent": "-cosFloat",
+        "parent": "_cosFloat",
         "pivot": [-5.6, 10.5, 0],
         "rotation": [-15, 0, 0],
         "cubes": [
