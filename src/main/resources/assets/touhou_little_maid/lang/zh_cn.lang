@@ -155,6 +155,10 @@ message.touhou_little_maid.maid_riding_set.false=实体骑乘：关
 message.touhou_little_maid.extinguisher.player_cannot_use=你匮乏的知识并不了解这物品该如何使用
 message.touhou_little_maid.chisel.hit_block_error=请右击粘土方块
 message.touhou_little_maid.chisel.offhand_not_photo=请在副手持有女仆照片
+message.touhou_little_maid.maid.death_pos=女仆死亡坐标：
+message.touhou_little_maid.maid.journeymap.name=旅行地图：
+message.touhou_little_maid.maid.journeymap.hover_message.click=点击创建坐标点。
+message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=Ctrl 点击在大地图中进行查看。
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=单点模式

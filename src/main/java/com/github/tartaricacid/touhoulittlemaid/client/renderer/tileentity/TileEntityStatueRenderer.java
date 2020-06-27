@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -85,7 +86,12 @@ public class TileEntityStatueRenderer extends TileEntitySpecialRenderer<TileEnti
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
         Entity entity;
-        String name = te.getModelId();
+        NBTTagCompound data = te.getExtraMaidData();
+
+        if (data == null) {
+            return;
+        }
+        String name = data.getString("ModelId");
 
         try {
             entity = EntityCacheUtil.ENTITY_CACHE.get(name, () -> {
@@ -96,12 +102,12 @@ public class TileEntityStatueRenderer extends TileEntitySpecialRenderer<TileEnti
                     return e;
                 }
             });
+
             if (entity instanceof EntityMaid) {
                 EntityMaid maid = (EntityMaid) entity;
                 clearMaidDataResidue(maid, true);
-                if (te.getModelId() != null) {
-                    maid.setModelId(te.getModelId());
-                }
+                maid.setModelId(name);
+                entity.readFromNBT(data);
             }
         } catch (ExecutionException e) {
             return;

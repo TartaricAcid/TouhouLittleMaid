@@ -1,8 +1,8 @@
 Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, modelMap) {
         date = new Date();
-        hourDeg = (date.getHours() % 12) * (Math.PI / 6);
-        minDeg = date.getMinutes() * (Math.PI / 30);
+        hourDeg = ((date.getHours() + date.getMinutes() / 60) % 12) * (Math.PI / 6);
+        minDeg = (date.getMinutes() + date.getSeconds() / 60) * (Math.PI / 30);
         secDeg = date.getSeconds() * (Math.PI / 30);
 
         systemHourRotationX = modelMap.get("systemHourRotationX");

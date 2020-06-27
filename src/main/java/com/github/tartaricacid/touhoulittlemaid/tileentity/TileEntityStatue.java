@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRender;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +16,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileEntityStatue extends TileEntity {
@@ -25,22 +25,24 @@ public class TileEntityStatue extends TileEntity {
     private static final String CORE_BLOCK_POS_TAG = "CoreBlockPos";
     private static final String STATUE_FACING_TAG = "StatueFacing";
     private static final String ALL_BLOCKS_TAG = "AllBlocks";
-    private static final String MODEL_ID_TAG = "StatueModelId";
+    private static final String EXTRA_MAID_DATA = "ExtraMaidData";
 
     private Size size = Size.SMALL;
     private boolean isCoreBlock = false;
     private BlockPos coreBlockPos = BlockPos.ORIGIN;
     private EnumFacing facing = EnumFacing.NORTH;
     private List<BlockPos> allBlocks = Lists.newArrayList();
-    private String modelId = EntityMaidRender.DEFAULT_MODEL_ID;
+    @Nullable
+    private NBTTagCompound extraMaidData = null;
 
-    public void setForgeData(Size size, boolean isCoreBlock, BlockPos coreBlockPos, EnumFacing facing, List<BlockPos> allBlocks, String modelId) {
+    public void setForgeData(Size size, boolean isCoreBlock, BlockPos coreBlockPos, EnumFacing facing,
+                             List<BlockPos> allBlocks, @Nullable NBTTagCompound extraData) {
         this.size = size;
         this.isCoreBlock = isCoreBlock;
         this.coreBlockPos = coreBlockPos;
         this.facing = facing;
         this.allBlocks = allBlocks;
-        this.modelId = modelId;
+        this.extraMaidData = extraData;
         refresh();
     }
 
@@ -55,7 +57,9 @@ public class TileEntityStatue extends TileEntity {
             blockList.appendTag(NBTUtil.createPosTag(pos));
         }
         getTileData().setTag(ALL_BLOCKS_TAG, blockList);
-        getTileData().setString(MODEL_ID_TAG, modelId);
+        if (extraMaidData != null) {
+            getTileData().setTag(EXTRA_MAID_DATA, extraMaidData);
+        }
         return super.writeToNBT(compound);
     }
 
@@ -71,7 +75,9 @@ public class TileEntityStatue extends TileEntity {
         for (int i = 0; i < blockList.tagCount(); i++) {
             allBlocks.add(NBTUtil.getPosFromTag(blockList.getCompoundTagAt(i)));
         }
-        modelId = getTileData().getString(MODEL_ID_TAG);
+        if (getTileData().hasKey(EXTRA_MAID_DATA, Constants.NBT.TAG_COMPOUND)) {
+            extraMaidData = getTileData().getCompoundTag(EXTRA_MAID_DATA);
+        }
     }
 
     @Override
@@ -124,8 +130,9 @@ public class TileEntityStatue extends TileEntity {
         return allBlocks;
     }
 
-    public String getModelId() {
-        return modelId;
+    @Nullable
+    public NBTTagCompound getExtraMaidData() {
+        return extraMaidData;
     }
 
     public enum Size {

@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -53,7 +54,7 @@ public class ItemChisel extends Item {
     }
 
     private void genStatueBlocks(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumFacing facing) {
-        String modeId = ItemPhoto.getMaidNbtData(player.getHeldItemOffhand()).getString("ModelId");
+        NBTTagCompound data = ItemPhoto.getMaidNbtData(player.getHeldItemOffhand());
         TileEntityStatue.Size[] sizes = TileEntityStatue.Size.values();
         for (int i = sizes.length - 1; i >= 0; i--) {
             TileEntityStatue.Size size = sizes[i];
@@ -65,10 +66,16 @@ public class ItemChisel extends Item {
                     TileEntity te = worldIn.getTileEntity(posIn);
                     if (te instanceof TileEntityStatue) {
                         TileEntityStatue statue = (TileEntityStatue) te;
-                        statue.setForgeData(size, posIn == pos, pos, facing,
-                                Lists.newArrayList(posList), modeId);
+                        if (posIn == pos) {
+                            statue.setForgeData(size, true, pos, facing,
+                                    Lists.newArrayList(posList), data);
+                        } else {
+                            statue.setForgeData(size, false, pos, facing,
+                                    Lists.newArrayList(posList), null);
+                        }
                     }
                 }
+
                 player.getHeldItemMainhand().damageItem(size.ordinal() + 1, player);
                 player.playSound(SoundEvents.BLOCK_ANVIL_LAND, 0.5f, 1.5f);
                 return;

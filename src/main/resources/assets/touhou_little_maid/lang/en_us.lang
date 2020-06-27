@@ -155,6 +155,10 @@ message.touhou_little_maid.maid_riding_set.false=Entity Riding: OFF
 message.touhou_little_maid.extinguisher.player_cannot_use=Your lack of knowledge does not know how to use this item
 message.touhou_little_maid.chisel.hit_block_error=Please right click on the clay block
 message.touhou_little_maid.chisel.offhand_not_photo=Please have a photo of the maid in your offhand
+message.touhou_little_maid.maid.death_pos=Maid Death Pos:
+message.touhou_little_maid.maid.journeymap.name=JourneyMap:
+message.touhou_little_maid.maid.journeymap.hover_message.click=Click to create waypoint.
+message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=Ctrl + click to view on map.
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=Single Point

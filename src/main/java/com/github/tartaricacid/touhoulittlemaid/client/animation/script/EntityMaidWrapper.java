@@ -102,4 +102,12 @@ public class EntityMaidWrapper {
     public int getDim() {
         return maid.dimension;
     }
+
+    public float getHealth() {
+        return maid.getHealth();
+    }
+
+    public float getMaxHealth() {
+        return maid.getMaxHealth();
+    }
 }

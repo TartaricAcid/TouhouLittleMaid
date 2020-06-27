@@ -11,10 +11,9 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.AbstractEntityFromItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
@@ -40,6 +39,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
@@ -61,13 +61,19 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -561,7 +567,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean canAttackClass(Class<? extends EntityLivingBase> cls) {
-        return cls != EntitySuitcase.class && cls != EntityChair.class && cls != EntityMarisaBroom.class && cls != EntityArmorStand.class && super.canAttackClass(cls);
+        return cls != AbstractEntityFromItem.class && cls != EntityArmorStand.class && super.canAttackClass(cls);
     }
 
     @Override
@@ -794,7 +800,35 @@ public class EntityMaid extends AbstractEntityMaid {
         ItemStack stack = BlockGarageKit.getItemStackWithData("touhou_little_maid:entity.passive.maid",
                 this.getModelId(), entityTag);
         // 生成物品实体
-        entityDropItem(stack, 0).setEntityInvulnerable(true);
+        EntityItem entityItem = entityDropItem(stack, 0);
+        entityItem.setEntityInvulnerable(true);
+        if (!this.world.isRemote && this.world.getGameRules().getBoolean("showDeathMessages")
+                && this.getOwner() instanceof EntityPlayerMP) {
+            sendPositionMessage(entityItem, (EntityPlayerMP) this.getOwner());
+        }
+    }
+
+    private void sendPositionMessage(EntityItem entityItem, EntityPlayerMP owner) {
+        BlockPos pos = entityItem.getPosition();
+        String coordinate = String.format("[x:%d, y:%d, z:%d, dim:%d]",
+                pos.getX(), pos.getY(), pos.getZ(), entityItem.dimension);
+        TextComponentTranslation start = new TextComponentTranslation("message.touhou_little_maid.maid.death_pos");
+        TextComponentString clickable = new TextComponentString(coordinate);
+        Style chatStyle = clickable.getStyle();
+        if (Loader.isModLoaded("journeymap")) {
+            chatStyle.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/jm wpedit " + coordinate));
+            TextComponentTranslation hover = new TextComponentTranslation("message.touhou_little_maid.maid.journeymap.name");
+            hover.getStyle().setColor(TextFormatting.YELLOW);
+            TextComponentTranslation click = new TextComponentTranslation("message.touhou_little_maid.maid.journeymap.hover_message.click");
+            TextComponentTranslation ctrlClick = new TextComponentTranslation("message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click");
+            TextComponentString hover2 = new TextComponentString(click.getUnformattedComponentText() + "\n" + ctrlClick.getUnformattedComponentText());
+            hover2.getStyle().setColor(TextFormatting.AQUA);
+            hover.appendSibling(hover2);
+            chatStyle.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
+        }
+        chatStyle.setColor(TextFormatting.AQUA);
+        start.appendSibling(clickable);
+        owner.sendMessage(start);
     }
 
     @Override
