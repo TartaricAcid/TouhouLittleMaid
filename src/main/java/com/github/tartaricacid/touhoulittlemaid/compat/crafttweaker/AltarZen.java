@@ -1,8 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.crafttweaker;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.util.ItemDefinition;
 import com.github.tartaricacid.touhoulittlemaid.api.util.ProcessingInput;
+import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
+import com.github.tartaricacid.touhoulittlemaid.crafting.ReviveMaidAltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.crafting.SpawnMaidRecipe;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.google.common.collect.Lists;
 import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
@@ -32,6 +37,21 @@ public class AltarZen {
     @ZenMethod
     public static void addItemCraftRecipe(String id, float powerCost, IItemStack output, IIngredient... input) {
         DELAYED_ACTIONS.add(new AddItemCraftRecipe(id, powerCost, output, input));
+    }
+
+    @ZenMethod
+    public static void addMaidSpawnCraftRecipe(String id, float powerCost, IIngredient... input) {
+        DELAYED_ACTIONS.add(new AddMaidSpawnCraftRecipe(id, powerCost, input));
+    }
+
+    @ZenMethod
+    public static void addMaidReviveCraftRecipe(String id, float powerCost, IIngredient... input) {
+        DELAYED_ACTIONS.add(new AddMaidReviveCraftRecipe(id, powerCost, input));
+    }
+
+    @ZenMethod
+    public static void addEntitySpawnCraftRecipe(String id, float powerCost, String entityId, IIngredient... input) {
+        DELAYED_ACTIONS.add(new AddEntitySpawnCraftRecipe(id, powerCost, entityId, input));
     }
 
     @ZenMethod
@@ -70,10 +90,10 @@ public class AltarZen {
     }
 
     public static class AddItemCraftRecipe implements IAction {
-        private String id;
-        private float powerCost;
-        private IItemStack output;
-        private IIngredient[] input;
+        private final String id;
+        private final float powerCost;
+        private final IItemStack output;
+        private final IIngredient[] input;
 
         AddItemCraftRecipe(String id, float powerCost, IItemStack output, IIngredient[] input) {
             this.id = id;
@@ -94,7 +114,7 @@ public class AltarZen {
     }
 
     public static class RemoveRecipe implements IAction {
-        private String id;
+        private final String id;
 
         RemoveRecipe(String id) {
             this.id = id;
@@ -108,6 +128,80 @@ public class AltarZen {
         @Override
         public String describe() {
             return "Delete altar item craft recipe: " + id;
+        }
+    }
+
+    public static class AddMaidSpawnCraftRecipe implements IAction {
+        private final String id;
+        private final float powerCost;
+        private final IIngredient[] input;
+
+        public AddMaidSpawnCraftRecipe(String id, float powerCost, IIngredient[] input) {
+            this.id = id;
+            this.powerCost = powerCost;
+            this.input = input;
+        }
+
+        @Override
+        public void apply() {
+            AltarRecipesManager.instance().addRecipe(new ResourceLocation(id), new SpawnMaidRecipe(powerCost, toProcessingInput(input)));
+        }
+
+        @Override
+        public String describe() {
+            return "Add maid spawn craft recipe: " + id;
+        }
+    }
+
+    public static class AddMaidReviveCraftRecipe implements IAction {
+        private final String id;
+        private final float powerCost;
+        private final IIngredient[] input;
+
+        public AddMaidReviveCraftRecipe(String id, float powerCost, IIngredient[] input) {
+            this.id = id;
+            this.powerCost = powerCost;
+            this.input = input;
+        }
+
+        @Override
+        public void apply() {
+            ProcessingInput[] before = toProcessingInput(input);
+            ProcessingInput[] after = new ProcessingInput[before.length + 1];
+            after[0] = ItemDefinition.of(MaidBlocks.GARAGE_KIT);
+            System.arraycopy(before, 0, after, 1, before.length);
+            AltarRecipesManager.instance().addRecipe(new ResourceLocation(id), new ReviveMaidAltarRecipe(powerCost, after));
+        }
+
+        @Override
+        public String describe() {
+            return "Add maid revive craft recipe: " + id;
+        }
+    }
+
+    public static class AddEntitySpawnCraftRecipe implements IAction {
+        private final String id;
+        private final float powerCost;
+        private final String entityId;
+        private final IIngredient[] input;
+
+        public AddEntitySpawnCraftRecipe(String id, float powerCost, String entityId, IIngredient[] input) {
+            this.id = id;
+            this.powerCost = powerCost;
+            this.entityId = entityId;
+            this.input = input;
+        }
+
+        @Override
+        public void apply() {
+            AltarRecipesManager.instance().addRecipe(new ResourceLocation(id),
+                    new AltarRecipe(new ResourceLocation(entityId), powerCost,
+                            ItemStack.EMPTY, toProcessingInput(input)));
+        }
+
+        @Override
+        public String describe() {
+            return "Add altar entity spawn craft recipe: " + id;
         }
     }
 }
