@@ -359,6 +359,10 @@
       "model_id": "touhou_little_maid:ibaraki_kasen",
       "description": ["{model.touhou_little_maid.ibaraki_kasen.desc}"]
     }, {
+      "model_id": "touhou_little_maid:ibaraki_kasen_2",
+      "name": "{model.touhou_little_maid.ibaraki_kasen.name}",
+      "description": ["{model.touhou_little_maid.ibaraki_kasen.desc}"]
+    }, {
       "model_id": "touhou_little_maid:motoori_kosuzu",
       "description": ["{model.touhou_little_maid.motoori_kosuzu.desc}"]
     }, {
@@ -394,6 +398,11 @@
     }, {
       "model_id": "touhou_little_maid:yumemi_okazaki",
       "description": ["{model.touhou_little_maid.yumemi_okazaki.desc}"]
+    }, {
+      "model_id": "touhou_little_maid:moesumika",
+      "easter_egg": {
+        "tag": "moesumika"
+      }
     }
   ]
 }
