@@ -49,7 +49,7 @@ public class EntityPowerPoint extends Entity {
      */
     public EntityPowerPoint(World worldIn, double x, double y, double z, int powerValue) {
         super(worldIn);
-        this.setSize(0.5F, 0.5F);
+        this.setSize(0.25F, 0.25F);
         this.setPosition(x, y, z);
         this.rotationYaw = (float) (Math.random() * 360.0);
         this.motionX = (Math.random() * 0.2 - 0.1) * 2.0;

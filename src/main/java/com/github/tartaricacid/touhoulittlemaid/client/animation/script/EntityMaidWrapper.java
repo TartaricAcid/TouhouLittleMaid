@@ -110,4 +110,12 @@ public class EntityMaidWrapper {
     public float getMaxHealth() {
         return maid.getMaxHealth();
     }
+
+    public boolean hasAttackTarget() {
+        return maid.getAttackTarget() != null;
+    }
+
+    public boolean onHurt() {
+        return maid.hurtTime > 0;
+    }
 }
