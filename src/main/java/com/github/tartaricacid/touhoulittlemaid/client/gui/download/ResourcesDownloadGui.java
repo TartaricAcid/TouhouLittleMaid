@@ -81,7 +81,7 @@ public class ResourcesDownloadGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        // 中心点e
+        // 中心点
         int middleX = this.width / 2;
         int middleY = this.height / 2;
 
@@ -91,7 +91,7 @@ public class ResourcesDownloadGui extends GuiScreen {
             drawCenteredString(fontRenderer, I18n.format("gui.touhou_little_maid.resources_download.fail.2"), this.width / 2, this.height / 2, 0xfffff);
         } else {
             mc.renderEngine.bindTexture(BG);
-            drawModalRectWithCustomSizedTexture(middleX - 200, middleY - 85, 0, 0, 400, 256, 484, 256);
+            drawModalRectWithCustomSizedTexture(middleX - 200, middleY - 85, 0, 0, 400, 200, 484, 256);
             drawModalRectWithCustomSizedTexture(middleX - 19, middleY - 77 + (int) (169 * scroll), 400, 0, 4, 15, 484, 256);
             for (int i = 0; i < 4; i++) {
                 drawModalRectWithCustomSizedTexture(middleX - 196 + (28 * i), middleY - 110, 456, 194, 28, 25, 484, 256);
