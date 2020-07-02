@@ -151,6 +151,7 @@ public class MaidModelInfo implements IModelInfo {
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/blink.js"),
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/hurt.js"),
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
+                    new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/music_shake.js"),
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/leg/default.js"),
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/default.js"),
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/swing.js"),

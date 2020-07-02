@@ -1678,7 +1678,7 @@ public class EntityMaid extends AbstractEntityMaid {
         MIDDLE(2),
         BIG(3);
 
-        private int level;
+        private final int level;
 
         EnumBackPackLevel(int level) {
             this.level = level;
