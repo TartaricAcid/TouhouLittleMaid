@@ -1,0 +1,13 @@
+{
+  "sortnum": 18,
+  "name": "P 点",
+  "icon": "touhou_little_maid:power_point",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:power_point",
+      "text": "右键丢出，能够掉落实体 P 点。"
+    }
+  ]
+}

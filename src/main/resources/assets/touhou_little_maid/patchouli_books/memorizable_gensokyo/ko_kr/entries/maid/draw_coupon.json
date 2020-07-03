@@ -1,0 +1,32 @@
+{
+  "sortnum": 9,
+  "name": "뽑기 쿠폰",
+  "icon": "touhou_little_maid:maid_model_coupon:5",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "메이드 모델 자유 변경 설정이 꺼져 있을때를 위해 저희가 제작한 새 모델 변경 방식입니다. $(br2)마치 캡슐 뽑기처럼 플레이어가 에메랄드나 뽑기 코인을 이용해 뽑기를 하여 메이드 모델 쿠폰을 얻을 수 있습니다."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon_machines",
+      "text": "에메랄드나 뽑기 쿠폰을 들고 우클릭하여 뽑기 캡슐을 얻을 수 있습니다. 결과물의 등급 및 확률은 컨피그에서 조절할 수 있습니다."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon:4",
+      "text": "뽑기 캡슐을 들고 우클릭하여 모델 쿠폰을 얻을 수 있으며, 다른 등급의 뽑기 캡슐에서 각기 다른 등급의 모델 쿠폰을 얻을 수 있습니다.  $(br2)확률은 컨피그 파일에서 조절할 수 있습니다. 자세한 사항은 모드의 위키를 참조해 주세요."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_model_coupon:5",
+      "text": "메이드에 우클릭해 모델을 변경합니다."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon_coin",
+      "text": "란노스케를 처치해 뽑기 코인을 얻을 수 있습니다. 또는 모델 쿠폰을 조합해 뽑기 쿠폰을 얻을 수 있습니다."
+    }
+  ]
+}

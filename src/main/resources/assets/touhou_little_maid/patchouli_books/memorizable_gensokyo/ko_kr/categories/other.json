@@ -1,0 +1,6 @@
+{
+  "sortnum": 2,
+  "name": "기타",
+  "description": "다른 기타 컨텐츠에 대한 설명",
+  "icon": "touhou_little_maid:chair{ModelId:'touhou_little_maid:beach_chair'}"
+}

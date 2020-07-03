@@ -1,0 +1,13 @@
+{
+  "sortnum": 16,
+  "name": "雕刻刀与雕像",
+  "icon": "touhou_little_maid:chisel",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:chisel",
+      "text": "雕刻刀右击粘土可以做成不同尺寸大小的雕像，目前支持 1x1x1，1x1x2，2x2x4，3x3x6 大小尺寸。$(br2)玩家副手持有女仆照片，主手持有雕刻刀，右击多方块结构的左下角，即可雕刻出照片中的女仆。"
+    }
+  ]
+}

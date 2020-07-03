@@ -1,0 +1,17 @@
+{
+  "sortnum": 16,
+  "name": "Chisel and Statues",
+  "icon": "touhou_little_maid:chisel",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:chisel",
+      "text": "Right-click the clay with a chisel can make statues of different sizes. Currently supports 1x1x1, 1x1x2, 2x2x4, 3x3x6 sizes."
+    },
+    {
+      "type": "text",
+      "text": "The player holds a photo of the maid in offhand, the mainhand holds the chisel, then right-clicks the lower left corner of the multi-block structure to engrave the maid in the photo."
+    }
+  ]
+}

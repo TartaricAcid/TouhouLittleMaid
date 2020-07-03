@@ -1,0 +1,13 @@
+{
+  "sortnum": 17,
+  "name": "Extinguisher",
+  "icon": "touhou_little_maid:extinguisher",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:extinguisher",
+      "text": "The items used with the maid extinguishing mode and cannot be used by players."
+    }
+  ]
+}

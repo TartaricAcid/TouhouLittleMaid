@@ -1,13 +1,13 @@
 {
   "sortnum": 10,
-  "name": "Backpack",
+  "name": "배낭",
   "icon": "touhou_little_maid:maid_backpack",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_backpack",
-      "text": "The backpack can be used to expand the inventory of the maid. It can be applied by holding the backpack and right-click on the maid. The backpack has three levels. $(br2)Use the camera to remove the maid's backpack, and backpack can be remove by shift left-click."
+      "text": "메이드의 인벤토리를 확장하는데 사용할 수 있는 배낭입니다. 배낭을 들고 메이드를 우클릭해 착용시킬 수 있습니다. 배낭에는 총 3개의 레벨이 존재합니다.$(br2) 배낭을 내려놓게 하려면 카메라를 사용하거나 쉬프트+좌클릭을 하세요."
     },
     {
       "type": "text",
