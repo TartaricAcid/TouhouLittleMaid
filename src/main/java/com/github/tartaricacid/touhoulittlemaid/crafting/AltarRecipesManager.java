@@ -55,6 +55,7 @@ public class AltarRecipesManager {
         ProcessingInput ingotGold = OreDictDefinition.of("ingotGold");
         ProcessingInput ingotIron = OreDictDefinition.of("ingotIron");
         ProcessingInput blockGlass = OreDictDefinition.of("blockGlass");
+        ProcessingInput clayBall = ItemDefinition.of(Items.CLAY_BALL);
         ProcessingInput blockBlackWool = ItemDefinition.of(Blocks.WOOL, 15);
         ProcessingInput blockRedWool = ItemDefinition.of(Blocks.WOOL, 14);
         ProcessingInput blockBrownWool = ItemDefinition.of(Blocks.WOOL, 12);
@@ -209,6 +210,21 @@ public class AltarRecipesManager {
                 0.3f, new ItemStack(MaidItems.PORTABLE_AUDIO),
                 ItemDefinition.of(Blocks.JUKEBOX), blockBlackWool, blockBlackWool,
                 blockBlackWool, blockBlackWool, blockBlackWool);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_chisel"),
+                0.2f, new ItemStack(MaidItems.CHISEL),
+                stick, stick, ingotIron,
+                ingotIron, dyeYellow, dyeRed);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_chisel"),
+                0.2f, new ItemStack(MaidItems.CHISEL),
+                stick, stick, ingotIron,
+                ingotIron, dyeYellow, dyeRed);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_clay_ball"),
+                0.2f, new ItemStack(MaidItems.EXTINGUISHER),
+                clayBall, clayBall, clayBall,
+                clayBall, ingotIron, dyeRed);
     }
 
     public static AltarRecipesManager instance() {

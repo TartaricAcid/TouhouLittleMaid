@@ -20,4 +20,12 @@ public class WorldWrapper {
     public boolean isNight() {
         return !world.isDaytime();
     }
+
+    public boolean isRaining() {
+        return world.isRaining();
+    }
+
+    public boolean isThundering() {
+        return world.isThundering();
+    }
 }

@@ -138,7 +138,6 @@ message.touhou_little_maid.altar.not_enough_power=你的 P 点不足。
 message.touhou_little_maid.tombstone.place_fail=墓碑放置失败！
 message.touhou_little_maid.tombstone.on_block_activated=墓碑已经被收回！
 message.touhou_little_maid.missing_patchouli=[{"text":"[车万女仆] ","color":"green","bold":true},{"text":"点击此处","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://media.forgecdn.net/files/2731/963/Patchouli-1.0-20.jar"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":"安装帕秋莉模组来获取手册","color":"yellow","bold":false}]
-message.touhou_little_maid.java_version_old=[{"text":"[车万女仆] ","color":"green","bold":true},{"text":"你的 Java 8 版本过低，符卡无法正常加载，建议使用 60 及以上版本的 Java。","color":"yellow","bold":false}]
 message.touhou_little_maid.broom.message=只有创造模式玩家可以骑乘，但是你可以修改配置文件关闭此限制
 message.touhou_little_maid.debug_danmaku.type=当前类型：%s
 message.touhou_little_maid.owner_maid_num.can_not_add=你无法再驯服女仆，你已经达到了上限（%d/%d）

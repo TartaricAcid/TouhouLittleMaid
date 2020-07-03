@@ -10,18 +10,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 
 public class EntityMaidWrapper {
     public float swingProgress;
     public boolean isRiding;
     private EntityMaid maid;
     private WorldWrapper world;
+    private Biome biome;
 
     public void setData(EntityMaid maid, float swingProgress, boolean isRiding) {
         this.maid = maid;
         this.swingProgress = swingProgress;
         this.isRiding = isRiding;
         this.world = new WorldWrapper(maid.world);
+        this.biome = maid.world.getBiome(maid.getPosition());
     }
 
     public WorldWrapper getWorld() {
@@ -130,6 +133,26 @@ public class EntityMaidWrapper {
 
     public boolean hasSasimono() {
         return maid.hasSasimono();
+    }
+
+    public boolean inWater() {
+        return maid.isInWater();
+    }
+
+    public boolean inRain() {
+        return maid.world.isRainingAt(maid.getPosition());
+    }
+
+    public String getAtBiome() {
+        ResourceLocation res = biome.getRegistryName();
+        if (res != null) {
+            return res.getPath();
+        }
+        return "";
+    }
+
+    public String getAtBiomeTemp() {
+        return biome.getTempCategory().name();
     }
 
     public boolean isHoldTrolley() {

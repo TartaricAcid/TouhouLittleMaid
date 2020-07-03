@@ -138,7 +138,6 @@ message.touhou_little_maid.altar.not_enough_power=You don't have enough power.
 message.touhou_little_maid.tombstone.place_fail=Tombstone Place Fail!
 message.touhou_little_maid.tombstone.on_block_activated=Tombstone Has Been Taken Back!
 message.touhou_little_maid.missing_patchouli=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Click Here","color":"gold","underlined":true,"bold":false,"clickEvent":{"action":"open_url","value":"https://media.forgecdn.net/files/2731/963/Patchouli-1.0-20.jar"},"hoverEvent":{"action":"show_text","value":"https://www.curseforge.com/minecraft/mc-mods/patchouli"}},{"text":" To Install Patchouli Mod To Get The Manual","color":"yellow","bold":false}]
-message.touhou_little_maid.java_version_old=[{"text":"[Touhou Little Maid] ","color":"green","bold":true},{"text":"Your version of Java 8 is too low and the spell card cannot load properly. It is recommended to use Java 8 version 60 and above.","color":"yellow","bold":false}]
 message.touhou_little_maid.broom.message=Only creative mode player can ride it, but you can disable it by modifying the configuration.
 message.touhou_little_maid.debug_danmaku.type=Current Type: %s
 message.touhou_little_maid.owner_maid_num.can_not_add=You can no longer tame maids, you have reached the limit (%d/%d)

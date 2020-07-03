@@ -26,12 +26,12 @@ Java.asJSONCompatible({
 
 function ridingPosture(legLeft, legRight) {
     if (legLeft != undefined) {
-        legLeft.setRotateAngleX(-0.960);
-        legLeft.setRotateAngleZ(-0.523);
+        legLeft.setRotateAngleX(-1.134);
+        legLeft.setRotateAngleZ(-0.262);
     }
     if (legRight != undefined) {
-        legRight.setRotateAngleX(-0.960);
-        legRight.setRotateAngleZ(0.523);
+        legRight.setRotateAngleX(-1.134);
+        legRight.setRotateAngleZ(0.262);
     }
     GlWrapper.translate(0, 0.3, 0);
 }
