@@ -27,6 +27,10 @@ public class EntityChairWrapper {
         return 0;
     }
 
+    public float getYaw() {
+        return chair.rotationYaw;
+    }
+
     public float getPassengerPitch() {
         if (!chair.getPassengers().isEmpty()) {
             return chair.getPassengers().get(0).rotationPitch;

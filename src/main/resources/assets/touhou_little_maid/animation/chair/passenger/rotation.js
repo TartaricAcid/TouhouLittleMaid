@@ -4,7 +4,7 @@ Java.asJSONCompatible({
         passengerRotationPitch = modelMap.get("passengerRotationPitch");
 
         if (passengerRotationYaw != undefined) {
-            passengerRotationYaw.setRotateAngleY((chair.getPassengerYaw() + 90) * 0.017453292);
+            passengerRotationYaw.setRotateAngleY((chair.getPassengerYaw() - chair.getYaw()) * 0.017453292);
         }
         if (passengerRotationPitch != undefined) {
             passengerRotationPitch.setRotateAngleX(chair.getPassengerPitch() * 0.017453292);
