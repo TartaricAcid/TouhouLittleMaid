@@ -43,7 +43,7 @@ repositories {
     maven {
         // HWYLA
         name = "Tehnut Maven"
-        url = "http://tehnut.info/maven"
+        url = "https://maven.tehnut.info"
     }
     maven {
         // The One Probe
@@ -71,7 +71,7 @@ dependencies {
         exclude group: 'cofh'
     }
     deobfCompile "MCMultiPart2:MCMultiPart:${mcmp_version}"
-    compile "vazkii.patchouli:Patchouli:${patchouli_version}"
+    deobfCompile "vazkii.patchouli:Patchouli:${patchouli_version}"
 
     // 想要了解更多，可以查询如下网址
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
