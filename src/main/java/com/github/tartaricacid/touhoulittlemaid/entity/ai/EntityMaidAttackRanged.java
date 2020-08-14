@@ -1,12 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskAttackRanged;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityMaidAttackRanged extends EntityAIBase {
@@ -19,6 +24,8 @@ public class EntityMaidAttackRanged extends EntityAIBase {
     private boolean strafingClockwise;
     private boolean strafingBackwards;
     private int strafingTime = -1;
+    //切换武器的CD，女仆换武器就不用时间了吗？？！！
+    private int pickUpItemCoolDown = 0;
 
     public EntityMaidAttackRanged(AbstractEntityMaid entity, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn) {
         this.entity = entity;
@@ -34,24 +41,90 @@ public class EntityMaidAttackRanged extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        // 能够远程攻击：模式正确、主手持弓、身上有箭
-        boolean canRangeAttack = this.isBowInMainhand() && TaskAttackRanged.findArrow(entity) >= 0;
-        // 能够弹幕攻击：模式正确、主手持御币
-        boolean canDanmakuAttack = this.isGoheiInMainhand();
-        // 能够处理攻击：攻击目标不为空、上述两者攻击存在一个
-        EntityLivingBase target = this.entity.getAttackTarget();
-        boolean canAttack = target != null && target.isEntityAlive()
-                && entity.isWithinHomeDistanceFromPosition(new BlockPos(target))
-                && (canRangeAttack || canDanmakuAttack);
-        return !entity.isSitting() && canAttack;
+        //切换武器的冷却时间
+        if (pickUpItemCoolDown > 0) {
+            pickUpItemCoolDown--;
+        }
+        //没坐下才能干点什么
+        if (!entity.isSitting()) {
+            //判断当前是否有攻击对象，对象是否存活，以及能否到达
+            EntityLivingBase attackTarget = entity.getAttackTarget();
+            if (attackTarget != null && attackTarget.isEntityAlive() && entity.isWithinHomeDistanceFromPosition(new BlockPos(attackTarget))) {
+                //判断当前是弓箭模式还是御币模式
+                ResourceLocation taskUid = entity.getTaskUid();
+                if (taskUid == TaskAttackRanged.UID) {
+                    //射箭，总得先有箭吧
+                    if (TaskAttackRanged.findArrow(entity) >= 0) {
+                        boolean hasBow;
+                        //切换武器冷却完毕，切换武器冷却同时也是为了减少高频遍历物品
+                        if (pickUpItemCoolDown <= 0) {
+                            //判断当前是否持有弓类攻击武器
+                            //寻找伤害最高的弓类攻击武器
+                            //交换物品到主手
+                            hasBow = entity.MoveItemsToMainhandForMaxPriority(i -> bowWeight(i) > 0, this::bowWeight);
+                        } else {
+                            hasBow = bowWeight(entity.getHeldItemMainhand()) > 0;
+                        }
+                        if (!hasBow) {
+                            //没有武器想射点什么？
+                            if (pickUpItemCoolDown > 0) {
+                                //很想射点什么
+                                pickUpItemCoolDown = pickUpItemCoolDown - 4;
+                            }
+                            return false;
+                        } else {
+                            //在射点什么的时候不得冷却一下？差不多128个红石刻？2秒？
+                            pickUpItemCoolDown = 128;
+                            return true;
+                        }
+                    }
+                } else if (taskUid == TaskAttackDanmaku.UID) {
+                    boolean hasGohei;
+                    //切换武器冷却完毕，切换武器冷却同时也是为了减少高频遍历物品
+                    if (pickUpItemCoolDown <= 0) {
+                        //判断当前是否持有御币武器
+                        //寻找伤害最高的御币武器
+                        //交换物品到主手
+                        hasGohei = entity.MoveItemsToMainhandForMaxPriority(i -> goheiWeight(i) > 0, this::goheiWeight);
+                    } else {
+                        hasGohei = goheiWeight(entity.getHeldItemMainhand()) > 0;
+                    }
+                    if (!hasGohei) {
+                        //没有武器想射点什么？
+                        if (pickUpItemCoolDown > 0) {
+                            //很想射点什么
+                            pickUpItemCoolDown = pickUpItemCoolDown - 4;
+                        }
+                        return false;
+                    } else {
+                        //在射点什么的时候不得冷却一下？差不多128个红石刻？2秒？
+                        pickUpItemCoolDown = 128;
+                        return true;
+                    }
+                }
+                //也许以后有其他远程攻击模式？
+            }
+        }
+        return false;
     }
 
-    private boolean isBowInMainhand() {
-        return this.entity.getHeldItemMainhand().getItem() instanceof ItemBow;
+    //计算该物品作为弓类武器的比重，0为不适合
+    private int bowWeight(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        if (item instanceof ItemBow) {
+            //就优先装备低耐久弓吧
+            return Math.max(itemStack.getItemDamage(), 1);
+        }
+        return 0;
     }
 
-    private boolean isGoheiInMainhand() {
-        return this.entity.getHeldItemMainhand().getItem() == MaidItems.HAKUREI_GOHEI;
+    //计算该物品作为御币武器的比重，0为不适合
+    private int goheiWeight(ItemStack itemStack) {
+        if (itemStack.getItem() == MaidItems.HAKUREI_GOHEI) {
+            //就优先装备低耐久御币吧
+            return Math.max(itemStack.getItemDamage(), 1);
+        }
+        return 0;
     }
 
     @Override
