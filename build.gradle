@@ -43,10 +43,11 @@ repositories {
     maven {
         // HWYLA
         name = "Tehnut Maven"
-        url = "http://tehnut.info/maven"
+        url = "https://maven.tehnut.info/"
     }
     maven {
         // The One Probe
+        //https://maven.tterrag.com/mcjty/theoneprobe/TheOneProbe-1.12/1.12-1.4.22-13/TheOneProbe-1.12-1.12-1.4.22-13.pom
         name = 'tterrag maven'
         url = "http://maven.tterrag.com/"
     }
