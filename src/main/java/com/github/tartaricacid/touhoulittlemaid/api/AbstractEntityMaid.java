@@ -4,11 +4,15 @@ import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.CooldownTracker;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @author Snownee
@@ -18,6 +22,13 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
     public AbstractEntityMaid(World worldIn) {
         super(worldIn);
     }
+
+    /**
+     * 获取女仆的当前AI的UID
+     *
+     * @return AI的UID
+     */
+    abstract public ResourceLocation getTaskUid();
 
     /**
      * 获取女仆的饰品栏
@@ -41,6 +52,15 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * @return IItemHandlerModifiable 对象
      */
     abstract public IItemHandlerModifiable getInv(MaidInventory type);
+
+    /**
+     * 判断主手物品是否满足条件，否则寻找优先级最大的物品交换到主手
+     *
+     * @param itemRule        如果主手满足条件，则无需交换
+     * @param priorityHandler 如果主手不满足条件，则交换。优先级大于0才是有效物品，寻找优先级最大的物品
+     * @return 返回true主手物品已符合条件，反之false
+     */
+    abstract public boolean MoveItemsToMainhandForMaxPriority(Predicate<ItemStack> itemRule, Function<ItemStack, Integer> priorityHandler);
 
     /**
      * 女仆能否破坏方块

@@ -88,6 +88,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
@@ -177,6 +179,16 @@ public class EntityMaid extends AbstractEntityMaid {
     public EntityMaid(World worldIn) {
         super(worldIn);
         setSize(0.6f, 1.5f);
+    }
+
+    /**
+     * 获取女仆的当前AI的UID
+     *
+     * @return AI的UID
+     */
+    @Override
+    public ResourceLocation getTaskUid() {
+        return task.getUid();
     }
 
     @SuppressWarnings("unchecked")
@@ -1133,6 +1145,45 @@ public class EntityMaid extends AbstractEntityMaid {
             default:
                 return mainInv;
         }
+    }
+
+    /**
+     * 判断主手物品是否满足条件，否则寻找优先级最大的物品交换到主手
+     *
+     * @param itemRule        如果主手满足条件，则无需交换
+     * @param priorityHandler 如果主手不满足条件，则交换。优先级大于0才是有效物品，寻找优先级最大的物品
+     * @return 返回true主手物品已符合条件，反之false
+     */
+    @Override
+    public boolean MoveItemsToMainhandForMaxPriority(Predicate<ItemStack> itemRule, Function<ItemStack, Integer> priorityHandler) {
+        CombinedInvWrapper availableInv = getAvailableInv(true);
+        if (!itemRule.test(availableInv.getStackInSlot(0))) {
+            int maxPriorityItem = 0;
+            int itemIndex = -1;
+            for (int i = 1; i < availableInv.getSlots(); i++) {
+                ItemStack stack = availableInv.getStackInSlot(i);
+                int priority = priorityHandler.apply(stack);
+                if (priority > maxPriorityItem) {
+                    maxPriorityItem = priority;
+                    itemIndex = i;
+                }
+            }
+            if (itemIndex > 0) {
+                //将主手的物品放入副手或物品栏，从背包或副手取出寻找到的剑类武器
+                ItemStack pickUpItem = availableInv.extractItem(itemIndex, availableInv.getSlotLimit(itemIndex), false);
+                ItemStack putDownItem = availableInv.extractItem(0, availableInv.getSlotLimit(0), false);
+                int i = 1;
+                int countSlots = availableInv.getSlots();
+                while (putDownItem.getCount() > 0 && i < countSlots) {
+                    putDownItem = availableInv.insertItem(i, putDownItem, false);
+                    i++;
+                }
+                availableInv.insertItem(0, pickUpItem, false);
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
