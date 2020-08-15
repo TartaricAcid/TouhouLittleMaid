@@ -257,7 +257,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         try {
             stream = mc.getResourceManager().getResource(icon).getInputStream();
             BufferedImage img = ImageIO.read(stream);
-            if (img.getWidth() == img.getHeight()) {
+            if (img.getWidth() >= img.getHeight()) {
                 pack.setIconAnimation(CustomModelPack.AnimationState.FALSE);
             } else {
                 pack.setIconAnimation(CustomModelPack.AnimationState.TRUE);

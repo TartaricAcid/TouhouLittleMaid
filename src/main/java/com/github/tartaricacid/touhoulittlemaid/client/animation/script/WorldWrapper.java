@@ -14,11 +14,11 @@ public class WorldWrapper {
     }
 
     public boolean isDay() {
-        return world.isDaytime();
+        return world.getWorldTime() < 13000;
     }
 
     public boolean isNight() {
-        return !world.isDaytime();
+        return world.getWorldTime() >= 13000;
     }
 
     public boolean isRaining() {

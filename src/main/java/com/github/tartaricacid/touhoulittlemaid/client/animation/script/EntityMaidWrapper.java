@@ -217,10 +217,6 @@ public class EntityMaidWrapper {
         return maid.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue();
     }
 
-    public boolean hasAttackTarget() {
-        return maid.getAttackTarget() != null;
-    }
-
     public boolean onHurt() {
         return maid.hurtTime > 0;
     }
