@@ -567,7 +567,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean canAttackClass(Class<? extends EntityLivingBase> cls) {
-        return cls != AbstractEntityFromItem.class && cls != EntityArmorStand.class && super.canAttackClass(cls);
+        return !AbstractEntityFromItem.class.isAssignableFrom(cls) && cls != EntityArmorStand.class && super.canAttackClass(cls);
     }
 
     @Override
