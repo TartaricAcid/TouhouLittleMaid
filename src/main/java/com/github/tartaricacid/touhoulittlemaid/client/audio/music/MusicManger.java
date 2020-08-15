@@ -117,8 +117,12 @@ public final class MusicManger {
                     neteaseMusicList.setMusicJsonInfo(info);
                     neteaseMusicList.getPlayList().deco();
                     neteaseMusicList.setListId(id);
-                    MUSIC_LIST_GROUP.add(neteaseMusicList);
-                    TouhouLittleMaid.LOGGER.info("{} NetEase cloud music information obtained successfully", id);
+                    if (neteaseMusicList.getPlayList().getTrackCount() > 0) {
+                        MUSIC_LIST_GROUP.add(neteaseMusicList);
+                        TouhouLittleMaid.LOGGER.info("{} NetEase cloud music information obtained successfully", id);
+                    } else {
+                        TouhouLittleMaid.LOGGER.info("{} Music list track number is 0", id);
+                    }
                 }
                 // 防止高频访问，导致被网易云音乐屏蔽
                 // 随机 sleep 15 ~ 30 秒
