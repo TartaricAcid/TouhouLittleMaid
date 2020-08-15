@@ -189,41 +189,6 @@ public class MaidSkinDetailsGui extends AbstractSkinDetailsGui<EntityMaid, MaidM
     void drawSideButtonTooltips(int mouseX, int mouseY) {
     }
 
-    @Override
-    void loadAnimation(Object scriptObject) {
-        CustomResourcesLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), Collections.singletonList(scriptObject));
-    }
-
-    @Override
-    void reloadModel() {
-        CustomResourcesLoader.MAID_MODEL.putModel(modelItem.getModelId().toString(), CustomResourcesLoader.loadModel(modelItem.getModel()));
-    }
-
-    @Override
-    void resetAnimationAndModel() {
-        List<Object> animations = CustomJsAnimationManger.getCustomAnimation(modelItem);
-        if (animations != null && animations.size() > 0) {
-            CustomResourcesLoader.MAID_MODEL.putAnimation(modelItem.getModelId().toString(), animations);
-        }
-        reloadModel();
-    }
-
-    @Override
-    void putDebugAnimation(File debugAnimationFile) {
-        CustomResourcesLoader.MAID_MODEL.putDebugAnimation(modelItem.getModelId().toString(), debugAnimationFile.getAbsolutePath());
-    }
-
-    @Nullable
-    @Override
-    String getDebugAnimationFile() {
-        return CustomResourcesLoader.MAID_MODEL.getDebugAnimationFilePath(modelItem.getModelId().toString());
-    }
-
-    @Override
-    void removeDebugAnimationFile() {
-        CustomResourcesLoader.MAID_MODEL.removeDebugAnimation(modelItem.getModelId().toString());
-    }
-
     private void applyBegButtonLogic() {
         begButton.setStateTriggered(!begButton.isStateTriggered());
         guiEntity.setBegging(!guiEntity.isBegging());

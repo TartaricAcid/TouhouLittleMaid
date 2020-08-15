@@ -64,22 +64,6 @@ public class CustomJsAnimationManger {
         return null;
     }
 
-    public static void loadDebugAnimation(File file, Consumer<Object> consumer) {
-        InputStream stream = null;
-        try {
-            stream = new FileInputStream(file);
-            Bindings bindings = CommonProxy.NASHORN.createBindings();
-            Object scriptObject = CommonProxy.NASHORN.eval(IOUtils.toString(stream, StandardCharsets.UTF_8), bindings);
-            if (scriptObject != null) {
-                consumer.accept(scriptObject);
-            }
-        } catch (IOException | ScriptException e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.closeQuietly(stream);
-        }
-    }
-
     public static void clearAll() {
         CUSTOM_ANIMATION_MAP.clear();
     }

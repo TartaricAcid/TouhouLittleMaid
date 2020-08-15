@@ -97,41 +97,6 @@ public class ChairSkinDetailsGui extends AbstractSkinDetailsGui<EntityChair, Cha
     }
 
     @Override
-    void loadAnimation(Object scriptObject) {
-        CustomResourcesLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), Collections.singletonList(scriptObject));
-    }
-
-    @Override
-    void reloadModel() {
-        CustomResourcesLoader.CHAIR_MODEL.putModel(modelItem.getModelId().toString(), CustomResourcesLoader.loadModel(modelItem.getModel()));
-    }
-
-    @Override
-    void resetAnimationAndModel() {
-        List<Object> animations = CustomJsAnimationManger.getCustomAnimation(modelItem);
-        if (animations != null && animations.size() > 0) {
-            CustomResourcesLoader.CHAIR_MODEL.putAnimation(modelItem.getModelId().toString(), animations);
-        }
-        reloadModel();
-    }
-
-    @Override
-    void putDebugAnimation(File debugAnimationFile) {
-        CustomResourcesLoader.CHAIR_MODEL.putDebugAnimation(modelItem.getModelId().toString(), debugAnimationFile.getAbsolutePath());
-    }
-
-    @Nullable
-    @Override
-    String getDebugAnimationFile() {
-        return CustomResourcesLoader.CHAIR_MODEL.getDebugAnimationFilePath(modelItem.getModelId().toString());
-    }
-
-    @Override
-    void removeDebugAnimationFile() {
-        CustomResourcesLoader.CHAIR_MODEL.removeDebugAnimation(modelItem.getModelId().toString());
-    }
-
-    @Override
     void drawSideButtonText() {
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.skin_details.mounted_height"), 5, 22, 0xcacad4);
         String data = String.format("%.2f", guiEntity.getMountedHeight() / 0.0625f + 3);

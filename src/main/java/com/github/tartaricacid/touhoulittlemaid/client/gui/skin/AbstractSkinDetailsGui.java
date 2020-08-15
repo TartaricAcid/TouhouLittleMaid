@@ -1,13 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
-import net.minecraft.client.gui.GuiButtonToggle;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -19,22 +17,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
-import org.apache.commons.io.monitor.FileAlterationMonitor;
-import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.vecmath.Point4d;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -48,13 +36,6 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.skin.AbstractS
 @SideOnly(Side.CLIENT)
 public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U extends IModelInfo> extends GuiScreen {
     protected static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
-    /**
-     * 文件监控相关
-     */
-    private static final long FILE_ALTERATION_INTERVAL = TimeUnit.SECONDS.toMillis(1);
-    private static FileAlterationMonitor FILE_ALTERATION_MONITOR;
-    private static boolean ENABLE_FILE_ALTERATION = true;
-    private File animationFile;
 
     /**
      * 部分缩放，旋转所限制的范围
@@ -90,18 +71,12 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
     private float yaw = -45;
     private float pitch = -30;
 
-    private GuiButtonToggle fileAlterationButton;
-
     public AbstractSkinDetailsGui(T sourceEntity, T guiEntity, U modelItem) {
         this.sourceEntity = sourceEntity;
         this.guiEntity = guiEntity;
         this.modelItem = modelItem;
         // 启用模拟 tick 线程
         simulationTickRun();
-        // 启用文件监控
-        fileAlterationRun();
-        // 尝试获取缓存的调试脚本文件
-        loadCacheDebugAnimationFile();
     }
 
     /**
@@ -125,37 +100,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
      * 处理返回按钮的逻辑
      */
     abstract void applyReturnButtonLogic();
-
-    /**
-     * 自定义动画的加载
-     */
-    abstract void loadAnimation(Object scriptObject);
-
-    /**
-     * 重载模型（因为模型会缓存，而动画会影响模型，所以需要重载恢复为默认值）
-     */
-    abstract void reloadModel();
-
-    /**
-     * 恢复为默认的动画和模型
-     */
-    abstract void resetAnimationAndModel();
-
-    /**
-     * 缓存当前模型对应的调试动画脚本文件路径
-     */
-    abstract void putDebugAnimation(File debugAnimationFile);
-
-    /**
-     * 获取当前模型对应的调试动画脚本文件
-     */
-    @Nullable
-    abstract String getDebugAnimationFile();
-
-    /**
-     * 移除当前模型缓存的调试动画脚本文件
-     */
-    abstract void removeDebugAnimationFile();
 
     /**
      * 绘制侧边栏按钮上的文字
@@ -198,19 +142,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
         drawButtonTooltips(mouseX, mouseY);
     }
 
-    private void loadCacheDebugAnimationFile() {
-        if (getDebugAnimationFile() != null) {
-            File file = new File(getDebugAnimationFile());
-            if (file.isFile()) {
-                animationFile = file;
-                TouhouLittleMaid.LOGGER.info("loading {} animation file", file.getAbsolutePath());
-                reloadModel();
-                CustomJsAnimationManger.loadDebugAnimation(file, this::loadAnimation);
-                addFileAlteration(animationFile);
-            }
-        }
-    }
-
     /**
      * 创建一个模拟 tick 的定时线程
      */
@@ -230,15 +161,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
         }, 0, 50, TimeUnit.MILLISECONDS);
     }
 
-    private void fileAlterationRun() {
-        FILE_ALTERATION_MONITOR = new FileAlterationMonitor(FILE_ALTERATION_INTERVAL);
-        try {
-            FILE_ALTERATION_MONITOR.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onGuiClosed() {
         mc.addScheduledTask(this::closeThread);
@@ -247,12 +169,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
     private void closeThread() {
         // 关闭模拟线程
         TIMER.shutdownNow();
-        // 关闭文件监控
-        try {
-            FILE_ALTERATION_MONITOR.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -279,9 +195,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
         String info = String.format("%s%d FPS %.2f%%", TextFormatting.BOLD, Minecraft.getDebugFPS(), scale * 100 / 80);
         fontRenderer.drawString(name, 136, this.height - 12, 0xcacad4, false);
         fontRenderer.drawString(info, this.width - fontRenderer.getStringWidth(info) - 4, this.height - 12, 0xcacad4, false);
-        if (animationFile != null) {
-            fontRenderer.drawString(TextFormatting.DARK_GRAY + I18n.format("gui.touhou_little_maid.skin_details.loaded_file", animationFile.getName()), 136, this.height - 26, 0xffffff, false);
-        }
     }
 
     /**
@@ -311,18 +224,9 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
                 30, 24, 15, BUTTON_TEXTURE);
         GuiButtonImage returnButton = new GuiButtonImage(RETURN.getIndex(), width - 45, 0, 15, 15,
                 15, 24, 15, BUTTON_TEXTURE);
-        GuiButtonImage animationJsButton = new GuiButtonImage(ANIMATION.getIndex(), 133, 16, 15, 15,
-                45, 24, 15, BUTTON_TEXTURE);
-        GuiButtonImage resetAnimationModelButton = new GuiButtonImage(RESET_ANIMATION_MODEL.getIndex(), 163, 16, 15, 15,
-                90, 24, 15, BUTTON_TEXTURE);
-        fileAlterationButton = new GuiButtonToggle(FILE_ALTERATION.getIndex(), 148, 16, 15, 15, ENABLE_FILE_ALTERATION);
-        fileAlterationButton.initTextureValues(75, 24, -15, 15, BUTTON_TEXTURE);
         addButton(closeButton);
         addButton(floorButton);
         addButton(returnButton);
-        addButton(animationJsButton);
-        addButton(fileAlterationButton);
-        addButton(resetAnimationModelButton);
         initSideButton();
     }
 
@@ -338,84 +242,9 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
             case RETURN:
                 applyReturnButtonLogic();
                 return;
-            case ANIMATION:
-                applyAnimationChooseLogic();
-                return;
-            case FILE_ALTERATION:
-                applyFileAlterationLogic();
-                return;
-            case RESET_ANIMATION_MODEL:
-                applyResetAnimationModelLogic();
-                return;
             case OTHER:
             default:
                 actionSideButtonPerformed(button);
-        }
-    }
-
-    /**
-     * 处理自定义动画文件的选择按钮
-     */
-    protected void applyAnimationChooseLogic() {
-        Path configPath = mc.gameDir.toPath().resolve("config").resolve("touhou_little_maid");
-        if (!Files.isDirectory(configPath)) {
-            try {
-                Files.createDirectories(configPath);
-            } catch (IOException ignore) {
-                return;
-            }
-        }
-        JFileChooser fileChooser = new JFileChooser(configPath.toFile());
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                I18n.format("gui.touhou_little_maid.animation_choose.file_filter.description"),
-                "js");
-        fileChooser.setFileFilter(filter);
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            animationFile = fileChooser.getSelectedFile();
-            putDebugAnimation(animationFile);
-            loadFile(animationFile);
-            addFileAlteration(animationFile);
-        }
-    }
-
-    private void applyFileAlterationLogic() {
-        ENABLE_FILE_ALTERATION = !ENABLE_FILE_ALTERATION;
-        fileAlterationButton.setStateTriggered(ENABLE_FILE_ALTERATION);
-        // 当开启时候，也顺便加载下动画吧
-        if (ENABLE_FILE_ALTERATION) {
-            loadFile(animationFile);
-        }
-    }
-
-    private void applyResetAnimationModelLogic() {
-        resetAnimationAndModel();
-        removeDebugAnimationFile();
-        animationFile = null;
-    }
-
-    private void addFileAlteration(File file) {
-        FileAlterationObserver observer = new FileAlterationObserver(file.getParent(), FileFilterUtils.nameFileFilter(file.getName()));
-        observer.addListener(new FileAlterationListenerAdaptor() {
-            @Override
-            public void onFileChange(File file) {
-                if (ENABLE_FILE_ALTERATION) {
-                    loadFile(file);
-                }
-            }
-        });
-        // 先清空，再添加
-        for (FileAlterationObserver o : FILE_ALTERATION_MONITOR.getObservers()) {
-            FILE_ALTERATION_MONITOR.removeObserver(o);
-        }
-        FILE_ALTERATION_MONITOR.addObserver(observer);
-    }
-
-    private void loadFile(@Nullable File file) {
-        if (file != null) {
-            TouhouLittleMaid.LOGGER.info("loading {} animation file", file.getAbsolutePath());
-            mc.addScheduledTask(this::reloadModel);
-            mc.addScheduledTask(() -> CustomJsAnimationManger.loadDebugAnimation(file, this::loadAnimation));
         }
     }
 
@@ -444,28 +273,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
         isInWidthRange = width - 45 < mouseX && mouseX < width - 30;
         if (isInWidthRange && isInHeightRange) {
             drawHoveringText(I18n.format("gui.touhou_little_maid.skin_details.return"), mouseX + 16, mouseY + 24);
-        }
-
-        isInWidthRange = 133 < mouseX && mouseX < 148;
-        isInHeightRange = 16 < mouseY && mouseY < 31;
-        if (isInWidthRange && isInHeightRange) {
-            drawHoveringText(I18n.format("gui.touhou_little_maid.skin_details.load_animation_file"), mouseX + 16, mouseY + 24);
-        }
-
-        isInWidthRange = 148 < mouseX && mouseX < 163;
-        if (isInWidthRange && isInHeightRange) {
-            String str;
-            if (ENABLE_FILE_ALTERATION) {
-                str = I18n.format("gui.touhou_little_maid.skin_details.file_alteration.enable");
-            } else {
-                str = I18n.format("gui.touhou_little_maid.skin_details.file_alteration.disable");
-            }
-            drawHoveringText(str, mouseX + 16, mouseY + 24);
-        }
-
-        isInWidthRange = 163 < mouseX && mouseX < 178;
-        if (isInWidthRange && isInHeightRange) {
-            drawHoveringText(I18n.format("gui.touhou_little_maid.skin_details.reset"), mouseX + 16, mouseY + 24);
         }
 
         drawSideButtonTooltips(mouseX, mouseY);
@@ -596,12 +403,6 @@ public abstract class AbstractSkinDetailsGui<T extends EntityLivingBase, U exten
         SHOW_FLOOR(944),
         // 返回按钮
         RETURN(945),
-        // 加载自定义动画的按钮
-        ANIMATION(946),
-        // 文件跟踪
-        FILE_ALTERATION(947),
-        // 重置动画和模型
-        RESET_ANIMATION_MODEL(948),
         // 其他按钮，把决定权交给子类，所以里面的数值是不用的
         OTHER(-1);
 
