@@ -1,10 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyMaidSkinDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.proxy.ClientProxy;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -24,6 +24,7 @@ import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clea
  **/
 @SideOnly(Side.CLIENT)
 public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelInfo> {
+    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/icon/maid_default.png");
     private static int PAGE_INDEX = 0;
     private static int PACK_INDEX = 0;
     private static int ROW_INDEX = 0;
@@ -40,23 +41,28 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelInfo> {
 
     @Override
     void drawRightEntity(int posX, int posY, MaidModelInfo modelItem) {
-        EntityMaid maid;
-        try {
-            maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(ENTITY_ID, () -> {
-                Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(ENTITY_ID), mc.world);
-                if (e == null) {
-                    return new EntityMaid(mc.world);
-                } else {
-                    return e;
-                }
-            });
-        } catch (ExecutionException | ClassCastException e) {
-            e.printStackTrace();
-            return;
+        if (mc.gameSettings.fancyGraphics) {
+            EntityMaid maid;
+            try {
+                maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(ENTITY_ID, () -> {
+                    Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(ENTITY_ID), mc.world);
+                    if (e == null) {
+                        return new EntityMaid(mc.world);
+                    } else {
+                        return e;
+                    }
+                });
+            } catch (ExecutionException | ClassCastException e) {
+                e.printStackTrace();
+                return;
+            }
+            clearMaidDataResidue(maid, false);
+            maid.setModelId(modelItem.getModelId().toString());
+            GuiInventory.drawEntityOnScreen(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
+        } else {
+            mc.renderEngine.bindTexture(ICON);
+            drawModalRectWithCustomSizedTexture(posX - 6, posY - 23, 0, 0, 12, 24, 12, 24);
         }
-        clearMaidDataResidue(maid, false);
-        maid.setModelId(modelItem.getModelId().toString());
-        GuiInventory.drawEntityOnScreen(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
     }
 
     @Override
