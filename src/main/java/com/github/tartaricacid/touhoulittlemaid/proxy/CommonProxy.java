@@ -61,13 +61,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
 import static com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation.readDrawCsvFile;
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
-    public static final ScriptEngine NASHORN = new ScriptEngineManager().getEngineByName("nashorn");
     /**
      * 服务端用模型列表，
      * 这个只会在服务器启动时候读取默认原版的列表，
@@ -76,11 +77,24 @@ public class CommonProxy {
      * 只有 ResourceLocation 类和基本数据类型，不会导致服务端崩溃
      */
     public static final Map<String, String> VANILLA_ID_NAME_MAP = Maps.newHashMap();
+    private static final Pattern PATTERN = Pattern.compile("^\\d\\.\\d\\.\\d_(\\d+)$");
+    public static final ScriptEngine NASHORN = getScriptEngine();
     public static AltarRecipesManager ALTAR_RECIPES_MANAGER;
     public static SimpleNetworkWrapper INSTANCE = null;
 
     public static boolean isNpcModLoad() {
         return Loader.isModLoaded("customnpcs");
+    }
+
+    private static ScriptEngine getScriptEngine() {
+        Matcher matcher = PATTERN.matcher(System.getProperty("java.version"));
+        if (matcher.find()) {
+            int version = Integer.parseInt(matcher.group(1));
+            if (version < 60) {
+                return new ScriptEngineManager().getEngineByName("nashorn");
+            }
+        }
+        return new ScriptEngineManager(null).getEngineByName("nashorn");
     }
 
     public void preInit(FMLPreInitializationEvent event) {
