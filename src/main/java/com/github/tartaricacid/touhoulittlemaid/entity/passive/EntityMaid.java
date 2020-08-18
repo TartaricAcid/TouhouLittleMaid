@@ -5,9 +5,11 @@ import com.github.tartaricacid.touhoulittlemaid.api.*;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.util.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBed;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumSerializer;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidLookIdle;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
@@ -16,16 +18,19 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidHandsItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventoryItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemKappaCompass;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.UpdateMaidSleepYawMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -74,6 +79,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -109,6 +115,10 @@ public class EntityMaid extends AbstractEntityMaid {
      * 要在客户端显示女仆当前所处的模式，所以需要同步客户端
      */
     private static final DataParameter<Integer> COMPASS_MODE = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+    /**
+     * 女仆是否处于睡觉状态
+     */
+    private static final DataParameter<Boolean> SLEEP = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     /**
      * 模式所应用的 AI 的优先级
      */
@@ -179,14 +189,14 @@ public class EntityMaid extends AbstractEntityMaid {
         setSize(0.6f, 1.5f);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
+        this.tasks.addTask(2, new EntityMaidFindBed(this, 1.0f));
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
-        this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityRinnosuke.class, 3.0f, 0.8d, 0.9d));
-        this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityFairy.class, 3.0f, 0.8d, 0.9d));
-        this.tasks.addTask(3, new EntityMaidAvoidEntity(this, EntityCreeper.class, 6.0F, 0.8d, 0.9d));
+        this.tasks.addTask(3, new EntityMaidAvoidEntity<>(this, EntityRinnosuke.class, 3.0f, 0.8d, 0.9d));
+        this.tasks.addTask(3, new EntityMaidAvoidEntity<>(this, EntityFairy.class, 3.0f, 0.8d, 0.9d));
+        this.tasks.addTask(3, new EntityMaidAvoidEntity<>(this, EntityCreeper.class, 6.0F, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidCompassSetting(this, 0.6f));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
         this.tasks.addTask(4, new EntityMaidOpenDoor(this, true));
@@ -200,12 +210,12 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityWolf.class, 4.0F, 0.1f));
         this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityOcelot.class, 4.0F, 0.1f));
         this.tasks.addTask(9, new EntityMaidWatchClosest(this, EntityParrot.class, 4.0F, 0.1f));
-        this.tasks.addTask(10, new EntityAILookIdle(this));
+        this.tasks.addTask(10, new EntityMaidLookIdle(this));
         this.tasks.addTask(11, new EntityMaidWanderAvoidWater(this, 0.5f));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityMob.class, true));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntitySlime.class, true));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityMob.class, true));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntitySlime.class, true));
         this.targetTasks.addTask(3, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(4, new EntityAIOwnerHurtTarget(this));
     }
@@ -226,6 +236,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(INVULNERABLE, false);
         this.dataManager.register(BACKPACK_LEVEL, EnumBackPackLevel.EMPTY.getLevel());
         this.dataManager.register(COMPASS_MODE, ItemKappaCompass.Mode.NONE.ordinal());
+        this.dataManager.register(SLEEP, false);
     }
 
     @Override
@@ -258,7 +269,34 @@ public class EntityMaid extends AbstractEntityMaid {
         applyEntityRiding();
         applyNavigatorAndMoveHelper();
         // 计数器 tick
-        cooldownTracker.tick();
+        // cooldownTracker.tick();
+        if (this.isSleep()) {
+            onMaidSleep();
+        }
+    }
+
+    private void onMaidSleep() {
+        // 必须在服务端检测
+        if (!world.isRemote) {
+            IBlockState state = world.getBlockState(this.getPosition().down());
+            if (state.getBlock() == MaidBlocks.MAID_BED && state.getValue(BlockMaidBed.PART) == BlockMaidBed.EnumPartType.FOOT) {
+                if (world.isDaytime() && !world.isThundering()) {
+                    this.setSleep(false);
+                    this.setHealth(getMaxHealth());
+                } else {
+                    if (ticksExisted % 3 == 0) {
+                        setPositionAndRotation(Math.floor(this.posX) + 0.5, this.posY, Math.floor(this.posZ) + 0.5,
+                                state.getValue(BlockHorizontal.FACING).getHorizontalAngle(), 0);
+                    }
+                    if (ticksExisted % 20 == 0) {
+                        CommonProxy.INSTANCE.sendToAllAround(new UpdateMaidSleepYawMessage(getEntityId(), state.getValue(BlockHorizontal.FACING).getHorizontalAngle()),
+                                new NetworkRegistry.TargetPoint(dimension, posX, posY, posZ, 128));
+                    }
+                }
+            } else {
+                this.setSleep(false);
+            }
+        }
     }
 
     private void spawnPortalParticle() {
@@ -352,7 +390,7 @@ public class EntityMaid extends AbstractEntityMaid {
                 boolean maidNotRiddenAndRiding = !this.isBeingRidden() && !this.isRiding();
                 boolean passengerNotRiddenAndRiding = !entity.isBeingRidden() && !entity.isRiding();
                 // 女仆处于待命或设置了不骑乘状态
-                boolean stateIsForbid = this.isSitting() || !this.isCanRiding();
+                boolean stateIsForbid = this.isSitting() || this.isSleep() || !this.isCanRiding();
                 // 服务端，而且尝试坐上去的实体是 IEntityRidingMaid
                 if (!world.isRemote && !stateIsForbid && maidNotRiddenAndRiding && passengerNotRiddenAndRiding &&
                         entity instanceof IEntityRidingMaid && ((IEntityRidingMaid) entity).canRiding(this)) {
@@ -735,7 +773,7 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private boolean openMaidGui(EntityPlayer player) {
         // 否则打开 GUI
-        if (!world.isRemote) {
+        if (!world.isRemote && !this.isSleep()) {
             player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.MAIN_GUI.MAIN.getId(), world, this.getEntityId(), LittleMaidAPI.getTasks().indexOf(task), 0);
         }
         return true;
@@ -960,6 +998,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.CAN_RIDING.getName())) {
             canRiding = compound.getBoolean(NBT.CAN_RIDING.getName());
         }
+        if (compound.hasKey(NBT.SLEEP.getName())) {
+            setSleep(compound.getBoolean(NBT.SLEEP.getName()));
+        }
     }
 
     @Override
@@ -994,6 +1035,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.CAN_HOLD_VEHICLE.getName(), canHoldVehicle);
         compound.setBoolean(NBT.CAN_RIDING_BROOM.getName(), canRidingBroom);
         compound.setBoolean(NBT.CAN_RIDING.getName(), canRiding);
+        compound.setBoolean(NBT.SLEEP.getName(), isSleep());
     }
 
     @Override
@@ -1410,11 +1452,11 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     public boolean isStruckByLightning() {
-        return this.getDataManager().get(STRUCK_BY_LIGHTNING);
+        return this.dataManager.get(STRUCK_BY_LIGHTNING);
     }
 
     public void setStruckByLightning(boolean isStruck) {
-        this.getDataManager().set(STRUCK_BY_LIGHTNING, isStruck);
+        this.dataManager.set(STRUCK_BY_LIGHTNING, isStruck);
     }
 
     public Long getSasimonoCRC32() {
@@ -1436,6 +1478,15 @@ public class EntityMaid extends AbstractEntityMaid {
 
     public void setShowSasimono(boolean isShow) {
         this.dataManager.set(SHOW_SASIMONO, isShow);
+    }
+
+    @Override
+    public boolean isSleep() {
+        return this.dataManager.get(SLEEP);
+    }
+
+    public void setSleep(boolean isSleep) {
+        this.dataManager.set(SLEEP, isSleep);
     }
 
     public void setBackpackLevel(EnumBackPackLevel level) {
@@ -1563,7 +1614,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean isCanHoldTrolley() {
-        return canHoldTrolley;
+        return canHoldTrolley && !isSleep();
     }
 
     public void setCanHoldTrolley(boolean canHoldTrolley) {
@@ -1572,7 +1623,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean isCanHoldVehicle() {
-        return canHoldVehicle;
+        return canHoldVehicle && !isSleep();
     }
 
     public void setCanHoldVehicle(boolean canHoldVehicle) {
@@ -1581,7 +1632,7 @@ public class EntityMaid extends AbstractEntityMaid {
 
     @Override
     public boolean isCanRidingBroom() {
-        return canRidingBroom;
+        return canRidingBroom && !isSleep();
     }
 
     public void setCanRidingBroom(boolean canRidingBroom) {
@@ -1589,7 +1640,7 @@ public class EntityMaid extends AbstractEntityMaid {
     }
 
     public boolean isCanRiding() {
-        return canRiding;
+        return canRiding && !isSleep();
     }
 
     public void setCanRiding(boolean canRiding) {
@@ -1653,7 +1704,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 能够使用扫帚
         CAN_RIDING_BROOM("MaidCanRidingBroom"),
         // 能够主动坐上坐垫之类的
-        CAN_RIDING("MaidCanRidingEntity");
+        CAN_RIDING("MaidCanRidingEntity"),
+        // 女仆是否处于睡觉状态
+        SLEEP("MaidIsSleep");
 
         private String name;
 

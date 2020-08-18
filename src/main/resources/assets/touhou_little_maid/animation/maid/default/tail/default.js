@@ -5,6 +5,12 @@ Java.asJSONCompatible({
         if (tail != undefined) {
             tail.setRotateAngleX(Math.sin(ageInTicks * 0.2) * 0.05);
             tail.setRotateAngleZ(Math.cos(ageInTicks * 0.2) * 0.1);
+
+            if (maid.isSleep()) {
+                tail.setHidden(true)
+            } else {
+                tail.setHidden(false)
+            }
         }
     }
 })

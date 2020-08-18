@@ -29,6 +29,6 @@ public class EntityMaidWatchClosest extends EntityAIWatchClosest {
         boolean taskIsIdle = maid.getTask() instanceof TaskIdle;
         boolean controlNotWatch = !(maid.getControllingPassenger() instanceof EntityMaidVehicle);
         boolean passengerNotWatch = !(maid.getRidingEntity() instanceof EntityMaidVehicle || maid.getRidingEntity() instanceof EntityPlayer);
-        return super.shouldExecute() && taskIsIdle && controlNotWatch && passengerNotWatch;
+        return super.shouldExecute() && !maid.isSleep() && taskIsIdle && controlNotWatch && passengerNotWatch;
     }
 }

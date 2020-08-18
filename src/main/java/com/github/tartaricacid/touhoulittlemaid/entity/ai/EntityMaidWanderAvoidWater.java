@@ -13,11 +13,11 @@ public class EntityMaidWanderAvoidWater extends EntityAIWanderAvoidWater {
 
     @Override
     public boolean shouldExecute() {
-        return !entityMaid.guiOpening && !entityMaid.isSitting() && super.shouldExecute();
+        return !entityMaid.guiOpening && !entityMaid.isSitting() && !entityMaid.isSleep() && super.shouldExecute();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.guiOpening && !entityMaid.isSitting() && super.shouldContinueExecuting();
+        return !entityMaid.guiOpening && !entityMaid.isSitting() && !entityMaid.isSleep() && super.shouldContinueExecuting();
     }
 }

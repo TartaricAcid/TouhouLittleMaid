@@ -43,7 +43,7 @@ public class EntityMaidAttackRanged extends EntityAIBase {
         boolean canAttack = target != null && target.isEntityAlive()
                 && entity.isWithinHomeDistanceFromPosition(new BlockPos(target))
                 && (canRangeAttack || canDanmakuAttack);
-        return !entity.isSitting() && canAttack;
+        return !entity.isSitting() && !entity.isSleep() && canAttack;
     }
 
     private boolean isBowInMainhand() {

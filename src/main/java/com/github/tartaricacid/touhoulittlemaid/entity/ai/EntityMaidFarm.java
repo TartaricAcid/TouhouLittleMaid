@@ -52,7 +52,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
     @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
-        if (maid.isSitting()) {
+        if (maid.isSitting() || maid.isSleep()) {
             return false;
         }
 
@@ -88,7 +88,7 @@ public class EntityMaidFarm extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return activeHandler != null && this.currentTask != TASK.NONE && !maid.isSitting() && super.shouldContinueExecuting();
+        return activeHandler != null && this.currentTask != TASK.NONE && !maid.isSitting() && !maid.isSleep() && super.shouldContinueExecuting();
     }
 
     @Override

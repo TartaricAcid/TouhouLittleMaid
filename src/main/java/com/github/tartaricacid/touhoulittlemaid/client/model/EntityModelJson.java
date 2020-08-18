@@ -13,6 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -149,6 +150,11 @@ public class EntityModelJson extends ModelBase {
             } catch (Exception e) {
                 e.printStackTrace();
                 CustomResourcesLoader.MAID_MODEL.removeAnimation(modelId);
+            }
+            if (((EntityMaid) entityIn).isSleep()) {
+                GlStateManager.rotate(180, 0, 1, 0);
+                GlStateManager.rotate(-90, 1, 0, 0);
+                GlStateManager.translate(0, -1.08, 1.3);
             }
             return;
         }

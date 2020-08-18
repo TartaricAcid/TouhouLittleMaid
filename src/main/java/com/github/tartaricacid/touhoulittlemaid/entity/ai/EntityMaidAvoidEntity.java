@@ -23,7 +23,7 @@ public class EntityMaidAvoidEntity<T extends Entity> extends EntityAIAvoidEntity
     public boolean shouldExecute() {
         if (entity instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entity;
-            if (maid.getTask().isAttack()) {
+            if (maid.getTask().isAttack() || maid.isSleep()) {
                 return false;
             }
         }
@@ -45,7 +45,7 @@ public class EntityMaidAvoidEntity<T extends Entity> extends EntityAIAvoidEntity
     public boolean shouldContinueExecuting() {
         if (entity instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entity;
-            if (maid.getTask().isAttack()) {
+            if (maid.getTask().isAttack() || maid.isSleep()) {
                 return false;
             }
         }

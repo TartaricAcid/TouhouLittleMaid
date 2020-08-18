@@ -220,4 +220,8 @@ public class EntityMaidWrapper {
     public boolean onHurt() {
         return maid.hurtTime > 0;
     }
+
+    public boolean isSleep() {
+        return maid.isSleep();
+    }
 }

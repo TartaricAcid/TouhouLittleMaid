@@ -43,7 +43,7 @@ public class EntityMaidFeedAnimal extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (maid.isSitting()) {
+        if (maid.isSitting() || maid.isSleep()) {
             return false;
         }
 
@@ -105,7 +105,7 @@ public class EntityMaidFeedAnimal extends EntityAIBase {
     public boolean shouldContinueExecuting() {
         boolean entityIsExisted = entitySelected != null && entitySelected.isEntityAlive();
         boolean entityCanFeed = entitySelected != null && entitySelected.getGrowingAge() == 0 && !entitySelected.isInLove();
-        return !maid.isSitting() && entityIsExisted && entityCanFeed;
+        return !maid.isSitting() && !maid.isSleep() && entityIsExisted && entityCanFeed;
     }
 
     @Override

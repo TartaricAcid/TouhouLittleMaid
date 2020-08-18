@@ -32,7 +32,7 @@ public class EntityMaidFeedOwner extends EntityAIBase {
         timeCount--;
         // 主人是 EntityPlayer 而且在限制距离内
         boolean ownerIsOkay = entityMaid.getOwner() instanceof EntityPlayer && entityMaid.getDistance(entityMaid.getOwner()) < distance;
-        return timeCount < 0 && !entityMaid.isSitting() && ownerIsOkay;
+        return timeCount < 0 && !entityMaid.isSitting() && !entityMaid.isSleep() && ownerIsOkay;
     }
 
     @Override

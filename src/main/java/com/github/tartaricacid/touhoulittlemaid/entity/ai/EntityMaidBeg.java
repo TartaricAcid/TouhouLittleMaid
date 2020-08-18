@@ -28,15 +28,15 @@ public class EntityMaidBeg extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         this.player = this.world.getClosestPlayerToEntity(this.entityMaid, this.maxPlayerDistance);
-        return !entityMaid.guiOpening && this.player != null && this.hasTemptationItemInHand(this.player)
+        return !entityMaid.guiOpening && !entityMaid.isSleep() && this.player != null && this.hasTemptationItemInHand(this.player)
                 && entityMaid.isWithinHomeDistanceFromPosition(new BlockPos(this.player))
                 && !ObjectUtil.equalNotNull(player.getRidingEntity(), entityMaid.getControllingPassenger());
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        // 如果玩家正在打开UI/死了，不执行
-        if (entityMaid.guiOpening || !this.player.isEntityAlive()) {
+        // 如果玩家正在打开UI/死了，女仆在睡觉，不执行
+        if (entityMaid.guiOpening || !this.player.isEntityAlive() || entityMaid.isSleep()) {
             return false;
         }
 
@@ -77,7 +77,7 @@ public class EntityMaidBeg extends EntityAIBase {
     @Override
     public void updateTask() {
         this.entityMaid.getLookHelper().setLookPosition(this.player.posX, this.player.posY + this.player.getEyeHeight(), this.player.posZ, 10.0F, this.entityMaid.getVerticalFaceSpeed());
-        if (!this.entityMaid.isSitting()) {
+        if (!this.entityMaid.isSitting() && !entityMaid.isSleep()) {
             if (this.entityMaid.getDistance(player) > 2.5) {
                 this.entityMaid.getNavigator().tryMoveToXYZ(this.player.posX, this.player.posY, this.player.posZ, 0.7);
             } else {

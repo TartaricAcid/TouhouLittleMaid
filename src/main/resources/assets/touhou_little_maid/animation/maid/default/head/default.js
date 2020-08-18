@@ -5,5 +5,14 @@ Java.asJSONCompatible({
             head.setRotateAngleX(headPitch * 0.017453292);
             head.setRotateAngleY(netHeadYaw * 0.017453292);
         }
+
+        hat = modelMap.get("hat");
+        if (hat != undefined) {
+            if (maid.isSleep()) {
+                hat.setHidden(true)
+            } else {
+                hat.setHidden(false)
+            }
+        }
     }
 })

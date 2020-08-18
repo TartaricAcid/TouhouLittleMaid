@@ -27,6 +27,10 @@ public final class WriteCompassPosEvent {
         if (itemstack.getItem() == MaidItems.KAPPA_COMPASS && event.getMaid() instanceof EntityMaid) {
             event.setCanceled(true);
             EntityMaid maid = (EntityMaid) event.getMaid();
+            if (maid.isSleep()) {
+                return;
+            }
+
             ItemKappaCompass.Mode mode = ItemKappaCompass.getMode(itemstack);
             List<BlockPos> posList = ItemKappaCompass.getPos(itemstack);
             if (maid.setCompassPosList(posList, mode)) {

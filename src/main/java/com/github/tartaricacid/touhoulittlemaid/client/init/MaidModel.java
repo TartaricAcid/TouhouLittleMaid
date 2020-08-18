@@ -83,6 +83,7 @@ public final class MaidModel {
         registerRender(MaidItems.PORTABLE_AUDIO);
         registerRender(MaidItems.CHISEL);
         registerRender(MaidItems.POWER_POINT);
+        registerRender(MaidItems.MAID_BED);
 
         register2d3dRender(MaidItems.HAKUREI_GOHEI);
         register2d3dRender(MaidItems.MAID_BEACON);

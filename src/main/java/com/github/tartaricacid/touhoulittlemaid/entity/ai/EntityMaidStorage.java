@@ -31,7 +31,7 @@ public class EntityMaidStorage extends EntityAIMoveToBlock {
     @Override
     public boolean shouldExecute() {
         // 模式判定，如果模式不对，或者处于待命状态
-        if (maid.guiOpening || maid.isSitting()) {
+        if (maid.guiOpening || maid.isSitting() || maid.isSleep()) {
             return false;
         }
 
@@ -67,7 +67,7 @@ public class EntityMaidStorage extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !maid.guiOpening && this.currentTask != TASK.NONE && !maid.isSitting() && super.shouldContinueExecuting();
+        return !maid.guiOpening && this.currentTask != TASK.NONE && !maid.isSitting() && !maid.isSleep() && super.shouldContinueExecuting();
     }
 
     @Override

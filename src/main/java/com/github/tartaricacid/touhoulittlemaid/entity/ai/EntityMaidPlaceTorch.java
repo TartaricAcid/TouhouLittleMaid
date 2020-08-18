@@ -30,7 +30,7 @@ public class EntityMaidPlaceTorch extends EntityAIMoveToBlock {
 
     @Override
     public boolean shouldExecute() {
-        return !entityMaid.isSitting() && super.shouldExecute() && !getTorchItem().isEmpty();
+        return !entityMaid.isSitting() && !entityMaid.isSleep() && super.shouldExecute() && !getTorchItem().isEmpty();
     }
 
     @Override

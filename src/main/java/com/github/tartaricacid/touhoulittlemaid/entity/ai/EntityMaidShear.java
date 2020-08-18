@@ -35,7 +35,7 @@ public class EntityMaidShear extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (entityMaid.isSitting() || !(entityMaid.getHeldItemMainhand().getItem() instanceof ItemShears)) {
+        if (entityMaid.isSitting() || entityMaid.isSleep() || !(entityMaid.getHeldItemMainhand().getItem() instanceof ItemShears)) {
             return false;
         }
 

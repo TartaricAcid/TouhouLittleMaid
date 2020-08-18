@@ -15,7 +15,7 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
 
     @Override
     public boolean shouldExecute() {
-        return !entityMaid.isHomeModeEnable() && super.shouldExecute();
+        return !entityMaid.isHomeModeEnable() && !entityMaid.isSleep() && super.shouldExecute();
     }
 
     /**
@@ -24,7 +24,7 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
     @Override
     public void updateTask() {
         this.entityMaid.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float) this.entityMaid.getVerticalFaceSpeed());
-        if (entityMaid.isSitting()) {
+        if (entityMaid.isSitting() || entityMaid.isSleep()) {
             return;
         }
         if (--timeToRecalcPath > 0) {
@@ -61,9 +61,9 @@ public class EntityMaidFollowOwner extends EntityAIFollowOwner {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !entityMaid.isHomeModeEnable() && !this.entityMaid.getNavigator().noPath()
+        return !entityMaid.isHomeModeEnable() && !entityMaid.isSleep() && !this.entityMaid.getNavigator().noPath()
                 && this.entityMaid.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist)
-                && !this.entityMaid.isSitting();
+                && !this.entityMaid.isSitting() && !entityMaid.isSleep();
     }
 
     @Override

@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -30,7 +29,7 @@ public class EntityMaidExtinguishing extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         timeCount--;
-        return timeCount < 0 && !entityMaid.isSitting() &&
+        return timeCount < 0 && !entityMaid.isSitting() && !entityMaid.isSleep() &&
                 entityMaid.getHeldItemMainhand().getItem() == MaidItems.EXTINGUISHER;
     }
 

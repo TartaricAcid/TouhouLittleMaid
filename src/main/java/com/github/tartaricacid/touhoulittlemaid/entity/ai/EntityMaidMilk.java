@@ -37,7 +37,7 @@ public class EntityMaidMilk extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (entityMaid.isSitting()) {
+        if (entityMaid.isSitting() || entityMaid.isSleep()) {
             return false;
         }
 

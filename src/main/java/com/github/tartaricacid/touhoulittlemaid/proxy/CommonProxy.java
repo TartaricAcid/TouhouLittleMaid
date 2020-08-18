@@ -266,6 +266,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(SetScarecrowDataMessage.Handler.class, SetScarecrowDataMessage.class, 23, Side.SERVER);
         INSTANCE.registerMessage(PortableAudioMessageToServer.Handler.class, PortableAudioMessageToServer.class, 24, Side.SERVER);
         INSTANCE.registerMessage(PortableAudioMessageToClient.Handler.class, PortableAudioMessageToClient.class, 25, Side.CLIENT);
+        INSTANCE.registerMessage(UpdateMaidSleepYawMessage.Handler.class, UpdateMaidSleepYawMessage.class, 25, Side.CLIENT);
     }
 
     /**

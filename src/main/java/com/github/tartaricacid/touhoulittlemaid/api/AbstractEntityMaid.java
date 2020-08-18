@@ -163,4 +163,9 @@ public abstract class AbstractEntityMaid extends EntityTameable implements IRang
      * 能够骑乘扫帚
      */
     abstract public boolean isCanRidingBroom();
+
+    /**
+     * 是否处于睡觉状态
+     */
+    abstract public boolean isSleep();
 }

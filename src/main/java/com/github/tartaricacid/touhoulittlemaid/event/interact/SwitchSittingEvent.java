@@ -19,6 +19,10 @@ public final class SwitchSittingEvent {
         World world = event.getWorld();
 
         if (player.isSneaking()) {
+            if (maid.isSleep()) {
+                return;
+            }
+
             maid.setSitting(!maid.isSitting());
             if (maid.isSitting()) {
                 // 清除寻路逻辑
