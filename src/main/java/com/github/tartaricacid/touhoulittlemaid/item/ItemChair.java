@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -165,11 +166,15 @@ public class ItemChair extends Item {
     @SideOnly(Side.CLIENT)
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            for (String key : CustomResourcesLoader.CHAIR_MODEL.getModelIdSet()) {
-                float height = CustomResourcesLoader.CHAIR_MODEL.getModelMountedYOffset(key);
-                boolean canRide = CustomResourcesLoader.CHAIR_MODEL.getModelTameableCanRide(key);
-                boolean isNoGravity = CustomResourcesLoader.CHAIR_MODEL.getModelNoGravity(key);
-                items.add(setAllTagData(new ItemStack(this), key, height, canRide, isNoGravity));
+            if (GeneralConfig.MISC_CONFIG.fastRendering) {
+                items.add(new ItemStack(this));
+            } else {
+                for (String key : CustomResourcesLoader.CHAIR_MODEL.getModelIdSet()) {
+                    float height = CustomResourcesLoader.CHAIR_MODEL.getModelMountedYOffset(key);
+                    boolean canRide = CustomResourcesLoader.CHAIR_MODEL.getModelTameableCanRide(key);
+                    boolean isNoGravity = CustomResourcesLoader.CHAIR_MODEL.getModelNoGravity(key);
+                    items.add(setAllTagData(new ItemStack(this), key, height, canRide, isNoGravity));
+                }
             }
         }
     }

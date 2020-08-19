@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.api.neteasemusic;
 
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -85,5 +87,11 @@ public final class WebApi {
     public String userAllList(long userId, long size, long page) throws Exception {
         String url = "http://music.163.com/api/user/playlist/?uid=" + userId + "&offset=0&total=true&limit=1000";
         return NetWorker.get(url, requestPropertyData);
+    }
+
+    @Nullable
+    public String getRedirectMusicUrl(long musicId) throws Exception {
+        String url = String.format("https://music.163.com/song/media/outer/url?id=%d.mp3", musicId);
+        return NetWorker.getRedirectUrl(url, requestPropertyData);
     }
 }

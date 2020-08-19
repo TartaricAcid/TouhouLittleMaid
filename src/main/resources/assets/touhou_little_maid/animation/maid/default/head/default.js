@@ -4,6 +4,9 @@ Java.asJSONCompatible({
         if (head != undefined) {
             head.setRotateAngleX(headPitch * 0.017453292);
             head.setRotateAngleY(netHeadYaw * 0.017453292);
+            if (maid.isSleep()) {
+                head.setRotateAngleX(15 * 0.017453292);
+            }
         }
 
         hat = modelMap.get("hat");

@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api.neteasemusic;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,6 +39,20 @@ public class NetWorker {
         bufferedReader.close();
 
         return result.toString();
+    }
+
+    @Nullable
+    public static String getRedirectUrl(String url, Map<String, String> requestPropertyData) throws IOException {
+        URL urlConnect = new URL(url);
+        URLConnection connection = urlConnect.openConnection();
+        Collection<String> keys = requestPropertyData.keySet();
+        for (String key : keys) {
+            String val = requestPropertyData.get(key);
+            connection.setRequestProperty(key, val);
+        }
+        connection.setConnectTimeout(3_000);
+        connection.setReadTimeout(5_000);
+        return connection.getHeaderField("Location");
     }
 
     public static String post(String url, String param, Map<String, String> requestPropertyData) throws IOException {

@@ -38,7 +38,7 @@ public final class MusicManger {
     private static final ThreadPoolExecutor POOL = new ThreadPoolExecutor(1, 1, 0L,
             TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
     private static final MusicJsonInfo DEFAULT_INFO = MusicJsonInfo.getDefaultInstance();
-    private static final WebApi NET_EASE_WEB_API = new NetEaseMusic().getApi();
+    public static final WebApi NET_EASE_WEB_API = new NetEaseMusic().getApi();
     public static CopyOnWriteArrayList<NetEaseMusicList> MUSIC_LIST_GROUP = Lists.newCopyOnWriteArrayList();
 
     public static void loadMusicList() {

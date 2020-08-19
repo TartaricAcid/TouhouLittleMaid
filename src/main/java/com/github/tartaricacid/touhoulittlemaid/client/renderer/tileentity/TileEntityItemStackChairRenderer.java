@@ -31,15 +31,10 @@ import java.util.concurrent.ExecutionException;
 @SideOnly(Side.CLIENT)
 public class TileEntityItemStackChairRenderer extends TileEntityItemStackRenderer {
     public static final TileEntityItemStackChairRenderer INSTANCE = new TileEntityItemStackChairRenderer();
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/items/garage_kit_chair.png");
 
     @Override
     public void renderByItem(@Nonnull ItemStack itemStackIn) {
-        if (Minecraft.getMinecraft().gameSettings.fancyGraphics) {
-            renderEntityIcon(itemStackIn);
-        } else {
-            renderFlatIcon();
-        }
+        renderEntityIcon(itemStackIn);
     }
 
     private void renderEntityIcon(@Nonnull ItemStack itemStackIn) {
@@ -89,38 +84,6 @@ public class TileEntityItemStackChairRenderer extends TileEntityItemStackRendere
             GlStateManager.disableTexture2D();
         }
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-        GlStateManager.enableBlend();
-    }
-
-    private void renderFlatIcon() {
-        GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
-        GlStateManager.disableCull();
-        GlStateManager.enableColorMaterial();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufBuilder = tessellator.getBuffer();
-        bufBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        Minecraft.getMinecraft().renderEngine.bindTexture(ICON);
-        bufBuilder.pos(0, 1, 0.5).tex(0, 0).endVertex();
-        bufBuilder.pos(0, 0, 0.5).tex(0, 1).endVertex();
-        bufBuilder.pos(1, 0, 0.5).tex(1, 1).endVertex();
-        bufBuilder.pos(1, 1, 0.5).tex(1, 0).endVertex();
-        tessellator.draw();
-
-        GlStateManager.popMatrix();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        if (lightmapEnabled) {
-            GlStateManager.enableTexture2D();
-        } else {
-            GlStateManager.disableTexture2D();
-        }
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-        GlStateManager.enableLighting();
-        GlStateManager.enableCull();
         GlStateManager.enableBlend();
     }
 }

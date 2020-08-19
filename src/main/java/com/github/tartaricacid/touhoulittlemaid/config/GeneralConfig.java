@@ -189,6 +189,11 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.misc_config.give_guide_book_first")
         @Config.Name("GiveGuideBookFirst")
         public boolean giveGuideBookFirst = true;
+
+        @Config.Comment("Whether to enable fast rendering, the GUI will no longer display 3D icons after enabling?")
+        @Config.LangKey("config.touhou_little_maid.misc_config.fast_rendering")
+        @Config.Name("FastRendering")
+        public boolean fastRendering = false;
     }
 
     public static class GashaponConfig {

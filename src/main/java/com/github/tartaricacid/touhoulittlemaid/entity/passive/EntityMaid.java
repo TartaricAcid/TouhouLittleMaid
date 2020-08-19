@@ -18,6 +18,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.EventType;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.FavorabilityEvent;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
@@ -106,6 +108,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> STRUCK_BY_LIGHTNING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> SASIMONO_CRC32 = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> SHOW_SASIMONO = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> FAVORABILITY = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
     /**
      * 无敌状态不会主动同步至客户端
      */
@@ -237,6 +240,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(BACKPACK_LEVEL, EnumBackPackLevel.EMPTY.getLevel());
         this.dataManager.register(COMPASS_MODE, ItemKappaCompass.Mode.NONE.ordinal());
         this.dataManager.register(SLEEP, false);
+        this.dataManager.register(FAVORABILITY, 0);
     }
 
     @Override
@@ -282,8 +286,11 @@ public class EntityMaid extends AbstractEntityMaid {
             if (state.getBlock() == MaidBlocks.MAID_BED && state.getValue(BlockMaidBed.PART) == BlockMaidBed.EnumPartType.FOOT) {
                 if (world.isDaytime() && !world.isThundering()) {
                     this.setSleep(false);
+                    this.setSilent(false);
                     this.setHealth(getMaxHealth());
+                    MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.WAKE_UP_NATURALLY, this));
                 } else {
+                    this.setSilent(true);
                     if (ticksExisted % 3 == 0) {
                         setPositionAndRotation(Math.floor(this.posX) + 0.5, this.posY, Math.floor(this.posZ) + 0.5,
                                 state.getValue(BlockHorizontal.FACING).getHorizontalAngle(), 0);
@@ -295,6 +302,8 @@ public class EntityMaid extends AbstractEntityMaid {
                 }
             } else {
                 this.setSleep(false);
+                this.setSilent(false);
+                MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.WAKE_UP_NOISE, this));
             }
         }
     }
@@ -1001,6 +1010,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.SLEEP.getName())) {
             setSleep(compound.getBoolean(NBT.SLEEP.getName()));
         }
+        if (compound.hasKey(NBT.FAVORABILITY.getName())) {
+            setFavorability(compound.getInteger(NBT.FAVORABILITY.getName()));
+        }
     }
 
     @Override
@@ -1036,6 +1048,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.CAN_RIDING_BROOM.getName(), canRidingBroom);
         compound.setBoolean(NBT.CAN_RIDING.getName(), canRiding);
         compound.setBoolean(NBT.SLEEP.getName(), isSleep());
+        compound.setInteger(NBT.FAVORABILITY.getName(), getFavorability());
     }
 
     @Override
@@ -1489,6 +1502,14 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(SLEEP, isSleep);
     }
 
+    public int getFavorability() {
+        return this.dataManager.get(FAVORABILITY);
+    }
+
+    public void setFavorability(int point) {
+        this.dataManager.set(FAVORABILITY, point);
+    }
+
     public void setBackpackLevel(EnumBackPackLevel level) {
         this.dataManager.set(BACKPACK_LEVEL,
                 MathHelper.clamp(level.getLevel(), EnumBackPackLevel.EMPTY.getLevel(), EnumBackPackLevel.BIG.getLevel()));
@@ -1706,7 +1727,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 能够主动坐上坐垫之类的
         CAN_RIDING("MaidCanRidingEntity"),
         // 女仆是否处于睡觉状态
-        SLEEP("MaidIsSleep");
+        SLEEP("MaidIsSleep"),
+        // 女仆好感度
+        FAVORABILITY("MaidFavorability");
 
         private String name;
 

@@ -1,13 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.skin;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.ApplyMaidSkinDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +25,8 @@ import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clea
  **/
 @SideOnly(Side.CLIENT)
 public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelInfo> {
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/icon/maid_default.png");
+    private static final ResourceLocation ICON0 = new ResourceLocation("textures/items/spawn_egg.png");
+    private static final ResourceLocation ICON1 = new ResourceLocation("textures/items/spawn_egg_overlay.png");
     private static int PAGE_INDEX = 0;
     private static int PACK_INDEX = 0;
     private static int ROW_INDEX = 0;
@@ -41,7 +43,7 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelInfo> {
 
     @Override
     void drawRightEntity(int posX, int posY, MaidModelInfo modelItem) {
-        if (mc.gameSettings.fancyGraphics) {
+        if (!GeneralConfig.MISC_CONFIG.fastRendering) {
             EntityMaid maid;
             try {
                 maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(ENTITY_ID, () -> {
@@ -60,9 +62,23 @@ public class MaidSkinGui extends AbstractSkinGui<EntityMaid, MaidModelInfo> {
             maid.setModelId(modelItem.getModelId().toString());
             GuiInventory.drawEntityOnScreen(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
         } else {
-            mc.renderEngine.bindTexture(ICON);
-            drawModalRectWithCustomSizedTexture(posX - 6, posY - 23, 0, 0, 12, 24, 12, 24);
+            float[] rgb0 = getRgbFromHash(modelItem.getName().hashCode());
+            GlStateManager.color(rgb0[0], rgb0[1], rgb0[2]);
+            mc.renderEngine.bindTexture(ICON0);
+            drawModalRectWithCustomSizedTexture(posX - 8, posY - 20, 0, 0, 16, 16, 16, 16);
+
+            float[] rgb1 = getRgbFromHash(modelItem.getModelId().hashCode());
+            GlStateManager.color(rgb1[0], rgb1[1], rgb1[2]);
+            mc.renderEngine.bindTexture(ICON1);
+            drawModalRectWithCustomSizedTexture(posX - 8, posY - 20, 0, 0, 16, 16, 16, 16);
         }
+    }
+
+    private float[] getRgbFromHash(int hashCode) {
+        float r = (float) (hashCode >> 16 & 255) / 255.0F;
+        float g = (float) (hashCode >> 8 & 255) / 255.0F;
+        float b = (float) (hashCode & 255) / 255.0F;
+        return new float[]{r, g, b};
     }
 
     @Override

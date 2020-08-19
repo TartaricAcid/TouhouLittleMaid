@@ -58,6 +58,7 @@ item.touhou_little_maid.portable_audio.name=Portable Audio
 item.touhou_little_maid.chisel.name=Chisel
 item.touhou_little_maid.extinguisher.name=Extinguisher
 item.touhou_little_maid.power_point.name=Power Point
+item.touhou_little_maid.maid_bed.name=Maid Bed
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -174,6 +175,7 @@ info.touhou_little_maid.maid.unset_pos=§6§lUnset Pos
 info.touhou_little_maid.maid.set_pos=§a§lMaid Pos: %d, %d, %d
 info.touhou_little_maid.portable_audio.playing=The song is already playing ~
 info.touhou_little_maid.portable_audio.404=This song does not exist, please check whether it is removed
+info.touhou_little_maid.portable_audio.redirect_error=Failed to get the song link, it may be that NetEase Cloud blocked your ip.
 
 # Death
 death.touhou_little_maid.attack.danmaku.1=%1$s was killed by %2$s using danmaku
@@ -218,6 +220,7 @@ config.touhou_little_maid.misc_config.chair_cannot_change_model=Only creative pl
 config.touhou_little_maid.misc_config.chair_cannot_be_destroied=Only creative player can destroy chair
 config.touhou_little_maid.misc_config.danmaku_affected_by_fluid=Will the danmaku be affected by the fluid?
 config.touhou_little_maid.misc_config.give_guide_book_first=Give Guide Book?
+config.touhou_little_maid.misc_config.fast_rendering=Enable Fast Rendering?
 
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=Gashapon Config

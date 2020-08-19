@@ -58,6 +58,7 @@ item.touhou_little_maid.portable_audio.name=手提音响
 item.touhou_little_maid.chisel.name=雕刻刀
 item.touhou_little_maid.extinguisher.name=灭火器
 item.touhou_little_maid.power_point.name=P 点
+item.touhou_little_maid.maid_bed.name=女仆床
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -174,6 +175,7 @@ info.touhou_little_maid.maid.unset_pos=§6§l未设置坐标
 info.touhou_little_maid.maid.set_pos=§a§l女仆坐标：%d，%d，%d
 info.touhou_little_maid.portable_audio.playing=歌曲已经在播放了哦~
 info.touhou_little_maid.portable_audio.404=此歌曲不存在，请检查是否被下架
+info.touhou_little_maid.portable_audio.redirect_error=获取歌曲链接失败，可能是网易云屏蔽了你所使用的 IP。
 
 # Death
 death.touhou_little_maid.attack.danmaku.1=%1$s被%2$s用弹幕干掉了
@@ -218,6 +220,7 @@ config.touhou_little_maid.misc_config.chair_cannot_change_model=只有创造模�
 config.touhou_little_maid.misc_config.chair_cannot_be_destroied=只有创造模式玩家能够打掉坐垫
 config.touhou_little_maid.misc_config.danmaku_affected_by_fluid=弹幕会被流体影响么？
 config.touhou_little_maid.misc_config.give_guide_book_first=首次进入游戏给予手册？
+config.touhou_little_maid.misc_config.fast_rendering=是否开启快速渲染？
 
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=扭蛋配置

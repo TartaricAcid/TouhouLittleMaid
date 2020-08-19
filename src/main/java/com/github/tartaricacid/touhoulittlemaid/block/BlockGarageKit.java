@@ -150,8 +150,12 @@ public class BlockGarageKit extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        for (String modelId : CustomResourcesLoader.MAID_MODEL.getModelIdSet()) {
-            items.add(getItemStackWithData(DEFAULT_ENTITY_ID, modelId, DEFAULT_DATA));
+        if (GeneralConfig.MISC_CONFIG.fastRendering) {
+            items.add(getItemStackWithData(DEFAULT_ENTITY_ID, DEFAULT_MODEL_ID, DEFAULT_DATA));
+        } else {
+            for (String modelId : CustomResourcesLoader.MAID_MODEL.getModelIdSet()) {
+                items.add(getItemStackWithData(DEFAULT_ENTITY_ID, modelId, DEFAULT_DATA));
+            }
         }
     }
 

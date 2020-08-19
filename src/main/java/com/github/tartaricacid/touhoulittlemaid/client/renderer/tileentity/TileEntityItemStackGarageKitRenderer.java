@@ -1,18 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
@@ -35,16 +31,11 @@ import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clea
 @SideOnly(Side.CLIENT)
 public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRenderer {
     public static final TileEntityItemStackGarageKitRenderer INSTANCE = new TileEntityItemStackGarageKitRenderer();
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/items/garage_kit_maid.png");
 
     @Override
     public void renderByItem(@Nonnull ItemStack itemStackIn) {
         if (itemStackIn.getItem() == Item.getItemFromBlock(MaidBlocks.GARAGE_KIT)) {
-            if (Minecraft.getMinecraft().gameSettings.fancyGraphics) {
-                renderEntityIcon(itemStackIn);
-            } else {
-                renderFlatIcon();
-            }
+            renderEntityIcon(itemStackIn);
         }
     }
 
@@ -101,38 +92,6 @@ public class TileEntityItemStackGarageKitRenderer extends TileEntityItemStackRen
             GlStateManager.disableTexture2D();
         }
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-        GlStateManager.enableBlend();
-    }
-
-    private void renderFlatIcon() {
-        GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
-        GlStateManager.disableCull();
-        GlStateManager.enableColorMaterial();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufBuilder = tessellator.getBuffer();
-        bufBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        Minecraft.getMinecraft().renderEngine.bindTexture(ICON);
-        bufBuilder.pos(0, 1, 0.5).tex(0, 0).endVertex();
-        bufBuilder.pos(0, 0, 0.5).tex(0, 1).endVertex();
-        bufBuilder.pos(1, 0, 0.5).tex(1, 1).endVertex();
-        bufBuilder.pos(1, 1, 0.5).tex(1, 0).endVertex();
-        tessellator.draw();
-
-        GlStateManager.popMatrix();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        if (lightmapEnabled) {
-            GlStateManager.enableTexture2D();
-        } else {
-            GlStateManager.disableTexture2D();
-        }
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-        GlStateManager.enableLighting();
-        GlStateManager.enableCull();
         GlStateManager.enableBlend();
     }
 }

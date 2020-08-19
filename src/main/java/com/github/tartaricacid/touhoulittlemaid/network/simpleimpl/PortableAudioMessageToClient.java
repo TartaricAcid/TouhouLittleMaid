@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.simpleimpl;
 
 import com.github.tartaricacid.touhoulittlemaid.client.audio.PortableAudioSound;
+import com.github.tartaricacid.touhoulittlemaid.client.audio.music.MusicManger;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPortableAudio;
 import io.netty.buffer.ByteBuf;
@@ -15,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.net.URL;
-import java.net.URLConnection;
 
 public class PortableAudioMessageToClient implements IMessage {
     private static final String ERROR_404 = "http://music.163.com/404";
@@ -49,13 +49,15 @@ public class PortableAudioMessageToClient implements IMessage {
         public IMessage onMessage(PortableAudioMessageToClient message, MessageContext ctx) {
             if (ctx.side == Side.CLIENT && GeneralConfig.MUSIC_CONFIG.receiveMusic) {
                 try {
-                    URL songUrl = new URL(String.format("https://music.163.com/song/media/outer/url?id=%d.mp3", message.songId));
-                    URLConnection con = songUrl.openConnection();
-                    con.setConnectTimeout(3_000);
-                    // 默认超时 5 秒
-                    con.setReadTimeout(5_000);
                     // 获取得到 302 跳转后的连接地址
-                    final URL realSongUrl = new URL(con.getHeaderField("Location"));
+                    String url = MusicManger.NET_EASE_WEB_API.getRedirectMusicUrl(message.songId);
+                    if (url == null) {
+                        FMLClientHandler.instance().getClient().addScheduledTask(() -> Minecraft.getMinecraft().ingameGUI.setOverlayMessage(
+                                I18n.format("info.touhou_little_maid.portable_audio.redirect_error"),
+                                false));
+                        return null;
+                    }
+                    final URL realSongUrl = new URL(url);
                     FMLClientHandler.instance().getClient().addScheduledTask(() -> {
                         Entity entity = FMLClientHandler.instance().getWorldClient().getEntityByID(message.entityId);
                         if (entity instanceof EntityPortableAudio) {
