@@ -9,13 +9,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public final class EventType {
     public static final EventType WAKE_UP_NATURALLY = new EventType("wake_up_naturally", 3);
     public static final EventType WAKE_UP_NOISE = new EventType("wake_up_noise", -5);
-    public static final EventType FLOWER = new EventType("flower", 1);
-    public static final EventType FOOD = new EventType("food", 1);
     public static final EventType WORK_THUNDERSTORM = new EventType("work_thunderstorm", -1);
     public static final EventType WORK_NIGHT = new EventType("work_night", -1);
     public static final EventType HURT = new EventType("hurt", -1);
     public static final EventType HURT_BY_PLAYER = new EventType("hurt_by_player", -3);
     public static final EventType DEATH = new EventType("hurt_by_player", -5);
+    public static final EventType JOY = new EventType("joy", 2);
 
     private String name;
     private int point;

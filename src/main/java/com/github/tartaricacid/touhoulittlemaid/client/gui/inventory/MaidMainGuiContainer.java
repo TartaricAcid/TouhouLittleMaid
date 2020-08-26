@@ -39,7 +39,7 @@ public class MaidMainGuiContainer extends AbstractMaidGuiContainer {
         // 绘制文字
         fontRenderer.drawString(String.valueOf(Math.round(maid.getHealth())), i + 91, j + 11, 0x555555, false);
         fontRenderer.drawString(String.valueOf(Math.round(armorNum)), i + 91, j + 23, 0x555555, false);
-        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.attack", DECIMAL_FORMAT.format(maid.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())), i + 80, j + 35, 0x555555, false);
+        fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.attack", maid.getFavorability()), i + 80, j + 35, 0x555555, false);
         fontRenderer.drawString(I18n.format("gui.touhou_little_maid.info.experience", maid.getExp()), i + 80, j + 46, 0x555555, false);
     }
 

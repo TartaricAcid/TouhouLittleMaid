@@ -7,10 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidVehicle;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGrid;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidJoy;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.*;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Items;
@@ -28,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType.JOYS;
 import static com.github.tartaricacid.touhoulittlemaid.util.ItemRenderRegisterUtils.*;
 
 /**
@@ -45,6 +44,7 @@ public final class MaidModel {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrid.class, new TileEntityGridRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAltar.class, new TileEntityAltarRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityStatue.class, new TileEntityStatueRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMaidJoy.class, new TileEntityMaidJoyRenderer());
 
         // Block Item
         Item.getItemFromBlock(MaidBlocks.GARAGE_KIT).setTileEntityItemStackRenderer(TileEntityItemStackGarageKitRenderer.INSTANCE);
@@ -165,5 +165,13 @@ public final class MaidModel {
         ModelBakery.registerItemVariants(MaidItems.MAID_VEHICLE, maidVehicle.toArray(new ModelResourceLocation[]{}));
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_VEHICLE,
                 stack -> maidVehicle.get(MathHelper.clamp(stack.getMetadata(), 0, EntityMaidVehicle.Type.values().length - 1)));
+
+        List<ModelResourceLocation> maidJoy = new ArrayList<>();
+        for (String type : JOYS.keySet()) {
+            maidJoy.add(getModelRl(TouhouLittleMaid.MOD_ID, type));
+        }
+        ModelBakery.registerItemVariants(MaidItems.MAID_JOY, maidJoy.toArray(new ModelResourceLocation[]{}));
+        ModelLoader.setCustomMeshDefinition(MaidItems.MAID_JOY,
+                stack -> maidJoy.get(JOYS.get(ItemMaidJoy.getType(stack)).getIndex()));
     }
 }

@@ -20,6 +20,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.EventType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.FavorabilityEvent;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
@@ -32,6 +33,7 @@ import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemDropUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -51,6 +53,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -96,6 +99,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<Boolean> BEGGING = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
@@ -186,6 +190,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private boolean canRiding = true;
     private BlockPos leashedPosition = BlockPos.ORIGIN;
     private float maximumLeashedDistance = INFINITY_LEASHED_DISTANCE;
+    private Map<String, Integer> joyTickData = Maps.newHashMap();
 
     public EntityMaid(World worldIn) {
         super(worldIn);
@@ -195,7 +200,7 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityMaidFindBed(this, 1.0f));
+        this.tasks.addTask(2, new EntityMaidFindBed(this, 0.8f));
         this.tasks.addTask(3, new EntityMaidPanic(this, 1.0f));
         this.tasks.addTask(3, new EntityMaidAvoidEntity<>(this, EntityRinnosuke.class, 3.0f, 0.8d, 0.9d));
         this.tasks.addTask(3, new EntityMaidAvoidEntity<>(this, EntityFairy.class, 3.0f, 0.8d, 0.9d));
@@ -203,6 +208,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(3, new EntityMaidCompassSetting(this, 0.6f));
         this.tasks.addTask(4, new EntityMaidBeg(this, 8.0f));
         this.tasks.addTask(4, new EntityMaidOpenDoor(this, true));
+        this.tasks.addTask(4, new EntityMaidFindJoyBlock(this, 0.8f));
 
         this.tasks.addTask(5, new EntityMaidStorage(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
@@ -274,8 +280,13 @@ public class EntityMaid extends AbstractEntityMaid {
         applyNavigatorAndMoveHelper();
         // 计数器 tick
         // cooldownTracker.tick();
+        // 睡觉计算
         if (this.isSleep()) {
             onMaidSleep();
+        }
+        // 娱乐计算
+        if (!world.isRemote) {
+            JoyType.updateJoyTick(this, joyTickData);
         }
     }
 
@@ -1013,6 +1024,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.FAVORABILITY.getName())) {
             setFavorability(compound.getInteger(NBT.FAVORABILITY.getName()));
         }
+        if (compound.hasKey(NBT.JOY_TICK_DATA.getName())) {
+            joyTickData = JoyType.compoundToJoyTickData(compound.getCompoundTag(NBT.JOY_TICK_DATA.getName()));
+        }
     }
 
     @Override
@@ -1049,6 +1063,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.CAN_RIDING.getName(), canRiding);
         compound.setBoolean(NBT.SLEEP.getName(), isSleep());
         compound.setInteger(NBT.FAVORABILITY.getName(), getFavorability());
+        compound.setTag(NBT.JOY_TICK_DATA.getName(), JoyType.joyTickDataToCompound(joyTickData));
     }
 
     @Override
@@ -1510,11 +1525,6 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(FAVORABILITY, point);
     }
 
-    public void setBackpackLevel(EnumBackPackLevel level) {
-        this.dataManager.set(BACKPACK_LEVEL,
-                MathHelper.clamp(level.getLevel(), EnumBackPackLevel.EMPTY.getLevel(), EnumBackPackLevel.BIG.getLevel()));
-    }
-
     public EnumBackPackLevel getBackLevel() {
         return EnumBackPackLevel.getEnumLevelByNum(this.dataManager.get(BACKPACK_LEVEL));
     }
@@ -1668,6 +1678,51 @@ public class EntityMaid extends AbstractEntityMaid {
         this.canRiding = canRiding;
     }
 
+    public Map<String, Integer> getJoyTickData() {
+        return joyTickData;
+    }
+
+    public boolean hasHelmet() {
+        return !getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
+    }
+
+    public boolean hasChestPlate() {
+        return !getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+    }
+
+    public boolean hasLeggings() {
+        return !getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+    }
+
+    public boolean hasBoots() {
+        return !getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
+    }
+
+    public String getAtBiomeTemp() {
+        return world.getBiome(getPosition()).getTempCategory().name();
+    }
+
+    public double getArmorValue() {
+        return getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue();
+    }
+
+    public boolean onHurt() {
+        return hurtTime > 0;
+    }
+
+    public boolean hasBackpack() {
+        return getBackLevel() != EntityMaid.EnumBackPackLevel.EMPTY;
+    }
+
+    public int getBackpackLevel() {
+        return getBackLevel().getLevel();
+    }
+
+    public void setBackpackLevel(EnumBackPackLevel level) {
+        this.dataManager.set(BACKPACK_LEVEL,
+                MathHelper.clamp(level.getLevel(), EnumBackPackLevel.EMPTY.getLevel(), EnumBackPackLevel.BIG.getLevel()));
+    }
+
     @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
@@ -1729,7 +1784,9 @@ public class EntityMaid extends AbstractEntityMaid {
         // 女仆是否处于睡觉状态
         SLEEP("MaidIsSleep"),
         // 女仆好感度
-        FAVORABILITY("MaidFavorability");
+        FAVORABILITY("MaidFavorability"),
+        // 女仆娱乐设施的计数器
+        JOY_TICK_DATA("MaidJoyTickData");
 
         private String name;
 

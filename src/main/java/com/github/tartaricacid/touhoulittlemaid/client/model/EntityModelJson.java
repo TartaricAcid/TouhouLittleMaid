@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
+import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.IAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityChairWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityMaidWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
@@ -133,6 +134,7 @@ public class EntityModelJson extends ModelBase {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
                                   float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
         if (animations == null) {
@@ -140,16 +142,20 @@ public class EntityModelJson extends ModelBase {
         }
         Invocable invocable = (Invocable) CommonProxy.NASHORN;
         if (entityIn instanceof EntityMaid) {
-            entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
-            String modelId = ((EntityMaid) entityIn).getModelId();
-            try {
-                for (Object animation : animations) {
-                    invocable.invokeMethod(animation, "animation",
-                            entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+            for (Object animation : animations) {
+                if (animation instanceof IAnimation) {
+                    ((IAnimation) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn, modelMap);
+                } else {
+                    entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
+                    String modelId = ((EntityMaid) entityIn).getModelId();
+                    try {
+                        invocable.invokeMethod(animation, "animation",
+                                entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        CustomResourcesLoader.MAID_MODEL.removeAnimation(modelId);
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                CustomResourcesLoader.MAID_MODEL.removeAnimation(modelId);
             }
             if (((EntityMaid) entityIn).isSleep()) {
                 GlStateManager.rotate(180, 0, 1, 0);
@@ -158,17 +164,22 @@ public class EntityModelJson extends ModelBase {
             }
             return;
         }
+
         if (entityIn instanceof EntityChair) {
-            entityChairWrapper.setChair((EntityChair) entityIn);
-            String modelId = ((EntityChair) entityIn).getModelId();
-            try {
-                for (Object animation : animations) {
-                    invocable.invokeMethod(animation, "animation",
-                            entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+            for (Object animation : animations) {
+                if (animation instanceof IAnimation) {
+                    ((IAnimation) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn, modelMap);
+                } else {
+                    entityChairWrapper.setChair((EntityChair) entityIn);
+                    String modelId = ((EntityChair) entityIn).getModelId();
+                    try {
+                        invocable.invokeMethod(animation, "animation",
+                                entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        CustomResourcesLoader.CHAIR_MODEL.removeAnimation(modelId);
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                CustomResourcesLoader.CHAIR_MODEL.removeAnimation(modelId);
             }
         }
     }

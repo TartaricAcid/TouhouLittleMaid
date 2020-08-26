@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.InnerAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.PlayerMaidResources;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ReloadResourceEvent {
     @SubscribeEvent
     public static void onTextureStitchEvent(TextureStitchEvent.Post event) {
+        InnerAnimation.init();
         CustomResourcesLoader.reloadResources();
         PlayerMaidResources.reloadResources();
     }

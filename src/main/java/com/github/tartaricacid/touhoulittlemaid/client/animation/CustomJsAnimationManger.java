@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation;
 
+import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.InnerAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
@@ -13,14 +14,11 @@ import org.apache.commons.io.IOUtils;
 import javax.annotation.Nullable;
 import javax.script.Bindings;
 import javax.script.ScriptException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 @SideOnly(Side.CLIENT)
 public class CustomJsAnimationManger {
@@ -48,6 +46,9 @@ public class CustomJsAnimationManger {
         }
         if (CUSTOM_ANIMATION_MAP.containsKey(resourceLocation)) {
             return CUSTOM_ANIMATION_MAP.get(resourceLocation);
+        }
+        if (InnerAnimation.getInnerAnimation().containsKey(resourceLocation)) {
+            return InnerAnimation.getInnerAnimation().get(resourceLocation);
         }
         InputStream stream = null;
         try {

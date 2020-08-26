@@ -279,7 +279,7 @@ task.touhou_little_maid.extinguishing=Extinguishing
 # GUI
 gui.touhou_little_maid.info.healthy=HP: %f/%f
 gui.touhou_little_maid.info.armor=AR: %f/20.0
-gui.touhou_little_maid.info.attack=AT: %f
+gui.touhou_little_maid.info.attack=AT: %d
 gui.touhou_little_maid.info.experience=Exp: %d
 gui.touhou_little_maid.tab.main=Main
 gui.touhou_little_maid.tab.inventory=Inventory

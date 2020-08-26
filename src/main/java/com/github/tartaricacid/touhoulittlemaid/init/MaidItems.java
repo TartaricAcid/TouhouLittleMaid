@@ -93,6 +93,8 @@ public final class MaidItems {
     public static Item POWER_POINT;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "maid_bed")
     public static Item MAID_BED;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "maid_joy")
+    public static Item MAID_JOY;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -187,6 +189,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemExtinguisher().setRegistryName("extinguisher"));
         event.getRegistry().register(new ItemPowerPoint().setRegistryName("power_point"));
         event.getRegistry().register(new ItemMaidBed().setRegistryName("maid_bed"));
+        event.getRegistry().register(new ItemMaidJoy().setRegistryName("maid_joy"));
 
         event.getRegistry().register(new ItemMaidVehicle().setRegistryName("maid_vehicle"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));

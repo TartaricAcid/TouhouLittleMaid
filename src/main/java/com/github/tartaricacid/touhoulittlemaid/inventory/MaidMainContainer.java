@@ -60,7 +60,7 @@ public class MaidMainContainer extends Container {
     @Override
     public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
         return this.maid.getOwnerId() != null && this.maid.getOwnerId().equals(playerIn.getUniqueID())
-                && this.maid.isEntityAlive() && this.maid.getDistance(playerIn) < 5.0F;
+                && this.maid.isEntityAlive() && !maid.isSleep() && this.maid.getDistance(playerIn) < 5.0F;
     }
 
     private void addPlayerSlots(IInventory playerInventory) {

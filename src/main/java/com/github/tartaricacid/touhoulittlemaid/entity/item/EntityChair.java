@@ -256,6 +256,32 @@ public class EntityChair extends AbstractEntityFromItem {
         this.dataManager.set(TAMEABLE_CAN_RIDE, canRide);
     }
 
+    public boolean hasPassenger() {
+        return !getPassengers().isEmpty();
+    }
+
+    public float getPassengerYaw() {
+        if (!getPassengers().isEmpty()) {
+            return getPassengers().get(0).rotationYaw;
+        }
+        return 0;
+    }
+
+    public float getYaw() {
+        return rotationYaw;
+    }
+
+    public float getPassengerPitch() {
+        if (!getPassengers().isEmpty()) {
+            return getPassengers().get(0).rotationPitch;
+        }
+        return 0;
+    }
+
+    public int getDim() {
+        return dimension;
+    }
+
     enum NBT {
         // 模型 ID
         MODEL_ID("ModelId"),

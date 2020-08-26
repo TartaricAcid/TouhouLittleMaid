@@ -1,0 +1,73 @@
+package com.github.tartaricacid.touhoulittlemaid.entity.ai;
+
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidJoy;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidJoy;
+import net.minecraft.block.Block;
+import net.minecraft.entity.ai.EntityAIMoveToBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.List;
+
+public class EntityMaidFindJoyBlock extends EntityAIMoveToBlock {
+    private final EntityMaid maid;
+
+    public EntityMaidFindJoyBlock(EntityMaid maid, double speedIn) {
+        super(maid, speedIn, 8);
+        this.maid = maid;
+    }
+
+    @Override
+    public boolean shouldExecute() {
+        return this.maid.isTamed() && !this.maid.isSitting() && !this.maid.isSleep() && super.shouldExecute();
+    }
+
+    @Override
+    public void updateTask() {
+        super.updateTask();
+        if (this.getIsAboveDestination()) {
+            List<EntityMaidJoy> joyList = maid.world.getEntitiesWithinAABB(EntityMaidJoy.class, new AxisAlignedBB(destinationBlock));
+            if (!joyList.isEmpty()) {
+                return;
+            }
+            TileEntity te = maid.world.getTileEntity(destinationBlock);
+            if (!(te instanceof TileEntityMaidJoy)) {
+                return;
+            }
+            String type = ((TileEntityMaidJoy) te).getType();
+            EntityMaidJoy entityMaidJoy = new EntityMaidJoy(maid.world, type,
+                    destinationBlock.getX() + 0.5,
+                    destinationBlock.getY() + 0.5625,
+                    destinationBlock.getZ() + 0.5);
+            maid.world.spawnEntity(entityMaidJoy);
+            maid.startRiding(entityMaidJoy);
+        }
+    }
+
+    @Override
+    public boolean shouldContinueExecuting() {
+        return this.maid.isTamed() && !this.maid.isSitting() && !this.maid.isSleep() && super.shouldContinueExecuting();
+    }
+
+    @Override
+    protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
+        if (worldIn.isAirBlock(pos.up())) {
+            Block block = worldIn.getBlockState(pos).getBlock();
+            if (block == MaidBlocks.MAID_JOY) {
+                List<EntityMaidJoy> joyList = maid.world.getEntitiesWithinAABB(EntityMaidJoy.class, new AxisAlignedBB(pos));
+                if (joyList.isEmpty()) {
+                    TileEntity te = worldIn.getTileEntity(pos);
+                    if (te instanceof TileEntityMaidJoy) {
+                        return JoyType.canUseJoyType(maid, ((TileEntityMaidJoy) te).getType());
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
