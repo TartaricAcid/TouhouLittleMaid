@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.*;
+import com.github.tartaricacid.touhoulittlemaid.client.model.BookDeskModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.LivingModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.PianoModel;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidJoy;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,20 +15,12 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityMaidJoyRenderer extends TileEntitySpecialRenderer<TileEntityMaidJoy> {
     private static final ModelBase BOOK_DESK = new BookDeskModel();
-    private static final ModelBase PLAY_STATION = new PlayStationModel();
     private static final ModelBase PIANO = new PianoModel();
-    private static final ModelBase DRUM = new DrumModel();
     private static final ModelBase LIVING = new LivingModel();
-    private static final ModelBase MANUAL_DESK = new ManualDeskModel();
-    private static final ModelBase TEA_DESK = new TeaDeskModel();
 
     private static final ResourceLocation BOOK_DESK_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/book_desk.png");
-    private static final ResourceLocation PLAY_STATION_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/play_station.png");
     private static final ResourceLocation PIANO_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/piano.png");
-    private static final ResourceLocation DRUM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/drum.png");
     private static final ResourceLocation LIVING_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/living.png");
-    private static final ResourceLocation MANUAL_DESK_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/manual_desk.png");
-    private static final ResourceLocation TEA_DESK_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tea_desk.png");
 
     @Override
     public void render(TileEntityMaidJoy te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -80,40 +74,24 @@ public class TileEntityMaidJoyRenderer extends TileEntitySpecialRenderer<TileEnt
     public ResourceLocation getTexture(String type) {
         switch (type) {
             default:
-            case "game":
-                return PLAY_STATION_TEXTURE;
             case "reading":
                 return BOOK_DESK_TEXTURE;
             case "piano":
                 return PIANO_TEXTURE;
-            case "drum":
-                return DRUM_TEXTURE;
             case "live":
                 return LIVING_TEXTURE;
-            case "making_manual":
-                return MANUAL_DESK_TEXTURE;
-            case "tea":
-                return TEA_DESK_TEXTURE;
         }
     }
 
     public ModelBase getModel(String type) {
         switch (type) {
             default:
-            case "game":
-                return PLAY_STATION;
             case "reading":
                 return BOOK_DESK;
             case "piano":
                 return PIANO;
-            case "drum":
-                return DRUM;
             case "live":
                 return LIVING;
-            case "making_manual":
-                return MANUAL_DESK;
-            case "tea":
-                return TEA_DESK;
         }
     }
 }

@@ -59,6 +59,9 @@ item.touhou_little_maid.chisel.name=雕刻刀
 item.touhou_little_maid.extinguisher.name=灭火器
 item.touhou_little_maid.power_point.name=P 点
 item.touhou_little_maid.maid_bed.name=女仆床
+item.touhou_little_maid.maid_joy.reading.name=书桌
+item.touhou_little_maid.maid_joy.piano.name=电子琴
+item.touhou_little_maid.maid_joy.live.name=直播站
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办

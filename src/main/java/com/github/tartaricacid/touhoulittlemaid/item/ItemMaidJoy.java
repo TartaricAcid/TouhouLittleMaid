@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -54,6 +55,12 @@ public class ItemMaidJoy extends Item {
     }
 
     @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        String key = String.format("item.touhou_little_maid.maid_joy.%s.name", getType(stack));
+        return I18n.translateToLocal(key);
+    }
+
+    @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             for (String joyType : JoyType.JOYS.keySet()) {
@@ -64,9 +71,9 @@ public class ItemMaidJoy extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote) {
-            return EnumActionResult.SUCCESS;
-        }
+//        if (worldIn.isRemote) {
+//            return EnumActionResult.SUCCESS;
+//        }
 
         if (facing != EnumFacing.UP) {
             return EnumActionResult.FAIL;

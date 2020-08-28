@@ -244,7 +244,9 @@ public final class InnerAnimation {
 
                 float[] rotation;
                 if (armLeft != null) {
-                    if (isHoldTrolley(maid)) {
+                    if (maid.isSitInJoyBlock()) {
+                        armLeft.setRotateAngleX(-1.3f);
+                    } else if (isHoldTrolley(maid)) {
                         armLeft.setRotateAngleX(0.5f);
                         armLeft.setRotateAngleY(0);
                         armLeft.setRotateAngleZ(-0.395f);
@@ -266,7 +268,9 @@ public final class InnerAnimation {
                 }
 
                 if (armRight != null) {
-                    if (isHoldVehicle(maid)) {
+                    if (maid.isSitInJoyBlock()) {
+                        armRight.setRotateAngleX(-1.3f);
+                    } else if (isHoldVehicle(maid)) {
                         rotation = getRightHandRotation(maid);
                         armRight.setRotateAngleX(rotation[0]);
                         armRight.setRotateAngleY(rotation[1]);
@@ -1694,7 +1698,9 @@ public final class InnerAnimation {
                 double f3 = Math.sin(maid.swingProgress * Math.PI) * -0.7 * 0.75;
 
                 if (armLeft != null) {
-                    if (isHoldTrolley(maid)) {
+                    if (maid.isSitInJoyBlock()) {
+                        armLeft.setRotateAngleX(-1.8f);
+                    } else if (isHoldTrolley(maid)) {
                         armLeft.setRotateAngleX(0.5f);
                         armLeft.setRotateAngleY(0);
                         armLeft.setRotateAngleZ(-0.395f);
@@ -1716,7 +1722,9 @@ public final class InnerAnimation {
                 }
 
                 if (armRight != null) {
-                    if (isHoldVehicle(maid)) {
+                    if (maid.isSitInJoyBlock()) {
+                        armRight.setRotateAngleX(-1.8f);
+                    } else if (isHoldVehicle(maid)) {
                         float[] rotation = getRightHandRotation(maid);
                         armRight.setRotateAngleX(rotation[0]);
                         armRight.setRotateAngleY(rotation[1]);

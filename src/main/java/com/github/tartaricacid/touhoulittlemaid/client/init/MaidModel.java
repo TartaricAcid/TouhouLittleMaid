@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.*;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidVehicle;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidJoy;
@@ -171,7 +172,13 @@ public final class MaidModel {
             maidJoy.add(getModelRl(TouhouLittleMaid.MOD_ID, type));
         }
         ModelBakery.registerItemVariants(MaidItems.MAID_JOY, maidJoy.toArray(new ModelResourceLocation[]{}));
-        ModelLoader.setCustomMeshDefinition(MaidItems.MAID_JOY,
-                stack -> maidJoy.get(JOYS.get(ItemMaidJoy.getType(stack)).getIndex()));
+        ModelLoader.setCustomMeshDefinition(MaidItems.MAID_JOY, (stack -> {
+            JoyType type = JOYS.get(ItemMaidJoy.getType(stack));
+            if (type != null) {
+                return maidJoy.get(type.getIndex());
+            } else {
+                return maidJoy.get(0);
+            }
+        }));
     }
 }

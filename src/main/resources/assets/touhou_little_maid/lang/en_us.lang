@@ -59,6 +59,9 @@ item.touhou_little_maid.chisel.name=Chisel
 item.touhou_little_maid.extinguisher.name=Extinguisher
 item.touhou_little_maid.power_point.name=Power Point
 item.touhou_little_maid.maid_bed.name=Maid Bed
+item.touhou_little_maid.maid_joy.reading.name=Book Desk
+item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
+item.touhou_little_maid.maid_joy.live.name=Live Station
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit

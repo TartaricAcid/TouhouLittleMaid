@@ -14,6 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResources
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.AbstractEntityFromItem;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidJoy;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMarisaBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
@@ -1721,6 +1722,10 @@ public class EntityMaid extends AbstractEntityMaid {
     public void setBackpackLevel(EnumBackPackLevel level) {
         this.dataManager.set(BACKPACK_LEVEL,
                 MathHelper.clamp(level.getLevel(), EnumBackPackLevel.EMPTY.getLevel(), EnumBackPackLevel.BIG.getLevel()));
+    }
+
+    public boolean isSitInJoyBlock() {
+        return getRidingEntity() instanceof EntityMaidJoy;
     }
 
     @Nonnull

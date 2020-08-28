@@ -6,6 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyT
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidJoy;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -31,6 +33,10 @@ public class EntityMaidFindJoyBlock extends EntityAIMoveToBlock {
     public void updateTask() {
         super.updateTask();
         if (this.getIsAboveDestination()) {
+            IBlockState state = maid.world.getBlockState(destinationBlock);
+            if (state.getBlock() != MaidBlocks.MAID_JOY) {
+                return;
+            }
             List<EntityMaidJoy> joyList = maid.world.getEntitiesWithinAABB(EntityMaidJoy.class, new AxisAlignedBB(destinationBlock));
             if (!joyList.isEmpty()) {
                 return;
@@ -39,11 +45,24 @@ public class EntityMaidFindJoyBlock extends EntityAIMoveToBlock {
             if (!(te instanceof TileEntityMaidJoy)) {
                 return;
             }
+
+            // 取消骑乘状态
+            if (maid.getRidingEntity() != null) {
+                maid.dismountRidingEntity();
+            }
+            // 取消被骑乘状态
+            if (maid.getControllingPassenger() != null) {
+                maid.getControllingPassenger().dismountRidingEntity();
+            }
+
             String type = ((TileEntityMaidJoy) te).getType();
             EntityMaidJoy entityMaidJoy = new EntityMaidJoy(maid.world, type,
                     destinationBlock.getX() + 0.5,
                     destinationBlock.getY() + 0.5625,
                     destinationBlock.getZ() + 0.5);
+            float yaw = state.getValue(BlockHorizontal.FACING).getHorizontalAngle();
+            entityMaidJoy.rotationYaw = yaw;
+            entityMaidJoy.prevRotationYaw = yaw;
             maid.world.spawnEntity(entityMaidJoy);
             maid.startRiding(entityMaidJoy);
         }

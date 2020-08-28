@@ -38,6 +38,9 @@ public class EntityMaidAvoidEntity<T extends Entity> extends EntityAIAvoidEntity
             if (maid.isSitting()) {
                 maid.setSitting(false);
             }
+            if (maid.getRidingEntity() != null) {
+                maid.dismountRidingEntity();
+            }
         }
     }
 

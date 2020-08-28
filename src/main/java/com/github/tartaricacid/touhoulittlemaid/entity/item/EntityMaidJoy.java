@@ -1,12 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class EntityMaidJoy extends Entity {
-    private String type;
+    private String type = "";
 
     public EntityMaidJoy(World worldIn) {
         super(worldIn);
@@ -26,11 +27,16 @@ public class EntityMaidJoy extends Entity {
         if (this.getPassengers().isEmpty() || world.getBlockState(this.getPosition().down()).getBlock() != MaidBlocks.MAID_JOY) {
             this.setDead();
         }
+        if (!getPassengers().isEmpty() && getPassengers().get(0) instanceof EntityMaid) {
+            EntityMaid maid = (EntityMaid) getPassengers().get(0);
+            maid.rotationYaw = this.rotationYaw;
+            maid.rotationYawHead = this.rotationYaw;
+        }
     }
 
     @Override
     public double getMountedYOffset() {
-        return -0.6;
+        return -0.3;
     }
 
     @Override

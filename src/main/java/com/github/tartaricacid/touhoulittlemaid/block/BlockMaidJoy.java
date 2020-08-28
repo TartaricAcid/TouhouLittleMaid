@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidJoy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidJoy;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
@@ -101,6 +102,12 @@ public class BlockMaidJoy extends BlockHorizontal implements ITileEntityProvider
 
     @Override
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-        return new ItemStack(MaidItems.MAID_JOY);
+        ItemStack stack = new ItemStack(MaidItems.MAID_JOY);
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileEntityMaidJoy) {
+            TileEntityMaidJoy maidJoy = (TileEntityMaidJoy) te;
+            return ItemMaidJoy.setType(stack, maidJoy.getType());
+        }
+        return stack;
     }
 }

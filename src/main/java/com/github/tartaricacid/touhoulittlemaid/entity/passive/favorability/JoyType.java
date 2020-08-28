@@ -13,12 +13,8 @@ public final class JoyType {
     private static final int FAVORABILITY_INCREASES_FREQUENCY = 100;
     private static int COUNTER = 0;
     public static final JoyType READING = addJoyType("reading", 20 * 60, 20 * 60 * 10);
-    public static final JoyType GAME = addJoyType("game", 20 * 30, 20 * 60 * 20);
     public static final JoyType PIANO = addJoyType("piano", 20 * 60, 20 * 60 * 15);
-    public static final JoyType DRUM = addJoyType("drum", 20 * 60, 20 * 60 * 15);
     public static final JoyType LIVE = addJoyType("live", 20 * 60, 20 * 60 * 10);
-    public static final JoyType MAKING_MANUAL = addJoyType("making_manual", 20 * 60, 20 * 60 * 10);
-    public static final JoyType TEA = addJoyType("tea", 20 * 60, 20 * 60 * 10);
     private final String name;
     private final int joyingTick;
     private final int coolingTick;
