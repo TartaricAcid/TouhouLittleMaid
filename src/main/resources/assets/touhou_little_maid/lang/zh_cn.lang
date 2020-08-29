@@ -282,7 +282,7 @@ task.touhou_little_maid.extinguishing=灭火
 # GUI
 gui.touhou_little_maid.info.healthy=血量：%f/%f
 gui.touhou_little_maid.info.armor=护甲：%f/20.0
-gui.touhou_little_maid.info.attack=伤害：%d
+gui.touhou_little_maid.info.favorability=好感度：%d
 gui.touhou_little_maid.info.experience=经验：%d
 gui.touhou_little_maid.tab.main=主界面
 gui.touhou_little_maid.tab.inventory=物品栏

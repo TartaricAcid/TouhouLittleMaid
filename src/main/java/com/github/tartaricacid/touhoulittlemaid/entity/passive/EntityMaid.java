@@ -22,6 +22,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.EventType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.FavorabilityEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.Level;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.TaskIdle;
@@ -289,6 +290,14 @@ public class EntityMaid extends AbstractEntityMaid {
         if (!world.isRemote) {
             JoyType.updateJoyTick(this, joyTickData);
         }
+        // 夜间、雷暴天工作
+        if (ticksExisted % 1000 == 0 && !world.isRemote) {
+            if (!world.isDaytime() || world.isThundering()) {
+                if (!this.getTask().getUid().equals(TaskIdle.UID)) {
+                    MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.WORK_NIGHT_OR_THUNDERSTORM, this));
+                }
+            }
+        }
     }
 
     private void onMaidSleep() {
@@ -302,13 +311,16 @@ public class EntityMaid extends AbstractEntityMaid {
                     this.setHealth(getMaxHealth());
                     MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.WAKE_UP_NATURALLY, this));
                 } else {
-                    this.setSilent(true);
-                    if (ticksExisted % 3 == 0) {
+                    if (!this.isSilent()) {
+                        this.setSilent(true);
+                    }
+                    if (ticksExisted % 2 == 0) {
                         setPositionAndRotation(Math.floor(this.posX) + 0.5, this.posY, Math.floor(this.posZ) + 0.5,
                                 state.getValue(BlockHorizontal.FACING).getHorizontalAngle(), 0);
                     }
-                    if (ticksExisted % 20 == 0) {
-                        CommonProxy.INSTANCE.sendToAllAround(new UpdateMaidSleepYawMessage(getEntityId(), state.getValue(BlockHorizontal.FACING).getHorizontalAngle()),
+                    if (ticksExisted % 60 == 0) {
+                        CommonProxy.INSTANCE.sendToAllAround(new UpdateMaidSleepYawMessage(getEntityId(),
+                                        state.getValue(BlockHorizontal.FACING).getHorizontalAngle()),
                                 new NetworkRegistry.TargetPoint(dimension, posX, posY, posZ, 128));
                     }
                 }
@@ -340,7 +352,8 @@ public class EntityMaid extends AbstractEntityMaid {
      */
     private void randomRestoreHealth() {
         if (this.getHealth() < this.getMaxHealth() && rand.nextFloat() < 0.0025) {
-            this.heal(1);
+            Level level = Level.getLevelByCount(getFavorability());
+            this.heal(level.getHealthyValue() / 20);
             this.spawnRestoreHealthParticle(rand.nextInt(3) + 7);
         }
     }
@@ -618,8 +631,14 @@ public class EntityMaid extends AbstractEntityMaid {
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
         // 拥有旗指物时，玩家对自己女仆的伤害数值为 1/5，最大为 2
-        if (source.getTrueSource() instanceof EntityPlayer && this.isOwner((EntityPlayer) source.getTrueSource()) && this.hasSasimono()) {
-            amount = MathHelper.clamp(amount / 5, 0, 2);
+        if (source.getTrueSource() instanceof EntityPlayer && this.isOwner((EntityPlayer) source.getTrueSource())) {
+            if (this.hasSasimono()) {
+                amount = MathHelper.clamp(amount / 5, 0, 2);
+            } else {
+                MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.HURT_BY_PLAYER, this));
+            }
+        } else {
+            MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.HURT, this));
         }
         return super.attackEntityFrom(source, amount);
     }
@@ -711,7 +730,7 @@ public class EntityMaid extends AbstractEntityMaid {
         super.onStruckByLightning(lightningBolt);
         if (!isStruckByLightning()) {
             double beforeMaxHealth = this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
-            this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(beforeMaxHealth * 2);
+            this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(beforeMaxHealth + 20);
             setStruckByLightning(true);
         }
     }
@@ -829,6 +848,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (baubleInv.fireEvent((b, s) -> b.onDropsPre(this, s))) {
             return;
         }
+
+        // 好感度
+        MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.DEATH, this));
 
         // 将女仆身上的物品进行掉落
         if (!world.isRemote) {

@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "touhou_little_maid:maid_bed"
+    "model": "touhou_little_maid:maid_bed_head"
   },
   "variants": {
     "facing": {
@@ -18,10 +18,10 @@
       }
     },
     "part": {
-      "head": {
-        "model": "touhou_little_maid:maid_bed_empty"
-      },
-      "foot": {}
+      "head": {},
+      "foot": {
+        "model": "touhou_little_maid:maid_bed_foot"
+      }
     }
   }
 }
