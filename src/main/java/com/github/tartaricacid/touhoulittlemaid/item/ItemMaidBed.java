@@ -52,7 +52,7 @@ public class ItemMaidBed extends Item {
             boolean posBlockStateIsOkay = replaceable || worldIn.isAirBlock(pos);
             boolean offsetBlockStateIsOkay = offsetBlockState.getBlock().isReplaceable(worldIn, offsetPos) || worldIn.isAirBlock(offsetPos);
             if (posBlockStateIsOkay && offsetBlockStateIsOkay && worldIn.getBlockState(pos.down()).isTopSolid() && worldIn.getBlockState(offsetPos.down()).isTopSolid()) {
-                IBlockState maidBedFoot = MaidBlocks.MAID_BED.getDefaultState().withProperty(BlockMaidBed.OCCUPIED, Boolean.FALSE).withProperty(BlockMaidBed.FACING, playerFacing).withProperty(BlockMaidBed.PART, BlockMaidBed.EnumPartType.FOOT);
+                IBlockState maidBedFoot = MaidBlocks.MAID_BED.getDefaultState().withProperty(BlockMaidBed.FACING, playerFacing).withProperty(BlockMaidBed.PART, BlockMaidBed.EnumPartType.FOOT);
                 worldIn.setBlockState(pos, maidBedFoot, 10);
                 worldIn.setBlockState(offsetPos, maidBedFoot.withProperty(BlockMaidBed.PART, BlockMaidBed.EnumPartType.HEAD), 10);
                 SoundType soundtype = maidBedFoot.getBlock().getSoundType(maidBedFoot, worldIn, pos, player);

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidJoy;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityMaidJoy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType;
@@ -34,15 +35,17 @@ public class EntityMaidFindJoyBlock extends EntityAIMoveToBlock {
         super.updateTask();
         if (this.getIsAboveDestination()) {
             IBlockState state = maid.world.getBlockState(destinationBlock);
-            if (state.getBlock() != MaidBlocks.MAID_JOY) {
+            if (state.getBlock() != MaidBlocks.MAID_JOY || !state.getValue(BlockMaidJoy.CORE)) {
                 return;
             }
+
+            TileEntity te = maid.world.getTileEntity(destinationBlock);
+            if (!(te instanceof TileEntityMaidJoy) || !((TileEntityMaidJoy) te).isCoreBlock()) {
+                return;
+            }
+
             List<EntityMaidJoy> joyList = maid.world.getEntitiesWithinAABB(EntityMaidJoy.class, new AxisAlignedBB(destinationBlock));
             if (!joyList.isEmpty()) {
-                return;
-            }
-            TileEntity te = maid.world.getTileEntity(destinationBlock);
-            if (!(te instanceof TileEntityMaidJoy)) {
                 return;
             }
 
@@ -76,12 +79,13 @@ public class EntityMaidFindJoyBlock extends EntityAIMoveToBlock {
     @Override
     protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
         if (worldIn.isAirBlock(pos.up())) {
-            Block block = worldIn.getBlockState(pos).getBlock();
-            if (block == MaidBlocks.MAID_JOY) {
-                List<EntityMaidJoy> joyList = maid.world.getEntitiesWithinAABB(EntityMaidJoy.class, new AxisAlignedBB(pos));
-                if (joyList.isEmpty()) {
-                    TileEntity te = worldIn.getTileEntity(pos);
-                    if (te instanceof TileEntityMaidJoy) {
+            IBlockState state = worldIn.getBlockState(pos);
+            Block block = state.getBlock();
+            if (block == MaidBlocks.MAID_JOY && state.getValue(BlockMaidJoy.CORE)) {
+                TileEntity te = worldIn.getTileEntity(pos);
+                if (te instanceof TileEntityMaidJoy && ((TileEntityMaidJoy) te).isCoreBlock()) {
+                    List<EntityMaidJoy> joyList = maid.world.getEntitiesWithinAABB(EntityMaidJoy.class, new AxisAlignedBB(pos));
+                    if (joyList.isEmpty()) {
                         return JoyType.canUseJoyType(maid, ((TileEntityMaidJoy) te).getType());
                     }
                 }

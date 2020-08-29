@@ -13,11 +13,11 @@ public class EntityMaidLookIdle extends EntityAILookIdle {
 
     @Override
     public boolean shouldExecute() {
-        return super.shouldExecute() && !maid.isSleep();
+        return super.shouldExecute() && !maid.isSleep() && !maid.isSitInJoyBlock();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return super.shouldContinueExecuting() && !maid.isSleep();
+        return super.shouldContinueExecuting() && !maid.isSleep() && !maid.isSitInJoyBlock();
     }
 }

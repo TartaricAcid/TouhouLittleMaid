@@ -6,9 +6,19 @@
   "variants": {
     "facing": {
       "north": {},
-      "south": {"y": 180},
-      "west": {"y": 270},
-      "east": {"y": 90}
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      },
+      "east": {
+        "y": 90
+      }
+    },
+    "core": {
+      "true": {},
+      "false": {}
     }
   }
 }

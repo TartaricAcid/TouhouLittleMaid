@@ -22,10 +22,6 @@
         "model": "touhou_little_maid:maid_bed_empty"
       },
       "foot": {}
-    },
-    "occupied": {
-      "true": {},
-      "false": {}
     }
   }
 }

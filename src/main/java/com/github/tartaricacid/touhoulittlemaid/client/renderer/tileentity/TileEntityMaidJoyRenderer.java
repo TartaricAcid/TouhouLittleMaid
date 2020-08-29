@@ -24,6 +24,9 @@ public class TileEntityMaidJoyRenderer extends TileEntitySpecialRenderer<TileEnt
 
     @Override
     public void render(TileEntityMaidJoy te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        if (!te.isCoreBlock()) {
+            return;
+        }
         EnumFacing facing = EnumFacing.byHorizontalIndex(te.getBlockMetadata());
         String type = te.getType();
 
@@ -71,7 +74,7 @@ public class TileEntityMaidJoyRenderer extends TileEntitySpecialRenderer<TileEnt
         return true;
     }
 
-    public ResourceLocation getTexture(String type) {
+    public static ResourceLocation getTexture(String type) {
         switch (type) {
             default:
             case "reading":
@@ -83,7 +86,7 @@ public class TileEntityMaidJoyRenderer extends TileEntitySpecialRenderer<TileEnt
         }
     }
 
-    public ModelBase getModel(String type) {
+    public static ModelBase getModel(String type) {
         switch (type) {
             default:
             case "reading":

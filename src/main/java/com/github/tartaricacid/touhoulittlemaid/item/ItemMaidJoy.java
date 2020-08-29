@@ -1,12 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBed;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidJoy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidJoy;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,6 +22,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+
+import java.util.List;
+
+import static com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability.JoyType.JOYS;
 
 public class ItemMaidJoy extends Item {
     private static final String TYPE_TAG_NAME = "MaidJoyType";
@@ -63,7 +69,7 @@ public class ItemMaidJoy extends Item {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            for (String joyType : JoyType.JOYS.keySet()) {
+            for (String joyType : JOYS.keySet()) {
                 items.add(setType(new ItemStack(this), joyType));
             }
         }
@@ -71,10 +77,6 @@ public class ItemMaidJoy extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-//        if (worldIn.isRemote) {
-//            return EnumActionResult.SUCCESS;
-//        }
-
         if (facing != EnumFacing.UP) {
             return EnumActionResult.FAIL;
         }
@@ -90,23 +92,39 @@ public class ItemMaidJoy extends Item {
         int index = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         EnumFacing playerFacing = EnumFacing.byHorizontalIndex(index);
         ItemStack itemstack = player.getHeldItem(hand);
+        JoyType type = JOYS.get(getType(itemstack));
+        BlockPos[] posList = type.getPosList(playerFacing);
+        List<BlockPos> absolutePosList = Lists.newArrayList();
 
-        if (player.canPlayerEdit(pos, facing, itemstack)) {
-            boolean posBlockStateIsOkay = replaceable || worldIn.isAirBlock(pos);
-            if (posBlockStateIsOkay && worldIn.getBlockState(pos.down()).isTopSolid()) {
-                IBlockState maidJoy = MaidBlocks.MAID_JOY.getDefaultState().withProperty(BlockMaidBed.FACING, playerFacing);
-                worldIn.setBlockState(pos, maidJoy, 10);
-                SoundType soundtype = maidJoy.getBlock().getSoundType(maidJoy, worldIn, pos, player);
-                worldIn.playSound(null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                if (worldIn.getTileEntity(pos) instanceof TileEntityMaidJoy) {
-                    String type = getType(itemstack);
-                    TileEntityMaidJoy te = (TileEntityMaidJoy) (worldIn.getTileEntity(pos));
-                    te.setType(type);
-                }
-                itemstack.shrink(1);
-                return EnumActionResult.SUCCESS;
+        for (BlockPos p : posList) {
+            BlockPos posIn = pos.add(p);
+            absolutePosList.add(posIn);
+            IBlockState state = worldIn.getBlockState(posIn);
+
+            boolean blockIsOkay = state.getBlock().isReplaceable(worldIn, posIn) || worldIn.isAirBlock(posIn);
+            boolean playerCanEdit = player.canPlayerEdit(pos, facing, itemstack);
+            if (!playerCanEdit || !blockIsOkay) {
+                return EnumActionResult.FAIL;
             }
         }
-        return EnumActionResult.FAIL;
+
+        for (BlockPos p : absolutePosList) {
+            IBlockState maidJoy = MaidBlocks.MAID_JOY.getDefaultState()
+                    .withProperty(BlockHorizontal.FACING, playerFacing)
+                    .withProperty(BlockMaidJoy.CORE, p.equals(pos));
+            worldIn.setBlockState(p, maidJoy, 10);
+            if (worldIn.getTileEntity(p) instanceof TileEntityMaidJoy) {
+                TileEntityMaidJoy te = (TileEntityMaidJoy) (worldIn.getTileEntity(p));
+                if (te != null) {
+                    te.setForgeData(type.getName(), p.equals(pos), pos, absolutePosList);
+                }
+            }
+        }
+
+        SoundType soundtype = SoundType.WOOD;
+        worldIn.playSound(null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS,
+                (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+        itemstack.shrink(1);
+        return EnumActionResult.SUCCESS;
     }
 }
