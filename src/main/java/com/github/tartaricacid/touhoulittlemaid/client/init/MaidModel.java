@@ -167,17 +167,17 @@ public final class MaidModel {
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_VEHICLE,
                 stack -> maidVehicle.get(MathHelper.clamp(stack.getMetadata(), 0, EntityMaidVehicle.Type.values().length - 1)));
 
-        List<ModelResourceLocation> maidJoy = new ArrayList<>();
+        ModelResourceLocation[] maidJoy = new ModelResourceLocation[JOYS.size()];
         for (String type : JOYS.keySet()) {
-            maidJoy.add(getModelRl(TouhouLittleMaid.MOD_ID, type));
+            maidJoy[JOYS.get(type).getIndex()] = getModelRl(TouhouLittleMaid.MOD_ID, type);
         }
-        ModelBakery.registerItemVariants(MaidItems.MAID_JOY, maidJoy.toArray(new ModelResourceLocation[]{}));
+        ModelBakery.registerItemVariants(MaidItems.MAID_JOY, maidJoy);
         ModelLoader.setCustomMeshDefinition(MaidItems.MAID_JOY, (stack -> {
             JoyType type = JOYS.get(ItemMaidJoy.getType(stack));
             if (type != null) {
-                return maidJoy.get(type.getIndex());
+                return maidJoy[type.getIndex()];
             } else {
-                return maidJoy.get(0);
+                return maidJoy[0];
             }
         }));
     }

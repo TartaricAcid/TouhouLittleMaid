@@ -1,0 +1,21 @@
+{
+  "pools": [
+    {
+      "name": "power_point",
+      "rolls": 2,
+      "bonus_rolls": 2,
+      "entries": [
+        {
+          "type": "item",
+          "name": "touhou_little_maid:power_point"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "random_chance",
+          "chance": 0.8
+        }
+      ]
+    }
+  ]
+}

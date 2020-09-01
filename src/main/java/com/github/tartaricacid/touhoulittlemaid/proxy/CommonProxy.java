@@ -38,6 +38,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.Effect
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectRequest;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ServerEffectHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.github.tartaricacid.touhoulittlemaid.world.DungeonLootTable;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,6 +50,7 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -128,6 +130,7 @@ public class CommonProxy {
         if (Loader.isModLoaded("patchouli")) {
             MultiblockRegistry.init();
         }
+        LootTableList.register(DungeonLootTable.getPowerPointLoot());
     }
 
     public void postInit(FMLPostInitializationEvent event) {
