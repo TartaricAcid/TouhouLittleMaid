@@ -83,6 +83,8 @@ commands.touhou_little_maid.draw_coupon.reload=Has reloaded all draw coupon
 commands.touhou_little_maid.maid_res.usage=§cUsage: /maid_res <reload>
 commands.touhou_little_maid.maid_res.warning=§cTips: This command may not reload some resources
 commands.touhou_little_maid.maid_res.time=Reload Time: %.3f ms
+commands.touhou_little_maid.tlm_server_pack.usage=§cUsage: /tlm_server_pack <reload>
+commands.touhou_little_maid.tlm_server_pack.reload=The server model pack has been reloaded, re-enter the server to update the client model pack
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=Mode: %d
@@ -164,6 +166,7 @@ message.touhou_little_maid.maid.death_pos=Maid Death Pos:
 message.touhou_little_maid.maid.journeymap.name=JourneyMap:
 message.touhou_little_maid.maid.journeymap.hover_message.click=Click to create waypoint.
 message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=Ctrl + click to view on map.
+message.touhou_little_maid.server.pack_sync=§a[Touhou Little Maid] §6Syncing client model package...
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=Single Point

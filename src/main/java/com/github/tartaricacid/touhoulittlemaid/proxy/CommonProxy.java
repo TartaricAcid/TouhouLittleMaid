@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomMode
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.command.MainCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadDrawCommand;
+import com.github.tartaricacid.touhoulittlemaid.command.ReloadServerPackCommand;
 import com.github.tartaricacid.touhoulittlemaid.command.ReloadSpellCardCommand;
 import com.github.tartaricacid.touhoulittlemaid.compat.crafttweaker.AltarZen;
 import com.github.tartaricacid.touhoulittlemaid.compat.neat.NeatCompat;
@@ -27,6 +28,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.internal.task.*;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.serverpack.GetServerPackMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.serverpack.SendClientPackMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.serverpack.ServerPackManager;
+import com.github.tartaricacid.touhoulittlemaid.network.serverpack.SyncClientPackMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.*;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.ClientEffectHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.effect.EffectReply;
@@ -179,6 +184,7 @@ public class CommonProxy {
             AltarZen.DELAYED_ACTIONS.forEach(CraftTweakerAPI::apply);
             AltarZen.DELAYED_ACTIONS.clear();
         }
+        ServerPackManager.initCrc32Info();
     }
 
     public void loadComplete(FMLLoadCompleteEvent event) {
@@ -189,6 +195,7 @@ public class CommonProxy {
         event.registerServerCommand(new MainCommand());
         event.registerServerCommand(new ReloadSpellCardCommand());
         event.registerServerCommand(new ReloadDrawCommand());
+        event.registerServerCommand(new ReloadServerPackCommand());
     }
 
     /**
@@ -268,6 +275,9 @@ public class CommonProxy {
         INSTANCE.registerMessage(PortableAudioMessageToServer.Handler.class, PortableAudioMessageToServer.class, 24, Side.SERVER);
         INSTANCE.registerMessage(PortableAudioMessageToClient.Handler.class, PortableAudioMessageToClient.class, 25, Side.CLIENT);
         INSTANCE.registerMessage(UpdateMaidSleepYawMessage.Handler.class, UpdateMaidSleepYawMessage.class, 26, Side.CLIENT);
+        INSTANCE.registerMessage(SyncClientPackMessage.Handler.class, SyncClientPackMessage.class, 27, Side.CLIENT);
+        INSTANCE.registerMessage(GetServerPackMessage.Handler.class, GetServerPackMessage.class, 28, Side.SERVER);
+        INSTANCE.registerMessage(SendClientPackMessage.Handler.class, SendClientPackMessage.class, 29, Side.CLIENT);
     }
 
     /**

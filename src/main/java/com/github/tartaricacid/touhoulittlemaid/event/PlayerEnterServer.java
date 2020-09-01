@@ -26,7 +26,7 @@ public class PlayerEnterServer {
     public static void onPlayerEnterServer(PlayerLoggedInEvent event) {
         if (event.player instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            syncSpellCard(player);
+            // syncSpellCard(player); 此功能被废弃
             if (Loader.isModLoaded("patchouli")) {
                 giveGuideBook(player);
             }

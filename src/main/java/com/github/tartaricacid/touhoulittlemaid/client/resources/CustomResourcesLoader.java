@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimati
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.*;
+import com.github.tartaricacid.touhoulittlemaid.network.serverpack.ClientPackManager;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -35,9 +36,9 @@ public class CustomResourcesLoader {
     public static final CustomMaidModelResources MAID_MODEL = new CustomMaidModelResources("maid_model.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
     public static final CustomChairModelResources CHAIR_MODEL = new CustomChairModelResources("maid_chair.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
     public static final CustomSoundResources SOUND_INFO = new CustomSoundResources("maid_sound.json", Lists.newArrayList());
+    public static final String OLD_BEDROCK_VERSION = "1.10.0";
     private static final Logger LOGGER = TouhouLittleMaid.LOGGER;
     private static final Marker MARKER = MarkerManager.getMarker("ResourcesLoader");
-    private static final String OLD_BEDROCK_VERSION = "1.10.0";
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
     public static void reloadResources() {
@@ -49,6 +50,11 @@ public class CustomResourcesLoader {
         loadMaidModelPack();
         loadChairModelPack();
         loadSoundInfo();
+        if (!ClientPackManager.CRC32_LIST_FROM_SERVER.isEmpty()) {
+            for (long crc32 : ClientPackManager.CRC32_LIST_FROM_SERVER) {
+                ClientPackManager.readModelFromZipFile(ClientPackManager.getCrc32FileMap().get(crc32));
+            }
+        }
     }
 
     private static void loadMaidModelPack() {

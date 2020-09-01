@@ -19,10 +19,27 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 @SideOnly(Side.CLIENT)
 public class CustomJsAnimationManger {
     private static final Map<ResourceLocation, Object> CUSTOM_ANIMATION_MAP = Maps.newHashMap();
+
+    @Nullable
+    public static List<Object> getCustomAnimation(ZipFile zipFile, IModelInfo item) {
+        List<Object> animations = Lists.newArrayList();
+        if (item.getAnimation() != null && item.getAnimation().size() > 0) {
+            for (ResourceLocation res : item.getAnimation()) {
+                Object animation = CustomJsAnimationManger.getCustomAnimation(zipFile, res);
+                if (animation != null) {
+                    animations.add(animation);
+                }
+            }
+            return animations;
+        }
+        return null;
+    }
 
     @Nullable
     public static List<Object> getCustomAnimation(IModelInfo item) {
@@ -35,6 +52,32 @@ public class CustomJsAnimationManger {
                 }
             }
             return animations;
+        }
+        return null;
+    }
+
+    @Nullable
+    public static Object getCustomAnimation(ZipFile zipFile, @Nullable ResourceLocation resourceLocation) {
+        if (resourceLocation == null) {
+            return null;
+        }
+        if (CUSTOM_ANIMATION_MAP.containsKey(resourceLocation)) {
+            return CUSTOM_ANIMATION_MAP.get(resourceLocation);
+        }
+        if (InnerAnimation.getInnerAnimation().containsKey(resourceLocation)) {
+            return InnerAnimation.getInnerAnimation().get(resourceLocation);
+        }
+        ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", resourceLocation.getNamespace(), resourceLocation.getNamespace()));
+        if (entry == null) {
+            return null;
+        }
+        try (InputStream stream = zipFile.getInputStream(entry)) {
+            Bindings bindings = CommonProxy.NASHORN.createBindings();
+            Object scriptObject = CommonProxy.NASHORN.eval(IOUtils.toString(stream, StandardCharsets.UTF_8), bindings);
+            CUSTOM_ANIMATION_MAP.put(resourceLocation, scriptObject);
+            return scriptObject;
+        } catch (IOException | ScriptException e) {
+            e.printStackTrace();
         }
         return null;
     }

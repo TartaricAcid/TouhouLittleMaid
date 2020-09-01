@@ -83,6 +83,8 @@ commands.touhou_little_maid.draw_coupon.reload=已经重载所有的抽卡数据
 commands.touhou_little_maid.maid_res.usage=§c用法：/maid_res <reload>
 commands.touhou_little_maid.maid_res.warning=§c提醒：这条命令可能无法重载某些资源
 commands.touhou_little_maid.maid_res.time=重载耗时：%.3f ms
+commands.touhou_little_maid.tlm_server_pack.usage=§c用法：/tlm_server_pack <reload>
+commands.touhou_little_maid.tlm_server_pack.reload=服务端模型包已经重载，重新进服来更新客户端模型包
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=模式：%d
@@ -164,6 +166,7 @@ message.touhou_little_maid.maid.death_pos=女仆死亡坐标：
 message.touhou_little_maid.maid.journeymap.name=旅行地图：
 message.touhou_little_maid.maid.journeymap.hover_message.click=点击创建坐标点。
 message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=Ctrl 点击在大地图中进行查看。
+message.touhou_little_maid.server.pack_sync=§a[车万女仆] §6正在同步客户端模型……
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=单点模式
