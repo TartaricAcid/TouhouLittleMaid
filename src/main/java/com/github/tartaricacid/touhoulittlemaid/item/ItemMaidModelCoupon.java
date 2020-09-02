@@ -4,8 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.draw.DrawManger;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -77,8 +77,8 @@ public class ItemMaidModelCoupon extends Item {
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab) && GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
-            for (String modelId : DrawCalculation.getModelIdSet()) {
-                ItemStack stack = new ItemStack(this, 1, DrawCalculation.getModelLevel(modelId));
+            for (String modelId : DrawManger.getModelIdSet()) {
+                ItemStack stack = new ItemStack(this, 1, DrawManger.getModelLevel(modelId));
                 items.add(setModelData(stack, modelId));
             }
         }
@@ -116,27 +116,7 @@ public class ItemMaidModelCoupon extends Item {
             tooltip.add(I18n.format("tooltips.touhou_little_maid.maid_model_coupon.desc",
                     ParseI18n.parse(CustomResourcesLoader.MAID_MODEL.getInfo(getModelData(stack)).get().getName())));
         }
-        String star;
-        switch (stack.getMetadata()) {
-            case 1:
-                star = "§bN";
-                break;
-            case 2:
-                star = "§aR";
-                break;
-            case 3:
-                star = "§cSR";
-                break;
-            case 4:
-                star = "§5SSR";
-                break;
-            case 5:
-                star = "§6UR";
-                break;
-            default:
-                star = "§bN";
-                break;
-        }
+        String star = DrawManger.Level.getFormatTextByIndex(stack.getMetadata());
         tooltip.add(star);
     }
 }

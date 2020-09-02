@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
+import com.github.tartaricacid.touhoulittlemaid.draw.DrawManger;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -60,7 +60,7 @@ public class BlockGashaponMachines extends BlockHorizontal {
             playerIn.getHeldItemMainhand().shrink(GeneralConfig.GASHAPON_CONFIG.purchaseGashaponPrice);
             if (!worldIn.isRemote) {
                 EntityItem item = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ,
-                        new ItemStack(MaidItems.GASHAPON, 1, DrawCalculation.getGashaponLevel()));
+                        new ItemStack(MaidItems.GASHAPON, 1, DrawManger.getGashaponLevel()));
                 worldIn.spawnEntity(item);
             }
             return true;

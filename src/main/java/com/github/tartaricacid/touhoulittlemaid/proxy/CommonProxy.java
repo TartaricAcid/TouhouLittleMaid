@@ -20,6 +20,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegis
 import com.github.tartaricacid.touhoulittlemaid.compat.theoneprobe.TheOneProbeInfo;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipesManager;
 import com.github.tartaricacid.touhoulittlemaid.danmaku.CustomSpellCardManger;
+import com.github.tartaricacid.touhoulittlemaid.draw.SendToClientDrawMessage;
+import com.github.tartaricacid.touhoulittlemaid.draw.SendToServerDrawMessage;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityRinnosuke;
@@ -72,7 +74,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig.MOB_CONFIG;
-import static com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation.readDrawCsvFile;
+import static com.github.tartaricacid.touhoulittlemaid.draw.DrawManger.readDrawCsvFile;
 
 public class CommonProxy {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
@@ -281,6 +283,8 @@ public class CommonProxy {
         INSTANCE.registerMessage(SyncClientPackMessage.Handler.class, SyncClientPackMessage.class, 27, Side.CLIENT);
         INSTANCE.registerMessage(GetServerPackMessage.Handler.class, GetServerPackMessage.class, 28, Side.SERVER);
         INSTANCE.registerMessage(SendClientPackMessage.Handler.class, SendClientPackMessage.class, 29, Side.CLIENT);
+        INSTANCE.registerMessage(SendToClientDrawMessage.Handler.class, SendToClientDrawMessage.class, 30, Side.CLIENT);
+        INSTANCE.registerMessage(SendToServerDrawMessage.Handler.class, SendToServerDrawMessage.class, 31, Side.SERVER);
     }
 
     /**

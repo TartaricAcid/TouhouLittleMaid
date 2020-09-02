@@ -2,8 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.draw.DrawManger;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.util.DrawCalculation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +49,7 @@ public class ItemGashapon extends Item {
             int times = meta > 2 ? meta - 1 : 1;
             for (int i = 0; i < times; i++) {
                 ItemStack itemStack = new ItemStack(MaidItems.MAID_MODEL_COUPON, 1, meta);
-                String model = DrawCalculation.getCouponModelId(meta);
+                String model = DrawManger.getCouponModelId(meta);
                 if (StringUtils.isNotBlank(model)) {
                     ItemMaidModelCoupon.setModelData(itemStack, model);
                     EntityItem itemEntity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, itemStack);
@@ -58,6 +58,7 @@ public class ItemGashapon extends Item {
             }
         }
         playerIn.getHeldItem(handIn).shrink(1);
+        playerIn.getCooldownTracker().setCooldown(this, 20);
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
     }
 
