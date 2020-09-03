@@ -11,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -89,6 +88,8 @@ public final class ServerPackManager {
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
             pack.decorate();
+            // 加入包之前，移除那些彩蛋模型
+            pack.getModelList().removeIf(maidModelInfo -> maidModelInfo.getEasterEgg() != null);
             MODEL_PACK_LIST.add(pack);
         }
     }

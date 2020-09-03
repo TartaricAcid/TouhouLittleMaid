@@ -41,7 +41,9 @@ public class SendToClientDrawMessage implements IMessage {
                     String modelId = modelInfo.getModelId().toString();
                     if (!modelToWeight.containsKey(modelId)) {
                         DrawManger.ModelDrawInfo modelDrawInfo = new DrawManger.ModelDrawInfo(modelId, DrawManger.Level.N, 0);
-                        modelDrawInfoList.add(modelDrawInfo);
+                        if (modelDrawInfoList.stream().noneMatch(i -> i.getModelId().equals(modelId))) {
+                            modelDrawInfoList.add(modelDrawInfo);
+                        }
                     }
                 }
             }
