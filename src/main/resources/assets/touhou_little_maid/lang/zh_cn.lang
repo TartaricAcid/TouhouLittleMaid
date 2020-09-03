@@ -390,6 +390,7 @@ gui.touhou_little_maid.draw_list.index=序号
 gui.touhou_little_maid.draw_list.model_name=模型名称
 gui.touhou_little_maid.draw_list.pool=奖池
 gui.touhou_little_maid.draw_list.weight=权重
+gui.touhou_little_maid.tag.always_show=是否总是显示名称
 
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s

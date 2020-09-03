@@ -390,6 +390,7 @@ gui.touhou_little_maid.draw_list.index=Index
 gui.touhou_little_maid.draw_list.model_name=Model Name
 gui.touhou_little_maid.draw_list.pool=Pool
 gui.touhou_little_maid.draw_list.weight=Weight
+gui.touhou_little_maid.tag.always_show=Whether to always show the name
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s

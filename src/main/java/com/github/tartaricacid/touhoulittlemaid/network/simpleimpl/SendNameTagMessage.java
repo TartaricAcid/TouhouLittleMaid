@@ -17,19 +17,22 @@ import java.util.UUID;
 public class SendNameTagMessage implements IMessage {
     private UUID uuid;
     private String name;
+    private boolean alwaysShow;
 
     public SendNameTagMessage() {
     }
 
-    public SendNameTagMessage(UUID uuid, String name) {
+    public SendNameTagMessage(UUID uuid, String name, boolean alwaysShow) {
         this.uuid = uuid;
         this.name = name;
+        this.alwaysShow = alwaysShow;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         uuid = new UUID(buf.readLong(), buf.readLong());
         name = ByteBufUtils.readUTF8String(buf);
+        alwaysShow = buf.readBoolean();
     }
 
     @Override
@@ -37,6 +40,7 @@ public class SendNameTagMessage implements IMessage {
         buf.writeLong(uuid.getMostSignificantBits());
         buf.writeLong(uuid.getLeastSignificantBits());
         ByteBufUtils.writeUTF8String(buf, name);
+        buf.writeBoolean(alwaysShow);
     }
 
     public static class Handler implements IMessageHandler<SendNameTagMessage, IMessage> {
@@ -58,6 +62,7 @@ public class SendNameTagMessage implements IMessage {
             String name = message.name.substring(0, Math.min(32, message.name.length()));
             if (player.equals(maid.getOwner()) && player.getHeldItemMainhand().getItem() == Items.NAME_TAG) {
                 maid.setCustomNameTag(name);
+                maid.setAlwaysRenderNameTag(message.alwaysShow);
                 maid.enablePersistence();
                 player.getHeldItemMainhand().shrink(1);
             }
