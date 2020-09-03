@@ -78,8 +78,9 @@ commands.touhou_little_maid.main.power.info=当前 Power 数：%.2f
 commands.touhou_little_maid.main.maid_num.info=当前女仆数：%d
 commands.touhou_little_maid.spell_card.usage=§c用法：/spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=已经重载所有的符卡
-commands.touhou_little_maid.draw_coupon.usage=§c用法：/draw_coupon <reload>
+commands.touhou_little_maid.draw_coupon.usage=§c用法：/draw_coupon <reload|gui>
 commands.touhou_little_maid.draw_coupon.reload=已经重载所有的抽卡数据
+commands.touhou_little_maid.draw_coupon.config_not_enable=你需要启用“禁止修改女仆模型选项（§cMaidCannotChangeModel§r）”才可以使用抽卡功能。
 commands.touhou_little_maid.maid_res.usage=§c用法：/maid_res <reload>
 commands.touhou_little_maid.maid_res.warning=§c提醒：这条命令可能无法重载某些资源
 commands.touhou_little_maid.maid_res.time=重载耗时：%.3f ms
@@ -167,6 +168,7 @@ message.touhou_little_maid.maid.journeymap.name=旅行地图：
 message.touhou_little_maid.maid.journeymap.hover_message.click=点击创建坐标点。
 message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=Ctrl 点击在大地图中进行查看。
 message.touhou_little_maid.server.pack_sync=§a[车万女仆] §6正在同步客户端模型……
+message.touhou_little_maid.draw.pack_not_sync=§a模型包未与服务器同步，请等待同步后在使用此指令。
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=单点模式
@@ -377,6 +379,17 @@ gui.touhou_little_maid.portable_audio.track.artists=§l歌手
 gui.touhou_little_maid.portable_audio.track.album=§l专辑
 gui.touhou_little_maid.portable_audio.track.duration=§l时长
 gui.touhou_little_maid.portable_audio.play_list.empty=模组检测到网易云歌单列表为空，原因可能如下：\n\n- 网易云音乐未在你所处地区开放使用\n- 你当前的网络环境无法连接到网易云音乐服务器\n- 网易云音乐屏蔽了你所用的 IP\n- 其他未知的网络问题\n\n当前仅支持网易云音乐，所以只有中国大陆玩家可以使用，对此深表歉意。\n不过我们后续会增加更多其他音乐网站的支持，敬请期待。\n\n请注意：这是你和网易云音乐之间的网络问题，并非模组 BUG！\n\n【按 Esc 键退出此界面】
+gui.touhou_little_maid.draw_config.save=保存
+gui.touhou_little_maid.draw_config.save_reload=保存并重载
+gui.touhou_little_maid.draw_config.done=完成！
+gui.touhou_little_maid.draw_config.edit=编辑
+gui.touhou_little_maid.draw_config.pool=奖池：%s
+gui.touhou_little_maid.draw_config.weight=权重：%d
+gui.touhou_little_maid.draw_config.how_to_edit_pool=§7奖池概率列举如下，你可通过修改服务器配置文件夹下的 §4§nTouhouLittleMaid.cfg§7 的 §4§ngashaponconfig§7 选项来修改奖池概率：\n\n§b§lN 等级权重： %d\n§a§lS 等级权重： %d\n§c§lSR 等级权重： %d\n§5§lSSR 等级权重： %d\n§6§lUR 等级权重： %d\n\n§9§n【再次点击 编辑 按钮返回】
+gui.touhou_little_maid.draw_list.index=序号
+gui.touhou_little_maid.draw_list.model_name=模型名称
+gui.touhou_little_maid.draw_list.pool=奖池
+gui.touhou_little_maid.draw_list.weight=权重
 
 gui.touhou_little_maid.skin.text.version=版本：%s
 gui.touhou_little_maid.skin.text.date=日期：%s

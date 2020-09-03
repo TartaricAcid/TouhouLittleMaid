@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.draw.DrawManger;
 import com.github.tartaricacid.touhoulittlemaid.draw.SendToClientDrawMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.serverpack.ServerPackManager;
@@ -47,6 +48,10 @@ public class ReloadDrawCommand extends CommandBase {
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
         if (args.length >= 1) {
+            if (!GeneralConfig.MAID_CONFIG.maidCannotChangeModel) {
+                sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.draw_coupon.config_not_enable"));
+                return;
+            }
             if (SUB.RELOAD.name().toLowerCase().equals(args[0])) {
                 readDrawCsvFile(this);
                 sender.sendMessage(new TextComponentTranslation("commands.touhou_little_maid.draw_coupon.reload"));
@@ -66,7 +71,10 @@ public class ReloadDrawCommand extends CommandBase {
     @Nonnull
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        return args.length != 1 ? Collections.EMPTY_LIST : getListOfStringsMatchingLastWord(args, SUB.RELOAD.name().toLowerCase());
+        return args.length != 1 ? Collections.EMPTY_LIST :
+                getListOfStringsMatchingLastWord(args,
+                        SUB.RELOAD.name().toLowerCase(),
+                        SUB.GUI.name().toLowerCase());
     }
 
     enum SUB {

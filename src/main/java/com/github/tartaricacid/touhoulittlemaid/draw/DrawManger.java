@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.draw;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.util.math.MathHelper;
 import org.apache.commons.io.IOUtils;
@@ -70,11 +71,13 @@ public final class DrawManger {
         for (String modelId : modelIdList) {
             totalWeight += MODEL_TO_WEIGHT.get(modelId);
         }
-        int randomNum = RANDOM.nextInt(totalWeight);
-        for (String modelId : modelIdList) {
-            randomNum -= MODEL_TO_WEIGHT.get(modelId);
-            if (randomNum < 0) {
-                return modelId;
+        if (totalWeight > 0) {
+            int randomNum = RANDOM.nextInt(totalWeight);
+            for (String modelId : modelIdList) {
+                randomNum -= MODEL_TO_WEIGHT.get(modelId);
+                if (randomNum < 0) {
+                    return modelId;
+                }
             }
         }
         return "";
@@ -161,6 +164,33 @@ public final class DrawManger {
 
     public static HashMap<Integer, List<String>> getLevelToModel() {
         return LEVEL_TO_MODEL;
+    }
+
+    /**
+     * 对数据排序
+     * 第一排序：奖池高 - 低
+     * 第二排序：权重高 - 低
+     */
+    public static List<ModelDrawInfo> sortModelDrawInfo(List<ModelDrawInfo> modelDrawInfoList) {
+        List<ModelDrawInfo> out = Lists.newArrayList();
+
+        HashMap<Level, List<ModelDrawInfo>> levelListHashMap = Maps.newHashMap();
+        List<Level> levelList = Lists.reverse(Arrays.asList(Level.values()));
+        for (Level level : levelList) {
+            levelListHashMap.put(level, Lists.newArrayList());
+        }
+
+        for (ModelDrawInfo info : modelDrawInfoList) {
+            levelListHashMap.get(info.level).add(info);
+        }
+        for (List<ModelDrawInfo> list : levelListHashMap.values()) {
+            list.sort(Comparator.comparingInt(e -> -e.getWeight()));
+        }
+
+        for (Level level : levelList) {
+            out.addAll(levelListHashMap.get(level));
+        }
+        return out;
     }
 
     public enum Level {

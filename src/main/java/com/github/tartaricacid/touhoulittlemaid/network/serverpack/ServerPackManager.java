@@ -32,7 +32,7 @@ import java.util.zip.ZipFile;
 
 import static com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy.GSON;
 
-@Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.SERVER)
+@Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public final class ServerPackManager {
     private static final Path ROOT = Paths.get("touhou-little-maid-server-pack");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");

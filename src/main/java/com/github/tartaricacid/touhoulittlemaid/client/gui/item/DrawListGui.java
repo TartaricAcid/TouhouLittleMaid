@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.draw.DrawManger;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.util.Optional;
@@ -37,10 +38,10 @@ public class DrawListGui extends GuiScrollingList {
 
     @Override
     protected void drawHeader(int entryRight, int relativeY, Tessellator tess) {
-        parentGui.getFontRenderer().drawString("序号", 10, relativeY, 0xffffffff);
-        parentGui.getFontRenderer().drawString("皮肤名称", 40, relativeY, 0xffffffff);
-        parentGui.getFontRenderer().drawString("奖池", parentGui.width - 100, relativeY, 0xffffffff);
-        parentGui.getFontRenderer().drawString("权重", parentGui.width - 50, relativeY, 0xffffffff);
+        parentGui.getFontRenderer().drawString(I18n.format("gui.touhou_little_maid.draw_list.index"), 10, relativeY, 0xffffffff);
+        parentGui.getFontRenderer().drawString(I18n.format("gui.touhou_little_maid.draw_list.model_name"), 40, relativeY, 0xffffffff);
+        parentGui.getFontRenderer().drawString(I18n.format("gui.touhou_little_maid.draw_list.pool"), parentGui.width - 100, relativeY, 0xffffffff);
+        parentGui.getFontRenderer().drawString(I18n.format("gui.touhou_little_maid.draw_list.weight"), parentGui.width - 50, relativeY, 0xffffffff);
     }
 
     @Override
@@ -59,13 +60,16 @@ public class DrawListGui extends GuiScrollingList {
         DrawManger.ModelDrawInfo info = parentGui.modelDrawInfoList.get(slotIdx);
         Optional<MaidModelInfo> modelInfo = CustomResourcesLoader.MAID_MODEL.getInfo(info.getModelId());
         if (modelInfo.isPresent()) {
+            if (slotIdx % 2 == 0) {
+                Gui.drawRect(0, slotTop - 2, parentGui.width, slotTop + 10, 0x22566270);
+            }
             String name = ParseI18n.parse(modelInfo.get().getName());
             parentGui.getFontRenderer().drawString(String.valueOf(slotIdx), 10, slotTop, 0xffffffff);
             parentGui.getFontRenderer().drawString(name, 40, slotTop, 0xffffffff);
             parentGui.getFontRenderer().drawString(info.getLevel().getFormatText(), parentGui.width - 100, slotTop, 0xffffffff);
             parentGui.getFontRenderer().drawString(String.valueOf(info.getWeight()), parentGui.width - 50, slotTop, 0xffffffff);
-            if (slotIdx % 2 == 0) {
-                Gui.drawRect(0, slotTop - 2, parentGui.width, slotTop + 10, 0x22566270);
+            if (info.getWeight() == 0) {
+                Gui.drawRect(40, slotTop + 4, 40 + parentGui.getFontRenderer().getStringWidth(name), slotTop + 5, 0xffee5500);
             }
         }
     }

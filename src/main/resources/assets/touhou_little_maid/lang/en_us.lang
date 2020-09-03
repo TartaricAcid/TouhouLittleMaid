@@ -78,7 +78,8 @@ commands.touhou_little_maid.main.power.info=Current Power: %.2f
 commands.touhou_little_maid.main.maid_num.info=Current Maid Num: %d
 commands.touhou_little_maid.spell_card.usage=§cUsage: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=Has reloaded all custom spell card
-commands.touhou_little_maid.draw_coupon.usage=§cUsage: /draw_coupon <reload>
+commands.touhou_little_maid.draw_coupon.usage=§cUsage: /draw_coupon <reload|gui>
+commands.touhou_little_maid.draw_coupon.config_not_enable=You have not enabled the §cMaid Cannot Change Model§r configuration. You must enable this option before you can use the draw function.
 commands.touhou_little_maid.draw_coupon.reload=Has reloaded all draw coupon
 commands.touhou_little_maid.maid_res.usage=§cUsage: /maid_res <reload>
 commands.touhou_little_maid.maid_res.warning=§cTips: This command may not reload some resources
@@ -167,6 +168,7 @@ message.touhou_little_maid.maid.journeymap.name=JourneyMap:
 message.touhou_little_maid.maid.journeymap.hover_message.click=Click to create waypoint.
 message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=Ctrl + click to view on map.
 message.touhou_little_maid.server.pack_sync=§a[Touhou Little Maid] §6Syncing client model package...
+message.touhou_little_maid.draw.pack_not_sync=§aThe model package is not synchronized with the server, please wait for synchronization before using this command.
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=Single Point
@@ -377,6 +379,17 @@ gui.touhou_little_maid.portable_audio.track.artists=Artists
 gui.touhou_little_maid.portable_audio.track.album=Album
 gui.touhou_little_maid.portable_audio.track.duration=Time
 gui.touhou_little_maid.portable_audio.play_list.empty=The mod detects that the NetEase Cloud Music playlist is empty. The reasons may be as follows:\n\n- NetEase Cloud Music is not open for use in your region\n- Your current network environment cannot connect to NetEase Cloud Music server\n- Netease Cloud Music blocks the IP you use\n- Other unknown network issues\n\nCurrently, only NetEase Cloud Music is supported, so only players from China Mainland can use it, we apologize for this.\nHowever, we will add more support from other music websites in the future, so stay tuned.\n\nPlease note: This is a network problem between you and NetEase Cloud Music, not a mod bug!\n\n[Press Esc to exit this interface]
+gui.touhou_little_maid.draw_config.save=Save
+gui.touhou_little_maid.draw_config.save_reload=Save & Reload
+gui.touhou_little_maid.draw_config.done=Done!
+gui.touhou_little_maid.draw_config.edit=Edit
+gui.touhou_little_maid.draw_config.pool=Pool: %s
+gui.touhou_little_maid.draw_config.weight=Weight: %d
+gui.touhou_little_maid.draw_config.how_to_edit_pool=§7The probability of the pool is listed below. You can modify the probability of the pool by modifying the §4§ngashaponconfig§7 option of §4§nTouhouLittleMaid.cfg§7 under the server configuration folder:\n\n§b§lN Level Weight: %d\n§a§lS Level Weight: %d\n§c§lSR Level Weight: %d\n§5§lSSR Level Weight: %d\n§6§lUR Level Weight: %d\n\n§9§n[click the Edit button again to return]
+gui.touhou_little_maid.draw_list.index=Index
+gui.touhou_little_maid.draw_list.model_name=Model Name
+gui.touhou_little_maid.draw_list.pool=Pool
+gui.touhou_little_maid.draw_list.weight=Weight
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s

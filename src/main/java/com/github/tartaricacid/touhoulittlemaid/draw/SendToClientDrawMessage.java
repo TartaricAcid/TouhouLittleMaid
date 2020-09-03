@@ -1,11 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.draw;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.DrawConfigGui;
+import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
 import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -15,6 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static com.github.tartaricacid.touhoulittlemaid.draw.DrawManger.sortModelDrawInfo;
 
 public class SendToClientDrawMessage implements IMessage {
     private List<DrawManger.ModelDrawInfo> modelDrawInfoList = Lists.newArrayList();
@@ -70,7 +75,17 @@ public class SendToClientDrawMessage implements IMessage {
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(SendToClientDrawMessage message, MessageContext ctx) {
             if (ctx.side == Side.CLIENT) {
-                Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(new DrawConfigGui(message.modelDrawInfoList)));
+                Minecraft.getMinecraft().addScheduledTask(() -> {
+                    // 检查客户端列表与服务端列表是否同步
+                    for (DrawManger.ModelDrawInfo info : message.modelDrawInfoList) {
+                        if (!CustomResourcesLoader.MAID_MODEL.containsInfo(info.getModelId())) {
+                            ITextComponent component = new TextComponentTranslation("message.touhou_little_maid.draw.pack_not_sync");
+                            Minecraft.getMinecraft().player.sendMessage(component);
+                            return;
+                        }
+                    }
+                    Minecraft.getMinecraft().displayGuiScreen(new DrawConfigGui(sortModelDrawInfo(message.modelDrawInfoList)));
+                });
             }
             return null;
         }

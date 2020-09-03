@@ -11,6 +11,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +27,7 @@ import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clea
 public class DrawConfigGui extends GuiScreen {
     private static final String ENTITY_ID = "touhou_little_maid:entity.passive.maid";
     public List<DrawManger.ModelDrawInfo> modelDrawInfoList;
+    private long unixTime;
     private boolean isEditPool = false;
     private MaidModelInfo modelItem;
     private DrawListGui drawList;
@@ -52,10 +54,12 @@ public class DrawConfigGui extends GuiScreen {
         buttonList.add(new GuiButton(9, 228, 60, 30, 20, "+10"));
         buttonList.add(new GuiButton(10, 260, 60, 30, 20, "+100"));
 
-        buttonList.add(new GuiButton(11, width - 90, 20, 80, 20, "Save"));
-        buttonList.add(new GuiButton(12, width - 90, 45, 80, 20, "Save & Reload"));
-
-        buttonList.add(new GuiButton(13, 260, 20, 30, 20, "Edit"));
+        buttonList.add(new GuiButton(11, width - 90, 20, 80, 20,
+                I18n.format("gui.touhou_little_maid.draw_config.save")));
+        buttonList.add(new GuiButton(12, width - 90, 45, 80, 20,
+                I18n.format("gui.touhou_little_maid.draw_config.save_reload")));
+        buttonList.add(new GuiButton(13, 260, 20, 30, 20,
+                I18n.format("gui.touhou_little_maid.draw_config.edit")));
     }
 
     @Override
@@ -83,23 +87,23 @@ public class DrawConfigGui extends GuiScreen {
         if (!isEditPool) {
             drawList.drawScreen(mouseX, mouseY, partialTicks);
         } else {
-            String text = String.format(
-                    "§7奖池概率列举如下，你可通过修改服务器配置文件夹下的 §4§nTouhouLittleMaid.cfg§7 的 §4§ngashaponconfig§7 选项来修改奖池概率：\n\n" +
-                            "§b§lN 等级权重： %d\n" +
-                            "§a§lS 等级权重： %d\n" +
-                            "§c§lSR 等级权重： %d\n" +
-                            "§5§lSSR 等级权重： %d\n" +
-                            "§6§lUR 等级权重： %d\n\n" +
-                            "§9§n【再次点击 Edit 按钮返回】",
+            String text = I18n.format("gui.touhou_little_maid.draw_config.how_to_edit_pool",
                     GeneralConfig.GASHAPON_CONFIG.gashaponWeights1, GeneralConfig.GASHAPON_CONFIG.gashaponWeights2,
                     GeneralConfig.GASHAPON_CONFIG.gashaponWeights3, GeneralConfig.GASHAPON_CONFIG.gashaponWeights4,
-                    GeneralConfig.GASHAPON_CONFIG.gashaponWeights5);
+                    GeneralConfig.GASHAPON_CONFIG.gashaponWeights5).replace("\\n", "\n");
             fontRenderer.drawSplitString(text, 50, 110, width - 100, 0xffffffff);
         }
         if (selectIndex >= 0 && selectIndex < modelDrawInfoList.size()) {
-            fontRenderer.drawString("奖池： " + modelDrawInfoList.get(selectIndex).getLevel().getFormatText(), 100, 5, 0xffffffff);
-            fontRenderer.drawString("权重： " + modelDrawInfoList.get(selectIndex).getWeight(), 100, 45, 0xffffffff);
+            fontRenderer.drawString(I18n.format("gui.touhou_little_maid.draw_config.pool",
+                    modelDrawInfoList.get(selectIndex).getLevel().getFormatText()), 100, 5, 0xffffffff);
+            fontRenderer.drawString(I18n.format("gui.touhou_little_maid.draw_config.weight",
+                    modelDrawInfoList.get(selectIndex).getWeight()), 100, 45, 0xffffffff);
             super.drawScreen(mouseX, mouseY, partialTicks);
+        }
+        if (unixTime > System.currentTimeMillis()) {
+            fontRenderer.drawString(I18n.format("gui.touhou_little_maid.draw_config.done"),
+                    width - 50 - fontRenderer.getStringWidth(I18n.format("gui.touhou_little_maid.draw_config.done")) / 2,
+                    72, 0xffff2222);
         }
     }
 
@@ -134,9 +138,11 @@ public class DrawConfigGui extends GuiScreen {
                 return;
             case 11:
                 CommonProxy.INSTANCE.sendToServer(new SendToServerDrawMessage(modelDrawInfoList, false));
+                unixTime = System.currentTimeMillis() + 3_000;
                 return;
             case 12:
                 CommonProxy.INSTANCE.sendToServer(new SendToServerDrawMessage(modelDrawInfoList, true));
+                unixTime = System.currentTimeMillis() + 3_000;
                 return;
             case 13:
                 isEditPool = !isEditPool;

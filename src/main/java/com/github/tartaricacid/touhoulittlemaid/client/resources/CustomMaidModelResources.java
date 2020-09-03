@@ -7,7 +7,6 @@ import com.google.common.collect.Maps;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +94,10 @@ public class CustomMaidModelResources {
 
     public Optional<MaidModelInfo> getInfo(String modelId) {
         return Optional.ofNullable(idInfoMap.get(modelId));
+    }
+
+    public boolean containsInfo(String modelId) {
+        return idInfoMap.containsKey(modelId);
     }
 
     public Optional<ModelData> getEasterEggNormalTagModel(String tag) {
