@@ -244,6 +244,7 @@ config.touhou_little_maid.gashapon_config.gashapon_weights_1=N Level Gashapon's 
 config.touhou_little_maid.music_config=Music Config
 config.touhou_little_maid.music_config.player_name_reg=Player Name Reg
 config.touhou_little_maid.music_config.receive_music=Receive Music
+config.touhou_little_maid.music_config.music_list_count=Music List Count
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=Pellet

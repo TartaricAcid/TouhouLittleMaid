@@ -244,6 +244,7 @@ config.touhou_little_maid.gashapon_config.gashapon_weights_1=N 等级扭蛋权�
 config.touhou_little_maid.music_config=音乐配置
 config.touhou_little_maid.music_config.player_name_reg=玩家名正则过滤
 config.touhou_little_maid.music_config.receive_music=是否接收音乐
+config.touhou_little_maid.music_config.music_list_count=歌单曲数（过大有可能获取失败）
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=点弹

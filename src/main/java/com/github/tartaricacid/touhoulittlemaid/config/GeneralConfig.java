@@ -249,6 +249,12 @@ public class GeneralConfig {
         @Config.LangKey("config.touhou_little_maid.music_config.receive_music")
         @Config.Name("ReceiveMusic")
         public Boolean receiveMusic = true;
+
+        @Config.Comment("Maximum music list count")
+        @Config.LangKey("config.touhou_little_maid.music_config.music_list_count")
+        @Config.Name("MusicListCount")
+        @Config.RangeInt(min = 6)
+        public int musicListCount = 20;
     }
 
     /**

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.audio.music;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.neteasemusic.NetEaseMusic;
 import com.github.tartaricacid.touhoulittlemaid.api.neteasemusic.WebApi;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.google.common.collect.Lists;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
@@ -32,13 +33,13 @@ import static com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy.GSON;
  */
 @SideOnly(Side.CLIENT)
 public final class MusicManger {
+    public static final WebApi NET_EASE_WEB_API = new NetEaseMusic().getApi();
     private static final Path ROOT_FOLDER = Paths.get(System.getProperty("user.home")).resolve("touhou_little_maid");
     private static final Path LOCAL_MUSIC_LIST_FILE = ROOT_FOLDER.resolve("music_list");
     private static final ResourceLocation MUSIC_JSON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "music.json");
     private static final ThreadPoolExecutor POOL = new ThreadPoolExecutor(1, 1, 0L,
             TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
     private static final MusicJsonInfo DEFAULT_INFO = MusicJsonInfo.getDefaultInstance();
-    public static final WebApi NET_EASE_WEB_API = new NetEaseMusic().getApi();
     public static CopyOnWriteArrayList<NetEaseMusicList> MUSIC_LIST_GROUP = Lists.newCopyOnWriteArrayList();
 
     public static void loadMusicList() {
@@ -117,9 +118,27 @@ public final class MusicManger {
                     neteaseMusicList.setMusicJsonInfo(info);
                     neteaseMusicList.getPlayList().deco();
                     neteaseMusicList.setListId(id);
-                    if (neteaseMusicList.getPlayList().getTrackCount() > 0) {
+                    int count = neteaseMusicList.getPlayList().getTrackCount();
+                    if (count > 0) {
                         MUSIC_LIST_GROUP.add(neteaseMusicList);
                         TouhouLittleMaid.LOGGER.info("{} NetEase cloud music information obtained successfully", id);
+                        // 获取额外歌曲，限定为 20 首
+                        // 防止高频访问，导致被网易云音乐屏蔽
+                        // 随机 sleep 3 ~ 5 秒
+                        Thread.sleep((3 + Math.round(Math.random() * 2)) * 1000);
+                        int size = Math.min(neteaseMusicList.getPlayList().getTrackIds().size(), GeneralConfig.MUSIC_CONFIG.musicListCount);
+                        if (count < size) {
+                            long[] ids = new long[size - count];
+                            for (int i = count; i < size; i++) {
+                                ids[i - count] = neteaseMusicList.getPlayList().getTrackIds().get(i).getId();
+                            }
+                            String extraTrackInfo = NET_EASE_WEB_API.songs(ids);
+                            ExtraMusicList extraTracks = GSON.fromJson(extraTrackInfo, ExtraMusicList.class);
+                            if (extraTracks.getCode() == 200) {
+                                neteaseMusicList.getPlayList().getTracks().addAll(extraTracks.getTracks());
+                                neteaseMusicList.getPlayList().deco();
+                            }
+                        }
                     } else {
                         TouhouLittleMaid.LOGGER.info("{} Music list track number is 0", id);
                     }

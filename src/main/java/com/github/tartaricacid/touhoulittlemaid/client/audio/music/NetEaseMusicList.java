@@ -40,16 +40,16 @@ public class NetEaseMusicList {
         return musicJsonInfo;
     }
 
+    public void setMusicJsonInfo(MusicJsonInfo musicJsonInfo) {
+        this.musicJsonInfo = musicJsonInfo;
+    }
+
     public long getListId() {
         return listId;
     }
 
     public void setListId(long listId) {
         this.listId = listId;
-    }
-
-    public void setMusicJsonInfo(MusicJsonInfo musicJsonInfo) {
-        this.musicJsonInfo = musicJsonInfo;
     }
 
     public static class Track {
@@ -168,6 +168,9 @@ public class NetEaseMusicList {
         @SerializedName("tracks")
         private List<Track> tracks;
 
+        @SerializedName("trackIds")
+        private List<TrackId> trackIds;
+
         @Expose(deserialize = false)
         private String creatorName;
 
@@ -217,6 +220,10 @@ public class NetEaseMusicList {
             return tracks;
         }
 
+        public List<TrackId> getTrackIds() {
+            return trackIds;
+        }
+
         public PlayList deco() {
             creatorName = creator.nickname;
             formatCreateTime = DateFormatUtils.format(createTime, "yyyy-MM-dd");
@@ -225,6 +232,15 @@ public class NetEaseMusicList {
             trackCount = tracks.size();
             description = description == null ? "" : description;
             return this;
+        }
+
+        public class TrackId {
+            @SerializedName("id")
+            private long id;
+
+            public long getId() {
+                return id;
+            }
         }
     }
 }
