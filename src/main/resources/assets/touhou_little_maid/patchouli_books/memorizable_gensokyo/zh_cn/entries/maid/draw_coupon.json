@@ -12,15 +12,18 @@
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon_machines",
       "text": "用绿宝石或者扭蛋币右击扭蛋机获取扭蛋，扭蛋的等级和概率均可在配置文件中自定义。"
-    }, {
+    },
+    {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon:4",
       "text": "右击来获取模型券。不同等级的扭蛋会得到不同等级的模型券。$(br2)概率可通过 csv 文件自定义，具体可查看本模组的 wiki。"
-    }, {
+    },
+    {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_model_coupon:5",
       "text": "右击女仆应用模型。"
-    }, {
+    },
+    {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon_coin",
       "text": "杀死霖之助会获得一定数量的扭蛋币。其次，你可以通过模型券合成来得到扭蛋币。"

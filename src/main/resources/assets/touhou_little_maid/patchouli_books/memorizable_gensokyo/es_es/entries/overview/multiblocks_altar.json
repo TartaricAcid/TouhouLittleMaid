@@ -1,0 +1,31 @@
+{
+  "sortnum": 4,
+  "name": "Altar de bloques múltiples",
+  "icon": "minecraft:wool:14",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "El altar es una estructura de bloques múltiples que es requerida para los crafteos de este mod.$(br2)Las recetas del altar pueden ser obtenidas utilizando el JEI, y el crafteo tambien requiere $(l:overview/power_point)power point$() del jugador."
+    },
+    {
+      "type": "multiblock",
+      "name": "Altar",
+      "multiblock_id": "touhou_little_maid:altar",
+      "text": "Presiona el click derecho en el centro de la lana roja con $(l:overview/gohei_and_danmaku)gohei$() para construir el altar."
+    },
+    {
+      "type": "text",
+      "text": "Puedes colocar un item dando click derecho en la parte superior de los seis pilares de madera del altar. Puedes remover un item teniendo la mano vacía y dando clilc derecho.$(br2)Cuando los items son colocados y los puntos de poder del jugador son suficientes, el altar activara el crafteo.$(br2)El crafteo puede ser interrumpido debido a la falta de poder, después de obtener el poder suficiente. haga click derecho para reactivar el crafteo."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/altar_craft.png"
+      ],
+      "title": "Altar crafteado",
+      "border": true,
+      "text": "Todavia no puedes hacer la nave lighting, recuerda hacer primero todos los crafteos."
+    }
+  ]
+}

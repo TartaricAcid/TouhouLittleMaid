@@ -1,0 +1,13 @@
+{
+  "sortnum": 18,
+  "name": "Puntos de poder",
+  "icon": "touhou_little_maid:power_point",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:power_point",
+      "text": "El click derecho es rechazado, puedes soltar la entidad de puntos de energía."
+    }
+  ]
+}

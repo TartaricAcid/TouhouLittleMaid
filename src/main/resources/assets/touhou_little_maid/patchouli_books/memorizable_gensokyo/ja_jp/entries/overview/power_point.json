@@ -1,0 +1,25 @@
+{
+  "sortnum": 2,
+  "name": "P点",
+  "icon": "minecraft:diamond_sword",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "P点は重要なリソースです。$(l:overview/world_spawn#fairy)妖精メイド$()か$(l:overview/world_spawn#rinnosuke)森近 霖之助$()を倒すことで入手できます。$(br2)$(l:overview/multiblocks_altar)祭壇$()のクラフトにも使用します。"
+    },
+    {
+      "type": "text",
+      "text": "$(l:overview/gohei_and_danmaku)お祓い棒$()を持っているとき、ゲーム画面の左上に現在の所持P点が表示されます。 $(br2)P点の最大値は5で、これ以上は増えません。"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/power_point.png"
+      ],
+      "title": "P点",
+      "border": true,
+      "text": "地面にP点がドロップしました"
+    }
+  ]
+}

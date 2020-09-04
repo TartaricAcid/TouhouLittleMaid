@@ -1,0 +1,12 @@
+{
+  "sortnum": 11,
+  "name": "Sonido de Maid",
+  "icon": "minecraft:jukebox",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Puedes hacer paquetes de sonidos personalizados ara remplazar o ampliar lo sonidos de la maid. Hay botones relacionados en la parte inferior del inventario de la maid.$(br2)Haga click en el boton para abril la gui de reproducción de sonido."
+    }
+  ]
+}

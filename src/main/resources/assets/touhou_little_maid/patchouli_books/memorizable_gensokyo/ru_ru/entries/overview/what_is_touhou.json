@@ -1,0 +1,23 @@
+{
+  "sortnum": 0,
+  "name": "Проект Восток",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "link",
+      "text": "Touhou Project - это японские додзинские серии игр, сделанные членом Team Shanghai Alice под ником ZUN, специализирующийся в Shoot 'em Ups.",
+      "url": "https://ru.touhouwiki.net/wiki/Заглавная_страница",
+      "link_text": "Touhou Вики"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/hakurei_reimu.png"
+      ],
+      "title": "Рейму Хакурей",
+      "border": true,
+      "text": "Главный герой серии Touhou Project."
+    }
+  ]
+}

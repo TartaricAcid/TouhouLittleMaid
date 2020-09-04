@@ -1,0 +1,17 @@
+{
+  "sortnum": 16,
+  "name": "Cincel y Estatuas",
+  "icon": "touhou_little_maid:chisel",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:chisel",
+      "text": "Haga clic derecho en la arcilla con un cincel para hacer estatuas de diferentes tamaños. Actualmente admite tamaños de 1x1x1, 1x1x2, 2x2x4, 3x3x6."
+    },
+    {
+      "type": "text",
+      "text": "El jugador sujeta una foto de la maid en la mano, la mano principal tiene el cincel, luego haz click derecho en la esquina inferior izquierda de la estructura multibloque para grabar la maid en la foto."
+    }
+  ]
+}

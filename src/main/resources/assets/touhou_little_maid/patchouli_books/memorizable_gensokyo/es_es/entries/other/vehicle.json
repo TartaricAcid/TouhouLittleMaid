@@ -1,0 +1,13 @@
+{
+  "sortnum": 13,
+  "name": "Vehículo",
+  "icon": "touhou_little_maid:maid_vehicle",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_vehicle",
+      "text": "El vehículo es una de las entidades que la maid puede conducir. La maid conducirá cuando se acerque a un vehículo $(l)empty$(), Las maids de los alrededores pueden subirse como pasajeras.$(br2)Los jugadores también pueden subirse al vehículo apretando click derecho."
+    }
+  ]
+}

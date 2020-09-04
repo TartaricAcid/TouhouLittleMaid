@@ -1,0 +1,17 @@
+{
+  "sortnum": 15,
+  "name": "Audio Portátil",
+  "icon": "touhou_little_maid:portable_audio",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:portable_audio",
+      "text": "El audio portátil puede ser recogido por una maid, con click derecho puedes abrir la GUI, Puede reproducir musica en red y sincronizarce con otros reproductores dentro de 96 bloques.$(br2)Actualmente solo se admite NetEase Cloud Music pero añadiremos soporte para mas sitios web de música mas tarde."
+    },
+    {
+      "type": "text",
+      "text": "Las listas de reproducción de audio pueden ser añadidas a través de paquetes de recursos, pero necesitas reiniciar el juego para cargar estas listas de reproducción.$(br2)El audio se puede desactivar modificando la configuración, o puede silenciarlo ajustando el volumen del registro."
+    }
+  ]
+}

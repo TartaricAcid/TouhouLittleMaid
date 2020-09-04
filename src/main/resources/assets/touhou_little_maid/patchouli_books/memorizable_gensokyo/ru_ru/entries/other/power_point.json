@@ -1,0 +1,13 @@
+{
+  "sortnum": 18,
+  "name": "Очки силы",
+  "icon": "touhou_little_maid:power_point",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:power_point",
+      "text": "Щелчок правой кнопкой мыши выбрасывает, может выронить очко силы."
+    }
+  ]
+}

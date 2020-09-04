@@ -1,0 +1,16 @@
+{
+  "sortnum": 4,
+  "name": "Joyas",
+  "icon": "touhou_little_maid:ultramarine_orb_elixir",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "La tercer pestaña de la GUI de la maid es el inventario de Joyas. Este mod proporciona varias joyas que pueden activarse para proteger a las maids bajo ciertas condiciones:$(li)Orbe Ultramarino: Se puede usar 6 veces para evitar la muerte de la maid.$(li)Lapida: La lapida se genera después de la muerte de la maid para preservar sus items."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Joya de protección: Cuando la maid recibe el daño correspondiente, el evento de daño sera cancelado.$(li)Tela de agilidad: Cuando una maid es equipada con esta joya si es golpeada por un proyectil tendrá el mismo comportamiento que un ender."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "sortnum": 2,
+  "name": "Tareas de Maid",
+  "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:daiyousei'}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Cuando se abre una interfaz GUI, se puede ver una lista en el lado izquierdo. Esta es la barra de tareas de la maid. Las funciones relacionadas son las siguientes:$(li)ocio: tarea por defecto; la doncella no hace nada.$(li)ataque: si pones una espada en la mano principal de una maid, el comportamiento de la maid será el mismo que un lobo del vanilla, atacando activamente a criaturas hostiles."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Arco: Si pones un arco en la mano principal de una maid y pones flechas en cualquier espacio del inventario, atacarán activamente a criaturas hostiles con el arco.$(li)Danmaku: Si pones al gohei en la mano principal de una maid, disparará a danmaku para atacar a las criaturas hostiles, y lanza diferentes números de danmaku según el número de criaturas hostiles que la rodean."
+    },
+    {
+      "type": "text",
+      "text": "$(li)cultivos: si le das semillas de cultivos a la maid, ella plantara cultivos alrededor de ella y los recolectara apenas crezcan. Solo cuando la maid tenga equipada una azada podra arar la tierra como el jugador.$(li)caña de azucar: plantara y cosechara caña de azucar.$(li)Melones: cosechara sandias y calabazas.$(li)cacao: planta y cosecha cacao.$(li)césped: removerá las hierbas y flores alrededor de ella."
+    },
+    {
+      "type": "text",
+      "text": "Nieve: Limpia la capa de nieve alrededor de ellos, las bolas de nieve caen cuando sujetas una pala.\nAlimento: Si tu pones comida en el inventario de la maid, ella activamente alimentara al jugador cuando el valor de hambre del mismo este bajo.\nTijeras: Si tu pones las tijeras en la mano principal de la maid, ella activamente trasquilara las ovejas a su alrededor.\nAntorcha: Si tu le colocas una antorcha a la maid, ella activamente colocara antorchas en las áreas poco brillantes."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Alimentar: si le das los items necesarios para alimentar animales. la maid alimentara activamente a los animales de los alrededores.$(li)extinción: La maid necesita tener un extintor en la mano principal. cuando este modo es encendido la main va a apagar el fuego de su propietario, de si misma y de las entidades domesticadas dentro de un ratio de 3 bloques."
+    }
+  ]
+}

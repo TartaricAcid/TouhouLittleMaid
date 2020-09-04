@@ -1,5 +1,4 @@
 # Touhou Little Mod Language File
-# Translator: yor42
 item_group.touhou_little_maid.main.name=동방 리틀 메이드: 일반
 item_group.touhou_little_maid.garage_kit.name=레진 피규어
 item_group.touhou_little_maid.chair.name=의자
@@ -56,9 +55,14 @@ item.touhou_little_maid.wheel_chair.name=휠체어
 item.touhou_little_maid.rickshaw.name=인력거
 item.touhou_little_maid.scarecrow.name=허수아비
 item.touhou_little_maid.portable_audio.name=휴대용 오디오
-item.touhou_little_maid.chisel.name=Chisel
-item.touhou_little_maid.extinguisher.name=Extinguisher
+item.touhou_little_maid.chisel.name=끌
+item.touhou_little_maid.extinguisher.name=소화기
 item.touhou_little_maid.power_point.name=Power Point
+item.touhou_little_maid.maid_bed.name=Maid Bed
+item.touhou_little_maid.maid_joy.reading.name=Book Desk
+item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
+item.touhou_little_maid.maid_joy.live.name=Live Station
+item.touhou_little_maid.smart_slab.name=Smart Slab
 
 # Block
 tile.touhou_little_maid.garage_kit.name=레진 피규어
@@ -75,11 +79,14 @@ commands.touhou_little_maid.main.power.info=현재 파워: %.2f
 commands.touhou_little_maid.main.maid_num.info=현재 메이드 수: %d
 commands.touhou_little_maid.spell_card.usage=§c사용법: /spell_card <reload>
 commands.touhou_little_maid.spell_card.reload=모든 커스텀 스펠카드를 다시 불러왔습니다.
-commands.touhou_little_maid.draw_coupon.usage=§c사용법: /draw_coupon <reload>
+commands.touhou_little_maid.draw_coupon.usage=§c사용법: /draw_coupon <reload|gui>
+commands.touhou_little_maid.draw_coupon.config_not_enable=You have not enabled the §cMaid Cannot Change Model§r configuration. You must enable this option before you can use the draw function.
 commands.touhou_little_maid.draw_coupon.reload=모든 쿠폰을 다시 불러왔습니다.
 commands.touhou_little_maid.maid_res.usage=§c사용법: /maid_res <reload>
 commands.touhou_little_maid.maid_res.warning=§c알림: 일부 리소스는 다시 불러와지지 않을 수 있습니다.
 commands.touhou_little_maid.maid_res.time=새로고침 시간: %.3f ms
+commands.touhou_little_maid.tlm_server_pack.usage=§cUsage: /tlm_server_pack <reload>
+commands.touhou_little_maid.tlm_server_pack.reload=The server model pack has been reloaded, re-enter the server to update the client model pack
 
 # Tooltips
 tooltips.touhou_little_maid.hakurei_gohei.desc=모드: %d
@@ -121,6 +128,9 @@ tooltips.touhou_little_maid.bauble.usage=메이드의 버블즈 인벤토리에 
 tooltips.touhou_little_maid.scarecrow.name=플레이어의 이름: %s
 tooltips.touhou_little_maid.scarecrow.text=텍스트: %s
 tooltips.touhou_little_maid.scarecrow.special=[스페셜]
+tooltips.touhou_little_maid.smart_slab.desc=Reusable tool, right click to place or retract the maid
+tooltips.touhou_little_maid.smart_slab.maid_name=Maid Name: %s
+tooltips.touhou_little_maid.smart_slab.maid_name.unknow=Unknow
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=포인트 쓰기 성공!
@@ -154,13 +164,15 @@ message.touhou_little_maid.slashblade.position=Slash blade의 위치가 변경�
 message.touhou_little_maid.maid_pos.clear=메이드 위치가 초기화되었습니다!
 message.touhou_little_maid.maid_riding_set.true=엔티티 탑승:켜짐
 message.touhou_little_maid.maid_riding_set.false=엔티티 탑승:꺼짐
-message.touhou_little_maid.extinguisher.player_cannot_use=Your lack of knowledge does not know how to use this item
-message.touhou_little_maid.chisel.hit_block_error=Please right click on the clay block
-message.touhou_little_maid.chisel.offhand_not_photo=Please have a photo of the maid in your offhand
-message.touhou_little_maid.maid.death_pos=Maid Death Pos:
-message.touhou_little_maid.maid.journeymap.name=JourneyMap:
-message.touhou_little_maid.maid.journeymap.hover_message.click=Click to create waypoint.
-message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=Ctrl + click to view on map.
+message.touhou_little_maid.extinguisher.player_cannot_use=아직 이 아이템을 어떻게 사용해야할지 모릅니다.
+message.touhou_little_maid.chisel.hit_block_error=점토 블럭을 우클릭하세요
+message.touhou_little_maid.chisel.offhand_not_photo=왼손에 메이드 사진을 들어 주세요.
+message.touhou_little_maid.maid.death_pos=메이드 사망 위치:
+message.touhou_little_maid.maid.journeymap.name=저니맵:
+message.touhou_little_maid.maid.journeymap.hover_message.click=클릭하여 웨이포인트를 생성합니다.
+message.touhou_little_maid.maid.journeymap.hover_message.ctrl_click=컨트롤+클릭하여 지도에서 봅니다.
+message.touhou_little_maid.server.pack_sync=§a[Touhou Little Maid] §6Syncing client model package...
+message.touhou_little_maid.draw.pack_not_sync=§aThe model package is not synchronized with the server, please wait for synchronization before using this command.
 
 # Compass Mode
 compass.touhou_little_maid.mode.single_point=단일 포인트
@@ -175,6 +187,7 @@ info.touhou_little_maid.maid.unset_pos=§6§l위치 설정 초기화
 info.touhou_little_maid.maid.set_pos=§a§l메이드 위치: %d, %d, %d
 info.touhou_little_maid.portable_audio.playing=음악이 이미 재생중입니다
 info.touhou_little_maid.portable_audio.404=음악이 존재하지 않습니다. 삭제되었는지 다시 한번 확인해주세요.
+info.touhou_little_maid.portable_audio.redirect_error=Failed to get the song link, it may be that NetEase Cloud blocked your ip.
 
 # Death
 death.touhou_little_maid.attack.danmaku.1=%1$s 이(가) 탄막으로 %2$s 에게 살해당했습니다
@@ -192,6 +205,8 @@ config.touhou_little_maid.maid_config.maid_always_show_hat=메이드의 모자�
 config.touhou_little_maid.maid_config.enabled_tasks=사용 가능한 메이드 동작 모드
 config.touhou_little_maid.maid_config.maid_cannot_change_model=플레이어가 메이드 스킨을 변경할 수 없게 하기
 config.touhou_little_maid.maid_config.owner_max_maid_num=소유 가능한 메이드 수 제한
+config.touhou_little_maid.maid_config.give_init_maid=Give A Init Maid
+config.touhou_little_maid.maid_config.spawn_slab_in_loot_chest=Spawn Smart Slab In Loot Chest
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=바닐라 설정
@@ -219,6 +234,7 @@ config.touhou_little_maid.misc_config.chair_cannot_change_model=크리에이티�
 config.touhou_little_maid.misc_config.chair_cannot_be_destroied=크리에이티브 플레이어만 의자 파괴 가능
 config.touhou_little_maid.misc_config.danmaku_affected_by_fluid=탄막이 유체에 영향을 받게 할까요?
 config.touhou_little_maid.misc_config.give_guide_book_first=가이드북을 기본 제공할까요?
+config.touhou_little_maid.misc_config.fast_rendering=Enable Fast Rendering?
 
 # Gashapon Config
 config.touhou_little_maid.gashapon_config=뽑기 설정
@@ -234,6 +250,7 @@ config.touhou_little_maid.gashapon_config.gashapon_weights_1=뽑기 일반 등�
 config.touhou_little_maid.music_config=음악 설정
 config.touhou_little_maid.music_config.player_name_reg=플레이어 이름 등록
 config.touhou_little_maid.music_config.receive_music=음악 받기
+config.touhou_little_maid.music_config.music_list_count=Music List Count
 
 # Danmaku Type
 danmaku_type.touhou_little_maid.pellet=펠렛
@@ -277,7 +294,7 @@ task.touhou_little_maid.extinguishing=Extinguishing
 # GUI
 gui.touhou_little_maid.info.healthy=체력: %f/%f
 gui.touhou_little_maid.info.armor=방어력: %f/20.0
-gui.touhou_little_maid.info.attack=공격력: %f
+gui.touhou_little_maid.info.favorability=Fav: %d
 gui.touhou_little_maid.info.experience=경험치: %d
 gui.touhou_little_maid.tab.main=일반
 gui.touhou_little_maid.tab.inventory=인벤토리
@@ -369,6 +386,18 @@ gui.touhou_little_maid.portable_audio.track.artists=아티스트
 gui.touhou_little_maid.portable_audio.track.album=엘범
 gui.touhou_little_maid.portable_audio.track.duration=시간
 gui.touhou_little_maid.portable_audio.play_list.empty=넷이즈 클라우드 뮤직의 플레이리스트가 비어 있습니다! 이는 다음과 같은 원인으로 발생할 수 있습니다:\n\n- 넷이즈 클라우드 뮤직이 사용 불가능한 지역일 수 있습니다\n- 현재 네트워크가 불안정하여 넷이즈 클라우드 뮤직에 연결할 수 없습니다\n- 넷이즈 클라우드 뮤직에서 차단된 IP일 수 있습니다\n- 다른 알 수 없는 네트워크 문제일 수 있습니다.\n\n불편을 드려 죄송하지만 현재로써는 넷이즈 클라우드 뮤직만이 지원되므로 중국 본토에 거주하는 플레이어만이 쓸 수 있는 기능입니다.\n하지만 나중에 다른 음악 웹사이트에 대한 지원을 추가할 예정이므로 기대해 주세요.\n\n알림: 이건 모드의 버그가 아닌 이 컴퓨터와 넷이즈 클라우드 뮤직간의 네트워크 문제입니다!\n\n[이 인터페이스에서 나가려면 ESC를 누르세요]
+gui.touhou_little_maid.draw_config.save=Save
+gui.touhou_little_maid.draw_config.save_reload=Save & Reload
+gui.touhou_little_maid.draw_config.done=Done!
+gui.touhou_little_maid.draw_config.edit=Edit
+gui.touhou_little_maid.draw_config.pool=Pool: %s
+gui.touhou_little_maid.draw_config.weight=Weight: %d
+gui.touhou_little_maid.draw_config.how_to_edit_pool=§7The probability of the pool is listed below. You can modify the probability of the pool by modifying the §4§ngashaponconfig§7 option of §4§nTouhouLittleMaid.cfg§7 under the server configuration folder:\n\n§b§lN Level Weight: %d\n§a§lS Level Weight: %d\n§c§lSR Level Weight: %d\n§5§lSSR Level Weight: %d\n§6§lUR Level Weight: %d\n\n§9§n[click the Edit button again to return]
+gui.touhou_little_maid.draw_list.index=Index
+gui.touhou_little_maid.draw_list.model_name=Model Name
+gui.touhou_little_maid.draw_list.pool=Pool
+gui.touhou_little_maid.draw_list.weight=Weight
+gui.touhou_little_maid.tag.always_show=Whether to always show the name
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=버전: %s

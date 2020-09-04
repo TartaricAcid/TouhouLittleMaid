@@ -1,0 +1,24 @@
+{
+  "sortnum": 1,
+  "name": "メイドの基本",
+  "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:kirisame_marisa'}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "メイドは多くの基本的機能があります。$(li)デフォルトでは、メイドは周辺のアイテムと経験値オーブを回収します。メイドノメインGUIにはピックアップモードを切り替えるボタンがあります。$(li)デフォルトでは、メイドは常にプレイヤーの傍に居ます。"
+    },
+    {
+      "type": "text",
+      "text": "$(li)素手でメイドをShift+右クリックで待機モードに切り替えます。待機モードでは危険を回避する行動を含め何もしません。$(li)メイドが乗り物に乗っているとき、素手でShift+右クリックで降ろすことができます。$(li)プレイヤーはメイドに金リンゴやポーションを使用できます。アイテムを持ちメイドに向かって右クリック。"
+    },
+    {
+      "type": "text",
+      "text": "$(li)メイドが拾った経験値オーブは経験値ポーションにできます。空の瓶を持ってメイドに向かって右クリック。$(li)メイドは被り物を身に着けることでモデルをレンダリングできます。$(li)空の名札を持ちメイドに右クリックをすると直接名前を付けることができます。"
+    },
+    {
+      "type": "text",
+      "text": "$(li)After install Journey Map Mod, the coordinates displayed by the maid at death can be directly clicked to save as the coordinates of the Journey Map, or you can ctrl click to view it under the big map window of the Journey Map."
+    }
+  ]
+}

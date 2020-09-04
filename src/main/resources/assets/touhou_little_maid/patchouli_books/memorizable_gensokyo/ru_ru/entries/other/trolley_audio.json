@@ -1,0 +1,13 @@
+{
+  "sortnum": 12,
+  "name": "Тележка с аудио",
+  "icon": "touhou_little_maid:trolley_audio",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:trolley_audio",
+      "text": "Аудио на тележке похоже на чемодан, и его использование точно такое же, как обычный музыкальный автомат."
+    }
+  ]
+}

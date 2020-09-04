@@ -1,0 +1,16 @@
+{
+  "sortnum": 7,
+  "name": "Comando",
+  "icon": "minecraft:command_block",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(#f00)/hata reload$() Recargar todas las texturas$(br)$(#f00)/maid_res reload$() Recargar el paquete de recursos de la maid. Este comando no recarga completamente algunos recursos. Se recomienda utilizar la tecla de acceso directo F3+T.$(br)$(#f00)/draw_coupon reload$() Recargar cupón de tirada.$(br)$(#f00)/spell_card reload$() Recargar todos los datos de las spell cards."
+    },
+    {
+      "type": "text",
+      "text": "$(#f00)/touhou_little_maid power$() Establece el valor de poder del jugador$(br)$(#f00)/touhou_little_maid maid_num$() Establece el numero de maids por jugador"
+    }
+  ]
+}

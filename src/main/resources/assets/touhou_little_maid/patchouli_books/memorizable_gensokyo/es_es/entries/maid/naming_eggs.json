@@ -1,0 +1,12 @@
+{
+  "sortnum": 12,
+  "name": "Nombrar huevos",
+  "icon": "minecraft:name_tag",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Una maid con un nombre especifico puede mostrar un modelo especial.$(br2)Por defecto, una maid nombrada como $(#ff0000)=>id$() puede convertiste en el modelo de aspecto del jugador correspondiente a ese id.$(br2)El paquete de recursos de la maid también puede añadir modelos personalizados de huevos, incluso modelos de huevos cifrados SHA1."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "sortnum": 2,
+  "name": "カメラ & アルバム",
+  "icon": "touhou_little_maid:album",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:camera",
+      "text": "メイドを長距離移動させる場合や別ディメンジョンへ移動させる場合、大変手間がかかります。それを解決する為にカメラは設計されています。$(br2)カメラをメイドに使用することでメイドを写真の中にしまうことができます。写真は右クリックして中のメイドを解放できます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:album",
+      "text": "インベントリ内にアルバムがある場合、写真は直接アルバムへ挿入されます。アルバムを写真と同じように使用することでメイドを一人ずつ配置できます。"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "sortnum": 3,
+  "name": "La escoba de Marisa",
+  "icon": "touhou_little_maid:marisa_broom",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:marisa_broom",
+      "text": "La escoba es un objeto volador conveniente que permite al jugador con el click derecho en el vuelo y usar las teclas WASD del teclado para navegar.$(br2)La maid también montara en la escoba cuando este cerca de ella y la maid que se siente en la escoba podrá moverse en un estatus de vuelo en la mayoría de los casos."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/broom.png"
+      ],
+      "title": "La escoba de Marisa",
+      "border": true,
+      "text": "Maid montando en una escoba."
+    },
+    {
+      "type": "text",
+      "text": "Sin embargo, actualmente solo los jugadores en modo creativo pueden montar la escoba. Puedes modificar el archivo de configuración para desactivar esta función."
+    }
+  ]
+}

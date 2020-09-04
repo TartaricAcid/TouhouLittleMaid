@@ -9,7 +9,8 @@
       "item": "touhou_little_maid:hakurei_gohei",
       "link_recipe": true,
       "text": "御币是一种范围性攻击武器，可以用来发射弹幕，当然也可以作为近战武器。$(br2)当你手持御币摁下 alt 键并滑动鼠标滚轮，可以切换发射的弹幕样式。"
-    }, {
+    },
+    {
       "type": "crafting",
       "recipe": "touhou_little_maid:hakurei_gohei",
       "text": "玩家拥有的 power 值越高，发射的弹幕伤害和速度就越快。$(br2)御币还是构建多方块祭坛的重要工具。"

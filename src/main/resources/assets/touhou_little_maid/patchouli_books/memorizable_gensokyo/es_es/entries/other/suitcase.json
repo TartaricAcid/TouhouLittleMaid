@@ -1,0 +1,13 @@
+{
+  "sortnum": 11,
+  "name": "Maleta",
+  "icon": "touhou_little_maid:suitcase",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:suitcase",
+      "text": "La maleta es una entidad que puede almacenar items. La maid puede agarrarlo y llevarlo consigo simplemente acercándose a ella. haz shift + click derecho para quitarle la maleta a la maid."
+    }
+  ]
+}

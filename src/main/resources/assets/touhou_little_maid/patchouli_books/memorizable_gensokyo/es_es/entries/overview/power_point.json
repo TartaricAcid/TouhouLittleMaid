@@ -1,0 +1,25 @@
+{
+  "sortnum": 2,
+  "name": "Puntos de poder",
+  "icon": "minecraft:diamond_sword",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Los puntos de poder son un importante recurso de este mod, estos se obtienen matando a $(l:overview/world_spawn#fairy)maid fairy$() o a $(l:overview/world_spawn#rinnosuke)rinnosuke morichika$().$(br2) puede utilizarse para crear el $(l:overview/multiblocks_altar)altar$()."
+    },
+    {
+      "type": "text",
+      "text": "Cuando sostienes el $(l:overview/gohei_and_danmaku)gohei$(), Puedes ver tus puntos de poder en la esquina superior izquierda de la pantalla.$(br2)El poder maximo que se puede obtener es 5, no subira mas de ese numero."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/power_point.png"
+      ],
+      "title": "Puntos de poder",
+      "border": true,
+      "text": "La entidad Punto de poder cayo al suelo."
+    }
+  ]
+}

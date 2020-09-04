@@ -1,0 +1,16 @@
+{
+  "sortnum": 7,
+  "name": "Команда",
+  "icon": "minecraft:command_block",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(#f00)/hata reload$() Перезагрузить все текстуры флага$(br)$(#f00)/maid_res reload$() Перезагрузить набор ресурсов горничной. Эта команда не полностью перезагрузит некоторые ресурсы. Рекомендуется использовать F3+T.$(br)$(#f00)/draw_coupon reload$() Перезагрузить купоны.$(br)$(#f00)/spell_card reload$() Перезагрузить все данные карт заклинаний."
+    },
+    {
+      "type": "text",
+      "text": "$(#f00)/touhou_little_maid power$() Установить значение силы игрока$(br)$(#f00)/touhou_little_maid maid_num$() Установить число горничных для игрока"
+    }
+  ]
+}

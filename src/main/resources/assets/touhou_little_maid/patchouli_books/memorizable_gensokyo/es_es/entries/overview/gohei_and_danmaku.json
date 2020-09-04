@@ -1,0 +1,28 @@
+{
+  "sortnum": 3,
+  "name": "Gohei y Danmaku",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:hakurei_gohei",
+      "link_recipe": true,
+      "text": "El gohei es un arma a distancia que puede ser usada para disparar danmaku, y también puede ser usada como un arma cuerpo a cuerpo.$(br2)cuando tienes el gohei y presionas alt y mueves la rueda del ratón, podrás elegir la forma que tenga el danmaku."
+    },
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:hakurei_gohei",
+      "text": "Mientras mas alto son los puntos de poder del jugador, mas alto sera el daño y la velocidad del danmaku que dispare.$(br2)El gohei es una herramienta importante para construir el altar de bloques múltiples."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/shoot_danmaku.png"
+      ],
+      "title": "Disparar Danmaku",
+      "border": true,
+      "text": "El jugador debe sostener el gohei para disparar danmaku"
+    }
+  ]
+}

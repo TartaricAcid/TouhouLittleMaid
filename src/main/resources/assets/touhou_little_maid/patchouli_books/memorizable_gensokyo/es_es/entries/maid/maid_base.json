@@ -1,0 +1,24 @@
+{
+  "sortnum": 1,
+  "name": "Maid base",
+  "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:kirisame_marisa'}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Hay muchas funciones básicas que las maids pueden hacer, tales como:$(li)por defecto, la doncella recogerá activamente los items, flechas orbes de experiencia que estén a su alrededor. La GUI principal tiene para cambiar el modo de recogida;$(li)Por defecto, la maid siempre seguirá al jugador."
+    },
+    {
+      "type": "text",
+      "text": "$(li)shift + click derecho en la maid teniendo la mano vacía la cambiara al modo sentado. en este modo, no hará nada, incluido evitar el peligro.$(li)cuando la maid viaje en otras entidades, shit + click derecho con una mano vacía puede quitarla de el.$(li)El jugador puede usar la manzana dorada o una poción en una maid apretando click derecho en ella sosteniendo el item."
+    },
+    {
+      "type": "text",
+      "text": "$(li)La experiencia obtenida por la maid se convierte en botellas de experiencia si el jugador hace click derecho sosteniendo una botella vacía.$(li)La maid se puede equipar una cráneo y otros modelos.$(li) Haga click derecho a una maid sin nombre,y podrás nombrarla directamente."
+    },
+    {
+      "type": "text",
+      "text": "$(li)después de instalar Journey Map Mod, las coordenadas mostradas por la maid al morir pueden ser pulsadas directamente para guardar las coordenadas en el Journey map, o puede hacer clic en ctrl para verlo en la ventana grande del Journey Map."
+    }
+  ]
+}

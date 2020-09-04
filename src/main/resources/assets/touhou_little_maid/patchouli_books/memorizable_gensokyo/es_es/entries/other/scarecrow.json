@@ -1,0 +1,17 @@
+{
+  "sortnum": 14,
+  "name": "Espantapájaros",
+  "icon": "touhou_little_maid:scarecrow",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:scarecrow",
+      "text": "El espantapájaros puede repeler a hadas maids, Rinnosukes y creepers dentro de 10 bloques.$(br2) El espantapájaros puede tener el aspecto de un jugador ingresando su id, y también se puede escribir un texto en el cartel del pecho."
+    },
+    {
+      "type": "text",
+      "text": "Scarecrow has a lightning strike eggs."
+    }
+  ]
+}

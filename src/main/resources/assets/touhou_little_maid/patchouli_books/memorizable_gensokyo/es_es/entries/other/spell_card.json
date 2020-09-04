@@ -1,0 +1,17 @@
+{
+  "sortnum": 9,
+  "name": "Carta de Hechizo",
+  "icon": "touhou_little_maid:spell_card",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:spell_card",
+      "text": "Las spells cards son un contenido en prueba añadido recientemente, al usarlo consume muchos recursos, así que úsela con cuidado por favor.$(br2)Cuando el jugador tiene una spell card en su mano secundario y un gohei en la principal, haciendo click derecho utilizara la spell card."
+    },
+    {
+      "type": "text",
+      "text": "Las Spell cards pueden ser personalizadas utilizando scripts de javascript. Para personalizaciones mas especificas, ve a la wiki de este proyecto."
+    }
+  ]
+}

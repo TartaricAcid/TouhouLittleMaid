@@ -1,0 +1,13 @@
+{
+  "sortnum": 12,
+  "name": "Maleta Altavoz",
+  "icon": "touhou_little_maid:trolley_audio",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:trolley_audio",
+      "text": "La carretilla de audio es similar a la maleta, y se usa exactamente igual que el tocadiscos."
+    }
+  ]
+}

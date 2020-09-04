@@ -1,0 +1,28 @@
+{
+  "sortnum": 3,
+  "name": "Aspecto",
+  "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:komeiji_koishi'}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "El aspecto de las maids es completamente personalizable, puedes cambiar fácilmente el aspecto de las maids en el juego.$(br2)También puedes añadir un paquete de recursos de terceros ara aumentar el estilo de la apariencia de la maid."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/change_skin.png"
+      ],
+      "title": "Botón de cambio de aspecto",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "Abajo de la Gui de la maid, puedes abrir el centro de descarga de paquetes de recursos, donde puedes descargar los modelos de maids hechos por otros jugadores.$(br2)descarga el paquete de recursos, y cárgalo en juego para usar mas modelos de maid."
+    },
+    {
+      "type": "text",
+      "text": "Utiliza el software $(l:https://blockbench.net/)Blockbench$(/l) para crear fácilmente tu propio paquete de recursos de aspecto para la maid.$(br2)Los modelos de aspecto de maid son perfectamente compatibles con la 1.10.0 de la version bedrock.$(br2)Para mas información de las maids personalizadas, por favor echa un vistazo a la wiki."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "sortnum": 1,
+  "name": "Задать место появления в мире",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Этот мод добавляет двух мобов. $(br2)Добыча мобов является важным ингредиентом для крафта.$(br2)Шанс спавна враждебных существ в этом моде можно изменить в конфигурационном файле. Если значение равно 0, то этим монстрам запрещен спавн."
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.fairy{OnGround:true}",
+      "offset": 0.125,
+      "text": "Появление в мире ночью будет летать и одновременно стрелять данмаку, чтобы атаковать игроков и горничных.",
+      "anchor": "fairy"
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.rinnosuke",
+      "offset": 0.125,
+      "text": "Появляется в лесном биоме ночью будет атаковать игроков и горничных.",
+      "anchor": "rinnosuke"
+    }
+  ]
+}

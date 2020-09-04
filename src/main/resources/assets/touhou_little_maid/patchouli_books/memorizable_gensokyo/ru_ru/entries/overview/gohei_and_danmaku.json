@@ -1,0 +1,28 @@
+{
+  "sortnum": 3,
+  "name": "Гохей и Данмаку",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:hakurei_gohei",
+      "link_recipe": true,
+      "text": "Гохей — это оружие дальнего боя, которое можно использовать для стрельбы данмаку, а также используется как обычное оружие ближнего боя.$(br2)Когда вы удерживаете гохей и нажимаете alt, прокрутив колесо мыши, вы можете переключить стиль данмаку."
+    },
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:hakurei_gohei",
+      "text": "Чем больше силы у игрока, тем выше урон и скорость данмаку.$(br2)Гохей является важным инструментом для постройки алтаря."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/shoot_danmaku.png"
+      ],
+      "title": "Стрельба данмаку",
+      "border": true,
+      "text": "Игрок держит гохей для стрельбы данмаку"
+    }
+  ]
+}

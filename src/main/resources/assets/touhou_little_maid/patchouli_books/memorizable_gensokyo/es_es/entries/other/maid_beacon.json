@@ -1,0 +1,17 @@
+{
+  "sortnum": 4,
+  "name": "Lámpara de Santuario",
+  "icon": "touhou_little_maid:maid_beacon",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_beacon",
+      "text": "La lampara shrine es un buen elemento de decoración y tiene cierta función practica. haga click derecho en la parte superior de la lampara para abrir la GUI, esto le permitir almacenar los puntos de poder del jugador."
+    },
+    {
+      "type": "text",
+      "text": "También puedes seleccionar el efecto, entonces consumirá puntos de poder para darle el efecto a las maid de los alrededores.$(br2)La lampara también es una buena herramienta para recoger automáticamente puntos de poder. puede recoger automáticamente puntos de energía dentro de 3 bloques y almacenarlos."
+    }
+  ]
+}

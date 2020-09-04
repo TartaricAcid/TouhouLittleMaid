@@ -7,16 +7,20 @@
     {
       "type": "text",
       "text": "When you open a maid's GUI, you can see a list on the left side. This is a maid's task bar. The related functions are as the following:$(li)Idle: default task; the maid does nothing.$(li)Attack: if you put a sword on a maid's main hand, the maid's behavior will be the same as a vanilla wolf, actively attacking hostile creatures."
-    }, {
+    },
+    {
       "type": "text",
       "text": "$(li)Bow: If you put a bow on a maid's main hand, and put arrows in any other inventory blocks, they will actively attack hostile creatures with bows.$(li)Danmaku: If you put the gohei in a maid's main hand, she will shoot danmaku to attack the hostile creatures, and launch different numbers of danmaku according to the number of hostile creatures around her."
-    }, {
+    },
+    {
       "type": "text",
       "text": "$(li)Farm: If you put crop seeds on the maid, she will actively plant crops around her, and actively harvest them. Only when maid has a hoe in mainhand can break crop like the player.$(li)Sugarcane: plants and harvests sugarcanes.$(li)Melons: harvest watermelons and pumpkins.$(li)Cocoa: plant and harvest cocoas.$(li)Grass: clean weeds and flowers around them."
-    }, {
+    },
+    {
       "type": "text",
       "text": "$(li)Snow: clean the snow layer around them, snowball drops when holding a shovel.$(li)Feed: if you put food in a maid's inventory, she will activly feed the player when the player's hunger value is low.$(li)Shears: if you put shears in a maid's main hand, she will actively shear sheep around her.$(li)Torch: if you put torches on a maid, they will actively place torches in the low brightness areas."
-    }, {
+    },
+    {
       "type": "text",
       "text": "$(li)Breed: if you put the items needed to breed animals in a maid's inventory. She will actively feed the surrounding animals.$(li)Extinguishing: the mainhand of the maid needs to hold a fire extinguisher. When this mode is turned on, the maid will extinguish the fire of the owner, itself, and tamable entities within 3 blocks."
     }

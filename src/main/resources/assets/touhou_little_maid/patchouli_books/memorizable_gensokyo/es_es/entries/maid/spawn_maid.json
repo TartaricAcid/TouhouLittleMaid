@@ -1,0 +1,16 @@
+{
+  "sortnum": 0,
+  "name": "Generar Maid",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "La manera de conseguir una maid es muy especial y se debe hacer a través de un altar de bloques múltiples.$(br2)dado a que es probable que la receta cambien en el futuro, por favor revisa las recetas del altar en el JEI.$(br2)Después de que la maid aparezca con éxito en el altar, obtendrás una caja de pastel con la maid. puedes hacer click derecho para abrir la caja."
+    },
+    {
+      "type": "text",
+      "text": "Necesitas hacer click derecho 3 veces para activar las diferentes etapas de apertura, y finalmente la caja del pastel desaparecerá.$(br2)Necesitaras un pastel para domesticar a la maid. los elementos para domesticar a la maid pueden ser cambiados en el archivo de configuración.$(br2)La maid domesticada es idéntica a una mascota del vanilla, y puedes hacer click derecho para abrir su GUI."
+    }
+  ]
+}

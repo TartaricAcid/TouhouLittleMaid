@@ -1,0 +1,17 @@
+{
+  "sortnum": 4,
+  "name": "神社の灯篭",
+  "icon": "touhou_little_maid:maid_beacon",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_beacon",
+      "text": "神社の灯篭はただの装飾品ではありません。実用的な機能を備えています。神社の灯篭の上部を右クリックしてGUIを開き、プレイヤーのP点を保存できます。"
+    },
+    {
+      "type": "text",
+      "text": "それは効果も選択でき、P点を消費することで周囲のメイドに効果をもたらします。$(br2)また、神社の灯篭はP点を集める機能があります。周囲３ブロック以内のP点を自動的に収集し保存します。"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "sortnum": 1,
+  "name": "Punto de aparición",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Este mod añade dos mobs.$(br2) Los recursos que sueltan los mobs son ingredientes de crafteo importantes.$(br2)El chance de aparición de las criaturas hostiles de este mod puede ser modificado en el archivo de configuracion. cuando es puesto en 0, estos monstruos no aparecerán."
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.fairy{OnGround:true}",
+      "offset": 0.125,
+      "text": "Aparecen en las planicies de noche, estos volaran y dispararan danmaku simultáneamente para atacar al jugador y a las maids.",
+      "anchor": "fairy"
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.rinnosuke",
+      "offset": 0.125,
+      "text": "Aparece en el bosque de noche, este atacara a jugadores y a maids.",
+      "anchor": "rinnosuke"
+    }
+  ]
+}

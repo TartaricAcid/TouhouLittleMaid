@@ -1,0 +1,25 @@
+{
+  "sortnum": 2,
+  "name": "Очки силы",
+  "icon": "minecraft:diamond_sword",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Очки силы являются важным ресурсом для этого мода, которые можно получить, убив $(l:overview/world_spawn#fairy)maid fairy$() или $(l:overview/world_spawn#rinnosuke)rinnosuke morichika$().$(br2)Могут быть использованы для создания из $(l:overview/multiblocks_altar)altar$()."
+    },
+    {
+      "type": "text",
+      "text": "Когда вы держите $(l:overview/gohei_and_danmaku)gohei$(), вы можете увидеть номер ваших очков сил в левом верхнем углу экрана. $(br2)Максимальные очки силы 5, и больше этого числа очки силы не увеличиваются."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/power_point.png"
+      ],
+      "title": "Очки силы",
+      "border": true,
+      "text": "Очко силы упало на землю."
+    }
+  ]
+}

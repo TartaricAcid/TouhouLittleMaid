@@ -1,0 +1,18 @@
+{
+  "sortnum": 2,
+  "name": "Álbum y Camara",
+  "icon": "touhou_little_maid:album",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:camera",
+      "text": "Llevar a una maid a través de dimensiones o a grandes distancias es un problema, y la cámara esta diseñada para este propósito.$(br2)Solo toma una foto a tu maid con la cámara y conviértela en una foto, luego tenla foto en la mano y haz click derecho en un bloque para liberarla."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:album",
+      "text": "Si tienes un álbum en el inventario, usa la cámara, las fotos se pondrán en el álbum, y luego podrás colar las maids una por una usando el álbum y dando click derecho en un bloque."
+    }
+  ]
+}

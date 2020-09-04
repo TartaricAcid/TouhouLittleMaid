@@ -1,0 +1,23 @@
+{
+  "sortnum": 0,
+  "name": "東方プロジェクト",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "link",
+      "text": "東方プロジェクトは、日本の同人サークル[上海アリス幻想楽団]のZUN氏がプロデュースするファンダムプロダクションのシリーズです。",
+      "url": "https://en.touhouwiki.net/wiki/Touhou_Wiki",
+      "link_text": "Touhou Wiki"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/hakurei_reimu.png"
+      ],
+      "title": "博麗 霊夢",
+      "border": true,
+      "text": "東方プロジェクトシリーズの主人公"
+    }
+  ]
+}

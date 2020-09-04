@@ -1,0 +1,20 @@
+{
+  "sortnum": 8,
+  "name": "Modificar Vanilla",
+  "icon": "minecraft:book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Dos modificaciones de modelos de entidades fueron añadidas a la configuración de este mod.$(br2) Una modifica el modelo del slime y lo cambia por un Yukkuri, y la otra cambia el orbe de experiencia por Puntaje.$(br2)Tambien puedes cambiar el totem de la imortalidad por una textura de un Punto de vida."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/yukkuri.png"
+      ],
+      "title": "Yukkuri",
+      "border": true
+    }
+  ]
+}

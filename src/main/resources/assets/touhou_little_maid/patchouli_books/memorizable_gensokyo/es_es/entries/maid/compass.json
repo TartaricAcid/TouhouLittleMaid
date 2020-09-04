@@ -1,0 +1,17 @@
+{
+  "sortnum": 7,
+  "name": "Brújula Kappa",
+  "icon": "touhou_little_maid:kappa_compass",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:kappa_compass",
+      "text": "La brújula se usa en conjunto con el modo casa de la maid. click derecho en un bloque para guardar las coordenadas, después click derecho en la maid para vincularle las coordenadas."
+    },
+    {
+      "type": "text",
+      "text": "La brújula tiene 4 modos:$(br)$(li) un punto: La maid se moverá dentro de los 16 bloques de las coordenadas seleccionadas.$(li)re-entrada de punto múltiple: la maid se moverá ida y vuelta por las coordenadas establecidas.$(li)Cierre de punto múltiple: la maid se moverá cíclica mente a lo largo de las coordenadas establecidas.$(li)Establecer rango: la maid solo se moverá en el rango establecido."
+    }
+  ]
+}

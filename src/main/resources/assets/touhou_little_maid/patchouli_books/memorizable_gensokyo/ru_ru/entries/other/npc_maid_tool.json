@@ -1,0 +1,13 @@
+{
+  "sortnum": 10,
+  "name": "NPC инструмент горничной",
+  "icon": "touhou_little_maid:npc_maid_tool",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:npc_maid_tool",
+      "text": "NPC инструмент горничной совместим с пользовательским NPC mod. $(br2)Когда модель NPC установлена как touhou little maid, вы можете использовать этот инструмент правой кнопкой мыши по NPC для установки пользовательской модели горничной."
+    }
+  ]
+}

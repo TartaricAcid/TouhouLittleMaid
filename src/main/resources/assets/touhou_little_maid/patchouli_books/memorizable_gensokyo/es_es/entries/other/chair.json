@@ -1,0 +1,17 @@
+{
+  "sortnum": 1,
+  "name": "Cojín personalizado",
+  "icon": "touhou_little_maid:chair{ModelId:'touhou_little_maid:cat_cart'}",
+  "category": "other",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:chair",
+      "text": "El cojín personalizado es un objeto puramente decorativo, colocado directamente en el suelo con el click derecho y el click izquierdo puedes deshacerte, click derecho para sentarte, Con SHIFT y click derecho puedes abrir la interfaz de usuario para cambiar el estilo del mismo."
+    },
+    {
+      "type": "text",
+      "text": "Las maids pueden sentarse directamente en un cojín cuando estén cerca, utiliza el click derecho para que la maid deje el cojín.$(br2)El modelo del cojín es completamente personalizable, también puedes añadir un modelo personalizado con un paquete de recursos. Para cpsas relacionadas con la personalización, por favor revise la wiki."
+    }
+  ]
+}

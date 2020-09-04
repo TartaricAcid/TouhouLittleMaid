@@ -1,0 +1,28 @@
+{
+  "sortnum": 3,
+  "name": "お祓い棒と弾幕",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:hakurei_gohei",
+      "link_recipe": true,
+      "text": "The gohei is a ranged weapon that can be used to shoot danmaku, and it also can be used as a normal melee weapon.$(br2)When you hold the gohei and press alt to scroll the mouse wheel, you can switch the danmaku style of the shoot."
+    },
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:hakurei_gohei",
+      "text": "P点が高いほど弾幕のダメージと速度が上昇します。$(br2)お祓い棒は祭壇を建てるための重要なツールです。"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/shoot_danmaku.png"
+      ],
+      "title": "弾幕を撃つ",
+      "border": true,
+      "text": "お祓い棒を手に持ち弾幕を撃つ"
+    }
+  ]
+}

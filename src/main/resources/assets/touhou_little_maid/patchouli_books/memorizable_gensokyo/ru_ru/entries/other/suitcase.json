@@ -1,0 +1,13 @@
+{
+  "sortnum": 11,
+  "name": "Чемодан",
+  "icon": "touhou_little_maid:suitcase",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:suitcase",
+      "text": "Чемодан - это объект, который может хранить предметы. Горничная может взять его при приближении к нему. Щелкните правой кнопкой мыши по горничной для удаления чемодана."
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "sortnum": 9,
+  "name": "Cupón gacha",
+  "icon": "touhou_little_maid:maid_model_coupon:5",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Cuando la función de cambiar el modelo de la maid de forma libre es desactivada en la configuración, diseñamos un nuevo método de para cambiarlas.$(br2)Similar a un gacha, los jugadores consumirán esmeraldas o moneda de gacha para conseguir un gashapon y obtener un cupón de modelo de maid."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon_machines",
+      "text": "Click derecho con una esmeralda o una moneda de gacha para conseguir un gashapon, el nivel y la probabilidad pueden ser modificadas."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon:4",
+      "text": "Click derecho con el gashapon equipado ara conseguir un cupón de modelo. diferentes niveles de gashapon pueden conseguir cupones de modelo de diferentes niveles.$(br2)La probabilidad puede ser modificada en los csv file, para detalles. por favor vea la wiki del mod"
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_model_coupon:5",
+      "text": "Click derecho en la maid para cambiar el modelo."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon_coin",
+      "text": "Matar a rinnosuke te dará cierta cantidad de monedas de gacha. También, puedes obtener monedas de gacha mediante cupones de modelo."
+    }
+  ]
+}
