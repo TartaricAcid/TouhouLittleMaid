@@ -136,13 +136,6 @@ public final class MaidItems {
             return CHAIR.getDefaultInstance();
         }
     };
-    public static CreativeTabs SPELL_CARD_TABS = new MaidCreativeTabs("spell_card") {
-        @SideOnly(Side.CLIENT)
-        @Override
-        public ItemStack getIcon() {
-            return SPELL_CARD.getDefaultInstance();
-        }
-    };
     public static CreativeTabs MODEL_COUPON_TABS = new MaidCreativeTabs("model_coupon") {
         @SideOnly(Side.CLIENT)
         @Override

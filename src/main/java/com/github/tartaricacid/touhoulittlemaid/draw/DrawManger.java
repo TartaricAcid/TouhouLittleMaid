@@ -114,8 +114,8 @@ public final class DrawManger {
 
     public static void readDrawCsvFile(Object clz) {
         DrawManger.clearAllData();
+        InputStream input = null;
         try {
-            InputStream input;
             // 依据配置文件夹下是否有文件，进行读取
             if (CONFIG_DRAW_CSV_FILE.toFile().isFile()) {
                 input = Files.newInputStream(CONFIG_DRAW_CSV_FILE);
@@ -135,10 +135,11 @@ public final class DrawManger {
                     }
                 }
             }
-            // 别忘了关闭输入流
-            IOUtils.closeQuietly(input);
         } catch (IOException e) {
             TouhouLittleMaid.LOGGER.warn("Fail to read csv file");
+        } finally {
+            // 别忘了关闭输入流
+            IOUtils.closeQuietly(input);
         }
     }
 

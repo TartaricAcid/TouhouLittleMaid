@@ -104,7 +104,7 @@ public final class ServerPackManager {
 
     @SubscribeEvent
     public static void onEnterServer(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.player instanceof EntityPlayerMP) {
+        if (event.player instanceof EntityPlayerMP && !ServerPackManager.getCrc32FileMap().isEmpty()) {
             CommonProxy.INSTANCE.sendTo(new SyncClientPackMessage(ServerPackManager.getCrc32FileMap()), (EntityPlayerMP) event.player);
         }
     }

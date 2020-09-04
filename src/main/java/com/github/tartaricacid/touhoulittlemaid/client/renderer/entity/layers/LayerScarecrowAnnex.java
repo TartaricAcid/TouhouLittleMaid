@@ -29,8 +29,8 @@ public class LayerScarecrowAnnex implements LayerRenderer<EntityScarecrow> {
         if (StringUtils.isNotBlank(scarecrow.getCustomNameTag())) {
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.color(255, 255, 255, 255);
             GlStateManager.translate(0, 0, 0);
             Minecraft.getMinecraft().renderEngine.bindTexture(PlayerMaidResources.getPlayerSkin(scarecrow.getCustomNameTag()));
             if (scarecrow.isSpecial()) {

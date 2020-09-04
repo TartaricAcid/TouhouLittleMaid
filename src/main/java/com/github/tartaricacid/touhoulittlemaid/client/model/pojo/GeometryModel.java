@@ -15,10 +15,10 @@ public class GeometryModel {
     private int texturewidth;
 
     @SerializedName("visible_bounds_height")
-    private int visibleBoundsHeight;
+    private float visibleBoundsHeight;
 
     @SerializedName("visible_bounds_width")
-    private int visibleBoundsWidth;
+    private float visibleBoundsWidth;
 
     @SerializedName("visible_bounds_offset")
     private List<Float> visibleBoundsOffset;
@@ -35,11 +35,11 @@ public class GeometryModel {
         return texturewidth;
     }
 
-    public int getVisibleBoundsHeight() {
+    public float getVisibleBoundsHeight() {
         return visibleBoundsHeight;
     }
 
-    public int getVisibleBoundsWidth() {
+    public float getVisibleBoundsWidth() {
         return visibleBoundsWidth;
     }
 

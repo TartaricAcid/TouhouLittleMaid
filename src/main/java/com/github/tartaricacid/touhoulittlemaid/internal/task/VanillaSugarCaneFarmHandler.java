@@ -52,8 +52,8 @@ public class VanillaSugarCaneFarmHandler implements FarmHandler {
 
     @Override
     public boolean canPlant(AbstractEntityMaid maid, World world, BlockPos pos, ItemStack seed) {
-        // 此处方块可替换（比如草之类的方块）
-        if (!world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
+        // 此处方块可替换（比如草之类的方块）或者不为水
+        if (!world.getBlockState(pos).getBlock().isReplaceable(world, pos) || world.getBlockState(pos).getMaterial().isLiquid()) {
             return false;
         }
 

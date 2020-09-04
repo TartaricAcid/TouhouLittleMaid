@@ -168,6 +168,7 @@ public class CommonProxy {
 
         // 注册 FarmHandler 和 FeedHandler
         LittleMaidAPI.registerFarmHandler(new VanillaNormalFarmHandler());
+        VanillaNormalFarmHandler.readInnerCropFile();
         LittleMaidAPI.registerFarmHandler(new VanillaSugarCaneFarmHandler());
         LittleMaidAPI.registerFarmHandler(new VanillaMelonHandler());
         LittleMaidAPI.registerFarmHandler(new VanillaCocoaHandler());

@@ -1,0 +1,10 @@
+{
+  "actuallyadditions:item_misc": {
+    "id": "actuallyadditions:item_misc",
+    "meta": 13
+  },
+  "actuallyadditions:item_food": {
+    "id": "actuallyadditions:item_food",
+    "meta": 16
+  }
+}

@@ -38,7 +38,6 @@ public class ItemSpellCard extends Item {
     public ItemSpellCard() {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".spell_card");
         setMaxStackSize(1);
-        setCreativeTab(MaidItems.SPELL_CARD_TABS);
     }
 
     /**
