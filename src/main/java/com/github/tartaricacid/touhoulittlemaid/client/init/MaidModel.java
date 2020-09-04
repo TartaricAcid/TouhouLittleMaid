@@ -180,5 +180,21 @@ public final class MaidModel {
                 return maidJoy[0];
             }
         }));
+
+        ModelResourceLocation smartSlabInit = getModelRl(MaidItems.SMART_SLAB, 0);
+        ModelResourceLocation smartSlabEmpty = getModelRl(MaidItems.SMART_SLAB, 1);
+        ModelResourceLocation smartSlabFull = getModelRl(MaidItems.SMART_SLAB, 2);
+        ModelBakery.registerItemVariants(MaidItems.SMART_SLAB, smartSlabInit, smartSlabEmpty, smartSlabFull);
+        ModelLoader.setCustomMeshDefinition(MaidItems.SMART_SLAB, stack -> {
+            switch (stack.getMetadata()) {
+                case 0:
+                    return smartSlabInit;
+                case 1:
+                    return smartSlabEmpty;
+                case 2:
+                default:
+                    return smartSlabFull;
+            }
+        });
     }
 }

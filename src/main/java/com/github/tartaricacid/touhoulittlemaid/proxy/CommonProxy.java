@@ -133,6 +133,7 @@ public class CommonProxy {
             MultiblockRegistry.init();
         }
         LootTableList.register(DungeonLootTable.getPowerPointLoot());
+        LootTableList.register(DungeonLootTable.getSmartSlabLoot());
     }
 
     public void postInit(FMLPostInitializationEvent event) {

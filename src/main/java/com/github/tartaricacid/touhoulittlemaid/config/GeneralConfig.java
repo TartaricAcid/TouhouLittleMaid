@@ -81,6 +81,16 @@ public class GeneralConfig {
         @Config.Name("OwnerMaxMaidNum")
         @Config.RangeInt(min = 0)
         public int ownerMaxMaidNum = Integer.MAX_VALUE;
+
+        @Config.Comment("Give a init maid for player first join.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.give_init_maid")
+        @Config.Name("GiveInitMaid")
+        public boolean giveInitMaid = true;
+
+        @Config.Comment("Spawn smart slab in loot chest.")
+        @Config.LangKey("config.touhou_little_maid.maid_config.spawn_slab_in_loot_chest")
+        @Config.Name("SpawnSlabInLootChest")
+        public boolean spawnSlabInLootChest = true;
     }
 
     public static class VanillaConfig {

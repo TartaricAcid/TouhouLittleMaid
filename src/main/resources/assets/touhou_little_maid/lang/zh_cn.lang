@@ -62,6 +62,7 @@ item.touhou_little_maid.maid_bed.name=女仆床
 item.touhou_little_maid.maid_joy.reading.name=书桌
 item.touhou_little_maid.maid_joy.piano.name=电子琴
 item.touhou_little_maid.maid_joy.live.name=直播站
+item.touhou_little_maid.smart_slab.name=机巧板
 
 # Block
 tile.touhou_little_maid.garage_kit.name=手办
@@ -127,6 +128,9 @@ tooltips.touhou_little_maid.bauble.usage=需要放置在女仆的饰品栏中
 tooltips.touhou_little_maid.scarecrow.name=玩家名称：%s
 tooltips.touhou_little_maid.scarecrow.text=文本：%s
 tooltips.touhou_little_maid.scarecrow.special=[特殊模型]
+tooltips.touhou_little_maid.smart_slab.desc=可重复使用的工具，右击释放/捕捉女仆
+tooltips.touhou_little_maid.smart_slab.maid_name=女仆名称：%s
+tooltips.touhou_little_maid.smart_slab.maid_name.unknow=未知
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=坐标写入成功！
@@ -201,6 +205,8 @@ config.touhou_little_maid.maid_config.maid_always_show_hat=女仆总是显示帽
 config.touhou_little_maid.maid_config.enabled_tasks=女仆启用的模式
 config.touhou_little_maid.maid_config.maid_cannot_change_model=禁止玩家改变女仆皮肤
 config.touhou_little_maid.maid_config.owner_max_maid_num=可驯服的最大女仆数
+config.touhou_little_maid.maid_config.give_init_maid=给予一个初始女仆
+config.touhou_little_maid.maid_config.spawn_slab_in_loot_chest=在战利品箱里面生成机巧板
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=原版相关配置

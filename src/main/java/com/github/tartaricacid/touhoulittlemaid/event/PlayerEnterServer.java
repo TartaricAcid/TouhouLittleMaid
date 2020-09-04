@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.capability.HasGuideHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.HasGuideSerializer;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SyncCustomSpellCardData;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import net.minecraft.entity.item.EntityItem;
@@ -11,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -27,9 +27,7 @@ public class PlayerEnterServer {
         if (event.player instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             // syncSpellCard(player); 此功能被废弃
-            if (Loader.isModLoaded("patchouli")) {
-                giveGuideBook(player);
-            }
+            giveGuideBook(player);
         }
     }
 
@@ -41,17 +39,24 @@ public class PlayerEnterServer {
 
     private static void giveGuideBook(EntityPlayerMP player) {
         HasGuideHandler hasGuide = player.getCapability(HasGuideSerializer.HAS_GUIDE_CAP, null);
-        if (hasGuide != null && hasGuide.isFirst() && GeneralConfig.MISC_CONFIG.giveGuideBookFirst) {
+        if (hasGuide != null && hasGuide.isFirst()) {
+            // 给予手册
             Item item = Item.getByNameOrId("patchouli:guide_book");
-            if (item != null) {
+            if (item != null && GeneralConfig.MISC_CONFIG.giveGuideBookFirst) {
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setString("patchouli:book", "touhou_little_maid:memorizable_gensokyo");
                 ItemStack stack = new ItemStack(item);
                 stack.setTagCompound(tag);
                 EntityItem entityItem = new EntityItem(player.world, player.posX, player.posY, player.posZ, stack);
                 player.world.spawnEntity(entityItem);
-                hasGuide.setFirst(false);
             }
+            // 给予初始女仆一只
+            if (GeneralConfig.MAID_CONFIG.giveInitMaid) {
+                ItemStack stack = new ItemStack(MaidItems.SMART_SLAB);
+                EntityItem entityItem = new EntityItem(player.world, player.posX, player.posY, player.posZ, stack);
+                player.world.spawnEntity(entityItem);
+            }
+            hasGuide.setFirst(false);
         }
     }
 }

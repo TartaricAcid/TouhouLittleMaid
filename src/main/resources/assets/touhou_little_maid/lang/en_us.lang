@@ -62,6 +62,7 @@ item.touhou_little_maid.maid_bed.name=Maid Bed
 item.touhou_little_maid.maid_joy.reading.name=Book Desk
 item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
 item.touhou_little_maid.maid_joy.live.name=Live Station
+item.touhou_little_maid.smart_slab.name=Smart Slab
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -127,6 +128,9 @@ tooltips.touhou_little_maid.bauble.usage=Need to be placed in the maid's bauble 
 tooltips.touhou_little_maid.scarecrow.name=Player Name: %s
 tooltips.touhou_little_maid.scarecrow.text=Text: %s
 tooltips.touhou_little_maid.scarecrow.special=[Special]
+tooltips.touhou_little_maid.smart_slab.desc=Reusable tool, right click to place or retract the maid
+tooltips.touhou_little_maid.smart_slab.maid_name=Maid Name: %s
+tooltips.touhou_little_maid.smart_slab.maid_name.unknow=Unknow
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!
@@ -201,6 +205,8 @@ config.touhou_little_maid.maid_config.maid_always_show_hat=Maid Always Show Hat
 config.touhou_little_maid.maid_config.enabled_tasks=Maid Enabled Tasks
 config.touhou_little_maid.maid_config.maid_cannot_change_model=Disable Player Change Maid Skin
 config.touhou_little_maid.maid_config.owner_max_maid_num=Owner Max Maid Num
+config.touhou_little_maid.maid_config.give_init_maid=Give A Init Maid
+config.touhou_little_maid.maid_config.spawn_slab_in_loot_chest=Spawn Smart Slab In Loot Chest
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=Vanilla Config

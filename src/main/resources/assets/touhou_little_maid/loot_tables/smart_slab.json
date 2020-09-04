@@ -1,19 +1,18 @@
 {
   "pools": [
     {
-      "name": "power_point",
-      "rolls": 2,
-      "bonus_rolls": 2,
+      "name": "smart_slab",
+      "rolls": 1,
       "entries": [
         {
           "type": "item",
-          "name": "touhou_little_maid:power_point"
+          "name": "touhou_little_maid:smart_slab"
         }
       ],
       "conditions": [
         {
           "condition": "random_chance",
-          "chance": 0.5
+          "chance": 0.025
         }
       ]
     }
