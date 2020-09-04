@@ -1,0 +1,17 @@
+{
+  "sortnum": 19,
+  "name": "Maid Bed",
+  "icon": "touhou_little_maid:maid_bed",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_bed",
+      "text": "The player can sleep, and naturally the maid can also sleep. At night or on a thunderstorm, the maid has the probability to look for the surrounding bed to sleep."
+    },
+    {
+      "type": "text",
+      "text": "The sleeping maid will no longer be attacked by hostile creatures, and the maid’s GUI cannot be opened at this time.$(br2)But remember, don't wake them up when the maids are asleep, or they will have a great decline in your favorability."
+    }
+  ]
+}

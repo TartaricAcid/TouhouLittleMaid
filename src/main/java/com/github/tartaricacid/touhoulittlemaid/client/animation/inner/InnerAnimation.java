@@ -1577,6 +1577,24 @@ public final class InnerAnimation {
         };
     }
 
+    public static IAnimation<EntityMaid> getSleepDefault() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper sleepHide = modelMap.get("sleepHide");
+                ModelRendererWrapper sleepShow = modelMap.get("sleepShow");
+
+                if (sleepHide != null) {
+                    sleepHide.setHidden(maid.isSleep());
+                }
+
+                if (sleepShow != null) {
+                    sleepShow.setHidden(!maid.isSleep());
+                }
+            }
+        };
+    }
+
     public static IAnimation<EntityMaid> getSpecialHecatia() {
         return new IAnimation<EntityMaid>() {
             @Override
@@ -2489,6 +2507,7 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/torch.js"), getTaskTorch());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/wing/default.js"), getWingDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/wing/default.js"), getWingDefault());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sleep/default.js"), getSleepDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/player/arm/default.js"), getPlayerArmDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid.default.js"), getMaidDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/special/hecatia_dimension.js"), getSpecialHecatia());

@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:power_point",
-      "text": "Right-click is thrown out, can drop the power point entity."
+      "text": "Right-click is thrown out, can drop the power point entity.$(br2)You can find the power point of the item form in the dungeon loot chest."
     }
   ]
 }

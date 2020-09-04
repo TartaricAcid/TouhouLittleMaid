@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "type": "minecraft:item_nbt",
+    "item": "touhou_little_maid:maid_joy",
+    "nbt": {
+      "MaidJoyType": "piano"
+    }
+  },
+  "pattern": [
+    "NNN",
+    "OOO",
+    "ODO"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:noteblock"
+    },
+    "O": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    }
+  }
+}

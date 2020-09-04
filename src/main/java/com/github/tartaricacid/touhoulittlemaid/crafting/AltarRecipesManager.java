@@ -221,10 +221,15 @@ public class AltarRecipesManager {
                 stick, stick, ingotIron,
                 ingotIron, dyeYellow, dyeRed);
 
-        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_clay_ball"),
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_extinguisher"),
                 0.2f, new ItemStack(MaidItems.EXTINGUISHER),
                 clayBall, clayBall, clayBall,
                 clayBall, ingotIron, dyeRed);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_maid_bed"),
+                0.2f, new ItemStack(MaidItems.MAID_BED),
+                blockPinkWool, blockPinkWool, blockPinkWool,
+                plankWood, plankWood, plankWood);
     }
 
     public static AltarRecipesManager instance() {

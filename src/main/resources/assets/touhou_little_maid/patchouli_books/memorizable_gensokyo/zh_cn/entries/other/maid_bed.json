@@ -1,0 +1,13 @@
+{
+  "sortnum": 19,
+  "name": "女仆床",
+  "icon": "touhou_little_maid:maid_bed",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_bed",
+      "text": "玩家可以睡觉，自然而然女仆也可以睡觉。在夜晚或者雷雨天，女仆就有概率主动寻找周围的床睡觉。$(br2)睡着的女仆不会再被敌对性生物攻击，这时候也无法打开女仆的 GUI$(br2)但是谨记，切勿在女仆睡着时弄醒她们，不然她们会对你的好感度大幅度下降。"
+    }
+  ]
+}

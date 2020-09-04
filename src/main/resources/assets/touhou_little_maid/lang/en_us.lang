@@ -728,9 +728,11 @@ subtitle.touhou_little_maid.item.portable_audio=Audio Music Sound
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=Mode: %s
 hwyla.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
+hwyla.touhou_little_maid.entity_maid.favorability=Favorability: %d
 hwyla.touhou_little_maid.entity_maid.invulnerable=Invulnerable
 hwyla.touhou_little_maid.tombstone.maid_owner=Maid Owner: %s
 top.touhou_little_maid.entity_maid.task=Mode:
+top.touhou_little_maid.entity_maid.favorability=Favorability:
 top.touhou_little_maid.entity_maid.has_sasimono=Has Hata Sasimono
 top.touhou_little_maid.entity_maid.invulnerable=Invulnerable
 top.touhou_little_maid.tombstone.maid_owner=Maid Owner: %s

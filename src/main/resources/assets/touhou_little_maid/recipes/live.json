@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "type": "minecraft:item_nbt",
+    "item": "touhou_little_maid:maid_joy",
+    "nbt": {
+      "MaidJoyType": "live"
+    }
+  },
+  "pattern": [
+    "NGL",
+    "OOO",
+    "ODO"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:noteblock"
+    },
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlass"
+    },
+    "L": {
+      "item": "minecraft:lever"
+    },
+    "O": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    }
+  }
+}

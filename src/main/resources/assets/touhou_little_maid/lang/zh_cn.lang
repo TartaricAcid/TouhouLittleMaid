@@ -726,10 +726,12 @@ subtitle.touhou_little_maid.item.portable_audio=音响：音乐
 
 # HWYLA & The One Probe
 hwyla.touhou_little_maid.entity_maid.task=当前模式：%s
+hwyla.touhou_little_maid.entity_maid.favorability=好感度：%d
 hwyla.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物
 hwyla.touhou_little_maid.entity_maid.invulnerable=无敌
 hwyla.touhou_little_maid.tombstone.maid_owner=女仆主人：%s
 top.touhou_little_maid.entity_maid.task=当前模式：
+top.touhou_little_maid.entity_maid.favorability=好感度：
 top.touhou_little_maid.entity_maid.has_sasimono=拥有旗指物
 top.touhou_little_maid.entity_maid.invulnerable=无敌
 top.touhou_little_maid.tombstone.maid_owner=女仆主人：%s

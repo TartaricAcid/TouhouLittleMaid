@@ -1,0 +1,17 @@
+{
+  "sortnum": 22,
+  "name": "机巧板",
+  "icon": "touhou_little_maid:smart_slab",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:smart_slab",
+      "text": "这可不是一块普通的石板，它附上了远古女仆的灵魂。$(br)每个玩家在刚刚出生时会获得一块机巧板，右击就可以释放出一只女仆。机巧板可以重复利用，你可以右击女仆将其装回石板中。"
+    },
+    {
+      "type": "text",
+      "text": "在地牢战利品箱中也能非常罕见的发现机巧板。$(br2)你可以通过配置禁用上述两个机巧板获取方式，机巧板同样会被“玩家女仆数量上限”配置所限制住。"
+    }
+  ]
+}

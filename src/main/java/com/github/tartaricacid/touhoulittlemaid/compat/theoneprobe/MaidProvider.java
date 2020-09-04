@@ -24,6 +24,10 @@ public class MaidProvider implements IProbeInfoEntityProvider {
                 String text = IProbeInfo.STARTLOC + "top.touhou_little_maid.entity_maid.task" + IProbeInfo.ENDLOC;
                 text += IProbeInfo.STARTLOC + task.getTranslationKey() + IProbeInfo.ENDLOC;
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).item(task.getIcon()).text(text);
+
+                String favText = IProbeInfo.STARTLOC + "top.touhou_little_maid.entity_maid.favorability" + IProbeInfo.ENDLOC;
+                favText += maid.getFavorability();
+                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(favText);
             }
             if (maid.hasSasimono()) {
                 String text = IProbeInfo.STARTLOC + "top.touhou_little_maid.entity_maid.has_sasimono" + IProbeInfo.ENDLOC;
