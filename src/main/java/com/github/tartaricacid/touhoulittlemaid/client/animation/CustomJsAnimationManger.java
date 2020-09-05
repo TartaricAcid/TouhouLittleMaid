@@ -67,7 +67,7 @@ public class CustomJsAnimationManger {
         if (InnerAnimation.getInnerAnimation().containsKey(resourceLocation)) {
             return InnerAnimation.getInnerAnimation().get(resourceLocation);
         }
-        ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", resourceLocation.getNamespace(), resourceLocation.getNamespace()));
+        ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", resourceLocation.getNamespace(), resourceLocation.getPath()));
         if (entry == null) {
             return null;
         }
