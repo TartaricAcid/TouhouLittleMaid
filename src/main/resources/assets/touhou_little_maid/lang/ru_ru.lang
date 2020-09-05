@@ -62,7 +62,7 @@ item.touhou_little_maid.maid_bed.name=Maid Bed
 item.touhou_little_maid.maid_joy.reading.name=Book Desk
 item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
 item.touhou_little_maid.maid_joy.live.name=Live Station
-item.touhou_little_maid.smart_slab.name=Smart Slab
+item.touhou_little_maid.smart_slab.name=Soul Spell
 
 # Block
 tile.touhou_little_maid.garage_kit.name="Гаражный" набор
@@ -206,7 +206,7 @@ config.touhou_little_maid.maid_config.enabled_tasks=Горничная откр�
 config.touhou_little_maid.maid_config.maid_cannot_change_model=Запретить игрокам менять скин горничной
 config.touhou_little_maid.maid_config.owner_max_maid_num=Максимальное число хозяинов горничных
 config.touhou_little_maid.maid_config.give_init_maid=Give A Init Maid
-config.touhou_little_maid.maid_config.spawn_slab_in_loot_chest=Spawn Smart Slab In Loot Chest
+config.touhou_little_maid.maid_config.spawn_slab_in_loot_chest=Spawn Soul Spell In Loot Chest
 
 # Vanilla Config
 config.touhou_little_maid.vanilla_config=Обычная конфигурация
