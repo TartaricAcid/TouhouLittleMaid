@@ -160,10 +160,8 @@ public class BlockGarageKit extends Block {
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-        if (!player.isCreative()) {
-            spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
-        }
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        spawnAsEntity(worldIn, pos, getItemStackFromBlock(worldIn, pos));
     }
 
     @Override

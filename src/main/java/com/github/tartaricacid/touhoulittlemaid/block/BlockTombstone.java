@@ -74,15 +74,12 @@ public class BlockTombstone extends BlockHorizontal {
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity te = worldIn.getTileEntity(pos);
-        if (!player.isCreative() && te instanceof TileEntityTombstone) {
+        if (te instanceof TileEntityTombstone) {
             TileEntityTombstone tombstone = (TileEntityTombstone) te;
             for (int i = 0; i < tombstone.handler.getSlots(); i++) {
-                spawnAsEntity(worldIn, player.getPosition(), tombstone.handler.getStackInSlot(i));
-            }
-            if (!worldIn.isRemote) {
-                player.sendMessage(new TextComponentTranslation("message.touhou_little_maid.tombstone.on_block_activated"));
+                spawnAsEntity(worldIn, pos, tombstone.handler.getStackInSlot(i));
             }
         }
     }
