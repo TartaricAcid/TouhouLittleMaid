@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPortableAudio;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySuitcase;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.*;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemAlbum;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -67,6 +68,9 @@ public class MaidGuiHandler implements IGuiHandler {
             // 服务端什么也不做
             return null;
         }
+        if (guiId == OTHER_GUI.WIRELESS_IO.getId() && player.getHeldItemMainhand().getItem() == MaidItems.WIRELESS_IO) {
+            return new WirelessIOContainer(player.inventory, player.getHeldItemMainhand());
+        }
         return null;
     }
 
@@ -109,6 +113,9 @@ public class MaidGuiHandler implements IGuiHandler {
         }
         if (CommonProxy.isNpcModLoad() && guiId == OTHER_GUI.NPC_MAID_TOOL.getId() && entity instanceof EntityCustomNpc) {
             return returnNpcClientGui(entity);
+        }
+        if (guiId == OTHER_GUI.WIRELESS_IO.getId() && player.getHeldItemMainhand().getItem() == MaidItems.WIRELESS_IO) {
+            return new WirelessIOGuiContainer(player.inventory, player.getHeldItemMainhand());
         }
         return null;
     }
@@ -164,7 +171,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // 行李箱
         SUITCASE(9),
         // 手提音响
-        PORTABLE_AUDIO(10);
+        PORTABLE_AUDIO(10),
+        // 无线传输饰品
+        WIRELESS_IO(11);
 
         private int id;
 

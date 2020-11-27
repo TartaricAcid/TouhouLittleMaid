@@ -148,6 +148,7 @@ public class CommonProxy {
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.DROWN_PROTECT_BAUBLE), new DrownProtectBauble());
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.TOMBSTONE_BAUBLE), new TombstoneBauble());
         LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.NIMBLE_FABRIC), new NimbleFabricBauble());
+        LittleMaidAPI.registerBauble(ItemDefinition.of(MaidItems.WIRELESS_IO), new WirelessIOBauble());
 
         // 注册女仆模式
         LittleMaidAPI.registerTask(new TaskAttack());
@@ -287,6 +288,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(SendClientPackMessage.Handler.class, SendClientPackMessage.class, 29, Side.CLIENT);
         INSTANCE.registerMessage(SendToClientDrawMessage.Handler.class, SendToClientDrawMessage.class, 30, Side.CLIENT);
         INSTANCE.registerMessage(SendToServerDrawMessage.Handler.class, SendToServerDrawMessage.class, 31, Side.SERVER);
+        INSTANCE.registerMessage(WirelessIOGuiMessage.Handler.class, WirelessIOGuiMessage.class, 32, Side.SERVER);
     }
 
     /**

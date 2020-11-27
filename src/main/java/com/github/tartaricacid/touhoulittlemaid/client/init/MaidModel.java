@@ -67,6 +67,7 @@ public final class MaidModel {
         registerRender(MaidItems.TOMBSTONE_BAUBLE);
         registerRender(MaidItems.NIMBLE_FABRIC);
         registerRender(MaidItems.SUBSTITUTE_JIZO);
+        registerRender(MaidItems.WIRELESS_IO);
 
         registerRender(MaidItems.KAPPA_COMPASS);
         registerRender(MaidItems.MARISA_BROOM);

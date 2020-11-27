@@ -97,6 +97,8 @@ public final class MaidItems {
     public static Item MAID_JOY;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "smart_slab")
     public static Item SMART_SLAB;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "wireless_io")
+    public static Item WIRELESS_IO;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -158,6 +160,7 @@ public final class MaidItems {
         event.getRegistry().register(getDamageableBaubles(64, "drown_protect_bauble"));
         event.getRegistry().register(getDamageableBaubles(64, "nimble_fabric"));
         event.getRegistry().register(getNormalBaubles("tombstone_bauble"));
+        event.getRegistry().register(new ItemWirelessIO().setRegistryName("wireless_io"));
 
         event.getRegistry().register(new ItemKappaCompass().setRegistryName("kappa_compass"));
         event.getRegistry().register(new ItemHakureiGohei().setRegistryName("hakurei_gohei"));

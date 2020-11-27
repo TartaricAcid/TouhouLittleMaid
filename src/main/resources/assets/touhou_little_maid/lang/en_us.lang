@@ -63,6 +63,7 @@ item.touhou_little_maid.maid_joy.reading.name=Book Desk
 item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
 item.touhou_little_maid.maid_joy.live.name=Live Station
 item.touhou_little_maid.smart_slab.name=Soul Spell
+item.touhou_little_maid.wireless_io.name=Wireless IO Item
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
