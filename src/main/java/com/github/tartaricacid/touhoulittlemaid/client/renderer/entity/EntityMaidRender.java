@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.RenderMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layers.*;
@@ -11,7 +12,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -24,7 +24,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,6 +31,7 @@ import java.util.Locale;
 public class EntityMaidRender extends RenderLiving<EntityMaid> {
     public static final Factory FACTORY = new Factory();
     public static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
+    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/hakurei_reimu.png");
     public MaidModelInfo mainInfo;
     public List<Object> mainAnimations = Lists.newArrayList();
     public ModelData eventModelData;
@@ -108,9 +108,12 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
         super.renderEntityName(entityIn, x, y, z, str, 16);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityMaid entity) {
+        if (mainInfo == null) {
+            return DEFAULT_TEXTURE;
+        }
         return mainInfo.getTexture();
     }
 

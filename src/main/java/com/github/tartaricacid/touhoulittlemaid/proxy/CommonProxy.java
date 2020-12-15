@@ -289,6 +289,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(SendToClientDrawMessage.Handler.class, SendToClientDrawMessage.class, 30, Side.CLIENT);
         INSTANCE.registerMessage(SendToServerDrawMessage.Handler.class, SendToServerDrawMessage.class, 31, Side.SERVER);
         INSTANCE.registerMessage(WirelessIOGuiMessage.Handler.class, WirelessIOGuiMessage.class, 32, Side.SERVER);
+        INSTANCE.registerMessage(WirelessIOSlotConfigMessage.Handler.class, WirelessIOSlotConfigMessage.class, 33, Side.SERVER);
     }
 
     /**

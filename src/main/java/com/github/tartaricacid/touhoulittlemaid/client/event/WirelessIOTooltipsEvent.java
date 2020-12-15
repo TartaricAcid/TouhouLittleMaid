@@ -28,11 +28,11 @@ public class WirelessIOTooltipsEvent {
             int x = event.getX();
             int y = event.getY();
 
-            if (y < 74) {
-                y = 74;
+            if (y < 70) {
+                y = 70;
             }
-            y = y - 74;
-            x = x - 4;
+            y = y - 70;
+            x = x - 80;
 
             Minecraft mc = Minecraft.getMinecraft();
             IItemHandler handler = ItemWirelessIO.getFilterList(stack);
@@ -41,12 +41,11 @@ public class WirelessIOTooltipsEvent {
             mc.getTextureManager().bindTexture(BG);
             GuiUtils.drawTexturedModalRect(x, y, 0, 0, 68, 668, 300);
 
-
             RenderHelper.enableGUIStandardItemLighting();
-            GlStateManager.translate(0, 0, 500);
+            GlStateManager.translate(0, 0, 300);
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 3; ++j) {
-                    ItemStack stackIn = handler.getStackInSlot(j + i * 3);
+                    ItemStack stackIn = handler.getStackInSlot(j * 3 + i);
                     mc.getRenderItem().renderItemAndEffectIntoGUI(stackIn, x + 8 + 18 * i, y + 8 + 18 * j);
                 }
             }

@@ -132,6 +132,14 @@ tooltips.touhou_little_maid.scarecrow.special=[Special]
 tooltips.touhou_little_maid.smart_slab.desc=Reusable tool, right click to place or retract the maid
 tooltips.touhou_little_maid.smart_slab.maid_name=Maid Name: %s
 tooltips.touhou_little_maid.smart_slab.maid_name.unknow=Unknow
+tooltips.touhou_little_maid.wireless_io.usage.1=Maid with this bauble can take/store items from chest.
+tooltips.touhou_little_maid.wireless_io.usage.2=Shift right-click chest to bind position, right-click air to open GUI.
+tooltips.touhou_little_maid.wireless_io.io_mode.input=Maid -> Chest
+tooltips.touhou_little_maid.wireless_io.io_mode.output=Chest -> Maid
+tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist=Blacklist
+tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist=Whitelist
+tooltips.touhou_little_maid.wireless_io.binding_pos.has=Bingding Pos: %d, %d, %d
+tooltips.touhou_little_maid.wireless_io.binding_pos.none=Unbound Chest
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!
@@ -399,6 +407,10 @@ gui.touhou_little_maid.draw_list.model_name=Model Name
 gui.touhou_little_maid.draw_list.pool=Pool
 gui.touhou_little_maid.draw_list.weight=Weight
 gui.touhou_little_maid.tag.always_show=Whether to always show the name
+gui.touhou_little_maid.wireless_io.filter_mode=Switch Filter Mode
+gui.touhou_little_maid.wireless_io.io_mode=Switch Item I/O
+gui.touhou_little_maid.wireless_io.config_slot=Open Slot Config
+gui.touhou_little_maid.wireless_io.config_slot.return=Return
 
 # Skin Gui
 gui.touhou_little_maid.skin.text.version=Version: %s

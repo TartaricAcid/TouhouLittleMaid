@@ -67,7 +67,7 @@ public class MaidRenderTooltipsEvent {
 
         GlStateManager.enableDepth();
         GlStateManager.color(1, 1, 1);
-        GlStateManager.translate(x - 30, y - 5, 500);
+        GlStateManager.translate(x - 30, y - 5, 300);
         GlStateManager.scale(24, 24, -24);
         GlStateManager.rotate(190, 1, 0, 0);
         GlStateManager.rotate((world.getWorldTime() * 2) % 360, 0, -1, 0);
