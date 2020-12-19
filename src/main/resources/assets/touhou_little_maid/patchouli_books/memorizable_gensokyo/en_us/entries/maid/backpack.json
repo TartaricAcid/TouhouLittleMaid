@@ -8,14 +8,6 @@
       "type": "spotlight",
       "item": "touhou_little_maid:maid_backpack",
       "text": "The backpack can be used to expand the inventory of the maid. It can be applied by holding the backpack and right-click on the maid. The backpack has three levels. $(br2)Use the camera to remove the maid's backpack, and backpack can be remove by shift left-click."
-    },
-    {
-      "type": "text",
-      "text": "After maid is equipped with backpack, she will throw item into the surrounding hopper according to the number of items in its inventory.$(br2)Whitelist items can be marked with item frame above the hopper, The maid will not throw items into the hopper locked by the redstone signal.$(li)Default: The maid throws items from the 8th slot in inventory when backpack is half full."
-    },
-    {
-      "type": "text",
-      "text": "$(li)Marked whitelist hopper: When backpack is half full, maid will try to throw all whitelist items in the backpack."
     }
   ]
 }

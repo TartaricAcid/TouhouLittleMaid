@@ -212,7 +212,6 @@ public class EntityMaid extends AbstractEntityMaid {
         this.tasks.addTask(4, new EntityMaidOpenDoor(this, true));
         this.tasks.addTask(4, new EntityMaidFindJoyBlock(this, 0.8f));
 
-        this.tasks.addTask(5, new EntityMaidStorage(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidPickup(this, 0.8f));
         this.tasks.addTask(6, new EntityMaidFollowOwner(this, 0.8f, 5.0f, 2.0f));
 
