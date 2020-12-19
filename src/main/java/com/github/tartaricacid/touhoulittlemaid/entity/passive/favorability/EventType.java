@@ -11,7 +11,6 @@ public final class EventType {
     public static final EventType WAKE_UP_NATURALLY = new EventType("wake_up_naturally", 50);
     public static final EventType WAKE_UP_NOISE = new EventType("wake_up_noise", -50);
     public static final EventType WORK_NIGHT_OR_THUNDERSTORM = new EventType("work_night_or_thunderstorm", -1);
-    public static final EventType HURT = new EventType("hurt", -1);
     public static final EventType HURT_BY_PLAYER = new EventType("hurt_by_player", -20);
     public static final EventType DEATH = new EventType("death", -100);
     public static final EventType JOY = new EventType("joy", 2);

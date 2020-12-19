@@ -636,8 +636,6 @@ public class EntityMaid extends AbstractEntityMaid {
             } else {
                 MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.HURT_BY_PLAYER, this));
             }
-        } else {
-            MinecraftForge.EVENT_BUS.post(new FavorabilityEvent(EventType.HURT, this));
         }
         return super.attackEntityFrom(source, amount);
     }
