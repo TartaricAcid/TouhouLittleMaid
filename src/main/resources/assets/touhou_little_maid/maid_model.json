@@ -130,10 +130,6 @@
       "model_id": "touhou_little_maid:aki_sizuha",
       "description": ["{model.touhou_little_maid.aki_sizuha.desc}"]
     }, {
-      "model_id": "touhou_little_maid:aki_sizuha_2",
-      "name": "{model.touhou_little_maid.aki_sizuha.name}",
-      "description": ["{model.touhou_little_maid.aki_sizuha.desc}"]
-    }, {
       "model_id": "touhou_little_maid:minoriko_aki",
       "description": ["{model.touhou_little_maid.minoriko_aki.desc}"]
     }, {
