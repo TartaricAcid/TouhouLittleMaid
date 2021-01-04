@@ -151,6 +151,12 @@ public class GeneralConfig {
         @Config.RangeDouble(min = 0)
         public double shrineLampMaxStorage = 100.0;
 
+        @Config.Comment("Shrine Lamp Max Range Of Absorb Power Point")
+        @Config.LangKey("config.touhou_little_maid.misc_config.shrine_lamp.max_range")
+        @Config.Name("ShrineLampMaxRange")
+        @Config.RangeInt(min = 0)
+        public int shrineLampMaxRange = 6;
+
         @Config.Comment("Loss Power Point After Player Death")
         @Config.LangKey("config.touhou_little_maid.misc_config.player_death_loss_power_point")
         @Config.Name("PlayerDeathLossPowerPoint")

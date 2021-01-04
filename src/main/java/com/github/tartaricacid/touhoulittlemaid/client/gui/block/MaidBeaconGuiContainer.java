@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerHandler;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerSerializer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidBeaconContainer;
+import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SetBeaconOverflowMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.SetBeaconPotionMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.simpleimpl.StorageAndTakePowerMessage;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
@@ -36,12 +37,15 @@ public class MaidBeaconGuiContainer extends GuiContainer {
     private GuiButtonToggle strength;
     private GuiButtonToggle resistance;
     private GuiButtonToggle regeneration;
+    private GuiButton overflowDeleteButton;
+    private boolean overflowDelete;
 
     public MaidBeaconGuiContainer(MaidBeaconContainer maidBeaconContainer) {
         super(maidBeaconContainer);
         this.xSize = 256;
         this.ySize = 105;
         this.beacon = maidBeaconContainer.getTileEntityMaidBeacon();
+        this.overflowDelete = beacon.isOverflowDelete();
     }
 
     @Override
@@ -78,6 +82,9 @@ public class MaidBeaconGuiContainer extends GuiContainer {
         this.buttonList.add(new GuiButton(ADD_ALL.getIndex(), i + 80, j + 48, 62, 20, I18n.format("gui.touhou_little_maid.maid_beacon.add_all")));
         this.buttonList.add(new GuiButton(MIN_ONE.getIndex(), i + 16, j + 70, 62, 20, I18n.format("gui.touhou_little_maid.maid_beacon.min_one")));
         this.buttonList.add(new GuiButton(MIN_ALL.getIndex(), i + 80, j + 70, 62, 20, I18n.format("gui.touhou_little_maid.maid_beacon.min_all")));
+
+        overflowDeleteButton = new GuiButton(-1, i + 6, j - 22, 145, 20, getOverflowDeleteButtonText());
+        addButton(overflowDeleteButton);
     }
 
     @Override
@@ -164,6 +171,12 @@ public class MaidBeaconGuiContainer extends GuiContainer {
             }
             return;
         }
+        if (button.id == -1) {
+            overflowDelete = !overflowDelete;
+            CommonProxy.INSTANCE.sendToServer(new SetBeaconOverflowMessage(beacon.getPos(), overflowDelete));
+            overflowDeleteButton.displayString = getOverflowDeleteButtonText();
+            return;
+        }
         if (button.id == Button.ADD_ONE.getIndex()) {
             CommonProxy.INSTANCE.sendToServer(new StorageAndTakePowerMessage(beacon.getPos(), 1, true));
             return;
@@ -195,6 +208,12 @@ public class MaidBeaconGuiContainer extends GuiContainer {
         drawTexturedModalRect(start + spacing * 2, y, MobEffects.STRENGTH.getStatusIconIndex() % 8 * 18, 198 + MobEffects.STRENGTH.getStatusIconIndex() / 8 * 18, 18, 18);
         drawTexturedModalRect(start + spacing * 3, y, MobEffects.RESISTANCE.getStatusIconIndex() % 8 * 18, 198 + MobEffects.RESISTANCE.getStatusIconIndex() / 8 * 18, 18, 18);
         drawTexturedModalRect(start + spacing * 4, y, MobEffects.REGENERATION.getStatusIconIndex() % 8 * 18, 198 + MobEffects.REGENERATION.getStatusIconIndex() / 8 * 18, 18, 18);
+    }
+
+    private String getOverflowDeleteButtonText() {
+        String delete = I18n.format("gui.touhou_little_maid.maid_beacon.overflow_delete_true");
+        String keep = I18n.format("gui.touhou_little_maid.maid_beacon.overflow_delete_false");
+        return overflowDelete ? delete : keep;
     }
 
     enum Button {

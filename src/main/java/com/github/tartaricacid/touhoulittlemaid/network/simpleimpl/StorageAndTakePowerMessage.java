@@ -44,21 +44,6 @@ public class StorageAndTakePowerMessage implements IMessage {
     }
 
     public static class Handler implements IMessageHandler<StorageAndTakePowerMessage, IMessage> {
-        @Override
-        public IMessage onMessage(StorageAndTakePowerMessage message, MessageContext ctx) {
-            if (ctx.side == Side.SERVER) {
-                FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-                    EntityPlayerMP player = ctx.getServerHandler().player;
-                    World world = player.world;
-                    TileEntity te = world.getTileEntity(message.pos);
-                    if (te instanceof TileEntityMaidBeacon) {
-                        onStorageAndTake((TileEntityMaidBeacon) te, player, message.powerNum, message.isStorage);
-                    }
-                });
-            }
-            return null;
-        }
-
         private static void onStorageAndTake(TileEntityMaidBeacon beacon, EntityPlayer player, float powerNum, boolean isStorage) {
             PowerHandler powerHandler = player.getCapability(PowerSerializer.POWER_CAP, null);
             if (powerHandler != null) {
@@ -96,6 +81,23 @@ public class StorageAndTakePowerMessage implements IMessage {
                     playerPower.set(PowerHandler.MAX_POWER);
                 }
             }
+        }
+
+        @Override
+        public IMessage onMessage(StorageAndTakePowerMessage message, MessageContext ctx) {
+            if (ctx.side == Side.SERVER) {
+                FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+                    EntityPlayerMP player = ctx.getServerHandler().player;
+                    World world = player.world;
+                    if (world.isBlockLoaded(message.pos)) {
+                        TileEntity te = world.getTileEntity(message.pos);
+                        if (te instanceof TileEntityMaidBeacon) {
+                            onStorageAndTake((TileEntityMaidBeacon) te, player, message.powerNum, message.isStorage);
+                        }
+                    }
+                });
+            }
+            return null;
         }
     }
 }

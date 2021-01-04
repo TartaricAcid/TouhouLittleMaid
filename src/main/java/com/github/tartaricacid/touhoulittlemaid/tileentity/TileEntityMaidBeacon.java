@@ -26,8 +26,10 @@ import static com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaid
 public class TileEntityMaidBeacon extends TileEntity implements ITickable {
     public static final String POTION_INDEX_TAG = "PotionIndex";
     public static final String STORAGE_POWER_TAG = "StoragePower";
+    public static final String OVERFLOW_DELETE_TAG = "OverflowDelete";
     private int potionIndex = -1;
     private float storagePower;
+    private boolean overflowDelete = false;
 
     @Override
     public void update() {
@@ -50,7 +52,8 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
     }
 
     private void updateAbsorbPower() {
-        List<EntityPowerPoint> list = this.world.getEntitiesWithinAABB(EntityPowerPoint.class, new AxisAlignedBB(pos).grow(3, 3, 3));
+        int range = MISC_CONFIG.shrineLampMaxRange;
+        List<EntityPowerPoint> list = this.world.getEntitiesWithinAABB(EntityPowerPoint.class, new AxisAlignedBB(pos).grow(range, range, range));
         for (EntityPowerPoint powerPoint : list) {
             if (powerPoint.isEntityAlive()) {
                 float addNum = this.getStoragePower() + powerPoint.powerValue / 100.0f;
@@ -58,6 +61,11 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
                     this.setStoragePower(addNum);
                     powerPoint.spawnExplosionParticle();
                     powerPoint.setDead();
+                } else {
+                    if (overflowDelete) {
+                        powerPoint.spawnExplosionParticle();
+                        powerPoint.setDead();
+                    }
                 }
             }
         }
@@ -93,6 +101,9 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
         if (compound.hasKey(STORAGE_POWER_TAG)) {
             storagePower = compound.getFloat(STORAGE_POWER_TAG);
         }
+        if (compound.hasKey(OVERFLOW_DELETE_TAG)) {
+            overflowDelete = compound.getBoolean(OVERFLOW_DELETE_TAG);
+        }
     }
 
     @Nonnull
@@ -105,6 +116,7 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
     public NBTTagCompound writeBeaconNBT(NBTTagCompound compound) {
         compound.setInteger(POTION_INDEX_TAG, potionIndex);
         compound.setFloat(STORAGE_POWER_TAG, storagePower);
+        compound.setBoolean(OVERFLOW_DELETE_TAG, overflowDelete);
         return compound;
     }
 
@@ -126,6 +138,15 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
         markDirty();
     }
 
+    public boolean isOverflowDelete() {
+        return overflowDelete;
+    }
+
+    public void setOverflowDelete(boolean overflowDelete) {
+        this.overflowDelete = overflowDelete;
+        markDirty();
+    }
+
     public float getEffectCost() {
         return (float) (MISC_CONFIG.shrineLampEffectCost / 900);
     }
@@ -144,7 +165,7 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickable {
 
         public static final Effect[] VALUES = values();
 
-        private Potion potion;
+        private final Potion potion;
 
         Effect(Potion potion) {
             this.potion = potion;
