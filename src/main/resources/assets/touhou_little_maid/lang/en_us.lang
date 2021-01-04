@@ -64,6 +64,7 @@ item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
 item.touhou_little_maid.maid_joy.live.name=Live Station
 item.touhou_little_maid.smart_slab.name=Soul Spell
 item.touhou_little_maid.wireless_io.name=Wireless IO Item
+item.touhou_little_maid.hammer.name=Miracle Mallet
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -140,6 +141,9 @@ tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist=Blacklist
 tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist=Whitelist
 tooltips.touhou_little_maid.wireless_io.binding_pos.has=Bingding Pos: %d, %d, %d
 tooltips.touhou_little_maid.wireless_io.binding_pos.none=Unbound Chest
+tooltips.touhou_little_maid.hammer.desc=Right-click block to bind the pos, place it in the main-hand of maid, and use it with maid's hammer mode.
+tooltips.touhou_little_maid.hammer.binding_pos.none=Unbound Pos
+tooltips.touhou_little_maid.hammer.binding_pos.has=Pos: %d %d %d
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!
@@ -300,6 +304,7 @@ task.touhou_little_maid.milk=Milk
 task.touhou_little_maid.torch=Torch
 task.touhou_little_maid.feed_animal=Breed
 task.touhou_little_maid.extinguishing=Extinguishing
+task.touhou_little_maid.hammer=Hammer
 
 # GUI
 gui.touhou_little_maid.info.healthy=HP: %f/%f

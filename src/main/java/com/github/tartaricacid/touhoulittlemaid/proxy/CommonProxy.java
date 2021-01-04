@@ -167,6 +167,7 @@ public class CommonProxy {
         LittleMaidAPI.registerTask(new TaskTorch());
         LittleMaidAPI.registerTask(new TaskFeedAnimal());
         LittleMaidAPI.registerTask(new TaskExtinguishing());
+        LittleMaidAPI.registerTask(new TaskHammer());
 
         // 注册 FarmHandler 和 FeedHandler
         LittleMaidAPI.registerFarmHandler(new VanillaNormalFarmHandler());
