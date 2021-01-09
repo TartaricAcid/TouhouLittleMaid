@@ -68,6 +68,8 @@ public final class MaidModel {
         registerRender(MaidItems.NIMBLE_FABRIC);
         registerRender(MaidItems.SUBSTITUTE_JIZO);
         registerRender(MaidItems.WIRELESS_IO);
+        registerRender(MaidItems.ITEM_MAGNET_BAUBLE);
+        registerRender(MaidItems.MUTE_BAUBLE);
 
         registerRender(MaidItems.KAPPA_COMPASS);
         registerRender(MaidItems.MARISA_BROOM);

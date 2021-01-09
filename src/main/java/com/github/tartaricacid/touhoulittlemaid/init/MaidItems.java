@@ -47,6 +47,10 @@ public final class MaidItems {
     public static Item NIMBLE_FABRIC;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "marisa_broom")
     public static Item MARISA_BROOM;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "item_magnet_bauble")
+    public static Item ITEM_MAGNET_BAUBLE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "mute_bauble")
+    public static Item MUTE_BAUBLE;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "camera")
     public static Item CAMERA;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "photo")
@@ -163,6 +167,8 @@ public final class MaidItems {
         event.getRegistry().register(getDamageableBaubles(64, "nimble_fabric"));
         event.getRegistry().register(getNormalBaubles("tombstone_bauble"));
         event.getRegistry().register(new ItemWirelessIO().setRegistryName("wireless_io"));
+        event.getRegistry().register(getNormalBaubles("item_magnet_bauble"));
+        event.getRegistry().register(getNormalBaubles("mute_bauble"));
 
         event.getRegistry().register(new ItemKappaCompass().setRegistryName("kappa_compass"));
         event.getRegistry().register(new ItemHakureiGohei().setRegistryName("hakurei_gohei"));

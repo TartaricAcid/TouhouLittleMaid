@@ -1,10 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
+
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.bauble.WirelessIOBauble;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
-import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemHammer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -26,16 +25,16 @@ import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Side.CLIENT)
-public class WirelessIORenderEvent {
+public class HammerRenderEvent {
     @SubscribeEvent
     public static void onRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
 
         ItemStack mainStack = mc.player.getHeldItemMainhand();
-        if (mainStack.getItem() != MaidItems.WIRELESS_IO) {
+        if (mainStack.getItem() != MaidItems.HAMMER) {
             return;
         }
-        BlockPos pos = ItemWirelessIO.getBindingPos(mainStack);
+        BlockPos pos = ItemHammer.getStoreBlockPos(mainStack);
         if (pos == null) {
             return;
         }
@@ -50,22 +49,12 @@ public class WirelessIORenderEvent {
         OpenGlHelper.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
         GlStateManager.disableTexture2D();
         GlStateManager.resetColor();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(playerVec3d.x, playerVec3d.y, playerVec3d.z);
-        GlStateManager.color(1, 0, 0, 1);
-        GlStateManager.translate(pos.getX() + 0.5, pos.getY() - 0.75, pos.getZ() + 0.5);
-        GlStateManager.scale(WirelessIOBauble.MAX_DISTANCE, WirelessIOBauble.MAX_DISTANCE, WirelessIOBauble.MAX_DISTANCE);
-        GlStateManager.rotate(90, 1.0F, 0.0F, 0.0F);
-        GlStateManager.glLineWidth(2.0F);
-        GlStateManager.callList(RenderHelper.SPHERE_LINE);
-        GlStateManager.popMatrix();
-        GlStateManager.resetColor();
+        GlStateManager.disableDepth();
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(playerVec3d.x, playerVec3d.y, playerVec3d.z);
         GlStateManager.translate(pos.getX(), pos.getY() - 1.5, pos.getZ());
-        GlStateManager.glLineWidth(5.0F);
+        GlStateManager.glLineWidth(3.0F);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         for (int i = 0; i < 2; i++) {
@@ -96,6 +85,7 @@ public class WirelessIORenderEvent {
                 yaw, pitch, 0.05f);
         GlStateManager.popMatrix();
 
+        GlStateManager.enableDepth();
         GlStateManager.resetColor();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();

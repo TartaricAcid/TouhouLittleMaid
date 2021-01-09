@@ -77,7 +77,7 @@ public class KappaCompassRenderEvent {
 
     private static void renderWorldPos(Minecraft mc, List<BlockPos> blockPosList, ItemKappaCompass.Mode mode) {
         Vec3d playerVec3d = new Vec3d(-TileEntityRendererDispatcher.staticPlayerX,
-                -TileEntityRendererDispatcher.staticPlayerY + mc.player.getEyeHeight() - 0.1,
+                -TileEntityRendererDispatcher.staticPlayerY + 1.5,
                 -TileEntityRendererDispatcher.staticPlayerZ);
         float yaw = TileEntityRendererDispatcher.instance.entityYaw;
         float pitch = TileEntityRendererDispatcher.instance.entityPitch;

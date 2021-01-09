@@ -49,7 +49,7 @@ public class ScarecrowRenderEvent {
 
     private static void renderSphereDisplay(Minecraft mc, BlockPos pos) {
         Vec3d vec3d = new Vec3d(-TileEntityRendererDispatcher.staticPlayerX,
-                -TileEntityRendererDispatcher.staticPlayerY + mc.player.getEyeHeight() - 0.1,
+                -TileEntityRendererDispatcher.staticPlayerY + 1.5,
                 -TileEntityRendererDispatcher.staticPlayerZ);
 
         GlStateManager.enableBlend();
