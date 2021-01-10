@@ -35,7 +35,7 @@ item.touhou_little_maid.tombstone_bauble.name=§6Tombstone Bauble
 item.touhou_little_maid.nimble_fabric.name=§6Nimble Fabric
 item.touhou_little_maid.item_magnet_bauble.name=§6Item Magnet
 item.touhou_little_maid.mute_bauble.name=§6Mute Bauble
-item.touhou_little_maid.wireless_io.name=§6Wireless IO Item
+item.touhou_little_maid.wireless_io.name=§6Gap
 item.touhou_little_maid.marisa_broom.name=Marisa's Broom
 item.touhou_little_maid.camera.name=Aya's Camera
 item.touhou_little_maid.photo.name=Photo
@@ -66,7 +66,7 @@ item.touhou_little_maid.maid_joy.reading.name=Book Desk
 item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
 item.touhou_little_maid.maid_joy.live.name=Live Station
 item.touhou_little_maid.smart_slab.name=Soul Spell
-item.touhou_little_maid.hammer.name=Miracle Mallet
+item.touhou_little_maid.hammer.name=Break Guide
 item.touhou_little_maid.furnace_guide.name=Furnace Guide
 
 # Block
@@ -144,7 +144,7 @@ tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist=Blacklist
 tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist=Whitelist
 tooltips.touhou_little_maid.wireless_io.binding_pos.has=Bingding Pos: %d, %d, %d
 tooltips.touhou_little_maid.wireless_io.binding_pos.none=Unbound Chest
-tooltips.touhou_little_maid.hammer.desc=Right-click block to bind the pos, place it in the off-hand of maid, and use it with maid's hammer mode.
+tooltips.touhou_little_maid.hammer.desc=Right-click block to bind the pos, place it in the off-hand of maid, and use it with maid's break mode.
 tooltips.touhou_little_maid.hammer.binding_pos.none=Unbound Pos
 tooltips.touhou_little_maid.hammer.binding_pos.has=Pos: %d %d %d
 
@@ -307,7 +307,7 @@ task.touhou_little_maid.milk=Milk
 task.touhou_little_maid.torch=Torch
 task.touhou_little_maid.feed_animal=Breed
 task.touhou_little_maid.extinguishing=Extinguishing
-task.touhou_little_maid.hammer=Hammer
+task.touhou_little_maid.hammer=Break
 task.touhou_little_maid.furnace=Furnace
 
 # GUI

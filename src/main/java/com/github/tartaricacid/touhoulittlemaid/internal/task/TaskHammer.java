@@ -5,9 +5,9 @@ import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.util.Util;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.EntityMaidHammer;
-import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidSoundEvent;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -22,7 +22,7 @@ public class TaskHammer implements IMaidTask {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(MaidItems.HAMMER);
+        return new ItemStack(Items.DIAMOND_PICKAXE);
     }
 
     @Override

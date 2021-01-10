@@ -6,13 +6,16 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemFurnaceGuide;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemFindUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -82,8 +85,9 @@ public class EntityMaidFurnace extends EntityAIMoveToBlock {
                             int beforeCount = output.getStackInSlot(i).getCount();
                             int afterCount = ItemHandlerHelper.insertItemStacked(maidInv, output.getStackInSlot(i).copy(), false).getCount();
                             if (beforeCount != afterCount) {
-                                output.extractItem(i, beforeCount - afterCount, false);
+                                ItemStack result = output.extractItem(i, beforeCount - afterCount, false);
                                 swingHand = true;
+                                getSmeltingXp(result);
                             }
                         }
                     }
@@ -130,6 +134,32 @@ public class EntityMaidFurnace extends EntityAIMoveToBlock {
                     maid.swingArm(EnumHand.MAIN_HAND);
                 }
             }
+        }
+    }
+
+    /**
+     * 来自原版的熔炉 XP 获取算法，我有点理解不能
+     */
+    private void getSmeltingXp(ItemStack result) {
+        int removeCount = result.getCount();
+        int xp = removeCount;
+        float smeltingExperience = FurnaceRecipes.instance().getSmeltingExperience(result);
+
+        if (smeltingExperience <= 0.0F) {
+            xp = 0;
+        } else if (smeltingExperience < 1.0F) {
+            float actualXp = removeCount * smeltingExperience;
+            int floorXp = MathHelper.floor(actualXp);
+            int ceilXp = MathHelper.ceil(actualXp);
+            if (floorXp < ceilXp && Math.random() < (actualXp - floorXp)) {
+                ++floorXp;
+            }
+            xp = floorXp;
+        }
+        while (xp > 0) {
+            int split = EntityXPOrb.getXPSplit(xp);
+            xp -= split;
+            maid.world.spawnEntity(new EntityXPOrb(maid.world, maid.posX, maid.posY + 0.5D, maid.posZ + 0.5D, split));
         }
     }
 

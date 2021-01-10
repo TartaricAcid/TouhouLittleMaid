@@ -41,6 +41,9 @@ public class LayerMaidBipedHead extends LayerArmorBase<ModelBiped> {
             if (maid.isBegging()) {
                 GlStateManager.rotate(0.139f * 180 / (float) Math.PI, 0, 0, 1);
             }
+            if (maid.isSleep()) {
+                GlStateManager.rotate(15, 1, 0, 0);
+            }
             renderArmorLayer(livingBase, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.HEAD);
             GlStateManager.popMatrix();
         }
