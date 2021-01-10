@@ -185,9 +185,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         this.buttonList.add(new GuiButton(BUTTON.CLEAR_POS.ordinal(), i + 68, j + 167, 20, 20, ""));
         // 骑乘设置按钮
         this.buttonList.add(new GuiButton(BUTTON.RIDING_SET.ordinal(), i + 89, j + 167, 20, 20, ""));
+        // 隐藏头盔设置按钮
+        this.buttonList.add(new GuiButton(BUTTON.HELMET_HIDE.ordinal(), i + 110, j + 167, 20, 20, ""));
 
         // 占位按钮
-        for (int k = 3; k < 6; k++) {
+        for (int k = 4; k < 6; k++) {
             this.buttonList.add(new GuiButton(405 + k, i + 47 + 21 * k, j + 167, 20, 20, ""));
         }
     }
@@ -279,6 +281,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             return;
         }
 
+        if (button.id == BUTTON.HELMET_HIDE.ordinal()) {
+            CommonProxy.INSTANCE.sendToServer(new MaidShowHelmetMessage(maid.getUniqueID(), !maid.isShowHelmet()));
+            return;
+        }
+
         if (button.id == BUTTON.TASK_LEFT_SWITCH.ordinal()) {
             if (taskPageIndex > 0) {
                 taskPageIndex--;
@@ -340,10 +347,11 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         drawModalRectWithCustomSizedTexture(i + 29, j + 170, 14, 0, 14, 14, 256, 256);
         drawModalRectWithCustomSizedTexture(i + 50, j + 170, 28, 0, 14, 14, 256, 256);
         drawModalRectWithCustomSizedTexture(i + 71, j + 170, 42, 0, 14, 14, 256, 256);
+        drawModalRectWithCustomSizedTexture(i + 113, j + 170, 56, 0, 14, 14, 256, 256);
         drawItemStack(SADDLE, i + 48 + 21 * 2, j + 168);
 
         // 占位按钮图标
-        for (int k = 3; k < 6; k++) {
+        for (int k = 4; k < 6; k++) {
             drawItemStack(BARRIER, i + 49 + 21 * k, j + 169);
         }
 
@@ -456,11 +464,18 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.clear_pos"), mouseX, mouseY);
         }
 
-        // 清除坐标
+        // 骑乘设置
         xInRange = (i + 89) < mouseX && mouseX < (i + 108);
         yInRange = (j + 167) < mouseY && mouseY < (j + 187);
         if (xInRange && yInRange) {
             this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.riding_set"), mouseX, mouseY);
+        }
+
+        // 隐藏/显示头盔设置
+        xInRange = (i + 108) < mouseX && mouseX < (i + 127);
+        yInRange = (j + 167) < mouseY && mouseY < (j + 187);
+        if (xInRange && yInRange) {
+            this.drawHoveringText(I18n.format("gui.touhou_little_maid.button.hide_helmet"), mouseX, mouseY);
         }
 
         drawCustomTooltips(mouseX, mouseY, partialTicks);
@@ -598,7 +613,9 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 清除坐标按钮
         CLEAR_POS(MaidGuiHandler.OTHER_GUI.NONE.getId()),
         // 骑乘设置按钮
-        RIDING_SET(MaidGuiHandler.OTHER_GUI.NONE.getId());
+        RIDING_SET(MaidGuiHandler.OTHER_GUI.NONE.getId()),
+        // 隐藏头盔
+        HELMET_HIDE(MaidGuiHandler.OTHER_GUI.NONE.getId());
 
         private int guiId;
 

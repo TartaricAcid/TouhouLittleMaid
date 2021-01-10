@@ -294,6 +294,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(WirelessIOGuiMessage.Handler.class, WirelessIOGuiMessage.class, 32, Side.SERVER);
         INSTANCE.registerMessage(WirelessIOSlotConfigMessage.Handler.class, WirelessIOSlotConfigMessage.class, 33, Side.SERVER);
         INSTANCE.registerMessage(SetBeaconOverflowMessage.Handler.class, SetBeaconOverflowMessage.class, 34, Side.SERVER);
+        INSTANCE.registerMessage(MaidShowHelmetMessage.Handler.class, MaidShowHelmetMessage.class, 35, Side.SERVER);
     }
 
     /**

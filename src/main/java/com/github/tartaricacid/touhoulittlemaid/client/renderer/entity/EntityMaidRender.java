@@ -38,8 +38,9 @@ public class EntityMaidRender extends RenderLiving<EntityMaid> {
 
     private EntityMaidRender(RenderManager renderManager, ModelBase modelBase, float shadowSize) {
         super(renderManager, modelBase, shadowSize);
-        this.addLayer(new LayerMaidArrow(this));
+        this.addLayer(new LayerMaidBipedHead(this));
         this.addLayer(new LayerMaidHeldItem(this));
+        this.addLayer(new LayerMaidArrow(this));
         this.addLayer(new LayerMaidDebugFloor());
         this.addLayer(new LayerMaidDebugBroom());
         this.addLayer(new LayerHataSasimono(this));

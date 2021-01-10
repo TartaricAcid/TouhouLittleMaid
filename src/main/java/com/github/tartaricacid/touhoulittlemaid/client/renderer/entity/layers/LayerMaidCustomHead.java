@@ -37,6 +37,9 @@ public class LayerMaidCustomHead implements LayerRenderer<EntityMaid> {
 
     @Override
     public void doRenderLayer(@Nonnull EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        if (!maid.isShowHelmet()) {
+            return;
+        }
         ItemStack head = maid.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
         EntityModelJson modelJson = (EntityModelJson) this.maidRender.getMainModel();
         if (!head.isEmpty() && maidRender.getMainInfo().isShowCustomHead() && modelJson.hasHead()) {

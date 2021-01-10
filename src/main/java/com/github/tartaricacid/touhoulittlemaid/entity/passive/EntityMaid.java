@@ -116,6 +116,7 @@ public class EntityMaid extends AbstractEntityMaid {
     private static final DataParameter<String> SASIMONO_CRC32 = EntityDataManager.createKey(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> SHOW_SASIMONO = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> FAVORABILITY = EntityDataManager.createKey(EntityMaid.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> SHOW_HELMET = EntityDataManager.createKey(EntityMaid.class, DataSerializers.BOOLEAN);
     /**
      * 无敌状态不会主动同步至客户端
      */
@@ -249,6 +250,7 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.register(COMPASS_MODE, ItemKappaCompass.Mode.NONE.ordinal());
         this.dataManager.register(SLEEP, false);
         this.dataManager.register(FAVORABILITY, 0);
+        this.dataManager.register(SHOW_HELMET, true);
     }
 
     @Override
@@ -1053,6 +1055,9 @@ public class EntityMaid extends AbstractEntityMaid {
         if (compound.hasKey(NBT.FAVORABILITY.getName())) {
             setFavorability(compound.getInteger(NBT.FAVORABILITY.getName()));
         }
+        if (compound.hasKey(NBT.SHOW_HELMET.getName())) {
+            setShowHelmet(compound.getBoolean(NBT.SHOW_HELMET.getName()));
+        }
         if (compound.hasKey(NBT.JOY_TICK_DATA.getName())) {
             joyTickData = JoyType.compoundToJoyTickData(compound.getCompoundTag(NBT.JOY_TICK_DATA.getName()));
         }
@@ -1092,6 +1097,7 @@ public class EntityMaid extends AbstractEntityMaid {
         compound.setBoolean(NBT.CAN_RIDING.getName(), canRiding);
         compound.setBoolean(NBT.SLEEP.getName(), isSleep());
         compound.setInteger(NBT.FAVORABILITY.getName(), getFavorability());
+        compound.setBoolean(NBT.SHOW_HELMET.getName(), isShowHelmet());
         compound.setTag(NBT.JOY_TICK_DATA.getName(), JoyType.joyTickDataToCompound(joyTickData));
     }
 
@@ -1563,6 +1569,14 @@ public class EntityMaid extends AbstractEntityMaid {
         this.dataManager.set(FAVORABILITY, point);
     }
 
+    public boolean isShowHelmet() {
+        return this.dataManager.get(SHOW_HELMET);
+    }
+
+    public void setShowHelmet(boolean isHide) {
+        this.dataManager.set(SHOW_HELMET, isHide);
+    }
+
     public EnumBackPackLevel getBackLevel() {
         return EnumBackPackLevel.getEnumLevelByNum(this.dataManager.get(BACKPACK_LEVEL));
     }
@@ -1827,6 +1841,8 @@ public class EntityMaid extends AbstractEntityMaid {
         SLEEP("MaidIsSleep"),
         // 女仆好感度
         FAVORABILITY("MaidFavorability"),
+        // 女仆显示头盔
+        SHOW_HELMET("MaidShowHelmet"),
         // 女仆娱乐设施的计数器
         JOY_TICK_DATA("MaidJoyTickData");
 

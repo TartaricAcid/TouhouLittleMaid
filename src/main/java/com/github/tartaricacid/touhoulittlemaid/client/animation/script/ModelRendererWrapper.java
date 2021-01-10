@@ -9,10 +9,6 @@ public class ModelRendererWrapper {
         this.modelRenderer = modelRenderer;
     }
 
-    public void setModelRenderer(ModelRenderer modelRenderer) {
-        this.modelRenderer = modelRenderer;
-    }
-
     public float getRotateAngleX() {
         return modelRenderer.rotateAngleX;
     }
@@ -61,6 +57,18 @@ public class ModelRendererWrapper {
         modelRenderer.offsetZ = offsetZ;
     }
 
+    public float getRotationPointX() {
+        return modelRenderer.rotationPointX;
+    }
+
+    public float getRotationPointY() {
+        return modelRenderer.rotationPointY;
+    }
+
+    public float getRotationPointZ() {
+        return modelRenderer.rotationPointZ;
+    }
+
     public boolean isHidden() {
         return modelRenderer.isHidden;
     }
@@ -71,5 +79,9 @@ public class ModelRendererWrapper {
 
     public ModelRenderer getModelRenderer() {
         return modelRenderer;
+    }
+
+    public void setModelRenderer(ModelRenderer modelRenderer) {
+        this.modelRenderer = modelRenderer;
     }
 }

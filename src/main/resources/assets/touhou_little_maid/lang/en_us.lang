@@ -331,6 +331,7 @@ gui.touhou_little_maid.button.pack_download=Open Maid Resources Pack Download GU
 gui.touhou_little_maid.button.show_pos=Show Maid Pos
 gui.touhou_little_maid.button.clear_pos=Clear Maid Pos
 gui.touhou_little_maid.button.riding_set=Maid Riding Setting
+gui.touhou_little_maid.button.hide_helmet=Show/Hide Helmet
 gui.touhou_little_maid.skin_details.close=Close
 gui.touhou_little_maid.skin_details.floor=Show/Hide Floor
 gui.touhou_little_maid.skin_details.return=Return

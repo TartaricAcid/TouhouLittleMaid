@@ -237,8 +237,12 @@ public class EntityModelJson extends ModelBase {
         return modelMap.containsKey("head");
     }
 
+    public ModelRenderer getHead() {
+        return modelMap.get("head").getModelRenderer();
+    }
+
     public void postRenderCustomHead(float scale) {
-        ModelRenderer customHead = modelMap.get("head").getModelRenderer();
+        ModelRenderer customHead = getHead();
         if (customHead != null) {
             customHead.postRender(scale);
         }
