@@ -89,6 +89,7 @@ public final class MaidModel {
         registerRender(MaidItems.POWER_POINT);
         registerRender(MaidItems.MAID_BED);
         registerRender(MaidItems.HAMMER);
+        registerRender(MaidItems.FURNACE_GUIDE);
 
         register2d3dRender(MaidItems.HAKUREI_GOHEI);
         register2d3dRender(MaidItems.MAID_BEACON);

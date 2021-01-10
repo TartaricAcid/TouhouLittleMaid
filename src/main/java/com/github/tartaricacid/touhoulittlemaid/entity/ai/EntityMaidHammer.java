@@ -23,7 +23,7 @@ public class EntityMaidHammer extends EntityAIBase {
     public EntityMaidHammer(AbstractEntityMaid entityMaid, float speed) {
         this.maid = entityMaid;
         this.speed = speed;
-        this.countTime = 5;
+        this.countTime = 10;
         setMutexBits(1 | 2);
     }
 
@@ -39,7 +39,7 @@ public class EntityMaidHammer extends EntityAIBase {
             countTime--;
             return false;
         }
-        countTime = 5;
+        countTime = 10;
 
         // 检查锤子
         return hasHammerWithPos(maid);
@@ -53,7 +53,6 @@ public class EntityMaidHammer extends EntityAIBase {
         }
         if (maid.world.isBlockLoaded(pos) && !maid.world.isAirBlock(pos) && maid.isWithinHomeDistanceFromPosition(pos)) {
             if (maid.getDistanceSqToCenter(pos) <= DISTANCE_SQ) {
-                // FIXME: 2021/1/4 目前任意方块都能破坏
                 if (canHarvestBlock(maid, maid.world, pos)) {
                     maid.destroyBlock(pos, true);
                     maid.getHeldItemMainhand().damageItem(1, maid);

@@ -35,7 +35,7 @@ item.touhou_little_maid.tombstone_bauble.name=§6Tombstone Bauble
 item.touhou_little_maid.nimble_fabric.name=§6Nimble Fabric
 item.touhou_little_maid.item_magnet_bauble.name=§6Item Magnet
 item.touhou_little_maid.mute_bauble.name=§6Mute Bauble
-item.touhou_little_maid.wireless_io.name=§6NWireless IO Item
+item.touhou_little_maid.wireless_io.name=§6Wireless IO Item
 item.touhou_little_maid.marisa_broom.name=Marisa's Broom
 item.touhou_little_maid.camera.name=Aya's Camera
 item.touhou_little_maid.photo.name=Photo
@@ -67,6 +67,7 @@ item.touhou_little_maid.maid_joy.piano.name=Electronic Piano
 item.touhou_little_maid.maid_joy.live.name=Live Station
 item.touhou_little_maid.smart_slab.name=Soul Spell
 item.touhou_little_maid.hammer.name=Miracle Mallet
+item.touhou_little_maid.furnace_guide.name=Furnace Guide
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -307,6 +308,7 @@ task.touhou_little_maid.torch=Torch
 task.touhou_little_maid.feed_animal=Breed
 task.touhou_little_maid.extinguishing=Extinguishing
 task.touhou_little_maid.hammer=Hammer
+task.touhou_little_maid.furnace=Furnace
 
 # GUI
 gui.touhou_little_maid.info.healthy=HP: %f/%f

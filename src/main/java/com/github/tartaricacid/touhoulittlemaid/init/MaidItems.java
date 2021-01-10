@@ -105,6 +105,8 @@ public final class MaidItems {
     public static Item WIRELESS_IO;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "hammer")
     public static Item HAMMER;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "furnace_guide")
+    public static Item FURNACE_GUIDE;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -198,6 +200,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemMaidJoy().setRegistryName("maid_joy"));
         event.getRegistry().register(new ItemSmartSlab().setRegistryName("smart_slab"));
         event.getRegistry().register(new ItemHammer().setRegistryName("hammer"));
+        event.getRegistry().register(new ItemFurnaceGuide().setRegistryName("furnace_guide"));
 
         event.getRegistry().register(new ItemMaidVehicle().setRegistryName("maid_vehicle"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));

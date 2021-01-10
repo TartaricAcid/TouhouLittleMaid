@@ -71,6 +71,9 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.WIRELESS_IO.getId() && player.getHeldItemMainhand().getItem() == MaidItems.WIRELESS_IO) {
             return new WirelessIOContainer(player.inventory, player.getHeldItemMainhand());
         }
+        if (guiId == OTHER_GUI.FURNACE_GUIDE.getId() && player.getHeldItemMainhand().getItem() == MaidItems.FURNACE_GUIDE) {
+            return new FurnaceGuideContainer(player.inventory, player.getHeldItemMainhand());
+        }
         return null;
     }
 
@@ -116,6 +119,9 @@ public class MaidGuiHandler implements IGuiHandler {
         }
         if (guiId == OTHER_GUI.WIRELESS_IO.getId() && player.getHeldItemMainhand().getItem() == MaidItems.WIRELESS_IO) {
             return new WirelessIOGuiContainer(player.inventory, player.getHeldItemMainhand());
+        }
+        if (guiId == OTHER_GUI.FURNACE_GUIDE.getId() && player.getHeldItemMainhand().getItem() == MaidItems.FURNACE_GUIDE) {
+            return new FurnaceGuideGuiContainer(player.inventory, player.getHeldItemMainhand());
         }
         return null;
     }
@@ -173,7 +179,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // 手提音响
         PORTABLE_AUDIO(10),
         // 无线传输饰品
-        WIRELESS_IO(11);
+        WIRELESS_IO(11),
+        // 熔炉指导
+        FURNACE_GUIDE(12);
 
         private int id;
 

@@ -95,6 +95,7 @@ public class ItemAlbum extends Item {
         if (handIn == EnumHand.MAIN_HAND && playerIn.getHeldItem(handIn).getItem() instanceof ItemAlbum) {
             playerIn.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.OTHER_GUI.ALBUM.getId(), worldIn, 0, 0, 0);
             playerIn.playSound(MaidSoundEvent.ALBUM_OPEN, 0.8f, 1.0f);
+            return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
