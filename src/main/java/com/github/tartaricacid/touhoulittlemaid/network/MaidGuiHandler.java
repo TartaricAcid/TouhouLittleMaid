@@ -74,6 +74,9 @@ public class MaidGuiHandler implements IGuiHandler {
         if (guiId == OTHER_GUI.FURNACE_GUIDE.getId() && player.getHeldItemMainhand().getItem() == MaidItems.FURNACE_GUIDE) {
             return new FurnaceGuideContainer(player.inventory, player.getHeldItemMainhand());
         }
+        if (guiId == OTHER_GUI.POTION_GUIDE.getId() && player.getHeldItemMainhand().getItem() == MaidItems.POTION_GUIDE) {
+            return new PotionGuideContainer(player.inventory, player.getHeldItemMainhand());
+        }
         return null;
     }
 
@@ -122,6 +125,9 @@ public class MaidGuiHandler implements IGuiHandler {
         }
         if (guiId == OTHER_GUI.FURNACE_GUIDE.getId() && player.getHeldItemMainhand().getItem() == MaidItems.FURNACE_GUIDE) {
             return new FurnaceGuideGuiContainer(player.inventory, player.getHeldItemMainhand());
+        }
+        if (guiId == OTHER_GUI.POTION_GUIDE.getId() && player.getHeldItemMainhand().getItem() == MaidItems.POTION_GUIDE) {
+            return new PotionGuideGuiContainer(player.inventory, player.getHeldItemMainhand());
         }
         return null;
     }
@@ -181,7 +187,9 @@ public class MaidGuiHandler implements IGuiHandler {
         // 无线传输饰品
         WIRELESS_IO(11),
         // 熔炉指导
-        FURNACE_GUIDE(12);
+        FURNACE_GUIDE(12),
+        // 药水指导
+        POTION_GUIDE(13);
 
         private int id;
 

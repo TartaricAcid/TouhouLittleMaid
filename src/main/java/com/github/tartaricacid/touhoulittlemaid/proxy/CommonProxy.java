@@ -171,6 +171,7 @@ public class CommonProxy {
         LittleMaidAPI.registerTask(new TaskExtinguishing());
         LittleMaidAPI.registerTask(new TaskHammer());
         LittleMaidAPI.registerTask(new TaskFurnace());
+        LittleMaidAPI.registerTask(new TaskBrewing());
 
         // 注册 FarmHandler 和 FeedHandler
         LittleMaidAPI.registerFarmHandler(new VanillaNormalFarmHandler());
@@ -296,6 +297,7 @@ public class CommonProxy {
         INSTANCE.registerMessage(WirelessIOSlotConfigMessage.Handler.class, WirelessIOSlotConfigMessage.class, 33, Side.SERVER);
         INSTANCE.registerMessage(SetBeaconOverflowMessage.Handler.class, SetBeaconOverflowMessage.class, 34, Side.SERVER);
         INSTANCE.registerMessage(MaidShowHelmetMessage.Handler.class, MaidShowHelmetMessage.class, 35, Side.SERVER);
+        INSTANCE.registerMessage(PotionGuideIndexMessage.Handler.class, PotionGuideIndexMessage.class, 36, Side.SERVER);
     }
 
     /**
