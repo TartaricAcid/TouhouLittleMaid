@@ -199,6 +199,8 @@ public class ItemWirelessIO extends Item {
                         pos.getX(), pos.getY(), pos.getZ()) :
                 I18n.format("tooltips.touhou_little_maid.wireless_io.binding_pos.none");
 
+        tooltip.add("                                    ");
+        tooltip.add("                                    ");
         tooltip.add(I18n.format("tooltips.touhou_little_maid.wireless_io.usage.1"));
         tooltip.add(I18n.format("tooltips.touhou_little_maid.wireless_io.usage.2"));
         tooltip.add(TOOLTIPS_PREFIX + ioModeText);

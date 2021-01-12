@@ -86,8 +86,7 @@ public class EntityMaidBrewing extends EntityAIMoveToBlock {
 
                 // 检查燃料
                 int fuel = brewingStand.getField(1);
-                IItemHandler side = brewingStand.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
-                if (fuel <= 0 && side != null) {
+                if (fuel <= 0) {
                     ItemStack stack = ItemFindUtil.getStack(maidInv, s -> s.getItem() == Items.BLAZE_POWDER);
                     // 添加燃料
                     if (!stack.isEmpty()) {
@@ -95,14 +94,17 @@ public class EntityMaidBrewing extends EntityAIMoveToBlock {
                         stack.shrink(1);
                         brewingStand.markDirty();
                         swingHand = true;
+                    } else {
+                        // 没有燃料？就不要进行酿造了
+                        return;
                     }
                 }
 
                 // 检查当前酿造台是否完成了酿造
                 int index = ItemPotionGuide.getGuideIndex(guide);
                 int brewTime = brewingStand.getField(0);
-                boolean outputIsEmpty = true;
                 IItemHandler output = brewingStand.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
+
                 if (index == 0 && brewTime <= 0 && output != null) {
                     for (int i = 0; i < output.getSlots(); i++) {
                         ItemStack stack = output.getStackInSlot(i);
@@ -114,15 +116,19 @@ public class EntityMaidBrewing extends EntityAIMoveToBlock {
                                 swingHand = true;
                             }
                         }
+                        // 完成了酿造，但是产物取不出来，结束酿造
                         if (!output.getStackInSlot(i).isEmpty()) {
-                            outputIsEmpty = false;
+                            return;
                         }
                     }
                 }
 
-                // 放入酿造物品
-                // 先检查输出槽位是否满
-                if (index == 0 && outputIsEmpty  && side != null) {
+                // 开始放入酿造物品
+                IItemHandler side = brewingStand.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+                boolean noWaterBottle = true;
+
+                // 如果是第一步，先放入水瓶
+                if (index == 0 && side != null) {
                     for (int i = 0; i < maidInv.getSlots(); i++) {
                         ItemStack stack = maidInv.getStackInSlot(i);
                         if (stack.getItem() == Items.POTIONITEM && PotionUtils.getPotionFromItem(stack) == PotionTypes.WATER) {
@@ -130,19 +136,26 @@ public class EntityMaidBrewing extends EntityAIMoveToBlock {
                             int afterCount = ItemHandlerHelper.insertItemStacked(side, stack.copy(), false).getCount();
                             if (beforeCount != afterCount) {
                                 maidInv.extractItem(i, beforeCount - afterCount, false);
+                                noWaterBottle = false;
                                 swingHand = true;
                             }
                         }
+                    }
+                    // 没有放入任何水瓶，放弃酿造
+                    if (noWaterBottle) {
+                        return;
                     }
                 }
 
                 // 而后开始放药材
                 IItemHandler up = brewingStand.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-                // FIXME: 2021/1/11 目前还存在一定的问题
+
                 if (up != null && up.getStackInSlot(0).isEmpty()) {
                     ItemStack ingredient = guideInv.getStackInSlot(index);
+                    // 如果标记的列表中有空，直接跳转到下一步
                     if (ingredient.isEmpty()) {
                         ItemPotionGuide.setGuideIndex(guide, (index + 1) % 6);
+                        return;
                     }
                     int findSlot = ItemFindUtil.findStackSlot(maidInv, s -> s.isItemEqualIgnoreDurability(ingredient));
                     ItemStack findIngredient = maidInv.getStackInSlot(findSlot);

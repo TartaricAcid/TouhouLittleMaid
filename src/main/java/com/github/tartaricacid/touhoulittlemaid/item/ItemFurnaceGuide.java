@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 public class ItemFurnaceGuide extends Item {
     public static final int GUIDE_INV_SIZE = 16;
@@ -57,6 +60,15 @@ public class ItemFurnaceGuide extends Item {
             return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add("                                ");
+        tooltip.add("                                ");
+        tooltip.add("                                ");
+        tooltip.add("                                ");
     }
 
     private static class FurnaceGuideItemStackHandler extends ItemStackHandler {
