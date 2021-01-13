@@ -27,8 +27,7 @@ public class TaskFurnace implements IMaidTask {
 
     @Override
     public SoundEvent getAmbientSound(AbstractEntityMaid maid) {
-        // TODO: 2021/1/10 添加专门的音效
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_IDLE, 0.1f);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_FURNACE, 0.1f);
     }
 
     @Override

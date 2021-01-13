@@ -28,8 +28,7 @@ public class TaskBrewing implements IMaidTask {
 
     @Override
     public SoundEvent getAmbientSound(AbstractEntityMaid maid) {
-        // TODO: 2021/1/11 添加专门的音效
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_IDLE, 0.1f);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_BREWING, 0.1f);
     }
 
     @Override

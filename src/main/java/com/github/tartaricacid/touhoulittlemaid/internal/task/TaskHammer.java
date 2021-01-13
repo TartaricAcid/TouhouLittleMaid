@@ -27,8 +27,7 @@ public class TaskHammer implements IMaidTask {
 
     @Override
     public SoundEvent getAmbientSound(AbstractEntityMaid maid) {
-        // TODO: 2021/1/4 需要增加音效
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_IDLE, 0.2f);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_BREAK, 0.2f);
     }
 
     @Override

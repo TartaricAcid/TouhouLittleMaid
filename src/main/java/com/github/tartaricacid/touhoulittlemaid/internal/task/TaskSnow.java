@@ -31,7 +31,7 @@ public class TaskSnow implements IMaidTask {
 
     @Override
     public SoundEvent getAmbientSound(AbstractEntityMaid maid) {
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_FARM, 0.2f);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_REMOVE_SNOW, 0.2f);
     }
 
     @Override

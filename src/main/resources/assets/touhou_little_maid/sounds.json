@@ -120,6 +120,46 @@
       }
     ]
   },
+  "maid.mode.snow": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.snow",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.break": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.break",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.furnace": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.furnace",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.brewing": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.brewing",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
   "maid.ai.find_target": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.find_target",
