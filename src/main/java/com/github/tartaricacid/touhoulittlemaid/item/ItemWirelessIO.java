@@ -199,8 +199,18 @@ public class ItemWirelessIO extends Item {
                         pos.getX(), pos.getY(), pos.getZ()) :
                 I18n.format("tooltips.touhou_little_maid.wireless_io.binding_pos.none");
 
-        tooltip.add("                                    ");
-        tooltip.add("                                    ");
+        ItemStackHandler handler = ItemWirelessIO.getFilterList(stack);
+        boolean hasItem = false;
+        for (int i = 0; i < handler.getSlots(); i++) {
+            if (!handler.getStackInSlot(i).isEmpty()) {
+                hasItem = true;
+            }
+        }
+
+        if (hasItem) {
+            tooltip.add("                                    ");
+            tooltip.add("                                    ");
+        }
         tooltip.add(I18n.format("tooltips.touhou_little_maid.wireless_io.usage.1"));
         tooltip.add(I18n.format("tooltips.touhou_little_maid.wireless_io.usage.2"));
         tooltip.add(TOOLTIPS_PREFIX + ioModeText);

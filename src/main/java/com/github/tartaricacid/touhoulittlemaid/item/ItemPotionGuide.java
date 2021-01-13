@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.MaidItems;
 import com.github.tartaricacid.touhoulittlemaid.network.MaidGuiHandler;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -113,8 +114,18 @@ public class ItemPotionGuide extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add("                        ");
-        tooltip.add("                        ");
+        ItemStackHandler handler = ItemPotionGuide.getGuideInv(stack);
+        boolean hasItem = false;
+        for (int i = 0; i < handler.getSlots(); i++) {
+            if (!handler.getStackInSlot(i).isEmpty()) {
+                hasItem = true;
+            }
+        }
+        if (hasItem) {
+            tooltip.add("                        ");
+            tooltip.add("                        ");
+        }
+        tooltip.add(I18n.format("tooltips.touhou_little_maid.potion_guide.desc"));
     }
 
     private static class PotionGuideItemStackHandler extends ItemStackHandler {

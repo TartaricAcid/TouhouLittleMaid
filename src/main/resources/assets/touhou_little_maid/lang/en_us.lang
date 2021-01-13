@@ -148,6 +148,8 @@ tooltips.touhou_little_maid.wireless_io.binding_pos.none=Unbound Chest
 tooltips.touhou_little_maid.hammer.desc=Right-click block to bind the pos, place it in the off-hand of maid, and use it with maid's break mode.
 tooltips.touhou_little_maid.hammer.binding_pos.none=Unbound Pos
 tooltips.touhou_little_maid.hammer.binding_pos.has=Pos: %d %d %d
+tooltips.touhou_little_maid.potion_guide.desc=Right-click to open gui, place it in the main-hand of maid, and use it with maid's brewing mode.
+tooltips.touhou_little_maid.furnace_guide.desc=Right-click to open gui, place it in the main-hand of maid, and use it with maid's furnace mode.
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!
