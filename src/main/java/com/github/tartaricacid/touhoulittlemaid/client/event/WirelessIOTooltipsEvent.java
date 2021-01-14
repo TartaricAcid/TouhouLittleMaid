@@ -32,7 +32,7 @@ public class WirelessIOTooltipsEvent {
             RenderHelper.enableGUIStandardItemLighting();
             for (int i = 0; i < 9; ++i) {
                 ItemStack stackIn = handler.getStackInSlot(i);
-                if (!stack.isEmpty()) {
+                if (!stackIn.isEmpty()) {
                     mc.getRenderItem().renderItemAndEffectIntoGUI(stackIn, x + offset, y + 12);
                     offset += 16;
                 }

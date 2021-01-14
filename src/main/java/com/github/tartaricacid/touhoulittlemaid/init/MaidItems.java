@@ -123,16 +123,6 @@ public final class MaidItems {
             addSpawnEgg("entity.passive.maid", items);
             addSpawnEgg("entity.monster.rinnosuke", items);
             addSpawnEgg("entity.monster.fairy", items);
-            if (Loader.isModLoaded("patchouli")) {
-                Item book = Item.getByNameOrId("patchouli:guide_book");
-                if (book != null) {
-                    NBTTagCompound tag = new NBTTagCompound();
-                    tag.setString("patchouli:book", "touhou_little_maid:memorizable_gensokyo");
-                    ItemStack stack = new ItemStack(book);
-                    stack.setTagCompound(tag);
-                    items.add(stack);
-                }
-            }
             super.displayAllRelevantItems(items);
         }
     };

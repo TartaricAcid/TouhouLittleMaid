@@ -347,8 +347,8 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         drawModalRectWithCustomSizedTexture(i + 29, j + 170, 14, 0, 14, 14, 256, 256);
         drawModalRectWithCustomSizedTexture(i + 50, j + 170, 28, 0, 14, 14, 256, 256);
         drawModalRectWithCustomSizedTexture(i + 71, j + 170, 42, 0, 14, 14, 256, 256);
-        drawModalRectWithCustomSizedTexture(i + 113, j + 170, 56, 0, 14, 14, 256, 256);
-        drawItemStack(SADDLE, i + 48 + 21 * 2, j + 168);
+        drawModalRectWithCustomSizedTexture(i + 92, j + 170, 56, 0, 14, 14, 256, 256);
+        drawModalRectWithCustomSizedTexture(i + 113, j + 170, 70, 0, 14, 14, 256, 256);
 
         // 占位按钮图标
         for (int k = 4; k < 6; k++) {
