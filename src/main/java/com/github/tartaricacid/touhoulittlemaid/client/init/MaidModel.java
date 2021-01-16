@@ -96,6 +96,7 @@ public final class MaidModel {
         register2d3dRender(MaidItems.MAID_BEACON);
         register2d3dRender(MaidItems.CAMERA);
         register2d3dRender(MaidItems.EXTINGUISHER);
+        register2d3dRender(MaidItems.TRUMPET);
         registerReplaceRender(Items.TOTEM_OF_UNDYING,
                 new ModelResourceLocation("totem", "inventory"),
                 getModelRl(TouhouLittleMaid.MOD_ID, "life_point"),

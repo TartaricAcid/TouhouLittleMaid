@@ -69,6 +69,7 @@ item.touhou_little_maid.smart_slab.name=Soul Spell
 item.touhou_little_maid.hammer.name=Break Guide
 item.touhou_little_maid.furnace_guide.name=Furnace Guide
 item.touhou_little_maid.potion_guide.name=Potion Guide
+item.touhou_little_maid.trumpet.name=Trumpet
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -150,6 +151,8 @@ tooltips.touhou_little_maid.hammer.binding_pos.none=Unbound Pos
 tooltips.touhou_little_maid.hammer.binding_pos.has=Pos: %d %d %d
 tooltips.touhou_little_maid.potion_guide.desc=Right-click to open gui, place it in the main-hand of maid, and use it with maid's brewing mode.
 tooltips.touhou_little_maid.furnace_guide.desc=Right-click to open gui, place it in the main-hand of maid, and use it with maid's furnace mode.
+tooltips.touhou_little_maid.trumpet.desc.usage=Recall all the maids
+tooltips.touhou_little_maid.trumpet.desc.note=Please note: Only the maid on the loading chunk can be recalled!
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!

@@ -109,6 +109,8 @@ public final class MaidItems {
     public static Item FURNACE_GUIDE;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "potion_guide")
     public static Item POTION_GUIDE;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "trumpet")
+    public static Item TRUMPET;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -194,6 +196,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemHammer().setRegistryName("hammer"));
         event.getRegistry().register(new ItemFurnaceGuide().setRegistryName("furnace_guide"));
         event.getRegistry().register(new ItemPotionGuide().setRegistryName("potion_guide"));
+        event.getRegistry().register(new ItemTrumpet().setRegistryName("trumpet"));
 
         event.getRegistry().register(new ItemMaidVehicle().setRegistryName("maid_vehicle"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));
