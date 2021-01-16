@@ -36,7 +36,7 @@ public class LayerMaidBackpack implements LayerRenderer<EntityMaid> {
     @Override
     public void doRenderLayer(@Nonnull EntityMaid entityMaid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         // 非渲染判定
-        if (!renderer.getMainInfo().isShowBackpack()) {
+        if (!renderer.getMainInfo().isShowBackpack() || entityMaid.isSleep()) {
             return;
         }
 

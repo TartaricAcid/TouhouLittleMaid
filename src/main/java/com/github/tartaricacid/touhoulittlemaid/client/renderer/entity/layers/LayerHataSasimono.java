@@ -34,7 +34,7 @@ public class LayerHataSasimono implements LayerRenderer<EntityMaid> {
 
     @Override
     public void doRenderLayer(@Nonnull EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (renderer.getMainInfo().isShowHata() && maid.hasSasimono() && maid.isShowSasimono()) {
+        if (renderer.getMainInfo().isShowHata() && maid.hasSasimono() && maid.isShowSasimono() && !maid.isSleep()) {
             int texture;
 
             // 先判定 size
