@@ -26,6 +26,7 @@ public class JEIModPlugin implements IModPlugin {
         registry.addRecipes(AltarRecipeMaker.getAltarRecipes(), AltarRecipeCategory.ALTAR_CRAFTING);
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(MaidBlocks.GRID));
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(MaidBlocks.GARAGE_KIT));
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(MaidItems.SPELL_CARD));
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(MaidItems.CHAIR));
     }
 }

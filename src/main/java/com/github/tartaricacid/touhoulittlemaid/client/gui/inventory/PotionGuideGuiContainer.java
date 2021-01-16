@@ -36,7 +36,7 @@ public class PotionGuideGuiContainer extends GuiContainer {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        GlStateManager.color(1, 1, 1);
+        GlStateManager.color(255, 255, 255);
         mc.renderEngine.bindTexture(BACKGROUND);
         drawTexturedModalRect(guiLeft + 7 + 18 * index, guiTop + 29, 7 + 18 * index, 133, 18, 18);
         super.renderHoveredToolTip(mouseX, mouseY);

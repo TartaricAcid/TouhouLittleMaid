@@ -185,8 +185,8 @@ public class WirelessIOGuiContainer extends GuiContainer {
             slotButtons[46].initTextureValues(140, 0, 16, 16, SLOT);
             addButton(slotButtons[46]);
 
-            GuiButton returnButton = new GuiButton(-1, (width - 104) / 2, 205, 104, 20,
-                    "返回");
+            GuiButton returnButton = new GuiButton(-1, (width - 104) / 2, startY + 188, 104, 20,
+                    I18n.format("gui.touhou_little_maid.wireless_io.config_slot.return"));
             addButton(returnButton);
         }
 
