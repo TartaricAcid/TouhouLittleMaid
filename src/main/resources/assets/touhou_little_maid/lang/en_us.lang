@@ -152,7 +152,7 @@ tooltips.touhou_little_maid.hammer.binding_pos.has=Pos: %d %d %d
 tooltips.touhou_little_maid.potion_guide.desc=Right-click to open gui, place it in the main-hand of maid, and use it with maid's brewing mode.
 tooltips.touhou_little_maid.furnace_guide.desc=Right-click to open gui, place it in the main-hand of maid, and use it with maid's furnace mode.
 tooltips.touhou_little_maid.trumpet.desc.usage=Recall all the maids
-tooltips.touhou_little_maid.trumpet.desc.note=Please note: Only the maid on the loading chunk can be recalled!
+tooltips.touhou_little_maid.trumpet.desc.note=§cPlease note: only the maid on the loaded chunk can be recalled!
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!
@@ -478,7 +478,6 @@ model.touhou_little_maid.luna_child.name=Luna Child
 model.touhou_little_maid.remilia_scarlet.name=Remilia Scarlet
 model.touhou_little_maid.sunny_milk.name=Sunny Milk
 model.touhou_little_maid.alice_margatroid.name=Alice Margatroid
-model.touhou_little_maid.alice.name=Alice
 model.touhou_little_maid.patchouli_knowledge.name=Patchouli Knowledge
 model.touhou_little_maid.hong_meiling.name=Hong Meiling
 model.touhou_little_maid.koakuma.name=Koakuma
@@ -505,7 +504,6 @@ model.touhou_little_maid.tewi_inaba.name=Tewi Inaba
 model.touhou_little_maid.wriggle_nightbug.name=Wriggle Nightbug
 model.touhou_little_maid.keine_kamishirasawa.name=Keine Kamishirasawa
 model.touhou_little_maid.yagokoro_eirin.name=Eirin Yagokoro
-model.touhou_little_maid.mima.name=Mima
 model.touhou_little_maid.kazami_yuka.name=Yuuka Kazami
 model.touhou_little_maid.onozuka_komachi.name=Komachi Onozuka
 model.touhou_little_maid.shikieiki_yamaxanadu.name=Eiki Shiki, Yamaxanadu
@@ -544,7 +542,6 @@ model.touhou_little_maid.tsukumo_yatsuhashi.name=Yatsuhashi Tsukumo
 model.touhou_little_maid.tsukumo_benben.name=Benben Tsukumo
 model.touhou_little_maid.hecatia_lapislazuli.name=Hecatia Lapislazuli
 model.touhou_little_maid.miyoi_okunoda.name=Miyoi Okunoda
-model.touhou_little_maid.yumemi_okazaki.name=Yumemi Okazaki
 model.touhou_little_maid.niwatari_kutaka.name=Kutaka Niwatari
 model.touhou_little_maid.clownpiece.name=Clownpiece
 model.touhou_little_maid.doremy_sweet.name=Doremy Sweet
@@ -597,7 +594,6 @@ model.touhou_little_maid.luna_child.desc=§7Silent Moonlight
 model.touhou_little_maid.remilia_scarlet.desc=§7The Scarlet Devil
 model.touhou_little_maid.sunny_milk.desc=§7Shining Sunlight
 model.touhou_little_maid.alice_margatroid.desc=§7Seven-Colored Puppeteer
-model.touhou_little_maid.alice.desc=§7Girl of Death
 model.touhou_little_maid.patchouli_knowledge.desc=§7The Unmoving Great Library
 model.touhou_little_maid.hong_meiling.desc=§7Chinese Girl
 model.touhou_little_maid.koakuma.desc=§7？？？
@@ -623,7 +619,6 @@ model.touhou_little_maid.tewi_inaba.desc=§7White Rabbit of Good Fortune
 model.touhou_little_maid.wriggle_nightbug.desc=§7A Bug of Light Wriggling in the Dark
 model.touhou_little_maid.keine_kamishirasawa.desc=§7History-Eating Half Beast
 model.touhou_little_maid.yagokoro_eirin.desc=§7Brain of the Moon
-model.touhou_little_maid.mima.desc=§7Evil Spirit
 model.touhou_little_maid.kazami_yuka.desc=§7Flower Master of the Four Seasons
 model.touhou_little_maid.onozuka_komachi.desc=§7Guide of the Sanzu River
 model.touhou_little_maid.shikieiki_yamaxanadu.desc=§7Supreme Judge of Paradise
@@ -662,7 +657,6 @@ model.touhou_little_maid.tsukumo_yatsuhashi.desc=§7Tsukumogami of an Aging Koto
 model.touhou_little_maid.tsukumo_benben.desc=§7Tsukumogami of an Aging Biwa
 model.touhou_little_maid.hecatia_lapislazuli.desc=§7Goddess of Hell
 model.touhou_little_maid.miyoi_okunoda.desc=§7The Poster Girl of Geidontei, the Fantasy Pub
-model.touhou_little_maid.yumemi_okazaki.desc=§7Fantasy Legend
 model.touhou_little_maid.niwatari_kutaka.desc=§7Clerical God of Hell's Checkpoint
 model.touhou_little_maid.clownpiece.desc=§7Fairy of Hell
 model.touhou_little_maid.doremy_sweet.desc=§7Ruler of Dreams
@@ -711,6 +705,19 @@ model.touhou_little_maid.park_bench.name=Park Bench
 model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
 model.touhou_little_maid.moto.name=Moto
 model.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
+
+# Touhou Project PC-98
+pack.touhou_little_maid_old.maid.name=Touhou Project Model
+pack.touhou_little_maid_old.maid.desc=PC-98 Character
+model.touhou_little_maid_old.reimu_hakurei.name=Reimu Hakurei
+model.touhou_little_maid_old.alice.name=Alice
+model.touhou_little_maid_old.mima.name=Mima
+model.touhou_little_maid_old.yumemi_okazaki.name=Yumemi Okazaki
+
+model.touhou_little_maid_old.reimu_hakurei.desc=§7Shrine Maiden Who Protects Dreams and Tradition
+model.touhou_little_maid_old.mima.desc=§7Evil Spirit
+model.touhou_little_maid_old.alice.desc=§7Girl of Death
+model.touhou_little_maid_old.yumemi_okazaki.desc=§7Fantasy Legend
 
 # Sound Info
 pack.touhou_little_maid.sound.name=Default Sound

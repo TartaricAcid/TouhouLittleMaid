@@ -386,15 +386,6 @@
       "model_id": "touhou_little_maid:miyoi_okunoda",
       "description": ["{model.touhou_little_maid.miyoi_okunoda.desc}"]
     }, {
-      "model_id": "touhou_little_maid:mima",
-      "description": ["{model.touhou_little_maid.mima.desc}"]
-    }, {
-      "model_id": "touhou_little_maid:alice",
-      "description": ["{model.touhou_little_maid.alice.desc}"]
-    }, {
-      "model_id": "touhou_little_maid:yumemi_okazaki",
-      "description": ["{model.touhou_little_maid.yumemi_okazaki.desc}"]
-    }, {
       "model_id": "touhou_little_maid:moesumika",
       "easter_egg": {
         "tag": "moesumika"

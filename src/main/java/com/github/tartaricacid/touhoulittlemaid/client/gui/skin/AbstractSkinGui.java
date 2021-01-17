@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.IModelInfo
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiScreen;
@@ -40,16 +41,16 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
      * 按钮的 ID -> 模型 映射
      */
     private static final HashMap<Integer, IModelInfo> BUTTON_MODEL_MAP = Maps.newHashMap();
-    private SkinGuiNumber<U> guiNumber;
     /**
      * 用来在子类中通过实体 id 获取缓存中的实体对象
      */
     protected static String ENTITY_ID;
+    protected T entity;
+    private SkinGuiNumber<U> guiNumber;
     /**
      * 使用的模型包列表
      */
     private List<CustomModelPack<U>> modelPackList;
-    protected T entity;
 
     public AbstractSkinGui(T entity, List<CustomModelPack<U>> listPack, String entityId) {
         this.entity = entity;
@@ -242,7 +243,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
                             0, 0, 16, 16, 16, 16);
                 } else {
                     mc.renderEngine.bindTexture(icon);
-                    int time = (int) mc.world.getWorldTime() / pack.getIconDelay();
+                    int time = getTickTime() / pack.getIconDelay();
                     int iconIndex = time % pack.getIconAspectRatio();
                     drawModalRectWithCustomSizedTexture(middleX - 92 + 28 * index, middleY - 98,
                             0, iconIndex * 16, 16,
@@ -250,6 +251,10 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
                 }
             }
         }
+    }
+
+    private int getTickTime() {
+        return (int) Minecraft.getSystemTime() / 50;
     }
 
     private void checkIconAnimation(CustomModelPack<U> pack, ResourceLocation icon) {
