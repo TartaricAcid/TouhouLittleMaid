@@ -154,6 +154,9 @@ tooltips.touhou_little_maid.potion_guide.desc=Right-click to open gui, place it 
 tooltips.touhou_little_maid.furnace_guide.desc=Right-click to open gui, place it in the main-hand of maid, and use it with maid's furnace mode.
 tooltips.touhou_little_maid.trumpet.desc.usage=Recall all the maids
 tooltips.touhou_little_maid.trumpet.desc.note=§cPlease note: only the maid on the loaded chunk can be recalled!
+tooltips.touhou_little_maid.creative_favorability_tool.full=Right-click maid to add full favorability
+tooltips.touhou_little_maid.creative_favorability_tool.add=Right-click maid to add a level favorability
+tooltips.touhou_little_maid.creative_favorability_tool.reduce=Right-click maid to reduce a level favorability
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=Write point success!

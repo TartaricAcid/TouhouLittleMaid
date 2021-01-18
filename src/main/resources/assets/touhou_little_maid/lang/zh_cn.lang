@@ -154,6 +154,9 @@ tooltips.touhou_little_maid.potion_guide.desc=右击打开 GUI，放置在女仆
 tooltips.touhou_little_maid.furnace_guide.desc=右击打开 GUI，放置在女仆主手，与熔炉模式配合使用
 tooltips.touhou_little_maid.trumpet.desc.usage=召回所有女仆
 tooltips.touhou_little_maid.trumpet.desc.note=§c请谨记：只有加载区块上的女仆才可以被召回！
+tooltips.touhou_little_maid.creative_favorability_tool.full=右击女仆加满好感度
+tooltips.touhou_little_maid.creative_favorability_tool.add=右击女仆增加一个等级好感度
+tooltips.touhou_little_maid.creative_favorability_tool.reduce=右击女仆减少一个等级好感度
 
 # Message
 message.touhou_little_maid.kappa_compass.usage.result.success=坐标写入成功！

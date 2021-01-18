@@ -203,5 +203,20 @@ public final class MaidModel {
                     return smartSlabFull;
             }
         });
+
+        ModelResourceLocation favToolFull = getModelRl(MaidItems.CREATIVE_FAVORABILITY_TOOL, 0);
+        ModelResourceLocation favToolAdd = getModelRl(MaidItems.CREATIVE_FAVORABILITY_TOOL, 1);
+        ModelResourceLocation favToolReduce = getModelRl(MaidItems.CREATIVE_FAVORABILITY_TOOL, 2);
+        ModelBakery.registerItemVariants(MaidItems.CREATIVE_FAVORABILITY_TOOL, favToolFull, favToolAdd, favToolReduce);
+        ModelLoader.setCustomMeshDefinition(MaidItems.CREATIVE_FAVORABILITY_TOOL, stack -> {
+            switch (stack.getMetadata()) {
+                case 1:
+                    return favToolAdd;
+                case 2:
+                    return favToolReduce;
+                default:
+                    return favToolFull;
+            }
+        });
     }
 }

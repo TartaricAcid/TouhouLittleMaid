@@ -197,9 +197,7 @@ public final class MaidItems {
         event.getRegistry().register(new ItemFurnaceGuide().setRegistryName("furnace_guide"));
         event.getRegistry().register(new ItemPotionGuide().setRegistryName("potion_guide"));
         event.getRegistry().register(new ItemTrumpet().setRegistryName("trumpet"));
-        event.getRegistry().register(new Item().setRegistryName("creative_favorability_tool").setMaxStackSize(1)
-                .setTranslationKey(TouhouLittleMaid.MOD_ID + ".creative_favorability_tool")
-                .setCreativeTab(MaidItems.MAIN_TABS));
+        event.getRegistry().register(new ItemCreativeFavorabilityTool().setRegistryName("creative_favorability_tool"));
 
         event.getRegistry().register(new ItemMaidVehicle().setRegistryName("maid_vehicle"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));

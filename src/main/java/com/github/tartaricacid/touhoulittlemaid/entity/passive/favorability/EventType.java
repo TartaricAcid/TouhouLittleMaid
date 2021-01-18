@@ -14,7 +14,6 @@ public final class EventType {
     public static final EventType HURT_BY_PLAYER = new EventType("hurt_by_player", -20);
     public static final EventType DEATH = new EventType("death", -100);
     public static final EventType JOY = new EventType("joy", 2);
-    public static final EventType USE_CREATIVE_TOOL = new EventType("use_creative_tool", 0x6fffffff);
 
     private final String name;
     private final int point;

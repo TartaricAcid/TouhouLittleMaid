@@ -39,6 +39,10 @@ public enum Level {
         return Level.values()[MathHelper.clamp(ordinal() - 1, 0, values().length - 1)];
     }
 
+    public Level getPrevious() {
+        return Level.values()[MathHelper.clamp(ordinal() + 1, 0, values().length - 1)];
+    }
+
     public int getCount() {
         return count;
     }
