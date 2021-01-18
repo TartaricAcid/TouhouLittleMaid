@@ -1,0 +1,13 @@
+{
+  "sortnum": 16,
+  "name": "禁言饰品",
+  "icon": "touhou_little_maid:mute_bauble",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:mute_bauble",
+      "text": "装备上这个饰品后，女仆会变得异常安静。"
+    }
+  ]
+}

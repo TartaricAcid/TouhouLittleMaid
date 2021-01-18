@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive.favorability;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Locale;
 
@@ -32,6 +33,10 @@ public enum Level {
             }
         }
         return VERY_LOW;
+    }
+
+    public Level getNext() {
+        return Level.values()[MathHelper.clamp(ordinal() - 1, 0, values().length - 1)];
     }
 
     public int getCount() {

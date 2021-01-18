@@ -224,4 +224,8 @@ public class EntityMaidWrapper {
     public boolean isSleep() {
         return maid.isSleep();
     }
+
+    public int getFavorability() {
+        return maid.getFavorability();
+    }
 }

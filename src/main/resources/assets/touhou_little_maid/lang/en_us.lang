@@ -70,6 +70,7 @@ item.touhou_little_maid.hammer.name=Break Guide
 item.touhou_little_maid.furnace_guide.name=Furnace Guide
 item.touhou_little_maid.potion_guide.name=Potion Guide
 item.touhou_little_maid.trumpet.name=Trumpet
+item.touhou_little_maid.creative_favorability_tool.name=Creative Favorability Tool
 
 # Block
 tile.touhou_little_maid.garage_kit.name=Garage Kit
@@ -318,10 +319,6 @@ task.touhou_little_maid.furnace=Furnace
 task.touhou_little_maid.brewing=Brewing
 
 # GUI
-gui.touhou_little_maid.info.healthy=HP: %f/%f
-gui.touhou_little_maid.info.armor=AR: %f/20.0
-gui.touhou_little_maid.info.favorability=Fav: %d
-gui.touhou_little_maid.info.experience=Exp: %d
 gui.touhou_little_maid.tab.main=Main
 gui.touhou_little_maid.tab.inventory=Inventory
 gui.touhou_little_maid.tab.bauble=Bauble
@@ -731,7 +728,7 @@ spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle.nam
 spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle_3d.name=Border Sign "Boundary Between Wave and Particle" 3D
 
 # Subtitle
-subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
+subtitle.touhou_little_maid.maid.mode.idle=Maid Idle Sound
 subtitle.touhou_little_maid.maid.mode.attack=Maid Attack Sound
 subtitle.touhou_little_maid.maid.mode.range_attack=Maid Range Attack Sound
 subtitle.touhou_little_maid.maid.mode.danmaku_attack=Maid Danmaku Sttack Sound

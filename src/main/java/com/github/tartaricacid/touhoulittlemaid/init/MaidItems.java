@@ -8,11 +8,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -111,6 +109,8 @@ public final class MaidItems {
     public static Item POTION_GUIDE;
     @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "trumpet")
     public static Item TRUMPET;
+    @GameRegistry.ObjectHolder(TouhouLittleMaid.MOD_ID + ":" + "creative_favorability_tool")
+    public static Item CREATIVE_FAVORABILITY_TOOL;
 
     public static CreativeTabs MAIN_TABS = new MaidCreativeTabs("main") {
         @SideOnly(Side.CLIENT)
@@ -197,6 +197,9 @@ public final class MaidItems {
         event.getRegistry().register(new ItemFurnaceGuide().setRegistryName("furnace_guide"));
         event.getRegistry().register(new ItemPotionGuide().setRegistryName("potion_guide"));
         event.getRegistry().register(new ItemTrumpet().setRegistryName("trumpet"));
+        event.getRegistry().register(new Item().setRegistryName("creative_favorability_tool").setMaxStackSize(1)
+                .setTranslationKey(TouhouLittleMaid.MOD_ID + ".creative_favorability_tool")
+                .setCreativeTab(MaidItems.MAIN_TABS));
 
         event.getRegistry().register(new ItemMaidVehicle().setRegistryName("maid_vehicle"));
         event.getRegistry().register(new ItemBlock(MaidBlocks.GRID).setRegistryName("grid"));

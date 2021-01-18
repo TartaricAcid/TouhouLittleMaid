@@ -1,0 +1,13 @@
+{
+  "sortnum": 15,
+  "name": "物品磁铁",
+  "icon": "touhou_little_maid:item_magnet_bauble",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:item_magnet_bauble",
+      "text": "一个能够拓展拾取范围的饰品。$(br2)装备上后女仆拾取物品、箭、经验球、P点的范围将大大增加。"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "sortnum": 22,
+  "name": "小号",
+  "icon": "touhou_little_maid:trumpet",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:trumpet",
+      "text": "一个用来召回女仆的工具，右击即可使用。$(br2)$(4)$(l)需要注意：这个道具只能召回已加载区块上的女仆。从技术角度说，目前还没有任！何！办！法！可以召回卸载区块上的女仆。"
+    }
+  ]
+}
