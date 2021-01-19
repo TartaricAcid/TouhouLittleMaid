@@ -1,0 +1,20 @@
+{
+  "sortnum": 5,
+  "name": "Faveur",
+  "icon": "minecraft:cake",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Le système de faveur est un moyen pour une maid d'améliorer ses attributs. Si vous prenez bien soin de votre servante, sa faveur augmentera rapidement. $(br2)Et en même temps, la santé de la maid, sa vitesse de régénération et son attaque sera grandement amélioré."
+    },
+    {
+      "type": "text",
+      "text": "Les opérations suivantes peuvent augmenter la faveur de la servante:$(li)La Maid se réveille naturellement après s'être endormie$(li)La Maid joue sur le bureau d'angle, piano électronique et avec le matériel de streaming$(br2)Les opérations suivantes réduiront la faveur de la servante:$(li)Si le joueur réveille de force la Maid pendant son sommeil$(li)Si la Maid est blessé$(li)Si la Maid meurt"
+    },
+    {
+      "type": "text",
+      "text": "$(li)Si le joueur blesse accidentellement la Maid (le Hata Sasimono peut réduire cette valeur)$(li)Si la Maid travaille pendant les orages ou la nuit$(br2)Il y a actuellement cinq niveaux de faveur. Une faible faveur n'a actuellement aucun effet négatif mais une grande faveur peut améliorer les attributs d'une servante."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "sortnum": 4,
+  "name": "Multi-Blocks Altar",
+  "icon": "minecraft:wool:14",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The altar is the multi-block structure required for the craft of this mod.$(br2)The altar's recipes can be obtained through JEI, and the craft also requires player's $(l:overview/power_point)power point$()."
+    },
+    {
+      "type": "multiblock",
+      "name": "Altar",
+      "multiblock_id": "touhou_little_maid:altar",
+      "text": "Use the $(l:overview/gohei_and_danmaku)gohei$() to right click on the red wool in the center left of the fourth layer to build the altar."
+    },
+    {
+      "type": "text",
+      "text": "You can place the item by right-clicking on the top of the six oak pillars of the altar. You can remove the item by empty-handed right-clicking.$(br2)When the item is completely placed and the player's power point is enough, altar can trigger craft.$(br2)The craft is interrupted due to lack of power, and after obtaining enough power, right click again to re-trigger the craft."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/altar_craft.png"
+      ],
+      "title": "Altar Craft",
+      "border": true,
+      "text": "The craft of spawn lightning, remember all craft is shapeless."
+    }
+  ]
+}

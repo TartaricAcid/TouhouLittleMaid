@@ -1,0 +1,31 @@
+{
+  "sortnum": 4,
+  "name": "Sanctuaire Multi-Blocs",
+  "icon": "minecraft:wool:14",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Le sanctuaire est la structure multi-blocs requise pour les différentes fabrications de ce mod.$(br2)Les recettes du sanctuaire peuvent être obtenues en utilisant le JEI et la fabrication nécessite également des $(l:overview/power_point)Points P$() du joueur."
+    },
+    {
+      "type": "multiblock",
+      "name": "Sanctuaire",
+      "multiblock_id": "touhou_little_maid:altar",
+      "text": "Utilisez le $(l:overview/gohei_and_danmaku)Gohei$() pour faire un clic droit sur la laine rouge au centre gauche de la quatrième couche pour construire le sanctuaire."
+    },
+    {
+      "type": "text",
+      "text": "Vous pouvez placer un objet en faisant un clic droit avec sur le haut d'un des six piliers de chêne du sanctuaire. Vous pouvez retirer l'objet en ayant la main vide et en faisant un clic droit.$(br2)Lorsque les objets sont complètement placé et que les Points P du joueur sont suffisant, le sanctuaire activera le craft.$(br2)Le craft peut être interrompu en raison d'un manque de Point P. Après en avoir obtenu suffisamment, faites un clic droit à nouveau pour réactiver le craft."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/altar_craft.png"
+      ],
+      "title": "Craft du Sanctuaire",
+      "border": true,
+      "text": "Le craft de l'apparition de la foudre, rappelez-vous que tout les crafts sont sans forme."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "sortnum": 5,
+  "name": "Amistad",
+  "icon": "minecraft:cake",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "El sistema de amistad es una manera de que la maid mejore sus atributos. si usted cuida bien a su maid, la amistad con ella aumentara rápidamente. $(br2) y al mismo tiempo, la vida, regeneracion, velocidad y ataque de la maid mejorara considerablemente."
+    },
+    {
+      "type": "text",
+      "text": "Las siguientes cosas pueden aumentar la amistad con la maid: $(li)La maid se despierta naturalmente después de dormirse$(li) La maid juega en el escritorio de libros, piano eléctrico, y la estación de retransmisión$(br2)Las siguientes cosas disminuyen la amistad con la maid:$(li)Forzar a la maid a levantarse de la cama$(li)Maid golpeada$(li)La muerte de la maid"
+    },
+    {
+      "type": "text",
+      "text": "$(li)El jugador accidentalmente golea a la maid (el Hata Sasimono puede reducir la perdida)$(li)La maid sigue trabajando de noche o durante una tormenta eléctrica $(br2)Actualmente hay 5 niveles de amistad. Una amistad baja no tiene efectos negativos, pero una alta amistad mejorara las estadísticas de la maid."
+    }
+  ]
+}

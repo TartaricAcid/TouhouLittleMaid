@@ -1,0 +1,26 @@
+{
+  "sortnum": 3,
+  "name": "Balai de Marisa",
+  "icon": "touhou_little_maid:marisa_broom",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:marisa_broom",
+      "text": "Le balai est un outil de vol pratique qui permet au joueur de faire un clic droit sur le balai et d'utiliser les touches ZQSD du clavier pour ce déplacer. $(br2)La Maid montera également sur le balai quand elle se trouve à proximité et se déplacera dans la plupart des cas."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/broom.png"
+      ],
+      "title": "Balai de Marisa",
+      "border": true,
+      "text": "Maid sur un balai."
+    },
+    {
+      "type": "text",
+      "text": "However, currently only creative mode players are allowed to ride the broom. You can modify the configuration file to disable this feature."
+    }
+  ]
+}

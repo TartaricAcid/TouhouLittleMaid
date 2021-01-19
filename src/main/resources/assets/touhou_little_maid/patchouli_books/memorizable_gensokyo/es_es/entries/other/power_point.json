@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:power_point",
-      "text": "El click derecho es rechazado, puedes soltar la entidad de puntos de energía."
+      "text": "Click derecho para arrojarlo $(br2)Puedes encontrar los puntos de poder en forma de objeto en cofres de mazmorras."
     }
   ]
 }

@@ -1,0 +1,26 @@
+{
+  "sortnum": 1,
+  "name": "World Spawn",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This mod adds two mobs. $(br2)The looting of mob are important crafting ingredient.$(br2)The chance of spawn hostile creatures in this mod can be modified in the configuration file. When set to 0, these monsters can be prohibited from spawn."
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.fairy{OnGround:true}",
+      "offset": 0.125,
+      "text": "Spawn in the plain biome at night, it will fly and simultaneously shoot danmaku to attack players and maids.",
+      "anchor": "fairy"
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.rinnosuke",
+      "offset": 0.125,
+      "text": "Spawn in the forest biome at night, it will attack players and maids.",
+      "anchor": "rinnosuke"
+    }
+  ]
+}

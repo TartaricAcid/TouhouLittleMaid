@@ -1,0 +1,23 @@
+{
+  "sortnum": 19,
+  "name": "메이드 여가 블럭",
+  "icon": "touhou_little_maid:maid_joy",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'reading'}",
+      "text": "이들은 멀티블럭 구조물이므로 설치 전 공간이 충분한지 확인하세요."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'piano'}",
+      "text": "메이드가 랜덤하게 이 블럭에서 놀고, 노는 동안엔 호감도가 서서히 증가합니다."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'live'}",
+      "text": "물론 적대적 몹을 만나는 것과 같은 위험한 상황에 처할 경우 메이드는 도망칩니다.$(br2)놀이보단 목숨이 소중한 법이니까요."
+    }
+  ]
+}

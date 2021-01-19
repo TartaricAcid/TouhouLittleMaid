@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:npc_maid_tool",
-      "text": "Npc maid tool is a tool compatible with the custom npc mod. $(br2)When the npc's model is set as touhou little maid, you can use this tool right-click the npc to set a custom maid model."
+      "text": "NPCメイドツールはCustom NPCs modと互換性があるツールです。$(br2)NPCのモデルに東方リトルメイドが設定されている場合、NPCにこのアイテムを使用するとメイドのモデルに設定できます。"
     }
   ]
 }

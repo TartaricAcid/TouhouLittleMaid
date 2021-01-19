@@ -1,0 +1,16 @@
+{
+  "sortnum": 4,
+  "name": "Bauble",
+  "icon": "touhou_little_maid:ultramarine_orb_elixir",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The third tab of the maids' GUI is the bauble inventory. This mod provides several baubles that can be triggered to protect maids under certain conditions:$(li)Ultramarine Orb Elixir: Can be used 6 times to avoid a maid's death.$(li)Tombstone Bauble: Tombstones that generate upon a maid's death to preserve their items."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is canceled.$(li)Nimble Fabric: When a maid equipped with this bauble is hit by projectile, her behavior will be exactly the same as the ender."
+    }
+  ]
+}

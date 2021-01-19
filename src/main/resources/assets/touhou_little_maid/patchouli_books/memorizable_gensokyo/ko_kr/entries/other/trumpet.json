@@ -1,0 +1,13 @@
+{
+  "sortnum": 22,
+  "name": "Trumpet",
+  "icon": "touhou_little_maid:trumpet",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:trumpet",
+      "text": "A tool to recall the maid, right-click to use. $(br2)$(4)$(l)Note: This item can only recall the maid on the loaded chunk. From a technical point of view, there is currently NO ANY WAY to recall the maid on the unload chunk."
+    }
+  ]
+}

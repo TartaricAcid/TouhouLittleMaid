@@ -1,0 +1,13 @@
+{
+  "sortnum": 14,
+  "name": "Gap",
+  "icon": "touhou_little_maid:wireless_io",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:wireless_io",
+      "text": "A bauble that can transport items. $(br2)You can right-click chest with the gap to mark it, then open its GUI to make some settings, and finally place it in the maid's bauble inventory. $(br2)After this, the maid will take out/deposit the specified items \"wirelessly\" from the chest."
+    }
+  ]
+}

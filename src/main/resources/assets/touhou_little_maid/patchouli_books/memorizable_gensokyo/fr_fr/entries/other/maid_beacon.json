@@ -1,0 +1,17 @@
+{
+  "sortnum": 4,
+  "name": "Lanterne de sanctuaire",
+  "icon": "touhou_little_maid:maid_beacon",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_beacon",
+      "text": "La lanterne de sanctuaire est une bonne décoration et a certaines fonctions pratiques. Faites un clic droit sur la partie supérieure de la lanterne pour ouvrir l'interface GUI et stockez les Points P du joueur."
+    },
+    {
+      "type": "text",
+      "text": "Vous pouvez également sélectionner un bonus qui consommera des Points P pour donner l'effet aux Maids environnantes.$(br2)La lanterne est également un bon outil pour collecter automatiquement les Points P. Il peut collecter automatiquement des Points P jusqu'à 3 blocs et les stocker."
+    }
+  ]
+}

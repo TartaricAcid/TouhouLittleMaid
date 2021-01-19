@@ -1,0 +1,16 @@
+{
+  "sortnum": 21,
+  "name": "Gui de configuración de tirada",
+  "icon": "minecraft:writable_book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "El sistema de distribución de paquetes de recursos del servidor permite a cada jugador que entre en el servidor instalar por la fuerza un modelo de maid adicional al servidor. $(br2)Con el gui de configuración del dibujo visual, podemos restringir rápida y fácilmente la adquisición de skins de modelo de maid."
+    },
+    {
+      "type": "text",
+      "text": "Después de que el modelo de su cliente se corresponda por completo con el servidor, y el servidor ha activado la opción \"No se puede cambiar la apariencia de la maid\", puedes abrir el gui de configuración de dibujo a través del comando /draw gui, y el gui de configuración obtendrá activamente todos los datos de los modelos de maid en el servidor.$(br2)Luego puede modificar rápidamente la aparición y el valor. Haga clic en el botón para guardar, o guardar y recargar."
+    }
+  ]
+}

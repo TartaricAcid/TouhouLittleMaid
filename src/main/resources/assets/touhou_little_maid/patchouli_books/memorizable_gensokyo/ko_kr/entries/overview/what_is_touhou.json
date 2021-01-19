@@ -1,6 +1,6 @@
 {
   "sortnum": 0,
-  "name": "Touhou Project",
+  "name": "동방 프로젝트",
   "icon": "touhou_little_maid:hakurei_gohei",
   "category": "overview",
   "pages": [
@@ -8,7 +8,7 @@
       "type": "link",
       "text": "The Touhou Project is a Japanese doujin game series by Sole Team Shanghai Alice member ZUN that specializes in Shoot 'em Ups.",
       "url": "https://en.touhouwiki.net/wiki/Touhou_Wiki",
-      "link_text": "Touhou Wiki"
+      "link_text": "동방 위키"
     },
     {
       "type": "image",

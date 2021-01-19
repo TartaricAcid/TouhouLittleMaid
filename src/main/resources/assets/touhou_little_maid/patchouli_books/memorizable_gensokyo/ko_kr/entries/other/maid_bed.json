@@ -1,0 +1,17 @@
+{
+  "sortnum": 19,
+  "name": "메이드 침대",
+  "icon": "touhou_little_maid:maid_bed",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_bed",
+      "text": "플레어어가 잘 수 있으며 자연스럽게 메이드 또한 잘 수 있습니다. 밤이나 폭풍우가 칠 때 메이드가 잘 침대를 찾으려 할 가능성이 있습니다."
+    },
+    {
+      "type": "text",
+      "text": "자는 메이드는 적대적 몹에게 더이상 공격받지 않으며 이 때 메이드 GUI 또한 열 수 없습니다.$(br2)그러나 자는 메이드를 깨우면 호감도가 크게 감소하므로 주의하세요."
+    }
+  ]
+}

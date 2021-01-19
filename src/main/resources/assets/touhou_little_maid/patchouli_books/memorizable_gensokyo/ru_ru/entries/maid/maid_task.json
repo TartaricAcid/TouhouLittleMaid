@@ -23,6 +23,14 @@
     {
       "type": "text",
       "text": "$(li)Выращивание: если вы поместите предметы, необходимые для размножения животных, в инвентарь горничной, она начинает активно кормить окружающих животных.$(li)Огнетушение: основная рука горницы должна держать огнетушитель. Когда этот режим включен, горничная будет тушить горящего владельца и компаньонов в пределах 3 блоков."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Destroy: need to be used in conjunction with the destroy guide. First use the destroy guide to mark the block to be destroyed, then place it in maid's offhand, and finally place a pickaxe in maid's mainhand. The maid can destroy the marked blocks.$(li)Furnace: It needs to be used in conjunction with the furnace guide."
+    },
+    {
+      "type": "text",
+      "text": "First open furnace guide's GUI to mark the required fuel and items, and then place it in maid's mainhand. The maid will look for the surrounding furnaces to use.$(li)Brewing: need to be used in conjunction with potion guide. First open the potion guide's GUI to mark the recipe for potion, and then place it in maid's mainhand. The maid will find the brewing stands around to brew."
     }
   ]
 }

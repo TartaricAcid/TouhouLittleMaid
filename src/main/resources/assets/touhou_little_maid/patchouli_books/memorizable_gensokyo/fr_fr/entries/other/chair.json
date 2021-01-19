@@ -1,0 +1,17 @@
+{
+  "sortnum": 1,
+  "name": "Custom Cushion",
+  "icon": "touhou_little_maid:chair{ModelId:'touhou_little_maid:cat_cart'}",
+  "category": "other",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:chair",
+      "text": "The custom cushion is a purely decorative item, placed directly on the ground by right-click, and shift left-click can destroy it, right-click to sit, shift right-click to open the GUI to switch the cushion style."
+    },
+    {
+      "type": "text",
+      "text": "Some of the cushions can sit directly when the maid is close, shift right-click to the maid can leave the cushion.$(br2)The cushion model can also be completely customized, or you can quickly add a custom model through the resource package. For related customizations, please check the wiki."
+    }
+  ]
+}

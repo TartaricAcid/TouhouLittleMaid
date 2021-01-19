@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "$(#f00)/hata reload$() Reload all hata textures$(br)$(#f00)/maid_res reload$() Reload the maid resource pack. This command does not completely reload some resources. It is recommended to use the F3+T shortcut key.$(br)$(#f00)/draw_coupon reload$() Reload draw coupon.$(br)$(#f00)/spell_card reload$() Reload all spell card data."
+      "text": "$(#f00)/hata reload$() 旗指物の模様を再読み込みします。$(br)$(#f00)/maid_res reload$() メイドのリソースパックを再読み込みします。このコマンドは全てのリソースパックを再読み込みするわけではありません。F3+Tを押して再読み込みすることをおすすめします。$(br)$(#f00)/draw_coupon reload$() メイドモデルクーポンを再読み込みします。$(br)$(#f00)/draw_coupon reload$() スペルカードのデータを再読み込みします。"
     },
     {
       "type": "text",
-      "text": "$(#f00)/touhou_little_maid power$() Set player power value$(br)$(#f00)/touhou_little_maid maid_num$() Set player's maid num"
+      "text": "$(#f00)/touhou_little_maid power$() プレイヤーのP点を設定します。$(br)$(#f00)/touhou_little_maid maid_num$() プレイヤーのメイドの番号を設定します。"
     }
   ]
 }

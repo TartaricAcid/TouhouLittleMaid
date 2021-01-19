@@ -8,14 +8,6 @@
       "type": "spotlight",
       "item": "touhou_little_maid:maid_backpack",
       "text": "La mochila puede ser usada para expandir el inventario de las maids. se equipa teniendo la mochila en la mano y dándole click derecho a la maid. la mochila tiene tres niveles.$(br2)usa la cámara para remover la mochila de la maid, también puede quitar la mochila apretando shift + click izquierdo."
-    },
-    {
-      "type": "text",
-      "text": "Después que la maid es equipada con la mochila, ella tirara los items dentro tolvas que estén alrededor de acuerdo con el numero máximo de items que tenga en su inventario.$(br2) Una whitelist se puede hacer poniendo un marco de items, la maid no tirara items en tolvas que estén bloqueadas por una señal de redstone.$(li)predeterminado: La maid lanza objetos de la 8va ranura de inventario cuando la mochila este medio llena."
-    },
-    {
-      "type": "text",
-      "text": "$(li)Tolva marcada por whitelist: cuando la mochila este llena la maid intentara tirar todos los times de la mochila que estén en la whitelist."
     }
   ]
 }

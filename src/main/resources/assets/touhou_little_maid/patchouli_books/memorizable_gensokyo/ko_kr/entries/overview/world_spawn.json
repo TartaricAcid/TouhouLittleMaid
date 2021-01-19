@@ -1,25 +1,25 @@
 {
   "sortnum": 1,
-  "name": "World Spawn",
+  "name": "월드 스폰",
   "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
   "category": "overview",
   "pages": [
     {
       "type": "text",
-      "text": "This mod adds two mobs. $(br2)The looting of mob are important crafting ingredient.$(br2)The chance of spawn hostile creatures in this mod can be modified in the configuration file. When set to 0, these monsters can be prohibited from spawn."
+      "text": "이 모드는 두 몹을 추가합니다.$(br2)이 몹들은 중요한 조합 재료를 떨어트립니다.$(br2)적대적 생명체의 생성 확률은 설정에서 조정 가능하며, 0으로 설정시 해당 몹은 소환되지 않습니다."
     },
     {
       "type": "entity",
       "entity": "touhou_little_maid:entity.monster.fairy{OnGround:true}",
       "offset": 0.125,
-      "text": "Spawn in the plain biome at night, it will fly and simultaneously shoot danmaku to attack players and maids.",
+      "text": "밤에 평지 지형에서 스폰됩니다. 비행과 동시에 플레이어와 메이드를 향해 탄막을 쏩니다.",
       "anchor": "fairy"
     },
     {
       "type": "entity",
       "entity": "touhou_little_maid:entity.monster.rinnosuke",
       "offset": 0.125,
-      "text": "Spawn in the forest biome at night, it will attack players and maids.",
+      "text": "밤에 숲 바이옴에서 스폰되며 플레이어와 메이드를 공격합니다.",
       "anchor": "rinnosuke"
     }
   ]

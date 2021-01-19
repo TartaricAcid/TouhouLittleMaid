@@ -1,0 +1,23 @@
+{
+  "sortnum": 19,
+  "name": "メイドの遊べるブロック",
+  "icon": "touhou_little_maid:maid_joy",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'reading'}",
+      "text": "マルチブロック構造の形を取るので、十分なスペースのあるところに置いてください。"
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'piano'}",
+      "text": "メイドはランダムに遊びます。遊んでいる最中、メイドの好感度が少しづつ増加します。"
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'live'}",
+      "text": "もちろん、敵対的なモブに遭遇など危険な状況に陥ったときは一目散に逃げます。$(br2)結局の所、人生はエンターテインメントそのものよりよっぽど重要です。"
+    }
+  ]
+}

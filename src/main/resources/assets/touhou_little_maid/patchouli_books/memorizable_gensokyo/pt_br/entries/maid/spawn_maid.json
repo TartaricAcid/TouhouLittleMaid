@@ -1,0 +1,16 @@
+{
+  "sortnum": 0,
+  "name": "Spawn Maid",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The way to get a maid is very special and needs to be done through a multi-blocks altar.$(br2)Since the recipe is likely to change in the future, please check the JEI altar label.$(br2)After the maid is successfully spawned in a multi-blocks altar, you will get a cake box wrapped with the maid. You can right-click the cake box to open it."
+    },
+    {
+      "type": "text",
+      "text": "You need to right-click three times to trigger different opening stages, and finally the cake box will disappear.$(br2)You will need a cake to tame the maid. the taming items can be changed in the configuration file, which was mentioned already.$(br2)The tamed maid is almost identical to a vanilla pet, and you can right-click to open her GUI."
+    }
+  ]
+}

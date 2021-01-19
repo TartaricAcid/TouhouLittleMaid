@@ -1,0 +1,16 @@
+{
+  "sortnum": 21,
+  "name": "Draw Config Gui",
+  "icon": "minecraft:writable_book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The server-side resource pack distribution system allows every player who enters the server to forcibly install an additional maid model of the server. $(br2)With the visual drawing configuration gui, we can quickly and easily restrict the acquisition of maid skin models."
+    },
+    {
+      "type": "text",
+      "text": "After your client model is fully matched with the server, and the server has turned on the option \"Cannot change maid skin\", you can open the draw configuration gui through the /draw gui command, and the configuration gui will actively get all the maids from the server model data.$(br2)Then you can quickly modify the pool and weight in it. Click the button to save, or save and reload."
+    }
+  ]
+}

@@ -18,7 +18,7 @@
     },
     {
       "type": "text",
-      "text": "$(li)After install Journey Map Mod, the coordinates displayed by the maid at death can be directly clicked to save as the coordinates of the Journey Map, or you can ctrl click to view it under the big map window of the Journey Map."
+      "text": "$(li)Journey Map Modをインストールすると、メイドが死んだ時の座標をJourney Mapの座標として直接入力して保存することができます。また、Journey Mapの全画面マップに表示することもできます。"
     }
   ]
 }

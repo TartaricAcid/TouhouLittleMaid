@@ -1,0 +1,23 @@
+{
+  "sortnum": 19,
+  "name": "Diversión para la maid",
+  "icon": "touhou_little_maid:maid_joy",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'reading'}",
+      "text": "Estas son estructuras de varios bloques, así que por favor póngalas en un lugar con suficiente espacio."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'piano'}",
+      "text": "La maid jugará aleatoriamente en este bloque, y la amistad ira aumentando lentamente mientras la use."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'live'}",
+      "text": "Por supuesto, si se encuentran en situaciones peligrosas como criaturas hostiles, las maids tendrán como prioridad huir.$(br2)después de todo, la vida es mas importante que el entretenimiento en si."
+    }
+  ]
+}

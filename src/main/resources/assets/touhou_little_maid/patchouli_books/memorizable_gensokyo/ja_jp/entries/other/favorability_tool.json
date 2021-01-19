@@ -1,0 +1,13 @@
+{
+  "sortnum": 23,
+  "name": "Creative Favorability Tool",
+  "icon": "touhou_little_maid:creative_favorability_tool",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:creative_favorability_tool",
+      "text": "Right-click on the maid to tweak maid's favorability, cannot craft."
+    }
+  ]
+}

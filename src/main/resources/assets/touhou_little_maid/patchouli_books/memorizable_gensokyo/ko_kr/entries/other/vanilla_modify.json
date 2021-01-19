@@ -1,19 +1,19 @@
 {
   "sortnum": 8,
-  "name": "Vanilla Modify",
+  "name": "바닐라 수정",
   "icon": "minecraft:book",
   "category": "other",
   "pages": [
     {
       "type": "text",
-      "text": "Modifications to two vanilla entity models have been added to the configuration of this mod. $(br2)One can modify the vanilla slime model to yukkuri, and the other can modify the vanilla experience orb model to score point.$(br2)You can also change the vanilla totem of undying to the texture of the life point."
+      "text": "두 바닐라 모델 변경 설정이 컨피그에 추가되었습니다. $(br2)하나는 바닐라 슬라임을 윳쿠라로 바꾸며, 다른 하나는 경험치를 점수 아이템으로 바꿉니다.$(br2)또한 바닐라의 불사의 토템을 잔기 아이템으로 바꿀 수도 있습니다."
     },
     {
       "type": "image",
       "images": [
         "touhou_little_maid:textures/book/yukkuri.png"
       ],
-      "title": "Yukkuri",
+      "title": "윳쿠리",
       "border": true
     }
   ]

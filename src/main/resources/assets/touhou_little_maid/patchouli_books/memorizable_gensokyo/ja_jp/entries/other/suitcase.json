@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:suitcase",
-      "text": "The suitcase is an entity that can store items. The maid can carry it when approaching the suitcase. Shift right-click the maid to remove the suitcase."
+      "text": "スーツケースはアイテムを保管することができます。メイドはスーツケースに近づくことで携帯できます。Shiftキーを押しながらメイドを右クリックすることでスーツケースを外します。"
     }
   ]
 }

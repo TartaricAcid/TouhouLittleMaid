@@ -1,0 +1,17 @@
+{
+  "sortnum": 22,
+  "name": "Spell de alma",
+  "icon": "touhou_little_maid:smart_slab",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:smart_slab",
+      "text": "Esto no es un papel ordinario, esto tiene atado el alma de una antigua maid.$(br2)Cada jugador obtendrá un Soul Spell cuando aparezca, click derecho para liberar a la maid."
+    },
+    {
+      "type": "text",
+      "text": "El Spell puede ser reutilizado, puedes hacer click derecho sobre la maid para meterla en el Spell. El soul spell puede ser encontrado en los cofres de mazmorras muy raramente. $(br2)Puedes desactivar ambos métodos de adquisición del Soul Spell a través de la configuración, y el spell también esta limitado por la configuración de \"numero máximo de maids por jugador\"."
+    }
+  ]
+}

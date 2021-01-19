@@ -1,0 +1,20 @@
+{
+  "sortnum": 8,
+  "name": "Modification Vanilla",
+  "icon": "minecraft:book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Deux paramètres de changement d'apparence de modèle vanilla ont été ajoutés à la configuration de ce mod. $(br2)L'un peu convertir les slimes Vanilla en Yukkura, l'autre peu convertir les orbes d'EXP en point de score.$(br2)Vous pouvez également convertir le Totem Immortel Vanilla en 1uP."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/yukkuri.png"
+      ],
+      "title": "Yukkuri",
+      "border": true
+    }
+  ]
+}

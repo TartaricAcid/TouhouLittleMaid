@@ -1,0 +1,25 @@
+{
+  "sortnum": 2,
+  "name": "Power Point",
+  "icon": "minecraft:diamond_sword",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The power point is an important resource for this mod, which is obtained by killing the $(l:overview/world_spawn#fairy)maid fairy$() or $(l:overview/world_spawn#rinnosuke)rinnosuke morichika$().$(br2)Can be used for $(l:overview/multiblocks_altar)altar$() crafting."
+    },
+    {
+      "type": "text",
+      "text": "When you holds the $(l:overview/gohei_and_danmaku)gohei$(), you can see your power point number in the upper left corner of the game screen. $(br2)The maximum power point is 5, and more than this number power point no longer increases."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/power_point.png"
+      ],
+      "title": "Power Point",
+      "border": true,
+      "text": "Power point entity dropped on the ground."
+    }
+  ]
+}

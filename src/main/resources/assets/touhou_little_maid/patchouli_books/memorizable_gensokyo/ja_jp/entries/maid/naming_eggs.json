@@ -1,12 +1,12 @@
 {
   "sortnum": 12,
-  "name": "Naming Eggs",
+  "name": "スポーンエッグの名付け",
   "icon": "minecraft:name_tag",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "A specially named maid can display a special model.$(br2)By default, a maid named with $(#ff0000)=>id$() can become the player skin model corresponding to that id.$(br2)The maid resource pack can also add custom model eggs, even SHA1 encrypted model eggs."
+      "text": "メイドに特定の名前を名付けるとモデルが変わります。$(br2)通常、$(#ff0000)=>id$()という名前のメイドは、そのIDに対応するプレイヤーのモデルになることができます。$(br2)メイドのリソースパックでカスタムのモデルのスポーンエッグを追加することもできます。"
     }
   ]
 }

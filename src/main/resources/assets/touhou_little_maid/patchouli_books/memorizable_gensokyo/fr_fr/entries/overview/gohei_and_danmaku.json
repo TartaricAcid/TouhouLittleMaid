@@ -1,0 +1,28 @@
+{
+  "sortnum": 3,
+  "name": "Gohei et Danmaku",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:hakurei_gohei",
+      "link_recipe": true,
+      "text": "Le Gohei est une arme à distance qui peut être utilisée pour tirer un Danmaku et qui peut également être utilisée comme une arme de mêlée normale.$(br2)Lorsque vous avez le Gohei en main et appuyez sur alt en faisant défiler la molette de la souris, vous pouvez changer le style du Danmaku."
+    },
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:hakurei_gohei",
+      "text": "Plus le joueur possède de points de puissance, plus les dégâts et la vitesse du Danmaku sont élevés.$(br2)Le Gohei est un outil important pour construire un autel multi-blocs."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/shoot_danmaku.png"
+      ],
+      "title": "Tir Danmaku",
+      "border": true,
+      "text": "Maintenez votre Gohei afin de tirer un Danmaku."
+    }
+  ]
+}

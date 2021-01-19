@@ -7,11 +7,11 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:scarecrow",
-      "text": "The scarecrow can dispel the fairy maid, the rinnosuke and the creeper within 10 blocks.$(br2)The scarecrow can enter the player id and replace it with the head skin of the player, and can also write text on the sign on the chest."
+      "text": "案山子は10ブロック以内の妖精メイド、霖之助、クリーパーを近寄らせないことができます。$(br2)また、プレイヤーIDを入力し頭をそのプレイヤーのスキンにすることもできます。胸にテキストを描くことも可能です。"
     },
     {
       "type": "text",
-      "text": "Scarecrow has a lightning strike eggs."
+      "text": "案山子に雷が落ちると...?"
     }
   ]
 }

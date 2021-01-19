@@ -1,0 +1,13 @@
+{
+  "sortnum": 18,
+  "name": "Point P",
+  "icon": "touhou_little_maid:power_point",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:power_point",
+      "text": "Faites un clic droit pour lancer et obtenir des Points P.$(br2)Des Points P sous la forme d'objet peuvent être trouvés dans les coffres de donjon."
+    }
+  ]
+}

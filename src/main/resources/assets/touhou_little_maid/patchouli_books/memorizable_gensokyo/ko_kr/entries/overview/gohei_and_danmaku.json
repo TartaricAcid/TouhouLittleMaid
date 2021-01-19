@@ -1,6 +1,6 @@
 {
   "sortnum": 3,
-  "name": "Gohei And Danmaku",
+  "name": "무녀봉과 탄막",
   "icon": "touhou_little_maid:hakurei_gohei",
   "category": "overview",
   "pages": [
@@ -20,7 +20,7 @@
       "images": [
         "touhou_little_maid:textures/book/shoot_danmaku.png"
       ],
-      "title": "Shoot Danmaku",
+      "title": "탄막 쏘기",
       "border": true,
       "text": "The player holds gohei to shoot danmaku"
     }

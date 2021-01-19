@@ -1,0 +1,25 @@
+{
+  "sortnum": 2,
+  "name": "Point P",
+  "icon": "minecraft:diamond_sword",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Le point P est une ressource importante pour ce mod qui est obtenu en tuant une $(l:overview/world_spawn#fairy)Maid féerique$() ou $(l:overview/world_spawn#rinnosuke)Rinnosuke Morichika$().$(br2)Peut être utilisé pour la fabrication du $(l:overview/multiblocks_altar)sanctuaire$() ."
+    },
+    {
+      "type": "text",
+      "text": "Lorsque vous tenez le $(l:overview/gohei_and_danmaku)Gohei$(), vous pouvez voir votre nombre de point P dans le coin supérieur gauche de l'écran du jeu. $(br2)Vous ne pouvez pas avoir plus de 5 Point P."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/power_point.png"
+      ],
+      "title": "Point P",
+      "border": true,
+      "text": "L'objet Point P est tombé au sol."
+    }
+  ]
+}

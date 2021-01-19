@@ -7,11 +7,11 @@
     {
       "type": "crafting",
       "recipe": "touhou_little_maid:hata_sasimono",
-      "text": "This maid will hurt the player, and other maids or pets. That is why hata sasimono was designed."
+      "text": "旗指し物をつけたメイドは他のプレイヤーやメイド、ペットを攻撃します。旗指し物の模様は変更できます。"
     },
     {
       "type": "text",
-      "text": "Craft a hata sasimono, and then right-click on a maid to add hata sasimono to the maid. You can find the corresponding button to switch the style of hata sasimono in the main GUI.$(br2)You can also customize your own hata sasimono. Check the wiki for more instructions."
+      "text": "旗指物を持ってメイドに右クリックすることで、メイドに旗指物を装着させることができます。メイドのGUIに旗指物の模様の設定ができるボタンがあります。$(br2)旗指物の模様を自分でカスタマイズすることもできます。詳細はwikiをご覧ください。"
     }
   ]
 }

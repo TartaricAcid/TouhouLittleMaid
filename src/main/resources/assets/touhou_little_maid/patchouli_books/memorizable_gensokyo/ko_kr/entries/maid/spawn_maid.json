@@ -1,6 +1,6 @@
 {
   "sortnum": 0,
-  "name": "Spawn Maid",
+  "name": "메이드 소환",
   "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
   "category": "maid",
   "pages": [

@@ -1,6 +1,6 @@
 {
   "sortnum": 2,
-  "name": "Power Point",
+  "name": "파워 점수",
   "icon": "minecraft:diamond_sword",
   "category": "overview",
   "pages": [
@@ -17,7 +17,7 @@
       "images": [
         "touhou_little_maid:textures/book/power_point.png"
       ],
-      "title": "Power Point",
+      "title": "파워 점수",
       "border": true,
       "text": "Power point entity dropped on the ground."
     }

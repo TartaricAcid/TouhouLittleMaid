@@ -1,0 +1,13 @@
+{
+  "sortnum": 12,
+  "name": "Chariot à haut-parleur",
+  "icon": "touhou_little_maid:trolley_audio",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:trolley_audio",
+      "text": "Le chariot à haut-parleur est similaire à la valise et son utilisation est exactement la même que le jukebox vanilla."
+    }
+  ]
+}

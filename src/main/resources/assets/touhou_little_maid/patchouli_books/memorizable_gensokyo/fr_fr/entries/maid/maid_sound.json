@@ -1,0 +1,12 @@
+{
+  "sortnum": 11,
+  "name": "Bruitage de Maid",
+  "icon": "minecraft:jukebox",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Vous pouvez créer des packs de sons personnalisés pour remplacer ou étendre les effets sonores de la Maid. Il y a des boutons connexes en bas de l'inventaire de la servante. $(br2)Cliquez sur le bouton pour ouvrir l'interface de lecture du son."
+    }
+  ]
+}

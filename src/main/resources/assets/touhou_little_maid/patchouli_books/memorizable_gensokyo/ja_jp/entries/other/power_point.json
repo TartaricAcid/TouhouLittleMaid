@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:power_point",
-      "text": "Right-click is thrown out, can drop the power point entity."
+      "text": "右クリックで投げるとP点をドロップします。$(br2)このP点はダンジョンなどの構造物のチェストにあります。"
     }
   ]
 }

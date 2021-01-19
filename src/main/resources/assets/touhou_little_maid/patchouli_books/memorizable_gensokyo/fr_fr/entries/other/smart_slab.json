@@ -1,0 +1,17 @@
+{
+  "sortnum": 22,
+  "name": "Sort d'âme",
+  "icon": "touhou_little_maid:smart_slab",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:smart_slab",
+      "text": "Ce n'est pas un papier ordinaire, il est attaché à l'âme d'une ancienne servante.$(br2)Chaque joueur recevra un sort d'âme quand il apparaît, faites un clic droit pour libérer une maid."
+    },
+    {
+      "type": "text",
+      "text": "Le sort d'âme peut être réutilisé, vous pouvez faire un clic droit sur la maid pour la remettre dans le parchemin. Il est également très rarement possible de trouver un sort d'âme dans les coffres de donjon.$(br2)Vous pouvez désactiver ces deux méthodes d'acquisition dans les configurations, et le sort sera également restreint par la configuration \"nombre maximum de maids par joueurs\"."
+    }
+  ]
+}

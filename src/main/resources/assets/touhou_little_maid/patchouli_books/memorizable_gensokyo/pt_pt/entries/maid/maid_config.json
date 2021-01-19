@@ -1,0 +1,12 @@
+{
+  "sortnum": 6,
+  "name": "Maid Config",
+  "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:kawasiro_nitori'}",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This mod adds a lot of configuration for maids. You can enable/disable each mode of the maids, set some attributes of the maids, and limit the maximum number of maids that can be tamed by the player."
+    }
+  ]
+}

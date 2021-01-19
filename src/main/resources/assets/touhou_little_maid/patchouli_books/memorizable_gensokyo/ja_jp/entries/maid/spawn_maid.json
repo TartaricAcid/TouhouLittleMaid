@@ -1,16 +1,16 @@
 {
   "sortnum": 0,
-  "name": "Spawn Maid",
+  "name": "メイドの召喚",
   "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "The way to get a maid is very special and needs to be done through a multi-blocks altar.$(br2)Since the recipe is likely to change in the future, please check the JEI altar label.$(br2)After the maid is successfully spawned in a multi-blocks altar, you will get a cake box wrapped with the maid. You can right-click the cake box to open it."
+      "text": "メイドを召喚する方法は非常に特殊であり、祭壇を介して行う必要があります。$(br2)レシピは今後変更される可能性があるので、JEIでご確認ください。$(br2)メイドが祭壇に上手く召喚された後、ケーキボックスを手に入れます。右クリックして開封できます。"
     },
     {
       "type": "text",
-      "text": "You need to right-click three times to trigger different opening stages, and finally the cake box will disappear.$(br2)You will need a cake to tame the maid. the taming items can be changed in the configuration file, which was mentioned already.$(br2)The tamed maid is almost identical to a vanilla pet, and you can right-click to open her GUI."
+      "text": "ケーキボックスは3回右クリックする必要があります。$(br2)メイドを雇うにはケーキが必要です。雇うのに必要なアイテムは設定から変更できます。$(br2)雇われたメイドはバニラのペットと同じような行動を取ります。メイドを右クリックするとそのメイドのGUIを開くことができます。"
     }
   ]
 }

@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "This mod adds a lot of configuration for maids. You can enable/disable each mode of the maids, set some attributes of the maids, and limit the maximum number of maids that can be tamed by the player."
+      "text": "このmodはメイドに関する様々な機能を追加します。メイドのモードを有効/無効にしたり、メイドに特性を追加したり、プレイヤーが雇うことのできるメイドの最大数を設定できたりします。"
     }
   ]
 }

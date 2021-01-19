@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:kappa_compass",
-      "text": "The compass is used in conjunction with the maid's home mode. Right-clicking on a block records the coordinates, then right-clicking the maid can set coordinates for it."
+      "text": "コンパスはメイドがホームモードのときに使用できます。ブロックを右クリックすると座標が記録され、その後にメイドを右クリックすることで座標を設定することができます。"
     },
     {
       "type": "text",

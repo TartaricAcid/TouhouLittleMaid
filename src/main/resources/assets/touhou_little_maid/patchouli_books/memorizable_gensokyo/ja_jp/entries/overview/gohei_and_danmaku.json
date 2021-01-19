@@ -8,7 +8,7 @@
       "type": "spotlight",
       "item": "touhou_little_maid:hakurei_gohei",
       "link_recipe": true,
-      "text": "The gohei is a ranged weapon that can be used to shoot danmaku, and it also can be used as a normal melee weapon.$(br2)When you hold the gohei and press alt to scroll the mouse wheel, you can switch the danmaku style of the shoot."
+      "text": "博霊のお祓い棒は弾幕を撃つことができる射程範囲の広い武器であり、近接武器としても使用できます。$(br2)博霊のお祓い棒を持ちながらAltキーを押してスクロールすると、弾幕のスタイルを切り替えることができます。"
     },
     {
       "type": "crafting",

@@ -1,0 +1,17 @@
+{
+  "sortnum": 14,
+  "name": "Épouvantail",
+  "icon": "touhou_little_maid:scarecrow",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:scarecrow",
+      "text": "L'épouvantail fait fuir les Maids féeriques, les Rinnosuke et les Creepers dans un rayon de 10 blocs.$(br2)Vous pouvez entrer le pseudo d'un joueur sur l'épouvantail pour changer l'apparence de sa tête, et vous pouvez également écrire sur son panneau."
+    },
+    {
+      "type": "text",
+      "text": "Quelque chose se produira s'il est frappé par la foudre."
+    }
+  ]
+}

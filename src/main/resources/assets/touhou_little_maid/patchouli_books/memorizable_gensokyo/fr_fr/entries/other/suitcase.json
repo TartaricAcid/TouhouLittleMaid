@@ -1,0 +1,13 @@
+{
+  "sortnum": 11,
+  "name": "Valise",
+  "icon": "touhou_little_maid:suitcase",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:suitcase",
+      "text": "La valise est une entité qui peut stocker des objets. La maid peut la transporter quand elle s'en approche. Faite un shift + clic droit pour la lui enlever."
+    }
+  ]
+}

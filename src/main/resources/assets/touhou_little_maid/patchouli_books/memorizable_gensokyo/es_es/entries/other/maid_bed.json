@@ -1,0 +1,17 @@
+{
+  "sortnum": 19,
+  "name": "Cama de maid",
+  "icon": "touhou_little_maid:maid_bed",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_bed",
+      "text": "El jugador puede dormir, y naturalmente la maid también puede dormir. Por la noche o en una tormenta eléctrica, la criada tiene la posibilidad de buscar por una cama cercana para dormir."
+    },
+    {
+      "type": "text",
+      "text": "Cuando la maid duerma esta no sera atacada por criaturas hostiles, y tampoco podrás abrir la GUI mientras duerma.$(br2)A nadie le gusta que le molestes mientras duerme y eso incluye a las maids así que no las despiertes o la amistad se vera muy afectada."
+    }
+  ]
+}

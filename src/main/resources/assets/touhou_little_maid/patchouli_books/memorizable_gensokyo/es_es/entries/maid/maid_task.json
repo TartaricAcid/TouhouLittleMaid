@@ -23,6 +23,14 @@
     {
       "type": "text",
       "text": "$(li)Alimentar: si le das los items necesarios para alimentar animales. la maid alimentara activamente a los animales de los alrededores.$(li)extinción: La maid necesita tener un extintor en la mano principal. cuando este modo es encendido la main va a apagar el fuego de su propietario, de si misma y de las entidades domesticadas dentro de un ratio de 3 bloques."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Destroy: need to be used in conjunction with the destroy guide. First use the destroy guide to mark the block to be destroyed, then place it in maid's offhand, and finally place a pickaxe in maid's mainhand. The maid can destroy the marked blocks.$(li)Furnace: It needs to be used in conjunction with the furnace guide."
+    },
+    {
+      "type": "text",
+      "text": "First open furnace guide's GUI to mark the required fuel and items, and then place it in maid's mainhand. The maid will look for the surrounding furnaces to use.$(li)Brewing: need to be used in conjunction with potion guide. First open the potion guide's GUI to mark the recipe for potion, and then place it in maid's mainhand. The maid will find the brewing stands around to brew."
     }
   ]
 }

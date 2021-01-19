@@ -1,0 +1,32 @@
+{
+  "sortnum": 20,
+  "name": "Server Pack Distribution",
+  "icon": "minecraft:book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The maid can easily add additional resources through the resource pack, just as simple as replacing texture and shadow.$(br2)But there is a problem on the server. Your friend must install the same resource pack as you, so that he can see the same maid model as you."
+    },
+    {
+      "type": "text",
+      "text": "The server owner also needs to distribute resource packs to each player in advance, and tell them to install it before entering the server, so that they can see the additional maid models. $(br2)This is a very difficult and inconvenient thing."
+    },
+    {
+      "type": "text",
+      "text": "Now you only need to put the maid resource pack in the touhou-little-maid-server-pack folder in the server directory, and enter the /tlm_server_pack reload command. $(br2)Then every player who enters the server will actively download the resources in this folder Package and install silently."
+    },
+    {
+      "type": "text",
+      "text": "We also fully considered the problems of server network congestion and player modification models. $(br2)After the player enters the server, the resource pack is downloaded intermittently, and will not cause a lot of traffic in an instant."
+    },
+    {
+      "type": "text",
+      "text": "The resource pack downloaded by the server will also be cached to avoid wasting valuable bandwidth. A CRC32 cyclic redundancy value check is performed every time a downloaded resource pack is checked. $(br2)This check method avoids the possibility of some players modifying the resource pack."
+    },
+    {
+      "type": "text",
+      "text": "And the resource pack installed silently on the server side will not affect other operations. You can still install additional resource packs on your client. $(br2)When you log out of the server and enter the single play, or other servers, these silently installed resource packs will also be uninstalled automatically."
+    }
+  ]
+}

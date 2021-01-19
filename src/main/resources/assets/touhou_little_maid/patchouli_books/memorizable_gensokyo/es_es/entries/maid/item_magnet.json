@@ -1,0 +1,13 @@
+{
+  "sortnum": 15,
+  "name": "Item Magnet",
+  "icon": "touhou_little_maid:item_magnet_bauble",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:item_magnet_bauble",
+      "text": "A bauble that can expand the pickup range. $(br2)After being equipped, the maid's pickup range of items, arrows, experience orb, and power points will be greatly increased."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "sortnum": 19,
+  "name": "Блок счастья горничной",
+  "icon": "touhou_little_maid:maid_joy",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'reading'}",
+      "text": "Это многоблочные структуры, поэтому поместите их в просторном месте."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'piano'}",
+      "text": "Горничная будет играть на этих блоках и привязанность горничной будет медленно расти."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_joy{MaidJoyType:'live'}",
+      "text": "Конечно, если они столкнулись с опасными ситуациями, такими как враждебные существа, то горничные все равно возьмут на себя инициативу убежать. $(br2)В конце концов, жизнь всегда важнее чем свое развлечение."
+    }
+  ]
+}

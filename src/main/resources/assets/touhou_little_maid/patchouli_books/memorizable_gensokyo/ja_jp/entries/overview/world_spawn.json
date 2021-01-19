@@ -6,20 +6,20 @@
   "pages": [
     {
       "type": "text",
-      "text": "This mod adds two mobs. $(br2)The looting of mob are important crafting ingredient.$(br2)The chance of spawn hostile creatures in this mod can be modified in the configuration file. When set to 0, these monsters can be prohibited from spawn."
+      "text": "このModはモブを追加します。$(br2)ドロップアイテムは貴重なクラフトの素材となります。$(br2)Modにより追加された敵対的なモブはコンフィグによりスポーンの確率を変更できます。値を0に設定した場合、スポーンしなくなります。"
     },
     {
       "type": "entity",
       "entity": "touhou_little_maid:entity.monster.fairy{OnGround:true}",
       "offset": 0.125,
-      "text": "Spawn in the plain biome at night, it will fly and simultaneously shoot danmaku to attack players and maids.",
+      "text": "夜に平原にスポーンし、飛ぶと同時に弾幕を撃ちプレイヤーやメイドを攻撃します。",
       "anchor": "fairy"
     },
     {
       "type": "entity",
       "entity": "touhou_little_maid:entity.monster.rinnosuke",
       "offset": 0.125,
-      "text": "Spawn in the forest biome at night, it will attack players and maids.",
+      "text": "夜に森林バイオームにスポーンし、プレイヤーやメイドを攻撃します。",
       "anchor": "rinnosuke"
     }
   ]

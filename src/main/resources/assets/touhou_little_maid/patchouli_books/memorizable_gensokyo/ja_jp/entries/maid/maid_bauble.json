@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "The third tab of the maids' GUI is the bauble inventory. This mod provides several baubles that can be triggered to protect maids under certain conditions:$(li)Ultramarine Orb Elixir: Can be used 6 times to avoid a maid's death.$(li)Tombstone Bauble: Tombstones that generate upon a maid's death to preserve their items."
+      "text": "メイドのGUIの3つ目のタブは宝玉インベントリです。特定の条件下で効能を発揮する宝玉をもたせることができます。$(li)紺珠の薬:メイドが死を回避するために6回使用することができます。$(li)墓石の宝玉:メイドが死んだ時に墓石を設置し、メイドのアイテムを保存することができます。"
     },
     {
       "type": "text",
-      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is canceled.$(li)Nimble Fabric: When a maid equipped with this bauble is hit by projectile, her behavior will be exactly the same as the ender."
+      "text": "$(li)耐性の宝玉:特定の条件下の時、ダメージを無効化します。$(li)ひらり布:遠距離攻撃がメイドに向かってきた時、エンダーマンのようにテレポートします。"
     }
   ]
 }

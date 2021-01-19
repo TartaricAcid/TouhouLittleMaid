@@ -1,13 +1,13 @@
 {
   "sortnum": 13,
-  "name": "Vehicle",
+  "name": "乗り物",
   "icon": "touhou_little_maid:maid_vehicle",
   "category": "other",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_vehicle",
-      "text": "The vehicle is a series of entities that the maid can drive. The maid will drive it when approaching a $(l)empty$() vehicle, and then the surrounding maids can ride the vehicle.$(br2)Players can also ride this vehicle by right click."
+      "text": "乗り物はメイドが運転できるエンティティです。$(l)誰も乗っていない$()乗り物にメイドが近づくと、その乗り物をメイドが運転することができます。$(br2)周囲のメイドやプレイヤーも乗り物に乗ることができます。"
     }
   ]
 }

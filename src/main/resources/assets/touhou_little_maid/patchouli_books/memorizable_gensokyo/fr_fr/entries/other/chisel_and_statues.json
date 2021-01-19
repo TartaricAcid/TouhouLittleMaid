@@ -1,0 +1,17 @@
+{
+  "sortnum": 16,
+  "name": "Burin et Statues",
+  "icon": "touhou_little_maid:chisel",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:chisel",
+      "text": "Faites un clic droit sur l'argile avec un burin pour créer des statues de différentes tailles. Prend actuellement en charge les tailles 1x1x1, 1x1x2, 2x2x4, 3x3x6."
+    },
+    {
+      "type": "text",
+      "text": "Vous pouvez graver la Maid présente sur une photo en là tenant dans la main principal et avec un burin dans la main secondaire. Faite ensuite un clic droit sur un bloc d'argile."
+    }
+  ]
+}

@@ -7,11 +7,11 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:portable_audio",
-      "text": "The portable audio can be picked up by the maid, right-click it can open the GUI, play network music, and synchronize to players within 96 squares.$(br2)Currently only NetEase Cloud Music is supported, but we will add support for more music websites later."
+      "text": "ラジカセを右クリックすることでGUIを開くことができます。ネットワークに繋いで音楽を再生することができ、96マス以内のプレイヤーと同期します。$(br2)現在サポートされているのはNetEase Cloud Musicのみですが、更に多くの音楽サイトのサポートを追加する予定です。"
     },
     {
       "type": "text",
-      "text": "Audio playlists can be added through the resource pack, but you need to restart the game to load these playlists.$(br2)The audio can be disabled by modifying the configuration, or you can mute it by adjusting the volume of the record."
+      "text": "リソースパックからプレイリストを追加できますが、プレイリストを読み込むにはゲームを再起動する必要があります。$(br2)設定を変更するか、音量を調整してミュートにすることができます。"
     }
   ]
 }

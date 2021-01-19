@@ -1,6 +1,6 @@
 {
   "sortnum": 16,
-  "name": "Chisel and Statues",
+  "name": "彫刻刀と彫像",
   "icon": "touhou_little_maid:chisel",
   "category": "other",
   "pages": [
@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "The player holds a photo of the maid in offhand, the mainhand holds the chisel, then right-clicks the lower left corner of the multi-block structure to engrave the maid in the photo."
+      "text": "オフハンドにメイドの写真、メインハンドに彫刻刀を持って粘土ブロックに右クリックすると写真のメイドを彫刻することができます。"
     }
   ]
 }

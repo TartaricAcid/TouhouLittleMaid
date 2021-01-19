@@ -1,0 +1,13 @@
+{
+  "sortnum": 10,
+  "name": "Sac à dos",
+  "icon": "touhou_little_maid:maid_backpack",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_backpack",
+      "text": "Le sac à dos peut être utilisé pour agrandir l'inventaire de la Maid. Il peut être équipé en tenant le sac à dos et en faisant un clic droit sur la Maid. Le sac à dos a trois niveaux. $(br2)Utilisez la caméra fera tomber le sac à dos de la Maid par terre, faite ensuite un shift + clic gauche dessus afin de le récupérer."
+    }
+  ]
+}

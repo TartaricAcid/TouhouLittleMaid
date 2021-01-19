@@ -1,0 +1,13 @@
+{
+  "sortnum": 16,
+  "name": "Mute Bauble",
+  "icon": "touhou_little_maid:mute_bauble",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:mute_bauble",
+      "text": "After equipped with this bauble, the maid will become very quiet."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "sortnum": 1,
+  "name": "Spawn de créature",
+  "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Ce mod ajoute deux monstres. $(br2)Leur loot est un important ingrédient de craft.$(br2)Les chances de faire apparaître ces créatures hostiles peuvent être modifiées dans le fichier de configuration du mod. Quand défini à 0, ces monstres sont interdits d’apparition."
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.fairy{OnGround:true}",
+      "offset": 0.125,
+      "text": "Apparait la nuit dans le biome plaine, elle peut voler et tirera avec un Danmaku pour attaquer les joueurs et les maids.",
+      "anchor": "fairy"
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:entity.monster.rinnosuke",
+      "offset": 0.125,
+      "text": "Apparait la nuit dans le biome de la forêt, il attaquera les joueurs et les servantes.",
+      "anchor": "rinnosuke"
+    }
+  ]
+}

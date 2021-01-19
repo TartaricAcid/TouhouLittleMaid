@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:extinguisher",
-      "text": "The items used with the maid extinguishing mode and cannot be used by players."
+      "text": "メイドが消火モードの時のみに使用され、プレイヤーは使うことができません。"
     }
   ]
 }

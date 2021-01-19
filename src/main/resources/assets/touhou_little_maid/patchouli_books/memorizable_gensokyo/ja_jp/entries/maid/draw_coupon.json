@@ -1,32 +1,32 @@
 {
   "sortnum": 9,
-  "name": "Draw Coupon",
+  "name": "クーポンの入手",
   "icon": "touhou_little_maid:maid_model_coupon:5",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "When the free switching maid model function was turned off in the configuration file, we designed a new skin switching method for it.$(br2)Similar to a card drawing game, players consume emerald or gashapon coin to draw gashapon and obtain maid model coupon from it."
+      "text": "メイドのモデルの変更が無効化されている時の対処として新しい変更の方法があります。$(br2)エメラルドまたはガシャポンコインを使用してガシャポンを引き、メイドのモデルを変更できるクーポンをゲットできます。"
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon_machines",
-      "text": "Right-click with emerald or gashapon coin to get a gashapon, gashapon's level and probability can be customized."
+      "text": "エメラルドやガシャポンコインを持って右クリックすると、ガシャポンが出てきます。ガシャポンの中身の確率やレアリティはカスタマイズできます。"
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon:4",
-      "text": "Right-click gashapon to get model coupon. gashapon of different levels can get model coupon of different levels. $(br2)The probability can be customized through the csv file, for details, please see the mod's wiki"
+      "text": "右クリックでガシャポンは様々なモデルのメイドモデルクーポンを排出します。ガシャポンにはレアリティがあり、そのレアリティに対応したクーポンが出てきます。$(br2)確率はcsvファイルでカスタマイズできます。詳細についてはwikiを参照してください。"
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_model_coupon:5",
-      "text": "Right-click on a maid to switch its model."
+      "text": "メイドモデルクーポンを持ってメイドを右クリックすることでモデルを切り替えます。"
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon_coin",
-      "text": "Kill the rinnosuke will get a certain amount of gashapon coins. Secondly, you can obtain gashapon coins through model coupon craft."
+      "text": "霖之助を倒すとガシャポンコインをドロップします。また、メイドモデルクーポンからもガシャポンコインをクラフトできます。"
     }
   ]
 }

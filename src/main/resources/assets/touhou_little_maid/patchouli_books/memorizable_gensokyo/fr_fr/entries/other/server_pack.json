@@ -1,0 +1,32 @@
+{
+  "sortnum": 20,
+  "name": "Server Pack Distribution",
+  "icon": "minecraft:book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "La maid peut facilement ajouter des ressources supplémentaires via le pack de ressources, tout aussi simple que de remplacer la texture et l'ombre.$(br2)Mais il y a un problème sur le serveur. Votre ami doit installer le même pack de ressources que vous, afin qu'il puisse voir le même modèle de maid que vous."
+    },
+    {
+      "type": "text",
+      "text": "Le propriétaire du serveur doit également distribuer les packs de ressources à chaque joueur à l'avance, et dites-leur de l'installer avant d'entrer dans le serveur afin qu'ils puissent voir les modèles supplémentaires des maids. $(br2)C'est quelque chose de très difficile et peu pratique."
+    },
+    {
+      "type": "text",
+      "text": "Il vous suffit maintenant de placer le pack de ressources maid dans le dossier touhou-little-maid-server-pack du répertoire du serveur, et d'entrer la commande /tlm_server_pack. $(br2)Ensuite, chaque joueur qui entre sur le serveur téléchargera et installera les ressources de ce package."
+    },
+    {
+      "type": "text",
+      "text": "Nous avons également pris en considération les problèmes de congestion du réseau du serveur et des modèles de modification des joueurs. $(br2)Une fois que le joueur est entré sur le serveur, le pack de ressources est téléchargé par intermittence, et ne causera pas beaucoup de trafic en un instant."
+    },
+    {
+      "type": "text",
+      "text": "Le pack de ressources téléchargé par le serveur sera également mis en cache pour éviter de gaspiller une bande passante précieuse. Une vérification de la valeur de redondance cyclique CRC32 est effectuée chaque fois qu'un pack de ressources téléchargé est vérifié. $(br2)Cette méthode de vérification évite la possibilité que certains joueurs modifient le pack de ressources."
+    },
+    {
+      "type": "text",
+      "text": "Et le pack de ressources installé sur le serveur n'affectera pas les autres opérations. Vous pouvez toujours installer des packs de ressources supplémentaires sur votre client. $(br2)Lorsque vous vous déconnectez du serveur et entrez dans un seul jeu ou d'autres serveurs, ces packs de ressources installés seront également désinstallés automatiquement."
+    }
+  ]
+}

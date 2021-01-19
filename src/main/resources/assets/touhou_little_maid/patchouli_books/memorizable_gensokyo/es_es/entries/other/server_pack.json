@@ -1,0 +1,32 @@
+{
+  "sortnum": 20,
+  "name": "Distribución del Paquete del Servidor",
+  "icon": "minecraft:book",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "La maid puede agregar fácilmente recursos adicionales a través del paquete de recursos, tan simple como reemplazar la textura y sombras.$(br2)Pero hay un problema en servidores. Tu amigo debe instalar el mismo paquete de recursos que tú, para que pueda ver el mismo modelo de doncella que tú."
+    },
+    {
+      "type": "text",
+      "text": "El propietario del servidor también necesita distribuir los paquetes de recursos a cada jugador de antemano, y dígales que lo instalen antes de entrar en el servidor, de modo que puedan ver los modelos de maid adicionales. $(br2)Esto es algo muy difícil e inconveniente."
+    },
+    {
+      "type": "text",
+      "text": "Ahora sólo tiene que poner el paquete de recursos de maid en la carpeta touhou-little-maid-server-pack en el directorio del servidor, e introducir el comando /tlm_server_pack. $(br2)Entonces cada jugador que entre en el servidor descargará e instalara los recursos ese paquete."
+    },
+    {
+      "type": "text",
+      "text": "También hemos tenido en cuenta los problemas de congestión de la red del servidor y los modelos de modificación de los jugadores. $(br2)Después de que el jugador entre en el servidor, el paquete de recursos se descarga intermitentemente, y no causará mucho tráfico en un instante."
+    },
+    {
+      "type": "text",
+      "text": "El paquete de recursos descargado por el servidor también será cacheado para evitar perder el valioso ancho de banda. Una comprobación del valor de redundancia cíclica CRC32 se realiza cada vez que se marca un paquete de recursos descargado. $(br2)Este método de verificación evita la posibilidad de que algunos jugadores modifiquen el paquete de recursos."
+    },
+    {
+      "type": "text",
+      "text": "Y el paquete de recursos instalado en el servidor no afectará a otras operaciones. Todavía puede instalar paquetes de recursos adicionales en su cliente. $(br2)Cuando cierras sesión del servidor e ingresas a un solo juego, o a otros servidores, estos paquetes de recursos instalados se desinstalarán automáticamente."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "sortnum": 3,
-  "name": "Marisa Broom",
+  "name": "마리사의 빗자루",
   "icon": "touhou_little_maid:marisa_broom",
   "category": "other",
   "pages": [
@@ -14,7 +14,7 @@
       "images": [
         "touhou_little_maid:textures/book/broom.png"
       ],
-      "title": "Marisa Broom",
+      "title": "마리사의 빗자루",
       "border": true,
       "text": "빗자루에 타고 있는 메이드"
     },

@@ -1,0 +1,20 @@
+{
+  "sortnum": 5,
+  "name": "Favorability",
+  "icon": "minecraft:cake",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Favorability system is a way for a maid to improve her attributes. If you can take good care of your maid, her favorability will increase rapidly. $(br2)And at the same time, the maid's healthy, healthy recovery speed and attack value will also be greatly improved."
+    },
+    {
+      "type": "text",
+      "text": "The following operations can increase the maid's favorability:$(li)The maid wakes up naturally after falling asleep$(li)The maid plays on the book desk, electronic piano, and live station$(br2)The following operations will reduce the maid's favorability:$(li)Forcibly wake the sleeping maid$(li)Maid injured$(li)Maid death"
+    },
+    {
+      "type": "text",
+      "text": "$(li)The player accidentally injured the maid (the hata sasimono can reduce the value)$(li)The maid is still working during thunderstorms or night$(br2)There are currently five levels of favorability. Low favorability currently does not have any negative effects, but high favorability can improve the attributes of a maid."
+    }
+  ]
+}
