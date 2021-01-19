@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.bauble;
 
 import com.github.tartaricacid.touhoulittlemaid.api.AbstractEntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.IMaidBauble;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.WirelessIOGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -15,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.bytes2Booleans;
 import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class WirelessIOBauble implements IMaidBauble {
@@ -136,7 +136,7 @@ public class WirelessIOBauble implements IMaidBauble {
                 slotConfigTmp[maidInv.getSlots() - 2] = slotConfigTmp[45];
                 slotConfigTmp[maidInv.getSlots() - 1] = slotConfigTmp[46];
             }
-            boolean[] slotConfigData = WirelessIOGuiContainer.bytes2Booleans(slotConfigTmp);
+            boolean[] slotConfigData = bytes2Booleans(slotConfigTmp);
             IItemHandler filterList = ItemWirelessIO.getFilterList(baubleItem);
 
             if (isInput) {

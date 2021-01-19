@@ -28,7 +28,6 @@ public class ItemHammer extends Item {
         setTranslationKey(TouhouLittleMaid.MOD_ID + ".hammer");
         setMaxStackSize(1);
         setCreativeTab(MaidItems.MAIN_TABS);
-        setMaxDamage(64);
     }
 
     public static void setStoreBlockPos(ItemStack hammer, BlockPos pos) {

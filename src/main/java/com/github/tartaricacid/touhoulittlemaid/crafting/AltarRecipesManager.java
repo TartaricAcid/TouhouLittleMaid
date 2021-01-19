@@ -62,10 +62,12 @@ public class AltarRecipesManager {
         ProcessingInput blockPinkWool = ItemDefinition.of(Blocks.WOOL, 6);
         ProcessingInput blockGrayWool = ItemDefinition.of(Blocks.WOOL, 8);
         ProcessingInput blockYellowWool = ItemDefinition.of(Blocks.WOOL, 4);
+        ProcessingInput anyWool = ItemDefinition.of(Blocks.WOOL, OreDictionary.WILDCARD_VALUE);
         ProcessingInput minecart = ItemDefinition.of(Items.MINECART);
         ProcessingInput blockBrownConcrete = ItemDefinition.of(Blocks.CONCRETE, 7);
         ProcessingInput blockLightBlueConcrete = ItemDefinition.of(Blocks.CONCRETE, 3);
         ProcessingInput blockRedConcrete = ItemDefinition.of(Blocks.CONCRETE, 14);
+        ProcessingInput enderPearl = OreDictDefinition.of("enderpearl");
 
         addRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "spawn_maid"),
                 new SpawnMaidRecipe(
@@ -108,7 +110,7 @@ public class AltarRecipesManager {
 
         addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_elixir"),
                 0.3f, new ItemStack(MaidItems.ULTRAMARINE_ORB_ELIXIR),
-                OreDictDefinition.of("blockEmerald"), OreDictDefinition.of("enderpearl"), dyeCyan,
+                OreDictDefinition.of("blockEmerald"), enderPearl, dyeCyan,
                 dyeCyan, dyeCyan, dyeCyan);
 
         addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_explosion_protect_bauble"),
@@ -143,7 +145,7 @@ public class AltarRecipesManager {
 
         addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_tombstone_bauble"),
                 0.3f, new ItemStack(MaidItems.TOMBSTONE_BAUBLE),
-                ItemDefinition.of(Blocks.CHEST), ItemDefinition.of(Blocks.RED_FLOWER), OreDictDefinition.of("enderpearl"),
+                ItemDefinition.of(Blocks.CHEST), ItemDefinition.of(Blocks.RED_FLOWER), enderPearl,
                 cobblestone, cobblestone, cobblestone);
 
         addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_maid_beacon"),
@@ -230,6 +232,42 @@ public class AltarRecipesManager {
                 0.2f, new ItemStack(MaidItems.MAID_BED),
                 blockPinkWool, blockPinkWool, blockPinkWool,
                 plankWood, plankWood, plankWood);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_nimble_fabric"),
+                0.2f, new ItemStack(MaidItems.NIMBLE_FABRIC),
+                enderPearl, enderPearl, enderPearl,
+                anyWool, anyWool, anyWool);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_wireless_io"),
+                0.2f, new ItemStack(MaidItems.WIRELESS_IO),
+                enderPearl, OreDictDefinition.of("chestWood"), ItemDefinition.of(Blocks.HOPPER));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_item_magnet_bauble"),
+                0.2f, new ItemStack(MaidItems.ITEM_MAGNET_BAUBLE),
+                redstone, redstone, OreDictDefinition.of("chestWood"),
+                ingotIron, ingotIron, ingotIron);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_mute_bauble"),
+                0.2f, new ItemStack(MaidItems.MUTE_BAUBLE),
+                anyWool, anyWool, clayBall,
+                clayBall, clayBall);
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_break_guide"),
+                0.2f, new ItemStack(MaidItems.HAMMER),
+                ItemDefinition.of(Items.BOOK), ItemDefinition.of(Items.IRON_PICKAXE), ItemDefinition.of(Items.COMPASS));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_furnace_guide"),
+                0.2f, new ItemStack(MaidItems.FURNACE_GUIDE),
+                ItemDefinition.of(Items.BOOK), ItemDefinition.of(Blocks.FURNACE), ItemDefinition.of(Items.COMPASS));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_potion_guide"),
+                0.2f, new ItemStack(MaidItems.POTION_GUIDE),
+                ItemDefinition.of(Items.BOOK), ItemDefinition.of(Items.GLASS_BOTTLE), ItemDefinition.of(Items.COMPASS));
+
+        addItemCraftRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_trumpet"),
+                0.2f, new ItemStack(MaidItems.TRUMPET),
+                ingotGold, ingotGold, ingotIron,
+                ingotIron, ingotIron, ItemDefinition.of(Blocks.NOTEBLOCK));
     }
 
     public static AltarRecipesManager instance() {
