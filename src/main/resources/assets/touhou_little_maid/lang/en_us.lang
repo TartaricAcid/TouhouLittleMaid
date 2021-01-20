@@ -710,11 +710,15 @@ model.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
 pack.touhou_little_maid_old.maid.name=Touhou Project Model
 pack.touhou_little_maid_old.maid.desc=PC-98 Character
 model.touhou_little_maid_old.reimu_hakurei.name=Reimu Hakurei
+model.touhou_little_maid_old.singyoku2.name=SinGyoku (2nd Form)
+model.touhou_little_maid_old.singyoku3.name=SinGyoku (3rd Form)
 model.touhou_little_maid_old.alice.name=Alice
 model.touhou_little_maid_old.mima.name=Mima
 model.touhou_little_maid_old.yumemi_okazaki.name=Yumemi Okazaki
 
 model.touhou_little_maid_old.reimu_hakurei.desc=§7Shrine Maiden Who Protects Dreams and Tradition
+model.touhou_little_maid_old.singyoku2.desc=Gatekeeper
+model.touhou_little_maid_old.singyoku3.desc=Gatekeeper
 model.touhou_little_maid_old.mima.desc=§7Evil Spirit
 model.touhou_little_maid_old.alice.desc=§7Girl of Death
 model.touhou_little_maid_old.yumemi_okazaki.desc=§7Fantasy Legend

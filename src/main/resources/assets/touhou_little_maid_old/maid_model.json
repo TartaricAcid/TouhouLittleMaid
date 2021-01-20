@@ -1,24 +1,34 @@
 {
-  "pack_name": "{pack.touhou_little_maid_old.maid.name}",
-  "author": ["Succinum", "Pajinyi", "ZeniCrow", "Paulzzh", "Tian_mi"],
-  "description": ["{pack.touhou_little_maid_old.maid.desc}"],
-  "version": "1.0.0",
-  "date": "2021-01-17",
-  "icon": "touhou_little_maid_old:textures/maid_icon.png",
-  "model_list": [
-    {
-      "model_id": "touhou_little_maid_old:reimu_hakurei",
-      "description": ["{model.touhou_little_maid_old.reimu_hakurei.desc}"]
-    },
-    {
-      "model_id": "touhou_little_maid_old:mima",
-      "description": ["{model.touhou_little_maid_old.mima.desc}"]
-    }, {
-      "model_id": "touhou_little_maid_old:alice",
-      "description": ["{model.touhou_little_maid_old.alice.desc}"]
-    }, {
-      "model_id": "touhou_little_maid_old:yumemi_okazaki",
-      "description": ["{model.touhou_little_maid_old.yumemi_okazaki.desc}"]
-    }
-  ]
+	"pack_name": "{pack.touhou_little_maid_old.maid.name}",
+	"author": ["Succinum", "Pajinyi", "ZeniCrow"],
+	"description": ["{pack.touhou_little_maid_old.maid.desc}"],
+	"version": "1.0.0",
+	"date": "2021-01-17",
+	"icon": "touhou_little_maid_old:textures/maid_icon.png",
+	"model_list": [
+		{
+			"model_id": "touhou_little_maid_old:reimu_hakurei",
+			"description": ["{model.touhou_little_maid_old.reimu_hakurei.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:singyoku2",
+			"description": ["{model.touhou_little_maid_old.singyoku2.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:singyoku3",
+			"description": ["{model.touhou_little_maid_old.singyoku3.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:mima",
+			"description": ["{model.touhou_little_maid_old.mima.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:alice",
+			"description": ["{model.touhou_little_maid_old.alice.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:yumemi_okazaki",
+			"description": ["{model.touhou_little_maid_old.yumemi_okazaki.desc}"]
+		}
+	]
 }

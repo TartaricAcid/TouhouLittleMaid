@@ -710,11 +710,15 @@ model.touhou_little_maid.bowl.name=针妙丸的碗
 pack.touhou_little_maid_old.maid.name=东方 Project 模型
 pack.touhou_little_maid_old.maid.desc=旧作角色
 model.touhou_little_maid_old.reimu_hakurei.name=博丽灵梦
+model.touhou_little_maid_old.singyoku2.name=神玉（第二形态）
+model.touhou_little_maid_old.singyoku3.name=神玉（第三形态）
 model.touhou_little_maid_old.alice.name=爱丽丝
 model.touhou_little_maid_old.mima.name=魅魔
 model.touhou_little_maid_old.yumemi_okazaki.name=冈崎梦美
 
 model.touhou_little_maid_old.reimu_hakurei.desc=§7维护梦与传统的巫女
+model.touhou_little_maid_old.singyoku2.desc=Gatekeeper
+model.touhou_little_maid_old.singyoku3.desc=Gatekeeper
 model.touhou_little_maid_old.mima.desc=§7死之少女
 model.touhou_little_maid_old.alice.desc=§7恶灵小姐
 model.touhou_little_maid_old.yumemi_okazaki.desc=§7梦幻传说
