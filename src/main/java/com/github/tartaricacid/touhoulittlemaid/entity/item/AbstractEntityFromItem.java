@@ -17,6 +17,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author TartaricAcid
@@ -116,6 +117,32 @@ public abstract class AbstractEntityFromItem extends EntityLivingBase {
     @Override
     public boolean attackable() {
         return false;
+    }
+
+    /**
+     * 应用实体挤压伤害判断相关逻辑
+     * @param entities 将要被检测的实体
+     */
+    protected void applyEntityCrammingDamage(List<Entity> entities) {
+        // 与父类相关逻辑类似
+        if (entities.isEmpty())
+            return;
+
+        int maxEntityCramming = this.world.getGameRules().getInt("maxEntityCramming");
+
+        if (maxEntityCramming > 0 && entities.size() > maxEntityCramming - 1 && this.rand.nextInt(4) == 0) {
+            int collidableEntities = 0;
+
+            for (int i = 0; i < entities.size(); i++) {
+                if (entities.get(i).isRiding()) {
+                    collidableEntities++;
+                }
+            }
+
+            if (collidableEntities > maxEntityCramming) {
+                this.attackEntityFrom(DamageSource.CRAMMING, 6.0F);
+            }
+        }
     }
 
     // ------------ EntityLivingBase 要求实现的几个抽象方法，因为全用不上，故返回默认值 ----------- //

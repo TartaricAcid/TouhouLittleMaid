@@ -74,7 +74,7 @@ public class EntityBox extends Entity {
     }
 
     private void collideWithNearbyEntities() {
-        List<Entity> list = this.world.getEntitiesWithinAABB(EntityTameable.class, this.getEntityBoundingBox().shrink(1));
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().shrink(1));
         if (list.isEmpty()) {
             return;
         }

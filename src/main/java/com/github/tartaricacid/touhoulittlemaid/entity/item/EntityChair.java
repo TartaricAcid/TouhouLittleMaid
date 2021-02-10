@@ -91,11 +91,15 @@ public class EntityChair extends AbstractEntityFromItem {
 
     @Override
     protected void collideWithNearbyEntities() {
-        super.collideWithNearbyEntities();
-        List<Entity> list = this.world.getEntitiesWithinAABB(EntityTameable.class, this.getEntityBoundingBox().expand(0, 0.5, 0));
+        // super.collideWithNearbyEntities(); // 减少一次对getEntitiesInAABBexcluding的调用
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0, 0.5, 0));
         if (list.isEmpty()) {
             return;
         }
+
+        // 应用实体挤压伤害
+        applyEntityCrammingDamage(list);
+
         // 遍历进行乘坐判定
         for (Entity entity : list) {
             // 如果选择的实体不是已经坐上去的乘客
