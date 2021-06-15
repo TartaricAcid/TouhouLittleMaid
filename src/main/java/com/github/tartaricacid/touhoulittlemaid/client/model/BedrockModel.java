@@ -220,6 +220,14 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
         }
     }
 
+    public boolean hasBackpackPositioningModel() {
+        return modelMap.get("backpackPositioningBone") != null;
+    }
+
+    public ModelRenderer getBackpackPositioningModel() {
+        return modelMap.get("backpackPositioningBone").getModelRenderer();
+    }
+
     @Nullable
     private ModelRenderer getArm(HandSide sideIn) {
         return sideIn == HandSide.LEFT ? modelMap.get("armLeft").getModelRenderer() : modelMap.get("armRight").getModelRenderer();

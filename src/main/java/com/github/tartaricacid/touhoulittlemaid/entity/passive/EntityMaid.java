@@ -105,6 +105,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
 
     public boolean guiOpening = false;
+    /**
+     * 用于替换背包延时的参数
+     */
+    private int backpackDelay = 0;
     private boolean struckByLightning = false;
     private boolean sleep = false;
     private IMaidTask task = TaskManager.getIdleTask();
@@ -223,6 +227,14 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         }
         this.level.getProfiler().pop();
         super.customServerAiStep();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (backpackDelay > 0) {
+            backpackDelay--;
+        }
     }
 
     @Override
@@ -352,6 +364,14 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             }
         }
         return super.getCapability(capability, facing);
+    }
+
+    public void setBackpackDelay() {
+        backpackDelay = 20;
+    }
+
+    public boolean backpackNoDelay() {
+        return backpackDelay <= 0;
     }
 
     public boolean isSleep() {
