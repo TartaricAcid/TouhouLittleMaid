@@ -40,7 +40,7 @@ public class LayerMaidBackpack extends LayerRenderer<EntityMaid, BedrockModel<En
         // [-13, 41, 15]
         if (getParentModel().hasBackpackPositioningModel()) {
             ModelRenderer renderer = getParentModel().getBackpackPositioningModel();
-            matrixStackIn.translate(renderer.xRot * 0.0625, 0.0625 * (renderer.yRot - 23 + 8), 0.0625 * (renderer.zRot + 4));
+            matrixStackIn.translate(renderer.x * 0.0625, 0.0625 * (renderer.y - 23 + 8), 0.0625 * (renderer.z + 4));
         } else {
             matrixStackIn.translate(0, -0.5, 0.25);
         }

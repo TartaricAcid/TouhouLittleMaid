@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class GeometryModel {
+public class GeometryModelLegacy {
     @SerializedName("bones")
     private List<BonesItem> bones;
 
     @SerializedName("textureheight")
-    private int textureheight;
+    private int textureHeight;
 
     @SerializedName("texturewidth")
-    private int texturewidth;
+    private int textureWidth;
 
     @SerializedName("visible_bounds_height")
     private float visibleBoundsHeight;
@@ -27,12 +27,12 @@ public class GeometryModel {
         return bones;
     }
 
-    public int getTextureheight() {
-        return textureheight;
+    public int getTextureHeight() {
+        return textureHeight;
     }
 
-    public int getTexturewidth() {
-        return texturewidth;
+    public int getTextureWidth() {
+        return textureWidth;
     }
 
     public float getVisibleBoundsHeight() {
@@ -45,18 +45,5 @@ public class GeometryModel {
 
     public List<Float> getVisibleBoundsOffset() {
         return visibleBoundsOffset;
-    }
-
-    @Override
-    public String toString() {
-        return
-                "GeometryModel{" +
-                        "bones = '" + bones + '\'' +
-                        ",textureheight = '" + textureheight + '\'' +
-                        ",texturewidth = '" + texturewidth + '\'' +
-                        ",visible_bounds_height = '" + visibleBoundsHeight + '\'' +
-                        ",visible_bounds_width = '" + visibleBoundsWidth + '\'' +
-                        ",visible_bounds_offset = '" + visibleBoundsOffset + '\'' +
-                        "}";
     }
 }

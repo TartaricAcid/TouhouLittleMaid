@@ -1,7 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenChairGuiMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -41,6 +45,10 @@ public class EntityChair extends AbstractEntityFromItem {
 
     public EntityChair(EntityType<EntityChair> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    public EntityChair(World worldIn) {
+        this(TYPE, worldIn);
     }
 
     public EntityChair(World worldIn, double x, double y, double z, float yaw) {
@@ -95,9 +103,8 @@ public class EntityChair extends AbstractEntityFromItem {
             if (player.getItemInHand(hand).interactLivingEntity(player, this, hand).consumesAction()) {
                 return ActionResultType.SUCCESS;
             }
-            if (level.isClientSide) {
-                // TODO：待完成
-                // player.openGui(TouhouLittleMaid.INSTANCE, MaidGuiHandler.OTHER_GUI.CHAIR.getId(), world, this.getEntityId(), 0, 0);
+            if (!level.isClientSide) {
+                NetworkHandler.sendToClientPlayer(new OpenChairGuiMessage(getId()), player);
             }
         } else {
             if (!level.isClientSide && getPassengers().isEmpty() && !player.isPassenger()) {
@@ -122,8 +129,11 @@ public class EntityChair extends AbstractEntityFromItem {
     @Override
     @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getBoundingBoxForCulling() {
-        // TODO：待完成
-        return super.getBoundingBoxForCulling();
+        BedrockModel<EntityChair> model = CustomPackLoader.CHAIR_MODEL.getModel(getModelId()).orElse(null);
+        if (model == null) {
+            return super.getBoundingBoxForCulling();
+        }
+        return model.getRenderBoundingBox().move(position());
     }
 
     @Override

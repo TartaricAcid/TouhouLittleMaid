@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui.maid;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;

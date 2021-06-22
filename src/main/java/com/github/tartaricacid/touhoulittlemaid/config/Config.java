@@ -9,6 +9,8 @@ public final class Config {
     public static ForgeConfigSpec.BooleanValue MAID_CHANGE_MODEL;
     public static ForgeConfigSpec.IntValue OWNER_MAX_MAID_NUM;
 
+    public static ForgeConfigSpec.BooleanValue CHAIR_CHANGE_MODEL;
+
     public static ForgeConfigSpec initConfig() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -28,6 +30,13 @@ public final class Config {
 
             builder.comment("The maximum number of maids the player own");
             OWNER_MAX_MAID_NUM = builder.defineInRange("OwnerMaxMaidNum", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
+        }
+        builder.pop();
+
+        builder.push("chair");
+        {
+            builder.comment("Chair can switch models freely");
+            CHAIR_CHANGE_MODEL = builder.define("ChairChangeModel", true);
         }
         builder.pop();
 

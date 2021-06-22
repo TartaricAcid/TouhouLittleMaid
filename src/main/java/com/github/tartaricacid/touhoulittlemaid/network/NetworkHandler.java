@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.network;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenChairGuiMessage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +27,10 @@ public final class NetworkHandler {
     public static void init() {
         CHANNEL.registerMessage(0, MaidModelMessage.class, MaidModelMessage::encode, MaidModelMessage::decode, MaidModelMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(1, ChairModelMessage.class, ChairModelMessage::encode, ChairModelMessage::decode, ChairModelMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(2, OpenChairGuiMessage.class, OpenChairGuiMessage::encode, OpenChairGuiMessage::decode, OpenChairGuiMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, PlayerEntity player) {

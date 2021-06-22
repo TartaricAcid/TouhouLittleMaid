@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
@@ -19,6 +20,7 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
     private ChairModelInfo mainInfo;
     private List<Object> mainAnimations;
+    ;
 
     public EntityChairRenderer(EntityRendererManager rendererManager, BedrockModel<EntityChair> entityModelIn, float shadowSizeIn) {
         super(rendererManager, entityModelIn, shadowSizeIn);
@@ -26,7 +28,7 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
 
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        // 尝试读取模
+        // 读取默认模型，用于清除不存在模型的缓存残留
         CustomPackLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.model = model);
         CustomPackLoader.CHAIR_MODEL.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
         this.mainAnimations = null;
@@ -38,7 +40,10 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
 
         // 模型动画设置
         this.model.setAnimations(this.mainAnimations);
+
+        GlWrapper.setMatrixStack(matrixStackIn);
         super.render(chair, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        GlWrapper.clearMatrixStack();
     }
 
     @Override

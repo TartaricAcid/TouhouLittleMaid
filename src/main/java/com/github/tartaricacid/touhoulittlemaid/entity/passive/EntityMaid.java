@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
+import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.Config;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
@@ -45,8 +47,11 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -364,6 +369,16 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             }
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public AxisAlignedBB getBoundingBoxForCulling() {
+        BedrockModel<EntityMaid> model = CustomPackLoader.MAID_MODEL.getModel(getModelId()).orElse(null);
+        if (model == null) {
+            return super.getBoundingBoxForCulling();
+        }
+        return model.getRenderBoundingBox().move(position());
     }
 
     public void setBackpackDelay() {

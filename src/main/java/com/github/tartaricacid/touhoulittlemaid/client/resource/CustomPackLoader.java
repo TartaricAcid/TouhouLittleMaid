@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource;
 
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.ZipPackTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.ChairModels;
@@ -53,8 +54,6 @@ public class CustomPackLoader {
     public static final MaidModels MAID_MODEL = MaidModels.getInstance();
     public static final ChairModels CHAIR_MODEL = ChairModels.getInstance();
     private static final String COMMENT_SYMBOL = "#";
-    private static final String LEGACY_BEDROCK_VERSION = "1.10.0";
-    private static final String BEDROCK_VERSION = "1.12.0";
     private static final Marker MARKER = MarkerManager.getMarker("CustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
     private static final Path PACK_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve("tlm_custom_pack");
@@ -231,18 +230,30 @@ public class CustomPackLoader {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (!pojo.getFormatVersion().equals(LEGACY_BEDROCK_VERSION)) {
-                LOGGER.warn(MARKER, "{} model version is not 1.10.0", modelLocation);
-                // TODO: 2020/9/1 添加对高版本基岩版模型的兼容
-                return null;
+            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModelLegacy() != null) {
+                    return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
+                } else {
+                    // 否则日志给出提示
+                    LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                    return null;
+                }
             }
-            // 如果 model 字段不为空
-            if (pojo.getGeometryModel() != null) {
-                return new BedrockModel<>(pojo);
-            } else {
-                // 否则日志给出提示
-                LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+
+            // 判定是不是 1.12.0 版本基岩版模型文件
+            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModelNew() != null) {
+                    return new BedrockModel<>(pojo, BedrockVersion.NEW);
+                } else {
+                    // 否则日志给出提示
+                    LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                    return null;
+                }
             }
+
+            LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
             LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
@@ -262,18 +273,30 @@ public class CustomPackLoader {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (!pojo.getFormatVersion().equals(LEGACY_BEDROCK_VERSION)) {
-                LOGGER.warn(MARKER, "{} model version is not 1.10.0", modelLocation);
-                // TODO: 2020/9/1 添加对高版本基岩版模型的兼容
-                return null;
+            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModelLegacy() != null) {
+                    return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
+                } else {
+                    // 否则日志给出提示
+                    LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                    return null;
+                }
             }
-            // 如果 model 字段不为空
-            if (pojo.getGeometryModel() != null) {
-                return new BedrockModel<>(pojo);
-            } else {
-                // 否则日志给出提示
-                LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+
+            // 判定是不是 1.12.0 版本基岩版模型文件
+            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModelNew() != null) {
+                    return new BedrockModel<>(pojo, BedrockVersion.NEW);
+                } else {
+                    // 否则日志给出提示
+                    LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                    return null;
+                }
             }
+
+            LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
             LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);

@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui.maid;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ImageButtonWithId;

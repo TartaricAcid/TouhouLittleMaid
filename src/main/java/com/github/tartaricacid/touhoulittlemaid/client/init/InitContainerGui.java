@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.maid.MaidInventoryGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidInventoryGui;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
