@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackChairRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.client.gui.screen.Screen;
@@ -29,7 +30,8 @@ public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
     public ItemChair() {
-        super((new Properties()).tab(InitItems.MAIN_TAB).stacksTo(1));
+        super((new Properties()).tab(InitItems.MAIN_TAB).stacksTo(1)
+                .setISTER(() -> TileEntityItemStackChairRenderer::new));
     }
 
     public static Data getData(ItemStack stack) {
