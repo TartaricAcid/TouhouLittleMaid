@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task.instance;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -26,7 +27,7 @@ public class TaskAttack implements IAttackTask {
 
     @Override
     public SoundEvent getAmbientSound(EntityMaid maid) {
-       return null;
+        return InitSounds.MAID_ATTACK.get();
     }
 
     @Nullable

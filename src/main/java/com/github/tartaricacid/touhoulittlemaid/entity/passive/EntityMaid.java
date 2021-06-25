@@ -8,7 +8,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.event.api.InteractMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.event.api.MaidPlaySoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
 import com.google.common.collect.ImmutableList;
@@ -43,10 +45,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -93,6 +92,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final int TASK_PRIORITY = 5;
     private static final int HUNGER_VALUE_REFUSING_TASK = -256;
+    /**
+     * 玩家伤害女仆后的声音延时计数器
+     */
+    private static int PLAYER_HURT_SOUND_COUNT = 120;
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this) {
@@ -240,6 +243,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (backpackDelay > 0) {
             backpackDelay--;
         }
+        if (PLAYER_HURT_SOUND_COUNT > 0) {
+            PLAYER_HURT_SOUND_COUNT--;
+        }
     }
 
     @Override
@@ -283,6 +289,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             this.navigation.stop();
             this.setTarget(null);
             this.level.broadcastEntityEvent(this, (byte) 7);
+            this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
@@ -369,6 +376,54 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             }
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        if (MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+            return null;
+        }
+        return task.getAmbientSound(this);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        if (MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+            return null;
+        }
+        if (damageSourceIn.isFire()) {
+            return InitSounds.MAID_HURT_FIRE.get();
+        } else if (damageSourceIn.getEntity() instanceof PlayerEntity) {
+            if (PLAYER_HURT_SOUND_COUNT == 0) {
+                PLAYER_HURT_SOUND_COUNT = 120;
+                return InitSounds.MAID_PLAYER.get();
+            } else {
+                return null;
+            }
+        } else {
+            return InitSounds.MAID_HURT.get();
+        }
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        if (MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+            return null;
+        }
+        return InitSounds.MAID_DEATH.get();
+    }
+
+    @Override
+    protected float getVoicePitch() {
+        return 1 + random.nextFloat() * 0.1F;
+    }
+
+    @Override
+    public boolean isBaby() {
+        return false;
     }
 
     @Override

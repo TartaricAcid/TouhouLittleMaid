@@ -1,0 +1,324 @@
+{
+  "maid.mode.idle": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.idle",
+    "sounds": [
+      "touhou_little_maid:maid/mode/idle1",
+      "touhou_little_maid:maid/mode/idle2",
+      "touhou_little_maid:maid/mode/idle3",
+      "touhou_little_maid:maid/mode/idle4",
+      "touhou_little_maid:maid/mode/idle5",
+      "touhou_little_maid:maid/mode/idle6",
+      "touhou_little_maid:maid/mode/idle7",
+      "touhou_little_maid:maid/mode/idle8",
+      "touhou_little_maid:maid/mode/idle9",
+      "touhou_little_maid:maid/mode/idle10"
+    ]
+  },
+  "maid.mode.attack": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.attack",
+    "sounds": [
+      "touhou_little_maid:maid/mode/attack1",
+      "touhou_little_maid:maid/mode/attack2",
+      "touhou_little_maid:maid/mode/attack3"
+    ]
+  },
+  "maid.mode.range_attack": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.range_attack",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.attack",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.danmaku_attack": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.danmaku_attack",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.attack",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.farm": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.farm",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.feed": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.feed",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event",
+        "weight": 4
+      },
+      "touhou_little_maid:maid/mode/feed1",
+      "touhou_little_maid:maid/mode/feed2",
+      "touhou_little_maid:maid/mode/feed3",
+      "touhou_little_maid:maid/mode/feed4",
+      "touhou_little_maid:maid/mode/feed5"
+    ]
+  },
+  "maid.mode.shears": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.shears",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.milk": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.milk",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.torch": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.torch",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.feed_animal": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.feed_animal",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.extinguishing": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.extinguishing",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.snow": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.snow",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.break": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.break",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.furnace": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.furnace",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.mode.brewing": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.mode.brewing",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.mode.idle",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.ai.find_target": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.find_target",
+    "sounds": [
+      "touhou_little_maid:maid/ai/find_target1",
+      "touhou_little_maid:maid/ai/find_target2",
+      "touhou_little_maid:maid/ai/find_target3"
+    ]
+  },
+  "maid.ai.hurt": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.hurt",
+    "sounds": [
+      "touhou_little_maid:maid/ai/hurt1",
+      "touhou_little_maid:maid/ai/hurt2",
+      "touhou_little_maid:maid/ai/hurt3",
+      "touhou_little_maid:maid/ai/hurt4",
+      "touhou_little_maid:maid/ai/hurt5",
+      "touhou_little_maid:maid/ai/hurt6"
+    ]
+  },
+  "maid.ai.hurt_fire": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.hurt_fire",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid.ai.hurt",
+        "type": "event"
+      }
+    ]
+  },
+  "maid.ai.hurt_player": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.hurt_player",
+    "sounds": [
+      "touhou_little_maid:maid/ai/hurt_player1"
+    ]
+  },
+  "maid.ai.tamed": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.tamed",
+    "sounds": [
+      "touhou_little_maid:maid/ai/tamed1",
+      "touhou_little_maid:maid/ai/tamed2"
+    ]
+  },
+  "maid.ai.item_get": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.item_get",
+    "sounds": [
+      "touhou_little_maid:maid/ai/item_get1"
+    ]
+  },
+  "maid.ai.death": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.death",
+    "sounds": [
+      "touhou_little_maid:maid/ai/death1"
+    ]
+  },
+  "maid.environment.hot": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.environment.hot",
+    "sounds": [
+      "touhou_little_maid:maid/environment/hot1"
+    ]
+  },
+  "maid.environment.cold": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.environment.cold",
+    "sounds": [
+      "touhou_little_maid:maid/environment/cold1",
+      "touhou_little_maid:maid/environment/cold2"
+    ]
+  },
+  "maid.environment.rain": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.environment.rain",
+    "sounds": [
+      "touhou_little_maid:maid/environment/rain1",
+      "touhou_little_maid:maid/environment/rain2",
+      "touhou_little_maid:maid/environment/rain3"
+    ]
+  },
+  "maid.environment.snow": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.environment.snow",
+    "sounds": [
+      "touhou_little_maid:maid/environment/snow1"
+    ]
+  },
+  "maid.environment.morning": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.environment.morning",
+    "sounds": [
+      "touhou_little_maid:maid/environment/morning1"
+    ]
+  },
+  "maid.environment.night": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.environment.night",
+    "sounds": [
+      "touhou_little_maid:maid/environment/night1"
+    ]
+  },
+  "other.credit": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.other.credit",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:maid/other/credit",
+        "stream": true
+      }
+    ]
+  },
+  "item.camera_use": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.item.camera_use",
+    "sounds": [
+      {
+        "name": "touhou_little_maid:item/camera_use",
+        "stream": true
+      }
+    ]
+  },
+  "item.album_open": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.item.album_open",
+    "sounds": [
+      "touhou_little_maid:item/album_open"
+    ]
+  },
+  "block.altar_craft": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.block.altar_craft",
+    "sounds": [
+      "touhou_little_maid:block/altar_craft_1",
+      "touhou_little_maid:block/altar_craft_2"
+    ]
+  },
+  "entity.box": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.entity.box",
+    "sounds": [
+      "touhou_little_maid:entity/box"
+    ]
+  },
+  "item.compass": {
+    "category": "voice",
+    "subtitle": "subtitle.touhou_little_maid.item.compass",
+    "sounds": [
+      "touhou_little_maid:item/point"
+    ]
+  },
+  "item.portable_audio": {
+    "category": "record",
+    "subtitle": "subtitle.touhou_little_maid.item.portable_audio",
+    "sounds": [
+      "random/orb"
+    ]
+  }
+}
