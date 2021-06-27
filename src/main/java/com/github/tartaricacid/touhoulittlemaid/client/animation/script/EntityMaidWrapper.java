@@ -34,8 +34,7 @@ public class EntityMaidWrapper {
     }
 
     public String getTask() {
-        // FIXME：需要修改
-        return "";
+        return maid.getTask().getUid().toString();
     }
 
     public boolean hasHelmet() {
@@ -111,13 +110,11 @@ public class EntityMaidWrapper {
     }
 
     public boolean isBegging() {
-        // FIXME：需要更改
-        return false;
+        return maid.isBegging();
     }
 
     public boolean isSwingingArms() {
-        // FIXME：需要更改
-        return false;
+        return maid.isSwingingArms();
     }
 
     public boolean isRiding() {
@@ -129,17 +126,15 @@ public class EntityMaidWrapper {
     }
 
     public boolean hasBackpack() {
-        // FIXME：需要更改
-        return false;
+        return maid.hasBackpack();
     }
 
     public int getBackpackLevel() {
-        // FIXME：需要更改
-        return 0;
+        return maid.getBackpackLevel();
     }
 
+    @Deprecated
     public boolean hasSasimono() {
-        // FIXME：需要更改
         return false;
     }
 
@@ -159,19 +154,16 @@ public class EntityMaidWrapper {
         return "";
     }
 
+    @Deprecated
     public String getAtBiomeTemp() {
-        // FIXME:待修正
-        return "";
+        return maid.getAtBiomeTemp();
     }
 
+    @Deprecated
     public boolean isHoldTrolley() {
-        // FIXME：需要更改
         return false;
     }
 
-    /**
-     * 兼容旧版本动画，现已不用
-     */
     @Deprecated
     public boolean isRidingMarisaBroom() {
         return false;
@@ -181,14 +173,11 @@ public class EntityMaidWrapper {
         return maid.getVehicle() instanceof PlayerEntity;
     }
 
+    @Deprecated
     public boolean isHoldVehicle() {
-        // FIXME：需要更改
         return false;
     }
 
-    /**
-     * 兼容旧版本动画，现已不用
-     */
     @Deprecated
     public boolean isPortableAudioPlay() {
         return false;
@@ -202,19 +191,19 @@ public class EntityMaidWrapper {
         return swingProgress;
     }
 
+    @Deprecated
     public float[] getLeftHandRotation() {
-        // FIXME：需要更改
         return new float[]{0, 0, 0};
     }
 
+    @Deprecated
     public float[] getRightHandRotation() {
-        // FIXME：需要更改
         return new float[]{0, 0, 0};
     }
 
+    @Deprecated
     public int getDim() {
-        // FIXME：需要更改
-        return 0;
+        return maid.getDim();
     }
 
     public float getHealth() {
@@ -238,7 +227,6 @@ public class EntityMaidWrapper {
     }
 
     public int getFavorability() {
-        // FIXME：需要更改
-        return 0;
+        return maid.getFavorability();
     }
 }

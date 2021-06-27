@@ -29,14 +29,14 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         // 读取默认模型，用于清除不存在模型的缓存残留
-        CustomPackLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.model = model);
-        CustomPackLoader.CHAIR_MODEL.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
+        CustomPackLoader.CHAIR_MODELS.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.model = model);
+        CustomPackLoader.CHAIR_MODELS.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
         this.mainAnimations = null;
 
         // 通过模型 id 获取对应数据
-        CustomPackLoader.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.model = model);
-        CustomPackLoader.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(info -> this.mainInfo = info);
-        CustomPackLoader.CHAIR_MODEL.getAnimation(chair.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+        CustomPackLoader.CHAIR_MODELS.getModel(chair.getModelId()).ifPresent(model -> this.model = model);
+        CustomPackLoader.CHAIR_MODELS.getInfo(chair.getModelId()).ifPresent(info -> this.mainInfo = info);
+        CustomPackLoader.CHAIR_MODELS.getAnimation(chair.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
 
         // 模型动画设置
         this.model.setAnimations(this.mainAnimations);

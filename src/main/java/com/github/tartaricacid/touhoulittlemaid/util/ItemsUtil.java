@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
-import com.sun.javafx.geom.Vec3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,6 +7,7 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 
@@ -17,7 +17,7 @@ public final class ItemsUtil {
     private ItemsUtil() {
     }
 
-    public static void dropItemHandlerItems(@Nullable IItemHandler itemHandler, World world, Vec3d pos) {
+    public static void dropItemHandlerItems(@Nullable IItemHandler itemHandler, World world, Vector3d pos) {
         if (itemHandler != null && !world.isClientSide) {
             for (int i = 0; i < itemHandler.getSlots(); ++i) {
                 ItemStack itemstack = itemHandler.getStackInSlot(i);

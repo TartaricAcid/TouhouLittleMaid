@@ -42,9 +42,9 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
     @Override
     public void render(EntityMaid entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         // 读取默认模型，用于清除不存在模型的缓存残留
-        CustomPackLoader.MAID_MODEL.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.model = model);
-        CustomPackLoader.MAID_MODEL.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
-        CustomPackLoader.MAID_MODEL.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
+        CustomPackLoader.MAID_MODELS.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.model = model);
+        CustomPackLoader.MAID_MODELS.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
+        CustomPackLoader.MAID_MODELS.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
 
         MaidModels.ModelData eventModelData = new MaidModels.ModelData(model, mainInfo, mainAnimations);
         if (MinecraftForge.EVENT_BUS.post(new RenderMaidEvent(entity, eventModelData))) {
@@ -53,9 +53,9 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
             this.mainAnimations = eventModelData.getAnimations();
         } else {
             // 通过模型 id 获取对应数据
-            CustomPackLoader.MAID_MODEL.getModel(entity.getModelId()).ifPresent(model -> this.model = model);
-            CustomPackLoader.MAID_MODEL.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
-            CustomPackLoader.MAID_MODEL.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+            CustomPackLoader.MAID_MODELS.getModel(entity.getModelId()).ifPresent(model -> this.model = model);
+            CustomPackLoader.MAID_MODELS.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
+            CustomPackLoader.MAID_MODELS.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
         }
 
         // 模型动画设置

@@ -54,7 +54,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'
-            args '--mod', 'touhoulittlemaid', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'touhou_little_maid', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 touhoulittlemaid {
                     source sourceSets.main

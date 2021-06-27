@@ -51,8 +51,8 @@ import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 @OnlyIn(Dist.CLIENT)
 public class CustomPackLoader {
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
-    public static final MaidModels MAID_MODEL = MaidModels.getInstance();
-    public static final ChairModels CHAIR_MODEL = ChairModels.getInstance();
+    public static final MaidModels MAID_MODELS = MaidModels.getInstance();
+    public static final ChairModels CHAIR_MODELS = ChairModels.getInstance();
     private static final String COMMENT_SYMBOL = "#";
     private static final Marker MARKER = MarkerManager.getMarker("CustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
@@ -60,8 +60,8 @@ public class CustomPackLoader {
 
     public static void reloadPacks() {
         CustomJsAnimationManger.clearAll();
-        MAID_MODEL.clearAll();
-        CHAIR_MODEL.clearAll();
+        MAID_MODELS.clearAll();
+        CHAIR_MODELS.clearAll();
         // 重载数据
         loadPacks();
     }
@@ -104,7 +104,7 @@ public class CustomPackLoader {
 
     private static void loadMaidModelPack(ZipFile zipFile, String domain) {
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loading...");
-        ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", domain, MAID_MODEL.getJsonFileName()));
+        ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", domain, MAID_MODELS.getJsonFileName()));
         if (entry == null) {
             return;
         }
@@ -142,7 +142,7 @@ public class CustomPackLoader {
             }
             // 加入包之前，移除那些彩蛋模型
             pack.getModelList().removeIf(maidModelInfo -> maidModelInfo.getEasterEgg() != null);
-            MAID_MODEL.addPack(pack);
+            MAID_MODELS.addPack(pack);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JsonSyntaxException e) {
@@ -156,25 +156,25 @@ public class CustomPackLoader {
         MaidModelInfo.EasterEgg easterEgg = maidModelItem.getEasterEgg();
         MaidModels.ModelData data = new MaidModels.ModelData(modelJson, maidModelItem, animations);
         if (easterEgg.isEncrypt()) {
-            MAID_MODEL.putEasterEggEncryptTagModel(easterEgg.getTag(), data);
+            MAID_MODELS.putEasterEggEncryptTagModel(easterEgg.getTag(), data);
         } else {
-            MAID_MODEL.putEasterEggNormalTagModel(easterEgg.getTag(), data);
+            MAID_MODELS.putEasterEggNormalTagModel(easterEgg.getTag(), data);
         }
     }
 
     private static void putMaidModelData(MaidModelInfo maidModelItem, BedrockModel<EntityMaid> modelJson, List<Object> animations) {
         String id = maidModelItem.getModelId().toString();
         // 如果加载的模型不为空
-        MAID_MODEL.putModel(id, modelJson);
-        MAID_MODEL.putInfo(id, maidModelItem);
+        MAID_MODELS.putModel(id, modelJson);
+        MAID_MODELS.putInfo(id, maidModelItem);
         if (animations != null && animations.size() > 0) {
-            MAID_MODEL.putAnimation(id, animations);
+            MAID_MODELS.putAnimation(id, animations);
         }
     }
 
     private static void loadChairModelPack(ZipFile zipFile, String domain) {
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loading...");
-        ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", domain, CHAIR_MODEL.getJsonFileName()));
+        ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", domain, CHAIR_MODELS.getJsonFileName()));
         if (entry == null) {
             return;
         }
@@ -201,16 +201,16 @@ public class CustomPackLoader {
                 if (modelJson != null) {
                     String id = chairModelItem.getModelId().toString();
                     // 如果加载的模型不为空
-                    CHAIR_MODEL.putModel(id, modelJson);
-                    CHAIR_MODEL.putInfo(id, chairModelItem);
+                    CHAIR_MODELS.putModel(id, modelJson);
+                    CHAIR_MODELS.putInfo(id, chairModelItem);
                     if (animations != null && animations.size() > 0) {
-                        CHAIR_MODEL.putAnimation(id, animations);
+                        CHAIR_MODELS.putAnimation(id, animations);
                     }
                     // 打印日志
                     LOGGER.debug(MARKER, "Loaded model: {}", chairModelItem.getModel());
                 }
             }
-            CHAIR_MODEL.addPack(pack);
+            CHAIR_MODELS.addPack(pack);
         } catch (IOException ignore) {
             // 忽略错误，因为资源域很多
         } catch (JsonSyntaxException e) {

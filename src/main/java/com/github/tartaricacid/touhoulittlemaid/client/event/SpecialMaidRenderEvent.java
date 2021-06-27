@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import static com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader.MAID_MODEL;
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader.MAID_MODELS;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT)
@@ -47,7 +47,7 @@ public class SpecialMaidRenderEvent {
         }
         String name = customName.getString();
         if (StringUtils.isNotBlank(name)) {
-            MAID_MODEL.getEasterEggEncryptTagModel(DigestUtils.sha1Hex(name)).ifPresent(data -> modelDataSet(event, data));
+            MAID_MODELS.getEasterEggEncryptTagModel(DigestUtils.sha1Hex(name)).ifPresent(data -> modelDataSet(event, data));
         }
     }
 
@@ -59,7 +59,7 @@ public class SpecialMaidRenderEvent {
         }
         String name = customName.getString();
         if (StringUtils.isNotBlank(name)) {
-            MAID_MODEL.getEasterEggNormalTagModel(name).ifPresent(data -> modelDataSet(event, data));
+            MAID_MODELS.getEasterEggNormalTagModel(name).ifPresent(data -> modelDataSet(event, data));
         }
     }
 

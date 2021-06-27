@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -159,8 +160,8 @@ public final class InnerAnimation {
                 boolean isFarm = "farm".equals(maid.getTask().getUid().getPath()) && maid.swingTime > 0.0;
 
                 if (isFarm) {
-                   GlWrapper.translate(0, 0.0713625, -0.35876875);
-                   GlWrapper.rotate(22.5f, 1, 0, 0);
+                    GlWrapper.translate(0, 0.0713625, -0.35876875);
+                    GlWrapper.rotate(22.5f, 1, 0, 0);
                 }
 
                 if (legLeft != null) {
@@ -1816,8 +1817,7 @@ public final class InnerAnimation {
         return new IAnimation<LivingEntity>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, LivingEntity entity, HashMap<String, ModelRendererWrapper> modelMap) {
-                // TODO：待完成
-                int dim = 0;
+                RegistryKey<World> dim = entity.level.dimension();
 
                 ModelRendererWrapper overWorldHidden = modelMap.get("overWorldHidden");
                 ModelRendererWrapper overWorldShow = modelMap.get("overWorldShow");
@@ -1827,22 +1827,22 @@ public final class InnerAnimation {
                 ModelRendererWrapper endWorldShow = modelMap.get("endWorldShow");
 
                 if (overWorldHidden != null) {
-                    overWorldHidden.setHidden(dim == 0);
+                    overWorldHidden.setHidden(dim.equals(World.OVERWORLD));
                 }
                 if (overWorldShow != null) {
-                    overWorldShow.setHidden(dim != 0);
+                    overWorldShow.setHidden(!dim.equals(World.OVERWORLD));
                 }
                 if (netherWorldHidden != null) {
-                    netherWorldHidden.setHidden(dim == -1);
+                    netherWorldHidden.setHidden(dim.equals(World.NETHER));
                 }
                 if (netherWorldShow != null) {
-                    netherWorldShow.setHidden(dim != -1);
+                    netherWorldShow.setHidden(!dim.equals(World.OVERWORLD));
                 }
                 if (endWorldHidden != null) {
-                    endWorldHidden.setHidden(dim == 1);
+                    endWorldHidden.setHidden(dim.equals(World.END));
                 }
                 if (endWorldShow != null) {
-                    endWorldShow.setHidden(dim != 1);
+                    endWorldShow.setHidden(!dim.equals(World.END));
                 }
             }
         };
@@ -2347,7 +2347,7 @@ public final class InnerAnimation {
             legRight.setRotateAngleY(0.4f);
         }
 
-       GlWrapper.translate(0, 0.3, 0);
+        GlWrapper.translate(0, 0.3, 0);
     }
 
     public static void playerSittingPosture(ModelRendererWrapper armLeft, ModelRendererWrapper armRight, ModelRendererWrapper legLeft, ModelRendererWrapper legRight) {
@@ -2371,8 +2371,8 @@ public final class InnerAnimation {
             head.setOffsetY(0.0625f);
         }
 
-       GlWrapper.rotate(30, 1, 0, 0);
-       GlWrapper.translate(0, -0.45, -0.3);
+        GlWrapper.rotate(30, 1, 0, 0);
+        GlWrapper.translate(0, -0.45, -0.3);
     }
 
     @Deprecated
@@ -2410,8 +2410,8 @@ public final class InnerAnimation {
             head.setRotateAngleX((float) (head.getRotateAngleX() - 30 * Math.PI / 180));
             head.setOffsetY(0.0625f);
         }
-       GlWrapper.rotate(30, 1, 0, 0);
-       GlWrapper.translate(0, -0.4, -0.3);
+        GlWrapper.rotate(30, 1, 0, 0);
+        GlWrapper.translate(0, -0.4, -0.3);
     }
 
     @Deprecated
@@ -2419,13 +2419,13 @@ public final class InnerAnimation {
         return false;
     }
 
+    @Deprecated
     public static boolean isHoldTrolley(EntityMaid maid) {
-        // TODO：待完成
         return false;
     }
 
+    @Deprecated
     public static boolean isHoldVehicle(EntityMaid maid) {
-        // TODO：待完成
         return false;
     }
 
@@ -2433,13 +2433,13 @@ public final class InnerAnimation {
         return maid.swingingArm == Hand.OFF_HAND;
     }
 
+    @Deprecated
     public static float[] getLeftHandRotation(EntityMaid maid) {
-        // TODO：待完成
         return new float[]{0, 0, 0};
     }
 
+    @Deprecated
     public static float[] getRightHandRotation(EntityMaid maid) {
-        // TODO：待完成
         return new float[]{0, 0, 0};
     }
 

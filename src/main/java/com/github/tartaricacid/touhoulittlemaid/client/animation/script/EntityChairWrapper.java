@@ -43,9 +43,9 @@ public class EntityChairWrapper {
         return 0;
     }
 
+    @Deprecated
     public int getDim() {
-        // FIXME: 需要兼容修改
-        return 1;
+        return chair.getDim();
     }
 
     public WorldWrapper getWorld() {

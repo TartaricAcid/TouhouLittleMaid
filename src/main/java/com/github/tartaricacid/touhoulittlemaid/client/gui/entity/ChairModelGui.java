@@ -19,12 +19,12 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     private static int ROW_INDEX = 0;
 
     public ChairModelGui(EntityChair entity) {
-        super(entity, CustomPackLoader.CHAIR_MODEL.getPackList());
+        super(entity, CustomPackLoader.CHAIR_MODELS.getPackList());
     }
 
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
-        float renderItemScale = CustomPackLoader.CHAIR_MODEL.getModelRenderItemScale(entity.getModelId());
+        float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(entity.getModelId());
         InventoryScreen.renderEntityInInventory(middleX - 190, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
     }
 

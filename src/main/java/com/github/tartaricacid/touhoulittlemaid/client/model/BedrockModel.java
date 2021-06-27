@@ -276,7 +276,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
                             entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0.0625f, modelMap);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    CustomPackLoader.MAID_MODEL.removeAnimation(modelId);
+                    CustomPackLoader.MAID_MODELS.removeAnimation(modelId);
                 }
                 entityMaidWrapper.clearData();
             }
@@ -302,7 +302,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
                             entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0.0625f, modelMap);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    CustomPackLoader.CHAIR_MODEL.removeAnimation(modelId);
+                    CustomPackLoader.CHAIR_MODELS.removeAnimation(modelId);
                 }
                 entityChairWrapper.clearData();
             }

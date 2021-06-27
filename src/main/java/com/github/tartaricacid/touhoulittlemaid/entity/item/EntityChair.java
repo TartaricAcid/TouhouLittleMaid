@@ -18,10 +18,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -129,7 +126,7 @@ public class EntityChair extends AbstractEntityFromItem {
     @Override
     @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getBoundingBoxForCulling() {
-        BedrockModel<EntityChair> model = CustomPackLoader.CHAIR_MODEL.getModel(getModelId()).orElse(null);
+        BedrockModel<EntityChair> model = CustomPackLoader.CHAIR_MODELS.getModel(getModelId()).orElse(null);
         if (model == null) {
             return super.getBoundingBoxForCulling();
         }
@@ -233,8 +230,18 @@ public class EntityChair extends AbstractEntityFromItem {
         return 0;
     }
 
+    @Deprecated
     public int getDim() {
-        // TODO：待完成
+        RegistryKey<World> dim = this.level.dimension();
+        if (dim.equals(World.OVERWORLD)) {
+            return 0;
+        }
+        if (dim.equals(World.NETHER)) {
+            return -1;
+        }
+        if (dim.equals(World.END)) {
+            return 1;
+        }
         return 0;
     }
 

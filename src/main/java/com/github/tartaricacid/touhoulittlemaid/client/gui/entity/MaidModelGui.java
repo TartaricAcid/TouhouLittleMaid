@@ -21,12 +21,12 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     private static int ROW_INDEX = 0;
 
     public MaidModelGui(EntityMaid maid) {
-        super(maid, CustomPackLoader.MAID_MODEL.getPackList());
+        super(maid, CustomPackLoader.MAID_MODELS.getPackList());
     }
 
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
-        float renderItemScale = CustomPackLoader.MAID_MODEL.getModelRenderItemScale(entity.getModelId());
+        float renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(entity.getModelId());
         InventoryScreen.renderEntityInInventory(middleX - 190, middleY + 90, (int) (45 * renderItemScale), middleX - 190 - mouseX, middleY + 80 - 40 - mouseY, entity);
     }
 

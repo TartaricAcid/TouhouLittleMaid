@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -154,9 +153,9 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
             getMinecraft().textureManager.bind(SIDE);
             blit(matrixStack, leftPos + 5, topPos + 135, 18, 0, 9, 9);
             blit(matrixStack, leftPos + 27, topPos + 135, 0, 9, 47, 9);
-            double hunger = maid.getAttributeValue(InitEntities.HUNGER.get()) / maid.getAttributeBaseValue(InitEntities.HUNGER.get());
+            double hunger = maid.getHunger() / 20;
             blit(matrixStack, leftPos + 29, topPos + 137, 2, 28, (int) (43 * hunger), 5);
-            getMinecraft().font.draw(matrixStack, String.format("%.0f", maid.getAttributeValue(InitEntities.HUNGER.get())), leftPos + 15, topPos + 136, TextFormatting.DARK_GRAY.getColor());
+            getMinecraft().font.draw(matrixStack, String.format("%d", maid.getHunger()), leftPos + 15, topPos + 136, TextFormatting.DARK_GRAY.getColor());
         }
 
         getMinecraft().textureManager.bind(SIDE);

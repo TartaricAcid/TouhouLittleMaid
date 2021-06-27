@@ -25,7 +25,7 @@ public class TileEntityItemStackChairRenderer extends ItemStackTileEntityRendere
         }
         EntityChair entityChair;
         ItemChair.Data data = ItemChair.getData(itemStackIn);
-        float renderItemScale = CustomPackLoader.CHAIR_MODEL.getModelRenderItemScale(data.getModelId());
+        float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(data.getModelId());
         try {
             entityChair = (EntityChair) EntityCacheUtil.ENTITY_CACHE.get(EntityChair.TYPE, () -> {
                 Entity e = EntityChair.TYPE.create(world);
