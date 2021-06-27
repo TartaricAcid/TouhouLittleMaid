@@ -39,14 +39,19 @@ public final class MaidBrain {
         );
     }
 
-    public static void registerBrainGoals(Brain<EntityMaid> brain) {
+    public static void registerBrainGoals(Brain<EntityMaid> brain, EntityMaid maid) {
+        brain.setSchedule(InitEntities.MAID_DAY_SHIFT_SCHEDULES.get());
+
         registerCoreGoals(brain);
         registerIdleGoals(brain);
         registerPanicGoals(brain);
+        registerWorkGoals(brain, maid);
+        registerResetGoals(brain);
 
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
-        brain.useDefaultActivity();
+        brain.setActiveActivityIfPossible(Activity.IDLE);
+        brain.updateActivityFromSchedule(maid.level.getDayTime(), maid.level.getGameTime());
     }
 
     private static void registerCoreGoals(Brain<EntityMaid> brain) {
@@ -73,8 +78,26 @@ public final class MaidBrain {
                 ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, walkRandomly, noLook)));
         Pair<Integer, MaidBegTask> beg = Pair.of(1, new MaidBegTask());
         Pair<Integer, FindInteractionAndLookTargetTask> getPlayer = Pair.of(1, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 6));
+        Pair<Integer, UpdateActivityTask> updateActivity = Pair.of(99, new UpdateActivityTask());
 
-        brain.addActivity(Activity.IDLE, ImmutableList.of(shuffled, beg, getPlayer));
+        brain.addActivity(Activity.IDLE, ImmutableList.of(shuffled, beg, getPlayer, updateActivity));
+    }
+
+    private static void registerWorkGoals(Brain<EntityMaid> brain, EntityMaid maid) {
+        Pair<Integer, UpdateActivityTask> updateActivity = Pair.of(99, new UpdateActivityTask());
+        Task<EntityMaid> workTask = maid.getTask().createTask(maid);
+        if (workTask != null) {
+            Pair<Integer, Task<EntityMaid>> work = Pair.of(2, workTask);
+            brain.addActivity(Activity.WORK, ImmutableList.of(work, updateActivity));
+        } else {
+            brain.addActivity(Activity.WORK, ImmutableList.of(updateActivity));
+        }
+    }
+
+    private static void registerResetGoals(Brain<EntityMaid> brain) {
+        Pair<Integer, UpdateActivityTask> updateActivity = Pair.of(99, new UpdateActivityTask());
+
+        brain.addActivity(Activity.REST, ImmutableList.of(updateActivity));
     }
 
     private static void registerPanicGoals(Brain<EntityMaid> brain) {

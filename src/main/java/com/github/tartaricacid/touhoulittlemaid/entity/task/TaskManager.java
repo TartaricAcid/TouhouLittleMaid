@@ -2,21 +2,30 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskAttack;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskIdle;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public final class TaskManager {
     private static final Map<ResourceLocation, IMaidTask> TASK_MAP = Maps.newHashMap();
+    private static final List<IMaidTask> TASK_INDEX = Lists.newArrayList();
     private static final IMaidTask IDLE_TASK = new TaskIdle();
+
+    static {
+        registerTask(IDLE_TASK);
+        registerTask(new TaskAttack());
+    }
 
     /**
      * 注册 Task
      */
     public static void registerTask(IMaidTask task) {
         TASK_MAP.put(task.getUid(), task);
+        TASK_INDEX.add(task);
     }
 
     /**
@@ -33,8 +42,11 @@ public final class TaskManager {
         return IDLE_TASK;
     }
 
-    void register() {
-        registerTask(IDLE_TASK);
-        registerTask(new TaskAttack());
+    public static Map<ResourceLocation, IMaidTask> getTaskMap() {
+        return TASK_MAP;
+    }
+
+    public static List<IMaidTask> getTaskIndex() {
+        return TASK_INDEX;
     }
 }

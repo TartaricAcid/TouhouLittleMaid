@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -40,7 +40,7 @@ public interface IMaidTask {
      * @return 如果什么都不做，可以返回 null
      */
     @Nullable
-    Goal createGoal(EntityMaid maid);
+    Task<EntityMaid> createTask(EntityMaid maid);
 
     /**
      * 当前 Task 是否可使用

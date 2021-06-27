@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -19,12 +21,15 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.List;
+
 public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
     private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_backpack.png");
     private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
+    private static int TASK_PAGE = 0;
     private final EntityMaid maid;
     private boolean taskListOpen;
 
@@ -101,6 +106,24 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         pageUp.visible = taskListOpen;
         pageDown.visible = taskListOpen;
         pageClose.visible = taskListOpen;
+
+        List<IMaidTask> tasks = TaskManager.getTaskIndex();
+        // 先判定首位是否超限
+        if (TASK_PAGE * 12 >= tasks.size()) {
+            TASK_PAGE = 0;
+        }
+        for (int i = 0; i < 12; i++) {
+            int index = TASK_PAGE * 12 + i;
+            if (index < tasks.size()) {
+                TaskButton button = new TaskButton(tasks.get(index), leftPos - 89, topPos + 23 + 19 * i,
+                        83, 19, 93, 28, 20, TASK, 256, 256,
+                        (b) -> {
+                        },
+                        (b, m, x, y) -> renderTooltip(m, new StringTextComponent("xxx"), x, y), StringTextComponent.EMPTY);
+                this.addButton(button);
+                button.visible = taskListOpen;
+            }
+        }
     }
 
     @Override

@@ -27,7 +27,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -81,11 +80,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@OnlyIn(
-        value = Dist.CLIENT,
-        _interface = IChargeableMob.class
-)
-public class EntityMaid extends TameableEntity implements INamedContainerProvider, ICrossbowUser, IChargeableMob {
+public class EntityMaid extends TameableEntity implements INamedContainerProvider, ICrossbowUser {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, EntityClassification.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
 
@@ -145,7 +140,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private int backpackDelay = 0;
     private boolean sleep = false;
     private IMaidTask task = TaskManager.getIdleTask();
-    private Goal taskGoal;
 
     public EntityMaid(EntityType<EntityMaid> type, World world) {
         super(type, world);
@@ -197,8 +191,15 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Override
     protected Brain<?> makeBrain(Dynamic<?> dynamicIn) {
         Brain<EntityMaid> brain = this.brainProvider().makeBrain(dynamicIn);
-        MaidBrain.registerBrainGoals(brain);
+        MaidBrain.registerBrainGoals(brain, this);
         return brain;
+    }
+
+    public void refreshBrain(ServerWorld serverWorldIn) {
+        Brain<EntityMaid> brain = this.getBrain();
+        brain.stopAll(serverWorldIn, this);
+        this.brain = brain.copyWithoutBehaviors();
+        MaidBrain.registerBrainGoals(brain, this);
     }
 
     @Override
@@ -408,11 +409,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             amount = MathHelper.clamp(amount / 5, 0, 2);
         }
         return super.hurt(source, amount);
-    }
-
-    @Override
-    public boolean isPowered() {
-        return isStruckByLightning();
     }
 
     @Override
@@ -854,17 +850,11 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (task == this.task) {
             return;
         }
-        if (!level.isClientSide) {
-            if (this.taskGoal != null) {
-                goalSelector.removeGoal(taskGoal);
-            }
-            taskGoal = task.createGoal(this);
-            if (taskGoal != null) {
-                goalSelector.addGoal(TASK_PRIORITY, taskGoal);
-            }
-        }
         this.task = task;
         this.entityData.set(DATA_TASK, task.getUid().toString());
+        if (level instanceof ServerWorld) {
+            refreshBrain((ServerWorld) level);
+        }
     }
 
     @Override

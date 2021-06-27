@@ -4,7 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +32,7 @@ public class TaskAttack implements IAttackTask {
 
     @Nullable
     @Override
-    public Goal createGoal(EntityMaid maid) {
+    public Task<EntityMaid> createTask(EntityMaid maid) {
         return null;
     }
 }
