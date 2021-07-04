@@ -1,10 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
-import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityChairRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityDanmakuRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityFairyRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -15,7 +18,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public final class InitEntitiesRender {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent evt) {
-        RenderingRegistry.registerEntityRenderingHandler(EntityMaid.TYPE, r -> new EntityMaidRenderer(r, new BedrockModel<>(), 0.5f));
-        RenderingRegistry.registerEntityRenderingHandler(EntityChair.TYPE, r -> new EntityChairRenderer(r, new BedrockModel<>(), 0.5f));
+        RenderingRegistry.registerEntityRenderingHandler(EntityMaid.TYPE, EntityMaidRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityChair.TYPE, EntityChairRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityFairy.TYPE, EntityFairyRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityDanmaku.TYPE, EntityDanmakuRenderer::new);
     }
 }

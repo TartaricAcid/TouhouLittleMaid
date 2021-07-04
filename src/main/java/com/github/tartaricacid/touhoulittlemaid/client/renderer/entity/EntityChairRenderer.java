@@ -20,10 +20,9 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
     private ChairModelInfo mainInfo;
     private List<Object> mainAnimations;
-    ;
 
-    public EntityChairRenderer(EntityRendererManager rendererManager, BedrockModel<EntityChair> entityModelIn, float shadowSizeIn) {
-        super(rendererManager, entityModelIn, shadowSizeIn);
+    public EntityChairRenderer(EntityRendererManager rendererManager) {
+        super(rendererManager, new BedrockModel<>(), 0.5f);
     }
 
     @Override

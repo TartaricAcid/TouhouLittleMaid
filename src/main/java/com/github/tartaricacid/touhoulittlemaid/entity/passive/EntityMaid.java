@@ -141,7 +141,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private boolean sleep = false;
     private IMaidTask task = TaskManager.getIdleTask();
 
-    public EntityMaid(EntityType<EntityMaid> type, World world) {
+    protected EntityMaid(EntityType<EntityMaid> type, World world) {
         super(type, world);
         ((GroundPathNavigator) this.getNavigation()).setCanOpenDoors(true);
     }

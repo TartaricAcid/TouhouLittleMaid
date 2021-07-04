@@ -31,8 +31,8 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
 
-    public EntityMaidRenderer(EntityRendererManager manager, BedrockModel<EntityMaid> model, float shadowSize) {
-        super(manager, model, shadowSize);
+    public EntityMaidRenderer(EntityRendererManager manager) {
+        super(manager, new BedrockModel<>(), 0.5f);
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(new LayerMaidBipedHead(this));
         this.addLayer(new LayerMaidArrow(this));

@@ -24,6 +24,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,7 +41,7 @@ public class EntityChair extends AbstractEntityFromItem {
     private float mountedHeight = 0.0f;
     private boolean tameableCanRide = true;
 
-    public EntityChair(EntityType<EntityChair> type, World worldIn) {
+    protected EntityChair(EntityType<EntityChair> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -157,13 +158,13 @@ public class EntityChair extends AbstractEntityFromItem {
     @Override
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains(MODEL_ID_TAG)) {
+        if (compound.contains(MODEL_ID_TAG, Constants.NBT.TAG_STRING)) {
             setModelId(compound.getString(MODEL_ID_TAG));
         }
-        if (compound.contains(MOUNTED_HEIGHT_TAG)) {
+        if (compound.contains(MOUNTED_HEIGHT_TAG, Constants.NBT.TAG_FLOAT)) {
             setMountedHeight(compound.getFloat(MOUNTED_HEIGHT_TAG));
         }
-        if (compound.contains(TAMEABLE_CAN_RIDE_TAG)) {
+        if (compound.contains(TAMEABLE_CAN_RIDE_TAG, Constants.NBT.TAG_BYTE)) {
             setTameableCanRide(compound.getBoolean(TAMEABLE_CAN_RIDE_TAG));
         }
     }
