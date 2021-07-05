@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
-import com.github.tartaricacid.touhoulittlemaid.network.entity.SSpawnDanmakuPacket;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -19,6 +18,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityDanmaku extends ThrowableEntity {
     public static final EntityType<EntityDanmaku> TYPE = EntityType.Builder.<EntityDanmaku>of(EntityDanmaku::new, EntityClassification.MISC)
@@ -176,6 +176,6 @@ public class EntityDanmaku extends ThrowableEntity {
 
     @Override
     public IPacket<?> getAddEntityPacket() {
-        return new SSpawnDanmakuPacket(this);
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

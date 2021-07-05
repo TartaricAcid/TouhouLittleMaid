@@ -14,8 +14,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import java.util.concurrent.TimeUnit;
 
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ReloadResourceEvent {
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+public final class ReloadResourceEvent {
     public static final ResourceLocation EMPTY_BAUBLE_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "items/empty_bauble_slot");
     public static final ResourceLocation EMPTY_MAINHAND_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "items/empty_mainhand_slot");
     public static final ResourceLocation BLOCK_ATLAS_TEXTURE = new ResourceLocation("textures/atlas/blocks.png");

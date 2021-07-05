@@ -78,7 +78,7 @@ public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFly
 
     @Override
     public int getPowerPoint() {
-        return 246;
+        return 16;
     }
 
     @Override

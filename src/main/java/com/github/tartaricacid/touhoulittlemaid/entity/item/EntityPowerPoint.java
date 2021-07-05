@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
-import com.github.tartaricacid.touhoulittlemaid.network.entity.SSpawnPowerPointPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -10,6 +9,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SCollectItemPacket;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
@@ -21,8 +21,10 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityPowerPoint extends Entity {
+public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnData {
     public static final EntityType<EntityPowerPoint> TYPE = EntityType.Builder.<EntityPowerPoint>of(EntityPowerPoint::new, EntityClassification.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(6).updateInterval(20).build("power_point");
     private static final int MAX_AGE = 6000;
@@ -271,6 +273,16 @@ public class EntityPowerPoint extends Entity {
 
     @Override
     public IPacket<?> getAddEntityPacket() {
-        return new SSpawnPowerPointPacket(this);
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    @Override
+    public void writeSpawnData(PacketBuffer buffer) {
+        buffer.writeInt(value);
+    }
+
+    @Override
+    public void readSpawnData(PacketBuffer additionalData) {
+        this.value = additionalData.readInt();
     }
 }
