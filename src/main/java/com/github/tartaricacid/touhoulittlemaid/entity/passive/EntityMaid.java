@@ -358,7 +358,33 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     public void pickupPowerPoint(EntityPowerPoint powerPoint) {
-        // TODO：待完成
+        if (!this.level.isClientSide && powerPoint.isAlive() && powerPoint.throwTime == 0) {
+            // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
+            powerPoint.take(this, 1);
+            if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+                PICKUP_SOUND_COUNT--;
+                if (PICKUP_SOUND_COUNT == 0) {
+                    this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
+                    PICKUP_SOUND_COUNT = 5;
+                }
+            }
+
+            // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
+            Map.Entry<EquipmentSlotType, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
+            int xpValue = EntityPowerPoint.transPowerValueToXpValue(powerPoint.getValue());
+            if (entry != null) {
+                ItemStack itemstack = entry.getValue();
+                if (!itemstack.isEmpty() && itemstack.isDamaged()) {
+                    int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
+                    xpValue -= (i / 2);
+                    itemstack.setDamageValue(itemstack.getDamageValue() - i);
+                }
+            }
+            if (xpValue > 0) {
+                this.setExperience(getExperience() + xpValue);
+            }
+            powerPoint.remove();
+        }
     }
 
     public boolean pickupArrow(AbstractArrowEntity arrow, boolean simulate) {
@@ -516,11 +542,12 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
                 double xRandom = this.random.nextGaussian() * 0.02D;
                 double yRandom = this.random.nextGaussian() * 0.02D;
                 double zRandom = this.random.nextGaussian() * 0.02D;
+
                 this.level.addParticle(ParticleTypes.ENTITY_EFFECT,
                         this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - xRandom * 10.0D,
                         this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()) - yRandom * 10.0D,
                         this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - zRandom * 10.0D,
-                        xRandom, yRandom, zRandom);
+                        0.9, 0.1, 0.1);
             }
         }
     }
@@ -588,7 +615,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Nullable
     @Override
     public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
-        return new MaidInventory(id, inventory, level, getId());
+        return new MaidInventory(id, inventory, getId());
     }
 
     private boolean openMaidGui(PlayerEntity player) {
@@ -655,6 +682,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (damageSourceIn.isFire()) {
             return InitSounds.MAID_HURT_FIRE.get();
         } else if (damageSourceIn.getEntity() instanceof PlayerEntity) {
+            // fixme：当前存在问题
             if (PLAYER_HURT_SOUND_COUNT == 0) {
                 PLAYER_HURT_SOUND_COUNT = 120;
                 return InitSounds.MAID_PLAYER.get();

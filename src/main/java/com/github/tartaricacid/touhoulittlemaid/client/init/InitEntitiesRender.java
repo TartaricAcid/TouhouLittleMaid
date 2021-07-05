@@ -1,10 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityChairRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityDanmakuRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityFairyRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
@@ -22,5 +20,6 @@ public final class InitEntitiesRender {
         RenderingRegistry.registerEntityRenderingHandler(EntityChair.TYPE, EntityChairRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityFairy.TYPE, EntityFairyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDanmaku.TYPE, EntityDanmakuRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityPowerPoint.TYPE, EntityPowerPointRenderer::new);
     }
 }

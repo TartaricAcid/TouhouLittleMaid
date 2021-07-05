@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.network.entity.SSpawnDanmakuPacket;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -13,6 +14,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
@@ -66,7 +68,9 @@ public class EntityDanmaku extends ThrowableEntity {
     @Override
     protected void onHitBlock(BlockRayTraceResult result) {
         // 如果碰撞体积为 null
-        if (level.getBlockState(result.getBlockPos()).getCollisionShape(level, result.getBlockPos()).isEmpty()) {
+        BlockPos pos = result.getBlockPos();
+        BlockState blockState = level.getBlockState(pos);
+        if (!blockState.getCollisionShape(level, pos).isEmpty()) {
             this.remove();
         }
     }

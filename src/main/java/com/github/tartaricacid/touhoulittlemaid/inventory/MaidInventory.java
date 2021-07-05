@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,7 +15,6 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -32,21 +30,23 @@ import static net.minecraft.inventory.container.PlayerContainer.*;
 
 public class MaidInventory extends Container {
     public static final ContainerType<MaidInventory> TYPE = IForgeContainerType.create(
-            (windowId, inv, data) -> new MaidInventory(windowId, inv, Minecraft.getInstance().level, data.readInt()));
+            (windowId, inv, data) -> new MaidInventory(windowId, inv, data.readInt()));
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlotType[] SLOT_IDS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private static final int PLAYER_INVENTORY_SIZE = 36;
     private final EntityMaid maid;
 
-    public MaidInventory(int id, PlayerInventory inventory, World world, int entityId) {
+    public MaidInventory(int id, PlayerInventory inventory, int entityId) {
         super(TYPE, id);
-        this.maid = (EntityMaid) world.getEntity(entityId);
-        this.addPlayerInv(inventory);
-        this.addMaidArmorInv();
-        this.addMaidBauble();
-        this.addMaidHandInv();
-        this.addMainInv();
-        maid.guiOpening = true;
+        this.maid = (EntityMaid) inventory.player.level.getEntity(entityId);
+        if (maid != null) {
+            this.addPlayerInv(inventory);
+            this.addMaidArmorInv();
+            this.addMaidBauble();
+            this.addMaidHandInv();
+            this.addMainInv();
+            maid.guiOpening = true;
+        }
     }
 
     private void addPlayerInv(PlayerInventory playerInventory) {

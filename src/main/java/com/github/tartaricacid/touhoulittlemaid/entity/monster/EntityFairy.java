@@ -26,7 +26,7 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFlyingAnimal {
+public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFlyingAnimal, IHasPowerPoint {
     public static final EntityType<EntityFairy> TYPE = EntityType.Builder.<EntityFairy>of(EntityFairy::new, EntityClassification.MISC)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("fairy");
 
@@ -74,6 +74,17 @@ public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFly
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(FAIRY_TYPE, FairyType.BLACK.ordinal());
+    }
+
+    @Override
+    public int getPowerPoint() {
+        return 246;
+    }
+
+    @Override
+    protected void tickDeath() {
+        super.tickDeath();
+        dropPowerPoint(this);
     }
 
     @Override
