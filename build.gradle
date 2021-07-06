@@ -15,7 +15,7 @@ apply plugin: 'maven-publish'
 
 version = mod_version
 group = 'com.github.tartaricacid'
-archivesBaseName = 'touhoulittlemaid'
+archivesBaseName = 'touhoulittlemaid-1.16.5'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
