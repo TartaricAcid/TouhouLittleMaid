@@ -1,11 +1,12 @@
 buildscript {
     repositories {
-        maven { url = 'https://sizableshrimp.me/maven' }
+        // maven { url = 'https://sizableshrimp.me/maven' }
         maven { url = 'https://files.minecraftforge.net/maven' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'me.sizableshrimp.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        // classpath group: 'me.sizableshrimp.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 
