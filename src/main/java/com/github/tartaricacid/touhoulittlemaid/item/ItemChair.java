@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -99,16 +100,16 @@ public class ItemChair extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.chair.place.desc"));
-        tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.chair.destroy.desc"));
-        tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.chair.gui.desc"));
+        tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.chair.place.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.chair.destroy.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.chair.gui.desc").withStyle(TextFormatting.GRAY));
         // 调试模式，不加国际化
         if (flagIn.isAdvanced() && Screen.hasShiftDown()) {
             Data data = Data.deserialization(stack.getOrCreateTag());
-            tooltip.add(new StringTextComponent("Model Id: " + data.getModelId()));
-            tooltip.add(new StringTextComponent("Mounted Height: " + data.getHeight()));
-            tooltip.add(new StringTextComponent("Tameable Can Ride: " + data.isCanRide()));
-            tooltip.add(new StringTextComponent("Is No Gravity: " + data.isNoGravity()));
+            tooltip.add(new StringTextComponent("Model Id: " + data.getModelId()).withStyle(TextFormatting.GRAY));
+            tooltip.add(new StringTextComponent("Mounted Height: " + data.getHeight()).withStyle(TextFormatting.GRAY));
+            tooltip.add(new StringTextComponent("Tameable Can Ride: " + data.isCanRide()).withStyle(TextFormatting.GRAY));
+            tooltip.add(new StringTextComponent("Is No Gravity: " + data.isNoGravity()).withStyle(TextFormatting.GRAY));
         }
     }
 

@@ -12,7 +12,7 @@ import net.minecraft.util.text.StringTextComponent;
 
 import java.util.concurrent.TimeUnit;
 
-public class EntityCacheUtil {
+public final class EntityCacheUtil {
     /**
      * 实体缓存，在客户端会大量运用实体渲染，这个缓存可以减少重复创建实体带来的性能问题
      */

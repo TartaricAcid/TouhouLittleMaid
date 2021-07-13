@@ -1,10 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.info;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerChairModels;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerMaidModels;
+import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +39,8 @@ public final class ServerCustomPackLoader {
     public static final ServerMaidModels SERVER_MAID_MODELS = ServerMaidModels.getInstance();
     public static final ServerChairModels SERVER_CHAIR_MODELS = ServerChairModels.getInstance();
     private static final Map<Long, Path> CRC32_FILE_MAP = Maps.newHashMap();
-    private static final Path PACK_FOLDER = Paths.get("tlm_custom_pack");
+    private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
+    private static final Path PACK_FOLDER = Paths.get(CUSTOM_PACK_DIR_NAME);
     private static final Marker MARKER = MarkerManager.getMarker("CustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
 
@@ -45,10 +48,10 @@ public final class ServerCustomPackLoader {
         SERVER_MAID_MODELS.clearAll();
         SERVER_CHAIR_MODELS.clearAll();
         CRC32_FILE_MAP.clear();
-        loadPacks();
+        initPacks();
     }
 
-    private static void loadPacks() {
+    private static void initPacks() {
         File packFolder = PACK_FOLDER.toFile();
         if (!packFolder.isDirectory()) {
             try {
@@ -58,6 +61,17 @@ public final class ServerCustomPackLoader {
                 return;
             }
         }
+        checkDefaultPack();
+        loadPacks(packFolder);
+    }
+
+    private static void checkDefaultPack() {
+        // 不管存不存在，强行覆盖
+        String jarDefaultPackPath = String.format("/assets/%s/%s", TouhouLittleMaid.MOD_ID, CUSTOM_PACK_DIR_NAME);
+        GetJarResources.copyTouhouLittleMaidFolder(jarDefaultPackPath, PACK_FOLDER);
+    }
+
+    private static void loadPacks(File packFolder) {
         File[] files = packFolder.listFiles(((dir, name) -> name.endsWith(".zip")));
         if (files == null) {
             return;

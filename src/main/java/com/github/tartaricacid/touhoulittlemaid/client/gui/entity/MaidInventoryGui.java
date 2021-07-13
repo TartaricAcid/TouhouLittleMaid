@@ -78,19 +78,19 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         ImageButton pageDown = new ImageButton(leftPos - 72, topPos + 9, 16, 13, 93, 0, 14, TASK, 256, 256,
                 (b) -> {
                 },
-                (b, m, x, y) -> renderTooltip(m, new StringTextComponent("下一页"), x, y), StringTextComponent.EMPTY);
+                (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.next_page"), x, y), StringTextComponent.EMPTY);
 
         ImageButton pageUp = new ImageButton(leftPos - 89, topPos + 9, 16, 13, 110, 0, 14, TASK, 256, 256,
                 (b) -> {
                 },
-                (b, m, x, y) -> renderTooltip(m, new StringTextComponent("上一页"), x, y), StringTextComponent.EMPTY);
+                (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.previous_page"), x, y), StringTextComponent.EMPTY);
 
         ImageButton pageClose = new ImageButton(leftPos - 19, topPos + 9, 13, 13, 127, 0, 14, TASK, 256, 256,
                 (b) -> {
                     taskListOpen = false;
                     init();
                 },
-                (b, m, x, y) -> renderTooltip(m, new StringTextComponent("关闭"), x, y), StringTextComponent.EMPTY);
+                (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.close"), x, y), StringTextComponent.EMPTY);
 
         this.addButton(pageUp);
         this.addButton(pageDown);
@@ -101,7 +101,7 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
                     taskListOpen = !taskListOpen;
                     init();
                 },
-                (b, m, x, y) -> renderTooltip(m, new StringTextComponent("xxx"), x, y), StringTextComponent.EMPTY));
+                (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.switch"), x, y), StringTextComponent.EMPTY));
 
         pageUp.visible = taskListOpen;
         pageDown.visible = taskListOpen;

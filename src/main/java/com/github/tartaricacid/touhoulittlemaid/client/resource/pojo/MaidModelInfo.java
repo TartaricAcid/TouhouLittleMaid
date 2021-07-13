@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -119,6 +120,7 @@ public class MaidModelInfo implements IModelInfo {
         return canRidingBroom;
     }
 
+    @Nullable
     public EasterEgg getEasterEgg() {
         return easterEgg;
     }
