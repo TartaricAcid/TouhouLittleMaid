@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IModelInfo {
@@ -11,6 +12,7 @@ public interface IModelInfo {
 
     ResourceLocation getModel();
 
+    @Nullable
     List<ResourceLocation> getAnimation();
 
     ResourceLocation getTexture();

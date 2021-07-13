@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ImageButtonWithId;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.ZipPackTexture;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.SizeTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -271,9 +271,9 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
     private void checkIconAnimation(CustomModelPack<E> pack, ResourceLocation icon) {
         Texture iconText = getMinecraft().textureManager.getTexture(icon);
-        if (iconText instanceof ZipPackTexture) {
-            int width = ((ZipPackTexture) iconText).getWidth();
-            int height = ((ZipPackTexture) iconText).getHeight();
+        if (iconText instanceof SizeTexture) {
+            int width = ((SizeTexture) iconText).getWidth();
+            int height = ((SizeTexture) iconText).getHeight();
             if (width >= height) {
                 pack.setIconAnimation(CustomModelPack.AnimationState.FALSE);
             } else {

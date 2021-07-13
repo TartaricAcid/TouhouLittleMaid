@@ -6,21 +6,20 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-public class ZipPackTexture extends SizeTexture {
+public class FilePackTexture extends SizeTexture {
     private final ResourceLocation texturePath;
-    private final Path zipFilePath;
+    private final Path rootPath;
     private int width = 16;
     private int height = 16;
 
-    public ZipPackTexture(String zipFilePath, ResourceLocation texturePath) {
-        this.zipFilePath = Paths.get(zipFilePath);
+    public FilePackTexture(Path rootPath, ResourceLocation texturePath) {
+        this.rootPath = rootPath;
         this.texturePath = texturePath;
     }
 
@@ -34,12 +33,9 @@ public class ZipPackTexture extends SizeTexture {
     }
 
     private void doLoad() {
-        try (ZipFile zipFile = new ZipFile(zipFilePath.toFile())) {
-            ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", texturePath.getNamespace(), texturePath.getPath()));
-            if (entry == null) {
-                return;
-            }
-            try (InputStream stream = zipFile.getInputStream(entry)) {
+        File textureFile = rootPath.resolve("assets").resolve(texturePath.getNamespace()).resolve(texturePath.getPath()).toFile();
+        if (textureFile.isFile()) {
+            try (InputStream stream = new FileInputStream(textureFile)) {
                 NativeImage imageIn = NativeImage.read(stream);
                 width = imageIn.getWidth();
                 height = imageIn.getHeight();
@@ -48,8 +44,6 @@ public class ZipPackTexture extends SizeTexture {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

@@ -17,10 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -72,12 +69,32 @@ public final class ServerCustomPackLoader {
     }
 
     private static void loadPacks(File packFolder) {
-        File[] files = packFolder.listFiles(((dir, name) -> name.endsWith(".zip")));
+        File[] files = packFolder.listFiles(((dir, name) -> true));
         if (files == null) {
             return;
         }
         for (File file : files) {
-            readModelFromZipFile(file);
+            if (file.isFile() && file.getName().endsWith(".zip")) {
+                readModelFromZipFile(file);
+            }
+            if (file.isDirectory()) {
+                readModelFromFolder(file);
+            }
+        }
+    }
+
+    public static void readModelFromFolder(File root) {
+        File[] domainFiles = root.toPath().resolve("assets").toFile().listFiles((dir, name) -> true);
+        if (domainFiles == null) {
+            return;
+        }
+        for (File domainDir : domainFiles) {
+            if (domainDir.isDirectory()) {
+                Path rootPath = root.toPath();
+                String domain = domainDir.getName();
+                loadMaidModelPack(rootPath, domain);
+                loadChairModelPack(rootPath, domain);
+            }
         }
     }
 
@@ -90,6 +107,7 @@ public final class ServerCustomPackLoader {
                     String domain = matcher.group(1);
                     loadMaidModelPack(zipFile, domain);
                     loadChairModelPack(zipFile, domain);
+                    // 文件夹形式的不记录 crc32，也不往客户端同步
                     loadCrc32Info(file);
                 }
             }
@@ -101,6 +119,33 @@ public final class ServerCustomPackLoader {
     private static void loadCrc32Info(File file) throws IOException {
         long crc32 = FileUtils.checksumCRC32(file);
         CRC32_FILE_MAP.putIfAbsent(crc32, file.toPath());
+    }
+
+    private static void loadMaidModelPack(Path rootPath, String domain) {
+        LOGGER.debug(MARKER, "Touhou little maid mod's model is loading...");
+        File file = rootPath.resolve("assets").resolve(domain).resolve(SERVER_MAID_MODELS.getJsonFileName()).toFile();
+        if (!file.isFile()) {
+            return;
+        }
+        try (InputStream stream = new FileInputStream(file)) {
+            CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
+                    new TypeToken<CustomModelPack<MaidModelInfo>>() {
+                    }.getType());
+            pack.decorate();
+            for (MaidModelInfo maidModelInfo : pack.getModelList()) {
+                if (maidModelInfo.getEasterEgg() == null) {
+                    String id = maidModelInfo.getModelId().toString();
+                    SERVER_MAID_MODELS.putInfo(id, maidModelInfo);
+                    LOGGER.debug(MARKER, "Loaded model info: {}", id);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JsonSyntaxException e) {
+            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain);
+            e.printStackTrace();
+        }
+        LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
     }
 
     private static void loadMaidModelPack(ZipFile zipFile, String domain) {
@@ -137,6 +182,31 @@ public final class ServerCustomPackLoader {
             return;
         }
         try (InputStream stream = zipFile.getInputStream(entry)) {
+            CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
+                    new TypeToken<CustomModelPack<ChairModelInfo>>() {
+                    }.getType());
+            pack.decorate();
+            for (ChairModelInfo chairModelInfo : pack.getModelList()) {
+                String id = chairModelInfo.getModelId().toString();
+                SERVER_CHAIR_MODELS.putInfo(id, chairModelInfo);
+                LOGGER.debug(MARKER, "Loaded model info: {}", id);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JsonSyntaxException e) {
+            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain);
+            e.printStackTrace();
+        }
+        LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
+    }
+
+    private static void loadChairModelPack(Path rootPath, String domain) {
+        LOGGER.debug(MARKER, "Touhou little maid mod's model is loading...");
+        File file = rootPath.resolve("assets").resolve(domain).resolve(SERVER_CHAIR_MODELS.getJsonFileName()).toFile();
+        if (!file.isFile()) {
+            return;
+        }
+        try (InputStream stream = new FileInputStream(file)) {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
