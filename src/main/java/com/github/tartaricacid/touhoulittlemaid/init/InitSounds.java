@@ -44,7 +44,6 @@ public final class InitSounds {
     public static final RegistryObject<SoundEvent> ALTAR_CRAFT = registerSound("block.altar_craft");
     public static final RegistryObject<SoundEvent> BOX_OPEN = registerSound("entity.box");
     public static final RegistryObject<SoundEvent> COMPASS_POINT = registerSound("item.compass");
-    public static final RegistryObject<SoundEvent> PORTABLE_AUDIO = registerSound("item.portable_audio");
 
     private static RegistryObject<SoundEvent> registerSound(String name) {
         return SOUNDS.register(name, () -> new SoundEvent(new ResourceLocation(TouhouLittleMaid.MOD_ID, name)));

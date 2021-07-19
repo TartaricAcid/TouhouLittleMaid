@@ -55,6 +55,7 @@ public class CustomPackLoader {
     public static final ChairModels CHAIR_MODELS = ChairModels.getInstance();
     private static final String COMMENT_SYMBOL = "#";
     private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
+    private static final String DEFAULT_PACK_NAME = "touhou_little_maid-1.0.0.zip";
     private static final Marker MARKER = MarkerManager.getMarker("CustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
     private static final Path PACK_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve(CUSTOM_PACK_DIR_NAME);
@@ -82,8 +83,8 @@ public class CustomPackLoader {
 
     private static void checkDefaultPack() {
         // 不管存不存在，强行覆盖
-        String jarDefaultPackPath = String.format("/assets/%s/%s", TouhouLittleMaid.MOD_ID, CUSTOM_PACK_DIR_NAME);
-        GetJarResources.copyTouhouLittleMaidFolder(jarDefaultPackPath, PACK_FOLDER);
+        String jarDefaultPackPath = String.format("/assets/%s/%s/%s", TouhouLittleMaid.MOD_ID, CUSTOM_PACK_DIR_NAME, DEFAULT_PACK_NAME);
+        GetJarResources.copyTouhouLittleMaidFile(jarDefaultPackPath, PACK_FOLDER, DEFAULT_PACK_NAME);
     }
 
     private static void loadPacks(File packFolder) {
