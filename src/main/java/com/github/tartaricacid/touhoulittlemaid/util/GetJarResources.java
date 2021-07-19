@@ -50,6 +50,7 @@ public final class GetJarResources {
                     fs.close();
                     break;
                 default:
+                    TouhouLittleMaid.LOGGER.fatal("Unknown URL Protocol: {}", url.getProtocol());
                     throw new NullPointerException();
             }
         } catch (IOException | URISyntaxException e) {
