@@ -42,6 +42,7 @@ public final class GetJarResources {
                     break;
                 // 实际运行环境，资源部分成为了 jar 文件中的一部分，就需要通过此处进行复制了
                 case "jar":
+                case "modjar":
                     FileSystem fs = FileSystems.newFileSystem(url.toURI(), Collections.emptyMap());
                     // 因为此时获取得到的是 ZipPath，不能直接 toFile
                     // 所以 FileUtils.copyDirectory 自然也是用不了的，得自己实现复制文件夹功能
