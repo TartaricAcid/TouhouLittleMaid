@@ -10,7 +10,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber()
+@Mod.EventBusSubscriber
 public class SwitchSittingEvent {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onInteractMaid(InteractMaidEvent event) {
