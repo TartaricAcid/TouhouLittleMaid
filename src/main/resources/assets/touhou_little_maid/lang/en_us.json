@@ -21,6 +21,7 @@
   "gui.touhou_little_maid.task.switch": "Switch Task",
   "gui.touhou_little_maid.skin.text.version": "Version: %s",
   "gui.touhou_little_maid.skin.text.date": "Date: %s",
+  "gui.touhou_little_maid.skin.button.close": "Close",
   "gui.touhou_little_maid.skin.tooltips.show_details": "Shift Click To Open The Details GUI",
   "message.touhou_little_maid.change_model.disabled": "Model switch is disabled.",
   "death.touhou_little_maid.attack.danmaku.1": "%1$s was killed by %2$s using danmaku",
