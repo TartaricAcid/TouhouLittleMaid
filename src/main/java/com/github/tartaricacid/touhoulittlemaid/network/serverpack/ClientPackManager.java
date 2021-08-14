@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.network.serverpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
+import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.ServerPackTexture;
@@ -244,18 +245,29 @@ public final class ClientPackManager {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             CustomModelPOJO pojo = CommonProxy.GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), CustomModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (!pojo.getFormatVersion().equals(OLD_BEDROCK_VERSION)) {
-                LOGGER.warn(MARKER, "{} model version is not 1.10.0", modelLocation);
-                // TODO: 2020/9/1 添加对高版本基岩版模型的兼容
-                return null;
+            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModel() != null) {
+                    return new EntityModelJson(pojo, BedrockVersion.LEGACY);
+                } else {
+                    // 否则日志给出提示
+                    LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                }
             }
-            // 如果 model 字段不为空
-            if (pojo.getGeometryModel() != null) {
-                return new EntityModelJson(pojo);
-            } else {
-                // 否则日志给出提示
-                LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+
+            // 判定是不是 1.12.0 版本基岩版模型文件
+            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModelNew() != null) {
+                    return new EntityModelJson(pojo, BedrockVersion.NEW);
+                } else {
+                    // 否则日志给出提示
+                    LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                    return null;
+                }
             }
+
+            LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
             LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);

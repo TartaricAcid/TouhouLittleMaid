@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.model.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class CubesItem {
@@ -19,6 +20,12 @@ public class CubesItem {
 
     @SerializedName("origin")
     private List<Float> origin;
+
+    @SerializedName("rotation")
+    private List<Float> rotation;
+
+    @SerializedName("pivot")
+    private List<Float> pivot;
 
     public List<Float> getUv() {
         return uv;
@@ -41,6 +48,16 @@ public class CubesItem {
 
     public List<Float> getOrigin() {
         return origin;
+    }
+
+    @Nullable
+    public List<Float> getRotation() {
+        return rotation;
+    }
+
+    @Nullable
+    public List<Float> getPivot() {
+        return pivot;
     }
 
     @Override

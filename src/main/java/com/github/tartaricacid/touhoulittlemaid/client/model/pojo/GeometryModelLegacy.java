@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class GeometryModel {
+public class GeometryModelLegacy {
     @SerializedName("bones")
     private List<BonesItem> bones;
 
