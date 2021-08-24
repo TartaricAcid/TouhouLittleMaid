@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="300" src="https://i.loli.net/2021/08/23/NlEhiUfW46Fyt9g.png" alt="title">
+    <img width="300" src="https://i.loli.net/2021/08/24/9qfcwoChbiFSGTy.png" alt="title">
 </p>
 <p align="center">
     <a href="https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid">
@@ -18,8 +18,8 @@
 </p>
 <p align="center">
     <a href="#">English</a> | 
-    <a href="">简体中文</a> | 
-    <a href="">日本語</a>
+    <a href="#">简体中文</a> | 
+    <a href="#">日本語</a>
 </p>
 
 This is a Minecraft 1.16.5 Forge mod, which was inspired by the [Little Maid Mob](https://github.com/MMM666/littleMaidMob) mod and [Touhou Project](https://en.wikipedia.org/wiki/Touhou_Project).       
