@@ -4,42 +4,63 @@ on:
   push:
     branches:
       - 1.16.5
+    paths:
+      - 'src/main/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    
-    - name: Set up JDK 8
-      uses: actions/setup-java@v2
-      with:
-        java-version: '8'
-        distribution: 'adopt'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
-        
-    - name: Cache Gradle packages
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Build with Gradle
-      run: ./gradlew build
-      
-    - name: Cleanup Gradle Cache
-      # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
-      # Restoring these files from a GitHub Actions cache might cause problems for future builds.
-      run: |
-        rm -f ~/.gradle/caches/modules-2/modules-2.lock
-        rm -f ~/.gradle/caches/modules-2/gc.properties
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build
+
+      - name: Create timestamp
+        id: create_timestamp
+        run: echo "::set-output name=timestamp::$(date '+%Y%m%d%H%M%s')"
+        shell: bash
+
+      - name: Send file to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: snapshot-${{ steps.create_timestamp.outputs.timestamp }}
+          body: ${{ github.event.head_commit.message }}
+          draft: true
+          prerelease: true
+          files: |
+            ./build/libs/*.jar
+
+      - name: Send file to Discord
+        uses: sinshutu/upload-to-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: ./build/libs/*.jar
+
+      - name: Cleanup Gradle Cache
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
