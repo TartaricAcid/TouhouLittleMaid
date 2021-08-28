@@ -26,6 +26,11 @@ This is a Minecraft 1.16.5 Forge mod, which was inspired by the [Little Maid Mob
 Added cute maids to Minecraft, who can help with battles, farming and other tasks.      
 The mod supports custom models in the Bedrock Edition Entity format, you can easily switch the maid model, or create your own maid model.
 
+## Notice
+- If you have any comments or suggestions, you can visit [Discussions](https://github.com/TartaricAcid/TouhouLittleMaid/discussions) to give us feedback.    
+- If you have any bugs, you can visit [Issues](https://github.com/TartaricAcid/TouhouLittleMaid/issues) to submit issues.
+- You can visit [Releases](https://github.com/TartaricAcid/TouhouLittleMaid/releases) to download the snapshot version mod, but please note that **the snapshot version mod will be very unstable**.
+
 ## Authors
 - Programmer: `TartaricAcid`, `Snownee`
 - Artist: `Succinum`, `Pajinyi`, `ZeniCrow`, `Tian_mi`, `Paulzzh`, `YurisCat`
