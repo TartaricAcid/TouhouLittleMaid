@@ -54,6 +54,10 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
      */
     protected abstract ItemStack getKilledStack();
 
+    @Override
+    public void kill() {
+        this.remove();
+    }
 
     @Override
     public boolean hurt(@Nonnull DamageSource source, float amount) {

@@ -1,18 +1,18 @@
 buildscript {
     repositories {
-        // maven { url = 'https://sizableshrimp.me/maven' }
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        // classpath group: 'me.sizableshrimp.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = mod_version
 group = 'com.github.tartaricacid'
@@ -21,8 +21,7 @@ archivesBaseName = 'touhoulittlemaid-1.16.5'
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
-    // mappings channel: 'official_snapshot', version: '20210309-1.16.5'
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'parchment', version: '2021.08.29-1.16.5'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -89,7 +88,7 @@ repositories {
     maven {
         // The One Probe
         name = 'terrag maven'
-        url = "http://maven.tterrag.com/"
+        url = "https://maven.tterrag.com/"
     }
     maven {
         // Patchouli
