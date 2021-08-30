@@ -1,11 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.script;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.model.ModelRendererWithOffset;
 
 public class ModelRendererWrapper {
-    private ModelRenderer modelRenderer;
+    private ModelRendererWithOffset modelRenderer;
 
-    public ModelRendererWrapper(ModelRenderer modelRenderer) {
+    public ModelRendererWrapper(ModelRendererWithOffset modelRenderer) {
         this.modelRenderer = modelRenderer;
     }
 
@@ -34,30 +34,27 @@ public class ModelRendererWrapper {
     }
 
     public float getOffsetX() {
-        // FIXME：可能新版本已经不存在此数值，需要进一步确认
-        return 0;
+        return modelRenderer.offsetX;
     }
 
     public void setOffsetX(float offsetX) {
-        // FIXME：可能新版本已经不存在此数值，需要进一步确认
+        modelRenderer.offsetX = offsetX;
     }
 
     public float getOffsetY() {
-        // FIXME：可能新版本已经不存在此数值，需要进一步确认
-        return 0;
+        return modelRenderer.offsetY;
     }
 
     public void setOffsetY(float offsetY) {
-        // FIXME：可能新版本已经不存在此数值，需要进一步确认
+        modelRenderer.offsetY = offsetY;
     }
 
     public float getOffsetZ() {
-        // FIXME：可能新版本已经不存在此数值，需要进一步确认
-        return 0;
+        return modelRenderer.offsetZ;
     }
 
     public void setOffsetZ(float offsetZ) {
-        // FIXME：可能新版本已经不存在此数值，需要进一步确认
+        modelRenderer.offsetZ = offsetZ;
     }
 
     public float getRotationPointX() {
@@ -80,11 +77,11 @@ public class ModelRendererWrapper {
         modelRenderer.visible = !hidden;
     }
 
-    public ModelRenderer getModelRenderer() {
+    public ModelRendererWithOffset getModelRenderer() {
         return modelRenderer;
     }
 
-    public void setModelRenderer(ModelRenderer modelRenderer) {
+    public void setModelRenderer(ModelRendererWithOffset modelRenderer) {
         this.modelRenderer = modelRenderer;
     }
 }

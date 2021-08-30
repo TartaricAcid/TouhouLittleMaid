@@ -95,7 +95,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
             indexBones.put(bones.getName(), bones);
             // 塞入新建的空 ModelRenderer 实例
             // 因为后面添加 parent 需要，所以先塞空对象，然后二次遍历再进行数据存储
-            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRenderer(this)));
+            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRendererWithOffset(this)));
         }
 
         // 开始往 ModelRenderer 实例里面塞数据
@@ -150,7 +150,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
                 }
                 // 创建 Cube ModelRender
                 else {
-                    ModelRenderer cubeRenderer = new ModelRenderer(this);
+                    ModelRenderer cubeRenderer = new ModelRendererWithOffset(this);
                     cubeRenderer.setPos(convertPivot(bones, cube, 0), convertPivot(bones, cube, 1), convertPivot(bones, cube, 2));
                     setRotationAngle(cubeRenderer, convertRotation(cubeRotation.get(0)), convertRotation(cubeRotation.get(1)), convertRotation(cubeRotation.get(2)));
                     cubeRenderer.cubes.add(new ModelFloatBox(uv.get(0), uv.get(1),
@@ -186,7 +186,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
             indexBones.put(bones.getName(), bones);
             // 塞入新建的空 ModelRenderer 实例
             // 因为后面添加 parent 需要，所以先塞空对象，然后二次遍历再进行数据存储
-            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRenderer(this)));
+            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRendererWithOffset(this)));
         }
 
         // 开始往 ModelRenderer 实例里面塞数据
