@@ -53,13 +53,6 @@ jobs:
           files: |
             ./build/libs/*.jar
 
-      - name: Send file to Discord
-        uses: sinshutu/upload-to-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: ./build/libs/*.jar
-
       - name: Cleanup Gradle Cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
