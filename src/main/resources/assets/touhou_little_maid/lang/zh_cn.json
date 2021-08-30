@@ -24,6 +24,7 @@
   "gui.touhou_little_maid.skin.button.close": "关闭",
   "gui.touhou_little_maid.skin.tooltips.show_details": "Shift 点击打开详情界面",
   "message.touhou_little_maid.change_model.disabled": "模型切换功能已被禁止",
+  "commands.touhou_little_maid.pack.reload.info": "所有的模型包已经重载！",
   "death.touhou_little_maid.attack.danmaku.1": "%1$s被%2$s用弹幕干掉了",
   "death.touhou_little_maid.attack.danmaku.2": "%1$s在躲避%2$s的弹幕时不慎 biu 了~",
   "death.touhou_little_maid.attack.danmaku.3": "%1$s被%2$s的弹幕打的满身疮痍",

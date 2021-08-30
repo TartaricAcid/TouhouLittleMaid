@@ -39,7 +39,7 @@ public final class ServerCustomPackLoader {
     private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
     private static final String DEFAULT_PACK_NAME = "touhou_little_maid-1.0.0.zip";
     private static final Path PACK_FOLDER = Paths.get(CUSTOM_PACK_DIR_NAME);
-    private static final Marker MARKER = MarkerManager.getMarker("CustomPackLoader");
+    private static final Marker MARKER = MarkerManager.getMarker("ServerCustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
 
     public static void reloadPacks() {

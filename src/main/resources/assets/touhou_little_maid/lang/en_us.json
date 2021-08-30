@@ -24,6 +24,7 @@
   "gui.touhou_little_maid.skin.button.close": "Close",
   "gui.touhou_little_maid.skin.tooltips.show_details": "Shift Click To Open The Details GUI",
   "message.touhou_little_maid.change_model.disabled": "Model switch is disabled.",
+  "commands.touhou_little_maid.pack.reload.info": "All model pack have been reloaded!",
   "death.touhou_little_maid.attack.danmaku.1": "%1$s was killed by %2$s using danmaku",
   "death.touhou_little_maid.attack.danmaku.2": "%1$s was shot by %2$s using danmaku",
   "death.touhou_little_maid.attack.danmaku.3": "%1$s was pummeled by %2$s using danmaku",

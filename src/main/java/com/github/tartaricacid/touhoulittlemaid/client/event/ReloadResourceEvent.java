@@ -23,12 +23,7 @@ public final class ReloadResourceEvent {
     @SubscribeEvent
     public static void onTextureStitchEventPost(TextureStitchEvent.Post event) {
         if (BLOCK_ATLAS_TEXTURE.equals(event.getMap().location())) {
-            StopWatch watch = StopWatch.createStarted();
-            InnerAnimation.init();
-            CustomPackLoader.reloadPacks();
-            PlayerMaidModels.reload();
-            watch.stop();
-            TouhouLittleMaid.LOGGER.info("Model loading time: {} ms", watch.getTime(TimeUnit.MICROSECONDS) / 1000.0);
+            reloadAllPack();
         }
     }
 
@@ -38,5 +33,14 @@ public final class ReloadResourceEvent {
             event.addSprite(EMPTY_BAUBLE_SLOT);
             event.addSprite(EMPTY_MAINHAND_SLOT);
         }
+    }
+
+    public static void reloadAllPack() {
+        StopWatch watch = StopWatch.createStarted();
+        InnerAnimation.init();
+        CustomPackLoader.reloadPacks();
+        PlayerMaidModels.reload();
+        watch.stop();
+        TouhouLittleMaid.LOGGER.info("Model loading time: {} ms", watch.getTime(TimeUnit.MICROSECONDS) / 1000.0);
     }
 }
