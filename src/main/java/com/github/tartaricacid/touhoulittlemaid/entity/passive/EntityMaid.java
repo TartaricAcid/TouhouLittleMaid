@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.config.Config;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.AbstractEntityFromItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -30,6 +29,7 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -89,7 +89,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final DataParameter<Boolean> DATA_BEGGING = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_PICKUP = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_HOME_MODE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> DATA_SHOW_HELMET = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> DATA_RIDEABLE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_INVULNERABLE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> DATA_BACKPACK_LEVEL = EntityDataManager.defineId(EntityMaid.class, DataSerializers.INT);
     private static final DataParameter<Integer> DATA_HUNGER = EntityDataManager.defineId(EntityMaid.class, DataSerializers.INT);
@@ -101,9 +101,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     private static final String MODEL_ID_TAG = "ModelId";
     private static final String TASK_TAG = "MaidTask";
-    private static final String PICKUP_TAG = "ModelIsPickup";
-    private static final String HOME_TAG = "ModelIsHome";
-    private static final String SHOW_HELMET_TAG = "MaidShowHelmet";
+    private static final String PICKUP_TAG = "MaidIsPickup";
+    private static final String HOME_TAG = "MaidIsHome";
+    private static final String RIDEABLE_TAG = "MaidIsRideable";
     private static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     private static final String MAID_INVENTORY_TAG = "MaidInventory";
     private static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
@@ -113,7 +113,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final String EXPERIENCE_TAG = "MaidExperience";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private static final int TASK_PRIORITY = 5;
     private static final int HUNGER_VALUE_REFUSING_TASK = -256;
     private static int PLAYER_HURT_SOUND_COUNT = 120;
     private static int PICKUP_SOUND_COUNT = 5;
@@ -166,7 +165,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         this.entityData.define(DATA_BEGGING, false);
         this.entityData.define(DATA_PICKUP, true);
         this.entityData.define(DATA_HOME_MODE, false);
-        this.entityData.define(DATA_SHOW_HELMET, true);
+        this.entityData.define(DATA_RIDEABLE, true);
         this.entityData.define(DATA_INVULNERABLE, false);
         this.entityData.define(DATA_BACKPACK_LEVEL, 0);
         this.entityData.define(DATA_HUNGER, 0);
@@ -199,7 +198,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         Brain<EntityMaid> brain = this.getBrain();
         brain.stopAll(serverWorldIn, this);
         this.brain = brain.copyWithoutBehaviors();
-        MaidBrain.registerBrainGoals(brain, this);
+        MaidBrain.registerBrainGoals(this.getBrain(), this);
     }
 
     @Override
@@ -208,7 +207,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (!guiOpening) {
             this.getBrain().tick((ServerWorld) this.level, this);
         }
-        this.updateSwingTime();
         this.level.getProfiler().pop();
         super.customServerAiStep();
     }
@@ -224,6 +222,12 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         }
         this.spawnPortalParticle();
         this.randomRestoreHealth();
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.updateSwingTime();
     }
 
     @Override
@@ -429,6 +433,13 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     @Override
+    public boolean doHurtTarget(Entity entityIn) {
+        boolean result = super.doHurtTarget(entityIn);
+        this.getMainHandItem().hurtAndBreak(1, this, (maid) -> maid.broadcastBreakEvent(Hand.MAIN_HAND));
+        return result;
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof PlayerEntity && this.isOwnedBy((PlayerEntity) source.getEntity())) {
             // 玩家对自己女仆的伤害数值为 1/5，最大为 2
@@ -501,19 +512,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        if (target instanceof AbstractEntityFromItem) {
-            return false;
+        if (target instanceof IMob) {
+            return super.canAttack(target);
         }
-        return super.canAttack(target);
-    }
-
-    public boolean canUseTaskGoal() {
-        boolean guiNotOpening = !guiOpening;
-        boolean isTamed = isTame();
-        boolean notInSitting = !isInSittingPose();
-        boolean notHunger = getHunger() > HUNGER_VALUE_REFUSING_TASK;
-        boolean taskEnable = getTask().isEnable(this);
-        return guiNotOpening && isTamed && notInSitting && notHunger && taskEnable;
+        return false;
     }
 
     private void spawnPortalParticle() {
@@ -559,7 +561,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         compound.putString(TASK_TAG, getTask().getUid().toString());
         compound.putBoolean(PICKUP_TAG, isPickup());
         compound.putBoolean(HOME_TAG, isHomeModeEnable());
-        compound.putBoolean(SHOW_HELMET_TAG, isShowHelmet());
+        compound.putBoolean(RIDEABLE_TAG, isRideable());
         compound.putInt(BACKPACK_LEVEL_TAG, getBackpackLevel());
         compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT());
         compound.put(MAID_BAUBLE_INVENTORY_TAG, maidBauble.serializeNBT());
@@ -586,8 +588,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (compound.contains(HOME_TAG, Constants.NBT.TAG_BYTE)) {
             setHomeModeEnable(compound.getBoolean(HOME_TAG));
         }
-        if (compound.contains(SHOW_HELMET_TAG, Constants.NBT.TAG_BYTE)) {
-            setShowHelmet(compound.getBoolean(SHOW_HELMET_TAG));
+        if (compound.contains(RIDEABLE_TAG, Constants.NBT.TAG_BYTE)) {
+            setRideable(compound.getBoolean(RIDEABLE_TAG));
         }
         if (compound.contains(BACKPACK_LEVEL_TAG, Constants.NBT.TAG_INT)) {
             setBackpackLevel(compound.getInt(BACKPACK_LEVEL_TAG));
@@ -682,7 +684,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (damageSourceIn.isFire()) {
             return InitSounds.MAID_HURT_FIRE.get();
         } else if (damageSourceIn.getEntity() instanceof PlayerEntity) {
-            // fixme：当前存在问题
+            // fixme：当前存在问题，呼喊声还是会叠加播放
             if (PLAYER_HURT_SOUND_COUNT == 0) {
                 PLAYER_HURT_SOUND_COUNT = 120;
                 return InitSounds.MAID_PLAYER.get();
@@ -786,12 +788,12 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         this.entityData.set(DATA_PICKUP, isPickup);
     }
 
-    public boolean isShowHelmet() {
-        return this.entityData.get(DATA_SHOW_HELMET);
+    public boolean isRideable() {
+        return this.entityData.get(DATA_RIDEABLE);
     }
 
-    public void setShowHelmet(boolean show) {
-        this.entityData.set(DATA_SHOW_HELMET, show);
+    public void setRideable(boolean rideable) {
+        this.entityData.set(DATA_RIDEABLE, rideable);
     }
 
     public int getBackpackLevel() {

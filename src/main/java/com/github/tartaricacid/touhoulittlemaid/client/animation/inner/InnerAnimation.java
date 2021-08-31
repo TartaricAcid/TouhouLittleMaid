@@ -281,9 +281,9 @@ public final class InnerAnimation {
                         armRight.setRotateAngleY(0);
                         armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.05 + 0.4));
                         // 手部使用动画
-                        if (maid.swingTime > 0.0 && !isSwingLeftHand(maid)) {
+                        if (maid.attackAnim > 0.0 && !isSwingLeftHand(maid)) {
                             armRight.setRotateAngleX((float) (armRight.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.swingTime * Math.PI) * -0.4));
+                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
                         }
                     }
                 }
@@ -298,9 +298,9 @@ public final class InnerAnimation {
                 ModelRendererWrapper armLeft = modelMap.get("armLeftExtraA");
                 ModelRendererWrapper armRight = modelMap.get("armRightExtraA");
 
-                double f1 = 1.0 - Math.pow(1.0 - maid.swingTime, 4);
+                double f1 = 1.0 - Math.pow(1.0 - maid.attackAnim, 4);
                 double f2 = Math.sin(f1 * Math.PI);
-                double f3 = Math.sin(maid.swingTime * Math.PI) * -0.7 * 0.75;
+                double f3 = Math.sin(maid.attackAnim * Math.PI) * -0.7 * 0.75;
 
                 float[] rotation;
                 if (armLeft != null) {
@@ -318,9 +318,9 @@ public final class InnerAnimation {
                         armLeft.setRotateAngleY(0);
                         armLeft.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.05) * 0.05 - 0.4));
                         // 手部使用动画
-                        if (maid.swingTime > 0.0 && isSwingLeftHand(maid)) {
+                        if (maid.attackAnim > 0.0 && isSwingLeftHand(maid)) {
                             armLeft.setRotateAngleX((float) (armLeft.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(maid.swingTime * Math.PI) * -0.4));
+                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
                         }
                     }
                 }
@@ -336,9 +336,9 @@ public final class InnerAnimation {
                         armRight.setRotateAngleY(0);
                         armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.05 + 0.4));
                         // 手部使用动画
-                        if (maid.swingTime > 0.0 && !isSwingLeftHand(maid)) {
+                        if (maid.attackAnim > 0.0 && !isSwingLeftHand(maid)) {
                             armRight.setRotateAngleX((float) (armRight.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.swingTime * Math.PI) * -0.4));
+                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
                         }
                     }
                 }
@@ -1712,9 +1712,9 @@ public final class InnerAnimation {
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
-                double f1 = 1.0 - Math.pow(1.0 - maid.swingTime, 4);
+                double f1 = 1.0 - Math.pow(1.0 - maid.attackAnim, 4);
                 double f2 = Math.sin(f1 * Math.PI);
-                double f3 = Math.sin(maid.swingTime * Math.PI) * -0.7 * 0.75;
+                double f3 = Math.sin(maid.attackAnim * Math.PI) * -0.7 * 0.75;
 
                 if (armLeft != null) {
                     if (maid.isSitInJoyBlock()) {
@@ -1733,9 +1733,9 @@ public final class InnerAnimation {
                         armLeft.setRotateAngleY(0);
                         armLeft.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.05) * 0.025 - 0.05));
                         // 手部使用动画
-                        if (maid.swingTime > 0.0 && isSwingLeftHand(maid)) {
+                        if (maid.attackAnim > 0.0 && isSwingLeftHand(maid)) {
                             armLeft.setRotateAngleX((float) (armLeft.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armLeft.setRotateAngleZ(armLeft.getRotateAngleZ() + (float) (Math.sin(maid.swingTime * Math.PI) * -0.4));
+                            armLeft.setRotateAngleZ(armLeft.getRotateAngleZ() + (float) (Math.sin(maid.attackAnim * Math.PI) * -0.4));
                         }
                     }
                 }
@@ -1753,9 +1753,9 @@ public final class InnerAnimation {
                         armRight.setRotateAngleY(0);
                         armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.025 + 0.05));
                         // 手部使用动画
-                        if (maid.swingTime > 0.0 && !isSwingLeftHand(maid)) {
+                        if (maid.attackAnim > 0.0 && !isSwingLeftHand(maid)) {
                             armRight.setRotateAngleX((float) (armRight.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.swingTime * Math.PI) * -0.4));
+                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
                         }
                     }
                 }

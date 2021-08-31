@@ -15,6 +15,7 @@ public final class TaskManager {
     private static final List<IMaidTask> TASK_INDEX = Lists.newArrayList();
     private static final IMaidTask IDLE_TASK = new TaskIdle();
 
+    // FIXME: 2021/8/31 需要更加优雅的设计注册位置
     static {
         registerTask(IDLE_TASK);
         registerTask(new TaskAttack());

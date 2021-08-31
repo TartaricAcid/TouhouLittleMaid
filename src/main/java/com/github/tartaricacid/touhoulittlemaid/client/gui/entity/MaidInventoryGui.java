@@ -7,6 +7,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskMessage;
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -23,6 +27,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 
+import static net.minecraft.client.gui.widget.button.Button.NO_TOOLTIP;
+
 public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
@@ -31,6 +37,11 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
     private static int TASK_PAGE = 0;
     private final EntityMaid maid;
+    private ToggleWidget home;
+    private ToggleWidget pick;
+    private ToggleWidget ride;
+    private ImageButton info;
+    private ImageButton taskSwitch;
     private boolean taskListOpen;
 
     public MaidInventoryGui(MaidInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
@@ -46,42 +57,30 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         this.buttons.clear();
         this.children.clear();
 
-        ToggleWidget home = new ToggleWidget(leftPos + 9, topPos + 174, 20, 20, false);
-        home.initTextureValues(0, 0, 21, 21, BUTTON);
-        this.addButton(home);
+        this.addToggleButton();
+        {
+            this.addButton(new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 42, 10, BUTTON, 256, 256,
+                    (b) -> getMinecraft().setScreen(new MaidModelGui(maid)),
+                    (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.button.skin"), x, y),
+                    StringTextComponent.EMPTY));
+            info = new ImageButton(leftPos + 8, topPos + 14, 9, 9, 72, 64, 10, BUTTON, 256, 256,
+                    (b) -> {
+                    }, NO_TOOLTIP, StringTextComponent.EMPTY);
+            this.addButton(info);
+        }
+        this.addTaskButtons();
+    }
 
-        ToggleWidget pick = new ToggleWidget(leftPos + 30, topPos + 174, 20, 20, false);
-        pick.initTextureValues(42, 0, 21, 21, BUTTON);
-        this.addButton(pick);
-
-        ToggleWidget hat = new ToggleWidget(leftPos + 51, topPos + 174, 20, 20, false);
-        hat.initTextureValues(84, 0, 21, 21, BUTTON);
-        this.addButton(hat);
-
-        ToggleWidget ride = new ToggleWidget(leftPos + 9, topPos + 195, 20, 20, false);
-        ride.initTextureValues(126, 0, 21, 21, BUTTON);
-        this.addButton(ride);
-
-        ToggleWidget tog1 = new ToggleWidget(leftPos + 30, topPos + 195, 20, 20, false);
-        tog1.initTextureValues(168, 0, 21, 21, BUTTON);
-        this.addButton(tog1);
-
-        ToggleWidget tog2 = new ToggleWidget(leftPos + 51, topPos + 195, 20, 20, false);
-        tog2.initTextureValues(210, 0, 21, 21, BUTTON);
-        this.addButton(tog2);
-
-        this.addButton(new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 42, 10, BUTTON, 256, 256,
-                (b) -> getMinecraft().setScreen(new MaidModelGui(maid)),
-                (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.button.skin"), x, y),
-                StringTextComponent.EMPTY));
-
+    private void addTaskButtons() {
         ImageButton pageDown = new ImageButton(leftPos - 72, topPos + 9, 16, 13, 93, 0, 14, TASK, 256, 256,
                 (b) -> {
+                    // TODO: 2021/8/30 翻页功能 
                 },
                 (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.next_page"), x, y), StringTextComponent.EMPTY);
 
         ImageButton pageUp = new ImageButton(leftPos - 89, topPos + 9, 16, 13, 110, 0, 14, TASK, 256, 256,
                 (b) -> {
+                    // TODO: 2021/8/30 翻页功能
                 },
                 (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.previous_page"), x, y), StringTextComponent.EMPTY);
 
@@ -92,17 +91,17 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
                 },
                 (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.close"), x, y), StringTextComponent.EMPTY);
 
-        this.addButton(pageUp);
-        this.addButton(pageDown);
-        this.addButton(pageClose);
-
-        this.addButton(new ImageButton(leftPos + 4, topPos + 149, 71, 21, 0, 42, 22, BUTTON, 256, 256,
+        ImageButton taskSwitch = new ImageButton(leftPos + 4, topPos + 149, 71, 21, 0, 42, 22, BUTTON, 256, 256,
                 (b) -> {
                     taskListOpen = !taskListOpen;
                     init();
                 },
-                (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.switch"), x, y), StringTextComponent.EMPTY));
+                (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.switch"), x, y), StringTextComponent.EMPTY);
 
+        this.addButton(pageUp);
+        this.addButton(pageDown);
+        this.addButton(pageClose);
+        this.addButton(taskSwitch);
         pageUp.visible = taskListOpen;
         pageDown.visible = taskListOpen;
         pageClose.visible = taskListOpen;
@@ -115,15 +114,47 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         for (int i = 0; i < 12; i++) {
             int index = TASK_PAGE * 12 + i;
             if (index < tasks.size()) {
-                TaskButton button = new TaskButton(tasks.get(index), leftPos - 89, topPos + 23 + 19 * i,
+                final IMaidTask maidTask = tasks.get(index);
+                TaskButton button = new TaskButton(maidTask, leftPos - 89, topPos + 23 + 19 * i,
                         83, 19, 93, 28, 20, TASK, 256, 256,
-                        (b) -> {
-                        },
-                        (b, m, x, y) -> renderTooltip(m, new StringTextComponent("xxx"), x, y), StringTextComponent.EMPTY);
+                        (b) -> NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid())),
+                        (b, m, x, y) -> renderComponentTooltip(m, maidTask.getDescription(), x, y), StringTextComponent.EMPTY);
                 this.addButton(button);
                 button.visible = taskListOpen;
             }
         }
+    }
+
+    private void addToggleButton() {
+        home = new ToggleWidget(leftPos + 9, topPos + 174, 20, 20, maid.isHomeModeEnable()) {
+            @Override
+            public void onClick(double mouseX, double mouseY) {
+                this.isStateTriggered = !this.isStateTriggered;
+                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), isStateTriggered, maid.isPickup(), maid.isRideable()));
+            }
+        };
+        home.initTextureValues(0, 0, 21, 21, BUTTON);
+        this.addButton(home);
+
+        pick = new ToggleWidget(leftPos + 30, topPos + 174, 20, 20, maid.isPickup()) {
+            @Override
+            public void onClick(double mouseX, double mouseY) {
+                this.isStateTriggered = !this.isStateTriggered;
+                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), isStateTriggered, maid.isRideable()));
+            }
+        };
+        pick.initTextureValues(42, 0, 21, 21, BUTTON);
+        this.addButton(pick);
+
+        ride = new ToggleWidget(leftPos + 51, topPos + 174, 20, 20, maid.isRideable()) {
+            @Override
+            public void onClick(double mouseX, double mouseY) {
+                this.isStateTriggered = !this.isStateTriggered;
+                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), maid.isPickup(), isStateTriggered));
+            }
+        };
+        ride.initTextureValues(84, 0, 21, 21, BUTTON);
+        this.addButton(ride);
     }
 
     @Override
@@ -133,15 +164,53 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         {
             IMaidTask task = maid.getTask();
             itemRenderer.renderGuiItem(task.getIcon(), leftPos + 6, topPos + 151);
+            font.draw(matrixStack, task.getName(), leftPos + 28, topPos + 155, 0x333333);
         }
         renderTooltip(matrixStack, mouseX, mouseY);
+        if (info.isHovered()) {
+            renderMaidInfo(matrixStack, mouseX, mouseY);
+        }
+    }
+
+    private void renderMaidInfo(MatrixStack matrixStack, int mouseX, int mouseY) {
+        // TODO: 2021/8/30 显示详细信息
+        renderComponentTooltip(matrixStack, Lists.newArrayList(
+                new StringTextComponent("你的女仆当前很健康"),
+                new StringTextComponent("- 血量：全满（+20）"),
+                new StringTextComponent("- 心情：良好（+943）"),
+                new StringTextComponent("- 饥饿状况：饱腹（+20）"),
+                new StringTextComponent("- 好感度：高（+93）"),
+                new StringTextComponent("- 护甲：高（+20）")
+        ), mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderTooltip(MatrixStack matrixStack, int x, int y) {
+        super.renderTooltip(matrixStack, x, y);
+        if (home.isHovered()) {
+            renderComponentTooltip(matrixStack, Lists.newArrayList(
+                    new TranslationTextComponent("gui.touhou_little_maid.button.home.desc"),
+                    new TranslationTextComponent("gui.touhou_little_maid.button.home." + home.isStateTriggered())
+            ), x, y);
+        }
+        if (pick.isHovered()) {
+            renderComponentTooltip(matrixStack, Lists.newArrayList(
+                    new TranslationTextComponent("gui.touhou_little_maid.button.pickup.desc"),
+                    new TranslationTextComponent("gui.touhou_little_maid.button.pickup." + pick.isStateTriggered())
+            ), x, y);
+        }
+        if (ride.isHovered()) {
+            renderComponentTooltip(matrixStack, Lists.newArrayList(
+                    new TranslationTextComponent("gui.touhou_little_maid.button.maid_riding_set.desc"),
+                    new TranslationTextComponent("gui.touhou_little_maid.button.maid_riding_set." + ride.isStateTriggered())
+            ), x, y);
+        }
     }
 
     @Override
     protected void renderLabels(MatrixStack matrixStack, int x, int y) {
     }
 
-    @SuppressWarnings("all")
     @Override
     protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.translate(0, 0, -100);
@@ -155,6 +224,17 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         InventoryScreen.renderEntityInInventory(leftPos + 40, topPos + 100, 40, (leftPos + 40) - x, (topPos + 70 - 20) - y, maid);
         RenderSystem.disableScissor();
 
+        this.drawBaseInfoGui(matrixStack);
+        this.drawBackpackGui(matrixStack);
+
+        if (taskListOpen) {
+            getMinecraft().textureManager.bind(TASK);
+            blit(matrixStack, leftPos - 93, topPos + 5, 0, 0, 92, 251);
+        }
+    }
+
+    @SuppressWarnings("all")
+    private void drawBaseInfoGui(MatrixStack matrixStack) {
         matrixStack.translate(0, 0, 200);
         {
             getMinecraft().textureManager.bind(SIDE);
@@ -170,13 +250,13 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
             blit(matrixStack, leftPos + 27, topPos + 124, 0, 9, 47, 9);
             double armor = maid.getAttributeValue(Attributes.ARMOR) / 20;
             blit(matrixStack, leftPos + 29, topPos + 126, 2, 23, (int) (43 * armor), 5);
-            getMinecraft().font.draw(matrixStack, String.format("%.0f", maid.getAttributeValue(Attributes.ARMOR)), leftPos + 15, topPos + 125, TextFormatting.DARK_GRAY.getColor());
+            getMinecraft().font.draw(matrixStack, String.format("%d", maid.getArmorValue()), leftPos + 15, topPos + 125, TextFormatting.DARK_GRAY.getColor());
         }
         {
             getMinecraft().textureManager.bind(SIDE);
             blit(matrixStack, leftPos + 5, topPos + 135, 18, 0, 9, 9);
             blit(matrixStack, leftPos + 27, topPos + 135, 0, 9, 47, 9);
-            double hunger = maid.getHunger() / 20;
+            double hunger = maid.getHunger() / 20.0;
             blit(matrixStack, leftPos + 29, topPos + 137, 2, 28, (int) (43 * hunger), 5);
             getMinecraft().font.draw(matrixStack, String.format("%d", maid.getHunger()), leftPos + 15, topPos + 136, TextFormatting.DARK_GRAY.getColor());
         }
@@ -185,7 +265,9 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         blit(matrixStack, leftPos + 94, topPos + 7, 107, 0, 149, 21);
         blit(matrixStack, leftPos + 94, topPos + 5, 107, 21, 24, 26);
         blit(matrixStack, leftPos + 98, topPos + 12, 107, 47, 16, 16);
+    }
 
+    private void drawBackpackGui(MatrixStack matrixStack) {
         getMinecraft().textureManager.bind(BACKPACK);
         blit(matrixStack, leftPos + 85, topPos + 36, 0, 0, 165, 122);
 
@@ -201,11 +283,6 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         if (level < BackpackLevel.BIG) {
             fill(matrixStack, leftPos + 142, topPos + 122, leftPos + 250, topPos + 158, 0xaa222222);
             blit(matrixStack, leftPos + 190, topPos + 133, 165, 0, 11, 11);
-        }
-
-        if (taskListOpen) {
-            getMinecraft().textureManager.bind(TASK);
-            blit(matrixStack, leftPos - 93, topPos + 5, 0, 0, 92, 251);
         }
     }
 

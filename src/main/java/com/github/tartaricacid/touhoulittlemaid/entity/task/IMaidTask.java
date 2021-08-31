@@ -1,13 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import net.minecraft.entity.LivingEntity;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public interface IMaidTask {
     /**
@@ -37,10 +40,9 @@ public interface IMaidTask {
      * 该模式下调用的 AI
      *
      * @param maid 女仆对象
-     * @return 如果什么都不做，可以返回 null
+     * @return 如果什么都不做，请返回空集合
      */
-    @Nullable
-    Task<EntityMaid> createTask(EntityMaid maid);
+    List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid);
 
     /**
      * 当前 Task 是否可使用
@@ -53,30 +55,18 @@ public interface IMaidTask {
     }
 
     /**
-     * 主要应用于女仆是否会慌乱跑这样的 AI 触发上（我都处于战斗模式了，怎么能怯战呢）
+     * 获取当前模式名称
      *
-     * @return 是否处于战斗状态
+     * @return 当前模式名称
      */
-    default boolean isAttack() {
-        return false;
+    default TranslationTextComponent getName() {
+        return new TranslationTextComponent(String.format("task.%s.%s", getUid().getNamespace(), getUid().getPath()));
     }
 
     /**
-     * 远程攻击的逻辑
+     * 获取当前模式的描述文本
      *
-     * @param maid           女仆对象
-     * @param target         攻击目标
-     * @param distanceFactor 距离因子，会依据蓄力进行数值传入
+     * @return 模式的描述文本，可以多行<br>如果没有文本描述，请返回空集合
      */
-    default void onRangedAttack(EntityMaid maid, LivingEntity target, float distanceFactor) {
-    }
-
-    /**
-     * 获取当前模式的国际化 key
-     *
-     * @return 国际化 key
-     */
-    default String getTranslationKey() {
-        return "task." + getUid().getNamespace() + "." + getUid().getPath();
-    }
+    List<ITextComponent> getDescription();
 }

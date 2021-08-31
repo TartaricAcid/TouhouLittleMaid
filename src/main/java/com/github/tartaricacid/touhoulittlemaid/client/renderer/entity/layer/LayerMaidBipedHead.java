@@ -34,9 +34,6 @@ public class LayerMaidBipedHead extends LayerRenderer<EntityMaid, BedrockModel<E
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!maid.isShowHelmet()) {
-            return;
-        }
         ItemStack head = maid.getItemBySlot(EquipmentSlotType.HEAD);
         if (!head.isEmpty() && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
             Item item = head.getItem();

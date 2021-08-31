@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -68,7 +67,7 @@ public class TaskButton extends Button {
         RenderSystem.enableDepthTest();
         blit(matrixStack, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, this.textureWidth, this.textureHeight);
         itemRenderer.renderGuiItem(task.getIcon(), this.x + 2, this.y + 2);
-        minecraft.font.draw(matrixStack, new TranslationTextComponent(task.getTranslationKey()), this.x + 23, this.y + 6, 0x333333);
+        minecraft.font.draw(matrixStack, task.getName(), this.x + 23, this.y + 6, 0x333333);
         if (this.isHovered()) {
             this.renderToolTip(matrixStack, mouseX, mouseY);
         }
