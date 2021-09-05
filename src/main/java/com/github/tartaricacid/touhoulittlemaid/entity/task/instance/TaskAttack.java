@@ -22,6 +22,7 @@ import java.util.Optional;
 
 public class TaskAttack implements IAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "attack");
+    private static final int MAX_STOP_ATTACK_DISTANCE = 8;
 
     @Override
     public ResourceLocation getUid() {
@@ -42,7 +43,8 @@ public class TaskAttack implements IAttackTask {
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         SupplementedTask<EntityMaid> supplementedTask = new SupplementedTask<>(this::hasSword,
                 new ForgetAttackTargetTask<>(this::findRandomValidAttackTarget));
-        FindNewAttackTargetTask<EntityMaid> findTargetTask = new FindNewAttackTargetTask<>((target) -> !hasSword(maid));
+        FindNewAttackTargetTask<EntityMaid> findTargetTask = new FindNewAttackTargetTask<>(
+                (target) -> !hasSword(maid) || farAway(target, maid));
         MoveToTargetTask moveToTargetTask = new MoveToTargetTask(0.6f);
         AttackTargetTask attackTargetTask = new AttackTargetTask(20);
 
@@ -61,6 +63,10 @@ public class TaskAttack implements IAttackTask {
 
     private boolean hasSword(EntityMaid maid) {
         return maid.getMainHandItem().getItem() instanceof SwordItem;
+    }
+
+    private boolean farAway(LivingEntity target, EntityMaid maid) {
+        return maid.distanceTo(target) > MAX_STOP_ATTACK_DISTANCE;
     }
 
     private Optional<? extends LivingEntity> findRandomValidAttackTarget(EntityMaid maid) {

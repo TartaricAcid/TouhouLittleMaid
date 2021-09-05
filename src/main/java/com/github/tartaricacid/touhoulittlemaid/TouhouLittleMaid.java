@@ -22,6 +22,7 @@ public final class TouhouLittleMaid {
     public TouhouLittleMaid() {
         InitEntities.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitEntities.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        InitEntities.MEMORY_MODULE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitEntities.SENSOR_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitEntities.SCHEDULES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());

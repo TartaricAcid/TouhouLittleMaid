@@ -17,8 +17,10 @@ public class MaidBegTask extends Task<EntityMaid> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid owner) {
-        return owner.getBrain().getMemory(MemoryModuleType.INTERACTION_TARGET).filter(LivingEntity::isAttackable)
-                .filter(owner::isOwnedBy).filter((e) -> e.getMainHandItem().getItem() == owner.getTemptationItem())
+        return owner.getBrain().getMemory(MemoryModuleType.INTERACTION_TARGET)
+                .filter(LivingEntity::isAttackable)
+                .filter(owner::isOwnedBy)
+                .filter((e) -> e.getMainHandItem().getItem() == owner.getTemptationItem())
                 .isPresent();
     }
 

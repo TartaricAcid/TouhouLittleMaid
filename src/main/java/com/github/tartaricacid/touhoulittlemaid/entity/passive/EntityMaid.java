@@ -133,6 +133,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
 
     public boolean guiOpening = false;
+    public int takeXpDelay;
     /**
      * 用于替换背包延时的参数
      */
@@ -216,6 +217,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         super.baseTick();
         if (backpackDelay > 0) {
             backpackDelay--;
+        }
+        if (takeXpDelay > 0) {
+            takeXpDelay--;
         }
         if (PLAYER_HURT_SOUND_COUNT > 0) {
             PLAYER_HURT_SOUND_COUNT--;
@@ -333,7 +337,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     public void pickupXPOrb(ExperienceOrbEntity entityXPOrb) {
-        if (!this.level.isClientSide && entityXPOrb.isAlive() && entityXPOrb.throwTime == 0) {
+        if (!this.level.isClientSide && entityXPOrb.isAlive() && entityXPOrb.tickCount > 2 && this.takeXpDelay == 0) {
+            this.takeXpDelay = 2;
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.take(entityXPOrb, 1);
             if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
@@ -446,6 +451,22 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             amount = MathHelper.clamp(amount / 5, 0, 2);
         }
         return super.hurt(source, amount);
+    }
+
+    public boolean canPickUp(Entity entity) {
+        if (isPickup()) {
+            if (entity instanceof ItemEntity) {
+                return pickupItem((ItemEntity) entity, true);
+            }
+            if (entity instanceof AbstractArrowEntity) {
+                return pickupArrow((AbstractArrowEntity) entity, true);
+            }
+            if (entity instanceof ExperienceOrbEntity) {
+                return true;
+            }
+            return entity instanceof EntityPowerPoint;
+        }
+        return false;
     }
 
     @Override

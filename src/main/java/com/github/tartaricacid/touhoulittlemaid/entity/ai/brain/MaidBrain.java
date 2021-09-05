@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.Brain;
@@ -15,6 +14,7 @@ import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.ai.brain.task.*;
 
+import java.util.Collections;
 import java.util.List;
 
 public final class MaidBrain {
@@ -30,7 +30,8 @@ public final class MaidBrain {
                 MemoryModuleType.WALK_TARGET,
                 MemoryModuleType.INTERACTION_TARGET,
                 MemoryModuleType.ATTACK_TARGET,
-                MemoryModuleType.ATTACK_COOLING_DOWN
+                MemoryModuleType.ATTACK_COOLING_DOWN,
+                MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM
         );
     }
 
@@ -38,7 +39,8 @@ public final class MaidBrain {
         return ImmutableList.of(
                 SensorType.NEAREST_LIVING_ENTITIES,
                 SensorType.HURT_BY,
-                InitEntities.MAID_HOSTILES_SENSOR.get()
+                InitEntities.MAID_HOSTILES_SENSOR.get(),
+                InitEntities.MAID_PICKUP_ENTITIES_SENSOR.get()
         );
     }
 
@@ -64,8 +66,9 @@ public final class MaidBrain {
         Pair<Integer, Task<? super EntityMaid>> maidPanic = Pair.of(0, new MaidPanicTask());
         Pair<Integer, Task<? super EntityMaid>> walkToTarget = Pair.of(1, new WalkToTargetTask());
         Pair<Integer, Task<? super EntityMaid>> followOwner = Pair.of(1, new MaidFollowOwnerTask(0.5f, 5, 2));
+        Pair<Integer, Task<? super EntityMaid>> pickupItem = Pair.of(1, new MaidPickupEntitiesTask(EntityMaid::isPickup, 8, 0.6f));
 
-        brain.addActivity(Activity.CORE, ImmutableList.of(swim, interactWithDoor, look, maidPanic, walkToTarget, followOwner));
+        brain.addActivity(Activity.CORE, ImmutableList.of(swim, interactWithDoor, look, maidPanic, walkToTarget, followOwner, pickupItem));
     }
 
     private static void registerIdleGoals(Brain<EntityMaid> brain) {
@@ -79,20 +82,21 @@ public final class MaidBrain {
 
         Pair<Integer, Task<? super EntityMaid>> shuffled = Pair.of(1, new FirstShuffledTask<>(
                 ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, walkRandomly, noLook)));
-        Pair<Integer, Task<? super EntityMaid>> beg = Pair.of(1, new MaidBegTask());
         Pair<Integer, Task<? super EntityMaid>> getPlayer = Pair.of(1, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 6));
+        Pair<Integer, Task<? super EntityMaid>> beg = Pair.of(1, new MaidBegTask());
         Pair<Integer, Task<? super EntityMaid>> updateActivity = Pair.of(99, new UpdateActivityTask());
 
-        brain.addActivity(Activity.IDLE, ImmutableList.of(shuffled, beg, getPlayer, updateActivity));
+        brain.addActivity(Activity.IDLE, ImmutableList.of(shuffled, getPlayer, beg, updateActivity));
     }
 
     private static void registerWorkGoals(Brain<EntityMaid> brain, EntityMaid maid) {
         Pair<Integer, Task<? super EntityMaid>> updateActivity = Pair.of(99, new UpdateActivityTask());
         List<Pair<Integer, Task<? super EntityMaid>>> pairMaidList = maid.getTask().createBrainTasks(maid);
         if (pairMaidList.isEmpty()) {
-            pairMaidList = Lists.newArrayList();
+            pairMaidList = Collections.singletonList(updateActivity);
+        } else {
+            pairMaidList.add(updateActivity);
         }
-        pairMaidList.add(updateActivity);
         brain.addActivity(Activity.WORK, ImmutableList.copyOf(pairMaidList));
     }
 

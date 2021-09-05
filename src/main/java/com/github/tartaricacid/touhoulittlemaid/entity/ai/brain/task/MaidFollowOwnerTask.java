@@ -17,6 +17,8 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Random;
 
 public class MaidFollowOwnerTask extends Task<EntityMaid> {
+    private static final int MAX_TELEPORT_ATTEMPTS_TIMES = 10;
+    private static final int MIN_TELEPORT_DISTANCE = 12;
     private final float speedModifier;
     private final int stopDistance;
     private final int startDistance;
@@ -59,7 +61,7 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
     @Override
     protected void tick(ServerWorld worldIn, EntityMaid maid, long gameTime) {
         if (!maid.isLeashed() && !maid.isPassenger()) {
-            if (maid.distanceToSqr(this.owner) >= 144) {
+            if (maid.distanceTo(this.owner) >= MIN_TELEPORT_DISTANCE) {
                 this.teleportToOwner(maid);
             } else {
                 BrainUtil.setWalkAndLookTargetMemories(maid, owner, speedModifier, stopDistance);
@@ -79,7 +81,7 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
     private void teleportToOwner(EntityMaid maid) {
         BlockPos blockpos = this.owner.blockPosition();
 
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < MAX_TELEPORT_ATTEMPTS_TIMES; ++i) {
             int j = this.randomIntInclusive(maid.getRandom(), -3, 3);
             int k = this.randomIntInclusive(maid.getRandom(), -1, 1);
             int l = this.randomIntInclusive(maid.getRandom(), -3, 3);

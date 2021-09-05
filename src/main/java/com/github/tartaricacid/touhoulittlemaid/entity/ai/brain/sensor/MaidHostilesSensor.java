@@ -27,9 +27,12 @@ public class MaidHostilesSensor extends Sensor<LivingEntity> {
     }
 
     private Optional<LivingEntity> getNearestHostile(LivingEntity livingEntity) {
-        return this.getVisibleEntities(livingEntity).flatMap((entities) -> entities.stream().filter(this::isHostile).filter((enemy) -> this.isClose(livingEntity, enemy)).min((enemy1, enemy2) -> {
-            return this.compareMobDistance(livingEntity, enemy1, enemy2);
-        }));
+        return this.getVisibleEntities(livingEntity).flatMap((entities) -> entities.stream()
+                .filter(this::isHostile)
+                .filter((enemy) -> this.isClose(livingEntity, enemy))
+                .min((enemy1, enemy2) -> {
+                    return this.compareMobDistance(livingEntity, enemy1, enemy2);
+                }));
     }
 
     private Optional<List<LivingEntity>> getVisibleEntities(LivingEntity livingEntity) {
