@@ -71,8 +71,6 @@ public class TaskAttack implements IAttackTask {
 
     private Optional<? extends LivingEntity> findRandomValidAttackTarget(EntityMaid maid) {
         return maid.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).flatMap(
-                mobs -> mobs.stream().filter(maid::canAttack)
-                        .skip(maid.getRandom().nextInt(mobs.size()))
-                        .findFirst());
+                mobs -> mobs.stream().filter(maid::canAttack).findFirst());
     }
 }

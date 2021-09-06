@@ -101,6 +101,8 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
             maid.moveTo(x + 0.5D, y, z + 0.5D, maid.yRot, maid.xRot);
             maid.getNavigation().stop();
             maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+            maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
+            maid.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
             maid.getBrain().eraseMemory(MemoryModuleType.PATH);
             return true;
         }

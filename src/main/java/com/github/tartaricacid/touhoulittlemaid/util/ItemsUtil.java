@@ -1,51 +1,65 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 public final class ItemsUtil {
     private ItemsUtil() {
     }
 
-    public static void dropItemHandlerItems(@Nullable IItemHandler itemHandler, World world, Vector3d pos) {
-        if (itemHandler != null && !world.isClientSide) {
-            for (int i = 0; i < itemHandler.getSlots(); ++i) {
-                ItemStack itemstack = itemHandler.getStackInSlot(i);
-                InventoryHelper.dropItemStack(world, pos.x, pos.y, pos.z, itemstack);
-            }
-        }
-    }
-
+    /**
+     * 掉落指定起始、结束槽位的物品
+     */
     public static void dropEntityItems(Entity entity, IItemHandler itemHandler, int startIndex, int endIndex) {
         for (int i = startIndex; i < endIndex; i++) {
             InventoryHelper.dropItemStack(entity.level, entity.getX(), entity.getY(), entity.getZ(), itemHandler.getStackInSlot(i));
         }
     }
 
+    /**
+     * 掉落全部物品
+     */
     public static void dropEntityItems(Entity entity, IItemHandler itemHandler) {
         dropEntityItems(entity, itemHandler, 0, itemHandler.getSlots());
     }
 
-    public static void giveItemToPlayer(PlayerEntity player, ItemStack stack) {
-        if (player.addItem(stack)) {
-            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            player.inventoryMenu.broadcastChanges();
-        } else {
-            ItemEntity itemEntity = player.drop(stack, false);
-            if (itemEntity != null) {
-                itemEntity.setNoPickUpDelay();
-                itemEntity.setOwner(player.getUUID());
+    /**
+     * 传入 IItemHandler 和判定条件 filter，获取对应的格子数
+     *
+     * @return 如果没找到，返回 -1
+     */
+    public static int findStackSlot(IItemHandler handler, Predicate<ItemStack> filter) {
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stack = handler.getStackInSlot(i);
+            if (filter.test(stack)) {
+                return i;
             }
+        }
+        return -1;
+    }
+
+    /**
+     * 符合 filter 条件的物品是否在 handler 中
+     */
+    public static boolean isStackIn(IItemHandler handler, Predicate<ItemStack> filter) {
+        return findStackSlot(handler, filter) >= 0;
+    }
+
+    /**
+     * 获取符合 filter 添加的 ItemStack
+     *
+     * @return 如果该物品不存在，返回 ItemStack.EMPTY
+     */
+    public static ItemStack getStack(IItemHandler handler, Predicate<ItemStack> filter) {
+        int slotIndex = findStackSlot(handler, filter);
+        if (slotIndex >= 0) {
+            return handler.getStackInSlot(slotIndex);
+        } else {
+            return ItemStack.EMPTY;
         }
     }
 }

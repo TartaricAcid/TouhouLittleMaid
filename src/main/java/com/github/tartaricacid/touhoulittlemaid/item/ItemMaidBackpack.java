@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Map;
@@ -40,7 +41,7 @@ public class ItemMaidBackpack extends Item {
                 maid.setBackpackLevel(level);
                 maid.setBackpackDelay();
                 stack.shrink(1);
-                ItemsUtil.giveItemToPlayer(playerIn, new ItemStack(ITEM_BY_LEVEL.get(maidBackpackLevel)));
+                ItemHandlerHelper.giveItemToPlayer(playerIn, new ItemStack(ITEM_BY_LEVEL.get(maidBackpackLevel)));
                 if (level < maidBackpackLevel) {
                     ItemStackHandler maidInv = maid.getMaidInv();
                     int startIndex = BackpackLevel.BACKPACK_CAPACITY_MAP.get(level);

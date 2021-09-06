@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.event.api.InteractMaidEvent;
@@ -475,8 +476,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     @Override
-    public void shootCrossbowProjectile(LivingEntity livingEntity, ItemStack stack, ProjectileEntity projectileEntity, float p_230284_4_) {
-        this.shootCrossbowProjectile(this, livingEntity, projectileEntity, p_230284_4_, 1.6F);
+    public void shootCrossbowProjectile(LivingEntity target, ItemStack crossbow, ProjectileEntity projectileEntity, float projectileAngle) {
+        this.shootCrossbowProjectile(this, target, projectileEntity, projectileAngle, 1.6F);
     }
 
     @Override
@@ -522,8 +523,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        // TODO：依据不同 task 添加不同攻击模式
-        this.performCrossbowAttack(this, 1.6F);
+        IMaidTask maidTask = this.getTask();
+        if (maidTask instanceof IRangedAttackTask) {
+            ((IRangedAttackTask) maidTask).performRangedAttack(this, target, distanceFactor);
+        }
     }
 
     @Override
@@ -667,7 +670,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @Override
     protected void dropEquipment() {
-        ItemsUtil.dropItemHandlerItems(new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble), this.level, position());
+        ItemsUtil.dropEntityItems(this, new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble));
         // TODO：背包掉落和记录女仆数据的物品
     }
 
@@ -753,6 +756,11 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Override
     public boolean canBeLeashed(PlayerEntity player) {
         return this.isOwnedBy(player) && super.canBeLeashed(player);
+    }
+
+    @Override
+    public boolean canFireProjectileWeapon(ShootableItem shootableItem) {
+        return getTask() instanceof IRangedAttackTask;
     }
 
     @Override

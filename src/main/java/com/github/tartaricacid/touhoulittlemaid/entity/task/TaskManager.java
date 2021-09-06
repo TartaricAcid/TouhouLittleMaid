@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskAttack;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskBowAttack;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskIdle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,6 +20,7 @@ public final class TaskManager {
     static {
         registerTask(IDLE_TASK);
         registerTask(new TaskAttack());
+        registerTask(new TaskBowAttack());
     }
 
     /**

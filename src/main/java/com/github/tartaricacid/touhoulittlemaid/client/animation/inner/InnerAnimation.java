@@ -353,7 +353,7 @@ public final class InnerAnimation {
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
-                if (maid.isSwimming()) {
+                if (maid.isSwingingArms()) {
                     if (armLeft != null) {
                         armLeft.setRotateAngleX(-1.396f);
                         armLeft.setRotateAngleY(0.785f);
