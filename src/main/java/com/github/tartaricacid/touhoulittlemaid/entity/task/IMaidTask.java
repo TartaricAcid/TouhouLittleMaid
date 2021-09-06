@@ -66,7 +66,8 @@ public interface IMaidTask {
     /**
      * 获取当前模式的描述文本
      *
+     * @param maid 女仆对象
      * @return 模式的描述文本，可以多行<br>如果没有文本描述，请返回空集合
      */
-    List<ITextComponent> getDescription();
+    List<ITextComponent> getDescription(EntityMaid maid);
 }

@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -18,7 +17,6 @@ import net.minecraft.util.text.ITextComponent;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class TaskAttack implements IAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "attack");
@@ -42,7 +40,7 @@ public class TaskAttack implements IAttackTask {
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         SupplementedTask<EntityMaid> supplementedTask = new SupplementedTask<>(this::hasSword,
-                new ForgetAttackTargetTask<>(this::findRandomValidAttackTarget));
+                new ForgetAttackTargetTask<>(IAttackTask::findFirstValidAttackTarget));
         FindNewAttackTargetTask<EntityMaid> findTargetTask = new FindNewAttackTargetTask<>(
                 (target) -> !hasSword(maid) || farAway(target, maid));
         MoveToTargetTask moveToTargetTask = new MoveToTargetTask(0.6f);
@@ -57,7 +55,7 @@ public class TaskAttack implements IAttackTask {
     }
 
     @Override
-    public List<ITextComponent> getDescription() {
+    public List<ITextComponent> getDescription(EntityMaid maid) {
         return Collections.emptyList();
     }
 
@@ -67,10 +65,5 @@ public class TaskAttack implements IAttackTask {
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {
         return maid.distanceTo(target) > MAX_STOP_ATTACK_DISTANCE;
-    }
-
-    private Optional<? extends LivingEntity> findRandomValidAttackTarget(EntityMaid maid) {
-        return maid.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).flatMap(
-                mobs -> mobs.stream().filter(maid::canAttack).findFirst());
     }
 }

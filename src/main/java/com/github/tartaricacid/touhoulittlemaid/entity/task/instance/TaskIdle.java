@@ -43,7 +43,7 @@ public class TaskIdle implements IMaidTask {
     }
 
     @Override
-    public List<ITextComponent> getDescription() {
+    public List<ITextComponent> getDescription(EntityMaid maid) {
         return Collections.singletonList(new TranslationTextComponent(String.format("task.%s.%s.desc", getUid().getNamespace(), getUid().getPath())));
     }
 }

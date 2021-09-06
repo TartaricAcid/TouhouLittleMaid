@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidAttackStrafingTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
@@ -12,7 +13,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -30,7 +30,6 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class TaskBowAttack implements IRangedAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "ranged_attack");
@@ -55,7 +54,7 @@ public class TaskBowAttack implements IRangedAttackTask {
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         SupplementedTask<EntityMaid> supplementedTask = new SupplementedTask<>(this::hasBow,
-                new ForgetAttackTargetTask<>(this::findRandomValidAttackTarget));
+                new ForgetAttackTargetTask<>(IAttackTask::findFirstValidAttackTarget));
         FindNewAttackTargetTask<EntityMaid> findTargetTask = new FindNewAttackTargetTask<>(
                 (target) -> !hasBow(maid) || farAway(target, maid));
         MoveToTargetTask moveToTargetTask = new MoveToTargetTask(0.6f);
@@ -91,7 +90,7 @@ public class TaskBowAttack implements IRangedAttackTask {
     }
 
     @Override
-    public List<ITextComponent> getDescription() {
+    public List<ITextComponent> getDescription(EntityMaid maid) {
         return Collections.emptyList();
     }
 
@@ -132,11 +131,6 @@ public class TaskBowAttack implements IRangedAttackTask {
         }
 
         return arrowEntity;
-    }
-
-    private Optional<? extends LivingEntity> findRandomValidAttackTarget(EntityMaid maid) {
-        return maid.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).flatMap(
-                mobs -> mobs.stream().filter(maid::canAttack).findFirst());
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {

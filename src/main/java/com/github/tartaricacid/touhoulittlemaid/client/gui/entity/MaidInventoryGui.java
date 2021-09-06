@@ -118,7 +118,7 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
                 TaskButton button = new TaskButton(maidTask, leftPos - 89, topPos + 23 + 19 * i,
                         83, 19, 93, 28, 20, TASK, 256, 256,
                         (b) -> NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid())),
-                        (b, m, x, y) -> renderComponentTooltip(m, maidTask.getDescription(), x, y), StringTextComponent.EMPTY);
+                        (b, m, x, y) -> renderComponentTooltip(m, maidTask.getDescription(maid), x, y), StringTextComponent.EMPTY);
                 this.addButton(button);
                 button.visible = taskListOpen;
             }
