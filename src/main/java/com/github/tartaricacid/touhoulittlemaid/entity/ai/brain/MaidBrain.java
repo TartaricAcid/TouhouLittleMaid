@@ -31,7 +31,7 @@ public final class MaidBrain {
                 MemoryModuleType.INTERACTION_TARGET,
                 MemoryModuleType.ATTACK_TARGET,
                 MemoryModuleType.ATTACK_COOLING_DOWN,
-                MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM
+                InitEntities.TARGET_POS.get()
         );
     }
 

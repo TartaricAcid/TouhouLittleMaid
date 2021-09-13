@@ -21,6 +21,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -49,6 +50,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
@@ -61,6 +63,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -456,6 +459,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     public boolean canPickUp(Entity entity) {
         if (isPickup()) {
+            if (entity.isInWater()) {
+                return false;
+            }
             if (entity instanceof ItemEntity) {
                 return pickupItem((ItemEntity) entity, true);
             }
@@ -945,6 +951,28 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Deprecated
     public boolean hasSasimono() {
         return false;
+    }
+
+    public boolean canDestroyBlock(BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        return state.getBlock().canEntityDestroy(state, level, pos, this) && ForgeEventFactory.onEntityDestroyBlock(this, pos, state);
+    }
+
+    public boolean canPlaceBlock(BlockPos pos, BlockState placeState) {
+        BlockState oldState = level.getBlockState(pos);
+        return oldState.getMaterial().isReplaceable();
+    }
+
+    public boolean destroyBlock(BlockPos pos) {
+        return destroyBlock(pos, true);
+    }
+
+    public boolean destroyBlock(BlockPos pos, boolean dropBlock) {
+        return canDestroyBlock(pos) && level.destroyBlock(pos, dropBlock, this);
+    }
+
+    public boolean placeBlock(BlockPos pos, BlockState placeState) {
+        return canPlaceBlock(pos, placeState) && level.setBlock(pos, placeState, Constants.BlockFlags.DEFAULT);
     }
 
     @Deprecated

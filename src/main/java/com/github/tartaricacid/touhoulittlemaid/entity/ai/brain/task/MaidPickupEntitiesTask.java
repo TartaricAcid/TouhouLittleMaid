@@ -38,8 +38,7 @@ public class MaidPickupEntitiesTask extends Task<EntityMaid> {
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         getItems(maid).stream()
-                .filter(e -> e.closerThan(maid, maxDistToWalk))
-                .filter(Entity::isAlive).findFirst()
+                .filter(e -> e.closerThan(maid, maxDistToWalk) && e.isAlive() && !e.isInWater()).findFirst()
                 .ifPresent(e -> BrainUtil.setWalkAndLookTargetMemories(maid, e, this.speedModifier, 0));
     }
 

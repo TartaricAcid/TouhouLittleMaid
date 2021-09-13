@@ -1,9 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskAttack;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskBowAttack;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskDanmakuAttack;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.TaskIdle;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.util.ResourceLocation;
@@ -23,6 +20,7 @@ public final class TaskManager {
         registerTask(new TaskAttack());
         registerTask(new TaskBowAttack());
         registerTask(new TaskDanmakuAttack());
+        registerTask(new TaskNormalFarm());
     }
 
     /**
