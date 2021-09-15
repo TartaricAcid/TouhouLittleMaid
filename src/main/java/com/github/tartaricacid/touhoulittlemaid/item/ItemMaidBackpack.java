@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -40,7 +41,11 @@ public class ItemMaidBackpack extends Item {
                 }
                 maid.setBackpackLevel(level);
                 maid.setBackpackDelay();
+                for (Item backpack : ITEM_BY_LEVEL.values()) {
+                    playerIn.getCooldowns().addCooldown(backpack, 20);
+                }
                 stack.shrink(1);
+                target.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
                 ItemHandlerHelper.giveItemToPlayer(playerIn, new ItemStack(ITEM_BY_LEVEL.get(maidBackpackLevel)));
                 if (level < maidBackpackLevel) {
                     ItemStackHandler maidInv = maid.getMaidInv();

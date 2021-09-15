@@ -19,6 +19,7 @@ import net.minecraft.client.gui.widget.ToggleWidget;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -164,7 +165,10 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         {
             IMaidTask task = maid.getTask();
             itemRenderer.renderGuiItem(task.getIcon(), leftPos + 6, topPos + 151);
-            font.draw(matrixStack, task.getName(), leftPos + 28, topPos + 155, 0x333333);
+            List<IReorderingProcessor> splitTexts = font.split(task.getName(), 42);
+            if (!splitTexts.isEmpty()) {
+                font.draw(matrixStack, splitTexts.get(0), leftPos + 28, topPos + 155, 0x333333);
+            }
         }
         renderTooltip(matrixStack, mouseX, mouseY);
         if (info.isHovered()) {

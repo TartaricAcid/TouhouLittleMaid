@@ -102,9 +102,7 @@ public class TaskNormalFarm implements IFarmTask {
             BlockNamedItem blockNamedItem = (BlockNamedItem) seed.getItem();
             Block block = blockNamedItem.getBlock();
             if (block instanceof IPlantable) {
-                if (maid.placeItemBlock(basePos.above(), seed)) {
-                    seed.shrink(1);
-                }
+                maid.placeItemBlock(basePos.above(), seed);
             }
         }
         return seed;

@@ -48,6 +48,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -150,6 +151,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     protected EntityMaid(EntityType<EntityMaid> type, World world) {
         super(type, world);
         ((GroundPathNavigator) this.getNavigation()).setCanOpenDoors(true);
+        this.setPathfindingMalus(PathNodeType.COCOA, -1.0F);
     }
 
     public EntityMaid(World worldIn) {

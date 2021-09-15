@@ -19,11 +19,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class TaskSugarCane implements IFarmTask {
-    private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "sugar_cane");
+    private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "sugar_cane");
 
     @Override
     public ResourceLocation getUid() {
-        return NAME;
+        return UID;
     }
 
     @Override

@@ -22,6 +22,10 @@ public final class TaskManager {
         registerTask(new TaskDanmakuAttack());
         registerTask(new TaskNormalFarm());
         registerTask(new TaskSugarCane());
+        registerTask(new TaskMelon());
+        registerTask(new TaskCocoa());
+        registerTask(new TaskGrass());
+        registerTask(new TaskSnow());
     }
 
     /**

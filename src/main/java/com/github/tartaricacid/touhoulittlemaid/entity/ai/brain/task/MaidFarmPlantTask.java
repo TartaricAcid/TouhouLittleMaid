@@ -64,7 +64,7 @@ public class MaidFarmPlantTask extends Task<EntityMaid> {
                 for (int slot : slots) {
                     ItemStack seed = availableInv.getStackInSlot(slot);
                     BlockState baseState = world.getBlockState(basePos);
-                    if (maid.canPlaceBlock(cropPos) && task.canPlant(maid, basePos, baseState, seed)) {
+                    if (task.canPlant(maid, basePos, baseState, seed)) {
                         ItemStack remain = task.plant(maid, basePos, baseState, seed);
                         availableInv.setStackInSlot(slot, remain);
                         maid.swing(Hand.MAIN_HAND);

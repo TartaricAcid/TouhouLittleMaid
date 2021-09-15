@@ -33,10 +33,12 @@ public class MaidFarmMoveTask extends MaidMoveToBlockTask {
 
     @Override
     protected boolean shouldMoveTo(ServerWorld worldIn, EntityMaid maid, BlockPos basePos) {
-        BlockPos above2Pos = basePos.above(2);
-        BlockState stateUp2 = worldIn.getBlockState(above2Pos);
-        if (!stateUp2.getCollisionShape(worldIn, above2Pos).isEmpty()) {
-            return false;
+        if (task.checkCropPosAbove()) {
+            BlockPos above2Pos = basePos.above(2);
+            BlockState stateUp2 = worldIn.getBlockState(above2Pos);
+            if (!stateUp2.getCollisionShape(worldIn, above2Pos).isEmpty()) {
+                return false;
+            }
         }
 
         BlockPos cropPos = basePos.above();

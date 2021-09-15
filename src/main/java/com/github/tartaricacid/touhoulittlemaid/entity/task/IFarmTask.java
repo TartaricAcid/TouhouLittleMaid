@@ -75,6 +75,15 @@ public interface IFarmTask extends IMaidTask {
     }
 
     /**
+     * 是否检查作物上方有足够的空间
+     *
+     * @return 如果不检查，返回 false
+     */
+    default boolean checkCropPosAbove() {
+        return true;
+    }
+
+    /**
      * 该模式的环境音效
      *
      * @param maid 女仆对象
