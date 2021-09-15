@@ -26,6 +26,7 @@ public final class TaskManager {
         registerTask(new TaskCocoa());
         registerTask(new TaskGrass());
         registerTask(new TaskSnow());
+        registerTask(new TaskFeedOwner());
     }
 
     /**
