@@ -36,13 +36,13 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_backpack.png");
     private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
+    private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
     private final EntityMaid maid;
     private ToggleWidget home;
     private ToggleWidget pick;
     private ToggleWidget ride;
     private ImageButton info;
-    private ImageButton taskSwitch;
     private boolean taskListOpen;
 
     public MaidInventoryGui(MaidInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
@@ -75,13 +75,20 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     private void addTaskButtons() {
         ImageButton pageDown = new ImageButton(leftPos - 72, topPos + 9, 16, 13, 93, 0, 14, TASK, 256, 256,
                 (b) -> {
-                    // TODO: 2021/8/30 翻页功能 
+                    List<IMaidTask> tasks = TaskManager.getTaskIndex();
+                    if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < tasks.size()) {
+                        TASK_PAGE++;
+                        init();
+                    }
                 },
                 (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.next_page"), x, y), StringTextComponent.EMPTY);
 
         ImageButton pageUp = new ImageButton(leftPos - 89, topPos + 9, 16, 13, 110, 0, 14, TASK, 256, 256,
                 (b) -> {
-                    // TODO: 2021/8/30 翻页功能
+                    if (TASK_PAGE > 0) {
+                        TASK_PAGE--;
+                        init();
+                    }
                 },
                 (b, m, x, y) -> renderTooltip(m, new TranslationTextComponent("gui.touhou_little_maid.task.previous_page"), x, y), StringTextComponent.EMPTY);
 
@@ -109,11 +116,11 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
 
         List<IMaidTask> tasks = TaskManager.getTaskIndex();
         // 先判定首位是否超限
-        if (TASK_PAGE * 12 >= tasks.size()) {
+        if (TASK_PAGE * TASK_COUNT_PER_PAGE >= tasks.size()) {
             TASK_PAGE = 0;
         }
-        for (int i = 0; i < 12; i++) {
-            int index = TASK_PAGE * 12 + i;
+        for (int i = 0; i < TASK_COUNT_PER_PAGE; i++) {
+            int index = TASK_PAGE * TASK_COUNT_PER_PAGE + i;
             if (index < tasks.size()) {
                 final IMaidTask maidTask = tasks.get(index);
                 TaskButton button = new TaskButton(maidTask, leftPos - 89, topPos + 23 + 19 * i,
@@ -213,6 +220,10 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
 
     @Override
     protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+        if (taskListOpen) {
+            String text = String.format("%d/%d", TASK_PAGE + 1, TaskManager.getTaskIndex().size() / TASK_COUNT_PER_PAGE + 1);
+            font.draw(matrixStack, text, -48, 12, 0x333333);
+        }
     }
 
     @Override

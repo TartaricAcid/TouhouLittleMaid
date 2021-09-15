@@ -38,7 +38,7 @@ public class MaidFeedOwnerTask extends Task<EntityMaid> {
         }
         LivingEntity owner = maid.getOwner();
         if (owner instanceof PlayerEntity && owner.isAlive()) {
-            if (owner.distanceTo(maid) < closeEnoughDist) {
+            if (owner.closerThan(maid, closeEnoughDist)) {
                 timeCount = MAX_DELAY_TIME + maid.getRandom().nextInt(MAX_DELAY_TIME);
                 return true;
             }
