@@ -1,10 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public final class ItemsUtil {
@@ -40,6 +43,20 @@ public final class ItemsUtil {
             }
         }
         return -1;
+    }
+
+    /**
+     * 获取符合条件的 slot 列表
+     */
+    public static List<Integer> getFilterStackSlots(IItemHandler handler, Predicate<ItemStack> filter) {
+        IntList slots = new IntArrayList();
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stack = handler.getStackInSlot(i);
+            if (filter.test(stack)) {
+                slots.add(i);
+            }
+        }
+        return slots;
     }
 
     /**

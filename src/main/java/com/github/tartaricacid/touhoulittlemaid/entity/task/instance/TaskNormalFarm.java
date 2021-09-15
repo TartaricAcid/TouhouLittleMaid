@@ -1,29 +1,20 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task.instance;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmMoveTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmPlantTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IFarmTask;
-import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.EmptyBlockReader;
-import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
-import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.*;
-import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,23 +29,6 @@ public class TaskNormalFarm implements IFarmTask {
     @Override
     public ItemStack getIcon() {
         return Items.IRON_HOE.getDefaultInstance();
-    }
-
-    @Nullable
-    @Override
-    public SoundEvent getAmbientSound(EntityMaid maid) {
-        return SoundUtil.environmentSound(maid, InitSounds.MAID_FARM.get(), 0.2f);
-    }
-
-    @Override
-    public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f, 16);
-        MaidFarmPlantTask maidFarmPlantTask = new MaidFarmPlantTask(this);
-
-        return Lists.newArrayList(
-                Pair.of(2, maidFarmMoveTask),
-                Pair.of(2, maidFarmPlantTask)
-        );
     }
 
     @Override
@@ -128,9 +102,7 @@ public class TaskNormalFarm implements IFarmTask {
             BlockNamedItem blockNamedItem = (BlockNamedItem) seed.getItem();
             Block block = blockNamedItem.getBlock();
             if (block instanceof IPlantable) {
-                IPlantable plantable = (IPlantable) block;
-                BlockState seedState = plantable.getPlant(maid.level, basePos.above());
-                if (seedState.getBlock() != Blocks.AIR && maid.placeBlock(basePos.above(), seedState)) {
+                if (maid.placeItemBlock(basePos.above(), seed)) {
                     seed.shrink(1);
                 }
             }

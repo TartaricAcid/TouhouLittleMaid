@@ -51,7 +51,9 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -958,7 +960,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         return state.getBlock().canEntityDestroy(state, level, pos, this) && ForgeEventFactory.onEntityDestroyBlock(this, pos, state);
     }
 
-    public boolean canPlaceBlock(BlockPos pos, BlockState placeState) {
+    public boolean canPlaceBlock(BlockPos pos) {
         BlockState oldState = level.getBlockState(pos);
         return oldState.getMaterial().isReplaceable();
     }
@@ -971,8 +973,28 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         return canDestroyBlock(pos) && level.destroyBlock(pos, dropBlock, this);
     }
 
-    public boolean placeBlock(BlockPos pos, BlockState placeState) {
-        return canPlaceBlock(pos, placeState) && level.setBlock(pos, placeState, Constants.BlockFlags.DEFAULT);
+    public boolean placeItemBlock(Hand hand, BlockPos placePos, Direction direction, ItemStack stack) {
+        if (stack.getItem() instanceof BlockItem) {
+            return ((BlockItem) stack.getItem()).place(new BlockItemUseContext(level, null, hand, stack,
+                    getBlockRayTraceResult(placePos, direction))).consumesAction();
+        }
+        return false;
+    }
+
+    public boolean placeItemBlock(BlockPos placePos, Direction direction, ItemStack stack) {
+        return placeItemBlock(Hand.MAIN_HAND, placePos, direction, stack);
+    }
+
+    public boolean placeItemBlock(BlockPos placePos, ItemStack stack) {
+        return placeItemBlock(placePos, Direction.UP, stack);
+    }
+
+    private BlockRayTraceResult getBlockRayTraceResult(BlockPos pos, Direction direction) {
+        return new BlockRayTraceResult(
+                new Vector3d((double) pos.getX() + 0.5D + (double) direction.getStepX() * 0.5D,
+                        (double) pos.getY() + 0.5D + (double) direction.getStepY() * 0.5D,
+                        (double) pos.getZ() + 0.5D + (double) direction.getStepZ() * 0.5D),
+                direction, pos, false);
     }
 
     @Deprecated

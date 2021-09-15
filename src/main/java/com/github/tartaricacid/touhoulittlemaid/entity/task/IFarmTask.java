@@ -1,9 +1,19 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmMoveTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmPlantTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public interface IFarmTask extends IMaidTask {
     /**
@@ -60,7 +70,31 @@ public interface IFarmTask extends IMaidTask {
      *
      * @return 距离
      */
-    default int getCloseEnoughDist() {
-        return 1;
+    default double getCloseEnoughDist() {
+        return 1.0;
+    }
+
+    /**
+     * 该模式的环境音效
+     *
+     * @param maid 女仆对象
+     * @return 对应的环境音效
+     */
+    @Override
+    default SoundEvent getAmbientSound(EntityMaid maid) {
+        return SoundUtil.environmentSound(maid, InitSounds.MAID_FARM.get(), 0.2f);
+    }
+
+    /**
+     * 该模式下调用的 AI
+     *
+     * @param maid 女仆对象
+     * @return 如果什么都不做，请返回空集合
+     */
+    @Override
+    default List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
+        MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f, 16);
+        MaidFarmPlantTask maidFarmPlantTask = new MaidFarmPlantTask(this);
+        return Lists.newArrayList(Pair.of(2, maidFarmMoveTask), Pair.of(2, maidFarmPlantTask));
     }
 }

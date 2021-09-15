@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.brain.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -16,6 +17,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+
+import java.util.List;
+import java.util.Optional;
 
 public class MaidFarmPlantTask extends Task<EntityMaid> {
     private final IFarmTask task;
@@ -31,11 +35,10 @@ public class MaidFarmPlantTask extends Task<EntityMaid> {
         return brain.getMemory(InitEntities.TARGET_POS.get()).map(targetPos -> {
             Vector3d targetV3d = targetPos.currentPosition();
             if (owner.distanceToSqr(targetV3d) > Math.pow(task.getCloseEnoughDist(), 2)) {
-                brain.getMemory(MemoryModuleType.WALK_TARGET).ifPresent(walkTarget -> {
-                    if (!walkTarget.getTarget().currentPosition().equals(targetV3d)) {
-                        brain.eraseMemory(InitEntities.TARGET_POS.get());
-                    }
-                });
+                Optional<WalkTarget> walkTarget = brain.getMemory(MemoryModuleType.WALK_TARGET);
+                if (!walkTarget.isPresent() || !walkTarget.get().getTarget().currentPosition().equals(targetV3d)) {
+                    brain.eraseMemory(InitEntities.TARGET_POS.get());
+                }
                 return false;
             }
             return true;
@@ -56,16 +59,19 @@ public class MaidFarmPlantTask extends Task<EntityMaid> {
             }
 
             CombinedInvWrapper availableInv = maid.getAvailableInv(true);
-            int slot = ItemsUtil.findStackSlot(availableInv, task::isSeed);
-            if (slot > 0) {
-                ItemStack seed = availableInv.getStackInSlot(slot);
-                BlockState baseState = world.getBlockState(basePos);
-                if (maid.canPlaceBlock(cropPos, cropState) && task.canPlant(maid, basePos, baseState, seed)) {
-                    ItemStack remain = task.plant(maid, basePos, baseState, seed);
-                    availableInv.setStackInSlot(slot, remain);
-                    maid.swing(Hand.MAIN_HAND);
-                    maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
-                    maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+            List<Integer> slots = ItemsUtil.getFilterStackSlots(availableInv, task::isSeed);
+            if (!slots.isEmpty()) {
+                for (int slot : slots) {
+                    ItemStack seed = availableInv.getStackInSlot(slot);
+                    BlockState baseState = world.getBlockState(basePos);
+                    if (maid.canPlaceBlock(cropPos) && task.canPlant(maid, basePos, baseState, seed)) {
+                        ItemStack remain = task.plant(maid, basePos, baseState, seed);
+                        availableInv.setStackInSlot(slot, remain);
+                        maid.swing(Hand.MAIN_HAND);
+                        maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
+                        maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+                        return;
+                    }
                 }
             }
         });

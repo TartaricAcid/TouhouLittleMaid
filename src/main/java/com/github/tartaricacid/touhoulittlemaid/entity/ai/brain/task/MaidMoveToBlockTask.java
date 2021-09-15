@@ -12,18 +12,16 @@ import net.minecraft.util.math.BlockPosWrapper;
 import net.minecraft.world.server.ServerWorld;
 
 public abstract class MaidMoveToBlockTask extends Task<EntityMaid> {
-    private static final int MAX_DELAY_TIME = 200;
+    private static final int MAX_DELAY_TIME = 120;
     private final float movementSpeed;
     private final int searchLength;
-    private final int closeEnoughDist;
     private int runDelay;
 
-    public MaidMoveToBlockTask(float speedIn, int length, int closeEnoughDist) {
+    public MaidMoveToBlockTask(float movementSpeed, int searchLength) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT,
                 InitEntities.TARGET_POS.get(), MemoryModuleStatus.VALUE_ABSENT));
-        this.movementSpeed = speedIn;
-        this.searchLength = length;
-        this.closeEnoughDist = closeEnoughDist;
+        this.movementSpeed = movementSpeed;
+        this.searchLength = searchLength;
     }
 
     @Override
@@ -37,15 +35,14 @@ public abstract class MaidMoveToBlockTask extends Task<EntityMaid> {
     }
 
     protected final void searchForDestination(ServerWorld worldIn, EntityMaid entityIn) {
-        BlockPos originPos = new BlockPos(entityIn.position());
+        BlockPos originPos = entityIn.blockPosition();
         for (int y = 0; y <= 1; y = y > 0 ? -y : 1 - y) {
             for (int i = 0; i < this.searchLength; ++i) {
                 for (int x = 0; x <= i; x = x > 0 ? -x : 1 - x) {
                     for (int z = x < i && x > -i ? i : 0; z <= i; z = z > 0 ? -z : 1 - z) {
                         BlockPos blockPos = originPos.offset(x, y - 1, z);
                         if (shouldMoveTo(worldIn, entityIn, blockPos)) {
-                            BrainUtil.setWalkAndLookTargetMemories(entityIn, blockPos, this.movementSpeed,
-                                    (int) Math.min(0, this.closeEnoughDist - 0.5));
+                            BrainUtil.setWalkAndLookTargetMemories(entityIn, blockPos, this.movementSpeed, 0);
                             entityIn.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosWrapper(blockPos));
                             this.runDelay = 5;
                             return;

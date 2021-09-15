@@ -13,8 +13,8 @@ public class MaidFarmMoveTask extends MaidMoveToBlockTask {
     private final NonNullList<ItemStack> seeds = NonNullList.create();
     private final IFarmTask task;
 
-    public MaidFarmMoveTask(IFarmTask task, float speedIn, int length) {
-        super(speedIn, length, task.getCloseEnoughDist());
+    public MaidFarmMoveTask(IFarmTask task, float movementSpeed, int searchLength) {
+        super(movementSpeed, searchLength);
         this.task = task;
     }
 
@@ -28,15 +28,14 @@ public class MaidFarmMoveTask extends MaidMoveToBlockTask {
                 seeds.add(stack);
             }
         }
-        if (!seeds.isEmpty()) {
-            this.searchForDestination(worldIn, entityIn);
-        }
+        this.searchForDestination(worldIn, entityIn);
     }
 
     @Override
     protected boolean shouldMoveTo(ServerWorld worldIn, EntityMaid maid, BlockPos basePos) {
-        BlockState stateUp2 = worldIn.getBlockState(basePos.above(2));
-        if (!stateUp2.getMaterial().isReplaceable()) {
+        BlockPos above2Pos = basePos.above(2);
+        BlockState stateUp2 = worldIn.getBlockState(above2Pos);
+        if (!stateUp2.getCollisionShape(worldIn, above2Pos).isEmpty()) {
             return false;
         }
 
