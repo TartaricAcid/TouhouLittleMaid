@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.sensor.MaidHostilesSensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.sensor.MaidPickupEntitiesSensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -23,6 +24,7 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -36,6 +38,7 @@ public final class InitEntities {
     public static final DeferredRegister<MemoryModuleType<?>> MEMORY_MODULE_TYPES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, TouhouLittleMaid.MOD_ID);
     public static final DeferredRegister<SensorType<?>> SENSOR_TYPES = DeferredRegister.create(ForgeRegistries.SENSOR_TYPES, TouhouLittleMaid.MOD_ID);
     public static final DeferredRegister<Schedule> SCHEDULES = DeferredRegister.create(ForgeRegistries.SCHEDULES, TouhouLittleMaid.MOD_ID);
+    public static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZERS = DeferredRegister.create(ForgeRegistries.DATA_SERIALIZERS, TouhouLittleMaid.MOD_ID);
 
     public static RegistryObject<EntityType<EntityMaid>> MAID = ENTITY_TYPES.register("maid", () -> EntityMaid.TYPE);
     public static RegistryObject<EntityType<EntityChair>> CHAIR = ENTITY_TYPES.register("chair", () -> EntityChair.TYPE);
@@ -58,6 +61,20 @@ public final class InitEntities {
                         .changeActivityAt(16000, Activity.REST)
                         .build();
             });
+    public static RegistryObject<Schedule> MAID_NIGHT_SHIFT_SCHEDULES = SCHEDULES.register("maid_night_shift_schedules",
+            () -> {
+                // 18:00 ~ 06:00 工作
+                // 06:00 ~ 14:00 睡觉
+                // 14:00 ~ 18:00 娱乐
+                return new ScheduleBuilder(new Schedule())
+                        .changeActivityAt(0, Activity.REST)
+                        .changeActivityAt(8000, Activity.IDLE)
+                        .changeActivityAt(12000, Activity.WORK)
+                        .build();
+            });
+    public static RegistryObject<Schedule> MAID_ALL_DAY_SCHEDULES = SCHEDULES.register("maid_all_day_schedules",
+            () -> new ScheduleBuilder(new Schedule()).changeActivityAt(0, Activity.WORK).build());
+    public static RegistryObject<DataSerializerEntry> MAID_SCHEDULE_DATA_SERIALIZERS = DATA_SERIALIZERS.register("maid_schedule", () -> new DataSerializerEntry(MaidSchedule.DATA));
 
     @SubscribeEvent
     public static void addEntityAttributeEvent(EntityAttributeCreationEvent event) {

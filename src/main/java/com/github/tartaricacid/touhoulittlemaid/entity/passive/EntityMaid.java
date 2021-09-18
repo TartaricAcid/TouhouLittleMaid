@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.Config;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
@@ -105,6 +106,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final DataParameter<Boolean> DATA_STRUCK_BY_LIGHTNING = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_IS_CHARGING_CROSSBOW = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_ARM_RISE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<MaidSchedule> SCHEDULE_MODE = EntityDataManager.defineId(EntityMaid.class, MaidSchedule.DATA);
 
     private static final String MODEL_ID_TAG = "ModelId";
     private static final String TASK_TAG = "MaidTask";
@@ -118,6 +120,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final String HUNGER_TAG = "MaidHunger";
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String EXPERIENCE_TAG = "MaidExperience";
+    private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final int HUNGER_VALUE_REFUSING_TASK = -256;
@@ -183,6 +186,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         this.entityData.define(DATA_STRUCK_BY_LIGHTNING, false);
         this.entityData.define(DATA_IS_CHARGING_CROSSBOW, false);
         this.entityData.define(DATA_ARM_RISE, false);
+        this.entityData.define(SCHEDULE_MODE, MaidSchedule.DAY);
     }
 
     @Override
@@ -603,6 +607,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         compound.putInt(HUNGER_TAG, getHunger());
         compound.putInt(FAVORABILITY_TAG, getFavorability());
         compound.putInt(EXPERIENCE_TAG, getExperience());
+        compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
     }
 
     @Override
@@ -645,6 +650,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         }
         if (compound.contains(EXPERIENCE_TAG, Constants.NBT.TAG_INT)) {
             setExperience(compound.getInt(EXPERIENCE_TAG));
+        }
+        if (compound.contains(SCHEDULE_MODE_TAG, Constants.NBT.TAG_STRING)) {
+            setSchedule(MaidSchedule.valueOf(compound.getString(SCHEDULE_MODE_TAG)));
         }
     }
 
@@ -885,6 +893,14 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     public void setSwingingArms(boolean swingingArms) {
         this.entityData.set(DATA_ARM_RISE, swingingArms);
+    }
+
+    public MaidSchedule getSchedule() {
+        return this.entityData.get(SCHEDULE_MODE);
+    }
+
+    public void setSchedule(MaidSchedule schedule) {
+        this.entityData.set(SCHEDULE_MODE, schedule);
     }
 
     public ItemStackHandler getMaidInv() {

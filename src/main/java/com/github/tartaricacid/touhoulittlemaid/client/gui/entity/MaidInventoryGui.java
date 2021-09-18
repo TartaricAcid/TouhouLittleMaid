@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
@@ -134,31 +135,33 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     }
 
     private void addToggleButton() {
-        home = new ToggleWidget(leftPos + 9, topPos + 174, 20, 20, maid.isHomeModeEnable()) {
+        this.addButton(new ScheduleButton(leftPos + 9, topPos + 177, maid));
+
+        home = new ToggleWidget(leftPos + 9, topPos + 196, 20, 20, maid.isHomeModeEnable()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
-                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), isStateTriggered, maid.isPickup(), maid.isRideable()));
+                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), isStateTriggered, maid.isPickup(), maid.isRideable(), maid.getSchedule()));
             }
         };
         home.initTextureValues(0, 0, 21, 21, BUTTON);
         this.addButton(home);
 
-        pick = new ToggleWidget(leftPos + 30, topPos + 174, 20, 20, maid.isPickup()) {
+        pick = new ToggleWidget(leftPos + 30, topPos + 196, 20, 20, maid.isPickup()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
-                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), isStateTriggered, maid.isRideable()));
+                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), isStateTriggered, maid.isRideable(), maid.getSchedule()));
             }
         };
         pick.initTextureValues(42, 0, 21, 21, BUTTON);
         this.addButton(pick);
 
-        ride = new ToggleWidget(leftPos + 51, topPos + 174, 20, 20, maid.isRideable()) {
+        ride = new ToggleWidget(leftPos + 51, topPos + 196, 20, 20, maid.isRideable()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
-                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), maid.isPickup(), isStateTriggered));
+                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), maid.isPickup(), isStateTriggered, maid.getSchedule()));
             }
         };
         ride.initTextureValues(84, 0, 21, 21, BUTTON);
@@ -280,6 +283,7 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         blit(matrixStack, leftPos + 94, topPos + 7, 107, 0, 149, 21);
         blit(matrixStack, leftPos + 94, topPos + 5, 107, 21, 24, 26);
         blit(matrixStack, leftPos + 98, topPos + 12, 107, 47, 16, 16);
+        blit(matrixStack, leftPos + 6, topPos + 168, 0, 47, 67, 25);
     }
 
     private void drawBackpackGui(MatrixStack matrixStack) {
