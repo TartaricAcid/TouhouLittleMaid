@@ -30,6 +30,7 @@ public final class TaskManager {
         registerTask(new TaskShears());
         registerTask(new TaskMilk());
         registerTask(new TaskTorch());
+        registerTask(new TaskFeedAnimal());
     }
 
     /**
