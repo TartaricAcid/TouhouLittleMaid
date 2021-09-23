@@ -22,6 +22,7 @@ public final class InitItems {
     public static RegistryObject<Item> CHAIR = ITEMS.register("chair", ItemChair::new);
     public static RegistryObject<Item> HAKUREI_GOHEI = ITEMS.register("hakurei_gohei", ItemHakureiGohei::new);
     public static RegistryObject<Item> MAID_BED = ITEMS.register("maid_bed", ItemMaidBed::new);
+    public static RegistryObject<Item> EXTINGUISHER = ITEMS.register("extinguisher", ItemExtinguisher::new);
 
     public static ItemGroup MAIN_TAB = new MaidGroup("main", HAKUREI_GOHEI);
 
