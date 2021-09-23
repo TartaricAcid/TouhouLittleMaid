@@ -45,6 +45,21 @@ public final class MaidBrain {
     }
 
     public static void registerBrainGoals(Brain<EntityMaid> brain, EntityMaid maid) {
+        registerSchedule(brain, maid);
+        registerCoreGoals(brain);
+        registerPanicGoals(brain);
+        registerAwaitGoals(brain);
+        registerIdleGoals(brain);
+        registerWorkGoals(brain, maid);
+        registerRestGoals(brain);
+
+        brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
+        brain.setDefaultActivity(Activity.IDLE);
+        brain.setActiveActivityIfPossible(Activity.IDLE);
+        brain.updateActivityFromSchedule(maid.level.getDayTime(), maid.level.getGameTime());
+    }
+
+    private static void registerSchedule(Brain<EntityMaid> brain, EntityMaid maid) {
         switch (maid.getSchedule()) {
             case ALL:
                 brain.setSchedule(InitEntities.MAID_ALL_DAY_SCHEDULES.get());
@@ -57,29 +72,19 @@ public final class MaidBrain {
                 brain.setSchedule(InitEntities.MAID_DAY_SHIFT_SCHEDULES.get());
                 break;
         }
-
-        registerCoreGoals(brain);
-        registerIdleGoals(brain);
-        registerPanicGoals(brain);
-        registerWorkGoals(brain, maid);
-        registerResetGoals(brain);
-
-        brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
-        brain.setDefaultActivity(Activity.IDLE);
-        brain.setActiveActivityIfPossible(Activity.IDLE);
-        brain.updateActivityFromSchedule(maid.level.getDayTime(), maid.level.getGameTime());
     }
 
     private static void registerCoreGoals(Brain<EntityMaid> brain) {
         Pair<Integer, Task<? super EntityMaid>> swim = Pair.of(0, new SwimTask(0.5F));
-        Pair<Integer, Task<? super EntityMaid>> interactWithDoor = Pair.of(0, new InteractWithDoorTask());
         Pair<Integer, Task<? super EntityMaid>> look = Pair.of(0, new LookTask(45, 90));
         Pair<Integer, Task<? super EntityMaid>> maidPanic = Pair.of(0, new MaidPanicTask());
+        Pair<Integer, Task<? super EntityMaid>> maidAwait = Pair.of(0, new MaidAwaitTask());
+        Pair<Integer, Task<? super EntityMaid>> interactWithDoor = Pair.of(1, new InteractWithDoorTask());
         Pair<Integer, Task<? super EntityMaid>> walkToTarget = Pair.of(1, new WalkToTargetTask());
         Pair<Integer, Task<? super EntityMaid>> followOwner = Pair.of(1, new MaidFollowOwnerTask(0.5f, 5, 2));
         Pair<Integer, Task<? super EntityMaid>> pickupItem = Pair.of(1, new MaidPickupEntitiesTask(EntityMaid::isPickup, 8, 0.6f));
 
-        brain.addActivity(Activity.CORE, ImmutableList.of(swim, interactWithDoor, look, maidPanic, walkToTarget, followOwner, pickupItem));
+        brain.addActivity(Activity.CORE, ImmutableList.of(swim, look, maidPanic, maidAwait, interactWithDoor, walkToTarget, followOwner, pickupItem));
     }
 
     private static void registerIdleGoals(Brain<EntityMaid> brain) {
@@ -111,7 +116,7 @@ public final class MaidBrain {
         brain.addActivity(Activity.WORK, ImmutableList.copyOf(pairMaidList));
     }
 
-    private static void registerResetGoals(Brain<EntityMaid> brain) {
+    private static void registerRestGoals(Brain<EntityMaid> brain) {
         Pair<Integer, Task<? super EntityMaid>> updateActivity = Pair.of(99, new UpdateActivityTask());
 
         brain.addActivity(Activity.REST, ImmutableList.of(updateActivity));
@@ -123,5 +128,20 @@ public final class MaidBrain {
         Pair<Integer, Task<? super EntityMaid>> runAwayHurt = Pair.of(1, MaidRunAwayTask.entity(MemoryModuleType.HURT_BY_ENTITY, 0.5f, 6, false));
 
         brain.addActivity(Activity.PANIC, ImmutableList.of(clearHurt, runAway, runAwayHurt));
+    }
+
+    private static void registerAwaitGoals(Brain<EntityMaid> brain) {
+        Pair<Task<? super EntityMaid>, Integer> lookToPlayer = Pair.of(new LookAtEntityTask(EntityType.PLAYER, 5), 1);
+        Pair<Task<? super EntityMaid>, Integer> lookToMaid = Pair.of(new LookAtEntityTask(EntityMaid.TYPE, 5), 1);
+        Pair<Task<? super EntityMaid>, Integer> lookToWolf = Pair.of(new LookAtEntityTask(EntityType.WOLF, 5), 1);
+        Pair<Task<? super EntityMaid>, Integer> lookToCat = Pair.of(new LookAtEntityTask(EntityType.CAT, 5), 1);
+        Pair<Task<? super EntityMaid>, Integer> lookToParrot = Pair.of(new LookAtEntityTask(EntityType.PARROT, 5), 1);
+        Pair<Task<? super EntityMaid>, Integer> noLook = Pair.of(new DummyTask(30, 60), 2);
+
+        Pair<Integer, Task<? super EntityMaid>> shuffled = Pair.of(1, new FirstShuffledTask<>(
+                ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook)));
+        Pair<Integer, Task<? super EntityMaid>> updateActivity = Pair.of(99, new UpdateActivityTask());
+
+        brain.addActivity(Activity.RIDE, ImmutableList.of(shuffled, updateActivity));
     }
 }

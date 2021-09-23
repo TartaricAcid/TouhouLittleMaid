@@ -35,7 +35,7 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid maid) {
         LivingEntity livingentity = maid.getOwner();
-        if (maid.isHomeModeEnable() || livingentity == null || livingentity.isSpectator() || maid.isOrderedToSit()
+        if (maid.isHomeModeEnable() || livingentity == null || livingentity.isSpectator() || maid.isInSittingPose()
                 || maid.distanceToSqr(livingentity) < this.startDistance * this.startDistance) {
             return false;
         }
@@ -89,7 +89,6 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
                 return;
             }
         }
-
     }
 
     private boolean maybeTeleportTo(EntityMaid maid, int x, int y, int z) {
