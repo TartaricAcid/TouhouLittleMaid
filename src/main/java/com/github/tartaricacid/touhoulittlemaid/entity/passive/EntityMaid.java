@@ -148,7 +148,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
      * 用于替换背包延时的参数
      */
     private int backpackDelay = 0;
-    private boolean sleep = false;
     private IMaidTask task = TaskManager.getIdleTask();
 
     protected EntityMaid(EntityType<EntityMaid> type, World world) {
@@ -238,6 +237,21 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         }
         this.spawnPortalParticle();
         this.randomRestoreHealth();
+        this.onMaidSleep();
+    }
+
+    private void onMaidSleep() {
+        if (isSleeping()) {
+            getSleepingPos().ifPresent(pos -> setPos(pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5));
+            setDeltaMovement(Vector3d.ZERO);
+            if (!isSilent()) {
+                this.setSilent(true);
+            }
+        } else {
+            if (isSilent()) {
+                this.setSilent(false);
+            }
+        }
     }
 
     @Override
@@ -663,7 +677,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     private boolean openMaidGui(PlayerEntity player) {
-        if (player instanceof ServerPlayerEntity && !this.isSleep()) {
+        if (player instanceof ServerPlayerEntity && !this.isSleeping()) {
             this.navigation.stop();
             NetworkHooks.openGui((ServerPlayerEntity) player, this, (buffer) -> buffer.writeInt(getId()));
         }
@@ -797,10 +811,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     public boolean backpackNoDelay() {
         return backpackDelay <= 0;
-    }
-
-    public boolean isSleep() {
-        return sleep;
     }
 
     public String getModelId() {

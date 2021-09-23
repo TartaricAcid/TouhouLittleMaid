@@ -3,10 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.item.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
@@ -24,6 +21,7 @@ public final class InitItems {
     public static RegistryObject<Item> MAID_BACKPACK_BIG = ITEMS.register("maid_backpack_big", () -> new ItemMaidBackpack(BackpackLevel.BIG));
     public static RegistryObject<Item> CHAIR = ITEMS.register("chair", ItemChair::new);
     public static RegistryObject<Item> HAKUREI_GOHEI = ITEMS.register("hakurei_gohei", ItemHakureiGohei::new);
+    public static RegistryObject<Item> MAID_BED = ITEMS.register("maid_bed", ItemMaidBed::new);
 
     public static ItemGroup MAIN_TAB = new MaidGroup("main", HAKUREI_GOHEI);
 

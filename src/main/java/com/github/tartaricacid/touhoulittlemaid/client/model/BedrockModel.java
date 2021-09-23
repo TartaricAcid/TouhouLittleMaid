@@ -25,7 +25,6 @@ import net.minecraft.util.HandSide;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -280,12 +279,6 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
                 }
                 entityMaidWrapper.clearData();
             }
-        }
-        // TODO: 可能需要修改
-        if (entityIn.isSleep()) {
-            GL11.glRotated(180, 0, 1, 0);
-            GL11.glRotated(-90, 1, 0, 0);
-            GL11.glTranslated(0, -1.08, 1.3);
         }
     }
 

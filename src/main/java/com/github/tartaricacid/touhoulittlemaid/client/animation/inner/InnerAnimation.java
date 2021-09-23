@@ -25,14 +25,14 @@ public final class InnerAnimation {
                 if (head != null) {
                     head.setRotateAngleX(headPitch * 0.017453292f);
                     head.setRotateAngleY(netHeadYaw * 0.017453292f);
-                    if (maid.isSleep()) {
+                    if (maid.isSleeping()) {
                         head.setRotateAngleX(15 * 0.017453292f);
                     }
                 }
 
                 ModelRendererWrapper hat = modelMap.get("hat");
                 if (hat != null) {
-                    hat.setHidden(maid.isSleep());
+                    hat.setHidden(maid.isSleeping());
                 }
             }
         };
@@ -45,7 +45,7 @@ public final class InnerAnimation {
                 ModelRendererWrapper blink = modelMap.get("blink");
 
                 if (blink != null) {
-                    if (maid.isSleep()) {
+                    if (maid.isSleeping()) {
                         blink.setHidden(false);
                         return;
                     }
@@ -1265,7 +1265,7 @@ public final class InnerAnimation {
                     tail.setRotateAngleX((float) (Math.sin(ageInTicks * 0.2) * 0.05));
                     tail.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.2) * 0.1));
 
-                    tail.setHidden(maid.isSleep());
+                    tail.setHidden(maid.isSleeping());
                 }
             }
         };
@@ -1568,11 +1568,11 @@ public final class InnerAnimation {
 
                 if (wingLeft != null) {
                     wingLeft.setRotateAngleY((float) (-Math.cos(ageInTicks * 0.3) * 0.2 + 1.0));
-                    wingLeft.setHidden(maid.isSleep());
+                    wingLeft.setHidden(maid.isSleeping());
                 }
                 if (wingRight != null) {
                     wingRight.setRotateAngleY((float) (Math.cos(ageInTicks * 0.3) * 0.2 - 1.0));
-                    wingRight.setHidden(maid.isSleep());
+                    wingRight.setHidden(maid.isSleeping());
                 }
             }
         };
@@ -1586,11 +1586,11 @@ public final class InnerAnimation {
                 ModelRendererWrapper sleepShow = modelMap.get("sleepShow");
 
                 if (sleepHide != null) {
-                    sleepHide.setHidden(maid.isSleep());
+                    sleepHide.setHidden(maid.isSleeping());
                 }
 
                 if (sleepShow != null) {
-                    sleepShow.setHidden(!maid.isSleep());
+                    sleepShow.setHidden(!maid.isSleeping());
                 }
             }
         };

@@ -195,7 +195,7 @@ public class MaidInventory extends Container {
 
     @Override
     public boolean stillValid(PlayerEntity playerIn) {
-        return maid.isOwnedBy(playerIn) && !maid.isSleep() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
+        return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
     }
 
     public EntityMaid getMaid() {

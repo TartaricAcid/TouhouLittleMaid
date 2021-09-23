@@ -36,7 +36,7 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid maid) {
         LivingEntity livingentity = maid.getOwner();
         if (maid.isHomeModeEnable() || livingentity == null || livingentity.isSpectator() || maid.isInSittingPose()
-                || maid.distanceToSqr(livingentity) < this.startDistance * this.startDistance) {
+                || maid.isSleeping() || maid.distanceToSqr(livingentity) < this.startDistance * this.startDistance) {
             return false;
         }
         this.owner = livingentity;
@@ -46,7 +46,7 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
     @Override
     protected boolean canStillUse(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         if (maid.getBrain().getMemory(MemoryModuleType.PATH).filter(Path::isDone).isPresent()
-                || maid.isInSittingPose() || this.owner.isDeadOrDying()) {
+                || maid.isInSittingPose() || maid.isSleeping() || this.owner.isDeadOrDying()) {
             return false;
         }
         return maid.distanceToSqr(this.owner) > this.stopDistance * this.stopDistance;

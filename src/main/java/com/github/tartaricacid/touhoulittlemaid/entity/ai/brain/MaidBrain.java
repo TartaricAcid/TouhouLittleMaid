@@ -83,8 +83,9 @@ public final class MaidBrain {
         Pair<Integer, Task<? super EntityMaid>> walkToTarget = Pair.of(1, new WalkToTargetTask());
         Pair<Integer, Task<? super EntityMaid>> followOwner = Pair.of(1, new MaidFollowOwnerTask(0.5f, 5, 2));
         Pair<Integer, Task<? super EntityMaid>> pickupItem = Pair.of(1, new MaidPickupEntitiesTask(EntityMaid::isPickup, 8, 0.6f));
+        Pair<Integer, Task<? super EntityMaid>> clearSleep = Pair.of(99, new MaidClearSleepTask());
 
-        brain.addActivity(Activity.CORE, ImmutableList.of(swim, look, maidPanic, maidAwait, interactWithDoor, walkToTarget, followOwner, pickupItem));
+        brain.addActivity(Activity.CORE, ImmutableList.of(swim, look, maidPanic, maidAwait, interactWithDoor, walkToTarget, followOwner, pickupItem, clearSleep));
     }
 
     private static void registerIdleGoals(Brain<EntityMaid> brain) {
@@ -117,9 +118,11 @@ public final class MaidBrain {
     }
 
     private static void registerRestGoals(Brain<EntityMaid> brain) {
+        Pair<Integer, Task<? super EntityMaid>> findBed = Pair.of(2, new MaidFindBedTask(0.6f, 12));
+        Pair<Integer, Task<? super EntityMaid>> sleep = Pair.of(2, new MaidSleepTask());
         Pair<Integer, Task<? super EntityMaid>> updateActivity = Pair.of(99, new UpdateActivityTask());
 
-        brain.addActivity(Activity.REST, ImmutableList.of(updateActivity));
+        brain.addActivity(Activity.REST, ImmutableList.of(findBed, sleep, updateActivity));
     }
 
     private static void registerPanicGoals(Brain<EntityMaid> brain) {

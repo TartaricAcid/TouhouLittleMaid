@@ -31,7 +31,7 @@ public class LayerMaidBackpack extends LayerRenderer<EntityMaid, BedrockModel<En
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!renderer.getMainInfo().isShowBackpack() || maid.isSleep() || maid.isInvisible()) {
+        if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
             return;
         }
 

@@ -1,10 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.config.Config;
-import com.github.tartaricacid.touhoulittlemaid.init.InitContainer;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -26,6 +23,7 @@ public final class TouhouLittleMaid {
         InitEntities.SENSOR_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitEntities.SCHEDULES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitEntities.DATA_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        InitBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitContainer.CONTAINER_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitSounds.SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());

@@ -223,7 +223,7 @@ public class EntityMaidWrapper {
     }
 
     public boolean isSleep() {
-        return maid.isSleep();
+        return maid.isSleeping();
     }
 
     public int getFavorability() {
