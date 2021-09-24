@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -11,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskMessage;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,10 +24,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 
 import java.util.List;
 
@@ -115,8 +114,8 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     }
 
     private void addStateButton() {
-        skin = new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 42, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidModelGui(maid)));
-        info = new ImageButton(leftPos + 8, topPos + 14, 9, 9, 72, 64, 10, BUTTON, NO_ACTION);
+        skin = new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidModelGui(maid)));
+        info = new ImageButton(leftPos + 8, topPos + 14, 9, 9, 72, 65, 10, BUTTON, NO_ACTION);
         this.addButton(skin);
         this.addButton(info);
     }
@@ -236,16 +235,43 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     }
 
     private void renderMaidInfo(MatrixStack matrixStack, int mouseX, int mouseY) {
-        // TODO: 2021/8/30 显示详细信息
         if (info.isHovered()) {
-            renderComponentTooltip(matrixStack, Lists.newArrayList(
-                    new StringTextComponent("你的女仆当前很健康"),
-                    new StringTextComponent("- 血量：全满（+20）"),
-                    new StringTextComponent("- 心情：良好（+943）"),
-                    new StringTextComponent("- 饥饿状况：饱腹（+20）"),
-                    new StringTextComponent("- 好感度：高（+93）"),
-                    new StringTextComponent("- 护甲：高（+20）")
-            ), mouseX, mouseY);
+            List<ITextComponent> list = Lists.newArrayList();
+            String prefix = "§a█\u0020";
+
+            IFormattableTextComponent title = new StringTextComponent("")
+                    .append(new TranslationTextComponent("tooltips.touhou_little_maid.info.title")
+                            .withStyle(TextFormatting.GOLD, TextFormatting.UNDERLINE))
+                    .append(new StringTextComponent("§r\u0020"));
+            if (maid.isStruckByLightning()) {
+                title.append(new StringTextComponent("❀").withStyle(TextFormatting.DARK_RED));
+            }
+            if (maid.isInvulnerable()) {
+                title.append(new StringTextComponent("✟").withStyle(TextFormatting.BLUE));
+            }
+            list.add(title);
+
+            if (maid.getOwner() != null) {
+                list.add(new StringTextComponent(prefix).withStyle(TextFormatting.WHITE)
+                        .append(new TranslationTextComponent("tooltips.touhou_little_maid.info.owner")
+                                .append(":\u0020").withStyle(TextFormatting.AQUA))
+                        .append(maid.getOwner().getDisplayName()));
+            }
+            CustomPackLoader.MAID_MODELS.getInfo(maid.getModelId()).ifPresent((info) -> list.add(new StringTextComponent(prefix)
+                    .withStyle(TextFormatting.WHITE)
+                    .append(new TranslationTextComponent("tooltips.touhou_little_maid.info.model_name")
+                            .append(":\u0020").withStyle(TextFormatting.AQUA))
+                    .append(ParseI18n.parse(info.getName()))));
+            list.add(new StringTextComponent(prefix).withStyle(TextFormatting.WHITE)
+                    .append(new TranslationTextComponent("tooltips.touhou_little_maid.info.experience")
+                            .append(":\u0020").withStyle(TextFormatting.AQUA))
+                    .append(String.valueOf(maid.getExperience())));
+            list.add(new StringTextComponent(prefix).withStyle(TextFormatting.WHITE)
+                    .append(new TranslationTextComponent("tooltips.touhou_little_maid.info.favorability")
+                            .append(":\u0020").withStyle(TextFormatting.AQUA))
+                    .append(String.valueOf(maid.getFavorability())));
+
+            renderComponentTooltip(matrixStack, list, mouseX, mouseY);
         }
     }
 
