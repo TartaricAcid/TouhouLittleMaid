@@ -46,6 +46,8 @@
   "gui.touhou_little_maid.button.maid_riding_set.true": "Entity Riding Is Enable",
   "gui.touhou_little_maid.button.maid_riding_set.false": "Entity Riding Is Disable",
   "gui.touhou_little_maid.button.maid_riding_set.desc": "§7Click this button to set whether the maid will ride on other entities",
+  "gui.touhou_little_maid.name_tag.edit_box": "Name Tag Edit Box",
+  "gui.touhou_little_maid.tag.always_show": "Whether to always show the name",
   "message.touhou_little_maid.change_model.disabled": "Model switch is disabled.",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "Your lack of knowledge does not know how to use this item",
   "commands.touhou_little_maid.pack.reload.info": "All model pack have been reloaded!",

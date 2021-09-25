@@ -46,6 +46,8 @@
   "gui.touhou_little_maid.button.maid_riding_set.true": "女仆骑乘已开启",
   "gui.touhou_little_maid.button.maid_riding_set.false": "女仆骑乘已关闭",
   "gui.touhou_little_maid.button.maid_riding_set.desc": "§7点击此按钮可以设置女仆是否骑乘其他实体",
+  "gui.touhou_little_maid.name_tag.edit_box": "命名牌文本框",
+  "gui.touhou_little_maid.tag.always_show": "是否总是显示名称",
   "message.touhou_little_maid.change_model.disabled": "模型切换功能已被禁止",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "你匮乏的知识并不了解这物品该如何使用",
   "commands.touhou_little_maid.pack.reload.info": "所有的模型包已经重载！",
