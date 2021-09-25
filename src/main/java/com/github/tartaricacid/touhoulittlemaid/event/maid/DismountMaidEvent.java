@@ -7,7 +7,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
-public class DismountMaidEvent {
+public final class DismountMaidEvent {
     @SubscribeEvent
     public static void onInteract(InteractMaidEvent event) {
         PlayerEntity player = event.getPlayer();

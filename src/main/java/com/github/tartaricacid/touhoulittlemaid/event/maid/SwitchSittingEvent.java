@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
-public class SwitchSittingEvent {
+public final class SwitchSittingEvent {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onInteractMaid(InteractMaidEvent event) {
         PlayerEntity player = event.getPlayer();
@@ -21,9 +21,7 @@ public class SwitchSittingEvent {
         if (player.isShiftKeyDown()) {
             maid.setInSittingPose(!maid.isInSittingPose());
             if (maid.isInSittingPose()) {
-                // 清除寻路逻辑
                 maid.getNavigation().stop();
-                // 清除所有的攻击目标
                 maid.setTarget(null);
             }
             maid.playSound(SoundEvents.ITEM_PICKUP, 0.2F,
