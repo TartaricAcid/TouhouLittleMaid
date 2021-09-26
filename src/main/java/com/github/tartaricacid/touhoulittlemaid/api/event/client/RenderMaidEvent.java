@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.event.api;
+package com.github.tartaricacid.touhoulittlemaid.api.event.client;
 
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;

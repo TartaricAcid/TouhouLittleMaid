@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidPlaySoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
@@ -12,8 +14,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoad
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.event.api.InteractMaidEvent;
-import com.github.tartaricacid.touhoulittlemaid.event.api.MaidPlaySoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;

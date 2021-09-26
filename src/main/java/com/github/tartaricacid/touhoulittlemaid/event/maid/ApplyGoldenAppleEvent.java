@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.event.api.InteractMaidEvent;
 import net.minecraft.item.Food;
 import net.minecraft.item.Foods;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package com.github.tartaricacid.touhoulittlemaid.client.event.api;
+package com.github.tartaricacid.touhoulittlemaid.api.event;
 
 import mcp.MethodsReturnNonnullByDefault;
 

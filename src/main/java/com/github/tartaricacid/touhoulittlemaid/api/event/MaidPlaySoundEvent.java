@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.event.api;
+package com.github.tartaricacid.touhoulittlemaid.api.event;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraftforge.eventbus.api.Cancelable;
