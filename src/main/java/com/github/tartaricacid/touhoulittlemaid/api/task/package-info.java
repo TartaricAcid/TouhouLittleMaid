@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package com.github.tartaricacid.touhoulittlemaid.entity.task.instance;
+package com.github.tartaricacid.touhoulittlemaid.api.task;
 
 import mcp.MethodsReturnNonnullByDefault;
 

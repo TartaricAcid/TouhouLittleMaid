@@ -1,8 +1,8 @@
-package com.github.tartaricacid.touhoulittlemaid.entity.task.instance;
+package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IFarmTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.IFarmTask;
 import com.github.tartaricacid.touhoulittlemaid.util.EmptyBlockReader;
 import net.minecraft.block.*;
 import net.minecraft.item.*;

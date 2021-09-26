@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.entity.task;
+package com.github.tartaricacid.touhoulittlemaid.api.task;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

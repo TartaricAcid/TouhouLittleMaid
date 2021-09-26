@@ -1,8 +1,8 @@
-package com.github.tartaricacid.touhoulittlemaid.entity.task.instance;
+package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;

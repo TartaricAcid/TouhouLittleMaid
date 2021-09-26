@@ -1,6 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.task.instance.*;
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.util.ResourceLocation;
@@ -10,36 +14,39 @@ import java.util.Map;
 import java.util.Optional;
 
 public final class TaskManager {
-    private static final Map<ResourceLocation, IMaidTask> TASK_MAP = Maps.newHashMap();
-    private static final List<IMaidTask> TASK_INDEX = Lists.newArrayList();
-    private static final IMaidTask IDLE_TASK = new TaskIdle();
+    private static Map<ResourceLocation, IMaidTask> TASK_MAP;
+    private static List<IMaidTask> TASK_INDEX;
+    private static IMaidTask IDLE_TASK;
 
-    // FIXME: 2021/8/31 需要更加优雅的设计注册位置
-    static {
-        registerTask(IDLE_TASK);
-        registerTask(new TaskAttack());
-        registerTask(new TaskBowAttack());
-        registerTask(new TaskDanmakuAttack());
-        registerTask(new TaskNormalFarm());
-        registerTask(new TaskSugarCane());
-        registerTask(new TaskMelon());
-        registerTask(new TaskCocoa());
-        registerTask(new TaskGrass());
-        registerTask(new TaskSnow());
-        registerTask(new TaskFeedOwner());
-        registerTask(new TaskShears());
-        registerTask(new TaskMilk());
-        registerTask(new TaskTorch());
-        registerTask(new TaskFeedAnimal());
-        registerTask(new TaskExtinguishing());
+    private TaskManager() {
+        IDLE_TASK = new TaskIdle();
+        TASK_MAP = Maps.newHashMap();
+        TASK_INDEX = Lists.newArrayList();
     }
 
-    /**
-     * 注册 Task
-     */
-    public static void registerTask(IMaidTask task) {
-        TASK_MAP.put(task.getUid(), task);
-        TASK_INDEX.add(task);
+    public static void init() {
+        TaskManager manager = new TaskManager();
+        manager.registerTask(IDLE_TASK);
+        manager.registerTask(new TaskAttack());
+        manager.registerTask(new TaskBowAttack());
+        manager.registerTask(new TaskDanmakuAttack());
+        manager.registerTask(new TaskNormalFarm());
+        manager.registerTask(new TaskSugarCane());
+        manager.registerTask(new TaskMelon());
+        manager.registerTask(new TaskCocoa());
+        manager.registerTask(new TaskGrass());
+        manager.registerTask(new TaskSnow());
+        manager.registerTask(new TaskFeedOwner());
+        manager.registerTask(new TaskShears());
+        manager.registerTask(new TaskMilk());
+        manager.registerTask(new TaskTorch());
+        manager.registerTask(new TaskFeedAnimal());
+        manager.registerTask(new TaskExtinguishing());
+        for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
+            littleMaid.registerMaidTask(manager);
+        }
+        TASK_MAP = ImmutableMap.copyOf(TASK_MAP);
+        TASK_INDEX = ImmutableList.copyOf(TASK_INDEX);
     }
 
     /**
@@ -62,5 +69,13 @@ public final class TaskManager {
 
     public static List<IMaidTask> getTaskIndex() {
         return TASK_INDEX;
+    }
+
+    /**
+     * 注册 Task
+     */
+    public void registerTask(IMaidTask task) {
+        TASK_MAP.put(task.getUid(), task);
+        TASK_INDEX.add(task);
     }
 }
