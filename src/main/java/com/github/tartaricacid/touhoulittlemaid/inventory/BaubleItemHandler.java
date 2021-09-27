@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory;
 
+import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
-import com.github.tartaricacid.touhoulittlemaid.item.bauble.IMaidBauble;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
@@ -9,7 +9,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 public class BaubleItemHandler extends ItemStackHandler {
@@ -43,7 +42,6 @@ public class BaubleItemHandler extends ItemStackHandler {
     public BaubleItemHandler(NonNullList<ItemStack> stacks) {
         super(stacks);
         baubles = new IMaidBauble[stacks.size()];
-        // 依据传入的 ItemStack 是否为空，尝试往 baubles 中塞入 null
         IntStream.range(0, getSlots()).forEach(this::onContentsChanged);
     }
 
@@ -54,12 +52,9 @@ public class BaubleItemHandler extends ItemStackHandler {
      */
     @Override
     public void setSize(int size) {
-        // 如果 size 和先前一致，只需要清空 baubles 就行
         if (size == stacks.size()) {
             Arrays.fill(baubles, null);
-        }
-        // 否则重新创建数组
-        else {
+        } else {
             baubles = new IMaidBauble[stacks.size()];
         }
         super.setSize(size);
@@ -71,7 +66,7 @@ public class BaubleItemHandler extends ItemStackHandler {
      * @param slot   指定的格子
      * @param bauble 设定的 IMaidBauble 对象
      */
-    private void setBaubleInSlot(int slot, IMaidBauble bauble) {
+    private void setBaubleInSlot(int slot, @Nullable IMaidBauble bauble) {
         validateSlotIndex(slot);
         baubles[slot] = bauble;
     }
@@ -85,7 +80,6 @@ public class BaubleItemHandler extends ItemStackHandler {
     @Nullable
     public IMaidBauble getBaubleInSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
-        // 如果 stack 为空，返回 null
         if (stack.isEmpty()) {
             return null;
         } else {
@@ -101,12 +95,9 @@ public class BaubleItemHandler extends ItemStackHandler {
     @Override
     protected void onContentsChanged(int slot) {
         ItemStack stack = getStackInSlot(slot);
-        // 如果物品为空，该格子的 baubles 设置为 null
         if (stack.isEmpty()) {
             setBaubleInSlot(slot, null);
-        }
-        // 否则通过 API 获取对应的对象，塞入 baubles
-        else {
+        } else {
             setBaubleInSlot(slot, BaubleManager.getBauble(stack));
         }
     }
@@ -120,7 +111,6 @@ public class BaubleItemHandler extends ItemStackHandler {
      */
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        // 只有在 LittleMaidAPI 拥有对应对象的，才是合法的
         return BaubleManager.getBauble(stack) != null;
     }
 
@@ -130,7 +120,6 @@ public class BaubleItemHandler extends ItemStackHandler {
     @Override
     @Nonnull
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        // 物品合法才允许插入，否则原样返回
         if (isItemValid(slot, stack)) {
             return super.insertItem(slot, stack, simulate);
         } else {
@@ -144,22 +133,5 @@ public class BaubleItemHandler extends ItemStackHandler {
     @Override
     protected void onLoad() {
         IntStream.range(0, getSlots()).forEach(this::onContentsChanged);
-    }
-
-    /**
-     * 事件触发
-     *
-     * @param function 触发时应用的逻辑
-     * @return 该事件是否成功触发
-     */
-    public boolean fireEvent(BiFunction<IMaidBauble, ItemStack, Boolean> function) {
-        for (int i = 0; i < getSlots(); i++) {
-            ItemStack stack = getStackInSlot(i);
-            IMaidBauble bauble = getBaubleInSlot(i);
-            if (!stack.isEmpty() && bauble != null && function.apply(bauble, stack)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

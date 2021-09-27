@@ -17,7 +17,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPac
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT)
-public class SpecialMaidRenderEvent {
+public final class SpecialMaidRenderEvent {
     /**
      * EMCAScript 6 箭头函数表达式风格的前缀，不错吧
      */

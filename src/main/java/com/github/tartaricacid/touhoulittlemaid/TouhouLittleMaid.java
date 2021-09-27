@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.Config;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
+import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
@@ -38,5 +39,6 @@ public final class TouhouLittleMaid {
         DeferredWorkQueue.runLater(NetworkHandler::init);
         EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
         TaskManager.init();
+        BaubleManager.init();
     }
 }

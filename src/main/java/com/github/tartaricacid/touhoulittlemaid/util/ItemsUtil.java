@@ -1,5 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
+import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.inventory.BaubleItemHandler;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.entity.Entity;
@@ -78,5 +81,21 @@ public final class ItemsUtil {
         } else {
             return ItemStack.EMPTY;
         }
+    }
+
+    /**
+     * 获取女仆饰品栏的饰品数据
+     *
+     * @return 如果没找到，返回 -1
+     */
+    public static int getBaubleSlotInMaid(EntityMaid maid, IMaidBauble bauble) {
+        BaubleItemHandler handler = maid.getMaidBauble();
+        for (int i = 0; i < handler.getSlots(); i++) {
+            IMaidBauble baubleIn = handler.getBaubleInSlot(i);
+            if (baubleIn == bauble) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

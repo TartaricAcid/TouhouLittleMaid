@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDamageEvent;
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidHurtEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidPlaySoundEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
@@ -50,6 +52,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -63,6 +66,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -477,6 +481,37 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             amount = MathHelper.clamp(amount / 5, 0, 2);
         }
         return super.hurt(source, amount);
+    }
+
+    /**
+     * 重新复写父类方法，添加上自己的 Event
+     */
+    @Override
+    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
+        if (!this.isInvulnerableTo(damageSrc)) {
+            MaidHurtEvent maidHurtEvent = new MaidHurtEvent(this, damageSrc, damageAmount);
+            damageAmount = MinecraftForge.EVENT_BUS.post(maidHurtEvent) ? 0 : maidHurtEvent.getAmount();
+            damageAmount = ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
+            if (damageAmount > 0) {
+                damageAmount = this.getDamageAfterArmorAbsorb(damageSrc, damageAmount);
+                damageAmount = this.getDamageAfterMagicAbsorb(damageSrc, damageAmount);
+                float damageAfterAbsorption = Math.max(damageAmount - this.getAbsorptionAmount(), 0);
+                this.setAbsorptionAmount(this.getAbsorptionAmount() - (damageAmount - damageAfterAbsorption));
+                float damageDealtAbsorbed = damageAmount - damageAfterAbsorption;
+                if (0 < damageDealtAbsorbed && damageDealtAbsorbed < (Float.MAX_VALUE / 10) && damageSrc.getEntity() instanceof ServerPlayerEntity) {
+                    ((ServerPlayerEntity) damageSrc.getEntity()).awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(damageDealtAbsorbed * 10));
+                }
+                MaidDamageEvent maidDamageEvent = new MaidDamageEvent(this, damageSrc, damageAfterAbsorption);
+                damageAfterAbsorption = MinecraftForge.EVENT_BUS.post(maidDamageEvent) ? 0 : maidDamageEvent.getAmount();
+                damageAfterAbsorption = ForgeHooks.onLivingDamage(this, damageSrc, damageAfterAbsorption);
+                if (damageAfterAbsorption != 0) {
+                    float health = this.getHealth();
+                    this.getCombatTracker().recordDamage(damageSrc, health, damageAfterAbsorption);
+                    this.setHealth(health - damageAfterAbsorption);
+                    this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAfterAbsorption);
+                }
+            }
+        }
     }
 
     public boolean canPickUp(Entity entity) {
