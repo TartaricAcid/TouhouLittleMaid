@@ -1,9 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
-import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
-import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDamageEvent;
-import com.github.tartaricacid.touhoulittlemaid.api.event.MaidHurtEvent;
-import com.github.tartaricacid.touhoulittlemaid.api.event.MaidPlaySoundEvent;
+import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
@@ -147,7 +144,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
 
     public boolean guiOpening = false;
-    public int takeXpDelay;
     /**
      * 用于替换背包延时的参数
      */
@@ -228,13 +224,17 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     @Override
+    public void tick() {
+        if (!MinecraftForge.EVENT_BUS.post(new MaidTickEvent(this))) {
+            super.tick();
+        }
+    }
+
+    @Override
     public void baseTick() {
         super.baseTick();
         if (backpackDelay > 0) {
             backpackDelay--;
-        }
-        if (takeXpDelay > 0) {
-            takeXpDelay--;
         }
         if (PLAYER_HURT_SOUND_COUNT > 0) {
             PLAYER_HURT_SOUND_COUNT--;
@@ -367,8 +367,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     public void pickupXPOrb(ExperienceOrbEntity entityXPOrb) {
-        if (!this.level.isClientSide && entityXPOrb.isAlive() && entityXPOrb.tickCount > 2 && this.takeXpDelay == 0) {
-            this.takeXpDelay = 2;
+        if (!this.level.isClientSide && entityXPOrb.isAlive() && entityXPOrb.tickCount > 2) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.take(entityXPOrb, 1);
             if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
@@ -476,6 +475,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (MinecraftForge.EVENT_BUS.post(new MaidAttackEvent(this, source, amount))) {
+            return false;
+        }
         if (source.getEntity() instanceof PlayerEntity && this.isOwnedBy((PlayerEntity) source.getEntity())) {
             // 玩家对自己女仆的伤害数值为 1/5，最大为 2
             amount = MathHelper.clamp(amount / 5, 0, 2);
@@ -511,6 +513,13 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
                     this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAfterAbsorption);
                 }
             }
+        }
+    }
+
+    @Override
+    public void die(DamageSource cause) {
+        if (!MinecraftForge.EVENT_BUS.post(new MaidDeathEvent(this, cause))) {
+            super.die(cause);
         }
     }
 
@@ -637,6 +646,21 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
                         this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()) - yRandom * 10.0D,
                         this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - zRandom * 10.0D,
                         0.9, 0.1, 0.1);
+            }
+        }
+    }
+
+    public void spawnExplosionParticle() {
+        if (this.level.isClientSide) {
+            for (int i = 0; i < 20; ++i) {
+                float mx = (random.nextFloat() - 0.5F) * 0.02F;
+                float my = (random.nextFloat() - 0.5F) * 0.02F;
+                float mz = (random.nextFloat() - 0.5F) * 0.02F;
+                level.addParticle(ParticleTypes.CLOUD,
+                        getX() + random.nextFloat() - 0.5F,
+                        getY() + random.nextFloat() - 0.5F,
+                        getZ() + random.nextFloat() - 0.5F,
+                        mx, my, mz);
             }
         }
     }

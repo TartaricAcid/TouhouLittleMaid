@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nullable;
@@ -23,6 +24,16 @@ public final class BaubleManager {
     public static void init() {
         BaubleManager manager = new BaubleManager();
         manager.bindBauble(InitItems.DROWN_PROTECT_BAUBLE, new DrownProtectBauble());
+        manager.bindBauble(InitItems.EXPLOSION_PROTECT_BAUBLE, new ExplosionProtectBauble());
+        manager.bindBauble(InitItems.ULTRAMARINE_ORB_ELIXIR, new ExtraLifeBauble());
+        manager.bindBauble(InitItems.FALL_PROTECT_BAUBLE, new FallProtectBauble());
+        manager.bindBauble(InitItems.FIRE_PROTECT_BAUBLE, new FireProtectBauble());
+        manager.bindBauble(InitItems.ITEM_MAGNET_BAUBLE, new ItemMagnetBauble());
+        manager.bindBauble(InitItems.MAGIC_PROTECT_BAUBLE, new MagicProtectBauble());
+        manager.bindBauble(InitItems.NIMBLE_FABRIC, new NimbleFabricBauble());
+        manager.bindBauble(InitItems.PROJECTILE_PROTECT_BAUBLE, new ProjectileProtectBauble());
+        manager.bindBauble(InitItems.MUTE_BAUBLE, new MuteBauble());
+        manager.bindBauble(Items.TOTEM_OF_UNDYING, new UndyingTotemBauble());
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.bindMaidBauble(manager);
         }

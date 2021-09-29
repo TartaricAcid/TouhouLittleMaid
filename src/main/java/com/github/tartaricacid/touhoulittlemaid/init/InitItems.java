@@ -23,7 +23,7 @@ public final class InitItems {
     public static RegistryObject<Item> HAKUREI_GOHEI = ITEMS.register("hakurei_gohei", ItemHakureiGohei::new);
     public static RegistryObject<Item> MAID_BED = ITEMS.register("maid_bed", ItemMaidBed::new);
     public static RegistryObject<Item> EXTINGUISHER = ITEMS.register("extinguisher", ItemExtinguisher::new);
-    public static RegistryObject<Item> ULTRAMARINE_ORB_ELIXIR = ITEMS.register("ultramarine_orb_elixir", () -> new ItemDamageableBauble(32));
+    public static RegistryObject<Item> ULTRAMARINE_ORB_ELIXIR = ITEMS.register("ultramarine_orb_elixir", () -> new ItemDamageableBauble(6));
     public static RegistryObject<Item> EXPLOSION_PROTECT_BAUBLE = ITEMS.register("explosion_protect_bauble", () -> new ItemDamageableBauble(32));
     public static RegistryObject<Item> FIRE_PROTECT_BAUBLE = ITEMS.register("fire_protect_bauble", () -> new ItemDamageableBauble(128));
     public static RegistryObject<Item> PROJECTILE_PROTECT_BAUBLE = ITEMS.register("projectile_protect_bauble", () -> new ItemDamageableBauble(64));

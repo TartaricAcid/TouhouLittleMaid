@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidArrow;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidBipedHead;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidHeldItem;
@@ -35,7 +34,6 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
         super(manager, new BedrockModel<>(), 0.5f);
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(new LayerMaidBipedHead(this));
-        this.addLayer(new LayerMaidArrow(this));
         this.addLayer(new LayerMaidBackpack(this));
     }
 

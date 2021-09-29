@@ -441,7 +441,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
         return (float) (degree * Math.PI / 180);
     }
 
-    public void setAnimations(List<Object> animations) {
+    public void setAnimations(@Nullable List<Object> animations) {
         this.animations = animations;
     }
 
