@@ -10,7 +10,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -20,7 +19,8 @@ import net.minecraftforge.common.IForgeShearable;
 import java.util.List;
 import java.util.Random;
 
-public class MaidShearTask extends Task<EntityMaid> {
+public class MaidShearTask extends MaidCheckRateTask {
+    private static final int MAX_DELAY_TIME = 12;
     private final int maxDistToWalk;
     private final float speedModifier;
     private LivingEntity shearableEntity = null;
@@ -30,6 +30,7 @@ public class MaidShearTask extends Task<EntityMaid> {
                 MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
         this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
+        this.setMaxCheckRate(MAX_DELAY_TIME);
     }
 
     @Override
@@ -39,6 +40,7 @@ public class MaidShearTask extends Task<EntityMaid> {
         this.getEntities(maid).stream().filter(e -> e.closerThan(maid, maxDistToWalk)).filter(Entity::isAlive)
                 .filter(e -> e instanceof IForgeShearable)
                 .filter(e -> ((IForgeShearable) e).isShearable(mainhandItem, maid.level, e.blockPosition()))
+                .filter(maid::canPathReach)
                 .findFirst()
                 .ifPresent(e -> {
                     shearableEntity = e;

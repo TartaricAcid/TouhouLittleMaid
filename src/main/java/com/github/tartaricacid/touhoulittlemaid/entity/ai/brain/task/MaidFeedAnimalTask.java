@@ -9,7 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -17,7 +16,8 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 
-public class MaidFeedAnimalTask extends Task<EntityMaid> {
+public class MaidFeedAnimalTask extends MaidCheckRateTask {
+    private static final int MAX_DELAY_TIME = 12;
     private final int maxDistToWalk;
     private final float speedModifier;
     private final int maxAnimalCount;
@@ -29,6 +29,7 @@ public class MaidFeedAnimalTask extends Task<EntityMaid> {
         this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
         this.maxAnimalCount = maxAnimalCount;
+        this.setMaxCheckRate(MAX_DELAY_TIME);
     }
 
     @Override
@@ -46,6 +47,7 @@ public class MaidFeedAnimalTask extends Task<EntityMaid> {
                     .filter(e -> ((AnimalEntity) e).getAge() == 0)
                     .filter(e -> ((AnimalEntity) e).canFallInLove())
                     .filter(e -> ItemsUtil.isStackIn(maid.getAvailableInv(false), ((AnimalEntity) e)::isFood))
+                    .filter(maid::canPathReach)
                     .findFirst()
                     .ifPresent(e -> {
                         feedEntity = (AnimalEntity) e;

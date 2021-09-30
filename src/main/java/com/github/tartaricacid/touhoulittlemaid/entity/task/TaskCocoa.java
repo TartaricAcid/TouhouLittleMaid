@@ -2,8 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IFarmTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmMoveTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmPlantTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.*;
+import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
@@ -28,6 +33,27 @@ public class TaskCocoa implements IFarmTask {
     @Override
     public ItemStack getIcon() {
         return Items.COCOA_BEANS.getDefaultInstance();
+    }
+
+    @Override
+    public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
+        MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f, 16) {
+            @Override
+            protected boolean checkPathReach(EntityMaid maid, BlockPos pos) {
+                for (int x = -1; x <= 1; x++) {
+                    for (int y = 0; y <= 1; y++) {
+                        for (int z = -1; z <= 1; z++) {
+                            if (maid.canPathReach(pos.offset(x, y, z))) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+        };
+        MaidFarmPlantTask maidFarmPlantTask = new MaidFarmPlantTask(this);
+        return Lists.newArrayList(Pair.of(5, maidFarmMoveTask), Pair.of(6, maidFarmPlantTask));
     }
 
     @Override

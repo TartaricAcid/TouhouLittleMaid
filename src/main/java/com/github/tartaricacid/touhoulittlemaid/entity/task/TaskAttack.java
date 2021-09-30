@@ -47,10 +47,10 @@ public class TaskAttack implements IAttackTask {
         AttackTargetTask attackTargetTask = new AttackTargetTask(20);
 
         return Lists.newArrayList(
-                Pair.of(2, supplementedTask),
-                Pair.of(2, findTargetTask),
-                Pair.of(2, moveToTargetTask),
-                Pair.of(2, attackTargetTask)
+                Pair.of(5, supplementedTask),
+                Pair.of(5, findTargetTask),
+                Pair.of(5, moveToTargetTask),
+                Pair.of(5, attackTargetTask)
         );
     }
 

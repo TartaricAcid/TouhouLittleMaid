@@ -9,7 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,20 +18,19 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 
-public class MaidExtinguishingTask extends Task<EntityMaid> {
+public class MaidExtinguishingTask extends MaidCheckRateTask {
+    private static final int MAX_DELAY_TIME = 12;
     private final float speed;
-    private int timeCount;
 
     public MaidExtinguishingTask(float speed) {
         super(ImmutableMap.of());
         this.speed = speed;
-        this.timeCount = 20;
+        this.setMaxCheckRate(MAX_DELAY_TIME);
     }
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid owner) {
-        timeCount--;
-        return timeCount < 0 && isExtinguisher(owner.getMainHandItem());
+        return super.checkExtraStartConditions(worldIn, owner) && isExtinguisher(owner.getMainHandItem());
     }
 
     @Override
@@ -66,8 +64,6 @@ public class MaidExtinguishingTask extends Task<EntityMaid> {
             mainhandItem.hurtAndBreak(1, maid, (m) -> m.broadcastBreakEvent(Hand.MAIN_HAND));
             maid.swing(Hand.MAIN_HAND);
         }
-
-        timeCount = 20;
     }
 
     private boolean isExtinguisher(ItemStack stack) {

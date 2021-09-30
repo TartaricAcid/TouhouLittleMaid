@@ -40,7 +40,7 @@ public class TaskExtinguishing implements IAttackTask {
 
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(2, new MaidExtinguishingTask(0.6f)));
+        return Lists.newArrayList(Pair.of(5, new MaidExtinguishingTask(0.6f)));
     }
 
     @Override

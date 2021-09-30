@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.world.server.ServerWorld;
 
@@ -24,7 +25,8 @@ public class MaidPickupEntitiesTask extends Task<EntityMaid> {
     }
 
     public MaidPickupEntitiesTask(Predicate<EntityMaid> predicate, int maxDistToWalk, float speedModifier) {
-        super(ImmutableMap.of(InitEntities.VISIBLE_PICKUP_ENTITIES.get(), MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(InitEntities.VISIBLE_PICKUP_ENTITIES.get(), MemoryModuleStatus.VALUE_PRESENT,
+                MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
         this.predicate = predicate;
         this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
@@ -38,7 +40,8 @@ public class MaidPickupEntitiesTask extends Task<EntityMaid> {
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         getItems(maid).stream()
-                .filter(e -> e.closerThan(maid, maxDistToWalk) && e.isAlive() && !e.isInWater()).findFirst()
+                .filter(e -> e.closerThan(maid, maxDistToWalk) && e.isAlive() && !e.isInWater())
+                .filter(maid::canPathReach).findFirst()
                 .ifPresent(e -> BrainUtil.setWalkAndLookTargetMemories(maid, e, this.speedModifier, 0));
     }
 

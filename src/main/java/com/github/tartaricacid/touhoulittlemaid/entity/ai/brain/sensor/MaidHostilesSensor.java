@@ -45,7 +45,7 @@ public class MaidHostilesSensor extends Sensor<LivingEntity> {
 
     private boolean isClose(LivingEntity livingEntity, LivingEntity target) {
         float distance = ACCEPTABLE_DISTANCE_FROM_HOSTILES.get(target.getType());
-        return target.distanceToSqr(livingEntity) <= (double) (distance * distance);
+        return target.closerThan(livingEntity, distance);
     }
 
     private boolean isHostile(LivingEntity livingEntity) {

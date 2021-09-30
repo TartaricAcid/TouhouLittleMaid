@@ -48,6 +48,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
@@ -153,6 +154,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     protected EntityMaid(EntityType<EntityMaid> type, World world) {
         super(type, world);
         ((GroundPathNavigator) this.getNavigation()).setCanOpenDoors(true);
+        ((GroundPathNavigator) this.getNavigation()).setCanFloat(true);
         this.setPathfindingMalus(PathNodeType.COCOA, -1.0F);
     }
 
@@ -847,6 +849,16 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Override
     public boolean canBeLeashed(PlayerEntity player) {
         return this.isOwnedBy(player) && super.canBeLeashed(player);
+    }
+
+    public boolean canPathReach(BlockPos pos) {
+        Path path = this.getNavigation().createPath(pos, 0);
+        return path != null && path.canReach();
+    }
+
+    public boolean canPathReach(Entity entity) {
+        Path path = this.getNavigation().createPath(entity, 0);
+        return path != null && path.canReach();
     }
 
     @Override

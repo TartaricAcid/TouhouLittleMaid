@@ -104,6 +104,6 @@ public interface IFarmTask extends IMaidTask {
     default List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f, 16);
         MaidFarmPlantTask maidFarmPlantTask = new MaidFarmPlantTask(this);
-        return Lists.newArrayList(Pair.of(2, maidFarmMoveTask), Pair.of(2, maidFarmPlantTask));
+        return Lists.newArrayList(Pair.of(5, maidFarmMoveTask), Pair.of(6, maidFarmPlantTask));
     }
 }

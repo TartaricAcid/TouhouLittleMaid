@@ -40,7 +40,7 @@ public class TaskMilk implements IMaidTask {
 
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(2, new MaidMilkTask(8, 0.6f)));
+        return Lists.newArrayList(Pair.of(5, new MaidMilkTask(8, 0.6f)));
     }
 
     @Override

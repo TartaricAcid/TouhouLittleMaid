@@ -62,11 +62,11 @@ public class TaskBowAttack implements IRangedAttackTask {
         MaidShootTargetTask shootTargetTask = new MaidShootTargetTask(2);
 
         return Lists.newArrayList(
-                Pair.of(2, supplementedTask),
-                Pair.of(2, findTargetTask),
-                Pair.of(2, moveToTargetTask),
-                Pair.of(2, maidAttackStrafingTask),
-                Pair.of(2, shootTargetTask)
+                Pair.of(5, supplementedTask),
+                Pair.of(5, findTargetTask),
+                Pair.of(5, moveToTargetTask),
+                Pair.of(5, maidAttackStrafingTask),
+                Pair.of(5, shootTargetTask)
         );
     }
 

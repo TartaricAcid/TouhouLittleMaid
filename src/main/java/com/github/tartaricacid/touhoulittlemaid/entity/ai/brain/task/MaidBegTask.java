@@ -11,17 +11,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.server.ServerWorld;
 
 public class MaidBegTask extends Task<EntityMaid> {
+    private static final int BEG_DISTANCE = 6;
+    private static final int CLOSED_DISTANCE = 2;
+
     public MaidBegTask() {
-        super(ImmutableMap.of(MemoryModuleType.INTERACTION_TARGET, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleStatus.VALUE_PRESENT));
     }
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid owner) {
-        return owner.getBrain().getMemory(MemoryModuleType.INTERACTION_TARGET)
-                .filter(LivingEntity::isAttackable)
-                .filter(owner::isOwnedBy)
-                .filter((e) -> e.getMainHandItem().getItem() == owner.getTemptationItem())
-                .isPresent();
+        return owner.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).map(list ->
+                list.stream().filter(owner::isOwnedBy)
+                        .filter(LivingEntity::isAlive)
+                        .filter(e -> e.closerThan(owner, BEG_DISTANCE))
+                        .anyMatch((e) -> holdTemptationItem(owner, e)))
+                .orElse(false);
     }
 
     @Override
@@ -30,30 +34,29 @@ public class MaidBegTask extends Task<EntityMaid> {
     }
 
     @Override
-    protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
-        PlayerEntity player = (PlayerEntity) maid.getBrain().getMemory(MemoryModuleType.INTERACTION_TARGET).get();
-        if (!maid.isInSittingPose()) {
-            BrainUtil.setWalkAndLookTargetMemories(maid, player, 0.5f, 2);
-        }
-        maid.setBegging(true);
+    protected boolean timedOut(long gameTime) {
+        return false;
     }
 
     @Override
-    protected void tick(ServerWorld worldIn, EntityMaid owner, long gameTime) {
-        PlayerEntity player = (PlayerEntity) owner.getBrain().getMemory(MemoryModuleType.INTERACTION_TARGET).get();
-        if (owner.distanceToSqr(player) > 4.0D) {
-            if (!owner.isInSittingPose()) {
-                BrainUtil.setWalkAndLookTargetMemories(owner, player, 0.5f, 2);
+    protected void tick(ServerWorld worldIn, EntityMaid maid, long gameTime) {
+        LivingEntity owner = maid.getOwner();
+        if (owner instanceof PlayerEntity) {
+            if (!maid.closerThan(owner, CLOSED_DISTANCE)) {
+                BrainUtil.setWalkAndLookTargetMemories(maid, owner, 0.6f, CLOSED_DISTANCE);
+            } else {
+                BrainUtil.lookAtEntity(maid, owner);
             }
-        }
-        if (!owner.isBegging()) {
-            owner.setBegging(true);
+            maid.setBegging(true);
         }
     }
 
     @Override
     protected void stop(ServerWorld worldIn, EntityMaid entityIn, long gameTimeIn) {
-        entityIn.getBrain().eraseMemory(MemoryModuleType.INTERACTION_TARGET);
         entityIn.setBegging(false);
+    }
+
+    private boolean holdTemptationItem(EntityMaid owner, LivingEntity e) {
+        return e.getMainHandItem().getItem() == owner.getTemptationItem();
     }
 }

@@ -13,12 +13,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.UseAction;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
@@ -88,10 +86,7 @@ public class TaskFeedOwner implements IFeedTask {
 
     @Override
     public ItemStack feed(ItemStack stack, PlayerEntity owner) {
-        if (stack.getUseAnimation() == UseAction.DRINK) {
-            // FIXME: 2021/9/15 还是没有声音
-            owner.playSound(SoundEvents.GENERIC_DRINK, 0.5F, owner.level.random.nextFloat() * 0.1F + 0.9F);
-        }
+        // FIXME: 2021/9/30 使用牛奶桶没有声音
         return stack.getItem().finishUsingItem(stack, owner.level, owner);
     }
 
@@ -103,7 +98,7 @@ public class TaskFeedOwner implements IFeedTask {
 
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(2, new MaidFeedOwnerTask(this, 2, 0.6f)));
+        return Lists.newArrayList(Pair.of(5, new MaidFeedOwnerTask(this, 2, 0.6f)));
     }
 
     @Override

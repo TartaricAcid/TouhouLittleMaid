@@ -9,40 +9,37 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
-public class MaidFeedOwnerTask extends Task<EntityMaid> {
-    private static final int MAX_DELAY_TIME = 40;
+public class MaidFeedOwnerTask extends MaidCheckRateTask {
+    private static final int MAX_DELAY_TIME = 20;
     private final IFeedTask task;
     private final float walkSpeed;
     private final int closeEnoughDist;
-    private int timeCount;
 
     public MaidFeedOwnerTask(IFeedTask task, int closeEnoughDist, float walkSpeed) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
         this.task = task;
         this.walkSpeed = walkSpeed;
         this.closeEnoughDist = closeEnoughDist;
+        this.setMaxCheckRate(MAX_DELAY_TIME);
     }
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid maid) {
-        if (timeCount > 0) {
-            timeCount--;
-            return false;
-        }
-        LivingEntity owner = maid.getOwner();
-        if (owner instanceof PlayerEntity && owner.isAlive()) {
-            if (owner.closerThan(maid, closeEnoughDist)) {
-                timeCount = MAX_DELAY_TIME + maid.getRandom().nextInt(MAX_DELAY_TIME);
-                return true;
+        if (super.checkExtraStartConditions(worldIn, maid)) {
+            LivingEntity owner = maid.getOwner();
+            if (owner instanceof PlayerEntity && owner.isAlive()) {
+                if (owner.closerThan(maid, closeEnoughDist)) {
+                    return true;
+                }
+                BrainUtil.setWalkAndLookTargetMemories(maid, owner, walkSpeed, 1);
             }
-            BrainUtil.setWalkAndLookTargetMemories(maid, owner, walkSpeed, 1);
+            return false;
         }
         return false;
     }
@@ -85,7 +82,7 @@ public class MaidFeedOwnerTask extends Task<EntityMaid> {
             map.stream().skip(maid.getRandom().nextInt(map.size())).findFirst().ifPresent(slot -> {
                 inv.setStackInSlot(slot, task.feed(inv.getStackInSlot(slot), player));
                 maid.swing(Hand.MAIN_HAND);
-                timeCount = 5;
+                this.setNextCheckTickCount(5);
             });
         }
     }

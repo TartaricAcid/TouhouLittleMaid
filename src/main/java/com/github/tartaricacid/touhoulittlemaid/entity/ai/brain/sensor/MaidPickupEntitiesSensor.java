@@ -15,6 +15,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MaidPickupEntitiesSensor extends Sensor<EntityMaid> {
+    private static final int PICKABLE_DISTANCE = 9;
+    private static final int HORIZONTAL_SEARCH_RANGE = 8;
+    private static final int VERTICAL_SEARCH_RANGE = 4;
+
     public MaidPickupEntitiesSensor() {
         super(30);
     }
@@ -26,12 +30,13 @@ public class MaidPickupEntitiesSensor extends Sensor<EntityMaid> {
 
     @Override
     protected void doTick(ServerWorld worldIn, EntityMaid maid) {
-        List<Entity> allItemEntity = worldIn.getEntitiesOfClass(Entity.class,
-                maid.getBoundingBox().inflate(8.0D, 4.0D, 8.0D), Predicates.alwaysTrue());
-        allItemEntity.sort(Comparator.comparingDouble(maid::distanceToSqr));
-        List<Entity> optional = allItemEntity.stream()
+        List<Entity> allEntities = worldIn.getEntitiesOfClass(Entity.class,
+                maid.getBoundingBox().inflate(HORIZONTAL_SEARCH_RANGE, VERTICAL_SEARCH_RANGE, HORIZONTAL_SEARCH_RANGE),
+                Predicates.alwaysTrue());
+        allEntities.sort(Comparator.comparingDouble(maid::distanceToSqr));
+        List<Entity> optional = allEntities.stream()
                 .filter(maid::canPickUp)
-                .filter((entity) -> entity.closerThan(maid, 9.0D))
+                .filter((e) -> e.closerThan(maid, PICKABLE_DISTANCE))
                 .filter(maid::canSee).collect(Collectors.toList());
         maid.getBrain().setMemory(InitEntities.VISIBLE_PICKUP_ENTITIES.get(), optional);
     }
