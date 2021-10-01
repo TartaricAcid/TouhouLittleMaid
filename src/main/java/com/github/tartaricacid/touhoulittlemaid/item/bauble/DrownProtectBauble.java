@@ -4,10 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDamageEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -27,22 +26,11 @@ public class DrownProtectBauble implements IMaidBauble {
             if (slot >= 0) {
                 event.setCanceled(true);
                 ItemStack stack = maid.getMaidBauble().getStackInSlot(slot);
-                stack.hurtAndBreak(1, maid, (m) -> sendItemBreakMessage(m, stack));
+                stack.hurtAndBreak(1, maid, m -> maid.sendItemBreakMessage(stack));
                 maid.getMaidBauble().setStackInSlot(slot, stack);
-                maid.setAirSupply(2);
-                for (int i = 0; i < 8; ++i) {
-                    double offsetX = 2 * RANDOM.nextDouble() - 1;
-                    double offsetY = RANDOM.nextDouble() / 2;
-                    double offsetZ = 2 * RANDOM.nextDouble() - 1;
-                    maid.level.addParticle(ParticleTypes.BUBBLE, false,
-                            maid.getX() + offsetX, maid.getY() + offsetY, maid.getZ() + offsetZ,
-                            0, 0.1, 0);
-                }
+                maid.setAirSupply(200);
+                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.BUBBLE));
             }
         }
-    }
-
-    private void sendItemBreakMessage(EntityMaid maid, ItemStack stack) {
-        NetworkHandler.sendToNearby(maid.level, maid.blockPosition(), new ItemBreakMessage(maid.getId(), stack));
     }
 }

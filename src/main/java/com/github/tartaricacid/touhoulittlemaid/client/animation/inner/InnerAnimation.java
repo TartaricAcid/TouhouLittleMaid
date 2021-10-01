@@ -49,7 +49,7 @@ public final class InnerAnimation {
                         blink.setHidden(false);
                         return;
                     }
-                    float remainder = ageInTicks % 60;
+                    float remainder = (ageInTicks + maid.getUUID().getLeastSignificantBits() % 10) % 60;
                     blink.setHidden(!(55 < remainder && remainder < 60));
                 }
             }
@@ -127,7 +127,7 @@ public final class InnerAnimation {
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper reverseBlink = modelMap.get("_bink");
                 if (reverseBlink != null) {
-                    float remainder = ageInTicks % 60;
+                    float remainder = (ageInTicks + maid.getUUID().getLeastSignificantBits() % 10) % 60;
                     reverseBlink.setHidden(55 < remainder && remainder < 60);
                 }
             }

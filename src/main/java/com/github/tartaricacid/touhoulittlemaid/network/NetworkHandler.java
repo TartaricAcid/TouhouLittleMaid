@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.network;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.message.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -37,6 +38,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(6, ItemBreakMessage.class, ItemBreakMessage::encode, ItemBreakMessage::decode, ItemBreakMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(7, SpawnParticleMessage.class, SpawnParticleMessage::encode, SpawnParticleMessage::decode, SpawnParticleMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, PlayerEntity player) {
@@ -46,6 +49,17 @@ public final class NetworkHandler {
     public static void sendToNearby(World world, BlockPos pos, Object toSend) {
         if (world instanceof ServerWorld) {
             ServerWorld ws = (ServerWorld) world;
+
+            ws.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false)
+                    .filter(p -> p.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 192 * 192)
+                    .forEach(p -> CHANNEL.send(PacketDistributor.PLAYER.with(() -> p), toSend));
+        }
+    }
+
+    public static void sendToNearby(Entity entity, Object toSend) {
+        if (entity.level instanceof ServerWorld) {
+            ServerWorld ws = (ServerWorld) entity.level;
+            BlockPos pos = entity.blockPosition();
 
             ws.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false)
                     .filter(p -> p.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 192 * 192)

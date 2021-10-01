@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidTickEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaidPredicates;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -39,7 +38,7 @@ public class ItemMagnetBauble implements IMaidBauble {
     private void handlePickup(EntityMaid maid) {
         World world = maid.level;
         if (maid.isPickup() && maid.isTame()) {
-            List<Entity> entities = world.getEntities(maid, maid.getBoundingBox().inflate(RANGE), EntityMaidPredicates.IS_PICKUP);
+            List<Entity> entities = world.getEntities(maid, maid.getBoundingBox().inflate(RANGE), maid::canPickup);
             if (!entities.isEmpty() && maid.isAlive()) {
                 for (Entity entityPickup : entities) {
                     // 如果是物品

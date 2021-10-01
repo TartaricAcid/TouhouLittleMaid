@@ -13,9 +13,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.UseAction;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 
@@ -86,7 +88,10 @@ public class TaskFeedOwner implements IFeedTask {
 
     @Override
     public ItemStack feed(ItemStack stack, PlayerEntity owner) {
-        // FIXME: 2021/9/30 使用牛奶桶没有声音
+        if (stack.getUseAnimation() == UseAction.DRINK) {
+            owner.level.playSound(null, owner, stack.getDrinkingSound(), SoundCategory.NEUTRAL,
+                    0.5f, owner.level.getRandom().nextFloat() * 0.1f + 0.9f);
+        }
         return stack.getItem().finishUsingItem(stack, owner.level, owner);
     }
 

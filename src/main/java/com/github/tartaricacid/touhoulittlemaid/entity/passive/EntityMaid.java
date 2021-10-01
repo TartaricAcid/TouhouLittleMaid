@@ -17,6 +17,8 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.mojang.serialization.Dynamic;
@@ -154,7 +156,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     protected EntityMaid(EntityType<EntityMaid> type, World world) {
         super(type, world);
         ((GroundPathNavigator) this.getNavigation()).setCanOpenDoors(true);
-        ((GroundPathNavigator) this.getNavigation()).setCanFloat(true);
+        this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(PathNodeType.COCOA, -1.0F);
     }
 
@@ -306,7 +308,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         // 只有拾物模式开启，驯服状态下才可以捡起物品
         if (this.isPickup() && this.isTame()) {
             List<Entity> entityList = this.level.getEntities(this,
-                    this.getBoundingBox().inflate(0.5, 0, 0.5), EntityMaidPredicates.IS_PICKUP);
+                    this.getBoundingBox().inflate(0.5, 0, 0.5), this::canPickup);
             if (!entityList.isEmpty() && this.isAlive()) {
                 for (Entity entityPickup : entityList) {
                     // 如果是物品
@@ -525,23 +527,27 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         }
     }
 
-    public boolean canPickUp(Entity entity) {
+    public boolean canPickup(Entity pickupEntity, boolean checkInWater) {
         if (isPickup()) {
-            if (entity.isInWater()) {
+            if (checkInWater && pickupEntity.isInWater()) {
                 return false;
             }
-            if (entity instanceof ItemEntity) {
-                return pickupItem((ItemEntity) entity, true);
+            if (pickupEntity instanceof ItemEntity) {
+                return pickupItem((ItemEntity) pickupEntity, true);
             }
-            if (entity instanceof AbstractArrowEntity) {
-                return pickupArrow((AbstractArrowEntity) entity, true);
+            if (pickupEntity instanceof AbstractArrowEntity) {
+                return pickupArrow((AbstractArrowEntity) pickupEntity, true);
             }
-            if (entity instanceof ExperienceOrbEntity) {
+            if (pickupEntity instanceof ExperienceOrbEntity) {
                 return true;
             }
-            return entity instanceof EntityPowerPoint;
+            return pickupEntity instanceof EntityPowerPoint;
         }
         return false;
+    }
+
+    public boolean canPickup(Entity pickupEntity) {
+        return canPickup(pickupEntity, false);
     }
 
     @Override
@@ -616,6 +622,19 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         return false;
     }
 
+    public void sendItemBreakMessage(ItemStack stack) {
+        if (!this.level.isClientSide) {
+            NetworkHandler.sendToNearby(this, new ItemBreakMessage(this.getId(), stack));
+        }
+    }
+
+    private void randomRestoreHealth() {
+        if (this.getHealth() < this.getMaxHealth() && random.nextFloat() < 0.0025) {
+            this.heal(1);
+            this.spawnRestoreHealthParticle(random.nextInt(3) + 7);
+        }
+    }
+
     private void spawnPortalParticle() {
         if (this.level.isClientSide && this.isInvulnerable() && this.getOwner() != null) {
             for (int i = 0; i < 2; ++i) {
@@ -626,13 +645,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
                         (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
                         (this.random.nextDouble() - 0.5D) * 2.0D);
             }
-        }
-    }
-
-    private void randomRestoreHealth() {
-        if (this.getHealth() < this.getMaxHealth() && random.nextFloat() < 0.0025) {
-            this.heal(1);
-            this.spawnRestoreHealthParticle(random.nextInt(3) + 7);
         }
     }
 
@@ -663,6 +675,18 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
                         getY() + random.nextFloat() - 0.5F,
                         getZ() + random.nextFloat() - 0.5F,
                         mx, my, mz);
+            }
+        }
+    }
+
+    public void spawnBubbleParticle() {
+        if (this.level.isClientSide) {
+            for (int i = 0; i < 8; ++i) {
+                double offsetX = 2 * random.nextDouble() - 1;
+                double offsetY = random.nextDouble() / 2;
+                double offsetZ = 2 * random.nextDouble() - 1;
+                level.addParticle(ParticleTypes.BUBBLE, getX() + offsetX, getY() + offsetY, getZ() + offsetZ,
+                        0, 0.1, 0);
             }
         }
     }

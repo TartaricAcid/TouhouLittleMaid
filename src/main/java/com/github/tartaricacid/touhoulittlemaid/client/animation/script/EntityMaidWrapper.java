@@ -229,4 +229,8 @@ public class EntityMaidWrapper {
     public int getFavorability() {
         return maid.getFavorability();
     }
+
+    public long getSeed() {
+        return maid.getUUID().getLeastSignificantBits();
+    }
 }

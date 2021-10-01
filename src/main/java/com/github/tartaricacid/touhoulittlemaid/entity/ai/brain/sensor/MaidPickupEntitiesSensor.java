@@ -35,8 +35,8 @@ public class MaidPickupEntitiesSensor extends Sensor<EntityMaid> {
                 Predicates.alwaysTrue());
         allEntities.sort(Comparator.comparingDouble(maid::distanceToSqr));
         List<Entity> optional = allEntities.stream()
-                .filter(maid::canPickUp)
-                .filter((e) -> e.closerThan(maid, PICKABLE_DISTANCE))
+                .filter(e -> maid.canPickup(e, true))
+                .filter(e -> e.closerThan(maid, PICKABLE_DISTANCE))
                 .filter(maid::canSee).collect(Collectors.toList());
         maid.getBrain().setMemory(InitEntities.VISIBLE_PICKUP_ENTITIES.get(), optional);
     }

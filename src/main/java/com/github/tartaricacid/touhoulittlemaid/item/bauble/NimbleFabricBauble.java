@@ -3,8 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAttackEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -34,7 +32,7 @@ public class NimbleFabricBauble implements IMaidBauble {
             if (slot >= 0) {
                 event.setCanceled(true);
                 ItemStack stack = maid.getMaidBauble().getStackInSlot(slot);
-                stack.hurtAndBreak(1, maid, (m) -> sendItemBreakMessage(m, stack));
+                stack.hurtAndBreak(1, maid, m -> maid.sendItemBreakMessage(stack));
                 maid.getMaidBauble().setStackInSlot(slot, stack);
                 for (int i = 0; i < MAX_RETRY; ++i) {
                     if (teleport(maid)) {
@@ -74,9 +72,5 @@ public class NimbleFabricBauble implements IMaidBauble {
         } else {
             return false;
         }
-    }
-
-    private void sendItemBreakMessage(EntityMaid maid, ItemStack stack) {
-        NetworkHandler.sendToNearby(maid.level, maid.blockPosition(), new ItemBreakMessage(maid.getId(), stack));
     }
 }
