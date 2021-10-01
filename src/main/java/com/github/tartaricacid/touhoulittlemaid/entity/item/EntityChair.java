@@ -33,13 +33,16 @@ import java.util.List;
 public class EntityChair extends AbstractEntityFromItem {
     public static final EntityType<EntityChair> TYPE = EntityType.Builder.<EntityChair>of(EntityChair::new, EntityClassification.MISC)
             .sized(0.875f, 0.5f).clientTrackingRange(10).build("chair");
+
     private static final DataParameter<String> MODEL_ID = EntityDataManager.defineId(EntityChair.class, DataSerializers.STRING);
+    private static final DataParameter<Float> MOUNTED_HEIGHT = EntityDataManager.defineId(EntityChair.class, DataSerializers.FLOAT);
+    private static final DataParameter<Boolean> TAMEABLE_CAN_RIDE = EntityDataManager.defineId(EntityChair.class, DataSerializers.BOOLEAN);
+
     private static final String MODEL_ID_TAG = "ModelId";
     private static final String MOUNTED_HEIGHT_TAG = "MountedHeight";
     private static final String TAMEABLE_CAN_RIDE_TAG = "TameableCanRide";
+
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
-    private float mountedHeight = 0.0f;
-    private boolean tameableCanRide = true;
 
     protected EntityChair(EntityType<EntityChair> type, World worldIn) {
         super(type, worldIn);
@@ -59,6 +62,8 @@ public class EntityChair extends AbstractEntityFromItem {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(MODEL_ID, DEFAULT_MODEL_ID);
+        this.entityData.define(MOUNTED_HEIGHT, 0f);
+        this.entityData.define(TAMEABLE_CAN_RIDE, true);
     }
 
     @Override
@@ -119,7 +124,7 @@ public class EntityChair extends AbstractEntityFromItem {
             // renderYawOffset 也必须同步，因为坐上的女仆朝向受 renderYawOffset 限制
             // 不同步就会导致朝向出现小问题
             // Fixme: 有问题，需要修改
-            this.yHeadRot = ((LivingEntity) passenger).yHeadRot;
+            // this.yHeadRot = ((LivingEntity) passenger).yHeadRot;
         }
     }
 
@@ -193,20 +198,20 @@ public class EntityChair extends AbstractEntityFromItem {
     }
 
     public float getMountedHeight() {
-        return mountedHeight;
+        return this.entityData.get(MOUNTED_HEIGHT);
     }
 
-    public void setMountedHeight(float mountedHeight) {
-        // 防止有人恶意利用这一点，强行增加范围限制
-        this.mountedHeight = MathHelper.clamp(mountedHeight, -0.5f, 2.5f);
+    public void setMountedHeight(float height) {
+        height = MathHelper.clamp(height, -0.5f, 2.5f);
+        this.entityData.set(MOUNTED_HEIGHT, height);
     }
 
     public boolean isTameableCanRide() {
-        return tameableCanRide;
+        return this.entityData.get(TAMEABLE_CAN_RIDE);
     }
 
-    public void setTameableCanRide(boolean tameableCanRide) {
-        this.tameableCanRide = tameableCanRide;
+    public void setTameableCanRide(boolean canRide) {
+        this.entityData.set(TAMEABLE_CAN_RIDE, canRide);
     }
 
     public boolean hasPassenger() {

@@ -55,7 +55,7 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
 
     @Override
     protected void setupRotations(EntityChair chair, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-        matrixStackIn.mulPose(Vector3f.YP.rotation(180 - chair.yRot));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180 - rotationYaw));
     }
 
     @Override

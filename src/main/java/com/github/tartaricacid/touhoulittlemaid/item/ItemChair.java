@@ -3,22 +3,23 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackChairRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.google.common.base.Predicates;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
@@ -50,38 +51,44 @@ public class ItemChair extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        return super.use(worldIn, playerIn, handIn);
+    public ActionResultType useOn(ItemUseContext context) {
+        if (context.getClickedFace() != Direction.DOWN) {
+            World world = context.getLevel();
+            BlockPos clickedPos = new BlockItemUseContext(context).getClickedPos();
+            AxisAlignedBB boundingBox = EntityChair.TYPE.getDimensions().makeBoundingBox(Vector3d.atBottomCenterOf(clickedPos));
+            if (world.noCollision(null, boundingBox, Predicates.alwaysTrue()) && world.getEntities(null, boundingBox).isEmpty()) {
+                ItemStack stack = context.getItemInHand();
+                if (world instanceof ServerWorld) {
+                    ServerWorld serverWorld = (ServerWorld) world;
+                    ITextComponent customName = null;
+                    if (stack.hasCustomHoverName()) {
+                        customName = stack.getDisplayName();
+                    }
+                    EntityChair chair = EntityChair.TYPE.create(serverWorld, stack.getTag(), customName, context.getPlayer(), clickedPos, SpawnReason.SPAWN_EGG, true, true);
+                    if (chair == null) {
+                        return ActionResultType.FAIL;
+                    }
+                    addExtraData(context, stack, chair);
+                    world.addFreshEntity(chair);
+                    world.playSound(null, chair.getX(), chair.getY(), chair.getZ(), SoundEvents.WOOL_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
+                }
+                stack.shrink(1);
+                return ActionResultType.sidedSuccess(world.isClientSide);
+            }
+        }
+        return ActionResultType.FAIL;
     }
 
-    @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        if (context.getClickedFace() == Direction.UP) {
-            ItemStack itemstack = context.getItemInHand();
-            float yaw = (float) MathHelper.floor((MathHelper.wrapDegrees(context.getRotation() - 180.0F) + 22.5F) / 45.0F) * 45.0F;
-            BlockPos pos = context.getClickedPos();
-            EntityChair chair = new EntityChair(context.getLevel(), pos.getX() + 0.5, pos.above().getY(), pos.getZ() + 0.5, yaw);
-            Data data = Data.deserialization(stack.getOrCreateTag());
-            chair.setModelId(data.getModelId());
-            chair.setMountedHeight(data.getHeight());
-            chair.setTameableCanRide(data.isCanRide());
-            chair.setNoGravity(data.isNoGravity());
-            // 应用命名
-            if (itemstack.hasCustomHoverName()) {
-                chair.setCustomName(itemstack.getDisplayName());
-            }
-            // 物品消耗，实体生成
-            if (context.getPlayer() != null && !context.getPlayer().isCreative()) {
-                context.getItemInHand().shrink(1);
-            }
-            if (!context.getLevel().isClientSide) {
-                context.getLevel().addFreshEntity(chair);
-            }
-            chair.yHeadRot = yaw;
-            chair.playSound(SoundEvents.WOOL_PLACE, 1.0f, 1.0f);
-            return ActionResultType.SUCCESS;
-        }
-        return ActionResultType.PASS;
+    private void addExtraData(ItemUseContext context, ItemStack stack, EntityChair chair) {
+        Data data = Data.deserialization(stack.getOrCreateTag());
+        chair.setModelId(data.getModelId());
+        chair.setMountedHeight(data.getHeight());
+        chair.setTameableCanRide(data.isCanRide());
+        chair.setNoGravity(data.isNoGravity());
+        float yaw = (float) MathHelper.floor((MathHelper.wrapDegrees(context.getRotation() - 180) + 22.5F) / 45.0F) * 45.0F;
+        chair.moveTo(chair.getX(), chair.getY(), chair.getZ(), yaw, 0.0F);
+        chair.setYBodyRot(yaw);
+        chair.setYHeadRot(yaw);
     }
 
     @Override
