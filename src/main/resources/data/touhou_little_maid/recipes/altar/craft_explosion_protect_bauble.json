@@ -1,0 +1,28 @@
+{
+  "type": "touhou_little_maid:altar_crafting",
+  "output": {
+    "type": "minecraft:item",
+    "nbt": "{Item:{id:\"touhou_little_maid:explosion_protect_bauble\",Count:1b,tag:{Damage:0}}}"
+  },
+  "power": 0.2,
+  "ingredients": [
+    {
+      "item": "minecraft:nether_wart"
+    },
+    {
+      "tag": "forge:dyes/orange"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    }
+  ]
+}

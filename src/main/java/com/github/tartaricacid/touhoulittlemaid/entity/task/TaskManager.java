@@ -26,24 +26,24 @@ public final class TaskManager {
 
     public static void init() {
         TaskManager manager = new TaskManager();
-        manager.registerTask(IDLE_TASK);
-        manager.registerTask(new TaskAttack());
-        manager.registerTask(new TaskBowAttack());
-        manager.registerTask(new TaskDanmakuAttack());
-        manager.registerTask(new TaskNormalFarm());
-        manager.registerTask(new TaskSugarCane());
-        manager.registerTask(new TaskMelon());
-        manager.registerTask(new TaskCocoa());
-        manager.registerTask(new TaskGrass());
-        manager.registerTask(new TaskSnow());
-        manager.registerTask(new TaskFeedOwner());
-        manager.registerTask(new TaskShears());
-        manager.registerTask(new TaskMilk());
-        manager.registerTask(new TaskTorch());
-        manager.registerTask(new TaskFeedAnimal());
-        manager.registerTask(new TaskExtinguishing());
+        manager.add(IDLE_TASK);
+        manager.add(new TaskAttack());
+        manager.add(new TaskBowAttack());
+        manager.add(new TaskDanmakuAttack());
+        manager.add(new TaskNormalFarm());
+        manager.add(new TaskSugarCane());
+        manager.add(new TaskMelon());
+        manager.add(new TaskCocoa());
+        manager.add(new TaskGrass());
+        manager.add(new TaskSnow());
+        manager.add(new TaskFeedOwner());
+        manager.add(new TaskShears());
+        manager.add(new TaskMilk());
+        manager.add(new TaskTorch());
+        manager.add(new TaskFeedAnimal());
+        manager.add(new TaskExtinguishing());
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
-            littleMaid.registerMaidTask(manager);
+            littleMaid.addMaidTask(manager);
         }
         TASK_MAP = ImmutableMap.copyOf(TASK_MAP);
         TASK_INDEX = ImmutableList.copyOf(TASK_INDEX);
@@ -74,7 +74,7 @@ public final class TaskManager {
     /**
      * 注册 Task
      */
-    public void registerTask(IMaidTask task) {
+    public void add(IMaidTask task) {
         TASK_MAP.put(task.getUid(), task);
         TASK_INDEX.add(task);
     }

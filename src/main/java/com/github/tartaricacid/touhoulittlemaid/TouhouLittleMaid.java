@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.config.Config;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
@@ -32,13 +33,16 @@ public final class TouhouLittleMaid {
         InitEntities.SCHEDULES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitEntities.DATA_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        InitBlocks.TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitContainer.CONTAINER_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitSounds.SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        InitRecipes.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.initConfig());
         DeferredWorkQueue.runLater(NetworkHandler::init);
         EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
         TaskManager.init();
         BaubleManager.init();
+        MultiBlockManager.init();
     }
 }
