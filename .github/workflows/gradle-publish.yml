@@ -48,7 +48,7 @@ jobs:
         with:
           tag_name: snapshot-${{ steps.create_timestamp.outputs.timestamp }}
           body: ${{ github.event.head_commit.message }}
-          draft: true
+          draft: false
           prerelease: true
           files: |
             ./build/libs/*.jar
