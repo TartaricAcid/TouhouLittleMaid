@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
+import com.github.tartaricacid.touhoulittlemaid.util.NBTToJson;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import net.minecraft.data.DataGenerator;
@@ -30,6 +31,13 @@ public class AltarRecipeProvider implements IDataProvider {
         this.generator = generator;
     }
 
+    protected void registerRecipes() {
+        addItemRecipes(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_explosion_protect_bauble"),
+                InitItems.EXPLOSION_PROTECT_BAUBLE.get().getDefaultInstance(), 0.2f,
+                Ingredient.of(Items.NETHER_WART), Ingredient.of(Tags.Items.DYES_ORANGE), Ingredient.of(Tags.Items.OBSIDIAN),
+                Ingredient.of(Tags.Items.OBSIDIAN), Ingredient.of(Tags.Items.OBSIDIAN), Ingredient.of(Tags.Items.OBSIDIAN));
+    }
+
     @Override
     public void run(DirectoryCache cache) throws IOException {
         Path path = this.generator.getOutputFolder();
@@ -40,13 +48,6 @@ public class AltarRecipeProvider implements IDataProvider {
             Path savePath = path.resolve("data/" + recipe.getId().getNamespace() + "/recipes/altar/" + recipe.getId().getPath() + ".json");
             IDataProvider.save(GSON, cache, jsonObject, savePath);
         }
-    }
-
-    protected void registerRecipes() {
-        addItemRecipes(new ResourceLocation(TouhouLittleMaid.MOD_ID, "craft_explosion_protect_bauble"),
-                InitItems.EXPLOSION_PROTECT_BAUBLE.get().getDefaultInstance(), 0.2f,
-                Ingredient.of(Items.NETHER_WART), Ingredient.of(Tags.Items.DYES_ORANGE), Ingredient.of(Tags.Items.OBSIDIAN),
-                Ingredient.of(Tags.Items.OBSIDIAN), Ingredient.of(Tags.Items.OBSIDIAN), Ingredient.of(Tags.Items.OBSIDIAN));
     }
 
     public void addRecipes(AltarRecipe recipe) {
@@ -69,9 +70,7 @@ public class AltarRecipeProvider implements IDataProvider {
                 throw new JsonParseException("Entity Registry Name Not Found");
             }
             output.addProperty("type", name.toString());
-            if (recipe.getExtraData() != null) {
-                output.addProperty("nbt", recipe.getExtraData().getAsString());
-            }
+            NBTToJson.getJson(recipe.getExtraData()).ifPresent(e -> output.add("nbt", e));
             json.add("output", output);
         }
         json.addProperty("power", recipe.getPowerCost());
