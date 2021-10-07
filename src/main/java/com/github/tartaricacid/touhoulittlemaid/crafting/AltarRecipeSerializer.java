@@ -53,15 +53,15 @@ public class AltarRecipeSerializer extends ForgeRegistryEntry<IRecipeSerializer<
     @Override
     public void toNetwork(PacketBuffer buffer, AltarRecipe recipe) {
         ResourceLocation name = recipe.getEntityType().getRegistryName();
-        if (name != null) {
-            buffer.writeUtf(name.toString());
-            buffer.writeNbt(recipe.getExtraData());
-            buffer.writeFloat(recipe.getPowerCost());
-            buffer.writeVarInt(recipe.getIngredients().size());
-            for (Ingredient input : recipe.getIngredients()) {
-                input.toNetwork(buffer);
-            }
+        if (name == null) {
+            throw new JsonParseException("Entity Type Tag Not Found");
         }
-        throw new JsonParseException("Entity Type Tag Not Found");
+        buffer.writeUtf(name.toString());
+        buffer.writeNbt(recipe.getExtraData());
+        buffer.writeFloat(recipe.getPowerCost());
+        buffer.writeVarInt(recipe.getIngredients().size());
+        for (Ingredient input : recipe.getIngredients()) {
+            input.toNetwork(buffer);
+        }
     }
 }

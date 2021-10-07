@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.command;
+package com.github.tartaricacid.touhoulittlemaid.command.subcommand;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;

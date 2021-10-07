@@ -73,7 +73,7 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return new AltarRecipeSerializer();
+        return InitRecipes.ALTAR_RECIPE_SERIALIZER.get();
     }
 
     @Override

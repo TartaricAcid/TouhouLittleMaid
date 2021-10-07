@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.command;
 
+import com.github.tartaricacid.touhoulittlemaid.command.subcommand.PackCommand;
+import com.github.tartaricacid.touhoulittlemaid.command.subcommand.PowerCommand;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
@@ -12,6 +14,7 @@ public final class RootCommand {
         LiteralArgumentBuilder<CommandSource> root = Commands.literal(ROOT_NAME)
                 .requires((source -> source.hasPermission(2)));
         root.then(PackCommand.get());
+        root.then(PowerCommand.get());
         dispatcher.register(root);
     }
 }
