@@ -1,12 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+
 public class ItemNormalBauble extends Item {
     public ItemNormalBauble() {
-        super((new Properties()).tab(InitItems.MAIN_TAB).stacksTo(1));
+        super((new Properties()).tab(MAIN_TAB).stacksTo(1));
     }
 
     @Override

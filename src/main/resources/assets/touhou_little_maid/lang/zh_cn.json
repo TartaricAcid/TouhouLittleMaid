@@ -23,6 +23,7 @@
   "item.touhou_little_maid.nimble_fabric": "§6闪避布",
   "item.touhou_little_maid.item_magnet_bauble": "§6物品磁铁",
   "item.touhou_little_maid.mute_bauble": "§6禁言饰品",
+  "item.touhou_little_maid.entity_placeholder": "生成实体",
   "block.touhou_little_maid.maid_bed": "女仆床",
   "tooltips.touhou_little_maid.chair.place.desc": "右击方块顶部进行放置。",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Shift 左击破坏它。",
@@ -124,5 +125,13 @@
   "subtitle.touhou_little_maid.item.album_open": "相册：打开",
   "subtitle.touhou_little_maid.block.altar_craft": "祭坛：合成",
   "subtitle.touhou_little_maid.entity.box": "盒子：打开",
-  "subtitle.touhou_little_maid.item.compass": "罗盘：选择点"
+  "subtitle.touhou_little_maid.item.compass": "罗盘：选择点",
+  "jei.touhou_little_maid.altar_craft.title": "祭坛合成",
+  "jei.touhou_little_maid.altar_craft.result": "结果：%s",
+  "jei.touhou_little_maid.altar_craft.item_craft.result": "合成物品",
+  "jei.touhou_little_maid.altar_craft.spawn_maid.result": "生成新的女仆",
+  "jei.touhou_little_maid.altar_craft.reborn_maid.result": "Reborn Maid From Garage Kit",
+  "jei.touhou_little_maid.altar_craft.spawn_lightning_bolt.result": "生成闪电",
+  "top.touhou_little_maid.entity_maid.task": "模式：",
+  "top.touhou_little_maid.entity_maid.invulnerable": "无敌"
 }

@@ -28,11 +28,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+
 public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
     public ItemChair() {
-        super((new Properties()).tab(InitItems.MAIN_TAB).stacksTo(1)
+        super((new Properties()).tab(MAIN_TAB).stacksTo(1)
                 .setISTER(() -> TileEntityItemStackChairRenderer::new));
     }
 

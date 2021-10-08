@@ -23,6 +23,7 @@
   "item.touhou_little_maid.nimble_fabric": "§6Nimble Fabric",
   "item.touhou_little_maid.item_magnet_bauble": "§6Item Magnet",
   "item.touhou_little_maid.mute_bauble": "§6Mute Bauble",
+  "item.touhou_little_maid.entity_placeholder": "Spawn Entity",
   "block.touhou_little_maid.maid_bed": "Maid Bed",
   "tooltips.touhou_little_maid.chair.place.desc": "Right click on the top of the block to place it.",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Shift left hit can destroy it.",
@@ -124,5 +125,13 @@
   "subtitle.touhou_little_maid.item.album_open": "Album Open Sound",
   "subtitle.touhou_little_maid.block.altar_craft": "Altar Craft Sound",
   "subtitle.touhou_little_maid.entity.box": "Box Open Sound",
-  "subtitle.touhou_little_maid.item.compass": "Compass Select Point Sound"
+  "subtitle.touhou_little_maid.item.compass": "Compass Select Point Sound",
+  "jei.touhou_little_maid.altar_craft.title": "Altar Craft",
+  "jei.touhou_little_maid.altar_craft.result": "Result: %s",
+  "jei.touhou_little_maid.altar_craft.item_craft.result": "Craft an Item",
+  "jei.touhou_little_maid.altar_craft.spawn_maid.result": "Spawn New Maid",
+  "jei.touhou_little_maid.altar_craft.reborn_maid.result": "Reborn Maid From Garage Kit",
+  "jei.touhou_little_maid.altar_craft.spawn_lightning_bolt.result": "Spawn Lightning Bolt",
+  "top.touhou_little_maid.entity_maid.task": "Mode: ",
+  "top.touhou_little_maid.entity_maid.invulnerable": "Invulnerable"
 }

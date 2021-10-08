@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,9 +9,11 @@ import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+
 public class ItemExtinguisher extends Item {
     public ItemExtinguisher() {
-        super((new Properties()).tab(InitItems.MAIN_TAB).durability(128).setNoRepair());
+        super((new Properties()).tab(MAIN_TAB).durability(128).setNoRepair());
     }
 
     @Override

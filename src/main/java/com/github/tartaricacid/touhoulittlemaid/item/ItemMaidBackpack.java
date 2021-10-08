@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.LivingEntity;
@@ -16,12 +15,14 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Map;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+
 public class ItemMaidBackpack extends Item {
     private static final Map<Integer, ItemMaidBackpack> ITEM_BY_LEVEL = Maps.newHashMap();
     private final int level;
 
     public ItemMaidBackpack(int level) {
-        super((new Properties()).tab(InitItems.MAIN_TAB).stacksTo(1));
+        super((new Properties()).tab(MAIN_TAB).stacksTo(1));
         this.level = level;
         ITEM_BY_LEVEL.put(level, this);
     }

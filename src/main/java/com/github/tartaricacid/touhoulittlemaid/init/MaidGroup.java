@@ -8,7 +8,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.HAKUREI_GOHEI;
+
 public class MaidGroup extends ItemGroup {
+    public static ItemGroup MAIN_TAB = new MaidGroup("main", HAKUREI_GOHEI);
+
     private final ITextComponent displayName;
     private final RegistryObject<Item> iconItem;
     private ItemStack icon = null;

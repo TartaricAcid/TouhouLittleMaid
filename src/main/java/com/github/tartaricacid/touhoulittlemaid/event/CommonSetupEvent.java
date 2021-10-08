@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
+import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,6 +14,7 @@ public final class CommonSetupEvent {
     public static void onSetupEvent(FMLCommonSetupEvent event) {
         event.enqueueWork(ServerCustomPackLoader::reloadPacks);
         event.enqueueWork(CommonSetupEvent::registerCapability);
+        event.enqueueWork(MultiblockRegistry::init);
     }
 
     private static void registerCapability() {

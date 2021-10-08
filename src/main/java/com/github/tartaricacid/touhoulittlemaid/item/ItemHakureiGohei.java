@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.google.common.base.Predicates;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -20,9 +19,11 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+
 public class ItemHakureiGohei extends ShootableItem {
     public ItemHakureiGohei() {
-        super((new Properties()).tab(InitItems.MAIN_TAB).durability(300).setNoRepair());
+        super((new Properties()).tab(MAIN_TAB).durability(300).setNoRepair());
     }
 
     @Override

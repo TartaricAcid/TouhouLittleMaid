@@ -31,11 +31,19 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
     private final CompoundNBT extraData;
     private final float powerCost;
     private final NonNullList<Ingredient> inputs;
+    private final boolean isItemCraft;
+    private final ItemStack resultItem;
 
     public AltarRecipe(ResourceLocation id, EntityType<?> entityType, @Nullable CompoundNBT extraData, float powerCost, Ingredient... inputs) {
         Preconditions.checkArgument(0 < inputs.length && inputs.length <= RECIPES_SIZE, "Ingredients count is illegal!");
         this.id = id;
         this.entityType = entityType;
+        this.isItemCraft = (entityType == EntityType.ITEM);
+        if (this.isItemCraft && extraData != null) {
+            this.resultItem = ItemStack.of(extraData.getCompound("EntityTag").getCompound("Item"));
+        } else {
+            this.resultItem = ItemStack.EMPTY;
+        }
         this.extraData = extraData;
         this.powerCost = powerCost;
         this.inputs = NonNullList.of(Ingredient.EMPTY, inputs);
@@ -63,7 +71,7 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
 
     @Override
     public ItemStack getResultItem() {
-        return ItemStack.EMPTY;
+        return resultItem;
     }
 
     @Override
@@ -106,5 +114,9 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
 
     public void spawnOutputEntity(ServerWorld world, BlockPos pos, AltarRecipeInventory inventory) {
         entityType.spawn(world, extraData, StringTextComponent.EMPTY, null, pos, SpawnReason.SPAWN_EGG, true, true);
+    }
+
+    public boolean isItemCraft() {
+        return isItemCraft;
     }
 }
