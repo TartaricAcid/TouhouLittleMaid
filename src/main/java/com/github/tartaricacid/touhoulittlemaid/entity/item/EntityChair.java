@@ -9,7 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.OpenChairGuiMess
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -115,17 +114,6 @@ public class EntityChair extends AbstractEntityFromItem {
             }
         }
         return ActionResultType.SUCCESS;
-    }
-
-    @Override
-    public void positionRider(Entity passenger) {
-        super.positionRider(passenger);
-        if (this.hasPassenger(passenger) && passenger instanceof LivingEntity) {
-            // renderYawOffset 也必须同步，因为坐上的女仆朝向受 renderYawOffset 限制
-            // 不同步就会导致朝向出现小问题
-            // Fixme: 有问题，需要修改
-            // this.yHeadRot = ((LivingEntity) passenger).yHeadRot;
-        }
     }
 
     @Nonnull

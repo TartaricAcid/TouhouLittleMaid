@@ -25,13 +25,11 @@ public final class EntityCraftingHelper {
                 if (element == null) {
                     return Pair.of(type, outputData);
                 }
-                CompoundNBT readData;
                 if (element.isJsonObject()) {
-                    readData = JsonToNBT.parseTag(GSON.toJson(element));
+                    outputData = JsonToNBT.parseTag(GSON.toJson(element));
                 } else {
-                    readData = JsonToNBT.parseTag(JSONUtils.convertToString(element, NBT_TAG));
+                    outputData = JsonToNBT.parseTag(JSONUtils.convertToString(element, NBT_TAG));
                 }
-                outputData.put("EntityTag", readData);
                 return Pair.of(type, outputData);
             }
             throw new JsonParseException("Entity Type Tag Not Found");

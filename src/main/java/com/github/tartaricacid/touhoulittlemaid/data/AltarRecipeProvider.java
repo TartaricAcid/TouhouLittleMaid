@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -26,6 +27,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.*;
 
@@ -70,7 +72,15 @@ public class AltarRecipeProvider implements IDataProvider {
         Ingredient coal = Ingredient.of(Items.COAL);
         Ingredient netherWart = Ingredient.of(Items.NETHER_WART);
 
-        addEntityRecipes(InitEntities.MAID.get(), 0.5f, gemDiamond, gemLapis, ingotGold, redstone, ingotIron, coal);
+        {
+            CompoundNBT extraData = new CompoundNBT();
+            ListNBT passengerList = new ListNBT();
+            CompoundNBT passenger = new CompoundNBT();
+            passenger.putString("id", Objects.requireNonNull(InitEntities.MAID.get().getRegistryName()).toString());
+            passengerList.add(passenger);
+            extraData.put("Passengers", passengerList);
+            addEntityRecipes(InitEntities.BOX.get(), extraData, 0.5f, gemDiamond, gemLapis, ingotGold, redstone, ingotIron, coal);
+        }
         addEntityRecipes(EntityType.LIGHTNING_BOLT, 0.2f, gunpowder, gunpowder, gunpowder, blazePowder, blazePowder, blazePowder);
         addItemRecipes(HAKUREI_GOHEI, 0.15f, stick, stick, stick, paper, paper, paper);
         addItemRecipes(ULTRAMARINE_ORB_ELIXIR, 0.3f, gemEmerald, enderPearl, dyeCyan, dyeCyan, dyeCyan, dyeCyan);

@@ -21,7 +21,7 @@ public class EntityExtinguishingAgent extends Entity {
     public static final EntityType<EntityExtinguishingAgent> TYPE = EntityType.Builder.<EntityExtinguishingAgent>of(EntityExtinguishingAgent::new, EntityClassification.MISC)
             .sized(0.2f, 0.2f).clientTrackingRange(10).build("extinguishing_agent");
     private static final int MAX_AGE = 3 * 20;
-    private boolean isCheck = false;
+    private static final int REMOVE_FIRE_AGE = 5;
 
     public EntityExtinguishingAgent(EntityType<?> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
@@ -35,41 +35,53 @@ public class EntityExtinguishingAgent extends Entity {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (this.tickCount > MAX_AGE) {
+        if (tickCount > MAX_AGE) {
             this.remove();
             return;
         }
-        if (!isCheck && tickCount == 5) {
-            for (int i = -2; i <= 2; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    for (int k = -2; k <= 2; k++) {
-                        BlockPos pos = this.blockPosition().offset(i, j, k);
-                        BlockState state = level.getBlockState(pos);
-                        if (state.is(Blocks.FIRE)) {
-                            level.removeBlock(pos, false);
-                        }
+        if (tickCount == REMOVE_FIRE_AGE) {
+            this.removeBlockFire();
+            this.removeEntityFire();
+        }
+        if (level.isClientSide) {
+            this.spawnCloudParticle();
+        }
+        this.playSound(SoundEvents.WOOL_PLACE, 2.0f - (1.8f / MAX_AGE) * tickCount, 0.1f);
+    }
+
+    private void spawnCloudParticle() {
+        int spawnNumber = 4;
+        for (int i = 0; i < spawnNumber; i++) {
+            double offsetX = 2 * random.nextDouble() - 1;
+            double offsetY = random.nextDouble() / 2;
+            double offsetZ = 2 * random.nextDouble() - 1;
+            level.addParticle(ParticleTypes.CLOUD, false,
+                    this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ,
+                    0, 0.1, 0);
+        }
+    }
+
+    private void removeEntityFire() {
+        List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2, 1, 2));
+        for (LivingEntity entity : list) {
+            entity.clearFire();
+        }
+    }
+
+    private void removeBlockFire() {
+        int hRange = 2;
+        int vRange = 1;
+        for (int x = -hRange; x <= hRange; x++) {
+            for (int y = -vRange; y <= vRange; y++) {
+                for (int z = -hRange; z <= hRange; z++) {
+                    BlockPos pos = this.blockPosition().offset(x, y, z);
+                    BlockState state = level.getBlockState(pos);
+                    if (state.is(Blocks.FIRE)) {
+                        level.removeBlock(pos, false);
                     }
                 }
             }
-
-            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2, 1, 2));
-            for (LivingEntity entity : list) {
-                entity.clearFire();
-            }
-
-            isCheck = true;
         }
-        if (level.isClientSide) {
-            for (int i = 0; i < 4; i++) {
-                double offsetX = 2 * random.nextDouble() - 1;
-                double offsetY = random.nextDouble() / 2;
-                double offsetZ = 2 * random.nextDouble() - 1;
-                level.addParticle(ParticleTypes.CLOUD, false,
-                        this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ,
-                        0, 0.1, 0);
-            }
-        }
-        this.playSound(SoundEvents.WOOL_PLACE, 2.0f - (1.8f / MAX_AGE) * tickCount, 0.1f);
     }
 
     @Override

@@ -207,7 +207,7 @@ public class BlockAltar extends Block {
             power.min(altarRecipe.getPowerCost());
             BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getBlockPos());
             if (world instanceof ServerWorld) {
-                altarRecipe.spawnOutputEntity((ServerWorld) world, centrePos, inventory);
+                altarRecipe.spawnOutputEntity((ServerWorld) world, centrePos.above(2), inventory);
             }
             removeAllAltarItem(world, altar);
             spawnParticleInCentre(world, centrePos);
