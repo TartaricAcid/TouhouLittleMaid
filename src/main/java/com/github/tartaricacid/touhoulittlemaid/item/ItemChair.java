@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
 public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";

@@ -19,7 +19,7 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
 public class ItemHakureiGohei extends ShootableItem {
     public ItemHakureiGohei() {

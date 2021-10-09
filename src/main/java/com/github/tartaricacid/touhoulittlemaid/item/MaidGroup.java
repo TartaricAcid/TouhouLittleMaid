@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.init;
+package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import net.minecraft.item.Item;

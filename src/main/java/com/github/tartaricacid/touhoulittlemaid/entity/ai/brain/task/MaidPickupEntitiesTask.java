@@ -34,7 +34,7 @@ public class MaidPickupEntitiesTask extends Task<EntityMaid> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid owner) {
-        return predicate.test(owner);
+        return owner.isTame() && predicate.test(owner);
     }
 
     @Override

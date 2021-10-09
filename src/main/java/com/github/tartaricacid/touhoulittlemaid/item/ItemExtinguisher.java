@@ -9,7 +9,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
 public class ItemExtinguisher extends Item {
     public ItemExtinguisher() {

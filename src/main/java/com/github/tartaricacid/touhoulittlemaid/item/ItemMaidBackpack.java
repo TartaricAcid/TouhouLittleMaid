@@ -15,7 +15,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Map;
 
-import static com.github.tartaricacid.touhoulittlemaid.init.MaidGroup.MAIN_TAB;
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
 public class ItemMaidBackpack extends Item {
     private static final Map<Integer, ItemMaidBackpack> ITEM_BY_LEVEL = Maps.newHashMap();

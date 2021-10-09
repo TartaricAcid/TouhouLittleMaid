@@ -6,12 +6,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.ModList;
 import vazkii.patchouli.api.IStateMatcher;
 import vazkii.patchouli.api.PatchouliAPI;
 
 public final class MultiblockRegistry {
-    private static final String PATCHOULI_MOD_ID = "patchouli";
     private static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar");
     private static final String[][] TEMPLATE = new String[][]{
             {"        ", "       R", "       R", "       R", "       R", "       R", "       R", "        ",},
@@ -23,11 +21,9 @@ public final class MultiblockRegistry {
     };
 
     public static void init() {
-        if (ModList.get().isLoaded(PATCHOULI_MOD_ID)) {
-            PatchouliAPI.IPatchouliAPI api = PatchouliAPI.get();
-            IStateMatcher oakLogMatcher = api.predicateMatcher(Blocks.OAK_LOG.defaultBlockState(), state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y);
-            IStateMatcher redWoolMatcher = api.predicateMatcher(Blocks.RED_WOOL.defaultBlockState(), Predicates.alwaysTrue());
-            api.registerMultiblock(ID, api.makeMultiblock(TEMPLATE, 'O', oakLogMatcher, 'R', redWoolMatcher, ' ', api.anyMatcher()));
-        }
+        PatchouliAPI.IPatchouliAPI api = PatchouliAPI.get();
+        IStateMatcher oakLogMatcher = api.predicateMatcher(Blocks.OAK_LOG.defaultBlockState(), state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y);
+        IStateMatcher redWoolMatcher = api.predicateMatcher(Blocks.RED_WOOL.defaultBlockState(), Predicates.alwaysTrue());
+        api.registerMultiblock(ID, api.makeMultiblock(TEMPLATE, 'O', oakLogMatcher, 'R', redWoolMatcher, ' ', api.anyMatcher()));
     }
 }
