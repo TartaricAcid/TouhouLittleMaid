@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFlyingAnimal, IHasPowerPoint {
-    public static final EntityType<EntityFairy> TYPE = EntityType.Builder.<EntityFairy>of(EntityFairy::new, EntityClassification.MISC)
+    public static final EntityType<EntityFairy> TYPE = EntityType.Builder.<EntityFairy>of(EntityFairy::new, EntityClassification.MONSTER)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("fairy");
 
     private static final String FAIRY_TYPE_TAG_NAME = "FairyType";

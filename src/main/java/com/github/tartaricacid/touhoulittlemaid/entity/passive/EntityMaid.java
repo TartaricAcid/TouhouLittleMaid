@@ -637,14 +637,12 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     private void spawnPortalParticle() {
         if (this.level.isClientSide && this.isInvulnerable() && this.getOwner() != null) {
-            for (int i = 0; i < 2; ++i) {
-                this.level.addParticle(ParticleTypes.PORTAL,
-                        this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
-                        this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D,
-                        this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
-                        (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
-                        (this.random.nextDouble() - 0.5D) * 2.0D);
-            }
+            this.level.addParticle(ParticleTypes.PORTAL,
+                    this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
+                    this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D,
+                    this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
+                    (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
+                    (this.random.nextDouble() - 0.5D) * 2.0D);
         }
     }
 
