@@ -1,0 +1,20 @@
+{
+  "sortnum": 2,
+  "name": "Maid Task",
+  "icon": "minecraft:writable_book",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "When you open a maid's GUI, you can see a maid task button, click it to switch the maid's task.$(br2)You can also click the schedule button to switch the maid's schedule so that it can work, rest or sleep in different time periods."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/schedule_button.png",
+        "touhou_little_maid:textures/book/task_button.png"
+      ],
+      "text": "Click the button in the lower right corner of the image to switch pictures"
+    }
+  ]
+}

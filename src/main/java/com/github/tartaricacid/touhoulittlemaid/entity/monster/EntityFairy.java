@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.monster;
 
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.goal.FairyAttackGoal;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
@@ -24,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFlyingAnimal, IHasPowerPoint {
     public static final EntityType<EntityFairy> TYPE = EntityType.Builder.<EntityFairy>of(EntityFairy::new, EntityClassification.MONSTER)
@@ -66,7 +66,7 @@ public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFly
 
         targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, EntityMaid.class, 10, true,
-                false, Objects::nonNull));
+                false, e -> !e.isSleeping()));
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
@@ -78,7 +78,7 @@ public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFly
 
     @Override
     public int getPowerPoint() {
-        return 16;
+        return (int) (MiscConfig.MAID_FAIRY_POWER_POINT.get() * 100);
     }
 
     @Override

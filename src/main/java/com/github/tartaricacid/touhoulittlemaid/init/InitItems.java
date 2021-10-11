@@ -30,7 +30,6 @@ public final class InitItems {
     public static RegistryObject<Item> FALL_PROTECT_BAUBLE = ITEMS.register("fall_protect_bauble", () -> new ItemDamageableBauble(32));
     public static RegistryObject<Item> DROWN_PROTECT_BAUBLE = ITEMS.register("drown_protect_bauble", () -> new ItemDamageableBauble(64));
     public static RegistryObject<Item> NIMBLE_FABRIC = ITEMS.register("nimble_fabric", () -> new ItemDamageableBauble(64));
-    public static RegistryObject<Item> TOMBSTONE_BAUBLE = ITEMS.register("tombstone_bauble", ItemNormalBauble::new);
     public static RegistryObject<Item> ITEM_MAGNET_BAUBLE = ITEMS.register("item_magnet_bauble", ItemNormalBauble::new);
     public static RegistryObject<Item> MUTE_BAUBLE = ITEMS.register("mute_bauble", ItemNormalBauble::new);
     public static RegistryObject<Item> ENTITY_PLACEHOLDER = ITEMS.register("entity_placeholder", () -> new Item((new Item.Properties()).stacksTo(1)));

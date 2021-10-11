@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
-import com.github.tartaricacid.touhoulittlemaid.config.Config;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
@@ -38,7 +38,7 @@ public final class TouhouLittleMaid {
         InitContainer.CONTAINER_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitSounds.SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitRecipes.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.initConfig());
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfig.init());
         DeferredWorkQueue.runLater(NetworkHandler::init);
         EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
         TaskManager.init();

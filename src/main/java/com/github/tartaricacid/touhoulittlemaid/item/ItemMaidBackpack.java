@@ -14,6 +14,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
@@ -25,6 +26,10 @@ public class ItemMaidBackpack extends Item {
         super((new Properties()).tab(MAIN_TAB).stacksTo(1));
         this.level = level;
         ITEM_BY_LEVEL.put(level, this);
+    }
+
+    public static Optional<ItemMaidBackpack> getInstance(int level) {
+        return Optional.ofNullable(ITEM_BY_LEVEL.get(level));
     }
 
     public int getLevel() {
@@ -47,7 +52,7 @@ public class ItemMaidBackpack extends Item {
                 }
                 stack.shrink(1);
                 target.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
-                ItemHandlerHelper.giveItemToPlayer(playerIn, new ItemStack(ITEM_BY_LEVEL.get(maidBackpackLevel)));
+                getInstance(maidBackpackLevel).ifPresent(backpack -> ItemHandlerHelper.giveItemToPlayer(playerIn, backpack.getDefaultInstance()));
                 if (level < maidBackpackLevel) {
                     ItemStackHandler maidInv = maid.getMaidInv();
                     int startIndex = BackpackLevel.BACKPACK_CAPACITY_MAP.get(level);

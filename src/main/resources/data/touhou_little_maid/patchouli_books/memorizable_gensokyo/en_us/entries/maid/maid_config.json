@@ -1,0 +1,12 @@
+{
+  "sortnum": 5,
+  "name": "Maid Config",
+  "icon": "minecraft:writable_book",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This mod adds a lot of configuration for maids. You can set some attributes of the maids, and limit the maximum number of maids that can be tamed by the player."
+    }
+  ]
+}

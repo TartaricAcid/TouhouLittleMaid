@@ -40,6 +40,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(7, SpawnParticleMessage.class, SpawnParticleMessage::encode, SpawnParticleMessage::decode, SpawnParticleMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(8, SyncCapabilityMessage.class, SyncCapabilityMessage::encode, SyncCapabilityMessage::decode, SyncCapabilityMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, PlayerEntity player) {

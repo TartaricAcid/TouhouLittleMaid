@@ -15,22 +15,22 @@
   "power": 0.2,
   "ingredients": [
     {
-      "item": "minecraft:nether_wart"
+      "tag": "forge:crops/nether_wart"
     },
     {
       "tag": "forge:dyes/yellow"
     },
     {
-      "item": "minecraft:feather"
+      "tag": "forge:feathers"
     },
     {
-      "item": "minecraft:feather"
+      "tag": "forge:feathers"
     },
     {
-      "item": "minecraft:feather"
+      "tag": "forge:feathers"
     },
     {
-      "item": "minecraft:feather"
+      "tag": "forge:feathers"
     }
   ]
 }

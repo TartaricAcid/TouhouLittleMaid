@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackChairRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.google.common.base.Predicates;
@@ -28,13 +29,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.CHAIR_TAB;
 
 public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
     public ItemChair() {
-        super((new Properties()).tab(MAIN_TAB).stacksTo(1)
+        super((new Properties()).tab(CHAIR_TAB).stacksTo(1)
                 .setISTER(() -> TileEntityItemStackChairRenderer::new));
     }
 
@@ -96,7 +97,12 @@ public class ItemChair extends Item {
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
-            items.add(setData(getDefaultInstance(), new Data(DEFAULT_MODEL_ID, 0f, true, false)));
+            for (String key : CustomPackLoader.CHAIR_MODELS.getModelIdSet()) {
+                float height = CustomPackLoader.CHAIR_MODELS.getModelMountedYOffset(key);
+                boolean canRide = CustomPackLoader.CHAIR_MODELS.getModelTameableCanRide(key);
+                boolean isNoGravity = CustomPackLoader.CHAIR_MODELS.getModelNoGravity(key);
+                items.add(setData(getDefaultInstance(), new Data(key, height, canRide, isNoGravity)));
+            }
         }
     }
 

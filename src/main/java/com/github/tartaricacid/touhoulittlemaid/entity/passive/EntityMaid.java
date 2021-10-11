@@ -3,10 +3,11 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.config.Config;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
@@ -17,6 +18,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
@@ -41,6 +43,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
@@ -59,7 +62,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -127,7 +132,6 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private static final int HUNGER_VALUE_REFUSING_TASK = -256;
     private static int PLAYER_HURT_SOUND_COUNT = 120;
     private static int PICKUP_SOUND_COUNT = 5;
 
@@ -286,20 +290,31 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     }
 
     private ActionResultType tameMaid(ItemStack stack, PlayerEntity player) {
-        boolean isNormal = !isTame() && stack.getItem() == getTamedItem();
-        boolean isNtr = stack.getItem() == getNtrItem();
-        if (isNormal || isNtr) {
-            if (!player.isCreative()) {
-                stack.shrink(1);
+        return player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP).map(cap -> {
+            if (cap.canAdd() || player.isCreative()) {
+                boolean isNormal = !isTame() && stack.getItem() == getTamedItem();
+                boolean isNtr = stack.getItem() == getNtrItem();
+                if (isNormal || isNtr) {
+                    if (!player.isCreative()) {
+                        stack.shrink(1);
+                        cap.add();
+                    }
+                    this.tame(player);
+                    this.navigation.stop();
+                    this.setTarget(null);
+                    this.level.broadcastEntityEvent(this, (byte) 7);
+                    this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
+                    return ActionResultType.SUCCESS;
+                }
+            } else {
+                if (player instanceof ServerPlayerEntity) {
+                    TranslationTextComponent msg = new TranslationTextComponent("message.touhou_little_maid.owner_maid_num.can_not_add",
+                            cap.get(), cap.getMaxNum());
+                    ((ServerPlayerEntity) player).sendMessage(msg, ChatType.GAME_INFO, Util.NIL_UUID);
+                }
             }
-            this.tame(player);
-            this.navigation.stop();
-            this.setTarget(null);
-            this.level.broadcastEntityEvent(this, (byte) 7);
-            this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
-            return ActionResultType.SUCCESS;
-        }
-        return ActionResultType.PASS;
+            return ActionResultType.PASS;
+        }).orElse(ActionResultType.PASS);
     }
 
     @Override
@@ -786,7 +801,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Override
     protected void dropEquipment() {
         ItemsUtil.dropEntityItems(this, new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble));
-        // TODO：背包掉落和记录女仆数据的物品
+        ItemMaidBackpack.getInstance(getBackpackLevel()).ifPresent(backpack ->
+                InventoryHelper.dropItemStack(level, getX(), getY(), getZ(), backpack.getDefaultInstance()));
+        // TODO：掉落记录女仆数据的物品
     }
 
     @Override
@@ -1154,7 +1171,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @SuppressWarnings("all")
     public Item getTamedItem() {
-        ResourceLocation key = new ResourceLocation(Config.MAID_TAMED_ITEM.get());
+        ResourceLocation key = new ResourceLocation(MaidConfig.MAID_TAMED_ITEM.get());
         if (ForgeRegistries.ITEMS.containsKey(key)) {
             return ForgeRegistries.ITEMS.getValue(key);
         }
@@ -1163,7 +1180,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @SuppressWarnings("all")
     public Item getTemptationItem() {
-        ResourceLocation key = new ResourceLocation(Config.MAID_TEMPTATION_ITEM.get());
+        ResourceLocation key = new ResourceLocation(MaidConfig.MAID_TEMPTATION_ITEM.get());
         if (ForgeRegistries.ITEMS.containsKey(key)) {
             return ForgeRegistries.ITEMS.getValue(key);
         }
@@ -1172,7 +1189,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @SuppressWarnings("all")
     public Item getNtrItem() {
-        ResourceLocation key = new ResourceLocation(Config.MAID_NTR_ITEM.get());
+        ResourceLocation key = new ResourceLocation(MaidConfig.MAID_NTR_ITEM.get());
         if (ForgeRegistries.ITEMS.containsKey(key)) {
             return ForgeRegistries.ITEMS.getValue(key);
         }

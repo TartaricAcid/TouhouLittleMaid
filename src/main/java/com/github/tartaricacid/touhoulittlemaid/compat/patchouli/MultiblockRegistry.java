@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.patchouli;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.google.common.base.Predicates;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.util.Direction;
@@ -22,8 +21,8 @@ public final class MultiblockRegistry {
 
     public static void init() {
         PatchouliAPI.IPatchouliAPI api = PatchouliAPI.get();
-        IStateMatcher oakLogMatcher = api.predicateMatcher(Blocks.OAK_LOG.defaultBlockState(), state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y);
-        IStateMatcher redWoolMatcher = api.predicateMatcher(Blocks.RED_WOOL.defaultBlockState(), Predicates.alwaysTrue());
+        IStateMatcher oakLogMatcher = api.predicateMatcher(Blocks.OAK_LOG.defaultBlockState(), state -> state.is(Blocks.OAK_LOG) && state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y);
+        IStateMatcher redWoolMatcher = api.predicateMatcher(Blocks.RED_WOOL.defaultBlockState(), state -> state.is(Blocks.RED_WOOL));
         api.registerMultiblock(ID, api.makeMultiblock(TEMPLATE, 'O', oakLogMatcher, 'R', redWoolMatcher, ' ', api.anyMatcher()));
     }
 }

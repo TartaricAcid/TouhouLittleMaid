@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.config.Config;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -41,7 +41,7 @@ public class MaidModelMessage {
                 }
                 Entity entity = sender.level.getEntity(message.id);
                 if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
-                    if (sender.isCreative() || Config.MAID_CHANGE_MODEL.get()) {
+                    if (sender.isCreative() || MaidConfig.MAID_CHANGE_MODEL.get()) {
                         ((EntityMaid) entity).setModelId(message.modelId.toString());
                     } else {
                         sender.sendMessage(new TranslationTextComponent("message.touhou_little_maid.change_model.disabled"),

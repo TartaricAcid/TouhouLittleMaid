@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.config.Config;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -49,7 +49,7 @@ public class ChairModelMessage {
                     return;
                 }
                 Entity entity = sender.level.getEntity(message.id);
-                boolean canChangeModel = Config.CHAIR_CHANGE_MODEL.get() || sender.isCreative();
+                boolean canChangeModel = ChairConfig.CHAIR_CHANGE_MODEL.get() || sender.isCreative();
 
                 if (entity instanceof EntityChair) {
                     if (canChangeModel) {

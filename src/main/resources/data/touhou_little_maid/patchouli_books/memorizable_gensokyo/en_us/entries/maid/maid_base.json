@@ -1,0 +1,20 @@
+{
+  "sortnum": 1,
+  "name": "Maid Base",
+  "icon": "touhou_little_maid:maid_spawn_egg",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "There are many basic functions that maids are able to perform, such as:$(li)By default, the maid will actively pick up items, arrows and experience orbs around her. The main GUI has a button to switch pick up mode;$(li)By default, the maid will always follow the player."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Shift right-clicking maid with an empty hand can switch sitting mode. In sitting mode, the doesn't do anything, including avoiding danger.$(li)When the maid ride on other entities, Shift right-clicking with an empty hand can remove them.$(li)The player can use a golden apple or potion on a maid by right-clicking them while holding the item."
+    },
+    {
+      "type": "text",
+      "text": "$(li)The experience picked up by the maid can be converted into an Bottle o' Enchanting if the player right-click the maid while holding a bottle.$(li)The maid can equip the skull and render model of it.$(li)Right-click the maid with an empty nameplate, and you can name it directly."
+    }
+  ]
+}

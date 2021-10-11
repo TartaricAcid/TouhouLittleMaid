@@ -15,13 +15,13 @@
   "power": 0.15,
   "ingredients": [
     {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     {
       "item": "minecraft:paper"

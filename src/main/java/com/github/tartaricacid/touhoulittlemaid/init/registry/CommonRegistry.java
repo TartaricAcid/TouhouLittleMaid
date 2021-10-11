@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
+import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapability;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -18,5 +19,6 @@ public final class CommonRegistry {
 
     private static void registerCapability() {
         CapabilityManager.INSTANCE.register(PowerCapability.class, new PowerCapability.Storage(), PowerCapability::new);
+        CapabilityManager.INSTANCE.register(MaidNumCapability.class, new MaidNumCapability.Storage(), MaidNumCapability::new);
     }
 }

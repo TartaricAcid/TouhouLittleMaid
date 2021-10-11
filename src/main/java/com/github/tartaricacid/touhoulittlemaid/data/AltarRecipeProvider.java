@@ -44,7 +44,7 @@ public class AltarRecipeProvider implements IDataProvider {
         Ingredient gunpowder = Ingredient.of(Tags.Items.GUNPOWDER);
         Ingredient blazePowder = Ingredient.of(Items.BLAZE_POWDER);
         Ingredient paper = Ingredient.of(Items.PAPER);
-        Ingredient stick = Ingredient.of(Items.STICK);
+        Ingredient stick = Ingredient.of(Tags.Items.RODS_WOODEN);
         Ingredient obsidian = Ingredient.of(Tags.Items.OBSIDIAN);
         Ingredient redstone = Ingredient.of(Tags.Items.DUSTS_REDSTONE);
         Ingredient dyeCyan = Ingredient.of(Tags.Items.DYES_CYAN);
@@ -55,7 +55,7 @@ public class AltarRecipeProvider implements IDataProvider {
         Ingredient dyeLime = Ingredient.of(Tags.Items.DYES_LIME);
         Ingredient shield = Ingredient.of(Items.SHIELD);
         Ingredient sugar = Ingredient.of(Items.SUGAR);
-        Ingredient feather = Ingredient.of(Items.FEATHER);
+        Ingredient feather = Ingredient.of(Tags.Items.FEATHERS);
         Ingredient fishes = Ingredient.of(ItemTags.FISHES);
         Ingredient plankWood = Ingredient.of(ItemTags.PLANKS);
         Ingredient ingotGold = Ingredient.of(Tags.Items.INGOTS_GOLD);
@@ -70,7 +70,7 @@ public class AltarRecipeProvider implements IDataProvider {
         Ingredient gemEmerald = Ingredient.of(Tags.Items.GEMS_EMERALD);
         Ingredient gemLapis = Ingredient.of(Tags.Items.GEMS_LAPIS);
         Ingredient coal = Ingredient.of(Items.COAL);
-        Ingredient netherWart = Ingredient.of(Items.NETHER_WART);
+        Ingredient netherWart = Ingredient.of(Tags.Items.CROPS_NETHER_WART);
 
         {
             CompoundNBT extraData = new CompoundNBT();

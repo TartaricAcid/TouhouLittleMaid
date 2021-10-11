@@ -1,0 +1,12 @@
+{
+  "sortnum": 2,
+  "name": "Command",
+  "icon": "minecraft:command_block",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(#f00)/tlm$() This is the command provided by the mod$(br2)You can use it to set power, maid num, or reload the model package."
+    }
+  ]
+}

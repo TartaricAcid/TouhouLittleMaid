@@ -1,0 +1,8 @@
+{
+  "name": "patchouli.touhou_little_maid.book.name",
+  "landing_text": "patchouli.touhou_little_maid.book.landing_text",
+  "model": "touhou_little_maid:memorizable_gensokyo",
+  "creative_tab": "touhou_little_maid.main",
+  "show_progress": false,
+  "version": 1
+}

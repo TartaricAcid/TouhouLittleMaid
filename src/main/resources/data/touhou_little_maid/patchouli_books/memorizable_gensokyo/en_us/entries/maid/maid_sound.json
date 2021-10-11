@@ -1,0 +1,12 @@
+{
+  "sortnum": 8,
+  "name": "Maid Sound",
+  "icon": "minecraft:jukebox",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "You can make custom sound resources packs to replace or expand the maid's sound effects."
+    }
+  ]
+}

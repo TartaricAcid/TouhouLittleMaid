@@ -1,0 +1,20 @@
+{
+  "sortnum": 7,
+  "name": "Backpack",
+  "icon": "touhou_little_maid:maid_backpack_small",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_backpack_middle",
+      "text": "The backpack can be used to expand the inventory of the maid. It can be applied by holding the backpack and right-click on the maid. The backpack has three levels. $(br2)Use the shears to remove the maid's backpack."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/backpack.png"
+      ],
+      "text": "Maid with a small backpack."
+    }
+  ]
+}

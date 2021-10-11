@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.event;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,7 +19,7 @@ public final class AddBaubleInformationEvent {
         if (BaubleManager.getBauble(event.getItemStack()) != null) {
             event.getToolTip().add(StringTextComponent.EMPTY);
             event.getToolTip().add(new TranslationTextComponent("tooltips.touhou_little_maid.bauble.desc"));
-            event.getToolTip().add(new TranslationTextComponent("tooltips.touhou_little_maid.bauble.usage"));
+            event.getToolTip().add(new TranslationTextComponent("tooltips.touhou_little_maid.bauble.usage").withStyle(TextFormatting.GRAY));
         }
     }
 }
