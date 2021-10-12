@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_bed",
-      "text": "The player can sleep, and naturally the maid can also sleep. During sleep schedule, the maid will to look for the surrounding bed to sleep.$(br2)The sleeping maid will no longer be attacked by hostile creatures, and the maid’s GUI cannot be opened at this time."
+      "text": "The player can sleep, and naturally the maid can also sleep. During sleep schedule, the maid will to look for the surrounding bed to sleep.$(br2)The sleeping maid will no longer be attacked by hostile creatures, and the maid's GUI cannot be opened at this time."
     },
     {
       "type": "image",

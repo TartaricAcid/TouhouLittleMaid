@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "$(#f00)/tlm$() This is the command provided by the mod$(br2)You can use it to set power, maid num, or reload the model package."
+      "text": "$(#f00)/tlm$(): This is the command provided by the mod$(br2)You can use it to set power, maid num, or reload the model package."
     }
   ]
 }

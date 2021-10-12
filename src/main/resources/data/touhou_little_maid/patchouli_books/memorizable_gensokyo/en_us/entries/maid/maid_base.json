@@ -10,7 +10,7 @@
     },
     {
       "type": "text",
-      "text": "$(li)Shift right-clicking maid with an empty hand can switch sitting mode. In sitting mode, the doesn't do anything, including avoiding danger.$(li)When the maid ride on other entities, Shift right-clicking with an empty hand can remove them.$(li)The player can use a golden apple or potion on a maid by right-clicking them while holding the item."
+      "text": "$(li)Shift right-clicking maid with an empty hand can switch sitting mode. In sitting mode, maid doesn't do anything, including avoiding danger.$(li)When the maid ride on other entities, Shift right-clicking with an empty hand can remove them.$(li)The player can use a golden apple or potion on a maid by right-clicking them while holding the item."
     },
     {
       "type": "text",

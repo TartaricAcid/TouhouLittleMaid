@@ -1,0 +1,11 @@
+{
+  "type": "touhou_little_maid:addition",
+  "conditions": [
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.5
+    }
+  ],
+  "parameter_set_name": "minecraft:chest",
+  "addition_loot_table": "touhou_little_maid:chest/power_point"
+}
