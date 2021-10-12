@@ -8,10 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-
-import java.util.Collections;
-import java.util.List;
 
 public class TaskGrass implements IFarmTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "grass");
@@ -50,10 +46,5 @@ public class TaskGrass implements IFarmTask {
     @Override
     public ItemStack plant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
         return seed;
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
     }
 }

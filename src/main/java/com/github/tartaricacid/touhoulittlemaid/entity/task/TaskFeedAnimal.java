@@ -13,10 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 public class TaskFeedAnimal implements IMaidTask {
@@ -41,10 +39,5 @@ public class TaskFeedAnimal implements IMaidTask {
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         return Lists.newArrayList(Pair.of(5, new MaidFeedAnimalTask(8, 0.6f, 30)));
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
     }
 }

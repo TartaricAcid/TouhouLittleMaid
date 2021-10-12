@@ -1,10 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
+import com.google.common.collect.Lists;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class ParseI18n {
@@ -43,10 +44,21 @@ public final class ParseI18n {
      * 将传入的字符串列表进行国际化
      */
     public static List<ITextComponent> parse(List<String> strIn) {
-        List<ITextComponent> strOut = new ArrayList<>();
+        List<ITextComponent> strOut = Lists.newArrayList();
         for (String str : strIn) {
             strOut.add(parse(str));
         }
         return strOut;
+    }
+
+    /**
+     * 将 key 列表转换成对应的翻译文本
+     */
+    public static List<ITextComponent> keysToTrans(List<String> keys, TextFormatting... formatting) {
+        List<ITextComponent> out = Lists.newArrayList();
+        for (String k : keys) {
+            out.add(new TranslationTextComponent(k).withStyle(formatting));
+        }
+        return out;
     }
 }

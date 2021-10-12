@@ -24,12 +24,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TaskBowAttack implements IRangedAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "ranged_attack");
@@ -90,8 +90,8 @@ public class TaskBowAttack implements IRangedAttackTask {
     }
 
     @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
+    public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
+        return Collections.singletonList(Pair.of("has_bow", this::hasBow));
     }
 
     private boolean hasBow(EntityMaid maid) {

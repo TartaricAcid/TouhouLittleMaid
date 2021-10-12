@@ -18,12 +18,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TaskDanmakuAttack implements IRangedAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "danmaku_attack");
@@ -102,8 +102,8 @@ public class TaskDanmakuAttack implements IRangedAttackTask {
     }
 
     @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
+    public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
+        return Collections.singletonList(Pair.of("has_gohei", this::hasGohei));
     }
 
     private boolean hasGohei(EntityMaid maid) {

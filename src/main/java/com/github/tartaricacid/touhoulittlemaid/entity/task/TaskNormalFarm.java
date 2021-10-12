@@ -10,13 +10,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.util.Constants;
-
-import java.util.Collections;
-import java.util.List;
 
 public class TaskNormalFarm implements IFarmTask {
     private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "farm");
@@ -106,10 +102,5 @@ public class TaskNormalFarm implements IFarmTask {
             }
         }
         return seed;
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
     }
 }

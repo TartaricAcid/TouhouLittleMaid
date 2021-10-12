@@ -1,16 +1,18 @@
 package com.github.tartaricacid.touhoulittlemaid.api.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface IMaidTask {
     /**
@@ -64,10 +66,23 @@ public interface IMaidTask {
     }
 
     /**
-     * 获取当前模式的描述文本
+     * 获取额外的条件提示文本
+     *
+     * @param maid 女仆对象
+     * @return 条件名（用于自动生成对应的 key）和对应条件布尔值的组合列表
+     */
+    default List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
+        return Collections.emptyList();
+    }
+
+    /**
+     * 获取当前模式的描述文本的 key
      *
      * @param maid 女仆对象
      * @return 模式的描述文本，可以多行<br>如果没有文本描述，请返回空集合
      */
-    List<ITextComponent> getDescription(EntityMaid maid);
+    default List<String> getDescription(EntityMaid maid) {
+        String key = String.format("task.%s.%s.desc", getUid().getNamespace(), getUid().getPath());
+        return Lists.newArrayList(key);
+    }
 }

@@ -12,11 +12,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
-import java.util.Collections;
-import java.util.List;
 
 public class TaskSugarCane implements IFarmTask {
     private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "sugar_cane");
@@ -69,11 +65,6 @@ public class TaskSugarCane implements IFarmTask {
     @Override
     public double getCloseEnoughDist() {
         return 2.0;
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
     }
 
     private boolean canSustainSugarCane(BlockState state) {

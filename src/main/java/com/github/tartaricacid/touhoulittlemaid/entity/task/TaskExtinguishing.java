@@ -13,11 +13,11 @@ import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TaskExtinguishing implements IAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "extinguishing");
@@ -44,7 +44,11 @@ public class TaskExtinguishing implements IAttackTask {
     }
 
     @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
+    public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
+        return Collections.singletonList(Pair.of("has_extinguisher", this::hasExtinguisher));
+    }
+
+    private boolean hasExtinguisher(EntityMaid maid) {
+        return maid.getMainHandItem().getItem() == InitItems.EXTINGUISHER.get();
     }
 }

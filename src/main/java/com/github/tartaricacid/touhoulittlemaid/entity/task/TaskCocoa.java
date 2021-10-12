@@ -15,11 +15,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.Collections;
 import java.util.List;
 
 public class TaskCocoa implements IFarmTask {
@@ -114,10 +112,5 @@ public class TaskCocoa implements IFarmTask {
     @Override
     public boolean checkCropPosAbove() {
         return false;
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
     }
 }

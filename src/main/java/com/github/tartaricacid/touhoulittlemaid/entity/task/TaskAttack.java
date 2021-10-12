@@ -13,10 +13,10 @@ import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TaskAttack implements IAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "attack");
@@ -55,8 +55,8 @@ public class TaskAttack implements IAttackTask {
     }
 
     @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
+    public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
+        return Collections.singletonList(Pair.of("has_sword", this::hasSword));
     }
 
     private boolean hasSword(EntityMaid maid) {

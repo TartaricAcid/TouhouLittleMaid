@@ -19,10 +19,8 @@ import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 public class TaskFeedOwner implements IFeedTask {
@@ -104,11 +102,6 @@ public class TaskFeedOwner implements IFeedTask {
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         return Lists.newArrayList(Pair.of(5, new MaidFeedOwnerTask(this, 2, 0.6f)));
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
     }
 
     private boolean isHarmfulEffect(EffectInstance effect) {

@@ -11,10 +11,6 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-
-import java.util.Collections;
-import java.util.List;
 
 public class TaskMelon implements IFarmTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "melon");
@@ -67,10 +63,5 @@ public class TaskMelon implements IFarmTask {
     @Override
     public double getCloseEnoughDist() {
         return 1.5;
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.emptyList();
     }
 }

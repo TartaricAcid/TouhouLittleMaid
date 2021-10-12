@@ -14,11 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 public class TaskIdle implements IMaidTask {
@@ -54,10 +51,5 @@ public class TaskIdle implements IMaidTask {
         Pair<Integer, Task<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
         Pair<Integer, Task<? super EntityMaid>> supplemented = Pair.of(6, supplementedTask);
         return Lists.newArrayList(beg, supplemented);
-    }
-
-    @Override
-    public List<ITextComponent> getDescription(EntityMaid maid) {
-        return Collections.singletonList(new TranslationTextComponent(String.format("task.%s.%s.desc", getUid().getNamespace(), getUid().getPath())));
     }
 }

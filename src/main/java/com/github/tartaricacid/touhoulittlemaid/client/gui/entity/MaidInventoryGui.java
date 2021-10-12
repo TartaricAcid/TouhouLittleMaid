@@ -16,6 +16,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.ToggleWidget;
@@ -26,9 +27,12 @@ import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.GuiTools.NO_ACTION;
+import static net.minecraftforge.fml.client.gui.GuiUtils.drawHoveringText;
 
 public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_main.png");
@@ -63,14 +67,14 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         super.init();
         this.buttons.clear();
         this.children.clear();
+        this.addHomeButton();
+        this.addPickButton();
+        this.addRideButton();
         this.addStateButton();
         this.addTaskSwitchButton();
         this.addTaskControlButton();
         this.addTaskListButton();
         this.addScheduleButton();
-        this.addHomeButton();
-        this.addPickButton();
-        this.addRideButton();
     }
 
     @Override
@@ -164,9 +168,33 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
         TaskButton button = new TaskButton(maidTask, leftPos - 89, topPos + 23 + 19 * count,
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 (b) -> NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid())),
-                (b, m, x, y) -> renderComponentTooltip(m, maidTask.getDescription(maid), x, y), StringTextComponent.EMPTY);
+                (b, m, x, y) -> drawHoveringText(m, getTaskTooltips(maidTask), x, y, width, height, 180, font), StringTextComponent.EMPTY);
         this.addButton(button);
         button.visible = taskListOpen;
+    }
+
+    private List<ITextComponent> getTaskTooltips(IMaidTask maidTask) {
+        List<ITextComponent> desc = ParseI18n.keysToTrans(maidTask.getDescription(maid), TextFormatting.GRAY);
+        if (!desc.isEmpty()) {
+            desc.add(0, new TranslationTextComponent("task.touhou_little_maid.desc.title").withStyle(TextFormatting.GOLD));
+        }
+        List<Pair<String, Predicate<EntityMaid>>> conditions = maidTask.getConditionDescription(maid);
+        if (!conditions.isEmpty()) {
+            desc.add(new StringTextComponent("\u0020"));
+            desc.add(new TranslationTextComponent("task.touhou_little_maid.desc.condition").withStyle(TextFormatting.GOLD));
+        }
+        StringTextComponent prefix = new StringTextComponent("-\u0020");
+        for (Pair<String, Predicate<EntityMaid>> line : conditions) {
+            String key = String.format("task.%s.%s.condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
+            TranslationTextComponent condition = new TranslationTextComponent(key);
+            if (line.getSecond().test(maid)) {
+                condition.withStyle(TextFormatting.GREEN);
+            } else {
+                condition.withStyle(TextFormatting.RED);
+            }
+            desc.add(prefix.append(condition));
+        }
+        return desc;
     }
 
     private void addScheduleButton() {
@@ -372,16 +400,16 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
 
     private void renderTransTooltip(ImageButton button, MatrixStack matrixStack, int x, int y, String key) {
         if (button.isHovered()) {
-            renderTooltip(matrixStack, new TranslationTextComponent(key), x, y);
+            drawHoveringText(matrixStack, Collections.singletonList(new TranslationTextComponent(key)), x, y, width, height, 180, font);
         }
     }
 
     private void renderTransTooltip(ToggleWidget button, MatrixStack matrixStack, int x, int y, String key) {
         if (button.isHovered()) {
-            renderComponentTooltip(matrixStack, Lists.newArrayList(
+            drawHoveringText(matrixStack, Lists.newArrayList(
                     new TranslationTextComponent(key + "." + button.isStateTriggered()),
                     new TranslationTextComponent(key + ".desc")
-            ), x, y);
+            ), x, y, width, height, 180, font);
         }
     }
 }
