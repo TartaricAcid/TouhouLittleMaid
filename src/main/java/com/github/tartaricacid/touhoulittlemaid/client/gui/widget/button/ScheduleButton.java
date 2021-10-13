@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidInventoryGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidMainContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -29,7 +29,7 @@ public class ScheduleButton extends Button {
     private final EntityMaid maid;
     private MaidSchedule mode;
 
-    public ScheduleButton(int x, int y, MaidInventoryGui gui) {
+    public ScheduleButton(int x, int y, MaidMainContainerGui gui) {
         super(x, y, 61, 13, StringTextComponent.EMPTY, (b) -> {
         });
         this.maid = gui.getMaid();

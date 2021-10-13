@@ -8,7 +8,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.pathfinding.WalkAndSwimNodeProcessor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.world.server.ServerWorld;
@@ -75,7 +75,7 @@ public class MaidFollowOwnerTask extends Task<EntityMaid> {
     }
 
     private boolean canTeleportTo(EntityMaid maid, BlockPos pos) {
-        PathNodeType pathNodeType = WalkNodeProcessor.getBlockPathTypeStatic(maid.level, pos.mutable());
+        PathNodeType pathNodeType = WalkAndSwimNodeProcessor.getBlockPathTypeStatic(maid.level, pos.mutable());
         if (pathNodeType == PathNodeType.WALKABLE) {
             BlockPos blockPos = pos.subtract(maid.blockPosition());
             return maid.level.noCollision(maid, maid.getBoundingBox().move(blockPos));

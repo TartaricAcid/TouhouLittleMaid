@@ -1,7 +1,8 @@
-package com.github.tartaricacid.touhoulittlemaid.inventory;
+package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -28,15 +29,14 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.inventory.container.PlayerContainer.*;
 
-public class MaidInventory extends Container {
-    public static final ContainerType<MaidInventory> TYPE = IForgeContainerType.create(
-            (windowId, inv, data) -> new MaidInventory(windowId, inv, data.readInt()));
+public class MaidMainContainer extends Container {
+    public static final ContainerType<MaidMainContainer> TYPE = IForgeContainerType.create((windowId, inv, data) -> new MaidMainContainer(windowId, inv, data.readInt()));
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlotType[] SLOT_IDS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private static final int PLAYER_INVENTORY_SIZE = 36;
     private final EntityMaid maid;
 
-    public MaidInventory(int id, PlayerInventory inventory, int entityId) {
+    public MaidMainContainer(int id, PlayerInventory inventory, int entityId) {
         super(TYPE, id);
         this.maid = (EntityMaid) inventory.player.level.getEntity(entityId);
         if (maid != null) {

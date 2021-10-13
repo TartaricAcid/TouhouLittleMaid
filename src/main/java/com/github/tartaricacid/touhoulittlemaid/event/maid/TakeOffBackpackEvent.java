@@ -24,7 +24,7 @@ public class TakeOffBackpackEvent {
         int backpackLevel = maid.getBackpackLevel();
 
         if (backpackLevel != BackpackLevel.EMPTY && stack.getItem().is(Tags.Items.SHEARS)) {
-            if (!maid.backpackNoDelay()) {
+            if (maid.backpackHasDelay()) {
                 return;
             }
             maid.setBackpackLevel(BackpackLevel.EMPTY);

@@ -42,7 +42,7 @@ public class ItemMaidBackpack extends Item {
             EntityMaid maid = (EntityMaid) target;
             int maidBackpackLevel = maid.getBackpackLevel();
             if (maid.isOwnedBy(playerIn) && level != maidBackpackLevel) {
-                if (!maid.backpackNoDelay()) {
+                if (maid.backpackHasDelay()) {
                     return ActionResultType.SUCCESS;
                 }
                 maid.setBackpackLevel(level);

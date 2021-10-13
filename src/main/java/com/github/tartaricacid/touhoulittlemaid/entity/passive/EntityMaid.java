@@ -15,8 +15,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.inventory.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -88,7 +90,6 @@ import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -130,32 +131,19 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String EXPERIENCE_TAG = "MaidExperience";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
-
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private static int PLAYER_HURT_SOUND_COUNT = 120;
-    private static int PICKUP_SOUND_COUNT = 5;
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
-    private final EntityHandsInvWrapper handsInvWrapper = new EntityHandsInvWrapper(this) {
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return canInsertItem(stack);
-        }
-    };
-    private final ItemStackHandler maidInv = new ItemStackHandler(36) {
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return canInsertItem(stack);
-        }
-    };
+    private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
+    private final ItemStackHandler maidInv = new MaidBackpackHandler(36);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
 
     public boolean guiOpening = false;
-    /**
-     * 用于替换背包延时的参数
-     */
-    private int backpackDelay = 0;
+
     private IMaidTask task = TaskManager.getIdleTask();
+    private int playerHurtSoundCount = 120;
+    private int pickupSoundCount = 5;
+    private int backpackDelay = 0;
 
     protected EntityMaid(EntityType<EntityMaid> type, World world) {
         super(type, world);
@@ -244,8 +232,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (backpackDelay > 0) {
             backpackDelay--;
         }
-        if (PLAYER_HURT_SOUND_COUNT > 0) {
-            PLAYER_HURT_SOUND_COUNT--;
+        if (playerHurtSoundCount > 0) {
+            playerHurtSoundCount--;
         }
         this.spawnPortalParticle();
         this.randomRestoreHealth();
@@ -365,10 +353,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.take(entityItem, count - itemstack.getCount());
                 if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                    PICKUP_SOUND_COUNT--;
-                    if (PICKUP_SOUND_COUNT == 0) {
+                    pickupSoundCount--;
+                    if (pickupSoundCount == 0) {
                         this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                        PICKUP_SOUND_COUNT = 5;
+                        pickupSoundCount = 5;
                     }
                 }
                 // 如果遍历塞完后发现为空了
@@ -390,10 +378,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.take(entityXPOrb, 1);
             if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                PICKUP_SOUND_COUNT--;
-                if (PICKUP_SOUND_COUNT == 0) {
+                pickupSoundCount--;
+                if (pickupSoundCount == 0) {
                     this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                    PICKUP_SOUND_COUNT = 5;
+                    pickupSoundCount = 5;
                 }
             }
 
@@ -419,10 +407,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             powerPoint.take(this, 1);
             if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                PICKUP_SOUND_COUNT--;
-                if (PICKUP_SOUND_COUNT == 0) {
+                pickupSoundCount--;
+                if (pickupSoundCount == 0) {
                     this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                    PICKUP_SOUND_COUNT = 5;
+                    pickupSoundCount = 5;
                 }
             }
 
@@ -460,10 +448,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.take(arrow, 1);
                 if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                    PICKUP_SOUND_COUNT--;
-                    if (PICKUP_SOUND_COUNT == 0) {
+                    pickupSoundCount--;
+                    if (pickupSoundCount == 0) {
                         this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                        PICKUP_SOUND_COUNT = 5;
+                        pickupSoundCount = 5;
                     }
                 }
                 arrow.remove();
@@ -771,7 +759,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Nullable
     @Override
     public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
-        return new MaidInventory(id, inventory, getId());
+        return new MaidMainContainer(id, inventory, getId());
     }
 
     private boolean openMaidGui(PlayerEntity player) {
@@ -840,9 +828,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         if (damageSourceIn.isFire()) {
             return InitSounds.MAID_HURT_FIRE.get();
         } else if (damageSourceIn.getEntity() instanceof PlayerEntity) {
-            // fixme：当前存在问题，呼喊声还是会叠加播放
-            if (PLAYER_HURT_SOUND_COUNT == 0) {
-                PLAYER_HURT_SOUND_COUNT = 120;
+            if (playerHurtSoundCount == 0) {
+                playerHurtSoundCount = 120;
                 return InitSounds.MAID_PLAYER.get();
             } else {
                 return null;
@@ -919,8 +906,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         backpackDelay = 20;
     }
 
-    public boolean backpackNoDelay() {
-        return backpackDelay <= 0;
+    public boolean backpackHasDelay() {
+        return backpackDelay > 0;
     }
 
     public String getModelId() {

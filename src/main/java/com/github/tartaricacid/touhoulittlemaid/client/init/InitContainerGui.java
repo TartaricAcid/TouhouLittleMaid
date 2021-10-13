@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidInventoryGui;
-import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidMainContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,6 +12,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public final class InitContainerGui {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent evt) {
-        evt.enqueueWork(() -> ScreenManager.register(MaidInventory.TYPE, MaidInventoryGui::new));
+        evt.enqueueWork(() -> ScreenManager.register(MaidMainContainer.TYPE, MaidMainContainerGui::new));
     }
 }

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
-import com.github.tartaricacid.touhoulittlemaid.inventory.AltarItemHandler;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.AltarItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.PosListData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

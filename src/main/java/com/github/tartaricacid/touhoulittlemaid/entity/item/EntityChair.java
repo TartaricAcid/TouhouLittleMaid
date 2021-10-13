@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -28,6 +30,9 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 public class EntityChair extends AbstractEntityFromItem {
     public static final EntityType<EntityChair> TYPE = EntityType.Builder.<EntityChair>of(EntityChair::new, EntityClassification.MISC)
@@ -36,10 +41,12 @@ public class EntityChair extends AbstractEntityFromItem {
     private static final DataParameter<String> MODEL_ID = EntityDataManager.defineId(EntityChair.class, DataSerializers.STRING);
     private static final DataParameter<Float> MOUNTED_HEIGHT = EntityDataManager.defineId(EntityChair.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> TAMEABLE_CAN_RIDE = EntityDataManager.defineId(EntityChair.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(EntityChair.class, DataSerializers.OPTIONAL_UUID);
 
     private static final String MODEL_ID_TAG = "ModelId";
     private static final String MOUNTED_HEIGHT_TAG = "MountedHeight";
     private static final String TAMEABLE_CAN_RIDE_TAG = "TameableCanRide";
+    private static final String OWNER_UUID_TAG = "OwnerUUID";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
@@ -63,6 +70,7 @@ public class EntityChair extends AbstractEntityFromItem {
         this.entityData.define(MODEL_ID, DEFAULT_MODEL_ID);
         this.entityData.define(MOUNTED_HEIGHT, 0f);
         this.entityData.define(TAMEABLE_CAN_RIDE, true);
+        this.entityData.define(OWNER_UUID, Optional.empty());
     }
 
     @Override
@@ -134,8 +142,10 @@ public class EntityChair extends AbstractEntityFromItem {
 
     @Override
     protected boolean canKillEntity(PlayerEntity player) {
-        // TODO: 需要配置文件修改
-        return true;
+        if (ChairConfig.CHAIR_CAN_DESTROYED_BY_ANYONE.get()) {
+            return true;
+        }
+        return this.getOwnerUUID().map(uuid -> player.getUUID().equals(uuid)).orElse(true);
     }
 
     @Override
@@ -160,6 +170,9 @@ public class EntityChair extends AbstractEntityFromItem {
         if (compound.contains(TAMEABLE_CAN_RIDE_TAG, Constants.NBT.TAG_BYTE)) {
             setTameableCanRide(compound.getBoolean(TAMEABLE_CAN_RIDE_TAG));
         }
+        if (compound.contains(OWNER_UUID_TAG)) {
+            setOwnerUUID(NBTUtil.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG))));
+        }
     }
 
     @Override
@@ -168,6 +181,7 @@ public class EntityChair extends AbstractEntityFromItem {
         compound.putString(MODEL_ID_TAG, getModelId());
         compound.putFloat(MOUNTED_HEIGHT_TAG, getMountedHeight());
         compound.putBoolean(TAMEABLE_CAN_RIDE_TAG, isTameableCanRide());
+        this.getOwnerUUID().ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG, uuid));
     }
 
     @Nullable
@@ -200,6 +214,20 @@ public class EntityChair extends AbstractEntityFromItem {
 
     public void setTameableCanRide(boolean canRide) {
         this.entityData.set(TAMEABLE_CAN_RIDE, canRide);
+    }
+
+    public Optional<UUID> getOwnerUUID() {
+        return this.entityData.get(OWNER_UUID);
+    }
+
+    public void setOwnerUUID(@Nullable UUID uuid) {
+        this.entityData.set(OWNER_UUID, Optional.ofNullable(uuid));
+    }
+
+    public void setOwner(@Nullable PlayerEntity player) {
+        if (player != null) {
+            this.setOwnerUUID(player.getUUID());
+        }
     }
 
     public boolean hasPassenger() {

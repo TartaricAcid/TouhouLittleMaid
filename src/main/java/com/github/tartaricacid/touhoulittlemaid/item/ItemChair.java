@@ -88,6 +88,7 @@ public class ItemChair extends Item {
         chair.setMountedHeight(data.getHeight());
         chair.setTameableCanRide(data.isCanRide());
         chair.setNoGravity(data.isNoGravity());
+        chair.setOwner(context.getPlayer());
         float yaw = (float) MathHelper.floor((MathHelper.wrapDegrees(context.getRotation() - 180) + 22.5F) / 45.0F) * 45.0F;
         chair.moveTo(chair.getX(), chair.getY(), chair.getZ(), yaw, 0.0F);
         chair.setYBodyRot(yaw);

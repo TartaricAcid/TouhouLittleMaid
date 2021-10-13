@@ -7,7 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskBut
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.inventory.MaidInventory;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
@@ -34,7 +34,7 @@ import java.util.function.Predicate;
 import static com.github.tartaricacid.touhoulittlemaid.util.GuiTools.NO_ACTION;
 import static net.minecraftforge.fml.client.gui.GuiUtils.drawHoveringText;
 
-public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
+public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
     private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_backpack.png");
@@ -55,7 +55,7 @@ public class MaidInventoryGui extends ContainerScreen<MaidInventory> {
     private ScheduleButton scheduleButton;
     private boolean taskListOpen;
 
-    public MaidInventoryGui(MaidInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public MaidMainContainerGui(MaidMainContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.imageHeight = 256;
         this.imageWidth = 256;

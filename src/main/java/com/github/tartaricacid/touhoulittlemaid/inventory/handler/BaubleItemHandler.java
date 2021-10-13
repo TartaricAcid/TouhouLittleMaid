@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.inventory;
+package com.github.tartaricacid.touhoulittlemaid.inventory.handler;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;

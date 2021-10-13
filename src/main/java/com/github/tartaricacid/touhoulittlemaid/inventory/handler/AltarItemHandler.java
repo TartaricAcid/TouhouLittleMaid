@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.inventory;
+package com.github.tartaricacid.touhoulittlemaid.inventory.handler;
 
 import net.minecraftforge.items.ItemStackHandler;
 
