@@ -1,0 +1,20 @@
+{
+  "sortnum": 2,
+  "name": "女仆工作模式",
+  "icon": "minecraft:writable_book",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "当你打开女仆的 GUI 时，你可以找到切换工作模式的按钮，点击即可切换女仆的工作模式。$(br2)你还可以点击日程表按钮来切换女仆的日程，让其在不同的时间工作、休息或者睡觉"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/schedule_button.png",
+        "touhou_little_maid:textures/book/task_button.png"
+      ],
+      "text": "点击图中右下角按钮切换图片"
+    }
+  ]
+}

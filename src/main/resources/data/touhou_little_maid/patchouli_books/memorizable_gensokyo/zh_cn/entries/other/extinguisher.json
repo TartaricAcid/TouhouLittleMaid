@@ -1,0 +1,13 @@
+{
+  "sortnum": 3,
+  "name": "灭火器",
+  "icon": "touhou_little_maid:extinguisher",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:extinguisher",
+      "text": "配合女仆灭火模式进行使用的物品，玩家无法使用。"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "sortnum": 9,
+  "name": "命名彩蛋",
+  "icon": "minecraft:name_tag",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "特殊命名的女仆能够显示特殊模型，默认情况下，使用 $(#ff0000)=>玩家ID$() 命名的女仆能变成该 ID 对应的玩家皮肤模型。$(br2)女仆资源包也可以添加自定义的模型彩蛋，甚至是 SHA1 加密过的模型彩蛋。"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/nametag.png"
+      ],
+      "text": "命名为 $(#ff0000)=>Notch$() 的女仆模型。"
+    }
+  ]
+}

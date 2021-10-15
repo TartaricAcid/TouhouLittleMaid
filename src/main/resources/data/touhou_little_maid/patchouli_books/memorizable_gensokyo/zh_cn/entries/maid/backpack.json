@@ -1,0 +1,20 @@
+{
+  "sortnum": 7,
+  "name": "女仆背包",
+  "icon": "touhou_little_maid:maid_backpack_small",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_backpack_middle",
+      "text": "背包能够拓展女仆的物品栏。只需要手持背包右击女仆即可装备上对应的背包。背包拥有三种不同等级。$(br2)使用剪刀来移除女仆的背包。"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/backpack.png"
+      ],
+      "text": "装备了小背包的女仆"
+    }
+  ]
+}

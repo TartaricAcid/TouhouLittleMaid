@@ -1,0 +1,19 @@
+{
+  "sortnum": 3,
+  "name": "御币与弹幕",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:hakurei_gohei",
+      "link_recipe": true,
+      "text": "御币是一个普通的近战武器。$(br2)手持御币的女仆，在弹幕模式下会发射弹幕。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:hakurei_gohei",
+      "text": "御币还是构建多方块祭坛的重要工具。"
+    }
+  ]
+}

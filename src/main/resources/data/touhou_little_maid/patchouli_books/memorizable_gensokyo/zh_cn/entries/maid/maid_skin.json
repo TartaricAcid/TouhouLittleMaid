@@ -1,0 +1,19 @@
+{
+  "sortnum": 3,
+  "name": "女仆皮肤",
+  "icon": "minecraft:writable_book",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "女仆的皮肤可以完全自定义，你也可以直接在游戏内切换女仆的皮肤。$(br2)你可以添加第三方的模型包来拓展女仆的皮肤。$(br2)只需要使用 $(l:https://blockbench.net/)Blockbench$(/l) 就能轻松创建你自己的模型包。模型包只需要放在游戏目录下的 $(#f00)tlm_custom_pack$() 文件夹中即可加载。"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/skin.png"
+      ],
+      "text": "点击图中按钮打开女仆皮肤切换界面。"
+    }
+  ]
+}

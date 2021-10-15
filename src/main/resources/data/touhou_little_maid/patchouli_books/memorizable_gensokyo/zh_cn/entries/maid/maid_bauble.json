@@ -1,0 +1,16 @@
+{
+  "sortnum": 4,
+  "name": "女仆饰品",
+  "icon": "touhou_little_maid:ultramarine_orb_elixir",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "本模组添加了数个饰品，当女仆在特定情况下时会触发这些饰品来保护她。$(li)绀珠之药：能够避免6次女仆的死亡。"
+    },
+    {
+      "type": "text",
+      "text": "$(li)保护饰品：当女仆受到对应伤害时，能够触发对应的保护。$(li)闪避布：当女仆被弹射物攻击时，行为将会和末影人一致。"
+    }
+  ]
+}

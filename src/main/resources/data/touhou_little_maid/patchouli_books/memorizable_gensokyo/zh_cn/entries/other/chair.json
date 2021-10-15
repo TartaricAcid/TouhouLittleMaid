@@ -1,0 +1,17 @@
+{
+  "sortnum": 1,
+  "name": "自定义坐垫",
+  "icon": "touhou_little_maid:chair{ModelId:'touhou_little_maid:cat_cart'}",
+  "category": "other",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:chair",
+      "text": "自定义坐垫是纯装饰向的物品，直接右击放置在地上，shift 左击能够打掉它。右击能够坐上，shift 右击可以打开切换坐垫样式的 GUI。"
+    },
+    {
+      "type": "text",
+      "text": "部分坐垫在女仆靠近时可以直接坐上，shift 右击女仆能够使其离开坐垫。$(br2)坐垫模型也可以完全自定义，也可通过资源包快捷添加自定义模型。"
+    }
+  ]
+}
