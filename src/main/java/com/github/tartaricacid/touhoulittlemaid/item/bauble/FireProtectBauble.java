@@ -6,6 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityExtinguishingA
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -27,6 +29,7 @@ public class FireProtectBauble implements IMaidBauble {
                 ItemStack stack = maid.getMaidBauble().getStackInSlot(slot);
                 stack.hurtAndBreak(1, maid, m -> maid.sendItemBreakMessage(stack));
                 maid.getMaidBauble().setStackInSlot(slot, stack);
+                maid.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 300));
                 if (!maid.level.isClientSide) {
                     maid.level.addFreshEntity(new EntityExtinguishingAgent(maid.level, maid.position()));
                 }

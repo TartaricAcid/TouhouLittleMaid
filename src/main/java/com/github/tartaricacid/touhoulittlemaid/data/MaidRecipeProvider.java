@@ -5,10 +5,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ForgeRecipeProvider;
+import vazkii.patchouli.common.item.PatchouliItems;
 
 import java.util.function.Consumer;
 
@@ -36,6 +38,10 @@ public class MaidRecipeProvider extends ForgeRecipeProvider {
                 .pattern("WWW")
                 .pattern("IPI")
                 .unlockedBy("chair", has(Blocks.WATER))
+                .save(consumer);
+        ShapelessRecipeBuilder.shapeless(PatchouliItems.book)
+                .requires(Tags.Items.DYES_WHITE).requires(Tags.Items.DYES_RED).requires(Items.BOOK)
+                .unlockedBy("book", has(Items.BOOK))
                 .save(consumer);
     }
 }

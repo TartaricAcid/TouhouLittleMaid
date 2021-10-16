@@ -28,6 +28,7 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         // 读取默认模型，用于清除不存在模型的缓存残留
+        // TODO: 2021/10/16 玩家 Shift 时渲染其碰撞箱
         CustomPackLoader.CHAIR_MODELS.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.model = model);
         CustomPackLoader.CHAIR_MODELS.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
         this.mainAnimations = null;
