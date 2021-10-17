@@ -23,6 +23,8 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
+
 public class LayerMaidBipedHead extends LayerRenderer<EntityMaid, BedrockModel<EntityMaid>> {
     private static final String SKULL_OWNER_TAG = "SkullOwner";
     private final EntityMaidRenderer maidRenderer;
@@ -55,6 +57,7 @@ public class LayerMaidBipedHead extends LayerRenderer<EntityMaid, BedrockModel<E
         }
     }
 
+    @Nullable
     private GameProfile getSkullGameProfile(ItemStack head) {
         GameProfile gameProfile = null;
         if (head.hasTag()) {

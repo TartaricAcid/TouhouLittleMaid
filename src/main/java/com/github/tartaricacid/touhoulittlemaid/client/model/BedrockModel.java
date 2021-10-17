@@ -17,8 +17,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.IHasArm;
-import net.minecraft.client.renderer.entity.model.IHasHead;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.HandSide;
@@ -35,7 +33,7 @@ import java.util.List;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
-public class BedrockModel<T extends LivingEntity> extends EntityModel<T> implements IHasArm, IHasHead {
+public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -308,7 +306,6 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
         modelRenderer.zRot = z;
     }
 
-    @Override
     public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {
         ModelRenderer arm = getArm(sideIn);
         if (arm != null) {
@@ -333,7 +330,6 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> impleme
         return modelMap.containsKey("head");
     }
 
-    @Override
     public ModelRenderer getHead() {
         return modelMap.get("head").getModelRenderer();
     }
