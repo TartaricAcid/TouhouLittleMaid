@@ -96,6 +96,7 @@ public class ItemChair extends Item {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
             for (String key : CustomPackLoader.CHAIR_MODELS.getModelIdSet()) {
