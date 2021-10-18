@@ -5,18 +5,21 @@
 <p align="center">A Minecraft Forge mod about the maid</p>
 <p align="center">
     <a href="https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid">
-		<img src="http://cf.way2muchnoise.eu/full_touhou-little-maid_downloads.svg" alt="CurseForge Download">
-	</a>
+        <img src="http://cf.way2muchnoise.eu/full_touhou-little-maid_downloads.svg" alt="CurseForge Download">
+    </a>
     <img src="https://img.shields.io/badge/license-MIT%2FCC%20BY--NC--SA%204.0-green" alt="License">
     <a href="https://discord.gg/re4xQtb">
         <img src="https://img.shields.io/discord/316493876103872512?logo=discord" alt="chat on Discord">
+    </a>
+    <a href="https://crowdin.com/project/touhoulittlemaid116">
+        <img src="https://badges.crowdin.net/touhoulittlemaid116/localized.svg" alt="translate on Crowdin">
     </a>
 </p>
 <p align="center">
     <a href="https://github.com/TartaricAcid/TouhouLittleMaid/discussions">Discussions</a>    ·
     <a href="https://github.com/TartaricAcid/TouhouLittleMaid/issues">Report Bug</a>    ·
     <a href="https://github.com/TartaricAcid/TouhouLittleMaid/releases">View Release</a>
-  </p>
+</p>
 <p align="center">
     <a href="#">English</a> | 
     <a href="#">简体中文</a> | 
