@@ -1,15 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -42,12 +38,7 @@ public class MaidTaskMessage {
                 }
                 Entity entity = sender.level.getEntity(message.id);
                 if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
-                    if (sender.isCreative() || MaidConfig.MAID_CHANGE_MODEL.get()) {
-                        ((EntityMaid) entity).setTask(TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask()));
-                    } else {
-                        sender.sendMessage(new TranslationTextComponent("message.touhou_little_maid.change_model.disabled"),
-                                ChatType.GAME_INFO, Util.NIL_UUID);
-                    }
+                    ((EntityMaid) entity).setTask(TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask()));
                 }
             });
         }

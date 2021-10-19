@@ -537,6 +537,7 @@ public class CustomPackLoader {
         getLanguageMap(zipFile, newLangData, currentLangPath);
 
         newLangData.putAll(oldLangData);
+        // FIXME: 2021/10/17 和 Untranslated Items 模组冲突
         ((ClientLanguageMap) LanguageMap.getInstance()).storage = newLangData;
     }
 
@@ -552,6 +553,7 @@ public class CustomPackLoader {
         getLanguageMap(rootPath, newLangData, currentLangPath);
 
         newLangData.putAll(oldLangData);
+        // FIXME: 2021/10/17 和 Untranslated Items 模组冲突
         ((ClientLanguageMap) LanguageMap.getInstance()).storage = newLangData;
     }
 
