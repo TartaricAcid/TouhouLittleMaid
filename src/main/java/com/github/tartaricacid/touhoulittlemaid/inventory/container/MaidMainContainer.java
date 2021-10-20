@@ -169,7 +169,7 @@ public class MaidMainContainer extends Container {
         ItemStack stack1 = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
-            ItemStack stack2 = slot.getItem();
+            ItemStack stack2 = slot.getItem().copy();
             stack1 = stack2.copy();
             if (index < PLAYER_INVENTORY_SIZE) {
                 if (!this.moveItemStackTo(stack2, PLAYER_INVENTORY_SIZE, this.slots.size(), false)) {
