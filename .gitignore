@@ -26,3 +26,8 @@ generated
 # Files from Forge MDK
 forge*changelog.txt
 logs
+
+# vuepress
+node_modules
+.temp
+.cache
