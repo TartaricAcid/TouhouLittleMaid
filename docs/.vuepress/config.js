@@ -11,7 +11,7 @@ module.exports = {
                 ariaLabel: 'Languages',
                 nav: [{
                     text: 'Home',
-                    link: './en/'
+                    link: './'
                 }, {
                     text: 'GitHub',
                     link: 'https://github.com/TartaricAcid/TouhouLittleMaid'
@@ -31,7 +31,7 @@ module.exports = {
                 label: '简体中文',
                 nav: [{
                     text: '主页',
-                    link: './zh/'
+                    link: './'
                 }, {
                     text: 'GitHub',
                     link: 'https://github.com/TartaricAcid/TouhouLittleMaid'
