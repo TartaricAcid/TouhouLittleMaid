@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: ./.vuepress/public/title.png
+heroImage: /.vuepress/public/title.png
 heroText: Touhou Little Maid Dev Wiki
 tagline: There is a wiki related to Touhou Little Maid mod development
 actionText: Get Started →
