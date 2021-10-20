@@ -1,6 +1,5 @@
 ---
 home: true
-heroImage: /.vuepress/public/title.png
 heroText: Touhou Little Maid Dev Wiki
 tagline: There is a wiki related to Touhou Little Maid mod development
 actionText: Get Started →
@@ -14,3 +13,4 @@ features:
   details: How to compat Touhou Little Maid mod, or develop an addition
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---
+![title](./.vuepress/public/title.png)
