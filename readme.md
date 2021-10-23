@@ -18,7 +18,8 @@
 <p align="center">
     <a href="https://github.com/TartaricAcid/TouhouLittleMaid/discussions">Discussions</a>    ·
     <a href="https://github.com/TartaricAcid/TouhouLittleMaid/issues">Report Bug</a>    ·
-    <a href="https://github.com/TartaricAcid/TouhouLittleMaid/releases">View Release</a>
+    <a href="https://github.com/TartaricAcid/TouhouLittleMaid/releases">View Release</a>    ·
+    <a href="http://page.cfpa.team/TouhouLittleMaid/">Wiki</a>
 </p>
 <p align="center">
     <a href="#">English</a> | 
