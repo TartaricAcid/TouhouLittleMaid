@@ -5,7 +5,7 @@ module.exports = {
     base: '/TouhouLittleMaid/',
     themeConfig: {
         locales: {
-            '/en/': {
+            '/': {
                 selectText: 'Languages',
                 label: 'English',
                 ariaLabel: 'Languages',
@@ -22,7 +22,9 @@ module.exports = {
                 sidebar: [{
                     title: 'Collapse',
                     children: [
-                        ['./en/', 'Home']
+                        ['./', 'Home'],
+                        ['./custom_model_pack', 'Custom Model Pack'],
+                        ['./maid_model_pack_details', 'Maid Model Pack Details']
                     ]
                 }]
             },
@@ -49,7 +51,7 @@ module.exports = {
         }
     },
     locales: {
-        '/en/': {
+        '/': {
             lang: 'en-US',
             title: 'Touhou Little Maid Dev Wiki',
             description: 'There is a wiki related to Touhou Little Maid mod development'
