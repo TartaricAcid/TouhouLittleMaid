@@ -47,7 +47,7 @@ The model supports JSON files with comments, please use at your discretion.
     ],
     // Description for model packs
     "description": [
-        "Default Texture Pack"
+        "Default Model Packs"
     ],
     // Model pack version
     "version": "1.0.0",
@@ -108,7 +108,7 @@ For the example above, `model_id` is `touhou_little_maid:hakurei_reimu`, then th
 
 If we filled the field for `model` or `texture`, then the content has no limit, and can even share a model or texture for multiple characters.
 
-## Animated icon
+## Animated Icon
 Icon does not have size limit, supports both static and animated icons.
 
 Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon that is not 1:1 scale, will be displayed slowly with a 0.1 second interval, which creates the animated effect.
@@ -122,7 +122,7 @@ The image below is the icon in the mod, left is static icon, and right is the an
 ## Model Files
 
 - This mod is using JSON files in Bedrock `1.10.0` or `1.12.0` for model loading, the document can be exported via model building software [Blockbench](https://blockbench.net/), without additional edits.
-- There are many preset animations, you only need to name a specific group, and then the plugin will automatically generate the corresponding animation script reference when exporting the model. For all available names, please see the [Preset Animation](/preset_animation) chapter.
+- There are many preset animations, you only need to name a specific group, and then the plugin will automatically generate the corresponding animation script reference when exporting the model. For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
 - Model also support JavaScript custom animations, you can find the introduction in the custom animation chapter.
 
 ## Internationlization
@@ -145,7 +145,7 @@ and then under model pack namespace, in the `lang` folder we create `en_us.lang`
 
 ```properties
 pack.vanilla_touhou_model.name=Vanilla Touhou Model
-pack.vanilla_touhou_model.desc=Default Model Pack
+pack.vanilla_touhou_model.desc=Default Model Packs
 ```
 
 We only added the English file, but if we want to support Chinese, we can create `zh_cn.lang` file and write the content as below:
@@ -166,9 +166,9 @@ Since models made by some authors are more unique, they may have some compabilit
 |                     Issues                      |                           Solution                           |
 | :---------------------------------------------: | :----------------------------------------------------------: |
 |             Uncoordinated animation             |          Write a custom JavaScript animation script          |
-|      Hold items are in incorrect position       |          Use positional bone to define the position          |
-|           Disable showing hold items            | As long as `armLeft` or `armRight` bone does not exist, then the corresponding hold items will not be shown |
-|        Backpack is in incorrect position        |          Use positional bone to define the position          |
+|      Hold items are in incorrect position       |          Use positional group to define the position          |
+|           Disable showing hold items            | As long as `armLeft` or `armRight` group does not exist, then the corresponding hold items will not be shown |
+|        Backpack is in incorrect position        |          Use positional group to define the position          |
 | Backpack, trolley, vehicles, broom, custom head | Write some fields as shown in the example below to close it  |
 
 ```json {5-10}

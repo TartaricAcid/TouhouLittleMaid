@@ -36,7 +36,7 @@ The game will automatically render left-handed items based on this group name, n
 ### `armLeftVertical`
 |                  Animation Reference Path                   |                            Effect                            |
 | :---------------------------------------------------------: | :----------------------------------------------------------: |
-| `touhou_little_maid:animation/maid/default/arm/vertical.js` | When walking, the bone is always perpendicular to the `armLeft` |
+| `touhou_little_maid:animation/maid/default/arm/vertical.js` | When walking, the group is always perpendicular to the `armLeft` |
 
 ### `armLeftExtraA`
 |                 Animation Reference Path                 |                         Effect                          |
@@ -53,7 +53,7 @@ The game will automatically render left-handed items based on this group name, n
 ### `armRightVertical`
 |                  Animation Reference Path                   |                            Effect                            |
 | :---------------------------------------------------------: | :----------------------------------------------------------: |
-| `touhou_little_maid:animation/maid/default/arm/vertical.js` | When walking, the bone is always perpendicular to the`armRight` |
+| `touhou_little_maid:animation/maid/default/arm/vertical.js` | When walking, the group is always perpendicular to the`armRight` |
 
 ### `armRightExtraA`
 |                 Animation Reference Path                 |                          Effect                          |
@@ -69,7 +69,7 @@ The game will automatically render left-handed items based on this group name, n
 ### `legLeftVertical`
 |                  Animation Reference Path                   |                            Effect                            |
 | :---------------------------------------------------------: | :----------------------------------------------------------: |
-| `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the bone is always perpendicular to the`legLeft` |
+| `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the group is always perpendicular to the`legLeft` |
 
 ### `legLeftExtraA`
 |                 Animation Reference Path                 |                        Effect                        |
@@ -85,7 +85,7 @@ The game will automatically render left-handed items based on this group name, n
 ### `legRightVertical`
 |                  Animation Reference Path                   |                            Effect                            |
 | :---------------------------------------------------------: | :----------------------------------------------------------: |
-| `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the bone is always perpendicular to the`legRight` |
+| `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the group is always perpendicular to the`legRight` |
 
 ### `legRightExtraA`
 |                 Animation Reference Path                 |                        Effect                         |
@@ -874,8 +874,8 @@ Preset animation for all, pay attention to the case of the group name.
 | :---------------------------------------------------------: | :----------------------------------------------------------: |
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the system |
 
-## Positioning Bone
-For rendering positioning,  based on the pivot point of the group, can be empty.
+## Positioning Group
+For rendering positioning, based on the pivot point of the group, can be empty.
 ### `armLeftPositioningBone`
 
 Position the left-handed item, its parent group must be `armLeft`
