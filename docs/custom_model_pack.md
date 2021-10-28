@@ -44,7 +44,7 @@ Need to pay attention to several points:
 
 1. The maid animation is automatically added based on the **group name**, so please do not delete or rename at will. 
 
-   > Want to know what group names are available? Please see the xxx.
+   > Want to know what group names are available? Please see the [Preset Animation](/preset_animation) chapter.
 
 2. Pay attention to the parent-child relationship of the group.
 

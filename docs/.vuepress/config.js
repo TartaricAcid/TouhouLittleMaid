@@ -24,7 +24,8 @@ module.exports = {
                     children: [
                         ['./', 'Home'],
                         ['./custom_model_pack', 'Custom Model Pack'],
-                        ['./maid_model_pack_details', 'Maid Model Pack Details']
+                        ['./maid_model_pack_details', 'Maid Model Pack Details'],                        
+                        ['./preset_animation', 'Preset Animation']
                     ]
                 }]
             },

@@ -74,7 +74,7 @@ The model supports JSON files with comments, please use at your discretion.
             "description": [
                 "Shrine Maiden of Hakurei"
             ],
-            // Animation script reference, without this part, model will not have any animation
+            // Animation script reference, without this part, model will have some default animations
             // tlm-utils plugins can auto generate the correct animation reference based on the group name
             "animation": [
                 "touhou_little_maid:animation/maid.default.js"
@@ -122,7 +122,7 @@ The image below is the icon in the mod, left is static icon, and right is the an
 ## Model Files
 
 - This mod is using JSON files in Bedrock `1.10.0` or `1.12.0` for model loading, the document can be exported via model building software [Blockbench](https://blockbench.net/), without additional edits.
-- There are many preset animations, you only need to name a specific group, and then the plugin will automatically generate the corresponding animation script reference when exporting the model. For all available names, please see the xxx chapter.
+- There are many preset animations, you only need to name a specific group, and then the plugin will automatically generate the corresponding animation script reference when exporting the model. For all available names, please see the [Preset Animation](/preset_animation) chapter.
 - Model also support JavaScript custom animations, you can find the introduction in the custom animation chapter.
 
 ## Internationlization
