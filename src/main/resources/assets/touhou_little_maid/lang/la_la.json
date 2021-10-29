@@ -22,5 +22,20 @@
   "task.touhou_little_maid.grass": "Herba",
   "task.touhou_little_maid.milk": "Iac",
   "task.touhou_little_maid.torch": "Fax",
-  "patchouli.touhou_little_maid.book.name": "Memoria de Gensocio"
+  "patchouli.touhou_little_maid.book.name": "Memoria de Gensocio",
+  "patchouli.touhou_little_maid.book.categories.maid.name": "Ancilla",
+  "patchouli.touhou_little_maid.book.categories.other.name": "Alter",
+  "patchouli.touhou_little_maid.book.entries.maid.backpack.name": "Saccus",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_base.name": "Basis de Ancilla",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_sound.name": "Sonus de Ancilla",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_task.name": "Negotium de Ancilla",
+  "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.name": "Ovis de Nomine",
+  "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name": "Dizo Subrogare",
+  "patchouli.touhou_little_maid.book.entries.other.maid_bed.name": "Lectus Ancillae",
+  "patchouli.touhou_little_maid.book.entries.other.power_point.name": "Punctum de Potentiis",
+  "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.name": "Gopeis et Dammacum",
+  "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.name": "Ara de Massis Multis",
+  "patchouli.touhou_little_maid.book.entries.overview.power_point.name": "Punctum de Potentiis",
+  "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.name": "Toho Inceptum",
+  "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.text": "Toho Inceptum ludus series Iaponiae dozinis Solo ZYNE, qui est in Iugo Sianharum Alis, de pampinis est."
 }
