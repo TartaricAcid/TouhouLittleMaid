@@ -36,7 +36,7 @@ module.exports = {
                     ]
                 }]
             },
-            '/zh/': {
+            '/zh_CN/': {
                 selectText: '选择语言',
                 label: '简体中文',
                 lastUpdated: '上次更新',
@@ -53,7 +53,7 @@ module.exports = {
                 sidebar: [{
                     title: '自定义模型',
                     children: [
-                        ['./zh/', '主页']
+                        ['./zh_CN/', '主页']
                     ]
                 }]
             }
@@ -65,7 +65,7 @@ module.exports = {
             title: 'Touhou Little Maid Dev Wiki',
             description: 'There is a wiki related to Touhou Little Maid mod development'
         },
-        '/zh/': {
+        '/zh_CN/': {
             lang: 'zh-CN',
             title: 'Touhou Little Maid 开发 Wiki',
             description: '有关于车万女仆的开发文档'
