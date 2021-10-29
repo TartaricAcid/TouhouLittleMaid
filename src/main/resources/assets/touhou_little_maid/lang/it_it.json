@@ -51,5 +51,11 @@
   "task.touhou_little_maid.milk": "Latte",
   "task.touhou_little_maid.torch": "Torcia",
   "task.touhou_little_maid.feed_animal": "Alleva",
-  "task.touhou_little_maid.extinguishing": "Spegni"
+  "task.touhou_little_maid.extinguishing": "Spegni",
+  "patchouli.touhou_little_maid.book.entries.maid.backpack.name": "Zaino",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_config.name": "Configura Maid",
+  "patchouli.touhou_little_maid.book.entries.maid.mute_bauble.pages.0.text": "Dopo aver equipaggiato questo accessorio, la maid diventerà molto sileziosa.",
+  "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name": "Jizo Della Sostituzione",
+  "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Estintore",
+  "patchouli.touhou_little_maid.book.entries.other.maid_bed.name": "Letto da Maid"
 }
