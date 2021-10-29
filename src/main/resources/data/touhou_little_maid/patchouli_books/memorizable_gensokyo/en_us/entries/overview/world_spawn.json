@@ -1,18 +1,18 @@
 {
   "sortnum": 1,
-  "name": "World Spawn",
+  "name": "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name",
   "icon": "touhou_little_maid:fairy_spawn_egg",
   "category": "overview",
   "pages": [
     {
       "type": "text",
-      "text": "This mod adds one mobs. $(br2)The looting of mob are important crafting ingredient.$(br2)The chance of spawn hostile creatures in this mod can be modified in the configuration file. When set to 0, these monsters can be prohibited from spawn."
+      "text": "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.0.text"
     },
     {
       "type": "entity",
       "entity": "touhou_little_maid:fairy{OnGround:true}",
       "offset": 0.125,
-      "text": "Spawn in the any biome at night, it will fly and shoot danmaku to attack players or maids.",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text",
       "anchor": "fairy"
     }
   ]

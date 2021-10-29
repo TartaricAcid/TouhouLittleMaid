@@ -1,16 +1,16 @@
 {
   "sortnum": 4,
-  "name": "Maid Bauble",
+  "name": "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.name",
   "icon": "touhou_little_maid:ultramarine_orb_elixir",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "This mod provides several baubles that can be triggered to protect maids under certain conditions, they need to be place in the bauble inventory.$(li)Ultramarine Orb Elixir: Can be used 6 times to avoid a maid's death."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.pages.0.text"
     },
     {
       "type": "text",
-      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is canceled.$(li)Nimble Fabric: When a maid equipped with this bauble is hit by projectile, her behavior will be exactly the same as the enderman."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.pages.1.text"
     }
   ]
 }

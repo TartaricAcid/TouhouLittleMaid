@@ -4,5 +4,6 @@
   "model": "touhou_little_maid:memorizable_gensokyo",
   "creative_tab": "touhou_little_maid.main",
   "show_progress": false,
+  "i18n": true,
   "version": 1
 }

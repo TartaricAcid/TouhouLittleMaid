@@ -1,6 +1,6 @@
 {
   "sortnum": 3,
-  "name": "Gohei And Danmaku",
+  "name": "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.name",
   "icon": "touhou_little_maid:hakurei_gohei",
   "category": "overview",
   "pages": [
@@ -8,12 +8,12 @@
       "type": "spotlight",
       "item": "touhou_little_maid:hakurei_gohei",
       "link_recipe": true,
-      "text": "The gohei is a normal melee weapon.$(br2)The maid holding a gohei will shoot danmaku in danmaku task."
+      "text": "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.pages.0.text"
     },
     {
       "type": "crafting",
       "recipe": "touhou_little_maid:hakurei_gohei",
-      "text": "The gohei is an important tool for building a multi-block altar."
+      "text": "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.pages.1.text"
     }
   ]
 }

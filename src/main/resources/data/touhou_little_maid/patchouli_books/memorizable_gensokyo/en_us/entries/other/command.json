@@ -1,12 +1,12 @@
 {
   "sortnum": 2,
-  "name": "Command",
+  "name": "patchouli.touhou_little_maid.book.entries.other.command.name",
   "icon": "minecraft:command_block",
   "category": "other",
   "pages": [
     {
       "type": "text",
-      "text": "$(#f00)/tlm$(): This is the command provided by the mod$(br2)You can use it to set power, maid num, or reload the model package."
+      "text": "patchouli.touhou_little_maid.book.entries.other.command.pages.0.text"
     }
   ]
 }

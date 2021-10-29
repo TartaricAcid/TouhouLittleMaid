@@ -1,19 +1,19 @@
 {
   "sortnum": 9,
-  "name": "Naming Eggs",
+  "name": "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.name",
   "icon": "minecraft:name_tag",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "A specially named maid can display a special model.$(br2)By default, a maid named with $(#ff0000)=>id$() can become the player skin model corresponding to that id.$(br2)The maid resource pack can also add custom model eggs, even SHA1 encrypted model eggs."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.pages.0.text"
     },
     {
       "type": "image",
       "images": [
         "touhou_little_maid:textures/book/nametag.png"
       ],
-      "text": "Maid with the name $(#ff0000)=>Notch$()."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.pages.1.text"
     }
   ]
 }

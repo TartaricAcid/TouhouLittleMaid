@@ -1,6 +1,6 @@
 {
   "sortnum": 1,
-  "name": "Maid",
-  "description": "Introduced the basic functions of the maid",
+  "name": "patchouli.touhou_little_maid.book.categories.maid.name",
+  "description": "patchouli.touhou_little_maid.book.categories.maid.description",
   "icon": "touhou_little_maid:maid_spawn_egg"
 }

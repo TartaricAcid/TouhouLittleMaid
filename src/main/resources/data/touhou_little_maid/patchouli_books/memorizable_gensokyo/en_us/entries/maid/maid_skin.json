@@ -1,19 +1,19 @@
 {
   "sortnum": 3,
-  "name": "Maid Skin",
+  "name": "patchouli.touhou_little_maid.book.entries.maid.maid_skin.name",
   "icon": "minecraft:writable_book",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "The maids' skin is completely customizable, you can easily change the maids' skin in game.$(br2)you can also add a third-party resource pack to increase the style of the maid's skin.$(br2)Use the $(l:https://blockbench.net/)Blockbench$(/l) software to easily create your own maid skin resource pack, and place the package in the $(#f00)tlm_custom_pack$() folder under the game directory."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_skin.pages.0.text"
     },
     {
       "type": "image",
       "images": [
         "touhou_little_maid:textures/book/skin.png"
       ],
-      "text": "Click the button in the picture to open the maid skin GUI."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_skin.pages.1.text"
     }
   ]
 }

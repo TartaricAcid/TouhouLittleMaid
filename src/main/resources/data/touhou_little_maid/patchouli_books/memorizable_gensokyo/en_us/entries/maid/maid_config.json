@@ -1,12 +1,12 @@
 {
   "sortnum": 5,
-  "name": "Maid Config",
+  "name": "patchouli.touhou_little_maid.book.entries.maid.maid_config.name",
   "icon": "minecraft:writable_book",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "This mod adds a lot of configuration for maids. You can set some attributes of the maids, and limit the maximum number of maids that can be tamed by the player."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_config.pages.0.text"
     }
   ]
 }

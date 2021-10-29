@@ -1,13 +1,13 @@
 {
   "sortnum": 6,
-  "name": "Substitute Jizo",
+  "name": "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name",
   "icon": "touhou_little_maid:substitute_jizo",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:substitute_jizo",
-      "text": "Substitute jizo is a creative mode item that can be set to invincible mode when right-click the maid."
+      "text": "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.pages.0.text"
     }
   ]
 }
