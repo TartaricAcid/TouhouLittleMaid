@@ -20,5 +20,9 @@
   "tooltips.touhou_little_maid.chair.destroy.desc": "Golpeie segurando shift para destruí-lo.",
   "tooltips.touhou_little_maid.chair.gui.desc": "Shift + clique com o botão direito do mouse para abrir a lista de skin.",
   "tooltips.touhou_little_maid.substitute_jizo.desc": "Clique com o botão direito em uma Maid para torná-la invulnerável, apenas para no modo criativi",
-  "gui.touhou_little_maid.skin.text.version": "Versão: %s"
+  "gui.touhou_little_maid.skin.text.version": "Versão: %s",
+  "patchouli.touhou_little_maid.book.entries.maid.backpack.name": "Mochila",
+  "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name": "Substituto de Jizo",
+  "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Extintor",
+  "patchouli.touhou_little_maid.book.entries.other.maid_bed.name": "Cama de Maid"
 }
