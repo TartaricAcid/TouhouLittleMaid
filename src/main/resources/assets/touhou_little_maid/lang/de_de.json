@@ -47,5 +47,17 @@
   "task.touhou_little_maid.milk": "Melken",
   "task.touhou_little_maid.torch": "Fackel",
   "task.touhou_little_maid.feed_animal": "Art",
-  "task.touhou_little_maid.extinguishing": "Auslöschen"
+  "task.touhou_little_maid.extinguishing": "Auslöschen",
+  "patchouli.touhou_little_maid.book.categories.other.name": "Andere",
+  "patchouli.touhou_little_maid.book.entries.maid.backpack.name": "Rucksack",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_base.name": "Maid Basis",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_task.name": "Maid Aufgabe",
+  "patchouli.touhou_little_maid.book.entries.maid.mute_bauble.name": "Stumm Filter",
+  "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name": "Unverwundbarkeit",
+  "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Feuerlöscher",
+  "patchouli.touhou_little_maid.book.entries.other.maid_bed.name": "Maid Bett",
+  "patchouli.touhou_little_maid.book.entries.other.power_point.name": "Power Punkt",
+  "patchouli.touhou_little_maid.book.entries.overview.power_point.name": "Power Punkt",
+  "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.name": "Touhou Projekt",
+  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "Weltspawn"
 }
