@@ -21,11 +21,11 @@ It is not difficult to make a custom model package from scratch, even if you are
   
   Mainly used to edit language files, optional.
 
-In addition, I also wrote a blockbench plugin for exporting custom models, [click here](https://cdn.discordapp.com/attachments/760041309481336843/760044338239242240/tlm-utils.js) to download.
-
-:::warning
-The current plugin does not support Blockbench 4.x version, and do not change the name of the plugin.
-:::
+In addition, I also wrote a blockbench plugin for exporting custom models.
+| Version | Link | Remark |
+| :--: | :--: | :--: |
+| `1.0.5` | [Download](https://github.com/TartaricAcid/TLM-Utils-Plugins/releases/download/1.0.5/tlm-utils.js) | For Blockbench 4.x |
+| `1.0.4` | [Download](https://github.com/TartaricAcid/TLM-Utils-Plugins/releases/download/1.0.4/tlm-utils.js) | For Blockbench 3.x |
 
 # Quick Start
 
