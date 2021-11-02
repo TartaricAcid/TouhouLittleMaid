@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimati
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
+import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.FilePackTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.ZipPackTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.ChairModels;
@@ -50,7 +51,8 @@ import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 
 @OnlyIn(Dist.CLIENT)
 public class CustomPackLoader {
-    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
+    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .registerTypeAdapter(CubesItem.class, new CubesItem.Deserializer()).create();
     public static final MaidModels MAID_MODELS = MaidModels.getInstance();
     public static final ChairModels CHAIR_MODELS = ChairModels.getInstance();
     private static final String COMMENT_SYMBOL = "#";

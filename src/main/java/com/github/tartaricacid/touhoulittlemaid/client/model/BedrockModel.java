@@ -5,10 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.IAnimatio
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityChairWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityMaidWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.Description;
+import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -133,6 +130,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
             // 塞入 Cube List
             for (CubesItem cube : bones.getCubes()) {
                 List<Float> uv = cube.getUv();
+                @Nullable FaceUVsItem faceUv = cube.getFaceUv();
                 List<Float> size = cube.getSize();
                 @Nullable List<Float> cubeRotation = cube.getRotation();
                 boolean mirror = cube.isMirror();
@@ -140,20 +138,34 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
                 // 当做普通 cube 存入
                 if (cubeRotation == null) {
-                    model.cubes.add(new ModelFloatBox(uv.get(0), uv.get(1),
-                            convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2),
-                            size.get(0), size.get(1), size.get(2), inflate, inflate, inflate, mirror,
-                            texWidth, texHeight));
+                    if (faceUv == null) {
+                        model.cubes.add(new ModelFloatBox(uv.get(0), uv.get(1),
+                                convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate, mirror,
+                                texWidth, texHeight));
+                    } else {
+                        model.cubes.add(new ModelFaceFloatBox(
+                                convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate,
+                                texWidth, texHeight, faceUv));
+                    }
                 }
                 // 创建 Cube ModelRender
                 else {
                     ModelRenderer cubeRenderer = new ModelRendererWithOffset(this);
                     cubeRenderer.setPos(convertPivot(bones, cube, 0), convertPivot(bones, cube, 1), convertPivot(bones, cube, 2));
                     setRotationAngle(cubeRenderer, convertRotation(cubeRotation.get(0)), convertRotation(cubeRotation.get(1)), convertRotation(cubeRotation.get(2)));
-                    cubeRenderer.cubes.add(new ModelFloatBox(uv.get(0), uv.get(1),
-                            convertOrigin(cube, 0), convertOrigin(cube, 1), convertOrigin(cube, 2),
-                            size.get(0), size.get(1), size.get(2), inflate, inflate, inflate, mirror,
-                            texWidth, texHeight));
+                    if (faceUv == null) {
+                        cubeRenderer.cubes.add(new ModelFloatBox(uv.get(0), uv.get(1),
+                                convertOrigin(cube, 0), convertOrigin(cube, 1), convertOrigin(cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate, mirror,
+                                texWidth, texHeight));
+                    } else {
+                        cubeRenderer.cubes.add(new ModelFaceFloatBox(
+                                convertOrigin(cube, 0), convertOrigin(cube, 1), convertOrigin(cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate,
+                                texWidth, texHeight, faceUv));
+                    }
 
                     // 添加进父骨骼中
                     model.addChild(cubeRenderer);
@@ -230,7 +242,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
                 model.cubes.add(new ModelFloatBox(uv.get(0), uv.get(1),
                         convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2),
-                        size.get(0), size.get(1), size.get(2), inflate, inflate, inflate, mirror,
+                        size.get(0), size.get(1), size.get(2), inflate, mirror,
                         texWidth, texHeight));
             }
         }

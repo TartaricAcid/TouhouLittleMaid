@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Description {
-    @SerializedName("texture_width")
+    @SerializedName("texture_height")
     private int textureHeight;
 
-    @SerializedName("texture_height")
+    @SerializedName("texture_width")
     private int textureWidth;
 
     @SerializedName("visible_bounds_height")
