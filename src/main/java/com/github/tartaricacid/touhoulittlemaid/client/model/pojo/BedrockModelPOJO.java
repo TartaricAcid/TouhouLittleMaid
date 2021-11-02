@@ -23,7 +23,7 @@ public class BedrockModelPOJO {
 
     @Nullable
     public GeometryModelLegacy getGeometryModelLegacy() {
-        return geometryModelLegacy;
+            return geometryModelLegacy;
     }
 
     @Nullable

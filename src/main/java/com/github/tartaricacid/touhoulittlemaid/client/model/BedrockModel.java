@@ -69,6 +69,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
     private void loadNewModel(BedrockModelPOJO pojo) {
         assert pojo.getGeometryModelNew() != null;
+        pojo.getGeometryModelNew().deco();
 
         Description description = pojo.getGeometryModelNew().getDescription();
         // 材质的长度、宽度
@@ -176,6 +177,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
     private void loadLegacyModel(BedrockModelPOJO pojo) {
         assert pojo.getGeometryModelLegacy() != null;
+        pojo.getGeometryModelLegacy().deco();
 
         // 材质的长度、宽度
         texWidth = pojo.getGeometryModelLegacy().getTextureWidth();

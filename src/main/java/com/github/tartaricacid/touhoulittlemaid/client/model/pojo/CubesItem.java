@@ -12,10 +12,8 @@ import java.util.List;
 public class CubesItem {
     private List<Float> uv;
     private FaceUVsItem faceUv;
-
-    @Expose
-    @SerializedName("mirror")
-    private boolean mirror;
+    private boolean mirror = false;
+    private boolean hasMirror = false;
 
     @Expose
     @SerializedName("inflate")
@@ -50,6 +48,14 @@ public class CubesItem {
         return mirror;
     }
 
+    public void setMirror(boolean mirror) {
+        this.mirror = mirror;
+    }
+
+    public boolean isHasMirror() {
+        return hasMirror;
+    }
+
     public float getInflate() {
         return inflate;
     }
@@ -81,6 +87,7 @@ public class CubesItem {
             CubesItem cube = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json, CubesItem.class);
             if (json.isJsonObject()) {
                 JsonObject obj = json.getAsJsonObject();
+
                 JsonElement uvElement = obj.get("uv");
                 if (uvElement.isJsonArray()) {
                     cube.uv = Lists.newArrayList();
@@ -88,14 +95,21 @@ public class CubesItem {
                     for (int i = 0; i < array.size(); i++) {
                         cube.uv.add(array.get(i).getAsFloat());
                     }
-                    return cube;
                 }
                 if (uvElement.isJsonObject()) {
                     cube.faceUv = new Gson().fromJson(uvElement, FaceUVsItem.class);
-                    return cube;
+                }
+
+                JsonElement mirrorElement = obj.get("mirror");
+                if (mirrorElement != null && mirrorElement.isJsonPrimitive()) {
+                    JsonPrimitive primitive = mirrorElement.getAsJsonPrimitive();
+                    if (primitive.isBoolean()) {
+                        cube.mirror = primitive.getAsBoolean();
+                        cube.hasMirror = true;
+                    }
                 }
             }
-            return null;
+            return cube;
         }
     }
 }
