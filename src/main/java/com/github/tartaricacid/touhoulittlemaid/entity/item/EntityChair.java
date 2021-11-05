@@ -75,13 +75,14 @@ public class EntityChair extends AbstractEntityFromItem {
 
     @Override
     protected void pushEntities() {
-        List<TameableEntity> list = level.getEntitiesOfClass(TameableEntity.class,
-                getBoundingBox().expandTowards(0, 0.5, 0),
-                e -> !e.isInSittingPose() && !e.isPassenger() && e.getPassengers().isEmpty());
-        for (TameableEntity entity : list) {
-            if (!level.isClientSide && isTameableCanRide()) {
-                entity.startRiding(this);
-            }
+        if (!isTameableCanRide()) {
+            return;
+        }
+        if (!level.isClientSide) {
+            List<TameableEntity> list = level.getEntitiesOfClass(TameableEntity.class,
+                    getBoundingBox().expandTowards(0, 0.5, 0),
+                    e -> !e.isInSittingPose() && !e.isPassenger() && e.getPassengers().isEmpty());
+            list.stream().findFirst().ifPresent(entity -> entity.startRiding(this));
         }
     }
 

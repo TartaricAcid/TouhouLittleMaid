@@ -217,6 +217,11 @@ public final class EntityMaidWrapper implements IMaidData {
     }
 
     @Override
+    public boolean isOnGround() {
+        return !maid.isOnGround();
+    }
+
+    @Override
     @Deprecated
     public String getAtBiomeTemp() {
         return maid.getAtBiomeTemp();

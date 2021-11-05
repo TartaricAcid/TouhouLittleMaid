@@ -212,6 +212,13 @@ public interface IMaidData extends IEntityData {
     int getFavorability();
 
     /**
+     * Whether the maid is on ground
+     *
+     * @return boolean
+     */
+    boolean isOnGround();
+
+    /**
      * Whether the maid has sasimono
      *
      * @return boolean

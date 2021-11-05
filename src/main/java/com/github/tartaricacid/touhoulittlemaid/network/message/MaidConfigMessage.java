@@ -51,6 +51,9 @@ public class MaidConfigMessage {
                     maid.setHomeModeEnable(message.home);
                     maid.setPickup(message.pick);
                     maid.setRideable(message.ride);
+                    if (maid.getVehicle() != null) {
+                        maid.stopRiding();
+                    }
                     if (maid.getSchedule() != message.schedule) {
                         maid.setSchedule(message.schedule);
                         maid.refreshBrain((ServerWorld) maid.level);
