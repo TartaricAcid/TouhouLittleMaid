@@ -4,12 +4,15 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityModelJson;
+import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.network.serverpack.ClientPackManager;
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
@@ -30,14 +33,13 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy.GSON;
-
 @SideOnly(Side.CLIENT)
 public class CustomResourcesLoader {
+    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .registerTypeAdapter(CubesItem.class, new CubesItem.Deserializer()).create();
     public static final CustomMaidModelResources MAID_MODEL = new CustomMaidModelResources("maid_model.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
     public static final CustomChairModelResources CHAIR_MODEL = new CustomChairModelResources("maid_chair.json", Lists.newArrayList(), Maps.newHashMap(), Maps.newHashMap(), Maps.newHashMap());
     public static final CustomSoundResources SOUND_INFO = new CustomSoundResources("maid_sound.json", Lists.newArrayList());
-    public static final String OLD_BEDROCK_VERSION = "1.10.0";
     private static final Logger LOGGER = TouhouLittleMaid.LOGGER;
     private static final Marker MARKER = MarkerManager.getMarker("ResourcesLoader");
     private static IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
@@ -173,7 +175,7 @@ public class CustomResourcesLoader {
         InputStream input = null;
         try {
             input = manager.getResource(modelLocation).getInputStream();
-            CustomModelPOJO pojo = CommonProxy.GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPOJO.class);
+            CustomModelPOJO pojo = GSON.fromJson(new InputStreamReader(input, StandardCharsets.UTF_8), CustomModelPOJO.class);
 
             // 先判断是不是 1.10.0 版本基岩版模型文件
             if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {

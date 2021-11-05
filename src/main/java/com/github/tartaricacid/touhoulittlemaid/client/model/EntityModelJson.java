@@ -4,10 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.IAnimatio
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityChairWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityMaidWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BonesItem;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CustomModelPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.Description;
+import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -64,6 +61,7 @@ public class EntityModelJson extends ModelBase {
 
     public void loadLegacyModel(CustomModelPOJO pojo) {
         assert pojo.getGeometryModel() != null;
+        pojo.getGeometryModel().deco();
 
         // 材质的长度、宽度
         textureWidth = pojo.getGeometryModel().getTexturewidth();
@@ -137,6 +135,7 @@ public class EntityModelJson extends ModelBase {
 
     public void loadNewModel(CustomModelPOJO pojo) {
         assert pojo.getGeometryModelNew() != null;
+        pojo.getGeometryModelNew().deco();
 
         Description description = pojo.getGeometryModelNew().getDescription();
         // 材质的长度、宽度
@@ -198,6 +197,7 @@ public class EntityModelJson extends ModelBase {
             // 塞入 Cube List
             for (CubesItem cube : bones.getCubes()) {
                 List<Float> uv = cube.getUv();
+                @Nullable FaceUVsItem faceUv = cube.getFaceUv();
                 List<Float> size = cube.getSize();
                 boolean mirror = cube.isMirror();
                 float inflate = cube.getInflate();
@@ -205,18 +205,30 @@ public class EntityModelJson extends ModelBase {
 
                 // 当做普通 cube 存入
                 if (cubeRotation == null) {
-                    model.cubeList.add(new ModelBoxFloat(model, uv.get(0), uv.get(1),
-                            convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2),
-                            size.get(0), size.get(1), size.get(2), inflate, mirror));
+                    if (faceUv == null) {
+                        model.cubeList.add(new ModelBoxFloat(model, uv.get(0), uv.get(1),
+                                convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate, mirror));
+                    } else {
+                        model.cubeList.add(new ModelBoxFaceFloat(model,
+                                convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate, faceUv));
+                    }
                 }
                 // 创建 Cube ModelRender
                 else {
                     ModelRenderer cubeRenderer = new ModelRenderer(this);
                     cubeRenderer.setRotationPoint(convertPivot(bones, cube, 0), convertPivot(bones, cube, 1), convertPivot(bones, cube, 2));
                     setRotationAngle(cubeRenderer, convertRotation(cubeRotation.get(0)), convertRotation(cubeRotation.get(1)), convertRotation(cubeRotation.get(2)));
-                    cubeRenderer.cubeList.add(new ModelBoxFloat(model, uv.get(0), uv.get(1),
-                            convertOrigin(cube, 0), convertOrigin(cube, 1), convertOrigin(cube, 2),
-                            size.get(0), size.get(1), size.get(2), inflate, mirror));
+                    if (faceUv == null) {
+                        cubeRenderer.cubeList.add(new ModelBoxFloat(model, uv.get(0), uv.get(1),
+                                convertOrigin(cube, 0), convertOrigin(cube, 1), convertOrigin(cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate, mirror));
+                    } else {
+                        cubeRenderer.cubeList.add(new ModelBoxFaceFloat(model,
+                                convertOrigin(cube, 0), convertOrigin(cube, 1), convertOrigin(cube, 2),
+                                size.get(0), size.get(1), size.get(2), inflate, faceUv));
+                    }
 
                     // 添加进父骨骼中
                     model.addChild(cubeRenderer);
@@ -241,20 +253,20 @@ public class EntityModelJson extends ModelBase {
         }
         Invocable invocable = (Invocable) CommonProxy.NASHORN;
         if (entityIn instanceof EntityMaid) {
-            for (Object animation : animations) {
-                if (animation instanceof IAnimation) {
-                    ((IAnimation) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn, modelMap);
-                } else {
-                    entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
-                    String modelId = ((EntityMaid) entityIn).getModelId();
-                    try {
+            try {
+                for (Object animation : animations) {
+                    if (animation instanceof IAnimation) {
+                        ((IAnimation) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn, modelMap);
+                    } else {
+                        entityMaidWrapper.setData((EntityMaid) entityIn, swingProgress, isRiding);
                         invocable.invokeMethod(animation, "animation",
                                 entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        CustomResourcesLoader.MAID_MODEL.removeAnimation(modelId);
+                        entityMaidWrapper.clearData();
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomResourcesLoader.MAID_MODEL.removeAnimation(((EntityMaid) entityIn).getModelId());
             }
             if (((EntityMaid) entityIn).isSleep()) {
                 GlStateManager.rotate(180, 0, 1, 0);
@@ -265,20 +277,20 @@ public class EntityModelJson extends ModelBase {
         }
 
         if (entityIn instanceof EntityChair) {
-            for (Object animation : animations) {
-                if (animation instanceof IAnimation) {
-                    ((IAnimation) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn, modelMap);
-                } else {
-                    entityChairWrapper.setChair((EntityChair) entityIn);
-                    String modelId = ((EntityChair) entityIn).getModelId();
-                    try {
+            try {
+                for (Object animation : animations) {
+                    if (animation instanceof IAnimation) {
+                        ((IAnimation) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn, modelMap);
+                    } else {
+                        entityChairWrapper.setData((EntityChair) entityIn);
                         invocable.invokeMethod(animation, "animation",
                                 entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, modelMap);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        CustomResourcesLoader.CHAIR_MODEL.removeAnimation(modelId);
+                        entityChairWrapper.clearData();
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomResourcesLoader.CHAIR_MODEL.removeAnimation(((EntityChair) entityIn).getModelId());
             }
         }
     }

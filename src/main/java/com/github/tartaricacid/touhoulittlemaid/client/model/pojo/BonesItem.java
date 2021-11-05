@@ -49,16 +49,4 @@ public class BonesItem {
     public boolean isMirror() {
         return mirror;
     }
-
-    @Override
-    public String toString() {
-        return
-                "BonesItem{" +
-                        "cubes = '" + cubes + '\'' +
-                        ",name = '" + name + '\'' +
-                        ",pivot = '" + pivot + '\'' +
-                        ",rotation = '" + rotation + '\'' +
-                        ",parent = '" + parent + '\'' +
-                        "}";
-    }
 }

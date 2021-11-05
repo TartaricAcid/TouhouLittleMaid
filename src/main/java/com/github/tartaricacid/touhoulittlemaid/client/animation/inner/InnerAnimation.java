@@ -4,17 +4,19 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRen
 import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Maps;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.ULocale;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public final class InnerAnimation {
-    private static final HashMap<ResourceLocation, IAnimation> INNER_ANIMATION = Maps.newHashMap();
+    private static final HashMap<ResourceLocation, IAnimation<?>> INNER_ANIMATION = Maps.newHashMap();
+    private static final ULocale CHINESE = new ULocale("@calendar=chinese");
 
     public static IAnimation<EntityMaid> getHeadDefault() {
         return new IAnimation<EntityMaid>() {
@@ -48,7 +50,7 @@ public final class InnerAnimation {
                         blink.setHidden(false);
                         return;
                     }
-                    float remainder = ageInTicks % 60;
+                    float remainder = (ageInTicks + Math.abs(maid.getUniqueID().getLeastSignificantBits()) % 10) % 60;
                     blink.setHidden(!(55 < remainder && remainder < 60));
                 }
             }
@@ -61,6 +63,7 @@ public final class InnerAnimation {
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper head = modelMap.get("head");
                 ModelRendererWrapper ahoge = modelMap.get("ahoge");
+                ModelRendererWrapper ahogeShow = modelMap.get("ahogeShow");
 
                 if (maid.isBegging()) {
                     if (head != null) {
@@ -70,12 +73,18 @@ public final class InnerAnimation {
                         ahoge.setRotateAngleX((float) (Math.cos(ageInTicks * 1.0) * 0.05));
                         ahoge.setRotateAngleZ((float) (Math.sin(ageInTicks * 1.0) * 0.05));
                     }
+                    if (ahogeShow != null) {
+                        ahogeShow.setHidden(false);
+                    }
                 } else {
                     if (head != null) {
                         head.setRotateAngleZ(0);
                     }
                     if (ahoge != null) {
                         ahoge.setRotateAngleZ(0);
+                    }
+                    if (ahogeShow != null) {
+                        ahogeShow.setHidden(true);
                     }
                 }
             }
@@ -125,9 +134,13 @@ public final class InnerAnimation {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper reverseBlink = modelMap.get("_bink");
+                ModelRendererWrapper reverseBlinkCorrect = modelMap.get("_blink");
+                float remainder = (ageInTicks + Math.abs(maid.getUniqueID().getLeastSignificantBits()) % 10) % 60;
                 if (reverseBlink != null) {
-                    float remainder = ageInTicks % 60;
                     reverseBlink.setHidden(55 < remainder && remainder < 60);
+                }
+                if (reverseBlinkCorrect != null) {
+                    reverseBlinkCorrect.setHidden(55 < remainder && remainder < 60);
                 }
             }
         };
@@ -959,7 +972,7 @@ public final class InnerAnimation {
                 ModelRendererWrapper bootsLeftValueNormal = modelMap.get("bootsLeftValueNormal");
                 ModelRendererWrapper bootsRightValueNormal = modelMap.get("bootsRightValueNormal");
 
-                boolean valueIsNormal = (0 < maid.getArmorValue()) && (maid.getArmorValue() <= 5);
+                boolean valueIsNormal = (5 < maid.getArmorValue()) && (maid.getArmorValue() <= 10);
 
                 if (helmetValueNormal != null) {
                     helmetValueNormal.setHidden(!valueIsNormal);
@@ -998,56 +1011,56 @@ public final class InnerAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorWeatherRainging() {
+    public static IAnimation<EntityMaid> getArmorWeatherRaining() {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper helmetWeatherRainging = modelMap.get("helmetWeatherRainging");
-                ModelRendererWrapper chestPlateWeatherRainging = modelMap.get("chestPlateWeatherRainging");
-                ModelRendererWrapper chestPlateLeftWeatherRainging = modelMap.get("chestPlateLeftWeatherRainging");
-                ModelRendererWrapper chestPlateMiddleWeatherRainging = modelMap.get("chestPlateMiddleWeatherRainging");
-                ModelRendererWrapper chestPlateRightWeatherRainging = modelMap.get("chestPlateRightWeatherRainging");
-                ModelRendererWrapper leggingsWeatherRainging = modelMap.get("leggingsWeatherRainging");
-                ModelRendererWrapper leggingsLeftWeatherRainging = modelMap.get("leggingsLeftWeatherRainging");
-                ModelRendererWrapper leggingsMiddleWeatherRainging = modelMap.get("leggingsMiddleWeatherRainging");
-                ModelRendererWrapper leggingsRightWeatherRainging = modelMap.get("leggingsRightWeatherRainging");
-                ModelRendererWrapper bootsLeftWeatherRainging = modelMap.get("bootsLeftWeatherRainging");
-                ModelRendererWrapper bootsRightWeatherRainging = modelMap.get("bootsRightWeatherRainging");
+                ModelRendererWrapper helmetWeatherRaining = modelMap.get("helmetWeatherRaining");
+                ModelRendererWrapper chestPlateWeatherRaining = modelMap.get("chestPlateWeatherRaining");
+                ModelRendererWrapper chestPlateLeftWeatherRaining = modelMap.get("chestPlateLeftWeatherRaining");
+                ModelRendererWrapper chestPlateMiddleWeatherRaining = modelMap.get("chestPlateMiddleWeatherRaining");
+                ModelRendererWrapper chestPlateRightWeatherRaining = modelMap.get("chestPlateRightWeatherRaining");
+                ModelRendererWrapper leggingsWeatherRaining = modelMap.get("leggingsWeatherRaining");
+                ModelRendererWrapper leggingsLeftWeatherRaining = modelMap.get("leggingsLeftWeatherRaining");
+                ModelRendererWrapper leggingsMiddleWeatherRaining = modelMap.get("leggingsMiddleWeatherRaining");
+                ModelRendererWrapper leggingsRightWeatherRaining = modelMap.get("leggingsRightWeatherRaining");
+                ModelRendererWrapper bootsLeftWeatherRaining = modelMap.get("bootsLeftWeatherRaining");
+                ModelRendererWrapper bootsRightWeatherRaining = modelMap.get("bootsRightWeatherRaining");
 
-                boolean weatherIsRainging = maid.world.isRaining();
+                boolean weatherIsRaining = maid.world.isRaining();
 
-                if (helmetWeatherRainging != null) {
-                    helmetWeatherRainging.setHidden(!weatherIsRainging);
+                if (helmetWeatherRaining != null) {
+                    helmetWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (chestPlateWeatherRainging != null) {
-                    chestPlateWeatherRainging.setHidden(!weatherIsRainging);
+                if (chestPlateWeatherRaining != null) {
+                    chestPlateWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (chestPlateLeftWeatherRainging != null) {
-                    chestPlateLeftWeatherRainging.setHidden(!weatherIsRainging);
+                if (chestPlateLeftWeatherRaining != null) {
+                    chestPlateLeftWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (chestPlateMiddleWeatherRainging != null) {
-                    chestPlateMiddleWeatherRainging.setHidden(!weatherIsRainging);
+                if (chestPlateMiddleWeatherRaining != null) {
+                    chestPlateMiddleWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (chestPlateRightWeatherRainging != null) {
-                    chestPlateRightWeatherRainging.setHidden(!weatherIsRainging);
+                if (chestPlateRightWeatherRaining != null) {
+                    chestPlateRightWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (leggingsWeatherRainging != null) {
-                    leggingsWeatherRainging.setHidden(!weatherIsRainging);
+                if (leggingsWeatherRaining != null) {
+                    leggingsWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (leggingsLeftWeatherRainging != null) {
-                    leggingsLeftWeatherRainging.setHidden(!weatherIsRainging);
+                if (leggingsLeftWeatherRaining != null) {
+                    leggingsLeftWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (leggingsMiddleWeatherRainging != null) {
-                    leggingsMiddleWeatherRainging.setHidden(!weatherIsRainging);
+                if (leggingsMiddleWeatherRaining != null) {
+                    leggingsMiddleWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (leggingsRightWeatherRainging != null) {
-                    leggingsRightWeatherRainging.setHidden(!weatherIsRainging);
+                if (leggingsRightWeatherRaining != null) {
+                    leggingsRightWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (bootsLeftWeatherRainging != null) {
-                    bootsLeftWeatherRainging.setHidden(!weatherIsRainging);
+                if (bootsLeftWeatherRaining != null) {
+                    bootsLeftWeatherRaining.setHidden(!weatherIsRaining);
                 }
-                if (bootsRightWeatherRainging != null) {
-                    bootsRightWeatherRainging.setHidden(!weatherIsRainging);
+                if (bootsRightWeatherRaining != null) {
+                    bootsRightWeatherRaining.setHidden(!weatherIsRaining);
                 }
             }
         };
@@ -1109,70 +1122,6 @@ public final class InnerAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHealthLessShow() {
-        return new IAnimation<EntityMaid>() {
-            @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper healthLessQuarterShow = modelMap.get("healthLessQuarterShow");
-                ModelRendererWrapper healthLessHalfShow = modelMap.get("healthLessHalfShow");
-                ModelRendererWrapper healthLessThreeQuartersShow = modelMap.get("healthLessThreeQuartersShow");
-
-                double i = maid.getHealth() / maid.getMaxHealth();
-
-                if (healthLessQuarterShow != null) {
-                    healthLessQuarterShow.setHidden(i > 0.25);
-                }
-
-                if (healthLessHalfShow != null) {
-                    healthLessHalfShow.setHidden(i > 0.5);
-                }
-
-                if (healthLessThreeQuartersShow != null) {
-                    healthLessThreeQuartersShow.setHidden(i > 0.75);
-                }
-            }
-        };
-    }
-
-    public static IAnimation<EntityMaid> getHealthMoreShow() {
-        return new IAnimation<EntityMaid>() {
-            @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper healthMoreQuarterShow = modelMap.get("healthMoreQuarterShow");
-                ModelRendererWrapper healthMoreHalfShow = modelMap.get("healthMoreHalfShow");
-                ModelRendererWrapper healthMoreThreeQuartersShow = modelMap.get("healthMoreThreeQuartersShow");
-
-                double i = maid.getHealth() / maid.getMaxHealth();
-
-                if (healthMoreQuarterShow != null) {
-                    healthMoreQuarterShow.setHidden(i <= 0.25);
-                }
-
-                if (healthMoreHalfShow != null) {
-                    healthMoreHalfShow.setHidden(i <= 0.5);
-                }
-
-                if (healthMoreThreeQuartersShow != null) {
-                    healthMoreThreeQuartersShow.setHidden(i <= 0.75);
-                }
-            }
-        };
-    }
-
-    public static IAnimation<EntityMaid> getHealthRotation() {
-        return new IAnimation<EntityMaid>() {
-            @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper healthRotationX90 = modelMap.get("healthRotationX90");
-
-                if (healthRotationX90 != null) {
-                    double deg = (Math.PI / 4) - (Math.PI / 2) * (maid.getHealth() / maid.getMaxHealth());
-                    healthRotationX90.setRotateAngleX((float) deg);
-                }
-            }
-        };
-    }
-
     public static IAnimation<EntityMaid> getStatusBackpack() {
         return new IAnimation<EntityMaid>() {
             @Override
@@ -1215,23 +1164,6 @@ public final class InnerAnimation {
 
                 if (backpackLevelBig != null) {
                     backpackLevelBig.setHidden(level != 3);
-                }
-            }
-        };
-    }
-
-    public static IAnimation<EntityMaid> getStatusMoving() {
-        return new IAnimation<EntityMaid>() {
-            @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper movingShow = modelMap.get("movingShow");
-                ModelRendererWrapper movingHidden = modelMap.get("movingHidden");
-
-                if (movingShow != null) {
-                    movingShow.setHidden(limbSwing <= 0);
-                }
-                if (movingHidden != null) {
-                    movingHidden.setHidden(limbSwing > 0);
                 }
             }
         };
@@ -2335,6 +2267,127 @@ public final class InnerAnimation {
         };
     }
 
+    public static IAnimation<EntityLivingBase> getNewYear() {
+        return new IAnimation<EntityLivingBase>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netLeadYaw, float headPitch, float scaleFactor, EntityLivingBase entity, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper newYearShow = modelMap.get("newYearShow");
+                ModelRendererWrapper newYearHidden = modelMap.get("newYearHidden");
+
+                Calendar calendar = Calendar.getInstance();
+                int month = calendar.get(Calendar.MONTH);
+                int dayInMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                boolean isNewYear = month == Calendar.JANUARY && dayInMonth == 1;
+                if (newYearShow != null) {
+                    newYearShow.setHidden(!isNewYear);
+                }
+                if (newYearHidden != null) {
+                    newYearHidden.setHidden(isNewYear);
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityLivingBase> getChristmas() {
+        return new IAnimation<EntityLivingBase>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netLeadYaw, float headPitch, float scaleFactor, EntityLivingBase entity, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper christmasShow = modelMap.get("christmasShow");
+                ModelRendererWrapper christmasHidden = modelMap.get("christmasHidden");
+
+                Calendar calendar = Calendar.getInstance();
+                int month = calendar.get(Calendar.MONTH);
+                int dayInMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                boolean isChristmas = month == Calendar.DECEMBER && (dayInMonth == 24 || dayInMonth == 25);
+                if (christmasShow != null) {
+                    christmasShow.setHidden(!isChristmas);
+                }
+                if (christmasHidden != null) {
+                    christmasHidden.setHidden(isChristmas);
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityLivingBase> getSpringFestival() {
+        return new IAnimation<EntityLivingBase>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netLeadYaw, float headPitch, float scaleFactor, EntityLivingBase entity, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper springFestivalShow = modelMap.get("springFestivalShow");
+                ModelRendererWrapper springFestivalHidden = modelMap.get("springFestivalHidden");
+
+                com.ibm.icu.util.Calendar calendar = ChineseCalendar.getInstance(CHINESE);
+                int month = calendar.get(ChineseCalendar.MONTH);
+                int dayInMonth = calendar.get(ChineseCalendar.DAY_OF_MONTH);
+                // 官方的春节假期是农历年三十到初六
+                // 但是有的腊月没有三十……所以我们从廿九算起
+                boolean isSpringFestival = (month == ChineseCalendar.DECEMBER && dayInMonth >= 29) || (month == ChineseCalendar.JANUARY && dayInMonth <= 6);
+                if (springFestivalShow != null) {
+                    springFestivalShow.setHidden(!isSpringFestival);
+                }
+                if (springFestivalHidden != null) {
+                    springFestivalHidden.setHidden(isSpringFestival);
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityLivingBase> getDuanwu() {
+        return new IAnimation<EntityLivingBase>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netLeadYaw, float headPitch, float scaleFactor, EntityLivingBase entity, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper duanwuShow = modelMap.get("duanwuShow");
+                ModelRendererWrapper duanwuHidden = modelMap.get("duanwuHidden");
+
+                com.ibm.icu.util.Calendar calendar = ChineseCalendar.getInstance(CHINESE);
+                int month = calendar.get(ChineseCalendar.MONTH);
+                int dayInMonth = calendar.get(ChineseCalendar.DAY_OF_MONTH);
+                boolean isDuanwu = month == ChineseCalendar.MAY && dayInMonth == 5;
+                if (duanwuShow != null) {
+                    duanwuShow.setHidden(!isDuanwu);
+                }
+                if (duanwuHidden != null) {
+                    duanwuHidden.setHidden(isDuanwu);
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityLivingBase> getMidAutumn() {
+        return new IAnimation<EntityLivingBase>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netLeadYaw, float headPitch, float scaleFactor, EntityLivingBase entity, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper midAutumnShow = modelMap.get("midAutumnShow");
+                ModelRendererWrapper midAutumnHidden = modelMap.get("midAutumnHidden");
+
+                com.ibm.icu.util.Calendar calendar = ChineseCalendar.getInstance(CHINESE);
+                int month = calendar.get(ChineseCalendar.MONTH);
+                int dayInMonth = calendar.get(ChineseCalendar.DAY_OF_MONTH);
+                boolean isMidAutumn = month == ChineseCalendar.AUGUST && dayInMonth == 15;
+                if (midAutumnShow != null) {
+                    midAutumnShow.setHidden(!isMidAutumn);
+                }
+                if (midAutumnHidden != null) {
+                    midAutumnHidden.setHidden(isMidAutumn);
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityLivingBase> getRandomSelect() {
+        return new IAnimation<EntityLivingBase>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netLeadYaw, float headPitch, float scaleFactor, EntityLivingBase entity, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper[] randomSelectUncheck = new ModelRendererWrapper[]{modelMap.get("randomSelect1"), modelMap.get("randomSelect2"), modelMap.get("randomSelect3"), modelMap.get("randomSelect4"), modelMap.get("randomSelect5")};
+                ModelRendererWrapper[] randomSelect = Arrays.stream(randomSelectUncheck).filter(Objects::nonNull).toArray(ModelRendererWrapper[]::new);
+                long index = Math.abs(entity.getUniqueID().getLeastSignificantBits()) % randomSelect.length;
+                for (int i = 0; i < randomSelect.length; i++) {
+                    randomSelect[i].setHidden(i != index);
+                }
+            }
+        };
+    }
+
     public static void playerRidingPosture(ModelRendererWrapper legLeft, ModelRendererWrapper legRight) {
         if (legLeft != null) {
             legLeft.setRotateAngleX(-1.4f);
@@ -2446,7 +2499,7 @@ public final class InnerAnimation {
         return new float[]{0, 0, 0};
     }
 
-    public static HashMap<ResourceLocation, IAnimation> getInnerAnimation() {
+    public static HashMap<ResourceLocation, IAnimation<?>> getInnerAnimation() {
         return INNER_ANIMATION;
     }
 
@@ -2466,7 +2519,7 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/value/value_high.js"), getArmorValueHigh());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/value/value_low.js"), getArmorValueLow());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/value/value_normal.js"), getArmorValueNormal());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/weather/raining.js"), getArmorWeatherRainging());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/weather/raining.js"), getArmorWeatherRaining());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/weather/thundering.js"), getArmorWeatherThundering());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/beg.js"), getHeadBeg());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/blink.js"), getHeadBlink());
@@ -2475,9 +2528,6 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hurt.js"), getHeadHurt());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/music_shake.js"), getHeadMusicShake());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/reverse_blink.js"), getHeadReverseBlink());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/health/less_show.js"), getHealthLessShow());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/health/more_show.js"), getHealthMoreShow());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/health/rotation.js"), getHealthRotation());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/default.js"), getLegDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/extra.js"), getLegExtra());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/vertical.js"), getLegVertical());
@@ -2486,7 +2536,6 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"), getSitSkirtRotation());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/backpack.js"), getStatusBackpack());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/backpack_level.js"), getStatusBackpackLevel());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/moving.js"), getStatusMoving());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/sasimono.js"), getStatusSasimono());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/tail/default.js"), getTailDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/attack.js"), getTaskAttack());
@@ -2509,6 +2558,7 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/wing/default.js"), getWingDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sleep/default.js"), getSleepDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/player/arm/default.js"), getPlayerArmDefault());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/player/sit/default.js"), getPlayerSitDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid.default.js"), getMaidDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/special/hecatia_dimension.js"), getSpecialHecatia());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/special/wakasagihime_sit.js"), getSpecialWakasagihime());
@@ -2529,5 +2579,12 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/z_high_speed.js"), getBaseRotationZH());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/z_normal_speed.js"), getBaseRotationZN());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/z_low_speed.js"), getBaseRotationZL());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/new_year.js"), getNewYear());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/christmas.js"), getChristmas());
+        // FIXME: 2021/11/5 目前 ICU4J 计算农历还存在问题
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/spring_festival.js"), getSpringFestival());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/duanwu.js"), getDuanwu());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/mid_autumn.js"), getMidAutumn());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/random/select.js"), getRandomSelect());
     }
 }

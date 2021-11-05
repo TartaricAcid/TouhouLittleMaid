@@ -33,13 +33,4 @@ public class CustomModelPOJO {
         }
         return geometryModelNew.get(0);
     }
-
-    @Override
-    public String toString() {
-        return
-                "CustomModelPOJO{" +
-                        "format_version = '" + formatVersion + '\'' +
-                        ",geometry.model = '" + geometryModel + '\'' +
-                        "}";
-    }
 }

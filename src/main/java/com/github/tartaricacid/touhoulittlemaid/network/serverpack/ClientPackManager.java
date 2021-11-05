@@ -12,7 +12,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.ChairModel
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.EasterEgg;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
@@ -49,7 +48,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader.*;
+import static com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader.CHAIR_MODEL;
+import static com.github.tartaricacid.touhoulittlemaid.client.resources.CustomResourcesLoader.MAID_MODEL;
 import static com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy.GSON;
 
 @SideOnly(Side.CLIENT)
@@ -243,7 +243,7 @@ public final class ClientPackManager {
             return null;
         }
         try (InputStream stream = zipFile.getInputStream(entry)) {
-            CustomModelPOJO pojo = CommonProxy.GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), CustomModelPOJO.class);
+            CustomModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), CustomModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
             if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
                 // 如果 model 字段不为空
