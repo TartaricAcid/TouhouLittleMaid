@@ -2,32 +2,30 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.script;
 
 import com.github.tartaricacid.touhoulittlemaid.api.animation.IMaidData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
 
-public class EntityMaidWrapper implements IMaidData {
-    public float swingProgress;
-    public boolean isRiding;
+public final class EntityMaidWrapper implements IMaidData {
+    private final WorldWrapper world = new WorldWrapper();
+    private final float[] handRotation = new float[]{0, 0, 0};
+    private float swingProgress;
+    private boolean isRiding;
     private EntityMaid maid;
-    private WorldWrapper world;
-    private Biome biome;
 
     public void setData(EntityMaid maid, float swingProgress, boolean isRiding) {
         this.maid = maid;
         this.swingProgress = swingProgress;
         this.isRiding = isRiding;
-        this.world = new WorldWrapper(maid.level);
-        this.biome = maid.level.getBiome(maid.blockPosition());
+        this.world.setData(maid.level);
     }
 
     public void clearData() {
         this.maid = null;
-        this.world = null;
-        this.biome = null;
+        this.world.clearData();
     }
 
     @Override
@@ -155,12 +153,6 @@ public class EntityMaidWrapper implements IMaidData {
     }
 
     @Override
-    @Deprecated
-    public boolean hasSasimono() {
-        return false;
-    }
-
-    @Override
     public boolean inWater() {
         return maid.isInWater();
     }
@@ -171,50 +163,6 @@ public class EntityMaidWrapper implements IMaidData {
     }
 
     @Override
-    public String getAtBiome() {
-        ResourceLocation res = biome.getRegistryName();
-        if (res != null) {
-            return res.getPath();
-        }
-        return "";
-    }
-
-    @Override
-    @Deprecated
-    public String getAtBiomeTemp() {
-        return maid.getAtBiomeTemp();
-    }
-
-    @Override
-    @Deprecated
-    public boolean isHoldTrolley() {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isRidingMarisaBroom() {
-        return false;
-    }
-
-    @Override
-    public boolean isRidingPlayer() {
-        return maid.getVehicle() instanceof PlayerEntity;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isHoldVehicle() {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isPortableAudioPlay() {
-        return false;
-    }
-
-    @Override
     public boolean isSwingLeftHand() {
         return maid.swingingArm == Hand.OFF_HAND;
     }
@@ -222,24 +170,6 @@ public class EntityMaidWrapper implements IMaidData {
     @Override
     public float getSwingProgress() {
         return swingProgress;
-    }
-
-    @Override
-    @Deprecated
-    public float[] getLeftHandRotation() {
-        return new float[]{0, 0, 0};
-    }
-
-    @Override
-    @Deprecated
-    public float[] getRightHandRotation() {
-        return new float[]{0, 0, 0};
-    }
-
-    @Override
-    @Deprecated
-    public int getDim() {
-        return maid.getDim();
     }
 
     @Override
@@ -275,5 +205,73 @@ public class EntityMaidWrapper implements IMaidData {
     @Override
     public long getSeed() {
         return maid.getUUID().getLeastSignificantBits();
+    }
+
+    @Override
+    public String getAtBiome() {
+        ResourceLocation res = BiomeCacheUtil.getCacheBiome(maid).getRegistryName();
+        if (res != null) {
+            return res.getPath();
+        }
+        return "";
+    }
+
+    @Override
+    @Deprecated
+    public String getAtBiomeTemp() {
+        return maid.getAtBiomeTemp();
+    }
+
+    @Override
+    @Deprecated
+    public boolean hasSasimono() {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isHoldTrolley() {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isRidingMarisaBroom() {
+        return false;
+    }
+
+    @Override
+    public boolean isRidingPlayer() {
+        return maid.getVehicle() instanceof PlayerEntity;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isHoldVehicle() {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isPortableAudioPlay() {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public float[] getLeftHandRotation() {
+        return handRotation;
+    }
+
+    @Override
+    @Deprecated
+    public float[] getRightHandRotation() {
+        return handRotation;
+    }
+
+    @Override
+    @Deprecated
+    public int getDim() {
+        return maid.getDim();
     }
 }

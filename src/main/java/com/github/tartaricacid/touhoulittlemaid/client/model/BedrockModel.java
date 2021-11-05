@@ -276,41 +276,37 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
     @SuppressWarnings("unchecked")
     private void setupMaidAnim(EntityMaid entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, Invocable invocable) {
-        for (Object animation : animations) {
-            if (animation instanceof IAnimation) {
-                ((IAnimation<EntityMaid>) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0, entityIn, modelMap);
-            } else {
-                entityMaidWrapper.setData(entityIn, attackTime, riding);
-                String modelId = (entityIn).getModelId();
-                try {
-                    invocable.invokeMethod(animation, "animation",
-                            entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0.0625f, modelMap);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    CustomPackLoader.MAID_MODELS.removeAnimation(modelId);
+        try {
+            for (Object animation : animations) {
+                if (animation instanceof IAnimation) {
+                    ((IAnimation<EntityMaid>) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0, entityIn, modelMap);
+                } else {
+                    entityMaidWrapper.setData(entityIn, attackTime, riding);
+                    invocable.invokeMethod(animation, "animation", entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0.0625f, modelMap);
+                    entityMaidWrapper.clearData();
                 }
-                entityMaidWrapper.clearData();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            CustomPackLoader.MAID_MODELS.removeAnimation(entityIn.getModelId());
         }
     }
 
     @SuppressWarnings("unchecked")
     private void setupChairAnim(EntityChair entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, Invocable invocable) {
-        for (Object animation : animations) {
-            if (animation instanceof IAnimation) {
-                ((IAnimation<EntityChair>) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0, entityIn, modelMap);
-            } else {
-                entityChairWrapper.setData(entityIn);
-                String modelId = (entityIn).getModelId();
-                try {
-                    invocable.invokeMethod(animation, "animation",
-                            entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0.0625f, modelMap);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    CustomPackLoader.CHAIR_MODELS.removeAnimation(modelId);
+        try {
+            for (Object animation : animations) {
+                if (animation instanceof IAnimation) {
+                    ((IAnimation<EntityChair>) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0, entityIn, modelMap);
+                } else {
+                    entityChairWrapper.setData(entityIn);
+                    invocable.invokeMethod(animation, "animation", entityChairWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0.0625f, modelMap);
+                    entityChairWrapper.clearData();
                 }
-                entityChairWrapper.clearData();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            CustomPackLoader.CHAIR_MODELS.removeAnimation(entityIn.getModelId());
         }
     }
 

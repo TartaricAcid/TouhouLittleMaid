@@ -3,11 +3,15 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.script;
 import com.github.tartaricacid.touhoulittlemaid.api.animation.IWorldData;
 import net.minecraft.world.World;
 
-public class WorldWrapper implements IWorldData {
-    private final World world;
+public final class WorldWrapper implements IWorldData {
+    private World world;
 
-    public WorldWrapper(World world) {
+    public void setData(World world) {
         this.world = world;
+    }
+
+    public void clearData() {
+        this.world = null;
     }
 
     @Override

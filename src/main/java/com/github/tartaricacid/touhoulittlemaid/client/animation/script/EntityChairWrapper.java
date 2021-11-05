@@ -4,18 +4,18 @@ import com.github.tartaricacid.touhoulittlemaid.api.animation.IChairData;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class EntityChairWrapper implements IChairData {
+public final class EntityChairWrapper implements IChairData {
+    private final WorldWrapper world = new WorldWrapper();
     private EntityChair chair;
-    private WorldWrapper world;
 
     public void setData(EntityChair chair) {
         this.chair = chair;
-        this.world = new WorldWrapper(chair.level);
+        this.world.setData(chair.level);
     }
 
     public void clearData() {
         this.chair = null;
-        this.world = null;
+        this.world.clearData();
     }
 
     @Override
@@ -50,12 +50,6 @@ public class EntityChairWrapper implements IChairData {
     }
 
     @Override
-    @Deprecated
-    public int getDim() {
-        return chair.getDim();
-    }
-
-    @Override
     public WorldWrapper getWorld() {
         return world;
     }
@@ -63,5 +57,11 @@ public class EntityChairWrapper implements IChairData {
     @Override
     public long getSeed() {
         return chair.getUUID().getLeastSignificantBits();
+    }
+
+    @Override
+    @Deprecated
+    public int getDim() {
+        return chair.getDim();
     }
 }

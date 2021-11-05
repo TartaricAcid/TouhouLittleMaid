@@ -23,6 +23,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
+import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.mojang.serialization.Dynamic;
@@ -1124,7 +1125,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     @Deprecated
     public String getAtBiomeTemp() {
-        float temp = this.level.getBiome(blockPosition()).getBaseTemperature();
+        float temp = BiomeCacheUtil.getCacheBiome(this).getBaseTemperature();
         if (temp < 0.15) {
             return "COLD";
         } else if (temp < 0.55) {

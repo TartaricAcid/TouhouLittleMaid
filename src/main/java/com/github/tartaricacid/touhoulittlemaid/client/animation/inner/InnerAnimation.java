@@ -62,6 +62,7 @@ public final class InnerAnimation {
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper head = modelMap.get("head");
                 ModelRendererWrapper ahoge = modelMap.get("ahoge");
+                ModelRendererWrapper ahogeShow = modelMap.get("ahogeShow");
 
                 if (maid.isBegging()) {
                     if (head != null) {
@@ -71,12 +72,18 @@ public final class InnerAnimation {
                         ahoge.setRotateAngleX((float) (Math.cos(ageInTicks * 1.0) * 0.05));
                         ahoge.setRotateAngleZ((float) (Math.sin(ageInTicks * 1.0) * 0.05));
                     }
+                    if (ahogeShow != null) {
+                        ahogeShow.setHidden(false);
+                    }
                 } else {
                     if (head != null) {
                         head.setRotateAngleZ(0);
                     }
                     if (ahoge != null) {
                         ahoge.setRotateAngleZ(0);
+                    }
+                    if (ahogeShow != null) {
+                        ahogeShow.setHidden(true);
                     }
                 }
             }
@@ -125,10 +132,13 @@ public final class InnerAnimation {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                // The previous typo is reserved for compatibility
                 ModelRendererWrapper reverseBlink = modelMap.get("_bink");
+                ModelRendererWrapper reverseBlinkCorrect = modelMap.get("_blink");
                 if (reverseBlink != null) {
                     float remainder = (ageInTicks + maid.getUUID().getLeastSignificantBits() % 10) % 60;
                     reverseBlink.setHidden(55 < remainder && remainder < 60);
+                    reverseBlinkCorrect.setHidden(55 < remainder && remainder < 60);
                 }
             }
         };
@@ -960,7 +970,7 @@ public final class InnerAnimation {
                 ModelRendererWrapper bootsLeftValueNormal = modelMap.get("bootsLeftValueNormal");
                 ModelRendererWrapper bootsRightValueNormal = modelMap.get("bootsRightValueNormal");
 
-                boolean valueIsNormal = (0 < maid.getArmorValue()) && (maid.getArmorValue() <= 5);
+                boolean valueIsNormal = (5 < maid.getArmorValue()) && (maid.getArmorValue() <= 10);
 
                 if (helmetValueNormal != null) {
                     helmetValueNormal.setHidden(!valueIsNormal);
