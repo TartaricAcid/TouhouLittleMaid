@@ -56,7 +56,7 @@ public final class EntityChairWrapper implements IChairData {
 
     @Override
     public long getSeed() {
-        return chair.getUUID().getLeastSignificantBits();
+        return Math.abs(chair.getUUID().getLeastSignificantBits());
     }
 
     @Override

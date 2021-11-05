@@ -46,7 +46,7 @@ public final class PlayerMaidModels {
     public static void reload() {
         PLAYER_MAID_ANIMATIONS.clear();
         for (ResourceLocation res : PLAYER_MAID_ANIMATION_RES) {
-            PLAYER_MAID_ANIMATIONS.add(InnerAnimation.getInnerAnimation().get(res));
+            PLAYER_MAID_ANIMATIONS.add(InnerAnimation.get(res));
         }
         playerMaidInfo = new MaidModelInfo() {
             @Override

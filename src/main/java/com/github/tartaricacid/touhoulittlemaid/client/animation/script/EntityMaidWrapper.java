@@ -204,7 +204,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public long getSeed() {
-        return maid.getUUID().getLeastSignificantBits();
+        return Math.abs(maid.getUUID().getLeastSignificantBits());
     }
 
     @Override

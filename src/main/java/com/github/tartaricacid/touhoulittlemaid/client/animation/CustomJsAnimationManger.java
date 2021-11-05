@@ -68,8 +68,8 @@ public class CustomJsAnimationManger {
         if (CUSTOM_ANIMATION_MAP.containsKey(resourceLocation)) {
             return CUSTOM_ANIMATION_MAP.get(resourceLocation);
         }
-        if (InnerAnimation.getInnerAnimation().containsKey(resourceLocation)) {
-            return InnerAnimation.getInnerAnimation().get(resourceLocation);
+        if (InnerAnimation.containsKey(resourceLocation)) {
+            return InnerAnimation.get(resourceLocation);
         }
         File file = rootPath.resolve("assets").resolve(resourceLocation.getNamespace()).resolve(resourceLocation.getPath()).toFile();
         if (!file.isFile()) {
@@ -94,8 +94,8 @@ public class CustomJsAnimationManger {
         if (CUSTOM_ANIMATION_MAP.containsKey(resourceLocation)) {
             return CUSTOM_ANIMATION_MAP.get(resourceLocation);
         }
-        if (InnerAnimation.getInnerAnimation().containsKey(resourceLocation)) {
-            return InnerAnimation.getInnerAnimation().get(resourceLocation);
+        if (InnerAnimation.containsKey(resourceLocation)) {
+            return InnerAnimation.get(resourceLocation);
         }
         ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", resourceLocation.getNamespace(), resourceLocation.getPath()));
         if (entry == null) {
