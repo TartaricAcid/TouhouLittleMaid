@@ -17,18 +17,60 @@
 		{
 			"model_id": "touhou_little_maid_old:singyoku3",
 			"description": ["{model.touhou_little_maid_old.singyoku3.desc}"]
-		},
-		{
-			"model_id": "touhou_little_maid_old:mima",
-			"description": ["{model.touhou_little_maid_old.mima.desc}"]
-		},
-		{
-			"model_id": "touhou_little_maid_old:alice",
-			"description": ["{model.touhou_little_maid_old.alice.desc}"]
-		},
-		{
-			"model_id": "touhou_little_maid_old:yumemi_okazaki",
-			"description": ["{model.touhou_little_maid_old.yumemi_okazaki.desc}"]
-		}
-	]
+        },
+      {
+        "model_id": "touhou_little_maid_old:mima",
+        "description": [
+          "{model.touhou_little_maid_old.mima.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:alice",
+        "description": [
+          "{model.touhou_little_maid_old.alice.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:kikuri",
+        "description": [
+          "{model.touhou_little_maid_old.kikuri.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:konngara",
+        "description": [
+          "{model.touhou_little_maid_old.konngara.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:elis",
+        "description": [
+          "{model.touhou_little_maid_old.elis.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:sariel",
+        "description": [
+          "{model.touhou_little_maid_old.sariel.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:meira",
+        "description": [
+          "{model.touhou_little_maid_old.meira.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:kirisame_marisa",
+        "description": [
+          "{model.touhou_little_maid_old.kirisame_marisa.desc}"
+        ]
+      },
+      {
+        "model_id": "touhou_little_maid_old:yumemi_okazaki",
+        "description": [
+          "{model.touhou_little_maid_old.yumemi_okazaki.desc}"
+        ]
+      }
+    ]
 }

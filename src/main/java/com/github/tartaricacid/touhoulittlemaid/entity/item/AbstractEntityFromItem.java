@@ -125,20 +125,17 @@ public abstract class AbstractEntityFromItem extends EntityLivingBase {
      */
     protected void applyEntityCrammingDamage(List<Entity> entities) {
         // 与父类相关逻辑类似
-        if (entities.isEmpty())
+        if (entities.isEmpty()) {
             return;
-
+        }
         int maxEntityCramming = this.world.getGameRules().getInt("maxEntityCramming");
-
         if (maxEntityCramming > 0 && entities.size() > maxEntityCramming - 1 && this.rand.nextInt(4) == 0) {
             int collidableEntities = 0;
-
-            for (int i = 0; i < entities.size(); i++) {
-                if (entities.get(i).isRiding()) {
+            for (Entity entity : entities) {
+                if (entity.isRiding()) {
                     collidableEntities++;
                 }
             }
-
             if (collidableEntities > maxEntityCramming) {
                 this.attackEntityFrom(DamageSource.CRAMMING, 6.0F);
             }

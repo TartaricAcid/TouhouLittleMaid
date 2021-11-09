@@ -77,17 +77,7 @@ public class SendToClientDrawMessage implements IMessage {
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(SendToClientDrawMessage message, MessageContext ctx) {
             if (ctx.side == Side.CLIENT) {
-                Minecraft.getMinecraft().addScheduledTask(() -> {
-                    // 检查客户端列表与服务端列表是否同步
-                    for (DrawManger.ModelDrawInfo info : message.modelDrawInfoList) {
-                        if (!CustomResourcesLoader.MAID_MODEL.containsInfo(info.getModelId())) {
-                            ITextComponent component = new TextComponentTranslation("message.touhou_little_maid.draw.pack_not_sync");
-                            Minecraft.getMinecraft().player.sendMessage(component);
-                            return;
-                        }
-                    }
-                    Minecraft.getMinecraft().displayGuiScreen(new DrawConfigGui(sortModelDrawInfo(message.modelDrawInfoList)));
-                });
+                Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(new DrawConfigGui(sortModelDrawInfo(message.modelDrawInfoList))));
             }
             return null;
         }

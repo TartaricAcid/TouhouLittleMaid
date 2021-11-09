@@ -565,6 +565,7 @@ model.touhou_little_maid.ushizaki_urumi.name=牛崎润美
 model.touhou_little_maid.watatsuki_no_toyohime.name=绵月丰姬
 model.touhou_little_maid.watatsuki_no_yorihime.name=绵月依姬
 model.touhou_little_maid.yorigami_jyoon.name=依神女苑
+model.touhou_little_maid.reisen.name=铃仙二号
 
 model.touhou_little_maid.hakurei_reimu.desc=§7乐园的巫女
 model.touhou_little_maid.yakumo_ran.desc=§7隙间妖怪的式神
@@ -680,6 +681,7 @@ model.touhou_little_maid.ushizaki_urumi.desc=§7古代鱼的携子护卫
 model.touhou_little_maid.watatsuki_no_toyohime.desc=§7连接海与山的月之公主
 model.touhou_little_maid.watatsuki_no_yorihime.desc=§7神灵附体的月之公主
 model.touhou_little_maid.yorigami_jyoon.desc=§7最凶最恶的双子之妹
+model.touhou_little_maid.reisen.desc=§7-
 
 model.touhou_little_maid.cushion.name=坐垫
 model.touhou_little_maid.class_desk.name=课桌
@@ -715,6 +717,12 @@ model.touhou_little_maid_old.singyoku3.name=神玉（第三形态）
 model.touhou_little_maid_old.alice.name=爱丽丝
 model.touhou_little_maid_old.mima.name=魅魔
 model.touhou_little_maid_old.yumemi_okazaki.name=冈崎梦美
+model.touhou_little_maid_old.kikuri.name=菊理
+model.touhou_little_maid_old.konngara.name=矜羯罗
+model.touhou_little_maid_old.elis.name=依莉斯
+model.touhou_little_maid_old.sariel.name=萨丽爱尔
+model.touhou_little_maid_old.meira.name=明罗
+model.touhou_little_maid_old.kirisame_marisa.name=雾雨魔理沙
 
 model.touhou_little_maid_old.reimu_hakurei.desc=§7维护梦与传统的巫女
 model.touhou_little_maid_old.singyoku2.desc=Gatekeeper
@@ -722,6 +730,12 @@ model.touhou_little_maid_old.singyoku3.desc=Gatekeeper
 model.touhou_little_maid_old.mima.desc=§7死之少女
 model.touhou_little_maid_old.alice.desc=§7恶灵小姐
 model.touhou_little_maid_old.yumemi_okazaki.desc=§7梦幻传说
+model.touhou_little_maid_old.kikuri.desc=§7Hellish Moon
+model.touhou_little_maid_old.konngara.desc=§7Astral Knight
+model.touhou_little_maid_old.elis.desc=§7Innocence Devil
+model.touhou_little_maid_old.sariel.desc=§7Angel of Death
+model.touhou_little_maid_old.meira.desc=§7武士
+model.touhou_little_maid_old.kirisame_marisa.desc=§7魔法使小姐
 
 # Sound Info
 pack.touhou_little_maid.sound.name=默认音效
