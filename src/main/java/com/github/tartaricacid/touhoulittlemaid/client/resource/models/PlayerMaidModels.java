@@ -29,7 +29,9 @@ public final class PlayerMaidModels {
     private static final Cache<String, GameProfile> GAME_PROFILE_CACHE = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
     private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1, TimeUnit.MINUTES, new LinkedBlockingQueue());
     private static final GameProfile EMPTY_GAME_PROFILE = new GameProfile(null, "EMPTY");
-    private static final PlayerMaidModel PLAYER_MAID_MODEL = new PlayerMaidModel();
+    private static final PlayerMaidModel PLAYER_MAID_MODEL = new PlayerMaidModel(false);
+    private static final PlayerMaidModel PLAYER_MAID_MODEL_SLIM = new PlayerMaidModel(true);
+    private static final String SLIM_NAME = "slim";
     private static final List<ResourceLocation> PLAYER_MAID_ANIMATION_RES = Lists.newArrayList(
             new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
             new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
@@ -56,7 +58,41 @@ public final class PlayerMaidModels {
         };
     }
 
-    public static BedrockModel<EntityMaid> getPlayerMaidModel() {
+    public static BedrockModel<EntityMaid> getPlayerMaidModel(String name) {
+        GameProfile newProfile = null;
+        Minecraft minecraft = Minecraft.getInstance();
+
+        try {
+            newProfile = GAME_PROFILE_CACHE.get(name, () -> {
+                THREAD_POOL.submit(() -> {
+                    GameProfile profile = new GameProfile(null, name);
+                    GameProfile profileNew = SkullTileEntity.updateGameprofile(profile);
+                    minecraft.submit(() -> {
+                        if (profileNew != null) {
+                            GAME_PROFILE_CACHE.put(name, profileNew);
+                        }
+                    });
+                });
+                return EMPTY_GAME_PROFILE;
+            });
+        } catch (ExecutionException ignore) {
+        }
+
+        if (newProfile != null) {
+            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(newProfile);
+            if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                String skinModel = map.get(MinecraftProfileTexture.Type.SKIN).getMetadata("model");
+                if (SLIM_NAME.equals(skinModel)) {
+                    return PLAYER_MAID_MODEL_SLIM;
+                }
+            } else {
+                UUID uuid = PlayerEntity.createPlayerUUID(newProfile);
+                String skinModel = DefaultPlayerSkin.getSkinModelName(uuid);
+                if (SLIM_NAME.equals(skinModel)) {
+                    return PLAYER_MAID_MODEL_SLIM;
+                }
+            }
+        }
         return PLAYER_MAID_MODEL;
     }
 

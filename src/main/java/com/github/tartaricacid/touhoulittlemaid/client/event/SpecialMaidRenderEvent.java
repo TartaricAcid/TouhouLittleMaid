@@ -31,10 +31,11 @@ public final class SpecialMaidRenderEvent {
         }
         String name = customName.getString();
         if (StringUtils.isNotBlank(name) && name.startsWith(PLAYER_NAME_PREFIX)) {
+            String playerName = name.substring(2);
             MaidModels.ModelData data = event.getModelData();
-            data.setModel(PlayerMaidModels.getPlayerMaidModel());
+            data.setModel(PlayerMaidModels.getPlayerMaidModel(playerName));
             data.setAnimations(PlayerMaidModels.getPlayerMaidAnimations());
-            data.setInfo(PlayerMaidModels.getPlayerMaidInfo(name.substring(2)));
+            data.setInfo(PlayerMaidModels.getPlayerMaidInfo(playerName));
             event.setCanceled(true);
         }
     }

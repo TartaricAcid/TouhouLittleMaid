@@ -67,7 +67,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
         }
     }
 
-    private void loadNewModel(BedrockModelPOJO pojo) {
+    protected void loadNewModel(BedrockModelPOJO pojo) {
         assert pojo.getGeometryModelNew() != null;
         pojo.getGeometryModelNew().deco();
 
@@ -175,7 +175,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
         }
     }
 
-    private void loadLegacyModel(BedrockModelPOJO pojo) {
+    protected void loadLegacyModel(BedrockModelPOJO pojo) {
         assert pojo.getGeometryModelLegacy() != null;
         pojo.getGeometryModelLegacy().deco();
 
