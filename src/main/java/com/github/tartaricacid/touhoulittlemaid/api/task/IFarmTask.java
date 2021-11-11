@@ -91,7 +91,7 @@ public interface IFarmTask extends IMaidTask {
      */
     @Override
     default SoundEvent getAmbientSound(EntityMaid maid) {
-        return SoundUtil.environmentSound(maid, InitSounds.MAID_FARM.get(), 0.2f);
+        return SoundUtil.environmentSound(maid, InitSounds.MAID_FARM.get(), 0.5f);
     }
 
     /**

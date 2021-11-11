@@ -10,10 +10,10 @@ import net.minecraft.world.biome.Biome;
 import java.util.Random;
 
 public final class SoundUtil {
-    private static final long MORNING_START = 500;
-    private static final long MORNING_END = 1500;
-    private static final long EVENING_START = 12500;
-    private static final long EVENING_END = 13500;
+    private static final long MORNING_START = 0;
+    private static final long MORNING_END = 3000;
+    private static final long EVENING_START = 12000;
+    private static final long EVENING_END = 15000;
     private static final float LOW_TEMPERATURE = 0.15F;
     private static final float HIGH_TEMPERATURE = 0.95F;
 
@@ -24,11 +24,11 @@ public final class SoundUtil {
         long dayTime = world.getDayTime();
         Biome biome = world.getBiome(pos);
 
-        // 差不多早上 6:30 - 7:30
+        // 差不多早上 6:00 - 9:00
         if (rand.nextFloat() < probability && MORNING_START < dayTime && dayTime < MORNING_END) {
             return InitSounds.MAID_MORNING.get();
         }
-        // 差不多下午 6:30 - 7:30
+        // 差不多下午 6:00 - 9:00
         if (rand.nextFloat() < probability && EVENING_START < dayTime && dayTime < EVENING_END) {
             return InitSounds.MAID_NIGHT.get();
         }
@@ -43,6 +43,14 @@ public final class SoundUtil {
         }
         if (rand.nextFloat() < probability && biome.getTemperature(pos) > HIGH_TEMPERATURE) {
             return InitSounds.MAID_HOT.get();
+        }
+        return fallback;
+    }
+
+    public static SoundEvent attackSound(EntityMaid maid, SoundEvent fallback, float probability) {
+        Random rand = maid.getRandom();
+        if (rand.nextFloat() < probability) {
+            return InitSounds.MAID_FIND_TARGET.get();
         }
         return fallback;
     }

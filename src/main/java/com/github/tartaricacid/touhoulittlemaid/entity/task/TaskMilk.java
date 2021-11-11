@@ -36,7 +36,7 @@ public class TaskMilk implements IMaidTask {
     @Nullable
     @Override
     public SoundEvent getAmbientSound(EntityMaid maid) {
-        return SoundUtil.environmentSound(maid, InitSounds.MAID_MILK.get(), 0.2f);
+        return SoundUtil.environmentSound(maid, InitSounds.MAID_MILK.get(), 0.5f);
     }
 
     @Override

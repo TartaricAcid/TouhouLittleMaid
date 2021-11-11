@@ -30,7 +30,7 @@ public class TaskSnow implements IFarmTask {
 
     @Override
     public SoundEvent getAmbientSound(EntityMaid maid) {
-        return SoundUtil.environmentSound(maid, InitSounds.MAID_REMOVE_SNOW.get(), 0.2f);
+        return SoundUtil.environmentSound(maid, InitSounds.MAID_REMOVE_SNOW.get(), 0.5f);
     }
 
     @Override

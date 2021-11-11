@@ -33,7 +33,7 @@ public class TaskShears implements IMaidTask {
     @Nullable
     @Override
     public SoundEvent getAmbientSound(EntityMaid maid) {
-        return SoundUtil.environmentSound(maid, InitSounds.MAID_SHEARS.get(), 0.2f);
+        return SoundUtil.environmentSound(maid, InitSounds.MAID_SHEARS.get(), 0.5f);
     }
 
     @Override

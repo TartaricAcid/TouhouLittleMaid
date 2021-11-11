@@ -96,7 +96,7 @@ public class TaskFeedOwner implements IFeedTask {
     @Nullable
     @Override
     public SoundEvent getAmbientSound(EntityMaid maid) {
-        return SoundUtil.environmentSound(maid, InitSounds.MAID_FEED.get(), 0.1f);
+        return SoundUtil.environmentSound(maid, InitSounds.MAID_FEED.get(), 0.3f);
     }
 
     @Override

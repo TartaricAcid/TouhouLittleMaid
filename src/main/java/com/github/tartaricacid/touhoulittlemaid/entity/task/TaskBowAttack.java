@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidShootTa
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -48,7 +49,7 @@ public class TaskBowAttack implements IRangedAttackTask {
     @Nullable
     @Override
     public SoundEvent getAmbientSound(EntityMaid maid) {
-        return InitSounds.MAID_RANGE_ATTACK.get();
+        return SoundUtil.attackSound(maid, InitSounds.MAID_RANGE_ATTACK.get(), 0.5f);
     }
 
     @Override

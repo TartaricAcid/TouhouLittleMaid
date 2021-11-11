@@ -37,7 +37,7 @@ public class TaskTorch implements IMaidTask {
     @Nullable
     @Override
     public SoundEvent getAmbientSound(EntityMaid maid) {
-        return SoundUtil.environmentSound(maid, InitSounds.MAID_TORCH.get(), 0.2f);
+        return SoundUtil.environmentSound(maid, InitSounds.MAID_TORCH.get(), 0.5f);
     }
 
     @Override
