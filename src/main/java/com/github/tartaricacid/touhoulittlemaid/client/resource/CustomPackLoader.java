@@ -538,7 +538,7 @@ public class CustomPackLoader {
         getLanguageMap(zipFile, newLangData, defaultLangPath);
         getLanguageMap(zipFile, newLangData, currentLangPath);
 
-        newLangData.putAll(oldLangData);
+        languageMapMerge(oldLangData, newLangData);
         // FIXME: 2021/10/17 和 Untranslated Items 模组冲突
         ((ClientLanguageMap) LanguageMap.getInstance()).storage = newLangData;
     }
@@ -554,7 +554,7 @@ public class CustomPackLoader {
         getLanguageMap(rootPath, newLangData, defaultLangPath);
         getLanguageMap(rootPath, newLangData, currentLangPath);
 
-        newLangData.putAll(oldLangData);
+        languageMapMerge(oldLangData, newLangData);
         // FIXME: 2021/10/17 和 Untranslated Items 模组冲突
         ((ClientLanguageMap) LanguageMap.getInstance()).storage = newLangData;
     }
@@ -591,6 +591,14 @@ public class CustomPackLoader {
                         langData.put(map[0], map[1]);
                     }
                 }
+            }
+        }
+    }
+
+    private static void languageMapMerge(Map<String, String> oldLangData, Map<String, String> newLangData) {
+        for (String key : oldLangData.keySet()) {
+            if (!newLangData.containsKey(key)) {
+                newLangData.put(key, oldLangData.get(key));
             }
         }
     }

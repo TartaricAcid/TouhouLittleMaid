@@ -24,7 +24,7 @@ public final class PackCommand {
 
     private static int reloadAllPack(CommandContext<CommandSource> context) {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ReloadResourceEvent::reloadAllPack);
-        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> PackCommand::sendPackToClient);
+        // DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> PackCommand::sendPackToClient);
         ServerCustomPackLoader.reloadPacks();
         // TODO：打印加载的时间到客户端聊天栏
         context.getSource().sendSuccess(new TranslationTextComponent("commands.touhou_little_maid.pack.reload.info"), true);
