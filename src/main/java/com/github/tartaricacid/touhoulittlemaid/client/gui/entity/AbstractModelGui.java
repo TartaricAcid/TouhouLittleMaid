@@ -321,16 +321,17 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      */
     private void drawPackInfoText(MatrixStack matrixStack, CustomModelPack<E> pack, int middleX, int middleY) {
         int offsetY = -80;
+        int sideMiddleX = (middleX - 256 / 2) / 2;
 
         // 绘制包名
-        drawCenteredString(matrixStack, font, ParseI18n.parse(pack.getPackName()), middleX - 193, middleY + offsetY, 0xffffff);
+        drawCenteredString(matrixStack, font, ParseI18n.parse(pack.getPackName()), sideMiddleX, middleY + offsetY, 0xffffff);
 
         // 如果描述不为空，逐行绘制描述
         for (ITextComponent str : ParseI18n.parse(pack.getDescription())) {
             List<ITextProperties> split = font.getSplitter().splitLines(str, (middleX - 256 / 2) - 20, Style.EMPTY);
             for (ITextProperties properties : split) {
                 offsetY += 10;
-                drawCenteredString(matrixStack, font, properties.getString(), middleX - 193, middleY + offsetY, TextFormatting.DARK_GRAY.getColor());
+                drawCenteredString(matrixStack, font, properties.getString(), sideMiddleX, middleY + offsetY, TextFormatting.DARK_GRAY.getColor());
             }
         }
 
@@ -339,7 +340,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
             for (List<String> textList : Lists.partition(pack.getAuthor(), 2)) {
                 offsetY += 10;
                 drawCenteredString(matrixStack, font, new StringTextComponent(textList.toString()).withStyle(TextFormatting.GOLD),
-                        middleX - 193, middleY + offsetY, 0xffffff);
+                        sideMiddleX, middleY + offsetY, 0xffffff);
             }
         }
 
@@ -348,7 +349,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
             offsetY += 10;
             drawCenteredString(matrixStack, font, new TranslationTextComponent("gui.touhou_little_maid.skin.text.version", pack.getVersion())
                             .withStyle(TextFormatting.DARK_AQUA),
-                    middleX - 193, middleY + offsetY, 0xffffff);
+                    sideMiddleX, middleY + offsetY, 0xffffff);
         }
 
         // 绘制日期信息
@@ -356,7 +357,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
             offsetY += 10;
             drawCenteredString(matrixStack, font, new TranslationTextComponent("gui.touhou_little_maid.skin.text.date", pack.getDate())
                             .withStyle(TextFormatting.GREEN),
-                    middleX - 193, middleY + offsetY, 0xffffff);
+                    sideMiddleX, middleY + offsetY, 0xffffff);
         }
 
         // 绘制最后的翻页数

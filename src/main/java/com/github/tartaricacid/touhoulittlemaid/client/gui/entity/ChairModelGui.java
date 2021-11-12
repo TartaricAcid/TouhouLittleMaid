@@ -25,7 +25,7 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(entity.getModelId());
-        InventoryScreen.renderEntityInInventory(middleX - 190, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
+        InventoryScreen.renderEntityInInventory((middleX - 256 / 2) / 2, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
     }
 
     @Override
