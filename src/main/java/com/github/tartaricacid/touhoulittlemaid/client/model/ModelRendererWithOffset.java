@@ -12,6 +12,9 @@ public class ModelRendererWithOffset extends ModelRenderer {
     public float offsetX;
     public float offsetY;
     public float offsetZ;
+    private float initRotX;
+    private float initRotY;
+    private float initRotZ;
 
     public ModelRendererWithOffset(Model model) {
         super(model);
@@ -44,5 +47,23 @@ public class ModelRendererWithOffset extends ModelRenderer {
     @Override
     public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn) {
         this.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    void setInitRotationAngle(float x, float y, float z) {
+        this.initRotX = x;
+        this.initRotY = y;
+        this.initRotZ = z;
+    }
+
+    public float getInitRotX() {
+        return initRotX;
+    }
+
+    public float getInitRotY() {
+        return initRotY;
+    }
+
+    public float getInitRotZ() {
+        return initRotZ;
     }
 }

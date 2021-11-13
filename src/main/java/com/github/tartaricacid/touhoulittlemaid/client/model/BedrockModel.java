@@ -102,7 +102,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
             // 父骨骼的名称，可能为空
             @Nullable String parent = bones.getParent();
             // 塞进 HashMap 里面的模型对象
-            ModelRenderer model = modelMap.get(name).getModelRenderer();
+            ModelRendererWithOffset model = modelMap.get(name).getModelRenderer();
 
             // 镜像参数
             model.mirror = bones.isMirror();
@@ -153,7 +153,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
                 }
                 // 创建 Cube ModelRender
                 else {
-                    ModelRenderer cubeRenderer = new ModelRendererWithOffset(this);
+                    ModelRendererWithOffset cubeRenderer = new ModelRendererWithOffset(this);
                     cubeRenderer.setPos(convertPivot(bones, cube, 0), convertPivot(bones, cube, 1), convertPivot(bones, cube, 2));
                     setRotationAngle(cubeRenderer, convertRotation(cubeRotation.get(0)), convertRotation(cubeRotation.get(1)), convertRotation(cubeRotation.get(2)));
                     if (faceUv == null) {
@@ -209,7 +209,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
             // 父骨骼的名称，可能为空
             @Nullable String parent = bones.getParent();
             // 塞进 HashMap 里面的模型对象
-            ModelRenderer model = modelMap.get(name).getModelRenderer();
+            ModelRendererWithOffset model = modelMap.get(name).getModelRenderer();
 
             // 镜像参数
             model.mirror = bones.isMirror();
@@ -310,10 +310,11 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
         }
     }
 
-    private void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    private void setRotationAngle(ModelRendererWithOffset modelRenderer, float x, float y, float z) {
         modelRenderer.xRot = x;
         modelRenderer.yRot = y;
         modelRenderer.zRot = z;
+        modelRenderer.setInitRotationAngle(x, y, z);
     }
 
     public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {

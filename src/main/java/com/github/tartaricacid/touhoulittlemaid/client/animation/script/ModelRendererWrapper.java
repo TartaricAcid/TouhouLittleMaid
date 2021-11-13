@@ -98,4 +98,19 @@ public class ModelRendererWrapper implements IModelRenderer {
     public void setHidden(boolean hidden) {
         modelRenderer.visible = !hidden;
     }
+
+    @Override
+    public float getInitRotateAngleX() {
+        return modelRenderer.getInitRotX();
+    }
+
+    @Override
+    public float getInitRotateAngleY() {
+        return modelRenderer.getInitRotY();
+    }
+
+    @Override
+    public float getInitRotateAngleZ() {
+        return modelRenderer.getInitRotZ();
+    }
 }

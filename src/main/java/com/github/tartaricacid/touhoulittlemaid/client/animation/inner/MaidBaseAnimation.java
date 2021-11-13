@@ -91,18 +91,18 @@ public final class MaidBaseAnimation {
                         head.setRotateAngleZ(0.139f);
                     }
                     if (ahoge != null) {
-                        ahoge.setRotateAngleX((float) (Math.cos(ageInTicks * 1.0) * 0.05));
-                        ahoge.setRotateAngleZ((float) (Math.sin(ageInTicks * 1.0) * 0.05));
+                        ahoge.setRotateAngleX((float) (Math.cos(ageInTicks * 1.0) * 0.05) + ahoge.getInitRotateAngleX());
+                        ahoge.setRotateAngleZ((float) (Math.sin(ageInTicks * 1.0) * 0.05) + ahoge.getInitRotateAngleZ());
                     }
                     if (ahogeShow != null) {
                         ahogeShow.setHidden(false);
                     }
                 } else {
                     if (head != null) {
-                        head.setRotateAngleZ(0);
+                        head.setRotateAngleZ(head.getInitRotateAngleZ());
                     }
                     if (ahoge != null) {
-                        ahoge.setRotateAngleZ(0);
+                        ahoge.setRotateAngleZ(ahoge.getInitRotateAngleZ());
                     }
                     if (ahogeShow != null) {
                         ahogeShow.setHidden(true);
@@ -121,7 +121,7 @@ public final class MaidBaseAnimation {
 
                 if (head != null) {
                     if (isPortableAudioPlay()) {
-                        head.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.4) * 0.06));
+                        head.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.4) * 0.06) + head.getInitRotateAngleZ());
                     }
                 }
             }
@@ -139,17 +139,17 @@ public final class MaidBaseAnimation {
                 if (time < Math.PI * 4) {
                     float rotationZ = (float) Math.abs(Math.sin(time * 0.5)) * 0.35f;
                     if (earLeftShake != null) {
-                        earLeftShake.setRotateAngleZ(rotationZ);
+                        earLeftShake.setRotateAngleZ(earLeftShake.getInitRotateAngleZ() + rotationZ);
                     }
                     if (earRightShake != null) {
-                        earRightShake.setRotateAngleZ(-rotationZ);
+                        earRightShake.setRotateAngleZ(earRightShake.getInitRotateAngleZ() - rotationZ);
                     }
                 } else {
                     if (earLeftShake != null) {
-                        earLeftShake.setRotateAngleZ(0);
+                        earLeftShake.setRotateAngleZ(earLeftShake.getInitRotateAngleZ());
                     }
                     if (earRightShake != null) {
-                        earRightShake.setRotateAngleZ(0);
+                        earRightShake.setRotateAngleZ(earRightShake.getInitRotateAngleZ());
                     }
                 }
             }
@@ -163,7 +163,7 @@ public final class MaidBaseAnimation {
                 ModelRendererWrapper legLeft = modelMap.get("legLeft");
                 ModelRendererWrapper legRight = modelMap.get("legRight");
 
-                boolean isFarm = "farm".equals(maid.getTask().getUid().getPath()) && maid.swingTime > 0.0;
+                boolean isFarm = "farm".equals(maid.getTask().getUid().getPath()) && maid.swingTime > 0;
 
                 if (isFarm) {
                     GlWrapper.translate(0, 0.0713625, -0.35876875);
@@ -176,8 +176,8 @@ public final class MaidBaseAnimation {
                         leftRad -= 0.3927;
                     }
                     legLeft.setRotateAngleX((float) leftRad);
-                    legLeft.setRotateAngleY(0);
-                    legLeft.setRotateAngleZ(0);
+                    legLeft.setRotateAngleY(legLeft.getInitRotateAngleY());
+                    legLeft.setRotateAngleZ(legLeft.getInitRotateAngleZ());
                 }
                 if (legRight != null) {
                     double rightRad = -Math.cos(limbSwing * 0.67) * 0.3 * limbSwingAmount;
@@ -185,8 +185,8 @@ public final class MaidBaseAnimation {
                         rightRad -= 0.3927;
                     }
                     legRight.setRotateAngleX((float) rightRad);
-                    legRight.setRotateAngleY(0);
-                    legRight.setRotateAngleZ(0);
+                    legRight.setRotateAngleY(legRight.getInitRotateAngleY());
+                    legRight.setRotateAngleZ(legRight.getInitRotateAngleZ());
                 }
             }
         };
@@ -199,9 +199,9 @@ public final class MaidBaseAnimation {
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
-                double f1 = 1.0 - Math.pow(1.0 - maid.swingTime, 4);
+                double f1 = 1.0 - Math.pow(1.0 - maid.attackAnim, 4);
                 double f2 = Math.sin(f1 * Math.PI);
-                double f3 = Math.sin(maid.swingTime * Math.PI) * -0.7 * 0.75;
+                double f3 = Math.sin(maid.attackAnim * Math.PI) * -0.7 * 0.75;
 
                 float[] rotation;
                 if (armLeft != null) {
@@ -218,12 +218,12 @@ public final class MaidBaseAnimation {
                         armLeft.setRotateAngleZ(rotation[2]);
                     } else {
                         armLeft.setRotateAngleX((float) (-Math.cos(limbSwing * 0.67) * 0.7 * limbSwingAmount));
-                        armLeft.setRotateAngleY(0);
-                        armLeft.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.05) * 0.05 - 0.4));
+                        armLeft.setRotateAngleY(armLeft.getInitRotateAngleY());
+                        armLeft.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.05) * 0.05 + armLeft.getInitRotateAngleZ()));
                         // 手部使用动画
-                        if (maid.swingTime > 0.0 && isSwingLeftHand(maid)) {
+                        if (maid.attackAnim > 0.0 && isSwingLeftHand(maid)) {
                             armLeft.setRotateAngleX((float) (armLeft.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(maid.swingTime * Math.PI) * -0.4));
+                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
                         }
                     }
                 }
@@ -238,8 +238,8 @@ public final class MaidBaseAnimation {
                         armRight.setRotateAngleZ(rotation[2]);
                     } else {
                         armRight.setRotateAngleX((float) (Math.cos(limbSwing * 0.67) * 0.7 * limbSwingAmount));
-                        armRight.setRotateAngleY(0);
-                        armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.05 + 0.4));
+                        armRight.setRotateAngleY(armRight.getInitRotateAngleY());
+                        armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.05 + armRight.getInitRotateAngleZ()));
                         // 手部使用动画
                         if (maid.attackAnim > 0.0 && !isSwingLeftHand(maid)) {
                             armRight.setRotateAngleX((float) (armRight.getRotateAngleX() - (f2 * 1.2 + f3)));
@@ -327,7 +327,7 @@ public final class MaidBaseAnimation {
                     if (isPassengerMarisaBroom(maid) || maid.isPassenger() || maid.isInSittingPose()) {
                         sittingRotationSkirt.setRotateAngleX(-0.567f);
                     } else {
-                        sittingRotationSkirt.setRotateAngleX(0);
+                        sittingRotationSkirt.setRotateAngleX(sittingRotationSkirt.getInitRotateAngleX());
                     }
                 }
             }
@@ -342,11 +342,11 @@ public final class MaidBaseAnimation {
                 ModelRendererWrapper wingRight = modelMap.get("wingRight");
 
                 if (wingLeft != null) {
-                    wingLeft.setRotateAngleY((float) (-Math.cos(ageInTicks * 0.3) * 0.2 + 1.0));
+                    wingLeft.setRotateAngleY((float) (-Math.cos(ageInTicks * 0.3) * 0.2 + wingLeft.getInitRotateAngleY()));
                     wingLeft.setHidden(maid.isSleeping());
                 }
                 if (wingRight != null) {
-                    wingRight.setRotateAngleY((float) (Math.cos(ageInTicks * 0.3) * 0.2 - 1.0));
+                    wingRight.setRotateAngleY((float) (Math.cos(ageInTicks * 0.3) * 0.2 + wingRight.getInitRotateAngleY()));
                     wingRight.setHidden(maid.isSleeping());
                 }
             }
@@ -442,8 +442,8 @@ public final class MaidBaseAnimation {
                 ModelRendererWrapper tail = modelMap.get("tail");
 
                 if (tail != null) {
-                    tail.setRotateAngleX((float) (Math.sin(ageInTicks * 0.2) * 0.05));
-                    tail.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.2) * 0.1));
+                    tail.setRotateAngleX((float) (Math.sin(ageInTicks * 0.2) * 0.05) + tail.getInitRotateAngleX());
+                    tail.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.2) * 0.1) + tail.getInitRotateAngleZ());
 
                     tail.setHidden(maid.isSleeping());
                 }
