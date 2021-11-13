@@ -19,6 +19,7 @@ public final class InnerAnimation {
     public static void init() {
         INNER_ANIMATION.clear();
         MaidBaseAnimation.init();
+        MaidExtraAnimation.init();
         MaidArmorAnimation.init();
         MaidTaskAnimation.init();
         ChairBaseAnimation.init();
