@@ -25,10 +25,13 @@ public final class MaidBaseAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/default.js"), getHeadDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/music_shake.js"), getHeadMusicShake());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/ear_shake.js"), getEarShake());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_swing.js"), getHairSwing());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_ponytail_swing.js"), getHairPonytailSwing());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/default.js"), getLegDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/default.js"), getSitDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_hidden.js"), getSitSkirtHidden());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"), getSitSkirtRotation());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation_swing.js"), getSitSkirtRotationSwing());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/backpack.js"), getStatusBackpack());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/backpack_level.js"), getStatusBackpackLevel());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/sasimono.js"), getStatusSasimono());
@@ -84,7 +87,7 @@ public final class MaidBaseAnimation {
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper head = modelMap.get("head");
                 ModelRendererWrapper ahoge = modelMap.get("ahoge");
-                ModelRendererWrapper ahogeShow = modelMap.get("ahogeShow");
+                ModelRendererWrapper begShow = modelMap.get("begShow");
 
                 if (maid.isBegging()) {
                     if (head != null) {
@@ -94,8 +97,8 @@ public final class MaidBaseAnimation {
                         ahoge.setRotateAngleX((float) (Math.cos(ageInTicks * 1.0) * 0.05) + ahoge.getInitRotateAngleX());
                         ahoge.setRotateAngleZ((float) (Math.sin(ageInTicks * 1.0) * 0.05) + ahoge.getInitRotateAngleZ());
                     }
-                    if (ahogeShow != null) {
-                        ahogeShow.setHidden(false);
+                    if (begShow != null) {
+                        begShow.setHidden(false);
                     }
                 } else {
                     if (head != null) {
@@ -104,8 +107,8 @@ public final class MaidBaseAnimation {
                     if (ahoge != null) {
                         ahoge.setRotateAngleZ(ahoge.getInitRotateAngleZ());
                     }
-                    if (ahogeShow != null) {
-                        ahogeShow.setHidden(true);
+                    if (begShow != null) {
+                        begShow.setHidden(true);
                     }
                 }
             }
@@ -128,6 +131,38 @@ public final class MaidBaseAnimation {
         };
     }
 
+    public static IAnimation<EntityMaid> getHairPonytailSwing() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper hairPonytailSwing = modelMap.get("hairPonytailSwing");
+
+                if (hairPonytailSwing != null) {
+                    float rotationZ = (float) Math.sin(ageInTicks * 0.05) * 0.06f;
+                    hairPonytailSwing.setRotateAngleZ(rotationZ + hairPonytailSwing.getInitRotateAngleZ());
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityMaid> getHairSwing() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper hairLeftSwing = modelMap.get("hairLeftSwing");
+                ModelRendererWrapper hairRightSwing = modelMap.get("hairRightSwing");
+
+                float rotationZ = (float) Math.sin(ageInTicks * 0.05) * 0.04f;
+                if (hairLeftSwing != null) {
+                    hairLeftSwing.setRotateAngleZ(hairLeftSwing.getInitRotateAngleZ() + rotationZ);
+                }
+                if (hairRightSwing != null) {
+                    hairRightSwing.setRotateAngleZ(hairRightSwing.getInitRotateAngleZ() - rotationZ);
+                }
+            }
+        };
+    }
+
     public static IAnimation<EntityMaid> getEarShake() {
         return new IAnimation<EntityMaid>() {
             @Override
@@ -135,9 +170,9 @@ public final class MaidBaseAnimation {
                 ModelRendererWrapper earLeftShake = modelMap.get("earLeftShake");
                 ModelRendererWrapper earRightShake = modelMap.get("earRightShake");
 
-                float time = (ageInTicks + Math.abs(maid.getUUID().getLeastSignificantBits()) % 10) % 60;
+                float time = (ageInTicks + Math.abs(maid.getUUID().getLeastSignificantBits()) % 10) % 40;
                 if (time < Math.PI * 4) {
-                    float rotationZ = (float) Math.abs(Math.sin(time * 0.5)) * 0.35f;
+                    float rotationZ = (float) Math.abs(Math.sin(time * 0.25)) * 0.4f;
                     if (earLeftShake != null) {
                         earLeftShake.setRotateAngleZ(earLeftShake.getInitRotateAngleZ() + rotationZ);
                     }
@@ -209,7 +244,7 @@ public final class MaidBaseAnimation {
                         armLeft.setRotateAngleX(-1.3f);
                     } else if (isHoldTrolley()) {
                         armLeft.setRotateAngleX(0.5f);
-                        armLeft.setRotateAngleY(0);
+                        armLeft.setRotateAngleY(armLeft.getInitRotateAngleY());
                         armLeft.setRotateAngleZ(-0.395f);
                     } else if (isHoldVehicle()) {
                         rotation = getLeftHandRotation();
@@ -328,6 +363,25 @@ public final class MaidBaseAnimation {
                         sittingRotationSkirt.setRotateAngleX(-0.567f);
                     } else {
                         sittingRotationSkirt.setRotateAngleX(sittingRotationSkirt.getInitRotateAngleX());
+                    }
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityMaid> getSitSkirtRotationSwing() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper sittingRotationSwingSkirt = modelMap.get("sittingRotationSwingSkirt");
+                if (sittingRotationSwingSkirt != null) {
+                    if (isPassengerMarisaBroom(maid) || maid.isPassenger() || maid.isInSittingPose()) {
+                        sittingRotationSwingSkirt.setRotateAngleX(-0.567f);
+                        sittingRotationSwingSkirt.setRotateAngleZ(sittingRotationSwingSkirt.getInitRotateAngleZ());
+                    } else {
+                        sittingRotationSwingSkirt.setRotateAngleX(sittingRotationSwingSkirt.getInitRotateAngleX());
+                        float rotationZ = (float) Math.sin(ageInTicks * 0.05) * 0.03f;
+                        sittingRotationSwingSkirt.setRotateAngleZ(sittingRotationSwingSkirt.getInitRotateAngleZ() + rotationZ);
                     }
                 }
             }
