@@ -311,14 +311,18 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
      */
     private void drawPackInfoText(CustomModelPack<U> pack, int middleX, int middleY) {
         int offSet = -80;
+        int sideMiddleX = (middleX - 256 / 2) / 2;
 
         // 绘制包名
-        drawCenteredString(fontRenderer, ParseI18n.parse(pack.getPackName()), middleX - 193, middleY + offSet, 0xffffff);
+        drawCenteredString(fontRenderer, ParseI18n.parse(pack.getPackName()), sideMiddleX, middleY + offSet, 0xffffff);
 
         // 如果描述不为空，逐行绘制描述
         for (String str : ParseI18n.parse(pack.getDescription())) {
-            offSet += 10;
-            drawCenteredString(fontRenderer, TextFormatting.GRAY + str, middleX - 193, middleY + offSet, 0xffffff);
+            List<String> split = fontRenderer.listFormattedStringToWidth(str, (middleX - 256 / 2) - 20);
+            for (String line : split) {
+                offSet += 10;
+                drawCenteredString(fontRenderer, TextFormatting.GRAY + line, sideMiddleX, middleY + offSet, 0xffffff);
+            }
         }
 
         // 绘制作者列表
@@ -326,7 +330,7 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
             for (List<String> textList : Lists.partition(pack.getAuthor(), 2)) {
                 offSet += 10;
                 drawCenteredString(fontRenderer, TextFormatting.GOLD + textList.toString(),
-                        middleX - 193, middleY + offSet, 0xffffff);
+                        sideMiddleX, middleY + offSet, 0xffffff);
             }
         }
 
@@ -334,14 +338,14 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         if (pack.getVersion() != null) {
             offSet += 10;
             drawCenteredString(fontRenderer, TextFormatting.DARK_AQUA + I18n.format("gui.touhou_little_maid.skin.text.version", pack.getVersion()),
-                    middleX - 193, middleY + offSet, 0xffffff);
+                    sideMiddleX, middleY + offSet, 0xffffff);
         }
 
         // 绘制日期信息
         if (pack.getDate() != null) {
             offSet += 10;
             drawCenteredString(fontRenderer, TextFormatting.GREEN + I18n.format("gui.touhou_little_maid.skin.text.date", pack.getDate()),
-                    middleX - 193, middleY + offSet, 0xffffff);
+                    sideMiddleX, middleY + offSet, 0xffffff);
         }
 
         // 绘制最后的翻页数

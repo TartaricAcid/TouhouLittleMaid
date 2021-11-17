@@ -1,16 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.script;
 
 import com.github.tartaricacid.touhoulittlemaid.api.animation.IModelRenderer;
-import net.minecraft.client.model.ModelRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.model.ModelRendererWithInit;
 
 public final class ModelRendererWrapper implements IModelRenderer {
-    private final ModelRenderer modelRenderer;
+    private final ModelRendererWithInit modelRenderer;
 
-    public ModelRendererWrapper(ModelRenderer modelRenderer) {
+    public ModelRendererWrapper(ModelRendererWithInit modelRenderer) {
         this.modelRenderer = modelRenderer;
     }
 
-    public ModelRenderer getModelRenderer() {
+    public ModelRendererWithInit getModelRenderer() {
         return modelRenderer;
     }
 
@@ -97,5 +97,20 @@ public final class ModelRendererWrapper implements IModelRenderer {
     @Override
     public void setHidden(boolean hidden) {
         modelRenderer.isHidden = hidden;
+    }
+
+    @Override
+    public float getInitRotateAngleX() {
+        return modelRenderer.getInitRotX();
+    }
+
+    @Override
+    public float getInitRotateAngleY() {
+        return modelRenderer.getInitRotY();
+    }
+
+    @Override
+    public float getInitRotateAngleZ() {
+        return modelRenderer.getInitRotZ();
     }
 }

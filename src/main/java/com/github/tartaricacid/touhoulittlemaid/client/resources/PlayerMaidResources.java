@@ -29,6 +29,7 @@ public class PlayerMaidResources {
 
     private static final GameProfile EMPTY_GAME_PROFILE = new GameProfile(null, "EMPTY");
     private static final ResourceLocation PLAYER_MAID_MODEL_RES = new ResourceLocation(TouhouLittleMaid.MOD_ID, "models/entity/player_maid.json");
+    private static final ResourceLocation PLAYER_MAID_SLIM_MODEL_RES = new ResourceLocation(TouhouLittleMaid.MOD_ID, "models/entity/player_maid_slim.json");
     private static final List<ResourceLocation> PLAYER_MAID_ANIMATION_RES = Lists.newArrayList(
             new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
             new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
@@ -39,12 +40,15 @@ public class PlayerMaidResources {
     );
     private static final ResourceLocation TEXTURE_ALEX = new ResourceLocation("textures/entity/alex.png");
     private static final List<Object> PLAYER_MAID_ANIMATIONS = Lists.newArrayList();
+    private static final String SLIM_NAME = "slim";
     private static EntityModelJson playerMaidModel;
+    private static EntityModelJson playerMaidModelSlim;
     private static MaidModelInfo playerMaidInfo;
     private static ResourceLocation playerSkin;
 
     public static void reloadResources() {
         playerMaidModel = CustomResourcesLoader.loadModel(PLAYER_MAID_MODEL_RES);
+        playerMaidModelSlim = CustomResourcesLoader.loadModel(PLAYER_MAID_SLIM_MODEL_RES);
         PLAYER_MAID_ANIMATIONS.clear();
         for (ResourceLocation res : PLAYER_MAID_ANIMATION_RES) {
             PLAYER_MAID_ANIMATIONS.add(CustomJsAnimationManger.getCustomAnimation(res));
@@ -57,7 +61,36 @@ public class PlayerMaidResources {
         };
     }
 
-    public static EntityModelJson getPlayerMaidModel() {
+    public static EntityModelJson getPlayerMaidModel(String name) {
+        GameProfile newProfile = null;
+        Minecraft minecraft = Minecraft.getMinecraft();
+        try {
+            newProfile = GAME_PROFILE_CACHE.get(name, () -> {
+                THREAD_POOL.submit(() -> {
+                    GameProfile profile = new GameProfile(null, name);
+                    GameProfile profileNew = TileEntitySkull.updateGameProfile(profile);
+                    minecraft.addScheduledTask(() -> GAME_PROFILE_CACHE.put(name, profileNew));
+                });
+                return EMPTY_GAME_PROFILE;
+            });
+        } catch (ExecutionException ignore) {
+        }
+
+        if (newProfile != null) {
+            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().loadSkinFromCache(newProfile);
+            if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                String skinModel = map.get(MinecraftProfileTexture.Type.SKIN).getMetadata("model");
+                if (SLIM_NAME.equals(skinModel)) {
+                    return playerMaidModelSlim;
+                }
+            } else {
+                UUID uuid = EntityPlayer.getUUID(newProfile);
+                String skinModel = DefaultPlayerSkin.getSkinType(uuid);
+                if (SLIM_NAME.equals(skinModel)) {
+                    return playerMaidModelSlim;
+                }
+            }
+        }
         return playerMaidModel;
     }
 

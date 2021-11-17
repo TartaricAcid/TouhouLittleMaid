@@ -27,7 +27,7 @@ public class TaskFurnace implements IMaidTask {
 
     @Override
     public SoundEvent getAmbientSound(AbstractEntityMaid maid) {
-        return Util.environmentSound(maid, MaidSoundEvent.MAID_FURNACE, 0.1f);
+        return Util.environmentSound(maid, MaidSoundEvent.MAID_FURNACE, 0.25f);
     }
 
     @Override

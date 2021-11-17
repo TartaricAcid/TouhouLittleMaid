@@ -48,7 +48,7 @@ public class EntityModelJson extends ModelBase {
     /**
      * 哪些模型需要渲染。加载进父骨骼的子骨骼是不需要渲染的
      */
-    private List<ModelRenderer> shouldRender = new LinkedList<>();
+    private List<ModelRendererWithInit> shouldRender = new LinkedList<>();
 
     public EntityModelJson(CustomModelPOJO pojo, BedrockVersion version) {
         if (version == BedrockVersion.LEGACY) {
@@ -81,7 +81,7 @@ public class EntityModelJson extends ModelBase {
             indexBones.put(bones.getName(), bones);
             // 塞入新建的空 ModelRenderer 实例
             // 因为后面添加 parent 需要，所以先塞空对象，然后二次遍历再进行数据存储
-            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRenderer(this)));
+            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRendererWithInit(this)));
         }
 
         // 开始往 ModelRenderer 实例里面塞数据
@@ -93,7 +93,7 @@ public class EntityModelJson extends ModelBase {
             // 父骨骼的名称，可能为空
             @Nullable String parent = bones.getParent();
             // 塞进 HashMap 里面的模型对象
-            ModelRenderer model = modelMap.get(name).getModelRenderer();
+            ModelRendererWithInit model = modelMap.get(name).getModelRenderer();
 
             // 镜像参数
             model.mirror = bones.isMirror();
@@ -156,7 +156,7 @@ public class EntityModelJson extends ModelBase {
             indexBones.put(bones.getName(), bones);
             // 塞入新建的空 ModelRenderer 实例
             // 因为后面添加 parent 需要，所以先塞空对象，然后二次遍历再进行数据存储
-            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRenderer(this)));
+            modelMap.put(bones.getName(), new ModelRendererWrapper(new ModelRendererWithInit(this)));
         }
 
         // 开始往 ModelRenderer 实例里面塞数据
@@ -168,7 +168,7 @@ public class EntityModelJson extends ModelBase {
             // 父骨骼的名称，可能为空
             @Nullable String parent = bones.getParent();
             // 塞进 HashMap 里面的模型对象
-            ModelRenderer model = modelMap.get(name).getModelRenderer();
+            ModelRendererWithInit model = modelMap.get(name).getModelRenderer();
 
             // 镜像参数
             model.mirror = bones.isMirror();
@@ -217,7 +217,7 @@ public class EntityModelJson extends ModelBase {
                 }
                 // 创建 Cube ModelRender
                 else {
-                    ModelRenderer cubeRenderer = new ModelRenderer(this);
+                    ModelRendererWithInit cubeRenderer = new ModelRendererWithInit(this);
                     cubeRenderer.setRotationPoint(convertPivot(bones, cube, 0), convertPivot(bones, cube, 1), convertPivot(bones, cube, 2));
                     setRotationAngle(cubeRenderer, convertRotation(cubeRotation.get(0)), convertRotation(cubeRotation.get(1)), convertRotation(cubeRotation.get(2)));
                     if (faceUv == null) {
@@ -295,10 +295,11 @@ public class EntityModelJson extends ModelBase {
         }
     }
 
-    private void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    private void setRotationAngle(ModelRendererWithInit modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
+        modelRenderer.setInitRotationAngle(x, y, z);
     }
 
     public boolean hasBackpackPositioningModel() {

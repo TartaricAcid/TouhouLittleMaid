@@ -16,6 +16,13 @@ public interface IModelRenderer {
     void setRotateAngleX(float xRot);
 
     /**
+     * Get ModelRenderer's initialization x rotate angle
+     *
+     * @return float
+     */
+    float getInitRotateAngleX();
+
+    /**
      * Get ModelRenderer's y rotate angle
      *
      * @return float
@@ -30,6 +37,13 @@ public interface IModelRenderer {
     void setRotateAngleY(float yRot);
 
     /**
+     * Get ModelRenderer's initialization y rotate angle
+     *
+     * @return float
+     */
+    float getInitRotateAngleY();
+
+    /**
      * Get ModelRenderer's z rotate angle
      *
      * @return float
@@ -42,6 +56,13 @@ public interface IModelRenderer {
      * @param zRot z rotate angle
      */
     void setRotateAngleZ(float zRot);
+
+    /**
+     * Get ModelRenderer's initialization z rotate angle
+     *
+     * @return float
+     */
+    float getInitRotateAngleZ();
 
     /**
      * Get ModelRenderer's x offset

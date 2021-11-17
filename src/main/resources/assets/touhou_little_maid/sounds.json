@@ -12,7 +12,16 @@
       "touhou_little_maid:maid/mode/idle7",
       "touhou_little_maid:maid/mode/idle8",
       "touhou_little_maid:maid/mode/idle9",
-      "touhou_little_maid:maid/mode/idle10"
+      "touhou_little_maid:maid/mode/idle10",
+      "touhou_little_maid:maid/mode/idle11",
+      "touhou_little_maid:maid/mode/idle12",
+      "touhou_little_maid:maid/mode/idle13",
+      "touhou_little_maid:maid/mode/idle14",
+      "touhou_little_maid:maid/mode/idle15",
+      "touhou_little_maid:maid/mode/idle16",
+      "touhou_little_maid:maid/mode/idle17",
+      "touhou_little_maid:maid/mode/idle18",
+      "touhou_little_maid:maid/mode/idle19"
     ]
   },
   "maid.mode.attack": {
@@ -21,7 +30,11 @@
     "sounds": [
       "touhou_little_maid:maid/mode/attack1",
       "touhou_little_maid:maid/mode/attack2",
-      "touhou_little_maid:maid/mode/attack3"
+      "touhou_little_maid:maid/mode/attack3",
+      "touhou_little_maid:maid/mode/attack4",
+      "touhou_little_maid:maid/mode/attack5",
+      "touhou_little_maid:maid/mode/attack6",
+      "touhou_little_maid:maid/mode/attack7"
     ]
   },
   "maid.mode.range_attack": {
@@ -67,7 +80,9 @@
       "touhou_little_maid:maid/mode/feed2",
       "touhou_little_maid:maid/mode/feed3",
       "touhou_little_maid:maid/mode/feed4",
-      "touhou_little_maid:maid/mode/feed5"
+      "touhou_little_maid:maid/mode/feed5",
+      "touhou_little_maid:maid/mode/feed6",
+      "touhou_little_maid:maid/mode/feed7"
     ]
   },
   "maid.mode.shears": {
@@ -178,7 +193,9 @@
       "touhou_little_maid:maid/ai/hurt3",
       "touhou_little_maid:maid/ai/hurt4",
       "touhou_little_maid:maid/ai/hurt5",
-      "touhou_little_maid:maid/ai/hurt6"
+      "touhou_little_maid:maid/ai/hurt6",
+      "touhou_little_maid:maid/ai/hurt7",
+      "touhou_little_maid:maid/ai/hurt8"
     ]
   },
   "maid.ai.hurt_fire": {
@@ -195,7 +212,9 @@
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.hurt_player",
     "sounds": [
-      "touhou_little_maid:maid/ai/hurt_player1"
+      "touhou_little_maid:maid/ai/hurt_player1",
+      "touhou_little_maid:maid/ai/hurt_player2",
+      "touhou_little_maid:maid/ai/hurt_player3"
     ]
   },
   "maid.ai.tamed": {
@@ -203,7 +222,9 @@
     "subtitle": "subtitle.touhou_little_maid.maid.ai.tamed",
     "sounds": [
       "touhou_little_maid:maid/ai/tamed1",
-      "touhou_little_maid:maid/ai/tamed2"
+      "touhou_little_maid:maid/ai/tamed2",
+      "touhou_little_maid:maid/ai/tamed3",
+      "touhou_little_maid:maid/ai/tamed4"
     ]
   },
   "maid.ai.item_get": {
@@ -217,14 +238,17 @@
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.death",
     "sounds": [
-      "touhou_little_maid:maid/ai/death1"
+      "touhou_little_maid:maid/ai/death1",
+      "touhou_little_maid:maid/ai/death2"
     ]
   },
   "maid.environment.hot": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.hot",
     "sounds": [
-      "touhou_little_maid:maid/environment/hot1"
+      "touhou_little_maid:maid/environment/hot1",
+      "touhou_little_maid:maid/environment/hot2",
+      "touhou_little_maid:maid/environment/hot3"
     ]
   },
   "maid.environment.cold": {
@@ -232,7 +256,9 @@
     "subtitle": "subtitle.touhou_little_maid.maid.environment.cold",
     "sounds": [
       "touhou_little_maid:maid/environment/cold1",
-      "touhou_little_maid:maid/environment/cold2"
+      "touhou_little_maid:maid/environment/cold2",
+      "touhou_little_maid:maid/environment/cold3",
+      "touhou_little_maid:maid/environment/cold4"
     ]
   },
   "maid.environment.rain": {
@@ -248,21 +274,25 @@
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.snow",
     "sounds": [
-      "touhou_little_maid:maid/environment/snow1"
+      "touhou_little_maid:maid/environment/snow1",
+      "touhou_little_maid:maid/environment/snow2"
     ]
   },
   "maid.environment.morning": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.morning",
     "sounds": [
-      "touhou_little_maid:maid/environment/morning1"
+      "touhou_little_maid:maid/environment/morning1",
+      "touhou_little_maid:maid/environment/morning2",
+      "touhou_little_maid:maid/environment/morning3"
     ]
   },
   "maid.environment.night": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.night",
     "sounds": [
-      "touhou_little_maid:maid/environment/night1"
+      "touhou_little_maid:maid/environment/night1",
+      "touhou_little_maid:maid/environment/night2"
     ]
   },
   "other.credit": {

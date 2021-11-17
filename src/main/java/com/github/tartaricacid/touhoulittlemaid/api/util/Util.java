@@ -32,12 +32,12 @@ public final class Util {
         // FIXME: 2019/7/26 这里调用了非 api 包的方法，看起来需要剔除或者转移位置
         World world = maid.world;
         Random rand = maid.getRNG();
-        // 差不多早上 6:30 - 7:30
-        if (500 < world.getWorldTime() && world.getWorldTime() < 1500 && rand.nextFloat() < probability) {
+        // 差不多早上 6:00 - 9:00
+        if (0 < world.getWorldTime() && world.getWorldTime() < 3000 && rand.nextFloat() < probability) {
             return MaidSoundEvent.MAID_MORNING;
         }
-        // 差不多下午 6:30 - 7:30
-        if (12500 < world.getWorldTime() && world.getWorldTime() < 13500 && rand.nextFloat() < probability) {
+        // 差不多下午 6:00 - 9:00
+        if (12000 < world.getWorldTime() && world.getWorldTime() < 15000 && rand.nextFloat() < probability) {
             return MaidSoundEvent.MAID_NIGHT;
         }
         Biome biome = world.getBiome(maid.getPosition());

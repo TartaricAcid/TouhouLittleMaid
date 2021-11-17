@@ -36,7 +36,7 @@ public class ChairSkinGui extends AbstractSkinGui<EntityChair, ChairModelInfo> {
     @Override
     void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomResourcesLoader.CHAIR_MODEL.getModelRenderItemScale(entity.getModelId());
-        GuiInventory.drawEntityOnScreen(middleX - 190, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
+        GuiInventory.drawEntityOnScreen((middleX - 256 / 2) / 2, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
     }
 
     @Override

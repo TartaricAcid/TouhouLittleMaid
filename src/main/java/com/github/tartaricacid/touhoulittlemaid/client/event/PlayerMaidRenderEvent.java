@@ -25,12 +25,13 @@ public class PlayerMaidRenderEvent {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRenderPlayerNamedMaid(RenderMaidEvent event) {
-        String name = event.getMaid().getCustomNameTag();
-        if (StringUtils.isNotBlank(name) && name.startsWith(PLAYER_NAME_PREFIX)) {
+        String nameTag = event.getMaid().getCustomNameTag();
+        if (StringUtils.isNotBlank(nameTag) && nameTag.startsWith(PLAYER_NAME_PREFIX)) {
             ModelData data = event.getModelData();
-            data.setModel(PlayerMaidResources.getPlayerMaidModel());
+            String name = nameTag.substring(2);
+            data.setModel(PlayerMaidResources.getPlayerMaidModel(name));
             data.setAnimations(PlayerMaidResources.getPlayerMaidAnimations());
-            data.setInfo(PlayerMaidResources.getPlayerMaidInfo(name.substring(2)));
+            data.setInfo(PlayerMaidResources.getPlayerMaidInfo(name));
             event.setCanceled(true);
         }
     }
