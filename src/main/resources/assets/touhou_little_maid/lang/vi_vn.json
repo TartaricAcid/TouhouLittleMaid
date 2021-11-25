@@ -71,6 +71,7 @@
   "commands.touhou_little_maid.power.handle.info": "%d Sức mạnh của người chơi đã thay đổi",
   "commands.touhou_little_maid.maid_num.handle.info": "%d số lượng người Hầu người chơi có được đã thay đổi",
   "task.touhou_little_maid.idle": "Chờ",
+  "task.touhou_little_maid.attack": "Tấn công",
   "task.touhou_little_maid.milk": "Sữa",
   "task.touhou_little_maid.feed_animal": "Cho ăn",
   "task.touhou_little_maid.extinguishing": "Bình chữa cháy"
