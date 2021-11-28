@@ -11,7 +11,7 @@ features:
     details: Как сделать свою горничную, или модель стула
   - 
     title: Изменить рецепты
-    details: How to modification of recipes by data packet
+    details: Как изменить рецепты по набору данных
   - 
     title: Разработка мода
     details: Как совместить Touhou Little Maid, или разработать дополнение
