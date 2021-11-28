@@ -1,9 +1,9 @@
-# Custom Altar Recipes
+# Свои рецепты Алтаря
 
 ## 1.16.5
 Touhou Little Maid in 1.16.5 use datapack to add altar recipes
 
-**Please make sure you know how to use the Minecaft vanilla datapack**
+**Пожалуйста, убедитесь, что вы знаете, как использовать ванильный датапак Minecaft**
 
 ```json
 {
