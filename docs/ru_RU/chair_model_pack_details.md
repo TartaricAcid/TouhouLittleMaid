@@ -5,7 +5,7 @@
 - Currently only supports models for **1.10.0 or 1.12.0 Bedrock Edition Model**.
 - For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
 
-## Model Packs Structure
+## Структура наборов моделей
 
 To better understand how to create model packs, we listed here the structure format for model packs
 
@@ -130,7 +130,7 @@ Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon t
 - There are many preset animations, you only need to name a specific group, and then the plugin will automatically generate the corresponding animation script reference when exporting the model. For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
 - Model also support JavaScript custom animations, you can find the introduction in the custom animation chapter.
 
-## Internationlization
+## Интернационализация
 
 As a game that are facing internationlization, part of the contents of model packs also have internationalization compability.
 
