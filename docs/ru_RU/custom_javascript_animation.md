@@ -1,12 +1,12 @@
 # Custom JavaScript Animation
 Through JavaScript files, you can add custom animations for maid or chair.
 
-- This wiki is suitable for Touhou Little Maid mod in `1.12.2` and `1.16.5`:
+- Этот вики подходит для Touhou Little Maid `1.12.2` и `1.16.5`:
 - Basic understanding for JavaScript language；
 - Some high school mathematical knowledge, especially towards Trigonometric function and polar coordinates;
 - For editing script software, VSCode is recommended, all related script files requires to be saved using UTF-8 without BOM.
 
-## Basic Format
+## Базовый формат
 
 Animation script can be put in any location of the folder, you only need to call the file path on the corresponding models. I recommend putting it in the `animation` folder.
 
@@ -100,11 +100,11 @@ After you load the model resource pack you made, just use the following command 
 
 ## Function Documentation
 
-### Entity Parameter
+### Параметр энтити
 
 Depending on the target of the added animation, the function that can be used by `entity` differs as well.
 
-#### Maid
+#### Горничная
 
 |      Function name       | Return value |                                       Note                                       |
 |:------------------------:|:------------:|:--------------------------------------------------------------------------------:|
