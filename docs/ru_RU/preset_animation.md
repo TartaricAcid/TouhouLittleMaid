@@ -883,4 +883,4 @@ Position the right-handed item, its parent group must be `armRight`
 
 ### `backpackPositioningBone`
 
-Position the backpack shoulder strap, it must be the root group
+Позиция лямки рюкзака, он должен быть в корневой группе
