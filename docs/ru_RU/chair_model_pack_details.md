@@ -30,7 +30,7 @@ model pack folder
                         └─wheel_chair.png
 ```
 
-## Model Packs Description Files
+## Описание файлов наборов моделей
 
 The file complete structure is as below, only the parts marked '(Required)' requires to be filled, you don't have to fill everything.
 
