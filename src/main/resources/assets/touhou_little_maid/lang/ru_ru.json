@@ -202,6 +202,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name": "Статуя Джизо",
   "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.pages.0.text": "Статуя Джизо - это предмет для креатива, который может быть установлен на горничную, щелкнув правой кнопкой мыши.",
   "patchouli.touhou_little_maid.book.entries.other.chair.name": "Пользовательские подушки",
+  "patchouli.touhou_little_maid.book.entries.other.chair.pages.0.text": "Пользовательская подушка является чисто декоративным предметом, размещенным на земле по ПКМ, и Shift + ЛКМ может его сломать, ПКМ чтобы сесть, ПКМ + Shift, чтобы открыть интерфейс для переключения стиля подушки.",
   "patchouli.touhou_little_maid.book.entries.other.command.name": "Команда",
   "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Огнетушитель",
   "patchouli.touhou_little_maid.book.entries.other.extinguisher.pages.0.text": "Предметы, используемые в режиме огнетушения и не могут быть использованы игроками.",
