@@ -1,8 +1,8 @@
 # Детали моделей стульев
-- This wiki applies to Touhou Little Maid mod in `1.12.2` or `1.16.5` latest version;
-- Requires understanding of vanilla Minecraft's resource pack structure;
-- Requires understanding of JSON format;
-- Currently only supports models for **1.10.0 or 1.12.0 Bedrock Edition Model**.
+- Этот вики применяется для Touhou Little Maid `1.12.2` и `1.16.5` последней версии;
+- Требует понимания структуры набора ресурсов ванильного Minecraft;
+- Требует понимания формата JSON;
+- В настоящее время поддерживает только модели **1.10.0 или 1.12.0 Bedrock Edition**.
 - For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
 
 ## Структура наборов моделей
