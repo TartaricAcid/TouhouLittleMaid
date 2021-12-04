@@ -1,4 +1,4 @@
-# Custom JavaScript Animation
+# Пользовательская анимация JavaScript
 Through JavaScript files, you can add custom animations for maid or chair.
 
 - Этот вики подходит для Touhou Little Maid `1.12.2` и `1.16.5`:
