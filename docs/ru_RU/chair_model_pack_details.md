@@ -3,11 +3,11 @@
 - Требует понимания структуры набора ресурсов ванильного Minecraft;
 - Требует понимания формата JSON;
 - В настоящее время поддерживает только модели **1.10.0 или 1.12.0 Bedrock Edition**.
-- For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
+- Для редактирования файлов мы рекомендуем `Visual Studio Code`, все связанные файлы должны быть сохранены с помощью `UTF-8 без BOM`.
 
 ## Структура наборов моделей
 
-To better understand how to create model packs, we listed here the structure format for model packs
+Чтобы лучше понять, как создать пакеты моделей, мы перечислили здесь формат структуры пакетов моделей
 
 ```
 model pack folder
@@ -32,9 +32,9 @@ model pack folder
 
 ## Описание файлов наборов моделей
 
-The file complete structure is as below, only the parts marked '(Required)' requires to be filled, you don't have to fill everything.
+Структура полного файла ниже, только части, которые помечены как '(Обязательные)' должны быть заполнены, вы не должны заполнять всё.
 
-The model supports JSON files with comments, please use at your discretion.
+Модель поддерживает JSON файлы с комментариями, пожалуйста, используйте их по своему усмотрению.
 
 ```json
 {
