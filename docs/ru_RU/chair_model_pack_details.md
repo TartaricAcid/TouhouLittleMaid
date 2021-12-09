@@ -90,7 +90,7 @@ model pack folder
 
 The example above listed all usable field, only the field with '(Required)' are needed, the rest can be omitted.
 
-For simplicity, you could write a file like this:
+Для простоты можно написать такой файл:
 
 ```json
 {
