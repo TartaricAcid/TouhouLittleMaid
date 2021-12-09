@@ -842,7 +842,7 @@ Preset animation for all, pay attention to the case of the group name.
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the X angle of the group according to the time in the system |
 
 ### `systemHourRotationY`
-|                  Animation Reference Path                   |                                                  Эффект                                                   |
+|                        Путь анимации                        |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Y angle of the group according to the time in the system |
 
@@ -862,24 +862,24 @@ Preset animation for all, pay attention to the case of the group name.
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the system |
 
 ### `systemMinuteRotationZ`
-|                  Animation Reference Path                   |                                                  Эффект                                                   |
+|                        Путь анимации                        |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the system |
 
 ### `systemSecondRotationZ`
-|                  Animation Reference Path                   |                                                  Эффект                                                   |
+|                        Путь анимации                        |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the system |
 
 ## Positioning Group
-For rendering positioning, based on the pivot point of the group, can be empty.
+Для позиции рендера, зависимое от точки сворачивания группы может быть пустым.
 ### `armLeftPositioningBone`
 
-Position the left-handed item, its parent group must be `armLeft`
+Позиция предмета в левой руке, родительская группа должна быть `armLeft`
 
 ### `armRightPositioningBone`
 
-Position the right-handed item, its parent group must be `armRight`
+Позиция предмета в правой руке, родительская группа должна быть `armRight`
 
 ### `backpackPositioningBone`
 
