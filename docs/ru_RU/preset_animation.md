@@ -48,44 +48,44 @@ The game will automatically render left-handed items based on this group name, n
 | `touhou_little_maid:animation/maid/default/sit/default.js` | When the maid is on sitting, cross her arms |
 
 ### `armRightVertical`
-|                  Animation Reference Path                   |                              Effect                              |
+|                  Animation Reference Path                   |                              Эффект                              |
 |:-----------------------------------------------------------:|:----------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/arm/vertical.js` | When walking, the group is always perpendicular to the`armRight` |
 
 ### `armRightExtraA`
-|                 Animation Reference Path                 |                          Effect                          |
+|                 Animation Reference Path                 |                          Эффект                          |
 |:--------------------------------------------------------:|:--------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/arm/extra.js` | Same as the `armRight`, but not render the holding items |
 
 ### `legLeft`
-|                  Animation Reference Path                  |                     Effect                      |
+|                  Animation Reference Path                  |                     Эффект                      |
 |:----------------------------------------------------------:|:-----------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/default.js` |     The maid swings her legs while walking      |
 | `touhou_little_maid:animation/maid/default/sit/default.js` | The maid swings her legs when she is on sitting |
 
 ### `legLeftVertical`
-|                  Animation Reference Path                   |                             Effect                              |
+|                  Animation Reference Path                   |                             Эффект                              |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the group is always perpendicular to the`legLeft` |
 
 ### `legLeftExtraA`
-|                 Animation Reference Path                 |                        Effect                        |
+|                 Animation Reference Path                 |                        Эффект                        |
 |:--------------------------------------------------------:|:----------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/extra.js` | Same as the `legLeft`, but no effect of sitting down |
 
 ### `legRight`
-|                  Animation Reference Path                  |                     Effect                      |
+|                  Animation Reference Path                  |                     Эффект                      |
 |:----------------------------------------------------------:|:-----------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/default.js` |     The maid swings her legs while walking      |
 | `touhou_little_maid:animation/maid/default/sit/default.js` | The maid swings her legs when she is on sitting |
 
 ### `legRightVertical`
-|                  Animation Reference Path                   |                              Effect                              |
+|                  Animation Reference Path                   |                              Эффект                              |
 |:-----------------------------------------------------------:|:----------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the group is always perpendicular to the`legRight` |
 
 ### `legRightExtraA`
-|                 Animation Reference Path                 |                        Effect                         |
+|                 Animation Reference Path                 |                        Эффект                         |
 |:--------------------------------------------------------:|:-----------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/extra.js` | Same as the `legRight`, but no effect of sitting down |
 
@@ -100,47 +100,47 @@ The game will automatically render left-handed items based on this group name, n
 | `touhou_little_maid:animation/maid/default/wing/default.js` | Wings reciprocating swing animation |
 
 ### `ahoge`
-|                Animation Reference Path                 |       Effect       |
+|                Animation Reference Path                 |       Эффект       |
 |:-------------------------------------------------------:|:------------------:|
 | `touhou_little_maid:animation/maid/default/head/beg.js` | Ahoge swing in beg |
 
 ### `blink`
-|                 Animation Reference Path                  |       Effect       |
+|                 Animation Reference Path                  |       Эффект       |
 |:---------------------------------------------------------:|:------------------:|
 | `touhou_little_maid:animation/maid/default/head/blink.js` | Blinking animation |
 
 ### `_bink`
-|                     Animation Reference Path                      |                              Effect                               |
+|                     Animation Reference Path                      |                              Эффект                               |
 |:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/head/reverse_blink.js` | An animation that is the exact opposite of the blinking animation |
 
 ### `hurtBlink`
-|                 Animation Reference Path                 |                 Effect                  |
+|                 Animation Reference Path                 |                 Эффект                  |
 |:--------------------------------------------------------:|:---------------------------------------:|
 | `touhou_little_maid:animation/maid/default/head/hurt.js` | Blink animation only shown when injured |
 
 ### `tail`
-|                  Animation Reference Path                   |        Effect        |
+|                  Animation Reference Path                   |        Эффект        |
 |:-----------------------------------------------------------:|:--------------------:|
 | `touhou_little_maid:animation/maid/default/tail/default.js` | Tail swing animation |
 
 ### `sittingRotationSkirt`
-|                     Animation Reference Path                      |                          Effect                           |
+|                     Animation Reference Path                      |                          Эффект                           |
 |:-----------------------------------------------------------------:|:---------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/sit/skirt_rotation.js` | Give the group a rotation angle while the maid is sitting |
 
 ### `sittingHiddenSkirt`
-|                    Animation Reference Path                     |                             Effect                             |
+|                    Animation Reference Path                     |                             Эффект                             |
 |:---------------------------------------------------------------:|:--------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/sit/skirt_hidden.js` | When the maid  is sitting, hide the group. Else show the group |
 
 ### `_sittingHiddenSkirt`
-|                    Animation Reference Path                     |                             Effect                             |
+|                    Animation Reference Path                     |                             Эффект                             |
 |:---------------------------------------------------------------:|:--------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/sit/skirt_hidden.js` | When the maid  is sitting, show the group. Else hide the group |
 
 ### `helmet`
-|                   Animation Reference Path                   |                                 Effect                                 |
+|                   Animation Reference Path                   |                                 Эффект                                 |
 |:------------------------------------------------------------:|:----------------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/armor/default.js` | This group is only displayed when the maid is equipped with the helmet |
 
@@ -639,7 +639,7 @@ It has nothing to do with whether the armor is equipped or not, just describe it
 
 It has nothing to do with whether the armor is equipped or not, just describe its role.
 
-|                       Animation Reference Path                       |                          Effect                           |
+|                       Animation Reference Path                       |                          Эффект                           |
 |:--------------------------------------------------------------------:|:---------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/armor/value/value_low.js` | Only displayed when the maid's armor value is less than 5 |
 
