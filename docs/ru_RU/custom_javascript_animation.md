@@ -126,8 +126,8 @@ Depending on the target of the added animation, the function that can be used by
 |    `isHoldVehicle()`     |       `логика`        |                          Whether maid is riding vehicle                          |
 |     `hasBackpack()`      |       `логика`        |                          Whether maid wearing backpack                           |
 |   `getBackpackLevel()`   |         `int`         |                            Get maid's backpack level                             |
-|     `hasSasimono()`      |       `boolean`       |                          Whether maid wearing sasimono                           |
-|   `isSwingLeftHand()`    |       `boolean`       | Whether the maid is swinging left or right arm, return `false` if it's the right |
+|     `hasSasimono()`      |       `логика`        |                          Whether maid wearing sasimono                           |
+|   `isSwingLeftHand()`    |       `логика`        | Whether the maid is swinging left or right arm, return `false` if it's the right |
 | `getLeftHandRotation()`  |      `float[3]`       |                          Get the left arm rotation data                          |
 | `getRightHandRotation()` |      `float[3]`       |                         Get the right arm rotation data                          |
 |        `getDim()`        |         `int`         |                      Get the dimension where the maid is in                      |
