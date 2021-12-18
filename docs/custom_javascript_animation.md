@@ -248,8 +248,8 @@ if (head != undefined) {
 
 We can get various group via `modelMap.get("xxx")`, the following are the functions that can be used to the obtained group.
 
-|             Function name             | Return value |                  Note                  |
-| :-----------------------------------: | :----------: | :------------------------------------: |
+|             Function name             | Return value |                  Note                   |
+| :-----------------------------------: | :----------: | :-------------------------------------: |
 | `setRotateAngleX(float rotateAngleX)` |     None     |         Set the group's X angle         |
 | `setRotateAngleY(float rotateAngleY)` |     None     |         Set the group's Y angle         |
 | `setRotateAngleZ(float rotateAngleZ)` |     None     |         Set the group's Z angle         |
@@ -257,13 +257,13 @@ We can get various group via `modelMap.get("xxx")`, the following are the functi
 |      `setOffsetY(float offsetY)`      |     None     |  Set the group's Y coordianate offset   |
 |      `setOffsetZ(float offsetZ)`      |     None     |  Set the group's Z coordianate offset   |
 |      `setHidden(boolean hidden)`      |     None     |       Set if the group is hidden        |
-| `getRotateAngleX(float rotateAngleX)` |   `float`    |       Obtain the group's X angle        |
-| `getRotateAngleY(float rotateAngleY)` |   `float`    |       Obtain the group's Y angle        |
-| `getRotateAngleZ(float rotateAngleZ)` |   `float`    |       Obtain the group's Z angle        |
-|      `getOffsetX(float offsetX)`      |   `float`    | Obtain the group's X coordianate offset |
-|      `getOffsetY(float offsetY)`      |   `float`    | Obtain the group's Y coordianate offset |
-|      `getOffsetZ(float offsetZ)`      |   `float`    | Obtain the group's Y coordianate offset |
-|      `isHidden(boolean hidden)`       |  `boolean`   |      Check if the group is hidden       |
+|          `getRotateAngleX()`          |   `float`    |       Obtain the group's X angle        |
+|          `getRotateAngleY()`          |   `float`    |       Obtain the group's Y angle        |
+|          `getRotateAngleZ()`          |   `float`    |       Obtain the group's Z angle        |
+|            `getOffsetX()`             |   `float`    | Obtain the group's X coordianate offset |
+|            `getOffsetY()`             |   `float`    | Obtain the group's Y coordianate offset |
+|            `getOffsetZ()`             |   `float`    | Obtain the group's Y coordianate offset |
+|             `isHidden()`              |  `boolean`   |      Check if the group is hidden       |
 
 
 
