@@ -29,8 +29,8 @@ import java.util.List;
 public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public static final EntityChairRender.Factory FACTORY = new EntityChairRender.Factory();
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
-    private ChairModelInfo mainInfo;
-    private List<Object> mainAnimations;
+    private ChairModelInfo chairInfo;
+    private List<Object> chairAnimations;
 
     private EntityChairRender(RenderManager renderManager, EntityModelJson mainModel) {
         super(renderManager, mainModel, 0f);
@@ -42,16 +42,16 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     public void doRender(@Nonnull EntityChair chair, double x, double y, double z, float entityYaw, float partialTicks) {
         // 尝试读取模
         CustomResourcesLoader.CHAIR_MODEL.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.mainModel = model);
-        CustomResourcesLoader.CHAIR_MODEL.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
-        this.mainAnimations = null;
+        CustomResourcesLoader.CHAIR_MODEL.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.chairInfo = info);
+        this.chairAnimations = null;
 
         // 通过模型 id 获取对应数据
         CustomResourcesLoader.CHAIR_MODEL.getModel(chair.getModelId()).ifPresent(model -> this.mainModel = model);
-        CustomResourcesLoader.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(info -> this.mainInfo = info);
-        CustomResourcesLoader.CHAIR_MODEL.getAnimation(chair.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+        CustomResourcesLoader.CHAIR_MODEL.getInfo(chair.getModelId()).ifPresent(info -> this.chairInfo = info);
+        CustomResourcesLoader.CHAIR_MODEL.getAnimation(chair.getModelId()).ifPresent(animations -> this.chairAnimations = animations);
 
         // 模型动画设置
-        ((EntityModelJson) this.mainModel).setAnimations(this.mainAnimations);
+        ((EntityModelJson) this.mainModel).setAnimations(this.chairAnimations);
 
         // 实体渲染
         GlStateManager.pushMatrix();
@@ -64,7 +64,13 @@ public class EntityChairRender extends RenderLivingBase<EntityChair> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityChair chair) {
-        return mainInfo.getTexture();
+        return chairInfo.getTexture();
+    }
+
+    @Override
+    protected void preRenderCallback(EntityChair entityChair, float partialTickTime) {
+        float scale = chairInfo.getRenderEntityScale();
+        GlStateManager.scale(scale, scale, scale);
     }
 
     @Override

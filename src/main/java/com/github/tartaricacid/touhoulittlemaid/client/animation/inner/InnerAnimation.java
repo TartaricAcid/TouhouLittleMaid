@@ -433,6 +433,33 @@ public final class InnerAnimation {
         };
     }
 
+    public static IAnimation<EntityMaid> getSitNoLeg() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper head = modelMap.get("head");
+                ModelRendererWrapper legLeft = modelMap.get("legLeft");
+                ModelRendererWrapper legRight = modelMap.get("legRight");
+                ModelRendererWrapper armLeft = modelMap.get("armLeft");
+                ModelRendererWrapper armRight = modelMap.get("armRight");
+
+                // 头部复位
+                if (head != null) {
+                    head.setOffsetY(0);
+                }
+
+                if (isRidingMarisaBroom(maid)) {
+                    // 坐在扫帚上时，应用待命的动作
+                    ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
+                } else if (maid.isRiding()) {
+                    ridingPosture(legLeft, legRight);
+                } else if (maid.isSitting()) {
+                    sittingNoLegPosture(armLeft, armRight);
+                }
+            }
+        };
+    }
+
     public static IAnimation<EntityMaid> getSitSkirtHidden() {
         return new IAnimation<EntityMaid>() {
             @Override
@@ -1267,6 +1294,34 @@ public final class InnerAnimation {
         };
     }
 
+    public static IAnimation<EntityMaid> getEarBegShake() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper earLeftShake = modelMap.get("earLeftShake");
+                ModelRendererWrapper earRightShake = modelMap.get("earRightShake");
+
+                float time = (ageInTicks + Math.abs(maid.getUniqueID().getLeastSignificantBits()) % 10) % 40;
+                if (maid.isBegging() && time < Math.PI * 4) {
+                    float rotationZ = (float) Math.abs(Math.sin(time * 0.25)) * 0.4f;
+                    if (earLeftShake != null) {
+                        earLeftShake.setRotateAngleZ(earLeftShake.getInitRotateAngleZ() + rotationZ);
+                    }
+                    if (earRightShake != null) {
+                        earRightShake.setRotateAngleZ(earRightShake.getInitRotateAngleZ() - rotationZ);
+                    }
+                } else {
+                    if (earLeftShake != null) {
+                        earLeftShake.setRotateAngleZ(earLeftShake.getInitRotateAngleZ());
+                    }
+                    if (earRightShake != null) {
+                        earRightShake.setRotateAngleZ(earRightShake.getInitRotateAngleZ());
+                    }
+                }
+            }
+        };
+    }
+
     public static IAnimation<EntityMaid> getStatusBackpack() {
         return new IAnimation<EntityMaid>() {
             @Override
@@ -1405,15 +1460,15 @@ public final class InnerAnimation {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper feed_animalHidden = modelMap.get("feedAnimalHidden");
+                ModelRendererWrapper feedAnimalHidden = modelMap.get("feedAnimalHidden");
 
-                if (feed_animalHidden != null) {
-                    feed_animalHidden.setHidden("feed_animal".equals(maid.getTask().getUid().getPath()));
+                if (feedAnimalHidden != null) {
+                    feedAnimalHidden.setHidden("feed_animal".equals(maid.getTask().getUid().getPath()));
                 }
 
-                ModelRendererWrapper feed_animalShow = modelMap.get("feedAnimalShow");
-                if (feed_animalShow != null) {
-                    feed_animalShow.setHidden(!"feed_animal".equals(maid.getTask().getUid().getPath()));
+                ModelRendererWrapper feedAnimalShow = modelMap.get("feedAnimalShow");
+                if (feedAnimalShow != null) {
+                    feedAnimalShow.setHidden(!"feed_animal".equals(maid.getTask().getUid().getPath()));
                 }
             }
         };
@@ -1477,15 +1532,15 @@ public final class InnerAnimation {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper sugar_caneHidden = modelMap.get("sugarCaneHidden");
+                ModelRendererWrapper sugarCaneHidden = modelMap.get("sugarCaneHidden");
 
-                if (sugar_caneHidden != null) {
-                    sugar_caneHidden.setHidden("sugar_cane".equals(maid.getTask().getUid().getPath()));
+                if (sugarCaneHidden != null) {
+                    sugarCaneHidden.setHidden("sugar_cane".equals(maid.getTask().getUid().getPath()));
                 }
 
-                ModelRendererWrapper sugar_caneShow = modelMap.get("sugarCaneShow");
-                if (sugar_caneShow != null) {
-                    sugar_caneShow.setHidden(!"sugar_cane".equals(maid.getTask().getUid().getPath()));
+                ModelRendererWrapper sugarCaneShow = modelMap.get("sugarCaneShow");
+                if (sugarCaneShow != null) {
+                    sugarCaneShow.setHidden(!"sugar_cane".equals(maid.getTask().getUid().getPath()));
                 }
             }
         };
@@ -1585,15 +1640,15 @@ public final class InnerAnimation {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper ranged_attackHidden = modelMap.get("ranged_attackHidden");
+                ModelRendererWrapper rangedAttackHidden = modelMap.get("rangedAttackHidden");
 
-                if (ranged_attackHidden != null) {
-                    ranged_attackHidden.setHidden("ranged_attack".equals(maid.getTask().getUid().getPath()));
+                if (rangedAttackHidden != null) {
+                    rangedAttackHidden.setHidden("ranged_attack".equals(maid.getTask().getUid().getPath()));
                 }
 
-                ModelRendererWrapper ranged_attackShow = modelMap.get("ranged_attackShow");
-                if (ranged_attackShow != null) {
-                    ranged_attackShow.setHidden(!"ranged_attack".equals(maid.getTask().getUid().getPath()));
+                ModelRendererWrapper rangedAttackShow = modelMap.get("rangedAttackShow");
+                if (rangedAttackShow != null) {
+                    rangedAttackShow.setHidden(!"ranged_attack".equals(maid.getTask().getUid().getPath()));
                 }
             }
         };
@@ -2594,6 +2649,17 @@ public final class InnerAnimation {
         ridingPosture(legLeft, legRight);
     }
 
+    public static void sittingNoLegPosture(ModelRendererWrapper armLeft, ModelRendererWrapper armRight) {
+        if (armLeft != null) {
+            armLeft.setRotateAngleX(-0.798f);
+            armLeft.setRotateAngleZ(0.274f);
+        }
+        if (armRight != null) {
+            armRight.setRotateAngleX(-0.798f);
+            armRight.setRotateAngleZ(-0.274f);
+        }
+    }
+
     public static void ridingBroomPosture(ModelRendererWrapper head, ModelRendererWrapper armLeft, ModelRendererWrapper armRight, ModelRendererWrapper legLeft, ModelRendererWrapper legRight) {
         sittingPosture(armLeft, armRight, legLeft, legRight);
         if (head != null) {
@@ -2667,6 +2733,7 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hurt.js"), getHeadHurt());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/music_shake.js"), getHeadMusicShake());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/ear_shake.js"), getEarShake());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/ear_beg_shake.js"), getEarBegShake());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_swing.js"), getHairSwing());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_ponytail_swing.js"), getHairPonytailSwing());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/reverse_blink.js"), getHeadReverseBlink());
@@ -2674,6 +2741,7 @@ public final class InnerAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/extra.js"), getLegExtra());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/vertical.js"), getLegVertical());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/default.js"), getSitDefault());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/no_leg.js"), getSitNoLeg());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_hidden.js"), getSitSkirtHidden());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"), getSitSkirtRotation());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation_swing.js"), getSitSkirtRotationSwing());
