@@ -12,6 +12,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class MaidModelInfo implements IModelInfo {
+    private static final float RENDER_ENTITY_SCALE_MIN = 0.2f;
+    private static final float RENDER_ENTITY_SCALE_MAX = 2.0f;
+
     @SerializedName("name")
     private String name;
 
@@ -166,7 +169,7 @@ public class MaidModelInfo implements IModelInfo {
                     new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/base/float/default.js")
             );
         }
-        renderEntityScale = MathHelper.clamp(renderEntityScale, 0.7f, 1.3f);
+        renderEntityScale = MathHelper.clamp(renderEntityScale, RENDER_ENTITY_SCALE_MIN, RENDER_ENTITY_SCALE_MAX);
         return this;
     }
 

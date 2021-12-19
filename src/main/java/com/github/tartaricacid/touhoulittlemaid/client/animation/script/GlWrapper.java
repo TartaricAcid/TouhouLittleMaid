@@ -19,8 +19,8 @@ public class GlWrapper {
     }
 
     public static void rotate(double angle, double x, double y, double z) {
-        Vector3f vector3f = new Vector3f((float) x, (float) y, (float) z);
-        matrixStack.mulPose(vector3f.rotation((float) (angle * Math.PI / 180)));
+        Vector3f vector3f = new Vector3f(normalize(x), normalize(y), normalize(z));
+        matrixStack.mulPose(vector3f.rotationDegrees((float) angle));
     }
 
     public static void scale(double x, double y, double z) {
@@ -33,5 +33,15 @@ public class GlWrapper {
 
     public static void popMatrix() {
         matrixStack.popPose();
+    }
+
+    private static float normalize(double value) {
+        if (value >= 1.0E-5) {
+            return 1.0f;
+        } else if (value <= -1.0E-5) {
+            return -1.0f;
+        } else {
+            return 0;
+        }
     }
 }

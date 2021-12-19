@@ -18,8 +18,8 @@ import java.util.List;
 public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockModel<EntityChair>> {
     public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
-    private ChairModelInfo mainInfo;
-    private List<Object> mainAnimations;
+    private ChairModelInfo chairInfo;
+    private List<Object> chairAnimations;
 
     public EntityChairRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new BedrockModel<>(), 0.5f);
@@ -30,16 +30,16 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
         // 读取默认模型，用于清除不存在模型的缓存残留
         // TODO: 2021/10/16 玩家 Shift 时渲染其碰撞箱
         CustomPackLoader.CHAIR_MODELS.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.model = model);
-        CustomPackLoader.CHAIR_MODELS.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.mainInfo = info);
-        this.mainAnimations = null;
+        CustomPackLoader.CHAIR_MODELS.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.chairInfo = info);
+        this.chairAnimations = null;
 
         // 通过模型 id 获取对应数据
         CustomPackLoader.CHAIR_MODELS.getModel(chair.getModelId()).ifPresent(model -> this.model = model);
-        CustomPackLoader.CHAIR_MODELS.getInfo(chair.getModelId()).ifPresent(info -> this.mainInfo = info);
-        CustomPackLoader.CHAIR_MODELS.getAnimation(chair.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+        CustomPackLoader.CHAIR_MODELS.getInfo(chair.getModelId()).ifPresent(info -> this.chairInfo = info);
+        CustomPackLoader.CHAIR_MODELS.getAnimation(chair.getModelId()).ifPresent(animations -> this.chairAnimations = animations);
 
         // 模型动画设置
-        this.model.setAnimations(this.mainAnimations);
+        this.model.setAnimations(this.chairAnimations);
 
         GlWrapper.setMatrixStack(matrixStackIn);
         super.render(chair, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
@@ -47,11 +47,17 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
     }
 
     @Override
+    protected void scale(EntityChair chair, MatrixStack matrixStackIn, float partialTickTime) {
+        float scale = chairInfo.getRenderEntityScale();
+        matrixStackIn.scale(scale, scale, scale);
+    }
+
+    @Override
     public ResourceLocation getTextureLocation(EntityChair entity) {
-        if (mainInfo == null) {
+        if (chairInfo == null) {
             return DEFAULT_TEXTURE;
         }
-        return mainInfo.getTexture();
+        return chairInfo.getTexture();
     }
 
     @Override

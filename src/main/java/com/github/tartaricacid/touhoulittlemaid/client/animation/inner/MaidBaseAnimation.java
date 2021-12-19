@@ -25,10 +25,12 @@ public final class MaidBaseAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/default.js"), getHeadDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/music_shake.js"), getHeadMusicShake());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/ear_shake.js"), getEarShake());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/ear_beg_shake.js"), getEarBegShake());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_swing.js"), getHairSwing());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_ponytail_swing.js"), getHairPonytailSwing());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/default.js"), getLegDefault());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/default.js"), getSitDefault());
+        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/no_leg.js"), getSitNoLeg());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_hidden.js"), getSitSkirtHidden());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"), getSitSkirtRotation());
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation_swing.js"), getSitSkirtRotationSwing());
@@ -191,6 +193,34 @@ public final class MaidBaseAnimation {
         };
     }
 
+    public static IAnimation<EntityMaid> getEarBegShake() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper earLeftShake = modelMap.get("earLeftBegShake");
+                ModelRendererWrapper earRightShake = modelMap.get("earRightBegShake");
+
+                float time = (ageInTicks + Math.abs(maid.getUUID().getLeastSignificantBits()) % 10) % 40;
+                if (maid.isBegging() && time < Math.PI * 4) {
+                    float rotationZ = (float) Math.abs(Math.sin(time * 0.25)) * 0.4f;
+                    if (earLeftShake != null) {
+                        earLeftShake.setRotateAngleZ(earLeftShake.getInitRotateAngleZ() + rotationZ);
+                    }
+                    if (earRightShake != null) {
+                        earRightShake.setRotateAngleZ(earRightShake.getInitRotateAngleZ() - rotationZ);
+                    }
+                } else {
+                    if (earLeftShake != null) {
+                        earLeftShake.setRotateAngleZ(earLeftShake.getInitRotateAngleZ());
+                    }
+                    if (earRightShake != null) {
+                        earRightShake.setRotateAngleZ(earRightShake.getInitRotateAngleZ());
+                    }
+                }
+            }
+        };
+    }
+
     public static IAnimation<EntityMaid> getLegDefault() {
         return new IAnimation<EntityMaid>() {
             @Override
@@ -331,6 +361,33 @@ public final class MaidBaseAnimation {
                     ridingPosture(legLeft, legRight);
                 } else if (maid.isInSittingPose()) {
                     sittingPosture(armLeft, armRight, legLeft, legRight);
+                }
+            }
+        };
+    }
+
+    public static IAnimation<EntityMaid> getSitNoLeg() {
+        return new IAnimation<EntityMaid>() {
+            @Override
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+                ModelRendererWrapper head = modelMap.get("head");
+                ModelRendererWrapper legLeft = modelMap.get("legLeft");
+                ModelRendererWrapper legRight = modelMap.get("legRight");
+                ModelRendererWrapper armLeft = modelMap.get("armLeft");
+                ModelRendererWrapper armRight = modelMap.get("armRight");
+
+                // 头部复位
+                if (head != null) {
+                    head.setOffsetY(0);
+                }
+
+                if (isPassengerMarisaBroom(maid)) {
+                    // 坐在扫帚上时，应用待命的动作
+                    ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
+                } else if (maid.isPassenger()) {
+                    ridingPosture(legLeft, legRight);
+                } else if (maid.isInSittingPose()) {
+                    sittingNoLegPosture(armLeft, armRight);
                 }
             }
         };
@@ -550,6 +607,17 @@ public final class MaidBaseAnimation {
             armRight.setRotateAngleZ(-0.274f);
         }
         ridingPosture(legLeft, legRight);
+    }
+
+    private static void sittingNoLegPosture(ModelRendererWrapper armLeft, ModelRendererWrapper armRight) {
+        if (armLeft != null) {
+            armLeft.setRotateAngleX(-0.798f);
+            armLeft.setRotateAngleZ(0.274f);
+        }
+        if (armRight != null) {
+            armRight.setRotateAngleX(-0.798f);
+            armRight.setRotateAngleZ(-0.274f);
+        }
     }
 
     private static void ridingBroomPosture(ModelRendererWrapper head, ModelRendererWrapper armLeft, ModelRendererWrapper armRight, ModelRendererWrapper legLeft, ModelRendererWrapper legRight) {

@@ -3,12 +3,16 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
 public class ChairModelInfo implements IModelInfo {
+    private static final float RENDER_ENTITY_SCALE_MIN = 0.2f;
+    private static final float RENDER_ENTITY_SCALE_MAX = 2.0f;
+
     @SerializedName("name")
     private String name;
 
@@ -26,6 +30,9 @@ public class ChairModelInfo implements IModelInfo {
 
     @SerializedName("render_item_scale")
     private float renderItemScale = 1.0f;
+
+    @SerializedName("render_entity_scale")
+    private float renderEntityScale = 1.0f;
 
     @SerializedName("animation")
     private List<ResourceLocation> animation;
@@ -83,6 +90,10 @@ public class ChairModelInfo implements IModelInfo {
         return renderItemScale;
     }
 
+    public float getRenderEntityScale() {
+        return renderEntityScale;
+    }
+
     public boolean isNoGravity() {
         return noGravity;
     }
@@ -109,6 +120,7 @@ public class ChairModelInfo implements IModelInfo {
         if (name == null) {
             name = String.format("{model.%s.%s.name}", modelId.getNamespace(), modelId.getPath());
         }
+        renderEntityScale = MathHelper.clamp(renderEntityScale, RENDER_ENTITY_SCALE_MIN, RENDER_ENTITY_SCALE_MAX);
         // 将写入的高度转换为游戏内部的高度
         mountedYOffset = (mountedYOffset - 3) * 0.0625f;
         return this;

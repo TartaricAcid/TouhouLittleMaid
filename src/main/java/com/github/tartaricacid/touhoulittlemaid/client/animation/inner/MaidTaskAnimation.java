@@ -86,15 +86,15 @@ public final class MaidTaskAnimation {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper feed_animalHidden = modelMap.get("feedAnimalHidden");
+                ModelRendererWrapper feedAnimalHidden = modelMap.get("feedAnimalHidden");
 
-                if (feed_animalHidden != null) {
-                    feed_animalHidden.setHidden("feed_animal".equals(maid.getTask().getUid().getPath()));
+                if (feedAnimalHidden != null) {
+                    feedAnimalHidden.setHidden("feed_animal".equals(maid.getTask().getUid().getPath()));
                 }
 
-                ModelRendererWrapper feed_animalShow = modelMap.get("feedAnimalShow");
-                if (feed_animalShow != null) {
-                    feed_animalShow.setHidden(!"feed_animal".equals(maid.getTask().getUid().getPath()));
+                ModelRendererWrapper feedAnimalShow = modelMap.get("feedAnimalShow");
+                if (feedAnimalShow != null) {
+                    feedAnimalShow.setHidden(!"feed_animal".equals(maid.getTask().getUid().getPath()));
                 }
             }
         };
@@ -158,15 +158,15 @@ public final class MaidTaskAnimation {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper sugar_caneHidden = modelMap.get("sugarCaneHidden");
+                ModelRendererWrapper sugarCaneHidden = modelMap.get("sugarCaneHidden");
 
-                if (sugar_caneHidden != null) {
-                    sugar_caneHidden.setHidden("sugar_cane".equals(maid.getTask().getUid().getPath()));
+                if (sugarCaneHidden != null) {
+                    sugarCaneHidden.setHidden("sugar_cane".equals(maid.getTask().getUid().getPath()));
                 }
 
-                ModelRendererWrapper sugar_caneShow = modelMap.get("sugarCaneShow");
-                if (sugar_caneShow != null) {
-                    sugar_caneShow.setHidden(!"sugar_cane".equals(maid.getTask().getUid().getPath()));
+                ModelRendererWrapper sugarCaneShow = modelMap.get("sugarCaneShow");
+                if (sugarCaneShow != null) {
+                    sugarCaneShow.setHidden(!"sugar_cane".equals(maid.getTask().getUid().getPath()));
                 }
             }
         };
@@ -266,15 +266,15 @@ public final class MaidTaskAnimation {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper ranged_attackHidden = modelMap.get("ranged_attackHidden");
+                ModelRendererWrapper rangedAttackHidden = modelMap.get("rangedAttackHidden");
 
-                if (ranged_attackHidden != null) {
-                    ranged_attackHidden.setHidden("ranged_attack".equals(maid.getTask().getUid().getPath()));
+                if (rangedAttackHidden != null) {
+                    rangedAttackHidden.setHidden("ranged_attack".equals(maid.getTask().getUid().getPath()));
                 }
 
-                ModelRendererWrapper ranged_attackShow = modelMap.get("ranged_attackShow");
-                if (ranged_attackShow != null) {
-                    ranged_attackShow.setHidden(!"ranged_attack".equals(maid.getTask().getUid().getPath()));
+                ModelRendererWrapper rangedAttackShow = modelMap.get("rangedAttackShow");
+                if (rangedAttackShow != null) {
+                    rangedAttackShow.setHidden(!"ranged_attack".equals(maid.getTask().getUid().getPath()));
                 }
             }
         };
