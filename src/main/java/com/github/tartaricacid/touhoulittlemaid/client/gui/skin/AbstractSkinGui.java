@@ -314,7 +314,12 @@ public abstract class AbstractSkinGui<T extends EntityLivingBase, U extends IMod
         int sideMiddleX = (middleX - 256 / 2) / 2;
 
         // 绘制包名
-        drawCenteredString(fontRenderer, ParseI18n.parse(pack.getPackName()), sideMiddleX, middleY + offSet, 0xffffff);
+        String packName = ParseI18n.parse(pack.getPackName());
+        List<String> packNameSplit = fontRenderer.listFormattedStringToWidth(packName, (middleX - 256 / 2) - 20);
+        for (String line : packNameSplit) {
+            offSet += 10;
+            drawCenteredString(fontRenderer, line, sideMiddleX, middleY + offSet, 0xffffff);
+        }
 
         // 如果描述不为空，逐行绘制描述
         for (String str : ParseI18n.parse(pack.getDescription())) {
