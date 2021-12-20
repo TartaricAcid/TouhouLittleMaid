@@ -324,7 +324,12 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         int sideMiddleX = (middleX - 256 / 2) / 2;
 
         // 绘制包名
-        drawCenteredString(matrixStack, font, ParseI18n.parse(pack.getPackName()), sideMiddleX, middleY + offsetY, 0xffffff);
+        ITextComponent packName = ParseI18n.parse(pack.getPackName());
+        List<ITextProperties> packSplitName = font.getSplitter().splitLines(packName, (middleX - 256 / 2) - 20, Style.EMPTY);
+        for (ITextProperties properties : packSplitName) {
+            offsetY += 10;
+            drawCenteredString(matrixStack, font, properties.getString(), sideMiddleX, middleY + offsetY, 0xffffff);
+        }
 
         // 如果描述不为空，逐行绘制描述
         for (ITextComponent str : ParseI18n.parse(pack.getDescription())) {
