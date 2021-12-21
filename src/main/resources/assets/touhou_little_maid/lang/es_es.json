@@ -1,6 +1,8 @@
 {
   "entity.touhou_little_maid.chair": "Silla",
+  "entity.touhou_little_maid.maid": "Sirvienta",
   "entity.touhou_little_maid.fairy": "Hada Sirvienta",
+  "entity.touhou_little_maid.danmaku": "Danmaku",
   "entity.touhou_little_maid.box": "Caja de Pastel",
   "entity.touhou_little_maid.throw_power_point": "Puntos de poder",
   "item_group.touhou_little_maid.main": "Touhou Little Maid: Principal",
