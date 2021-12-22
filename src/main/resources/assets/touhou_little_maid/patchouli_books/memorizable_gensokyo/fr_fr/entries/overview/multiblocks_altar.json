@@ -12,11 +12,11 @@
       "type": "multiblock",
       "name": "Sanctuaire",
       "multiblock_id": "touhou_little_maid:altar",
-      "text": "Utilisez le $(l:overview/gohei_and_danmaku)Gohei$() pour faire un clic droit sur la laine rouge au centre gauche de la quatrième couche pour construire le sanctuaire."
+      "text": "Clic droit avec le $(l:overview/gohei_and_danmaku)Gohei$() sur la laine rouge au centre gauche pour le construire."
     },
     {
       "type": "text",
-      "text": "Vous pouvez placer un objet en faisant un clic droit avec sur le haut d'un des six piliers de chêne du sanctuaire. Vous pouvez retirer l'objet en ayant la main vide et en faisant un clic droit.$(br2)Lorsque les objets sont complètement placé et que les Points P du joueur sont suffisant, le sanctuaire activera le craft.$(br2)Le craft peut être interrompu en raison d'un manque de Point P. Après en avoir obtenu suffisamment, faites un clic droit à nouveau pour réactiver le craft."
+      "text": "Placer un objet en faisant un clic droit avec sur le haut d'un des piliers du sanctuaire. Vous pouvez le retirer de la même façon en ayant la main vide.$(br2)Une fois les objets placé et avec suffisamment de Points P, le craft s’activera. Il sera cependant interrompu en cas d'un manque de Points P et devras être relancer avec un clic droit."
     },
     {
       "type": "image",

@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "Compass has 4 modes:$(br)$(li)Single point: The maid will move within 16 block within the set coordinates.$(li)Multi-point reentry: The maid will move back and forth along the set coordinates.$(li)Multi-point closure: The maid will move cyclically along the set coordinates.$(li)Set range: The maid will only move within the setting range."
+      "text": "コンパスには4つのモードがあります。$(br)$(li)シングルポイント: メイドは設定された座標から16ブロック以内の中で行動します。$(li)マルチリエントリー: メイドは設定された座標に沿って前後に動きます。$(li)マルチクロジャー: メイドは設定された座標を周回します。$(li)セットレンジ: メイドは設定された範囲の中で行動します。"
     }
   ]
 }

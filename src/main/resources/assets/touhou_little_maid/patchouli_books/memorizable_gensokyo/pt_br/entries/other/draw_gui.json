@@ -1,16 +1,16 @@
 {
   "sortnum": 21,
-  "name": "Draw Config Gui",
+  "name": "Interface de Configuração de Sorteio",
   "icon": "minecraft:writable_book",
   "category": "other",
   "pages": [
     {
       "type": "text",
-      "text": "The server-side resource pack distribution system allows every player who enters the server to forcibly install an additional maid model of the server. $(br2)With the visual drawing configuration gui, we can quickly and easily restrict the acquisition of maid skin models."
+      "text": "O sistema de distribuição de pacotes de recursos do servidor permite que cada jogador que entrar no servidor instale à força o modelo adicional de maid do servidor. $(br2)Com a interface de configuração de desenho visual, podemos restringir de forma rápida e fácil a aquisição de modelos de aparência da maid."
     },
     {
       "type": "text",
-      "text": "After your client model is fully matched with the server, and the server has turned on the option \"Cannot change maid skin\", you can open the draw configuration gui through the /draw gui command, and the configuration gui will actively get all the maids from the server model data.$(br2)Then you can quickly modify the pool and weight in it. Click the button to save, or save and reload."
+      "text": "Depois que o modelo de seu cliente for totalmente compatível com o servidor, e o servidor tiver ativado a opção \"Não é possível mudar a aparência da maid\", você pode abrir a guia de configuração de sorteio através do comando /draw gui, e a guia de configuração obterá ativamente todas as maids a partir dos dados do modelo do servidor.$(br2)Então você pode modificar rapidamente a probabilidade e o peso. Clique no botão para salvar ou salve e recarregue."
     }
   ]
 }

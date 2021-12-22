@@ -22,15 +22,15 @@
     },
     {
       "type": "text",
-      "text": "$(li)Alimentar: si le das los items necesarios para alimentar animales. la maid alimentara activamente a los animales de los alrededores.$(li)extinción: La maid necesita tener un extintor en la mano principal. cuando este modo es encendido la main va a apagar el fuego de su propietario, de si misma y de las entidades domesticadas dentro de un ratio de 3 bloques."
+      "text": "$(li)Alimentar: si le das los items necesarios para alimentar animales. la maid alimentara activamente a los animales de los alrededores.$(li)extinción: La maid necesita tener un extintor en la mano principal. cuando este modo es encendido la maid va a apagar el fuego de su propietario, de si misma y de las entidades domesticadas dentro de un ratio de 3 bloques."
     },
     {
       "type": "text",
-      "text": "$(li)Destroy: need to be used in conjunction with the destroy guide. First use the destroy guide to mark the block to be destroyed, then place it in maid's offhand, and finally place a pickaxe in maid's mainhand. The maid can destroy the marked blocks.$(li)Furnace: It needs to be used in conjunction with the furnace guide."
+      "text": "$(li)Destruir: necesita ser utilizado junto con la guía de destrucción. Primero usa la guía para marcar el bloque a ser destruido, luego colocarla en la mano de la maid y finalmente coloca un pico en la mano principal de la maid. La maid puede destruir los bloques marcados.$(li)Horno: Debe ser usado junto con la guía del horno."
     },
     {
       "type": "text",
-      "text": "First open furnace guide's GUI to mark the required fuel and items, and then place it in maid's mainhand. The maid will look for the surrounding furnaces to use.$(li)Brewing: need to be used in conjunction with potion guide. First open the potion guide's GUI to mark the recipe for potion, and then place it in maid's mainhand. The maid will find the brewing stands around to brew."
+      "text": "Primero abre el GUI de la guía para marcar el combustible y el objeto a cocinar y luego colocarlo en la mano principal de la Maid. La Maid buscara hornos cerca y empezara a trabajar $(li)Pociones: necesita ser utilizado junto con la guía de pociones. Primero abre la GUI de la guía para marcar la receta para la poción, y luego colocarla en la mano principal de la Maid. La Maid buscara los stands de pociones alrededor para trabajar."
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
   "sortnum": 16,
-  "name": "Mute Bauble",
+  "name": "Breloque anti-bruit",
   "icon": "touhou_little_maid:mute_bauble",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:mute_bauble",
-      "text": "After equipped with this bauble, the maid will become very quiet."
+      "text": "Une fois équipée de cette breloque, la maid deviendra très calme."
     }
   ]
 }

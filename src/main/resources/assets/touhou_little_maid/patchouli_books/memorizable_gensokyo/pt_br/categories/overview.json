@@ -1,6 +1,6 @@
 {
   "sortnum": 0,
-  "name": "Overview",
-  "description": "Introduce the new overview content of this mod.",
+  "name": "Visão geral",
+  "description": "Introduzir o novo conteúdo geral deste mod.",
   "icon": "minecraft:writable_book"
 }

@@ -1,0 +1,18 @@
+{
+  "sortnum": 2,
+  "name": "Camera & Album",
+  "icon": "touhou_little_maid:album",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:camera",
+      "text": "Carry a maid across dimensions or at a distance is a hassle, and the camera is designed for this purpose. $(br2)Just take a photo of your maid with camera and turn it into a photo, then hold the photo and right click on a block to release it."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:album",
+      "text": "If you have a album on the inventory, use the camera, the photos will be directly into the album, and then you can place the maids one by one by use album right click on a block."
+    }
+  ]
+}

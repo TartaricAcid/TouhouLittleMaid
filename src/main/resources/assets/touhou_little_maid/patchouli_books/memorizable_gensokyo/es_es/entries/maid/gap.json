@@ -1,13 +1,13 @@
 {
   "sortnum": 14,
-  "name": "Gap",
+  "name": "Brecha",
   "icon": "touhou_little_maid:wireless_io",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:wireless_io",
-      "text": "A bauble that can transport items. $(br2)You can right-click chest with the gap to mark it, then open its GUI to make some settings, and finally place it in the maid's bauble inventory. $(br2)After this, the maid will take out/deposit the specified items \"wirelessly\" from the chest."
+      "text": "Una bolsa que puede transportar objetos. $(br2)Puedes hacer clic derecho en el cofre con la brecha para marcarlo, luego abra su GUI para hacer algunos ajustes, y finalmente colocarlo en el inventario de amuletos de la maid. $(br2)Después de esto, la doncella eliminará/depositará los objetos especificados \"inalámbricamente\" del cofre."
     }
   ]
 }

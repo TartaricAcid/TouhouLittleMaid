@@ -1,0 +1,13 @@
+{
+  "sortnum": 12,
+  "name": "Trolley Audio",
+  "icon": "touhou_little_maid:trolley_audio",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:trolley_audio",
+      "text": "The trolley audio is similar to the suitcase, and its use is exactly the same as the vanilla jukebox."
+    }
+  ]
+}

@@ -1,16 +1,16 @@
 {
   "sortnum": 0,
-  "name": "Spawn Maid",
+  "name": "Invocar Maid",
   "icon": "minecraft:spawn_egg{EntityTag:{id:'touhou_little_maid:entity.passive.maid'}}",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "The way to get a maid is very special and needs to be done through a multi-blocks altar.$(br2)Since the recipe is likely to change in the future, please check the JEI altar label.$(br2)After the maid is successfully spawned in a multi-blocks altar, you will get a cake box wrapped with the maid. You can right-click the cake box to open it."
+      "text": "O jeito de conseguir uma maid é muito especial e precisa ser feito através de um altar de multi-blocos.$(br2)É provável que a fabricação mude no futuro, por favor, verifique o altar no JEI.$(br2)Depois que a maid for invocada com sucesso em um altar de multi-blocos, você receberá uma caixa de bolo embrulhada com a maid. Você pode clicar com o botão direito na caixa de bolo para abri-la."
     },
     {
       "type": "text",
-      "text": "You need to right-click three times to trigger different opening stages, and finally the cake box will disappear.$(br2)You will need a cake to tame the maid. the taming items can be changed in the configuration file, which was mentioned already.$(br2)The tamed maid is almost identical to a vanilla pet, and you can right-click to open her GUI."
+      "text": "Você precisa clicar três vezes com o botão direito para abrir a caixa de bolo e dai ela. irá desaparecer.$(br2)Você vai precisar de um bolo para domesticar a maid. os itens de domesticação podem ser alterados no arquivo de configurações, que já foi mencionado.$(br2)A maid domesticada é quase idêntica a um pet do vanilla, porem você pode clicar com o botão direito para abrir sua Interface."
     }
   ]
 }

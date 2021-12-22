@@ -1,12 +1,12 @@
 {
   "sortnum": 20,
-  "name": "Server Pack Distribution",
+  "name": "Distribution de Pack du Serveur",
   "icon": "minecraft:book",
   "category": "other",
   "pages": [
     {
       "type": "text",
-      "text": "La maid peut facilement ajouter des ressources supplémentaires via le pack de ressources, tout aussi simple que de remplacer la texture et l'ombre.$(br2)Mais il y a un problème sur le serveur. Votre ami doit installer le même pack de ressources que vous, afin qu'il puisse voir le même modèle de maid que vous."
+      "text": "Vous pouvez ajouter des modèles de Maid via des packs de ressources.$(br2)Mais quand il s'agit de jouer sur un serveur, vos amis doivent appliquer le même pack de ressources que vous pour voir les mêmes modèles que vous."
     },
     {
       "type": "text",

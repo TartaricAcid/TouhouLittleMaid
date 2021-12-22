@@ -1,6 +1,6 @@
 {
   "sortnum": 3,
-  "name": "Gohei And Danmaku",
+  "name": "Gohei e Danmaku",
   "icon": "touhou_little_maid:hakurei_gohei",
   "category": "overview",
   "pages": [
@@ -8,21 +8,21 @@
       "type": "spotlight",
       "item": "touhou_little_maid:hakurei_gohei",
       "link_recipe": true,
-      "text": "The gohei is a ranged weapon that can be used to shoot danmaku, and it also can be used as a normal melee weapon.$(br2)When you hold the gohei and press alt to scroll the mouse wheel, you can switch the danmaku style of the shoot."
+      "text": "O gohei é uma arma de distancia que pode ser usado para atirar danmaku, e também usado como uma arma normal corpo a corpo.$(br2)Quando você segurar o gohei e pressionar Alt e rolar o scroll(botão no meio do mouse), você pode mudar entre os estilos danmaku de tiro."
     },
     {
       "type": "crafting",
       "recipe": "touhou_little_maid:hakurei_gohei",
-      "text": "The higher power point player has, the higher damage and speed the danmaku has.$(br2)The gohei is an important tool for building a multi-block altar."
+      "text": "Quanto mais pontos de poder o jogador tem, mais dano e velocidade o danmaku tem.$(br2)O Gohei é um item importante para a criação do altar multi-bloco."
     },
     {
       "type": "image",
       "images": [
         "touhou_little_maid:textures/book/shoot_danmaku.png"
       ],
-      "title": "Shoot Danmaku",
+      "title": "Atirar Danmaku",
       "border": true,
-      "text": "The player holds gohei to shoot danmaku"
+      "text": "O jogador segura o Gohei para atirar danmaku"
     }
   ]
 }

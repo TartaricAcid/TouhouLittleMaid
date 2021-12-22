@@ -6,31 +6,31 @@
   "pages": [
     {
       "type": "text",
-      "text": "Lorsque vous ouvrez l'interface d'une maid, vous pouvez voir une liste sur le côté gauche. C'est la barre de tâches de la maid. Les fonctions associées sont les suivantes:$(li)Inactive: tâche par défaut; la maid ne fait rien.$(li)Attaque: si vous mettez une épée dans la main principale de la servante, le comportement de la maid sera le même qu'un loup vanilla, attaquant activement des créatures hostiles."
+      "text": "Lorsque vous ouvrez l'interface d'une maid, vous pouvez voir à gauche sa barre de tâches :$(li)Inactive : Tâche par défaut; la maid ne fait rien.$(li)Soldat : Si vous mettez une épée dans la main principale de la maid, son comportement sera le même qu'un loup vanilla, attaquant activement les créatures hostiles."
     },
     {
       "type": "text",
-      "text": "$(li)Arc : Si vous mettez un arc dans la main principale d'une servante et mettez des flèches dans n'importe quel autre case d'inventaire, ellle attaquera activement les créatures hostiles avec.$(li)Danmaku: Si vous mettez le gohei dans la main principale d'une servante, elle tirera des danmaku pour attaquer les créatures hostiles et lancera différents nombres de danmaku en fonction du nombre de créatures hostiles qui l'entourent."
+      "text": "$(li)Archère : Si vous mettez un arc dans la main principale d'une maid et mettez des flèches dans n'importe quel autre case d'inventaire, elle attaquera les créatures hostiles avec.$(li)Danmaku : Si vous mettez le Gohei dans la main principale d'une maid, elle tirera des danmaku pour attaquer les créatures hostiles et en lancera une quantité dépendant du nombre de créatures hostiles qui l'entourent."
     },
     {
       "type": "text",
-      "text": "$(li)Farm: If you put crop seeds on the maid, she will actively plant crops around her, and actively harvest them. Only when maid has a hoe in mainhand can break crop like the player.$(li)Sugarcane: plants and harvests sugarcanes.$(li)Melons: harvest watermelons and pumpkins.$(li)Cocoa: plant and harvest cocoas.$(li)Grass: clean weeds and flowers around them."
+      "text": "$(li)Ferme : Si vous donnez des graines à la maid, elle les planteras autour d'elle et récoltera sans détruire le plant. Ce n'est que lorsque la maid a une houe dans la main principale qu'elle peut briser une récolte comme un joueur.$(li)Sucre : plantes et récolte des cannes à sucre.$(li)Potager : Cultive des pastèques et des citrouilles.$(li)Cacao : Plante et récolte des fèves de cacao.$(li)Herbe : Nettoie les mauvaises herbes et les fleurs autour d'elle."
     },
     {
       "type": "text",
-      "text": "$(li)Snow: clean the snow layer around them, snowball drops when holding a shovel.$(li)Feed: if you put food in a maid's inventory, she will activly feed the player when the player's hunger value is low.$(li)Shears: if you put shears in a maid's main hand, she will actively shear sheep around her.$(li)Torch: if you put torches on a maid, they will actively place torches in the low brightness areas."
+      "text": "$(li)Neige : Nettoie les couches de neige autour d'elle, des boules de neige tomberont si elle tient une pelle.$(li)Nourrir : Si vous mettez de la nourriture dans l'inventaire de la maid, elle nourrira le joueur lorsqu'il aura faim.$(li)Cisailles : Si vous mettez des cisailles dans la main principale d'une maid, elle tondra les moutons autour d'elle.$(li)Torche : Si vous donnez des torches à une maid, elle placera des torches dans les zones de faible luminosité proche d'elle."
     },
     {
       "type": "text",
-      "text": "$(li)Breed: if you put the items needed to breed animals in a maid's inventory. She will actively feed the surrounding animals.$(li)Extinguishing: the mainhand of the maid needs to hold a fire extinguisher. When this mode is turned on, the maid will extinguish the fire of the owner, itself, and tamable entities within 3 blocks."
+      "text": "$(li)Élevage : Si vous mettez les objets nécessaires pour élever des animaux dans l'inventaire d'une maid, elle nourrira les animaux environnants.$(li)Pompière : La main principale de la maid doit tenir un extincteur. Lorsque cette tâche est activé, la maid éteindras le joueur, elle-même et les autres entités apprivoisables qui sont en feu avec une zone d'effet de 3 blocs."
     },
     {
       "type": "text",
-      "text": "$(li)Destroy: need to be used in conjunction with the destroy guide. First use the destroy guide to mark the block to be destroyed, then place it in maid's offhand, and finally place a pickaxe in maid's mainhand. The maid can destroy the marked blocks.$(li)Furnace: It needs to be used in conjunction with the furnace guide."
+      "text": "$(li)Démolir: Doit être utilisé avec le guide de démolition. Utilisez d'abord le guide pour marquer un bloc à détruire puis placez-le dans la main secondaire de la maid ainsi qu'une pioche dans sa main principale. La maid détruira le bloc marqué ainsi que tout ceux qui apparaitrons à cet emplacement.$(li)Four : Doit être utilisé avec le guide du four."
     },
     {
       "type": "text",
-      "text": "First open furnace guide's GUI to mark the required fuel and items, and then place it in maid's mainhand. The maid will look for the surrounding furnaces to use.$(li)Brewing: need to be used in conjunction with potion guide. First open the potion guide's GUI to mark the recipe for potion, and then place it in maid's mainhand. The maid will find the brewing stands around to brew."
+      "text": "Ouvrez tout d'abord l'interface du guide pour y placer le carburant et objet(s) nécessaires, puis placer le dans la main principale de la maid. Elle utilisera alors les fours environnants ainsi que les objets de son inventaire.$(li)Alambic : Doit être utilisé avec le guide de potion. Ouvrez d'abord l'interface du guide pour y placer la recette de la potion, puis placez-le dans la main principale de la maid. La maid utilisera alors les alambics environnants ainsi que les objets de son inventaire.$(li)Les tâches Four et Alambic fonctionne très bien avec l'objet \"Brèche\"."
     }
   ]
 }

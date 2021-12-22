@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "$(#f00)/hata reload$() Reload all hata textures$(br)$(#f00)/maid_res reload$() Reload the maid resource pack. This command does not completely reload some resources. It is recommended to use the F3+T shortcut key.$(br)$(#f00)/draw_coupon reload$() Reload draw coupon.$(br)$(#f00)/spell_card reload$() Reload all spell card data."
+      "text": "$(#f00)/hata reload$() Recharge toutes les textures du Hata$(br)$(#f00)/maid_res reload$() Recharger le pack de ressources de maid. Cette commande ne recharge pas complètement certaines ressources. Il est recommandé d'utiliser le raccourci F3+T.$(br)$(#f00)/draw_coupon reload$() Recharger le coupon Gashapon.$(br)$(#f00)/spell_card reload$() Recharger toutes les données de la carte de sort."
     },
     {
       "type": "text",

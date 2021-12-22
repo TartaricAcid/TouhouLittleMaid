@@ -1,12 +1,12 @@
 {
   "sortnum": 11,
-  "name": "Maid Sound",
+  "name": "Som da Maid",
   "icon": "minecraft:jukebox",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "You can make custom sound packs to replace or expand the maid's sound effects. There are related buttons at the bottom of the maid's inventory. $(br2)Click the button to open the sound playback gui."
+      "text": "Você pode fazer pacotes de som personalizados para substituir ou expandir os efeitos sonoros das maids. Existem botões relacionados na parte inferior do inventário da maid. $(br2)Clique no botão para abrir a interface de reprodução de som."
     }
   ]
 }

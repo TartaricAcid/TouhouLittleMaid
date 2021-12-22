@@ -1,6 +1,6 @@
 {
   "sortnum": 2,
-  "name": "Power Point",
+  "name": "Ponto de Poder",
   "icon": "minecraft:diamond_sword",
   "category": "overview",
   "pages": [
@@ -17,9 +17,9 @@
       "images": [
         "touhou_little_maid:textures/book/power_point.png"
       ],
-      "title": "Power Point",
+      "title": "Ponto de Poder",
       "border": true,
-      "text": "Power point entity dropped on the ground."
+      "text": "Entidade do ponto de poder jogado no chão."
     }
   ]
 }

@@ -7,11 +7,11 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:portable_audio",
-      "text": "The portable audio can be picked up by the maid, right-click it can open the GUI, play network music, and synchronize to players within 96 squares.$(br2)Currently only NetEase Cloud Music is supported, but we will add support for more music websites later."
+      "text": "La radio portable peut être ramassé par la maid, un clic droit peut ouvrir l'interface. Vous pouvez vous connecter au réseau et lire de la musique qui se synchronisera avec les joueurs dans un rayon de 96 blocs.$(br2)Actuellement seule NetEase Cloud Music est prise en charge, mais nous ajouterons plus de sites de musique plus tard."
     },
     {
       "type": "text",
-      "text": "Audio playlists can be added through the resource pack, but you need to restart the game to load these playlists.$(br2)The audio can be disabled by modifying the configuration, or you can mute it by adjusting the volume of the record."
+      "text": "Vous pouvez ajouter des listes de lecture à partir du pack de ressources, mais vous devrez redémarrer le jeu pour charger les listes de lecture.$(br2)L'audio peut être désactivé en modifiant la configuration, ou vous pouvez le couper en ajustant le volume de l'enregistrement."
     }
   ]
 }

@@ -10,7 +10,7 @@
     },
     {
       "type": "text",
-      "text": "Les opérations suivantes peuvent augmenter la faveur de la servante:$(li)La Maid se réveille naturellement après s'être endormie$(li)La Maid joue sur le bureau d'angle, piano électronique et avec le matériel de streaming$(br2)Les opérations suivantes réduiront la faveur de la servante:$(li)Si le joueur réveille de force la Maid pendant son sommeil$(li)Si la Maid est blessé$(li)Si la Maid meurt"
+      "text": "Les opérations suivantes peuvent augmenter la faveur de la Maid:$(li)La Maid se réveille naturellement après s'être endormie$(li)La Maid joue sur le bureau d'angle, piano électronique ou avec le matériel de streaming$(br2)Les opérations suivantes réduiront la faveur de la Maid:$(li)Si le joueur réveille de force la Maid pendant son sommeil$(li)Si la Maid meurt"
     },
     {
       "type": "text",

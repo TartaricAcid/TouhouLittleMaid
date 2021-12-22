@@ -1,0 +1,16 @@
+{
+  "sortnum": 7,
+  "name": "Command",
+  "icon": "minecraft:command_block",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(#f00)/hata reload$() Reload all hata textures$(br)$(#f00)/maid_res reload$() Reload the maid resource pack. This command does not completely reload some resources. It is recommended to use the F3+T shortcut key.$(br)$(#f00)/draw_coupon reload$() Reload draw coupon.$(br)$(#f00)/spell_card reload$() Reload all spell card data."
+    },
+    {
+      "type": "text",
+      "text": "$(#f00)/touhou_little_maid power$() Set player power value$(br)$(#f00)/touhou_little_maid maid_num$() Set player's maid num"
+    }
+  ]
+}

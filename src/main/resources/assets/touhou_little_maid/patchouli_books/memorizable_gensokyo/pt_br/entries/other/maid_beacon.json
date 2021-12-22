@@ -7,11 +7,11 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_beacon",
-      "text": "The shrine lamp is a good decoration and has certain practical functions. Right click on the upper part of the shrine lamp to open the GUI, store the player's power point."
+      "text": "A lâmpada do santuário é uma boa decoração e tem certas funções práticas. Clique com o botão direito na parte superior da lâmpada do santuário para abrir a sua interface e armazenar o ponto de poder do jogador."
     },
     {
       "type": "text",
-      "text": "It also can select effect, then will consume power points to bring the effect to the surrounding range of maids.$(br2)The shrine lamp is also a good tool for automatically collecting power point. It can automatically collect power point within 3 blocks and store them."
+      "text": "O efeito pode ser selecionado, em seguida, consumirá pontos de poder para trazer o efeito ao redor das maids.$(br2)A lâmpada do santuário é também uma boa ferramenta para coletar os ponto de poder. Ela pode coletar automaticamente o ponto de poder dentro de 3 blocos e armazená-los."
     }
   ]
 }

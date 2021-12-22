@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:npc_maid_tool",
-      "text": "Npc maid tool is a tool compatible with the custom npc mod. $(br2)When the npc's model is set as touhou little maid, you can use this tool right-click the npc to set a custom maid model."
+      "text": "PNJ Outil de Maid est un outil compatible avec les mods de PNJ personnalisés. $(br2)Si le modèle de PNJ est défini sur Touhou Little Maid, vous pouvez utiliser cet objet sur le PNJ pour définir un modèle de maid personnalisé."
     }
   ]
 }

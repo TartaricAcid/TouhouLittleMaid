@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "Compass has 4 modes:$(br)$(li)Single point: The maid will move within 16 block within the set coordinates.$(li)Multi-point reentry: The maid will move back and forth along the set coordinates.$(li)Multi-point closure: The maid will move cyclically along the set coordinates.$(li)Set range: The maid will only move within the setting range."
+      "text": "La boussole a 4 modes:$(br)$(li)Point unique : La maid se déplacera dans un rayon de 16 blocs à l'intérieur des coordonnées définies.$(li)Point Multiple : La maid se déplacera le long de la ligne des coordonnées définies.$(li)Point Nœud : La maid se déplacera le long du nœud des coordonnées définies.$(li)Point distant : La maid ne se déplacera que dans le périmètre des coordonnées définies."
     }
   ]
 }

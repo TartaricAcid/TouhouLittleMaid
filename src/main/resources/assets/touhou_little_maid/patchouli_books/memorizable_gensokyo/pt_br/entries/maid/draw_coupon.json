@@ -1,32 +1,32 @@
 {
   "sortnum": 9,
-  "name": "Draw Coupon",
+  "name": "Sorteio de Cupom",
   "icon": "touhou_little_maid:maid_model_coupon:5",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "When the free switching maid model function was turned off in the configuration file, we designed a new skin switching method for it.$(br2)Similar to a card drawing game, players consume emerald or gashapon coin to draw gashapon and obtain maid model coupon from it."
+      "text": "Quando a função de troca gratuita do modelo de maid for desativada nas configurações, criamos um novo método de troca de aparência para ela.$(br2) Semelhante a um jogo de sorte de cartas, os jogadores consomem esmeralda ou moeda de gasha para obter gashapon e obter cupom de modelo de maid a partir dele."
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon_machines",
-      "text": "Right-click with emerald or gashapon coin to get a gashapon, gashapon's level and probability can be customized."
+      "text": "Clique com o botão direito com a esmeralda ou a moeda do gasha para obter um cupom de gacha, nível de cupom de gacha e probabilidade podem ser personalizados."
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon:4",
-      "text": "Right-click gashapon to get model coupon. gashapon of different levels can get model coupon of different levels. $(br2)The probability can be customized through the csv file, for details, please see the mod's wiki"
+      "text": "Clique com o botão direito no Cupom do Gasha para obter cupom de modelo. O Cupom do Gasha de diferentes níveis pode obter o modelo de cupom de diferentes níveis. $(br2)A probabilidade pode ser personalizada através do arquivo csv, para mais detalhes, por favor veja a wiki do mod"
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_model_coupon:5",
-      "text": "Right-click on a maid to switch its model."
+      "text": "Clique com o botão direito sobre uma maid para mudar seu modelo."
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:gashapon_coin",
-      "text": "Kill the rinnosuke will get a certain amount of gashapon coins. Secondly, you can obtain gashapon coins through model coupon craft."
+      "text": "Matar o Rinnosuke dará uma certa quantidade de Moedas do Gasha. Em segundo lugar, você pode obter Moedas do Gasha por meio de cupons de modelos."
     }
   ]
 }

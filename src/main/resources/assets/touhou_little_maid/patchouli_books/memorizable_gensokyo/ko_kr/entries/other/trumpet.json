@@ -1,13 +1,13 @@
 {
   "sortnum": 22,
-  "name": "Trumpet",
+  "name": "트럼펫",
   "icon": "touhou_little_maid:trumpet",
   "category": "other",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:trumpet",
-      "text": "A tool to recall the maid, right-click to use. $(br2)$(4)$(l)Note: This item can only recall the maid on the loaded chunk. From a technical point of view, there is currently NO ANY WAY to recall the maid on the unload chunk."
+      "text": "메이드를 부르는 도구입니다. 우클릭하여 사용합니다. $(br2)$(4)$(l)알림: 이 아이템은 현재 로딩된 청크의 메이드만을 불러들입니다. 기술적인 관점으로 말하자면 현재로써 언로드된 청크의 메이드를 불러올 방법은 없습니다."
     }
   ]
 }

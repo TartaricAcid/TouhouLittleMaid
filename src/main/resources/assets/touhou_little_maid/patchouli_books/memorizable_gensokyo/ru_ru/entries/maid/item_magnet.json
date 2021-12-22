@@ -1,13 +1,13 @@
 {
   "sortnum": 15,
-  "name": "Item Magnet",
+  "name": "Магнит предметов",
   "icon": "touhou_little_maid:item_magnet_bauble",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:item_magnet_bauble",
-      "text": "A bauble that can expand the pickup range. $(br2)After being equipped, the maid's pickup range of items, arrows, experience orb, and power points will be greatly increased."
+      "text": "Украшение увеличивающее расстояние подбора предметов. $(br2)После экипировки, горничная подбирает предметы, стрелы, опыт и очки силы на большее расстояние."
     }
   ]
 }

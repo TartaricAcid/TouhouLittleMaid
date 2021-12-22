@@ -26,11 +26,11 @@
     },
     {
       "type": "text",
-      "text": "$(li)Destroy: need to be used in conjunction with the destroy guide. First use the destroy guide to mark the block to be destroyed, then place it in maid's offhand, and finally place a pickaxe in maid's mainhand. The maid can destroy the marked blocks.$(li)Furnace: It needs to be used in conjunction with the furnace guide."
+      "text": "$(li)採掘: 採掘ガイドを必要とします。採掘ガイドを開きます。メイドが採掘するブロックを設定したら、メイドのオフハンドにガイドをもたせます。メインハンドにツルハシをもたせたら、設定されたブロックを採掘します。$(li)かまど: かまどガイドが必要になります。"
     },
     {
       "type": "text",
-      "text": "First open furnace guide's GUI to mark the required fuel and items, and then place it in maid's mainhand. The maid will look for the surrounding furnaces to use.$(li)Brewing: need to be used in conjunction with potion guide. First open the potion guide's GUI to mark the recipe for potion, and then place it in maid's mainhand. The maid will find the brewing stands around to brew."
+      "text": "かまどガイドのGUIを開きます。必要な燃料とアイテムを設定したら、メイドにガイドをもたせます。すると、メイドは周りのかまどを探して使用します。$(li)醸造: ポーションガイドが必要になります。ポーションガイドのGUIを開きます。ポーションのレシピを設定したら、メイドにガイドをもたせます。すると、メイドは周りの醸造台を探して使用します。"
     }
   ]
 }

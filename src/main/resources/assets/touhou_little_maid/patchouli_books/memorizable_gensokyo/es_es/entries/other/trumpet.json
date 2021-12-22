@@ -1,13 +1,13 @@
 {
   "sortnum": 22,
-  "name": "Trumpet",
+  "name": "Trompeta",
   "icon": "touhou_little_maid:trumpet",
   "category": "other",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:trumpet",
-      "text": "A tool to recall the maid, right-click to use. $(br2)$(4)$(l)Note: This item can only recall the maid on the loaded chunk. From a technical point of view, there is currently NO ANY WAY to recall the maid on the unload chunk."
+      "text": "Una herramienta para llamar a las maids, click derecho para usar.$(br2)$(4)$(l)Nota: este item solo puede llamar a las maids que estén en un chunk cargado. desde un punto de vista técnico, actualmente NO HAY FORMA de llamar a una maid en un chunk sin cargar."
     }
   ]
 }

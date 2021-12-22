@@ -1,16 +1,16 @@
 {
   "sortnum": 4,
-  "name": "Bugigangas",
+  "name": "Ornamento",
   "icon": "touhou_little_maid:ultramarine_orb_elixir",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "The third tab of the maids' GUI is the bauble inventory. This mod provides several baubles that can be triggered to protect maids under certain conditions:$(li)Ultramarine Orb Elixir: Can be used 6 times to avoid a maid's death.$(li)Tombstone Bauble: Tombstones that generate upon a maid's death to preserve their items."
+      "text": "A terceira aba do Inventario da maid é o inventário de ornamentos. Este mod fornece vários ornamentos que podem ser acionados para proteger as maids sob certas condições: $(li) Esfera de Elixir Ultramarino: Pode ser usado 6 vezes para evitar a morte de uma maid. $(li) Criação de Lapide: Lápides são geradas após a morte de uma maid, assim preservando seus itens."
     },
     {
       "type": "text",
-      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is canceled.$(li)Nimble Fabric: When a maid equipped with this bauble is hit by projectile, her behavior will be exactly the same as the ender."
+      "text": "$(li)Ornamento de Proteção: Quando a maid receber os danos correspondentes, o dano é cancelado.$(li)Pedaço de Pano: Quando uma maid equipada com este Ornamento é atingida por projéteis, o seu comportamento será exatamente o mesmo que o Enderman."
     }
   ]
 }

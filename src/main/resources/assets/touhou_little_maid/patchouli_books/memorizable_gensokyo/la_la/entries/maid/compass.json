@@ -1,0 +1,17 @@
+{
+  "sortnum": 7,
+  "name": "Kappa Compass",
+  "icon": "touhou_little_maid:kappa_compass",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:kappa_compass",
+      "text": "The compass is used in conjunction with the maid's home mode. Right-clicking on a block records the coordinates, then right-clicking the maid can set coordinates for it."
+    },
+    {
+      "type": "text",
+      "text": "Compass has 4 modes:$(br)$(li)Single point: The maid will move within 16 block within the set coordinates.$(li)Multi-point reentry: The maid will move back and forth along the set coordinates.$(li)Multi-point closure: The maid will move cyclically along the set coordinates.$(li)Set range: The maid will only move within the setting range."
+    }
+  ]
+}

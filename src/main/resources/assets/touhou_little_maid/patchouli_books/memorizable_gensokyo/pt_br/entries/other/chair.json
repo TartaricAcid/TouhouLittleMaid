@@ -1,17 +1,17 @@
 {
   "sortnum": 1,
-  "name": "Custom Cushion",
+  "name": "Almofada Personalizada",
   "icon": "touhou_little_maid:chair{ModelId:'touhou_little_maid:cat_cart'}",
   "category": "other",
   "pages": [
     {
       "type": "crafting",
       "recipe": "touhou_little_maid:chair",
-      "text": "The custom cushion is a purely decorative item, placed directly on the ground by right-click, and shift left-click can destroy it, right-click to sit, shift right-click to open the GUI to switch the cushion style."
+      "text": "A almofada personalizada é um item puramente decorativo, colocado diretamente no chão com um clique do botão direito, e shift clique do botão esquerdo pode destruí-la. Clique com o botão direito para sentar, shift com o botão direito para abrir a interface para mudar o estilo de almofada."
     },
     {
       "type": "text",
-      "text": "Some of the cushions can sit directly when the maid is close, shift right-click to the maid can leave the cushion.$(br2)The cushion model can also be completely customized, or you can quickly add a custom model through the resource package. For related customizations, please check the wiki."
+      "text": "Algumas das almofadas podem ser sentadas diretamente quando a maid está por perto, clique com o botão direito do mouse para que a maid possa sair da almofada.$(br2)O modelo de almofada também pode ser completamente personalizado, ou você pode adicionar rapidamente um modelo personalizado através do pacote de recursos. Para personalizações relacionadas, por favor, verifique a wiki."
     }
   ]
 }

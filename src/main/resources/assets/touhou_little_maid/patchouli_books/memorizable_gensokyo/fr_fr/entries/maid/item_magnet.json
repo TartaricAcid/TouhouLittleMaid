@@ -1,13 +1,13 @@
 {
   "sortnum": 15,
-  "name": "Item Magnet",
+  "name": "Aimant à objet",
   "icon": "touhou_little_maid:item_magnet_bauble",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:item_magnet_bauble",
-      "text": "A bauble that can expand the pickup range. $(br2)After being equipped, the maid's pickup range of items, arrows, experience orb, and power points will be greatly increased."
+      "text": "Une babiole qui peut étendre la portée de ramassage. $(br2)Après avoir été équipé sur une Maid, la portée de ramassage d'objets, de flèches, d'orbes d'EXP et de Point P sera considérablement augmentée."
     }
   ]
 }

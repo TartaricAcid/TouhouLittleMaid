@@ -26,11 +26,11 @@
     },
     {
       "type": "text",
-      "text": "$(li)Destroy: need to be used in conjunction with the destroy guide. First use the destroy guide to mark the block to be destroyed, then place it in maid's offhand, and finally place a pickaxe in maid's mainhand. The maid can destroy the marked blocks.$(li)Furnace: It needs to be used in conjunction with the furnace guide."
+      "text": "$(li)Сломать: необходимо использовать вместе с руководством по уничтожению. Сначала используйте руководство по уничтожению, чтобы отметить блок, который будет уничтожен, затем поместите его в левую руку горничной и наконец поместите кирку в правую руку горничной. Она может уничтожать помеченные блоки.$(li)Печь: должна быть использована вместе с руководством по плавке."
     },
     {
       "type": "text",
-      "text": "First open furnace guide's GUI to mark the required fuel and items, and then place it in maid's mainhand. The maid will look for the surrounding furnaces to use.$(li)Brewing: need to be used in conjunction with potion guide. First open the potion guide's GUI to mark the recipe for potion, and then place it in maid's mainhand. The maid will find the brewing stands around to brew."
+      "text": "Сначала откройте интерфейс руководства печи, чтобы отметить нужное топливо и предметы, затем поместите его в правую руку горничной. Она будет искать окружающие печи для использования.$(li)Зельеварение: необходимо использовать вместе с руководством по зелью. Сначала откройте интерфейс руководства по зелью, чтобы отметить рецепт зелья, затем поместите его в основную руку горницы. Горничная найдет зельеварочные стойки во круге."
     }
   ]
 }

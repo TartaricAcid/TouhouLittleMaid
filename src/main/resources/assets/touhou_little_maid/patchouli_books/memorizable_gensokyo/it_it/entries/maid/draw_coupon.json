@@ -1,0 +1,32 @@
+{
+  "sortnum": 9,
+  "name": "Draw Coupon",
+  "icon": "touhou_little_maid:maid_model_coupon:5",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "When the free switching maid model function was turned off in the configuration file, we designed a new skin switching method for it.$(br2)Similar to a card drawing game, players consume emerald or gashapon coin to draw gashapon and obtain maid model coupon from it."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon_machines",
+      "text": "Right-click with emerald or gashapon coin to get a gashapon, gashapon's level and probability can be customized."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon:4",
+      "text": "Right-click gashapon to get model coupon. gashapon of different levels can get model coupon of different levels. $(br2)The probability can be customized through the csv file, for details, please see the mod's wiki"
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_model_coupon:5",
+      "text": "Right-click on a maid to switch its model."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:gashapon_coin",
+      "text": "Kill the rinnosuke will get a certain amount of gashapon coins. Secondly, you can obtain gashapon coins through model coupon craft."
+    }
+  ]
+}

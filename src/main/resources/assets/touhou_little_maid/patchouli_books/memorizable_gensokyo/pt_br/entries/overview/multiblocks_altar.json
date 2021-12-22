@@ -1,18 +1,18 @@
 {
   "sortnum": 4,
-  "name": "Multi-Blocks Altar",
+  "name": "Altar Multi-Blocos",
   "icon": "minecraft:wool:14",
   "category": "overview",
   "pages": [
     {
       "type": "text",
-      "text": "The altar is the multi-block structure required for the craft of this mod.$(br2)The altar's recipes can be obtained through JEI, and the craft also requires player's $(l:overview/power_point)power point$()."
+      "text": "O altar é uma estrutura Multi-Bloco nessecaria para o craft nesse mod.$(br2)As receitas de altar podem ser obtidas pelo JEI(Just Enough Items), e a construção requer que o player $(l:overview/power_point)power point$()."
     },
     {
       "type": "multiblock",
       "name": "Altar",
       "multiblock_id": "touhou_little_maid:altar",
-      "text": "Use the $(l:overview/gohei_and_danmaku)gohei$() to right click on the red wool in the center left of the fourth layer to build the altar."
+      "text": "Use o $(l:overview/gohei_and_danmaku)gohei$() para clicar na lã vermelha do centro-direita na quarta camada para construir o altar."
     },
     {
       "type": "text",
@@ -23,7 +23,7 @@
       "images": [
         "touhou_little_maid:textures/book/altar_craft.png"
       ],
-      "title": "Altar Craft",
+      "title": "Fabricar Altar",
       "border": true,
       "text": "The craft of spawn lightning, remember all craft is shapeless."
     }

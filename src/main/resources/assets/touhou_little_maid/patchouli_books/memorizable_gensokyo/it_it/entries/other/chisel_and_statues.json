@@ -1,0 +1,17 @@
+{
+  "sortnum": 16,
+  "name": "Scalpello e Statue",
+  "icon": "touhou_little_maid:chisel",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:chisel",
+      "text": "Clicca Mouse Destro sull'argilla con uno scalpello per creare statue di diverse dimensioni. Per ora sono possibili in formato 1x1x1, 1x1x2, 2x2x4, 3x3x6."
+    },
+    {
+      "type": "text",
+      "text": "Con la foto di una maid nella mano sinistra, e lo scalpello nella destra, clicca nell'angolo in basso a sinistra di una struttura multi blocco per scolpire la maid nella foto."
+    }
+  ]
+}

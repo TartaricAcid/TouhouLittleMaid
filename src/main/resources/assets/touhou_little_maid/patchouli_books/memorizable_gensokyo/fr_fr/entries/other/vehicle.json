@@ -7,7 +7,7 @@
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_vehicle",
-      "text": "Les véhicules sont des entités que la maid peut conduire. La maid peu conduire un véhicule $(l)vide$() en l'approchant, puis les maids environnantes peuvent monter en tant que passagers.$(br2)Les joueurs peuvent également monter sur ce véhicule en faisant un clic droit."
+      "text": "Les véhicules sont des entités que la maid peut conduire. La maid peu conduire un véhicule $(l)vide$() en l'approchant, puis les maids environnantes peuvent monter en tant que passagers.$(br2)Les joueurs peuvent également monter dans le véhicule en faisant un clic droit."
     }
   ]
 }

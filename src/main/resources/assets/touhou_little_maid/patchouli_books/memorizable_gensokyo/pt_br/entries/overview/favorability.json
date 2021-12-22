@@ -10,11 +10,11 @@
     },
     {
       "type": "text",
-      "text": "The following operations can increase the maid's favorability:$(li)The maid wakes up naturally after falling asleep$(li)The maid plays on the book desk, electronic piano, and live station$(br2)The following operations will reduce the maid's favorability:$(li)Forcibly wake the sleeping maid$(li)Maid injured$(li)Maid death"
+      "text": "The following operations can increase the maid's favorability:$(li)The maid wakes up naturally after falling asleep$(li)The maid plays on the book desk, electronic piano, and live station$(br2)The following operations will reduce the maid's favorability:$(li)Forcibly wake the sleeping maid$(li)Maid death"
     },
     {
       "type": "text",
-      "text": "$(li)The player accidentally injured the maid (the hata sasimono can reduce the value)$(li)The maid is still working during thunderstorms or night$(br2)There are currently five levels of favorability. Low favorability currently does not have any negative effects, but high favorability can improve the attributes of a maid."
+      "text": "$(li)Se o jogador acidentalmente machucou a maid(a hata sasimono pode reduzir o valor)$(li)Se a maid continuar trabalhando durante tempestades ou a noite$(br2)São atualmente 5 níveis de favorabilidade. Baixa favorabilidade atualmente não tem nenhum efeito negativo, mas favorabilidade alta pode aumentar os atributos da maid."
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
   "sortnum": 16,
-  "name": "Mute Bauble",
+  "name": "음소거 버블즈",
   "icon": "touhou_little_maid:mute_bauble",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:mute_bauble",
-      "text": "After equipped with this bauble, the maid will become very quiet."
+      "text": "이 버블즈를 착용한 메이드는 매우 조용해집니다."
     }
   ]
 }

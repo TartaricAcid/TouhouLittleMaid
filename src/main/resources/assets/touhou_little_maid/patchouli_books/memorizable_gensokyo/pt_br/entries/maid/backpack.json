@@ -1,13 +1,13 @@
 {
   "sortnum": 10,
-  "name": "Moschila",
+  "name": "Mochila",
   "icon": "touhou_little_maid:maid_backpack",
   "category": "maid",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_backpack",
-      "text": "The backpack can be used to expand the inventory of the maid. It can be applied by holding the backpack and right-click on the maid. The backpack has three levels. $(br2)Use the camera to remove the maid's backpack, and backpack can be remove by shift left-click."
+      "text": "A mochila pode ser usada para expandir o inventário da maid. Pode ser aplicado segurando a mochila e clicando com o botão direito do mouse na maid. A mochila tem três níveis. $(br2) Use a câmera para remover a mochila da maid, a mochila será removida clicando com o botão esquerdo do mouse."
     }
   ]
 }

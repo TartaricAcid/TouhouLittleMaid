@@ -1,0 +1,17 @@
+{
+  "sortnum": 22,
+  "name": "Soul Spell",
+  "icon": "touhou_little_maid:smart_slab",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:smart_slab",
+      "text": "This is not an ordinary paper, it is attached to the soul of the ancient maid.$(br2)Each player will get a soul spell when they are spawn, right click to release a maid."
+    },
+    {
+      "type": "text",
+      "text": "The spell can be reused, you can right-click on the maid to put it back into the spell. In the dungeon loot chest, soul spell can also be found very rarely.$(br2)You can disable the above two spell acquisition methods through configuration, and the spell will also be restricted by the \"maximum number of player maids\" configuration."
+    }
+  ]
+}

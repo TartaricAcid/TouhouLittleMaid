@@ -1,23 +1,23 @@
 {
   "sortnum": 19,
-  "name": "Maid Joy Block",
+  "name": "Bloc jouable pour Maid",
   "icon": "touhou_little_maid:maid_joy",
   "category": "other",
   "pages": [
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_joy{MaidJoyType:'reading'}",
-      "text": "These are multi-block structures, so please put them in a place with enough space."
+      "text": "Il prend la forme d'une structure multi-blocs, alors placez-le dans un endroit avec suffisamment d'espace."
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_joy{MaidJoyType:'piano'}",
-      "text": "The maid will randomly play in these block, and the maid's favorability will slowly increase during the play."
+      "text": "La maid joue de façons aléatoire avec ce bloc. Tout en jouant, la faveur de la maid augmentera progressivement."
     },
     {
       "type": "spotlight",
       "item": "touhou_little_maid:maid_joy{MaidJoyType:'live'}",
-      "text": "Of course, if they encounter dangerous situations such as hostile creatures, the maids will still take the initiative to run away. $(br2)After all, life is always more important than entertainment itself."
+      "text": "Bien sûr, si vous rencontrez une situation dangereuse telle que la rencontre d'une créature hostile, les maids prendront toujours l'initiative de s'enfuir.$(br2)Après tout, la vie est bien plus importante que le divertissement lui-même."
     }
   ]
 }

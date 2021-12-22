@@ -143,8 +143,8 @@ tooltips.touhou_little_maid.wireless_io.usage.1=Maid with this bauble can take/s
 tooltips.touhou_little_maid.wireless_io.usage.2=Shift right-click chest to bind position, right-click air to open GUI.
 tooltips.touhou_little_maid.wireless_io.io_mode.input=Maid -> Chest
 tooltips.touhou_little_maid.wireless_io.io_mode.output=Chest -> Maid
-tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist=Blacklist
-tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist=Whitelist
+tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist=Lista negra
+tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist=Lista branca
 tooltips.touhou_little_maid.wireless_io.binding_pos.has=Bingding Pos: %d, %d, %d
 tooltips.touhou_little_maid.wireless_io.binding_pos.none=Unbound Chest
 tooltips.touhou_little_maid.hammer.desc=Right-click block to bind the pos, place it in the off-hand of maid, and use it with maid's break mode.
@@ -565,6 +565,7 @@ model.touhou_little_maid.ushizaki_urumi.name=Urumi Ushizaki
 model.touhou_little_maid.watatsuki_no_toyohime.name=Watatsuki no Toyohime
 model.touhou_little_maid.watatsuki_no_yorihime.name=Watatsuki no Yorihime
 model.touhou_little_maid.yorigami_jyoon.name=Joon Yorigami
+model.touhou_little_maid.reisen.name=Reisen
 
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
@@ -680,6 +681,7 @@ model.touhou_little_maid.ushizaki_urumi.desc=§7Parental Guardian of Ancient Fis
 model.touhou_little_maid.watatsuki_no_toyohime.desc=§7The Moon Princess Connecting Sea and Mountain
 model.touhou_little_maid.watatsuki_no_yorihime.desc=§7The Moon Princess Possessed by Divine Spirits
 model.touhou_little_maid.yorigami_jyoon.desc=§7The Most-Despicable and Disastrous Younger Twin Sister
+model.touhou_little_maid.reisen.desc=§7-
 
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.class_desk.name=Class Desk
@@ -710,14 +712,30 @@ model.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
 pack.touhou_little_maid_old.maid.name=Touhou Project Model
 pack.touhou_little_maid_old.maid.desc=PC-98 Character
 model.touhou_little_maid_old.reimu_hakurei.name=Reimu Hakurei
+model.touhou_little_maid_old.singyoku2.name=SinGyoku (2nd Form)
+model.touhou_little_maid_old.singyoku3.name=SinGyoku (3rd Form)
 model.touhou_little_maid_old.alice.name=Alice
 model.touhou_little_maid_old.mima.name=Mima
 model.touhou_little_maid_old.yumemi_okazaki.name=Yumemi Okazaki
+model.touhou_little_maid_old.kikuri.name=Kikuri
+model.touhou_little_maid_old.konngara.name=Konngara
+model.touhou_little_maid_old.elis.name=Elis
+model.touhou_little_maid_old.sariel.name=Sariel
+model.touhou_little_maid_old.meira.name=Meira
+model.touhou_little_maid_old.kirisame_marisa.name=Kirisame Marisa
 
 model.touhou_little_maid_old.reimu_hakurei.desc=§7Shrine Maiden Who Protects Dreams and Tradition
+model.touhou_little_maid_old.singyoku2.desc=Gatekeeper
+model.touhou_little_maid_old.singyoku3.desc=Gatekeeper
 model.touhou_little_maid_old.mima.desc=§7Evil Spirit
 model.touhou_little_maid_old.alice.desc=§7Girl of Death
 model.touhou_little_maid_old.yumemi_okazaki.desc=§7Fantasy Legend
+model.touhou_little_maid_old.kikuri.desc=§7Hellish Moon
+model.touhou_little_maid_old.konngara.desc=§7Astral Knight
+model.touhou_little_maid_old.elis.desc=§7Innocence Devil
+model.touhou_little_maid_old.sariel.desc=§7Angel of Death
+model.touhou_little_maid_old.meira.desc=§7Samurai
+model.touhou_little_maid_old.kirisame_marisa.desc=§7Magician
 
 # Sound Info
 pack.touhou_little_maid.sound.name=Default Sound
@@ -731,7 +749,7 @@ spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle.nam
 spell_card.touhou_little_maid:border_sign.boundary_between_wave_and_particle_3d.name=Border Sign "Boundary Between Wave and Particle" 3D
 
 # Subtitle
-subtitle.touhou_little_maid.maid.mode.idle=Maid Idel Sound
+subtitle.touhou_little_maid.maid.mode.idle=Maid Idle Sound
 subtitle.touhou_little_maid.maid.mode.attack=Maid Attack Sound
 subtitle.touhou_little_maid.maid.mode.range_attack=Maid Range Attack Sound
 subtitle.touhou_little_maid.maid.mode.danmaku_attack=Maid Danmaku Sttack Sound

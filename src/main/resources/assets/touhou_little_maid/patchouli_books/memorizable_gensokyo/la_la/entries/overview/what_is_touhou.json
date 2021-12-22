@@ -1,0 +1,23 @@
+{
+  "sortnum": 0,
+  "name": "Toho Inceptum",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "link",
+      "text": "Toho Inceptum ludus series Iaponiae dozinis Solo ZYNE, qui est in Iugo Sianharum Alis, de pampinis est.",
+      "url": "https://en.touhouwiki.net/wiki/Touhou_Wiki",
+      "link_text": "Touhou Wiki"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/hakurei_reimu.png"
+      ],
+      "title": "Reimus Hacreus",
+      "border": true,
+      "text": "The main protagonist of the Touhou Project series."
+    }
+  ]
+}

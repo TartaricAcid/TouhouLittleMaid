@@ -1,17 +1,17 @@
 {
   "sortnum": 1,
-  "name": "Custom Cushion",
+  "name": "Coussin",
   "icon": "touhou_little_maid:chair{ModelId:'touhou_little_maid:cat_cart'}",
   "category": "other",
   "pages": [
     {
       "type": "crafting",
       "recipe": "touhou_little_maid:chair",
-      "text": "The custom cushion is a purely decorative item, placed directly on the ground by right-click, and shift left-click can destroy it, right-click to sit, shift right-click to open the GUI to switch the cushion style."
+      "text": "Le coussin est un objet purement décoratif. Placé le directement sur le sol avec un clic droit et faite un shift + clic gauche pour le détruire. Faite un clic droit dessus pour vous asseoir et shift + clic droit pour ouvrir son interface et changer son style."
     },
     {
       "type": "text",
-      "text": "Some of the cushions can sit directly when the maid is close, shift right-click to the maid can leave the cushion.$(br2)The cushion model can also be completely customized, or you can quickly add a custom model through the resource package. For related customizations, please check the wiki."
+      "text": "La maid peu également s'asseoir sur un coussin quand elle en est proche. Faites un shift + clic droit sur la maid assise pour lui faire quitter le coussin.$(br2)Des modèles de coussins personnalisés peuvent également être ajoutés à partir du pack de ressources. En cas de question, vérifiez le wiki."
     }
   ]
 }

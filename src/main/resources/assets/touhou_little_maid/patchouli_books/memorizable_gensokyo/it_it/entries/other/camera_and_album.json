@@ -1,0 +1,18 @@
+{
+  "sortnum": 2,
+  "name": "Fotocamera & Album",
+  "icon": "touhou_little_maid:album",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:camera",
+      "text": "Portare una maid attraverso un portale o su lunghi viaggi è difficile, è qui che entra in gioco la fotocamera. $(br2) Fotografa la tua maid e trasformala in una foto, tieni in mano la foto e clicca Mouse Destro su un blocco per liberarla."
+    },
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:album",
+      "text": "Se hai un album nell'inventario le foto che scatti verranno archiviate automaticamente, potrai in seguito posizionare le maid una per una cliccando Mouse Destro su un blocco con un album in mano."
+    }
+  ]
+}

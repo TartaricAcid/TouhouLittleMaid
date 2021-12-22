@@ -1,0 +1,26 @@
+{
+  "sortnum": 3,
+  "name": "Marisa Broom",
+  "icon": "touhou_little_maid:marisa_broom",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:marisa_broom",
+      "text": "The broom is a convenient flying tool that allows the player to right click on the ride and use the AWSD keys on the keyboard to navigate. $(br2)The maid will also ride on broom when she is near the broom, and the maid who sits on the broom will move in flight status in most cases."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/broom.png"
+      ],
+      "title": "Marisa Broom",
+      "border": true,
+      "text": "Maid riding on a broom."
+    },
+    {
+      "type": "text",
+      "text": "However, currently only creative mode players are allowed to ride the broom. You can modify the configuration file to disable this feature."
+    }
+  ]
+}

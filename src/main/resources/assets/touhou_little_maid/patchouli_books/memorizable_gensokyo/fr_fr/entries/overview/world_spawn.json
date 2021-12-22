@@ -19,7 +19,7 @@
       "type": "entity",
       "entity": "touhou_little_maid:entity.monster.rinnosuke",
       "offset": 0.125,
-      "text": "Apparait la nuit dans le biome de la forêt, il attaquera les joueurs et les servantes.",
+      "text": "Apparait la nuit dans le biome de la forêt, il attaquera les joueurs et les maids.",
       "anchor": "rinnosuke"
     }
   ]

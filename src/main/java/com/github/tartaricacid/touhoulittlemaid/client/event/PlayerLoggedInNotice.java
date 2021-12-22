@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.Loader;
@@ -9,9 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author TartaricAcid
@@ -34,8 +32,13 @@ public class PlayerLoggedInNotice {
         }
         if (missingPatchouli) {
             String json = I18n.format("message.touhou_little_maid.missing_patchouli");
-            ITextComponent component = ITextComponent.Serializer.fromJsonLenient(json);
-            event.player.sendMessage(component);
+            try {
+                ITextComponent component = ITextComponent.Serializer.fromJsonLenient(json);
+                if (component != null) {
+                    event.player.sendMessage(component);
+                }
+            } catch (JsonSyntaxException ignore) {
+            }
         }
         notFirst = true;
     }

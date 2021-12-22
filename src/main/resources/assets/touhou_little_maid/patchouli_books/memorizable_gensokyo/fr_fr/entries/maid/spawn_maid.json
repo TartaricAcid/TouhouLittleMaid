@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "The way to get a maid is very special and needs to be done through a multi-blocks altar.$(br2)Since the recipe is likely to change in the future, please check the JEI altar label.$(br2)After the maid is successfully spawned in a multi-blocks altar, you will get a cake box wrapped with the maid. You can right-click the cake box to open it."
+      "text": "La façon d'obtenir une maid est très spéciale et doit être faite grâce à un sanctuaire multi-blocs.$(br2)Puisque la recette est susceptible de changer dans le futur, veuillez vérifier le marque page du sanctuaire.$(br2)Une fois que la maid est apparue avec succès dans un sanctuaire multi-blocs, vous obtiendrez une boîte à cadeau enveloppant la maid. Vous pouvez cliquer avec le bouton droit de la souris sur la boîte à cadeau pour l'ouvrir."
     },
     {
       "type": "text",
-      "text": "Vous devez faire un clic droit 3 fois pour déclencher les chaque étapes d'ouverture et faire disparaitre la boîte.$(br2)Vous aurez besoin d'un gâteau pour apprivoiser la Maid. L'objet d'apprivoisement peu être modifié dans le fichier de configuration.$(br2)La Maid apprivoisée est presque identique à un familier vanilla et vous pouvez faire un clic droit pour ouvrir son GUI."
+      "text": "Vous devez faire un clic droit 3 fois pour déclencher chaque étapes d'ouverture et faire disparaitre la boîte.$(br2)Vous aurez besoin d'un gâteau pour apprivoiser la Maid. L'objet d'apprivoisement peu être modifié dans le fichier de configuration.$(br2)La Maid apprivoisée est presque identique à un familier vanilla et vous pouvez faire un clic droit sur elle pour ouvrir son GUI."
     }
   ]
 }

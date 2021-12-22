@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "The third tab of the maids' GUI is the bauble inventory. This mod provides several baubles that can be triggered to protect maids under certain conditions:$(li)Ultramarine Orb Elixir: Can be used 6 times to avoid a maid's death.$(li)Tombstone Bauble: Tombstones that generate upon a maid's death to preserve their items."
+      "text": "Le troisième onglet dans l'interface de la Maid est l'inventaire des breloques. Ce mod fournit plusieurs breloques qui peuvent être déclenchées pour protéger les Maids dans certaines conditions: $(li)Élixir d'orbe ultramarine : Peut être utilisé 6 fois par la maid pour éviter la mort.$(li)Breloque tombale : Génère une pierre tombale lorsque la maid meurt pour y entreposer ses objets."
     },
     {
       "type": "text",
-      "text": "$(li)Protect Bauble: When the maid receives the corresponding damage, the damage event is canceled.$(li)Nimble Fabric: When a maid equipped with this bauble is hit by projectile, her behavior will be exactly the same as the ender."
+      "text": "$(li)Breloque anti-explosion : Protège la maid contre les dégâts d'explosion.$(li)Étoffe Nimble : Lorsqu'une maid en est équipée et est frappée par un projectile, elle ce téléportera à la manière d'un Enderman pour l'esquiver."
     }
   ]
 }

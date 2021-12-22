@@ -1,24 +1,24 @@
 {
   "sortnum": 1,
-  "name": "Maid Base",
+  "name": "Maid : Les bases",
   "icon": "touhou_little_maid:garage_kit{ModelId:'touhou_little_maid:kirisame_marisa'}",
   "category": "maid",
   "pages": [
     {
       "type": "text",
-      "text": "There are many basic functions that maids are able to perform, such as:$(li)By default, the maid will actively pick up items, arrows and experience orbs around her. The main GUI has a button to switch pick up mode;$(li)By default, the maid will always follow the player."
+      "text": "Il y a beaucoup de fonctions basique que les maids sont en mesure d'exécuter, comme :$(li)par défaut, la maid ramasse automatiquement les objets, les flèches et les orbes d'EXP proche d'elle. L'interface de la maid a un bouton pour changer le mode de ramassage;$(li)Par défaut, la maid suivra toujours le joueur."
     },
     {
       "type": "text",
-      "text": "$(li)Shift right-clicking maid with an empty hand can switch sitting mode. In sitting mode, the doesn't do anything, including avoiding danger.$(li)When the maid ride on other entities, Shift right-clicking with an empty hand can remove them.$(li)The player can use a golden apple or potion on a maid by right-clicking them while holding the item."
+      "text": "$(li)Shift + clic droit avec la main vide sur la maid la fera s'asseoir. Elle ne fera alors plus rien, y compris éviter le danger.$(li)Lorsque la maid monte sur une autre entité, Shift + clic droit avec une main vide la fera descendre.$(li)Le joueur peut utiliser une pomme dorée ou une potion sur une maid en faisant un clic droit sur elle et en tenant l'objet."
     },
     {
       "type": "text",
-      "text": "$(li)The experience picked up by the maid can be converted into an Bottle o' Enchanting if the player right-click the maid while holding a bottle.$(li)The maid can equip the skull and render model of it.$(li)Right-click the maid with an empty nameplate, and you can name it directly."
+      "text": "$(li)L'expérience obtenue par la maid peut être convertie en fiole d'expérience si le joueur fait un clic droit sur elle tout en tenant une fiole vide.$(li)La maid peut équiper un crâne, l'adaptant à son modèle.$(li)Faites un clic droit sur la maid avec une étiquette pour la renommer."
     },
     {
       "type": "text",
-      "text": "$(li)After install Journey Map Mod, the coordinates displayed by the maid at death can be directly clicked to save as the coordinates of the Journey Map, or you can ctrl click to view it under the big map window of the Journey Map."
+      "text": "$(li)Après avoir installé Journey Map Mod, vous pouvez directement entrer et enregistrer les coordonnées de la mort de la maid comme coordonnées de la carte de voyage. Elles peuvent également être affiché sur une carte en plein écran de Journey Map."
     }
   ]
 }
