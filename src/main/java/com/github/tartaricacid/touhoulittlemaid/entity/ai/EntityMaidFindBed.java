@@ -35,9 +35,8 @@ public class EntityMaidFindBed extends EntityAIMoveToBlock {
     @Override
     public void updateTask() {
         super.updateTask();
-        boolean canSleep = !maid.world.isDaytime() || maid.world.isThundering();
         if (this.getIsAboveDestination() && maid.world.getEntitiesWithinAABB(EntityMaid.class,
-                new AxisAlignedBB(destinationBlock), EntityMaid::isSleep).isEmpty() && canSleep) {
+                new AxisAlignedBB(destinationBlock), EntityMaid::isSleep).isEmpty() && canSleep(maid.world)) {
             // 取消骑乘状态
             if (maid.getRidingEntity() != null) {
                 maid.dismountRidingEntity();
@@ -70,6 +69,13 @@ public class EntityMaidFindBed extends EntityAIMoveToBlock {
                 List<EntityMaid> maidList = worldIn.getEntitiesWithinAABB(EntityMaid.class, new AxisAlignedBB(pos), EntityMaid::isSleep);
                 return maidList.isEmpty();
             }
+        }
+        return false;
+    }
+
+    private boolean canSleep(World world) {
+        if (world.provider.canRespawnHere()) {
+            return !world.isDaytime() || world.isThundering();
         }
         return false;
     }
