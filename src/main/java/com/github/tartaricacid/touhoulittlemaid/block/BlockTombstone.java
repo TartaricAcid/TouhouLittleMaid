@@ -87,13 +87,6 @@ public class BlockTombstone extends BlockHorizontal {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand,
                                     EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te instanceof TileEntityTombstone) {
-            TileEntityTombstone tombstone = (TileEntityTombstone) te;
-            for (int i = 0; i < tombstone.handler.getSlots(); i++) {
-                spawnAsEntity(worldIn, playerIn.getPosition(), tombstone.handler.getStackInSlot(i));
-            }
-        }
         worldIn.setBlockToAir(pos);
         if (!worldIn.isRemote) {
             playerIn.sendMessage(new TextComponentTranslation("message.touhou_little_maid.tombstone.on_block_activated"));
