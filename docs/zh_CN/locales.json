@@ -1,17 +1,17 @@
 {
     "title": {
-        "lang": "",
-        "title": "",
-        "description": ""
+        "lang": "zh-CN",
+        "title": "Touhou Little Maid 开发 Wiki",
+        "description": "有关于车万女仆的开发文档"
     },
     "themeConfig": {
-        "selectText": "",
-        "label": "",
-        "ariaLabel": "",
-        "lastUpdated": "",
+        "selectText": "选择语言",
+        "label": "简体中文",
+        "ariaLabel": "Languages",
+        "lastUpdated": "上次更新",
         "nav": [
             {
-                "text": "",
+                "text": "主页",
                 "link": ""
             },
             {
@@ -25,36 +25,36 @@
         ],
         "sidebar": [
             {
-                "title": "",
+                "title": "自定义模型",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./zh_CN/custom_model_pack",
+                        "Custom Model Pack"
                     ],
                     [
-                        "",
-                        ""
+                        "./zh_CN/maid_model_pack_details",
+                        "Maid Model Pack Details"
                     ],
                     [
-                        "",
-                        ""
+                        "./zh_CN/chair_model_pack_details",
+                        "Chair Model Pack Details"
                     ],
                     [
-                        "",
-                        ""
+                        "./zh_CN/custom_javascript_animation",
+                        "Custom JavaScript Animation"
                     ],
                     [
-                        "",
-                        ""
+                        "./zh_CN/preset_animation",
+                        "Preset Animation"
                     ]
                 ]
             },
             {
-                "title": "",
+                "title": "合成修改",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./zh_CN/custom_altar_recipes",
+                        "Custom Altar Recipes"
                     ]
                 ]
             }
