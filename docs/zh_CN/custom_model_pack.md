@@ -1,8 +1,7 @@
 # Custom Model Pack
-Touhou Little Maid mod supports custom model packs, you can quickly make your favorite models through software like Blockbench.
-The game can read the model package in zip compressed file format, or directly read the folder.
+Touhou Little Maid mod supports custom model packs, you can quickly make your favorite models through software like Blockbench. The game can read the model package in zip compressed file format, or directly read the folder.
 
-The model packs compatible with the mod of `1.12.2` and `1.16.5` are exactly the same, just that the loading method is slightly different: 
+The model packs compatible with the mod of `1.12.2` and `1.16.5` are exactly the same, just that the loading method is slightly different:
 
 - `1.12.2`: The model package needs to be loaded like the vanilla resource package.
 - `1.16.5`: The model package needs to be placed in the `tlm_custom_pack` folder under the game's directory.
@@ -18,12 +17,12 @@ It is not difficult to make a custom model package from scratch, even if you are
 - Visual Studio Code: An Integrated Development Environment made by Microsoft.
 
   Official website: <https://code.visualstudio.com/>
-  
+
   Mainly used to edit language files, optional.
 
 In addition, I also wrote a blockbench plugin for exporting custom models.
-| Version | Link | Remark |
-| :--: | :--: | :--: |
+| Version |                                                Link                                                |       Remark       |
+|:-------:|:--------------------------------------------------------------------------------------------------:|:------------------:|
 | `1.0.5` | [Download](https://github.com/TartaricAcid/TLM-Utils-Plugins/releases/download/1.0.5/tlm-utils.js) | For Blockbench 4.x |
 | `1.0.4` | [Download](https://github.com/TartaricAcid/TLM-Utils-Plugins/releases/download/1.0.4/tlm-utils.js) | For Blockbench 3.x |
 
@@ -42,7 +41,7 @@ If you choose `chair`, there is no default model.
 ## 2. Modify it to what you want based on the default model
 Need to pay attention to several points:
 
-1. The maid animation is automatically added based on the **group name**, so please do not delete or rename at will. 
+1. The maid animation is automatically added based on the **group name**, so please do not delete or rename at will.
 
    > Want to know what group names are available? Please see the [Preset Animation](/preset_animation.md) chapter.
 
@@ -62,15 +61,13 @@ You can edit the textures directly in Blockbench, or you can edit the textures t
 
 Follow the prompts to fill out the form, it will create an empty model package folder.
 
-![img](https://media.discordapp.net/attachments/760041309481336843/760046894617067530/4.png) 
+![img](https://media.discordapp.net/attachments/760041309481336843/760046894617067530/4.png)
 
 ## 5. Export the model into resource pack
 
 Follow the prompts to fill out the form,
 
-:::tip
-Because there are still some problems with the plugin, after exporting successfully, remember to press `ctrl s` to save,  and need to wait 10 seconds before closing Blockbench, otherwise it may not be able to generate the correct animation reference based on the group name.
-:::
+:::tip Because there are still some problems with the plugin, after exporting successfully, remember to press `ctrl s` to save,  and need to wait 10 seconds before closing Blockbench, otherwise it may not be able to generate the correct animation reference based on the group name. :::
 
 ![img](https://media.discordapp.net/attachments/760041309481336843/760047013047173120/5.png)
 
