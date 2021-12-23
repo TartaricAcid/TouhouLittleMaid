@@ -12,15 +12,15 @@
         "nav": [
             {
                 "text": "主页",
-                "link": ""
+                "link": "./"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "GitHub",
+                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "CurseForge",
+                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
             }
         ],
         "sidebar": [
