@@ -29,23 +29,23 @@
                 "children": [
                     [
                         "./zh_CN/custom_model_pack",
-                        "Custom Model Pack"
+                        "自定义模型包"
                     ],
                     [
                         "./zh_CN/maid_model_pack_details",
-                        "Maid Model Pack Details"
+                        "女仆模型包详解"
                     ],
                     [
                         "./zh_CN/chair_model_pack_details",
-                        "Chair Model Pack Details"
+                        "坐垫模型包详解"
                     ],
                     [
                         "./zh_CN/custom_javascript_animation",
-                        "Custom JavaScript Animation"
+                        "自定义动画脚本"
                     ],
                     [
                         "./zh_CN/preset_animation",
-                        "Preset Animation"
+                        "预设动画"
                     ]
                 ]
             },
@@ -54,7 +54,7 @@
                 "children": [
                     [
                         "./zh_CN/custom_altar_recipes",
-                        "Custom Altar Recipes"
+                        "自定义祭坛合成"
                     ]
                 ]
             }
