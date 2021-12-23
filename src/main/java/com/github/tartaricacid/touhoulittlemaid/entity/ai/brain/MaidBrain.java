@@ -80,7 +80,7 @@ public final class MaidBrain {
         Pair<Integer, Task<? super EntityMaid>> maidAwait = Pair.of(1, new MaidAwaitTask());
         Pair<Integer, Task<? super EntityMaid>> interactWithDoor = Pair.of(2, new InteractWithDoorTask());
         Pair<Integer, Task<? super EntityMaid>> walkToTarget = Pair.of(2, new WalkToTargetTask());
-        Pair<Integer, Task<? super EntityMaid>> followOwner = Pair.of(3, new MaidFollowOwnerTask(0.5f, 5, 2));
+        Pair<Integer, Task<? super EntityMaid>> followOwner = Pair.of(3, new MaidFollowOwnerTask(0.5f, 8, 2));
         Pair<Integer, Task<? super EntityMaid>> pickupItem = Pair.of(10, new MaidPickupEntitiesTask(EntityMaid::isPickup, 8, 0.6f));
         Pair<Integer, Task<? super EntityMaid>> clearSleep = Pair.of(99, new MaidClearSleepTask());
 

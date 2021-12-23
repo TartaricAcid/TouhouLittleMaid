@@ -48,7 +48,7 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
         }
         this.extraData = extraData;
         this.powerCost = powerCost;
-        this.inputs = NonNullList.of(Ingredient.EMPTY, inputs);
+        this.inputs = NonNullList.of(Ingredient.EMPTY, fillInputs(inputs));
     }
 
     @Override
@@ -140,5 +140,17 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
         if (entity instanceof MobEntity) {
             ((MobEntity) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(pos), SpawnReason.SPAWN_EGG, null, null);
         }
+    }
+
+    private Ingredient[] fillInputs(Ingredient[] inputs) {
+        Ingredient[] newInputs = new Ingredient[RECIPES_SIZE];
+        for (int i = 0; i < RECIPES_SIZE; i++) {
+            if (i < inputs.length) {
+                newInputs[i] = inputs[i];
+            } else {
+                newInputs[i] = Ingredient.EMPTY;
+            }
+        }
+        return newInputs;
     }
 }
