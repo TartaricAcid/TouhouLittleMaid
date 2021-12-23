@@ -48,44 +48,44 @@ The game will automatically render left-handed items based on this group name, n
 | `touhou_little_maid:animation/maid/default/sit/default.js` | When the maid is on sitting, cross her arms |
 
 ### `armRightVertical`
-|                  Animation Reference Path                   |                              Effect                              |
+|                  Animation Reference Path                   |                              Эффект                              |
 |:-----------------------------------------------------------:|:----------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/arm/vertical.js` | When walking, the group is always perpendicular to the`armRight` |
 
 ### `armRightExtraA`
-|                 Animation Reference Path                 |                          Effect                          |
+|                 Animation Reference Path                 |                          Эффект                          |
 |:--------------------------------------------------------:|:--------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/arm/extra.js` | Same as the `armRight`, but not render the holding items |
 
 ### `legLeft`
-|                  Animation Reference Path                  |                     Effect                      |
+|                  Animation Reference Path                  |                     Эффект                      |
 |:----------------------------------------------------------:|:-----------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/default.js` |     The maid swings her legs while walking      |
 | `touhou_little_maid:animation/maid/default/sit/default.js` | The maid swings her legs when she is on sitting |
 
 ### `legLeftVertical`
-|                  Animation Reference Path                   |                             Effect                              |
+|                  Animation Reference Path                   |                             Эффект                              |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the group is always perpendicular to the`legLeft` |
 
 ### `legLeftExtraA`
-|                 Animation Reference Path                 |                        Effect                        |
+|                 Animation Reference Path                 |                        Эффект                        |
 |:--------------------------------------------------------:|:----------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/extra.js` | Same as the `legLeft`, but no effect of sitting down |
 
 ### `legRight`
-|                  Animation Reference Path                  |                     Effect                      |
+|                  Animation Reference Path                  |                     Эффект                      |
 |:----------------------------------------------------------:|:-----------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/default.js` |     The maid swings her legs while walking      |
 | `touhou_little_maid:animation/maid/default/sit/default.js` | The maid swings her legs when she is on sitting |
 
 ### `legRightVertical`
-|                  Animation Reference Path                   |                              Effect                              |
+|                  Animation Reference Path                   |                              Эффект                              |
 |:-----------------------------------------------------------:|:----------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/vertical.js` | When walking, the group is always perpendicular to the`legRight` |
 
 ### `legRightExtraA`
-|                 Animation Reference Path                 |                        Effect                         |
+|                 Animation Reference Path                 |                        Эффект                         |
 |:--------------------------------------------------------:|:-----------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/leg/extra.js` | Same as the `legRight`, but no effect of sitting down |
 
@@ -100,47 +100,47 @@ The game will automatically render left-handed items based on this group name, n
 | `touhou_little_maid:animation/maid/default/wing/default.js` | Wings reciprocating swing animation |
 
 ### `ahoge`
-|                Animation Reference Path                 |       Effect       |
+|                Animation Reference Path                 |       Эффект       |
 |:-------------------------------------------------------:|:------------------:|
 | `touhou_little_maid:animation/maid/default/head/beg.js` | Ahoge swing in beg |
 
 ### `blink`
-|                 Animation Reference Path                  |       Effect       |
+|                 Animation Reference Path                  |       Эффект       |
 |:---------------------------------------------------------:|:------------------:|
 | `touhou_little_maid:animation/maid/default/head/blink.js` | Blinking animation |
 
 ### `_bink`
-|                     Animation Reference Path                      |                              Effect                               |
+|                     Animation Reference Path                      |                              Эффект                               |
 |:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/head/reverse_blink.js` | An animation that is the exact opposite of the blinking animation |
 
 ### `hurtBlink`
-|                 Animation Reference Path                 |                 Effect                  |
+|                 Animation Reference Path                 |                 Эффект                  |
 |:--------------------------------------------------------:|:---------------------------------------:|
 | `touhou_little_maid:animation/maid/default/head/hurt.js` | Blink animation only shown when injured |
 
 ### `tail`
-|                  Animation Reference Path                   |        Effect        |
+|                  Animation Reference Path                   |        Эффект        |
 |:-----------------------------------------------------------:|:--------------------:|
 | `touhou_little_maid:animation/maid/default/tail/default.js` | Tail swing animation |
 
 ### `sittingRotationSkirt`
-|                     Animation Reference Path                      |                          Effect                           |
+|                     Animation Reference Path                      |                          Эффект                           |
 |:-----------------------------------------------------------------:|:---------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/sit/skirt_rotation.js` | Give the group a rotation angle while the maid is sitting |
 
 ### `sittingHiddenSkirt`
-|                    Animation Reference Path                     |                             Effect                             |
+|                    Animation Reference Path                     |                             Эффект                             |
 |:---------------------------------------------------------------:|:--------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/sit/skirt_hidden.js` | When the maid  is sitting, hide the group. Else show the group |
 
 ### `_sittingHiddenSkirt`
-|                    Animation Reference Path                     |                             Effect                             |
+|                    Animation Reference Path                     |                             Эффект                             |
 |:---------------------------------------------------------------:|:--------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/sit/skirt_hidden.js` | When the maid  is sitting, show the group. Else hide the group |
 
 ### `helmet`
-|                   Animation Reference Path                   |                                 Effect                                 |
+|                   Animation Reference Path                   |                                 Эффект                                 |
 |:------------------------------------------------------------:|:----------------------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/armor/default.js` | This group is only displayed when the maid is equipped with the helmet |
 
@@ -639,7 +639,7 @@ It has nothing to do with whether the armor is equipped or not, just describe it
 
 It has nothing to do with whether the armor is equipped or not, just describe its role.
 
-|                       Animation Reference Path                       |                          Effect                           |
+|                       Animation Reference Path                       |                          Эффект                           |
 |:--------------------------------------------------------------------:|:---------------------------------------------------------:|
 | `touhou_little_maid:animation/maid/default/armor/value/value_low.js` | Only displayed when the maid's armor value is less than 5 |
 
@@ -680,89 +680,89 @@ Preset animation for chair only, pay attention to the case of the group name.
 | `touhou_little_maid:animation/chair/passenger/rotation.js` | According to the passenger’s pitch, set the corresponding pitch for this group |
 
 ### `passengerHidden`
-|                 Animation Reference Path                 |                       Effect                        |
+|                 Animation Reference Path                 |                       Эффект                        |
 |:--------------------------------------------------------:|:---------------------------------------------------:|
 | `touhou_little_maid:animation/chair/passenger/hidden.js` | When the chair has a passenger, the group is hidden |
 
 ### `passengerShow`
-|                 Animation Reference Path                 |                         Effect                         |
+|                 Animation Reference Path                 |                         Эффект                         |
 |:--------------------------------------------------------:|:------------------------------------------------------:|
 | `touhou_little_maid:animation/chair/passenger/hidden.js` | When the chair has a passenger, the group is displayed |
 
 ## All Preset Animation
 Preset animation for all, pay attention to the case of the group name.
 ### `sinFloat` `cosFloat` `_sinFloat` `_cosFloat`
-|               Animation Reference Path               |                             Effect                              |
+|               Animation Reference Path               |                             Эффект                              |
 |:----------------------------------------------------:|:---------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/float/default.js` | According to the pivot point of the group, it float up and down |
 
 ### `overWorldHidden`
-|                 Animation Reference Path                 |                       Effect                        |
+|                 Animation Reference Path                 |                       Эффект                        |
 |:--------------------------------------------------------:|:---------------------------------------------------:|
 | `touhou_little_maid:animation/base/dimension/default.js` | Hide the group when the entity is in the over world |
 
 ### `overWorldShow`
-|                 Animation Reference Path                 |                       Effect                        |
+|                 Animation Reference Path                 |                       Эффект                        |
 |:--------------------------------------------------------:|:---------------------------------------------------:|
 | `touhou_little_maid:animation/base/dimension/default.js` | Show the group when the entity is in the over world |
 
 ### `netherWorldHidden`
-|                 Animation Reference Path                 |                        Effect                         |
+|                 Animation Reference Path                 |                        Эффект                         |
 |:--------------------------------------------------------:|:-----------------------------------------------------:|
 | `touhou_little_maid:animation/base/dimension/default.js` | Hide the group when the entity is in the nether world |
 
 ### `netherWorldShow`
-|                 Animation Reference Path                 |                        Effect                         |
+|                 Animation Reference Path                 |                        Эффект                         |
 |:--------------------------------------------------------:|:-----------------------------------------------------:|
 | `touhou_little_maid:animation/base/dimension/default.js` | Show the group when the entity is in the nether world |
 
 ### `endWorldHidden`
-|                 Animation Reference Path                 |                       Effect                       |
+|                 Animation Reference Path                 |                       Эффект                       |
 |:--------------------------------------------------------:|:--------------------------------------------------:|
 | `touhou_little_maid:animation/base/dimension/default.js` | Hide the group when the entity is in the end world |
 
 ### `endWorldShow`
-|                 Animation Reference Path                 |                       Effect                       |
+|                 Animation Reference Path                 |                       Эффект                       |
 |:--------------------------------------------------------:|:--------------------------------------------------:|
 | `touhou_little_maid:animation/base/dimension/default.js` | Show the group when the entity is in the end world |
 
 ### `xRotationLowA` `xRotationLowB` `xRotationLowC` `xRotationLowD` `xRotationLowE`
-|                  Animation Reference Path                   |                            Effect                             |
+|                  Animation Reference Path                   |                            Эффект                             |
 |:-----------------------------------------------------------:|:-------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/x_low_speed.js` | Pivot point as center, X direction of rotation axis, 72 sec/r |
 
 ### `yRotationLowA` `yRotationLowB` `yRotationLowC` `yRotationLowD` `yRotationLowE`
-|                  Animation Reference Path                   |                            Effect                             |
+|                  Animation Reference Path                   |                            Эффект                             |
 |:-----------------------------------------------------------:|:-------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/y_low_speed.js` | Pivot point as center, Y direction of rotation axis, 72 sec/r |
 
 ### `zRotationLowA` `zRotationLowB` `zRotationLowC` `zRotationLowD` `zRotationLowE`
-|                  Animation Reference Path                   |                            Effect                             |
+|                  Animation Reference Path                   |                            Эффект                             |
 |:-----------------------------------------------------------:|:-------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/z_low_speed.js` | Pivot point as center, Z direction of rotation axis, 72 sec/r |
 
 ### `xRotationNormalA` `xRotationNormalB` `xRotationNormalC` `xRotationNormalD` `xRotationNormalE`
-|                    Animation Reference Path                    |                            Effect                             |
+|                    Animation Reference Path                    |                            Эффект                             |
 |:--------------------------------------------------------------:|:-------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/x_normal_speed.js` | Pivot point as center, X direction of rotation axis, 18 sec/r |
 
 ### `yRotationNormalA` `yRotationNormalB` `yRotationNormalC` `yRotationNormalD` `yRotationNormalE`
-|                    Animation Reference Path                    |                            Effect                             |
+|                    Animation Reference Path                    |                            Эффект                             |
 |:--------------------------------------------------------------:|:-------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/y_normal_speed.js` | Pivot point as center, Y direction of rotation axis, 18 sec/r |
 
 ### `zRotationNormalA` `zRotationNormalB` `zRotationNormalC` `zRotationNormalD` `zRotationNormalE`
-|                    Animation Reference Path                    |                            Effect                             |
+|                    Animation Reference Path                    |                            Эффект                             |
 |:--------------------------------------------------------------:|:-------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/z_normal_speed.js` | Pivot point as center, Z direction of rotation axis, 18 sec/r |
 
 ### `xRotationHighA` `xRotationHighB` `xRotationHighC` `xRotationHighD` `xRotationHighE`
-|                   Animation Reference Path                   |                             Effect                             |
+|                   Animation Reference Path                   |                             Эффект                             |
 |:------------------------------------------------------------:|:--------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/x_high_speed.js` | Pivot point as center, X direction of rotation axis, 4.5 sec/r |
 
 ### `yRotationHighA` `yRotationHighB` `yRotationHighC` `yRotationHighD` `yRotationHighE`
-|                   Animation Reference Path                   |                             Effect                             |
+|                   Animation Reference Path                   |                             Эффект                             |
 |:------------------------------------------------------------:|:--------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/y_high_speed.js` | Pivot point as center, Y direction of rotation axis, 4.5 sec/r |
 
@@ -772,115 +772,115 @@ Preset animation for all, pay attention to the case of the group name.
 | `touhou_little_maid:animation/base/rotation/z_high_speed.js` | Pivot point as center, Z direction of rotation axis, 4.5 sec/r |
 
 ### `xReciprocate`
-|                  Animation Reference Path                   |                       Effect                        |
+|                  Animation Reference Path                   |                       Эффект                        |
 |:-----------------------------------------------------------:|:---------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/reciprocate.js` | Pivot point as center, reciprocate swing at X angle |
 
 ### `yReciprocate`
-|                  Animation Reference Path                   |                       Effect                        |
+|                  Animation Reference Path                   |                       Эффект                        |
 |:-----------------------------------------------------------:|:---------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/reciprocate.js` | Pivot point as center, reciprocate swing at Y angle |
 
 ### `zReciprocate`
-|                  Animation Reference Path                   |                       Effect                        |
+|                  Animation Reference Path                   |                       Эффект                        |
 |:-----------------------------------------------------------:|:---------------------------------------------------:|
 | `touhou_little_maid:animation/base/rotation/reciprocate.js` | Pivot point as center, reciprocate swing at Z angle |
 
 ### `dayShow`
-|                   Animation Reference Path                   |           Effect           |
+|                   Animation Reference Path                   |           Эффект           |
 |:------------------------------------------------------------:|:--------------------------:|
 | `touhou_little_maid:animation/base/time/day_night_hidden.js` | Show the group when in day |
 
 ### `nightShow`
-|                   Animation Reference Path                   |            Effect            |
+|                   Animation Reference Path                   |            Эффект            |
 |:------------------------------------------------------------:|:----------------------------:|
 | `touhou_little_maid:animation/base/time/day_night_hidden.js` | Show the group when in night |
 
 ### `gameHourRotationX`
-|                 Animation Reference Path                  |                                                 Effect                                                  |
+|                 Animation Reference Path                  |                                                 Эффект                                                  |
 |:---------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/game_rotation.js` | Used to make watch pointer animation, rotate the X angle of the group according to the time in the game |
 
 ### `gameMinuteRotationX`
-|                 Animation Reference Path                  |                                                 Effect                                                  |
+|                 Animation Reference Path                  |                                                 Эффект                                                  |
 |:---------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/game_rotation.js` | Used to make watch pointer animation, rotate the X angle of the group according to the time in the game |
 
 ### `gameHourRotationY`
-|                 Animation Reference Path                  |                                                 Effect                                                  |
+|                 Animation Reference Path                  |                                                 Эффект                                                  |
 |:---------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/game_rotation.js` | Used to make watch pointer animation, rotate the Y angle of the group according to the time in the game |
 
 ### `gameMinuteRotationY`
-|                 Animation Reference Path                  |                                                 Effect                                                  |
+|                 Animation Reference Path                  |                                                 Эффект                                                  |
 |:---------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/game_rotation.js` | Used to make watch pointer animation, rotate the Y angle of the group according to the time in the game |
 
 ### `gameHourRotationZ`
-|                 Animation Reference Path                  |                                                 Effect                                                  |
+|                 Animation Reference Path                  |                                                 Эффект                                                  |
 |:---------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/game_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the game |
 
 ### `gameMinuteRotationZ`
-|                 Animation Reference Path                  |                                                 Effect                                                  |
+|                 Animation Reference Path                  |                                                 Эффект                                                  |
 |:---------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/game_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the game |
 
 ### `systemHourRotationX`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                  Animation Reference Path                   |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the X angle of the group according to the time in the system |
 
 ### `systemMinuteRotationX`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                  Animation Reference Path                   |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the X angle of the group according to the time in the system |
 
 ### `systemSecondRotationX`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                  Animation Reference Path                   |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the X angle of the group according to the time in the system |
 
 ### `systemHourRotationY`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                        Путь анимации                        |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Y angle of the group according to the time in the system |
 
 ### `systemMinuteRotationY`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                  Animation Reference Path                   |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Y angle of the group according to the time in the system |
 
 ### `systemSecondRotationY`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                  Animation Reference Path                   |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Y angle of the group according to the time in the system |
 
 ### `systemHourRotationZ`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                  Animation Reference Path                   |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the system |
 
 ### `systemMinuteRotationZ`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                        Путь анимации                        |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the system |
 
 ### `systemSecondRotationZ`
-|                  Animation Reference Path                   |                                                  Effect                                                   |
+|                        Путь анимации                        |                                                  Эффект                                                   |
 |:-----------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | `touhou_little_maid:animation/base/time/system_rotation.js` | Used to make watch pointer animation, rotate the Z angle of the group according to the time in the system |
 
 ## Positioning Group
-For rendering positioning, based on the pivot point of the group, can be empty.
+Для позиции рендера, зависимое от точки сворачивания группы может быть пустым.
 ### `armLeftPositioningBone`
 
-Position the left-handed item, its parent group must be `armLeft`
+Позиция предмета в левой руке, родительская группа должна быть `armLeft`
 
 ### `armRightPositioningBone`
 
-Position the right-handed item, its parent group must be `armRight`
+Позиция предмета в правой руке, родительская группа должна быть `armRight`
 
 ### `backpackPositioningBone`
 
-Position the backpack shoulder strap, it must be the root group
+Позиция лямки рюкзака, он должен быть в корневой группе

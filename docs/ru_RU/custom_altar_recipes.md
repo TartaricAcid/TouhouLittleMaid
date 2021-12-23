@@ -1,18 +1,18 @@
-# Custom Altar Recipes
+# Свои рецепты Алтаря
 
 ## 1.16.5
 Touhou Little Maid in 1.16.5 use datapack to add altar recipes
 
-**Please make sure you know how to use the Minecaft vanilla datapack**
+**Пожалуйста, убедитесь, что вы знаете, как использовать ванильный датапак Minecaft**
 
 ```json
 {
-  // Fixed type
+  // Фиксированный тип
   "type": "touhou_little_maid:altar_crafting",
   "output": {
-    // Entity type name
+    // Имя типа энтити
     "type": "minecraft:item",
-    // Additional NBT data for the entity
+    // Доп. NBT данные для энтити
     "nbt": {
       "Item": {
         "id": "touhou_little_maid:hakurei_gohei",
@@ -20,9 +20,9 @@ Touhou Little Maid in 1.16.5 use datapack to add altar recipes
       }
     }
   },
-  // The necessary power point required for crafting
+  // Кол-во силы для крафта
   "power": 0.15,
-  // You can write up to 6 parameters, is the ingredients for the recipe
+  // Вы можете записать до 6 параметров, это ингредиенты для рецепта
   "ingredients": [
     {
       "tag": "forge:rods/wooden"
