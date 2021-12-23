@@ -174,12 +174,12 @@ Since models made by some authors are more unique, they may have some compabilit
     "pack_name": "Touhou Project Pack",
     "model_list": [{
         "model_id": "touhou_little_maid:hakurei_reimu",
-        "show_hata": false,          // Prevent displaying of hata sasimono
         "show_backpack": false,      // Prevent displaying of backpack
-        "can_hold_trolley": false,   // Prevent displaying of trolley owned by maids
-        "can_hold_vehicle": false,   // Prevent displaying of vehicles owned by maids
-        "can_riding_broom": false,   // Prevent displaying of riding brooms owned by maids
-        "show_custom_head": false    // Prevent displaying of maid's custom heads
+        "show_custom_head": false,   // Prevent displaying of maid's custom heads
+        "show_hata": false,          // Prevent displaying of hata sasimono, deprecated in 1.16
+        "can_hold_trolley": false,   // prevent maid to hold the trolley, deprecated in 1.16
+        "can_hold_vehicle": false,   // Prevent maid to hold the vehicle, deprecated in 1.16
+        "can_riding_broom": false    // Prevent maid to riding the broom, deprecated in 1.16
     }]
 }
 ```
