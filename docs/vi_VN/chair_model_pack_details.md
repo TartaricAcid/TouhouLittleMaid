@@ -66,6 +66,8 @@ The model supports JSON files with comments, please use at your discretion.
             "texture": "touhou_little_maid:textures/entity/cushion.png",
             // The model size when rendering the item form, default is 1.0
             "render_item_scale": 0.9,
+            // The size when render the entity, range is between 0.2~2.0, default is 1.0
+            "render_entity_scale": 0.75,
             // The entity height(pixels) above ground when sat on, default is 3
             "mounted_height": 3,
             // Will tamed entities such as maids can sit on it, default is true
