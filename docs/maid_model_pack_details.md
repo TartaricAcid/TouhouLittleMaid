@@ -66,7 +66,7 @@ The model supports JSON files with comments, please use at your discretion.
             "texture": "touhou_little_maid:textures/entity/hakurei_reimu.png",
             // The model size when rendering the item form, default is 1.0
             "render_item_scale": 0.9,
-            // The size when render the entity, range is between 0.7~1.3, default is 1.0
+            // The size when render the entity, range is between 0.2~2.0, default is 1.0
             "render_entity_scale": 0.75,
             // Model name
             "name": "Reimu Hakurei",
