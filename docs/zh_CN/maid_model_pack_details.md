@@ -113,9 +113,7 @@ Icon does not have size limit, supports both static and animated icons.
 
 Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon that is not 1:1 scale, will be displayed slowly with a 0.1 second interval, which creates the animated effect.
 
-:::tip
-The image below is the icon in the mod, left is static icon, and right is the animated icon.
-:::
+:::tip The image below is the icon in the mod, left is static icon, and right is the animated icon. :::
 
 ![020](https://i.imgur.com/VoulqpR.png)
 
@@ -163,13 +161,13 @@ For the first example, if we did not fill the `name` file, then the system will 
 
 Since models made by some authors are more unique, they may have some compability issues with maids' various addtional appearance parts. Here we address the issue with these non-standard models and how you can overcome it:
 
-|                     Issues                      |                           Solution                           |
-| :---------------------------------------------: | :----------------------------------------------------------: |
-|             Uncoordinated animation             |          Write a custom JavaScript animation script          |
-|      Hold items are in incorrect position       |          Use positional group to define the position          |
+|                     Issues                      |                                                   Solution                                                   |
+|:-----------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
+|             Uncoordinated animation             |                                  Write a custom JavaScript animation script                                  |
+|      Hold items are in incorrect position       |                                 Use positional group to define the position                                  |
 |           Disable showing hold items            | As long as `armLeft` or `armRight` group does not exist, then the corresponding hold items will not be shown |
-|        Backpack is in incorrect position        |          Use positional group to define the position          |
-| Backpack, trolley, vehicles, broom, custom head | Write some fields as shown in the example below to close it  |
+|        Backpack is in incorrect position        |                                 Use positional group to define the position                                  |
+| Backpack, trolley, vehicles, broom, custom head |                         Write some fields as shown in the example below to close it                          |
 
 ```json {5-10}
 {
@@ -225,7 +223,7 @@ As the script below, when maid is named `IKUN~`, because the characters' SHA-1 v
 
 ## Other Questions
 
-###  Z-fighting Issue
+### Z-fighting Issue
 
 This is an issue with OpenGL itself, during the process of creating models if we used flat or two coinciding solids, we will have this issue.
 
