@@ -1,13 +1,42 @@
 const fs = require("fs")
+const LOCAL = ["de_DE", "es_ES", "fr_FR", "it_IT", "ja_JP", "ko_KR", "la_LA", "pt_BR", "pt_PT", "ru_RU", "tr_TR", "vi_VN", "zh_CN"]
 
 function getLocales(local) {
     if (local) {
         let path = `./docs/${local}/locales.json`
         if (fs.existsSync(path)) {
-            return JSON.parse(fs.readFileSync(path))
+            let data = JSON.parse(fs.readFileSync(path));
+            if (data["title"]["lang"]) {
+                return data
+            }
+        }
+    } else {
+        return JSON.parse(fs.readFileSync("./docs/locales.json"))
+    }
+}
+
+function getThemeConfigLocales() {
+    let locales = {}
+    locales["/"] = getLocales()["themeConfig"]
+    for (let local of LOCAL) {
+        let themeConfigLocales = getLocales(local)
+        if (themeConfigLocales) {
+            locales[`/${local}/`] = themeConfigLocales["themeConfig"]
         }
     }
-    return JSON.parse(fs.readFileSync("./docs/locales.json"))
+    return locales
+}
+
+function getTitleLocales() {
+    let locales = {}
+    locales["/"] = getLocales()["title"]
+    for (let local of LOCAL) {
+        let titleLocales = getLocales(local)
+        if (titleLocales) {
+            locales[`/${local}/`] = titleLocales["title"]
+        }
+    }
+    return locales
 }
 
 module.exports = {
@@ -16,39 +45,9 @@ module.exports = {
     description: 'There is a wiki related to Touhou Little Maid mod development',
     base: '/TouhouLittleMaid/',
     themeConfig: {
-        locales: {
-            '/': getLocales()["themeConfig"],
-            '/de_DE/': getLocales("zh_CN")["themeConfig"],
-            '/es_ES/': getLocales("es_ES")["themeConfig"],
-            '/fr_FR/': getLocales("fr_FR")["themeConfig"],
-            '/it_IT/': getLocales("it_IT")["themeConfig"],
-            '/ja_JP/': getLocales("ja_JP")["themeConfig"],
-            '/ko_KR/': getLocales("ko_KR")["themeConfig"],
-            '/la_LA/': getLocales("la_LA")["themeConfig"],
-            '/pt_BR/': getLocales("pt_BR")["themeConfig"],
-            '/pt_PT/': getLocales("pt_PT")["themeConfig"],
-            '/ru_RU/': getLocales("ru_RU")["themeConfig"],
-            '/tr_TR/': getLocales("tr_TR")["themeConfig"],
-            '/vi_VN/': getLocales("vi_VN")["themeConfig"],
-            '/zh_CN/': getLocales("zh_CN")["themeConfig"],
-        }
+        locales: getThemeConfigLocales()
     },
-    locales: {
-        '/': getLocales()["title"],
-        '/de_DE/': getLocales("zh_CN")["title"],
-        '/es_ES/': getLocales("es_ES")["title"],
-        '/fr_FR/': getLocales("fr_FR")["title"],
-        '/it_IT/': getLocales("it_IT")["title"],
-        '/ja_JP/': getLocales("ja_JP")["title"],
-        '/ko_KR/': getLocales("ko_KR")["title"],
-        '/la_LA/': getLocales("la_LA")["title"],
-        '/pt_BR/': getLocales("pt_BR")["title"],
-        '/pt_PT/': getLocales("pt_PT")["title"],
-        '/ru_RU/': getLocales("ru_RU")["title"],
-        '/tr_TR/': getLocales("tr_TR")["title"],
-        '/vi_VN/': getLocales("vi_VN")["title"],
-        '/zh_CN/': getLocales("zh_CN")["title"],
-    },
+    locales: getTitleLocales(),
     markdown: {
         lineNumbers: true
     }
