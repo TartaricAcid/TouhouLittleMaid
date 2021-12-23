@@ -1,16 +1,16 @@
-# Chair Model Pack Details
-- This wiki applies to Touhou Little Maid mod in `1.12.2` or `1.16.5` latest version;
-- Requires understanding of vanilla Minecraft's resource pack structure;
-- Requires understanding of JSON format;
-- Currently only supports models for **1.10.0 or 1.12.0 Bedrock Edition Model**.
-- For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
+# 坐垫模型包详解
+- 本 wiki 适用于 Touhou Little Maid 模组 `1.12.2` 和 `1.16.5` 最新版；
+- 需要了解原版 Minecraft 的资源包结构；
+- 需要了解 JSON 格式；
+- 当前仅支持 **1.10.0 和 1.12.0 版本基岩版模型**；
+- 对于文本编辑软件，我们推荐使用 `Visual Studio Code`，所有的文件都需要以 `UTF-8 无 BOM` 编码保存。
 
-## Model Packs Structure
+## 模型包结构
 
-To better understand how to create model packs, we listed here the structure format for model packs
+为了更好地理解如何创建模型包，我们在此列出了模型包的结构
 
 ```
-model pack folder
+模型包文件夹
 │
 ├─pack.mcmeta
 ├─pack.png
@@ -30,56 +30,56 @@ model pack folder
                         └─wheel_chair.png
 ```
 
-## Model Packs Description Files
+## 模型包描述文件
 
-The file complete structure is as below, only the parts marked '(Required)' requires to be filled, you don't have to fill everything.
+文件完整的结构如下，只有标记为“（必须）”的部分才是必须的，你不必填写所有内容。
 
-The model supports JSON files with comments, please use at your discretion.
+模型支持带有注释的 JSON 文件，请酌情使用。
 
 ```json
 {
-    // Model pack name (Required)
+    // 模型包名（必须）
     "pack_name": "Custom Chair Model Packs",
-    // Author list
+    // 作者列表
     "author": [
         "TartaricAcid",
         "SuccinicAcid"
     ],
-    // Description for model packs
+    // 模型包描述文本
     "description": [
         "Default Model Packs"
     ],
-    // Model pack version
+    // 模型包版本
     "version": "1.0.3",
-    // Date creation for model pack
+    // 创建模型包的日期
     "date": "2019-08-20",
-    // Model pack icon, without this, the model pack will have no icon
+    // 模型包图标，没有此字段，模型包将没有图标
     "icon": "touhou_little_maid:textures/chair_icon.png",
-    // Model list (Required)
+    // 模型列表（必须）
     "model_list": [
         {
-            // Model id, no duplication allowed (Required)
+            // 模型 id，不允许重复（必须）
             "model_id": "touhou_little_maid:cushion",
-            // The path for the model, use the full resource path
+            // 模型的路径，请使用完整路径名
             "model": "touhou_little_maid:models/entity/cushion.json",
-            // The path for the texture, use the full resource path
+            // 材质的路径，请使用完整路径名
             "texture": "touhou_little_maid:textures/entity/cushion.png",
-            // The model size when rendering the item form, default is 1.0
+            // 以物品形式渲染时的缩放大小，默认为 1.0
             "render_item_scale": 0.9,
-            // The entity height(pixels) above ground when sat on, default is 3
+            // 坐上去的实体距离地面的高度，单位为距离地面的像素点数，默认为 3
             "mounted_height": 3,
-            // Will tamed entities such as maids can sit on it, default is true
+            // 女仆等可驯服生物会主动坐上去，默认为 true
             "tameable_can_ride": false,
-            // Whether the chair has gravity, the default is false
+            // 坐垫是否受重力影响，默认为 false
             "no_gravity": true,
-            // Model name
+            // 模型名
             "name": "Cushion",
-            // The description for the model
+            // 该模型的描述文本
             "description": [
                 "Just A Normal Cushion"
             ],
-            // Animation script reference, without this part, chair will not have any animation
-            // tlm-utils plugins can auto generate the correct animation reference based on the group name
+            // 动画脚本，如果没有此字段，坐垫将不会拥有任何动画
+            // tlm-utils 插件会自动依据组名分析动画脚本引用
             "animation": [
                 "touhou_little_maid:animation/chair/passenger/rotation.js"
             ]
@@ -88,25 +88,25 @@ The model supports JSON files with comments, please use at your discretion.
 }
 ```
 
-The example above listed all usable field, only the field with '(Required)' are needed, the rest can be omitted.
+上面的示例列出了所有可用字段，只需要带有“（必须）”的字段，其余部分可以省略。
 
-For simplicity, you could write a file like this:
+为了简单起见，你可以写一个像这样的文件：
 
 ```json
 {
-    // Model pack name (Required)
+    // 模型包包名（必须）
     "pack_name": "Custom Chair Model Packs",
-    // Model list (Required)
+    // 模型列表（必须）
     "model_list": [
         {
-            // Model id, no duplication allowed (Required)
+            // 模型 id，不允许重复（必须）
             "model_id": "touhou_little_maid:cushion"
         }
     ]
 }
 ```
 
-If we do not fill the field for `model` or `texture`, it will choose the default model and texture based on `model_id`.
+如果我们不填写 `model` 或 `texture`，它将基于 `model_id` 选择默认的模型和材质。
 
 For the example above, `model_id` is `touhou_little_maid:cushion`, then the model file will be `cushion.json` under `models/entity` folder, the texture will be `cushion.png` under `textures/entity` folder.
 
