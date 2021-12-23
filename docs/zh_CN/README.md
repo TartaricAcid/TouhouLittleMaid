@@ -1,19 +1,21 @@
 ---
 home: true
-heroText: Touhou Little Maid 开发 Wiki
+heroText: Touhou Little Maid Dev Wiki
 heroImage: https://i.imgur.com/SqIMw3U.png
-tagline: 有关于车万女仆的开发文档
-actionText: 点击开始 →
-actionLink: /zh/
+tagline: There is a wiki related to Touhou Little Maid mod development
+actionText: Get Started →
+actionLink: /custom_model_pack
 features:
-- title: 自定义模型
-  details: 如何制作自定义的女仆、坐垫模型
-- title: 合成修改
-  details: 如何通过数据包修改合成
-- title: 开发模组
-  details: 如何为 Touhou Little Maid 模组添加兼容，或者会做附属模组
+  - 
+    title: Custom Model
+    details: How to make a custom maid or chair model package
+  - 
+    title: Modify Recipes
+    details: How to modification of recipes by data packet
+  - 
+    title: Develop Mod
+    details: How to compat Touhou Little Maid mod, or develop an addition
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---
-::: warning
-确保你所使用的 Touhou Little Maid 模组为最新版
-:::
+
+::: warning Make sure the version of Touhou Little Maid mod you're using is the latest. :::
