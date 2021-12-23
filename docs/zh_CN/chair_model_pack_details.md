@@ -38,48 +38,50 @@
 
 ```json
 {
-    // 模型包名（必须）
+    // Model pack name (Required)
     "pack_name": "Custom Chair Model Packs",
-    // 作者列表
+    // Author list
     "author": [
         "TartaricAcid",
         "SuccinicAcid"
     ],
-    // 模型包描述文本
+    // Description for model packs
     "description": [
         "Default Model Packs"
     ],
-    // 模型包版本
+    // Model pack version
     "version": "1.0.3",
-    // 创建模型包的日期
+    // Date creation for model pack
     "date": "2019-08-20",
-    // 模型包图标，没有此字段，模型包将没有图标
+    // Model pack icon, without this, the model pack will have no icon
     "icon": "touhou_little_maid:textures/chair_icon.png",
-    // 模型列表（必须）
+    // Model list (Required)
     "model_list": [
         {
-            // 模型 id，不允许重复（必须）
+            // Model id, no duplication allowed (Required)
             "model_id": "touhou_little_maid:cushion",
-            // 模型的路径，请使用完整路径名
+            // The path for the model, use the full resource path
             "model": "touhou_little_maid:models/entity/cushion.json",
-            // 材质的路径，请使用完整路径名
+            // The path for the texture, use the full resource path
             "texture": "touhou_little_maid:textures/entity/cushion.png",
-            // 以物品形式渲染时的缩放大小，默认为 1.0
+            // The model size when rendering the item form, default is 1.0
             "render_item_scale": 0.9,
-            // 坐上去的实体距离地面的高度，单位为距离地面的像素点数，默认为 3
+            // The size when render the entity, range is between 0.2~2.0, default is 1.0
+            "render_entity_scale": 0.75,
+            // The entity height(pixels) above ground when sat on, default is 3
             "mounted_height": 3,
-            // 女仆等可驯服生物会主动坐上去，默认为 true
+            // Will tamed entities such as maids can sit on it, default is true
             "tameable_can_ride": false,
-            // 坐垫是否受重力影响，默认为 false
+            // Whether the chair has gravity, the default is false
             "no_gravity": true,
-            // 模型名
+            // Model name
             "name": "Cushion",
-            // 该模型的描述文本
+            // The description for the model
             "description": [
                 "Just A Normal Cushion"
             ],
-            // 动画脚本，如果没有此字段，坐垫将不会拥有任何动画
-            // tlm-utils 插件会自动依据组名分析动画脚本引用
+            // Animation script reference, without this part, chair will not have any animation
+            // tlm-utils plugins can auto generate the correct animation reference based on the group name
             "animation": [
                 "touhou_little_maid:animation/chair/passenger/rotation.js"
             ]
