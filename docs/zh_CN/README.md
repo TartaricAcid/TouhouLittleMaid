@@ -4,7 +4,7 @@ heroText: Touhou Little Maid 开发 Wiki
 heroImage: https://i.imgur.com/SqIMw3U.png
 tagline: 有关于车万女仆的开发文档
 actionText: 点击开始 →
-actionLink: /zh/
+actionLink: /zh_CN/custom_model_pack
 features:
 - title: 自定义模型
   details: 如何制作自定义的女仆、坐垫模型
