@@ -21,11 +21,9 @@ It is not difficult to make a custom model package from scratch, even if you are
   
   Mainly used to edit language files, optional.
 
-In addition, I also wrote a blockbench plugin for exporting custom models.
-| Version | Link | Remark |
-| :--: | :--: | :--: |
-| `1.0.5` | [Download](https://github.com/TartaricAcid/TLM-Utils-Plugins/releases/download/1.0.5/tlm-utils.js) | For Blockbench 4.x |
-| `1.0.4` | [Download](https://github.com/TartaricAcid/TLM-Utils-Plugins/releases/download/1.0.4/tlm-utils.js) | For Blockbench 3.x |
+In addition, I also wrote a blockbench plugin for exporting custom models, only applicable to Blockbench 4.0
+
+Plugin site: <http://page.cfpa.team/TLM-Utils-Plugins/>
 
 # Quick Start
 
@@ -37,7 +35,7 @@ When everything is done, you can start to make a model package according to the 
 Create a default model, it will automatically create a default Bedrock Edition model, you can modify on this basis.     
 If you choose `chair`, there is no default model.
 
-![img](https://media.discordapp.net/attachments/760041309481336843/760046338317615124/1.png)
+![img](https://i.imgur.com/h6ufpuS.gif)
 
 ## 2. Modify it to what you want based on the default model
 Need to pay attention to several points:
@@ -46,34 +44,25 @@ Need to pay attention to several points:
 
    > Want to know what group names are available? Please see the [Preset Animation](/preset_animation.md) chapter.
 
+   > You can right-click in the outliner interface to open the preset animation menu   
+   ![img](https://i.imgur.com/N17PbiE.gif)
+
 2. Pay attention to the parent-child relationship of the group.
 
 3. Pay attention to the pivot point.
-
-![img](https://media.discordapp.net/attachments/760041309481336843/760046542287142952/2.png)
 
 ## 3. Create textures
 
 You can edit the textures directly in Blockbench, or you can edit the textures through other image editors.
 
-![img](https://media.discordapp.net/attachments/760041309481336843/760046813163683860/3.png)
+![img](https://i.imgur.com/4JOKLMd.gif)
 
-## 4. Create a resource pack
+## 4. Create a model pack
 
-Follow the prompts to fill out the form, it will create an empty model package folder.
+![img](https://i.imgur.com/RHq9zf1.gif) 
 
-![img](https://media.discordapp.net/attachments/760041309481336843/760046894617067530/4.png) 
+## 5. Export the model into model pack
 
-## 5. Export the model into resource pack
+![img](https://i.imgur.com/Mux4TwJ.gif)
 
-Follow the prompts to fill out the form,
-
-:::tip
-Because there are still some problems with the plugin, after exporting successfully, remember to press `ctrl s` to save,  and need to wait 10 seconds before closing Blockbench, otherwise it may not be able to generate the correct animation reference based on the group name.
-:::
-
-![img](https://media.discordapp.net/attachments/760041309481336843/760047013047173120/5.png)
-
-## 6. Load the resource pack
-
-![img](https://media.discordapp.net/attachments/760041309481336843/760047185193730058/6.png)
+## 6. Load the model pack & enjoy it!
