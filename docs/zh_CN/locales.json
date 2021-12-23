@@ -12,32 +12,50 @@
         "nav": [
             {
                 "text": "主页",
-                "link": "./"
+                "link": ""
             },
             {
-                "text": "GitHub",
-                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
+                "text": "",
+                "link": ""
             },
             {
-                "text": "CurseForge",
-                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
+                "text": "",
+                "link": ""
             }
         ],
         "sidebar": [
             {
                 "title": "自定义模型",
                 "children": [
-                    ["./zh_CN/custom_model_pack", "Custom Model Pack"],
-                    ["./zh_CN/maid_model_pack_details", "Maid Model Pack Details"],
-                    ["./zh_CN/chair_model_pack_details", "Chair Model Pack Details"],
-                    ["./zh_CN/custom_javascript_animation","Custom JavaScript Animation"],
-                    ["./zh_CN/preset_animation", "Preset Animation"]
+                    [
+                        "./zh_CN/custom_model_pack",
+                        "Custom Model Pack"
+                    ],
+                    [
+                        "./zh_CN/maid_model_pack_details",
+                        "Maid Model Pack Details"
+                    ],
+                    [
+                        "./zh_CN/chair_model_pack_details",
+                        "Chair Model Pack Details"
+                    ],
+                    [
+                        "./zh_CN/custom_javascript_animation",
+                        "Custom JavaScript Animation"
+                    ],
+                    [
+                        "./zh_CN/preset_animation",
+                        "Preset Animation"
+                    ]
                 ]
             },
             {
                 "title": "合成修改",
                 "children": [
-                    ["./zh_CN/custom_altar_recipes", "Custom Altar Recipes"]
+                    [
+                        "./zh_CN/custom_altar_recipes",
+                        "Custom Altar Recipes"
+                    ]
                 ]
             }
         ]
