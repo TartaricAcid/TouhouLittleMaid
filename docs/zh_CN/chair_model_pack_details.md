@@ -66,6 +66,8 @@
             "texture": "touhou_little_maid:textures/entity/cushion.png",
             // 以物品形式渲染时的缩放大小，默认为 1.0
             "render_item_scale": 0.9,
+            // 以实体形式渲染时的缩放大小，范围为 0.2~2.0，默认为 1.0
+            "render_entity_scale": 0.75,
             // 坐上去的实体距离地面的高度，单位为距离地面的像素点数，默认为 3
             "mounted_height": 3,
             // 女仆等可驯服生物会主动坐上去，默认为 true
