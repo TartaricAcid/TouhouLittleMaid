@@ -100,61 +100,72 @@ After you load the model resource pack you made, just use the following command 
 
 ## Function Documentation
 
+Strikethrough style means that the method is deprecated in 1.16, you can visit the [link here](https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.16.5/src/main/java/com/github/tartaricacid/touhoulittlemaid/api/animation) to view the source code API.
+
 ### Entity Parameter
 
 Depending on the target of the added animation, the function that can be used by `entity` differs as well.
 
 #### Maid
 
-|      Function name       | Return value |                             Note                             |
-| :----------------------: | :----------: | :----------------------------------------------------------: |
-|      `hasHelmet()`       |  `boolean`   |           After maid wears helmet, returns `true`            |
-|    `hasChestPlate()`     |  `boolean`   |         After maid wears chestplate, returns `true`          |
-|     `hasLeggings()`      |  `boolean`   |          After maid wears leggings, returns `true`           |
-|       `hasBoots()`       |  `boolean`   |            After maid wears boots, returns `true`            |
-|      `getHelmet()`       |   `String`   | After maid wears helmet, returns helmet item's registry name |
-|    `getChestPlate()`     |   `String`   | After maid wears chestplate, returns chestplate item's registry name |
-|     `getLeggings()`      |   `String`   | After maid wears leggings, returns leggings item's registry name |
-|       `getBoots()`       |   `String`   |  After maid wears boots, returns boots item's registry name  |
-|      `isBegging()`       |  `boolean`   |               Whether maid is in begging mode                |
-|    `isSwingingArms()`    |  `boolean`   |   If maid is using arms, this function will return `true`    |
-|       `isRiding()`       |  `boolean`   |                Whether maid is in riding mode                |
-|      `isSitting()`       |  `boolean`   |               Whether maid is in standby mode                |
-|    `isHoldTrolley()`     |  `boolean`   |      Whether maid is carrying trolley or other entities      |
-| `isRidingMarisaBroom()`  |  `boolean`   |             Whether maid is riding Marisa Broom              |
-|    `isRidingPlayer()`    |  `boolean`   |                Whether maid is riding player                 |
-|    `isHoldVehicle()`     |  `boolean`   |                Whether maid is riding vehicle                |
-|     `hasBackpack()`      |  `boolean`   |                Whether maid wearing backpack                 |
-|   `getBackpackLevel()`   |    `int`     |                  Get maid's backpack level                   |
-|     `hasSasimono()`      |  `boolean`   |                Whether maid wearing sasimono                 |
-|   `isSwingLeftHand()`    |  `boolean`   | Whether the maid is swinging left or right arm, return `false` if it's the right |
-| `getLeftHandRotation()`  |  `float[3]`  |                Get the left arm rotation data                |
-| `getRightHandRotation()` |  `float[3]`  |               Get the right arm rotation data                |
-|        `getDim()`        |    `int`     |            Get the dimension where the maid is in            |
-|       `getWorld()`       |   `World`    |                    Get maid's world data                     |
-|       `getTask()`        |   `String`   |      Get maid's task, such as `attack`, `ranged_attack`       |
-|   `hasItemMainhand()`    |  `boolean`   |                Whether maid has mainhand item                |
-|    `hasItemOffhand()`    |  `boolean`   |                Whether maid has offhand item                 |
-|   `getItemMainhand()`    |   `String`   |            Get maid mainhand item's registry name            |
-|    `getItemOffhand()`    |   `String`   |            Get maid offhand item's registry name             |
-|       `inWater()`        |  `boolean`   |                    Whether maid in water                     |
-|        `inRain()`        |  `boolean`   |                     Whether maid in rain                     |
-|      `getHealth()`       |   `float`    |                      Get maid's health                       |
-|     `getMaxHealth()`     |   `float`    |                    Get maid's max health                     |
-|       `isSleep()`        |  `boolean`   |                    Whether maid is sleep                     |
-|    `getArmorValue()`     |   `double`   |                    Get maid's armor value                    |
+|        Function name         | Return value |                             Note                             |
+| :--------------------------: | :----------: | :----------------------------------------------------------: |
+|        `hasHelmet()`         |  `boolean`   |           After maid wears helmet, returns `true`            |
+|      `hasChestPlate()`       |  `boolean`   |         After maid wears chestplate, returns `true`          |
+|       `hasLeggings()`        |  `boolean`   |          After maid wears leggings, returns `true`           |
+|         `hasBoots()`         |  `boolean`   |            After maid wears boots, returns `true`            |
+|        `getHelmet()`         |   `String`   | After maid wears helmet, returns helmet item's registry name |
+|      `getChestPlate()`       |   `String`   | After maid wears chestplate, returns chestplate item's registry name |
+|       `getLeggings()`        |   `String`   | After maid wears leggings, returns leggings item's registry name |
+|         `getBoots()`         |   `String`   |  After maid wears boots, returns boots item's registry name  |
+|        `isBegging()`         |  `boolean`   |               Whether maid is in begging mode                |
+|      `isSwingingArms()`      |  `boolean`   |   If maid is using arms, this function will return `true`    |
+|     `getSwingProgress()`     |   `float`    |                   Get maid's swinging time                   |
+|         `isRiding()`         |  `boolean`   |                Whether maid is in riding mode                |
+|        `isSitting()`         |  `boolean`   |               Whether maid is in standby mode                |
+|    ~~`isHoldTrolley()`~~     |  `boolean`   |      Whether maid is carrying trolley or other entities      |
+| ~~`isRidingMarisaBroom()`~~  |  `boolean`   |             Whether maid is riding Marisa Broom              |
+|    ~~`isRidingPlayer()`~~    |  `boolean`   |                Whether maid is riding player                 |
+|    ~~`isHoldVehicle()`~~     |  `boolean`   |                Whether maid is riding vehicle                |
+| ~~`isPortableAudioPlay()`~~  |  `boolean`   |       Whether the maid hold portable audio and play it       |
+|       `hasBackpack()`        |  `boolean`   |                Whether maid wearing backpack                 |
+|     `getBackpackLevel()`     |    `int`     |                  Get maid's backpack level                   |
+|     ~~`hasSasimono()`~~      |  `boolean`   |                Whether maid wearing sasimono                 |
+|     `isSwingLeftHand()`      |  `boolean`   | Whether the maid is swinging left or right arm, return `false` if it's the right |
+| ~~`getLeftHandRotation()`~~  |  `float[3]`  |                Get the left arm rotation data                |
+| ~~`getRightHandRotation()`~~ |  `float[3]`  |               Get the right arm rotation data                |
+|        ~~`getDim()`~~        |    `int`     |            Get the dimension where the maid is in            |
+|         `getWorld()`         |   `World`    |                    Get maid's world data                     |
+|         `getTask()`          |   `String`   |      Get maid's task, such as `attack`, `ranged_attack`      |
+|     `hasItemMainhand()`      |  `boolean`   |                Whether maid has mainhand item                |
+|      `hasItemOffhand()`      |  `boolean`   |                Whether maid has offhand item                 |
+|     `getItemMainhand()`      |   `String`   |            Get maid mainhand item's registry name            |
+|      `getItemOffhand()`      |   `String`   |            Get maid offhand item's registry name             |
+|         `inWater()`          |  `boolean`   |                    Whether maid in water                     |
+|          `inRain()`          |  `boolean`   |                     Whether maid in rain                     |
+|        `getAtBiome()`        |   `String`   |                Get maid's biome register name                |
+|    ~~`getAtBiomeTemp()`~~    |   `String`   |              Get maid's biome temperature enum               |
+|          `onHurt()`          |  `boolean`   |                 Whether the maid is on hurt                  |
+|        `getHealth()`         |   `float`    |                      Get maid's health                       |
+|       `getMaxHealth()`       |   `float`    |                    Get maid's max health                     |
+|         `isSleep()`          |  `boolean`   |                    Whether maid is sleep                     |
+|     `getFavorability()`      |    `int`     |                 Get the maid's favorability                  |
+|        `isOnGround()`        |  `boolean`   |                Whether the maid is on ground                 |
+|      `getArmorValue()`       |   `double`   |                    Get maid's armor value                    |
+|         `getSeed()`          |    `long`    | Get a fixed value, each entity is different, similar to the entity's UUID |
 
 #### Chair
 
-|     Function name     | Return value |                   Note                   |
-| :-------------------: | :----------: | :--------------------------------------: |
-|  `isRidingPlayer()`   |  `boolean`   | Whether the chair is sit by the player |
-|   `hasPassenger()`    |  `boolean`   |    Whether the chair has passenger     |
-|  `getPassengerYaw()`  |   `float`    |       Get chair passenger's yaw        |
-|      `getYaw()`       |   `float`    |            Get chair's yaw             |
-| `getPassengerPitch()` |   `float`    |      Get chair passenger's pitch       |
-|      `getDim()`       |    `int`     |           Get chair's dim id           |
-|     `getWorld()`      |   `World`    |         Get chair's world data         |
+|     Function name     | Return value |                             Note                             |
+| :-------------------: | :----------: | :----------------------------------------------------------: |
+|  `isRidingPlayer()`   |  `boolean`   |            Whether the chair is sit by the player            |
+|   `hasPassenger()`    |  `boolean`   |               Whether the chair has passenger                |
+|  `getPassengerYaw()`  |   `float`    |                  Get chair passenger's yaw                   |
+|      `getYaw()`       |   `float`    |                       Get chair's yaw                        |
+| `getPassengerPitch()` |   `float`    |                 Get chair passenger's pitch                  |
+|    ~~`getDim()`~~     |    `int`     |                      Get chair's dim id                      |
+|     `getWorld()`      |   `World`    |                    Get chair's world data                    |
+|      `getSeed()`      |    `long`    | Get a fixed value, each entity is different, similar to the entity's UUID |
 
 #### World
 |  Function name   | Return value |               Note               |
@@ -248,22 +259,25 @@ if (head != undefined) {
 
 We can get various group via `modelMap.get("xxx")`, the following are the functions that can be used to the obtained group.
 
-|             Function name             | Return value |                  Note                   |
-| :-----------------------------------: | :----------: | :-------------------------------------: |
-| `setRotateAngleX(float rotateAngleX)` |     None     |         Set the group's X angle         |
-| `setRotateAngleY(float rotateAngleY)` |     None     |         Set the group's Y angle         |
-| `setRotateAngleZ(float rotateAngleZ)` |     None     |         Set the group's Z angle         |
-|      `setOffsetX(float offsetX)`      |     None     |  Set the group's X coordianate offset   |
-|      `setOffsetY(float offsetY)`      |     None     |  Set the group's Y coordianate offset   |
-|      `setOffsetZ(float offsetZ)`      |     None     |  Set the group's Z coordianate offset   |
-|      `setHidden(boolean hidden)`      |     None     |       Set if the group is hidden        |
-|          `getRotateAngleX()`          |   `float`    |       Obtain the group's X angle        |
-|          `getRotateAngleY()`          |   `float`    |       Obtain the group's Y angle        |
-|          `getRotateAngleZ()`          |   `float`    |       Obtain the group's Z angle        |
-|            `getOffsetX()`             |   `float`    | Obtain the group's X coordianate offset |
-|            `getOffsetY()`             |   `float`    | Obtain the group's Y coordianate offset |
-|            `getOffsetZ()`             |   `float`    | Obtain the group's Y coordianate offset |
-|             `isHidden()`              |  `boolean`   |      Check if the group is hidden       |
+|             Function name             | Return value |                       Note                        |
+| :-----------------------------------: | :----------: | :-----------------------------------------------: |
+| `setRotateAngleX(float rotateAngleX)` |     None     |              Set the group's X angle              |
+| `setRotateAngleY(float rotateAngleY)` |     None     |              Set the group's Y angle              |
+| `setRotateAngleZ(float rotateAngleZ)` |     None     |              Set the group's Z angle              |
+|      `setOffsetX(float offsetX)`      |     None     |       Set the group's X coordianate offset        |
+|      `setOffsetY(float offsetY)`      |     None     |       Set the group's Y coordianate offset        |
+|      `setOffsetZ(float offsetZ)`      |     None     |       Set the group's Z coordianate offset        |
+|      `setHidden(boolean hidden)`      |     None     |            Set if the group is hidden             |
+|          `getRotateAngleX()`          |   `float`    |            Obtain the group's X angle             |
+|          `getRotateAngleY()`          |   `float`    |            Obtain the group's Y angle             |
+|          `getRotateAngleZ()`          |   `float`    |            Obtain the group's Z angle             |
+|        `getInitRotateAngleX()`        |   `float`    | Get ModelRenderer's initialization x rotate angle |
+|        `getInitRotateAngleY()`        |   `float`    | Get ModelRenderer's initialization y rotate angle |
+|        `getInitRotateAngleZ()`        |   `float`    | Get ModelRenderer's initialization z rotate angle |
+|            `getOffsetX()`             |   `float`    |      Obtain the group's X coordianate offset      |
+|            `getOffsetY()`             |   `float`    |      Obtain the group's Y coordianate offset      |
+|            `getOffsetZ()`             |   `float`    |      Obtain the group's Y coordianate offset      |
+|             `isHidden()`              |  `boolean`   |           Check if the group is hidden            |
 
 
 
