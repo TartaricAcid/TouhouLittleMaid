@@ -7,10 +7,14 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3f;
 
 import java.util.List;
@@ -27,8 +31,20 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
 
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        if (Screen.hasShiftDown()) {
+            renderHitBox(chair, matrixStackIn, bufferIn);
+        } else {
+            renderChair(chair, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        }
+    }
+
+    private void renderHitBox(EntityChair chair, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn) {
+        AxisAlignedBB axisalignedbb = chair.getBoundingBox().move(-chair.getX(), -chair.getY(), -chair.getZ());
+        WorldRenderer.renderLineBox(matrixStackIn, bufferIn.getBuffer(RenderType.lines()), axisalignedbb, 1.0F, 0, 0, 1.0F);
+    }
+
+    private void renderChair(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         // 读取默认模型，用于清除不存在模型的缓存残留
-        // TODO: 2021/10/16 玩家 Shift 时渲染其碰撞箱
         CustomPackLoader.CHAIR_MODELS.getModel(DEFAULT_CHAIR_ID).ifPresent(model -> this.model = model);
         CustomPackLoader.CHAIR_MODELS.getInfo(DEFAULT_CHAIR_ID).ifPresent(info -> this.chairInfo = info);
         this.chairAnimations = null;
