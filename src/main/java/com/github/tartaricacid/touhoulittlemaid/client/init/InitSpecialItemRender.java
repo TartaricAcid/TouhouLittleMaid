@@ -27,6 +27,7 @@ public final class InitSpecialItemRender {
     public static void register(RegistryEvent.Register<Item> event) {
         addInHandModel(InitItems.HAKUREI_GOHEI.get());
         addInHandModel(InitItems.EXTINGUISHER.get());
+        addInHandModel(InitItems.CAMERA.get());
     }
 
     @SubscribeEvent

@@ -114,7 +114,7 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
         return powerCost;
     }
 
-    public void spawnOutputEntity(ServerWorld world, BlockPos pos, AltarRecipeInventory inventory) {
+    public void spawnOutputEntity(ServerWorld world, BlockPos pos, @Nullable AltarRecipeInventory inventory) {
         if (extraData != null) {
             CompoundNBT nbt = this.extraData.copy();
             nbt.putString("id", Objects.requireNonNull(entityType.getRegistryName()).toString());

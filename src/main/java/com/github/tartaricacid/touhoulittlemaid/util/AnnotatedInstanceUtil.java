@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Copy from https://github.com/mezz/JustEnoughItems/blob/1.16/src/main/java/mezz/jei/util/AnnotatedInstanceUtil.java
  */
-public class AnnotatedInstanceUtil {
+public final class AnnotatedInstanceUtil {
     public static List<ILittleMaid> getModExtensions() {
         return getInstances(LittleMaidExtension.class, ILittleMaid.class);
     }

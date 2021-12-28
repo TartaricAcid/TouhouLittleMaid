@@ -28,6 +28,8 @@
   "item.touhou_little_maid.entity_placeholder": "Spawn ???",
   "item.touhou_little_maid.substitute_jizo": "Substitute Jizo",
   "item.touhou_little_maid.power_point": "Power Point",
+  "item.touhou_little_maid.camera": "Aya's Camera",
+  "item.touhou_little_maid.photo": "Photo",
   "block.touhou_little_maid.maid_bed": "Maid Bed",
   "tooltips.touhou_little_maid.chair.place.desc": "Right click on the top of the block to place it.",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Shift left hit can destroy it.",

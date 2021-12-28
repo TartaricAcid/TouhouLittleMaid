@@ -39,12 +39,7 @@ public class ItemEntityPlaceholder extends Item {
 
     @SuppressWarnings("all")
     public static ItemStack setRecipeId(ItemStack stack, ResourceLocation id) {
-        CompoundNBT tag = new CompoundNBT();
-        if (stack.hasTag()) {
-            tag = stack.getTag();
-        }
-        tag.putString(RECIPES_ID_TAG, id.toString());
-        stack.setTag(tag);
+        stack.getOrCreateTag().putString(RECIPES_ID_TAG, id.toString());
         return stack;
     }
 
