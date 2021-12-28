@@ -7,7 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -31,7 +32,8 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
 
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        if (Screen.hasShiftDown()) {
+        ClientPlayerEntity player = Minecraft.getInstance().player;
+        if (player != null && player.isShiftKeyDown()) {
             renderHitBox(chair, matrixStackIn, bufferIn);
         } else {
             renderChair(chair, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);

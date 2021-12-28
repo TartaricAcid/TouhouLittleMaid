@@ -15,6 +15,8 @@ public interface IAttackTask extends IMaidTask {
      */
     static Optional<? extends LivingEntity> findFirstValidAttackTarget(EntityMaid maid) {
         return maid.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).flatMap(
-                mobs -> mobs.stream().filter(maid::canAttack).findFirst());
+                mobs -> mobs.stream().filter(maid::canAttack)
+                        .filter(e -> maid.isWithinRestriction(e.blockPosition()))
+                        .findFirst());
     }
 }

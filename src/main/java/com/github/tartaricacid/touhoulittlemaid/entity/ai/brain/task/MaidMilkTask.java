@@ -46,8 +46,14 @@ public class MaidMilkTask extends MaidCheckRateTask {
 
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
-        this.getEntities(maid).stream().filter(e -> e.closerThan(maid, maxDistToWalk)).filter(Entity::isAlive)
-                .filter(e -> e instanceof CowEntity).filter(e -> !e.isBaby()).filter(maid::canPathReach).findFirst()
+        this.getEntities(maid).stream()
+                .filter(e -> e.closerThan(maid, maxDistToWalk))
+                .filter(e -> maid.isWithinRestriction(e.blockPosition()))
+                .filter(Entity::isAlive)
+                .filter(e -> e instanceof CowEntity)
+                .filter(e -> !e.isBaby())
+                .filter(maid::canPathReach)
+                .findFirst()
                 .ifPresent(e -> {
                     milkTarget = e;
                     BrainUtil.setWalkAndLookTargetMemories(maid, e, this.speedModifier, 0);

@@ -50,7 +50,9 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -59,6 +61,8 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -118,6 +122,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final DataParameter<Boolean> DATA_IS_CHARGING_CROSSBOW = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_ARM_RISE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<MaidSchedule> SCHEDULE_MODE = EntityDataManager.defineId(EntityMaid.class, MaidSchedule.DATA);
+    private static final DataParameter<BlockPos> RESTRICT_CENTER = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BLOCK_POS);
+    private static final DataParameter<Float> RESTRICT_RADIUS = EntityDataManager.defineId(EntityMaid.class, DataSerializers.FLOAT);
 
     private static final String MODEL_ID_TAG = "ModelId";
     private static final String TASK_TAG = "MaidTask";
@@ -132,6 +138,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String EXPERIENCE_TAG = "MaidExperience";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
+    private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
@@ -183,6 +190,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         this.entityData.define(DATA_IS_CHARGING_CROSSBOW, false);
         this.entityData.define(DATA_ARM_RISE, false);
         this.entityData.define(SCHEDULE_MODE, MaidSchedule.DAY);
+        this.entityData.define(RESTRICT_CENTER, BlockPos.ZERO);
+        this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_HOME_RANGE.get().floatValue());
     }
 
     @Override
@@ -281,8 +290,8 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private ActionResultType tameMaid(ItemStack stack, PlayerEntity player) {
         return player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP).map(cap -> {
             if (cap.canAdd() || player.isCreative()) {
-                boolean isNormal = !isTame() && stack.getItem() == getTamedItem();
-                boolean isNtr = stack.getItem() == getNtrItem();
+                boolean isNormal = !isTame() && getTamedItem().test(stack);
+                boolean isNtr = getNtrItem().test(stack);
                 if (isNormal || isNtr) {
                     if (!player.isCreative()) {
                         stack.shrink(1);
@@ -709,6 +718,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         compound.putInt(FAVORABILITY_TAG, getFavorability());
         compound.putInt(EXPERIENCE_TAG, getExperience());
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
+        compound.put(RESTRICT_CENTER_TAG, NBTUtil.writeBlockPos(getRestrictCenter()));
     }
 
     @Override
@@ -754,6 +764,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         }
         if (compound.contains(SCHEDULE_MODE_TAG, Constants.NBT.TAG_STRING)) {
             setSchedule(MaidSchedule.valueOf(compound.getString(SCHEDULE_MODE_TAG)));
+        }
+        if (compound.contains(RESTRICT_CENTER_TAG, Constants.NBT.TAG_COMPOUND)) {
+            setRestrictCenter(NBTUtil.readBlockPos(compound.getCompound(RESTRICT_CENTER_TAG)));
         }
     }
 
@@ -933,6 +946,41 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     public void setHomeModeEnable(boolean enable) {
         this.entityData.set(DATA_HOME_MODE, enable);
+        if (enable) {
+            setRestrictCenter(this.blockPosition());
+        }
+    }
+
+    @Override
+    public BlockPos getRestrictCenter() {
+        return this.entityData.get(RESTRICT_CENTER);
+    }
+
+    public void setRestrictCenter(BlockPos center) {
+        this.entityData.set(RESTRICT_CENTER, center);
+    }
+
+    @Override
+    public boolean isWithinRestriction() {
+        return this.isWithinRestriction(this.blockPosition());
+    }
+
+    @Override
+    public boolean isWithinRestriction(BlockPos pos) {
+        if (hasRestriction()) {
+            return this.getRestrictCenter().distSqr(pos) < (double) (this.getRestrictRadius() * this.getRestrictRadius());
+        }
+        return true;
+    }
+
+    @Override
+    public boolean hasRestriction() {
+        return this.isHomeModeEnable();
+    }
+
+    @Override
+    public float getRestrictRadius() {
+        return this.entityData.get(RESTRICT_RADIUS);
     }
 
     public boolean isPickup() {
@@ -1157,30 +1205,35 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         return 0;
     }
 
+
     @SuppressWarnings("all")
-    public Item getTamedItem() {
-        ResourceLocation key = new ResourceLocation(MaidConfig.MAID_TAMED_ITEM.get());
-        if (ForgeRegistries.ITEMS.containsKey(key)) {
-            return ForgeRegistries.ITEMS.getValue(key);
-        }
-        return Items.CAKE;
+    public Ingredient getTamedItem() {
+        return getConfigIngredient(MaidConfig.MAID_TAMED_ITEM.get(), Items.CAKE);
     }
 
     @SuppressWarnings("all")
-    public Item getTemptationItem() {
-        ResourceLocation key = new ResourceLocation(MaidConfig.MAID_TEMPTATION_ITEM.get());
-        if (ForgeRegistries.ITEMS.containsKey(key)) {
-            return ForgeRegistries.ITEMS.getValue(key);
-        }
-        return Items.CAKE;
+    public Ingredient getTemptationItem() {
+        return getConfigIngredient(MaidConfig.MAID_TEMPTATION_ITEM.get(), Items.CAKE);
     }
 
     @SuppressWarnings("all")
-    public Item getNtrItem() {
-        ResourceLocation key = new ResourceLocation(MaidConfig.MAID_NTR_ITEM.get());
-        if (ForgeRegistries.ITEMS.containsKey(key)) {
-            return ForgeRegistries.ITEMS.getValue(key);
+    public Ingredient getNtrItem() {
+        return getConfigIngredient(MaidConfig.MAID_NTR_ITEM.get(), Items.STRUCTURE_VOID);
+    }
+
+    private Ingredient getConfigIngredient(String config, Item defaultItem) {
+        if (config.startsWith(MaidConfig.TAG_PREFIX)) {
+            ResourceLocation key = new ResourceLocation(config.substring(1));
+            ITag<Item> tag = ItemTags.getAllTags().getTag(key);
+            if (tag != null) {
+                return Ingredient.of(tag);
+            }
+        } else {
+            ResourceLocation key = new ResourceLocation(config);
+            if (ForgeRegistries.ITEMS.containsKey(key)) {
+                return Ingredient.of(ForgeRegistries.ITEMS.getValue(key));
+            }
         }
-        return Items.STRUCTURE_VOID;
+        return Ingredient.of(defaultItem);
     }
 }

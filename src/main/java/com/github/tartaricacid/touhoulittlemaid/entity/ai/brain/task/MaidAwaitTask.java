@@ -15,11 +15,20 @@ public class MaidAwaitTask extends Task<EntityMaid> {
 
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
+        Brain<?> brain = maid.getBrain();
         if (maid.isInSittingPose() || maid.isPassenger()) {
-            Brain<?> brain = maid.getBrain();
             brain.eraseMemory(MemoryModuleType.PATH);
             brain.eraseMemory(MemoryModuleType.WALK_TARGET);
             brain.setActiveActivityIfPossible(Activity.RIDE);
+        }
+        if (brain.hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
+            boolean result = brain.getMemory(MemoryModuleType.WALK_TARGET)
+                    .filter(walkTarget -> maid.isWithinRestriction(walkTarget.getTarget().currentBlockPosition()))
+                    .isPresent();
+            if (!result) {
+                brain.eraseMemory(MemoryModuleType.PATH);
+                brain.eraseMemory(MemoryModuleType.WALK_TARGET);
+            }
         }
     }
 }

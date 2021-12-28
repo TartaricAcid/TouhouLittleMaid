@@ -24,6 +24,7 @@ public class MaidBegTask extends Task<EntityMaid> {
                 list.stream().filter(owner::isOwnedBy)
                         .filter(LivingEntity::isAlive)
                         .filter(e -> e.closerThan(owner, BEG_DISTANCE))
+                        .filter(e -> owner.isWithinRestriction(e.blockPosition()))
                         .anyMatch((e) -> holdTemptationItem(owner, e)))
                 .orElse(false);
     }
@@ -57,6 +58,6 @@ public class MaidBegTask extends Task<EntityMaid> {
     }
 
     private boolean holdTemptationItem(EntityMaid owner, LivingEntity e) {
-        return e.getMainHandItem().getItem() == owner.getTemptationItem();
+        return owner.getTemptationItem().test(e.getMainHandItem());
     }
 }

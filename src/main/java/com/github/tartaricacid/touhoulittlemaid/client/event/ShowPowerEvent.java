@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT)
-public class ShowPowerEvent {
+public final class ShowPowerEvent {
     private static ItemStack POWER_POINT;
 
     @SubscribeEvent
