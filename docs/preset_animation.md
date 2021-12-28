@@ -5,10 +5,9 @@
 There are many default animations built in the mod, you only need:
 1. Set the correct name for the group you want to animate in Blockbench.
 2. Call the animation reference of the path in the `animation` field of the `maid_model.json` file. 
-:::tip
-The `tlm-utils` plugin can automatically call the animation script reference based on the group name, you just need to click the `Re-Analyze Animation` button.
-![img](https://i.imgur.com/iyCKwMx.gif)
-:::
+
+> The `tlm-utils` plugin can automatically call the animation script reference based on the group name, you just need to click the `Re-Analyze Animation` button.
+> ![img](https://i.imgur.com/iyCKwMx.gif)
 
 The Blockbench plugin provides all available preset animations, you can right-click in the outliner interface to open the preset animation menu   
 ![img](https://i.imgur.com/N17PbiE.gif)

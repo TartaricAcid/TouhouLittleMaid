@@ -14,6 +14,5 @@ features:
   details: How to compat Touhou Little Maid mod, or develop an addition
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---
-::: warning
-Make sure the version of Touhou Little Maid mod you're using is the latest.
-:::
+
+> Make sure the version of Touhou Little Maid mod you're using is the latest.

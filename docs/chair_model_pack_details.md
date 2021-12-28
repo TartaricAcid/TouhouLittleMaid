@@ -122,9 +122,7 @@ Icon does not have size limit, supports both static and animated icons.
 
 Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon that is not 1:1 scale, will be displayed slowly with a 0.1 second interval, which creates the animated effect.
 
-:::tip
-The image below is the icon in the mod, left is static icon, and right is the animated icon.
-:::
+> The image below is the icon in the mod, left is static icon, and right is the animated icon.
 
 ![020](https://i.imgur.com/VoulqpR.png)
 
