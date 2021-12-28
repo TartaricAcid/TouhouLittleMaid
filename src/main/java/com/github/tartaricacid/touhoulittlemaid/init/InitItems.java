@@ -32,7 +32,7 @@ public final class InitItems {
     public static RegistryObject<Item> NIMBLE_FABRIC = ITEMS.register("nimble_fabric", () -> new ItemDamageableBauble(64));
     public static RegistryObject<Item> ITEM_MAGNET_BAUBLE = ITEMS.register("item_magnet_bauble", ItemNormalBauble::new);
     public static RegistryObject<Item> MUTE_BAUBLE = ITEMS.register("mute_bauble", ItemNormalBauble::new);
-    public static RegistryObject<Item> ENTITY_PLACEHOLDER = ITEMS.register("entity_placeholder", () -> new Item((new Item.Properties()).stacksTo(1)));
+    public static RegistryObject<Item> ENTITY_PLACEHOLDER = ITEMS.register("entity_placeholder", () -> new ItemEntityPlaceholder());
     public static RegistryObject<Item> SUBSTITUTE_JIZO = ITEMS.register("substitute_jizo", ItemSubstituteJizo::new);
     public static RegistryObject<Item> POWER_POINT = ITEMS.register("power_point", ItemPowerPoint::new);
 

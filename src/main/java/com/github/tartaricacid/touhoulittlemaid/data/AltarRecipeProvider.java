@@ -97,6 +97,7 @@ public class AltarRecipeProvider implements IDataProvider {
         addItemRecipes(MAID_BED, pinkWool, pinkWool, pinkWool, plankWood, plankWood, plankWood);
         addItemRecipes(NIMBLE_FABRIC, enderPearl, enderPearl, enderPearl, anyWool, anyWool, anyWool);
         addItemRecipes(MUTE_BAUBLE, anyWool, anyWool, anyWool, clayBall, clayBall, clayBall);
+        addItemRecipes(ITEM_MAGNET_BAUBLE, redstone, redstone, redstone, ingotIron, ingotIron, ingotIron);
     }
 
     @Override

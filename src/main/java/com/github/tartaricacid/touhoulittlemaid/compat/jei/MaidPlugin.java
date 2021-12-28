@@ -3,12 +3,14 @@ package com.github.tartaricacid.touhoulittlemaid.compat.jei;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.jei.altar.AltarRecipeCategory;
 import com.github.tartaricacid.touhoulittlemaid.compat.jei.altar.AltarRecipeMaker;
+import com.github.tartaricacid.touhoulittlemaid.compat.jei.altar.EntityPlaceholderSubtype;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.util.ResourceLocation;
 
 @JeiPlugin
@@ -28,6 +30,11 @@ public class MaidPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(InitItems.HAKUREI_GOHEI.get().getDefaultInstance(), AltarRecipeCategory.UID);
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(InitItems.ENTITY_PLACEHOLDER.get(), new EntityPlaceholderSubtype());
     }
 
     @Override

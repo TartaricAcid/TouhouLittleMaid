@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.jei.altar;
 
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
@@ -33,6 +35,10 @@ public final class AltarRecipeMaker {
         for (AltarRecipe recipe : altarRecipesMap) {
             ResourceLocation recipeId = recipe.getId();
             ItemStack output = recipe.getResultItem();
+            if (!recipe.isItemCraft()) {
+                output = InitItems.ENTITY_PLACEHOLDER.get().getDefaultInstance();
+                ItemEntityPlaceholder.setRecipeId(output, recipe.getId());
+            }
             String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
             String langKey;
             if (recipe.isItemCraft()) {
