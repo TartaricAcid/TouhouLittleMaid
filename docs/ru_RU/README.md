@@ -18,4 +18,4 @@ features:
 footer: MIT Лицензировано | Авторское право © 2021-present TartaricAcid
 ---
 
-::: Предупреждение Убедитесь, что версия Touhou Little Maid является последней. :::
+> Make sure the version of Touhou Little Maid mod you're using is the latest.
