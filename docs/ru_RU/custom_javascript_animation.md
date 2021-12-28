@@ -215,12 +215,7 @@ head.setRotateAngleX(headPitch * 0.017453292);
 head.setRotateAngleY(netHeadYaw * 0.017453292);
 ```
 
-::: warning
-
-If the coeffiecient in this section is set to be larger than '0.017453292', there may have some error issue.
-
-:::
-
+> If the coeffiecient in this section is set to be larger than '0.017453292', there may have some error issue.
 
 
 ### `scale` Parameter
