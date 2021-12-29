@@ -125,7 +125,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final DataParameter<BlockPos> RESTRICT_CENTER = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Float> RESTRICT_RADIUS = EntityDataManager.defineId(EntityMaid.class, DataSerializers.FLOAT);
 
-    private static final String MODEL_ID_TAG = "ModelId";
+    public static final String MODEL_ID_TAG = "ModelId";
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";

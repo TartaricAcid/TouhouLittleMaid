@@ -1,7 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,9 +18,15 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -87,5 +97,23 @@ public class ItemPhoto extends Item {
         }
 
         return ActionResultType.FAIL;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        if (!hasMaidData(stack)) {
+            tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.photo.no_data.desc").withStyle(TextFormatting.DARK_RED));
+        } else {
+            CompoundNBT maidData = getMaidData(stack);
+            if (maidData.contains(EntityMaid.MODEL_ID_TAG, Constants.NBT.TAG_STRING)) {
+                String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
+                if (StringUtils.isNotBlank(modelId)) {
+                    CustomPackLoader.MAID_MODELS.getInfo(modelId).ifPresent(modelItem ->
+                            tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.photo.maid.desc",
+                                    I18n.get(ParseI18n.getI18nKey(modelItem.getName()))).withStyle(TextFormatting.GRAY)
+                            ));
+                }
+            }
+        }
     }
 }
