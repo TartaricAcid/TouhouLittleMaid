@@ -3,7 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockAltar;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBed;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockStatue;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
@@ -16,6 +18,8 @@ public final class InitBlocks {
 
     public static RegistryObject<Block> MAID_BED = BLOCKS.register("maid_bed", BlockMaidBed::new);
     public static RegistryObject<Block> ALTAR = BLOCKS.register("altar", BlockAltar::new);
+    public static RegistryObject<Block> STATUE = BLOCKS.register("statue", BlockStatue::new);
 
     public static RegistryObject<TileEntityType<TileEntityAltar>> ALTAR_TE = TILE_ENTITIES.register("altar", () -> TileEntityAltar.TYPE);
+    public static RegistryObject<TileEntityType<TileEntityStatue>> STATUE_TE = TILE_ENTITIES.register("statue", () -> TileEntityStatue.TYPE);
 }

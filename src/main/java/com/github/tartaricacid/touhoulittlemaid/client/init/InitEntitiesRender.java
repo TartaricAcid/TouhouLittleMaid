@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityAltarRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityStatueRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityExtinguishingAgent;
@@ -11,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityThrowPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,5 +36,6 @@ public final class InitEntitiesRender {
         RenderingRegistry.registerEntityRenderingHandler(EntityBox.TYPE, EntityBoxRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityThrowPowerPoint.TYPE, (manager) -> new SpriteRenderer<>(manager, itemRenderer));
         ClientRegistry.bindTileEntityRenderer(TileEntityAltar.TYPE, TileEntityAltarRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityStatue.TYPE, TileEntityStatueRenderer::new);
     }
 }

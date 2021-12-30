@@ -20,6 +20,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHand
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
@@ -106,7 +107,11 @@ import java.util.Optional;
 public class EntityMaid extends TameableEntity implements INamedContainerProvider, ICrossbowUser {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, EntityClassification.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
-
+    public static final String MODEL_ID_TAG = "ModelId";
+    public static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
+    public static final String MAID_INVENTORY_TAG = "MaidInventory";
+    public static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
+    public static final String EXPERIENCE_TAG = "MaidExperience";
     private static final DataParameter<String> DATA_MODEL_ID = EntityDataManager.defineId(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<String> DATA_TASK = EntityDataManager.defineId(EntityMaid.class, DataSerializers.STRING);
     private static final DataParameter<Boolean> DATA_BEGGING = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
@@ -124,21 +129,16 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final DataParameter<MaidSchedule> SCHEDULE_MODE = EntityDataManager.defineId(EntityMaid.class, MaidSchedule.DATA);
     private static final DataParameter<BlockPos> RESTRICT_CENTER = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Float> RESTRICT_RADIUS = EntityDataManager.defineId(EntityMaid.class, DataSerializers.FLOAT);
-
-    public static final String MODEL_ID_TAG = "ModelId";
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
     private static final String RIDEABLE_TAG = "MaidIsRideable";
-    private static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
-    private static final String MAID_INVENTORY_TAG = "MaidInventory";
-    private static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
     private static final String STRUCK_BY_LIGHTNING_TAG = "StruckByLightning";
     private static final String HUNGER_TAG = "MaidHunger";
     private static final String FAVORABILITY_TAG = "MaidFavorability";
-    private static final String EXPERIENCE_TAG = "MaidExperience";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
     private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
+
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
@@ -805,7 +805,17 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         ItemsUtil.dropEntityItems(this, new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble));
         ItemMaidBackpack.getInstance(getBackpackLevel()).ifPresent(backpack ->
                 InventoryHelper.dropItemStack(level, getX(), getY(), getZ(), backpack.getDefaultInstance()));
-        // TODO：掉落记录女仆数据的物品
+        spawnAtLocation(ItemFilm.maidToFilm(this), 0.2f);
+    }
+
+    @Override
+    protected boolean isAlwaysExperienceDropper() {
+        return true;
+    }
+
+    @Override
+    protected int getExperienceReward(PlayerEntity player) {
+        return this.getExperience();
     }
 
     @Override
