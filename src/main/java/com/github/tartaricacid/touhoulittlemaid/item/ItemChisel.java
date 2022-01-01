@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.block.BlockStatue;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
@@ -60,8 +61,12 @@ public class ItemChisel extends Item {
             Vector3i dimension = size.getDimension();
             BlockPos[] posList = checkBlocks(worldIn, pos, dimension, facing);
             if (posList != null) {
+                boolean isTiny = false;
+                if (posList.length == 1) {
+                    isTiny = true;
+                }
                 for (BlockPos posIn : posList) {
-                    worldIn.setBlock(posIn, InitBlocks.STATUE.get().defaultBlockState(), DEFAULT);
+                    worldIn.setBlock(posIn, InitBlocks.STATUE.get().defaultBlockState().setValue(BlockStatue.IS_TINY, isTiny), DEFAULT);
                     TileEntity te = worldIn.getBlockEntity(posIn);
                     if (te instanceof TileEntityStatue) {
                         TileEntityStatue statue = (TileEntityStatue) te;

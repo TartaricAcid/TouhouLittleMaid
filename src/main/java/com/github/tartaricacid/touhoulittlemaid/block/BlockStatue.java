@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
+import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -10,6 +12,8 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -19,19 +23,25 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static net.minecraftforge.common.util.Constants.BlockFlags.DEFAULT;
 
 public class BlockStatue extends Block {
+    public static final BooleanProperty IS_TINY = BooleanProperty.create("is_tiny");
+
     public BlockStatue() {
         super(AbstractBlock.Properties.of(Material.CLAY).strength(1, 2).noOcclusion());
+        this.registerDefaultState(this.stateDefinition.any().setValue(IS_TINY, false));
     }
 
     @Override
@@ -58,6 +68,11 @@ public class BlockStatue extends Block {
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(IS_TINY);
     }
 
     @Nullable
@@ -114,6 +129,27 @@ public class BlockStatue extends Block {
             if (!storagePos.equals(pos)) {
                 getStatue(worldIn, storagePos).ifPresent(s -> worldIn.setBlock(storagePos, Blocks.CLAY.defaultBlockState(), DEFAULT));
             }
+        }
+    }
+
+    @Override
+    public boolean isRandomlyTicking(BlockState state) {
+        return state.getValue(IS_TINY);
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+        if (worldIn.getBlockState(pos.below()).is(Blocks.FIRE)) {
+            getStatue(worldIn, pos).ifPresent(statue -> {
+                worldIn.setBlockAndUpdate(pos, InitBlocks.GARAGE_KIT.get().defaultBlockState());
+                {
+                    worldIn.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, 0);
+                }
+                TileEntity te = worldIn.getBlockEntity(pos);
+                if (te instanceof TileEntityGarageKit && statue.getExtraMaidData() != null) {
+                    ((TileEntityGarageKit) te).setData(statue.getFacing(), statue.getExtraMaidData());
+                }
+            });
         }
     }
 

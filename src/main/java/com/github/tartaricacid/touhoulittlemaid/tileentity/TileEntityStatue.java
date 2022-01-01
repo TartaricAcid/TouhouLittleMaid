@@ -114,7 +114,7 @@ public class TileEntityStatue extends TileEntity {
     }
 
     public void refresh() {
-        setChanged();
+        this.setChanged();
         if (level != null) {
             BlockState state = level.getBlockState(worldPosition);
             level.sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.DEFAULT);

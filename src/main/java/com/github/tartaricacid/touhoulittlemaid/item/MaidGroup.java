@@ -8,12 +8,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 
-import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.CHAIR;
-import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.HAKUREI_GOHEI;
+import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.*;
 
 public class MaidGroup extends ItemGroup {
     public static ItemGroup MAIN_TAB = new MaidGroup("main", HAKUREI_GOHEI);
     public static ItemGroup CHAIR_TAB = new MaidGroup("chair", CHAIR);
+    public static ItemGroup GARAGE_KIT_TAB = new MaidGroup("garage_kit", GARAGE_KIT);
 
     private final ITextComponent displayName;
     private final RegistryObject<Item> iconItem;
