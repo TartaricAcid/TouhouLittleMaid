@@ -70,10 +70,10 @@ public class TileEntityStatueRenderer extends TileEntityRenderer<TileEntityStatu
             }
         });
 
+        entity.load(data);
         if (entity instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entity;
             clearMaidDataResidue(maid, true);
-            entity.load(data);
         }
 
         float size = te.getSize().getScale();

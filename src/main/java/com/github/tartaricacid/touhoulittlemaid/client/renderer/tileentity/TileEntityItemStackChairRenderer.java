@@ -8,6 +8,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.Entity;
@@ -42,9 +43,13 @@ public class TileEntityItemStackChairRenderer extends ItemStackTileEntityRendere
         entityChair.setModelId(data.getModelId());
         matrixStack.pushPose();
         matrixStack.scale(renderItemScale, renderItemScale, renderItemScale);
-        RenderSystem.runAsFancy(() -> Minecraft.getInstance().getEntityRenderDispatcher().render(entityChair,
+        EntityRendererManager render = Minecraft.getInstance().getEntityRenderDispatcher();
+        boolean isShowHitBox = render.shouldRenderHitBoxes();
+        render.setRenderHitBoxes(false);
+        RenderSystem.runAsFancy(() -> render.render(entityChair,
                 1 / renderItemScale - 0.125, 0.25, 0.75, 0, 0,
                 matrixStack, buffer, combinedLight));
+        render.setRenderHitBoxes(isShowHitBox);
         matrixStack.popPose();
     }
 }

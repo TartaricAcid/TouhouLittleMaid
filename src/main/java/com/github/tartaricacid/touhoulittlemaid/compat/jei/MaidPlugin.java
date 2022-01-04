@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.jei.altar.EntityPlacehold
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -25,6 +26,7 @@ public class MaidPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(AltarRecipeMaker.getInstance().getAltarRecipes(), AltarRecipeCategory.UID);
+        registration.addIngredientInfo(InitItems.GARAGE_KIT.get().getDefaultInstance(), VanillaTypes.ITEM, "jei.touhou_little_maid.garage_kit.info");
     }
 
     @Override

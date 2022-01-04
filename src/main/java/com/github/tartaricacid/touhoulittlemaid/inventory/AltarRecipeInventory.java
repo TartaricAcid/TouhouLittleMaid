@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 public class AltarRecipeInventory implements IInventory {
@@ -11,6 +12,10 @@ public class AltarRecipeInventory implements IInventory {
     public final NonNullList<ItemStack> items = NonNullList.withSize(RECIPES_SIZE, ItemStack.EMPTY);
 
     public AltarRecipeInventory() {
+    }
+
+    public ItemStack getMatchIngredient(Ingredient ingredient) {
+        return items.stream().filter(ingredient).findFirst().orElse(ItemStack.EMPTY);
     }
 
     @Override

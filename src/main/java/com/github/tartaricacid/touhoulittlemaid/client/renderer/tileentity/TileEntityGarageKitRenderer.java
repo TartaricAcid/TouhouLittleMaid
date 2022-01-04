@@ -68,10 +68,10 @@ public class TileEntityGarageKitRenderer extends TileEntityRenderer<TileEntityGa
             }
         });
 
+        entity.load(data);
         if (entity instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entity;
             clearMaidDataResidue(maid, true);
-            entity.load(data);
         }
 
         matrixStack.pushPose();

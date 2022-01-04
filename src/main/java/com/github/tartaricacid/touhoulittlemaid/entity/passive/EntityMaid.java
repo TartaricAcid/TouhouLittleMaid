@@ -31,6 +31,7 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -924,6 +925,22 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             return super.getBoundingBoxForCulling();
         }
         return model.getRenderBoundingBox().move(position());
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public Vector3d getLeashOffset() {
+        Optional<BedrockModel<EntityMaid>> modelOptional = CustomPackLoader.MAID_MODELS.getModel(this.getModelId());
+        Optional<MaidModelInfo> infoOptional = CustomPackLoader.MAID_MODELS.getInfo(this.getModelId());
+        if (modelOptional.isPresent() && infoOptional.isPresent()) {
+            BedrockModel<EntityMaid> model = modelOptional.get();
+            float renderEntityScale = infoOptional.get().getRenderEntityScale();
+            if (model.hasHead()) {
+                ModelRenderer head = model.getHead();
+                return new Vector3d(head.x * renderEntityScale, (1.5 - head.y / 16) * renderEntityScale, head.z * renderEntityScale);
+            }
+        }
+        return super.getLeashOffset();
     }
 
     public void setBackpackDelay() {

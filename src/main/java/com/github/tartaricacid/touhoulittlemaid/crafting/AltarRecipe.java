@@ -4,10 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
 import com.google.common.base.Preconditions;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -20,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.RecipeMatcher;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -35,8 +34,11 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
     private final NonNullList<Ingredient> inputs;
     private final boolean isItemCraft;
     private final ItemStack resultItem;
+    private final Ingredient copyInput;
+    @Nullable
+    private final String copyTag;
 
-    public AltarRecipe(ResourceLocation id, EntityType<?> entityType, @Nullable CompoundNBT extraData, float powerCost, Ingredient... inputs) {
+    public AltarRecipe(ResourceLocation id, EntityType<?> entityType, @Nullable CompoundNBT extraData, float powerCost, Ingredient copyInput, @Nullable String copyTag, Ingredient... inputs) {
         Preconditions.checkArgument(0 < inputs.length && inputs.length <= RECIPES_SIZE, "Ingredients count is illegal!");
         this.id = id;
         this.entityType = entityType;
@@ -46,9 +48,15 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
         } else {
             this.resultItem = ItemStack.EMPTY;
         }
+        this.copyInput = copyInput;
+        this.copyTag = copyTag;
         this.extraData = extraData;
         this.powerCost = powerCost;
         this.inputs = NonNullList.of(Ingredient.EMPTY, fillInputs(inputs));
+    }
+
+    public AltarRecipe(ResourceLocation id, EntityType<?> entityType, @Nullable CompoundNBT extraData, float powerCost, Ingredient... inputs) {
+        this(id, entityType, extraData, powerCost, Ingredient.EMPTY, null, inputs);
     }
 
     @Override
@@ -114,6 +122,15 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
         return powerCost;
     }
 
+    public Ingredient getCopyInput() {
+        return copyInput;
+    }
+
+    @Nullable
+    public String getCopyTag() {
+        return copyTag;
+    }
+
     public void spawnOutputEntity(ServerWorld world, BlockPos pos, @Nullable AltarRecipeInventory inventory) {
         if (extraData != null) {
             CompoundNBT nbt = this.extraData.copy();
@@ -125,11 +142,34 @@ public class AltarRecipe implements IRecipe<AltarRecipeInventory> {
             });
             if (resultEntity != null) {
                 this.finalizeSpawn(world, pos, resultEntity);
+                this.copyIngredientTag(inventory, resultEntity);
                 world.tryAddFreshEntityWithPassengers(resultEntity);
             }
             return;
         }
         entityType.spawn(world, null, null, null, pos, SpawnReason.SPAWN_EGG, true, true);
+    }
+
+    private void copyIngredientTag(@Nullable AltarRecipeInventory inventory, Entity resultEntity) {
+        if (inventory != null && this.copyInput != Ingredient.EMPTY) {
+            ItemStack matchStack = inventory.getMatchIngredient(this.copyInput);
+            if (!matchStack.isEmpty()) {
+                CompoundNBT data;
+                if (StringUtils.isEmpty(this.copyTag)) {
+                    data = matchStack.getTag();
+                } else {
+                    data = matchStack.getTagElement(this.copyTag);
+                }
+                if (data != null && !data.isEmpty()) {
+                    if (resultEntity instanceof LivingEntity) {
+                        ((LivingEntity) resultEntity).readAdditionalSaveData(data);
+                    }
+                    if (resultEntity instanceof ItemEntity) {
+                        ((ItemEntity) resultEntity).readAdditionalSaveData(data);
+                    }
+                }
+            }
+        }
     }
 
     public boolean isItemCraft() {

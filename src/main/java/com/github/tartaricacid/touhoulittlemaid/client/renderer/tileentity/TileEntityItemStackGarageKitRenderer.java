@@ -69,10 +69,10 @@ public class TileEntityItemStackGarageKitRenderer extends ItemStackTileEntityRen
         });
 
         float renderItemScale = 1;
+        entity.load(data);
         if (entity instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entity;
             clearMaidDataResidue(maid, true);
-            entity.load(data);
             if (data.contains(EntityMaid.MODEL_ID_TAG, Constants.NBT.TAG_STRING)) {
                 String modelId = data.getString(EntityMaid.MODEL_ID_TAG);
                 renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(modelId);

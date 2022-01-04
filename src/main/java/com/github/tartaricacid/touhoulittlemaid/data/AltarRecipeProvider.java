@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.util.NBTToJson;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
@@ -22,6 +23,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.RegistryObject;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -71,6 +73,8 @@ public class AltarRecipeProvider implements IDataProvider {
         Ingredient gemLapis = Ingredient.of(Tags.Items.GEMS_LAPIS);
         Ingredient coal = Ingredient.of(Items.COAL);
         Ingredient netherWart = Ingredient.of(Tags.Items.CROPS_NETHER_WART);
+        Ingredient quartzBlock = Ingredient.of(Tags.Items.STORAGE_BLOCKS_QUARTZ);
+        Ingredient film = Ingredient.of(FILM.get());
 
         {
             CompoundNBT extraData = new CompoundNBT();
@@ -80,6 +84,10 @@ public class AltarRecipeProvider implements IDataProvider {
             passengerList.add(passenger);
             extraData.put("Passengers", passengerList);
             addEntityRecipes(InitEntities.BOX.get(), extraData, 0.5f, gemDiamond, gemLapis, ingotGold, redstone, ingotIron, coal);
+        }
+        {
+            addEntityRecipes("reborn_maid", InitEntities.MAID.get(), new CompoundNBT(), 0.5f, film, ItemFilm.MAID_INFO,
+                    film, gemLapis, ingotGold, redstone, ingotIron, coal);
         }
         addEntityRecipes(EntityType.LIGHTNING_BOLT, 0.2f, gunpowder, gunpowder, gunpowder, blazePowder, blazePowder, blazePowder);
         addItemRecipes(HAKUREI_GOHEI, 0.15f, stick, stick, stick, paper, paper, paper);
@@ -98,6 +106,8 @@ public class AltarRecipeProvider implements IDataProvider {
         addItemRecipes(NIMBLE_FABRIC, enderPearl, enderPearl, enderPearl, anyWool, anyWool, anyWool);
         addItemRecipes(MUTE_BAUBLE, anyWool, anyWool, anyWool, clayBall, clayBall, clayBall);
         addItemRecipes(ITEM_MAGNET_BAUBLE, redstone, redstone, redstone, ingotIron, ingotIron, ingotIron);
+        addItemRecipes(CAMERA, quartzBlock, quartzBlock, quartzBlock, quartzBlock, obsidian, obsidian);
+        addItemRecipes(CHISEL, stick, stick, ingotIron, ingotIron, dyeYellow, dyeRed);
     }
 
     @Override
@@ -114,6 +124,10 @@ public class AltarRecipeProvider implements IDataProvider {
 
     public void addRecipes(AltarRecipe recipe) {
         recipes.add(recipe);
+    }
+
+    public void addEntityRecipes(String name, EntityType<?> entityType, @Nullable CompoundNBT extraData, float powerCost, Ingredient copyInput, @Nullable String copyTag, Ingredient... inputs) {
+        addRecipes(new AltarRecipe(new ResourceLocation(TouhouLittleMaid.MOD_ID, name), entityType, extraData, powerCost, copyInput, copyTag, inputs));
     }
 
     public void addEntityRecipes(String name, EntityType<?> entityType, @Nullable CompoundNBT extraData, float powerCost, Ingredient... inputs) {
@@ -167,6 +181,14 @@ public class AltarRecipeProvider implements IDataProvider {
             }
             output.addProperty("type", name.toString());
             NBTToJson.getJson(recipe.getExtraData()).ifPresent(e -> output.add("nbt", e));
+            if (recipe.getCopyInput() != Ingredient.EMPTY) {
+                JsonObject copy = new JsonObject();
+                copy.add("ingredient", recipe.getCopyInput().toJson());
+                if (StringUtils.isNotBlank(recipe.getCopyTag())) {
+                    copy.addProperty("tag", recipe.getCopyTag());
+                }
+                output.add("copy", copy);
+            }
             json.add("output", output);
         }
         json.addProperty("power", recipe.getPowerCost());

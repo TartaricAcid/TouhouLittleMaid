@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,7 +25,7 @@ import java.util.Objects;
 import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
 public class ItemFilm extends Item {
-    private static final String MAID_INFO = "MaidInfo";
+    public static final String MAID_INFO = "MaidInfo";
 
     public ItemFilm() {
         super((new Item.Properties()).tab(MAIN_TAB).stacksTo(1));
@@ -61,6 +62,21 @@ public class ItemFilm extends Item {
         nbt.remove(EntityMaid.MAID_INVENTORY_TAG);
         nbt.remove(EntityMaid.MAID_BAUBLE_INVENTORY_TAG);
         nbt.remove(EntityMaid.EXPERIENCE_TAG);
+        nbt.remove("ArmorItems");
+        nbt.remove("HandItems");
+        nbt.remove("Leash");
+        nbt.remove("Health");
+        nbt.remove("HurtTime");
+        nbt.remove("DeathTime");
+        nbt.remove("HurtByTimestamp");
+    }
+
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        if (!entity.isInvulnerable()) {
+            entity.setInvulnerable(true);
+        }
+        return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override
