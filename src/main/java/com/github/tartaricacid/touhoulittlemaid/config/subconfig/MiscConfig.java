@@ -6,6 +6,7 @@ public final class MiscConfig {
     public static ForgeConfigSpec.DoubleValue MAID_FAIRY_POWER_POINT;
     public static ForgeConfigSpec.IntValue MAID_FAIRY_SPAWN_PROBABILITY;
     public static ForgeConfigSpec.DoubleValue PLAYER_DEATH_LOSS_POWER_POINT;
+    public static ForgeConfigSpec.BooleanValue GIVE_SMART_SLAB;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("misc");
@@ -18,6 +19,9 @@ public final class MiscConfig {
 
         builder.comment("Loss power point after player death");
         PLAYER_DEATH_LOSS_POWER_POINT = builder.defineInRange("PlayerDeathLossPowerPoint", 1.0, 0, 5);
+
+        builder.comment("Give a soul spell item for player first join");
+        GIVE_SMART_SLAB = builder.define("GiveSoulSpell", true);
 
         builder.pop();
     }

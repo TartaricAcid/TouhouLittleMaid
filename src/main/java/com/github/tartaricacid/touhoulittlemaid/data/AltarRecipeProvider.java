@@ -75,6 +75,7 @@ public class AltarRecipeProvider implements IDataProvider {
         Ingredient netherWart = Ingredient.of(Tags.Items.CROPS_NETHER_WART);
         Ingredient quartzBlock = Ingredient.of(Tags.Items.STORAGE_BLOCKS_QUARTZ);
         Ingredient film = Ingredient.of(FILM.get());
+        Ingredient noteBlock = Ingredient.of(Items.NOTE_BLOCK);
 
         {
             CompoundNBT extraData = new CompoundNBT();
@@ -108,6 +109,7 @@ public class AltarRecipeProvider implements IDataProvider {
         addItemRecipes(ITEM_MAGNET_BAUBLE, redstone, redstone, redstone, ingotIron, ingotIron, ingotIron);
         addItemRecipes(CAMERA, quartzBlock, quartzBlock, quartzBlock, quartzBlock, obsidian, obsidian);
         addItemRecipes(CHISEL, stick, stick, ingotIron, ingotIron, dyeYellow, dyeRed);
+        addItemRecipes(TRUMPET, ingotGold, ingotGold, ingotIron, ingotIron, ingotIron, noteBlock);
     }
 
     @Override
