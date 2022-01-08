@@ -42,6 +42,10 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(8, SyncCapabilityMessage.class, SyncCapabilityMessage::encode, SyncCapabilityMessage::decode, SyncCapabilityMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(9, WirelessIOGuiMessage.class, WirelessIOGuiMessage::encode, WirelessIOGuiMessage::decode, WirelessIOGuiMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(10, WirelessIOSlotConfigMessage.class, WirelessIOSlotConfigMessage::encode, WirelessIOSlotConfigMessage::decode, WirelessIOSlotConfigMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, PlayerEntity player) {

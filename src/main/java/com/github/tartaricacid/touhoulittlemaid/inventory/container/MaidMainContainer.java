@@ -163,7 +163,6 @@ public class MaidMainContainer extends Container {
         }
     }
 
-    // FIXME: 还存在盔甲数值问题
     @Override
     public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack stack1 = ItemStack.EMPTY;

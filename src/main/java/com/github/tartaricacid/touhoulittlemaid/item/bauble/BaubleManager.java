@@ -34,6 +34,7 @@ public final class BaubleManager {
         manager.bind(InitItems.PROJECTILE_PROTECT_BAUBLE, new ProjectileProtectBauble());
         manager.bind(InitItems.MUTE_BAUBLE, new MuteBauble());
         manager.bind(Items.TOTEM_OF_UNDYING, new UndyingTotemBauble());
+        manager.bind(InitItems.WIRELESS_IO, new WirelessIOBauble());
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.bindMaidBauble(manager);
         }
