@@ -9,6 +9,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 public class BaubleItemHandler extends ItemStackHandler {
@@ -133,5 +134,16 @@ public class BaubleItemHandler extends ItemStackHandler {
     @Override
     protected void onLoad() {
         IntStream.range(0, getSlots()).forEach(this::onContentsChanged);
+    }
+
+    public boolean fireEvent(BiFunction<IMaidBauble, ItemStack, Boolean> function) {
+        for (int i = 0; i < getSlots(); i++) {
+            ItemStack stack = getStackInSlot(i);
+            IMaidBauble bauble = getBaubleInSlot(i);
+            if (!stack.isEmpty() && bauble != null && function.apply(bauble, stack)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

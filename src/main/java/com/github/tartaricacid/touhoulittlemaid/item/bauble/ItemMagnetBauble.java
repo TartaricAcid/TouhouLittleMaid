@@ -1,18 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
-import com.github.tartaricacid.touhoulittlemaid.api.event.MaidTickEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
@@ -20,18 +16,10 @@ public class ItemMagnetBauble implements IMaidBauble {
     private static final int DELAY = 3 * 20;
     private static final int RANGE = 6;
 
-    public ItemMagnetBauble() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onLivingDamage(MaidTickEvent event) {
-        EntityMaid maid = event.getMaid();
+    @Override
+    public void onTick(EntityMaid maid, ItemStack baubleItem) {
         if (maid.tickCount % DELAY == 0) {
-            int slot = ItemsUtil.getBaubleSlotInMaid(maid, this);
-            if (slot >= 0) {
-                handlePickup(maid);
-            }
+            handlePickup(maid);
         }
     }
 

@@ -234,6 +234,10 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     public void tick() {
         if (!MinecraftForge.EVENT_BUS.post(new MaidTickEvent(this))) {
             super.tick();
+            maidBauble.fireEvent((b, s) -> {
+                b.onTick(this, s);
+                return true;
+            });
         }
     }
 
