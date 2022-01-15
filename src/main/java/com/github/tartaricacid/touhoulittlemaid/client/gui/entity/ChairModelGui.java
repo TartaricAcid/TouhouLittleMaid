@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelMessag
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.util.concurrent.ExecutionException;
@@ -55,8 +54,10 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     }
 
     @Override
-    void openDetailsGui(EntityChair entity, ResourceLocation modelId) {
-
+    void openDetailsGui(EntityChair entity, ChairModelInfo modelInfo) {
+        if (minecraft != null) {
+            minecraft.setScreen(new ChairModelDetailsGui(entity, modelInfo));
+        }
     }
 
     @Override

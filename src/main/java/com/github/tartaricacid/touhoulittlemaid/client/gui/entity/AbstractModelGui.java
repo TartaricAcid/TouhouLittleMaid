@@ -63,10 +63,10 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     /**
      * 打开详情界面
      *
-     * @param entity  实体
-     * @param modelId 该实体应该对应的模型数据
+     * @param entity    实体
+     * @param modelInfo 该实体应该对应的模型数据
      */
-    abstract void openDetailsGui(T entity, ResourceLocation modelId);
+    abstract void openDetailsGui(T entity, E modelInfo);
 
     /**
      * 发包通知模型更改
@@ -127,8 +127,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 开始添加按键，顺便装填按键对应模型的索引
         for (E modelItem : pack.getModelList().subList(fromIndex, toIndex)) {
-            this.addButton(new ImageButton(startX + offsetX - 8, startY + offsetY - 26, 15, 24, 41, 201, 24, BG,
-                    (b) -> notifyModelChange(entity, modelItem)));
+            this.addButton(new ImageButton(startX + offsetX - 8, startY + offsetY - 26, 15, 24, 41, 201, 24, BG, onModelButtonClick(modelItem)));
 
             // 往右绘制
             offsetX = offsetX + 20;
@@ -139,6 +138,16 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 offsetY = offsetY + 30;
             }
         }
+    }
+
+    private Button.IPressable onModelButtonClick(E modelItem) {
+        return (button) -> {
+            if (hasShiftDown()) {
+                openDetailsGui(entity, modelItem);
+            } else {
+                notifyModelChange(entity, modelItem);
+            }
+        };
     }
 
     private void addPageButton(int startX, int startY) {

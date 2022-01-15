@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelMessage
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.util.concurrent.ExecutionException;
@@ -65,7 +64,10 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     }
 
     @Override
-    void openDetailsGui(EntityMaid maid, ResourceLocation modelId) {
+    void openDetailsGui(EntityMaid maid, MaidModelInfo modelInfo) {
+        if (minecraft != null) {
+            minecraft.setScreen(new MaidModelDetailsGui(maid, modelInfo));
+        }
     }
 
     @Override
