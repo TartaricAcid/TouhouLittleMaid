@@ -17,6 +17,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.ToggleWidget;
@@ -52,6 +53,8 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
     private ImageButton pageUp;
     private ImageButton pageClose;
     private ImageButton taskSwitch;
+    private ImageButton modelDownload;
+    private ImageButton soundDownload;
     private ScheduleButton scheduleButton;
     private boolean taskListOpen;
 
@@ -70,6 +73,7 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
         this.addHomeButton();
         this.addPickButton();
         this.addRideButton();
+        this.addDownloadButton();
         this.addStateButton();
         this.addTaskSwitchButton();
         this.addTaskControlButton();
@@ -103,6 +107,8 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
         renderTransTooltip(home, matrixStack, x, y, "gui.touhou_little_maid.button.home");
         renderTransTooltip(pick, matrixStack, x, y, "gui.touhou_little_maid.button.pickup");
         renderTransTooltip(ride, matrixStack, x, y, "gui.touhou_little_maid.button.maid_riding_set");
+        renderTransTooltip(modelDownload, matrixStack, x, y, "gui.touhou_little_maid.button.model_download");
+        renderTransTooltip(soundDownload, matrixStack, x, y, "gui.touhou_little_maid.button.sound_download");
         renderTransTooltip(skin, matrixStack, x, y, "gui.touhou_little_maid.button.skin");
         renderTransTooltip(pageUp, matrixStack, x, y, "gui.touhou_little_maid.task.next_page");
         renderTransTooltip(pageDown, matrixStack, x, y, "gui.touhou_little_maid.task.previous_page");
@@ -244,6 +250,15 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
         };
         home.initTextureValues(0, 0, 21, 21, BUTTON);
         this.addButton(home);
+    }
+
+    private void addDownloadButton() {
+        modelDownload = new ImageButton(leftPos + 20, topPos + 217, 20, 20, 0, 86, 20, BUTTON,
+                (b) -> Minecraft.getInstance().setScreen(new ModelDownloadGui()));
+        soundDownload = new ImageButton(leftPos + 41, topPos + 217, 20, 20, 21, 86, 20, BUTTON,
+                (b) -> Minecraft.getInstance().setScreen(new SoundDownloadGui()));
+        this.addButton(modelDownload);
+        this.addButton(soundDownload);
     }
 
     private void drawTaskPageCount(MatrixStack matrixStack) {

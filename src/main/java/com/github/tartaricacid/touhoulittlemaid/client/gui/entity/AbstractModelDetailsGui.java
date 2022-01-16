@@ -19,11 +19,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TranslationTextComponent;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import javax.annotation.Nullable;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends IModelInfo> extends Screen {
     private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
@@ -42,7 +39,6 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
     private static Rectangle SIDE_MENU_SIZE;
     private static Rectangle TOP_STATUS_BAR_SIZE;
 
-    protected final ScheduledExecutorService timer;
     protected final DebugFloorModel floorModel;
 
     protected T sourceEntity;
@@ -61,9 +57,6 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         this.sourceEntity = sourceEntity;
         this.guiEntity = guiEntity;
         this.modelInfo = modelInfo;
-        this.timer = new ScheduledThreadPoolExecutor(1, new BasicThreadFactory.Builder()
-                .namingPattern("skin-details-gui-simulation-tick-schedule").daemon(true).build());
-        this.simulationTickRun();
         this.floorModel = new DebugFloorModel();
     }
 
@@ -76,11 +69,6 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
      * Init side button
      */
     abstract protected void initSideButton();
-
-    /**
-     * Use for animation
-     */
-    abstract protected void simulationTickRun();
 
     /**
      * Render extra entity in main window
@@ -137,12 +125,6 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         drawString(stack, font, new TranslationTextComponent("gui.touhou_little_maid.skin_details.right_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 14, 0xffaaaaaa);
         drawString(stack, font, new TranslationTextComponent("gui.touhou_little_maid.skin_details.mouse_wheel"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 24, 0xffaaaaaa);
         stack.popPose();
-    }
-
-    @Override
-    public void onClose() {
-        super.onClose();
-        timer.shutdownNow();
     }
 
     private void renderBottomStatueBar(MatrixStack stack) {
@@ -211,7 +193,6 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         float tmp = scale + amount * scale;
         scale = MathHelper.clamp(tmp, SCALE_MIN, SCALE_MAX);
     }
-
 
     private void renderEntity(int middleWidth, int middleHeight) {
         MatrixStack matrixstack = new MatrixStack();

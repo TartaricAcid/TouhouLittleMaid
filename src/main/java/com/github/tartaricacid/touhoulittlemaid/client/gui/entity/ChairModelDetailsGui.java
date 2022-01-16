@@ -10,8 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 
-import java.util.concurrent.TimeUnit;
-
 public class ChairModelDetailsGui extends AbstractModelDetailsGui<EntityChair, ChairModelInfo> {
     private EntityMaid maid;
     private boolean showPassenger = false;
@@ -40,13 +38,11 @@ public class ChairModelDetailsGui extends AbstractModelDetailsGui<EntityChair, C
     }
 
     @Override
-    protected void simulationTickRun() {
-        timer.scheduleAtFixedRate(() -> {
-            guiEntity.tickCount++;
-            if (maid != null) {
-                maid.tickCount++;
-            }
-        }, 0, 50, TimeUnit.MILLISECONDS);
+    public void tick() {
+        guiEntity.tickCount++;
+        if (maid != null) {
+            maid.tickCount++;
+        }
     }
 
     @Override

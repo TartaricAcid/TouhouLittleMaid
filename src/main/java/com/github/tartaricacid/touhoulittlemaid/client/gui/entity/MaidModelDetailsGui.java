@@ -14,8 +14,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import java.util.concurrent.TimeUnit;
-
 public class MaidModelDetailsGui extends AbstractModelDetailsGui<EntityMaid, MaidModelInfo> {
     private static final ItemStack MAIN_HAND_SWORD = Items.DIAMOND_SWORD.getDefaultInstance();
     private static final ItemStack OFF_HAND_SHIELD = Items.SHIELD.getDefaultInstance();
@@ -71,17 +69,15 @@ public class MaidModelDetailsGui extends AbstractModelDetailsGui<EntityMaid, Mai
     }
 
     @Override
-    protected void simulationTickRun() {
-        timer.scheduleAtFixedRate(() -> {
-            // Tick count increment for some animations
-            guiEntity.tickCount++;
-            // For entity walk
-            guiEntity.animationSpeedOld = guiEntity.animationSpeed;
-            // Set walk speed
-            float speed = isEnableWalk ? 0.5f : 0;
-            guiEntity.animationSpeed += (speed - guiEntity.animationSpeed) * 0.4f;
-            guiEntity.animationPosition += guiEntity.animationSpeed;
-        }, 0, 50, TimeUnit.MILLISECONDS);
+    public void tick() {
+        // Tick count increment for some animations
+        guiEntity.tickCount++;
+        // For entity walk
+        guiEntity.animationSpeedOld = guiEntity.animationSpeed;
+        // Set walk speed
+        float speed = isEnableWalk ? 0.5f : 0;
+        guiEntity.animationSpeed += (speed - guiEntity.animationSpeed) * 0.4f;
+        guiEntity.animationPosition += guiEntity.animationSpeed;
     }
 
     @Override
