@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityChairRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
@@ -46,9 +47,11 @@ public class TileEntityItemStackChairRenderer extends ItemStackTileEntityRendere
         EntityRendererManager render = Minecraft.getInstance().getEntityRenderDispatcher();
         boolean isShowHitBox = render.shouldRenderHitBoxes();
         render.setRenderHitBoxes(false);
+        EntityChairRenderer.renderHitBox = false;
         RenderSystem.runAsFancy(() -> render.render(entityChair,
                 1 / renderItemScale - 0.125, 0.25, 0.75, 0, 0,
                 matrixStack, buffer, combinedLight));
+        EntityChairRenderer.renderHitBox = true;
         render.setRenderHitBoxes(isShowHitBox);
         matrixStack.popPose();
     }

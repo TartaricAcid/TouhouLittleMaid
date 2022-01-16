@@ -23,6 +23,7 @@ import java.util.List;
 public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockModel<EntityChair>> {
     public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
+    public static boolean renderHitBox = true;
     private ChairModelInfo chairInfo;
     private List<Object> chairAnimations;
 
@@ -33,7 +34,7 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         ClientPlayerEntity player = Minecraft.getInstance().player;
-        if (player != null && player.isShiftKeyDown()) {
+        if (player != null && player.isShiftKeyDown() && renderHitBox) {
             renderHitBox(chair, matrixStackIn, bufferIn);
         } else {
             renderChair(chair, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
