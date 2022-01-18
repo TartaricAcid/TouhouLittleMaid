@@ -1,4 +1,4 @@
-# Custom JavaScript Animation
+# JavaScriptアニメーションのカスタマイズ
 Through JavaScript files, you can add custom animations for maid or chair.
 
 - This wiki is suitable for Touhou Little Maid mod in `1.12.2` and `1.16.5`:
