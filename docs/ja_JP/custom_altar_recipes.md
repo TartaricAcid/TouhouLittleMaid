@@ -1,9 +1,9 @@
-# Custom Altar Recipes
+# 祭壇レシピのカスタマイズ
 
 ## 1.16.5
-Touhou Little Maid in 1.16.5 use datapack to add altar recipes
+1.16.5では、祭壇のレシピを追加するためにデータパックを使用します
 
-**Please make sure you know how to use the Minecaft vanilla datapack**
+**データパックの使用方法を理解している必要があります**
 
 ```json
 {
@@ -49,7 +49,7 @@ Touhou Little Maid in 1.16.5 use datapack to add altar recipes
 ## 1.12.2
 Touhou Little Maid in 1.12.2 added compability to `CraftTweaker`, use `CraftTweaker` to add/edit altar recipes
 
-**Before using this function, please make sure you have understood the basic script writing method for `CraftTweaker`.**
+**この機能を使用する前に、 `CraftTweaker` の基本的なスクリプト記述方法を理解していることを確認してください。**
 
 ```js
 // Simplified template for recipes for importing related ZenClass
