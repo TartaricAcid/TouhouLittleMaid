@@ -4,7 +4,7 @@ heroText: 東方リトルメイドwiki
 heroImage: https://i.imgur.com/SqIMw3U.png
 tagline: 東方リトルメイドmodの開発に関するwikiがあります
 actionText: はじめに→
-actionLink: /custom_model_pack
+actionLink: /ja_JP/custom_model_pack
 features:
   - 
     title: カスタムモデル
