@@ -1,8 +1,8 @@
-# Chair Model Pack Details
-- This wiki applies to Touhou Little Maid mod in `1.12.2` or `1.16.5` latest version;
-- Requires understanding of vanilla Minecraft's resource pack structure;
-- Requires understanding of JSON format;
-- Currently only supports models for **1.10.0 or 1.12.0 Bedrock Edition Model**.
+# 椅子モデルパックの詳細
+- このwikiは `1.12.2` または `1.16.5` の最新バージョンのTouhou Little Maid modに適用されます。
+- バニラの Minecraft リソースパックの構造を理解する必要があります。
+- JSON 形式の理解が必要です。
+- 現在、 **1.10.0 または 1.12.0 Bedrock Edition Model** のみをサポートしています。
 - For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
 
 ## Model Packs Structure

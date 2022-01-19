@@ -1,4 +1,4 @@
-# Custom Model Pack
+# モデルパックのカスタマイズ
 Touhou Little Maid mod supports custom model packs, you can quickly make your favorite models through software like Blockbench. The game can read the model package in zip compressed file format, or directly read the folder.
 
 The model packs compatible with the mod of `1.12.2` and `1.16.5` are exactly the same, just that the loading method is slightly different:

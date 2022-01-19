@@ -1,4 +1,4 @@
-# Maid Model Pack Details
+# メイドモデルパックの詳細
 - This wiki applies to Touhou Little Maid mod in `1.12.2` or `1.16.5` latest version;
 - Requires understanding of vanilla Minecraft's resource pack structure;
 - Requires understanding of JSON format;
