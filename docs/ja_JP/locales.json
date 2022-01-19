@@ -28,23 +28,23 @@
                 "title": "カスタムモデル",
                 "children": [
                     [
-                        "./custom_model_pack",
+                        "./ja_JP/custom_model_pack",
                         "カスタムモデルパック"
                     ],
                     [
-                        "./maid_model_pack_details",
+                        "./ja_JP/maid_model_pack_details",
                         "メイドモデルパックの詳細"
                     ],
                     [
-                        "./chair_model_pack_details",
+                        "./ja_JP/chair_model_pack_details",
                         "椅子モデルパックの詳細"
                     ],
                     [
-                        "./custom_javascript_animation",
+                        "./ja_JP/custom_javascript_animation",
                         "JavaScriptアニメーションのカスタマイズ"
                     ],
                     [
-                        "./preset_animation",
+                        "./ja_JP/preset_animation",
                         "プリセット アニメーション"
                     ]
                 ]
@@ -53,7 +53,7 @@
                 "title": "レシピの変更",
                 "children": [
                     [
-                        "./custom_altar_recipes",
+                        "./ja_JP/custom_altar_recipes",
                         "祭壇レシピの変更"
                     ]
                 ]
