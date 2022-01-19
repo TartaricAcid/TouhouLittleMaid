@@ -1,12 +1,12 @@
 {
     "title": {
-        "lang": "en-US",
+        "lang": "ja-JP",
         "title": "東方リトルメイドwiki",
         "description": "東方リトルメイドmodの開発に関するwikiがあります"
     },
     "themeConfig": {
         "selectText": "言語",
-        "label": "English",
+        "label": "日本語",
         "ariaLabel": "言語",
         "lastUpdated": "最終アップデート",
         "nav": [
