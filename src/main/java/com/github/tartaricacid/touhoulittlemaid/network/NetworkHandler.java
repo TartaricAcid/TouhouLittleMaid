@@ -46,6 +46,16 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(10, WirelessIOSlotConfigMessage.class, WirelessIOSlotConfigMessage::encode, WirelessIOSlotConfigMessage::decode, WirelessIOSlotConfigMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(11, OpenBeaconGuiMessage.class, OpenBeaconGuiMessage::encode, OpenBeaconGuiMessage::decode, OpenBeaconGuiMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(12, SetBeaconPotionMessage.class, SetBeaconPotionMessage::encode, SetBeaconPotionMessage::decode, SetBeaconPotionMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(13, StorageAndTakePowerMessage.class, StorageAndTakePowerMessage::encode, StorageAndTakePowerMessage::decode, StorageAndTakePowerMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(14, SetBeaconOverflowMessage.class, SetBeaconOverflowMessage::encode, SetBeaconOverflowMessage::decode, SetBeaconOverflowMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(15, BeaconAbsorbMessage.class, BeaconAbsorbMessage::encode, BeaconAbsorbMessage::decode, BeaconAbsorbMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, PlayerEntity player) {

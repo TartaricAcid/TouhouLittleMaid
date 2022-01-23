@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -11,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SCollectItemPacket;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
@@ -23,6 +26,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
+
+import java.util.Random;
 
 public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnData {
     public static final EntityType<EntityPowerPoint> TYPE = EntityType.Builder.<EntityPowerPoint>of(EntityPowerPoint::new, EntityClassification.MISC)
@@ -79,6 +84,33 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
      */
     public static int transPowerValueToXpValue(int powerValue) {
         return powerValue / 4;
+    }
+
+    public static void spawnExplosionParticle(World world, float x, float y, float z, Random rand) {
+        if (!world.isClientSide) {
+            return;
+        }
+        for (int i = 0; i < 5; ++i) {
+            float mx = (rand.nextFloat() - 0.5F) * 0.02F;
+            float my = (rand.nextFloat() - 0.5F) * 0.02F;
+            float mz = (rand.nextFloat() - 0.5F) * 0.02F;
+            world.addParticle(ParticleTypes.CLOUD,
+                    x + rand.nextFloat() - 0.5F,
+                    y + rand.nextFloat() - 0.5F,
+                    z + rand.nextFloat() - 0.5F,
+                    mx, my, mz);
+        }
+    }
+
+    public void spawnExplosionParticle() {
+        float x = (float) position().x;
+        float y = (float) position().y + 0.125F;
+        float z = (float) position().z;
+        if (level.isClientSide) {
+            spawnExplosionParticle(level, x, y, z, random);
+        } else {
+            NetworkHandler.sendToNearby(level, blockPosition(), new BeaconAbsorbMessage(x, y, z));
+        }
     }
 
     @Override

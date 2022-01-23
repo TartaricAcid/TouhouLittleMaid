@@ -45,6 +45,7 @@ public final class InitItems {
     public static RegistryObject<Item> SMART_SLAB_HAS_MAID = ITEMS.register("smart_slab_has_maid", () -> new ItemSmartSlab(ItemSmartSlab.Type.HAS_MAID));
     public static RegistryObject<Item> TRUMPET = ITEMS.register("trumpet", ItemTrumpet::new);
     public static RegistryObject<Item> WIRELESS_IO = ITEMS.register("wireless_io", ItemWirelessIO::new);
+    public static RegistryObject<Item> MAID_BEACON = ITEMS.register("maid_beacon", ItemMaidBeacon::new);
 
     public static RegistryObject<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new SpawnEggItem(EntityMaid.TYPE, 0x4a6195, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));
     public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new SpawnEggItem(EntityFairy.TYPE, 0x171c20, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));

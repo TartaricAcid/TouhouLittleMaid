@@ -28,6 +28,7 @@ public final class InitSpecialItemRender {
         addInHandModel(InitItems.HAKUREI_GOHEI.get());
         addInHandModel(InitItems.EXTINGUISHER.get());
         addInHandModel(InitItems.CAMERA.get());
+        addInHandModel(InitItems.MAID_BEACON.get());
     }
 
     @SubscribeEvent
