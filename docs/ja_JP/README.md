@@ -1,21 +1,21 @@
 ---
 home: true
-heroText: Touhou Little Maid Dev Wiki
+heroText: 東方リトルメイドwiki
 heroImage: https://i.imgur.com/SqIMw3U.png
-tagline: There is a wiki related to Touhou Little Maid mod development
-actionText: Get Started →
-actionLink: /custom_model_pack
+tagline: 東方リトルメイドmodの開発に関するwikiがあります
+actionText: はじめに→
+actionLink: /ja_JP/custom_model_pack
 features:
   - 
-    title: Custom Model
-    details: How to make a custom maid or chair model package
+    title: カスタムモデル
+    details: カスタムメイドや椅子のモデルパッケージの作り方
   - 
-    title: Modify Recipes
-    details: How to modification of recipes by data packet
+    title: レシピの変更
+    details: データパックでのレシピの変更方法
   - 
     title: Develop Mod
     details: How to compat Touhou Little Maid mod, or develop an addition
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---
 
-> Make sure the version of Touhou Little Maid mod you're using is the latest.
+> 使用している東方リトルメイドmodのバージョンが最新であることを確認してください。

@@ -1,6 +1,6 @@
 
 
-# Preset Animation
+# プリセット アニメーション
 
 There are many default animations built in the mod, you only need:
 1. Set the correct name for the group you want to animate in Blockbench.
