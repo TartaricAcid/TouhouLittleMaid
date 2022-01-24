@@ -38,6 +38,7 @@
   "item.touhou_little_maid.wireless_io": "八雲紫のスキマ",
   "block.touhou_little_maid.maid_bed": "メイド用ベッド",
   "block.touhou_little_maid.garage_kit": "ガレージキット",
+  "block.touhou_little_maid.maid_beacon": "神社の灯篭",
   "tooltips.touhou_little_maid.chair.place.desc": "ブロックの上面を右クリックして配置します。",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Shift+左クリックで破壊できます。",
   "tooltips.touhou_little_maid.chair.gui.desc": "Shift+右クリックでスキンGUIを開きます。",
