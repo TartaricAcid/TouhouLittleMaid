@@ -76,6 +76,8 @@ public class AltarRecipeProvider implements IDataProvider {
         Ingredient quartzBlock = Ingredient.of(Tags.Items.STORAGE_BLOCKS_QUARTZ);
         Ingredient film = Ingredient.of(FILM.get());
         Ingredient noteBlock = Ingredient.of(Items.NOTE_BLOCK);
+        Ingredient chestsWooden = Ingredient.of(Tags.Items.CHESTS_WOODEN);
+        Ingredient hopper = Ingredient.of(Items.HOPPER);
 
         {
             CompoundNBT extraData = new CompoundNBT();
@@ -110,6 +112,8 @@ public class AltarRecipeProvider implements IDataProvider {
         addItemRecipes(CAMERA, quartzBlock, quartzBlock, quartzBlock, quartzBlock, obsidian, obsidian);
         addItemRecipes(CHISEL, stick, stick, ingotIron, ingotIron, dyeYellow, dyeRed);
         addItemRecipes(TRUMPET, ingotGold, ingotGold, ingotIron, ingotIron, ingotIron, noteBlock);
+        addItemRecipes(WIRELESS_IO, enderPearl, chestsWooden, hopper);
+        addItemRecipes(MAID_BEACON, plankWood, dyeRed, plankWood, obsidian, gemDiamond, obsidian);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
+import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
@@ -254,9 +256,20 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
 
     private void addDownloadButton() {
         modelDownload = new ImageButton(leftPos + 20, topPos + 217, 20, 20, 0, 86, 20, BUTTON,
-                (b) -> Minecraft.getInstance().setScreen(new ModelDownloadGui()));
+                (b) -> {
+                    List<DownloadInfo> downloadInfoList;
+                    int page = ModelDownloadGui.getCurrentPage();
+                    if (page == 0) {
+                        downloadInfoList = InfoGetManager.DOWNLOAD_INFO_LIST_ALL;
+                    } else {
+                        DownloadInfo.TypeEnum typeEnum = DownloadInfo.TypeEnum.getTypeByIndex(page - 1);
+                        downloadInfoList = InfoGetManager.getTypedDownloadInfoList(typeEnum);
+                    }
+                    Minecraft.getInstance().setScreen(new ModelDownloadGui(downloadInfoList));
+                });
         soundDownload = new ImageButton(leftPos + 41, topPos + 217, 20, 20, 21, 86, 20, BUTTON,
-                (b) -> Minecraft.getInstance().setScreen(new SoundDownloadGui()));
+                (b) -> {
+                });
         this.addButton(modelDownload);
         this.addButton(soundDownload);
     }

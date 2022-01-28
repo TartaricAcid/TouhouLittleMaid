@@ -57,10 +57,10 @@ public class CustomPackLoader {
     public static final ChairModels CHAIR_MODELS = ChairModels.getInstance();
     private static final String COMMENT_SYMBOL = "#";
     private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
+    public static final Path PACK_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve(CUSTOM_PACK_DIR_NAME);
     private static final String DEFAULT_PACK_NAME = "touhou_little_maid-1.0.0.zip";
     private static final Marker MARKER = MarkerManager.getMarker("CustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
-    private static final Path PACK_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve(CUSTOM_PACK_DIR_NAME);
 
     public static void reloadPacks() {
         CustomJsAnimationManger.clearAll();
