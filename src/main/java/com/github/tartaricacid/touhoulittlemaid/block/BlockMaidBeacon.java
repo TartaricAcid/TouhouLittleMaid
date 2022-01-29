@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.OpenBeaconGuiMessage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
@@ -104,6 +105,15 @@ public class BlockMaidBeacon extends Block {
     }
 
     @Override
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileEntity te = worldIn.getBlockEntity(pos);
+        if (te instanceof TileEntityMaidBeacon) {
+            popResource(worldIn, pos, ItemMaidBeacon.tileEntityToItemStack((TileEntityMaidBeacon) te));
+        }
+        super.onRemove(state, worldIn, pos, newState, isMoving);
+    }
+
+    @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.BLOCK;
     }
@@ -135,6 +145,12 @@ public class BlockMaidBeacon extends Block {
             stateUp = this.defaultBlockState().setValue(BlockMaidBeacon.POSITION, BlockMaidBeacon.Position.UP_W_E);
         }
         worldIn.setBlock(pos.above(), stateUp, Constants.BlockFlags.DEFAULT);
+        TileEntity te = worldIn.getBlockEntity(pos.above());
+        if (te instanceof TileEntityMaidBeacon) {
+            TileEntityMaidBeacon tileEntityMaidBeacon = (TileEntityMaidBeacon) te;
+            ItemMaidBeacon.itemStackToTileEntity(stack, tileEntityMaidBeacon);
+            tileEntityMaidBeacon.refresh();
+        }
     }
 
     @Override

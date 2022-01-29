@@ -90,6 +90,12 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickableTileEnt
         overflowDelete = getTileData().getBoolean(OVERFLOW_DELETE_TAG);
     }
 
+    public void loadData(CompoundNBT data) {
+        potionIndex = data.getInt(POTION_INDEX_TAG);
+        storagePower = data.getFloat(STORAGE_POWER_TAG);
+        overflowDelete = data.getBoolean(OVERFLOW_DELETE_TAG);
+    }
+
     @Override
     public CompoundNBT getUpdateTag() {
         return this.save(new CompoundNBT());

@@ -68,6 +68,7 @@
   "tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist": "Whitelist",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.has": "Binding Pos: %d, %d, %d",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "Unbound Chest",
+  "tooltips.touhou_little_maid.maid_beacon.desc": "Storage Power: %s",
   "gui.touhou_little_maid.schedule.day": "Day Shift",
   "gui.touhou_little_maid.schedule.night": "Night Shift",
   "gui.touhou_little_maid.schedule.all": "All Day",
