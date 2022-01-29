@@ -1,6 +1,6 @@
 ---
-home: 釜な
-heroText: Touhou Little Maid Dev Wiki
+home: true
+heroText: 東方リトルメイドwiki
 heroImage: https://i.imgur.com/SqIMw3U.png
 tagline: 東方リトルメイドmodの開発に関するwikiがあります
 actionText: はじめに→
