@@ -33,7 +33,7 @@ public final class MiscConfig {
         SHRINE_LAMP_MAX_STORAGE = builder.defineInRange("ShrineLampMaxStorage", 100, 0, Double.MAX_VALUE);
 
         builder.comment("Shrine Lamp Max Range Of Absorb Power Point");
-        SHRINE_LAMP_MAX_RANGE = builder.defineInRange("MaidFairySpawnProbability", 6, 0, Integer.MAX_VALUE);
+        SHRINE_LAMP_MAX_RANGE = builder.defineInRange("ShrineLampMaxRange", 6, 0, Integer.MAX_VALUE);
 
         builder.pop();
     }

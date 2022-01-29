@@ -1,0 +1,13 @@
+{
+  "sortnum": 5,
+  "name": "patchouli.touhou_little_maid.book.entries.maid.film.name",
+  "icon": "touhou_little_maid:item_magnet_bauble",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:film",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.film.pages.0.text"
+    }
+  ]
+}

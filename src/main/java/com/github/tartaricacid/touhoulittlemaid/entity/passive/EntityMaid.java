@@ -14,6 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoad
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
@@ -170,7 +171,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             Block block = ((BlockItem) stack.getItem()).getBlock();
             return !(block instanceof ShulkerBoxBlock);
         }
-        return true;
+        return stack.getItem() != InitItems.PHOTO.get();
     }
 
     @Override

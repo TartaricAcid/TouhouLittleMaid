@@ -1,0 +1,17 @@
+{
+  "sortnum": 9,
+  "name": "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.name",
+  "icon": "touhou_little_maid:chisel",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:chisel",
+      "text": "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.0.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.1.text"
+    }
+  ]
+}

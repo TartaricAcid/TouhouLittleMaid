@@ -1,0 +1,13 @@
+{
+  "sortnum": 5,
+  "name": "patchouli.touhou_little_maid.book.entries.maid.gap.name",
+  "icon": "touhou_little_maid:wireless_io",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:wireless_io",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.gap.pages.0.text"
+    }
+  ]
+}
