@@ -117,16 +117,16 @@ If we filled the field for `model` or `texture`, then the content has no limit, 
 `mounted_height` is the height of the entity when it is riding the model, the unit is the pixels above ground, you can use decimals.
 > The `X` and `Z` position of the riding entity will always be the center of the chair entity, please preset the `X` and `Z` of the chair models when designing the models.
 
-## Animated Icon
-Icon does not have size limit, supports both static and animated icons.
+## 动态图标
+图标没有尺寸限制，支持静态和动态图标。
 
-Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon that is not 1:1 scale, will be displayed slowly with a 0.1 second interval, which creates the animated effect.
+任何比例尺为1:1的图标将被解释为静态图标。 非1:1比例尺的任何长图标将会在0.1秒间隔内缓慢显示，从而产生动态效果。
 
-> The image below is the icon in the mod, left is static icon, and right is the animated icon.
+> 下面的图像是模组中的图标，左边是静态图标，右边是动态图标。
 
 ![020](https://i.imgur.com/VoulqpR.png)
 
-## Model Files
+## 模型文件
 
 - This mod is using JSON files in Bedrock `1.10.0` or `1.12.0` for model loading, the document can be exported via model building software [Blockbench](https://blockbench.net/), without additional edits.
 - There are many preset animations, you only need to name a specific group, and then the plugin will automatically generate the corresponding animation script reference when exporting the model. For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
