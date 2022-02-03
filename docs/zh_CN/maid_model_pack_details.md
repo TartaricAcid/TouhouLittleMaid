@@ -1,16 +1,16 @@
-# Maid Model Pack Details
-- This wiki applies to Touhou Little Maid mod in `1.12.2` or `1.16.5` latest version;
-- Requires understanding of vanilla Minecraft's resource pack structure;
-- Requires understanding of JSON format;
-- Currently only supports models for **1.10.0 or 1.12.0 Bedrock Edition Model**.
-- For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
+# 女仆模型包详解
+- 本 wiki 适用于 Touhou Little Maid 模组 `1.12.2` 和 `1.16.5` 最新版；
+- 需要了解原版 Minecraft 的资源包结构；
+- 需要了解 JSON 格式；
+- 当前仅支持 **1.10.0 和 1.12.0 版本基岩版模型**；
+- 对于文本编辑软件，我们推荐使用 `Visual Studio Code`，所有的文件都需要以 `UTF-8 无 BOM` 编码保存。
 
-## Model Packs Structure
+## 模型包结构
 
-To better understand how to create model packs, we listed here the structure format for model packs
+为了更好地理解如何创建模型包，我们在此列出了模型包的结构
 
 ```
-model pack folder
+模型包文件夹
 │
 ├─pack.mcmeta
 ├─pack.png
@@ -30,11 +30,11 @@ model pack folder
                         └─daiyousei.png
 ```
 
-## Model Packs Description Files
+## 模型包描述文件
 
-The file complete structure is as below, only the parts marked '(Required)' requires to be filled, you don't have to fill everything.
+文件完整的结构如下，只有标记为 '(必须)' 的部分才是必须的，你不必填写所有内容。
 
-The model supports JSON files with comments, please use at your discretion.
+模型支持带有注释的 JSON 文件，请酌情使用。
 
 ```json
 {
@@ -84,9 +84,9 @@ The model supports JSON files with comments, please use at your discretion.
 }
 ```
 
-The example above listed all usable field, only the field with '(Required)' are needed, the rest can be omitted.
+上面的示例列出了所有可用字段，只需要带有 '(必须)'的字段，其余部分可以省略。
 
-For simplicity, you could write a file like this:
+为了简单起见，你可以写一个像这样的文件：
 
 ```json
 {
@@ -102,72 +102,72 @@ For simplicity, you could write a file like this:
 }
 ```
 
-If we do not fill the field for `model` or `texture`, it will choose the default model and texture based on `model_id`.
+如果我们不填写`model` 或 `texture`,，它将基于 `model_id`选择默认的模型和材质。
 
-For the example above, `model_id` is `touhou_little_maid:hakurei_reimu`, then the model file will be `hakurei_reimu.json` under `models/entity` folder, the texture will be `hakurei_reimu.png` under `textures/entity` folder.
+就以上例子而言， `model_id` 是 `touhou_little_maid:hakurei_reimu`, 然后模型文件将是`hakurei_reimu.json`在 `models/entity` 文件夹下，纹理将是 `hakurei_reimu.png` 在 `textures/entity` 文件夹。
 
-If we filled the field for `model` or `texture`, then the content has no limit, and can even share a model or texture for multiple characters.
+如果我们填写了 `model` 或 `texture`, 然后内容没有限制，甚至可以共享多个字符的模型或纹理。
 
-## Animated Icon
-Icon does not have size limit, supports both static and animated icons.
+## 动态图标
+图标没有尺寸限制，支持静态和动态图标。
 
-Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon that is not 1:1 scale, will be displayed slowly with a 0.1 second interval, which creates the animated effect.
+任何比例尺为1:1的图标将被解释为静态图标。 非1:1比例尺的任何长图标将会在0.1秒间隔内缓慢显示，从而产生动态效果。
 
-> The image below is the icon in the mod, left is static icon, and right is the animated icon.
+> 下面的图像是模组中的图标，左边是静态图标，右边是动态图标。
 
 ![020](https://i.imgur.com/VoulqpR.png)
 
-## Model Files
+## 模型文件
 
-- This mod is using JSON files in Bedrock `1.10.0` or `1.12.0` for model loading, the document can be exported via model building software [Blockbench](https://blockbench.net/), without additional edits.
-- There are many preset animations, you only need to name a specific group, and then the plugin will automatically generate the corresponding animation script reference when exporting the model. For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
-- Model also support JavaScript custom animations, you can find the introduction in the custom animation chapter.
+- 这个模组正在使用Bedrock的 JSON 文件 `1.10.0` 或 `1.12。` 对于模型加载，文档可以通过模型构建软件导出 [Blockbench](https://blockbench.net/), 无需额外编辑。
+- 有许多预设动画，您只需要命名一个特定组。 然后当导出模型时，插件会自动生成对应的动画脚本参考。 所有可用的名字，请查看 [预设动画](/preset_animation.md) 章。
+- 模型也支持 JavaScript 自定义动画，您可以在自定义动画章节中找到导言。
 
-## Internationlization
+## 多语言
 
-As a game that are facing internationlization, part of the contents of model packs also have internationalization compability.
+作为一个面临国际化的游戏，模型包的部分内容也具有多语言的兼容性。
 
-- `pack_name` and `description` field in model packs support internationalization;
-- `name` and `description` field in model list support internationalization.
+- 模型包中的`pack_name` 和 `description` 支持多语言;
+- 模型列表中的`name` 和 `description` 支持多语言。
 
-The method of adding internationalization is pretty simple, just need to begin it using `{` and end it using `}`, the middle section is the internationlization key, and then followed by the corresponding language file.
+添加多语言的方法相当简单， 只需要开始使用 `{` 并以`}`结束， 中间部分是国际化密钥，然后是相应的语言文件。
 
-For example we wrote the description as follow (taking just a small section)
+例如，我们编写的描述如下(只取一小部分)
 
 ```json
 "pack_name": "{pack.vanilla_touhou_model.name}",
 "description": ["{pack.vanilla_touhou_model.desc}"]
 ```
 
-and then under model pack namespace, in the `lang` folder we create `en_us.lang` file, and write the content below:
+然后在模型包命名空间下，在 `lang` 文件夹中，我们可以创建 `en_us.lang` 文件并写下以下内容：
 
 ```properties
 pack.vanilla_touhou_model.name=Vanilla Touhou Model
 pack.vanilla_touhou_model.desc=Default Model Packs
 ```
 
-We only added the English file, but if we want to support Chinese, we can create `zh_cn.lang` file and write the content as below:
+我们只添加了英文文件，但如果我们想支持中文，我们可以创建 `zh_cn.lang` 文件并写入以下内容：
 
 ```properties
 pack.vanilla_touhou_model.name=原版东方资源包
 pack.vanilla_touhou_model.desc=默认的模型包
 ```
 
-For the first example, if we did not fill the `name` file, then the system will automatically create the local key based on `model_id`, for example `model_id` is `touhou_little_maid:cushion`, then the generated language key is `model.touhou_little_maid.cushion.name`.
+对于第一个例子，如果我们没有填写 `name` 文件， 然后系统将基于 `model_id`自动创建本地密钥 例如 `model_id` 是 `touhou_little_maid:cushion`, 然后生成的语言键是 `model.touhou_little_maid.cushion.name`
 
-`description` file is not generated by default, you will need to fill that in.
+`description` 文件不是默认生成的，您需要填写。
 
-## Compatibility Issue
+## 兼容性问题
 
-Since models made by some authors are more unique, they may have some compability issues with maids' various addtional appearance parts. Here we address the issue with these non-standard models and how you can overcome it:
+由于某些作者所做的模型比较独特，他们可能会有某些复杂性问题，包括女佣的各种附加外观部分。 我们在这里用这些非标准模型以及你如何能够克服这个问题：
 
-|                     Issues                      |                                                   Solution                                                   |
-|:-----------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
-|             Uncoordinated animation             |                                  Write a custom JavaScript animation script                                  |
-|      Hold items are in incorrect position       |                                 Use positional group to define the position                                  |
-|           Disable showing hold items            | As long as `armLeft` or `armRight` group does not exist, then the corresponding hold items will not be shown |
-|        Backpack is in incorrect position        |                                 Use positional group to define the position                                  |
-| Backpack, trolley, vehicles, broom, custom head |                         Write some fields as shown in the example below to close it                          |
+|         问题         |                    解决方法                    |
+|:------------------:|:------------------------------------------:|
+|       不协调的动画       |           编写自定义 JavaScript 动画脚本            |
+|     持有项目的位置不正确     |                 使用位置组来定义位置                 |
+|      禁用显示按住项目      | 只要 `Arlet` 或 `armRight` 组不存在，那么相应的持有项将不会显示 |
+|      背包位置不正确       |                 使用位置组来定义位置                 |
+| 背包、手推车、车辆、扫帚、自定义头部 |             写下下面示例中显示的一些字段以便关闭             |
 
 ```json {5-10}
 {
@@ -184,14 +184,14 @@ Since models made by some authors are more unique, they may have some compabilit
 }
 ```
 
-## Maid Easter Eggs
+## 女仆复活节彩蛋
 
-We added maid naming easter egg function, specially named maid can use special models.
+我们添加了女仆命名复命名蛋功能，专门命名女仆可以使用特殊模型。
 
-Writing easter egg script is pretty simple, the model will automatically detect it as easter egg models, and it won't show in skin menu.
+写入复活节彩蛋脚本非常简单，模型将自动检测到它作为复活节彩蛋模型，它不会在皮肤菜单中显示。
 
-### Normal Easter Eggs
-Below is the script for normal naming easter egg. Under normal naming easter egg, maid only need to be named as shown in the `tag` field to use the model.
+### 普通复活节蛋
+下面是正常命名复位蛋的脚本。 在普通的命名复位蛋下，女仆只需要在 `标签` 字段中被命名才能使用模型。
 ```json {5-7}
 {
     "pack_name": "Touhou Project Model Pack",
@@ -203,10 +203,10 @@ Below is the script for normal naming easter egg. Under normal naming easter egg
     }]
 }
 ```
-### Encrypted Easter Eggs
-Below  is the script for encrypted naming easter egg. For encrypted naming easter egg, maid has to be specially named, the naming has to be the same as SHA-1 value in the `tag` below to use the model.
+### 加密复活节蛋
+下面是加密的命名复位蛋的脚本。 要加密命名复命名蛋，必须特别命名， 命名必须与 `标签` 中的 SHA-1 值相同才能使用模型。
 
-As the script below, when maid is named `IKUN~`, because the characters' SHA-1 value is `6dadb86d91cc4c0c2c7860e1cb16cec01e1b6511`, same as `tag` field, it will use said model.
+作为下面的脚本，当maid 被命名为 `IKUN~`因为字符串的 SHA-1 值是 `6dadb86d91cc4c0c2c7860e1cb16cec01e1b6511`和 `标签` 字段相同，它将使用所说的模型。
 
 ```json {5-8}
 {
@@ -221,16 +221,16 @@ As the script below, when maid is named `IKUN~`, because the characters' SHA-1 v
 }
 ```
 
-## Other Questions
+## 其他问题
 
-### Z-fighting Issue
+### 贴图闪烁（Z-fighting）问题
 
-This is an issue with OpenGL itself, during the process of creating models if we used flat or two coinciding solids, we will have this issue.
+这是一个 OpenGL 本身的问题。 在创建模型过程中，如果我们使用平面或两个在同一位置的方块，将有这个问题。
 
 ![004](https://i.imgur.com/daYk77e.png)
 
-For the issue of one flat cube, you can add texture to one of the sides and keep the others empty, it will solve the issue; for two coinciding cube, move the cube slightly, or delete the coinciding cube.
+关于平面方块的问题， 您可以将纹理添加到一侧并保持其他方为空，它将解决这个问题； 对于两个在同一位置的方块，稍微移动方块，或删除重合方块。
 
-### Uppercase & Lowercase
+### 大写 & 小写
 
-In Minecraft, all the file names needs to be lowercase.
+在Minecraft中，所有文件名称都必须是小写的。
