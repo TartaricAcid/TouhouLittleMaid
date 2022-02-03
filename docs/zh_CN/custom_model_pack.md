@@ -1,67 +1,67 @@
-# Custom Model Pack
-Touhou Little Maid mod supports custom model packs, you can quickly make your favorite models through software like Blockbench. The game can read the model package in zip compressed file format, or directly read the folder.
+# 自定义模型包
+Touhou Little Maid模组支持自定义模型包，您可以通过 Blockbench 这样的软件快速制作您最喜欢的模型。 游戏可以以 zip 压缩文件格式读取模型包，或者直接读取文件夹。
 
-The model packs compatible with the mod of `1.12.2` and `1.16.5` are exactly the same, just that the loading method is slightly different:
+该模型包兼容的模组版本 `1.12.2` 和 `1.16.5` 完全相同，只是加载方法略有不同:
 
-- `1.12.2`: The model package needs to be loaded like the vanilla resource package.
-- `1.16.5`: The model package needs to be placed in the `tlm_custom_pack` folder under the game's directory.
+- `1.12.2`: 模型包需要像原版资源包一样加载。
+- `1.16.5`: 模型包需要放置在 `tlm_custom_pack` 游戏目录下的文件夹。
 
-It is not difficult to make a custom model package from scratch, even if you are a novice. You only need the following free software:
+即使你是新手，从零开始制作一个自定义模型包也不难。 您只需要以下免费软件：
 
-- Blockbench: A software develped by `JannisX11` specifically for Minecraft 3D modelling.
+- Blockbench: 一个由 `JannisX11` 开发的专门用于Minecraft 3D 建模的软件。
 
-  Official website: <https://blockbench.net/>
+  官方网站: [https://blockbie.net/](https://blockbench.net/)
 
-  The mod only supports Bedrock Edition model format, and does not support Bedrock Edition animation files.
+  Mod只支持 Bedrock 模式格式，不支持 Bedrock 动画文件。
 
-- Visual Studio Code: An Integrated Development Environment made by Microsoft.
+- Visual Studio Code: 微软开发的集成开发环境。
 
-  Official website: <https://code.visualstudio.com/>
+  官方网站: <https://code.visualstudio.com/>
 
-  Mainly used to edit language files, optional.
+  主要用于编辑语言文件，可选文件。
 
-In addition, I also wrote a blockbench plugin for exporting custom models, only applicable to Blockbench 4.0
+此外，我还编写了一个用于导出自定义模型的Blockbench插件，仅适用于Blockbench 4.0
 
-Plugin site: <http://page.cfpa.team/TLM-Utils-Plugins/>
+插件网站： <http://page.cfpa.team/TLM-Utils-Plugins/>
 
-# Quick Start
+# 快速入门
 
-First you need to understand how to use Blockbench, and second you need to install the `tlm-utils` plugin.    
-When everything is done, you can start to make a model package according to the instructions below.
+首先你需要了解如何使用Blockbench，其次你需要安装 `tlm-utils` 插件。    
+当一切完成后，您可以根据下面的说明开始制作一个模型包。
 
-## 1. Create a default model
+## 1. 创建默认模型
 
-Create a default model, it will automatically create a default Bedrock Edition model, you can modify on this basis.     
-If you choose `chair`, there is no default model.
+创建一个默认模型，它将自动创建一个默认的Bedrock模型，您可以在此基础上进行修改。     
+如果您选择 `Chair`, 没有默认模型。
 
 ![img](https://i.imgur.com/h6ufpuS.gif)
 
-## 2. Modify it to what you want based on the default model
-Need to pay attention to several points:
+## 2. 根据默认模型修改它
+需要注意以下几点：
 
-1. The maid animation is automatically added based on the **group name**, so please do not delete or rename at will.
+1. 女仆的动画是根据 **组名**自动添加的，所以请不要随意删除或重命名。
 
-   > Want to know what group names are available? Please see the [Preset Animation](/preset_animation.md) chapter.
+   > 想知道哪个组名可用？ 请查看 [预设动画](/preset_animation.md) 章。
 
-   > You can right-click in the outliner interface to open the preset animation menu   
+   > 您可以右键点击outliner界面打开预设动画菜单   
    > ![img](https://i.imgur.com/N17PbiE.gif)
 
-2. Pay attention to the parent-child relationship of the group.
+2. 注意该组的父子集。
 
-3. Pay attention to the pivot point.
+3. 注意枢纽点（the pivot point）。
 
-## 3. Create textures
+## 3. 创建材质
 
-You can edit the textures directly in Blockbench, or you can edit the textures through other image editors.
+您可以直接在 Blockbench 编辑纹理，或者您可以通过其他图像编辑器编辑纹理。
 
 ![img](https://i.imgur.com/4JOKLMd.gif)
 
-## 4. Create a model pack
+## 4. 创建一个模型包
 
 ![img](https://i.imgur.com/RHq9zf1.gif)
 
-## 5. Export the model into model pack
+## 5. 导出模型到模型包
 
 ![img](https://i.imgur.com/Mux4TwJ.gif)
 
-## 6. Load the model pack & enjoy it!
+## 6. 加载模型包 & 享受它！
