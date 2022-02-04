@@ -31,11 +31,13 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
 public class ItemSmartSlab extends Item {
     private static final String MAID_INFO = "MaidInfo";
+    private static final String MAID_OWNER = "Owner";
     private final Type type;
 
     public ItemSmartSlab(Type type) {
@@ -102,7 +104,12 @@ public class ItemSmartSlab extends Item {
     private ActionResultType spawnFromStore(ItemUseContext context, PlayerEntity player, World worldIn, EntityMaid maid) {
         ItemStack stack = context.getItemInHand();
         if (hasMaidData(stack)) {
-            maid.readAdditionalSaveData(getMaidData(stack));
+            CompoundNBT maidData = getMaidData(stack);
+            UUID ownerUid = maidData.getUUID(MAID_OWNER);
+            if (!player.getUUID().equals(ownerUid)) {
+                return ActionResultType.FAIL;
+            }
+            maid.readAdditionalSaveData(maidData);
             if (stack.hasCustomHoverName()) {
                 maid.setCustomName(stack.getHoverName());
             }

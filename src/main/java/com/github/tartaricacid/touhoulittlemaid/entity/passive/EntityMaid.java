@@ -237,7 +237,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
             super.tick();
             maidBauble.fireEvent((b, s) -> {
                 b.onTick(this, s);
-                return true;
+                return false;
             });
         }
     }

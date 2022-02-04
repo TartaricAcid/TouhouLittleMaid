@@ -38,7 +38,8 @@ public class BlockMaidBeacon extends Block {
     private static final VoxelShape DOWN_AABB = Block.box(6.5, 0, 6.5, 9.5, 26, 9.5);
 
     public BlockMaidBeacon() {
-        super(AbstractBlock.Properties.of(Material.WOOD).strength(2, 2).noOcclusion());
+        super(AbstractBlock.Properties.of(Material.WOOD).strength(2, 2).noOcclusion()
+                .lightLevel(s -> s.getValue(POSITION) == Position.DOWN ? 0 : 15));
         this.registerDefaultState(this.stateDefinition.any().setValue(POSITION, Position.DOWN));
     }
 
