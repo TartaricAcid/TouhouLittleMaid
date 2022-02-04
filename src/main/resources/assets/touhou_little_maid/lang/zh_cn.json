@@ -68,7 +68,7 @@
   "tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist": "白名单",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.has": "绑定坐标：%d, %d, %d",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "未绑定箱子",
-  "tooltips.touhou_little_maid.maid_beacon.desc": "能量存储：%s",
+  "tooltips.touhou_little_maid.maid_beacon.desc": "存储 P 点：%s",
   "gui.touhou_little_maid.schedule.day": "白班",
   "gui.touhou_little_maid.schedule.night": "夜班",
   "gui.touhou_little_maid.schedule.all": "全天",
