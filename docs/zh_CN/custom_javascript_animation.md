@@ -8,30 +8,23 @@
 
 ## 基本格式
 
-Animation script can be put in any location of the folder, you only need to call the file path on the corresponding models. I recommend putting it in the `animation` folder. 我建议将它放入 `animation` 文件夹中。
+动画脚本放置在文件夹任意位置均可，只需要在对应模型字段处声明动画文件位置即可。 我建议将它放入 `animation` 文件夹中。
 
 下面是通用模板：
 
 ```js
-// This call is only needed when you need to use GlWrapper
+// 当你需要使用 GlWrapper 时才需要声明这一段代码
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
-    /**
-     * @param entity Entity that requires the corresponding animation
-     * @param limbSwing The walking speed of the entity (think of it as the speedometer of a car)
-     * @param limbSwingAmount The total walking distance of the entity (think of it as the odometer of a car)
-     * @param ageInTicks The tick time of an entity, the value that constantly increase from 0
-     * @param netHeadYaw The yaw for the head of the entity
-     * @param headPitch The pitch for the head of the entity
-     * @param scale Param for scaling the entity, default is 0.0625, no use found.
-     * @param modelMap The group of the model saved for a hashmap
-     */
-    animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
-                          headPitch, scale, modelMap) {
-        // Script for the model
-    }
-})
+     /**
+     * @param entity 需要应用动画的实体对象
+     * @param limbSwing 实体在行走过程中的速度（可以理解为汽车的速度表）
+     * @param limbSwingAmount 实体行走的总里程数（可以理解为汽车的里程表）
+     * @param ageInTicks 实体的 tick 时间，一个从 0 开始一直增加的数值
+     * @param netHeadYaw 实体头部的偏航
+     * @param headPitch 实体头部的俯仰
+     * @param scale 实体缩放参数，默认为 0.0625，未发现任何使用的地方
      * @param modelMap 为一个 map，存储了该模型所有的骨骼
      */
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
