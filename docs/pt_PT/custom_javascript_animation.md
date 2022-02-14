@@ -14,7 +14,9 @@ Below is the general template：
 
 ```js
 // This call is only needed when you need to use GlWrapper
-var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script. GlWrapper"); Java.asJSONCompatible({
+var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
+
+Java.asJSONCompatible({
     /**
      * @param entity Entity that requires the corresponding animation
      * @param limbSwing The walking speed of the entity (think of it as the speedometer of a car)
@@ -36,7 +38,9 @@ Here we have a simple example, current model has a group named `rotation` we wan
 
 ```javascript
 // This call is only needed when you need to use GlWrapper
-var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script. GlWrapper"); Java.asJSONCompatible({
+var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
+
+Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
                           headPitch, scale, modelMap) {
         // First obtain a group named 'rotation' from modelMap
@@ -62,7 +66,9 @@ Trigonometry function fits our need, as you can use sine or cosine for this, we 
 
 ```javascript
 // This call is only needed when you need to use GlWrapper
-var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script. GlWrapper"); Java.asJSONCompatible({
+var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
+
+Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
         headPitch, scale, modelMap) {
         // First obtain a group named 'wing' from modelMap
