@@ -38,44 +38,44 @@
 
 ```json
 {
-    // Model pack name (Required)
+    // 模型包包名（必须）
     "pack_name": "Touhou Project Model Packs",
-    // Author list
+    // 作者列表
     "author": [
         "TartaricAcid",
         "SuccinicAcid"
     ],
-    // Description for model packs
+    // 模型包的描述文本
     "description": [
         "Default Model Packs"
     ],
-    // Model pack version
+    // 模型包的版本
     "version": "1.0.0",
-    // Date creation for model pack
+    // 模型包的制作时间
     "date": "2019-07-14",
-    // Model pack icon, without this, the model pack will have no icon
+    // 模型包的图标，缺失此字段，材质包将没有图标
     "icon": "touhou_little_maid:textures/maid_icon.png",
-    // Model list (Required)
+    // 模型列表（必须）
     "model_list": [
         {
-            // Model id, no duplication allowed (Required)
+            // 模型 id，不允许重复（必须）
             "model_id": "touhou_little_maid:hakurei_reimu",
-            // The path for the model, use the full resource path
+            // 模型所在的位置，使用完整的资源地址
             "model": "touhou_little_maid:models/entity/hakurei_reimu.json",
-            // The path for the texture, use the full resource path
+            // 模型所使用的材质位置，使用完整的资源地址
             "texture": "touhou_little_maid:textures/entity/hakurei_reimu.png",
-            // The model size when rendering the item form, default is 1.0
+            // 渲染成物品形态时的模型大小，默认为 1.0
             "render_item_scale": 0.9,
-            // The size when render the entity, range is between 0.2~2.0, default is 1.0
+            // 渲染成实体时的大小，范围为 0.2~2.0，默认为 1.0
             "render_entity_scale": 0.75,
-            // Model name
+            // 模型名称
             "name": "Reimu Hakurei",
-            // The description for the model
+            // 该模型的描述文本
             "description": [
                 "Shrine Maiden of Hakurei"
             ],
-            // Animation script reference, without this part, model will have some default animations
-            // tlm-utils plugins can auto generate the correct animation reference based on the group name
+            // 动画脚本，如果没有此字段，将会自动调用默认动画
+            // tlm-utils 插件会自动依据组名生成对应的动画脚本引用
             "animation": [
                 "touhou_little_maid:animation/maid.default.js"
             ]
@@ -90,12 +90,12 @@
 
 ```json
 {
-    // Model pack name (Required)
+    // 模型包包名（必须）
     "pack_name": "Touhou Project Model Packs",
-    // Model list (Required)
+    // 模型列表（必须）
     "model_list": [
         {
-            // Model id, no duplication allowed (Required)
+            // 模型 id，不允许重复（必须）
             "model_id": "touhou_little_maid:hakurei_reimu"
         }
     ]
@@ -123,7 +123,7 @@
 - 我们提供了许多预设动画，你只需要创建一个特殊名称的组，那么插件就会在导出模型是依据组名生成对应的动画脚本引用。 想要了解所有可用动画，请查看 [预设动画](/preset_animation.md) 篇章。
 - 模型也支持 JavaScript 自定义动画，你可以在自定义动画章节中找到对应介绍。
 
-## 多语言
+## 国际化
 
 作为一个面向国际化的游戏，模型包的部分内容自然也兼容国际化。
 
@@ -174,12 +174,12 @@ pack.vanilla_touhou_model.desc=默认的模型包
     "pack_name": "Touhou Project Pack",
     "model_list": [{
         "model_id": "touhou_little_maid:hakurei_reimu",
-        "show_backpack": false,      // Prevent displaying of backpack
-        "show_custom_head": false,   // Prevent displaying of maid's custom heads
-        "show_hata": false,          // Prevent displaying of hata sasimono, deprecated in 1.16
-        "can_hold_trolley": false,   // prevent maid to hold the trolley, deprecated in 1.16
-        "can_hold_vehicle": false,   // Prevent maid to hold the vehicle, deprecated in 1.16
-        "can_riding_broom": false    // Prevent maid to riding the broom, deprecated in 1.16
+        "show_backpack": false,      // 阻止背包的显示
+        "show_custom_head": false,   // 阻止女仆显示自定义头颅
+        "show_hata": false,          // 阻止旗指物的显示，在 1.16 中弃用
+        "can_hold_trolley": false,   // 阻止女仆持有拉杆箱，在 1.16 中弃用
+        "can_hold_vehicle": false,   // 阻止女仆持有载具，在 1.16 中弃用
+        "can_riding_broom": false    // 阻止女仆骑乘扫帚，在 1.16 中弃用
     }]
 }
 ```

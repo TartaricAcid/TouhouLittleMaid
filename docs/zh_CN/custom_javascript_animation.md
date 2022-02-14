@@ -1,16 +1,16 @@
 # 自定义 JavaScript 动画
-通过 JavaScript 文件，您可以为女仆或坐垫添加自定义动画。
+通过 JavaScript 文件，你可以为女仆或坐垫添加自定义动画。
 
-- This wiki is suitable for Touhou Little Maid mod in `1.12.2` and `1.16.5`:
-- Basic understanding for JavaScript language；
-- Some high school mathematical knowledge, especially towards Trigonometric function and polar coordinates;
-- For editing script software, VSCode is recommended, all related script files requires to be saved using UTF-8 without BOM.
+- 本 wiki 适用于 Touhou Little Maid 模组 `1.12.2` 和 `1.16.5` 版本；
+- 需要对 JavaScript 基本语法有简单的了解；
+- 需要高中及以上数学知识，尤其是对三角函数和极坐标的理解。
+- 文本编辑软件推荐 VSCode，相关文本文件均需要用 UTF-8 无 BOM 编码进行存储。
 
-## Basic Format
+## 基本格式
 
-Animation script can be put in any location of the folder, you only need to call the file path on the corresponding models. I recommend putting it in the `animation` folder.
+Animation script can be put in any location of the folder, you only need to call the file path on the corresponding models. I recommend putting it in the `animation` folder. 我建议将它放入 `animation` 文件夹中。
 
-Below is the general template：
+下面是通用模板：
 
 ```js
 // This call is only needed when you need to use GlWrapper
@@ -32,142 +32,149 @@ Java.asJSONCompatible({
         // Script for the model
     }
 })
+     * @param modelMap 为一个 map，存储了该模型所有的骨骼
+     */
+    animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
+                          headPitch, scale, modelMap) {
+        // 相关动画的书写
+    }
+})
 ```
 
-Here we have a simple example, current model has a group named `rotation` we want this group to make a rotational movement around the X axis, the movement speed is around 1 degree every tick (18 sec/r), we can write it as below.
+这里我们举一个简单的例子，当前模型有一个带有名为 `rotation` 的骨骼，我们想要把让这个骨骼绕着 X 轴持续的做旋转运动，运动的速度大约为每 tick 1 度（也就是 18 秒转一圈），我们可以这样写动画。
 
 ```javascript
-// This call is only needed when you need to use GlWrapper
+// 当你需要使用 GlWrapper 时才需要声明这一段代码
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
                           headPitch, scale, modelMap) {
-        // First obtain a group named 'rotation' from modelMap
+        // 先从 modelMap 中尝试获取名为 rotation 的骨骼
         rotation = modelMap.get("rotation");
-        // Just in case, we make a simple check to make sure this group existed
+        // 以防万一，我们做个简单的判定，确保此骨骼一定存在
         if (rotation != undefined) {
-            // Through the function setRotateAngleX in the group, we set its X axis angle
-            // ageInTicks is tick time for the entity, a value that constantly increases starting from 0
-            // Through remainder operator (which is % sign), set the value between 0~360
-            // Since this method only accepts radian, we need to multiply it by 0.017453292 to convert into radian
-            // And with that we achieved the animation of rotating 1 degree every tick
+            // 通过骨骼的 setRotateAngleX 函数设置其 X 轴角度
+            // ageInTicks 为实体的 tick 时间，一个从 0 开始一直增加的数值
+            // 通过取余运算（也就是 % 符号）将这个数限定在 0~360 之间
+            // 因为该方法只接收弧度值，所以需要乘以 0.017453292 转换成对应弧度
+            // 这样我们就实现了每 tick 旋转 1 度的动画
             rotation.setRotateAngleX(ageInTicks % 360 * 0.017453292);
         }
     }
 })
 ```
 
-Now we add another more complex motion, we have a group named `wing`, and we want a constant back and forth oscillating motion.
+现在我们再进行一个更加复杂的运动，我们有一个名为 `wing` 的骨骼，我们想要其能够持续的来回摆动。
 
-Oscillate around Y axis, at a degree between `-20°~40°`, and one cycle is completed every 5 second.
+摆动围绕 Y 轴，摆动角度在 `-20°~40°` 之间，每 5 秒做一次完整的往复运动。
 
-Trigonometry function fits our need, as you can use sine or cosine for this, we will be using sine function.
+这一块恰好需要用到高中所学的三角函数知识，这一块选取正弦或者余弦均可，我们使用正弦函数。
 
 ```javascript
-// This call is only needed when you need to use GlWrapper
+// 当你需要使用 GlWrapper 时才需要声明这一段代码
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
         headPitch, scale, modelMap) {
-        // First obtain a group named 'wing' from modelMap
+        // 先从 modelMap 中尝试获取名为 wing 的骨骼
         wing = modelMap.get("wing");
-        // Just in case, we make a simple check to make sure this group existed
+        // 以防万一，我们做个简单的判定，确保此骨骼一定存在
         if (wing != undefined) {
-            // One complete cycle every 5 second, which is 100 tick
-            // Using multiplication and remainder operator we can achieve this requirement
+            // 每 5 秒完整的往复一次，也就是 100 tick
+            // 通过乘法和求余来实现这个功能
             var time = (ageInTicks * 3.6) % 360;
-            // This is using the Math function in JavaScript
-            // Construct sine function, and obtain a periodic function between -20°~40°
+            // 这一块调用了 JavaScript 的 Math 函数
+            // 构建正弦函数，获得数值为 -20~40 的周期函数
             var func = 30 * Math.sin(time * 0.017453292) + 10;
-            // Since this method only accepts radian, we need to multiply it by 0.017453292 to convert into radian
+            // 最后进行参数的应用
             wing.setRotateAngleY(func * 0.017453292);
         }
     }
 })
 ```
 
-All other complex motion can be achieved through the related functions.
+其他复杂的运动均可通过相关函数来实现。
 
-## Hot Reload
+## 游戏内热重载功能
 
-Since you can't determine if the animation is correct just by looking at the functions, we added a function to hot reload the animation ingame.
+因为干巴巴的函数式并不能确定该动画是否表现正确，我们添加了游戏内的动画热重载功能。
 
-After you load the model resource pack you made, just use the following command can reload all animation's data.
+加载模型资源包后，只需使用以下命令即可重新加载所有动画数据。
 - 1.12.2: `/maid_res reload`
 - 1.16.5: `/tlm pack reload`
 
-## Function Documentation
+## 函数文档
 
-Strikethrough style means that the method is deprecated in 1.16, you can visit the [link here](https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.16.5/src/main/java/com/github/tartaricacid/touhoulittlemaid/api/animation) to view the source code API.
+删除线样式的表示此函数已在 1.16 中被废弃，你可以访问[此处连接](https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.16.5/src/main/java/com/github/tartaricacid/touhoulittlemaid/api/animation)查看源码 API。
 
-### Entity Parameter
+### 实体参数
 
-Depending on the target of the added animation, the function that can be used by `entity` differs as well.
+依据附加动画的对象不同，`entity` 参数可用的函数也不相同。
 
-#### Maid
+#### 女仆
 
-|        Function name         | Return value |                                       Note                                       |
-|:----------------------------:|:------------:|:--------------------------------------------------------------------------------:|
-|        `hasHelmet()`         |  `boolean`   |                     After maid wears helmet, returns `true`                      |
-|      `hasChestPlate()`       |  `boolean`   |                   After maid wears chestplate, returns `true`                    |
-|       `hasLeggings()`        |  `boolean`   |                    After maid wears leggings, returns `true`                     |
-|         `hasBoots()`         |  `boolean`   |                      After maid wears boots, returns `true`                      |
-|        `getHelmet()`         |   `String`   |           After maid wears helmet, returns helmet item's registry name           |
-|      `getChestPlate()`       |   `String`   |       After maid wears chestplate, returns chestplate item's registry name       |
-|       `getLeggings()`        |   `String`   |         After maid wears leggings, returns leggings item's registry name         |
-|         `getBoots()`         |   `String`   |            After maid wears boots, returns boots item's registry name            |
-|        `isBegging()`         |  `boolean`   |                         Whether maid is in begging mode                          |
-|      `isSwingingArms()`      |  `boolean`   |             If maid is using arms, this function will return `true`              |
-|     `getSwingProgress()`     |   `float`    |                             Get maid's swinging time                             |
-|         `isRiding()`         |  `boolean`   |                          Whether maid is in riding mode                          |
-|        `isSitting()`         |  `boolean`   |                         Whether maid is in standby mode                          |
-|    ~~`isHoldTrolley()`~~     |  `boolean`   |                Whether maid is carrying trolley or other entities                |
-| ~~`isRidingMarisaBroom()`~~  |  `boolean`   |                       Whether maid is riding Marisa Broom                        |
-|    ~~`isRidingPlayer()`~~    |  `boolean`   |                          Whether maid is riding player                           |
-|    ~~`isHoldVehicle()`~~     |  `boolean`   |                          Whether maid is riding vehicle                          |
-| ~~`isPortableAudioPlay()`~~  |  `boolean`   |                 Whether the maid hold portable audio and play it                 |
-|       `hasBackpack()`        |  `boolean`   |                          Whether maid wearing backpack                           |
-|     `getBackpackLevel()`     |    `int`     |                            Get maid's backpack level                             |
-|     ~~`hasSasimono()`~~      |  `boolean`   |                          Whether maid wearing sasimono                           |
-|     `isSwingLeftHand()`      |  `boolean`   | Whether the maid is swinging left or right arm, return `false` if it's the right |
-| ~~`getLeftHandRotation()`~~  |  `float[3]`  |                          Get the left arm rotation data                          |
-| ~~`getRightHandRotation()`~~ |  `float[3]`  |                         Get the right arm rotation data                          |
-|        ~~`getDim()`~~        |    `int`     |                      Get the dimension where the maid is in                      |
-|         `getWorld()`         |   `World`    |                              Get maid's world data                               |
-|         `getTask()`          |   `String`   |                Get maid's task, such as `attack`, `ranged_attack`                |
-|     `hasItemMainhand()`      |  `boolean`   |                          Whether maid has mainhand item                          |
-|      `hasItemOffhand()`      |  `boolean`   |                          Whether maid has offhand item                           |
-|     `getItemMainhand()`      |   `String`   |                      Get maid mainhand item's registry name                      |
-|      `getItemOffhand()`      |   `String`   |                      Get maid offhand item's registry name                       |
-|         `inWater()`          |  `boolean`   |                              Whether maid in water                               |
-|          `inRain()`          |  `boolean`   |                               Whether maid in rain                               |
-|        `getAtBiome()`        |   `String`   |                          Get maid's biome register name                          |
-|    ~~`getAtBiomeTemp()`~~    |   `String`   |                        Get maid's biome temperature enum                         |
-|          `onHurt()`          |  `boolean`   |                           Whether the maid is on hurt                            |
-|        `getHealth()`         |   `float`    |                                Get maid's health                                 |
-|       `getMaxHealth()`       |   `float`    |                              Get maid's max health                               |
-|         `isSleep()`          |  `boolean`   |                              Whether maid is sleep                               |
-|     `getFavorability()`      |    `int`     |                           Get the maid's favorability                            |
-|        `isOnGround()`        |  `boolean`   |                          Whether the maid is on ground                           |
-|      `getArmorValue()`       |   `double`   |                              Get maid's armor value                              |
-|         `getSeed()`          |    `long`    |    Get a fixed value, each entity is different, similar to the entity's UUID     |
+|             函数名              |    返回值     |                                        备注                                        |
+|:----------------------------:|:----------:|:--------------------------------------------------------------------------------:|
+|        `hasHelmet()`         | `boolean`  |                                女仆穿戴头盔后，返回 `true`                                 |
+|      `hasChestPlate()`       | `boolean`  |                                女仆穿戴胸甲后，返回 `true`                                 |
+|       `hasLeggings()`        | `boolean`  |                                女仆穿戴护腿后，返回 `true`                                 |
+|         `hasBoots()`         | `boolean`  |                                女仆穿戴靴子后，返回 `true`                                 |
+|        `getHelmet()`         |  `String`  |           After maid wears helmet, returns helmet item's registry name           |
+|      `getChestPlate()`       |  `String`  |       After maid wears chestplate, returns chestplate item's registry name       |
+|       `getLeggings()`        |  `String`  |         After maid wears leggings, returns leggings item's registry name         |
+|         `getBoots()`         |  `String`  |            After maid wears boots, returns boots item's registry name            |
+|        `isBegging()`         | `boolean`  |                         Whether maid is in begging mode                          |
+|      `isSwingingArms()`      | `boolean`  |             If maid is using arms, this function will return `true`              |
+|     `getSwingProgress()`     |  `float`   |                             Get maid's swinging time                             |
+|         `isRiding()`         | `boolean`  |                                    女仆是否处于骑乘模式                                    |
+|        `isSitting()`         | `boolean`  |                                    女仆是否处于待命模式                                    |
+|    ~~`isHoldTrolley()`~~     | `boolean`  |                Whether maid is carrying trolley or other entities                |
+| ~~`isRidingMarisaBroom()`~~  | `boolean`  |                       Whether maid is riding Marisa Broom                        |
+|    ~~`isRidingPlayer()`~~    | `boolean`  |                          Whether maid is riding player                           |
+|    ~~`isHoldVehicle()`~~     | `boolean`  |                          Whether maid is riding vehicle                          |
+| ~~`isPortableAudioPlay()`~~  | `boolean`  |                 Whether the maid hold portable audio and play it                 |
+|       `hasBackpack()`        | `boolean`  |                          Whether maid wearing backpack                           |
+|     `getBackpackLevel()`     |   `int`    |                            Get maid's backpack level                             |
+|     ~~`hasSasimono()`~~      | `boolean`  |                          Whether maid wearing sasimono                           |
+|     `isSwingLeftHand()`      | `boolean`  | Whether the maid is swinging left or right arm, return `false` if it's the right |
+| ~~`getLeftHandRotation()`~~  | `float[3]` |                          Get the left arm rotation data                          |
+| ~~`getRightHandRotation()`~~ | `float[3]` |                         Get the right arm rotation data                          |
+|        ~~`getDim()`~~        |   `int`    |                      Get the dimension where the maid is in                      |
+|         `getWorld()`         |  `World`   |                              Get maid's world data                               |
+|         `getTask()`          |  `String`  |                Get maid's task, such as `attack`, `ranged_attack`                |
+|     `hasItemMainhand()`      | `boolean`  |                          Whether maid has mainhand item                          |
+|      `hasItemOffhand()`      | `boolean`  |                          Whether maid has offhand item                           |
+|     `getItemMainhand()`      |  `String`  |                      Get maid mainhand item's registry name                      |
+|      `getItemOffhand()`      |  `String`  |                      Get maid offhand item's registry name                       |
+|         `inWater()`          | `boolean`  |                              Whether maid in water                               |
+|          `inRain()`          | `boolean`  |                               Whether maid in rain                               |
+|        `getAtBiome()`        |  `String`  |                          Get maid's biome register name                          |
+|    ~~`getAtBiomeTemp()`~~    |  `String`  |                        Get maid's biome temperature enum                         |
+|          `onHurt()`          | `boolean`  |                           Whether the maid is on hurt                            |
+|        `getHealth()`         |  `float`   |                                Get maid's health                                 |
+|       `getMaxHealth()`       |  `float`   |                                    获取女仆的最大生命值                                    |
+|         `isSleep()`          | `boolean`  |                              Whether maid is sleep                               |
+|     `getFavorability()`      |   `int`    |                           Get the maid's favorability                            |
+|        `isOnGround()`        | `boolean`  |                          Whether the maid is on ground                           |
+|      `getArmorValue()`       |  `double`  |                              Get maid's armor value                              |
+|         `getSeed()`          |   `long`   |    Get a fixed value, each entity is different, similar to the entity's UUID     |
 
 #### Chair
 
-|     Function name     | Return value |                                   Note                                    |
-|:---------------------:|:------------:|:-------------------------------------------------------------------------:|
-|  `isRidingPlayer()`   |  `boolean`   |                  Whether the chair is sit by the player                   |
-|   `hasPassenger()`    |  `boolean`   |                      Whether the chair has passenger                      |
-|  `getPassengerYaw()`  |   `float`    |                         Get chair passenger's yaw                         |
-|      `getYaw()`       |   `float`    |                              Get chair's yaw                              |
-| `getPassengerPitch()` |   `float`    |                        Get chair passenger's pitch                        |
-|    ~~`getDim()`~~     |    `int`     |                            Get chair's dim id                             |
-|     `getWorld()`      |   `World`    |                          Get chair's world data                           |
-|      `getSeed()`      |    `long`    | Get a fixed value, each entity is different, similar to the entity's UUID |
+|     Function name     | Return value |                  Note                  |
+|:---------------------:|:------------:|:--------------------------------------:|
+|  `isRidingPlayer()`   |  `boolean`   | Whether the chair is sit by the player |
+|   `hasPassenger()`    |  `boolean`   |    Whether the chair has passenger     |
+|  `getPassengerYaw()`  |   `float`    |       Get chair passenger's yaw        |
+|      `getYaw()`       |   `float`    |            Get chair's yaw             |
+| `getPassengerPitch()` |   `float`    |      Get chair passenger's pitch       |
+|    ~~`getDim()`~~     |    `int`     |           Get chair's dim id           |
+|     `getWorld()`      |   `World`    |         Get chair's world data         |
+|      `getSeed()`      |    `long`    |     获取一个固定值，每个实体都是不同的，类似于该实体的 UUID     |
 
-#### World
+#### 世界
 |  Function name   | Return value |               Note               |
 |:----------------:|:------------:|:--------------------------------:|
 | `getWorldTime()` |    `long`    | Get world's time (tick, 0-24000) |
@@ -230,7 +237,7 @@ A value that has unknown meaning.
 
 A Map that saves group, using string as keys.
 
-You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined`
+You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined` If there is no group that matches the name, return `undefined`
 
 Let's say we want to get the target group `head`:
 
