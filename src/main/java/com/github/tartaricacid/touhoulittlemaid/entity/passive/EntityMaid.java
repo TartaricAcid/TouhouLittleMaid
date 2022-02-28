@@ -1089,6 +1089,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
 
     public void setSchedule(MaidSchedule schedule) {
         this.entityData.set(SCHEDULE_MODE, schedule);
+        if (this.level instanceof ServerWorld) {
+            this.refreshBrain((ServerWorld) this.level);
+        }
     }
 
     public ItemStackHandler getMaidInv() {

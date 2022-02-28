@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -56,7 +55,6 @@ public class MaidConfigMessage {
                     }
                     if (maid.getSchedule() != message.schedule) {
                         maid.setSchedule(message.schedule);
-                        maid.refreshBrain((ServerWorld) maid.level);
                     }
                 }
             });
