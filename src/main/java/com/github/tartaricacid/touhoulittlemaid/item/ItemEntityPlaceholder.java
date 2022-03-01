@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityEntityPlaceholderRenderer;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
@@ -34,7 +35,7 @@ public class ItemEntityPlaceholder extends Item {
     private static final String RECIPES_ID_TAG = "RecipeId";
 
     public ItemEntityPlaceholder() {
-        super(new Item.Properties().stacksTo(1).tab(MAIN_TAB));
+        super(new Item.Properties().stacksTo(1).tab(MAIN_TAB).setISTER(() -> TileEntityEntityPlaceholderRenderer::new));
     }
 
     @SuppressWarnings("all")
