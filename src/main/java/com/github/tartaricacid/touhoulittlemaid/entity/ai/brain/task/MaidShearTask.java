@@ -36,6 +36,7 @@ public class MaidShearTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         ItemStack mainhandItem = maid.getMainHandItem();
+        shearableEntity = null;
 
         this.getEntities(maid).stream()
                 .filter(e -> e.closerThan(maid, maxDistToWalk))

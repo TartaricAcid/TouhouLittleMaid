@@ -46,6 +46,8 @@ public class MaidMilkTask extends MaidCheckRateTask {
 
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
+        milkTarget = null;
+
         this.getEntities(maid).stream()
                 .filter(e -> e.closerThan(maid, maxDistToWalk))
                 .filter(e -> maid.isWithinRestriction(e.blockPosition()))

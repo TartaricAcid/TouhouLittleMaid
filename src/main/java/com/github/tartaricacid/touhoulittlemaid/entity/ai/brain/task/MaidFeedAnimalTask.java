@@ -34,6 +34,8 @@ public class MaidFeedAnimalTask extends MaidCheckRateTask {
 
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
+        feedEntity = null;
+
         long animalCount = this.getEntities(maid).stream()
                 .filter(e -> e.closerThan(maid, maxDistToWalk))
                 .filter(e -> maid.isWithinRestriction(e.blockPosition()))
