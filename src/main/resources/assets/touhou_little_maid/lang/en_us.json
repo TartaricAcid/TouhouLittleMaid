@@ -141,6 +141,8 @@
   "gui.touhou_little_maid.resources_download.tab.2": "Chair Resources Pack",
   "gui.touhou_little_maid.resources_download.tab.3": "Sound Resources Pack",
   "gui.touhou_little_maid.resources_download.sound.downloaded.tip": "Sound pack need to be loaded like vanilla resource packs before they can be used!",
+  "gui.touhou_little_maid.model_gui.easter_egg.encrypt": "This is an encrypted named easter egg model",
+  "gui.touhou_little_maid.model_gui.easter_egg.normal": "This is a normal named easter egg model",
   "message.touhou_little_maid.change_model.disabled": "Model switch is disabled.",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "Your lack of knowledge does not know how to use this item",
   "message.touhou_little_maid.altar.not_enough_power": "You don't have enough power.",

@@ -17,6 +17,17 @@ public class FaceUVsItem {
     @SerializedName("west")
     private FaceItem west;
 
+    public static FaceUVsItem singleSouthFace() {
+        FaceUVsItem faces = new FaceUVsItem();
+        faces.north = FaceItem.empty();
+        faces.east = FaceItem.empty();
+        faces.west = FaceItem.empty();
+        faces.south = FaceItem.single16X();
+        faces.up = FaceItem.empty();
+        faces.down = FaceItem.empty();
+        return faces;
+    }
+
     public FaceItem getFace(Direction direction) {
         switch (direction) {
             case EAST:

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
+import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.FaceUVsItem;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -14,7 +15,7 @@ public class EntityPlaceholderModel extends EntityModel<Entity> {
         texHeight = 16;
         bone = new ModelRenderer(this);
         bone.setPos(8.0F, 24.0F, -10.0F);
-        bone.texOffs(0, 0).addBox(-16.0F, -16.0F, 9.5F, 16.0F, 16.0F, 0.0F, 0.02F, false);
+        bone.texOffs(0, 0).cubes.add(new ModelFaceFloatBox(-16.0F, -16.0F, 9.5F, 16.0F, 16.0F, 0, 0, 16, 16, FaceUVsItem.singleSouthFace()));
     }
 
     @Override

@@ -25,7 +25,7 @@ public class TileEntityEntityPlaceholderRenderer extends ItemStackTileEntityRend
     @Override
     public void renderByItem(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int combinedLight, int combinedOverlay) {
         matrixStack.pushPose();
-        matrixStack.translate(0.5, 1.5, 0);
+        matrixStack.translate(0.5, 1.5, 0.5);
         matrixStack.mulPose(Vector3f.ZN.rotationDegrees(180));
         IVertexBuilder buffer = bufferIn.getBuffer(RenderType.entityTranslucent(getTexture(stack)));
         BASE_MODEL.renderToBuffer(matrixStack, buffer, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);

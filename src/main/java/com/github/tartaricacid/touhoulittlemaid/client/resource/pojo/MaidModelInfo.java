@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class MaidModelInfo implements IModelInfo {
+    public static final String ENCRYPT_EGG_NAME = "{gui.touhou_little_maid.model_gui.easter_egg.encrypt}";
+    public static final String NORMAL_EGG_NAME = "{gui.touhou_little_maid.model_gui.easter_egg.normal}";
     private static final float RENDER_ENTITY_SCALE_MIN = 0.2f;
     private static final float RENDER_ENTITY_SCALE_MAX = 2.0f;
 
@@ -145,6 +147,14 @@ public class MaidModelInfo implements IModelInfo {
         }
         if (texture == null) {
             texture = new ResourceLocation(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
+        }
+        // 彩蛋
+        if (easterEgg != null) {
+            if (easterEgg.isEncrypt()) {
+                name = ENCRYPT_EGG_NAME;
+            } else {
+                name = NORMAL_EGG_NAME;
+            }
         }
         // 如果名称为空，自动生成本地化名称
         if (name == null) {

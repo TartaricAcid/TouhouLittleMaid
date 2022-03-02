@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.concurrent.ExecutionException;
 
+import static com.github.tartaricacid.touhoulittlemaid.client.event.SpecialMaidRenderEvent.EASTER_EGG_MODEL;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
@@ -52,7 +53,11 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         }
 
         clearMaidDataResidue(maid, false);
-        maid.setModelId(modelItem.getModelId().toString());
+        if (modelItem.getEasterEgg() != null) {
+            maid.setModelId(EASTER_EGG_MODEL);
+        } else {
+            maid.setModelId(modelItem.getModelId().toString());
+        }
         InventoryScreen.renderEntityInInventory(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
     }
 
@@ -65,14 +70,16 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
 
     @Override
     void openDetailsGui(EntityMaid maid, MaidModelInfo modelInfo) {
-        if (minecraft != null) {
+        if (minecraft != null && modelInfo.getEasterEgg() == null) {
             minecraft.setScreen(new MaidModelDetailsGui(maid, modelInfo));
         }
     }
 
     @Override
     void notifyModelChange(EntityMaid maid, MaidModelInfo info) {
-        NetworkHandler.CHANNEL.sendToServer(new MaidModelMessage(maid.getId(), info.getModelId()));
+        if (info.getEasterEgg() == null) {
+            NetworkHandler.CHANNEL.sendToServer(new MaidModelMessage(maid.getId(), info.getModelId()));
+        }
     }
 
     @Override

@@ -22,6 +22,9 @@ import net.minecraft.util.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo.ENCRYPT_EGG_NAME;
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo.NORMAL_EGG_NAME;
+
 public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelInfo> extends Screen {
     public static final Button.IPressable NO_PRESS = (b) -> {
     };
@@ -412,8 +415,10 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 // 转换为 ITextComponent
                 List<ITextComponent> tooltips = ParseI18n.parse(str);
                 // 塞入提示语
-                tooltips.add(new TranslationTextComponent("gui.touhou_little_maid.skin.tooltips.show_details")
-                        .withStyle(TextFormatting.DARK_GRAY, TextFormatting.ITALIC));
+                if (!modelItem.getName().equals(ENCRYPT_EGG_NAME) && !modelItem.getName().equals(NORMAL_EGG_NAME)) {
+                    tooltips.add(new TranslationTextComponent("gui.touhou_little_maid.skin.tooltips.show_details")
+                            .withStyle(TextFormatting.DARK_GRAY, TextFormatting.ITALIC));
+                }
                 // 绘制解析过的文本提示
                 renderComponentTooltip(matrixStack, tooltips, mouseX, mouseY);
             }

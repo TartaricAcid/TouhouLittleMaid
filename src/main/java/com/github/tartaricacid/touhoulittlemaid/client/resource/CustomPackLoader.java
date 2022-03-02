@@ -179,8 +179,6 @@ public class CustomPackLoader {
                     LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
                 }
             }
-            // 加入包之前，移除那些彩蛋模型
-            pack.getModelList().removeIf(maidModelInfo -> maidModelInfo.getEasterEgg() != null);
             MAID_MODELS.addPack(pack);
         } catch (IOException e) {
             e.printStackTrace();
@@ -229,8 +227,6 @@ public class CustomPackLoader {
                     LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
                 }
             }
-            // 加入包之前，移除那些彩蛋模型
-            pack.getModelList().removeIf(maidModelInfo -> maidModelInfo.getEasterEgg() != null);
             MAID_MODELS.addPack(pack);
         } catch (IOException e) {
             e.printStackTrace();
