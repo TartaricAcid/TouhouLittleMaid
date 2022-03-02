@@ -141,6 +141,8 @@
   "gui.touhou_little_maid.resources_download.tab.2": "坐垫资源包",
   "gui.touhou_little_maid.resources_download.tab.3": "声音资源包",
   "gui.touhou_little_maid.resources_download.sound.downloaded.tip": "声音包需要像原版资源包一样加载才能使用！",
+  "gui.touhou_little_maid.model_gui.easter_egg.encrypt": "这是一个加密的命名彩蛋",
+  "gui.touhou_little_maid.model_gui.easter_egg.normal": "这是一个普通的命名彩蛋",
   "message.touhou_little_maid.change_model.disabled": "模型切换功能已被禁止",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "你匮乏的知识并不了解这物品该如何使用",
   "message.touhou_little_maid.altar.not_enough_power": "你没有足够多的 P 点",
