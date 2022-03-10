@@ -1,9 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -16,19 +17,23 @@ public final class EntityHurtEvent {
     public static void onArrowImpact(ProjectileImpactEvent.Arrow event) {
         Entity attacker = event.getArrow().getOwner();
         RayTraceResult ray = event.getRayTraceResult();
-        if (attacker instanceof EntityMaid && ray instanceof EntityRayTraceResult) {
-            EntityMaid maid = (EntityMaid) attacker;
+        if (attacker instanceof TameableEntity && ray instanceof EntityRayTraceResult) {
+            TameableEntity thrower = (TameableEntity) attacker;
             Entity victim = ((EntityRayTraceResult) ray).getEntity();
             if (victim instanceof TameableEntity) {
                 TameableEntity tameable = (TameableEntity) victim;
-                if (tameable.getOwnerUUID() != null && tameable.getOwnerUUID().equals(maid.getOwnerUUID())) {
+                if (tameable.getOwnerUUID() != null && tameable.getOwnerUUID().equals(thrower.getOwnerUUID())) {
                     event.setCanceled(true);
                 }
             }
-            if (victim instanceof PlayerEntity) {
-                if (maid.isOwnedBy((PlayerEntity) victim)) {
+            if (victim instanceof LivingEntity) {
+                if (thrower.isOwnedBy((LivingEntity) victim)) {
                     event.setCanceled(true);
                 }
+            }
+            ResourceLocation registryName = victim.getType().getRegistryName();
+            if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
+                event.setCanceled(true);
             }
         }
     }

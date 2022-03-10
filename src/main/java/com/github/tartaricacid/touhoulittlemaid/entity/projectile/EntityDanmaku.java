@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -13,6 +14,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -83,6 +85,11 @@ public class EntityDanmaku extends ThrowableEntity {
                 return;
             }
             if (hit instanceof LivingEntity && tameable.isOwnedBy((LivingEntity) hit)) {
+                this.remove();
+                return;
+            }
+            ResourceLocation registryName = hit.getType().getRegistryName();
+            if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
                 this.remove();
                 return;
             }
