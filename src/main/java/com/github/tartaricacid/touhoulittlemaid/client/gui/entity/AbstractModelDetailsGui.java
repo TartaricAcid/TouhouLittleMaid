@@ -48,8 +48,8 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
     private float posX = 0;
     private float posY = 25;
     private float scale = 80;
-    private float yaw = -45;
-    private float pitch = -30;
+    private float yaw = 145;
+    private float pitch = -25;
     private boolean showFloor = true;
 
     public AbstractModelDetailsGui(T sourceEntity, @Nullable T guiEntity, E modelInfo) {
@@ -198,8 +198,9 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         MatrixStack matrixstack = new MatrixStack();
         RenderSystem.pushMatrix();
         RenderSystem.translatef(posX + middleWidth, posY + middleHeight, -550);
-        RenderSystem.rotatef(pitch, 1.0F, 0.0F, 0.0F);
-        RenderSystem.rotatef(yaw, 0.0F, 1.0F, 0.0F);
+        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+        RenderSystem.rotatef(-pitch, 1.0F, 0.0F, 0.0F);
+        RenderSystem.rotatef(-yaw, 0.0F, 1.0F, 0.0F);
         matrixstack.mulPose(Vector3f.ZP.rotationDegrees(-180.0F));
         matrixstack.scale(scale, scale, scale);
         EntityRendererManager manager = Minecraft.getInstance().getEntityRenderDispatcher();
