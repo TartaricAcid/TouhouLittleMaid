@@ -7,7 +7,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber()
+@Mod.EventBusSubscriber
 public final class EnterServerEvent {
     @SubscribeEvent
     public static void onAttachCapabilityEvent(PlayerEvent.PlayerLoggedInEvent event) {

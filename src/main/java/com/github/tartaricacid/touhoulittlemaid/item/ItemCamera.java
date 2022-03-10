@@ -42,7 +42,7 @@ public class ItemCamera extends Item {
             Optional<EntityMaid> result = MaidRayTraceHelper.rayTraceMaid(playerIn, searchDistance);
             if (result.isPresent()) {
                 EntityMaid maid = result.get();
-                if (!worldIn.isClientSide && maid.isAlive() && maid.isOwnedBy(playerIn)) {
+                if (!worldIn.isClientSide && maid.isAlive() && maid.isOwnedBy(playerIn) && !maid.isSleeping()) {
                     spawnMaidPhoto(worldIn, maid, playerIn);
                     maid.remove();
                     playerIn.getCooldowns().addCooldown(this, 20);

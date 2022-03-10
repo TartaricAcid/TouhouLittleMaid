@@ -51,10 +51,7 @@ public class EntityDanmaku extends ThrowableEntity {
         if (tameableA.getOwnerUUID() == null) {
             return false;
         }
-        if (tameableB.getOwnerUUID() == null) {
-            return false;
-        }
-        return tameableA.getOwnerUUID() == tameableB.getOwnerUUID();
+        return tameableA.getOwnerUUID().equals(tameableB.getOwnerUUID());
     }
 
     @Override
