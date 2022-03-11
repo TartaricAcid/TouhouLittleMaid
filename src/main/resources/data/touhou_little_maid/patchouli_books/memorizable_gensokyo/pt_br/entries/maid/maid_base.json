@@ -1,0 +1,20 @@
+{
+  "sortnum": 1,
+  "name": "Base da Empregada",
+  "icon": "touhou_little_maid:maid_spawn_egg",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Existem muitas funções básicas que as empregadas domésticas são capazes de realizar, como:$(li)Por padrão, a empregada pegará ativamente itens, flechas e orbes de experiência ao seu redor. A GUI principal tem um botão para alternar o modo de coleta;$(li)Por padrão, a empregada sempre seguirá o jogador."
+    },
+    {
+      "type": "text",
+      "text": "$(li)shift+clique com o botão direito com a mão vazia para fazer a empregada sentar. No modo sentado, a empregada não faz nada, inclusive evitar o perigo.$(li)Quando a empregada montar em outras entidades, Shift+clique com o botão direito com a mão vazia pode desmonta-la.$(li)O jogador pode usar uma maçã dourada ou poção em uma empregada clicando com o botão direito do mouse enquanto segura o item."
+    },
+    {
+      "type": "text",
+      "text": "$(li)A experiência coletada pela empregada pode ser convertida em um Frasco de Experiência se o jogador clicar com o botão direito do mouse na empregada enquanto segura uma garrafa.$(li)A empregada pode equipar o crânio e renderizar o modelo dele.$(li)Clique com o botão direito na empregada com uma Etiquete vazia e você pode nomeá-la diretamente."
+    }
+  ]
+}

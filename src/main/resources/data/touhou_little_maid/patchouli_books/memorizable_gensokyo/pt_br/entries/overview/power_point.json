@@ -1,0 +1,16 @@
+{
+  "sortnum": 2,
+  "name": "Ponto de Poder",
+  "icon": "touhou_little_maid:power_point",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "O ponto de poder é um recurso importante para este mod, que é obtido matando as $(l:overview/world_spawn#fairy)Fada da Empregada$().$(br2)Pode ser usado para criação do $(l:overview/multiblocks_altar)altar$()."
+    },
+    {
+      "type": "text",
+      "text": "Quando você segura o $(l:overview/gohei_and_danmaku)gohei$(), você pode ver o número do seu ponto de poder no canto superior esquerdo da tela do jogo. $(br2)O ponto de poder máximo é 5, e mais do que esse número o ponto de poder não aumenta mais."
+    }
+  ]
+}

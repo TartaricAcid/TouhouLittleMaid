@@ -1,0 +1,19 @@
+{
+  "sortnum": 9,
+  "name": "Nomeando Ovos",
+  "icon": "minecraft:name_tag",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Uma empregada especialmente nomeada pode exibir um modelo especial.$(br2)Por padrão, uma empregada chamada com $(#ff0000)=>id$() pode se tornar o modelo de skin do jogador correspondente a esse id.$(br2)O pacote de recursos de empregada também pode adicionar ovos de modelo personalizados, mesmo Ovos de modelo criptografados SHA1."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/nametag.png"
+      ],
+      "text": "Empregada com o nome $(#ff0000)=>Notch$()."
+    }
+  ]
+}

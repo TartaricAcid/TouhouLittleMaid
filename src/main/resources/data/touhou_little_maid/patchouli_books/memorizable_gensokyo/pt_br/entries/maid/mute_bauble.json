@@ -1,0 +1,13 @@
+{
+  "sortnum": 11,
+  "name": "Ornamento Silenciador",
+  "icon": "touhou_little_maid:mute_bauble",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:mute_bauble",
+      "text": "Depois de equipada com esse ornamento, a empregada vai ficar bem quietinha."
+    }
+  ]
+}

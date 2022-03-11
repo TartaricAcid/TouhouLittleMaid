@@ -1,0 +1,16 @@
+{
+  "sortnum": 0,
+  "name": "Gerar Empregada",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A forma de conseguir uma empregada é muito especial e precisa ser feita através de um altar multi-blocos.$(br2)Como a receita provavelmente mudará no futuro, verifique o rótulo do altar JEI.$(br2)Depois que a empregada for gerada com sucesso em um altar multi-blocos, você receberá uma caixa de bolo embrulhada com a empregada, basta clicar com o botão direito do mouse na caixa de bolo para abri-la."
+    },
+    {
+      "type": "text",
+      "text": "Você precisa clicar com o botão direito do mouse três vezes para acionar diferentes estágios de abertura e, finalmente, a caixa de bolo desaparecerá.$(br2)Você vai precisar de um bolo para domar a empregada. os itens de domesticação podem ser alterados no arquivo de configuração.$(br2)A empregada domesticada é quase idêntica a um animal de estimação baunilha, e você pode clicar com o botão direito do mouse para abrir a GUI dela."
+    }
+  ]
+}

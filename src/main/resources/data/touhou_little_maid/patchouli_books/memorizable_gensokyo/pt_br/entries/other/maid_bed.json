@@ -1,0 +1,20 @@
+{
+  "sortnum": 5,
+  "name": "Cama da Empregada",
+  "icon": "touhou_little_maid:maid_bed",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:maid_bed",
+      "text": "O jogador pode dormir e, naturalmente, a empregada também pode dormir. Durante o horário de sono, a empregada procurará a cama ao redor para dormir.$(br2)A empregada adormecida não será mais atacada por criaturas hostis, e a GUI da empregada não pode ser aberta neste momento."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/bed.png"
+      ],
+      "text": "Empregada dormindo na cama."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "sortnum": 3,
+  "name": "Pele da Empregada",
+  "icon": "minecraft:writable_book",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A pele das empregadas é totalmente personalizável, você pode facilmente mudar a pele das empregadas no jogo.$(br2)você também pode adicionar um pacote de recursos de terceiros para aumentar o estilo da pele da empregada.$(br2)Use o Programa $(l:https://blockbench.net/)Blockbench$(/l) para criar facilmente seu próprio pacote de recursos de pele da empregada e coloque o pacote na pasta $(#f00)tlm_custom_pack$() sob o diretório do jogo."
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/skin.png"
+      ],
+      "text": "Clique no botão na imagem para abrir a GUI da pele da empregada."
+    }
+  ]
+}

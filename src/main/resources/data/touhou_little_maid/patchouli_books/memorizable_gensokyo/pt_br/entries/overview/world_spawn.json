@@ -1,0 +1,19 @@
+{
+  "sortnum": 1,
+  "name": "Geração Mundial",
+  "icon": "touhou_little_maid:fairy_spawn_egg",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Este mod adiciona um mobs. $(br2)O saque da multidão é um importante ingrediente de criação.$(br2)A chance de gerar criaturas hostis neste mod pode ser modificada no arquivo de configuração. Quando definido como 0, esses monstros podem ser proibidos de aparecer."
+    },
+    {
+      "type": "entity",
+      "entity": "touhou_little_maid:fairy{OnGround:true}",
+      "offset": 0.125,
+      "text": "Desovar em qualquer bioma à noite, ele voará e atirará danmaku para atacar jogadores ou empregadas.",
+      "anchor": "fairy"
+    }
+  ]
+}

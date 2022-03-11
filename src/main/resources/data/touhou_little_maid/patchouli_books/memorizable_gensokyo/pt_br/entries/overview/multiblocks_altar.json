@@ -1,0 +1,29 @@
+{
+  "sortnum": 4,
+  "name": "Altar Multi-Bloco",
+  "icon": "minecraft:red_wool",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "O altar é uma estrutura multi-bloco necessária para a criação deste mod.$(br2)As receitas do altar podem ser obtidas através do JEI, e a criação também requer do jogadores $(l:overview/power_point)ponto de poder$()."
+    },
+    {
+      "type": "multiblock",
+      "name": "Altar",
+      "multiblock_id": "touhou_little_maid:altar",
+      "text": "Use o $(l:overview/gohei_and_danmaku)gohei$() para clicar com o botão direito na lã vermelha no centro esquerdo da quarta camada para construir o altar."
+    },
+    {
+      "type": "image",
+      "title": "Altar Multi-Bloco",
+      "images": [
+        "touhou_little_maid:textures/book/altar.png"
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Você pode colocar o item clicando com o botão direito do mouse no topo dos seis pilares de carvalho do altar. Você pode remover o item clicando com o botão direito do mouse com as mãos vazias.$(br2)Quando o item está completamente colocado e o ponto de poder do jogador é suficiente, o altar pode acionar a criação.$(br2)A criação é interrompida devido à falta de energia, e depois de obter energia suficiente, clique com o botão direito novamente para reativar a criação."
+    }
+  ]
+}

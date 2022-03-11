@@ -1,0 +1,17 @@
+{
+  "sortnum": 1,
+  "name": "Cadeira personalizada",
+  "icon": "touhou_little_maid:chair{ModelId:'touhou_little_maid:cat_cart'}",
+  "category": "other",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:chair",
+      "text": "A cadeira personalizada é um item puramente decorativo, colocado diretamente no chão por clique com o botão direito do mouse, e clique com o botão esquerdo para destruí-lo, clique com o botão direito para sentar, clique com o botão direito para abrir a GUI para alternar o modelo da cadeira."
+    },
+    {
+      "type": "text",
+      "text": "Algumas das cadeiras podem sentar-se diretamente quando a empregada está perto, clique com o botão direito do mouse para que a empregada possa sair da cadeira.$(br2)O modelo de cadeira também pode ser totalmente personalizado, ou você pode adicionar rapidamente um modelo personalizado através do pacote de modelos."
+    }
+  ]
+}

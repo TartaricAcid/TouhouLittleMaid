@@ -1,0 +1,12 @@
+{
+  "sortnum": 8,
+  "name": "Som da Empregada",
+  "icon": "minecraft:jukebox",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Você pode criar pacotes de recursos de som personalizados para substituir ou expandir os efeitos sonoros da empregada."
+    }
+  ]
+}

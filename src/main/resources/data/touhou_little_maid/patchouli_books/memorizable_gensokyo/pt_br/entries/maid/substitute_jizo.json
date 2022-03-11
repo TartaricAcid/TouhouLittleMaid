@@ -1,0 +1,13 @@
+{
+  "sortnum": 6,
+  "name": "Substituto Jizo",
+  "icon": "touhou_little_maid:substitute_jizo",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:substitute_jizo",
+      "text": "Substituto jizo é um item do modo criativo que pode configura para o modo invencível uma empregada ao clicar com o botão direito do mouse nela."
+    }
+  ]
+}

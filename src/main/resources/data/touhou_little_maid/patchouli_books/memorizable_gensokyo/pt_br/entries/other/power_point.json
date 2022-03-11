@@ -1,0 +1,13 @@
+{
+  "sortnum": 4,
+  "name": "Ponto de Poder",
+  "icon": "touhou_little_maid:power_point",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:power_point",
+      "text": "Clique com o botão direito do mouse é jogado, pode soltar a entidade de ponto de poder.$(br2)Você pode encontrar o ponto de poder em formulário de item no baú de saque da masmorra."
+    }
+  ]
+}

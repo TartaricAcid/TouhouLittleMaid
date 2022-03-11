@@ -1,0 +1,12 @@
+{
+  "sortnum": 5,
+  "name": "Confi. Empregada",
+  "icon": "minecraft:writable_book",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Este mod adiciona muita configuração para empregadas. Você pode definir alguns atributos das empregadas e limitar o número máximo de empregadas que podem ser domadas pelo jogador."
+    }
+  ]
+}

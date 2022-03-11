@@ -1,0 +1,19 @@
+{
+  "sortnum": 3,
+  "name": "Gohei E Danmaku",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "overview",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:hakurei_gohei",
+      "link_recipe": true,
+      "text": "O gohei é uma arma corpo a corpo normal.$(br2)A empregada segurando um gohei vai atirar em danmaku na tarefa de danmaku."
+    },
+    {
+      "type": "crafting",
+      "recipe": "touhou_little_maid:hakurei_gohei",
+      "text": "O gohei é uma ferramenta importante para construir um altar multi-bloco."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "sortnum": 10,
+  "name": "Ímã de Itens",
+  "icon": "touhou_little_maid:item_magnet_bauble",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:item_magnet_bauble",
+      "text": "Um ornamento que pode expandir o alcance de coleta. $(br2)Depois de ser equipado, o alcance de coleta de itens, flechas, orbe de experiência e pontos de poder da empregada será bastante aumentado."
+    }
+  ]
+}

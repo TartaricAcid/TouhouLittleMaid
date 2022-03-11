@@ -1,0 +1,16 @@
+{
+  "sortnum": 4,
+  "name": "Ornamentos da Empregada",
+  "icon": "touhou_little_maid:ultramarine_orb_elixir",
+  "category": "maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Este mod fornece vários ornamentos que podem ser acionados para proteger as empregadas sob certas condições, eles precisam ser colocados no inventário de ornamentos.$(li)Orbe de Elixir Ultramarino: Pode ser usado 6 vezes para evitar a morte de uma empregada."
+    },
+    {
+      "type": "text",
+      "text": "$(li)Ornamento Protetor: Quando a empregada recebe o dano correspondente, o evento de dano é cancelado.$(li)Tecido Ágil: Quando uma empregada equipada com este ornamento é atingida por um projétil, seu comportamento será exatamente o mesmo do enderman."
+    }
+  ]
+}

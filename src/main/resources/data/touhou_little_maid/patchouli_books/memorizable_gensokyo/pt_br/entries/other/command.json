@@ -1,0 +1,12 @@
+{
+  "sortnum": 2,
+  "name": "Comando",
+  "icon": "minecraft:command_block",
+  "category": "other",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(#f00)/tlm$(): Este é o comando fornecido pelo mod$(br2)Você pode usá-lo para definir poder, número de empregada ou recarregar o pacote do modelo."
+    }
+  ]
+}

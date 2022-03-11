@@ -1,0 +1,13 @@
+{
+  "sortnum": 3,
+  "name": "Extintor",
+  "icon": "touhou_little_maid:extinguisher",
+  "category": "other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:extinguisher",
+      "text": "Os itens usados com o modo de apagar fogo da empregada e não podem ser usados pelos jogadores."
+    }
+  ]
+}
