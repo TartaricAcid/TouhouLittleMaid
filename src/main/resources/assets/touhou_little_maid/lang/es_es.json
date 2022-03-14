@@ -200,7 +200,7 @@
   "patchouli.touhou_little_maid.book.categories.overview.name": "Vista general",
   "patchouli.touhou_little_maid.book.categories.overview.description": "Introducción a la descripcion general de este mod",
   "patchouli.touhou_little_maid.book.entries.maid.backpack.name": "Mochila",
-  "patchouli.touhou_little_maid.book.entries.maid.backpack.pages.0.text": "La mochila puede ser usada para expandir el inventario de la Maid. Puede ser equipado agarrando la mochila y dando click derecho en la maid. La mochila tiene 3 niveles. $(br2)Usa las tijeras para quitarle la mochila a la Maid.",
+  "patchouli.touhou_little_maid.book.entries.maid.backpack.pages.0.text": "La mochila puede ser usada para expandir el inventario de la sirvienta. Puede ser equipado agarrando la mochila y dando clic derecho en la sirvienta. La mochila tiene 3 niveles. $(br2)Usa las tijeras para quitarle la mochila a la sirvienta.",
   "patchouli.touhou_little_maid.book.entries.maid.backpack.pages.1.text": "Maid con una mochila pequeña.",
   "patchouli.touhou_little_maid.book.entries.maid.item_magnet.name": "Imán de objetos",
   "patchouli.touhou_little_maid.book.entries.maid.item_magnet.pages.0.text": "Una joya que aumenta el rango para recoger objetos.$(br2)Después de equiparlo, el rango para agarrar objetos, flechas, exp y puntos de poder aumentara considerablemente.",
