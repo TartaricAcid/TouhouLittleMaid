@@ -335,5 +335,8 @@
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.0.text": "Criar um pacote de modelo personalizado é muito simples, tudo que você precisa é do software Blockbench, Blockbench é um software gratuito e de código aberto que é fácil de usar.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.text": "Eu desenhei especialmente um plugin para fazer pacote de modelo para Blockbench, acesse o link abaixo para saber como instalar o plugin.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "Abrir Link",
+  "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.name": "Baixar Modelo Personalizado",
+  "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.1.text": "Você pode encontrar o botão de baixar do pacote de modelos na parte inferior da interface da empregada.",
+  "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.text": "Clique nele para abrir a interface de baixar e escolha baixar o pacote de modelo que você gosta.$(br2)Os pacotes de modelos são todos feitos por jogadores. Se você também quiser publicar seu pacote de modelo personalizado, clique no botão abaixo para participar do nosso grupo do Discord e enviar seu pacote de modelo.",
   "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.link_text": "Link do Discord"
 }
