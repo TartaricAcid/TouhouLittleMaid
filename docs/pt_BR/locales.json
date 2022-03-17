@@ -1,60 +1,60 @@
 {
     "title": {
-        "lang": "",
-        "title": "",
-        "description": ""
+        "lang": "pt-BR",
+        "title": "Touhou Little Maid Dev Wiki",
+        "description": "Existe um wiki relacionado ao desenvolvimento do mod Touhou Little Maid"
     },
     "themeConfig": {
-        "selectText": "",
-        "label": "",
-        "ariaLabel": "",
-        "lastUpdated": "",
+        "selectText": "Línguas",
+        "label": "Portuguese-Brazil",
+        "ariaLabel": "Línguas",
+        "lastUpdated": "Última Atualização",
         "nav": [
             {
-                "text": "",
-                "link": ""
+                "text": "Casa",
+                "link": "./"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "GitHub",
+                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "CurseForge",
+                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
             }
         ],
         "sidebar": [
             {
-                "title": "",
+                "title": "Modelo Personalizado",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./custom_model_pack",
+                        "Pacote de Modelo Personalizado"
                     ],
                     [
-                        "",
-                        ""
+                        "./maid_model_pack_details",
+                        "Detalhes do Pacote de Modelo da Empregada"
                     ],
                     [
-                        "",
-                        ""
+                        "./chair_model_pack_details",
+                        "Detalhes do Pacote de Modelos da Cadeira"
                     ],
                     [
-                        "",
-                        ""
+                        "./custom_javascript_animation",
+                        "Animação de JavaScript Personalizada"
                     ],
                     [
-                        "",
-                        ""
+                        "./preset_animation",
+                        "Animação Predefinida"
                     ]
                 ]
             },
             {
-                "title": "",
+                "title": "Modificar Receitas",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./custom_altar_recipes",
+                        "Receitas de Altar Personalizadas"
                     ]
                 ]
             }
