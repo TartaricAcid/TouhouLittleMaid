@@ -2,20 +2,20 @@
 home: true
 heroText: Touhou Little Maid Dev Wiki
 heroImage: https://i.imgur.com/SqIMw3U.png
-tagline: There is a wiki related to Touhou Little Maid mod development
-actionText: Get Started →
+tagline: Existe uma wiki relacionado ao desenvolvimento do mod Touhou Little Maid
+actionText: Começando →
 actionLink: /custom_model_pack
 features:
   - 
-    title: Custom Model
-    details: How to make a custom maid or chair model package
+    title: Modelo Personalizado
+    details: Como fazer um pacote de modelo personalizado da empregada ou cadeira
   - 
-    title: Modify Recipes
-    details: How to modification of recipes by data packet
+    title: Modificar Receitas
+    details: Como modificar receitas por pacote de dados
   - 
-    title: Develop Mod
-    details: How to compat Touhou Little Maid mod, or develop an addition
+    title: Desenvolver Mod
+    details: Como compatibilizar o mod Touhou Little Maid ou desenvolver uma adição
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---
 
-> Make sure the version of Touhou Little Maid mod you're using is the latest.
+> Certifique-se de que a versão do mod Touhou Little Maid que você está usando é a mais recente.
