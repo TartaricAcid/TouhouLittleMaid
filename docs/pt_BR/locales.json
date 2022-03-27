@@ -6,7 +6,7 @@
     },
     "themeConfig": {
         "selectText": "Línguas",
-        "label": "Portuguese-Brazil",
+        "label": "Português (Brasil)",
         "ariaLabel": "Línguas",
         "lastUpdated": "Última Atualização",
         "nav": [
