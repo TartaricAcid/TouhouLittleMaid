@@ -4,7 +4,7 @@ heroText: Touhou Little Maid Вики
 heroImage: https://i.imgur.com/SqIMw3U.png
 tagline: Вики, связанная с разработкой Touhou Little Maid
 actionText: Начать →
-actionLink: /custom_model_pack
+actionLink: /ru_RU/custom_model_pack
 features:
   - 
     title: Пользовательская модель
