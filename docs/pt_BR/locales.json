@@ -28,23 +28,23 @@
                 "title": "Modelo Personalizado",
                 "children": [
                     [
-                        "./custom_model_pack",
+                        "./pt_BR/custom_model_pack",
                         "Pacote de Modelo Personalizado"
                     ],
                     [
-                        "./maid_model_pack_details",
+                        "./pt_BR/maid_model_pack_details",
                         "Detalhes do Pacote de Modelo da Empregada"
                     ],
                     [
-                        "./chair_model_pack_details",
+                        "./pt_BR/chair_model_pack_details",
                         "Detalhes do Pacote de Modelos da Cadeira"
                     ],
                     [
-                        "./custom_javascript_animation",
+                        "./pt_BR/custom_javascript_animation",
                         "Animação de JavaScript Personalizada"
                     ],
                     [
-                        "./preset_animation",
+                        "./pt_BR/preset_animation",
                         "Animação Predefinida"
                     ]
                 ]
@@ -53,7 +53,7 @@
                 "title": "Modificar Receitas",
                 "children": [
                     [
-                        "./custom_altar_recipes",
+                        "./pt_BR/custom_altar_recipes",
                         "Receitas de Altar Personalizadas"
                     ]
                 ]
