@@ -4,7 +4,7 @@ heroText: Touhou Little Maid Dev Wiki
 heroImage: https://i.imgur.com/SqIMw3U.png
 tagline: Existe uma wiki relacionado ao desenvolvimento do mod Touhou Little Maid
 actionText: Começando →
-actionLink: /custom_model_pack
+actionLink: /pt_BR/custom_model_pack
 features:
   - 
     title: Modelo Personalizado
