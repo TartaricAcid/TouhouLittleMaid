@@ -95,6 +95,7 @@
   "gui.touhou_little_maid.button.maid_riding_set.desc": "§7Нажмите эту кнопку, чтобы установить будет ли горничная следовать за энтити",
   "gui.touhou_little_maid.name_tag.edit_box": "Коробка смены бирки",
   "gui.touhou_little_maid.tag.always_show": "Всегда показывать имя",
+  "gui.touhou_little_maid.skin_details.helmet": "Показать Шлем",
   "gui.touhou_little_maid.maid_beacon.player_power": "Игрок: %s",
   "gui.touhou_little_maid.maid_beacon.storage_power": "Хранение: %s",
   "gui.touhou_little_maid.maid_beacon.cost_power": "Цена: %s/ч",
