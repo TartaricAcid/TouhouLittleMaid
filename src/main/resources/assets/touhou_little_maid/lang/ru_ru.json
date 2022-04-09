@@ -98,6 +98,7 @@
   "gui.touhou_little_maid.name_tag.edit_box": "Коробка смены бирки",
   "gui.touhou_little_maid.tag.always_show": "Всегда показывать имя",
   "gui.touhou_little_maid.wireless_io.filter_mode": "Переключить режим фильтра",
+  "gui.touhou_little_maid.wireless_io.io_mode": "Переключить ВКЛ/ВЫКЛ",
   "gui.touhou_little_maid.wireless_io.config_slot": "Открыть конфиг слота",
   "gui.touhou_little_maid.custom_model_details_gui.title": "Интерфейс пользовательских деталей модели",
   "gui.touhou_little_maid.skin_details.helmet": "Показать Шлем",
