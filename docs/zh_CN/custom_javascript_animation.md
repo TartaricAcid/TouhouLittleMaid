@@ -156,29 +156,29 @@ Java.asJSONCompatible({
 
 #### 坐垫
 
-|     Function name     | Return value |                  Note                  |
-|:---------------------:|:------------:|:--------------------------------------:|
-|  `isRidingPlayer()`   |  `boolean`   | Whether the chair is sit by the player |
-|   `hasPassenger()`    |  `boolean`   |    Whether the chair has passenger     |
-|  `getPassengerYaw()`  |   `float`    |       Get chair passenger's yaw        |
-|      `getYaw()`       |   `float`    |            Get chair's yaw             |
-| `getPassengerPitch()` |   `float`    |      Get chair passenger's pitch       |
-|    ~~`getDim()`~~     |    `int`     |           Get chair's dim id           |
-|     `getWorld()`      |   `World`    |         Get chair's world data         |
-|      `getSeed()`      |    `long`    |     获取一个固定值，每个实体都是不同的，类似于该实体的 UUID     |
+|          函数名          |    返回值    |                   备注                   |
+|:---------------------:|:---------:|:--------------------------------------:|
+|  `isRidingPlayer()`   | `boolean` | Whether the chair is sit by the player |
+|   `hasPassenger()`    | `boolean` |    Whether the chair has passenger     |
+|  `getPassengerYaw()`  |  `float`  |       Get chair passenger's yaw        |
+|      `getYaw()`       |  `float`  |            Get chair's yaw             |
+| `getPassengerPitch()` |  `float`  |      Get chair passenger's pitch       |
+|    ~~`getDim()`~~     |   `int`   |           Get chair's dim id           |
+|     `getWorld()`      |  `World`  |         Get chair's world data         |
+|      `getSeed()`      |  `long`   |     获取一个固定值，每个实体都是不同的，类似于该实体的 UUID     |
 
 #### 世界
-|  Function name   | Return value |               Note               |
-|:----------------:|:------------:|:--------------------------------:|
-| `getWorldTime()` |    `long`    | Get world's time (tick, 0-24000) |
-|    `isDay()`     |  `boolean`   |     Whether the world is day     |
-|   `isNight()`    |  `boolean`   |    Whether the world is night    |
-|  `isRaining()`   |  `boolean`   |   Whether the world is raining   |
-| `isThundering()` |  `boolean`   | Whether the world is thundering  |
+|       函数名        |    返回值    |                备注                |
+|:----------------:|:---------:|:--------------------------------:|
+| `getWorldTime()` |  `long`   | Get world's time (tick, 0-24000) |
+|    `isDay()`     | `boolean` |     Whether the world is day     |
+|   `isNight()`    | `boolean` |    Whether the world is night    |
+|  `isRaining()`   | `boolean` |   Whether the world is raining   |
+| `isThundering()` | `boolean` | Whether the world is thundering  |
 
 
 
-### `limbSwing` & `limbSwingAmount` Parameter
+### `limbSwing` & `limbSwingAmount` 参数
 
 These are floating points, `limbSwing` is the walking speed of the entity (think of it as the speedometer of a car), `limbSwingAmount` is the total walking distance of the entity (think of it as the odometer of a car).
 
@@ -230,7 +230,7 @@ A value that has unknown meaning.
 
 A Map that saves group, using string as keys.
 
-You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined` If there is no group that matches the name, return `undefined`
+You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined` 如果没有符合名称的组，会返回 `undefined` 。
 
 Let's say we want to get the target group `head`:
 
