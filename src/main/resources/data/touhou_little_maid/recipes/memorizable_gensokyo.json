@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dyes/white"
+    },
+    {
+      "tag": "forge:dyes/red"
+    },
+    {
+      "item": "minecraft:book"
+    }
+  ],
+  "result": {
+    "type": "minecraft:item_nbt",
+    "item": "patchouli:guide_book",
+    "nbt": {
+      "patchouli:book": "touhou_little_maid:memorizable_gensokyo"
+    }
+  }
+}

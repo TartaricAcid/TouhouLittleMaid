@@ -1,0 +1,14 @@
+{
+  "variants": {
+    "position=down": {
+      "model": "touhou_little_maid:block/maid_beacon_down"
+    },
+    "position=up_n_s": {
+      "model": "touhou_little_maid:block/maid_beacon_up"
+    },
+    "position=up_w_e": {
+      "model": "touhou_little_maid:block/maid_beacon_up",
+      "y": 90
+    }
+  }
+}en

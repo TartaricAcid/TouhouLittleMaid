@@ -1,0 +1,14 @@
+{
+  "pools": [
+    {
+      "name": "power_point",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "touhou_little_maid:power_point"
+        }
+      ]
+    }
+  ]
+}

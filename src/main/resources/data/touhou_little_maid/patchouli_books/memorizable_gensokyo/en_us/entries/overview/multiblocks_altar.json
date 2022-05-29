@@ -1,0 +1,28 @@
+{
+  "sortnum": 4,
+  "name": "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.name",
+  "icon": "minecraft:red_wool",
+  "category": "touhou_little_maid:overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.pages.0.text"
+    },
+    {
+      "type": "multiblock",
+      "multiblock_id": "touhou_little_maid:altar",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.pages.1.text"
+    },
+    {
+      "type": "image",
+      "title": "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.pages.2.title",
+      "images": [
+        "touhou_little_maid:textures/book/altar.png"
+      ]
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.pages.3.text"
+    }
+  ]
+}

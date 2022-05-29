@@ -1,0 +1,19 @@
+{
+  "sortnum": 5,
+  "name": "patchouli.touhou_little_maid.book.entries.other.garage_kit.name",
+  "icon": "touhou_little_maid:garage_kit",
+  "category": "touhou_little_maid:other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:garage_kit",
+      "text": "patchouli.touhou_little_maid.book.entries.other.garage_kit.pages.0.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/garage_kit.png"
+      ]
+    }
+  ]
+}
