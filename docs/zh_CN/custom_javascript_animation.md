@@ -178,7 +178,7 @@ Java.asJSONCompatible({
 
 
 
-### `limbSwing` & `limbSwingAmount` 参数
+### `limbSwing` 和 `limbSwingAmount` 参数
 
 These are floating points, `limbSwing` is the walking speed of the entity (think of it as the speedometer of a car), `limbSwingAmount` is the total walking distance of the entity (think of it as the odometer of a car).
 
@@ -230,7 +230,7 @@ A value that has unknown meaning.
 
 A Map that saves group, using string as keys.
 
-You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined` 如果没有符合名称的组，会返回 `undefined` 。
+You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined`
 
 Let's say we want to get the target group `head`:
 
@@ -278,7 +278,7 @@ We can get various group via `modelMap.get("xxx")`, the following are the functi
 
 ### GlWrapper
 
-在脚本顶端，我们使用了一个叫做 `GlWrapper`的工具，它可以进行各种翻译、旋转和缩放操作。
+在脚本的最开头，我们使用了一个叫做 `GlWrapper` 的工具，它可以进行各种平移、旋转和缩放操作。
 
 |                       函数名                        | 返回值  |                                        备注                                        |
 |:------------------------------------------------:|:----:|:--------------------------------------------------------------------------------:|
