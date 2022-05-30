@@ -56,7 +56,7 @@ public class NimbleFabricBauble implements IMaidBauble {
 
     private boolean teleport(EntityMaid maid, double x, double y, double z) {
         BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (blockPos.getY() > 0 && !maid.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
+        while (blockPos.getY() > maid.level.getMinBuildHeight() && !maid.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
             blockPos.move(Direction.DOWN);
         }
         BlockState blockState = maid.level.getBlockState(blockPos);
