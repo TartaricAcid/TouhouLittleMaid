@@ -26,6 +26,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
@@ -68,11 +69,7 @@ public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLeve
     private void renderEntity(PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, CompoundTag data, Level world, EntityType<?> type) throws ExecutionException {
         Entity entity = EntityCacheUtil.ENTITY_CACHE.get(type, () -> {
             Entity e = type.create(world);
-            if (e == null) {
-                return new EntityMaid(world);
-            } else {
-                return e;
-            }
+            return Objects.requireNonNullElseGet(e, () -> new EntityMaid(world));
         });
 
         float renderItemScale = 1;

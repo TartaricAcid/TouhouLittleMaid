@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.Rectangle;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -15,7 +14,6 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -201,8 +199,9 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         scale = Mth.clamp(tmp, SCALE_MIN, SCALE_MAX);
     }
 
+    // TODO: 2022/5/30 修缮未完成部分
     private void renderEntity(int middleWidth, int middleHeight) {
-        PoseStack poseStack = new PoseStack();
+//        PoseStack poseStack = new PoseStack();
 //        poseStack.pushPose();
 //        poseStack.translate(posX + middleWidth, posY + middleHeight, -500);
 //        poseStack.scale(1.0F, 1.0F, -1.0F);
@@ -210,22 +209,22 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
 //        poseStack.mulPose(Vector3f.YP.rotationDegrees(-yaw));
 //        poseStack.mulPose(Vector3f.ZP.rotationDegrees(-180.0F));
 //        poseStack.scale(scale, scale, scale);
-        Lighting.setupForEntityInInventory();
-        EntityRenderDispatcher manager = Minecraft.getInstance().getEntityRenderDispatcher();
-        manager.overrideCameraOrientation(Vector3f.XP.rotationDegrees(pitch));
-        manager.setRenderShadow(false);
-        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        RenderSystem.runAsFancy(() -> {
-            manager.render(guiEntity, 0, -0.5, 0, 0, 1, poseStack, buffer, 0xf000f0);
-            if (showFloor) {
-                this.floorModel.renderToBuffer(poseStack, buffer.getBuffer(this.floorModel.renderType(FLOOR_TEXTURE)), 0xf000f0, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            }
-            this.renderExtraEntity(manager, poseStack, buffer);
-        });
-        buffer.endBatch();
-        manager.setRenderShadow(true);
+//        Lighting.setupForEntityInInventory();
+//        EntityRenderDispatcher manager = Minecraft.getInstance().getEntityRenderDispatcher();
+//        manager.overrideCameraOrientation(Vector3f.XP.rotationDegrees(pitch));
+//        manager.setRenderShadow(false);
+//        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+//        RenderSystem.runAsFancy(() -> {
+//            manager.render(guiEntity, 0, -0.5, 0, 0, 1, poseStack, buffer, 0xf000f0);
+//            if (showFloor) {
+//                this.floorModel.renderToBuffer(poseStack, buffer.getBuffer(this.floorModel.renderType(FLOOR_TEXTURE)), 0xf000f0, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+//            }
+//            this.renderExtraEntity(manager, poseStack, buffer);
+//        });
+//        buffer.endBatch();
+//        manager.setRenderShadow(true);
 //        poseStack.popPose();
-        Lighting.setupFor3DItems();
+//        Lighting.setupFor3DItems();
     }
 
     private void fillGradient(PoseStack poseStack, Rectangle vec4d, int color) {

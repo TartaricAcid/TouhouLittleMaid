@@ -24,15 +24,15 @@ public class WirelessIOButton extends StateSwitchingButton {
     }
 
     @Override
-    public void renderButton(PoseStack PoseStack, int mouseX, int mouseY, float partialTicks) {
-        super.renderButton(PoseStack, mouseX, mouseY, partialTicks);
+    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        super.renderButton(poseStack, mouseX, mouseY, partialTicks);
         if (this.isHoveredOrFocused()) {
-            this.onTooltip.onTooltip(PoseStack, mouseX, mouseY);
+            this.onTooltip.onTooltip(poseStack, mouseX, mouseY);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     public interface ITooltip {
-        void onTooltip(PoseStack PoseStack, int x, int y);
+        void onTooltip(PoseStack poseStack, int x, int y);
     }
 }

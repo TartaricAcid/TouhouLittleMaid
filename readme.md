@@ -27,7 +27,7 @@
     <a href="#">日本語</a>
 </p>
 
-This is a Minecraft 1.16.5 Forge mod, which was inspired by the [Little Maid Mob](https://github.com/MMM666/littleMaidMob) mod and [Touhou Project](https://en.wikipedia.org/wiki/Touhou_Project).       
+This is a Minecraft 1.18.2 Forge mod, which was inspired by the [Little Maid Mob](https://github.com/MMM666/littleMaidMob) mod and [Touhou Project](https://en.wikipedia.org/wiki/Touhou_Project).       
 Added cute maids to Minecraft, who can help with battles, farming and other tasks.      
 The mod supports custom models in the Bedrock Edition Entity format, you can easily switch the maid model, or create your own maid model.
 

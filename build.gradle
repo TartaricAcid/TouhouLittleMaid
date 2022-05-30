@@ -8,11 +8,8 @@ buildscript {
     }
 }
 
-plugins {
-    id 'eclipse'
-    id 'maven-publish'
-}
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
 
 
 version = mod_version
@@ -20,8 +17,6 @@ group = 'com.github.tartaricacid'
 archivesBaseName = 'touhoulittlemaid-1.18.2'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
 minecraft {
     mappings channel: 'official', version: '1.18.2'
@@ -54,23 +49,13 @@ minecraft {
                 }
             }
         }
-        
-        gameTestServer {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'touhoulittlemaid'
-            mods {
-                touhoulittlemaid {
-                    source sourceSets.main
-                }
-            }
-        }
 
         data {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             args '--mod', 'touhoulittlemaid', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 touhoulittlemaid {

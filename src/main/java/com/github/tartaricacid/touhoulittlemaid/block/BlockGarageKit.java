@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -101,9 +102,10 @@ public class BlockGarageKit extends Block implements EntityBlock {
             return InteractionResult.PASS;
         }
         BlockEntity tile = worldIn.getBlockEntity(pos);
-        if (!(tile instanceof TileEntityGarageKit garageKit)) {
+        if (!(tile instanceof TileEntityGarageKit)) {
             return InteractionResult.PASS;
         }
+        TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
         EntityType<?> type = ((SpawnEggItem) stack.getItem()).getType(stack.getTag());
         if (type.getRegistryName() == null) {
             return InteractionResult.PASS;
@@ -114,7 +116,8 @@ public class BlockGarageKit extends Block implements EntityBlock {
         data.putString("id", id);
 
         Entity entity = type.create(worldIn);
-        if (entity instanceof Mob mobEntity) {
+        if (entity instanceof Mob) {
+            Mob mobEntity = (Mob) entity;
             mobEntity.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(pos), MobSpawnType.SPAWN_EGG, null, data);
             mobEntity.addAdditionalSaveData(data);
         }
@@ -194,10 +197,10 @@ public class BlockGarageKit extends Block implements EntityBlock {
 
     @Nullable
     public EntityType<?> getType(@Nullable CompoundTag nbt) {
-        if (nbt != null && nbt.contains("EntityTag", 10)) {
-            CompoundTag CompoundTag = nbt.getCompound("EntityTag");
-            if (CompoundTag.contains("id", 8)) {
-                return EntityType.byString(CompoundTag.getString("id")).orElse(null);
+        if (nbt != null && nbt.contains("EntityTag", Tag.TAG_COMPOUND)) {
+            CompoundTag compound = nbt.getCompound("EntityTag");
+            if (compound.contains("id", Tag.TAG_STRING)) {
+                return EntityType.byString(compound.getString("id")).orElse(null);
             }
         }
         return null;

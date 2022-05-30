@@ -120,8 +120,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te instanceof TileEntityMaidBeacon beacon) {
-            //System.out.println(newState.getValue(POSITION).toString());
+        if (te instanceof TileEntityMaidBeacon) {
             popResource(worldIn, pos, ItemMaidBeacon.tileEntityToItemStack((TileEntityMaidBeacon) te));
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);

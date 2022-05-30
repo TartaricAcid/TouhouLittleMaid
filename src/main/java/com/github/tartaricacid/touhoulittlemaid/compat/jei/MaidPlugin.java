@@ -26,13 +26,13 @@ public class MaidPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(AltarRecipeMaker.getInstance().getAltarRecipes(), AltarRecipeCategory.UID);
+        registration.addRecipes(AltarRecipeCategory.ALTAR, AltarRecipeMaker.getInstance().getAltarRecipes());
         registration.addIngredientInfo(InitItems.GARAGE_KIT.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("jei.touhou_little_maid.garage_kit.info"));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(InitItems.HAKUREI_GOHEI.get().getDefaultInstance(), AltarRecipeCategory.UID);
+        registration.addRecipeCatalyst(InitItems.HAKUREI_GOHEI.get().getDefaultInstance(), AltarRecipeCategory.ALTAR);
     }
 
     @Override

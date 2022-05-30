@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class TileEntityItemStackChairRenderer extends BlockEntityWithoutLevelRenderer {
@@ -37,11 +38,7 @@ public class TileEntityItemStackChairRenderer extends BlockEntityWithoutLevelRen
         try {
             entityChair = (EntityChair) EntityCacheUtil.ENTITY_CACHE.get(EntityChair.TYPE, () -> {
                 Entity e = EntityChair.TYPE.create(world);
-                if (e == null) {
-                    return new EntityChair(world);
-                } else {
-                    return e;
-                }
+                return Objects.requireNonNullElseGet(e, () -> new EntityChair(world));
             });
         } catch (ExecutionException | ClassCastException e) {
             e.printStackTrace();
