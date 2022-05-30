@@ -184,7 +184,7 @@ Since models made by some authors are more unique, they may have some compabilit
 }
 ```
 
-## Maid Easter Eggs
+## Пасхальные яйца горничной
 
 We added maid naming easter egg function, specially named maid can use special models.
 

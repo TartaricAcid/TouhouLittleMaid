@@ -154,31 +154,31 @@ Java.asJSONCompatible({
 |      `getArmorValue()`       |  `double`  |                              Get maid's armor value                              |
 |         `getSeed()`          |   `long`   |    Get a fixed value, each entity is different, similar to the entity's UUID     |
 
-#### Chair
+#### 坐垫
 
-|     Function name     | Return value |                  Note                  |
-|:---------------------:|:------------:|:--------------------------------------:|
-|  `isRidingPlayer()`   |  `boolean`   | Whether the chair is sit by the player |
-|   `hasPassenger()`    |  `boolean`   |    Whether the chair has passenger     |
-|  `getPassengerYaw()`  |   `float`    |       Get chair passenger's yaw        |
-|      `getYaw()`       |   `float`    |            Get chair's yaw             |
-| `getPassengerPitch()` |   `float`    |      Get chair passenger's pitch       |
-|    ~~`getDim()`~~     |    `int`     |           Get chair's dim id           |
-|     `getWorld()`      |   `World`    |         Get chair's world data         |
-|      `getSeed()`      |    `long`    |     获取一个固定值，每个实体都是不同的，类似于该实体的 UUID     |
+|          函数名          |    返回值    |                   备注                   |
+|:---------------------:|:---------:|:--------------------------------------:|
+|  `isRidingPlayer()`   | `boolean` | Whether the chair is sit by the player |
+|   `hasPassenger()`    | `boolean` |    Whether the chair has passenger     |
+|  `getPassengerYaw()`  |  `float`  |       Get chair passenger's yaw        |
+|      `getYaw()`       |  `float`  |            Get chair's yaw             |
+| `getPassengerPitch()` |  `float`  |      Get chair passenger's pitch       |
+|    ~~`getDim()`~~     |   `int`   |           Get chair's dim id           |
+|     `getWorld()`      |  `World`  |         Get chair's world data         |
+|      `getSeed()`      |  `long`   |     获取一个固定值，每个实体都是不同的，类似于该实体的 UUID     |
 
 #### 世界
-|  Function name   | Return value |               Note               |
-|:----------------:|:------------:|:--------------------------------:|
-| `getWorldTime()` |    `long`    | Get world's time (tick, 0-24000) |
-|    `isDay()`     |  `boolean`   |     Whether the world is day     |
-|   `isNight()`    |  `boolean`   |    Whether the world is night    |
-|  `isRaining()`   |  `boolean`   |   Whether the world is raining   |
-| `isThundering()` |  `boolean`   | Whether the world is thundering  |
+|       函数名        |    返回值    |                备注                |
+|:----------------:|:---------:|:--------------------------------:|
+| `getWorldTime()` |  `long`   | Get world's time (tick, 0-24000) |
+|    `isDay()`     | `boolean` |     Whether the world is day     |
+|   `isNight()`    | `boolean` |    Whether the world is night    |
+|  `isRaining()`   | `boolean` |   Whether the world is raining   |
+| `isThundering()` | `boolean` | Whether the world is thundering  |
 
 
 
-### `limbSwing` & `limbSwingAmount` Parameter
+### `limbSwing` 和 `limbSwingAmount` 参数
 
 These are floating points, `limbSwing` is the walking speed of the entity (think of it as the speedometer of a car), `limbSwingAmount` is the total walking distance of the entity (think of it as the odometer of a car).
 
@@ -230,7 +230,7 @@ A value that has unknown meaning.
 
 A Map that saves group, using string as keys.
 
-You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined` If there is no group that matches the name, return `undefined`
+You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined`
 
 Let's say we want to get the target group `head`:
 
@@ -254,34 +254,34 @@ if (head != undefined) {
 
 We can get various group via `modelMap.get("xxx")`, the following are the functions that can be used to the obtained group.
 
-|             Function name             | Return value |                       Note                        |
-|:-------------------------------------:|:------------:|:-------------------------------------------------:|
-| `setRotateAngleX(float rotateAngleX)` |     None     |              Set the group's X angle              |
-| `setRotateAngleY(float rotateAngleY)` |     None     |              Set the group's Y angle              |
-| `setRotateAngleZ(float rotateAngleZ)` |     None     |              Set the group's Z angle              |
-|      `setOffsetX(float offsetX)`      |     None     |       Set the group's X coordianate offset        |
-|      `setOffsetY(float offsetY)`      |     None     |       Set the group's Y coordianate offset        |
-|      `setOffsetZ(float offsetZ)`      |     None     |       Set the group's Z coordianate offset        |
-|      `setHidden(boolean hidden)`      |     None     |            Set if the group is hidden             |
-|          `getRotateAngleX()`          |   `float`    |            Obtain the group's X angle             |
-|          `getRotateAngleY()`          |   `float`    |            Obtain the group's Y angle             |
-|          `getRotateAngleZ()`          |   `float`    |            Obtain the group's Z angle             |
-|        `getInitRotateAngleX()`        |   `float`    | Get ModelRenderer's initialization x rotate angle |
-|        `getInitRotateAngleY()`        |   `float`    | Get ModelRenderer's initialization y rotate angle |
-|        `getInitRotateAngleZ()`        |   `float`    | Get ModelRenderer's initialization z rotate angle |
-|            `getOffsetX()`             |   `float`    |      Obtain the group's X coordianate offset      |
-|            `getOffsetY()`             |   `float`    |      Obtain the group's Y coordianate offset      |
-|            `getOffsetZ()`             |   `float`    |      Obtain the group's Y coordianate offset      |
-|             `isHidden()`              |  `boolean`   |           Check if the group is hidden            |
+|                  函数名                  |    返回值    |                        备注                         |
+|:-------------------------------------:|:---------:|:-------------------------------------------------:|
+| `setRotateAngleX(float rotateAngleX)` |   None    |              Set the group's X angle              |
+| `setRotateAngleY(float rotateAngleY)` |   None    |              Set the group's Y angle              |
+| `setRotateAngleZ(float rotateAngleZ)` |   None    |              Set the group's Z angle              |
+|      `setOffsetX(float offsetX)`      |   None    |       Set the group's X coordianate offset        |
+|      `setOffsetY(float offsetY)`      |   None    |       Set the group's Y coordianate offset        |
+|      `setOffsetZ(float offsetZ)`      |   None    |       Set the group's Z coordianate offset        |
+|      `setHidden(boolean hidden)`      |   None    |            Set if the group is hidden             |
+|          `getRotateAngleX()`          |  `float`  |            Obtain the group's X angle             |
+|          `getRotateAngleY()`          |  `float`  |            Obtain the group's Y angle             |
+|          `getRotateAngleZ()`          |  `float`  |            Obtain the group's Z angle             |
+|        `getInitRotateAngleX()`        |  `float`  | Get ModelRenderer's initialization x rotate angle |
+|        `getInitRotateAngleY()`        |  `float`  | Get ModelRenderer's initialization y rotate angle |
+|        `getInitRotateAngleZ()`        |  `float`  | Get ModelRenderer's initialization z rotate angle |
+|            `getOffsetX()`             |  `float`  |      Obtain the group's X coordianate offset      |
+|            `getOffsetY()`             |  `float`  |      Obtain the group's Y coordianate offset      |
+|            `getOffsetZ()`             |  `float`  |      Obtain the group's Y coordianate offset      |
+|             `isHidden()`              | `boolean` |           Check if the group is hidden            |
 
 
 
 ### GlWrapper
 
-On the top of the script we used a tool called `GlWrapper`, that can make various translation, rotation and scaling operations.
+在脚本的最开头，我们使用了一个叫做 `GlWrapper` 的工具，它可以进行各种平移、旋转和缩放操作。
 
-|                  Function name                   | Return value |                                       Note                                       |
-|:------------------------------------------------:|:------------:|:--------------------------------------------------------------------------------:|
-|      `translate(float x, float y, float z)`      |     None     |                        Move the entity to coordiate x y z                        |
-| `rotate(float angle, float x, float y, float z)` |     None     | Using a straight line`(0, 0, 0) (x, y, z)` as axis, rotate it by `angle` degree. |
-|        `scale(float x, float y, float z)`        |     None     |                    Scale entity on three axis by x y z times                     |
+|                       函数名                        | 返回值  |                                        备注                                        |
+|:------------------------------------------------:|:----:|:--------------------------------------------------------------------------------:|
+|      `translate(float x, float y, float z)`      | None |                        Move the entity to coordiate x y z                        |
+| `rotate(float angle, float x, float y, float z)` | None | Using a straight line`(0, 0, 0) (x, y, z)` as axis, rotate it by `angle` degree. |
+|        `scale(float x, float y, float z)`        | None |                    Scale entity on three axis by x y z times                     |
