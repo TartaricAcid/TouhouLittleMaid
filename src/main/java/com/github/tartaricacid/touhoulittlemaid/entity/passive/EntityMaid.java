@@ -138,6 +138,7 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
     private static final String HOME_TAG = "MaidIsHome";
     private static final String RIDEABLE_TAG = "MaidIsRideable";
     private static final String STRUCK_BY_LIGHTNING_TAG = "StruckByLightning";
+    private static final String INVULNERABLE_TAG = "Invulnerable";
     private static final String HUNGER_TAG = "MaidHunger";
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
@@ -657,7 +658,7 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
     }
 
     private void spawnPortalParticle() {
-        if (this.level.isClientSide && this.isInvulnerable() && this.getOwner() != null) {
+        if (this.level.isClientSide && this.getIsInvulnerable() && this.getOwner() != null) {
             this.level.addParticle(ParticleTypes.PORTAL,
                     this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
                     this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D,
@@ -722,6 +723,7 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
         compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT());
         compound.put(MAID_BAUBLE_INVENTORY_TAG, maidBauble.serializeNBT());
         compound.putBoolean(STRUCK_BY_LIGHTNING_TAG, isStruckByLightning());
+        compound.putBoolean(INVULNERABLE_TAG, getIsInvulnerable());
         compound.putInt(HUNGER_TAG, getHunger());
         compound.putInt(FAVORABILITY_TAG, getFavorability());
         compound.putInt(EXPERIENCE_TAG, getExperience());
@@ -760,6 +762,9 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
         }
         if (compound.contains(STRUCK_BY_LIGHTNING_TAG, Tag.TAG_BYTE)) {
             setStruckByLightning(compound.getBoolean(STRUCK_BY_LIGHTNING_TAG));
+        }
+        if (compound.contains(INVULNERABLE_TAG, Tag.TAG_BYTE)) {
+            setEntityInvulnerable(compound.getBoolean(INVULNERABLE_TAG));
         }
         if (compound.contains(HUNGER_TAG, Tag.TAG_INT)) {
             setHunger(compound.getInt(HUNGER_TAG));

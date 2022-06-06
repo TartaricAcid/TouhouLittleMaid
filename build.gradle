@@ -1,14 +1,17 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 
 
@@ -19,7 +22,8 @@ archivesBaseName = 'touhoulittlemaid-1.18.2'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    // mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'parchment', version: '2022.05.22-1.18.2'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -87,11 +91,6 @@ repositories {
         }
     }
     maven {
-        // The One Probe
-        name = 'terrag maven'
-        url = "https://maven.tterrag.com/"
-    }
-    maven {
         // Patchouli
         name 'Jared Maven'
         url 'https://maven.blamejared.com/'
@@ -103,9 +102,6 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}")
-
-//    implementation fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
-//    implementation fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")

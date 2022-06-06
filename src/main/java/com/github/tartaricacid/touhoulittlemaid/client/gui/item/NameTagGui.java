@@ -72,7 +72,11 @@ public class NameTagGui extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return this.textField.mouseClicked(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
+        if (this.textField.mouseClicked(mouseX, mouseY, button)) {
+            this.setFocused(this.textField);
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

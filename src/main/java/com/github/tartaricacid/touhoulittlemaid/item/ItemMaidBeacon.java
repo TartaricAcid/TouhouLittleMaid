@@ -25,6 +25,7 @@ import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 public class ItemMaidBeacon extends DoubleHighBlockItem {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
     private static final String STORAGE_DATA_TAG = "StorageData";
+    private static final String FORGE_DATA_TAG = "ForgeData";
 
     public ItemMaidBeacon() {
         super(InitBlocks.MAID_BEACON.get(), (new Item.Properties()).stacksTo(1).tab(MAIN_TAB));
@@ -39,8 +40,8 @@ public class ItemMaidBeacon extends DoubleHighBlockItem {
 
     public static void itemStackToTileEntity(ItemStack stack, TileEntityMaidBeacon beacon) {
         CompoundTag tag = stack.getOrCreateTagElement(STORAGE_DATA_TAG);
-        if (tag.contains("ForgeData", Tag.TAG_COMPOUND)) {
-            beacon.loadData(tag.getCompound("ForgeData"));
+        if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            beacon.loadData(tag.getCompound(FORGE_DATA_TAG));
         }
     }
 
@@ -49,8 +50,8 @@ public class ItemMaidBeacon extends DoubleHighBlockItem {
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         float numPower = 0f;
         CompoundTag tag = stack.getOrCreateTagElement(STORAGE_DATA_TAG);
-        if (tag.contains("ForgeData", Tag.TAG_COMPOUND)) {
-            CompoundTag forgeTag = tag.getCompound("ForgeData");
+        if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            CompoundTag forgeTag = tag.getCompound(FORGE_DATA_TAG);
             if (forgeTag.contains(TileEntityMaidBeacon.STORAGE_POWER_TAG, Tag.TAG_FLOAT)) {
                 numPower = forgeTag.getFloat(TileEntityMaidBeacon.STORAGE_POWER_TAG);
             }

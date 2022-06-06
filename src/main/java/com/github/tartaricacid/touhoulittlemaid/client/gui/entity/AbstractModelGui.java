@@ -54,7 +54,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * @param mouseX  鼠标 x 坐标
      * @param mouseY  鼠标 Y 坐标
      */
-    abstract void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY);
+    protected abstract void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY);
 
     /**
      * 绘制右侧示例实体
@@ -63,7 +63,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * @param posY      实体所在的 y 坐标
      * @param modelItem 该实体应该对应的模型数据
      */
-    abstract void drawRightEntity(int posX, int posY, E modelItem);
+    protected abstract void drawRightEntity(int posX, int posY, E modelItem);
 
     /**
      * 打开详情界面
@@ -71,7 +71,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * @param entity    实体
      * @param modelInfo 该实体应该对应的模型数据
      */
-    abstract void openDetailsGui(T entity, E modelInfo);
+    protected abstract void openDetailsGui(T entity, E modelInfo);
 
     /**
      * 发包通知模型更改
@@ -79,19 +79,19 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * @param entity    实体
      * @param modelInfo 该实体应该对应的模型数据
      */
-    abstract void notifyModelChange(T entity, E modelInfo);
+    protected abstract void notifyModelChange(T entity, E modelInfo);
 
-    abstract int getPackIndex();
+    protected abstract int getPackIndex();
 
-    abstract void setPackIndex(int packIndex);
+    protected abstract void setPackIndex(int packIndex);
 
-    abstract int getRowIndex();
+    protected abstract int getRowIndex();
 
-    abstract void setRowIndex(int rowIndex);
+    protected abstract void setRowIndex(int rowIndex);
 
-    abstract int getPageIndex();
+    protected abstract int getPageIndex();
 
-    abstract void setPageIndex(int packIndex);
+    protected abstract void setPageIndex(int packIndex);
 
     @Override
     public void init() {

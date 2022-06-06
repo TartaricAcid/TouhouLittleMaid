@@ -2,10 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.*;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,9 +18,11 @@ public final class InitBlocks {
     public static RegistryObject<Block> STATUE = BLOCKS.register("statue", BlockStatue::new);
     public static RegistryObject<Block> GARAGE_KIT = BLOCKS.register("garage_kit", BlockGarageKit::new);
     public static RegistryObject<Block> MAID_BEACON = BLOCKS.register("maid_beacon", BlockMaidBeacon::new);
+    public static RegistryObject<Block> MODEL_SWITCHER = BLOCKS.register("model_switcher", BlockModelSwitcher::new);
 
     public static RegistryObject<BlockEntityType<TileEntityAltar>> ALTAR_TE = TILE_ENTITIES.register("altar", () -> TileEntityAltar.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityStatue>> STATUE_TE = TILE_ENTITIES.register("statue", () -> TileEntityStatue.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityGarageKit>> GARAGE_KIT_TE = TILE_ENTITIES.register("garage_kit", () -> TileEntityGarageKit.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityMaidBeacon>> MAID_BEACON_TE = TILE_ENTITIES.register("maid_beacon", () -> TileEntityMaidBeacon.TYPE);
+    public static RegistryObject<BlockEntityType<TileEntityModelSwitcher>> MODEL_SWITCHER_TE = TILE_ENTITIES.register("model_switcher", () -> TileEntityModelSwitcher.TYPE);
 }
