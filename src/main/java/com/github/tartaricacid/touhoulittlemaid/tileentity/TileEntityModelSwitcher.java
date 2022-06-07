@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.util.List;
