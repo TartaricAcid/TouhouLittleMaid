@@ -169,7 +169,7 @@ public class ModelSwitcherGui extends Screen {
         } else {
             drawCenteredString(pPoseStack, font, new TranslatableComponent("gui.touhou_little_maid.model_switcher.uuid.empty"), leftPos + 128, topPos - 10, 0xffffff);
         }
-        drawCenteredString(pPoseStack, font, String.format("%d/%d", page + 1, (infoList.size() - 1) / maxRow + 1), leftPos + 195, topPos + 12, 0xffffff);
+        drawCenteredString(pPoseStack, font, String.format("%d/%d", page + 1, (infoList.size() - 1) / maxRow + 1), leftPos + 193, topPos + 12, 0xffffff);
         if (this.description != null) {
             InventoryScreen.renderEntityInInventory(leftPos + 30, topPos + 60, 25, leftPos - 150, topPos - 50, maid);
             this.description.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
