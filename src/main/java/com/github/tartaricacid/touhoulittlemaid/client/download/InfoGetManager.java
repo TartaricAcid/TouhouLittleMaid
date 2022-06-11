@@ -127,6 +127,9 @@ public class InfoGetManager {
                         DOWNLOAD_INFO_LIST_SOUND.add(downloadInfo);
                     }
                 });
+
+                ConfigDownload.checkFile();
+                ConfigDownload.downloadFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }

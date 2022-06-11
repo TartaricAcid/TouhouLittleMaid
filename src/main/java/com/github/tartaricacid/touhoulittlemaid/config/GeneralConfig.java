@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.config;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.TeaconConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public final class GeneralConfig {
@@ -11,6 +12,7 @@ public final class GeneralConfig {
         MaidConfig.init(builder);
         ChairConfig.init(builder);
         MiscConfig.init(builder);
+        TeaconConfig.init(builder);
         return builder.build();
     }
 }
