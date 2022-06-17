@@ -221,7 +221,7 @@ As the script below, when maid is named `IKUN~`, because the characters' SHA-1 v
 }
 ```
 
-## Other Questions
+## Другие вопросы
 
 ### Z-fighting Issue
 
