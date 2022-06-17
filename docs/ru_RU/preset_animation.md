@@ -1,6 +1,6 @@
 
 
-# Preset Animation
+# Заготовленная анимация
 
 There are many default animations built in the mod, you only need:
 1. Set the correct name for the group you want to animate in Blockbench.
@@ -24,4 +24,4 @@ Position the right-handed item, its parent group must be `armRight`
 
 ### `backpackPositioningBone`
 
-Position the backpack shoulder strap, it must be the root group
+Позиция лямки рюкзака должна быть в корневой группе
