@@ -104,77 +104,77 @@ Java.asJSONCompatible({
 
 ### Параметры сущностей
 
-Depending on the target of the added animation, the function that can be used by `entity` differs as well.
+В зависимости от цели, к которой применяется анимация, функции, используемые `сущностью`, также могут отличаться друг от друга.
 
 #### Горничная
 
-|         Имя функции          | Возвращаемое значение |                                     Заметка                                      |
-|:----------------------------:|:---------------------:|:--------------------------------------------------------------------------------:|
-|        `hasHelmet()`         |       `логика`        |                     After maid wears helmet, returns `true`                      |
-|      `hasChestPlate()`       |       `логика`        |                   After maid wears chestplate, returns `true`                    |
-|       `hasLeggings()`        |       `логика`        |                    After maid wears leggings, returns `true`                     |
-|         `hasBoots()`         |       `логика`        |                      After maid wears boots, returns `true`                      |
-|        `getHelmet()`         |       `String`        |           After maid wears helmet, returns helmet item's registry name           |
-|      `getChestPlate()`       |       `String`        |       After maid wears chestplate, returns chestplate item's registry name       |
-|       `getLeggings()`        |       `String`        |         After maid wears leggings, returns leggings item's registry name         |
-|         `getBoots()`         |       `String`        |            After maid wears boots, returns boots item's registry name            |
-|        `isBegging()`         |       `boolean`       |                         Whether maid is in begging mode                          |
-|      `isSwingingArms()`      |       `логика`        |             If maid is using arms, this function will return `true`              |
-|     `getSwingProgress()`     |        `float`        |                             Get maid's swinging time                             |
-|         `isRiding()`         |       `логика`        |                          Whether maid is in riding mode                          |
-|        `isSitting()`         |       `логика`        |                         Whether maid is in standby mode                          |
-|    ~~`isHoldTrolley()`~~     |       `логика`        |                Whether maid is carrying trolley or other entities                |
-| ~~`isRidingMarisaBroom()`~~  |       `логика`        |                       Whether maid is riding Marisa Broom                        |
-|    ~~`isRidingPlayer()`~~    |       `логика`        |                          Whether maid is riding player                           |
-|    ~~`isHoldVehicle()`~~     |       `логика`        |                          Whether maid is riding vehicle                          |
-| ~~`isPortableAudioPlay()`~~  |       `boolean`       |                 Whether the maid hold portable audio and play it                 |
-|       `hasBackpack()`        |       `логика`        |                          Whether maid wearing backpack                           |
-|     `getBackpackLevel()`     |         `int`         |                            Get maid's backpack level                             |
-|     ~~`hasSasimono()`~~      |       `boolean`       |                          Whether maid wearing sasimono                           |
-|     `isSwingLeftHand()`      |       `boolean`       | Whether the maid is swinging left or right arm, return `false` if it's the right |
-| ~~`getLeftHandRotation()`~~  |      `float[3]`       |                          Get the left arm rotation data                          |
-| ~~`getRightHandRotation()`~~ |      `float[3]`       |                         Get the right arm rotation data                          |
-|        ~~`getDim()`~~        |         `int`         |                      Get the dimension where the maid is in                      |
-|         `getWorld()`         |        `World`        |                              Get maid's world data                               |
-|         `getTask()`          |       `String`        |                Get maid's task, such as `attack`, `ranged_attack`                |
-|     `hasItemMainhand()`      |       `boolean`       |                          Whether maid has mainhand item                          |
-|      `hasItemOffhand()`      |       `boolean`       |                          Whether maid has offhand item                           |
-|     `getItemMainhand()`      |       `String`        |                      Get maid mainhand item's registry name                      |
-|      `getItemOffhand()`      |       `String`        |                      Get maid offhand item's registry name                       |
-|         `inWater()`          |       `boolean`       |                              Whether maid in water                               |
-|          `inRain()`          |       `boolean`       |                               Whether maid in rain                               |
-|        `getAtBiome()`        |       `String`        |                          Get maid's biome register name                          |
-|    ~~`getAtBiomeTemp()`~~    |       `String`        |                        Get maid's biome temperature enum                         |
-|          `onHurt()`          |       `boolean`       |                           Whether the maid is on hurt                            |
-|        `getHealth()`         |        `float`        |                                Get maid's health                                 |
-|       `getMaxHealth()`       |        `float`        |                              Get maid's max health                               |
-|         `isSleep()`          |       `boolean`       |                              Whether maid is sleep                               |
-|     `getFavorability()`      |         `int`         |                           Get the maid's favorability                            |
-|        `isOnGround()`        |       `boolean`       |                          Whether the maid is on ground                           |
-|      `getArmorValue()`       |       `double`        |                              Get maid's armor value                              |
-|         `getSeed()`          |        `long`         |    Get a fixed value, each entity is different, similar to the entity's UUID     |
+|         Имя функции          |      Возвращаемое значение       |                                     Примечание                                      |
+|:----------------------------:|:--------------------------------:|:-----------------------------------------------------------------------------------:|
+|        `hasHelmet()`         |           `логический`           |                    Если горничная надела шлем, возвращает `true`                    |
+|      `hasChestPlate()`       |           `логический`           |                 Есди горничная надела нагрудник, возвращает `true`                  |
+|       `hasLeggings()`        |           `логический`           |                   Если горничная надела поножи, возвращает `true`                   |
+|         `hasBoots()`         |           `логический`           |                  Если горничная надела ботинки, возвращает `true`                   |
+|        `getHelmet()`         |           `строковый`            |        Если горничная надела шлем, возвращает имя шлема из реестра предметов        |
+|      `getChestPlate()`       |           `строковый`            |   Если горничная надела нагрудник, возвращает имя нагрудника из реестра предметов   |
+|       `getLeggings()`        |           `строковый`            |      Если горничная надела поножи, возвращает имя поножей из реестра предметов      |
+|         `getBoots()`         |           `строковый`            |     Если горничная надела ботинки, возвращает имя ботинок из реестра предметов      |
+|        `isBegging()`         |           `логический`           |                     Находится ли горничная в режиме попрошайки                      |
+|      `isSwingingArms()`      |           `логический`           |              Если горничная двигает руками, эта функция вернет `true`               |
+|     `getSwingProgress()`     |         `дробное число`          |                              Вернёт время анимации рук                              |
+|         `isRiding()`         |           `логический`           |                                  Едет ли горничная                                  |
+|        `isSitting()`         |           `логический`           |                             Сидит ли на месте горничная                             |
+|    ~~`isHoldTrolley()`~~     |           `логический`           |                   Держит ли горничная тележку или другие объекты                    |
+| ~~`isRidingMarisaBroom()`~~  |           `логический`           |                             Сидит ли горничная на метле                             |
+|    ~~`isRidingPlayer()`~~    |           `логический`           |                         Едет ли горничная верхом на игроке                          |
+|    ~~`isHoldVehicle()`~~     |           `логический`           |                           Едет ли горничная на транспорте                           |
+| ~~`isPortableAudioPlay()`~~  |           `логический`           |                Держит ли горничная портативное радио и играет ли оно                |
+|       `hasBackpack()`        |           `логический`           |                             Одет ли на горничной рюкзак                             |
+|     `getBackpackLevel()`     |         `целочисленный`          |                               Вернёт уровень рюкзака                                |
+|     ~~`hasSasimono()`~~      |           `логический`           |                            Одет ли на горничную сазимоно                            |
+|     `isSwingLeftHand()`      |           `логический`           |           Использует ли горничная левую руку, вернёт `false`, если правую           |
+| ~~`getLeftHandRotation()`~~  |       `дробное число [3]`        |                          Вернёт данные вращения левой руки                          |
+| ~~`getRightHandRotation()`~~ |       `дробное число [3]`        |                         Вернёт данные вращения правой руки                          |
+|        ~~`getDim()`~~        |         `целочисленный`          |                      Вернёт измерение, где находится горничная                      |
+|         `getWorld()`         |              `Мир`               |                                Вернёт данные о мире                                 |
+|         `getTask()`          |           `строковый`            |            Вернёт занятие горничной, такое как `attack`, `ranged_attack`            |
+|     `hasItemMainhand()`      |           `логический`           |                  Есть ли предмет в главной (правой) руке горничной                  |
+|      `hasItemOffhand()`      |           `логический`           |                 Есть ли предмет во вторичной (левой) руке горничной                 |
+|     `getItemMainhand()`      |           `строковый`            |  Вернёт имя предмета, находящегося в главной руке горничной, из реестра предметов   |
+|      `getItemOffhand()`      |           `строковый`            | Вернёт имя предмета, находящегося во вторичной руке горничной, из реестра предметов |
+|         `inWater()`          |           `логический`           |                                 В воде ли горничная                                 |
+|          `inRain()`          |           `логический`           |                               Под дождём ли горничная                               |
+|        `getAtBiome()`        |           `строковый`            |                Вернёт из реестра имя биома, где находится горничная                 |
+|    ~~`getAtBiomeTemp()`~~    |           `строковый`            |               Вернёт температуру биома, в котором находится горничная               |
+|          `onHurt()`          |           `логический`           |                                 Больно ли горничной                                 |
+|        `getHealth()`         |         `дробное число`          |                              Вернёт здоровье горничной                              |
+|       `getMaxHealth()`       |         `дробное число`          |                       Вернёт максимальное здоровье горничной                        |
+|         `isSleep()`          |           `логический`           |                                  Спит ли горничная                                  |
+|     `getFavorability()`      |         `целочисленный`          |                          Вернёт благоприятность горничной                           |
+|        `isOnGround()`        |           `логический`           |                           Находится ли горничная на блоке                           |
+|      `getArmorValue()`       | `большоt дробное число (double)` |                           Вернёт значение брони горничной                           |
+|         `getSeed()`          |   `большое целое число (long)`   | Вернёт фиксированное значение, уникальное для каждой сущности, схожее с UUID мобов  |
 
-#### Chair
+#### Сидение
 
-|     Function name     | Return value |                                   Note                                    |
-|:---------------------:|:------------:|:-------------------------------------------------------------------------:|
-|  `isRidingPlayer()`   |  `boolean`   |                  Whether the chair is sit by the player                   |
-|   `hasPassenger()`    |  `boolean`   |                      Whether the chair has passenger                      |
-|  `getPassengerYaw()`  |   `float`    |                         Get chair passenger's yaw                         |
-|      `getYaw()`       |   `float`    |                              Get chair's yaw                              |
-| `getPassengerPitch()` |   `float`    |                        Get chair passenger's pitch                        |
-|    ~~`getDim()`~~     |    `int`     |                            Get chair's dim id                             |
-|     `getWorld()`      |   `World`    |                          Get chair's world data                           |
-|      `getSeed()`      |    `long`    | Get a fixed value, each entity is different, similar to the entity's UUID |
+|      Имя функции      |    Возвращаемое значение     |                                     Примечание                                     |
+|:---------------------:|:----------------------------:|:----------------------------------------------------------------------------------:|
+|  `isRidingPlayer()`   |         `логический`         |                          Сидит ли за этим сидением игрок                           |
+|   `hasPassenger()`    |         `логический`         |                           Имеет ли это сидение пассажира                           |
+|  `getPassengerYaw()`  |       `дробное число`        |                              Вернёт поворот пассажира                              |
+|      `getYaw()`       |       `дробное число`        |                               Вернёт поворот сидения                               |
+| `getPassengerPitch()` |       `дробное число`        |                              Вернёт наклон пассажира                               |
+|    ~~`getDim()`~~     |       `целочисленный`        |                                Вернёт ID измерения                                 |
+|     `getWorld()`      |            `Мир`             |                                Вернёт данные о мире                                |
+|      `getSeed()`      | `большое целое число (long)` | Вернёт фиксированное значение, уникальное для каждой сущности, схожее с UUID мобов |
 
-#### World
-|  Function name   | Return value |               Note               |
-|:----------------:|:------------:|:--------------------------------:|
-| `getWorldTime()` |    `long`    | Get world's time (tick, 0-24000) |
-|    `isDay()`     |  `boolean`   |     Whether the world is day     |
-|   `isNight()`    |  `boolean`   |    Whether the world is night    |
-|  `isRaining()`   |  `boolean`   |   Whether the world is raining   |
-| `isThundering()` |  `boolean`   | Whether the world is thundering  |
+#### Мир
+|   Имя функции    |    Возвращаемое значение     |           Примечание           |
+|:----------------:|:----------------------------:|:------------------------------:|
+| `getWorldTime()` | `большое целое число (long)` | Вернёт время в тиках (0-24000) |
+|    `isDay()`     |         `логический`         |          Сейчас день?          |
+|   `isNight()`    |         `логический`         |          Сейчас ночь?          |
+|  `isRaining()`   |         `логический`         |         Идёт ли дождь          |
+| `isThundering()` |         `логический`         |         Идёт ли шторм          |
 
 
 
