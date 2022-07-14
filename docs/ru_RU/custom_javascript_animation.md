@@ -1,108 +1,108 @@
 # Пользовательская анимация JavaScript
-Through JavaScript files, you can add custom animations for maid or chair.
+С помощью JavaScript-файлов вы можете добавлять пользовательские анимации для горничной или кресла.
 
 - Этот вики подходит для Touhou Little Maid `1.12.2` и `1.16.5`:
-- Basic understanding for JavaScript language；
-- Some high school mathematical knowledge, especially towards Trigonometric function and polar coordinates;
-- For editing script software, VSCode is recommended, all related script files requires to be saved using UTF-8 without BOM.
+- Базовое понимание языка JavaScript;
+- Немного математических знаний из средней/старшей школы, в частности тригонометрических функций и полярных координат;
+- Для редактирования скриптов, рекомендуется использовать VSCode с сохранением в кодировке UTF-8 без BOM.
 
 ## Базовый формат
 
-Animation script can be put in any location of the folder, you only need to call the file path on the corresponding models. I recommend putting it in the `animation` folder.
+Скрипт с анимацией может быть помещён в любую папку, вам нужно только указать путь к файлу для соответствующих моделей. Я рекомендую поместить его в папку `animation`.
 
 Ниже приведен общий шаблон：
 
 ```js
-// This call is only needed when you need to use GlWrapper
+// Это вызывается только если вы хотите использовать GlWrapper
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     /**
-     * @param entity Entity that requires the corresponding animation
-     * @param limbSwing The walking speed of the entity (think of it as the speedometer of a car)
-     * @param limbSwingAmount The total walking distance of the entity (think of it as the odometer of a car)
-     * @param ageInTicks The tick time of an entity, the value that constantly increase from 0
-     * @param netHeadYaw The yaw for the head of the entity
-     * @param headPitch The pitch for the head of the entity
-     * @param scale Param for scaling the entity, default is 0.0625, no use found.
-     * @param modelMap The group of the model saved for a hashmap
+     * @param entity Сущность/моб, к которой применяется данная анимация
+     * @param limbSwing Скорость движения моба (как спидометр в машине)
+     * @param limbSwingAmount Пройденная мобом дистанция (как счётчик пробега в машине)
+     * @param ageInTicks Возраст моба в тиках, значение постоянно увеличивается от 0
+     * @param netHeadYaw Поворот головы моба
+     * @param headPitch Наклон головы моба
+     * @param scale Значение масштабирования моба. По умолчанию - 0.0625. Применений не найдено.
+     * @param modelMap Группа модели, сохраненная для хэш-карты
      */
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
                           headPitch, scale, modelMap) {
-        // Script for the model
+        // Скрипт для модели
     }
 })
 ```
 
-Here we have a simple example, current model has a group named `rotation` we want this group to make a rotational movement around the X axis, the movement speed is around 1 degree every tick (18 sec/r), we can write it as below.
+Простой пример: текущая модет имеет группу костей, названную `rotation`. Нам нужно, чтобы эта группа вращалась вдоль оси X со скоростью 1 градус каждый тик (18 секунд на 1 оборот). Мы можем написать анимацию так:
 
 ```javascript
-// This call is only needed when you need to use GlWrapper
+// Это вызывается только если вам нужно использовать GlWrapper
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
                           headPitch, scale, modelMap) {
-        // First obtain a group named 'rotation' from modelMap
+        // Сперва определим грумму 'rotation' из modelMap
         rotation = modelMap.get("rotation");
-        // Just in case, we make a simple check to make sure this group existed
+        // На всякий случай, сделаем простую проверку наличия этой группы у модели
         if (rotation != undefined) {
-            // Through the function setRotateAngleX in the group, we set its X axis angle
-            // ageInTicks is tick time for the entity, a value that constantly increases starting from 0
-            // Through remainder operator (which is % sign), set the value between 0~360
-            // Since this method only accepts radian, we need to multiply it by 0.017453292 to convert into radian
-            // And with that we achieved the animation of rotating 1 degree every tick
+            // С помощью setRotateAngleX, мы установим угол вращения по оси X
+            // ageInTicks - это возраст сущности, значение, постоянно увеличивающееся от 0
+            // С помощью оператора % мы найдём остаток от деленияв промежутке от 0 до 360
+            // Так как функция принимает только радианы, умножим полученное значение на 0.017453292 чтобы превратить градусы в радианы
+            // И так мы получим анимацию вращения на 1 градус каждый тик
             rotation.setRotateAngleX(ageInTicks % 360 * 0.017453292);
         }
     }
 })
 ```
 
-Теперь мы добавим еще одно сложное движение, у нас есть группа с именем `wing`, и мы хотим, чтобы постоянное движение в направлении назад и вперед.
+Теперь мы добавим еще одно сложное движение, у нас есть группа с именем `wing`, и мы хотим, чтобы крылья постоянно двигались вперёд-назад.
 
-Колеблется в оси Y в градусе от `-20°~40°`, и один цикл завершается каждые 5 секунд.
+Поворот будет по оси Y на угол от `-20° до 40°`, и цикл будет повторяться каждые 5 секунд.
 
-Тригонометрическая функция соответствует нашим нуждам, так как вы можете использовать синус или косинус, мы будем использовать синусовую функцию.
+Тригонометрическая функция соответствует нашим нуждам, так как вы можете использовать синус или косинус, мы будем использовать функцию синуса.
 
 ```javascript
-// This call is only needed when you need to use GlWrapper
+// Это вызывается только если вам нужно использовать GlWrapper
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
         headPitch, scale, modelMap) {
-        // First obtain a group named 'wing' from modelMap
+        // Сперва найдём группу 'wing' из modelMap
         wing = modelMap.get("wing");
-        // Just in case, we make a simple check to make sure this group existed
+        // На всякий случай сделаем простую проверку наличия этой группы у модели
         if (wing != undefined) {
-            // One complete cycle every 5 second, which is 100 tick
-            // Using multiplication and remainder operator we can achieve this requirement
+            // Один цикл займёт 5 секунд, что равно 100 тикам
+            // Используя умножение и остаток от деления мы получим желаемое
             var time = (ageInTicks * 3.6) % 360;
-            // This is using the Math function in JavaScript
-            // Construct sine function, and obtain a periodic function between -20°~40°
+            // Теперь используется функция Math из JavaScript
+            // Используя синус, мы получим периодическую функцию в интервале от -20° до 40°
             var func = 30 * Math.sin(time * 0.017453292) + 10;
-            // Since this method only accepts radian, we need to multiply it by 0.017453292 to convert into radian
+            // Так как функция принимает только радианы, умножим полученное значение на 0.017453292 чтобы превратить градусы в радианы
             wing.setRotateAngleY(func * 0.017453292);
         }
     }
 })
 ```
 
-All other complex motion can be achieved through the related functions.
+Все остальные сложные движения могут быть получены с помощью соответствующих фунций.
 
 ## Быстрая перезагрузка
 
-Since you can't determine if the animation is correct just by looking at the functions, we added a function to hot reload the animation ingame.
+Так как вы не можете понять, правильно ли написана анимация, только лишь посмотрев на код, мы добавили возможность быстрой перезагрузки анимации в игре.
 
-After you load the model resource pack you made, just use the following command can reload all animation's data.
+После того, как вы загрузите созданный вами набор ресурсов модели, просто используйте следующую команду для перезагрузки всех данных анимации.
 - 1.12.2: `/maid_res reload`
 - 1.16.5: `/tlm pack reload`
 
-## Function Documentation
+## Документация по функциям
 
-Strikethrough style means that the method is deprecated in 1.16, you can visit the [link here](https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.16.5/src/main/java/com/github/tartaricacid/touhoulittlemaid/api/animation) to view the source code API.
+Зачёркнутый стиль означает, что данные функции устарели в 1.16, вы можете посетить [эту ссылку](https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.16.5/src/main/java/com/github/tartaricacid/touhoulittlemaid/api/animation) чтобы увидеть исходный код.
 
-### Параметр энтити
+### Параметры сущностей
 
 Depending on the target of the added animation, the function that can be used by `entity` differs as well.
 
