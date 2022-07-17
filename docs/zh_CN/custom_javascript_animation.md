@@ -168,13 +168,13 @@ Java.asJSONCompatible({
 |      `getSeed()`      |  `long`   |     获取一个固定值，每个实体都是不同的，类似于该实体的 UUID     |
 
 #### 世界
-|       函数名        |    返回值    |                备注                |
-|:----------------:|:---------:|:--------------------------------:|
-| `getWorldTime()` |  `long`   | Get world's time (tick, 0-24000) |
-|    `isDay()`     | `boolean` |     Whether the world is day     |
-|   `isNight()`    | `boolean` |    Whether the world is night    |
-|  `isRaining()`   | `boolean` |   Whether the world is raining   |
-| `isThundering()` | `boolean` | Whether the world is thundering  |
+|       函数名        |    返回值    |         备注         |
+|:----------------:|:---------:|:------------------:|
+| `getWorldTime()` |  `long`   | 获取世界的时间（刻，0-24000） |
+|    `isDay()`     | `boolean` |      世界是否为白天       |
+|   `isNight()`    | `boolean` |      世界是否为黑夜       |
+|  `isRaining()`   | `boolean` |      世界是否在降雨       |
+| `isThundering()` | `boolean` |     世界是否处于雷雨中      |
 
 
 
@@ -218,11 +218,11 @@ head.setRotateAngleY(netHeadYaw * 0.017453292);
 > If the coeffiecient in this section is set to be larger than '0.017453292', there may have some error issue.
 
 
-### `scale` Parameter
+### `scale`参数
 
-Floating point, fixed at 0.0625.
+浮点数，固定为0.0625。
 
-A value that has unknown meaning.
+一个含义不明的值。
 
 
 
