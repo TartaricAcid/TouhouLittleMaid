@@ -1,60 +1,60 @@
 {
     "title": {
-        "lang": "",
-        "title": "",
-        "description": ""
+        "lang": "vi-VN",
+        "title": "Touhou Little Maid: Tài nguyên cho lập trình viên",
+        "description": "Sau đây là các thông tin liên quan đến việc tạo dựng nên mod Touhou Little Maid"
     },
     "themeConfig": {
-        "selectText": "",
-        "label": "",
-        "ariaLabel": "",
-        "lastUpdated": "",
+        "selectText": "Ngôn ngữ",
+        "label": "Tiếng Việt",
+        "ariaLabel": "Ngôn ngữ",
+        "lastUpdated": "Cập nhật lần cuối",
         "nav": [
             {
-                "text": "",
-                "link": ""
+                "text": "Trang chủ",
+                "link": "./"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "GitHub",
+                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "CurseForge",
+                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
             }
         ],
         "sidebar": [
             {
-                "title": "",
+                "title": "Mô hình tự tạo",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./custom_model_pack",
+                        "Gói mô hình tự tạo"
                     ],
                     [
-                        "",
-                        ""
+                        "./maid_model_pack_details",
+                        "Chi tiết gói mô hình"
                     ],
                     [
-                        "",
-                        ""
+                        "./chair_model_pack_details",
+                        "Chi tiết gói mô hình ghế"
                     ],
                     [
-                        "",
-                        ""
+                        "./custom_javascript_animation",
+                        "Hoạt ảnh JavaScript tự tạo"
                     ],
                     [
-                        "",
-                        ""
+                        "./preset_animation",
+                        "Hoạt ảnh có sẵn"
                     ]
                 ]
             },
             {
-                "title": "",
+                "title": "Thay đổi công thức",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./custom_altar_recipes",
+                        "Công thức tuỳ chỉnh trên bàn thờ"
                     ]
                 ]
             }
