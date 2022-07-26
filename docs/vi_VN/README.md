@@ -1,21 +1,21 @@
 ---
 home: true
-heroText: Touhou Little Maid Dev Wiki
+heroText: 'Touhou Little Maid: Tài nguyên cho lập trình viên'
 heroImage: https://i.imgur.com/SqIMw3U.png
-tagline: There is a wiki related to Touhou Little Maid mod development
-actionText: Get Started →
+tagline: Sau đây là các thông tin liên quan đến việc tạo dựng nên mod Touhou Little Maid
+actionText: Bắt đầu →
 actionLink: /custom_model_pack
 features:
   - 
-    title: Custom Model
-    details: How to make a custom maid or chair model package
+    title: Mô hình tự tạo
+    details: Cách để tự tạo gói mô hình cho maid hoặc ghế
   - 
-    title: Modify Recipes
-    details: How to modification of recipes by data packet
+    title: Thay đổi công thức
+    details: Cách để thay đổi công thức chế tạo với gói dữ liệu
   - 
-    title: Develop Mod
-    details: How to compat Touhou Little Maid mod, or develop an addition
+    title: Tạo dựng mod
+    details: Cách để tích hợp mod Touhou Little Maid, hoặc tạo nên mod con
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---
 
-> Make sure the version of Touhou Little Maid mod you're using is the latest.
+> Hãy đảm bào rằng phiên bản của Touhou Little Maid mà bạn đang dùng là bản mới nhất.
