@@ -275,7 +275,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.pages.0.text": "Maid được đặt một tên đặc biệt sẽ hiển thị với một mô hình đặc biệt.$(br2)Theo mặc định, maid với tên $(#ff0000)=>id$() có thể hiển thị dưới dạng mô hình người chơi với id đó.$(br2)Gói tài nguyên cho maid cũng có thể thêm trứng với mô hình tự tạo, kể cả trứng mô hình được mã hoá của SHA1.",
   "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.pages.1.text": "Maid với tên $(#ff0000)=>Notch$().",
   "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.name": "Triệu hồi maid",
-  "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.pages.0.text": "Cách để có một maid rất đặc biệt và được thực hiện với một bàn thờ gồm nhiều block.$(br2)Vì công thức cỏ thể sẽ được thay đổi trong tương lai, vui lòng kiểm tra công thức trên JEI.$(br2)Sau khi đã thành công triệu hồi một maid với bàn thờ, bạn sẽ nhận được một hộp bánh bọc trong một maid, chỉ cần chuột phải cái hộp để mở nó.",
+  "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.pages.0.text": "Cách để có một maid rất đặc biệt và được thực hiện với một bàn thờ gồm nhiều khối.$(br2)Vì công thức cỏ thể sẽ được thay đổi trong tương lai, vui lòng kiểm tra công thức trên JEI.$(br2)Sau khi đã thành công triệu hồi một maid với bàn thờ, bạn sẽ nhận được một hộp bánh bọc trong một maid, chỉ cần chuột phải cái hộp để mở nó.",
   "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.pages.1.text": "Bạn cần nhấp chuột phải 3 lần để từ từ mở hộp bánh, và cái hộp sẽ biến mất sau đó.$(br2)Bạn sẽ cần một cái bánh kem để thu phục maid. Vật dụng để thu phục maid có thể được thay đổi trong tệp tuỳ chỉnh của mod.$(br2)Maid được thu phục gần như có thể được nhận diện giống như thú cưng trong vanilla game, và bạn có thể nhấp chuột phải để mở giao diện của chúng.",
   "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name": "Jizo thay thế",
   "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.pages.0.text": "Jizo thay thế là một vật phẩm chỉ dùng cho chế độ sáng tạo, có thể khiến maid bất tử khi dùng nó nhấp chuột phải vào maid.",
@@ -286,5 +286,13 @@
   "patchouli.touhou_little_maid.book.entries.maid.gap.name": "Lỗ hở",
   "patchouli.touhou_little_maid.book.entries.maid.gap.pages.0.text": "Một trang sức có thể vận chuyển vật phẩm. $(br2)Bạn có thể nhấp chuột phải rương với cái lỗ hở này để đánh dấu nó, sau đó mở giao diện của nó để thay đổi một số cài đặt, và cuối cùng bỏ nó vào lại khung trang sức của maid. $(br2)Sau đó, maid sẽ lấy ra item nhất định \"từ xa\" từ rương đó.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_home.pages.1.text": "Bạn có thể dùng la bàn để tìm vị trí nhà của maid",
-  "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.name": "Đục khắc & tượng"
+  "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.name": "Đục khắc & tượng",
+  "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.0.text": "Nhấp chuột phải vào khối đất sét với cây đục có thể tạo ra tượng với kích thước khác nhau. Hiện hỗ trợ các kích thước 1x1x1, 1x1x2, 2x2x4, 3x3x6.",
+  "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.1.text": "Người chơi sẽ cầm một tấm ảnh chụp có maid trong tay phụ, tay chính cầm cây đục, sau đó chuột phải vào khối góc dưới bên trái của một cụm gồm nhiều khối để tạc tượng maid trong tấm ảnh.",
+  "patchouli.touhou_little_maid.book.entries.other.garage_kit.name": "Bộ dụng cụ Garage",
+  "patchouli.touhou_little_maid.book.entries.other.garage_kit.pages.0.text": "Bức tượng kích thước 1x1 đã bị đốt cháy có thể được chuyển hoá thành nó.",
+  "patchouli.touhou_little_maid.book.entries.other.maid_beacon.name": "Đèn miếu",
+  "patchouli.touhou_little_maid.book.entries.other.maid_beacon.pages.0.text": "Đèn đền là một vật trang trí và cũng có một số tác dụng. Nhấp chuột phải vào phần đỉnh của đèn sẽ mở giao diện của nó, lưu trữ điểm sức mạnh của người chơi.",
+  "patchouli.touhou_little_maid.book.entries.other.maid_beacon.pages.1.text": "Nó cũng có thể chọn hiệu ứng, sau đó sẽ sử dụng điểm sức mạnh để áp dụng hiệu ứng cho maid xung quanh trong phạm vi hoạt động.$(br2)Đèn miếu cũng là công cụ rất tốt trong việc thu thập điểm sức mạnh. Nó có thể tự động thu thập điểm sức mạnh trong phạm vi 6 khối và lưu trữ chúng.",
+  "patchouli.touhou_little_maid.book.entries.other.trumpet.name": "Kèn trumpet"
 }
