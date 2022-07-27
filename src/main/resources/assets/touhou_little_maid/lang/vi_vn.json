@@ -294,5 +294,6 @@
   "patchouli.touhou_little_maid.book.entries.other.maid_beacon.name": "Đèn miếu",
   "patchouli.touhou_little_maid.book.entries.other.maid_beacon.pages.0.text": "Đèn đền là một vật trang trí và cũng có một số tác dụng. Nhấp chuột phải vào phần đỉnh của đèn sẽ mở giao diện của nó, lưu trữ điểm sức mạnh của người chơi.",
   "patchouli.touhou_little_maid.book.entries.other.maid_beacon.pages.1.text": "Nó cũng có thể chọn hiệu ứng, sau đó sẽ sử dụng điểm sức mạnh để áp dụng hiệu ứng cho maid xung quanh trong phạm vi hoạt động.$(br2)Đèn miếu cũng là công cụ rất tốt trong việc thu thập điểm sức mạnh. Nó có thể tự động thu thập điểm sức mạnh trong phạm vi 6 khối và lưu trữ chúng.",
-  "patchouli.touhou_little_maid.book.entries.other.trumpet.name": "Kèn trumpet"
+  "patchouli.touhou_little_maid.book.entries.other.trumpet.name": "Kèn trumpet",
+  "patchouli.touhou_little_maid.book.entries.other.trumpet.pages.0.text": "Công cụ dùng để gọi maid, chuột phải để dùng. $(br2)$(4)$(l)Lưu ý: Vật phẩm này chỉ có thể gọi maid ở trong chunk đang được tải. Hiện tại với khả năng của lập trình viên, không có cách nào để có thể gọi maid trong các chunk không được tải."
 }
