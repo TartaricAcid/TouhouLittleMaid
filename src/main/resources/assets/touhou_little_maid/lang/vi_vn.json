@@ -296,5 +296,11 @@
   "patchouli.touhou_little_maid.book.entries.other.maid_beacon.pages.1.text": "Nó cũng có thể chọn hiệu ứng, sau đó sẽ sử dụng điểm sức mạnh để áp dụng hiệu ứng cho maid xung quanh trong phạm vi hoạt động.$(br2)Đèn miếu cũng là công cụ rất tốt trong việc thu thập điểm sức mạnh. Nó có thể tự động thu thập điểm sức mạnh trong phạm vi 6 khối và lưu trữ chúng.",
   "patchouli.touhou_little_maid.book.entries.other.trumpet.name": "Kèn trumpet",
   "patchouli.touhou_little_maid.book.entries.other.trumpet.pages.0.text": "Công cụ dùng để gọi maid, chuột phải để dùng. $(br2)$(4)$(l)Lưu ý: Vật phẩm này chỉ có thể gọi maid ở trong chunk đang được tải. Hiện tại với khả năng của lập trình viên, không có cách nào để có thể gọi maid trong các chunk không được tải.",
-  "patchouli.touhou_little_maid.book.entries.other.chair.name": "Ghế tự tạo"
+  "patchouli.touhou_little_maid.book.entries.other.chair.name": "Gối ngồi tự tạo",
+  "patchouli.touhou_little_maid.book.entries.other.chair.pages.0.text": "Gối ngồi là một vật dành riêng cho trang trí, được đặt trực tiếp xuống đất bằng cách nhấp chuột phải, và shift chuột trái có thể dễ dàng phá vỡ nó, nhấp chuột phải lên nó để ngồi, shift chuột phải để mở giao diện để thay đổi mô hình của gối.",
+  "patchouli.touhou_little_maid.book.entries.other.chair.pages.1.text": "Maid sẽ tự động ngồi lên gối khi ở gần, bạn có thể tách maid ra khỏi gối ngồi bằng cách shift chuột phải vào maid.$(br2)Mô hình của gối hoàn toàn có thể được tuỳ chỉnh, hoặc bạn có thể thêm mô hình của nó với các gói có sẵn.",
+  "patchouli.touhou_little_maid.book.entries.other.command.name": "Lệnh",
+  "patchouli.touhou_little_maid.book.entries.other.command.pages.0.text": "$(#f00)/tlm$(): Đây là những lệnh được cung cấp bởi mod$(br2)Bạn có thể dùng chúng để đặt chỉ số sức mạnh, số lượng maid, hoặc tải lại các gói mô hình.",
+  "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Dụng cụ dập lửa",
+  "patchouli.touhou_little_maid.book.entries.other.extinguisher.pages.0.text": "Vật dụng dành cho maid ở chế độ dập lửa và không thể được dùng bởi người chơi."
 }
