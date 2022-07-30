@@ -302,5 +302,9 @@
   "patchouli.touhou_little_maid.book.entries.other.command.name": "Lệnh",
   "patchouli.touhou_little_maid.book.entries.other.command.pages.0.text": "$(#f00)/tlm$(): Đây là những lệnh được cung cấp bởi mod$(br2)Bạn có thể dùng chúng để đặt chỉ số sức mạnh, số lượng maid, hoặc tải lại các gói mô hình.",
   "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Dụng cụ dập lửa",
-  "patchouli.touhou_little_maid.book.entries.other.extinguisher.pages.0.text": "Vật dụng dành cho maid ở chế độ dập lửa và không thể được dùng bởi người chơi."
+  "patchouli.touhou_little_maid.book.entries.other.extinguisher.pages.0.text": "Vật dụng dành cho maid ở chế độ dập lửa và không thể được dùng bởi người chơi.",
+  "patchouli.touhou_little_maid.book.entries.other.maid_bed.name": "Giường cho maid",
+  "patchouli.touhou_little_maid.book.entries.other.maid_bed.pages.0.text": "Người chơi có thể ngủ, và maid cũng vậy. Khi đến thời gian ngủ, maid sẽ tìm một chiếc giường gần đó để nghỉ ngơi.$(br2)Maid đang ngủ sẽ không thể bị tấng công bởi bất kì quái dữ nào, và giao diện của maid cũng không thể được mở trong lúc đó.",
+  "patchouli.touhou_little_maid.book.entries.other.maid_bed.pages.1.text": "Maid ngủ trên giường.",
+  "patchouli.touhou_little_maid.book.entries.other.power_point.name": "Điểm sức mạnh"
 }
