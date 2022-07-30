@@ -306,5 +306,11 @@
   "patchouli.touhou_little_maid.book.entries.other.maid_bed.name": "Giường cho maid",
   "patchouli.touhou_little_maid.book.entries.other.maid_bed.pages.0.text": "Người chơi có thể ngủ, và maid cũng vậy. Khi đến thời gian ngủ, maid sẽ tìm một chiếc giường gần đó để nghỉ ngơi.$(br2)Maid đang ngủ sẽ không thể bị tấng công bởi bất kì quái dữ nào, và giao diện của maid cũng không thể được mở trong lúc đó.",
   "patchouli.touhou_little_maid.book.entries.other.maid_bed.pages.1.text": "Maid ngủ trên giường.",
-  "patchouli.touhou_little_maid.book.entries.other.power_point.name": "Điểm sức mạnh"
+  "patchouli.touhou_little_maid.book.entries.other.power_point.name": "Điểm sức mạnh",
+  "patchouli.touhou_little_maid.book.entries.other.power_point.pages.0.text": "Nhấp chuột phải có thể làm rơi ra điểm sức mạnh dưới dạng thực thể.$(br2)Bạn có thể tìm thấy vật phẩm điểm sức mạnh trong các rương vật phẩm.",
+  "patchouli.touhou_little_maid.book.entries.other.camera_and_photo.name": "Máy ảnh & ảnh chụp",
+  "patchouli.touhou_little_maid.book.entries.other.camera_and_photo.pages.0.text": "Mang maid qua các chiều không gian khác nhau hay qua một đoàn đường dài thường rất rắc rối, vậy nên máy ảnh được sinh ra để giúp đỡ với gánh nặng này. $(br2)Chỉ cần chụp một tấm ảnh cho maid của bạn và sau đó in tấm ảnh chụp ra, khi cần thả maid chỉ cần cầm tấm ảnh và nhấp chuột phải vào block.",
+  "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.name": "Cây Gohei và Danmaku",
+  "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.pages.0.text": "Cây gohei là một vũ khí cận chiến thông thường.$(br2)Maid đang cầm gohei có thể bắn ra danmaku khi đang làm việc bắn danmaku.",
+  "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.pages.1.text": "Cây gohei giúp hoàn thiện đền thờ với kết cấu gồm nhiều khối."
 }
