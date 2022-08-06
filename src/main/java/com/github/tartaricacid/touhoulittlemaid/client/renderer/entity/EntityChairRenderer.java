@@ -28,13 +28,13 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
     private List<Object> chairAnimations;
 
     public EntityChairRenderer(EntityRendererProvider.Context rendererManager) {
-        super(rendererManager, new BedrockModel<>(), 0.5f);
+        super(rendererManager, new BedrockModel<>(), 0);
     }
 
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && player.isShiftKeyDown() && renderHitBox) {
+        if (player != null && player.isShiftKeyDown() && Minecraft.getInstance().options.renderDebug && renderHitBox) {
             renderHitBox(chair, poseStack, bufferIn);
         } else {
             renderChair(chair, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
