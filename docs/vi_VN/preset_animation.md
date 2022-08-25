@@ -1,9 +1,9 @@
 
 
-# Preset Animation
+# Hoạt ảnh có sẵn
 
-There are many default animations built in the mod, you only need:
-1. Set the correct name for the group you want to animate in Blockbench.
+Có rất nhiều hoạt ảnh mặc định sẵn có trong mod, bạn chỉ cần:
+1. Đặt đúng tên cho nhóm mà bạn muốn tạo hoạt động trong Blockbench.
 2. Call the animation reference of the path in the `animation` field of the `maid_model.json` file.
 
 > The `tlm-utils` plugin can automatically call the animation script reference based on the group name, you just need to click the `Re-Analyze Animation` button. ![img](https://i.imgur.com/iyCKwMx.gif)
