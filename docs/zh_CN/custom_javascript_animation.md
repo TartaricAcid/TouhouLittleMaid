@@ -168,13 +168,13 @@ Java.asJSONCompatible({
 |      `getSeed()`      |  `long`   | 获取一个固定值，每个实体都是不同的，类似于该实体的 UUID |
 
 #### 世界
-|       函数名        |    返回值    |         备注         |
-|:----------------:|:---------:|:------------------:|
-| `getWorldTime()` |  `long`   | 获取世界的时间（刻，0-24000） |
-|    `isDay()`     | `boolean` |      世界是否为白天       |
-|   `isNight()`    | `boolean` |      世界是否为黑夜       |
-|  `isRaining()`   | `boolean` |      世界是否在降雨       |
-| `isThundering()` | `boolean` |     世界是否处于雷雨中      |
+|       函数名        |    返回值    |           备注            |
+|:----------------:|:---------:|:-----------------------:|
+| `getWorldTime()` |  `long`   | 获取当前世界的时间（tick，0-24000） |
+|    `isDay()`     | `boolean` |        当前世界是否为白天        |
+|   `isNight()`    | `boolean` |        当前世界是否为黑夜        |
+|  `isRaining()`   | `boolean` |        当前世界是否在降雨        |
+| `isThundering()` | `boolean` |       当前世界是否处于雷雨中       |
 
 
 
@@ -200,13 +200,13 @@ Changing the value `0.6662` will control the frequency of the swing, multiplied 
 
 ### `ageInTicks` 参数
 
-浮点型，一个从0开始每刻都会自动增加的变量，也是用于大多数动画函数的自动更改型参数。
+浮点数，一个从 0 开始每 tick 都会自加的变量，大多数动画中都会用到的自变量。
 
 
 
 ### `netHeadYaw` 和 `headPitch` 参数
 
-二者均为浮点型，且为角度值（这是原版Minecraft设计的方式）。
+二者均为浮点数，单位为角度（这是原版 Minecraft 所设计的）。
 
 通常此参数可以用作旋转角度，你只需要将其更改为弧度。
 
@@ -220,7 +220,7 @@ head.setRotateAngleY(netHeadYaw * 0.017453292);
 
 ### `scale` 参数
 
-浮点数，固定为0.0625。
+浮点数，固定为 0.0625。
 
 一个含义不明的值。
 
