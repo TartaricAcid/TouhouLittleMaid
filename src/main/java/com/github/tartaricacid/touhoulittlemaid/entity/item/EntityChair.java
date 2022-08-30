@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.thread.EffectiveSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -103,9 +104,8 @@ public class EntityChair extends AbstractEntityFromItem {
      * 所以将其设计为仅修改服务端，避免影响客户端渲染交互，同时不会在服务端被钓鱼钩影响
      */
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    public boolean canBeCollidedWith() {
-        return false;
+    public boolean isPickable() {
+        return !EffectiveSide.get().isServer();
     }
 
     @Override
