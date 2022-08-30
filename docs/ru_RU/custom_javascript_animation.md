@@ -1,180 +1,180 @@
 # Пользовательская анимация JavaScript
-Through JavaScript files, you can add custom animations for maid or chair.
+С помощью JavaScript-файлов вы можете добавлять пользовательские анимации для горничной или кресла.
 
 - Этот вики подходит для Touhou Little Maid `1.12.2` и `1.16.5`:
-- Basic understanding for JavaScript language；
-- Some high school mathematical knowledge, especially towards Trigonometric function and polar coordinates;
-- For editing script software, VSCode is recommended, all related script files requires to be saved using UTF-8 without BOM.
+- Базовое понимание языка JavaScript;
+- Немного математических знаний из средней/старшей школы, в частности тригонометрических функций и полярных координат;
+- Для редактирования скриптов, рекомендуется использовать VSCode с сохранением в кодировке UTF-8 без BOM.
 
 ## Базовый формат
 
-Animation script can be put in any location of the folder, you only need to call the file path on the corresponding models. I recommend putting it in the `animation` folder.
+Скрипт с анимацией может быть помещён в любую папку, вам нужно только указать путь к файлу для соответствующих моделей. Я рекомендую поместить его в папку `animation`.
 
 Ниже приведен общий шаблон：
 
 ```js
-// This call is only needed when you need to use GlWrapper
+// Это вызывается только если вы хотите использовать GlWrapper
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     /**
-     * @param entity Entity that requires the corresponding animation
-     * @param limbSwing The walking speed of the entity (think of it as the speedometer of a car)
-     * @param limbSwingAmount The total walking distance of the entity (think of it as the odometer of a car)
-     * @param ageInTicks The tick time of an entity, the value that constantly increase from 0
-     * @param netHeadYaw The yaw for the head of the entity
-     * @param headPitch The pitch for the head of the entity
-     * @param scale Param for scaling the entity, default is 0.0625, no use found.
-     * @param modelMap The group of the model saved for a hashmap
+     * @param entity Сущность/моб, к которой применяется данная анимация
+     * @param limbSwing Скорость движения моба (как спидометр в машине)
+     * @param limbSwingAmount Пройденная мобом дистанция (как счётчик пробега в машине)
+     * @param ageInTicks Возраст моба в тиках, значение постоянно увеличивается от 0
+     * @param netHeadYaw Поворот головы моба
+     * @param headPitch Наклон головы моба
+     * @param scale Значение масштабирования моба. По умолчанию - 0.0625. Применений не найдено.
+     * @param modelMap Группа модели, сохраненная для хэш-карты
      */
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
                           headPitch, scale, modelMap) {
-        // Script for the model
+        // Скрипт для модели
     }
 })
 ```
 
-Here we have a simple example, current model has a group named `rotation` we want this group to make a rotational movement around the X axis, the movement speed is around 1 degree every tick (18 sec/r), we can write it as below.
+Простой пример: текущая модет имеет группу костей, названную `rotation`. Нам нужно, чтобы эта группа вращалась вдоль оси X со скоростью 1 градус каждый тик (18 секунд на 1 оборот). Мы можем написать анимацию так:
 
 ```javascript
-// This call is only needed when you need to use GlWrapper
+// Это вызывается только если вам нужно использовать GlWrapper
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
                           headPitch, scale, modelMap) {
-        // First obtain a group named 'rotation' from modelMap
+        // Сперва определим грумму 'rotation' из modelMap
         rotation = modelMap.get("rotation");
-        // Just in case, we make a simple check to make sure this group existed
+        // На всякий случай, сделаем простую проверку наличия этой группы у модели
         if (rotation != undefined) {
-            // Through the function setRotateAngleX in the group, we set its X axis angle
-            // ageInTicks is tick time for the entity, a value that constantly increases starting from 0
-            // Through remainder operator (which is % sign), set the value between 0~360
-            // Since this method only accepts radian, we need to multiply it by 0.017453292 to convert into radian
-            // And with that we achieved the animation of rotating 1 degree every tick
+            // С помощью setRotateAngleX, мы установим угол вращения по оси X
+            // ageInTicks - это возраст сущности, значение, постоянно увеличивающееся от 0
+            // С помощью оператора % мы найдём остаток от деленияв промежутке от 0 до 360
+            // Так как функция принимает только радианы, умножим полученное значение на 0.017453292 чтобы превратить градусы в радианы
+            // И так мы получим анимацию вращения на 1 градус каждый тик
             rotation.setRotateAngleX(ageInTicks % 360 * 0.017453292);
         }
     }
 })
 ```
 
-Теперь мы добавим еще одно сложное движение, у нас есть группа с именем `wing`, и мы хотим, чтобы постоянное движение в направлении назад и вперед.
+Теперь мы добавим еще одно сложное движение, у нас есть группа с именем `wing`, и мы хотим, чтобы крылья постоянно двигались вперёд-назад.
 
-Колеблется в оси Y в градусе от `-20°~40°`, и один цикл завершается каждые 5 секунд.
+Поворот будет по оси Y на угол от `-20° до 40°`, и цикл будет повторяться каждые 5 секунд.
 
-Тригонометрическая функция соответствует нашим нуждам, так как вы можете использовать синус или косинус, мы будем использовать синусовую функцию.
+Тригонометрическая функция соответствует нашим нуждам, так как вы можете использовать синус или косинус, мы будем использовать функцию синуса.
 
 ```javascript
-// This call is only needed when you need to use GlWrapper
+// Это вызывается только если вам нужно использовать GlWrapper
 var GlWrapper = Java.type("com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper");
 
 Java.asJSONCompatible({
     animation: function (entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw,
         headPitch, scale, modelMap) {
-        // First obtain a group named 'wing' from modelMap
+        // Сперва найдём группу 'wing' из modelMap
         wing = modelMap.get("wing");
-        // Just in case, we make a simple check to make sure this group existed
+        // На всякий случай сделаем простую проверку наличия этой группы у модели
         if (wing != undefined) {
-            // One complete cycle every 5 second, which is 100 tick
-            // Using multiplication and remainder operator we can achieve this requirement
+            // Один цикл займёт 5 секунд, что равно 100 тикам
+            // Используя умножение и остаток от деления мы получим желаемое
             var time = (ageInTicks * 3.6) % 360;
-            // This is using the Math function in JavaScript
-            // Construct sine function, and obtain a periodic function between -20°~40°
+            // Теперь используется функция Math из JavaScript
+            // Используя синус, мы получим периодическую функцию в интервале от -20° до 40°
             var func = 30 * Math.sin(time * 0.017453292) + 10;
-            // Since this method only accepts radian, we need to multiply it by 0.017453292 to convert into radian
+            // Так как функция принимает только радианы, умножим полученное значение на 0.017453292 чтобы превратить градусы в радианы
             wing.setRotateAngleY(func * 0.017453292);
         }
     }
 })
 ```
 
-All other complex motion can be achieved through the related functions.
+Все остальные сложные движения могут быть получены с помощью соответствующих фунций.
 
 ## Быстрая перезагрузка
 
-Since you can't determine if the animation is correct just by looking at the functions, we added a function to hot reload the animation ingame.
+Так как вы не можете понять, правильно ли написана анимация, только лишь посмотрев на код, мы добавили возможность быстрой перезагрузки анимации в игре.
 
-After you load the model resource pack you made, just use the following command can reload all animation's data.
+После того, как вы загрузите созданный вами набор ресурсов модели, просто используйте следующую команду для перезагрузки всех данных анимации.
 - 1.12.2: `/maid_res reload`
 - 1.16.5: `/tlm pack reload`
 
-## Function Documentation
+## Документация по функциям
 
-Strikethrough style means that the method is deprecated in 1.16, you can visit the [link here](https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.16.5/src/main/java/com/github/tartaricacid/touhoulittlemaid/api/animation) to view the source code API.
+Зачёркнутый стиль означает, что данные функции устарели в 1.16, вы можете посетить [эту ссылку](https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.16.5/src/main/java/com/github/tartaricacid/touhoulittlemaid/api/animation) чтобы увидеть исходный код.
 
-### Параметр энтити
+### Параметры сущностей
 
-Depending on the target of the added animation, the function that can be used by `entity` differs as well.
+В зависимости от цели, к которой применяется анимация, функции, используемые `сущностью`, также могут отличаться друг от друга.
 
 #### Горничная
 
-|         Имя функции          | Возвращаемое значение |                                     Заметка                                      |
-|:----------------------------:|:---------------------:|:--------------------------------------------------------------------------------:|
-|        `hasHelmet()`         |       `логика`        |                     After maid wears helmet, returns `true`                      |
-|      `hasChestPlate()`       |       `логика`        |                   After maid wears chestplate, returns `true`                    |
-|       `hasLeggings()`        |       `логика`        |                    After maid wears leggings, returns `true`                     |
-|         `hasBoots()`         |       `логика`        |                      After maid wears boots, returns `true`                      |
-|        `getHelmet()`         |       `String`        |           After maid wears helmet, returns helmet item's registry name           |
-|      `getChestPlate()`       |       `String`        |       After maid wears chestplate, returns chestplate item's registry name       |
-|       `getLeggings()`        |       `String`        |         After maid wears leggings, returns leggings item's registry name         |
-|         `getBoots()`         |       `String`        |            After maid wears boots, returns boots item's registry name            |
-|        `isBegging()`         |       `boolean`       |                         Whether maid is in begging mode                          |
-|      `isSwingingArms()`      |       `логика`        |             If maid is using arms, this function will return `true`              |
-|     `getSwingProgress()`     |        `float`        |                             Get maid's swinging time                             |
-|         `isRiding()`         |       `логика`        |                          Whether maid is in riding mode                          |
-|        `isSitting()`         |       `логика`        |                         Whether maid is in standby mode                          |
-|    ~~`isHoldTrolley()`~~     |       `логика`        |                Whether maid is carrying trolley or other entities                |
-| ~~`isRidingMarisaBroom()`~~  |       `логика`        |                       Whether maid is riding Marisa Broom                        |
-|    ~~`isRidingPlayer()`~~    |       `логика`        |                          Whether maid is riding player                           |
-|    ~~`isHoldVehicle()`~~     |       `логика`        |                          Whether maid is riding vehicle                          |
-| ~~`isPortableAudioPlay()`~~  |       `boolean`       |                 Whether the maid hold portable audio and play it                 |
-|       `hasBackpack()`        |       `логика`        |                          Whether maid wearing backpack                           |
-|     `getBackpackLevel()`     |         `int`         |                            Get maid's backpack level                             |
-|     ~~`hasSasimono()`~~      |       `boolean`       |                          Whether maid wearing sasimono                           |
-|     `isSwingLeftHand()`      |       `boolean`       | Whether the maid is swinging left or right arm, return `false` if it's the right |
-| ~~`getLeftHandRotation()`~~  |      `float[3]`       |                          Get the left arm rotation data                          |
-| ~~`getRightHandRotation()`~~ |      `float[3]`       |                         Get the right arm rotation data                          |
-|        ~~`getDim()`~~        |         `int`         |                      Get the dimension where the maid is in                      |
-|         `getWorld()`         |        `World`        |                              Get maid's world data                               |
-|         `getTask()`          |       `String`        |                Get maid's task, such as `attack`, `ranged_attack`                |
-|     `hasItemMainhand()`      |       `boolean`       |                          Whether maid has mainhand item                          |
-|      `hasItemOffhand()`      |       `boolean`       |                          Whether maid has offhand item                           |
-|     `getItemMainhand()`      |       `String`        |                      Get maid mainhand item's registry name                      |
-|      `getItemOffhand()`      |       `String`        |                      Get maid offhand item's registry name                       |
-|         `inWater()`          |       `boolean`       |                              Whether maid in water                               |
-|          `inRain()`          |       `boolean`       |                               Whether maid in rain                               |
-|        `getAtBiome()`        |       `String`        |                          Get maid's biome register name                          |
-|    ~~`getAtBiomeTemp()`~~    |       `String`        |                        Get maid's biome temperature enum                         |
-|          `onHurt()`          |       `boolean`       |                           Whether the maid is on hurt                            |
-|        `getHealth()`         |        `float`        |                                Get maid's health                                 |
-|       `getMaxHealth()`       |        `float`        |                              Get maid's max health                               |
-|         `isSleep()`          |       `boolean`       |                              Whether maid is sleep                               |
-|     `getFavorability()`      |         `int`         |                           Get the maid's favorability                            |
-|        `isOnGround()`        |       `boolean`       |                          Whether the maid is on ground                           |
-|      `getArmorValue()`       |       `double`        |                              Get maid's armor value                              |
-|         `getSeed()`          |        `long`         |    Get a fixed value, each entity is different, similar to the entity's UUID     |
+|         Имя функции          |      Возвращаемое значение       |                                     Примечание                                      |
+|:----------------------------:|:--------------------------------:|:-----------------------------------------------------------------------------------:|
+|        `hasHelmet()`         |           `логический`           |                    Если горничная надела шлем, возвращает `true`                    |
+|      `hasChestPlate()`       |           `логический`           |                 Есди горничная надела нагрудник, возвращает `true`                  |
+|       `hasLeggings()`        |           `логический`           |                   Если горничная надела поножи, возвращает `true`                   |
+|         `hasBoots()`         |           `логический`           |                  Если горничная надела ботинки, возвращает `true`                   |
+|        `getHelmet()`         |           `строковый`            |        Если горничная надела шлем, возвращает имя шлема из реестра предметов        |
+|      `getChestPlate()`       |           `строковый`            |   Если горничная надела нагрудник, возвращает имя нагрудника из реестра предметов   |
+|       `getLeggings()`        |           `строковый`            |      Если горничная надела поножи, возвращает имя поножей из реестра предметов      |
+|         `getBoots()`         |           `строковый`            |     Если горничная надела ботинки, возвращает имя ботинок из реестра предметов      |
+|        `isBegging()`         |           `логический`           |                     Находится ли горничная в режиме попрошайки                      |
+|      `isSwingingArms()`      |           `логический`           |              Если горничная двигает руками, эта функция вернет `true`               |
+|     `getSwingProgress()`     |         `дробное число`          |                              Вернёт время анимации рук                              |
+|         `isRiding()`         |           `логический`           |                                  Едет ли горничная                                  |
+|        `isSitting()`         |           `логический`           |                             Сидит ли на месте горничная                             |
+|    ~~`isHoldTrolley()`~~     |           `логический`           |                   Держит ли горничная тележку или другие объекты                    |
+| ~~`isRidingMarisaBroom()`~~  |           `логический`           |                             Сидит ли горничная на метле                             |
+|    ~~`isRidingPlayer()`~~    |           `логический`           |                         Едет ли горничная верхом на игроке                          |
+|    ~~`isHoldVehicle()`~~     |           `логический`           |                           Едет ли горничная на транспорте                           |
+| ~~`isPortableAudioPlay()`~~  |           `логический`           |                Держит ли горничная портативное радио и играет ли оно                |
+|       `hasBackpack()`        |           `логический`           |                             Одет ли на горничной рюкзак                             |
+|     `getBackpackLevel()`     |         `целочисленный`          |                               Вернёт уровень рюкзака                                |
+|     ~~`hasSasimono()`~~      |           `логический`           |                            Одет ли на горничную сазимоно                            |
+|     `isSwingLeftHand()`      |           `логический`           |           Использует ли горничная левую руку, вернёт `false`, если правую           |
+| ~~`getLeftHandRotation()`~~  |       `дробное число [3]`        |                          Вернёт данные вращения левой руки                          |
+| ~~`getRightHandRotation()`~~ |       `дробное число [3]`        |                         Вернёт данные вращения правой руки                          |
+|        ~~`getDim()`~~        |         `целочисленный`          |                      Вернёт измерение, где находится горничная                      |
+|         `getWorld()`         |              `Мир`               |                                Вернёт данные о мире                                 |
+|         `getTask()`          |           `строковый`            |            Вернёт занятие горничной, такое как `attack`, `ranged_attack`            |
+|     `hasItemMainhand()`      |           `логический`           |                  Есть ли предмет в главной (правой) руке горничной                  |
+|      `hasItemOffhand()`      |           `логический`           |                 Есть ли предмет во вторичной (левой) руке горничной                 |
+|     `getItemMainhand()`      |           `строковый`            |  Вернёт имя предмета, находящегося в главной руке горничной, из реестра предметов   |
+|      `getItemOffhand()`      |           `строковый`            | Вернёт имя предмета, находящегося во вторичной руке горничной, из реестра предметов |
+|         `inWater()`          |           `логический`           |                                 В воде ли горничная                                 |
+|          `inRain()`          |           `логический`           |                               Под дождём ли горничная                               |
+|        `getAtBiome()`        |           `строковый`            |                Вернёт из реестра имя биома, где находится горничная                 |
+|    ~~`getAtBiomeTemp()`~~    |           `строковый`            |               Вернёт температуру биома, в котором находится горничная               |
+|          `onHurt()`          |           `логический`           |                                 Больно ли горничной                                 |
+|        `getHealth()`         |         `дробное число`          |                              Вернёт здоровье горничной                              |
+|       `getMaxHealth()`       |         `дробное число`          |                       Вернёт максимальное здоровье горничной                        |
+|         `isSleep()`          |           `логический`           |                                  Спит ли горничная                                  |
+|     `getFavorability()`      |         `целочисленный`          |                          Вернёт благоприятность горничной                           |
+|        `isOnGround()`        |           `логический`           |                           Находится ли горничная на блоке                           |
+|      `getArmorValue()`       | `большоt дробное число (double)` |                           Вернёт значение брони горничной                           |
+|         `getSeed()`          |   `большое целое число (long)`   | Вернёт фиксированное значение, уникальное для каждой сущности, схожее с UUID мобов  |
 
-#### Chair
+#### Сидение
 
-|     Function name     | Return value |                                   Note                                    |
-|:---------------------:|:------------:|:-------------------------------------------------------------------------:|
-|  `isRidingPlayer()`   |  `boolean`   |                  Whether the chair is sit by the player                   |
-|   `hasPassenger()`    |  `boolean`   |                      Whether the chair has passenger                      |
-|  `getPassengerYaw()`  |   `float`    |                         Get chair passenger's yaw                         |
-|      `getYaw()`       |   `float`    |                              Get chair's yaw                              |
-| `getPassengerPitch()` |   `float`    |                        Get chair passenger's pitch                        |
-|    ~~`getDim()`~~     |    `int`     |                            Get chair's dim id                             |
-|     `getWorld()`      |   `World`    |                          Get chair's world data                           |
-|      `getSeed()`      |    `long`    | Get a fixed value, each entity is different, similar to the entity's UUID |
+|      Имя функции      |    Возвращаемое значение     |                                     Примечание                                     |
+|:---------------------:|:----------------------------:|:----------------------------------------------------------------------------------:|
+|  `isRidingPlayer()`   |         `логический`         |                          Сидит ли за этим сидением игрок                           |
+|   `hasPassenger()`    |         `логический`         |                           Имеет ли это сидение пассажира                           |
+|  `getPassengerYaw()`  |       `дробное число`        |                              Вернёт поворот пассажира                              |
+|      `getYaw()`       |       `дробное число`        |                               Вернёт поворот сидения                               |
+| `getPassengerPitch()` |       `дробное число`        |                              Вернёт наклон пассажира                               |
+|    ~~`getDim()`~~     |       `целочисленный`        |                                Вернёт ID измерения                                 |
+|     `getWorld()`      |            `Мир`             |                                Вернёт данные о мире                                |
+|      `getSeed()`      | `большое целое число (long)` | Вернёт фиксированное значение, уникальное для каждой сущности, схожее с UUID мобов |
 
-#### World
-|  Function name   | Return value |               Note               |
-|:----------------:|:------------:|:--------------------------------:|
-| `getWorldTime()` |    `long`    | Get world's time (tick, 0-24000) |
-|    `isDay()`     |  `boolean`   |     Whether the world is day     |
-|   `isNight()`    |  `boolean`   |    Whether the world is night    |
-|  `isRaining()`   |  `boolean`   |   Whether the world is raining   |
-| `isThundering()` |  `boolean`   | Whether the world is thundering  |
+#### Мир
+|   Имя функции    |    Возвращаемое значение     |           Примечание           |
+|:----------------:|:----------------------------:|:------------------------------:|
+| `getWorldTime()` | `большое целое число (long)` | Вернёт время в тиках (0-24000) |
+|    `isDay()`     |         `логический`         |          Сейчас день?          |
+|   `isNight()`    |         `логический`         |          Сейчас ночь?          |
+|  `isRaining()`   |         `логический`         |         Идёт ли дождь          |
+| `isThundering()` |         `логический`         |         Идёт ли шторм          |
 
 
 

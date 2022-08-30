@@ -68,6 +68,7 @@
   "tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist": "ホワイトリスト",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.has": "チェストの座標: %d, %d, %d",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "チェストが設定されていません",
+  "tooltips.touhou_little_maid.maid_beacon.desc": "溜まったPower：%s",
   "gui.touhou_little_maid.schedule.day": "日勤",
   "gui.touhou_little_maid.schedule.night": "夜勤",
   "gui.touhou_little_maid.schedule.all": "24時間労働",
@@ -140,6 +141,7 @@
   "gui.touhou_little_maid.resources_download.tab.2": "チェア リソースパック",
   "gui.touhou_little_maid.resources_download.tab.3": "サウンド リソースパック",
   "gui.touhou_little_maid.resources_download.sound.downloaded.tip": "サウンドパックを使用するには、バニラのリソースパックのようにロードする必要があります！",
+  "gui.touhou_little_maid.model_gui.easter_egg.encrypt": "This is an encrypted named easter egg model",
   "message.touhou_little_maid.change_model.disabled": "メイドのモデルの変更が無効化されています。",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "知識不足のためアイテムの使い方がわかりません。",
   "message.touhou_little_maid.altar.not_enough_power": "P点が足りません。",
@@ -324,5 +326,9 @@
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text": "東方wiki",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "ワールドの生成",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.0.text": "このModはモブを追加します。$(br2)ドロップアイテムは貴重なクラフトの素材となります。$(br2)Modにより追加された敵対的なモブはコンフィグによりスポーンの確率を変更できます。値を0に設定した場合、スポーンしなくなります。",
-  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "夜にいくつかのバイオームでスポーンし、飛びながら弾幕を撃ちプレイヤーやメイドを攻撃します。"
+  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "夜にいくつかのバイオームでスポーンし、飛びながら弾幕を撃ちプレイヤーやメイドを攻撃します。",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.name": "カスタムモデルを作成",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "リンクを開く",
+  "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.name": "カスタムモデルをダウンロードする",
+  "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.link_text": "Discordリンク"
 }

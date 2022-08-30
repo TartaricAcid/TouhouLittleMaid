@@ -146,7 +146,7 @@ Java.asJSONCompatible({
 |        `getAtBiome()`        |  `String`  |                          Get maid's biome register name                          |
 |    ~~`getAtBiomeTemp()`~~    |  `String`  |                        Get maid's biome temperature enum                         |
 |          `onHurt()`          | `boolean`  |                           Whether the maid is on hurt                            |
-|        `getHealth()`         |  `float`   |                                Get maid's health                                 |
+|        `getHealth()`         |  `float`   |                                     获取女仆的生命值                                     |
 |       `getMaxHealth()`       |  `float`   |                                    获取女仆的最大生命值                                    |
 |         `isSleep()`          | `boolean`  |                              Whether maid is sleep                               |
 |     `getFavorability()`      |   `int`    |                           Get the maid's favorability                            |
@@ -156,25 +156,25 @@ Java.asJSONCompatible({
 
 #### 坐垫
 
-|          函数名          |    返回值    |                   备注                   |
-|:---------------------:|:---------:|:--------------------------------------:|
-|  `isRidingPlayer()`   | `boolean` | Whether the chair is sit by the player |
-|   `hasPassenger()`    | `boolean` |    Whether the chair has passenger     |
-|  `getPassengerYaw()`  |  `float`  |       Get chair passenger's yaw        |
-|      `getYaw()`       |  `float`  |            Get chair's yaw             |
-| `getPassengerPitch()` |  `float`  |      Get chair passenger's pitch       |
-|    ~~`getDim()`~~     |   `int`   |           Get chair's dim id           |
-|     `getWorld()`      |  `World`  |         Get chair's world data         |
-|      `getSeed()`      |  `long`   |     获取一个固定值，每个实体都是不同的，类似于该实体的 UUID     |
+|          函数名          |    返回值    |               备注               |
+|:---------------------:|:---------:|:------------------------------:|
+|  `isRidingPlayer()`   | `boolean` |           坐垫是否被玩家所坐            |
+|   `hasPassenger()`    | `boolean` |            坐垫是否有乘客             |
+|  `getPassengerYaw()`  |  `float`  |   Get chair passenger's yaw    |
+|      `getYaw()`       |  `float`  |        Get chair's yaw         |
+| `getPassengerPitch()` |  `float`  |  Get chair passenger's pitch   |
+|    ~~`getDim()`~~     |   `int`   |       Get chair's dim id       |
+|     `getWorld()`      |  `World`  |     Get chair's world data     |
+|      `getSeed()`      |  `long`   | 获取一个固定值，每个实体都是不同的，类似于该实体的 UUID |
 
 #### 世界
-|       函数名        |    返回值    |                备注                |
-|:----------------:|:---------:|:--------------------------------:|
-| `getWorldTime()` |  `long`   | Get world's time (tick, 0-24000) |
-|    `isDay()`     | `boolean` |     Whether the world is day     |
-|   `isNight()`    | `boolean` |    Whether the world is night    |
-|  `isRaining()`   | `boolean` |   Whether the world is raining   |
-| `isThundering()` | `boolean` | Whether the world is thundering  |
+|       函数名        |    返回值    |           备注            |
+|:----------------:|:---------:|:-----------------------:|
+| `getWorldTime()` |  `long`   | 获取当前世界的时间（tick，0-24000） |
+|    `isDay()`     | `boolean` |        当前世界是否为白天        |
+|   `isNight()`    | `boolean` |        当前世界是否为黑夜        |
+|  `isRaining()`   | `boolean` |        当前世界是否在降雨        |
+| `isThundering()` | `boolean` |       当前世界是否处于雷雨中       |
 
 
 
@@ -194,21 +194,21 @@ These two data are mainly used on the rotation of the legs and limbs, Minecraft 
 
 Changing the value `0.6662` will control the frequency of the swing, multiplied by the coeffecient of the formula (for example, the leg uses `1.4` as the coeffecient) to change the amplitude of the swing.
 
-Using the vanilla Minecraft formula for arm and leg swinging can make a more natural swinging animation.
+使用原版Minecraft的手臂和腿摆动公式可以使摆动动画更加自然。
 
 
 
-### `ageInTicks` Parameter
+### `ageInTicks` 参数
 
-Floating point, a variable that self-increase from 0 every tick, a self-changing parameter that's used in most animation function.
+浮点数，一个从 0 开始每 tick 都会自加的变量，大多数动画中都会用到的自变量。
 
 
 
-### `netHeadYaw` and `headPitch` Parameter
+### `netHeadYaw` 和 `headPitch` 参数
 
-Both are floating point, and are degrees value (this is how vanilla Minecraft is designed).
+二者均为浮点数，单位为角度（这是原版 Minecraft 所设计的）。
 
-Normally this parameter can be used as a rotation angle, you just need to change it into radian.
+通常此参数可以用作旋转角度，你只需要将其更改为弧度。
 
 ```javascript
 head.setRotateAngleX(headPitch * 0.017453292);
@@ -218,15 +218,15 @@ head.setRotateAngleY(netHeadYaw * 0.017453292);
 > If the coeffiecient in this section is set to be larger than '0.017453292', there may have some error issue.
 
 
-### `scale` Parameter
+### `scale` 参数
 
-Floating point, fixed at 0.0625.
+浮点数，固定为 0.0625。
 
-A value that has unknown meaning.
+一个含义不明的值。
 
 
 
-### modelMap Parameter
+### modelMap 参数
 
 A Map that saves group, using string as keys.
 
@@ -244,7 +244,7 @@ Of course, as a precaution, it's best to set a check for this group, to make sur
 ```javascript
 head = modelMap.get("head");
 if (head != undefined) {
-    // Making various animation
+    // 制作各种动画
 }
 ```
 
@@ -256,13 +256,13 @@ We can get various group via `modelMap.get("xxx")`, the following are the functi
 
 |                  函数名                  |    返回值    |                        备注                         |
 |:-------------------------------------:|:---------:|:-------------------------------------------------:|
-| `setRotateAngleX(float rotateAngleX)` |   None    |              Set the group's X angle              |
-| `setRotateAngleY(float rotateAngleY)` |   None    |              Set the group's Y angle              |
-| `setRotateAngleZ(float rotateAngleZ)` |   None    |              Set the group's Z angle              |
-|      `setOffsetX(float offsetX)`      |   None    |       Set the group's X coordianate offset        |
-|      `setOffsetY(float offsetY)`      |   None    |       Set the group's Y coordianate offset        |
-|      `setOffsetZ(float offsetZ)`      |   None    |       Set the group's Z coordianate offset        |
-|      `setHidden(boolean hidden)`      |   None    |            Set if the group is hidden             |
+| `setRotateAngleX(float rotateAngleX)` |     无     |              Set the group's X angle              |
+| `setRotateAngleY(float rotateAngleY)` |     无     |              Set the group's Y angle              |
+| `setRotateAngleZ(float rotateAngleZ)` |     无     |              Set the group's Z angle              |
+|      `setOffsetX(float offsetX)`      |     无     |       Set the group's X coordianate offset        |
+|      `setOffsetY(float offsetY)`      |     无     |       Set the group's Y coordianate offset        |
+|      `setOffsetZ(float offsetZ)`      |     无     |       Set the group's Z coordianate offset        |
+|      `setHidden(boolean hidden)`      |     无     |            Set if the group is hidden             |
 |          `getRotateAngleX()`          |  `float`  |            Obtain the group's X angle             |
 |          `getRotateAngleY()`          |  `float`  |            Obtain the group's Y angle             |
 |          `getRotateAngleZ()`          |  `float`  |            Obtain the group's Z angle             |
@@ -280,8 +280,8 @@ We can get various group via `modelMap.get("xxx")`, the following are the functi
 
 在脚本的最开头，我们使用了一个叫做 `GlWrapper` 的工具，它可以进行各种平移、旋转和缩放操作。
 
-|                       函数名                        | 返回值  |                                        备注                                        |
-|:------------------------------------------------:|:----:|:--------------------------------------------------------------------------------:|
-|      `translate(float x, float y, float z)`      | None |                        Move the entity to coordiate x y z                        |
-| `rotate(float angle, float x, float y, float z)` | None | Using a straight line`(0, 0, 0) (x, y, z)` as axis, rotate it by `angle` degree. |
-|        `scale(float x, float y, float z)`        | None |                    Scale entity on three axis by x y z times                     |
+|                       函数名                        | 返回值 |                      备注                      |
+|:------------------------------------------------:|:---:|:--------------------------------------------:|
+|      `translate(float x, float y, float z)`      |  无  |                将实体移动至坐标 x y z                |
+| `rotate(float angle, float x, float y, float z)` |  无  | 以直线 `(0, 0, 0) (x, y, z)` 为轴，将其旋转 `angle` 度。 |
+|        `scale(float x, float y, float z)`        |  无  |              将实体在三条轴上缩放 x y z 倍              |

@@ -1,27 +1,27 @@
 
 
-# Preset Animation
+# Hoạt ảnh có sẵn
 
-There are many default animations built in the mod, you only need:
-1. Set the correct name for the group you want to animate in Blockbench.
-2. Call the animation reference of the path in the `animation` field of the `maid_model.json` file.
+Có rất nhiều hoạt ảnh mặc định sẵn có trong mod, bạn chỉ cần:
+1. Đặt đúng tên cho nhóm mà bạn muốn tạo hoạt động trong Blockbench.
+2. Gọi tên đường dẫn đến vùng `animation` của tệp `maid_model.json`.
 
-> The `tlm-utils` plugin can automatically call the animation script reference based on the group name, you just need to click the `Re-Analyze Animation` button. ![img](https://i.imgur.com/iyCKwMx.gif)
+> Plugin `tlm-utils` có thể tự động gọi tên đường dẫn đến hoạt ảnh dựa vào tên nhóm mô hình, bạn chỉ cần nhấp vào nút `Re-Analyze Animation`. ![img](https://i.imgur.com/iyCKwMx.gif)
 
-The Blockbench plugin provides all available preset animations, you can right-click in the outliner interface to open the preset animation menu   
+Plugin này trên Blockbench cung cấp toàn bộ hoạt ảnh có sẵn khả dụng, bạn có thể nhấp chuột phải trong vùng outliner để mở giao diện hoạt ảnh có sẵn   
 ![img](https://i.imgur.com/N17PbiE.gif)
 
 
-## Positioning Group
-For rendering positioning, based on the pivot point of the group, can be empty.
+## Sắp xếp các nhóm
+Dành cho việc render, các trục pivot của các nhóm có thể được bỏ trống.
 ### `armLeftPositioningBone`
 
-Position the left-handed item, its parent group must be `armLeft`
+Để sắp xếp vị trí cho vật phẩm cầm trên tay trái, nhóm mô hình của nó phải là `armLeft`
 
 ### `armRightPositioningBone`
 
-Position the right-handed item, its parent group must be `armRight`
+Để sắp xếp vị trí cho vật phẩm cầm trên tay phải, nhóm mô hình của nó phải là `armRight`
 
 ### `backpackPositioningBone`
 
-Position the backpack shoulder strap, it must be the root group
+Để sắp xếp vị trí cho ba lô đeo trên lưng, nhóm mô hình của nó phải là root

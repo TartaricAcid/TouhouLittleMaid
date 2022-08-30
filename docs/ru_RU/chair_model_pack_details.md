@@ -90,7 +90,7 @@
 }
 ```
 
-The example above listed all usable field, only the field with '(Required)' are needed, the rest can be omitted.
+На примере выше перечислены все возможные поля, однако для заполнения обязательны только поля с '(Required)', остальные могут быть опущены.
 
 Для простоты можно написать такой файл:
 
