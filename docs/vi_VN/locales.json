@@ -7,7 +7,7 @@
     "themeConfig": {
         "selectText": "Ngôn ngữ",
         "label": "Tiếng Việt",
-        "ariaLabel": "Ngôn ngữ",
+        "ariaLabel": "Languages",
         "lastUpdated": "Cập nhật lần cuối",
         "nav": [
             {
@@ -28,23 +28,23 @@
                 "title": "Mô hình tự tạo",
                 "children": [
                     [
-                        "./custom_model_pack",
+                        "./vi_VN/custom_model_pack",
                         "Gói mô hình tự tạo"
                     ],
                     [
-                        "./maid_model_pack_details",
+                        "./vi_VN/maid_model_pack_details",
                         "Chi tiết gói mô hình"
                     ],
                     [
-                        "./chair_model_pack_details",
+                        "./vi_VN/chair_model_pack_details",
                         "Chi tiết gói mô hình ghế"
                     ],
                     [
-                        "./custom_javascript_animation",
+                        "./vi_VN/custom_javascript_animation",
                         "Hoạt ảnh JavaScript tự tạo"
                     ],
                     [
-                        "./preset_animation",
+                        "./vi_VN/preset_animation",
                         "Hoạt ảnh có sẵn"
                     ]
                 ]
@@ -53,7 +53,7 @@
                 "title": "Thay đổi công thức",
                 "children": [
                     [
-                        "./custom_altar_recipes",
+                        "./vi_VN/custom_altar_recipes",
                         "Công thức tuỳ chỉnh trên bàn thờ"
                     ]
                 ]
