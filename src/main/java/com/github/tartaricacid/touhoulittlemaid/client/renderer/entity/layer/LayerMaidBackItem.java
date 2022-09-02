@@ -9,9 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.enchantment.IVanishable;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
 
@@ -30,9 +28,9 @@ public class LayerMaidBackItem extends LayerRenderer<EntityMaid, BedrockModel<En
             renderTool(matrixStack, bufferIn, packedLightIn, maid, stack);
             return;
         }
-        if (stack.getItem() instanceof BlockItem) {
-            // TODO: 2022/8/31 渲染花花草草，但是定位困难，暂时未完成！
-        }
+        // if (stack.getItem() instanceof BlockItem) {
+        // TODO: 2022/8/31 渲染花花草草，但是定位困难，暂时未完成！
+        // }
     }
 
     private void renderTool(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMaid maid, ItemStack stack) {
@@ -42,12 +40,7 @@ public class LayerMaidBackItem extends LayerRenderer<EntityMaid, BedrockModel<En
         matrixStack.pushPose();
         matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
-        if (getParentModel().hasBackpackPositioningModel()) {
-            ModelRenderer renderer = getParentModel().getBackpackPositioningModel();
-            matrixStack.translate((renderer.x - 16) * 0.0625, -0.0625 * (renderer.y - 16 + 8), -0.0625 * (renderer.z + 16 - 1));
-        } else {
-            matrixStack.translate(0, 0.5, -0.25);
-        }
+        matrixStack.translate(0, 0.5, -0.25);
         switch (maid.getBackpackLevel()) {
             default:
             case BackpackLevel.EMPTY:
