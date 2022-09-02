@@ -121,6 +121,15 @@ public class MaidMainContainer extends Container {
         // 默认背包
         for (int i = 0; i < 6; i++) {
             addSlot(new SlotItemHandler(inv, i, 143 + 18 * i, 37));
+            // 最后一格给予特殊图标
+            if (i == 5) {
+                addSlot(new SlotItemHandler(inv, i, 143 + 18 * i, 37) {
+                    @Override
+                    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+                        return Pair.of(PlayerContainer.BLOCK_ATLAS, ReloadResourceEvent.EMPTY_BACK_SHOW_SLOT);
+                    }
+                });
+            }
         }
 
         if (level > BackpackLevel.EMPTY) {
