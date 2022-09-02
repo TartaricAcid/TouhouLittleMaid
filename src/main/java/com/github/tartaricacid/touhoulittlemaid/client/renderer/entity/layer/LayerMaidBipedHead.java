@@ -6,20 +6,22 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.AbstractSkullBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.SkullTileEntityRenderer;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.SkullTileEntity;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.StringUtils;
 
@@ -47,13 +49,22 @@ public class LayerMaidBipedHead extends LayerRenderer<EntityMaid, BedrockModel<E
                 GameProfile gameprofile = getSkullGameProfile(head);
                 matrixStackIn.translate(-0.5D, 0.0D, -0.5D);
                 SkullTileEntityRenderer.renderSkull(null, 180.0F, skullBlock.getType(), gameprofile, limbSwing, matrixStackIn, bufferIn, packedLightIn);
-            } else if (!(item instanceof ArmorItem) || ((ArmorItem) item).getSlot() != EquipmentSlotType.HEAD) {
-                matrixStackIn.translate(0.0D, -0.25D, 0.0D);
-                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-                matrixStackIn.scale(0.625F, -0.625F, -0.625F);
-                Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, head, ItemCameraTransforms.TransformType.HEAD, false, matrixStackIn, bufferIn, packedLightIn);
             }
             matrixStackIn.popPose();
+        }
+
+        ItemStack stack = maid.getMaidInv().getStackInSlot(5);
+        if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
+            Block block = ((BlockItem) stack.getItem()).getBlock();
+            if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
+                BlockState plant = ((IPlantable) block).getPlant(maid.level, maid.blockPosition());
+                matrixStackIn.pushPose();
+                this.getParentModel().getHead().translateAndRotate(matrixStackIn);
+                matrixStackIn.scale(0.8F, -0.8F, -0.8F);
+                matrixStackIn.translate(-0.5, 0.625, -0.5);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
+                matrixStackIn.popPose();
+            }
         }
     }
 

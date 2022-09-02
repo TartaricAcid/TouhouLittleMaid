@@ -25,39 +25,31 @@ public class LayerMaidBackItem extends LayerRenderer<EntityMaid, BedrockModel<En
     public void render(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack stack = maid.getMaidInv().getStackInSlot(5);
         if (stack.getItem() instanceof IVanishable) {
-            renderTool(matrixStack, bufferIn, packedLightIn, maid, stack);
-            return;
+            if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+                return;
+            }
+            matrixStack.pushPose();
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+            matrixStack.translate(0, 0.5, -0.25);
+            switch (maid.getBackpackLevel()) {
+                default:
+                case BackpackLevel.EMPTY:
+                    matrixStack.translate(0, 0.625, 0.2);
+                    break;
+                case BackpackLevel.SMALL:
+                    matrixStack.translate(0, 0.625, -0.05);
+                    break;
+                case BackpackLevel.MIDDLE:
+                    matrixStack.mulPose(Vector3f.XP.rotationDegrees(-7.5F));
+                    matrixStack.translate(0, 0.625, -0.25);
+                    break;
+                case BackpackLevel.BIG:
+                    matrixStack.translate(0, 0, -0.4);
+                    break;
+            }
+            Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, stack, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, bufferIn, packedLightIn);
+            matrixStack.popPose();
         }
-        // if (stack.getItem() instanceof BlockItem) {
-        // TODO: 2022/8/31 渲染花花草草，但是定位困难，暂时未完成！
-        // }
-    }
-
-    private void renderTool(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMaid maid, ItemStack stack) {
-        if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
-            return;
-        }
-        matrixStack.pushPose();
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
-        matrixStack.translate(0, 0.5, -0.25);
-        switch (maid.getBackpackLevel()) {
-            default:
-            case BackpackLevel.EMPTY:
-                matrixStack.translate(0, 0.625, 0.2);
-                break;
-            case BackpackLevel.SMALL:
-                matrixStack.translate(0, 0.625, -0.05);
-                break;
-            case BackpackLevel.MIDDLE:
-                matrixStack.mulPose(Vector3f.XP.rotationDegrees(-7.5F));
-                matrixStack.translate(0, 0.625, -0.25);
-                break;
-            case BackpackLevel.BIG:
-                matrixStack.translate(0, 0, -0.4);
-                break;
-        }
-        Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, stack, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, bufferIn, packedLightIn);
-        matrixStack.popPose();
     }
 }
