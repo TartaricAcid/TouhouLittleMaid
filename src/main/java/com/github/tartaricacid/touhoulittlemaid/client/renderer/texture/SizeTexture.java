@@ -16,4 +16,11 @@ public abstract class SizeTexture extends Texture {
      * @return 高度（像素）
      */
     abstract public int getHeight();
+
+    /**
+     * 给定路径的文件是否存在
+     *
+     * @return 存在与否
+     */
+    abstract public boolean isExist();
 }

@@ -78,7 +78,7 @@ repositories {
     }
     maven {
         name = "Curse Maven"
-        url = "https://www.cursemaven.com"
+        url = "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
@@ -93,6 +93,10 @@ repositories {
         name 'Jared Maven'
         url 'https://maven.blamejared.com/'
     }
+    maven {
+        // Cloth Config API
+        url "https://maven.shedaniel.me/"
+    }
 }
 
 dependencies {
@@ -106,6 +110,9 @@ dependencies {
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
+    compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
+    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
 }
 
 tasks.withType(JavaCompile) {

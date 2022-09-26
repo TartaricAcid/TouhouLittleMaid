@@ -71,7 +71,9 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
 
         // 模型动画设置
         this.model.setAnimations(this.mainAnimations);
-
+        // 渲染聊天气泡
+        ChatBubbleRenderer.renderChatBubble(this, entity, matrixStackIn, bufferIn, packedLightIn);
+        // 渲染女仆模型本体
         GlWrapper.setMatrixStack(matrixStackIn);
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         GlWrapper.clearMatrixStack();

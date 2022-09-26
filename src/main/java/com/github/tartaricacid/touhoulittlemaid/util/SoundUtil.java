@@ -55,12 +55,12 @@ public final class SoundUtil {
         return fallback;
     }
 
-    private static boolean isRainBiome(Biome biome, BlockPos pos) {
+    public static boolean isRainBiome(Biome biome, BlockPos pos) {
         float temp = biome.getTemperature(pos);
         return biome.getPrecipitation() == Biome.RainType.RAIN && LOW_TEMPERATURE <= temp && temp <= HIGH_TEMPERATURE;
     }
 
-    private static boolean isSnowyBiome(Biome biome, BlockPos pos) {
+    public static boolean isSnowyBiome(Biome biome, BlockPos pos) {
         return biome.getPrecipitation() == Biome.RainType.SNOW && biome.getTemperature(pos) < LOW_TEMPERATURE;
     }
 }

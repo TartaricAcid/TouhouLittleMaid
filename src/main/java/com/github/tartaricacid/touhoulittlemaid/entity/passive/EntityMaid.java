@@ -10,6 +10,9 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
@@ -131,6 +134,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     private static final DataParameter<MaidSchedule> SCHEDULE_MODE = EntityDataManager.defineId(EntityMaid.class, MaidSchedule.DATA);
     private static final DataParameter<BlockPos> RESTRICT_CENTER = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Float> RESTRICT_RADIUS = EntityDataManager.defineId(EntityMaid.class, DataSerializers.FLOAT);
+    private static final DataParameter<MaidChatBubbles> CHAT_BUBBLE = EntityDataManager.defineId(EntityMaid.class, MaidChatBubbles.DATA);
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -195,6 +199,7 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         this.entityData.define(SCHEDULE_MODE, MaidSchedule.DAY);
         this.entityData.define(RESTRICT_CENTER, BlockPos.ZERO);
         this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_HOME_RANGE.get().floatValue());
+        this.entityData.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
     }
 
     @Override
@@ -275,6 +280,9 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     public void aiStep() {
         super.aiStep();
         this.updateSwingTime();
+        if (!level.isClientSide) {
+            ChatBubbleManger.tick(this);
+        }
     }
 
     @Override
@@ -1018,6 +1026,22 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
     @Override
     public float getRestrictRadius() {
         return this.entityData.get(RESTRICT_RADIUS);
+    }
+
+    public MaidChatBubbles getChatBubble() {
+        return this.entityData.get(CHAT_BUBBLE);
+    }
+
+    public void addChatBubble(long endTime, ChatText text) {
+        ChatBubbleManger.addChatBubble(endTime, text, this);
+    }
+
+    public void setChatBubble(MaidChatBubbles bubbles) {
+        this.entityData.set(CHAT_BUBBLE, bubbles);
+    }
+
+    public int getChatBubbleCount() {
+        return ChatBubbleManger.getChatBubbleCount(this);
     }
 
     public boolean isPickup() {

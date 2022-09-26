@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
@@ -22,6 +23,9 @@ public class MaidModelInfo implements IModelInfo {
 
     @SerializedName("description")
     private List<String> description;
+
+    @SerializedName("chat_bubble")
+    private ChatBubbleInfo chatBubble = null;
 
     @SerializedName("model")
     private ResourceLocation model;
@@ -75,6 +79,10 @@ public class MaidModelInfo implements IModelInfo {
     @Override
     public List<String> getDescription() {
         return description;
+    }
+
+    public ChatBubbleInfo getChatBubble() {
+        return chatBubble;
     }
 
     @Override
@@ -180,6 +188,11 @@ public class MaidModelInfo implements IModelInfo {
             );
         }
         renderEntityScale = MathHelper.clamp(renderEntityScale, RENDER_ENTITY_SCALE_MIN, RENDER_ENTITY_SCALE_MAX);
+        if (chatBubble == null) {
+            chatBubble = ChatBubbleManger.DEFAULT_CHAT_BUBBLE;
+        } else {
+            chatBubble.decorate();
+        }
         return this;
     }
 

@@ -3,7 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.util;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import org.apache.commons.io.FileUtils;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
 
@@ -21,9 +23,22 @@ public final class GetJarResources {
     public static void copyTouhouLittleMaidFile(String filePath, Path destPath, String fileName) {
         URL url = TouhouLittleMaid.class.getResource(filePath);
         try {
+            assert url != null;
             FileUtils.copyURLToFile(url, destPath.resolve(fileName).toFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Nullable
+    public static InputStream readTouhouLittleMaidFile(String filePath) {
+        URL url = TouhouLittleMaid.class.getResource(filePath);
+        try {
+            assert url != null;
+            return url.openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

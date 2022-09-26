@@ -7,9 +7,9 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FilePackTexture extends SizeTexture {
@@ -24,6 +24,12 @@ public class FilePackTexture extends SizeTexture {
     }
 
     @Override
+    public boolean isExist() {
+        File textureFile = rootPath.resolve("assets").resolve(texturePath.getNamespace()).resolve(texturePath.getPath()).toFile();
+        return textureFile.isFile();
+    }
+
+    @Override
     public void load(IResourceManager manager) {
         if (!RenderSystem.isOnRenderThreadOrInit()) {
             RenderSystem.recordRenderCall(this::doLoad);
@@ -35,7 +41,7 @@ public class FilePackTexture extends SizeTexture {
     private void doLoad() {
         File textureFile = rootPath.resolve("assets").resolve(texturePath.getNamespace()).resolve(texturePath.getPath()).toFile();
         if (textureFile.isFile()) {
-            try (InputStream stream = new FileInputStream(textureFile)) {
+            try (InputStream stream = Files.newInputStream(textureFile.toPath())) {
                 NativeImage imageIn = NativeImage.read(stream);
                 width = imageIn.getWidth();
                 height = imageIn.getHeight();

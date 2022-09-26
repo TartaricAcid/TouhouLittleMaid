@@ -21,4 +21,9 @@ public class MuteBauble implements IMaidBauble {
             event.setCanceled(true);
         }
     }
+
+    @Override
+    public String getChatBubbleId() {
+        return "mute";
+    }
 }

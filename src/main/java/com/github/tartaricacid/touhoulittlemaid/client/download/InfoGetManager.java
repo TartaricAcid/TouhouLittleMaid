@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
@@ -186,6 +187,7 @@ public class InfoGetManager {
                 } else {
                     Files.copy(fileInCache.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     CustomPackLoader.readModelFromZipFile(fileInTlmModel);
+                    ServerCustomPackLoader.reloadPacks();
                 }
                 info.setStatus(DownloadStatus.DOWNLOADED);
             } catch (IOException e) {
@@ -198,13 +200,13 @@ public class InfoGetManager {
 
     public static List<DownloadInfo> getTypedDownloadInfoList(DownloadInfo.TypeEnum typeEnum) {
         switch (typeEnum) {
-            default:
-            case MAID:
-                return DOWNLOAD_INFO_LIST_MAID;
             case CHAIR:
                 return DOWNLOAD_INFO_LIST_CHAIR;
             case SOUND:
                 return DOWNLOAD_INFO_LIST_SOUND;
+            default:
+            case MAID:
+                return DOWNLOAD_INFO_LIST_MAID;
         }
     }
 }

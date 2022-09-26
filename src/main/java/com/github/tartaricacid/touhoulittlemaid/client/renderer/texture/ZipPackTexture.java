@@ -25,6 +25,17 @@ public class ZipPackTexture extends SizeTexture {
     }
 
     @Override
+    public boolean isExist() {
+        try (ZipFile zipFile = new ZipFile(zipFilePath.toFile())) {
+            ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", texturePath.getNamespace(), texturePath.getPath()));
+            return entry != null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public void load(IResourceManager manager) {
         if (!RenderSystem.isOnRenderThreadOrInit()) {
             RenderSystem.recordRenderCall(this::doLoad);
