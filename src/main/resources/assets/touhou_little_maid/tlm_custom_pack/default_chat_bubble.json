@@ -1,0 +1,66 @@
+{
+  "bg": "touhou_little_maid:textures/chat_bubble/bg/default1.png",
+  "text": {
+    "main": {
+      "idle": [
+        "%touhou_little_maid:textures/chat_bubble/emoji/idle1.png%",
+        "%touhou_little_maid:textures/chat_bubble/emoji/idle2.png%",
+        "%touhou_little_maid:textures/chat_bubble/emoji/idle3.png%",
+        "%touhou_little_maid:textures/chat_bubble/emoji/idle4.png%",
+        "%touhou_little_maid:textures/chat_bubble/emoji/idle5.png%",
+        "^_^",
+        "(╬ Ò ‸ Ó)",
+        "(≧▽≦)",
+        "(⁎˃ᆺ˂)"
+      ],
+      "sleep": [
+        "%touhou_little_maid:textures/chat_bubble/emoji/sleep1.png%"
+      ],
+      "work": [
+        "%touhou_little_maid:textures/chat_bubble/emoji/work1.png%",
+        "%touhou_little_maid:textures/chat_bubble/emoji/work2.png%",
+        "%touhou_little_maid:textures/chat_bubble/emoji/work3.png%",
+        "%touhou_little_maid:textures/chat_bubble/emoji/work4.png%",
+        "( ≧Д≦)",
+        "(눈_눈)",
+        "〒.〒",
+        "(☉_☉)"
+      ]
+    },
+    "special": {
+      "morning": [
+        "{chat_bubble.touhou_little_maid.morning.1}"
+      ],
+      "night": [
+        "{chat_bubble.touhou_little_maid.night.1}"
+      ],
+      "hot": [
+        "%touhou_little_maid:textures/chat_bubble/emoji/rain1.png%",
+        "{chat_bubble.touhou_little_maid.hot.1}"
+      ],
+      "cold": [
+        "{chat_bubble.touhou_little_maid.cold.1}"
+      ],
+      "rain": [
+        "%touhou_little_maid:textures/chat_bubble/emoji/rain1.png%",
+        "{chat_bubble.touhou_little_maid.rain.1}"
+      ],
+      "snow": [
+        "{chat_bubble.touhou_little_maid.snow.1}"
+      ],
+      "hurt": [
+        "{chat_bubble.touhou_little_maid.hurt.1}",
+        "˃ʍ˂",
+        "✖‿✖"
+      ],
+      "beg": [
+        "(*╹▽╹*)"
+      ]
+    },
+    "other": {
+      "mute": [
+        "%touhou_little_maid:textures/chat_bubble/emoji/mute1.png%"
+      ]
+    }
+  }
+}
