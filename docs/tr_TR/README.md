@@ -15,7 +15,7 @@ features:
   - 
     title: Develop Mod
     details: How to compat Touhou Little Maid mod, or develop an addition
-footer: MIT Licensed | Copyright © 2021-present TartaricAcid
+footer: MIT Lisanslı | Telif hakkı © 2021-günümüz TartaricAcid
 ---
 
-> Make sure the version of Touhou Little Maid mod you're using is the latest.
+> Kullandığınız Touhou Little Maid modunun güncel olduğuna emin olun.
