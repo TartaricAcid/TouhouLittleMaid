@@ -23,8 +23,9 @@ public final class GetJarResources {
     public static void copyTouhouLittleMaidFile(String filePath, Path destPath, String fileName) {
         URL url = TouhouLittleMaid.class.getResource(filePath);
         try {
-            assert url != null;
-            FileUtils.copyURLToFile(url, destPath.resolve(fileName).toFile());
+            if (url != null) {
+                FileUtils.copyURLToFile(url, destPath.resolve(fileName).toFile());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,8 +35,9 @@ public final class GetJarResources {
     public static InputStream readTouhouLittleMaidFile(String filePath) {
         URL url = TouhouLittleMaid.class.getResource(filePath);
         try {
-            assert url != null;
-            return url.openStream();
+            if (url != null) {
+                return url.openStream();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

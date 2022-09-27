@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -14,10 +15,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockModel<EntityChair>> {
@@ -34,11 +37,18 @@ public class EntityChairRenderer extends LivingRenderer<EntityChair, BedrockMode
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         ClientPlayerEntity player = Minecraft.getInstance().player;
-        if (player != null && player.isShiftKeyDown() && renderHitBox) {
+        if (canShowHitBox(player) && renderHitBox) {
             renderHitBox(chair, matrixStackIn, bufferIn);
         } else {
             renderChair(chair, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         }
+    }
+
+    private boolean canShowHitBox(@Nullable PlayerEntity player) {
+        if (player != null && player.isShiftKeyDown()) {
+            return player.getMainHandItem().getItem() == InitItems.CHAIR_SHOW.get();
+        }
+        return false;
     }
 
     private void renderHitBox(EntityChair chair, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn) {
