@@ -56,6 +56,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(15, BeaconAbsorbMessage.class, BeaconAbsorbMessage::encode, BeaconAbsorbMessage::decode, BeaconAbsorbMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(16, ToggleTabMessage.class, ToggleTabMessage::encode, ToggleTabMessage::decode, ToggleTabMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, PlayerEntity player) {

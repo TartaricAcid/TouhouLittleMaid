@@ -1,5 +1,6 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.ChairModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ModelDetailsButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;

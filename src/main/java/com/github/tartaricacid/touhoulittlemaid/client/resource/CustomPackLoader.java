@@ -14,6 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelI
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChatBubbleInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -79,6 +80,7 @@ public class CustomPackLoader {
         CHAIR_MODELS.clearAll();
         TMP_REGISTER_TEXTURE.clear();
         initPacks();
+        InGameMaidConfig.read();
     }
 
     private static void initPacks() {

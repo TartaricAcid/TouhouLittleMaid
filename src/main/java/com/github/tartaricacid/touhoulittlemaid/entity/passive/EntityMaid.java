@@ -19,6 +19,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
@@ -109,7 +110,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class EntityMaid extends TameableEntity implements INamedContainerProvider, ICrossbowUser {
+public class EntityMaid extends TameableEntity implements ICrossbowUser {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, EntityClassification.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
@@ -789,18 +790,26 @@ public class EntityMaid extends TameableEntity implements INamedContainerProvide
         }
     }
 
-    @Nullable
-    @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
-        return new MaidMainContainer(id, inventory, getId());
+    public boolean openMaidGui(PlayerEntity player) {
+        return openMaidGui(player, TabIndex.MAIN);
     }
 
-    private boolean openMaidGui(PlayerEntity player) {
+    public boolean openMaidGui(PlayerEntity player, int tabIndex) {
         if (player instanceof ServerPlayerEntity && !this.isSleeping()) {
             this.navigation.stop();
-            NetworkHooks.openGui((ServerPlayerEntity) player, this, (buffer) -> buffer.writeInt(getId()));
+            NetworkHooks.openGui((ServerPlayerEntity) player, getGuiProvider(tabIndex), (buffer) -> buffer.writeInt(getId()));
         }
         return true;
+    }
+
+    private INamedContainerProvider getGuiProvider(int tabIndex) {
+        switch (tabIndex) {
+            case TabIndex.CONFIG:
+                return MaidConfigContainer.create(getId());
+            case TabIndex.MAIN:
+            default:
+                return MaidMainContainer.create(getId());
+        }
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
@@ -9,13 +8,12 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.inventory.container.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -29,35 +27,19 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.inventory.container.PlayerContainer.*;
 
-public class MaidMainContainer extends Container {
+public class MaidMainContainer extends AbstractMaidContainer {
     public static final ContainerType<MaidMainContainer> TYPE = IForgeContainerType.create((windowId, inv, data) -> new MaidMainContainer(windowId, inv, data.readInt()));
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlotType[] SLOT_IDS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private static final int PLAYER_INVENTORY_SIZE = 36;
-    private final EntityMaid maid;
 
     public MaidMainContainer(int id, PlayerInventory inventory, int entityId) {
-        super(TYPE, id);
-        this.maid = (EntityMaid) inventory.player.level.getEntity(entityId);
+        super(TYPE, id, inventory, entityId);
         if (maid != null) {
-            this.addPlayerInv(inventory);
             this.addMaidArmorInv();
             this.addMaidBauble();
             this.addMaidHandInv();
             this.addMainInv();
-            maid.guiOpening = true;
-        }
-    }
-
-    private void addPlayerInv(PlayerInventory playerInventory) {
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 88 + col * 18, 174 + row * 18));
-            }
-        }
-
-        for (int col = 0; col < 9; ++col) {
-            this.addSlot(new Slot(playerInventory, col, 88 + col * 18, 232));
         }
     }
 
@@ -177,7 +159,7 @@ public class MaidMainContainer extends Container {
         ItemStack stack1 = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
-            ItemStack stack2 = slot.getItem().copy();
+            ItemStack stack2 = slot.getItem();
             stack1 = stack2.copy();
             if (index < PLAYER_INVENTORY_SIZE) {
                 if (!this.moveItemStackTo(stack2, PLAYER_INVENTORY_SIZE, this.slots.size(), false)) {
@@ -195,18 +177,18 @@ public class MaidMainContainer extends Container {
         return stack1;
     }
 
-    @Override
-    public void removed(PlayerEntity playerIn) {
-        super.removed(playerIn);
-        maid.guiOpening = false;
-    }
 
-    @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
-    }
+    public static INamedContainerProvider create(int entityId) {
+        return new INamedContainerProvider() {
+            @Override
+            public ITextComponent getDisplayName() {
+                return new StringTextComponent("Maid Main Container");
+            }
 
-    public EntityMaid getMaid() {
-        return maid;
+            @Override
+            public Container createMenu(int index, PlayerInventory playerInventory, PlayerEntity player) {
+                return new MaidMainContainer(index, playerInventory, entityId);
+            }
+        };
     }
 }

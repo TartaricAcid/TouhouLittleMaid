@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;

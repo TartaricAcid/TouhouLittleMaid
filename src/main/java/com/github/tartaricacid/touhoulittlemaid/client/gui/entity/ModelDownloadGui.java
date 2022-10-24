@@ -36,7 +36,7 @@ public class ModelDownloadGui extends Screen {
     private List<Long> crc32List = Lists.newArrayList();
     private List<DownloadInfo> showInfoList;
 
-    protected ModelDownloadGui(@Nullable List<DownloadInfo> showInfoList) {
+    public ModelDownloadGui(@Nullable List<DownloadInfo> showInfoList) {
         super(new StringTextComponent("Model Pack Download GUI"));
         this.showInfoList = showInfoList;
         if (showInfoList != null && !showInfoList.isEmpty()) {

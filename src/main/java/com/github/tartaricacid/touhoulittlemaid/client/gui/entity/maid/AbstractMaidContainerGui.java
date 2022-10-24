@@ -1,16 +1,18 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui.entity;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskMessage;
@@ -37,10 +39,9 @@ import java.util.function.Predicate;
 import static com.github.tartaricacid.touhoulittlemaid.util.GuiTools.NO_ACTION;
 import static net.minecraftforge.fml.client.gui.GuiUtils.drawHoveringText;
 
-public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
+public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> extends ContainerScreen<T> {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_main.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
-    private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_backpack.png");
     private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
     private static final int TASK_COUNT_PER_PAGE = 12;
@@ -57,10 +58,10 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
     private ImageButton taskSwitch;
     private ImageButton modelDownload;
     private ImageButton soundDownload;
-    private ScheduleButton scheduleButton;
+    private ScheduleButton<T> scheduleButton;
     private boolean taskListOpen;
 
-    public MaidMainContainerGui(MaidMainContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public AbstractMaidContainerGui(T screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.imageHeight = 256;
         this.imageWidth = 256;
@@ -81,6 +82,7 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
         this.addTaskControlButton();
         this.addTaskListButton();
         this.addScheduleButton();
+        this.addTabsButton();
     }
 
     @Override
@@ -99,7 +101,6 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
         blit(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         this.drawMaidCharacter(x, y);
         this.drawBaseInfoGui(matrixStack);
-        this.drawBackpackGui(matrixStack);
         this.drawTaskListBg(matrixStack);
     }
 
@@ -206,8 +207,16 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
     }
 
     private void addScheduleButton() {
-        scheduleButton = new ScheduleButton(leftPos + 9, topPos + 177, this);
+        scheduleButton = new ScheduleButton<>(leftPos + 9, topPos + 177, this);
         this.addButton(scheduleButton);
+    }
+
+    private void addTabsButton() {
+        MaidTabs<T> maidTabs = new MaidTabs<>(maid.getId(), leftPos, topPos);
+        MaidTabButton[] tabs = maidTabs.getTabs(this);
+        for (MaidTabButton button : tabs) {
+            this.addButton(button);
+        }
     }
 
     private void addTaskSwitchButton() {
@@ -382,28 +391,7 @@ public class MaidMainContainerGui extends ContainerScreen<MaidMainContainer> {
 
         getMinecraft().textureManager.bind(SIDE);
         blit(matrixStack, leftPos + 94, topPos + 7, 107, 0, 149, 21);
-        blit(matrixStack, leftPos + 94, topPos + 5, 107, 21, 24, 26);
-        blit(matrixStack, leftPos + 98, topPos + 12, 107, 47, 16, 16);
         blit(matrixStack, leftPos + 6, topPos + 168, 0, 47, 67, 25);
-    }
-
-    private void drawBackpackGui(MatrixStack matrixStack) {
-        getMinecraft().textureManager.bind(BACKPACK);
-        blit(matrixStack, leftPos + 85, topPos + 36, 0, 0, 165, 122);
-
-        int level = maid.getBackpackLevel();
-        if (level < BackpackLevel.SMALL) {
-            fill(matrixStack, leftPos + 142, topPos + 58, leftPos + 250, topPos + 76, 0xaa222222);
-            blit(matrixStack, leftPos + 190, topPos + 62, 165, 0, 11, 11);
-        }
-        if (level < BackpackLevel.MIDDLE) {
-            fill(matrixStack, leftPos + 142, topPos + 81, leftPos + 250, topPos + 117, 0xaa222222);
-            blit(matrixStack, leftPos + 190, topPos + 92, 165, 0, 11, 11);
-        }
-        if (level < BackpackLevel.BIG) {
-            fill(matrixStack, leftPos + 142, topPos + 122, leftPos + 250, topPos + 158, 0xaa222222);
-            blit(matrixStack, leftPos + 190, topPos + 133, 165, 0, 11, 11);
-        }
     }
 
     @Override

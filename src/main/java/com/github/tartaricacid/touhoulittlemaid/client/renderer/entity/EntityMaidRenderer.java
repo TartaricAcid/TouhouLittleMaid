@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.Lay
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -72,7 +73,9 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
         // 模型动画设置
         this.model.setAnimations(this.mainAnimations);
         // 渲染聊天气泡
-        ChatBubbleRenderer.renderChatBubble(this, entity, matrixStackIn, bufferIn, packedLightIn);
+        if (InGameMaidConfig.INSTANCE.isShowChatBubble()) {
+            ChatBubbleRenderer.renderChatBubble(this, entity, matrixStackIn, bufferIn, packedLightIn);
+        }
         // 渲染女仆模型本体
         GlWrapper.setMatrixStack(matrixStackIn);
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
