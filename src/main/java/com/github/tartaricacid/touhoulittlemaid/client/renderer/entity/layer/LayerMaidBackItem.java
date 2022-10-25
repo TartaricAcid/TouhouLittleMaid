@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -25,7 +26,7 @@ public class LayerMaidBackItem extends LayerRenderer<EntityMaid, BedrockModel<En
     public void render(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack stack = maid.getMaidInv().getStackInSlot(5);
         if (stack.getItem() instanceof IVanishable) {
-            if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
                 return;
             }
             matrixStack.pushPose();

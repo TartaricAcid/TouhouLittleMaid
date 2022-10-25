@@ -26,7 +26,6 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
     @Override
     protected void init() {
         super.init();
-
         left = leftPos + 81;
         top = topPos + 28;
 
@@ -40,39 +39,26 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         };
         showChatBubble.initTextureValues(22, 0, -22, 0, ICON);
 
-        ToggleWidget toggle2 = new ToggleWidget(left + 10, top + 10 + 24, 22, 22, INSTANCE.isToggle2()) {
+        ToggleWidget showBackpack = new ToggleWidget(left + 10, top + 10 + 24, 22, 22, INSTANCE.isShowBackpack()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
-                INSTANCE.setToggle2(this.isStateTriggered);
+                INSTANCE.setShowBackpack(this.isStateTriggered);
                 InGameMaidConfig.save();
             }
         };
-        toggle2.initTextureValues(22, 0, -22, 0, ICON);
-
-        ToggleWidget toggle3 = new ToggleWidget(left + 10, top + 10 + 24 * 2, 22, 22, INSTANCE.isToggle3()) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                this.isStateTriggered = !this.isStateTriggered;
-                INSTANCE.setToggle3(this.isStateTriggered);
-                InGameMaidConfig.save();
-            }
-        };
-        toggle3.initTextureValues(22, 0, -22, 0, ICON);
+        showBackpack.initTextureValues(22, 0, -22, 0, ICON);
 
         this.addButton(showChatBubble);
-        this.addButton(toggle2);
-        this.addButton(toggle3);
-
-        this.addButton(new MaidSoundFreqButton(left + 10, top + 16 + 24 * 3));
+        this.addButton(showBackpack);
+        this.addButton(new MaidSoundFreqButton(left + 10, top + 15 + 24 * 2));
     }
 
     @Override
     protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         super.renderBg(matrixStack, partialTicks, x, y);
         font.draw(matrixStack, new TranslationTextComponent("gui.touhou_little_maid.maid_config.show_chat_bubble"), left + 38, top + 17, 0x333333);
-        font.draw(matrixStack, new TranslationTextComponent("gui.touhou_little_maid.maid_config.toggle2"), left + 38, top + 17 + 24, 0x333333);
-        font.draw(matrixStack, new TranslationTextComponent("gui.touhou_little_maid.maid_config.toggle3"), left + 38, top + 17 + 24 * 2, 0x333333);
+        font.draw(matrixStack, new TranslationTextComponent("gui.touhou_little_maid.maid_config.show_backpack"), left + 38, top + 17 + 24, 0x333333);
     }
 
     @Override

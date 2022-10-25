@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.config;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -11,6 +13,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+@OnlyIn(Dist.CLIENT)
 public class InGameMaidConfig {
     private static final File CONFIG_FILE = Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("touhou_little_maid").resolve("in_game_maid_config.json").toFile();
     public static InGameMaidConfig INSTANCE;
@@ -21,11 +24,8 @@ public class InGameMaidConfig {
     @SerializedName("show_chat_bubble")
     private boolean showChatBubble = true;
 
-    @SerializedName("toggle2")
-    private boolean toggle2 = false;
-
-    @SerializedName("toggle3")
-    private boolean toggle3 = false;
+    @SerializedName("show_backpack")
+    private boolean showBackpack = true;
 
     public double getSoundFrequency() {
         return soundFrequency;
@@ -43,20 +43,12 @@ public class InGameMaidConfig {
         this.showChatBubble = showChatBubble;
     }
 
-    public boolean isToggle2() {
-        return toggle2;
+    public boolean isShowBackpack() {
+        return showBackpack;
     }
 
-    public void setToggle2(boolean toggle2) {
-        this.toggle2 = toggle2;
-    }
-
-    public boolean isToggle3() {
-        return toggle3;
-    }
-
-    public void setToggle3(boolean toggle3) {
-        this.toggle3 = toggle3;
+    public void setShowBackpack(boolean showBackpack) {
+        this.showBackpack = showBackpack;
     }
 
     public static void read() {
