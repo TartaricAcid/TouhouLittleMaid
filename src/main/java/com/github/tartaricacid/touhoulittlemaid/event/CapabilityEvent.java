@@ -36,8 +36,13 @@ public final class CapabilityEvent {
 
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
-        LazyOptional<PowerCapability> oldPowerCap = getPowerCap(event.getOriginal());
-        LazyOptional<PowerCapability> newPowerCap = getPowerCap(event.getPlayer());
+        Player original = event.getOriginal();
+        Player newPlayer = event.getPlayer();
+
+        original.reviveCaps();
+
+        LazyOptional<PowerCapability> oldPowerCap = getPowerCap(original);
+        LazyOptional<PowerCapability> newPowerCap = getPowerCap(newPlayer);
         newPowerCap.ifPresent((newPower) -> oldPowerCap.ifPresent((oldPower) -> {
             if (event.isWasDeath()) {
                 newPower.set(oldPower.get() - MiscConfig.PLAYER_DEATH_LOSS_POWER_POINT.get().floatValue());
@@ -46,9 +51,13 @@ public final class CapabilityEvent {
             }
         }));
 
-        LazyOptional<MaidNumCapability> oldMaidNumCap = getMaidNumCap(event.getOriginal());
-        LazyOptional<MaidNumCapability> newMaidNumCap = getMaidNumCap(event.getPlayer());
+        LazyOptional<MaidNumCapability> oldMaidNumCap = getMaidNumCap(original);
+        LazyOptional<MaidNumCapability> newMaidNumCap = getMaidNumCap(newPlayer);
+        TouhouLittleMaid.LOGGER.info("##DEBUG## oldMaidNumCap.isPresent() = {}", oldMaidNumCap.isPresent());
+        TouhouLittleMaid.LOGGER.info("##DEBUG## newMaidNumCap.isPresent() = {}", newMaidNumCap.isPresent());
         newMaidNumCap.ifPresent((newMaidNum) -> oldMaidNumCap.ifPresent((oldMaidNum) -> newMaidNum.set(oldMaidNum.get())));
+
+        original.invalidateCaps();
     }
 
     @SubscribeEvent
