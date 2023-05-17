@@ -114,8 +114,8 @@ Java.asJSONCompatible({
 |      `hasChestPlate()`       | `boolean`  |                                女仆穿戴胸甲后，返回 `true`                                 |
 |       `hasLeggings()`        | `boolean`  |                                女仆穿戴护腿后，返回 `true`                                 |
 |         `hasBoots()`         | `boolean`  |                                女仆穿戴靴子后，返回 `true`                                 |
-|        `getHelmet()`         |  `String`  |           After maid wears helmet, returns helmet item's registry name           |
-|      `getChestPlate()`       |  `String`  |       After maid wears chestplate, returns chestplate item's registry name       |
+|        `getHelmet()`         |  `String`  |                                        a                                         |
+|             `a`              |  `String`  |       After maid wears chestplate, returns chestplate item's registry name       |
 |       `getLeggings()`        |  `String`  |         After maid wears leggings, returns leggings item's registry name         |
 |         `getBoots()`         |  `String`  |            After maid wears boots, returns boots item's registry name            |
 |        `isBegging()`         | `boolean`  |                         Whether maid is in begging mode                          |
