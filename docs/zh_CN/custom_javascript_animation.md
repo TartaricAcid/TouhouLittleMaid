@@ -114,16 +114,16 @@ Java.asJSONCompatible({
 |      `hasChestPlate()`       | `boolean`  |                                女仆穿戴胸甲后，返回 `true`                                 |
 |       `hasLeggings()`        | `boolean`  |                                女仆穿戴护腿后，返回 `true`                                 |
 |         `hasBoots()`         | `boolean`  |                                女仆穿戴靴子后，返回 `true`                                 |
-|        `getHelmet()`         |  `String`  |                                        a                                         |
-|             `a`              |  `String`  |       After maid wears chestplate, returns chestplate item's registry name       |
-|       `getLeggings()`        |  `String`  |         After maid wears leggings, returns leggings item's registry name         |
-|         `getBoots()`         |  `String`  |            After maid wears boots, returns boots item's registry name            |
-|        `isBegging()`         | `boolean`  |                         Whether maid is in begging mode                          |
+|        `getHelmet()`         |  `String`  |                              当女仆佩戴头盔后，返回头盔物品的注册名称。                               |
+|      `getChestPlate()`       |  `String`  |                              当女仆佩戴胸甲后，返回胸甲物品的注册名称。                               |
+|       `getLeggings()`        |  `String`  |                              当女仆佩戴护腿后，返回护腿物品的注册名称。                               |
+|         `getBoots()`         |  `String`  |                              当女仆佩戴靴子后，返回头盔物品的注册名称。                               |
+|        `isBegging()`         | `boolean`  |                                    女仆是否处于祈求模式                                    |
 |      `isSwingingArms()`      | `boolean`  |             If maid is using arms, this function will return `true`              |
 |     `getSwingProgress()`     |  `float`   |                             Get maid's swinging time                             |
 |         `isRiding()`         | `boolean`  |                                    女仆是否处于骑乘模式                                    |
 |        `isSitting()`         | `boolean`  |                                    女仆是否处于待命模式                                    |
-|    ~~`isHoldTrolley()`~~     | `boolean`  |                Whether maid is carrying trolley or other entities                |
+|    ~~`isHoldTrolley()`~~     | `boolean`  |                                 女仆是否携带手推车或其他实体。                                  |
 | ~~`isRidingMarisaBroom()`~~  | `boolean`  |                       Whether maid is riding Marisa Broom                        |
 |    ~~`isRidingPlayer()`~~    | `boolean`  |                          Whether maid is riding player                           |
 |    ~~`isHoldVehicle()`~~     | `boolean`  |                          Whether maid is riding vehicle                          |
@@ -152,7 +152,7 @@ Java.asJSONCompatible({
 |     `getFavorability()`      |   `int`    |                           Get the maid's favorability                            |
 |        `isOnGround()`        | `boolean`  |                          Whether the maid is on ground                           |
 |      `getArmorValue()`       |  `double`  |                              Get maid's armor value                              |
-|         `getSeed()`          |   `long`   |    Get a fixed value, each entity is different, similar to the entity's UUID     |
+|         `getSeed()`          |   `long`   |                          获取一个固定值，每个实体都是不同的，类似于该实体的 UUID                          |
 
 #### 坐垫
 
@@ -180,9 +180,9 @@ Java.asJSONCompatible({
 
 ### `limbSwing` 和 `limbSwingAmount` 参数
 
-These are floating points, `limbSwing` is the walking speed of the entity (think of it as the speedometer of a car), `limbSwingAmount` is the total walking distance of the entity (think of it as the odometer of a car).
+这些都是浮点数，`limbSwing`是实体的行走速度（可以将其视为汽车的速度计），`limbSwingAmount`是实体的总行走距离（可以将其视为汽车的里程表）。
 
-These two data are mainly used on the rotation of the legs and limbs, Minecraft vanilla uses these two basic data to calculate the animation of the arm and leg swinging.
+这两个数据主要用于腿部和肢体的旋转，Minecraft原版使用这两个基本数据来计算手臂和腿部摆动的动画。
 
 `Math.cos(limbSwing * 0.6662) * limbSwingAmount`(left hand)
 
@@ -192,7 +192,7 @@ These two data are mainly used on the rotation of the legs and limbs, Minecraft 
 
 `-Math.cos(limbSwing * 0.6662) * limbSwingAmount * 1.4`(right leg)
 
-Changing the value `0.6662` will control the frequency of the swing, multiplied by the coeffecient of the formula (for example, the leg uses `1.4` as the coeffecient) to change the amplitude of the swing.
+改变值`0.6662`将控制摆动的频率，乘以公式的系数 (例如，腿部使用`1.4`作为系数) 来改变摆动的幅度。
 
 使用原版Minecraft的手臂和腿摆动公式可以使摆动动画更加自然。
 
@@ -215,7 +215,7 @@ head.setRotateAngleX(headPitch * 0.017453292);
 head.setRotateAngleY(netHeadYaw * 0.017453292);
 ```
 
-> If the coeffiecient in this section is set to be larger than '0.017453292', there may have some error issue.
+> 如果在此部分设置的系数大于'0.017453292'，可能会出现一些错误问题。
 
 
 ### `scale` 参数
@@ -228,18 +228,18 @@ head.setRotateAngleY(netHeadYaw * 0.017453292);
 
 ### modelMap 参数
 
-A Map that saves group, using string as keys.
+一个使用字符串作为键的保存组的 Map。
 
-You can get the corresponding group through `modelMap.get("xxx")`. If there is no group that matches the name, return `undefined`
+您可以通过`modelMap.get("xxx")`获取相应的组。 如果没有与名称匹配的组，返回`undefined`
 
-Let's say we want to get the target group `head`:
+假设我们想获取目标组`head`：
 
 ```javascript
 head = modelMap.get("head");
 ```
-Then we can set various parameter using this `head` group to make animation.
+然后我们可以使用这个`head`组来设置各种参数，制作动画。
 
-Of course, as a precaution, it's best to set a check for this group, to make sure it's existed.
+当然，为了预防起见，最好对该组进行检查，以确保它存在。
 
 ```javascript
 head = modelMap.get("head");
@@ -250,29 +250,29 @@ if (head != undefined) {
 
 
 
-### Group
+### 组
 
-We can get various group via `modelMap.get("xxx")`, the following are the functions that can be used to the obtained group.
+我们可以通过`modelMap.get("xxx")`获取各种组，以下是可用于获取到的组的函数列表。
 
-|                  函数名                  |    返回值    |                        备注                         |
-|:-------------------------------------:|:---------:|:-------------------------------------------------:|
-| `setRotateAngleX(float rotateAngleX)` |     无     |              Set the group's X angle              |
-| `setRotateAngleY(float rotateAngleY)` |     无     |              Set the group's Y angle              |
-| `setRotateAngleZ(float rotateAngleZ)` |     无     |              Set the group's Z angle              |
-|      `setOffsetX(float offsetX)`      |     无     |       Set the group's X coordianate offset        |
-|      `setOffsetY(float offsetY)`      |     无     |       Set the group's Y coordianate offset        |
-|      `setOffsetZ(float offsetZ)`      |     无     |       Set the group's Z coordianate offset        |
-|      `setHidden(boolean hidden)`      |     无     |            Set if the group is hidden             |
-|          `getRotateAngleX()`          |  `float`  |            Obtain the group's X angle             |
-|          `getRotateAngleY()`          |  `float`  |            Obtain the group's Y angle             |
-|          `getRotateAngleZ()`          |  `float`  |            Obtain the group's Z angle             |
-|        `getInitRotateAngleX()`        |  `float`  | Get ModelRenderer's initialization x rotate angle |
-|        `getInitRotateAngleY()`        |  `float`  | Get ModelRenderer's initialization y rotate angle |
-|        `getInitRotateAngleZ()`        |  `float`  | Get ModelRenderer's initialization z rotate angle |
-|            `getOffsetX()`             |  `float`  |      Obtain the group's X coordianate offset      |
-|            `getOffsetY()`             |  `float`  |      Obtain the group's Y coordianate offset      |
-|            `getOffsetZ()`             |  `float`  |      Obtain the group's Y coordianate offset      |
-|             `isHidden()`              | `boolean` |           Check if the group is hidden            |
+|                  函数名                  |    返回值    |              备注               |
+|:-------------------------------------:|:---------:|:-----------------------------:|
+| `setRotateAngleX(float rotateAngleX)` |     无     |          设置组的 X 轴角度           |
+| `setRotateAngleY(float rotateAngleY)` |     无     |          设置组的 Y 轴角度           |
+| `setRotateAngleZ(float rotateAngleZ)` |     无     |          设置组的 Z 轴角度           |
+|      `setOffsetX(float offsetX)`      |     无     |         设置组的 X 轴坐标偏移          |
+|      `setOffsetY(float offsetY)`      |     无     |         设置组的 Y 轴坐标偏移          |
+|      `setOffsetZ(float offsetZ)`      |     无     |         设置组的 Z 轴坐标偏移          |
+|      `setHidden(boolean hidden)`      |     无     |            设置组是否隐藏            |
+|          `getRotateAngleX()`          |  `float`  |          获取组的 X 轴角度           |
+|          `getRotateAngleY()`          |  `float`  |          获取组的 Y 轴角度           |
+|          `getRotateAngleZ()`          |  `float`  |          获取组的 Z 轴角度           |
+|        `getInitRotateAngleX()`        |  `float`  | 获取 ModelRenderer 的初始化 X 轴旋转角度 |
+|        `getInitRotateAngleY()`        |  `float`  | 获取 ModelRenderer 的初始化 Y 轴旋转角度 |
+|        `getInitRotateAngleZ()`        |  `float`  | 获取 ModelRenderer 的初始化 Z 轴旋转角度 |
+|            `getOffsetX()`             |  `float`  |         获取组的 X 轴坐标偏移          |
+|            `getOffsetY()`             |  `float`  |         获取组的 Y 轴坐标偏移          |
+|            `getOffsetZ()`             |  `float`  |         获取组的 Z 轴坐标偏移          |
+|             `isHidden()`              | `boolean` |            检查组是否隐藏            |
 
 
 
