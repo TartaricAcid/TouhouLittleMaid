@@ -1,4 +1,4 @@
-# Chair Model Pack Details
+# Chair Model Pack Detalhas
 - Esta wiki se aplica ao mod Touhou Little Maid na versão mais recente `1.12.2` ou `1.16.5`;
 - Requer compreensão da estrutura do pacote de recursos do Minecraft;
 - Requires understanding of JSON format;
