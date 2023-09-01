@@ -1,4 +1,4 @@
-name: Gradle Package
+name: Gradle Package 1.18.2
 
 on:
   workflow_dispatch:    
