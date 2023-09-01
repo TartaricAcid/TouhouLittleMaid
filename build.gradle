@@ -27,10 +27,10 @@ minecraft {
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/client_a')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'touhoulittlemaid'
+            property 'fml.earlyprogresswindow', 'false'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
@@ -40,8 +40,19 @@ minecraft {
             }
         }
 
+        client2 {
+            parent minecraft.runs.client
+            workingDirectory project.file('run/client_b')
+            args '--username', 'tartaric_acid'
+            mods {
+                touhoulittlemaid {
+                    source sourceSets.main
+                }
+            }
+        }
+
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/server')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'touhoulittlemaid'
@@ -55,7 +66,7 @@ minecraft {
         }
 
         data {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/data')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'

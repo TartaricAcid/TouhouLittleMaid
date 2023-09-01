@@ -38,9 +38,7 @@ public final class CapabilityEvent {
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         Player original = event.getOriginal();
         Player newPlayer = event.getPlayer();
-
         original.reviveCaps();
-
         LazyOptional<PowerCapability> oldPowerCap = getPowerCap(original);
         LazyOptional<PowerCapability> newPowerCap = getPowerCap(newPlayer);
         newPowerCap.ifPresent((newPower) -> oldPowerCap.ifPresent((oldPower) -> {
@@ -50,13 +48,9 @@ public final class CapabilityEvent {
                 newPower.set(oldPower.get());
             }
         }));
-
         LazyOptional<MaidNumCapability> oldMaidNumCap = getMaidNumCap(original);
         LazyOptional<MaidNumCapability> newMaidNumCap = getMaidNumCap(newPlayer);
-        TouhouLittleMaid.LOGGER.info("##DEBUG## oldMaidNumCap.isPresent() = {}", oldMaidNumCap.isPresent());
-        TouhouLittleMaid.LOGGER.info("##DEBUG## newMaidNumCap.isPresent() = {}", newMaidNumCap.isPresent());
         newMaidNumCap.ifPresent((newMaidNum) -> oldMaidNumCap.ifPresent((oldMaidNum) -> newMaidNum.set(oldMaidNum.get())));
-
         original.invalidateCaps();
     }
 
