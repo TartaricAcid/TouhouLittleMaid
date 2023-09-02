@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -61,18 +60,11 @@ public class MaidFeedAnimalTask extends MaidCheckRateTask {
                 if (!food.isEmpty()) {
                     food.shrink(1);
                     maid.swing(InteractionHand.MAIN_HAND);
-                    setInLove(feedEntity);
+                    feedEntity.setInLove(null);
                 }
                 feedEntity = null;
             }
         }
-    }
-
-    // fixme: 用于修复和 Quark 的不兼容问题，但其实这应该是 Quark 的锅
-    // 因为原版设定就是可以输入为 null
-    private void setInLove(Animal animal) {
-        animal.setInLoveTime(600);
-        animal.level.broadcastEntityEvent(animal, EntityEvent.IN_LOVE_HEARTS);
     }
 
     private NearestVisibleLivingEntities getEntities(EntityMaid maid) {
