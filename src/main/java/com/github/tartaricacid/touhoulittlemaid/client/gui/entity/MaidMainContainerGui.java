@@ -35,6 +35,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -49,6 +50,7 @@ public class MaidMainContainerGui extends AbstractContainerScreen<MaidMainContai
     private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
+    @Nullable
     private final EntityMaid maid;
     private StateSwitchingButton home;
     private StateSwitchingButton pick;
@@ -74,6 +76,11 @@ public class MaidMainContainerGui extends AbstractContainerScreen<MaidMainContai
     @Override
     protected void init() {
         super.init();
+        // fixme: https://github.com/TartaricAcid/TouhouLittleMaid/issues/416
+        // 临时修复，应该采用更好的办法！
+        if (this.maid == null) {
+            return;
+        }
         this.clearWidgets();
         this.addHomeButton();
         this.addPickButton();
@@ -89,6 +96,11 @@ public class MaidMainContainerGui extends AbstractContainerScreen<MaidMainContai
     @Override
     @SuppressWarnings("all")
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        // fixme: https://github.com/TartaricAcid/TouhouLittleMaid/issues/416
+        // 临时修复，应该采用更好的办法！
+        if (this.maid == null) {
+            return;
+        }
         super.render(poseStack, mouseX, mouseY, partialTicks);
         this.drawCurrentTaskText(poseStack);
         this.renderTooltip(poseStack, mouseX, mouseY);

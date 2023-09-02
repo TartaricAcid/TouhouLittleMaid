@@ -25,6 +25,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static net.minecraft.world.inventory.InventoryMenu.*;
 
@@ -197,6 +198,7 @@ public class MaidMainContainer extends AbstractContainerMenu {
         return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
     }
 
+    @Nullable
     public EntityMaid getMaid() {
         return maid;
     }
