@@ -45,10 +45,10 @@ public class ChatBubbleRenderer {
                 if (chatText.isText()) {
                     ITextComponent parseText = ParseI18n.parse(chatText.getText());
                     int width = font.width(parseText);
-                    renderChatBubbleBody(0, -32, width, data, d -> renderText(parseText, 0, -32, width, packedLight, d));
+                    renderChatBubbleBody(0, -32 + getRenderYOffset(maid), width, data, d -> renderText(parseText, 0, -32 + getRenderYOffset(maid), width, packedLight, d));
                 }
                 if (chatText.isIcon()) {
-                    renderChatBubbleBody(0, -32, 20, data, d -> renderIcon(0, -32, chatText.getIconPath(), d));
+                    renderChatBubbleBody(0, -32 + getRenderYOffset(maid), 20, data, d -> renderIcon(0, -32 + getRenderYOffset(maid), chatText.getIconPath(), d));
                 }
                 return;
             }
@@ -65,12 +65,12 @@ public class ChatBubbleRenderer {
                     int width = font.width(parseText1);
                     int fullWidth = ((width / 20) + 2) * 20;
                     int startX = -fullWidth / 2 - 5;
-                    renderChatBubbleBody(startX, -32, width, data1, d -> renderText(parseText1, startX, -32, width, packedLight, d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), width, data1, d -> renderText(parseText1, startX, -32 + getRenderYOffset(maid), width, packedLight, d));
                 }
                 if (chatText1.isIcon()) {
                     int fullWidth = 60;
                     int startX = -fullWidth / 2 - 5;
-                    renderChatBubbleBody(startX, -32, 20, data1, d -> renderIcon(startX, -32, chatText1.getIconPath(), d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), 20, data1, d -> renderIcon(startX, -32 + getRenderYOffset(maid), chatText1.getIconPath(), d));
                 }
 
                 if (chatText2.isText()) {
@@ -78,12 +78,12 @@ public class ChatBubbleRenderer {
                     int width = font.width(parseText2);
                     int fullWidth = ((width / 20) + 2) * 20;
                     int startX = fullWidth / 2 + 5;
-                    renderChatBubbleBody(startX, -32, width, data2, d -> renderText(parseText2, startX, -32, width, packedLight, d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), width, data2, d -> renderText(parseText2, startX, -32 + getRenderYOffset(maid), width, packedLight, d));
                 }
                 if (chatText2.isIcon()) {
                     int fullWidth = 60;
                     int startX = fullWidth / 2 + 5;
-                    renderChatBubbleBody(startX, -32, 20, data2, d -> renderIcon(startX, -32, chatText2.getIconPath(), d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), 20, data2, d -> renderIcon(startX, -32 + getRenderYOffset(maid), chatText2.getIconPath(), d));
                 }
                 return;
             }
@@ -103,12 +103,12 @@ public class ChatBubbleRenderer {
                     int width = font.width(parseText1);
                     int fullWidth = ((width / 20) + 2) * 20;
                     int startX = -fullWidth / 2 - 5;
-                    renderChatBubbleBody(startX, -32, width, data1, d -> renderText(parseText1, startX, -32, width, packedLight, d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), width, data1, d -> renderText(parseText1, startX, -32 + getRenderYOffset(maid), width, packedLight, d));
                 }
                 if (chatText1.isIcon()) {
                     int fullWidth = 60;
                     int startX = -fullWidth / 2 - 5;
-                    renderChatBubbleBody(startX, -32, 20, data1, d -> renderIcon(startX, -32, chatText1.getIconPath(), d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), 20, data1, d -> renderIcon(startX, -32 + getRenderYOffset(maid), chatText1.getIconPath(), d));
                 }
 
                 if (chatText2.isText()) {
@@ -116,24 +116,31 @@ public class ChatBubbleRenderer {
                     int width = font.width(parseText2);
                     int fullWidth = ((width / 20) + 2) * 20;
                     int startX = fullWidth / 2 + 5;
-                    renderChatBubbleBody(startX, -32, width, data2, d -> renderText(parseText2, startX, -32, width, packedLight, d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), width, data2, d -> renderText(parseText2, startX, -32 + getRenderYOffset(maid), width, packedLight, d));
                 }
                 if (chatText2.isIcon()) {
                     int fullWidth = 60;
                     int startX = fullWidth / 2 + 5;
-                    renderChatBubbleBody(startX, -32, 20, data2, d -> renderIcon(startX, -32, chatText2.getIconPath(), d));
+                    renderChatBubbleBody(startX, -32 + getRenderYOffset(maid), 20, data2, d -> renderIcon(startX, -32 + getRenderYOffset(maid), chatText2.getIconPath(), d));
                 }
 
                 if (chatText3.isText()) {
                     ITextComponent parseText3 = ParseI18n.parse(chatText3.getText());
                     int width = font.width(parseText3);
-                    renderChatBubbleBody(0, -62, width, data3, d -> renderText(parseText3, 0, -62, width, packedLight, d));
+                    renderChatBubbleBody(0, -62 + getRenderYOffset(maid), width, data3, d -> renderText(parseText3, 0, -62 + getRenderYOffset(maid), width, packedLight, d));
                 }
                 if (chatText3.isIcon()) {
-                    renderChatBubbleBody(0, -62, 20, data3, d -> renderIcon(0, -62, chatText3.getIconPath(), d));
+                    renderChatBubbleBody(0, -62 + getRenderYOffset(maid), 20, data3, d -> renderIcon(0, -62 + getRenderYOffset(maid), chatText3.getIconPath(), d));
                 }
             }
         }
+    }
+
+    private static int getRenderYOffset(EntityMaid maid) {
+        if (maid.isSleeping()) {
+            return 48;
+        }
+        return 0;
     }
 
     private static void renderText(ITextComponent chatText, int startX, int startY, int width, int packedLight, RenderData data) {

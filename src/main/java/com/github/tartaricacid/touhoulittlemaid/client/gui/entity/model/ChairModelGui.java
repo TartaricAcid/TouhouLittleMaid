@@ -23,13 +23,13 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     }
 
     @Override
-    void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
+    protected void drawLeftEntity(int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(entity.getModelId());
         InventoryScreen.renderEntityInInventory((middleX - 256 / 2) / 2, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
     }
 
     @Override
-    void drawRightEntity(int posX, int posY, ChairModelInfo modelItem) {
+    protected void drawRightEntity(int posX, int posY, ChairModelInfo modelItem) {
         World world = getMinecraft().level;
         if (world == null) {
             return;
@@ -55,45 +55,45 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     }
 
     @Override
-    void openDetailsGui(EntityChair entity, ChairModelInfo modelInfo) {
+    protected void openDetailsGui(EntityChair entity, ChairModelInfo modelInfo) {
         if (minecraft != null) {
             minecraft.setScreen(new ChairModelDetailsGui(entity, modelInfo));
         }
     }
 
     @Override
-    void notifyModelChange(EntityChair entity, ChairModelInfo modelInfo) {
+    protected void notifyModelChange(EntityChair entity, ChairModelInfo modelInfo) {
         NetworkHandler.CHANNEL.sendToServer(new ChairModelMessage(entity.getId(), modelInfo.getModelId(), modelInfo.getMountedYOffset(),
                 modelInfo.isTameableCanRide(), modelInfo.isNoGravity()));
     }
 
     @Override
-    int getPageIndex() {
+    protected int getPageIndex() {
         return PAGE_INDEX;
     }
 
     @Override
-    void setPageIndex(int pageIndex) {
+    protected void setPageIndex(int pageIndex) {
         PAGE_INDEX = pageIndex;
     }
 
     @Override
-    int getPackIndex() {
+    protected int getPackIndex() {
         return PACK_INDEX;
     }
 
     @Override
-    void setPackIndex(int packIndex) {
+    protected void setPackIndex(int packIndex) {
         PACK_INDEX = packIndex;
     }
 
     @Override
-    int getRowIndex() {
+    protected int getRowIndex() {
         return ROW_INDEX;
     }
 
     @Override
-    void setRowIndex(int rowIndex) {
+    protected void setRowIndex(int rowIndex) {
         ROW_INDEX = rowIndex;
     }
 }

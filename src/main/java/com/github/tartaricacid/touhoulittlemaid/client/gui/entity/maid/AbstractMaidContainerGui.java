@@ -384,9 +384,12 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             getMinecraft().textureManager.bind(SIDE);
             blit(matrixStack, leftPos + 5, topPos + 135, 18, 0, 9, 9);
             blit(matrixStack, leftPos + 27, topPos + 135, 0, 9, 47, 9);
-            double hunger = maid.getHunger() / 20.0;
-            blit(matrixStack, leftPos + 29, topPos + 137, 2, 28, (int) (43 * hunger), 5);
-            getMinecraft().font.draw(matrixStack, String.format("%d", maid.getHunger()), leftPos + 15, topPos + 136, TextFormatting.DARK_GRAY.getColor());
+
+            int exp = maid.getExperience();
+            int count = exp / 120;
+            double percent = (exp % 120) / 120.0;
+            blit(matrixStack, leftPos + 29, topPos + 137, 2, 28, (int) (43 * percent), 5);
+            getMinecraft().font.draw(matrixStack, String.format("%d", count), leftPos + 15, topPos + 136, TextFormatting.DARK_GRAY.getColor());
         }
 
         getMinecraft().textureManager.bind(SIDE);
