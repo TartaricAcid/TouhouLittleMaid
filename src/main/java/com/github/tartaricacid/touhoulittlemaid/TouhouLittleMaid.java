@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
@@ -43,5 +44,6 @@ public final class TouhouLittleMaid {
         TaskManager.init();
         BaubleManager.init();
         MultiBlockManager.init();
+        ChatBubbleManger.initDefaultChat();
     }
 }

@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidMainContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.MaidConfigContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.MaidMainContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.WirelessIOContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -15,6 +17,7 @@ public final class InitContainerGui {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> MenuScreens.register(MaidMainContainer.TYPE, MaidMainContainerGui::new));
+        evt.enqueueWork(() -> MenuScreens.register(MaidConfigContainer.TYPE, MaidConfigContainerGui::new));
         evt.enqueueWork(() -> MenuScreens.register(WirelessIOContainer.TYPE, WirelessIOContainerGui::new));
     }
 }

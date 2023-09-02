@@ -25,15 +25,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileEntityStatue extends BlockEntity {
-    public static final BlockEntityType<TileEntityStatue> TYPE = BlockEntityType.Builder.of(TileEntityStatue::new, InitBlocks.STATUE.get()).build(null);
-
-    private static final String STATUE_SIZE_TAG = "StatueSize";
+    private static final String STATUE_SIZE_TAG = "StatueSize";    public static final BlockEntityType<TileEntityStatue> TYPE = BlockEntityType.Builder.of(TileEntityStatue::new, InitBlocks.STATUE.get()).build(null);
     private static final String CORE_BLOCK_TAG = "CoreBlock";
     private static final String CORE_BLOCK_POS_TAG = "CoreBlockPos";
     private static final String STATUE_FACING_TAG = "StatueFacing";
     private static final String ALL_BLOCKS_TAG = "AllBlocks";
     private static final String EXTRA_MAID_DATA = "ExtraMaidData";
-
     private Size size = Size.SMALL;
     private boolean isCoreBlock = false;
     private BlockPos coreBlockPos = BlockPos.ZERO;
@@ -41,7 +38,6 @@ public class TileEntityStatue extends BlockEntity {
     private List<BlockPos> allBlocks = Lists.newArrayList();
     @Nullable
     private CompoundTag extraMaidData = null;
-
     public TileEntityStatue(BlockPos blockPos, BlockState blockState) {
         super(TYPE, blockPos, blockState);
     }
@@ -168,4 +164,6 @@ public class TileEntityStatue extends BlockEntity {
             return dimension;
         }
     }
+
+
 }

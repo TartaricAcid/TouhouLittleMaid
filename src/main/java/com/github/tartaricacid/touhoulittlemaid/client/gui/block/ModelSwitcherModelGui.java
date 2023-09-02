@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.AbstractModelGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidModelDetailsGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.MaidModelDetailsGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.AbstractModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;

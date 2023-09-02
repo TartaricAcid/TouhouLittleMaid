@@ -40,8 +40,15 @@ public class MaidRecipeProvider extends RecipeProvider {
                 .unlockedBy("chair", has(Blocks.WATER))
                 .save(consumer);
         ShapelessRecipeBuilder.shapeless(PatchouliItems.BOOK)
-                .requires(Tags.Items.DYES_WHITE).requires(Tags.Items.DYES_RED).requires(Items.BOOK)
+                .requires(Tags.Items.DYES_WHITE)
+                .requires(Tags.Items.DYES_RED)
+                .requires(Items.BOOK)
                 .unlockedBy("book", has(Items.BOOK))
+                .save(consumer);
+        ShapelessRecipeBuilder.shapeless(InitItems.CHAIR_SHOW.get())
+                .requires(InitItems.CHAIR.get())
+                .requires(Tags.Items.DUSTS_REDSTONE)
+                .unlockedBy("chair", has(Blocks.WATER))
                 .save(consumer);
     }
 }

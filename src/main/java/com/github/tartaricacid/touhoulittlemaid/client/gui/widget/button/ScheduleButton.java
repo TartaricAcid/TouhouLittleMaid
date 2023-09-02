@@ -1,10 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.MaidMainContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
 import com.google.common.collect.Lists;
@@ -23,13 +24,13 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class ScheduleButton extends Button {
+public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
     private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
     private final EntityMaid maid;
     private MaidSchedule mode;
 
-    public ScheduleButton(int x, int y, MaidMainContainerGui gui) {
+    public ScheduleButton(int x, int y, AbstractMaidContainerGui<T> gui) {
         super(x, y, 61, 13, TextComponent.EMPTY, (b) -> {
         });
         this.maid = gui.getMaid();

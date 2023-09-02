@@ -1,16 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -25,41 +26,38 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static net.minecraft.world.inventory.InventoryMenu.*;
 
 
-public class MaidMainContainer extends AbstractContainerMenu {
+public class MaidMainContainer extends AbstractMaidContainer {
     public static final MenuType<MaidMainContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new MaidMainContainer(windowId, inv, data.readInt()));
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     private static final int PLAYER_INVENTORY_SIZE = 36;
-    private final EntityMaid maid;
 
     public MaidMainContainer(int id, Inventory inventory, int entityId) {
-        super(TYPE, id);
-        this.maid = (EntityMaid) inventory.player.level.getEntity(entityId);
+        super(TYPE, id, inventory, entityId);
         if (maid != null) {
-            this.addPlayerInv(inventory);
             this.addMaidArmorInv();
             this.addMaidBauble();
             this.addMaidHandInv();
             this.addMainInv();
-            maid.guiOpening = true;
         }
     }
 
-    private void addPlayerInv(Inventory playerInventory) {
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 88 + col * 18, 174 + row * 18));
+    public static MenuProvider create(int entityId) {
+        return new MenuProvider() {
+            @Override
+            public Component getDisplayName() {
+                return new TextComponent("Maid Main Container");
             }
-        }
 
-        for (int col = 0; col < 9; ++col) {
-            this.addSlot(new Slot(playerInventory, col, 88 + col * 18, 232));
-        }
+            @Override
+            public AbstractMaidContainer createMenu(int index, Inventory playerInventory, Player player) {
+                return new MaidMainContainer(index, playerInventory, entityId);
+            }
+        };
     }
 
     private void addMaidHandInv() {
@@ -122,6 +120,15 @@ public class MaidMainContainer extends AbstractContainerMenu {
         // 默认背包
         for (int i = 0; i < 6; i++) {
             addSlot(new SlotItemHandler(inv, i, 143 + 18 * i, 37));
+            // 最后一格给予特殊图标
+            if (i == 5) {
+                addSlot(new SlotItemHandler(inv, i, 143 + 18 * i, 37) {
+                    @Override
+                    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+                        return Pair.of(BLOCK_ATLAS, ReloadResourceEvent.EMPTY_BACK_SHOW_SLOT);
+                    }
+                });
+            }
         }
 
         if (level > BackpackLevel.EMPTY) {
@@ -185,21 +192,5 @@ public class MaidMainContainer extends AbstractContainerMenu {
             }
         }
         return stack1;
-    }
-
-    @Override
-    public void removed(Player playerIn) {
-        super.removed(playerIn);
-        maid.guiOpening = false;
-    }
-
-    @Override
-    public boolean stillValid(Player playerIn) {
-        return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
-    }
-
-    @Nullable
-    public EntityMaid getMaid() {
-        return maid;
     }
 }

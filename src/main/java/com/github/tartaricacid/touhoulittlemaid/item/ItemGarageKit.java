@@ -24,17 +24,6 @@ public class ItemGarageKit extends BlockItem {
         super(InitBlocks.GARAGE_KIT.get(), (new Item.Properties()).tab(GARAGE_KIT_TAB).stacksTo(1));
     }
 
-    @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
-                Minecraft minecraft = Minecraft.getInstance();
-                return new TileEntityItemStackGarageKitRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
-            }
-        });
-    }
-
     private static boolean hasMaidData(ItemStack stack) {
         return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(ENTITY_INFO).isEmpty();
     }
@@ -51,5 +40,16 @@ public class ItemGarageKit extends BlockItem {
         data.putString("id", "touhou_little_maid:maid");
         data.putString(EntityMaid.MODEL_ID_TAG, "touhou_little_maid:hakurei_reimu");
         return data;
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                Minecraft minecraft = Minecraft.getInstance();
+                return new TileEntityItemStackGarageKitRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+            }
+        });
     }
 }

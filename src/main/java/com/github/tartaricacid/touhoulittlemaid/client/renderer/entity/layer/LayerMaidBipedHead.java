@@ -5,25 +5,27 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMai
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.SkullModelBase;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.AbstractSkullBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -55,11 +57,19 @@ public class LayerMaidBipedHead extends RenderLayer<EntityMaid, BedrockModel<Ent
                 SkullModelBase modelBase = this.skullModels.get(type);
                 RenderType rendertype = SkullBlockRenderer.getRenderType(type, gameprofile);
                 SkullBlockRenderer.renderSkull(null, 180.0F, 0.0F, poseStack, bufferIn, packedLightIn, modelBase, rendertype);
-            } else if (!(item instanceof ArmorItem) || ((ArmorItem) item).getSlot() != EquipmentSlot.HEAD) {
-                poseStack.translate(0.0D, -0.25D, 0.0D);
-                poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-                poseStack.scale(0.625F, -0.625F, -0.625F);
-                Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, head, ItemTransforms.TransformType.HEAD, false, poseStack, bufferIn, packedLightIn);
+            }
+            ItemStack stack = maid.getMaidInv().getStackInSlot(5);
+            if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
+                Block block = ((BlockItem) stack.getItem()).getBlock();
+                if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
+                    BlockState plant = ((IPlantable) block).getPlant(maid.level, maid.blockPosition());
+                    poseStack.pushPose();
+                    this.getParentModel().getHead().translateAndRotate(poseStack);
+                    poseStack.scale(0.8F, -0.8F, -0.8F);
+                    poseStack.translate(-0.5, 0.625, -0.5);
+                    Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
+                    poseStack.popPose();
+                }
             }
             poseStack.popPose();
         }

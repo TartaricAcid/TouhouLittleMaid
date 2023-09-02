@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ChairModelGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.ChairModelGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;

@@ -4,12 +4,14 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidBackItem;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidBipedHead;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.LayerMaidHeldItem;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;
@@ -44,6 +47,7 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
         this.addLayer(new LayerMaidHeldItem(this));
         this.addLayer(new LayerMaidBipedHead(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackpack(this, manager.getModelSet()));
+        this.addLayer(new LayerMaidBackItem(this));
     }
 
     @Override
@@ -69,7 +73,11 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
 
         // 模型动画设置
         this.model.setAnimations(this.mainAnimations);
-
+        // 渲染聊天气泡
+        if (InGameMaidConfig.INSTANCE.isShowChatBubble()) {
+            ChatBubbleRenderer.renderChatBubble(this, entity, poseStack, bufferIn, packedLightIn);
+        }
+        // 渲染女仆模型本体
         GlWrapper.setPoseStack(poseStack);
         super.render(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
         GlWrapper.clearPoseStack();
@@ -131,5 +139,9 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
 
     public MaidModelInfo getMainInfo() {
         return mainInfo;
+    }
+
+    public EntityRenderDispatcher getDispatcher() {
+        return this.entityRenderDispatcher;
     }
 }

@@ -9,14 +9,6 @@ public class FaceItem {
     @SerializedName("uv_size")
     private float[] uvSize;
 
-    public float[] getUv() {
-        return uv;
-    }
-
-    public float[] getUvSize() {
-        return uvSize;
-    }
-
     public static FaceItem single16X() {
         FaceItem face = new FaceItem();
         face.uv = new float[]{0, 0};
@@ -29,5 +21,13 @@ public class FaceItem {
         face.uv = new float[]{0, 0};
         face.uvSize = new float[]{0, 0};
         return face;
+    }
+
+    public float[] getUv() {
+        return uv;
+    }
+
+    public float[] getUvSize() {
+        return uvSize;
     }
 }

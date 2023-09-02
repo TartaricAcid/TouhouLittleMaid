@@ -53,11 +53,11 @@ public final class SoundUtil {
         return fallback;
     }
 
-    private static boolean isRainBiome(Biome biome, BlockPos pos) {
+    public static boolean isRainBiome(Biome biome, BlockPos pos) {
         return biome.getPrecipitation() == Biome.Precipitation.RAIN && biome.warmEnoughToRain(pos) && !biome.shouldSnowGolemBurn(pos);
     }
 
-    private static boolean isSnowyBiome(Biome biome, BlockPos pos) {
+    public static boolean isSnowyBiome(Biome biome, BlockPos pos) {
         return biome.getPrecipitation() == Biome.Precipitation.SNOW && biome.coldEnoughToSnow(pos);
     }
 }

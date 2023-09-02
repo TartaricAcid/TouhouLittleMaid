@@ -11,12 +11,16 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
@@ -61,11 +65,9 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -108,7 +110,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowAttackMob {
+public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
@@ -133,6 +135,7 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
     private static final EntityDataAccessor<MaidSchedule> SCHEDULE_MODE = SynchedEntityData.defineId(EntityMaid.class, MaidSchedule.DATA);
     private static final EntityDataAccessor<BlockPos> RESTRICT_CENTER = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Float> RESTRICT_RADIUS = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<MaidChatBubbles> CHAT_BUBBLE = SynchedEntityData.defineId(EntityMaid.class, MaidChatBubbles.DATA);
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -197,6 +200,7 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
         this.entityData.define(SCHEDULE_MODE, MaidSchedule.DAY);
         this.entityData.define(RESTRICT_CENTER, BlockPos.ZERO);
         this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_HOME_RANGE.get().floatValue());
+        this.entityData.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
     }
 
     @Override
@@ -277,6 +281,9 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
     public void aiStep() {
         super.aiStep();
         this.updateSwingTime();
+        if (!level.isClientSide) {
+            ChatBubbleManger.tick(this);
+        }
     }
 
     @Override
@@ -783,18 +790,26 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
         }
     }
 
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player playerEntity) {
-        return new MaidMainContainer(id, inventory, getId());
+    public boolean openMaidGui(Player player) {
+        return openMaidGui(player, TabIndex.MAIN);
     }
 
-    private boolean openMaidGui(Player player) {
+    public boolean openMaidGui(Player player, int tabIndex) {
         if (player instanceof ServerPlayer && !this.isSleeping()) {
             this.navigation.stop();
-            NetworkHooks.openGui((ServerPlayer) player, this, (buffer) -> buffer.writeInt(getId()));
+            NetworkHooks.openGui((ServerPlayer) player, getGuiProvider(tabIndex), (buffer) -> buffer.writeInt(getId()));
         }
         return true;
+    }
+
+    private MenuProvider getGuiProvider(int tabIndex) {
+        switch (tabIndex) {
+            case TabIndex.CONFIG:
+                return MaidConfigContainer.create(getId());
+            case TabIndex.MAIN:
+            default:
+                return MaidMainContainer.create(getId());
+        }
     }
 
     @Override
@@ -1020,6 +1035,22 @@ public class EntityMaid extends TamableAnimal implements MenuProvider, CrossbowA
     @Override
     public float getRestrictRadius() {
         return this.entityData.get(RESTRICT_RADIUS);
+    }
+
+    public MaidChatBubbles getChatBubble() {
+        return this.entityData.get(CHAT_BUBBLE);
+    }
+
+    public void setChatBubble(MaidChatBubbles bubbles) {
+        this.entityData.set(CHAT_BUBBLE, bubbles);
+    }
+
+    public void addChatBubble(long endTime, ChatText text) {
+        ChatBubbleManger.addChatBubble(endTime, text, this);
+    }
+
+    public int getChatBubbleCount() {
+        return ChatBubbleManger.getChatBubbleCount(this);
     }
 
     public boolean isPickup() {

@@ -11,12 +11,16 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.ZipPackT
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.ChairModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChatBubbleInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -34,7 +38,10 @@ import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,6 +49,7 @@ import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -51,10 +59,14 @@ import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 
 @OnlyIn(Dist.CLIENT)
 public class CustomPackLoader {
-    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-            .registerTypeAdapter(CubesItem.class, new CubesItem.Deserializer()).create();
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .registerTypeAdapter(CubesItem.class, new CubesItem.Deserializer())
+            .registerTypeAdapter(ChatText.class, new ChatText.Serializer())
+            .create();
     public static final MaidModels MAID_MODELS = MaidModels.getInstance();
     public static final ChairModels CHAIR_MODELS = ChairModels.getInstance();
+    private static final Set<ResourceLocation> TMP_REGISTER_TEXTURE = Sets.newHashSet();
     private static final String COMMENT_SYMBOL = "#";
     private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
     public static final Path PACK_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve(CUSTOM_PACK_DIR_NAME);
@@ -66,7 +78,9 @@ public class CustomPackLoader {
         CustomJsAnimationManger.clearAll();
         MAID_MODELS.clearAll();
         CHAIR_MODELS.clearAll();
+        TMP_REGISTER_TEXTURE.clear();
         initPacks();
+        InGameMaidConfig.read();
     }
 
     private static void initPacks() {
@@ -147,24 +161,33 @@ public class CustomPackLoader {
         if (!file.isFile()) {
             return;
         }
-        try (InputStream stream = new FileInputStream(file)) {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
             pack.decorate();
             // 加载图标贴图
             if (pack.getIcon() != null) {
-                Minecraft.getInstance().textureManager.register(pack.getIcon(),
-                        new FilePackTexture(rootPath, pack.getIcon()));
-                // 获取图标的长宽
-
+                registerFilePackTexture(rootPath, pack.getIcon());
             }
             for (MaidModelInfo maidModelItem : pack.getModelList()) {
                 // 尝试加载模型
                 BedrockModel<EntityMaid> modelJson = loadMaidModel(rootPath, maidModelItem.getModel());
                 // 加载贴图
-                Minecraft.getInstance().textureManager.register(maidModelItem.getTexture(),
-                        new FilePackTexture(rootPath, maidModelItem.getTexture()));
+                registerFilePackTexture(rootPath, maidModelItem.getTexture());
+                {
+                    // 加载聊天气泡背景
+                    ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
+                    registerFilePackTexture(rootPath, chatBubble.getBg());
+                    // 加载聊聊天气泡图标
+                    ChatBubbleInfo.Text text = chatBubble.getText();
+                    text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                            .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
+                    text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                            .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
+                    text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                            .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
+                }
                 // 加载动画
                 @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(rootPath, maidModelItem);
                 if (modelJson != null) {
@@ -202,17 +225,26 @@ public class CustomPackLoader {
             pack.decorate();
             // 加载图标贴图
             if (pack.getIcon() != null) {
-                Minecraft.getInstance().textureManager.register(pack.getIcon(),
-                        new ZipPackTexture(zipFile.getName(), pack.getIcon()));
-                // 获取图标的长宽
-
+                registerZipPackTexture(zipFile.getName(), pack.getIcon());
             }
             for (MaidModelInfo maidModelItem : pack.getModelList()) {
                 // 尝试加载模型
                 BedrockModel<EntityMaid> modelJson = loadMaidModel(zipFile, maidModelItem.getModel());
                 // 加载贴图
-                Minecraft.getInstance().textureManager.register(maidModelItem.getTexture(),
-                        new ZipPackTexture(zipFile.getName(), maidModelItem.getTexture()));
+                registerZipPackTexture(zipFile.getName(), maidModelItem.getTexture());
+                {
+                    // 加载聊天气泡背景
+                    ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
+                    registerZipPackTexture(zipFile.getName(), chatBubble.getBg());
+                    // 加载聊聊天气泡图标
+                    ChatBubbleInfo.Text text = chatBubble.getText();
+                    text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                            .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
+                    text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                            .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
+                    text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                            .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
+                }
                 // 加载动画
                 @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(zipFile, maidModelItem);
                 if (modelJson != null) {
@@ -237,6 +269,7 @@ public class CustomPackLoader {
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
     }
 
+    @SuppressWarnings("all")
     private static void putMaidEasterEggData(MaidModelInfo maidModelItem, BedrockModel<EntityMaid> modelJson, List<Object> animations) {
         MaidModelInfo.EasterEgg easterEgg = maidModelItem.getEasterEgg();
         MaidModels.ModelData data = new MaidModels.ModelData(modelJson, maidModelItem, animations);
@@ -263,7 +296,7 @@ public class CustomPackLoader {
         if (!file.isFile()) {
             return;
         }
-        try (InputStream stream = new FileInputStream(file)) {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
             // 将其转换为 pojo 对象
             // 这个 pojo 是二次修饰的过的对象，所以一部分数据异常已经进行了处理或者抛出
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
@@ -272,15 +305,13 @@ public class CustomPackLoader {
             pack.decorate();
             // 加载图标贴图
             if (pack.getIcon() != null) {
-                Minecraft.getInstance().textureManager.register(pack.getIcon(),
-                        new FilePackTexture(rootPath, pack.getIcon()));
+                registerFilePackTexture(rootPath, pack.getIcon());
             }
             for (ChairModelInfo chairModelItem : pack.getModelList()) {
                 // 尝试加载模型
                 BedrockModel<EntityChair> modelJson = loadChairModel(rootPath, chairModelItem.getModel());
                 // 加载贴图
-                Minecraft.getInstance().textureManager.register(chairModelItem.getTexture(),
-                        new FilePackTexture(rootPath, chairModelItem.getTexture()));
+                registerFilePackTexture(rootPath, chairModelItem.getTexture());
                 // 加载动画
                 @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(rootPath, chairModelItem);
                 if (modelJson != null) {
@@ -320,15 +351,13 @@ public class CustomPackLoader {
             pack.decorate();
             // 加载图标贴图
             if (pack.getIcon() != null) {
-                Minecraft.getInstance().textureManager.register(pack.getIcon(),
-                        new ZipPackTexture(zipFile.getName(), pack.getIcon()));
+                registerZipPackTexture(zipFile.getName(), pack.getIcon());
             }
             for (ChairModelInfo chairModelItem : pack.getModelList()) {
                 // 尝试加载模型
                 BedrockModel<EntityChair> modelJson = loadChairModel(zipFile, chairModelItem.getModel());
                 // 加载贴图
-                Minecraft.getInstance().textureManager.register(chairModelItem.getTexture(),
-                        new ZipPackTexture(zipFile.getName(), chairModelItem.getTexture()));
+                registerZipPackTexture(zipFile.getName(), chairModelItem.getTexture());
                 // 加载动画
                 @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(zipFile, chairModelItem);
                 if (modelJson != null) {
@@ -359,7 +388,7 @@ public class CustomPackLoader {
         if (!file.isFile()) {
             return null;
         }
-        try (InputStream stream = new FileInputStream(file)) {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
             if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
@@ -444,7 +473,7 @@ public class CustomPackLoader {
         if (!file.isFile()) {
             return null;
         }
-        try (InputStream stream = new FileInputStream(file)) {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
             if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
@@ -523,6 +552,26 @@ public class CustomPackLoader {
         return null;
     }
 
+    private static void registerFilePackTexture(Path rootPath, ResourceLocation texturePath) {
+        if (!TMP_REGISTER_TEXTURE.contains(texturePath)) {
+            FilePackTexture filePackTexture = new FilePackTexture(rootPath, texturePath);
+            if (filePackTexture.isExist()) {
+                Minecraft.getInstance().textureManager.register(texturePath, filePackTexture);
+                TMP_REGISTER_TEXTURE.add(texturePath);
+            }
+        }
+    }
+
+    private static void registerZipPackTexture(String zipFilePath, ResourceLocation texturePath) {
+        if (!TMP_REGISTER_TEXTURE.contains(texturePath)) {
+            ZipPackTexture zipPackTexture = new ZipPackTexture(zipFilePath, texturePath);
+            if (zipPackTexture.isExist()) {
+                Minecraft.getInstance().textureManager.register(texturePath, zipPackTexture);
+                TMP_REGISTER_TEXTURE.add(texturePath);
+            }
+        }
+    }
+
     private static void readLanguageFile(ZipFile zipFile, String namespace) throws IOException {
         LanguageInfo language = Minecraft.getInstance().getLanguageManager().getSelected();
 
@@ -560,7 +609,7 @@ public class CustomPackLoader {
         if (!file.isFile()) {
             return;
         }
-        try (InputStream stream = new FileInputStream(file)) {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
             List<String> lines = IOUtils.readLines(stream, StandardCharsets.UTF_8);
             for (String s : lines) {
                 if (!s.startsWith(COMMENT_SYMBOL)) {

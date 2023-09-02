@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
@@ -16,8 +17,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, BedrockModel<EntityChair>> {
@@ -34,11 +37,18 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
     @Override
     public void render(EntityChair chair, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && player.isShiftKeyDown() && Minecraft.getInstance().options.renderDebug && renderHitBox) {
+        if (canShowHitBox(player) && renderHitBox) {
             renderHitBox(chair, poseStack, bufferIn);
         } else {
             renderChair(chair, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
         }
+    }
+
+    private boolean canShowHitBox(@Nullable Player player) {
+        if (player != null && player.isShiftKeyDown()) {
+            return player.getMainHandItem().getItem() == InitItems.CHAIR_SHOW.get();
+        }
+        return false;
     }
 
     private void renderHitBox(EntityChair chair, PoseStack poseStack, MultiBufferSource bufferIn) {

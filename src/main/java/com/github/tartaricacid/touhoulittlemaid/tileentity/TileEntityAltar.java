@@ -24,25 +24,20 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 
 public class TileEntityAltar extends BlockEntity {
-    public static final BlockEntityType<TileEntityAltar> TYPE = BlockEntityType.Builder.of(TileEntityAltar::new, InitBlocks.ALTAR.get()).build(null);
-
-    private static final String STORAGE_ITEM = "StorageItem";
+    private static final String STORAGE_ITEM = "StorageItem";    public static final BlockEntityType<TileEntityAltar> TYPE = BlockEntityType.Builder.of(TileEntityAltar::new, InitBlocks.ALTAR.get()).build(null);
     private static final String IS_RENDER = "IsRender";
     private static final String CAN_PLACE_ITEM = "CanPlaceItem";
     private static final String STORAGE_STATE_ID = "StorageBlockStateId";
     private static final String DIRECTION = "Direction";
     private static final String STORAGE_BLOCK_LIST = "StorageBlockList";
     private static final String CAN_PLACE_ITEM_POS_LIST = "CanPlaceItemPosList";
-
     public final ItemStackHandler handler = new AltarItemHandler();
-
     private boolean isRender = false;
     private boolean canPlaceItem = false;
     private BlockState storageState = Blocks.AIR.defaultBlockState();
     private PosListData blockPosList = new PosListData();
     private PosListData canPlaceItemPosList = new PosListData();
     private Direction direction = Direction.SOUTH;
-
     public TileEntityAltar(BlockPos blockPos, BlockState blockState) {
         super(TYPE, blockPos, blockState);
     }
@@ -137,4 +132,6 @@ public class TileEntityAltar extends BlockEntity {
     public Direction getDirection() {
         return direction;
     }
+
+
 }

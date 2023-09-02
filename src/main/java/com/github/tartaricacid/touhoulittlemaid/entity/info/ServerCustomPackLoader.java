@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerChairModels;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerMaidModels;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
@@ -17,7 +18,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,7 +36,10 @@ import java.util.zip.ZipFile;
 import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 
 public final class ServerCustomPackLoader {
-    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .registerTypeAdapter(ChatText.class, new ChatText.Serializer())
+            .create();
     public static final ServerMaidModels SERVER_MAID_MODELS = ServerMaidModels.getInstance();
     public static final ServerChairModels SERVER_CHAIR_MODELS = ServerChairModels.getInstance();
     private static final Map<Long, Path> CRC32_FILE_MAP = Maps.newHashMap();
@@ -128,7 +135,7 @@ public final class ServerCustomPackLoader {
         if (!file.isFile()) {
             return;
         }
-        try (InputStream stream = new FileInputStream(file)) {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
@@ -207,7 +214,7 @@ public final class ServerCustomPackLoader {
         if (!file.isFile()) {
             return;
         }
-        try (InputStream stream = new FileInputStream(file)) {
+        try (InputStream stream = Files.newInputStream(file.toPath())) {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());

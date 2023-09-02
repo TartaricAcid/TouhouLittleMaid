@@ -19,9 +19,9 @@ public class MaidAttackStrafingTask extends Behavior<EntityMaid> {
 
     public MaidAttackStrafingTask() {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
-                MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
-                MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
-                MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT),
+                        MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
+                        MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
+                        MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT),
                 1200);
     }
 
