@@ -72,6 +72,7 @@
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "未绑定箱子",
   "tooltips.touhou_little_maid.maid_beacon.desc": "存储 P 点：%s",
   "tooltips.touhou_little_maid.chair_show.desc": "潜行时手持此物品可以查看坐垫的碰撞箱",
+  "tooltips.touhou_little_maid.model_switcher.bounded": "已经绑定女仆",
   "gui.touhou_little_maid.schedule.day": "白班",
   "gui.touhou_little_maid.schedule.night": "夜班",
   "gui.touhou_little_maid.schedule.all": "全天",

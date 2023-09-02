@@ -72,6 +72,7 @@
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "Unbound Chest",
   "tooltips.touhou_little_maid.maid_beacon.desc": "Storage Power: %s",
   "tooltips.touhou_little_maid.chair_show.desc": "Hold this item and sneak to see the hit box of chair",
+  "tooltips.touhou_little_maid.model_switcher.bounded": "Already bound to the maid",
   "gui.touhou_little_maid.schedule.day": "Day Shift",
   "gui.touhou_little_maid.schedule.night": "Night Shift",
   "gui.touhou_little_maid.schedule.all": "All Day",

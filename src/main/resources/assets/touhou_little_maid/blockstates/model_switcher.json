@@ -1,7 +1,18 @@
 {
   "variants": {
-    "": {
+    "facing=south": {
       "model": "touhou_little_maid:block/model_switcher"
+    },
+    "facing=north": {
+      "model": "touhou_little_maid:block/model_switcher"
+    },
+    "facing=east": {
+      "model": "touhou_little_maid:block/model_switcher",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "touhou_little_maid:block/model_switcher",
+      "y": 90
     }
   }
 }

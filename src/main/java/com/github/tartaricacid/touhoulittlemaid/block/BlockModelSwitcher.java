@@ -15,14 +15,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import org.apache.commons.lang3.StringUtils;
@@ -31,14 +33,18 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class BlockModelSwitcher extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
     public BlockModelSwitcher() {
         super(BlockBehaviour.Properties.of(Material.STONE).strength(50.0F, 1200.0F));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
+        Direction value = state.getValue(FACING);
         if (direction != null) {
-            return direction == Direction.NORTH || direction == Direction.SOUTH;
+            return direction == value.getClockWise() || direction == value.getCounterClockWise();
         }
         return false;
     }
@@ -50,13 +56,24 @@ public class BlockModelSwitcher extends BaseEntityBlock {
     }
 
     @Override
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(FACING);
+    }
+
+    @Override
     public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         if (pLevel.isClientSide) {
             return;
         }
-        boolean northSignal = pLevel.getSignal(pPos.north(), Direction.NORTH) > 0;
-        boolean southSignal = pLevel.getSignal(pPos.south(), Direction.SOUTH) > 0;
-        boolean hasSignal = northSignal || southSignal;
+        Direction direction = pState.getValue(FACING);
+        boolean leftSignal = pLevel.getSignal(pPos.offset(direction.getCounterClockWise().getNormal()), direction.getCounterClockWise()) > 0;
+        boolean rightSignal = pLevel.getSignal(pPos.offset(direction.getClockWise().getNormal()), direction.getClockWise()) > 0;
+        boolean hasSignal = leftSignal || rightSignal;
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (blockEntity instanceof TileEntityModelSwitcher && pLevel instanceof ServerLevel) {
             TileEntityModelSwitcher switcher = (TileEntityModelSwitcher) blockEntity;
@@ -69,7 +86,7 @@ public class BlockModelSwitcher extends BaseEntityBlock {
                 if (uuid == null) {
                     return;
                 }
-                int index = calculateIndex(northSignal, switcher.getInfoList().size(), switcher.getIndex());
+                int index = calculateIndex(leftSignal, switcher.getInfoList().size(), switcher.getIndex());
                 switcher.setIndex(index);
                 ServerLevel serverLevel = (ServerLevel) pLevel;
                 Entity entity = serverLevel.getEntity(uuid);
@@ -99,8 +116,8 @@ public class BlockModelSwitcher extends BaseEntityBlock {
         }
     }
 
-    private int calculateIndex(boolean northSignal, int size, int index) {
-        if (northSignal) {
+    private int calculateIndex(boolean leftSignal, int size, int index) {
+        if (leftSignal) {
             if (index < size - 1) {
                 index++;
             } else {
@@ -149,5 +166,15 @@ public class BlockModelSwitcher extends BaseEntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public BlockState rotate(BlockState pState, Rotation pRot) {
+        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState pState, Mirror pMirror) {
+        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
     }
 }

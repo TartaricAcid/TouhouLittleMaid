@@ -4,9 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +17,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
@@ -55,5 +63,23 @@ public class ItemModelSwitcher extends BlockItem {
             return InteractionResult.SUCCESS;
         }
         return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
+    }
+
+    private boolean hasMaidInfo(ItemStack stack) {
+        CompoundTag tag = stack.getTagElement(STORAGE_DATA_TAG);
+        if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            CompoundTag forgeTag = tag.getCompound(FORGE_DATA_TAG);
+            return forgeTag.contains(TileEntityModelSwitcher.ENTITY_UUID, Tag.TAG_INT_ARRAY);
+        }
+        return false;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
+        if (hasMaidInfo(pStack)) {
+            pTooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.model_switcher.bounded").withStyle(ChatFormatting.GRAY));
+        } else {
+            pTooltip.add(new TranslatableComponent("gui.touhou_little_maid.model_switcher.uuid.empty").withStyle(ChatFormatting.DARK_RED));
+        }
     }
 }

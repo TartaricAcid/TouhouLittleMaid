@@ -17,7 +17,7 @@ apply plugin: 'eclipse'
 
 version = mod_version
 group = 'com.github.tartaricacid'
-archivesBaseName = 'touhoulittlemaid-1.18.2'
+archivesBaseName = 'touhoulittlemaid-1.18.2-release'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
