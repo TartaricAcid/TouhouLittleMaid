@@ -1,13 +1,24 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "touhou_little_maid:chair"
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "WWW",
+    "IPI"
+  ],
+  "key": {
+    "W": {
+      "tag": "minecraft:wool"
     },
-    {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "R": {
       "tag": "forge:dusts/redstone"
     }
-  ],
+  },
   "result": {
     "item": "touhou_little_maid:chair_show"
   }

@@ -35,6 +35,7 @@ public class ItemFilm extends Item {
         ItemStack film = InitItems.FILM.get().getDefaultInstance();
         CompoundNBT filmTag = new CompoundNBT();
         CompoundNBT maidTag = new CompoundNBT();
+        maid.setHomeModeEnable(false);
         maid.addAdditionalSaveData(maidTag);
         removeMaidSomeData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(InitEntities.MAID.get().getRegistryName()).toString());

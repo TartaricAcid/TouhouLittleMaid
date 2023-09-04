@@ -60,6 +60,7 @@ public class ItemCamera extends Item {
         ItemStack photo = InitItems.PHOTO.get().getDefaultInstance();
         CompoundNBT photoTag = new CompoundNBT();
         CompoundNBT maidTag = new CompoundNBT();
+        maid.setHomeModeEnable(false);
         maid.addAdditionalSaveData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(InitEntities.MAID.get().getRegistryName()).toString());
         photoTag.put(MAID_INFO, maidTag);

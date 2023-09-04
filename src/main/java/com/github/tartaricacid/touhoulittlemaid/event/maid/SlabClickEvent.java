@@ -24,6 +24,7 @@ public final class SlabClickEvent {
         if (stack.getItem() == emptySmartSlab) {
             if (!player.getCooldowns().isOnCooldown(emptySmartSlab)) {
                 ItemStack output = maidSmartSlab.getDefaultInstance();
+                maid.setHomeModeEnable(false);
                 ItemSmartSlab.storeMaidData(output, maid);
                 if (maid.hasCustomName()) {
                     output.setHoverName(maid.getCustomName());
