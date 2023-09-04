@@ -23,7 +23,6 @@ archivesBaseName = 'touhoulittlemaid-1.20.1-release'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    // mappings channel: 'official', version: '1.18.2'
     mappings channel: 'parchment', version: '2023.08.20-1.20.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
