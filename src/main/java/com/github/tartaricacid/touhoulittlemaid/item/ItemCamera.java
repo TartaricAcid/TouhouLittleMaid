@@ -58,6 +58,7 @@ public class ItemCamera extends Item {
         ItemStack photo = InitItems.PHOTO.get().getDefaultInstance();
         CompoundTag photoTag = new CompoundTag();
         CompoundTag maidTag = new CompoundTag();
+        maid.setHomeModeEnable(false);
         maid.addAdditionalSaveData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
         photoTag.put(MAID_INFO, maidTag);
