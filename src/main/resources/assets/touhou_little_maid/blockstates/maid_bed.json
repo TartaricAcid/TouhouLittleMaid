@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,occupied=false,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head"
+    },
+    "facing=south,occupied=false,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head",
+      "y": 180
+    },
+    "facing=west,occupied=false,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head",
+      "y": 270
+    },
+    "facing=east,occupied=false,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head",
+      "y": 90
+    },
+    "facing=north,occupied=true,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head"
+    },
+    "facing=south,occupied=true,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head",
+      "y": 180
+    },
+    "facing=west,occupied=true,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head",
+      "y": 270
+    },
+    "facing=east,occupied=true,part=head": {
+      "model": "touhou_little_maid:block/maid_bed_head",
+      "y": 90
+    },
+    "facing=north,occupied=false,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot"
+    },
+    "facing=south,occupied=false,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot",
+      "y": 180
+    },
+    "facing=west,occupied=false,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot",
+      "y": 270
+    },
+    "facing=east,occupied=false,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot",
+      "y": 90
+    },
+    "facing=north,occupied=true,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot"
+    },
+    "facing=south,occupied=true,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot",
+      "y": 180
+    },
+    "facing=west,occupied=true,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot",
+      "y": 270
+    },
+    "facing=east,occupied=true,part=foot": {
+      "model": "touhou_little_maid:block/maid_bed_foot",
+      "y": 90
+    }
+  }
+}
