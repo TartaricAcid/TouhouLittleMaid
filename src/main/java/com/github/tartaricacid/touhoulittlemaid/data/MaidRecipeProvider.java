@@ -50,5 +50,15 @@ public class MaidRecipeProvider extends RecipeProvider {
                 .requires(Tags.Items.DUSTS_REDSTONE)
                 .unlockedBy("chair", has(Blocks.WATER))
                 .save(consumer);
+        ShapedRecipeBuilder.shaped(InitItems.CHAIR_SHOW.get())
+                .define('W', ItemTags.WOOL)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('P', ItemTags.PLANKS)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .pattern(" R ")
+                .pattern("WWW")
+                .pattern("IPI")
+                .unlockedBy("chair", has(Blocks.WATER))
+                .save(consumer);
     }
 }

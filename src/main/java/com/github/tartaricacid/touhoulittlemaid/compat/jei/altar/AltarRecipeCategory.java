@@ -47,10 +47,10 @@ public class AltarRecipeCategory implements IRecipeCategory<AltarRecipeWrapper> 
 
         poseStack.pushPose();
         poseStack.scale(0.8f, 0.8f, 0.8f);
-        powerDraw.draw(poseStack, 78, 59);
+        powerDraw.draw(poseStack, 90, 50);
         poseStack.popPose();
 
-        font.draw(poseStack, String.format("×%.2f", recipe.getPowerCost()), 76, 49, darkGray);
+        font.draw(poseStack, String.format("×%.2f", recipe.getPowerCost()), 65, 55, darkGray);
         font.draw(poseStack, result, (bgDraw.getWidth() - font.width(result)) / 2.0f, 85, darkGray);
     }
 
