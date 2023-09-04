@@ -1,10 +1,10 @@
-name: Gradle Package 1.18.2
+name: Gradle Package 1.20
 
 on:
   workflow_dispatch:    
   push:
     branches:
-      - 1.20
+      - "1.20"
     paths:
       - 'src/main/**'
 
