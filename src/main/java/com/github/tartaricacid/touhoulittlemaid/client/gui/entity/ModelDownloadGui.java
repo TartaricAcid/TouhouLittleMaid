@@ -156,12 +156,12 @@ public class ModelDownloadGui extends Screen {
         int startY = this.height / 2 - 73;
 
         MutableComponent name = Component.translatable(info.getName());
-        graphics.drawString(font, name, startX, startY, 0xFFAA00);
-        graphics.drawString(font, info.getVersion(), startX + font.width(name) + 4, startY, 0x55FF55);
-        graphics.drawString(font, getI18nFormatFileSize(info.getFormatFileSize()), startX, startY + 12, 0x3A8FB7);
-        graphics.drawString(font, getI18nFormatFileTime(info.getFormatData()), startX, startY + 24, 0x55FFFF);
-        graphics.drawString(font, getI18nFormatAuthor(info.getAuthor()), startX, startY + 36, 0x00896C);
-        graphics.drawString(font, getI18nFormatLicense(info.getLicense()), startX, startY + 48, 0xF7D94C);
+        graphics.drawString(font, name, startX, startY, 0xFFAA00, false);
+        graphics.drawString(font, info.getVersion(), startX + font.width(name) + 4, startY, 0x55FF55, false);
+        graphics.drawString(font, getI18nFormatFileSize(info.getFormatFileSize()), startX, startY + 12, 0x3A8FB7, false);
+        graphics.drawString(font, getI18nFormatFileTime(info.getFormatData()), startX, startY + 24, 0x55FFFF, false);
+        graphics.drawString(font, getI18nFormatAuthor(info.getAuthor()), startX, startY + 36, 0x00896C, false);
+        graphics.drawString(font, getI18nFormatLicense(info.getLicense()), startX, startY + 48, 0xF7D94C, false);
         graphics.drawWordWrap(font, Component.translatable(info.getDesc()), startX, startY + 72, 195, 0x7a7a7a);
     }
 

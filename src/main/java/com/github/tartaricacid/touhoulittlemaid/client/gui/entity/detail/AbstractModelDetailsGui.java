@@ -124,9 +124,9 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         this.fillGradient(graphics, BACKGROUND_SIZE, 0xfe17191d, -999);
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, -900);
-        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.skin_details.left_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 4, 0xffaaaaaa);
-        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.skin_details.right_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 14, 0xffaaaaaa);
-        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.skin_details.mouse_wheel"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 24, 0xffaaaaaa);
+        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.skin_details.left_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 4, 0xffaaaaaa, false);
+        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.skin_details.right_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 14, 0xffaaaaaa, false);
+        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.skin_details.mouse_wheel"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 24, 0xffaaaaaa, false);
         graphics.pose().popPose();
     }
 
@@ -134,8 +134,8 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         this.fillGradient(graphics, BOTTOM_STATUS_BAR_SIZE, 0xfe282c34);
         String name = String.format("%s %s", "\u2714", I18n.get(ParseI18n.getI18nKey(modelInfo.getName())));
         String info = String.format("%d FPS %.2f%%", Minecraft.fps, scale * 100 / 80);
-        graphics.drawString(font, name, 136, this.height - 12, 0xcacad4);
-        graphics.drawString(font, info, this.width - font.width(info) - 4, this.height - 12, 0xcacad4);
+        graphics.drawString(font, name, 136, this.height - 12, 0xcacad4, false);
+        graphics.drawString(font, info, this.width - font.width(info) - 4, this.height - 12, 0xcacad4, false);
     }
 
     private void renderViewCrosshair() {

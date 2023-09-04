@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.script;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.util.Mth;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -22,7 +23,7 @@ public class GlWrapper {
 
     public static void rotate(double angle, double x, double y, double z) {
         Vector3f vector3f = new Vector3f(normalize(x), normalize(y), normalize(z));
-        poseStack.mulPose(new Quaternionf().rotateAxis((float) angle, vector3f));
+        poseStack.mulPose(new Quaternionf().rotateAxis((float) angle * Mth.DEG_TO_RAD, vector3f));
     }
 
     public static void scale(double x, double y, double z) {

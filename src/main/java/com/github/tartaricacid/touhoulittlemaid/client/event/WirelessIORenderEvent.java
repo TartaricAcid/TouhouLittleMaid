@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class WirelessIORenderEvent {
     @SubscribeEvent
     public static void onRender(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.player == null) {
                 return;
@@ -35,8 +35,8 @@ public final class WirelessIORenderEvent {
             if (pos == null) {
                 return;
             }
-            Vec3 position = Minecraft.getInstance().getBlockEntityRenderDispatcher().camera.getPosition();
-            AABB aabb = new AABB(pos).move(-position.x, -position.y, -position.z);
+            Vec3 position = event.getCamera().getPosition().reverse();
+            AABB aabb = new AABB(pos).move(position);
             VertexConsumer buffer = mc.renderBuffers().bufferSource().getBuffer(RenderType.LINES);
             LevelRenderer.renderLineBox(event.getPoseStack(), buffer, aabb, 1.0F, 0, 0, 1.0F);
         }

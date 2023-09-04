@@ -50,8 +50,8 @@ public class AltarRecipeCategory implements IRecipeCategory<AltarRecipeWrapper> 
         powerDraw.draw(graphics, 78, 59);
         graphics.pose().popPose();
 
-        graphics.drawString(font, String.format("×%.2f", recipe.getPowerCost()), 76, 49, darkGray);
-        graphics.drawString(font, result, (int) ((bgDraw.getWidth() - font.width(result)) / 2.0f), 85, darkGray);
+        graphics.drawString(font, String.format("×%.2f", recipe.getPowerCost()), 76, 49, darkGray, false);
+        graphics.drawString(font, result, (int) ((bgDraw.getWidth() - font.width(result)) / 2.0f), 85, darkGray, false);
     }
 
     @Override

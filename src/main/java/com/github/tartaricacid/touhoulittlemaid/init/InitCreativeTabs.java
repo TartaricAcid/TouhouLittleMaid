@@ -6,9 +6,12 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import vazkii.patchouli.common.item.ItemModBook;
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.*;
 
@@ -19,6 +22,9 @@ public class InitCreativeTabs {
             .title(Component.translatable("item_group.touhou_little_maid.main"))
             .icon(() -> InitItems.HAKUREI_GOHEI.get().getDefaultInstance())
             .displayItems((par, output) -> {
+                if (ModList.get().isLoaded("patchouli")) {
+                    output.accept(ItemModBook.forBook(new ResourceLocation(TouhouLittleMaid.MOD_ID, "memorizable_gensokyo")));
+                }
                 output.accept(MAID_SPAWN_EGG.get());
                 output.accept(FAIRY_SPAWN_EGG.get());
                 output.accept(MAID_BACKPACK_SMALL.get());
@@ -44,7 +50,7 @@ public class InitCreativeTabs {
                 output.accept(FILM.get());
                 output.accept(CHISEL.get());
                 output.accept(SMART_SLAB_EMPTY.get());
-                output.accept(SMART_SLAB_HAS_MAID.get());
+                output.accept(SMART_SLAB_INIT.get());
                 output.accept(TRUMPET.get());
                 output.accept(WIRELESS_IO.get());
                 output.accept(MAID_BEACON.get());
