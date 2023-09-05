@@ -5,9 +5,9 @@
 - 現在、 **1.10.0 または 1.12.0 Bedrock Edition Model** のみをサポートしています。
 - For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
 
-## Model Packs Structure
+## モデルパックの構造
 
-To better understand how to create model packs, we listed here the structure format for model packs
+モデルパック作成時に構造をわかりやすくするため、以下に構造形式を示します。
 
 ```
 model pack folder
