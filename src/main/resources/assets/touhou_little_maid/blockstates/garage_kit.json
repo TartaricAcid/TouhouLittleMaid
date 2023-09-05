@@ -1,9 +1,6 @@
 {
   "variants": {
-    "is_tiny=false": {
-      "model": "touhou_little_maid:block/statue"
-    },
-    "is_tiny=true": {
+    "": {
       "model": "touhou_little_maid:block/statue"
     }
   }

@@ -18,7 +18,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = mod_version
 group = 'com.github.tartaricacid'
-archivesBaseName = 'touhoulittlemaid-1.20.1-release'
+archivesBaseName = 'touhoulittlemaid-1.20.1-release-hotfix'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
