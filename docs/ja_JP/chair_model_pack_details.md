@@ -30,11 +30,11 @@ model pack folder
                         └─wheel_chair.png
 ```
 
-## Model Packs Description Files
+## モデルパックの詳細ファイル
 
-The file complete structure is as below, only the parts marked '(Required)' requires to be filled, you don't have to fill everything.
+'(Required)'と書かれた部分のみ記入が必須であり、すべてを記入して埋める必要はありません。
 
-The model supports JSON files with comments, please use at your discretion.
+このモデルは、コメント付きのJSONファイルをサポートしています。任意でお使いください。
 
 ```json
 {
