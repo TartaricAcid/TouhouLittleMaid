@@ -2,7 +2,7 @@
   "sortnum": 6,
   "name": "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.name",
   "icon": "minecraft:book",
-  "category": "overview",
+  "category": "touhou_little_maid:overview",
   "pages": [
     {
       "type": "image",

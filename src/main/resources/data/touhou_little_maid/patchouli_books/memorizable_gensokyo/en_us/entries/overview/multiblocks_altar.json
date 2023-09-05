@@ -2,7 +2,7 @@
   "sortnum": 4,
   "name": "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.name",
   "icon": "minecraft:red_wool",
-  "category": "overview",
+  "category": "touhou_little_maid:overview",
   "pages": [
     {
       "type": "text",

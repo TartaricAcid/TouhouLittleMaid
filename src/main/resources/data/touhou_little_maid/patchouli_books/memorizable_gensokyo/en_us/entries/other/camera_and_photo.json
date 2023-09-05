@@ -2,7 +2,7 @@
   "sortnum": 6,
   "name": "patchouli.touhou_little_maid.book.entries.other.camera_and_photo.name",
   "icon": "touhou_little_maid:photo",
-  "category": "other",
+  "category": "touhou_little_maid:other",
   "pages": [
     {
       "type": "spotlight",

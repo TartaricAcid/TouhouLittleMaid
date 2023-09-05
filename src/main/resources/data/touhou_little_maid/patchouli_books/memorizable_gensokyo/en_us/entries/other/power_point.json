@@ -2,7 +2,7 @@
   "sortnum": 4,
   "name": "patchouli.touhou_little_maid.book.entries.other.power_point.name",
   "icon": "touhou_little_maid:power_point",
-  "category": "other",
+  "category": "touhou_little_maid:other",
   "pages": [
     {
       "type": "spotlight",

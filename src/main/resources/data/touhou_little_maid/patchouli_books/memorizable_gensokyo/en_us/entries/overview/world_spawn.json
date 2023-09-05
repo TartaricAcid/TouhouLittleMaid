@@ -2,7 +2,7 @@
   "sortnum": 1,
   "name": "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name",
   "icon": "touhou_little_maid:fairy_spawn_egg",
-  "category": "overview",
+  "category": "touhou_little_maid:overview",
   "pages": [
     {
       "type": "text",

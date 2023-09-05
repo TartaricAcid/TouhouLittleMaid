@@ -2,7 +2,7 @@
   "sortnum": 5,
   "name": "patchouli.touhou_little_maid.book.entries.maid.film.name",
   "icon": "touhou_little_maid:film",
-  "category": "maid",
+  "category": "touhou_little_maid:maid",
   "pages": [
     {
       "type": "spotlight",

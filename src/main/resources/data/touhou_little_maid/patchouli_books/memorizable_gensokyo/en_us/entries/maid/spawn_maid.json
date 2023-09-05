@@ -2,7 +2,7 @@
   "sortnum": 0,
   "name": "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.name",
   "icon": "touhou_little_maid:hakurei_gohei",
-  "category": "maid",
+  "category": "touhou_little_maid:maid",
   "pages": [
     {
       "type": "text",

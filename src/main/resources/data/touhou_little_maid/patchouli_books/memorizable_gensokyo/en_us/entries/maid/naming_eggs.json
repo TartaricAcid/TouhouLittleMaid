@@ -2,7 +2,7 @@
   "sortnum": 9,
   "name": "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.name",
   "icon": "minecraft:name_tag",
-  "category": "maid",
+  "category": "touhou_little_maid:maid",
   "pages": [
     {
       "type": "text",

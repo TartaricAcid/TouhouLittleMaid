@@ -2,7 +2,7 @@
   "sortnum": 4,
   "name": "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.name",
   "icon": "touhou_little_maid:ultramarine_orb_elixir",
-  "category": "maid",
+  "category": "touhou_little_maid:maid",
   "pages": [
     {
       "type": "text",

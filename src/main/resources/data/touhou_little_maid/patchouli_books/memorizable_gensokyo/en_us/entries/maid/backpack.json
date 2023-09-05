@@ -2,7 +2,7 @@
   "sortnum": 7,
   "name": "patchouli.touhou_little_maid.book.entries.maid.backpack.name",
   "icon": "touhou_little_maid:maid_backpack_small",
-  "category": "maid",
+  "category": "touhou_little_maid:maid",
   "pages": [
     {
       "type": "spotlight",

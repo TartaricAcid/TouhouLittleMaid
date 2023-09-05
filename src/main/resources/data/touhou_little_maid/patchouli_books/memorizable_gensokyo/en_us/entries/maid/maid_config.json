@@ -2,7 +2,7 @@
   "sortnum": 5,
   "name": "patchouli.touhou_little_maid.book.entries.maid.maid_config.name",
   "icon": "minecraft:writable_book",
-  "category": "maid",
+  "category": "touhou_little_maid:maid",
   "pages": [
     {
       "type": "text",
