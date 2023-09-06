@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.chatbubble;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.DataUtils;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -78,7 +79,7 @@ public final class ChatText {
 
             if (text.startsWith(ICON_IDENTIFIER_CHAR) && text.endsWith(ICON_IDENTIFIER_CHAR)) {
                 String substring = text.substring(1, text.length() - 1);
-                if (ResourceLocation.isValidResourceLocation(substring)) {
+                if (DataUtils.isValidResourceLocation(substring)) {
                     return new ChatText(ChatTextType.ICON, new ResourceLocation(substring), StringUtils.EMPTY);
                 }
                 return EMPTY_CHAT_TEXT;
