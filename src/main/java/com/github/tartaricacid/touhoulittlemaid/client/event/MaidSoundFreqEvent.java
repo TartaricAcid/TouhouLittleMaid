@@ -14,6 +14,9 @@ public class MaidSoundFreqEvent {
 
     @SubscribeEvent
     public static void onPlaySoundEvent(PlaySoundEvent event) {
+        if (event.getSound() == null) {
+            return;
+        }
         ResourceLocation location = event.getSound().getLocation();
         double soundFrequency = InGameMaidConfig.INSTANCE.getSoundFrequency();
         if (soundFrequency < 1 && checkSoundName(location)) {
