@@ -25,7 +25,7 @@ public class MaidModelInfo implements IModelInfo {
     private List<String> description;
 
     @SerializedName("chat_bubble")
-    private ChatBubbleInfo chatBubble = null;
+    private ChatBubbleInfo chatBubble = ChatBubbleManger.DEFAULT_CHAT_BUBBLE;
 
     @SerializedName("model")
     private ResourceLocation model;
@@ -190,7 +190,7 @@ public class MaidModelInfo implements IModelInfo {
         renderEntityScale = MathHelper.clamp(renderEntityScale, RENDER_ENTITY_SCALE_MIN, RENDER_ENTITY_SCALE_MAX);
         if (chatBubble == null) {
             chatBubble = ChatBubbleManger.DEFAULT_CHAT_BUBBLE;
-        } else {
+        } else if (chatBubble != ChatBubbleManger.DEFAULT_CHAT_BUBBLE) {
             chatBubble.decorate();
         }
         return this;
