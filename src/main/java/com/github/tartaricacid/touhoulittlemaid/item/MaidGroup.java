@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +21,7 @@ public class MaidGroup extends CreativeModeTab {
 
     public MaidGroup(String label, RegistryObject<Item> iconItem) {
         super(String.format("touhou_little_maid.%s", label));
-        this.displayName = new TranslatableComponent(String.format("item_group.%s.%s", TouhouLittleMaid.MOD_ID, label));
+        this.displayName = Component.translatable(String.format("item_group.%s.%s", TouhouLittleMaid.MOD_ID, label));
         this.iconItem = iconItem;
     }
 

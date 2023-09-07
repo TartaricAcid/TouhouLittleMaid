@@ -18,7 +18,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,7 +57,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
     private boolean showFloor = true;
 
     public AbstractModelDetailsGui(T sourceEntity, @Nullable T guiEntity, E modelInfo) {
-        super(new TranslatableComponent("gui.touhou_little_maid.custom_model_details_gui.title"));
+        super(Component.translatable("gui.touhou_little_maid.custom_model_details_gui.title"));
         this.sourceEntity = sourceEntity;
         this.guiEntity = guiEntity;
         this.modelInfo = modelInfo;
@@ -123,9 +124,9 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         this.fillGradient(stack, BACKGROUND_SIZE, 0xfe17191d, -999);
         stack.pushPose();
         stack.translate(0, 0, -900);
-        drawString(stack, font, new TranslatableComponent("gui.touhou_little_maid.skin_details.left_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 4, 0xffaaaaaa);
-        drawString(stack, font, new TranslatableComponent("gui.touhou_little_maid.skin_details.right_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 14, 0xffaaaaaa);
-        drawString(stack, font, new TranslatableComponent("gui.touhou_little_maid.skin_details.mouse_wheel"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 24, 0xffaaaaaa);
+        drawString(stack, font, Component.translatable("gui.touhou_little_maid.skin_details.left_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 4, 0xffaaaaaa);
+        drawString(stack, font, Component.translatable("gui.touhou_little_maid.skin_details.right_mouse"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 14, 0xffaaaaaa);
+        drawString(stack, font, Component.translatable("gui.touhou_little_maid.skin_details.mouse_wheel"), (int) SIDE_MENU_SIZE.w + 4, (int) TOP_STATUS_BAR_SIZE.h + 24, 0xffaaaaaa);
         stack.popPose();
     }
 

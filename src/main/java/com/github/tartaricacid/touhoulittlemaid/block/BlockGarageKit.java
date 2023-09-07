@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -40,7 +41,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -67,7 +69,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
         for (String modelId : CustomPackLoader.MAID_MODELS.getModelIdSet()) {
             ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
             CompoundTag data = stack.getOrCreateTagElement(ENTITY_INFO);
-            data.putString("id", Objects.requireNonNull(InitEntities.MAID.get().getRegistryName()).toString());
+            data.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
             data.putString(EntityMaid.MODEL_ID_TAG, modelId);
             items.add(stack);
         }
@@ -107,11 +109,12 @@ public class BlockGarageKit extends Block implements EntityBlock {
         }
         TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
         EntityType<?> type = ((SpawnEggItem) stack.getItem()).getType(stack.getTag());
-        if (type.getRegistryName() == null) {
+        ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(type);
+        if (key == null) {
             return InteractionResult.PASS;
         }
 
-        String id = type.getRegistryName().toString();
+        String id = key.toString();
         CompoundTag data = new CompoundTag();
         data.putString("id", id);
 
@@ -127,8 +130,8 @@ public class BlockGarageKit extends Block implements EntityBlock {
     }
 
     @Override
-    public void initializeClient(Consumer<IBlockRenderProperties> consumer) {
-        consumer.accept(new IBlockRenderProperties() {
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+        consumer.accept(new IClientBlockExtensions() {
             @Override
             public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
                 if (target instanceof BlockHitResult && world instanceof ClientLevel) {

@@ -12,7 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -66,7 +66,7 @@ public class ItemPhoto extends Item {
         // 方向不对或者位置不合适
         if (facing != Direction.UP || PlaceHelper.notSuitableForPlaceMaid(worldIn, pos)) {
             if (worldIn.isClientSide) {
-                player.sendMessage(new TranslatableComponent("message.touhou_little_maid.photo.not_suitable_for_place_maid"), Util.NIL_UUID);
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.photo.not_suitable_for_place_maid"));
             }
             return InteractionResult.FAIL;
         }
@@ -74,7 +74,7 @@ public class ItemPhoto extends Item {
         // 检查照片的 NBT 数据
         if (!hasMaidData(photo)) {
             if (worldIn.isClientSide) {
-                player.sendMessage(new TranslatableComponent("message.touhou_little_maid.photo.have_no_nbt_data"), Util.NIL_UUID);
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.photo.have_no_nbt_data"));
             }
             return InteractionResult.FAIL;
         }
@@ -102,14 +102,14 @@ public class ItemPhoto extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (!hasMaidData(stack)) {
-            tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.photo.no_data.desc").withStyle(ChatFormatting.DARK_RED));
+            tooltip.add(Component.translatable("tooltips.touhou_little_maid.photo.no_data.desc").withStyle(ChatFormatting.DARK_RED));
         } else {
             CompoundTag maidData = getMaidData(stack);
             if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
                 String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
                 if (StringUtils.isNotBlank(modelId)) {
                     CustomPackLoader.MAID_MODELS.getInfo(modelId).ifPresent(modelItem ->
-                            tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.photo.maid.desc",
+                            tooltip.add(Component.translatable("tooltips.touhou_little_maid.photo.maid.desc",
                                     I18n.get(ParseI18n.getI18nKey(modelItem.getName()))).withStyle(ChatFormatting.GRAY)
                             ));
                 }

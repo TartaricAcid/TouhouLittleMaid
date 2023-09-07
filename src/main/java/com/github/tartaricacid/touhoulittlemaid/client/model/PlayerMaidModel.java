@@ -21,13 +21,13 @@ public class PlayerMaidModel extends BedrockModel<EntityMaid> {
     public PlayerMaidModel(boolean smallArms) {
         ResourceManager manager = Minecraft.getInstance().getResourceManager();
         if (smallArms) {
-            try (InputStream stream = manager.getResource(ALEX).getInputStream()) {
+            try (InputStream stream = manager.open(ALEX)) {
                 loadNewModel(CustomPackLoader.GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class));
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
         } else {
-            try (InputStream stream = manager.getResource(STEVE).getInputStream()) {
+            try (InputStream stream = manager.open(STEVE)) {
                 loadLegacyModel(CustomPackLoader.GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class));
             } catch (IOException exception) {
                 exception.printStackTrace();

@@ -5,7 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMai
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -13,8 +13,11 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 
 public class LayerMaidHeldItem extends RenderLayer<EntityMaid, BedrockModel<EntityMaid>> {
-    public LayerMaidHeldItem(EntityMaidRenderer maidRenderer) {
+    private final ItemInHandRenderer itemInHandRenderer;
+
+    public LayerMaidHeldItem(EntityMaidRenderer maidRenderer, ItemInHandRenderer pItemInHandRenderer) {
         super(maidRenderer);
+        this.itemInHandRenderer = pItemInHandRenderer;
     }
 
     @Override
@@ -45,7 +48,7 @@ public class LayerMaidHeldItem extends RenderLayer<EntityMaid, BedrockModel<Enti
                 poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
                 poseStack.translate((isLeft ? -1 : 1) / 16.0, 0.125, -0.525);
             }
-            Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, itemStack, transformTypeIn, isLeft, poseStack, typeBuffer, combinedLightIn);
+            this.itemInHandRenderer.renderItem(maid, itemStack, transformTypeIn, isLeft, poseStack, typeBuffer, combinedLightIn);
             poseStack.popPose();
         }
     }

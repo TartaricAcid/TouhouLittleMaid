@@ -12,7 +12,8 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 @JeiPlugin
@@ -27,7 +28,7 @@ public class MaidPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(AltarRecipeCategory.ALTAR, AltarRecipeMaker.getInstance().getAltarRecipes());
-        registration.addIngredientInfo(InitItems.GARAGE_KIT.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("jei.touhou_little_maid.garage_kit.info"));
+        registration.addIngredientInfo(InitItems.GARAGE_KIT.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, Component.translatable("jei.touhou_little_maid.garage_kit.info"));
     }
 
     @Override

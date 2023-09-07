@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.Locale;
 
@@ -17,7 +17,7 @@ public class GuiDownloadButton extends Button {
     private final DownloadInfo info;
 
     public GuiDownloadButton(int x, int y, int width, int height, DownloadInfo info) {
-        super(x, y, width, height, TextComponent.EMPTY, (b) -> {
+        super(x, y, width, height, Component.empty(), (b) -> {
         });
         this.info = info;
     }
@@ -34,7 +34,7 @@ public class GuiDownloadButton extends Button {
         super.renderButton(poseStack, mouseX, mouseY, partialTicks);
         if (info.getStatus() == DownloadStatus.DOWNLOADED && info.hasType(DownloadInfo.TypeEnum.SOUND)) {
             Font font = Minecraft.getInstance().font;
-            font.drawWordWrap(new TranslatableComponent("gui.touhou_little_maid.resources_download.sound.downloaded.tip"),
+            font.drawWordWrap(Component.translatable("gui.touhou_little_maid.resources_download.sound.downloaded.tip"),
                     this.x + 10, this.y + (this.height - 8) / 2 - this.height * 2, 200, 0xffbb1010);
         }
     }
@@ -52,6 +52,6 @@ public class GuiDownloadButton extends Button {
 
     @Override
     public Component getMessage() {
-        return new TranslatableComponent(String.format("gui.touhou_little_maid.resources_download.%s", info.getStatus().name().toLowerCase(Locale.US)));
+        return Component.translatable(String.format("gui.touhou_little_maid.resources_download.%s", info.getStatus().name().toLowerCase(Locale.US)));
     }
 }

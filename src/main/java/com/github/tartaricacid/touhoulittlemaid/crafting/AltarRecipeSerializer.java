@@ -13,14 +13,14 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class AltarRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AltarRecipe> {
+public class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
     @Override
     public AltarRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
         EntityCraftingHelper.Output output = EntityCraftingHelper.getEntityData(GsonHelper.getAsJsonObject(json, "output"));
@@ -54,7 +54,7 @@ public class AltarRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?
 
     @Override
     public void toNetwork(FriendlyByteBuf buffer, AltarRecipe recipe) {
-        ResourceLocation name = recipe.getEntityType().getRegistryName();
+        ResourceLocation name = ForgeRegistries.ENTITY_TYPES.getKey(recipe.getEntityType());
         if (name == null) {
             throw new JsonParseException("Entity Type Tag Not Found");
         }

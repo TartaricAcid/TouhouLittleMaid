@@ -12,8 +12,8 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -37,20 +37,20 @@ public class WirelessIOContainerGui extends AbstractContainerScreen<WirelessIOCo
                 (x, y) -> {
                     isMaidToChest = !isMaidToChest;
                     NetworkHandler.CHANNEL.sendToServer(new WirelessIOGuiMessage(isMaidToChest, isBlacklist));
-                }, (m, x, y) -> this.renderTooltip(m, new TranslatableComponent("gui.touhou_little_maid.wireless_io.io_mode"), x, y));
+                }, (m, x, y) -> this.renderTooltip(m, Component.translatable("gui.touhou_little_maid.wireless_io.io_mode"), x, y));
 
         ioModeToggle.initTextureValues(194, 32, -18, 18, MAIN);
         WirelessIOButton filterModeToggle = new WirelessIOButton(leftPos + 136, topPos + 26, 16, 16, isBlacklist,
                 (x, y) -> {
                     isBlacklist = !isBlacklist;
                     NetworkHandler.CHANNEL.sendToServer(new WirelessIOGuiMessage(isMaidToChest, isBlacklist));
-                }, (m, x, y) -> this.renderTooltip(m, new TranslatableComponent("gui.touhou_little_maid.wireless_io.filter_mode"), x, y));
+                }, (m, x, y) -> this.renderTooltip(m, Component.translatable("gui.touhou_little_maid.wireless_io.filter_mode"), x, y));
         filterModeToggle.initTextureValues(176, 0, 16, 16, MAIN);
 
         ImageButton configButton = new ImageButton(leftPos + 136, topPos + 44, 16, 16, 208, 0, 16,
                 MAIN, 256, 256, buttons -> getMinecraft().setScreen(new WirelessIOConfigSlotGui(menu.getWirelessIO())),
-                (b, m, x, y) -> this.renderTooltip(m, new TranslatableComponent("gui.touhou_little_maid.wireless_io.config_slot"), x, y),
-                TextComponent.EMPTY);
+                (b, m, x, y) -> this.renderTooltip(m, Component.translatable("gui.touhou_little_maid.wireless_io.config_slot"), x, y),
+                Component.empty());
 
         addRenderableWidget(filterModeToggle);
         addRenderableWidget(configButton);

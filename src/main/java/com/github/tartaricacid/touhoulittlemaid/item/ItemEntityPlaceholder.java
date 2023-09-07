@@ -12,7 +12,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
@@ -24,7 +23,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
@@ -60,10 +59,10 @@ public class ItemEntityPlaceholder extends Item {
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 Minecraft minecraft = Minecraft.getInstance();
                 return new TileEntityEntityPlaceholderRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
             }
@@ -90,7 +89,7 @@ public class ItemEntityPlaceholder extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+        if (this.allowedIn(group)) {
             ClientLevel world = Minecraft.getInstance().level;
             if (world == null) {
                 return;
@@ -111,8 +110,8 @@ public class ItemEntityPlaceholder extends Item {
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
             String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
             String langKey = String.format("jei.%s.altar_craft.%s.result", namespace, path.getFileName());
-            return new TranslatableComponent(langKey);
+            return Component.translatable(langKey);
         }
-        return new TranslatableComponent("item.touhou_little_maid.entity_placeholder");
+        return Component.translatable("item.touhou_little_maid.entity_placeholder");
     }
 }

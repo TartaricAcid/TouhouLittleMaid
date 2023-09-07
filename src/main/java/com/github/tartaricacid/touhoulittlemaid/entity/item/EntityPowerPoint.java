@@ -13,6 +13,7 @@ import net.minecraft.network.protocol.game.ClientboundTakeItemEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -26,8 +27,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-
-import java.util.Random;
 
 public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnData {
     public static final EntityType<EntityPowerPoint> TYPE = EntityType.Builder.<EntityPowerPoint>of(EntityPowerPoint::new, MobCategory.MISC)
@@ -86,7 +85,7 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
         return powerValue / 4;
     }
 
-    public static void spawnExplosionParticle(Level world, float x, float y, float z, Random rand) {
+    public static void spawnExplosionParticle(Level world, float x, float y, float z, RandomSource rand) {
         if (!world.isClientSide) {
             return;
         }

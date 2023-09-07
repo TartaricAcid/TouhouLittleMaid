@@ -13,8 +13,8 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -85,7 +85,7 @@ public final class PlayerMaidModels {
                     return PLAYER_MAID_MODEL_SLIM;
                 }
             } else {
-                UUID uuid = Player.createPlayerUUID(newProfile);
+                UUID uuid = UUIDUtil.getOrCreatePlayerUUID(newProfile);
                 String skinModel = DefaultPlayerSkin.getSkinModelName(uuid);
                 if (SLIM_NAME.equals(skinModel)) {
                     return PLAYER_MAID_MODEL_SLIM;
@@ -128,7 +128,7 @@ public final class PlayerMaidModels {
             if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
                 return minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
             } else {
-                UUID uuid = Player.createPlayerUUID(newProfile);
+                UUID uuid = UUIDUtil.getOrCreatePlayerUUID(newProfile);
                 return DefaultPlayerSkin.getDefaultSkin(uuid);
             }
         }

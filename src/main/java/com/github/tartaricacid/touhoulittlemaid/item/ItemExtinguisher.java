@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +18,7 @@ public class ItemExtinguisher extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (worldIn.isClientSide) {
-            playerIn.sendMessage(new TranslatableComponent("message.touhou_little_maid.extinguisher.player_cannot_use"), Util.NIL_UUID);
+            playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.extinguisher.player_cannot_use"));
         }
         return super.use(worldIn, playerIn, handIn);
     }

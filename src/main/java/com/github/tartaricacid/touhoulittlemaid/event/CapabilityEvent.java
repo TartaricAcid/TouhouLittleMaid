@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -37,7 +37,7 @@ public final class CapabilityEvent {
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         Player original = event.getOriginal();
-        Player newPlayer = event.getPlayer();
+        Player newPlayer = event.getEntity();
         original.reviveCaps();
         LazyOptional<PowerCapability> oldPowerCap = getPowerCap(original);
         LazyOptional<PowerCapability> newPowerCap = getPowerCap(newPlayer);
@@ -55,7 +55,7 @@ public final class CapabilityEvent {
     }
 
     @SubscribeEvent
-    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+    public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             getPowerCap(player).ifPresent(PowerCapability::markDirty);

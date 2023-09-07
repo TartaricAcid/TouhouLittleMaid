@@ -30,8 +30,8 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -193,7 +193,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         TaskButton button = new TaskButton(maidTask, leftPos - 89, topPos + 23 + 19 * count,
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 (b) -> NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid())),
-                (b, m, x, y) -> renderComponentTooltip(m, getTaskTooltips(maidTask), x, y), TextComponent.EMPTY);
+                (b, m, x, y) -> renderComponentTooltip(m, getTaskTooltips(maidTask), x, y), Component.empty());
         this.addRenderableWidget(button);
         button.visible = taskListOpen;
     }
@@ -201,17 +201,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
         List<Component> desc = ParseI18n.keysToTrans(maidTask.getDescription(maid), ChatFormatting.GRAY);
         if (!desc.isEmpty()) {
-            desc.add(0, new TranslatableComponent("task.touhou_little_maid.desc.title").withStyle(ChatFormatting.GOLD));
+            desc.add(0, Component.translatable("task.touhou_little_maid.desc.title").withStyle(ChatFormatting.GOLD));
         }
         List<Pair<String, Predicate<EntityMaid>>> conditions = maidTask.getConditionDescription(maid);
         if (!conditions.isEmpty()) {
-            desc.add(new TextComponent("\u0020"));
-            desc.add(new TranslatableComponent("task.touhou_little_maid.desc.condition").withStyle(ChatFormatting.GOLD));
+            desc.add(Component.literal("\u0020"));
+            desc.add(Component.translatable("task.touhou_little_maid.desc.condition").withStyle(ChatFormatting.GOLD));
         }
-        TextComponent prefix = new TextComponent("-\u0020");
+        MutableComponent prefix = Component.literal("-\u0020");
         for (Pair<String, Predicate<EntityMaid>> line : conditions) {
             String key = String.format("task.%s.%s.condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
-            TranslatableComponent condition = new TranslatableComponent(key);
+            MutableComponent condition = Component.translatable(key);
             if (line.getSecond().test(maid)) {
                 condition.withStyle(ChatFormatting.GREEN);
             } else {
@@ -320,35 +320,35 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             List<Component> list = Lists.newArrayList();
             String prefix = "§a█\u0020";
 
-            MutableComponent title = new TextComponent("")
-                    .append(new TranslatableComponent("tooltips.touhou_little_maid.info.title")
+            MutableComponent title = Component.literal("")
+                    .append(Component.translatable("tooltips.touhou_little_maid.info.title")
                             .withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE))
-                    .append(new TextComponent("§r\u0020"));
+                    .append(Component.literal("§r\u0020"));
             if (maid.isStruckByLightning()) {
-                title.append(new TextComponent("❀").withStyle(ChatFormatting.DARK_RED));
+                title.append(Component.literal("❀").withStyle(ChatFormatting.DARK_RED));
             }
             if (maid.isInvulnerable()) {
-                title.append(new TextComponent("✟").withStyle(ChatFormatting.BLUE));
+                title.append(Component.literal("✟").withStyle(ChatFormatting.BLUE));
             }
             list.add(title);
 
             if (maid.getOwner() != null) {
-                list.add(new TextComponent(prefix).withStyle(ChatFormatting.WHITE)
-                        .append(new TranslatableComponent("tooltips.touhou_little_maid.info.owner")
+                list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
+                        .append(Component.translatable("tooltips.touhou_little_maid.info.owner")
                                 .append(":\u0020").withStyle(ChatFormatting.AQUA))
                         .append(maid.getOwner().getDisplayName()));
             }
-            CustomPackLoader.MAID_MODELS.getInfo(maid.getModelId()).ifPresent((info) -> list.add(new TextComponent(prefix)
+            CustomPackLoader.MAID_MODELS.getInfo(maid.getModelId()).ifPresent((info) -> list.add(Component.literal(prefix)
                     .withStyle(ChatFormatting.WHITE)
-                    .append(new TranslatableComponent("tooltips.touhou_little_maid.info.model_name")
+                    .append(Component.translatable("tooltips.touhou_little_maid.info.model_name")
                             .append(":\u0020").withStyle(ChatFormatting.AQUA))
                     .append(ParseI18n.parse(info.getName()))));
-            list.add(new TextComponent(prefix).withStyle(ChatFormatting.WHITE)
-                    .append(new TranslatableComponent("tooltips.touhou_little_maid.info.experience")
+            list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
+                    .append(Component.translatable("tooltips.touhou_little_maid.info.experience")
                             .append(":\u0020").withStyle(ChatFormatting.AQUA))
                     .append(String.valueOf(maid.getExperience())));
-            list.add(new TextComponent(prefix).withStyle(ChatFormatting.WHITE)
-                    .append(new TranslatableComponent("tooltips.touhou_little_maid.info.favorability")
+            list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
+                    .append(Component.translatable("tooltips.touhou_little_maid.info.favorability")
                             .append(":\u0020").withStyle(ChatFormatting.AQUA))
                     .append(String.valueOf(maid.getFavorability())));
 
@@ -440,15 +440,15 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void renderTransTooltip(ImageButton button, PoseStack poseStack, int x, int y, String key) {
         if (button.isHoveredOrFocused()) {
-            renderComponentTooltip(poseStack, Collections.singletonList(new TranslatableComponent(key)), x, y);
+            renderComponentTooltip(poseStack, Collections.singletonList(Component.translatable(key)), x, y);
         }
     }
 
     private void renderTransTooltip(StateSwitchingButton button, PoseStack poseStack, int x, int y, String key) {
         if (button.isHoveredOrFocused()) {
             renderComponentTooltip(poseStack, Lists.newArrayList(
-                    new TranslatableComponent(key + "." + button.isStateTriggered()),
-                    new TranslatableComponent(key + ".desc")
+                    Component.translatable(key + "." + button.isStateTriggered()),
+                    Component.translatable(key + ".desc")
             ), x, y);
         }
     }

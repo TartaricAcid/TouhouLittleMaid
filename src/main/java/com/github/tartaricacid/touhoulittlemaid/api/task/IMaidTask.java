@@ -3,7 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.api.task;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.behavior.Behavior;
@@ -61,8 +62,8 @@ public interface IMaidTask {
      *
      * @return 当前模式名称
      */
-    default TranslatableComponent getName() {
-        return new TranslatableComponent(String.format("task.%s.%s", getUid().getNamespace(), getUid().getPath()));
+    default MutableComponent getName() {
+        return Component.translatable(String.format("task.%s.%s", getUid().getNamespace(), getUid().getPath()));
     }
 
     /**

@@ -4,10 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-
-import java.util.Random;
 
 public final class SoundUtil {
     private static final long MORNING_START = 0;
@@ -17,7 +16,7 @@ public final class SoundUtil {
 
     public static SoundEvent environmentSound(EntityMaid maid, SoundEvent fallback, float probability) {
         Level world = maid.level;
-        Random rand = maid.getRandom();
+        RandomSource rand = maid.getRandom();
         BlockPos pos = maid.blockPosition();
         long dayTime = world.getDayTime();
         Biome biome = world.getBiome(pos).value();
@@ -46,7 +45,7 @@ public final class SoundUtil {
     }
 
     public static SoundEvent attackSound(EntityMaid maid, SoundEvent fallback, float probability) {
-        Random rand = maid.getRandom();
+        RandomSource rand = maid.getRandom();
         if (rand.nextFloat() < probability) {
             return InitSounds.MAID_FIND_TARGET.get();
         }

@@ -25,7 +25,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileEntityStatue extends BlockEntity {
-    private static final String STATUE_SIZE_TAG = "StatueSize";    public static final BlockEntityType<TileEntityStatue> TYPE = BlockEntityType.Builder.of(TileEntityStatue::new, InitBlocks.STATUE.get()).build(null);
+    private static final String STATUE_SIZE_TAG = "StatueSize";
+    public static final BlockEntityType<TileEntityStatue> TYPE = BlockEntityType.Builder.of(TileEntityStatue::new, InitBlocks.STATUE.get()).build(null);
     private static final String CORE_BLOCK_TAG = "CoreBlock";
     private static final String CORE_BLOCK_POS_TAG = "CoreBlockPos";
     private static final String STATUE_FACING_TAG = "StatueFacing";
@@ -38,6 +39,7 @@ public class TileEntityStatue extends BlockEntity {
     private List<BlockPos> allBlocks = Lists.newArrayList();
     @Nullable
     private CompoundTag extraMaidData = null;
+
     public TileEntityStatue(BlockPos blockPos, BlockState blockState) {
         super(TYPE, blockPos, blockState);
     }
@@ -55,17 +57,17 @@ public class TileEntityStatue extends BlockEntity {
 
     @Override
     public void saveAdditional(CompoundTag compound) {
-        getTileData().putInt(STATUE_SIZE_TAG, size.ordinal());
-        getTileData().putBoolean(CORE_BLOCK_TAG, isCoreBlock);
-        getTileData().put(CORE_BLOCK_POS_TAG, NbtUtils.writeBlockPos(coreBlockPos));
-        getTileData().putString(STATUE_FACING_TAG, facing.getSerializedName());
+        getPersistentData().putInt(STATUE_SIZE_TAG, size.ordinal());
+        getPersistentData().putBoolean(CORE_BLOCK_TAG, isCoreBlock);
+        getPersistentData().put(CORE_BLOCK_POS_TAG, NbtUtils.writeBlockPos(coreBlockPos));
+        getPersistentData().putString(STATUE_FACING_TAG, facing.getSerializedName());
         ListTag blockList = new ListTag();
         for (BlockPos pos : allBlocks) {
             blockList.add(NbtUtils.writeBlockPos(pos));
         }
-        getTileData().put(ALL_BLOCKS_TAG, blockList);
+        getPersistentData().put(ALL_BLOCKS_TAG, blockList);
         if (extraMaidData != null) {
-            getTileData().put(EXTRA_MAID_DATA, extraMaidData);
+            getPersistentData().put(EXTRA_MAID_DATA, extraMaidData);
         }
         super.saveAdditional(compound);
     }
@@ -73,17 +75,17 @@ public class TileEntityStatue extends BlockEntity {
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        size = Size.getSizeByIndex(getTileData().getInt(STATUE_SIZE_TAG));
-        isCoreBlock = getTileData().getBoolean(CORE_BLOCK_TAG);
-        coreBlockPos = NbtUtils.readBlockPos(getTileData().getCompound(CORE_BLOCK_POS_TAG));
-        facing = Direction.byName(getTileData().getString(STATUE_FACING_TAG));
+        size = Size.getSizeByIndex(getPersistentData().getInt(STATUE_SIZE_TAG));
+        isCoreBlock = getPersistentData().getBoolean(CORE_BLOCK_TAG);
+        coreBlockPos = NbtUtils.readBlockPos(getPersistentData().getCompound(CORE_BLOCK_POS_TAG));
+        facing = Direction.byName(getPersistentData().getString(STATUE_FACING_TAG));
         allBlocks.clear();
-        ListTag blockList = getTileData().getList(ALL_BLOCKS_TAG, Tag.TAG_COMPOUND);
+        ListTag blockList = getPersistentData().getList(ALL_BLOCKS_TAG, Tag.TAG_COMPOUND);
         for (int i = 0; i < blockList.size(); i++) {
             allBlocks.add(NbtUtils.readBlockPos(blockList.getCompound(i)));
         }
-        if (getTileData().contains(EXTRA_MAID_DATA, Tag.TAG_COMPOUND)) {
-            extraMaidData = getTileData().getCompound(EXTRA_MAID_DATA);
+        if (getPersistentData().contains(EXTRA_MAID_DATA, Tag.TAG_COMPOUND)) {
+            extraMaidData = getPersistentData().getCompound(EXTRA_MAID_DATA);
         }
     }
 

@@ -13,7 +13,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -55,14 +55,14 @@ public final class PowerCommand {
                 default:
             }
         }
-        context.getSource().sendSuccess(new TranslatableComponent("commands.touhou_little_maid.power.handle.info", players.size()), true);
+        context.getSource().sendSuccess(Component.translatable("commands.touhou_little_maid.power.handle.info", players.size()), true);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int getPower(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         for (Player player : EntityArgument.getPlayers(context, TARGETS_NAME)) {
             player.getCapability(PowerCapabilityProvider.POWER_CAP, null).ifPresent(power ->
-                    context.getSource().sendSuccess(new TranslatableComponent("commands.touhou_little_maid.power.get.info",
+                    context.getSource().sendSuccess(Component.translatable("commands.touhou_little_maid.power.get.info",
                             player.getScoreboardName(), power.get()), false));
         }
         return Command.SINGLE_SUCCESS;

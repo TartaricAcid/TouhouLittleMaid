@@ -15,26 +15,28 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class TileEntityGarageKit extends BlockEntity {
-    private static final String FACING_TAG = "GarageKitFacing";    public static final BlockEntityType<TileEntityGarageKit> TYPE = BlockEntityType.Builder.of(TileEntityGarageKit::new, InitBlocks.GARAGE_KIT.get()).build(null);
+    private static final String FACING_TAG = "GarageKitFacing";
+    public static final BlockEntityType<TileEntityGarageKit> TYPE = BlockEntityType.Builder.of(TileEntityGarageKit::new, InitBlocks.GARAGE_KIT.get()).build(null);
     private static final String EXTRA_DATA = "ExtraData";
     private Direction facing = Direction.NORTH;
     private CompoundTag extraData = new CompoundTag();
+
     public TileEntityGarageKit(BlockPos blockPos, BlockState blockState) {
         super(TYPE, blockPos, blockState);
     }
 
     @Override
     public void saveAdditional(CompoundTag compound) {
-        getTileData().putString(FACING_TAG, facing.getSerializedName());
-        getTileData().put(EXTRA_DATA, extraData);
+        getPersistentData().putString(FACING_TAG, facing.getSerializedName());
+        getPersistentData().put(EXTRA_DATA, extraData);
         super.saveAdditional(compound);
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        facing = Direction.byName(getTileData().getString(FACING_TAG));
-        extraData = getTileData().getCompound(EXTRA_DATA);
+        facing = Direction.byName(getPersistentData().getString(FACING_TAG));
+        extraData = getPersistentData().getCompound(EXTRA_DATA);
     }
 
     @Override

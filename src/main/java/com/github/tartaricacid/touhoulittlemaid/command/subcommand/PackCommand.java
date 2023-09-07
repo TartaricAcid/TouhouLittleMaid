@@ -7,7 +7,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
@@ -27,7 +28,7 @@ public final class PackCommand {
         // DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> PackCommand::sendPackToClient);
         ServerCustomPackLoader.reloadPacks();
         // TODO：打印加载的时间到客户端聊天栏
-        context.getSource().sendSuccess(new TranslatableComponent("commands.touhou_little_maid.pack.reload.info"), true);
+        context.getSource().sendSuccess(Component.translatable("commands.touhou_little_maid.pack.reload.info"), true);
         return Command.SINGLE_SUCCESS;
     }
 

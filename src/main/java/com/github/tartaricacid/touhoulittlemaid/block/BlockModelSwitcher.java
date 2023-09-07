@@ -7,7 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.OpenSwitcherGuiM
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -102,7 +102,7 @@ public class BlockModelSwitcher extends BaseEntityBlock {
         if (modelInfo != null) {
             maid.setModelId(modelInfo.getModelId().toString());
             if (StringUtils.isNotBlank(modelInfo.getText())) {
-                maid.setCustomName(new TextComponent(modelInfo.getText()));
+                maid.setCustomName(Component.literal(modelInfo.getText()));
                 maid.setCustomNameVisible(true);
             } else {
                 maid.setCustomName(null);

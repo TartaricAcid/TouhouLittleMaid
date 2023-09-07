@@ -44,7 +44,7 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
 
     public EntityMaidRenderer(EntityRendererProvider.Context manager) {
         super(manager, new BedrockModel<>(), 0.5f);
-        this.addLayer(new LayerMaidHeldItem(this));
+        this.addLayer(new LayerMaidHeldItem(this, manager.getItemInHandRenderer()));
         this.addLayer(new LayerMaidBipedHead(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackpack(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackItem(this));

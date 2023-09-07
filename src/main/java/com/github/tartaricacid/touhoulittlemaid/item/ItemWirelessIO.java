@@ -10,8 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -154,7 +152,7 @@ public class ItemWirelessIO extends Item implements MenuProvider {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (handIn == InteractionHand.MAIN_HAND && playerIn instanceof ServerPlayer) {
-            NetworkHooks.openGui((ServerPlayer) playerIn, this, (buffer) -> buffer.writeItem(playerIn.getMainHandItem()));
+            NetworkHooks.openScreen((ServerPlayer) playerIn, this, (buffer) -> buffer.writeItem(playerIn.getMainHandItem()));
             return InteractionResultHolder.success(playerIn.getMainHandItem());
         }
         return super.use(worldIn, playerIn, handIn);
@@ -177,17 +175,17 @@ public class ItemWirelessIO extends Item implements MenuProvider {
                         pos.getX(), pos.getY(), pos.getZ()) :
                 I18n.get("tooltips.touhou_little_maid.wireless_io.binding_pos.none");
 
-        tooltip.add(new TextComponent(TOOLTIPS_PREFIX + ioModeText));
-        tooltip.add(new TextComponent(TOOLTIPS_PREFIX + filterModeText));
-        tooltip.add(new TextComponent(TOOLTIPS_PREFIX + hasPos));
-        tooltip.add(new TextComponent(" "));
-        tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.wireless_io.usage.1").withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.wireless_io.usage.2").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.literal(TOOLTIPS_PREFIX + ioModeText));
+        tooltip.add(Component.literal(TOOLTIPS_PREFIX + filterModeText));
+        tooltip.add(Component.literal(TOOLTIPS_PREFIX + hasPos));
+        tooltip.add(Component.literal(" "));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.wireless_io.usage.1").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.wireless_io.usage.2").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("item.touhou_little_maid.wireless_io");
+        return Component.translatable("item.touhou_little_maid.wireless_io");
     }
 
     @Nullable

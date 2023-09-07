@@ -11,7 +11,6 @@ public final class CommonRegistry {
     @SubscribeEvent
     public static void onSetupEvent(FMLCommonSetupEvent event) {
         event.enqueueWork(ServerCustomPackLoader::reloadPacks);
-        event.enqueueWork(CommandRegistry::registerArgumentTypes);
         event.enqueueWork(NetworkHandler::init);
     }
 }

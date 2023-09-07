@@ -4,7 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.StateSwitchingButton;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
@@ -12,11 +13,11 @@ import java.util.function.Consumer;
 public class ModelDetailsButton extends StateSwitchingButton {
     private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
     private final Consumer<Boolean> onClick;
-    private final TranslatableComponent name;
+    private final MutableComponent name;
 
     public ModelDetailsButton(int xIn, int yIn, String langKey, Consumer<Boolean> onClick) {
         super(xIn, yIn, 128, 12, false);
-        this.name = new TranslatableComponent(langKey);
+        this.name = Component.translatable(langKey);
         this.onClick = onClick;
         this.initTextureValues(0, 0, 128, 12, BUTTON_TEXTURE);
     }

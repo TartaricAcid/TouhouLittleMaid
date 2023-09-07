@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public final class InitBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TouhouLittleMaid.MOD_ID);
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, TouhouLittleMaid.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TouhouLittleMaid.MOD_ID);
 
     public static RegistryObject<Block> MAID_BED = BLOCKS.register("maid_bed", BlockMaidBed::new);
     public static RegistryObject<Block> ALTAR = BLOCKS.register("altar", BlockAltar::new);

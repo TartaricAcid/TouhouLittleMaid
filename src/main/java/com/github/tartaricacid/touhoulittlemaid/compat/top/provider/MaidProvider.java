@@ -8,7 +8,7 @@
 //import net.minecraft.entity.player.Player;
 //import net.minecraft.resources.ResourceLocation;
 //import net.minecraft.util.text.ChatFormatting;
-//import net.minecraft.util.text.TranslatableComponent;
+//import net.minecraft.util.text.MutableComponent;
 //import net.minecraft.world.World;
 //
 //public class MaidProvider implements IProbeInfoEntityProvider {
@@ -20,14 +20,14 @@
 //            EntityMaid maid = (EntityMaid) entity;
 //            if (maid.isTame()) {
 //                IMaidTask task = maid.getTask();
-//                TranslatableComponent taskTitle = new TranslatableComponent("top.touhou_little_maid.entity_maid.task");
-//                TranslatableComponent taskName = task.getName();
+//                MutableComponent taskTitle = Component.translatable("top.touhou_little_maid.entity_maid.task");
+//                MutableComponent taskName = task.getName();
 //                taskTitle.append(taskName);
 //                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
 //                        .item(task.getIcon()).text(taskTitle);
 //            }
 //            if (maid.getIsInvulnerable()) {
-//                TranslatableComponent text = new TranslatableComponent("top.touhou_little_maid.entity_maid.invulnerable");
+//                MutableComponent text = Component.translatable("top.touhou_little_maid.entity_maid.invulnerable");
 //                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
 //                        .text(text.withStyle(ChatFormatting.DARK_PURPLE));
 //            }

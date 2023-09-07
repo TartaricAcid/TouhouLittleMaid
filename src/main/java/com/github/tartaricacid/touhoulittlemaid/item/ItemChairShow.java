@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -21,7 +21,7 @@ public class ItemChairShow extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
-        tooltip.add((new TranslatableComponent("tooltips.touhou_little_maid.chair_show.desc"))
+        tooltip.add((Component.translatable("tooltips.touhou_little_maid.chair_show.desc"))
                 .withStyle(ChatFormatting.GRAY));
     }
 }

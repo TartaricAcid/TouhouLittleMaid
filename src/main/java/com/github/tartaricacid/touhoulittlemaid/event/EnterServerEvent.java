@@ -11,8 +11,8 @@ import net.minecraftforge.fml.common.Mod;
 public final class EnterServerEvent {
     @SubscribeEvent
     public static void onAttachCapabilityEvent(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getPlayer() instanceof ServerPlayer) {
-            InitTrigger.GIVE_SMART_SLAB_CONFIG.trigger((ServerPlayer) event.getPlayer());
+        if (event.getEntity() instanceof ServerPlayer) {
+            InitTrigger.GIVE_SMART_SLAB_CONFIG.trigger((ServerPlayer) event.getEntity());
         }
     }
 }

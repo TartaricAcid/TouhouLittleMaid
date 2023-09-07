@@ -44,7 +44,7 @@ public class TileEntityEntityPlaceholderRenderer extends BlockEntityWithoutLevel
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
             String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
             ResourceLocation texture = new ResourceLocation(namespace, String.format("textures/items/%s.png", path.getFileName().toString()));
-            if (Minecraft.getInstance().getResourceManager().hasResource(texture)) {
+            if (Minecraft.getInstance().getResourceManager().getResource(texture).isPresent()) {
                 return texture;
             }
         }

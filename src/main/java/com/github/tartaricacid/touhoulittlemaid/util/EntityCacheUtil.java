@@ -6,7 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -36,7 +36,7 @@ public final class EntityCacheUtil {
         maid.deathTime = 0;
         maid.setInSittingPose(false);
         maid.setBackpackLevel(BackpackLevel.EMPTY);
-        maid.setCustomName(TextComponent.EMPTY);
+        maid.setCustomName(Component.empty());
         if (clearEquipmentData) {
             for (EquipmentSlot slot : EquipmentSlot.values()) {
                 maid.setItemSlot(slot, ItemStack.EMPTY);
@@ -45,8 +45,8 @@ public final class EntityCacheUtil {
     }
 
     @SubscribeEvent
-    public static void onChangeDim(EntityJoinWorldEvent event) {
-        if (event.getWorld().isClientSide && event.getEntity() == Minecraft.getInstance().player) {
+    public static void onChangeDim(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide && event.getEntity() == Minecraft.getInstance().player) {
             ResourceKey<Level> dim = event.getEntity().level.dimension();
             if (!dim.equals(dimAt)) {
                 dimAt = dim;

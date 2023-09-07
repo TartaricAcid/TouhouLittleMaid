@@ -17,13 +17,12 @@ apply plugin: 'eclipse'
 
 version = mod_version
 group = 'com.github.tartaricacid'
-archivesBaseName = 'touhoulittlemaid-1.18.2-release'
+archivesBaseName = 'touhoulittlemaid-1.19.2-release'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    // mappings channel: 'official', version: '1.18.2'
-    mappings channel: 'parchment', version: '2022.05.22-1.18.2'
+    mappings channel: 'parchment', version: '2022.11.27-1.19.2'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -85,14 +84,15 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 Maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        // location of the maven that hosts JEI files since January 2023
+        // Patchouli
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
     }
     maven {
         // location of a maven mirror for JEI files, as a fallback
-        name = "Mod Maven"
-        url = "https://modmaven.k-4u.nl"
+        name = "ModMaven"
+        url = "https://modmaven.dev"
     }
     maven {
         name = "Curse Maven"
@@ -101,18 +101,16 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    maven {
-        // Patchouli
-        name 'Jared Maven'
-        url 'https://maven.blamejared.com/'
-    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}")
+    // compile against the JEI API but do not include it at runtime
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")

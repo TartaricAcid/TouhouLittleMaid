@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class MaidTabButton extends Button {
@@ -13,7 +13,7 @@ public class MaidTabButton extends Button {
     private final int left;
 
     public MaidTabButton(int x, int y, int left, Button.OnPress onPressIn) {
-        super(x, y, 24, 26, TextComponent.EMPTY, onPressIn);
+        super(x, y, 24, 26, Component.empty(), onPressIn);
         this.left = left;
     }
 

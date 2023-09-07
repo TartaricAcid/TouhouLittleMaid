@@ -23,7 +23,7 @@ public class EasterEggModel extends BedrockModel<EntityMaid> {
 
     public EasterEggModel() {
         ResourceManager manager = Minecraft.getInstance().getResourceManager();
-        try (InputStream stream = manager.getResource(MODEL).getInputStream()) {
+        try (InputStream stream = manager.open(MODEL)) {
             loadLegacyModel(CustomPackLoader.GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class));
         } catch (IOException exception) {
             exception.printStackTrace();

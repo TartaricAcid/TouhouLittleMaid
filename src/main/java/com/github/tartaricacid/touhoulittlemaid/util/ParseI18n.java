@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
 
@@ -34,10 +34,10 @@ public final class ParseI18n {
         // 如果是“{ ”开头，“} ”结尾
         if (strIn.startsWith(I18N_START_CHAR) && strIn.endsWith(I18N_END_CHAR)) {
             // 将剔除大括号后的字符进行国际化
-            return new TranslatableComponent(strIn.substring(1, strIn.length() - 1));
+            return Component.translatable(strIn.substring(1, strIn.length() - 1));
         } else {
             // 否则装填原字符串（这算硬编码么？）
-            return new TextComponent(strIn);
+            return Component.literal(strIn);
         }
     }
 
@@ -58,7 +58,7 @@ public final class ParseI18n {
     public static List<Component> keysToTrans(List<String> keys, ChatFormatting... formatting) {
         List<Component> out = Lists.newArrayList();
         for (String k : keys) {
-            out.add(new TranslatableComponent(k).withStyle(formatting));
+            out.add(Component.translatable(k).withStyle(formatting));
         }
         return out;
     }

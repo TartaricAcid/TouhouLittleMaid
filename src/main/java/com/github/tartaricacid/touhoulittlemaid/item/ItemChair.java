@@ -14,8 +14,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -33,7 +31,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,10 +62,10 @@ public class ItemChair extends Item {
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 Minecraft minecraft = Minecraft.getInstance();
                 return new TileEntityItemStackChairRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
             }
@@ -119,7 +117,7 @@ public class ItemChair extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+        if (this.allowedIn(group)) {
             for (String key : CustomPackLoader.CHAIR_MODELS.getModelIdSet()) {
                 float height = CustomPackLoader.CHAIR_MODELS.getModelMountedYOffset(key);
                 boolean canRide = CustomPackLoader.CHAIR_MODELS.getModelTameableCanRide(key);
@@ -138,16 +136,16 @@ public class ItemChair extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.chair.place.desc").withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.chair.destroy.desc").withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.chair.gui.desc").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.chair.place.desc").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.chair.destroy.desc").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.chair.gui.desc").withStyle(ChatFormatting.GRAY));
         // 调试模式，不加国际化
         if (flagIn.isAdvanced() && Screen.hasShiftDown()) {
             Data data = Data.deserialization(stack.getOrCreateTag());
-            tooltip.add(new TextComponent("Model Id: " + data.getModelId()).withStyle(ChatFormatting.GRAY));
-            tooltip.add(new TextComponent("Mounted Height: " + data.getHeight()).withStyle(ChatFormatting.GRAY));
-            tooltip.add(new TextComponent("Tameable Can Ride: " + data.isCanRide()).withStyle(ChatFormatting.GRAY));
-            tooltip.add(new TextComponent("Is No Gravity: " + data.isNoGravity()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal("Model Id: " + data.getModelId()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal("Mounted Height: " + data.getHeight()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal("Tameable Can Ride: " + data.isCanRide()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal("Is No Gravity: " + data.isNoGravity()).withStyle(ChatFormatting.GRAY));
         }
     }
 

@@ -5,7 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -63,8 +64,7 @@ public class ChairModelMessage {
                         }
                     } else {
                         if (sender.isAlive()) {
-                            sender.sendMessage(new TranslatableComponent("message.touhou_little_maid.change_model.disabled"),
-                                    ChatType.GAME_INFO, Util.NIL_UUID);
+                            sender.sendSystemMessage(Component.translatable("message.touhou_little_maid.change_model.disabled"));
                         }
                     }
                 }

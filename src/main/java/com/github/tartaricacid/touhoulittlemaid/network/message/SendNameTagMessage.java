@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Items;
@@ -52,7 +52,7 @@ public class SendNameTagMessage {
     private static void setMaidNameTag(SendNameTagMessage message, ServerPlayer player, EntityMaid maid) {
         String name = message.name.substring(0, Math.min(32, message.name.length()));
         if (player.equals(maid.getOwner()) && player.getMainHandItem().getItem() == Items.NAME_TAG) {
-            maid.setCustomName(new TextComponent(name));
+            maid.setCustomName(Component.literal(name));
             maid.setCustomNameVisible(message.alwaysShow);
             maid.setPersistenceRequired();
             player.getMainHandItem().shrink(1);

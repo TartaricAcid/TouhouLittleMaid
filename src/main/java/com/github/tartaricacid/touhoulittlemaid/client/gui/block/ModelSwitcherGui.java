@@ -21,8 +21,8 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class ModelSwitcherGui extends Screen {
     private int page;
 
     public ModelSwitcherGui(TileEntityModelSwitcher switcher) {
-        super(new TextComponent("Model Switcher GUI"));
+        super(Component.literal("Model Switcher GUI"));
         this.infoList = switcher.getInfoList();
         this.pos = switcher.getBlockPos();
         this.bindUuid = switcher.getUuid();
@@ -78,17 +78,17 @@ public class ModelSwitcherGui extends Screen {
         TileEntityModelSwitcher.ModeInfo info = this.infoList.get(selectedIndex);
         maid.setModelId(info.getModelId().toString());
 
-        this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20, new TranslatableComponent("gui.touhou_little_maid.button.skin"), b -> {
+        this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20, Component.translatable("gui.touhou_little_maid.button.skin"), b -> {
             ModelSwitcherModelGui modelGui = new ModelSwitcherModelGui(this.maid, info, this);
             getMinecraft().setScreen(modelGui);
         }));
         this.addRenderableWidget(new DirectButton(leftPos + 55, topPos + 38, 76, 20, info.getDirection(),
                 b -> info.setDirection(((DirectButton) b).getDirection())));
-        this.addRenderableWidget(new Button(leftPos + 12, topPos + 135, 121, 20, new TranslatableComponent("selectWorld.edit.save"),
+        this.addRenderableWidget(new Button(leftPos + 12, topPos + 135, 121, 20, Component.translatable("selectWorld.edit.save"),
                 b -> NetworkHandler.CHANNEL.sendToServer(new SaveSwitcherDataMessage(pos, this.infoList))));
 
         this.description = new EditBox(getMinecraft().font, leftPos + 12, topPos + 65, 119, 20,
-                new TranslatableComponent("gui.touhou_little_maid.name_tag.edit_box"));
+                Component.translatable("gui.touhou_little_maid.name_tag.edit_box"));
         this.description.setValue(info.getText());
         this.addWidget(this.description);
         this.setInitialFocus(this.description);
@@ -130,11 +130,11 @@ public class ModelSwitcherGui extends Screen {
     }
 
     private void addListChangeButton() {
-        this.addRenderableWidget(new Button(leftPos + 141, topPos + 139, 53, 20, new TranslatableComponent("gui.touhou_little_maid.model_switcher.list.add"), b -> {
+        this.addRenderableWidget(new Button(leftPos + 141, topPos + 139, 53, 20, Component.translatable("gui.touhou_little_maid.model_switcher.list.add"), b -> {
             this.infoList.add(new TileEntityModelSwitcher.ModeInfo(DEFAULT_MODEL_ID, "", Direction.NORTH));
             this.init();
         }));
-        this.addRenderableWidget(new Button(leftPos + 196, topPos + 139, 53, 20, new TranslatableComponent("selectWorld.deleteButton"), b -> {
+        this.addRenderableWidget(new Button(leftPos + 196, topPos + 139, 53, 20, Component.translatable("selectWorld.deleteButton"), b -> {
             if (-1 < selectedIndex && selectedIndex < this.infoList.size()) {
                 this.infoList.remove(selectedIndex);
                 selectedIndex = -1;
@@ -167,7 +167,7 @@ public class ModelSwitcherGui extends Screen {
         if (bindUuid != null) {
             drawCenteredString(pPoseStack, font, bindUuid.toString(), leftPos + 128, topPos - 10, 0xffffff);
         } else {
-            drawCenteredString(pPoseStack, font, new TranslatableComponent("gui.touhou_little_maid.model_switcher.uuid.empty"), leftPos + 128, topPos - 10, 0xffffff);
+            drawCenteredString(pPoseStack, font, Component.translatable("gui.touhou_little_maid.model_switcher.uuid.empty"), leftPos + 128, topPos - 10, 0xffffff);
         }
         drawCenteredString(pPoseStack, font, String.format("%d/%d", page + 1, (infoList.size() - 1) / maxRow + 1), leftPos + 193, topPos + 12, 0xffffff);
         if (this.description != null) {
@@ -184,7 +184,7 @@ public class ModelSwitcherGui extends Screen {
             String modelId = infoList.get(i).getModelId().toString();
             if (CustomPackLoader.MAID_MODELS.getInfo(modelId).isPresent()) {
                 MaidModelInfo info = CustomPackLoader.MAID_MODELS.getInfo(modelId).get();
-                TranslatableComponent component = new TranslatableComponent(ParseI18n.getI18nKey(info.getName()));
+                MutableComponent component = Component.translatable(ParseI18n.getI18nKey(info.getName()));
                 drawCenteredString(pPoseStack, font, component, leftPos + 193, startOffsetY, 0xffffff);
             }
             startOffsetY += 19;

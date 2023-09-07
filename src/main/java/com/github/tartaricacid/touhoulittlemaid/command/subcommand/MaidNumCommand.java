@@ -12,7 +12,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -54,14 +55,14 @@ public final class MaidNumCommand {
                 default:
             }
         }
-        context.getSource().sendSuccess(new TranslatableComponent("commands.touhou_little_maid.maid_num.handle.info", players.size()), true);
+        context.getSource().sendSuccess(Component.translatable("commands.touhou_little_maid.maid_num.handle.info", players.size()), true);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int getMaidNum(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         for (Player player : EntityArgument.getPlayers(context, TARGETS_NAME)) {
             player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP, null).ifPresent(maidNum ->
-                    context.getSource().sendSuccess(new TranslatableComponent("commands.touhou_little_maid.maid_num.get.info",
+                    context.getSource().sendSuccess(Component.translatable("commands.touhou_little_maid.maid_num.get.info",
                             player.getScoreboardName(), maidNum.get()), false));
         }
         return Command.SINGLE_SUCCESS;

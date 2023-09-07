@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class EntityDanmaku extends ThrowableProjectile {
     public static final EntityType<EntityDanmaku> TYPE = EntityType.Builder.<EntityDanmaku>of(EntityDanmaku::new, MobCategory.MISC)
@@ -84,7 +85,7 @@ public class EntityDanmaku extends ThrowableProjectile {
                 this.discard();
                 return;
             }
-            ResourceLocation registryName = hit.getType().getRegistryName();
+            ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(hit.getType());
             if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
                 this.discard();
                 return;

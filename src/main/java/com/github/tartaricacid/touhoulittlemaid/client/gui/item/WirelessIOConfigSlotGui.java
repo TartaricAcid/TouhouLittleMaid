@@ -10,8 +10,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -28,7 +28,7 @@ public class WirelessIOConfigSlotGui extends Screen {
     protected int topPos;
 
     protected WirelessIOConfigSlotGui(ItemStack wirelessIO) {
-        super(new TextComponent("Wireless IO Config Slot GUI"));
+        super(Component.literal("Wireless IO Config Slot GUI"));
         configData = bytes2Booleans(ItemWirelessIO.getSlotConfig(wirelessIO), SLOT_NUM);
     }
 
@@ -79,9 +79,9 @@ public class WirelessIOConfigSlotGui extends Screen {
             index++;
         }
 
-        Button confirm = new Button(leftPos, topPos + 140, 60, 20, new TranslatableComponent("gui.done"),
+        Button confirm = new Button(leftPos, topPos + 140, 60, 20, Component.translatable("gui.done"),
                 b -> NetworkHandler.CHANNEL.sendToServer(new WirelessIOSlotConfigMessage(booleans2Bytes(this.configData))));
-        Button cancel = new Button(leftPos + 62, topPos + 140, 60, 20, new TranslatableComponent("gui.cancel"),
+        Button cancel = new Button(leftPos + 62, topPos + 140, 60, 20, Component.translatable("gui.cancel"),
                 b -> NetworkHandler.CHANNEL.sendToServer(new WirelessIOSlotConfigMessage()));
         addRenderableWidget(confirm);
         addRenderableWidget(cancel);

@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,9 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -34,7 +33,7 @@ public class MaidMainContainer extends AbstractMaidContainer {
     public static final MenuType<MaidMainContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new MaidMainContainer(windowId, inv, data.readInt()));
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
-    private static final int PLAYER_INVENTORY_SIZE = 36;
+    public static final int PLAYER_INVENTORY_SIZE = 36;
 
     public MaidMainContainer(int id, Inventory inventory, int entityId) {
         super(TYPE, id, inventory, entityId);
@@ -50,7 +49,7 @@ public class MaidMainContainer extends AbstractMaidContainer {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TextComponent("Maid Main Container");
+                return Component.literal("Maid Main Container");
             }
 
             @Override
@@ -61,7 +60,7 @@ public class MaidMainContainer extends AbstractMaidContainer {
     }
 
     private void addMaidHandInv() {
-        LazyOptional<IItemHandler> hand = maid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN);
+        LazyOptional<IItemHandler> hand = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN);
         hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 79) {
             @Override
             @OnlyIn(Dist.CLIENT)
@@ -79,7 +78,7 @@ public class MaidMainContainer extends AbstractMaidContainer {
     }
 
     private void addMaidArmorInv() {
-        LazyOptional<IItemHandler> armor = maid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.EAST);
+        LazyOptional<IItemHandler> armor = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.EAST);
         armor.ifPresent((handler -> {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; j++) {

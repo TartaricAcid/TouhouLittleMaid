@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public final class EntityMaidWrapper implements IMaidData {
     private final WorldWrapper world = new WorldWrapper();
@@ -45,7 +46,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public String getHelmet() {
-        ResourceLocation res = maid.getItemBySlot(EquipmentSlot.HEAD).getItem().getRegistryName();
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.HEAD).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -59,7 +60,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public String getChestPlate() {
-        ResourceLocation res = maid.getItemBySlot(EquipmentSlot.CHEST).getItem().getRegistryName();
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.CHEST).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -73,7 +74,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public String getLeggings() {
-        ResourceLocation res = maid.getItemBySlot(EquipmentSlot.LEGS).getItem().getRegistryName();
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.LEGS).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -87,7 +88,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public String getBoots() {
-        ResourceLocation res = maid.getItemBySlot(EquipmentSlot.FEET).getItem().getRegistryName();
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.FEET).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -101,7 +102,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public String getItemMainhand() {
-        ResourceLocation res = maid.getMainHandItem().getItem().getRegistryName();
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getMainHandItem().getItem());
         if (res != null) {
             return res.toString();
         }
@@ -115,7 +116,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public String getItemOffhand() {
-        ResourceLocation res = maid.getOffhandItem().getItem().getRegistryName();
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getOffhandItem().getItem());
         if (res != null) {
             return res.toString();
         }
@@ -209,7 +210,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public String getAtBiome() {
-        ResourceLocation res = BiomeCacheUtil.getCacheBiome(maid).getRegistryName();
+        ResourceLocation res = ForgeRegistries.BIOMES.getKey(BiomeCacheUtil.getCacheBiome(maid));
         if (res != null) {
             return res.getPath();
         }

@@ -10,6 +10,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber
 public final class EntityHurtEvent {
@@ -31,7 +32,7 @@ public final class EntityHurtEvent {
                     event.setCanceled(true);
                 }
             }
-            ResourceLocation registryName = victim.getType().getRegistryName();
+            ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(victim.getType());
             if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
                 event.setCanceled(true);
             }

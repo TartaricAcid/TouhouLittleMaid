@@ -15,8 +15,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.schedule.Activity;
 
@@ -31,7 +31,7 @@ public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
     private MaidSchedule mode;
 
     public ScheduleButton(int x, int y, AbstractMaidContainerGui<T> gui) {
-        super(x, y, 61, 13, TextComponent.EMPTY, (b) -> {
+        super(x, y, 61, 13, Component.empty(), (b) -> {
         });
         this.maid = gui.getMaid();
         this.mode = maid.getSchedule();
@@ -60,53 +60,53 @@ public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
         Activity activity;
 
         List<Component> out = Lists.newArrayList();
-        out.add(new TextComponent(String.format("§n%s§7 %s:%s", getScheduleTransText(), DECIMAL_FORMAT.format(hour), DECIMAL_FORMAT.format(minute))));
+        out.add(Component.literal(String.format("§n%s§7 %s:%s", getScheduleTransText(), DECIMAL_FORMAT.format(hour), DECIMAL_FORMAT.format(minute))));
         switch (mode) {
             case ALL:
-                out.add(new TextComponent(String.format("§a█ 00:00-24:00 %s", getActivityTransText(Activity.WORK))));
+                out.add(Component.literal(String.format("§a█ 00:00-24:00 %s", getActivityTransText(Activity.WORK))));
                 break;
             case NIGHT:
                 activity = InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time);
                 if (activity == Activity.WORK) {
-                    out.add(new TextComponent(String.format("§a█ 18:00-06:00 %s", getActivityTransText(Activity.WORK))));
+                    out.add(Component.literal(String.format("§a█ 18:00-06:00 %s", getActivityTransText(Activity.WORK))));
                 } else {
-                    out.add(new TextComponent(String.format("§8█ 18:00-06:00 %s", getActivityTransText(Activity.WORK))));
+                    out.add(Component.literal(String.format("§8█ 18:00-06:00 %s", getActivityTransText(Activity.WORK))));
                 }
 
                 if (activity == Activity.REST) {
-                    out.add(new TextComponent(String.format("§a█ 06:00-14:00 %s", getActivityTransText(Activity.REST))));
+                    out.add(Component.literal(String.format("§a█ 06:00-14:00 %s", getActivityTransText(Activity.REST))));
                 } else {
-                    out.add(new TextComponent(String.format("§8█ 06:00-14:00 %s", getActivityTransText(Activity.REST))));
+                    out.add(Component.literal(String.format("§8█ 06:00-14:00 %s", getActivityTransText(Activity.REST))));
                 }
 
                 if (activity == Activity.IDLE) {
-                    out.add(new TextComponent(String.format("§a█ 14:00-18:00 %s", getActivityTransText(Activity.IDLE))));
+                    out.add(Component.literal(String.format("§a█ 14:00-18:00 %s", getActivityTransText(Activity.IDLE))));
                 } else {
-                    out.add(new TextComponent(String.format("§8█ 14:00-18:00 %s", getActivityTransText(Activity.IDLE))));
+                    out.add(Component.literal(String.format("§8█ 14:00-18:00 %s", getActivityTransText(Activity.IDLE))));
                 }
                 break;
             case DAY:
             default:
                 activity = InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time);
                 if (activity == Activity.WORK) {
-                    out.add(new TextComponent(String.format("§a█ 06:00-18:00 %s", getActivityTransText(Activity.WORK))));
+                    out.add(Component.literal(String.format("§a█ 06:00-18:00 %s", getActivityTransText(Activity.WORK))));
                 } else {
-                    out.add(new TextComponent(String.format("§8█ 06:00-18:00 %s", getActivityTransText(Activity.WORK))));
+                    out.add(Component.literal(String.format("§8█ 06:00-18:00 %s", getActivityTransText(Activity.WORK))));
                 }
 
                 if (activity == Activity.IDLE) {
-                    out.add(new TextComponent(String.format("§a█ 18:00-22:00 %s", getActivityTransText(Activity.IDLE))));
+                    out.add(Component.literal(String.format("§a█ 18:00-22:00 %s", getActivityTransText(Activity.IDLE))));
                 } else {
-                    out.add(new TextComponent(String.format("§8█ 18:00-22:00 %s", getActivityTransText(Activity.IDLE))));
+                    out.add(Component.literal(String.format("§8█ 18:00-22:00 %s", getActivityTransText(Activity.IDLE))));
                 }
 
                 if (activity == Activity.REST) {
-                    out.add(new TextComponent(String.format("§a█ 22:00-06:00 %s", getActivityTransText(Activity.REST))));
+                    out.add(Component.literal(String.format("§a█ 22:00-06:00 %s", getActivityTransText(Activity.REST))));
                 } else {
-                    out.add(new TextComponent(String.format("§8█ 22:00-06:00 %s", getActivityTransText(Activity.REST))));
+                    out.add(Component.literal(String.format("§8█ 22:00-06:00 %s", getActivityTransText(Activity.REST))));
                 }
         }
-        out.add(new TranslatableComponent("tooltips.touhou_little_maid.schedule.desc"));
+        out.add(Component.translatable("tooltips.touhou_little_maid.schedule.desc"));
         return out;
     }
 

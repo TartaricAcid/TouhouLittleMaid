@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -81,7 +81,7 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
                     this.killEntity();
                 }
             }
-            LazyOptional<IItemHandler> itemHandler = this.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            LazyOptional<IItemHandler> itemHandler = this.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
             if (!level.isClientSide) {
                 itemHandler.ifPresent((handler) -> {
                     for (int i = 0; i < handler.getSlots(); ++i) {

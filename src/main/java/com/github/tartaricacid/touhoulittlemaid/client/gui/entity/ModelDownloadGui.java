@@ -16,8 +16,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.apache.commons.io.FileUtils;
@@ -39,7 +39,7 @@ public class ModelDownloadGui extends Screen {
     private List<DownloadInfo> showInfoList;
 
     public ModelDownloadGui(@Nullable List<DownloadInfo> showInfoList) {
-        super(new TextComponent("Model Pack Download GUI"));
+        super(Component.literal("Model Pack Download GUI"));
         this.showInfoList = showInfoList;
         if (showInfoList != null && !showInfoList.isEmpty()) {
             getCrc32Info();
@@ -60,7 +60,7 @@ public class ModelDownloadGui extends Screen {
         int startY = this.height / 2 - 79;
 
         if (showInfoList == null || showInfoList.isEmpty()) {
-            addRenderableWidget(new Button(5, 5, 60, 20, new TranslatableComponent("gui.touhou_little_maid.resources_download.reload"), (b) -> {
+            addRenderableWidget(new Button(5, 5, 60, 20, Component.translatable("gui.touhou_little_maid.resources_download.reload"), (b) -> {
             }));
             return;
         }
@@ -68,7 +68,7 @@ public class ModelDownloadGui extends Screen {
         for (int i = startIndex; i < 9 + startIndex; i++) {
             if (i < showInfoList.size()) {
                 DownloadInfo info = showInfoList.get(i);
-                ButtonWithId button = new ButtonWithId(i, startX, startY + 21 * (i - startIndex), 171, 20, new TranslatableComponent(info.getName()), (id) -> {
+                ButtonWithId button = new ButtonWithId(i, startX, startY + 21 * (i - startIndex), 171, 20, Component.translatable(info.getName()), (id) -> {
                     index = id;
                     this.init();
                 });
@@ -95,7 +95,7 @@ public class ModelDownloadGui extends Screen {
             }));
         }
 
-        addRenderableWidget(new Button(startX + 287, startY - 30, 100, 20, new TranslatableComponent("spectatorMenu.close"), (b) -> {
+        addRenderableWidget(new Button(startX + 287, startY - 30, 100, 20, Component.translatable("spectatorMenu.close"), (b) -> {
             if (minecraft != null) {
                 minecraft.setScreen(null);
             }
@@ -109,8 +109,8 @@ public class ModelDownloadGui extends Screen {
 
         renderBackground(poseStack);
         if (minecraft == null || showInfoList == null || showInfoList.isEmpty()) {
-            drawCenteredString(poseStack, font, new TranslatableComponent("gui.touhou_little_maid.resources_download.fail.1"), this.width / 2, this.height / 2 - 15, 0xfffff);
-            drawCenteredString(poseStack, font, new TranslatableComponent("gui.touhou_little_maid.resources_download.fail.2"), this.width / 2, this.height / 2, 0xfffff);
+            drawCenteredString(poseStack, font, Component.translatable("gui.touhou_little_maid.resources_download.fail.1"), this.width / 2, this.height / 2 - 15, 0xfffff);
+            drawCenteredString(poseStack, font, Component.translatable("gui.touhou_little_maid.resources_download.fail.2"), this.width / 2, this.height / 2, 0xfffff);
         } else {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, BG);
@@ -130,7 +130,7 @@ public class ModelDownloadGui extends Screen {
         boolean inRangeY = (middleY - 110) <= mouseY && mouseY < (middleY - 110 + 25);
         if (inRangeX && inRangeY) {
             int index = (mouseX - (middleX - 196)) / 28;
-            renderTooltip(poseStack, new TranslatableComponent("gui.touhou_little_maid.resources_download.tab." + index), mouseX, mouseY);
+            renderTooltip(poseStack, Component.translatable("gui.touhou_little_maid.resources_download.tab." + index), mouseX, mouseY);
         }
     }
 
@@ -159,14 +159,14 @@ public class ModelDownloadGui extends Screen {
         int startX = this.width / 2 - 7;
         int startY = this.height / 2 - 73;
 
-        TranslatableComponent name = new TranslatableComponent(info.getName());
+        MutableComponent name = Component.translatable(info.getName());
         drawString(poseStack, font, name, startX, startY, 0xFFAA00);
         drawString(poseStack, font, info.getVersion(), startX + font.width(name) + 4, startY, 0x55FF55);
         drawString(poseStack, font, getI18nFormatFileSize(info.getFormatFileSize()), startX, startY + 12, 0x3A8FB7);
         drawString(poseStack, font, getI18nFormatFileTime(info.getFormatData()), startX, startY + 24, 0x55FFFF);
         drawString(poseStack, font, getI18nFormatAuthor(info.getAuthor()), startX, startY + 36, 0x00896C);
         drawString(poseStack, font, getI18nFormatLicense(info.getLicense()), startX, startY + 48, 0xF7D94C);
-        font.drawWordWrap(new TranslatableComponent(info.getDesc()), startX, startY + 72, 195, 0x7a7a7a);
+        font.drawWordWrap(Component.translatable(info.getDesc()), startX, startY + 72, 195, 0x7a7a7a);
     }
 
     private void getCrc32Info() {

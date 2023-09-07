@@ -10,8 +10,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +23,7 @@ public class NameTagGui extends Screen {
     private boolean alwaysShow = false;
 
     public NameTagGui(EntityMaid maid) {
-        super(TextComponent.EMPTY);
+        super(Component.empty());
         this.maid = maid;
     }
 
@@ -34,12 +34,12 @@ public class NameTagGui extends Screen {
         int middleX = this.width / 2;
         int middleY = this.height / 2;
         textField = new EditBox(getMinecraft().font, middleX - 99, middleY - 26, 176, 20,
-                new TranslatableComponent("gui.touhou_little_maid.name_tag.edit_box"));
+                Component.translatable("gui.touhou_little_maid.name_tag.edit_box"));
         this.addWidget(this.textField);
         this.setInitialFocus(this.textField);
-        addRenderableWidget(new Button(middleX - 100, middleY, 98, 20, new TranslatableComponent("gui.done"), this::sendDoneMessage));
-        addRenderableWidget(new Button(middleX + 2, middleY, 98, 20, new TranslatableComponent("gui.cancel"), b -> onClose()));
-        alwaysShowButton = new Button(middleX + 80, middleY - 26, 20, 20, TextComponent.EMPTY, b -> alwaysShow = !alwaysShow);
+        addRenderableWidget(new Button(middleX - 100, middleY, 98, 20, Component.translatable("gui.done"), this::sendDoneMessage));
+        addRenderableWidget(new Button(middleX + 2, middleY, 98, 20, Component.translatable("gui.cancel"), b -> onClose()));
+        alwaysShowButton = new Button(middleX + 80, middleY - 26, 20, 20, Component.empty(), b -> alwaysShow = !alwaysShow);
         addRenderableWidget(alwaysShowButton);
     }
 
@@ -61,7 +61,7 @@ public class NameTagGui extends Screen {
         RenderSystem.setShaderTexture(0, TEXTURES);
         blit(poseStack, middleX + 80, middleY - 26, alwaysShow ? 88 : 110, 220, 20, 20);
         if (alwaysShowButton.isHoveredOrFocused()) {
-            renderTooltip(poseStack, new TranslatableComponent("gui.touhou_little_maid.tag.always_show"), mouseX, mouseY);
+            renderTooltip(poseStack, Component.translatable("gui.touhou_little_maid.tag.always_show"), mouseX, mouseY);
         }
     }
 

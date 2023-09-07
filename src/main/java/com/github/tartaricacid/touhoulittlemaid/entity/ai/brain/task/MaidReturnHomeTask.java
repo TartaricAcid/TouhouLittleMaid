@@ -4,13 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-
-import java.util.Random;
 
 public class MaidReturnHomeTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 100;
@@ -75,7 +74,7 @@ public class MaidReturnHomeTask extends MaidCheckRateTask {
         return false;
     }
 
-    private int randomIntInclusive(Random random, int min, int max) {
+    private int randomIntInclusive(RandomSource random, int min, int max) {
         return random.nextInt(max - min + 1) + min;
     }
 

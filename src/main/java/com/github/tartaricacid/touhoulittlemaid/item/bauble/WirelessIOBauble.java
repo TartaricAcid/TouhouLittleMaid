@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -15,7 +16,6 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.bytes2Booleans;
-import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class WirelessIOBauble implements IMaidBauble {
     public static final int MAX_DISTANCE = 16;
@@ -110,7 +110,7 @@ public class WirelessIOBauble implements IMaidBauble {
             }
 
             ChestBlockEntity chest = (ChestBlockEntity) te;
-            chest.getCapability(ITEM_HANDLER_CAPABILITY, null).ifPresent(chestInv -> {
+            chest.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(chestInv -> {
                 IItemHandler maidInv = maid.getAvailableInv(false);
                 boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
                 boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);

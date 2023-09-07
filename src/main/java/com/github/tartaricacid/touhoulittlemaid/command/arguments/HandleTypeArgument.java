@@ -10,14 +10,15 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class HandleTypeArgument implements ArgumentType<String> {
     public static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType(
-            (obj) -> new TranslatableComponent("argument.touhou_little_maid.handle_type.invalid", obj));
+            (obj) -> Component.translatable("argument.touhou_little_maid.handle_type.invalid", obj));
     private static final List<String> HANDLE_TYPES = Lists.newArrayList();
 
     private HandleTypeArgument() {

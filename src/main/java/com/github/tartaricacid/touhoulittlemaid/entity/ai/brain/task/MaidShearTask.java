@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.common.IForgeShearable;
 
 import java.util.List;
-import java.util.Random;
 
 public class MaidShearTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
@@ -57,7 +57,7 @@ public class MaidShearTask extends MaidCheckRateTask {
                 });
 
         if (shearableEntity != null && shearableEntity.closerThan(maid, 2)) {
-            Random rand = maid.getRandom();
+            RandomSource rand = maid.getRandom();
             int level = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, mainHandItem);
             List<ItemStack> drops = ((IForgeShearable) shearableEntity).onSheared(null, mainHandItem,
                     maid.level, shearableEntity.blockPosition(), level);

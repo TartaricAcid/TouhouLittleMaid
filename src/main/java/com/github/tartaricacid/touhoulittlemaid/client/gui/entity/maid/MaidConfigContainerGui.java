@@ -7,7 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigCo
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -57,8 +57,8 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         super.renderBg(matrixStack, partialTicks, x, y);
-        font.draw(matrixStack, new TranslatableComponent("gui.touhou_little_maid.maid_config.show_chat_bubble"), left + 38, top + 17, 0x333333);
-        font.draw(matrixStack, new TranslatableComponent("gui.touhou_little_maid.maid_config.show_backpack"), left + 38, top + 17 + 24, 0x333333);
+        font.draw(matrixStack, Component.translatable("gui.touhou_little_maid.maid_config.show_chat_bubble"), left + 38, top + 17, 0x333333);
+        font.draw(matrixStack, Component.translatable("gui.touhou_little_maid.maid_config.show_backpack"), left + 38, top + 17 + 24, 0x333333);
     }
 
     @Override

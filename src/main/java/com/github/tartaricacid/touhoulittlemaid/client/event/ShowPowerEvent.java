@@ -12,7 +12,8 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -22,8 +23,8 @@ public final class ShowPowerEvent {
     private static ItemStack POWER_POINT;
 
     @SubscribeEvent
-    public static void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.LAYER) {
+    public static void onRenderOverlay(RenderGuiOverlayEvent.Pre event) {
+        if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player == null) {
                 return;
@@ -39,7 +40,7 @@ public final class ShowPowerEvent {
             }
             itemRenderer.renderGuiItem(POWER_POINT, 5, 5);
             player.getCapability(PowerCapabilityProvider.POWER_CAP).ifPresent(cap ->
-                    fontRenderer.draw(event.getMatrixStack(), String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff));
+                    fontRenderer.draw(event.getPoseStack(), String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff));
             RenderSystem.enableBlend();
         }
     }

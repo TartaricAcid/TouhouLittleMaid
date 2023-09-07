@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Vanishable;
 
@@ -49,7 +50,7 @@ public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<Enti
                     matrixStack.translate(0, 0, -0.4);
                     break;
             }
-            Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, packedLightIn);
+            Minecraft.getInstance().getItemRenderer().renderStatic(maid, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, maid.level, packedLightIn, OverlayTexture.NO_OVERLAY, maid.getId());
             matrixStack.popPose();
         }
     }

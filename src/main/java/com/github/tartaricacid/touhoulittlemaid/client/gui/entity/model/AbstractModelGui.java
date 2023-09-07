@@ -37,7 +37,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     private final List<CustomModelPack<E>> modelPackList;
 
     public AbstractModelGui(T entity, List<CustomModelPack<E>> listPack) {
-        super(new TextComponent("Custom Model GUI"));
+        super(Component.literal("Custom Model GUI"));
         this.entity = entity;
         this.modelPackList = listPack;
         this.guiNumber = new SkinGuiNumber<>(modelPackList);
@@ -155,13 +155,13 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     }
 
     private void addPageButton(int startX, int startY) {
-        Button prePage = new Button(startX - 119, startY - 101, 20, 20, new TextComponent("<"), (b) -> {
+        Button prePage = new Button(startX - 119, startY - 101, 20, 20, Component.literal("<"), (b) -> {
             setRowIndex(0);
             setPageIndex(Mth.clamp(getPageIndex() - 1, 0, guiNumber.getPageSize() - 1));
             setPackIndex(guiNumber.tabToPackIndex(0, getPageIndex()));
             this.init();
         });
-        Button nextPage = new Button(startX + 99, startY - 101, 20, 20, new TextComponent(">"), (b) -> {
+        Button nextPage = new Button(startX + 99, startY - 101, 20, 20, Component.literal(">"), (b) -> {
             setRowIndex(0);
             setPageIndex(Mth.clamp(getPageIndex() + 1, 0, guiNumber.getPageSize() - 1));
             setPackIndex(guiNumber.tabToPackIndex(0, getPageIndex()));
@@ -361,7 +361,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         if (!pack.getAuthor().isEmpty()) {
             for (List<String> textList : Lists.partition(pack.getAuthor(), 2)) {
                 offsetY += 10;
-                drawCenteredString(poseStack, font, new TextComponent(textList.toString()).withStyle(ChatFormatting.GOLD),
+                drawCenteredString(poseStack, font, Component.literal(textList.toString()).withStyle(ChatFormatting.GOLD),
                         sideMiddleX, middleY + offsetY, 0xffffff);
             }
         }
@@ -369,7 +369,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         // 绘制版本信息
         if (pack.getVersion() != null) {
             offsetY += 10;
-            drawCenteredString(poseStack, font, new TranslatableComponent("gui.touhou_little_maid.skin.text.version", pack.getVersion())
+            drawCenteredString(poseStack, font, Component.translatable("gui.touhou_little_maid.skin.text.version", pack.getVersion())
                             .withStyle(ChatFormatting.DARK_AQUA),
                     sideMiddleX, middleY + offsetY, 0xffffff);
         }
@@ -377,7 +377,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         // 绘制日期信息
         if (pack.getDate() != null) {
             offsetY += 10;
-            drawCenteredString(poseStack, font, new TranslatableComponent("gui.touhou_little_maid.skin.text.date", pack.getDate())
+            drawCenteredString(poseStack, font, Component.translatable("gui.touhou_little_maid.skin.text.date", pack.getDate())
                             .withStyle(ChatFormatting.GREEN),
                     sideMiddleX, middleY + offsetY, 0xffffff);
         }
@@ -421,7 +421,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 List<Component> tooltips = ParseI18n.parse(str);
                 // 塞入提示语
                 if (!modelItem.getName().equals(ENCRYPT_EGG_NAME) && !modelItem.getName().equals(NORMAL_EGG_NAME)) {
-                    tooltips.add(new TranslatableComponent("gui.touhou_little_maid.skin.tooltips.show_details")
+                    tooltips.add(Component.translatable("gui.touhou_little_maid.skin.tooltips.show_details")
                             .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
                 }
                 // 绘制解析过的文本提示
@@ -453,7 +453,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         boolean xInRange = (middleX + 122) < mouseX && mouseX < (middleX + 143);
         boolean yInRange = (middleY - 97) < mouseY && mouseY < (middleY - 80);
         if (xInRange && yInRange) {
-            renderTooltip(poseStack, new TranslatableComponent("gui.touhou_little_maid.skin.button.close"), mouseX, mouseY);
+            renderTooltip(poseStack, Component.translatable("gui.touhou_little_maid.skin.button.close"), mouseX, mouseY);
         }
     }
 

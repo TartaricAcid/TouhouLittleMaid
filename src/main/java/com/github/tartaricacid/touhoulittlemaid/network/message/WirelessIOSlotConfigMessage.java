@@ -43,7 +43,7 @@ public class WirelessIOSlotConfigMessage {
                     if (message.configData.length > 0) {
                         ItemWirelessIO.setSlotConfig(handItem, message.configData);
                     }
-                    NetworkHooks.openGui(sender, (ItemWirelessIO) handItem.getItem(), (buffer) -> buffer.writeItem(handItem));
+                    NetworkHooks.openScreen(sender, (ItemWirelessIO) handItem.getItem(), (buffer) -> buffer.writeItem(handItem));
                 }
             });
         }

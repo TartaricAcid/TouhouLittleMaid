@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.RecipeMatcher;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -134,7 +135,7 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
     public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable AltarRecipeInventory inventory) {
         if (extraData != null) {
             CompoundTag nbt = this.extraData.copy();
-            nbt.putString("id", Objects.requireNonNull(entityType.getRegistryName()).toString());
+            nbt.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(entityType)).toString());
             Entity resultEntity = EntityType.loadEntityRecursive(nbt, world, (e) -> {
                 e.moveTo(pos.getX(), pos.getY(), pos.getZ(), e.getYRot(), e.getXRot());
                 this.finalizeSpawn(world, pos, e);
