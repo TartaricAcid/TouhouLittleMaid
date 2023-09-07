@@ -1,10 +1,10 @@
-name: Gradle Package 1.18.2
+name: Gradle Package 1.19.2
 
 on:
   workflow_dispatch:    
   push:
     branches:
-      - 1.18.2
+      - 1.19.2
     paths:
       - 'src/main/**'
 
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: 1.18.2
+          ref: 1.19.2
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
