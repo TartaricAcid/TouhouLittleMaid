@@ -15,10 +15,10 @@ body:
       label: Minecraft Version
       description: The version of Minecraft you are use
       options:
-        - label: 1.12.2 (End of support)
-        - label: 1.16.5
-        - label: 1.18.2
-        - label: 1.20
+        - label: "1.12.2 (End of support)"
+        - label: "1.16.5"
+        - label: "1.18.2"
+        - label: "1.20"
     validations:
       required: true
   - type: textarea
