@@ -163,7 +163,10 @@ public class InfoGetManager {
             }
         }
 
-        ((ClientLanguageMap) LanguageMap.getInstance()).storage = newLangData;
+        // FIXME: 还是会存在问题
+        if (LanguageMap.getInstance() instanceof ClientLanguageMap) {
+            ((ClientLanguageMap) LanguageMap.getInstance()).storage = newLangData;
+        }
     }
 
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
