@@ -163,7 +163,9 @@ public class InfoGetManager {
             }
         }
 
-        ((ClientLanguage) Language.getInstance()).storage = newLangData;
+        if (Language.getInstance() instanceof ClientLanguage) {
+            ((ClientLanguage) Language.getInstance()).storage = newLangData;
+        }
     }
 
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
