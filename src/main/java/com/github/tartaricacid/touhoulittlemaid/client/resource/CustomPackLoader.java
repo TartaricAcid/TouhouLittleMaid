@@ -583,8 +583,9 @@ public class CustomPackLoader {
         getLanguageMap(zipFile, newLangData, currentLangPath);
 
         languageMapMerge(oldLangData, newLangData);
-        // FIXME: 2021/10/17 和 Untranslated Items 模组冲突
-        ((ClientLanguage) Language.getInstance()).storage = newLangData;
+        if (Language.getInstance() instanceof ClientLanguage) {
+            ((ClientLanguage) Language.getInstance()).storage = newLangData;
+        }
     }
 
     private static void readLanguageFile(Path rootPath, String namespace) throws IOException {
@@ -599,8 +600,9 @@ public class CustomPackLoader {
         getLanguageMap(rootPath, newLangData, currentLangPath);
 
         languageMapMerge(oldLangData, newLangData);
-        // FIXME: 2021/10/17 和 Untranslated Items 模组冲突
-        ((ClientLanguage) Language.getInstance()).storage = newLangData;
+        if (Language.getInstance() instanceof ClientLanguage) {
+            ((ClientLanguage) Language.getInstance()).storage = newLangData;
+        }
     }
 
     private static void getLanguageMap(Path rootPath, Map<String, String> langData, String defaultLangPath) throws IOException {
