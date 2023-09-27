@@ -116,6 +116,8 @@ dependencies {
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
+    implementation fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
 }
 
 tasks.withType(JavaCompile).configureEach {

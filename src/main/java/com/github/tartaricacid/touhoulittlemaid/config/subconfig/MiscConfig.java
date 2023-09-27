@@ -1,13 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
 import com.google.common.collect.Lists;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static net.minecraft.world.level.biome.Biome.BiomeCategory.*;
 
@@ -35,12 +33,7 @@ public final class MiscConfig {
         builder.comment("The following biome do not spawn maid fairy",
                 "Available names: " + StringUtils.join(biomes, ", "));
         MAID_FAIRY_BLACKLIST_BIOME = builder.defineList("MaidFairyBlacklistBiome", Lists.newArrayList(NETHER.getName(), THEEND.getName(),
-                NONE.getName(), MUSHROOM.getName()), o -> {
-            if (o instanceof String name) {
-                return byName(name) != null;
-            }
-            return false;
-        });
+                NONE.getName(), MUSHROOM.getName()), MiscConfig::checkBiome);
 
         builder.comment("Loss power point after player death");
         PLAYER_DEATH_LOSS_POWER_POINT = builder.defineInRange("PlayerDeathLossPowerPoint", 1.0, 0, 5);
@@ -58,5 +51,13 @@ public final class MiscConfig {
         SHRINE_LAMP_MAX_RANGE = builder.defineInRange("ShrineLampMaxRange", 6, 0, Integer.MAX_VALUE);
 
         builder.pop();
+    }
+
+    @SuppressWarnings("all")
+    private static boolean checkBiome(Object o) {
+        if (o instanceof String name) {
+            return byName(name) != null;
+        }
+        return false;
     }
 }
