@@ -109,8 +109,9 @@ repositories {
         url 'https://maven.blamejared.com/'
     }
     maven {
-        // Cloth Config API
-        url "https://maven.shedaniel.me/"
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
     }
 }
 
@@ -126,8 +127,7 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
-    compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
-    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
+    implementation fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
 }
 
 tasks.withType(JavaCompile) {

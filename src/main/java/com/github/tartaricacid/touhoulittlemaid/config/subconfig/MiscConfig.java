@@ -1,6 +1,15 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
+
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static net.minecraft.world.biome.Biome.Category.*;
+
 
 public final class MiscConfig {
     public static ForgeConfigSpec.DoubleValue MAID_FAIRY_POWER_POINT;
@@ -10,6 +19,7 @@ public final class MiscConfig {
     public static ForgeConfigSpec.DoubleValue SHRINE_LAMP_EFFECT_COST;
     public static ForgeConfigSpec.DoubleValue SHRINE_LAMP_MAX_STORAGE;
     public static ForgeConfigSpec.IntValue SHRINE_LAMP_MAX_RANGE;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> MAID_FAIRY_BLACKLIST_BIOME;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("misc");
@@ -19,6 +29,13 @@ public final class MiscConfig {
 
         builder.comment("Maid fairy's spawn probability (zombie is 100, enderman is 10)");
         MAID_FAIRY_SPAWN_PROBABILITY = builder.defineInRange("MaidFairySpawnProbability", 70, 0, Integer.MAX_VALUE);
+
+        List<String> biomes = Lists.newArrayList();
+        Arrays.stream(values()).forEach(a -> biomes.add(a.getName()));
+        builder.comment("The following biome do not spawn maid fairy",
+                "Available names: " + StringUtils.join(biomes, ", "));
+        MAID_FAIRY_BLACKLIST_BIOME = builder.defineList("MaidFairyBlacklistBiome", Lists.newArrayList(NETHER.getName(), THEEND.getName(),
+                NONE.getName(), MUSHROOM.getName()), MiscConfig::checkBiome);
 
         builder.comment("Loss power point after player death");
         PLAYER_DEATH_LOSS_POWER_POINT = builder.defineInRange("PlayerDeathLossPowerPoint", 1.0, 0, 5);
@@ -36,5 +53,14 @@ public final class MiscConfig {
         SHRINE_LAMP_MAX_RANGE = builder.defineInRange("ShrineLampMaxRange", 6, 0, Integer.MAX_VALUE);
 
         builder.pop();
+    }
+
+    @SuppressWarnings("all")
+    private static boolean checkBiome(Object o) {
+        if (o instanceof String) {
+            String name = (String) o;
+            return byName(name) != null;
+        }
+        return false;
     }
 }
