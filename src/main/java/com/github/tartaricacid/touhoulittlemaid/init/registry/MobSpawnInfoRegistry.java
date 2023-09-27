@@ -9,6 +9,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig.MAID_FAIRY_BLACKLIST_BIOME;
 import static net.minecraft.world.level.biome.Biome.BiomeCategory.*;
 
 
@@ -22,7 +23,6 @@ public final class MobSpawnInfoRegistry {
     }
 
     private static boolean biomeIsOkay(Biome.BiomeCategory category) {
-        // TODO: 2021/10/17 添加配置文件，管控可生成的生物群系
-        return category != NETHER && category != THEEND && category != NONE && category != MUSHROOM;
+        return !MAID_FAIRY_BLACKLIST_BIOME.get().contains(category.getName());
     }
 }
