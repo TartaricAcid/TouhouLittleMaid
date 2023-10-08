@@ -102,6 +102,9 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        url "https://maven.shedaniel.me/"
+    }
 }
 
 dependencies {
@@ -120,6 +123,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
+
+    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
 }
 
 jar {
