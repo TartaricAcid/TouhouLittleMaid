@@ -130,6 +130,15 @@ dependencies {
     implementation fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
 }
 
+jar {
+    manifest {
+        attributes([
+                "Implementation-Title"  : project.name,
+                "Implementation-Version": "${version}"
+        ])
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

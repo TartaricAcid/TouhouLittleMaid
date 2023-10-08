@@ -40,7 +40,7 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickableTileEnt
 
     @Override
     public void tick() {
-        if (this.level != null && !this.level.isClientSide && this.level.dayTime() % 80L == 0L) {
+        if (this.level != null && !this.level.isClientSide && this.level.getGameTime() % 80L == 0L) {
             if (potionIndex != -1 && storagePower >= this.getEffectCost()) {
                 storagePower = storagePower - this.getEffectCost();
                 updateBeaconEffect(this.level, BeaconEffect.getEffectByIndex(potionIndex).getEffect());

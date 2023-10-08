@@ -32,15 +32,16 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
 
     protected final void searchForDestination(ServerWorld worldIn, EntityMaid maid) {
         BlockPos blockpos = maid.blockPosition();
-        BlockPos.Mutable blockPos = new BlockPos.Mutable();
+        BlockPos.Mutable mutableBlockPos = new BlockPos.Mutable();
         for (int y = this.verticalSearchStart; y <= this.verticalSearchRange; y = y > 0 ? -y : 1 - y) {
             for (int i = 0; i < this.searchRange; ++i) {
                 for (int x = 0; x <= i; x = x > 0 ? -x : 1 - x) {
                     for (int z = x < i && x > -i ? i : 0; z <= i; z = z > 0 ? -z : 1 - z) {
-                        blockPos.setWithOffset(blockpos, x, y - 1, z);
-                        if (maid.isWithinRestriction(blockPos) && shouldMoveTo(worldIn, maid, blockPos) && checkPathReach(maid, blockPos)) {
-                            BrainUtil.setWalkAndLookTargetMemories(maid, blockPos, this.movementSpeed, 0);
-                            maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosWrapper(blockPos));
+                        mutableBlockPos.setWithOffset(blockpos, x, y - 1, z);
+                        if (maid.isWithinRestriction(mutableBlockPos) && shouldMoveTo(worldIn, maid, mutableBlockPos) && checkPathReach(maid, mutableBlockPos)
+                                && checkOwnerPos(maid, mutableBlockPos)) {
+                            BrainUtil.setWalkAndLookTargetMemories(maid, mutableBlockPos, this.movementSpeed, 0);
+                            maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosWrapper(mutableBlockPos));
                             this.setNextCheckTickCount(5);
                             return;
                         }
@@ -48,6 +49,13 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
                 }
             }
         }
+    }
+
+    private boolean checkOwnerPos(EntityMaid maid, BlockPos mutableBlockPos) {
+        if (maid.isHomeModeEnable()) {
+            return true;
+        }
+        return maid.getOwner() != null && mutableBlockPos.closerThan(maid.getOwner().position(), 8);
     }
 
     /**
