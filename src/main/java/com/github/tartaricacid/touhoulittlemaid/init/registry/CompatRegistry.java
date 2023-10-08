@@ -20,7 +20,7 @@ public final class CompatRegistry {
 
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
-        event.enqueueWork(() -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new));
+        event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
         event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
         event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MenuIntegration::registerModsPage)));
     }
