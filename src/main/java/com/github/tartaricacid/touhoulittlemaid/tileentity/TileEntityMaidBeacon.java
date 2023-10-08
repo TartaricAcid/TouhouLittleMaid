@@ -37,7 +37,7 @@ public class TileEntityMaidBeacon extends BlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TileEntityMaidBeacon beacon) {
-        if (beacon.level != null && !level.isClientSide && level.dayTime() % 80L == 0L) {
+        if (beacon.level != null && !level.isClientSide && level.getGameTime() % 80L == 0L) {
             if (beacon.potionIndex != -1 && beacon.storagePower >= beacon.getEffectCost()) {
                 beacon.storagePower = beacon.storagePower - beacon.getEffectCost();
                 beacon.updateBeaconEffect(level, BeaconEffect.getEffectByIndex(beacon.potionIndex).getEffect());
