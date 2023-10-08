@@ -117,6 +117,9 @@ dependencies {
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
     implementation fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
+
+    implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
 }
 
 jar {

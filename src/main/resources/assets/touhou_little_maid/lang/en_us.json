@@ -256,6 +256,8 @@
   "jei.touhou_little_maid.garage_kit.info": "The fire roasted 1x1 size statue can be converted into it",
   "top.touhou_little_maid.entity_maid.task": "Mode: ",
   "top.touhou_little_maid.entity_maid.invulnerable": "Invulnerable",
+  "top.touhou_little_maid.entity_maid.schedule": "Schedule: ",
+  "config.jade.plugin_touhou_little_maid.maid": "Show Maid's Extra Info",
   "patchouli.touhou_little_maid.book.name": "Memorizable Gensokyo",
   "patchouli.touhou_little_maid.book.landing_text": "A mod about the maid and the touhou project.$(br2)Thanks to Snownee for help in coding. $(br)Thanks to Succinum, Pajinyi, ZeniCrow, Tian_mi, Paulzzh, Yuriscat and other artists for producing excellent models and textures.$(br)Thanks to Verclene, the author of little maid mob mod.",
   "patchouli.touhou_little_maid.book.categories.maid.name": "Maid",
