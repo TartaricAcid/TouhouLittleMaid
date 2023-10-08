@@ -37,7 +37,7 @@ public class NameTagGui extends Screen {
                 .pos(middleX - 100, middleY).size(98, 20).build());
         this.addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), b -> onClose())
                 .pos(middleX + 2, middleY).size(98, 20).build());
-        alwaysShowButton = Button.builder(Component.translatable("gui.done"), b -> alwaysShow = !alwaysShow)
+        alwaysShowButton = Button.builder(Component.empty(), b -> alwaysShow = !alwaysShow)
                 .pos(middleX + 80, middleY - 26).size(20, 20).build();
         addRenderableWidget(alwaysShowButton);
     }
