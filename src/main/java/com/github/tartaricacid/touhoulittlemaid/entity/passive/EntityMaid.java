@@ -31,6 +31,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -153,6 +154,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     public boolean guiOpening = false;
 
+    private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
     private int playerHurtSoundCount = 120;
     private int pickupSoundCount = 5;
@@ -1235,6 +1237,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Deprecated
     public boolean hasSasimono() {
         return false;
+    }
+
+    public List<SendEffectMessage.EffectData> getEffects() {
+        return effects;
+    }
+
+    public void setEffects(List<SendEffectMessage.EffectData> effects) {
+        this.effects = effects;
     }
 
     public boolean canDestroyBlock(BlockPos pos) {
