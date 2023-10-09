@@ -133,7 +133,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                     duration = StringUtil.formatTickDuration(effect.duration);
                 }
                 text = text.append(CommonComponents.SPACE).append(duration);
-                graphics.drawString(font, text, leftPos - font.width(text) - 5, topPos + yOffset + 5, getPotionColor(effect.category));
+                graphics.drawString(font, text, leftPos - font.width(text) - 3, topPos + yOffset + 5, getPotionColor(effect.category));
                 yOffset += 10;
             }
         }
