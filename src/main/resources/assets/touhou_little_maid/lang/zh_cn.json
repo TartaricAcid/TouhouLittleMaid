@@ -204,6 +204,8 @@
   "config.touhou_little_maid.misc.player_death_loss_power_point.desc": "在玩家死亡后会损失的 P 点，设置为 5 表示全部损失",
   "config.touhou_little_maid.misc.give_smart_slab.name": "是否给予魂符",
   "config.touhou_little_maid.misc.give_smart_slab.desc": "当玩家首次加入游戏时，是否给予玩家一个魂符",
+  "config.touhou_little_maid.misc.give_patchouli_book.name": "是否给予帕秋莉手册",
+  "config.touhou_little_maid.misc.give_patchouli_book.desc": "当玩家首次进入游戏时候，给予一本“记忆中的幻想乡”手册",
   "config.touhou_little_maid.misc.shrine_lamp_effect_cost.name": "庭灯效果的损耗",
   "config.touhou_little_maid.misc.shrine_lamp_effect_cost.desc": "神社庭灯施加女仆效果时，P 点损耗情况（P 点/小时）",
   "config.touhou_little_maid.misc.shrine_lamp_max_storage.name": "庭灯最大储量",

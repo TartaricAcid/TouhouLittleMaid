@@ -120,6 +120,10 @@ public class MenuIntegration {
                 .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.misc.give_smart_slab.desc"))
                 .setSaveConsumer(MiscConfig.GIVE_SMART_SLAB::set).build());
 
+        misc.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.misc.give_patchouli_book.name"), MiscConfig.GIVE_PATCHOULI_BOOK.get())
+                .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.misc.give_patchouli_book.desc"))
+                .setSaveConsumer(MiscConfig.GIVE_PATCHOULI_BOOK::set).build());
+
         misc.addEntry(entryBuilder.startDoubleField(Component.translatable("config.touhou_little_maid.misc.shrine_lamp_effect_cost.name"), MiscConfig.SHRINE_LAMP_EFFECT_COST.get())
                 .setDefaultValue(0.9).setMin(0).setMax(Double.MAX_VALUE)
                 .setTooltip(Component.translatable("config.touhou_little_maid.misc.shrine_lamp_effect_cost.desc"))

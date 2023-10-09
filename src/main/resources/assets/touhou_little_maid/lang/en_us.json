@@ -204,6 +204,8 @@
   "config.touhou_little_maid.misc.player_death_loss_power_point.desc": "Loss power point after player death",
   "config.touhou_little_maid.misc.give_smart_slab.name": "Give Smart Slab",
   "config.touhou_little_maid.misc.give_smart_slab.desc": "Give a soul spell item for player first join",
+  "config.touhou_little_maid.misc.give_patchouli_book.name": "Give Patchouli Book",
+  "config.touhou_little_maid.misc.give_patchouli_book.desc": "Give the Memorizable Gensokyo book item for player first join",
   "config.touhou_little_maid.misc.shrine_lamp_effect_cost.name": "Shrine Lamp Effect Cost",
   "config.touhou_little_maid.misc.shrine_lamp_effect_cost.desc": "Shrine Lamp Effect Cost (Power Point/Per Hour)",
   "config.touhou_little_maid.misc.shrine_lamp_max_storage.name": "Shrine Lamp Max Storage",
