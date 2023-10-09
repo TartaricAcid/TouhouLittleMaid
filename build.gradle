@@ -2,6 +2,7 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -9,12 +10,15 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
         classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
 apply plugin: 'eclipse'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'java'
 
 version = mod_version
 group = 'com.github.tartaricacid'
@@ -83,6 +87,11 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+mixin {
+    add sourceSets.main, "touhou_little_maid.refmap.json"
+    config "touhou_little_maid.mixins.json"
+}
+
 repositories {
     maven {
         // location of the maven that hosts JEI files since January 2023
@@ -125,6 +134,8 @@ dependencies {
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
 
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 jar {
