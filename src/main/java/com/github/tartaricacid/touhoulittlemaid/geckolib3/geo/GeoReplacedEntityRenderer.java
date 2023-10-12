@@ -291,9 +291,6 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
         if (pose != Pose.SLEEPING) {
             poseStack.mulPose(Axis.YP.rotationDegrees(180f - rotationYaw));
         }
-        if (entity instanceof TamableAnimal tamableAnimal && tamableAnimal.isInSittingPose()) {
-            poseStack.translate(0, -0.5, 0);
-        }
         if (pose == Pose.SLEEPING) {
             Direction bedOrientation = entity.getBedOrientation();
             poseStack.mulPose(Axis.YP.rotationDegrees(bedOrientation != null ? getFacingAngle(bedOrientation) : rotationYaw));

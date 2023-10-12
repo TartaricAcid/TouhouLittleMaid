@@ -253,9 +253,11 @@ public class CustomPackLoader {
             }
         }
         GeckoModelLoader.registerMaidAnimations(uid, animationData);
-        // 如果加载的模型不为空
-        // FIXME: 2023/10/10 加载彩蛋模型！
-        MAID_MODELS.putInfo(uid.toString(), maidModelItem);
+        if (maidModelItem.getEasterEgg() != null && StringUtils.isNotBlank(maidModelItem.getEasterEgg().getTag())) {
+            putMaidEasterEggData(maidModelItem, null, null);
+        } else {
+            MAID_MODELS.putInfo(uid.toString(), maidModelItem);
+        }
         // 打印日志
         LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
     }
@@ -397,8 +399,11 @@ public class CustomPackLoader {
             }
         }
         GeckoModelLoader.registerMaidAnimations(uid, animationData);
-        // FIXME: 2023/10/10 加载彩蛋模型！
-        MAID_MODELS.putInfo(uid.toString(), maidModelItem);
+        if (maidModelItem.getEasterEgg() != null && StringUtils.isNotBlank(maidModelItem.getEasterEgg().getTag())) {
+            putMaidEasterEggData(maidModelItem, null, null);
+        } else {
+            MAID_MODELS.putInfo(uid.toString(), maidModelItem);
+        }
         // 打印日志
         LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
     }
@@ -442,7 +447,7 @@ public class CustomPackLoader {
     }
 
     @SuppressWarnings("all")
-    private static void putMaidEasterEggData(MaidModelInfo maidModelItem, BedrockModel<EntityMaid> modelJson, List<Object> animations) {
+    private static void putMaidEasterEggData(MaidModelInfo maidModelItem, @Nullable BedrockModel<EntityMaid> modelJson, @Nullable List<Object> animations) {
         MaidModelInfo.EasterEgg easterEgg = maidModelItem.getEasterEgg();
         MaidModels.ModelData data = new MaidModels.ModelData(modelJson, maidModelItem, animations);
         if (easterEgg.isEncrypt()) {

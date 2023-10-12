@@ -63,7 +63,10 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
 
         MaidModels.ModelData eventModelData = new MaidModels.ModelData(model, mainInfo, mainAnimations);
         if (MinecraftForge.EVENT_BUS.post(new RenderMaidEvent(entity, eventModelData))) {
-            this.model = eventModelData.getModel();
+            BedrockModel<EntityMaid> bedrockModel = eventModelData.getModel();
+            if (bedrockModel != null) {
+                this.model = bedrockModel;
+            }
             this.mainInfo = eventModelData.getInfo();
             this.mainAnimations = eventModelData.getAnimations();
         } else {
@@ -114,14 +117,8 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
 
             VertexConsumer buffer = bufferIn.getBuffer(RenderType.lines());
             Matrix4f matrix4f = poseStack.last().pose();
-            buffer.vertex(matrix4f, 0, 0.5f, 0)
-                    .color(0xff, 0x00, 0x00, 0xff)
-                    .normal(1, 0, 0)
-                    .endVertex();
-            buffer.vertex(matrix4f, home.x(), home.y(), home.z())
-                    .color(0xff, 0x00, 0x00, 0xff)
-                    .normal(0, 0, 1)
-                    .endVertex();
+            buffer.vertex(matrix4f, 0, 0.5f, 0).color(0xff, 0x00, 0x00, 0xff).normal(1, 0, 0).endVertex();
+            buffer.vertex(matrix4f, home.x(), home.y(), home.z()).color(0xff, 0x00, 0x00, 0xff).normal(0, 0, 1).endVertex();
         }
     }
 
