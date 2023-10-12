@@ -41,6 +41,7 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
+    private GeckoEntityMaidRenderer geckoEntityMaidRenderer;
 
     public EntityMaidRenderer(EntityRendererProvider.Context manager) {
         super(manager, new BedrockModel<>(), 0.5f);
@@ -48,6 +49,7 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
         this.addLayer(new LayerMaidBipedHead(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackpack(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackItem(this));
+        this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer(manager);
     }
 
     @Override
@@ -71,12 +73,19 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
             CustomPackLoader.MAID_MODELS.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
         }
 
-        // 模型动画设置
-        this.model.setAnimations(this.mainAnimations);
         // 渲染聊天气泡
         if (InGameMaidConfig.INSTANCE.isShowChatBubble()) {
             ChatBubbleRenderer.renderChatBubble(this, entity, poseStack, bufferIn, packedLightIn);
         }
+
+        // GeckoLib 接管渲染
+        if (this.mainInfo.isGeckoModel()) {
+            this.geckoEntityMaidRenderer.setMainInfo(this.mainInfo);
+            this.geckoEntityMaidRenderer.render(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
+            return;
+        }
+        // 模型动画设置
+        this.model.setAnimations(this.mainAnimations);
         // 渲染女仆模型本体
         GlWrapper.setPoseStack(poseStack);
         super.render(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);

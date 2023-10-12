@@ -18,6 +18,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -170,35 +171,11 @@ public class CustomPackLoader {
                 registerFilePackTexture(rootPath, pack.getIcon());
             }
             for (MaidModelInfo maidModelItem : pack.getModelList()) {
-                // 尝试加载模型
-                BedrockModel<EntityMaid> modelJson = loadMaidModel(rootPath, maidModelItem.getModel());
-                // 加载贴图
-                registerFilePackTexture(rootPath, maidModelItem.getTexture());
-                {
-                    // 加载聊天气泡背景
-                    ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
-                    registerFilePackTexture(rootPath, chatBubble.getBg());
-                    // 加载聊聊天气泡图标
-                    ChatBubbleInfo.Text text = chatBubble.getText();
-                    text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                            .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
-                    text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                            .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
-                    text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                            .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
-                }
-                // 加载动画
-                @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(rootPath, maidModelItem);
-                if (modelJson != null) {
-                    // 加载彩蛋，彩蛋不允许为空
-                    if (maidModelItem.getEasterEgg() != null
-                            && StringUtils.isNotBlank(maidModelItem.getEasterEgg().getTag())) {
-                        putMaidEasterEggData(maidModelItem, modelJson, animations);
-                    } else {
-                        putMaidModelData(maidModelItem, modelJson, animations);
-                    }
-                    // 打印日志
-                    LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
+                loadChatBubble(rootPath, maidModelItem);
+                if (maidModelItem.isGeckoModel()) {
+                    loadGeckoMaidModelElement(rootPath, maidModelItem);
+                } else {
+                    loadMaidModelElement(rootPath, maidModelItem);
                 }
             }
             MAID_MODELS.addPack(pack);
@@ -210,6 +187,116 @@ public class CustomPackLoader {
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
     }
+
+    private static void loadMaidModelElement(Path rootPath, MaidModelInfo maidModelItem) {
+        // 尝试加载模型
+        BedrockModel<EntityMaid> modelJson = loadMaidModel(rootPath, maidModelItem.getModel());
+        // 加载贴图
+        registerFilePackTexture(rootPath, maidModelItem.getTexture());
+        // 加载动画
+        @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(rootPath, maidModelItem);
+        if (modelJson != null) {
+            // 加载彩蛋，彩蛋不允许为空
+            if (maidModelItem.getEasterEgg() != null && StringUtils.isNotBlank(maidModelItem.getEasterEgg().getTag())) {
+                putMaidEasterEggData(maidModelItem, modelJson, animations);
+            } else {
+                putMaidModelData(maidModelItem, modelJson, animations);
+            }
+            // 打印日志
+            LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
+        }
+    }
+
+    private static void loadChatBubble(Path rootPath, MaidModelInfo maidModelItem) {
+        // 加载聊天气泡背景
+        ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
+        registerFilePackTexture(rootPath, chatBubble.getBg());
+        // 加载聊聊天气泡图标
+        ChatBubbleInfo.Text text = chatBubble.getText();
+        text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
+        text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
+        text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
+    }
+
+    private static void loadGeckoMaidModelElement(Path rootPath, MaidModelInfo maidModelItem) throws IOException {
+        ResourceLocation uid = maidModelItem.getModelId();
+        // 尝试加载模型
+        ResourceLocation modelLocation = maidModelItem.getModel();
+        File modelFile = rootPath.resolve("assets").resolve(modelLocation.getNamespace()).resolve(modelLocation.getPath()).toFile();
+        if (!modelFile.isFile()) {
+            return;
+        }
+        try (InputStream fileInputStream = Files.newInputStream(modelFile.toPath())) {
+            GeckoModelLoader.registerGeo(uid, fileInputStream);
+        }
+        // 加载贴图
+        registerFilePackTexture(rootPath, maidModelItem.getTexture());
+        // 加载动画
+        List<ResourceLocation> animation = maidModelItem.getAnimation();
+        if (animation == null || animation.size() == 0) {
+            return;
+        }
+        AnimationFile animationData = new AnimationFile();
+        for (ResourceLocation animationPath : animation) {
+            if (animationPath.equals(GeckoModelLoader.DEFAULT_MAID_ANIMATION)) {
+                break;
+            }
+            File animationFile = rootPath.resolve("assets").resolve(animationPath.getNamespace()).resolve(animationPath.getPath()).toFile();
+            if (!animationFile.isFile()) {
+                continue;
+            }
+            try (InputStream fileInputStream = Files.newInputStream(animationFile.toPath())) {
+                GeckoModelLoader.mergeAnimationFile(fileInputStream, animationData);
+            }
+        }
+        GeckoModelLoader.registerMaidAnimations(uid, animationData);
+        // 如果加载的模型不为空
+        // FIXME: 2023/10/10 加载彩蛋模型！
+        MAID_MODELS.putInfo(uid.toString(), maidModelItem);
+        // 打印日志
+        LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
+    }
+
+    private static void loadGeckoChairModelElement(Path rootPath, ChairModelInfo chairModelItem) throws IOException {
+        ResourceLocation uid = chairModelItem.getModelId();
+        // 尝试加载模型
+        ResourceLocation modelLocation = chairModelItem.getModel();
+        File modelFile = rootPath.resolve("assets").resolve(modelLocation.getNamespace()).resolve(modelLocation.getPath()).toFile();
+        if (!modelFile.isFile()) {
+            return;
+        }
+        try (InputStream fileInputStream = Files.newInputStream(modelFile.toPath())) {
+            GeckoModelLoader.registerGeo(uid, fileInputStream);
+        }
+        // 加载贴图
+        registerFilePackTexture(rootPath, chairModelItem.getTexture());
+        // 加载动画
+        List<ResourceLocation> animation = chairModelItem.getAnimation();
+        if (animation == null || animation.size() == 0) {
+            return;
+        }
+        AnimationFile animationData = new AnimationFile();
+        for (ResourceLocation animationPath : animation) {
+            if (animationPath.equals(GeckoModelLoader.DEFAULT_CHAIR_ANIMATION)) {
+                break;
+            }
+            File animationFile = rootPath.resolve("assets").resolve(animationPath.getNamespace()).resolve(animationPath.getPath()).toFile();
+            if (!animationFile.isFile()) {
+                continue;
+            }
+            try (InputStream fileInputStream = Files.newInputStream(animationFile.toPath())) {
+                GeckoModelLoader.mergeAnimationFile(fileInputStream, animationData);
+            }
+        }
+        GeckoModelLoader.registerChairAnimations(uid, animationData);
+        CHAIR_MODELS.putInfo(uid.toString(), chairModelItem);
+        // 打印日志
+        LOGGER.debug(MARKER, "Loaded model: {}", chairModelItem.getModel());
+    }
+
 
     private static void loadMaidModelPack(ZipFile zipFile, String domain) {
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loading...");
@@ -227,35 +314,11 @@ public class CustomPackLoader {
                 registerZipPackTexture(zipFile.getName(), pack.getIcon());
             }
             for (MaidModelInfo maidModelItem : pack.getModelList()) {
-                // 尝试加载模型
-                BedrockModel<EntityMaid> modelJson = loadMaidModel(zipFile, maidModelItem.getModel());
-                // 加载贴图
-                registerZipPackTexture(zipFile.getName(), maidModelItem.getTexture());
-                {
-                    // 加载聊天气泡背景
-                    ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
-                    registerZipPackTexture(zipFile.getName(), chatBubble.getBg());
-                    // 加载聊聊天气泡图标
-                    ChatBubbleInfo.Text text = chatBubble.getText();
-                    text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                            .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
-                    text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                            .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
-                    text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                            .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
-                }
-                // 加载动画
-                @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(zipFile, maidModelItem);
-                if (modelJson != null) {
-                    // 加载彩蛋，彩蛋不允许为空
-                    if (maidModelItem.getEasterEgg() != null
-                            && StringUtils.isNotBlank(maidModelItem.getEasterEgg().getTag())) {
-                        putMaidEasterEggData(maidModelItem, modelJson, animations);
-                    } else {
-                        putMaidModelData(maidModelItem, modelJson, animations);
-                    }
-                    // 打印日志
-                    LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
+                loadCharBubble(zipFile, maidModelItem);
+                if (maidModelItem.isGeckoModel()) {
+                    loadGeckoMaidModelElement(zipFile, maidModelItem);
+                } else {
+                    loadMaidModelElement(zipFile, maidModelItem);
                 }
             }
             MAID_MODELS.addPack(pack);
@@ -266,6 +329,116 @@ public class CustomPackLoader {
             e.printStackTrace();
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
+    }
+
+    private static void loadMaidModelElement(ZipFile zipFile, MaidModelInfo maidModelItem) {
+        // 尝试加载模型
+        BedrockModel<EntityMaid> modelJson = loadMaidModel(zipFile, maidModelItem.getModel());
+        // 加载贴图
+        registerZipPackTexture(zipFile.getName(), maidModelItem.getTexture());
+        // 加载动画
+        @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(zipFile, maidModelItem);
+        if (modelJson != null) {
+            // 加载彩蛋，彩蛋不允许为空
+            if (maidModelItem.getEasterEgg() != null && StringUtils.isNotBlank(maidModelItem.getEasterEgg().getTag())) {
+                putMaidEasterEggData(maidModelItem, modelJson, animations);
+            } else {
+                putMaidModelData(maidModelItem, modelJson, animations);
+            }
+            // 打印日志
+            LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
+        }
+    }
+
+    private static void loadCharBubble(ZipFile zipFile, MaidModelInfo maidModelItem) {
+        // 加载聊天气泡背景
+        ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
+        registerZipPackTexture(zipFile.getName(), chatBubble.getBg());
+        // 加载聊聊天气泡图标
+        ChatBubbleInfo.Text text = chatBubble.getText();
+        text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
+        text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
+        text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
+                .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
+    }
+
+    private static void loadGeckoMaidModelElement(ZipFile zipFile, MaidModelInfo maidModelItem) throws IOException {
+        ResourceLocation uid = maidModelItem.getModelId();
+        // 尝试加载模型
+        ResourceLocation modelLocation = maidModelItem.getModel();
+        String path = String.format("assets/%s/%s", modelLocation.getNamespace(), modelLocation.getPath());
+        ZipEntry modelZipEntry = zipFile.getEntry(path);
+        if (modelZipEntry == null) {
+            return;
+        }
+        try (InputStream zipFileInputStream = zipFile.getInputStream(modelZipEntry)) {
+            GeckoModelLoader.registerGeo(uid, zipFileInputStream);
+        }
+        // 加载贴图
+        registerZipPackTexture(zipFile.getName(), maidModelItem.getTexture());
+        // 加载动画
+        List<ResourceLocation> animation = maidModelItem.getAnimation();
+        if (animation == null || animation.size() == 0) {
+            return;
+        }
+        AnimationFile animationData = new AnimationFile();
+        for (ResourceLocation animationPath : animation) {
+            if (animationPath.equals(GeckoModelLoader.DEFAULT_MAID_ANIMATION)) {
+                break;
+            }
+            ZipEntry animationZipEntry = zipFile.getEntry(String.format("assets/%s/%s", animationPath.getNamespace(), animationPath.getPath()));
+            if (animationZipEntry == null) {
+                continue;
+            }
+            try (InputStream zipFileInputStream = zipFile.getInputStream(animationZipEntry)) {
+                GeckoModelLoader.mergeAnimationFile(zipFileInputStream, animationData);
+            }
+        }
+        GeckoModelLoader.registerMaidAnimations(uid, animationData);
+        // FIXME: 2023/10/10 加载彩蛋模型！
+        MAID_MODELS.putInfo(uid.toString(), maidModelItem);
+        // 打印日志
+        LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
+    }
+
+    private static void loadGeckoChairModelElement(ZipFile zipFile, ChairModelInfo chairModelItem) throws IOException {
+        ResourceLocation uid = chairModelItem.getModelId();
+        // 尝试加载模型
+        ResourceLocation modelLocation = chairModelItem.getModel();
+        String path = String.format("assets/%s/%s", modelLocation.getNamespace(), modelLocation.getPath());
+        ZipEntry modelZipEntry = zipFile.getEntry(path);
+        if (modelZipEntry == null) {
+            return;
+        }
+        try (InputStream zipFileInputStream = zipFile.getInputStream(modelZipEntry)) {
+            GeckoModelLoader.registerGeo(uid, zipFileInputStream);
+        }
+        // 加载贴图
+        registerZipPackTexture(zipFile.getName(), chairModelItem.getTexture());
+        // 加载动画
+        List<ResourceLocation> animation = chairModelItem.getAnimation();
+        if (animation == null || animation.size() == 0) {
+            return;
+        }
+        AnimationFile animationData = new AnimationFile();
+        for (ResourceLocation animationPath : animation) {
+            if (animationPath.equals(GeckoModelLoader.DEFAULT_CHAIR_ANIMATION)) {
+                break;
+            }
+            ZipEntry animationZipEntry = zipFile.getEntry(String.format("assets/%s/%s", animationPath.getNamespace(), animationPath.getPath()));
+            if (animationZipEntry == null) {
+                continue;
+            }
+            try (InputStream zipFileInputStream = zipFile.getInputStream(animationZipEntry)) {
+                GeckoModelLoader.mergeAnimationFile(zipFileInputStream, animationData);
+            }
+        }
+        GeckoModelLoader.registerChairAnimations(uid, animationData);
+        CHAIR_MODELS.putInfo(uid.toString(), chairModelItem);
+        // 打印日志
+        LOGGER.debug(MARKER, "Loaded model: {}", chairModelItem.getModel());
     }
 
     @SuppressWarnings("all")
@@ -307,22 +480,10 @@ public class CustomPackLoader {
                 registerFilePackTexture(rootPath, pack.getIcon());
             }
             for (ChairModelInfo chairModelItem : pack.getModelList()) {
-                // 尝试加载模型
-                BedrockModel<EntityChair> modelJson = loadChairModel(rootPath, chairModelItem.getModel());
-                // 加载贴图
-                registerFilePackTexture(rootPath, chairModelItem.getTexture());
-                // 加载动画
-                @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(rootPath, chairModelItem);
-                if (modelJson != null) {
-                    String id = chairModelItem.getModelId().toString();
-                    // 如果加载的模型不为空
-                    CHAIR_MODELS.putModel(id, modelJson);
-                    CHAIR_MODELS.putInfo(id, chairModelItem);
-                    if (animations != null && animations.size() > 0) {
-                        CHAIR_MODELS.putAnimation(id, animations);
-                    }
-                    // 打印日志
-                    LOGGER.debug(MARKER, "Loaded model: {}", chairModelItem.getModel());
+                if (chairModelItem.isGeckoModel()) {
+                    loadGeckoChairModelElement(rootPath, chairModelItem);
+                } else {
+                    loadChairModelElement(rootPath, chairModelItem);
                 }
             }
             CHAIR_MODELS.addPack(pack);
@@ -333,6 +494,26 @@ public class CustomPackLoader {
             e.printStackTrace();
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
+    }
+
+    private static void loadChairModelElement(Path rootPath, ChairModelInfo chairModelItem) {
+        // 尝试加载模型
+        BedrockModel<EntityChair> modelJson = loadChairModel(rootPath, chairModelItem.getModel());
+        // 加载贴图
+        registerFilePackTexture(rootPath, chairModelItem.getTexture());
+        // 加载动画
+        @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(rootPath, chairModelItem);
+        if (modelJson != null) {
+            String id = chairModelItem.getModelId().toString();
+            // 如果加载的模型不为空
+            CHAIR_MODELS.putModel(id, modelJson);
+            CHAIR_MODELS.putInfo(id, chairModelItem);
+            if (animations != null && animations.size() > 0) {
+                CHAIR_MODELS.putAnimation(id, animations);
+            }
+            // 打印日志
+            LOGGER.debug(MARKER, "Loaded model: {}", chairModelItem.getModel());
+        }
     }
 
     private static void loadChairModelPack(ZipFile zipFile, String domain) {
@@ -353,22 +534,10 @@ public class CustomPackLoader {
                 registerZipPackTexture(zipFile.getName(), pack.getIcon());
             }
             for (ChairModelInfo chairModelItem : pack.getModelList()) {
-                // 尝试加载模型
-                BedrockModel<EntityChair> modelJson = loadChairModel(zipFile, chairModelItem.getModel());
-                // 加载贴图
-                registerZipPackTexture(zipFile.getName(), chairModelItem.getTexture());
-                // 加载动画
-                @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(zipFile, chairModelItem);
-                if (modelJson != null) {
-                    String id = chairModelItem.getModelId().toString();
-                    // 如果加载的模型不为空
-                    CHAIR_MODELS.putModel(id, modelJson);
-                    CHAIR_MODELS.putInfo(id, chairModelItem);
-                    if (animations != null && animations.size() > 0) {
-                        CHAIR_MODELS.putAnimation(id, animations);
-                    }
-                    // 打印日志
-                    LOGGER.debug(MARKER, "Loaded model: {}", chairModelItem.getModel());
+                if (chairModelItem.isGeckoModel()) {
+                    loadGeckoChairModelElement(zipFile, chairModelItem);
+                } else {
+                    loadChairModelElement(zipFile, chairModelItem);
                 }
             }
             CHAIR_MODELS.addPack(pack);
@@ -379,6 +548,26 @@ public class CustomPackLoader {
             e.printStackTrace();
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
+    }
+
+    private static void loadChairModelElement(ZipFile zipFile, ChairModelInfo chairModelItem) {
+        // 尝试加载模型
+        BedrockModel<EntityChair> modelJson = loadChairModel(zipFile, chairModelItem.getModel());
+        // 加载贴图
+        registerZipPackTexture(zipFile.getName(), chairModelItem.getTexture());
+        // 加载动画
+        @Nullable List<Object> animations = CustomJsAnimationManger.getCustomAnimation(zipFile, chairModelItem);
+        if (modelJson != null) {
+            String id = chairModelItem.getModelId().toString();
+            // 如果加载的模型不为空
+            CHAIR_MODELS.putModel(id, modelJson);
+            CHAIR_MODELS.putInfo(id, chairModelItem);
+            if (animations != null && animations.size() > 0) {
+                CHAIR_MODELS.putAnimation(id, animations);
+            }
+            // 打印日志
+            LOGGER.debug(MARKER, "Loaded model: {}", chairModelItem.getModel());
+        }
     }
 
     @Nullable

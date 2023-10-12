@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.event;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.InnerAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.PlayerMaidModels;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,6 +31,7 @@ public final class ReloadResourceEvent {
 
     public static void reloadAllPack() {
         StopWatch watch = StopWatch.createStarted();
+        GeckoModelLoader.loadDefaultAnimation();
         InnerAnimation.init();
         CustomPackLoader.reloadPacks();
         PlayerMaidModels.reload();
