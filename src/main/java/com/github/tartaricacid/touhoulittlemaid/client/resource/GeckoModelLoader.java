@@ -32,6 +32,11 @@ public class GeckoModelLoader {
     public static AnimationFile DEFAULT_MAID_ANIMATION_FILE = new AnimationFile();
     public static AnimationFile DEFAULT_CHAIR_ANIMATION_FILE = new AnimationFile();
 
+    public static void reload() {
+        clearAllCache();
+        loadDefaultAnimation();
+    }
+
     public static void registerGeo(ResourceLocation id, InputStream inputStream) {
         Map<ResourceLocation, GeoModel> geoModels = GeckoLibCache.getInstance().getGeoModels();
         RawGeoModel rawModel = Converter.fromInputStream(inputStream);
@@ -62,6 +67,10 @@ public class GeckoModelLoader {
         GeckoLibCache.getInstance().getAnimations().put(id, animationFile);
     }
 
+    public static void mergeAnimationFile(InputStream inputStream, AnimationFile animationFile) {
+        mergeAnimationFile(animationFile, getAnimationFile(inputStream));
+    }
+
     private static AnimationFile getAnimationFile(InputStream stream) {
         AnimationFile animationFile = new AnimationFile();
         MolangParser parser = GeckoLibCache.getInstance().parser;
@@ -79,16 +88,17 @@ public class GeckoModelLoader {
         return animationFile;
     }
 
-    public static void mergeAnimationFile(InputStream inputStream, AnimationFile animationFile) {
-        mergeAnimationFile(animationFile, getAnimationFile(inputStream));
-    }
-
     private static AnimationFile mergeAnimationFile(AnimationFile main, AnimationFile other) {
         other.animations().forEach(main::putAnimation);
         return main;
     }
 
-    public static void loadDefaultAnimation() {
+    private static void clearAllCache() {
+        GeckoLibCache.getInstance().getGeoModels().clear();
+        GeckoLibCache.getInstance().getAnimations().clear();
+    }
+
+    private static void loadDefaultAnimation() {
         try (InputStream stream = Minecraft.getInstance().getResourceManager().open(DEFAULT_MAID_ANIMATION)) {
             DEFAULT_MAID_ANIMATION_FILE = getAnimationFile(stream);
         } catch (IOException e) {

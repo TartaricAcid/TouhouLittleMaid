@@ -1,11 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
-import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
-import static com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig.INSTANCE;
+import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig.INSTANCE;
 
 public class MaidSoundFreqButton extends AbstractSliderButton {
     public MaidSoundFreqButton(int x, int y) {
