@@ -14,7 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelI
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChatBubbleInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.client.sound.CustomSoundLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -80,6 +80,7 @@ public class CustomPackLoader {
         MAID_MODELS.clearAll();
         CHAIR_MODELS.clearAll();
         TMP_REGISTER_TEXTURE.clear();
+        CustomSoundLoader.clear();
 
         // 读取
         initPacks();
@@ -133,6 +134,7 @@ public class CustomPackLoader {
                     loadMaidModelPack(rootPath, domain);
                     loadChairModelPack(rootPath, domain);
                     readLanguageFile(rootPath, domain);
+                    CustomSoundLoader.loadSoundPack(rootPath, domain);
                 }
             }
         } catch (IOException ioException) {
@@ -150,6 +152,7 @@ public class CustomPackLoader {
                     loadMaidModelPack(zipFile, domain);
                     loadChairModelPack(zipFile, domain);
                     readLanguageFile(zipFile, domain);
+                    CustomSoundLoader.loadSoundPack(zipFile, domain);
                 }
             }
         } catch (IOException ioException) {
@@ -747,7 +750,7 @@ public class CustomPackLoader {
         return null;
     }
 
-    private static void registerFilePackTexture(Path rootPath, ResourceLocation texturePath) {
+    public static void registerFilePackTexture(Path rootPath, ResourceLocation texturePath) {
         if (!TMP_REGISTER_TEXTURE.contains(texturePath)) {
             FilePackTexture filePackTexture = new FilePackTexture(rootPath, texturePath);
             if (filePackTexture.isExist()) {
@@ -757,7 +760,7 @@ public class CustomPackLoader {
         }
     }
 
-    private static void registerZipPackTexture(String zipFilePath, ResourceLocation texturePath) {
+    public static void registerZipPackTexture(String zipFilePath, ResourceLocation texturePath) {
         if (!TMP_REGISTER_TEXTURE.contains(texturePath)) {
             ZipPackTexture zipPackTexture = new ZipPackTexture(zipFilePath, texturePath);
             if (zipPackTexture.isExist()) {
