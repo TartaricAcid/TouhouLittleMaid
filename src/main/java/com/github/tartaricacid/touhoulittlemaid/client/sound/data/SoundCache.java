@@ -25,9 +25,13 @@ public class SoundCache {
 
     public SoundBuffer getBuffer(ResourceLocation soundEvent) {
         List<SoundBuffer> soundBuffers = buffers.get(soundEvent);
-        if (soundBuffers != null && soundBuffers.size() > 0) {
+        if (soundBuffers != null && !soundBuffers.isEmpty()) {
             return soundBuffers.get(RANDOM.nextInt(soundBuffers.size()));
         }
         return null;
+    }
+
+    public Map<ResourceLocation, List<SoundBuffer>> getBuffers() {
+        return buffers;
     }
 }

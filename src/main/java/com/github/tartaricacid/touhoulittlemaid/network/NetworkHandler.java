@@ -68,6 +68,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(21, PlayMaidSoundMessage.class, PlayMaidSoundMessage::encode, PlayMaidSoundMessage::decode, PlayMaidSoundMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(22, SetMaidSoundIdMessage.class, SetMaidSoundIdMessage::encode, SetMaidSoundIdMessage::decode, SetMaidSoundIdMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

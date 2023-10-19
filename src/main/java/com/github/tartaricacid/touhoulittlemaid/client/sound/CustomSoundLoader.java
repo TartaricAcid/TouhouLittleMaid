@@ -34,10 +34,10 @@ import java.util.zip.ZipFile;
 import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 
 public class CustomSoundLoader {
+    public static final Map<String, SoundCache> CACHE = Maps.newHashMap();
     private static final Pattern FILENAME_REG = Pattern.compile("^\\d+\\.ogg$");
     private static final Marker MARKER = MarkerManager.getMarker("CustomSoundLoader");
     private static final String JSON_FILE_NAME = "maid_sound.json";
-    private static final Map<String, SoundCache> CACHE = Maps.newHashMap();
 
     public static void clear() {
         CACHE.clear();

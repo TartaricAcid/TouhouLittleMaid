@@ -4,6 +4,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class SoundPackInfo {
     @SerializedName("url")
     private String url;
 
+    @Nullable
     public String getDate() {
         return date;
     }
@@ -41,18 +43,22 @@ public class SoundPackInfo {
         return author;
     }
 
+    @Nullable
     public String getDescription() {
         return description;
     }
 
+    @Nullable
     public String getVersion() {
         return version;
     }
 
+    @Nullable
     public ResourceLocation getIcon() {
         return icon;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }
