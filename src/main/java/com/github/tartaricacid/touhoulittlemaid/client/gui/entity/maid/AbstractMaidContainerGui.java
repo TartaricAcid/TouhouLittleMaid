@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
@@ -335,6 +336,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 });
         soundDownload = new ImageButton(leftPos + 41, topPos + 217, 20, 20, 21, 86, 20, BUTTON,
                 (b) -> {
+                    Minecraft.getInstance().setScreen(new MaidSoundPackGui(maid));
                 });
         this.addRenderableWidget(modelDownload);
         this.addRenderableWidget(soundDownload);

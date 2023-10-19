@@ -35,7 +35,7 @@ import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 
 public class CustomSoundLoader {
     public static final Map<String, SoundCache> CACHE = Maps.newHashMap();
-    private static final Pattern FILENAME_REG = Pattern.compile("^\\d+\\.ogg$");
+    private static final Pattern FILENAME_REG = Pattern.compile("^\\d*\\.ogg$");
     private static final Marker MARKER = MarkerManager.getMarker("CustomSoundLoader");
     private static final String JSON_FILE_NAME = "maid_sound.json";
 
@@ -152,9 +152,9 @@ public class CustomSoundLoader {
         buffers.get(to.getLocation()).addAll(fromBuffers);
     }
 
-    private static boolean checkFileName(String fileName, String name) {
-        if (name.startsWith(fileName)) {
-            String substring = name.substring(fileName.length());
+    private static boolean checkFileName(String patterString, String rawString) {
+        if (rawString.startsWith(patterString)) {
+            String substring = rawString.substring(patterString.length());
             Matcher matcher = FILENAME_REG.matcher(substring);
             return matcher.matches();
         }
