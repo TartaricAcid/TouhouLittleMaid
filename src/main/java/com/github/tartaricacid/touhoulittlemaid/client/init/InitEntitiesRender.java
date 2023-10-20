@@ -19,6 +19,7 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,6 +37,10 @@ public final class InitEntitiesRender {
         EntityRenderers.register(EntityExtinguishingAgent.TYPE, EntityExtinguishingAgentRenderer::new);
         EntityRenderers.register(EntityBox.TYPE, EntityBoxRender::new);
         EntityRenderers.register(EntityThrowPowerPoint.TYPE, ThrownItemRenderer::new);
+
+        EntityRenderers.register(EntityType.SLIME, EntityYukkuriSlimeRender::new);
+        EntityRenderers.register(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
+
         BlockEntityRenderers.register(TileEntityAltar.TYPE, TileEntityAltarRenderer::new);
         BlockEntityRenderers.register(TileEntityStatue.TYPE, TileEntityStatueRenderer::new);
         BlockEntityRenderers.register(TileEntityGarageKit.TYPE, TileEntityGarageKitRenderer::new);
@@ -51,5 +56,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(MaidBackpackMiddleModel.LAYER, MaidBackpackMiddleModel::createBodyLayer);
         event.registerLayerDefinition(MaidBackpackSmallModel.LAYER, MaidBackpackSmallModel::createBodyLayer);
         event.registerLayerDefinition(StatueBaseModel.LAYER, StatueBaseModel::createBodyLayer);
+        event.registerLayerDefinition(EntityYukkuriModel.LAYER, EntityYukkuriModel::createBodyLayer);
     }
 }
