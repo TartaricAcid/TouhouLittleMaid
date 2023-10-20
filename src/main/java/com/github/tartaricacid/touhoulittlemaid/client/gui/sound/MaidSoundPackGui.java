@@ -57,6 +57,107 @@ public class MaidSoundPackGui extends Screen {
         this.packMaxPage = (CustomSoundLoader.CACHE.size() - 1) / packPerSize;
         this.soundMaxPage = 0;
 
+        this.addSoundPackButtons();
+        this.addPackPageButtons();
+        if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
+            this.addSoundElementButtons();
+            this.addSoundOtherButtons();
+            this.addSoundElementPageButtons();
+        }
+    }
+
+    private void addPackPageButtons() {
+        this.addRenderableWidget(new FlatColorButton(startX + 5, startY + 201, 32, 16, Component.literal("<"), (b) -> {
+            if (this.packPage > 0) {
+                packPage--;
+                this.init();
+            }
+        }));
+
+        this.addRenderableWidget(new FlatColorButton(startX + 203, startY + 201, 32, 16, Component.literal(">"), (b) -> {
+            if ((packPage + 1) * packPerSize < CustomSoundLoader.CACHE.size()) {
+                packPage++;
+                this.init();
+            }
+        }));
+    }
+
+    private void addSoundElementButtons() {
+        int yOffset = 41;
+        boolean otherColor = false;
+        Map<ResourceLocation, List<SoundBuffer>> buffers = CustomSoundLoader.getSoundCache(selectSoundId).getBuffers();
+        List<ResourceLocation> soundIds = List.copyOf(buffers.keySet());
+        this.soundMaxPage = (buffers.size() - 1) / soundPerSize;
+        int startSoundIndex = soundPage * soundPerSize;
+        if (startSoundIndex >= soundIds.size()) {
+            this.soundPage = 0;
+            startSoundIndex = 0;
+        }
+        int endSoundIndex = Math.min(soundIds.size(), startSoundIndex + soundPerSize);
+        for (int i = startSoundIndex; i < endSoundIndex; i++) {
+            ResourceLocation soundEvent = soundIds.get(i);
+            this.addRenderableWidget(new SoundElementButton(startX + 245, startY + yOffset, 152, 12, soundEvent, buffers.get(soundEvent), otherColor, (b) -> {
+                SoundElementButton soundButton = (SoundElementButton) b;
+                SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(soundButton.getSoundEvent());
+                if (minecraft != null && event != null) {
+                    minecraft.getSoundManager().play(new MaidSoundInstance(event, this.selectSoundId, this.maid));
+                }
+            }).setTooltips("tooltips.touhou_little_maid.custom_sound.play_sound"));
+            otherColor = !otherColor;
+            yOffset += 12;
+        }
+    }
+
+    private void addSoundOtherButtons() {
+        this.addRenderableWidget(new FlatColorButton(startX + 245, startY + 19, 110, 18, Component.translatable("gui.touhou_little_maid.custom_sound.pack.apply"), (b) -> {
+            if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
+                this.maid.setSoundPackId(this.selectSoundId);
+                NetworkHandler.CHANNEL.sendToServer(new SetMaidSoundIdMessage(this.maid.getId(), this.selectSoundId));
+                this.init();
+            }
+        }));
+
+        this.addRenderableWidget(new FlatColorButton(startX + 358, startY + 19, 18, 18, Component.empty(), (b) -> {
+            if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
+                String url = CustomSoundLoader.getSoundCache(selectSoundId).getInfo().getUrl();
+                if (StringUtils.isNotBlank(url) && minecraft != null) {
+                    minecraft.setScreen(new ConfirmLinkScreen(yes -> {
+                        if (yes) {
+                            Util.getPlatform().openUri(url);
+                        }
+                        minecraft.setScreen(this);
+                    }, url, false));
+                }
+            }
+        }).setTooltips("tooltips.touhou_little_maid.custom_sound.open_url"));
+
+        this.addRenderableWidget(new FlatColorButton(startX + 379, startY + 19, 18, 18, Component.empty(), (b) -> {
+            if (minecraft != null) {
+                minecraft.getSoundManager().play(new MaidSoundInstance(InitSounds.MAID_CREDIT.get(), this.selectSoundId, this.maid));
+            }
+        }).setTooltips("tooltips.touhou_little_maid.custom_sound.credit"));
+    }
+
+    private void addSoundElementPageButtons() {
+        this.addRenderableWidget(new FlatColorButton(startX + 245, startY + 201, 16, 16, Component.literal("<"), (b) -> {
+            if (this.soundPage > 0) {
+                soundPage--;
+                this.init();
+            }
+        }));
+
+        this.addRenderableWidget(new FlatColorButton(startX + 381, startY + 201, 16, 16, Component.literal(">"), (b) -> {
+            if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
+                Map<ResourceLocation, List<SoundBuffer>> buffersIn = CustomSoundLoader.getSoundCache(selectSoundId).getBuffers();
+                if ((soundPage + 1) * soundPerSize < buffersIn.size()) {
+                    soundPage++;
+                    this.init();
+                }
+            }
+        }));
+    }
+
+    private void addSoundPackButtons() {
         int yOffset = 19;
         List<String> soundPackIds = List.copyOf(CustomSoundLoader.CACHE.keySet());
         int startPackIndex = packPage * packPerSize;
@@ -80,108 +181,30 @@ public class MaidSoundPackGui extends Screen {
             if (soundId.equals(selectSoundId)) {
                 button.setSelect(true);
             }
+            if (soundId.equals(this.maid.getSoundPackId())) {
+                button.setUse(true);
+            }
             this.addRenderableWidget(button);
             yOffset += 45;
         }
-
-        if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
-            yOffset = 41;
-            boolean otherColor = false;
-            Map<ResourceLocation, List<SoundBuffer>> buffers = CustomSoundLoader.getSoundCache(selectSoundId).getBuffers();
-            List<ResourceLocation> soundIds = List.copyOf(buffers.keySet());
-            this.soundMaxPage = (buffers.size() - 1) / soundPerSize;
-            int startSoundIndex = soundPage * soundPerSize;
-            if (startSoundIndex >= soundIds.size()) {
-                this.soundPage = 0;
-                startSoundIndex = 0;
-            }
-            int endSoundIndex = Math.min(soundIds.size(), startSoundIndex + soundPerSize);
-            for (int i = startSoundIndex; i < endSoundIndex; i++) {
-                ResourceLocation soundEvent = soundIds.get(i);
-                this.addRenderableWidget(new SoundElementButton(startX + 245, startY + yOffset, 152, 12, soundEvent, buffers.get(soundEvent), otherColor, (b) -> {
-                    SoundElementButton soundButton = (SoundElementButton) b;
-                    SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(soundButton.getSoundEvent());
-                    if (minecraft != null && event != null) {
-                        minecraft.getSoundManager().play(new MaidSoundInstance(event, this.selectSoundId, this.maid));
-                    }
-                }).setTooltips("tooltips.touhou_little_maid.custom_sound.play_sound"));
-                otherColor = !otherColor;
-                yOffset += 12;
-            }
-        }
-
-        this.addRenderableWidget(new FlatColorButton(startX + 245, startY + 19, 110, 18, Component.translatable("gui.touhou_little_maid.custom_sound.pack.apply"), (b) -> {
-            if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
-                NetworkHandler.CHANNEL.sendToServer(new SetMaidSoundIdMessage(this.maid.getId(), this.selectSoundId));
-            }
-        }));
-        this.addRenderableWidget(new FlatColorButton(startX + 358, startY + 19, 18, 18, Component.empty(), (b) -> {
-            if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
-                String url = CustomSoundLoader.getSoundCache(selectSoundId).getInfo().getUrl();
-                if (StringUtils.isNotBlank(url) && minecraft != null) {
-                    minecraft.setScreen(new ConfirmLinkScreen(yes -> {
-                        if (yes) {
-                            Util.getPlatform().openUri(url);
-                        }
-                        minecraft.setScreen(this);
-                    }, url, false));
-                }
-            }
-        }).setTooltips("tooltips.touhou_little_maid.custom_sound.open_url"));
-        this.addRenderableWidget(new FlatColorButton(startX + 379, startY + 19, 18, 18, Component.empty(), (b) -> {
-            if (minecraft != null) {
-                minecraft.getSoundManager().play(new MaidSoundInstance(InitSounds.MAID_CREDIT.get(), this.selectSoundId, this.maid));
-            }
-        }).setTooltips("tooltips.touhou_little_maid.custom_sound.credit"));
-
-        this.addRenderableWidget(new FlatColorButton(startX + 5, startY + 201, 32, 16, Component.literal("<"), (b) -> {
-            if (this.packPage > 0) {
-                packPage--;
-                this.init();
-            }
-        }));
-        this.addRenderableWidget(new FlatColorButton(startX + 203, startY + 201, 32, 16, Component.literal(">"), (b) -> {
-            if ((packPage + 1) * packPerSize < CustomSoundLoader.CACHE.size()) {
-                packPage++;
-                this.init();
-            }
-        }));
-
-        this.addRenderableWidget(new FlatColorButton(startX + 245, startY + 201, 16, 16, Component.literal("<"), (b) -> {
-            if (this.soundPage > 0) {
-                soundPage--;
-                this.init();
-            }
-        }));
-        this.addRenderableWidget(new FlatColorButton(startX + 381, startY + 201, 16, 16, Component.literal(">"), (b) -> {
-            if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
-                Map<ResourceLocation, List<SoundBuffer>> buffers = CustomSoundLoader.getSoundCache(selectSoundId).getBuffers();
-                if ((soundPage + 1) * soundPerSize < buffers.size()) {
-                    soundPage++;
-                    this.init();
-                }
-            }
-        }));
     }
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderBackground(graphics);
         graphics.fill(startX, startY, startX + 240, startY + 220, 0xFF2A2A2A);
-        graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.custom_sound.pack.title"), startX + 120, startY + 6, 0xFFFFFF);
-        graphics.drawCenteredString(font, String.format("%d/%d", packPage + 1, packMaxPage + 1), startX + 120, startY + 206, 0xBBBBBB);
-
         graphics.fill(startX + 242, startY, startX + 400, startY + 220, 0xFF2A2A2A);
+        graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.custom_sound.pack.title"), startX + 120, startY + 6, 0xFFFFFF);
         graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.custom_sound.sounds.preview"), startX + 321, startY + 6, 0xFFFFFF);
-        graphics.drawCenteredString(font, String.format("%d/%d", soundPage + 1, soundMaxPage + 1), startX + 321, startY + 206, 0xBBBBBB);
-
+        graphics.drawCenteredString(font, String.format("%d/%d", packPage + 1, packMaxPage + 1), startX + 120, startY + 206, 0xBBBBBB);
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
-
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, ICON);
-        graphics.blit(ICON, startX + 359, startY + 20, 0, 0, 16, 16, 256, 256);
-        graphics.blit(ICON, startX + 380, startY + 20, 16, 0, 16, 16, 256, 256);
-
+        if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
+            graphics.drawCenteredString(font, String.format("%d/%d", soundPage + 1, soundMaxPage + 1), startX + 321, startY + 206, 0xBBBBBB);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, ICON);
+            graphics.blit(ICON, startX + 359, startY + 20, 0, 0, 16, 16, 256, 256);
+            graphics.blit(ICON, startX + 380, startY + 20, 16, 0, 16, 16, 256, 256);
+        }
         this.renderables.stream().filter(b -> b instanceof FlatColorButton).forEach(b -> ((FlatColorButton) b).renderToolTip(graphics, this, pMouseX, pMouseY));
     }
 }

@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.sound.pojo;
 
+import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.resources.ResourceLocation;
 
@@ -26,6 +28,12 @@ public class SoundPackInfo {
 
     @SerializedName("icon")
     private ResourceLocation icon;
+    @SerializedName("icon_delay")
+    private int iconDelay = 2;
+    @Expose(deserialize = false)
+    private CustomModelPack.AnimationState iconAnimation = CustomModelPack.AnimationState.UNCHECK;
+    @Expose(deserialize = false)
+    private int iconAspectRatio = 1;
 
     @SerializedName("url")
     private String url;
@@ -58,6 +66,26 @@ public class SoundPackInfo {
         return icon;
     }
 
+    public CustomModelPack.AnimationState getIconAnimation() {
+        return iconAnimation;
+    }
+
+    public void setIconAnimation(CustomModelPack.AnimationState iconAnimation) {
+        this.iconAnimation = iconAnimation;
+    }
+
+    public int getIconAspectRatio() {
+        return iconAspectRatio;
+    }
+
+    public void setIconAspectRatio(int iconAspectRatio) {
+        this.iconAspectRatio = iconAspectRatio;
+    }
+
+    public int getIconDelay() {
+        return iconDelay;
+    }
+
     @Nullable
     public String getUrl() {
         return url;
@@ -71,6 +99,9 @@ public class SoundPackInfo {
         }
         if (author == null) {
             author = Collections.EMPTY_LIST;
+        }
+        if (iconDelay <= 0) {
+            iconDelay = 1;
         }
         return this;
     }

@@ -74,7 +74,7 @@ public class CustomSoundLoader {
     }
 
     private static Map<ResourceLocation, List<SoundBuffer>> loadSoundEvent(Path rootPath) {
-        Map<ResourceLocation, List<SoundBuffer>> buffers = Maps.newHashMap();
+        Map<ResourceLocation, List<SoundBuffer>> buffers = Maps.newLinkedHashMap();
 
         buffers.put(InitSounds.MAID_IDLE.get().getLocation(), loadSounds(rootPath.resolve("mode"), "idle"));
         buffers.put(InitSounds.MAID_ATTACK.get().getLocation(), loadSounds(rootPath.resolve("mode"), "attack"));
@@ -101,6 +101,7 @@ public class CustomSoundLoader {
         buffers.put(InitSounds.MAID_DEATH.get().getLocation(), loadSounds(rootPath.resolve("ai"), "death"));
 
         buffers.put(InitSounds.MAID_COLD.get().getLocation(), loadSounds(rootPath.resolve("environment"), "cold"));
+        buffers.put(InitSounds.MAID_HOT.get().getLocation(), loadSounds(rootPath.resolve("environment"), "hot"));
         buffers.put(InitSounds.MAID_RAIN.get().getLocation(), loadSounds(rootPath.resolve("environment"), "rain"));
         buffers.put(InitSounds.MAID_SNOW.get().getLocation(), loadSounds(rootPath.resolve("environment"), "snow"));
         buffers.put(InitSounds.MAID_MORNING.get().getLocation(), loadSounds(rootPath.resolve("environment"), "morning"));
@@ -188,7 +189,7 @@ public class CustomSoundLoader {
 
     @NotNull
     private static Map<ResourceLocation, List<SoundBuffer>> loadSoundEvent(ZipFile zipFile, String id) {
-        Map<ResourceLocation, List<SoundBuffer>> buffers = Maps.newHashMap();
+        Map<ResourceLocation, List<SoundBuffer>> buffers = Maps.newLinkedHashMap();
         Pattern pattern = Pattern.compile(String.format("assets/%s/sounds/maid/(.*?)/(.*?\\.ogg)", id));
         zipFile.stream().forEach(zipEntry -> {
             if (!zipEntry.isDirectory()) {
@@ -222,6 +223,7 @@ public class CustomSoundLoader {
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_DEATH.get(), "ai", "death");
 
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_COLD.get(), "environment", "cold");
+                    loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_HOT.get(), "environment", "hot");
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_RAIN.get(), "environment", "rain");
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_SNOW.get(), "environment", "snow");
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_MORNING.get(), "environment", "morning");
