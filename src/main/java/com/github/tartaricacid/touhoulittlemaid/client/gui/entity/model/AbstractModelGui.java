@@ -118,6 +118,9 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 添加切换模型的按钮
         addModelButton(startX, startY);
+
+        // 模型包翻页
+        addScrollButton(startX, startY);
     }
 
     private void addModelButton(int startX, int startY) {
@@ -145,6 +148,25 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 offsetY = offsetY + 30;
             }
         }
+    }
+
+    private void addScrollButton(int startX, int startY) {
+        ImageButton upButton = new ImageButton(startX - 256 / 2 + 253, startY - 73, 14, 10, 24, 15, 10, SIDE, b -> {
+            int row = Mth.clamp(getRowIndex() - 1, 0, guiNumber.getRowSize(getPackIndex()));
+            if (row != getRowIndex()) {
+                setRowIndex(row);
+                this.init();
+            }
+        });
+        Button downButton = new ImageButton(startX - 256 / 2 + 253, startY - 73 + 156, 14, 10, 38, 15, 10, SIDE, b -> {
+            int row = Mth.clamp(getRowIndex() + 1, 0, guiNumber.getRowSize(getPackIndex()));
+            if (row != getRowIndex()) {
+                setRowIndex(row);
+                this.init();
+            }
+        });
+        this.addRenderableWidget(upButton);
+        this.addRenderableWidget(downButton);
     }
 
     private Button.OnPress onModelButtonClick(E modelItem) {
@@ -244,11 +266,11 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     private void drawScrollSide(GuiGraphics graphics, int middleX, int middleY) {
         if (guiNumber.canScroll(getPackIndex(), getRowIndex())) {
             graphics.blit(SIDE, middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
                     24, 0, 12, 15);
         } else {
             graphics.blit(SIDE, middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
                     36, 0, 12, 15);
         }
     }

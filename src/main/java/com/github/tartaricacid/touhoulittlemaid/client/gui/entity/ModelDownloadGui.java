@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -93,6 +94,13 @@ public class ModelDownloadGui extends Screen {
             }));
         }
 
+        this.addRenderableWidget(new ImageButton(startX + 194 - 21, startY + 1, 8, 10, 128, 224, 10, BG, 484, 256, b -> {
+            this.mouseScrolled(0, 0, 1);
+        }));
+        this.addRenderableWidget(new ImageButton(startX + 194 - 21, startY + 2 + 175, 8, 10, 136, 224, 10, BG, 484, 256, b -> {
+            this.mouseScrolled(0, 0, -1);
+        }));
+
         this.addRenderableWidget(Button.builder(Component.translatable("spectatorMenu.close"), b -> {
             if (minecraft != null) {
                 minecraft.setScreen(null);
@@ -111,7 +119,7 @@ public class ModelDownloadGui extends Screen {
             graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.resources_download.fail.2"), this.width / 2, this.height / 2, 0xfffff);
         } else {
             graphics.blit(BG, middleX - 200, middleY - 85, 0, 0, 400, 200, 484, 256);
-            graphics.blit(BG, middleX - 19, middleY - 77 + (int) (169 * scroll), 400, 0, 4, 15, 484, 256);
+            graphics.blit(BG, middleX - 19, middleY - 66 + (int) (147 * scroll), 400, 0, 4, 15, 484, 256);
             for (int i = 0; i < 4; i++) {
                 graphics.blit(BG, middleX - 196 + (28 * i), middleY - 110, 456, 194, 28, 25, 484, 256);
             }
