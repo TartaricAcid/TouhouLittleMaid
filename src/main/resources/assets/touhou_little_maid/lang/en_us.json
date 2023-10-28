@@ -368,6 +368,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.maid_skin.pages.1.text": "Click the button in the picture to open the maid skin GUI.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_sound.name": "Maid Sound",
   "patchouli.touhou_little_maid.book.entries.maid.maid_sound.pages.0.text": "You can make custom sound resources packs to replace or expand the maid's sound effects.",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_sound.pages.1.text": "Click the button in the picture to open the maid sound GUI.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_task.name": "Maid Task",
   "patchouli.touhou_little_maid.book.entries.maid.maid_task.pages.0.text": "When you open a maid's GUI, you can see a maid task button, click it to switch the maid's task.$(br2)You can also click the schedule button to switch the maid's schedule so that it can work, rest or sleep in different time periods.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_task.pages.1.text": "Click the button in the lower right corner of the image to switch pictures",

@@ -95,7 +95,8 @@ public class GeckoModelLoader {
 
     private static void clearAllCache() {
         GeckoLibCache.getInstance().getGeoModels().clear();
-        GeckoLibCache.getInstance().getAnimations().clear();
+        // 不能清除动画文件，会导致崩溃
+        // GeckoLibCache.getInstance().getAnimations().clear();
     }
 
     private static void loadDefaultAnimation() {

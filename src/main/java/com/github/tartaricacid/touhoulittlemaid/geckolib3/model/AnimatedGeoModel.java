@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.model;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatableModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -89,11 +91,12 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-
+    @Nullable
     public Animation getAnimation(String name, IAnimatable animatable) {
         AnimationFile animation = GeckoLibCache.getInstance().getAnimations().get(this.getAnimationFileLocation((T) animatable));
         if (animation == null) {
-            throw new GeckoLibException(this.getAnimationFileLocation((T) animatable), "Could not find animation file. Please double check name.");
+            TouhouLittleMaid.LOGGER.debug("{}: Could not find animation file. Please double check name.", this.getAnimationFileLocation((T) animatable));
+            return null;
         }
         return animation.getAnimation(name);
     }
