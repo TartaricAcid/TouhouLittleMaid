@@ -31,7 +31,8 @@ public class AnimationRegister {
         register("swim", Priority.HIGHEST, (maid, event) -> maid.isSwimming());
 
         register("boat", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof Boat);
-        register("sit", Priority.HIGH, (maid, event) -> maid.isPassenger() || maid.isInSittingPose());
+        register("sit", Priority.HIGH, (maid, event) -> maid.isInSittingPose());
+        register("chair", Priority.HIGH, (maid, event) -> maid.isPassenger());
 
         register("swim_stand", Priority.NORMAL, (maid, event) -> maid.isInWater());
         register("attacked", ILoopType.EDefaultLoopTypes.PLAY_ONCE, Priority.NORMAL, (maid, event) -> maid.hurtTime > 0);
@@ -90,7 +91,7 @@ public class AnimationRegister {
         parser.register(new LazyVariable("query.modified_distance_moved", 0));
         parser.register(new LazyVariable("query.moon_phase", 0));
 
-        parser.register(new LazyVariable("query.maid_level", 0));
+        parser.register(new LazyVariable("query.player_level", 0));
         parser.register(new LazyVariable("query.time_of_day", 0));
         parser.register(new LazyVariable("query.time_stamp", 0));
         parser.register(new LazyVariable("query.vertical_speed", 0));
@@ -122,6 +123,11 @@ public class AnimationRegister {
         parser.register(new LazyVariable("ysm.food_level", 20));
 
         parser.register(new LazyVariable("ysm.first_person_mod_hide", MolangUtils.FALSE));
+
+        parser.register(new LazyVariable("tlm.is_begging", MolangUtils.FALSE));
+        parser.register(new LazyVariable("tlm.is_sitting", MolangUtils.FALSE));
+        parser.register(new LazyVariable("tlm.has_backpack", MolangUtils.FALSE));
+        parser.register(new LazyVariable("tlm.backpack_level", 0));
     }
 
     public static void setParserValue(AnimationEvent<GeckoMaidEntity> animationEvent, MolangParser parser, EntityModelData data, EntityMaid maid) {
@@ -169,7 +175,7 @@ public class AnimationRegister {
         parser.setValue("query.modified_distance_moved", () -> maid.walkDist);
         parser.setValue("query.moon_phase", () -> mc.level.getMoonPhase());
 
-        parser.setValue("query.maid_level", () -> maid.getExperience() / 120);
+        parser.setValue("query.player_level", () -> maid.getExperience() / 120);
         parser.setValue("query.time_of_day", () -> MolangUtils.normalizeTime(mc.level.getDayTime()));
         parser.setValue("query.time_stamp", () -> mc.level.getDayTime());
         parser.setValue("query.vertical_speed", () -> getVerticalSpeed(maid));
@@ -196,6 +202,11 @@ public class AnimationRegister {
 
         parser.setValue("ysm.armor_value", maid::getArmorValue);
         parser.setValue("ysm.hurt_time", () -> maid.hurtTime);
+
+        parser.setValue("tlm.is_begging", () -> MolangUtils.booleanToFloat(maid.isBegging()));
+        parser.setValue("tlm.is_sitting", () -> MolangUtils.booleanToFloat(maid.isInSittingPose()));
+        parser.setValue("tlm.has_backpack", () -> MolangUtils.booleanToFloat(maid.hasBackpack()));
+        parser.setValue("tlm.backpack_level", maid::getBackpackLevel);
     }
 
     private static void register(String animationName, ILoopType loopType, int priority, BiPredicate<EntityMaid, AnimationEvent<GeckoMaidEntity>> predicate) {

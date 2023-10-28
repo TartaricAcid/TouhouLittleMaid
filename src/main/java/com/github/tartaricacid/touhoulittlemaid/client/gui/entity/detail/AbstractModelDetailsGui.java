@@ -230,8 +230,8 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         RenderSystem.runAsFancy(() -> {
             manager.render(guiEntity, 0, 0, 0, 0, 1, poseStack, buffer, 0xf000f0);
+            poseStack.translate(0, 0.5, 0);
             if (showFloor) {
-                poseStack.translate(0, 0.5, 0);
                 this.floorModel.renderToBuffer(poseStack, buffer.getBuffer(this.floorModel.renderType(FLOOR_TEXTURE)), 0xf000f0, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             this.renderExtraEntity(manager, poseStack, buffer);
@@ -242,6 +242,11 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         viewStack.popPose();
         RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
     }
 
     private void fillGradient(GuiGraphics graphics, Rectangle vec4d, int color) {

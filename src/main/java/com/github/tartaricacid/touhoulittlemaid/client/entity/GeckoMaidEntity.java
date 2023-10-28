@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.manager.Animation
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.GeckoLibUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class GeckoMaidEntity implements IAnimatable {
     private static final ResourceLocation GECKO_DEFAULT_ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "fox_miko");
@@ -27,14 +28,21 @@ public class GeckoMaidEntity implements IAnimatable {
             data.addAnimationController(new AnimationController<>(this, controllerName, 0, e -> manager.predicateParallel(e, animationName)));
         }
         data.addAnimationController(new AnimationController<>(this, "main", 2, manager::predicateMain));
-        data.addAnimationController(new AnimationController(this, "hold_offhand", 0, manager::predicateOffhandHold));
-        data.addAnimationController(new AnimationController(this, "hold_mainhand", 0, manager::predicateMainhandHold));
-        data.addAnimationController(new AnimationController(this, "swing", 2, manager::predicateSwing));
-        data.addAnimationController(new AnimationController(this, "use", 2, manager::predicateUse));
+        data.addAnimationController(new AnimationController<>(this, "hold_offhand", 0, manager::predicateOffhandHold));
+        data.addAnimationController(new AnimationController<>(this, "hold_mainhand", 0, manager::predicateMainhandHold));
+        data.addAnimationController(new AnimationController<>(this, "swing", 2, manager::predicateSwing));
+        data.addAnimationController(new AnimationController<>(this, "use", 2, manager::predicateUse));
+        data.addAnimationController(new AnimationController<>(this, "beg", 2, manager::predicateBeg));
         for (int i = 0; i < 8; i++) {
             String controllerName = String.format("parallel_%d_controller", i);
             String animationName = String.format("parallel%d", i);
             data.addAnimationController(new AnimationController<>(this, controllerName, 0, e -> manager.predicateParallel(e, animationName)));
+        }
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+                String controllerName = String.format("%s_controller", slot.getName());
+                data.addAnimationController(new AnimationController<>(this, controllerName, 0, e -> manager.predicateArmor(e, slot)));
+            }
         }
     }
 

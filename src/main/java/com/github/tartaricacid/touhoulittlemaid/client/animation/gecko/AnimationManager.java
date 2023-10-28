@@ -195,6 +195,17 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
+    public PlayState predicateBeg(AnimationEvent<GeckoMaidEntity> event) {
+        EntityMaid maid = event.getAnimatable().getMaid();
+        if (maid == null) {
+            return PlayState.STOP;
+        }
+        if (maid.isBegging()) {
+            return playAnimation(event, "beg", ILoopType.EDefaultLoopTypes.LOOP);
+        }
+        return PlayState.STOP;
+    }
+
     public PlayState predicateArmor(AnimationEvent<GeckoMaidEntity> event, EquipmentSlot slot) {
         EntityMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
