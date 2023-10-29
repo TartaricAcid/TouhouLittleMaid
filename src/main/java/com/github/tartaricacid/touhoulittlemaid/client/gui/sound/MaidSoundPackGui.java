@@ -101,7 +101,7 @@ public class MaidSoundPackGui extends Screen {
                 SoundElementButton soundButton = (SoundElementButton) b;
                 SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(soundButton.getSoundEvent());
                 if (minecraft != null && event != null) {
-                    minecraft.getSoundManager().play(new MaidSoundInstance(event, this.selectSoundId, this.maid));
+                    minecraft.getSoundManager().play(new MaidSoundInstance(event, this.selectSoundId, this.maid, true));
                 }
             }).setTooltips("tooltips.touhou_little_maid.custom_sound.play_sound"));
             otherColor = !otherColor;
@@ -134,7 +134,7 @@ public class MaidSoundPackGui extends Screen {
 
         this.addRenderableWidget(new FlatColorButton(startX + 379, startY + 19, 18, 18, Component.empty(), (b) -> {
             if (minecraft != null) {
-                minecraft.getSoundManager().play(new MaidSoundInstance(InitSounds.MAID_CREDIT.get(), this.selectSoundId, this.maid));
+                minecraft.getSoundManager().play(new MaidSoundInstance(InitSounds.MAID_CREDIT.get(), this.selectSoundId, this.maid, true));
             }
         }).setTooltips("tooltips.touhou_little_maid.custom_sound.credit"));
     }

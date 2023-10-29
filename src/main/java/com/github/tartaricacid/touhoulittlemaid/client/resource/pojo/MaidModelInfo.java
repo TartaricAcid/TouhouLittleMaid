@@ -39,6 +39,9 @@ public class MaidModelInfo implements IModelInfo {
     @SerializedName("model_id")
     private ResourceLocation modelId;
 
+    @SerializedName("use_sound_pack_id")
+    private String useSoundPackId;
+
     @SerializedName("render_item_scale")
     private float renderItemScale = 1.0f;
 
@@ -99,6 +102,11 @@ public class MaidModelInfo implements IModelInfo {
     @Override
     public ResourceLocation getModelId() {
         return modelId;
+    }
+
+    @Nullable
+    public String getUseSoundPackId() {
+        return useSoundPackId;
     }
 
     @Override

@@ -13,11 +13,17 @@ import javax.annotation.Nullable;
 public class MaidSoundInstance extends AbstractTickableSoundInstance {
     private final String id;
     private final EntityMaid maid;
+    private final boolean testSound;
 
     public MaidSoundInstance(SoundEvent soundEvent, String id, EntityMaid maid) {
+        this(soundEvent, id, maid, false);
+    }
+
+    public MaidSoundInstance(SoundEvent soundEvent, String id, EntityMaid maid, boolean testSound) {
         super(soundEvent, SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());
         this.id = id;
         this.maid = maid;
+        this.testSound = testSound;
         this.x = this.maid.getX();
         this.y = this.maid.getY();
         this.z = this.maid.getZ();
@@ -43,6 +49,10 @@ public class MaidSoundInstance extends AbstractTickableSoundInstance {
 
     public EntityMaid getMaid() {
         return maid;
+    }
+
+    public boolean isTestSound() {
+        return testSound;
     }
 
     @Nullable

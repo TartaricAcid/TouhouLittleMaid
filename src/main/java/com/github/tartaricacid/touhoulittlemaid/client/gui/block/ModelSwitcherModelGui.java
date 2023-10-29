@@ -7,11 +7,15 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -84,6 +88,15 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
             maid.setModelId(info.getModelId().toString());
             infoIn.setModelId(info.getModelId());
             getMinecraft().setScreen(this.modelSwitcherGui);
+        }
+    }
+
+    @Override
+    protected void addModelCustomTips(MaidModelInfo modelItem, List<Component> tooltips) {
+        String useSoundPackId = modelItem.getUseSoundPackId();
+        if (StringUtils.isNotBlank(useSoundPackId)) {
+            tooltips.add(Component.translatable("gui.touhou_little_maid.skin.tooltips.maid_use_sound_pack_id", useSoundPackId)
+                    .withStyle(ChatFormatting.GOLD));
         }
     }
 

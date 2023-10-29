@@ -173,7 +173,6 @@ public class InfoGetManager {
             try {
                 URL url = new URL(new URL(ROOT_URL), info.getUrl());
                 File fileInTlmModel = CustomPackLoader.PACK_FOLDER.resolve(info.getFileName()).toFile();
-                File fileInMcRes = Minecraft.getInstance().gameDirectory.toPath().resolve("resourcepacks").resolve(info.getFileName()).toFile();
                 File fileInCache = PACK_FOLDER.resolve(info.getFileName()).toFile();
                 if (!fileInCache.isFile() || FileUtils.checksumCRC32(fileInCache) != info.getChecksum()) {
                     TouhouLittleMaid.LOGGER.info("Downloading {} file...", info.getFileName());
@@ -182,13 +181,9 @@ public class InfoGetManager {
                 } else {
                     TouhouLittleMaid.LOGGER.info("file {} existed in cache folder", info.getFileName());
                 }
-                if (info.hasType(DownloadInfo.TypeEnum.SOUND)) {
-                    Files.copy(fileInCache.toPath(), fileInMcRes.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } else {
-                    Files.copy(fileInCache.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    CustomPackLoader.readModelFromZipFile(fileInTlmModel);
-                    ServerCustomPackLoader.reloadPacks();
-                }
+                Files.copy(fileInCache.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                CustomPackLoader.readModelFromZipFile(fileInTlmModel);
+                ServerCustomPackLoader.reloadPacks();
                 info.setStatus(DownloadStatus.DOWNLOADED);
             } catch (IOException e) {
                 info.setStatus(DownloadStatus.NOT_DOWNLOAD);

@@ -184,15 +184,6 @@ public class ModelDownloadGui extends Screen {
                     return super.visitFile(file, attrs);
                 }
             });
-            Files.walkFileTree(Minecraft.getInstance().gameDirectory.toPath().resolve("resourcepacks"), EnumSet.noneOf(FileVisitOption.class), 1, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (file.getFileName().toString().endsWith(".zip")) {
-                        crc32List.add(FileUtils.checksumCRC32(file.toFile()));
-                    }
-                    return super.visitFile(file, attrs);
-                }
-            });
         } catch (IOException e) {
             e.printStackTrace();
         }
