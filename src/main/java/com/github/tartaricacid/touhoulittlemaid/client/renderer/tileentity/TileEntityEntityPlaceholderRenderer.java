@@ -22,7 +22,7 @@ import java.util.Locale;
 
 public class TileEntityEntityPlaceholderRenderer extends BlockEntityWithoutLevelRenderer {
     private static final EntityPlaceholderModel BASE_MODEL = new EntityPlaceholderModel();
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/items/entity_placeholder.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/item/entity_placeholder.png");
 
     public TileEntityEntityPlaceholderRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
         super(dispatcher, modelSet);
