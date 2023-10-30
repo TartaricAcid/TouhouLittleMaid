@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.config;
+package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.google.gson.annotations.SerializedName;
@@ -15,7 +15,7 @@ import java.nio.file.Files;
 
 @OnlyIn(Dist.CLIENT)
 public class InGameMaidConfig {
-    private static final File CONFIG_FILE = Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("assets/touhou_little_maid").resolve("in_game_maid_config.json").toFile();
+    private static final File CONFIG_FILE = Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("touhou_little_maid").resolve("in_game_maid_config.json").toFile();
     public static InGameMaidConfig INSTANCE;
 
     @SerializedName("sound_frequency")

@@ -84,9 +84,9 @@ public class InfoGetManager {
 
     private static Path getRootPath() {
         if (Minecraft.getInstance() != null && Minecraft.getInstance().gameDirectory != null) {
-            return Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve("config").resolve("assets/touhou_little_maid");
+            return Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve("config").resolve("touhou_little_maid");
         }
-        return Paths.get("./").resolve("config").resolve("assets/touhou_little_maid");
+        return Paths.get("./").resolve("config").resolve("touhou_little_maid");
     }
 
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
