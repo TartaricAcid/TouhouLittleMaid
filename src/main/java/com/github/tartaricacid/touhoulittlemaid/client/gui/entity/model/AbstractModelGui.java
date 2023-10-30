@@ -81,6 +81,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      */
     protected abstract void notifyModelChange(T entity, E modelInfo);
 
+    protected abstract void addModelCustomTips(E modelItem, List<Component> tooltips);
+
     protected abstract int getPackIndex();
 
     protected abstract void setPackIndex(int packIndex);
@@ -142,6 +144,25 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 offsetY = offsetY + 30;
             }
         }
+    }
+
+    private void addScrollButton(int startX, int startY) {
+        ImageButton upButton = new ImageButton(startX - 256 / 2 + 253, startY - 73, 14, 10, 24, 15, 10, SIDE, b -> {
+            int row = Mth.clamp(getRowIndex() - 1, 0, guiNumber.getRowSize(getPackIndex()));
+            if (row != getRowIndex()) {
+                setRowIndex(row);
+                this.init();
+            }
+        });
+        Button downButton = new ImageButton(startX - 256 / 2 + 253, startY - 73 + 156, 14, 10, 38, 15, 10, SIDE, b -> {
+            int row = Mth.clamp(getRowIndex() + 1, 0, guiNumber.getRowSize(getPackIndex()));
+            if (row != getRowIndex()) {
+                setRowIndex(row);
+                this.init();
+            }
+        });
+        this.addRenderableWidget(upButton);
+        this.addRenderableWidget(downButton);
     }
 
     private Button.OnPress onModelButtonClick(E modelItem) {
@@ -234,6 +255,9 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 绘制其他文本提示
         drawTooltips(poseStack, mouseX, mouseY, middleX, middleY);
+
+        // 模型包翻页
+        addScrollButton(middleX, middleY);
     }
 
     private void drawButton(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
@@ -245,11 +269,11 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     private void drawScrollSide(PoseStack poseStack, int middleX, int middleY) {
         if (guiNumber.canScroll(getPackIndex(), getRowIndex())) {
             blit(poseStack, middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
                     24, 0, 12, 15);
         } else {
             blit(poseStack, middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
                     36, 0, 12, 15);
         }
     }

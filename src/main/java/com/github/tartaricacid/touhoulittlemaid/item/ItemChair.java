@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileE
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -131,8 +133,15 @@ public class ItemChair extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public Component getDescription() {
-        return super.getDescription();
+    public Component getName(ItemStack stack) {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            ItemChair.Data data = getData(stack);
+            if (CustomPackLoader.CHAIR_MODELS.getInfo(data.getModelId()).isPresent()) {
+                String name = CustomPackLoader.CHAIR_MODELS.getInfo(data.getModelId()).get().getName();
+                return ParseI18n.parse(name);
+            }
+        }
+        return super.getName(stack);
     }
 
     @Override

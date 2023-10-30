@@ -31,6 +31,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
@@ -114,11 +115,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
+    public static final String SOUND_PACK_ID_TAG = "SoundPackId";
     public static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     public static final String MAID_INVENTORY_TAG = "MaidInventory";
     public static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
     public static final String EXPERIENCE_TAG = "MaidExperience";
     private static final EntityDataAccessor<String> DATA_MODEL_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> DATA_SOUND_PACK_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_TASK = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_BEGGING = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_PICKUP = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
@@ -148,6 +151,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
+    private static final String DEFAULT_SOUND_PACK_ID = "touhou_little_maid";
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
@@ -185,6 +189,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
+        this.entityData.define(DATA_SOUND_PACK_ID, DEFAULT_SOUND_PACK_ID);
         this.entityData.define(DATA_TASK, TaskIdle.UID.toString());
         this.entityData.define(DATA_BEGGING, false);
         this.entityData.define(DATA_PICKUP, true);
@@ -761,6 +766,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString(MODEL_ID_TAG, getModelId());
+        compound.putString(SOUND_PACK_ID_TAG, getSoundPackId());
         compound.putString(TASK_TAG, getTask().getUid().toString());
         compound.putBoolean(PICKUP_TAG, isPickup());
         compound.putBoolean(HOME_TAG, isHomeModeEnable());
@@ -782,6 +788,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         super.readAdditionalSaveData(compound);
         if (compound.contains(MODEL_ID_TAG, Tag.TAG_STRING)) {
             setModelId(compound.getString(MODEL_ID_TAG));
+        }
+        if (compound.contains(SOUND_PACK_ID_TAG, Tag.TAG_STRING)) {
+            setSoundPackId(compound.getString(SOUND_PACK_ID_TAG));
         }
         if (compound.contains(TASK_TAG, Tag.TAG_STRING)) {
             ResourceLocation uid = new ResourceLocation(compound.getString(TASK_TAG));
@@ -899,6 +908,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             this.setModelId(id);
             return spawnDataIn;
         }).orElse(spawnDataIn);
+    }
+
+    @Override
+    public void playSound(SoundEvent soundEvent, float volume, float pitch) {
+        if (soundEvent.getLocation().getPath().startsWith("maid") && !level.isClientSide) {
+            NetworkHandler.sendToNearby(this, new PlayMaidSoundMessage(soundEvent.getLocation(), this.getSoundPackId(), this.getId()), 16);
+        } else {
+            super.playSound(soundEvent, volume, pitch);
+        }
     }
 
     @Nullable
@@ -1023,6 +1041,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     public void setModelId(String modelId) {
         this.entityData.set(DATA_MODEL_ID, modelId);
+    }
+
+    public String getSoundPackId() {
+        return this.entityData.get(DATA_SOUND_PACK_ID);
+    }
+
+    public void setSoundPackId(String soundPackId) {
+        this.entityData.set(DATA_SOUND_PACK_ID, soundPackId);
     }
 
     public boolean isBegging() {

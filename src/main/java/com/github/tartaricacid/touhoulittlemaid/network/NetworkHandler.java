@@ -66,6 +66,10 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(20, SendEffectMessage.class, SendEffectMessage::encode, SendEffectMessage::decode, SendEffectMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(21, PlayMaidSoundMessage.class, PlayMaidSoundMessage::encode, PlayMaidSoundMessage::decode, PlayMaidSoundMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(22, SetMaidSoundIdMessage.class, SetMaidSoundIdMessage::encode, SetMaidSoundIdMessage::decode, SetMaidSoundIdMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {
@@ -78,6 +82,17 @@ public final class NetworkHandler {
 
             ws.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false).stream()
                     .filter(p -> p.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 192 * 192)
+                    .forEach(p -> CHANNEL.send(PacketDistributor.PLAYER.with(() -> p), toSend));
+        }
+    }
+
+    public static void sendToNearby(Entity entity, Object toSend, int distance) {
+        if (entity.level instanceof ServerLevel) {
+            ServerLevel ws = (ServerLevel) entity.level;
+            BlockPos pos = entity.blockPosition();
+
+            ws.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false).stream()
+                    .filter(p -> p.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < distance * distance)
                     .forEach(p -> CHANNEL.send(PacketDistributor.PLAYER.with(() -> p), toSend));
         }
     }

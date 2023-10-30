@@ -4,6 +4,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.cloth;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.VanillaConfig;
 import com.google.common.collect.Lists;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -36,6 +37,7 @@ public class MenuIntegration {
         maidConfig(root, entryBuilder);
         chairConfig(root, entryBuilder);
         miscConfig(root, entryBuilder);
+        vanillaConfig(root, entryBuilder);
         return root;
     }
 
@@ -157,6 +159,25 @@ public class MenuIntegration {
                 .setSaveConsumer(d -> MiscConfig.SHRINE_LAMP_MAX_RANGE.set(d)).build());
     }
 
+    private static void vanillaConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
+        ConfigCategory vanilla = root.getOrCreateCategory(new TranslatableComponent("config.touhou_little_maid.vanilla"));
+
+        vanilla.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_slime_model.name"), VanillaConfig.REPLACE_SLIME_MODEL.get())
+                .setDefaultValue(true).setTooltip(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_slime_model.desc"))
+                .setSaveConsumer(VanillaConfig.REPLACE_SLIME_MODEL::set).build());
+
+        vanilla.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_xp_texture.name"), VanillaConfig.REPLACE_XP_TEXTURE.get())
+                .setDefaultValue(true).setTooltip(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_xp_texture.desc"))
+                .setSaveConsumer(VanillaConfig.REPLACE_XP_TEXTURE::set).build());
+
+        vanilla.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_totem_texture.name"), VanillaConfig.REPLACE_TOTEM_TEXTURE.get())
+                .setDefaultValue(true).setTooltip(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_totem_texture.desc"))
+                .setSaveConsumer(VanillaConfig.REPLACE_TOTEM_TEXTURE::set).build());
+
+        vanilla.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_xp_bottle_texture.name"), VanillaConfig.REPLACE_XP_BOTTLE_TEXTURE.get())
+                .setDefaultValue(true).setTooltip(new TranslatableComponent("config.touhou_little_maid.vanilla.replace_xp_bottle_texture.desc"))
+                .setSaveConsumer(VanillaConfig.REPLACE_XP_BOTTLE_TEXTURE::set).build());
+    }
 
     public static void registerModsPage() {
         ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () ->

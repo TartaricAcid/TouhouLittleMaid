@@ -14,6 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelI
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChatBubbleInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.client.sound.CustomSoundLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -80,6 +81,7 @@ public class CustomPackLoader {
         MAID_MODELS.clearAll();
         CHAIR_MODELS.clearAll();
         TMP_REGISTER_TEXTURE.clear();
+        CustomSoundLoader.clear();
 
         // 读取
         initPacks();
@@ -133,6 +135,7 @@ public class CustomPackLoader {
                     loadMaidModelPack(rootPath, domain);
                     loadChairModelPack(rootPath, domain);
                     readLanguageFile(rootPath, domain);
+                    CustomSoundLoader.loadSoundPack(rootPath, domain);
                 }
             }
         } catch (IOException ioException) {
@@ -150,6 +153,7 @@ public class CustomPackLoader {
                     loadMaidModelPack(zipFile, domain);
                     loadChairModelPack(zipFile, domain);
                     readLanguageFile(zipFile, domain);
+                    CustomSoundLoader.loadSoundPack(zipFile, domain);
                 }
             }
         } catch (IOException ioException) {
@@ -774,7 +778,7 @@ public class CustomPackLoader {
         Map<String, String> newLangData = Maps.newHashMap();
 
         String defaultLangPath = String.format("assets/%s/lang/en_us.lang", namespace);
-        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language);
+        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language.getCode());
         getLanguageMap(zipFile, newLangData, defaultLangPath);
         getLanguageMap(zipFile, newLangData, currentLangPath);
 
@@ -791,7 +795,7 @@ public class CustomPackLoader {
         Map<String, String> newLangData = Maps.newHashMap();
 
         String defaultLangPath = String.format("assets/%s/lang/en_us.lang", namespace);
-        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language);
+        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language.getCode());
         getLanguageMap(rootPath, newLangData, defaultLangPath);
         getLanguageMap(rootPath, newLangData, currentLangPath);
 

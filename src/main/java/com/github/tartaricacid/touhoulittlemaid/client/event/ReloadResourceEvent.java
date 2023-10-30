@@ -40,10 +40,12 @@ public final class ReloadResourceEvent {
 
     public static void reloadAllPack() {
         StopWatch watch = StopWatch.createStarted();
-        GeckoModelLoader.reload();
-        InnerAnimation.init();
-        CustomPackLoader.reloadPacks();
-        PlayerMaidModels.reload();
+        {
+            GeckoModelLoader.reload();
+            InnerAnimation.init();
+            CustomPackLoader.reloadPacks();
+            PlayerMaidModels.reload();
+        }
         watch.stop();
         TouhouLittleMaid.LOGGER.info("Model loading time: {} ms", watch.getTime(TimeUnit.MICROSECONDS) / 1000.0);
     }

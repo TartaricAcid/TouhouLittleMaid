@@ -11,8 +11,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
@@ -95,6 +95,13 @@ public class ModelDownloadGui extends Screen {
             }));
         }
 
+        this.addRenderableWidget(new ImageButton(startX + 194 - 21, startY + 1, 8, 10, 128, 224, 10, BG, 484, 256, b -> {
+            this.mouseScrolled(0, 0, 1);
+        }));
+        this.addRenderableWidget(new ImageButton(startX + 194 - 21, startY + 2 + 175, 8, 10, 136, 224, 10, BG, 484, 256, b -> {
+            this.mouseScrolled(0, 0, -1);
+        }));
+
         addRenderableWidget(new Button(startX + 287, startY - 30, 100, 20, new TranslatableComponent("spectatorMenu.close"), (b) -> {
             if (minecraft != null) {
                 minecraft.setScreen(null);
@@ -115,7 +122,7 @@ public class ModelDownloadGui extends Screen {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, BG);
             blit(poseStack, middleX - 200, middleY - 85, 0, 0, 400, 200, 484, 256);
-            blit(poseStack, middleX - 19, middleY - 77 + (int) (169 * scroll), 400, 0, 4, 15, 484, 256);
+            blit(poseStack, middleX - 19, middleY - 66 + (int) (147 * scroll), 400, 0, 4, 15, 484, 256);
             for (int i = 0; i < 4; i++) {
                 blit(poseStack, middleX - 196 + (28 * i), middleY - 110, 456, 194, 28, 25, 484, 256);
             }
@@ -172,15 +179,6 @@ public class ModelDownloadGui extends Screen {
     private void getCrc32Info() {
         try {
             Files.walkFileTree(CustomPackLoader.PACK_FOLDER, EnumSet.noneOf(FileVisitOption.class), 1, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (file.getFileName().toString().endsWith(".zip")) {
-                        crc32List.add(FileUtils.checksumCRC32(file.toFile()));
-                    }
-                    return super.visitFile(file, attrs);
-                }
-            });
-            Files.walkFileTree(Minecraft.getInstance().gameDirectory.toPath().resolve("resourcepacks"), EnumSet.noneOf(FileVisitOption.class), 1, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (file.getFileName().toString().endsWith(".zip")) {
