@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
@@ -60,12 +61,12 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private StateSwitchingButton ride;
     private ImageButton info;
     private ImageButton skin;
+    private ImageButton sound;
     private ImageButton pageDown;
     private ImageButton pageUp;
     private ImageButton pageClose;
     private ImageButton taskSwitch;
     private ImageButton modelDownload;
-    private ImageButton soundDownload;
     private ScheduleButton<T> scheduleButton;
     private boolean taskListOpen;
     private int counterTime = 0;
@@ -170,8 +171,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(pick, poseStack, x, y, "gui.touhou_little_maid.button.pickup");
         renderTransTooltip(ride, poseStack, x, y, "gui.touhou_little_maid.button.maid_riding_set");
         renderTransTooltip(modelDownload, poseStack, x, y, "gui.touhou_little_maid.button.model_download");
-        renderTransTooltip(soundDownload, poseStack, x, y, "gui.touhou_little_maid.button.sound_download");
         renderTransTooltip(skin, poseStack, x, y, "gui.touhou_little_maid.button.skin");
+        renderTransTooltip(sound, poseStack, x, y, "gui.touhou_little_maid.button.sound");
         renderTransTooltip(pageUp, poseStack, x, y, "gui.touhou_little_maid.task.next_page");
         renderTransTooltip(pageDown, poseStack, x, y, "gui.touhou_little_maid.task.previous_page");
         renderTransTooltip(pageClose, poseStack, x, y, "gui.touhou_little_maid.task.close");
@@ -187,8 +188,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void addStateButton() {
         skin = new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidModelGui(maid)));
+        sound = new ImageButton(leftPos + 52, topPos + 14, 9, 9, 144, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidSoundPackGui(maid)));
         info = new ImageButton(leftPos + 8, topPos + 14, 9, 9, 72, 65, 10, BUTTON, NO_ACTION);
         this.addRenderableWidget(skin);
+        this.addRenderableWidget(sound);
         this.addRenderableWidget(info);
     }
 
@@ -323,7 +326,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addDownloadButton() {
-        modelDownload = new ImageButton(leftPos + 20, topPos + 217, 20, 20, 0, 86, 20, BUTTON,
+        modelDownload = new ImageButton(leftPos + 20, topPos + 217, 41, 20, 0, 86, 20, BUTTON,
                 (b) -> {
                     List<DownloadInfo> downloadInfoList;
                     int page = ModelDownloadGui.getCurrentPage();
@@ -335,11 +338,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                     }
                     Minecraft.getInstance().setScreen(new ModelDownloadGui(downloadInfoList));
                 });
-        soundDownload = new ImageButton(leftPos + 41, topPos + 217, 20, 20, 21, 86, 20, BUTTON,
-                (b) -> {
-                });
         this.addRenderableWidget(modelDownload);
-        this.addRenderableWidget(soundDownload);
     }
 
     private void drawTaskPageCount(PoseStack poseStack) {

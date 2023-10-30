@@ -184,13 +184,9 @@ public class InfoGetManager {
                 } else {
                     TouhouLittleMaid.LOGGER.info("file {} existed in cache folder", info.getFileName());
                 }
-                if (info.hasType(DownloadInfo.TypeEnum.SOUND)) {
-                    Files.copy(fileInCache.toPath(), fileInMcRes.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } else {
-                    Files.copy(fileInCache.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    CustomPackLoader.readModelFromZipFile(fileInTlmModel);
-                    ServerCustomPackLoader.reloadPacks();
-                }
+                Files.copy(fileInCache.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                CustomPackLoader.readModelFromZipFile(fileInTlmModel);
+                ServerCustomPackLoader.reloadPacks();
                 info.setStatus(DownloadStatus.DOWNLOADED);
             } catch (IOException e) {
                 info.setStatus(DownloadStatus.NOT_DOWNLOAD);

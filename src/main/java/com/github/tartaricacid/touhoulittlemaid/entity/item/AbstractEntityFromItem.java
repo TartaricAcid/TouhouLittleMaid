@@ -9,8 +9,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -110,11 +111,11 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
         // 不允许被击退效果影响
     }
 
-//    @Nonnull
-//    @Override
-//    public ItemStack getPickedResult(RayTraceResult target) {
-//        return getKilledStack();
-//    }
+    @Nonnull
+    @Override
+    public ItemStack getPickedResult(HitResult target) {
+        return getKilledStack();
+    }
 
     @Override
     public boolean attackable() {

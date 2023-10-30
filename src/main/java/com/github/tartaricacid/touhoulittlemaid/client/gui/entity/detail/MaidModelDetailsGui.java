@@ -3,15 +3,14 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ModelDetailsButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -19,14 +18,22 @@ public class MaidModelDetailsGui extends AbstractModelDetailsGui<EntityMaid, Mai
     private static final ItemStack MAIN_HAND_SWORD = Items.DIAMOND_SWORD.getDefaultInstance();
     private static final ItemStack OFF_HAND_SHIELD = Items.SHIELD.getDefaultInstance();
     private static final ItemStack ARMOR_ITEM = Items.GOLDEN_HELMET.getDefaultInstance();
-    private Minecart minecart;
+    private EntityChair chair;
     private volatile boolean isEnableWalk = false;
 
     public MaidModelDetailsGui(EntityMaid sourceEntity, MaidModelInfo modelInfo) {
         super(sourceEntity, InitEntities.MAID.get().create(sourceEntity.level), modelInfo);
         this.guiEntity.setModelId(modelInfo.getModelId().toString());
+        this.guiEntity.setOnGround(true);
+        this.initChair();
+    }
+
+    private void initChair() {
         if (Minecraft.getInstance().level != null) {
-            this.minecart = EntityType.MINECART.create(Minecraft.getInstance().level);
+            this.chair = InitEntities.CHAIR.get().create(Minecraft.getInstance().level);
+            if (this.chair != null) {
+                this.chair.setModelId("touhou_little_maid:low_stool");
+            }
         }
     }
 
@@ -83,12 +90,14 @@ public class MaidModelDetailsGui extends AbstractModelDetailsGui<EntityMaid, Mai
 
     @Override
     protected void renderExtraEntity(EntityRenderDispatcher manager, PoseStack matrix, MultiBufferSource.BufferSource bufferIn) {
-
+        if (guiEntity.isPassenger() && chair != null) {
+            manager.render(chair, 0, -0.95, 0, 0, 1, matrix, bufferIn, 0xf000f0);
+        }
     }
 
     private void applyRideButtonLogic(boolean isStateTriggered) {
-        if (isStateTriggered && minecart != null) {
-            guiEntity.startRiding(minecart, true);
+        if (isStateTriggered && chair != null) {
+            guiEntity.startRiding(chair, true);
         } else {
             guiEntity.removeVehicle();
         }

@@ -8,9 +8,11 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo> {
@@ -65,6 +67,10 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     protected void notifyModelChange(EntityChair entity, ChairModelInfo modelInfo) {
         NetworkHandler.CHANNEL.sendToServer(new ChairModelMessage(entity.getId(), modelInfo.getModelId(), modelInfo.getMountedYOffset(),
                 modelInfo.isTameableCanRide(), modelInfo.isNoGravity()));
+    }
+
+    @Override
+    protected void addModelCustomTips(ChairModelInfo modelItem, List<Component> tooltips) {
     }
 
     @Override
