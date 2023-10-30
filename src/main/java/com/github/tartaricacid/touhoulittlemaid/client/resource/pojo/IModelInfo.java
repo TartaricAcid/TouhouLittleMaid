@@ -13,6 +13,8 @@ public interface IModelInfo {
 
     ResourceLocation getModel();
 
+    boolean isGeckoModel();
+
     @Nullable
     List<ResourceLocation> getAnimation();
 

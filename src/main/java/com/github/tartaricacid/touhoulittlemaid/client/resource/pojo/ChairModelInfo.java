@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 
+import com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.resources.ResourceLocation;
@@ -8,10 +9,12 @@ import net.minecraft.util.Mth;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChairModelInfo implements IModelInfo {
     private static final float RENDER_ENTITY_SCALE_MIN = 0.2f;
     private static final float RENDER_ENTITY_SCALE_MAX = 2.0f;
+    private static final String GECKO_ANIMATION = ".json";
 
     @SerializedName("name")
     private String name;
@@ -46,9 +49,17 @@ public class ChairModelInfo implements IModelInfo {
     @SerializedName("no_gravity")
     private boolean noGravity = false;
 
+    @SerializedName("is_gecko")
+    private boolean isGeckoModel = false;
+
     @Override
     public ResourceLocation getTexture() {
         return texture;
+    }
+
+    @Override
+    public boolean isGeckoModel() {
+        return isGeckoModel;
     }
 
     @Override
@@ -119,6 +130,13 @@ public class ChairModelInfo implements IModelInfo {
         // 如果名称为空，自动生成本地化名称
         if (name == null) {
             name = String.format("{model.%s.%s.name}", modelId.getNamespace(), modelId.getPath());
+        }
+        if (isGeckoModel) {
+            if (animation == null || animation.isEmpty()) {
+                animation = Collections.singletonList(GeckoModelLoader.DEFAULT_CHAIR_ANIMATION);
+            } else {
+                animation = animation.stream().filter(res -> res.getPath().endsWith(GECKO_ANIMATION)).collect(Collectors.toList());
+            }
         }
         renderEntityScale = Mth.clamp(renderEntityScale, RENDER_ENTITY_SCALE_MIN, RENDER_ENTITY_SCALE_MAX);
         // 将写入的高度转换为游戏内部的高度
