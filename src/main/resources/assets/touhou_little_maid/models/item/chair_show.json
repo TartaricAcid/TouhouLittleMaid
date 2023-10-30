@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "touhou_little_maid:items/chair_show"
+    "layer0": "touhou_little_maid:item/chair_show"
   }
 }

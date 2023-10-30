@@ -1,0 +1,29 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "parallel0": {
+      "loop": true
+    },
+    "parallel1": {
+      "loop": true
+    },
+    "parallel2": {
+      "loop": true
+    },
+    "parallel3": {
+      "loop": true
+    },
+    "parallel4": {
+      "loop": true
+    },
+    "parallel5": {
+      "loop": true
+    },
+    "parallel6": {
+      "loop": true
+    },
+    "parallel7": {
+      "loop": true
+    }
+  }
+}

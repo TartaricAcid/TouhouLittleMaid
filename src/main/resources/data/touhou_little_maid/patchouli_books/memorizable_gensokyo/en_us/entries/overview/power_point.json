@@ -5,7 +5,8 @@
   "category": "touhou_little_maid:overview",
   "pages": [
     {
-      "type": "text",
+      "type": "spotlight",
+      "item": "touhou_little_maid:power_point",
       "text": "patchouli.touhou_little_maid.book.entries.overview.power_point.pages.0.text"
     },
     {

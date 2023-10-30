@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.tartaricacid.touhoulittlemaid.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "touhou_little_maid.refmap.json",
+  "mixins": [
+    "MixinArrowEntity"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

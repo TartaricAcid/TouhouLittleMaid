@@ -16,6 +16,8 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaid
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.RequestEffectMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -28,12 +30,12 @@ import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -66,6 +68,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private ImageButton soundDownload;
     private ScheduleButton<T> scheduleButton;
     private boolean taskListOpen;
+    private int counterTime = 0;
 
     public AbstractMaidContainerGui(T screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
@@ -104,8 +107,48 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             return;
         }
         super.render(poseStack, mouseX, mouseY, partialTicks);
+        this.drawEffectInfo(poseStack);
         this.drawCurrentTaskText(poseStack);
         this.renderTooltip(poseStack, mouseX, mouseY);
+    }
+
+    @SuppressWarnings("all")
+    private void drawEffectInfo(PoseStack poseStack) {
+        if (taskListOpen) {
+            return;
+        }
+        List<SendEffectMessage.EffectData> effects = maid.getEffects();
+        if (!effects.isEmpty()) {
+            int yOffset = 5;
+            for (SendEffectMessage.EffectData effect : effects) {
+                MutableComponent text = Component.translatable(effect.descriptionId);
+                if (effect.amplifier >= 1 && effect.amplifier <= 9) {
+                    MutableComponent levelText = Component.translatable("enchantment.level." + (effect.amplifier + 1));
+                    text = text.append(" ").append(levelText);
+                }
+                String duration;
+                if (effect.duration == -1) {
+                    duration = I18n.get("effect.duration.infinite");
+                } else {
+                    duration = StringUtil.formatTickDuration(effect.duration);
+                }
+                text = text.append(" ").append(duration);
+                drawString(poseStack, font, text, leftPos - font.width(text) - 3, topPos + yOffset + 5, getPotionColor(effect.category));
+                yOffset += 10;
+            }
+        }
+    }
+
+    @SuppressWarnings("all")
+    private int getPotionColor(int category) {
+        switch (category) {
+            case 0:
+                return ChatFormatting.GREEN.getColor();
+            case 1:
+                return ChatFormatting.RED.getColor();
+            default:
+                return ChatFormatting.BLUE.getColor();
+        }
     }
 
     @Override
@@ -416,6 +459,14 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         RenderSystem.setShaderTexture(0, SIDE);
         blit(poseStack, leftPos + 94, topPos + 7, 107, 0, 149, 21);
         blit(poseStack, leftPos + 6, topPos + 168, 0, 47, 67, 25);
+    }
+
+    @Override
+    protected void containerTick() {
+        counterTime += 1;
+        if (counterTime % 20 == 0 && maid != null) {
+            NetworkHandler.CHANNEL.sendToServer(new RequestEffectMessage(maid.getId()));
+        }
     }
 
     @Override
