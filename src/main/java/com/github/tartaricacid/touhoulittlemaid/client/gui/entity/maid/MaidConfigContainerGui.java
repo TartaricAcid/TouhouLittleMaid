@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidSoundFreqButton;
-import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.StateSwitchingButton;
@@ -11,7 +11,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import static com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig.INSTANCE;
+import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig.INSTANCE;
 
 public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigContainer> {
     private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_config.png");
