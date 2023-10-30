@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "touhou_little_maid:items/magic_protect_bauble"
+    "layer0": "touhou_little_maid:item/magic_protect_bauble"
   }
 }

@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class TileEntityEntityPlaceholderRenderer extends ItemStackTileEntityRenderer {
     private static final EntityPlaceholderModel BASE_MODEL = new EntityPlaceholderModel();
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/items/entity_placeholder.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/item/entity_placeholder.png");
 
     @Override
     public void renderByItem(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int combinedLight, int combinedOverlay) {
@@ -37,7 +37,7 @@ public class TileEntityEntityPlaceholderRenderer extends ItemStackTileEntityRend
         if (recipeId != null) {
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
             String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
-            ResourceLocation texture = new ResourceLocation(namespace, String.format("textures/items/%s.png", path.getFileName().toString()));
+            ResourceLocation texture = new ResourceLocation(namespace, String.format("textures/item/%s.png", path.getFileName().toString()));
             if (Minecraft.getInstance().getResourceManager().hasResource(texture)) {
                 return texture;
             }

@@ -1,10 +1,10 @@
 {
 	"parent": "block/block",
 	"textures": {
-		"0": "touhou_little_maid:blocks/model_switcher_1",
-		"1": "touhou_little_maid:blocks/model_switcher_2",
-		"2": "touhou_little_maid:blocks/model_switcher_3",
-		"particle": "touhou_little_maid:blocks/model_switcher_1"
+		"0": "touhou_little_maid:block/model_switcher_1",
+		"1": "touhou_little_maid:block/model_switcher_2",
+		"2": "touhou_little_maid:block/model_switcher_3",
+		"particle": "touhou_little_maid:block/model_switcher_1"
 	},
 	"elements": [
 		{

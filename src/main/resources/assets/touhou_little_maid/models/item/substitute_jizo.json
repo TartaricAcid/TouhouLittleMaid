@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "touhou_little_maid:items/substitute_jizo"
+    "layer0": "touhou_little_maid:item/substitute_jizo"
   }
 }

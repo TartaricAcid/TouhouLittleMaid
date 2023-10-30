@@ -4,8 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
@@ -16,6 +16,8 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaid
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.RequestEffectMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -26,10 +28,12 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.ToggleWidget;
 import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 import net.minecraft.util.text.*;
 
 import java.util.Collections;
@@ -60,6 +64,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private ImageButton soundDownload;
     private ScheduleButton<T> scheduleButton;
     private boolean taskListOpen;
+    private int counterTime = 0;
 
     public AbstractMaidContainerGui(T screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -89,6 +94,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     @SuppressWarnings("all")
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.drawEffectInfo(matrixStack);
         this.drawCurrentTaskText(matrixStack);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
@@ -102,6 +108,45 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         this.drawMaidCharacter(x, y);
         this.drawBaseInfoGui(matrixStack);
         this.drawTaskListBg(matrixStack);
+    }
+
+    @SuppressWarnings("all")
+    private void drawEffectInfo(MatrixStack matrixStack) {
+        if (taskListOpen) {
+            return;
+        }
+        List<SendEffectMessage.EffectData> effects = maid.getEffects();
+        if (!effects.isEmpty()) {
+            int yOffset = 5;
+            for (SendEffectMessage.EffectData effect : effects) {
+                IFormattableTextComponent text = new TranslationTextComponent(effect.descriptionId);
+                if (effect.amplifier >= 1 && effect.amplifier <= 9) {
+                    IFormattableTextComponent levelText = new TranslationTextComponent("enchantment.level." + (effect.amplifier + 1));
+                    text = text.append(" ").append(levelText);
+                }
+                String duration;
+                if (effect.duration == -1) {
+                    duration = I18n.get("effect.duration.infinite");
+                } else {
+                    duration = StringUtils.formatTickDuration(effect.duration);
+                }
+                text = text.append(" ").append(duration);
+                drawString(matrixStack, font, text, leftPos - font.width(text) - 3, topPos + yOffset + 5, getPotionColor(effect.category));
+                yOffset += 10;
+            }
+        }
+    }
+
+    @SuppressWarnings("all")
+    private int getPotionColor(int category) {
+        switch (category) {
+            case 0:
+                return TextFormatting.GREEN.getColor();
+            case 1:
+                return TextFormatting.RED.getColor();
+            default:
+                return TextFormatting.BLUE.getColor();
+        }
     }
 
     @Override
@@ -395,6 +440,14 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         getMinecraft().textureManager.bind(SIDE);
         blit(matrixStack, leftPos + 94, topPos + 7, 107, 0, 149, 21);
         blit(matrixStack, leftPos + 6, topPos + 168, 0, 47, 67, 25);
+    }
+
+    @Override
+    public void tick() {
+        counterTime += 1;
+        if (counterTime % 20 == 0 && maid != null) {
+            NetworkHandler.CHANNEL.sendToServer(new RequestEffectMessage(maid.getId()));
+        }
     }
 
     @Override

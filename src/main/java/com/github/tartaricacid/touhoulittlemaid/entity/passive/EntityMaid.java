@@ -27,11 +27,14 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWr
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -48,13 +51,11 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
@@ -91,7 +92,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -103,8 +103,6 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -156,6 +154,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     public boolean guiOpening = false;
 
+    private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
     private int playerHurtSoundCount = 120;
     private int pickupSoundCount = 5;
@@ -441,10 +440,10 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-            Map.Entry<EquipmentSlotType, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
+            // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
+            ItemStack itemstack = this.getRandomItemWithMendingEnchantments();
             int xpValue = EntityPowerPoint.transPowerValueToXpValue(powerPoint.getValue());
-            if (entry != null) {
-                ItemStack itemstack = entry.getValue();
+            if (!itemstack.isEmpty()) {
                 if (!itemstack.isEmpty() && itemstack.isDamaged()) {
                     int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
                     xpValue -= (i / 2);
@@ -458,14 +457,30 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         }
     }
 
+    private ItemStack getRandomItemWithMendingEnchantments() {
+        List<ItemStack> stacks = Lists.newArrayList();
+        this.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(cap -> {
+            for (int i = 0; i < cap.getSlots(); i++) {
+                ItemStack itemstack = cap.getStackInSlot(i);
+                if (!itemstack.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MENDING, itemstack) > 0 && itemstack.isDamaged()) {
+                    stacks.add(itemstack);
+                }
+            }
+        });
+        return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get(this.getRandom().nextInt(stacks.size()));
+    }
+
     public boolean pickupArrow(AbstractArrowEntity arrow, boolean simulate) {
-        if (!this.level.isClientSide && arrow.isAlive() && arrow.inGround && arrow.shakeTime <= 0) {
+        if (!this.level.isClientSide && arrow.isAlive() && arrow.shakeTime <= 0) {
             // 先判断箭是否处于可以拾起的状态
             if (arrow.pickup != AbstractArrowEntity.PickupStatus.ALLOWED) {
                 return false;
             }
             // 能够塞入
             ItemStack stack = getArrowFromEntity(arrow);
+            if (stack.isEmpty()) {
+                return false;
+            }
             if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(false), stack, simulate).isEmpty()) {
                 return false;
             }
@@ -488,15 +503,13 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     }
 
     private ItemStack getArrowFromEntity(AbstractArrowEntity entity) {
-        try {
-            Method method = ObfuscationReflectionHelper.findMethod(entity.getClass(), "func_184550_j");
-            return (ItemStack) method.invoke(entity);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            return new ItemStack(Items.ARROW);
-        } catch (ObfuscationReflectionHelper.UnableToFindMethodException e) {
-            // 临时修复匠魂可能存在拾取箭的问题
-            return ItemStack.EMPTY;
+        if (entity instanceof MixinArrowEntity) {
+            MixinArrowEntity mixinArrow = (MixinArrowEntity) entity;
+            if (mixinArrow.tlmInGround() || entity.isNoPhysics()) {
+                return mixinArrow.getTlmPickupItem();
+            }
         }
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -645,10 +658,38 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     @Override
     public boolean canAttack(LivingEntity target) {
+        if (this.getOwner() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) this.getOwner();
+            LivingEntity lastHurtByMob = player.getLastHurtByMob();
+            if (target.equals(lastHurtByMob) && checkCanAttackEntity(lastHurtByMob)) {
+                return true;
+            }
+            LivingEntity lastHurtMob = player.getLastHurtMob();
+            if (target.equals(lastHurtMob) && checkCanAttackEntity(lastHurtMob)) {
+                return true;
+            }
+        }
+        LivingEntity maidLastHurtByMob = this.getLastHurtByMob();
+        if (target.equals(maidLastHurtByMob) && checkCanAttackEntity(maidLastHurtByMob)) {
+            return true;
+        }
         if (target instanceof IMob) {
             return super.canAttack(target);
         }
         return false;
+    }
+
+    private boolean checkCanAttackEntity(LivingEntity target) {
+        // 不能攻击玩家
+        if (target instanceof PlayerEntity) {
+            return false;
+        }
+        // 有主的宠物也不攻击
+        if (target instanceof TameableEntity) {
+            TameableEntity tamableAnimal = (TameableEntity) target;
+            return tamableAnimal.getOwnerUUID() == null;
+        }
+        return true;
     }
 
     public void sendItemBreakMessage(ItemStack stack) {
@@ -1195,6 +1236,14 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     public boolean onHurt() {
         return hurtTime > 0;
+    }
+
+    public List<SendEffectMessage.EffectData> getEffects() {
+        return effects;
+    }
+
+    public void setEffects(List<SendEffectMessage.EffectData> effects) {
+        this.effects = effects;
     }
 
     @Deprecated

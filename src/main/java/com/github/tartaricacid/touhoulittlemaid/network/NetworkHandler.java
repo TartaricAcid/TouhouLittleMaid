@@ -62,6 +62,10 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(18, ToggleTabMessage.class, ToggleTabMessage::encode, ToggleTabMessage::decode, ToggleTabMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(19, RequestEffectMessage.class, RequestEffectMessage::encode, RequestEffectMessage::decode, RequestEffectMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(20, SendEffectMessage.class, SendEffectMessage::encode, SendEffectMessage::decode, SendEffectMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, PlayerEntity player) {
