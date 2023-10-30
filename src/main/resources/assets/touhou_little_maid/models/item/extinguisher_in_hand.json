@@ -5,8 +5,8 @@
     64
   ],
   "textures": {
-    "0": "touhou_little_maid:items/extinguisher_in_hand",
-    "particle": "touhou_little_maid:items/extinguisher_in_hand"
+    "0": "touhou_little_maid:item/extinguisher_in_hand",
+    "particle": "touhou_little_maid:item/extinguisher_in_hand"
   },
   "elements": [
     {

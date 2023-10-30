@@ -3,306 +3,203 @@
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.idle",
     "sounds": [
-      "touhou_little_maid:maid/mode/idle1",
-      "touhou_little_maid:maid/mode/idle2",
-      "touhou_little_maid:maid/mode/idle3",
-      "touhou_little_maid:maid/mode/idle4",
-      "touhou_little_maid:maid/mode/idle5",
-      "touhou_little_maid:maid/mode/idle6",
-      "touhou_little_maid:maid/mode/idle7",
-      "touhou_little_maid:maid/mode/idle8",
-      "touhou_little_maid:maid/mode/idle9",
-      "touhou_little_maid:maid/mode/idle10",
-      "touhou_little_maid:maid/mode/idle11",
-      "touhou_little_maid:maid/mode/idle12",
-      "touhou_little_maid:maid/mode/idle13",
-      "touhou_little_maid:maid/mode/idle14",
-      "touhou_little_maid:maid/mode/idle15",
-      "touhou_little_maid:maid/mode/idle16",
-      "touhou_little_maid:maid/mode/idle17",
-      "touhou_little_maid:maid/mode/idle18",
-      "touhou_little_maid:maid/mode/idle19"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.attack": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.attack",
     "sounds": [
-      "touhou_little_maid:maid/mode/attack1",
-      "touhou_little_maid:maid/mode/attack2",
-      "touhou_little_maid:maid/mode/attack3",
-      "touhou_little_maid:maid/mode/attack4",
-      "touhou_little_maid:maid/mode/attack5",
-      "touhou_little_maid:maid/mode/attack6",
-      "touhou_little_maid:maid/mode/attack7"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.range_attack": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.range_attack",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.attack",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.danmaku_attack": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.danmaku_attack",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.attack",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.farm": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.farm",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.feed": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.feed",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event",
-        "weight": 4
-      },
-      "touhou_little_maid:maid/mode/feed1",
-      "touhou_little_maid:maid/mode/feed2",
-      "touhou_little_maid:maid/mode/feed3",
-      "touhou_little_maid:maid/mode/feed4",
-      "touhou_little_maid:maid/mode/feed5",
-      "touhou_little_maid:maid/mode/feed6",
-      "touhou_little_maid:maid/mode/feed7"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.shears": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.shears",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.milk": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.milk",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.torch": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.torch",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.feed_animal": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.feed_animal",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.extinguishing": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.extinguishing",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.snow": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.snow",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.break": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.break",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.furnace": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.furnace",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.mode.brewing": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.mode.brewing",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.mode.idle",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.ai.find_target": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.find_target",
     "sounds": [
-      "touhou_little_maid:maid/ai/find_target1",
-      "touhou_little_maid:maid/ai/find_target2",
-      "touhou_little_maid:maid/ai/find_target3"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.ai.hurt": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.hurt",
     "sounds": [
-      "touhou_little_maid:maid/ai/hurt1",
-      "touhou_little_maid:maid/ai/hurt2",
-      "touhou_little_maid:maid/ai/hurt3",
-      "touhou_little_maid:maid/ai/hurt4",
-      "touhou_little_maid:maid/ai/hurt5",
-      "touhou_little_maid:maid/ai/hurt6",
-      "touhou_little_maid:maid/ai/hurt7",
-      "touhou_little_maid:maid/ai/hurt8"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.ai.hurt_fire": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.hurt_fire",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid.ai.hurt",
-        "type": "event"
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.ai.hurt_player": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.hurt_player",
     "sounds": [
-      "touhou_little_maid:maid/ai/hurt_player1",
-      "touhou_little_maid:maid/ai/hurt_player2",
-      "touhou_little_maid:maid/ai/hurt_player3"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.ai.tamed": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.tamed",
     "sounds": [
-      "touhou_little_maid:maid/ai/tamed1",
-      "touhou_little_maid:maid/ai/tamed2",
-      "touhou_little_maid:maid/ai/tamed3",
-      "touhou_little_maid:maid/ai/tamed4"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.ai.item_get": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.item_get",
     "sounds": [
-      "touhou_little_maid:maid/ai/item_get1"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.ai.death": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.ai.death",
     "sounds": [
-      "touhou_little_maid:maid/ai/death1",
-      "touhou_little_maid:maid/ai/death2"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.environment.hot": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.hot",
     "sounds": [
-      "touhou_little_maid:maid/environment/hot1",
-      "touhou_little_maid:maid/environment/hot2",
-      "touhou_little_maid:maid/environment/hot3"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.environment.cold": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.cold",
     "sounds": [
-      "touhou_little_maid:maid/environment/cold1",
-      "touhou_little_maid:maid/environment/cold2",
-      "touhou_little_maid:maid/environment/cold3",
-      "touhou_little_maid:maid/environment/cold4"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.environment.rain": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.rain",
     "sounds": [
-      "touhou_little_maid:maid/environment/rain1",
-      "touhou_little_maid:maid/environment/rain2",
-      "touhou_little_maid:maid/environment/rain3"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.environment.snow": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.snow",
     "sounds": [
-      "touhou_little_maid:maid/environment/snow1",
-      "touhou_little_maid:maid/environment/snow2"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.environment.morning": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.morning",
     "sounds": [
-      "touhou_little_maid:maid/environment/morning1",
-      "touhou_little_maid:maid/environment/morning2",
-      "touhou_little_maid:maid/environment/morning3"
+      "touhou_little_maid:maid/empty"
     ]
   },
   "maid.environment.night": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.night",
     "sounds": [
-      "touhou_little_maid:maid/environment/night1",
-      "touhou_little_maid:maid/environment/night2"
+      "touhou_little_maid:maid/empty"
     ]
   },
-  "other.credit": {
+  "maid.credit": {
     "category": "voice",
     "subtitle": "subtitle.touhou_little_maid.other.credit",
     "sounds": [
-      {
-        "name": "touhou_little_maid:maid/other/credit",
-        "stream": true
-      }
+      "touhou_little_maid:maid/empty"
     ]
   },
   "item.camera_use": {

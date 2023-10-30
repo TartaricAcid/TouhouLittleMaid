@@ -28,11 +28,14 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWr
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -90,7 +93,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -103,8 +105,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -156,6 +156,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     public boolean guiOpening = false;
 
+    private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
     private int playerHurtSoundCount = 120;
     private int pickupSoundCount = 5;
@@ -441,10 +442,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-            Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
+            ItemStack itemstack = this.getRandomItemWithMendingEnchantments();
             int xpValue = EntityPowerPoint.transPowerValueToXpValue(powerPoint.getValue());
-            if (entry != null) {
-                ItemStack itemstack = entry.getValue();
+            if (!itemstack.isEmpty()) {
                 if (!itemstack.isEmpty() && itemstack.isDamaged()) {
                     int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
                     xpValue -= (i / 2);
@@ -458,14 +458,30 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
     }
 
+    private ItemStack getRandomItemWithMendingEnchantments() {
+        List<ItemStack> stacks = Lists.newArrayList();
+        this.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(cap -> {
+            for (int i = 0; i < cap.getSlots(); i++) {
+                ItemStack itemstack = cap.getStackInSlot(i);
+                if (!itemstack.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MENDING, itemstack) > 0 && itemstack.isDamaged()) {
+                    stacks.add(itemstack);
+                }
+            }
+        });
+        return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get(this.getRandom().nextInt(stacks.size()));
+    }
+
     public boolean pickupArrow(AbstractArrow arrow, boolean simulate) {
-        if (!this.level.isClientSide && arrow.isAlive() && arrow.isOnGround() && arrow.shakeTime <= 0) {
+        if (!this.level.isClientSide && arrow.isAlive() && arrow.shakeTime <= 0) {
             // 先判断箭是否处于可以拾起的状态
             if (arrow.pickup != AbstractArrow.Pickup.ALLOWED) {
                 return false;
             }
             // 能够塞入
             ItemStack stack = getArrowFromEntity(arrow);
+            if (stack.isEmpty()) {
+                return false;
+            }
             if (!ItemHandlerHelper.insertItemStacked(getAvailableInv(false), stack, simulate).isEmpty()) {
                 return false;
             }
@@ -488,15 +504,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     private ItemStack getArrowFromEntity(AbstractArrow entity) {
-        try {
-            Method method = ObfuscationReflectionHelper.findMethod(entity.getClass(), "func_184550_j");
-            return (ItemStack) method.invoke(entity);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            return new ItemStack(Items.ARROW);
-        } catch (ObfuscationReflectionHelper.UnableToFindMethodException e) {
-            // 临时修复匠魂可能存在拾取箭的问题
-            return ItemStack.EMPTY;
+        if (entity instanceof MixinArrowEntity mixinArrow) {
+            if (mixinArrow.tlmInGround() || entity.isNoPhysics()) {
+                return mixinArrow.getTlmPickupItem();
+            }
         }
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -645,10 +658,36 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     @Override
     public boolean canAttack(LivingEntity target) {
+        if (this.getOwner() instanceof Player player) {
+            LivingEntity lastHurtByMob = player.getLastHurtByMob();
+            if (target.equals(lastHurtByMob) && checkCanAttackEntity(lastHurtByMob)) {
+                return true;
+            }
+            LivingEntity lastHurtMob = player.getLastHurtMob();
+            if (target.equals(lastHurtMob) && checkCanAttackEntity(lastHurtMob)) {
+                return true;
+            }
+        }
+        LivingEntity maidLastHurtByMob = this.getLastHurtByMob();
+        if (target.equals(maidLastHurtByMob) && checkCanAttackEntity(maidLastHurtByMob)) {
+            return true;
+        }
         if (target instanceof Enemy) {
             return super.canAttack(target);
         }
         return false;
+    }
+
+    private boolean checkCanAttackEntity(LivingEntity target) {
+        // 不能攻击玩家
+        if (target instanceof Player) {
+            return false;
+        }
+        // 有主的宠物也不攻击
+        if (target instanceof TamableAnimal tamableAnimal) {
+            return tamableAnimal.getOwnerUUID() == null;
+        }
+        return true;
     }
 
     public void sendItemBreakMessage(ItemStack stack) {
@@ -1200,6 +1239,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Deprecated
     public boolean hasSasimono() {
         return false;
+    }
+
+    public List<SendEffectMessage.EffectData> getEffects() {
+        return effects;
+    }
+
+    public void setEffects(List<SendEffectMessage.EffectData> effects) {
+        this.effects = effects;
     }
 
     public boolean canDestroyBlock(BlockPos pos) {

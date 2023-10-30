@@ -1,8 +1,8 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "touhou_little_maid:blocks/maid_beacon",
-    "particle": "touhou_little_maid:blocks/maid_beacon"
+    "0": "touhou_little_maid:block/maid_beacon",
+    "particle": "touhou_little_maid:block/maid_beacon"
   },
   "elements": [
     {

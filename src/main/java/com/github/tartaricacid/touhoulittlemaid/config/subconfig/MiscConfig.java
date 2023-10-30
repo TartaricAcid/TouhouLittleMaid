@@ -15,6 +15,7 @@ public final class MiscConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> MAID_FAIRY_BLACKLIST_BIOME;
     public static ForgeConfigSpec.DoubleValue PLAYER_DEATH_LOSS_POWER_POINT;
     public static ForgeConfigSpec.BooleanValue GIVE_SMART_SLAB;
+    public static ForgeConfigSpec.BooleanValue GIVE_PATCHOULI_BOOK;
     public static ForgeConfigSpec.DoubleValue SHRINE_LAMP_EFFECT_COST;
     public static ForgeConfigSpec.DoubleValue SHRINE_LAMP_MAX_STORAGE;
     public static ForgeConfigSpec.IntValue SHRINE_LAMP_MAX_RANGE;
@@ -40,6 +41,9 @@ public final class MiscConfig {
 
         builder.comment("Give a soul spell item for player first join");
         GIVE_SMART_SLAB = builder.define("GiveSoulSpell", true);
+
+        builder.comment("Give the Memorizable Gensokyo book item for player first join");
+        GIVE_PATCHOULI_BOOK = builder.define("GivePatchouliBook", true);
 
         builder.comment("Shrine Lamp Effect Cost (Power Point/Per Hour)");
         SHRINE_LAMP_EFFECT_COST = builder.defineInRange("ShrineLampEffectCost", 0.9, 0, Double.MAX_VALUE);

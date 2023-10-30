@@ -5,8 +5,8 @@
     128
   ],
   "textures": {
-    "0": "touhou_little_maid:blocks/maid_bed",
-    "particle": "touhou_little_maid:blocks/maid_bed"
+    "0": "touhou_little_maid:block/maid_bed",
+    "particle": "touhou_little_maid:block/maid_bed"
   },
   "elements": [
     {
