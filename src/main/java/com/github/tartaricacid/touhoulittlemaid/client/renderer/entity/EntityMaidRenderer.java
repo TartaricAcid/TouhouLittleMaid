@@ -11,7 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.Lay
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -40,6 +40,7 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
+    private GeckoEntityMaidRenderer geckoEntityMaidRenderer;
 
     public EntityMaidRenderer(EntityRendererManager manager) {
         super(manager, new BedrockModel<>(), 0.5f);
@@ -47,6 +48,7 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
         this.addLayer(new LayerMaidBipedHead(this));
         this.addLayer(new LayerMaidBackpack(this));
         this.addLayer(new LayerMaidBackItem(this));
+        this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer(manager);
     }
 
     @Override
@@ -60,7 +62,10 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
 
         MaidModels.ModelData eventModelData = new MaidModels.ModelData(model, mainInfo, mainAnimations);
         if (MinecraftForge.EVENT_BUS.post(new RenderMaidEvent(entity, eventModelData))) {
-            this.model = eventModelData.getModel();
+            BedrockModel<EntityMaid> bedrockModel = eventModelData.getModel();
+            if (bedrockModel != null) {
+                this.model = bedrockModel;
+            }
             this.mainInfo = eventModelData.getInfo();
             this.mainAnimations = eventModelData.getAnimations();
         } else {
@@ -70,12 +75,19 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
             CustomPackLoader.MAID_MODELS.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
         }
 
-        // 模型动画设置
-        this.model.setAnimations(this.mainAnimations);
         // 渲染聊天气泡
         if (InGameMaidConfig.INSTANCE.isShowChatBubble()) {
             ChatBubbleRenderer.renderChatBubble(this, entity, matrixStackIn, bufferIn, packedLightIn);
         }
+
+        // GeckoLib 接管渲染
+        if (this.mainInfo.isGeckoModel()) {
+            this.geckoEntityMaidRenderer.setMainInfo(this.mainInfo);
+            this.geckoEntityMaidRenderer.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+            return;
+        }
+        // 模型动画设置
+        this.model.setAnimations(this.mainAnimations);
         // 渲染女仆模型本体
         GlWrapper.setMatrixStack(matrixStackIn);
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);

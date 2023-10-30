@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.config;
+package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.google.gson.annotations.SerializedName;
