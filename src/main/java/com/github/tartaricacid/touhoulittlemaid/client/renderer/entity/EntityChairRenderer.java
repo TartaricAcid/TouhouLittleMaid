@@ -29,9 +29,11 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
     public static boolean renderHitBox = true;
     private ChairModelInfo chairInfo;
     private List<Object> chairAnimations;
+    private GeckoEntityChairRenderer geckoEntityChairRenderer;
 
     public EntityChairRenderer(EntityRendererProvider.Context rendererManager) {
         super(rendererManager, new BedrockModel<>(), 0);
+        this.geckoEntityChairRenderer = new GeckoEntityChairRenderer(rendererManager);
     }
 
     @Override
@@ -66,6 +68,13 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
         CustomPackLoader.CHAIR_MODELS.getModel(chair.getModelId()).ifPresent(model -> this.model = model);
         CustomPackLoader.CHAIR_MODELS.getInfo(chair.getModelId()).ifPresent(info -> this.chairInfo = info);
         CustomPackLoader.CHAIR_MODELS.getAnimation(chair.getModelId()).ifPresent(animations -> this.chairAnimations = animations);
+
+        // GeckoLib 接管渲染
+        if (this.chairInfo.isGeckoModel()) {
+            this.geckoEntityChairRenderer.setMainInfo(this.chairInfo);
+            this.geckoEntityChairRenderer.render(chair, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
+            return;
+        }
 
         // 模型动画设置
         this.model.setAnimations(this.chairAnimations);

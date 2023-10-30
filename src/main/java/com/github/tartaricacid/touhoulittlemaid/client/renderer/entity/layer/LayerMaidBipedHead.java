@@ -58,20 +58,20 @@ public class LayerMaidBipedHead extends RenderLayer<EntityMaid, BedrockModel<Ent
                 RenderType rendertype = SkullBlockRenderer.getRenderType(type, gameprofile);
                 SkullBlockRenderer.renderSkull(null, 180.0F, 0.0F, poseStack, bufferIn, packedLightIn, modelBase, rendertype);
             }
-            ItemStack stack = maid.getMaidInv().getStackInSlot(5);
-            if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
-                Block block = ((BlockItem) stack.getItem()).getBlock();
-                if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
-                    BlockState plant = ((IPlantable) block).getPlant(maid.level, maid.blockPosition());
-                    poseStack.pushPose();
-                    this.getParentModel().getHead().translateAndRotate(poseStack);
-                    poseStack.scale(0.8F, -0.8F, -0.8F);
-                    poseStack.translate(-0.5, 0.625, -0.5);
-                    Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
-                    poseStack.popPose();
-                }
-            }
             poseStack.popPose();
+        }
+        ItemStack stack = maid.getMaidInv().getStackInSlot(5);
+        if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
+            Block block = ((BlockItem) stack.getItem()).getBlock();
+            if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
+                BlockState plant = ((IPlantable) block).getPlant(maid.level, maid.blockPosition());
+                poseStack.pushPose();
+                this.getParentModel().getHead().translateAndRotate(poseStack);
+                poseStack.scale(0.8F, -0.8F, -0.8F);
+                poseStack.translate(-0.5, 0.625, -0.5);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
+                poseStack.popPose();
+            }
         }
     }
 

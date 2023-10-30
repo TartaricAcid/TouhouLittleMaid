@@ -34,6 +34,7 @@ public final class EntityCacheUtil {
         maid.hurtDuration = 0;
         maid.hurtTime = 0;
         maid.deathTime = 0;
+        maid.setOnGround(true);
         maid.setInSittingPose(false);
         maid.setBackpackLevel(BackpackLevel.EMPTY);
         maid.setCustomName(Component.empty());
