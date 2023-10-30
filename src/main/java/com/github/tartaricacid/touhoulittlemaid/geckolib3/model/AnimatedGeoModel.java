@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.model;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatableModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation;
@@ -14,7 +15,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoMo
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.GeoModelProvider;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.IAnimatableModelProvider;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.NativeUtil;
 import net.minecraft.entity.Entity;
@@ -40,7 +40,7 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-        public void setCustomAnimations(T animatable, int instanceId, AnimationEvent animationEvent) {
+    public void setCustomAnimations(T animatable, int instanceId, AnimationEvent animationEvent) {
         Minecraft mc = Minecraft.getInstance();
         AnimationData manager = animatable.getFactory().getOrCreateAnimationData(instanceId);
         AnimationEvent<T> predicate;
@@ -79,7 +79,7 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-        public AnimationProcessor getAnimationProcessor() {
+    public AnimationProcessor getAnimationProcessor() {
         return this.animationProcessor;
     }
 
@@ -88,16 +88,17 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-        public Animation getAnimation(String name, IAnimatable animatable) {
+    public Animation getAnimation(String name, IAnimatable animatable) {
         AnimationFile animation = GeckoLibCache.getInstance().getAnimations().get(this.getAnimationFileLocation((T) animatable));
         if (animation == null) {
-            throw new GeckoLibException(this.getAnimationFileLocation((T) animatable), "Could not find animation file. Please double check name.");
+            TouhouLittleMaid.LOGGER.debug("{}: Could not find animation file. Please double check name.", this.getAnimationFileLocation((T) animatable));
+            return null;
         }
         return animation.getAnimation(name);
     }
 
     @Override
-        public GeoModel getModel(ResourceLocation location) {
+    public GeoModel getModel(ResourceLocation location) {
         GeoModel model = super.getModel(location);
         if (model == null) {
             throw new GeckoLibException(location, "Could not find model. If you are getting this with a built mod, please just restart your game.");
@@ -117,7 +118,7 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-        public double getCurrentTick() {
+    public double getCurrentTick() {
         return NativeUtil.getTime() * 20;
     }
 }

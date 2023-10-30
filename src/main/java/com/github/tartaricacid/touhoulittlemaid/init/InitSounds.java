@@ -38,7 +38,7 @@ public final class InitSounds {
     public static final RegistryObject<SoundEvent> MAID_SNOW = registerSound("maid.environment.snow");
     public static final RegistryObject<SoundEvent> MAID_MORNING = registerSound("maid.environment.morning");
     public static final RegistryObject<SoundEvent> MAID_NIGHT = registerSound("maid.environment.night");
-    public static final RegistryObject<SoundEvent> OTHER_CREDIT = registerSound("other.credit");
+    public static final RegistryObject<SoundEvent> MAID_CREDIT = registerSound("maid.credit");
     public static final RegistryObject<SoundEvent> CAMERA_USE = registerSound("item.camera_use");
     public static final RegistryObject<SoundEvent> ALBUM_OPEN = registerSound("item.album_open");
     public static final RegistryObject<SoundEvent> ALTAR_CRAFT = registerSound("block.altar_craft");

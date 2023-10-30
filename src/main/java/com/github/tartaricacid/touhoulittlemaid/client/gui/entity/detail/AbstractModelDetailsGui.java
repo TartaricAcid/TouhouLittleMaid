@@ -219,6 +219,11 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         RenderSystem.popMatrix();
     }
 
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
     private void fillGradient(MatrixStack matrixStack, Rectangle vec4d, int color) {
         fillGradient(matrixStack, (int) vec4d.x, (int) vec4d.y, (int) vec4d.w, (int) vec4d.h, color, color);
     }
