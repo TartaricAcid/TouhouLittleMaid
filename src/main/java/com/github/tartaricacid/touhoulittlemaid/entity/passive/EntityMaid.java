@@ -914,8 +914,9 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     @Override
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
-        if (soundEvent.getLocation().getPath().startsWith("maid") && !level.isClientSide) {
-            NetworkHandler.sendToNearby(this, new PlayMaidSoundMessage(soundEvent.getLocation(), this.getSoundPackId(), this.getId()), 16);
+        ResourceLocation id = ForgeRegistries.SOUND_EVENTS.getKey(soundEvent);
+        if (id != null && id.getPath().startsWith("maid") && !level.isClientSide) {
+            NetworkHandler.sendToNearby(this, new PlayMaidSoundMessage(id, this.getSoundPackId(), this.getId()), 16);
         } else {
             super.playSound(soundEvent, volume, pitch);
         }

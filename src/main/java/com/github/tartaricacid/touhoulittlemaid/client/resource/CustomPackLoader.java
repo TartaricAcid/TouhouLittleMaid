@@ -781,6 +781,7 @@ public class CustomPackLoader {
         String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language.getCode());
         getLanguageMap(zipFile, newLangData, defaultLangPath);
         getLanguageMap(zipFile, newLangData, currentLangPath);
+        removeOldLanguageKey(newLangData);
 
         languageMapMerge(oldLangData, newLangData);
         // FIXME: 还是会存在问题
@@ -799,6 +800,7 @@ public class CustomPackLoader {
         String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language.getCode());
         getLanguageMap(rootPath, newLangData, defaultLangPath);
         getLanguageMap(rootPath, newLangData, currentLangPath);
+        removeOldLanguageKey(newLangData);
 
         languageMapMerge(oldLangData, newLangData);
         // FIXME: 还是会存在问题
@@ -849,5 +851,9 @@ public class CustomPackLoader {
                 newLangData.put(key, oldLangData.get(key));
             }
         }
+    }
+
+    private static void removeOldLanguageKey(Map<String, String> langData) {
+        langData.remove("subtitle.touhou_little_maid.other.credit");
     }
 }

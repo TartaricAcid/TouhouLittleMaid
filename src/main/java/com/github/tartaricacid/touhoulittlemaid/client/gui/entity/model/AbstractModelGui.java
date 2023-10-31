@@ -438,6 +438,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 str.addAll(modelItem.getDescription());
                 // 转换为 ITextComponent
                 List<ITextComponent> tooltips = ParseI18n.parse(str);
+                // 添加额外的提示
+                addModelCustomTips(modelItem, tooltips);
                 // 塞入提示语
                 if (!modelItem.getName().equals(ENCRYPT_EGG_NAME) && !modelItem.getName().equals(NORMAL_EGG_NAME)) {
                     tooltips.add(new TranslationTextComponent("gui.touhou_little_maid.skin.tooltips.show_details")

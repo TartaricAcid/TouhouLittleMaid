@@ -52,6 +52,7 @@ public class MaidSoundPackGui extends Screen {
     @Override
     protected void init() {
         this.buttons.clear();
+        this.children.clear();
 
         this.startX = (width - 400) / 2;
         this.startY = (height - 220) / 2;
