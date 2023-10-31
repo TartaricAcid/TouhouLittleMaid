@@ -58,13 +58,11 @@ public class GeoBone implements IBone {
     }
 
     @Override
-
     public void setModelRendererName(String modelRendererName) {
         this.name = modelRendererName;
     }
 
     @Override
-
     public void saveInitialSnapshot() {
         if (this.initialSnapshot == null) {
             this.initialSnapshot = new BoneSnapshot(this, true);
@@ -72,194 +70,162 @@ public class GeoBone implements IBone {
     }
 
     @Override
-
     public BoneSnapshot getInitialSnapshot() {
         return this.initialSnapshot;
     }
 
 
     @Override
-
     public String getName() {
         return this.name;
     }
 
     @Override
-
     public float getRotationX() {
         return rotateX;
     }
 
     @Override
-
     public void setRotationX(float value) {
         this.rotateX = value;
     }
 
     @Override
-
     public float getRotationY() {
         return rotateY;
     }
 
     @Override
-
     public void setRotationY(float value) {
         this.rotateY = value;
     }
 
     @Override
-
     public float getRotationZ() {
         return rotateZ;
     }
 
     @Override
-
     public void setRotationZ(float value) {
         this.rotateZ = value;
     }
 
     @Override
-
     public float getPositionX() {
         return positionX;
     }
 
     @Override
-
     public void setPositionX(float value) {
         this.positionX = value;
     }
 
     @Override
-
     public float getPositionY() {
         return positionY;
     }
 
     @Override
-
     public void setPositionY(float value) {
         this.positionY = value;
     }
 
     @Override
-
     public float getPositionZ() {
         return positionZ;
     }
 
     @Override
-
     public void setPositionZ(float value) {
         this.positionZ = value;
     }
 
     @Override
-
     public float getScaleX() {
         return scaleX;
     }
 
     @Override
-
     public void setScaleX(float value) {
         this.scaleX = value;
     }
 
     @Override
-
     public float getScaleY() {
         return scaleY;
     }
 
     @Override
-
     public void setScaleY(float value) {
         this.scaleY = value;
     }
 
     @Override
-
     public float getScaleZ() {
         return scaleZ;
     }
 
     @Override
-
     public void setScaleZ(float value) {
         this.scaleZ = value;
     }
 
     @Override
-
     public boolean isHidden() {
         return this.isHidden;
     }
 
     @Override
-
     public void setHidden(boolean hidden) {
         this.setHidden(hidden, hidden);
     }
 
     @Override
-
     public float getPivotX() {
         return this.rotationPointX;
     }
 
     @Override
-
     public void setPivotX(float value) {
         this.rotationPointX = value;
     }
 
     @Override
-
     public float getPivotY() {
         return this.rotationPointY;
     }
 
     @Override
-
     public void setPivotY(float value) {
         this.rotationPointY = value;
     }
 
     @Override
-
     public float getPivotZ() {
         return this.rotationPointZ;
     }
 
     @Override
-
     public void setPivotZ(float value) {
         this.rotationPointZ = value;
     }
 
     @Override
-
     public boolean cubesAreHidden() {
         return areCubesHidden;
     }
 
     @Override
-
     public boolean childBonesAreHiddenToo() {
         return hideChildBonesToo;
     }
 
     @Override
-
     public void setCubesHidden(boolean hidden) {
         this.areCubesHidden = hidden;
     }
 
     @Override
-
     public void setHidden(boolean selfHidden, boolean skipChildRendering) {
         this.isHidden = selfHidden;
         this.hideChildBonesToo = skipChildRendering;

@@ -10,13 +10,11 @@ public class Abs extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-
     public double get() {
         return Math.abs(this.getArg(0));
     }

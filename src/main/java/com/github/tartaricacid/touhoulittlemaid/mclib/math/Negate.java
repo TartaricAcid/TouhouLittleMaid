@@ -9,13 +9,11 @@ public class Negate implements IValue {
     }
 
     @Override
-
     public double get() {
         return this.value.get() == 0 ? 1 : 0;
     }
 
     @Override
-
     public String toString() {
         return "!" + this.value.toString();
     }

@@ -154,7 +154,6 @@ public final class Color {
     }
 
     @Override
-
     public boolean equals(Object other) {
         if (this == other) {
             return true;
@@ -166,13 +165,11 @@ public final class Color {
     }
 
     @Override
-
     public int hashCode() {
         return color;
     }
 
     @Override
-
     public String toString() {
         return String.valueOf(color);
     }

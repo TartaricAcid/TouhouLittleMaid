@@ -26,7 +26,6 @@ public class LazyVariable extends Variable {
     }
 
     @Override
-
     public void set(double value) {
         this.valueSupplier = () -> value;
     }
@@ -36,7 +35,6 @@ public class LazyVariable extends Variable {
     }
 
     @Override
-
     public double get() {
         return this.valueSupplier.getAsDouble();
     }

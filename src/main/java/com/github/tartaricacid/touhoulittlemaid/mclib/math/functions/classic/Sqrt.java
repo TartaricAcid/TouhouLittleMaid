@@ -10,13 +10,11 @@ public class Sqrt extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-
     public double get() {
         return Math.sqrt(this.getArg(0));
     }

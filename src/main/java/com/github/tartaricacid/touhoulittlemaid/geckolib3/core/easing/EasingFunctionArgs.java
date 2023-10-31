@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public record EasingFunctionArgs(EasingType easingType, Double arg0) {
     @Override
-
     public boolean equals(Object o) {
         if (this == o) {
             return true;

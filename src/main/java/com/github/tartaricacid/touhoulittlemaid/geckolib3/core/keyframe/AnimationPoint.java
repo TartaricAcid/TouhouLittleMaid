@@ -39,7 +39,6 @@ public class AnimationPoint {
     }
 
     @Override
-
     public String toString() {
         return "Tick: " + currentTick + " | End Tick: " + animationEndTick + " | Start Value: " + animationStartValue
                 + " | End Value: " + animationEndValue;

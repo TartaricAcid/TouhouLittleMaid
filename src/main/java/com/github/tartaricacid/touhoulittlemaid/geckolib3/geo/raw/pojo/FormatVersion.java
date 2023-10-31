@@ -35,7 +35,6 @@ public enum FormatVersion {
 
     protected static class Serializer implements JsonSerializer<FormatVersion>, JsonDeserializer<FormatVersion> {
         @Override
-
         public FormatVersion deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             try {
                 return FormatVersion.forValue(json.getAsString());
@@ -45,7 +44,6 @@ public enum FormatVersion {
         }
 
         @Override
-
         public JsonElement serialize(FormatVersion src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(src.toValue());
         }

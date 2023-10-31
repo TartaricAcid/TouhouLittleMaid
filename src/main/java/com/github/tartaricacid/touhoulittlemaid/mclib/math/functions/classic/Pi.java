@@ -10,7 +10,6 @@ public class Pi extends Function {
     }
 
     @Override
-
     public double get() {
         return 3.141592653589793d;
     }

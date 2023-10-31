@@ -13,13 +13,11 @@ public class Ternary implements IValue {
     }
 
     @Override
-
     public double get() {
         return this.condition.get() != 0 ? this.ifTrue.get() : this.ifFalse.get();
     }
 
     @Override
-
     public String toString() {
         return this.condition.toString() + " ? " + this.ifTrue.toString() + " : " + this.ifFalse.toString();
     }

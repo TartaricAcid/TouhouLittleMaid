@@ -9,7 +9,6 @@ public class Constant implements IValue {
     }
 
     @Override
-
     public double get() {
         return this.value;
     }
@@ -19,7 +18,6 @@ public class Constant implements IValue {
     }
 
     @Override
-
     public String toString() {
         return String.valueOf(this.value);
     }

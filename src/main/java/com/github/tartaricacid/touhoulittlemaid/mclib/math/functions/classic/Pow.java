@@ -10,13 +10,11 @@ public class Pow extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 2;
     }
 
     @Override
-
     public double get() {
         return Math.pow(this.getArg(0), this.getArg(1));
     }

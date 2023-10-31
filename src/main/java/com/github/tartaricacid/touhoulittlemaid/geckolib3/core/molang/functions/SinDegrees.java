@@ -10,13 +10,11 @@ public class SinDegrees extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-
     public double get() {
         return Math.sin(this.getArg(0) / 180 * Math.PI);
     }

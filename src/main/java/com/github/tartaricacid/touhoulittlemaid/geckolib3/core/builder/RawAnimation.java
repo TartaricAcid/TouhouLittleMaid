@@ -21,7 +21,6 @@ public class RawAnimation {
     }
 
     @Override
-
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -33,7 +32,6 @@ public class RawAnimation {
     }
 
     @Override
-
     public int hashCode() {
         return Objects.hash(this.animationName, this.loopType);
     }

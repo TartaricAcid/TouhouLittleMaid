@@ -13,13 +13,11 @@ public class RandomInteger extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 2;
     }
 
     @Override
-
     public double get() {
         double min = Math.ceil(this.getArg(0));
         double max = Math.floor(this.getArg(1));

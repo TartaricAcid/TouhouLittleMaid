@@ -27,7 +27,6 @@ public abstract class Function implements IValue {
     }
 
     @Override
-
     public String toString() {
         StringBuilder args = new StringBuilder();
         for (int i = 0; i < this.args.length; i++) {

@@ -13,13 +13,11 @@ public class DieRollInteger extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 3;
     }
 
     @Override
-
     public double get() {
         double i = 0;
         double total = 0;

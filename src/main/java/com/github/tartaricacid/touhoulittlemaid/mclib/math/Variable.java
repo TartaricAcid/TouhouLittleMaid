@@ -15,7 +15,6 @@ public class Variable implements IValue {
     }
 
     @Override
-
     public double get() {
         return this.value;
     }
@@ -25,7 +24,6 @@ public class Variable implements IValue {
     }
 
     @Override
-
     public String toString() {
         return this.name;
     }

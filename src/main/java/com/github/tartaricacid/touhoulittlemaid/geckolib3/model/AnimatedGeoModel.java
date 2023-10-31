@@ -41,7 +41,6 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-
     public void setCustomAnimations(T animatable, int instanceId, AnimationEvent animationEvent) {
         Minecraft mc = Minecraft.getInstance();
         AnimationData manager = animatable.getFactory().getOrCreateAnimationData(instanceId);
@@ -81,7 +80,6 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-
     public AnimationProcessor getAnimationProcessor() {
         return this.animationProcessor;
     }
@@ -102,7 +100,6 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-
     public GeoModel getModel(ResourceLocation location) {
         GeoModel model = super.getModel(location);
         if (model == null) {
@@ -123,7 +120,6 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
     }
 
     @Override
-
     public double getCurrentTick() {
         return Blaze3D.getTime() * 20;
     }

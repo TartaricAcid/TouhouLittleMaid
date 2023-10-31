@@ -69,7 +69,6 @@ public class MolangParser extends MathBuilder {
     }
 
     @Override
-
     public void register(Variable variable) {
         if (!(variable instanceof LazyVariable)) {
             variable = LazyVariable.from(variable);
@@ -97,7 +96,6 @@ public class MolangParser extends MathBuilder {
     }
 
     @Override
-
     protected LazyVariable getVariable(String name) {
         return VARIABLES.computeIfAbsent(name, key -> new LazyVariable(key, 0));
     }
@@ -202,7 +200,6 @@ public class MolangParser extends MathBuilder {
      * 这样就能更加轻松解析赋值表达式
      */
     @Override
-
     protected boolean isOperator(String s) {
         return super.isOperator(s) || s.equals("=");
     }

@@ -16,7 +16,6 @@ public class MolangAssignment extends MolangExpression {
     }
 
     @Override
-
     public double get() {
         double value = this.expression.get();
         this.variable.set(value);
@@ -24,7 +23,6 @@ public class MolangAssignment extends MolangExpression {
     }
 
     @Override
-
     public String toString() {
         return this.variable.getName() + " = " + this.expression.toString();
     }

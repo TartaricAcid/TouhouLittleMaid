@@ -64,7 +64,6 @@ public interface ILoopType {
         }
 
         @Override
-
         public boolean isRepeatingAfterEnd() {
             return this.looping;
         }

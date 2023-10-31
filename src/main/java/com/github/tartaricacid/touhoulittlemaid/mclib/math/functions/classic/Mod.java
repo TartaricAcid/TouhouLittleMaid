@@ -10,13 +10,11 @@ public class Mod extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 2;
     }
 
     @Override
-
     public double get() {
         return this.getArg(0) % this.getArg(1);
     }

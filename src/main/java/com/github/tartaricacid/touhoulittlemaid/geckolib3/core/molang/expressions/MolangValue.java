@@ -21,19 +21,16 @@ public class MolangValue extends MolangExpression {
     }
 
     @Override
-
     public double get() {
         return this.value.get();
     }
 
     @Override
-
     public String toString() {
         return (this.returns ? MolangParser.RETURN : "") + this.value.toString();
     }
 
     @Override
-
     public JsonElement toJson() {
         if (this.value instanceof Constant) {
             return new JsonPrimitive(this.value.get());

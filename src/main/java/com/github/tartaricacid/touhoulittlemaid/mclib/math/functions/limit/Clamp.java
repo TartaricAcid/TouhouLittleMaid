@@ -10,13 +10,11 @@ public class Clamp extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 3;
     }
 
     @Override
-
     public double get() {
         return Mth.clamp(this.getArg(0), this.getArg(1), this.getArg(2));
     }

@@ -13,7 +13,6 @@ public class LocatorValue {
 
     protected static class Serializer implements JsonSerializer<LocatorValue>, JsonDeserializer<LocatorValue> {
         @Override
-
         public LocatorValue deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             LocatorValue result = new LocatorValue();
             if (json.isJsonArray()) {
@@ -25,7 +24,6 @@ public class LocatorValue {
         }
 
         @Override
-
         public JsonElement serialize(LocatorValue src, Type typeOfSrc, JsonSerializationContext context) {
             return src.locatorClassValue != null ?
                     context.serialize(src.locatorClassValue) :

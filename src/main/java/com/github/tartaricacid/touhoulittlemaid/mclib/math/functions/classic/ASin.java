@@ -10,13 +10,11 @@ public class ASin extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-
     public double get() {
         return Math.asin(getArg(0));
     }

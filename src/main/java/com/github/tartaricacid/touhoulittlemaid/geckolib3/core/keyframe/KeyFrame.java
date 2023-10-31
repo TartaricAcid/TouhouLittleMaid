@@ -64,13 +64,11 @@ public class KeyFrame<T> {
     }
 
     @Override
-
     public int hashCode() {
         return Objects.hash(length, startValue, endValue);
     }
 
     @Override
-
     public boolean equals(Object obj) {
         return obj instanceof KeyFrame && hashCode() == obj.hashCode();
     }

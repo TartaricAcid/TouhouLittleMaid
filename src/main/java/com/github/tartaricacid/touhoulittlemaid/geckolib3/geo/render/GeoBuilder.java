@@ -35,7 +35,6 @@ public class GeoBuilder implements IGeoBuilder {
     }
 
     @Override
-
     public GeoModel constructGeoModel(RawGeometryTree geometryTree) {
         GeoModel model = new GeoModel();
         model.properties = geometryTree.properties;
@@ -63,7 +62,6 @@ public class GeoBuilder implements IGeoBuilder {
     }
 
     @Override
-
     public GeoBone constructBone(RawBoneGroup bone, ModelProperties properties, GeoBone parent) {
         GeoBone geoBone = new GeoBone();
 

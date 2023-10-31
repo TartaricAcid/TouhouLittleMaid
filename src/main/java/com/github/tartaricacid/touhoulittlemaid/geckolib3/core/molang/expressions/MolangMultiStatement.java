@@ -18,7 +18,6 @@ public class MolangMultiStatement extends MolangExpression {
     }
 
     @Override
-
     public double get() {
         double value = 0;
         for (MolangExpression expression : this.expressions) {
@@ -28,7 +27,6 @@ public class MolangMultiStatement extends MolangExpression {
     }
 
     @Override
-
     public String toString() {
         StringJoiner builder = new StringJoiner("; ");
         for (MolangExpression expression : this.expressions) {

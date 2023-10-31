@@ -109,32 +109,27 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
     }
 
     @Override
-
     @Nonnull
     public IRenderCycle getCurrentModelRenderCycle() {
         return this.currentModelRenderCycle;
     }
 
     @Override
-
     public void setCurrentModelRenderCycle(IRenderCycle currentModelRenderCycle) {
         this.currentModelRenderCycle = currentModelRenderCycle;
     }
 
     @Override
-
     public float getWidthScale(Object animatable) {
         return this.widthScale;
     }
 
     @Override
-
     public float getHeightScale(Object entity) {
         return this.heightScale;
     }
 
     @Override
-
     public void renderEarly(Object animatable, PoseStack poseStack, float partialTick,
                             MultiBufferSource bufferSource, VertexConsumer buffer, int packedLight, int packedOverlayIn,
                             float red, float green, float blue, float alpha) {
@@ -143,7 +138,6 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
     }
 
     @Override
-
     public void render(Entity entity, float entityYaw, float partialTick, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight) {
 
@@ -248,7 +242,6 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
     }
 
     @Override
-
     public void renderRecursively(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
                                   int packedOverlay, float red, float green, float blue, float alpha) {
         if (bone.isTrackingXform()) {
@@ -274,13 +267,11 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
     }
 
     @Override
-
     public ResourceLocation getTextureLocation(Entity entity) {
         return this.modelProvider.getTextureLocation(this.currentAnimatable);
     }
 
     @Override
-
     public AnimatedGeoModel getGeoModelProvider() {
         return this.modelProvider;
     }
@@ -322,7 +313,6 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
     }
 
     @Override
-
     public boolean shouldShowName(Entity entity) {
         double nameRenderDistance = entity.isDiscrete() ? 32d : 64d;
         if (this.entityRenderDispatcher.distanceToSqr(entity) >= nameRenderDistance * nameRenderDistance) {
@@ -340,7 +330,6 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
     }
 
     @Override
-
     public ResourceLocation getTextureLocation(Object animatable) {
         return this.modelProvider.getTextureLocation((IAnimatable) animatable);
     }
@@ -388,13 +377,11 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
     }
 
     @Override
-
     public MultiBufferSource getCurrentRTB() {
         return this.rtb;
     }
 
     @Override
-
     public void setCurrentRTB(MultiBufferSource bufferSource) {
         this.rtb = bufferSource;
     }

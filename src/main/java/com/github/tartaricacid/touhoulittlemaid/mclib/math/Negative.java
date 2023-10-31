@@ -9,13 +9,11 @@ public class Negative implements IValue {
     }
 
     @Override
-
     public double get() {
         return -this.value.get();
     }
 
     @Override
-
     public String toString() {
         return "-" + this.value.toString();
     }

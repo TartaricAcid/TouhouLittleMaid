@@ -97,20 +97,17 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-
     @Nonnull
     public IRenderCycle getCurrentModelRenderCycle() {
         return this.currentModelRenderCycle;
     }
 
     @Override
-
     public void setCurrentModelRenderCycle(IRenderCycle currentModelRenderCycle) {
         this.currentModelRenderCycle = currentModelRenderCycle;
     }
 
     @Override
-
     public void renderEarly(T animatable, PoseStack poseStack, float partialTick, MultiBufferSource bufferSource,
                             VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue,
                             float partialTicks) {
@@ -129,7 +126,6 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-
     public void render(T animatable, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
         poseStack.pushPose();
@@ -221,7 +217,6 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-
     public void renderRecursively(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
                                   int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.pushPose();
@@ -272,25 +267,21 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-
     public int getInstanceId(T animatable) {
         return animatable.getId();
     }
 
     @Override
-
     public GeoModelProvider<T> getGeoModelProvider() {
         return this.modelProvider;
     }
 
     @Override
-
     public float getWidthScale(T animatable) {
         return this.widthScale;
     }
 
     @Override
-
     public float getHeightScale(T entity) {
         return this.heightScale;
     }
@@ -342,7 +333,6 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-
     public boolean shouldShowName(T animatable) {
         double nameRenderDistance = animatable.isDiscrete() ? 32d : 64d;
         if (this.entityRenderDispatcher.distanceToSqr(animatable) >= nameRenderDistance * nameRenderDistance) {
@@ -360,7 +350,6 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-
     public ResourceLocation getTextureLocation(T animatable) {
         return this.modelProvider.getTextureLocation(animatable);
     }
@@ -408,13 +397,11 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-
     public MultiBufferSource getCurrentRTB() {
         return this.rtb;
     }
 
     @Override
-
     public void setCurrentRTB(MultiBufferSource bufferSource) {
         this.rtb = bufferSource;
     }

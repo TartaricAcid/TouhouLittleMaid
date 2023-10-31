@@ -10,13 +10,11 @@ public class ATan2 extends Function {
     }
 
     @Override
-
     public int getRequiredArguments() {
         return 2;
     }
 
     @Override
-
     public double get() {
         return Math.atan2(getArg(0), getArg(1));
     }
