@@ -13,7 +13,7 @@ features:
     title: Tarif Düzenleme
     details: Datapack aracılığıyla tarif düzenleme
   - 
-    title: Develop Mod
+    title: Mod Geliştirme
     details: Modu derleme veya eklenti geliştirme
 footer: MIT Lisanslı | Telif hakkı © 2021-günümüz TartaricAcid
 ---
