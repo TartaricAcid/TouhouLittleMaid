@@ -1,8 +1,8 @@
-# Chair Model Pack Details
-- This wiki applies to Touhou Little Maid mod in `1.12.2` or `1.16.5` latest version;
-- Requires understanding of vanilla Minecraft's resource pack structure;
-- Requires understanding of JSON format;
-- Currently only supports models for **1.10.0 or 1.12.0 Bedrock Edition Model**.
+# Sandalye Model Paketi Detayları
+- Bu wiki Touhou Little Maid modunun `1.12.2` veya `1.16.5` versiyonlarında ki son sürümleri için uygulanır;
+- Minecraft'ın kaynak paketi dosyalarının yapısı hakkında bilgi gerektirir;
+- JSON dosya formatı hakkında bilgi gerektirir;
+- Şu an sadece **1.10.0 veya 1.12.0 Bedrock Edition** modellerini destekler.
 - For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
 
 ## Model Packs Structure
