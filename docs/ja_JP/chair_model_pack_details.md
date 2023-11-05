@@ -5,9 +5,9 @@
 - 現在、 **1.10.0 または 1.12.0 Bedrock Edition Model** のみをサポートしています。
 - For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
 
-## Model Packs Structure
+## モデルパックの構造
 
-To better understand how to create model packs, we listed here the structure format for model packs
+モデルパック作成時に構造をわかりやすくするため、以下に構造形式を示します。
 
 ```
 model pack folder
@@ -30,11 +30,11 @@ model pack folder
                         └─wheel_chair.png
 ```
 
-## Model Packs Description Files
+## モデルパックの詳細ファイル
 
-The file complete structure is as below, only the parts marked '(Required)' requires to be filled, you don't have to fill everything.
+'(Required)'と書かれた部分のみ記入が必須であり、すべてを記入して埋める必要はありません。
 
-The model supports JSON files with comments, please use at your discretion.
+このモデルは、コメント付きのJSONファイルをサポートしています。任意でお使いください。
 
 ```json
 {
