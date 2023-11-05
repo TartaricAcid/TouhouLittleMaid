@@ -9,8 +9,13 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitch
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.event.SpecialMaidRenderEvent.EASTER_EGG_MODEL;
@@ -70,6 +75,15 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
         float g = (float) (hashCode >> 8 & 255) / 255.0F;
         float b = (float) (hashCode & 255) / 255.0F;
         return new float[]{r, g, b};
+    }
+
+    @Override
+    protected void addModelCustomTips(MaidModelInfo modelItem, List<ITextComponent> tooltips) {
+        String useSoundPackId = modelItem.getUseSoundPackId();
+        if (StringUtils.isNotBlank(useSoundPackId)) {
+            tooltips.add(new TranslationTextComponent("gui.touhou_little_maid.skin.tooltips.maid_use_sound_pack_id", useSoundPackId)
+                    .withStyle(TextFormatting.GOLD));
+        }
     }
 
     @Override

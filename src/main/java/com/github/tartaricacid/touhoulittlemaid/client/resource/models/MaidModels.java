@@ -127,17 +127,18 @@ public final class MaidModels {
         private MaidModelInfo info;
         private List<Object> animations;
 
-        public ModelData(BedrockModel<EntityMaid> model, MaidModelInfo info, @Nullable List<Object> animations) {
+        public ModelData(@Nullable BedrockModel<EntityMaid> model, MaidModelInfo info, @Nullable List<Object> animations) {
             this.model = model;
             this.info = info;
             this.animations = animations;
         }
 
+        @Nullable
         public BedrockModel<EntityMaid> getModel() {
             return model;
         }
 
-        public void setModel(BedrockModel<EntityMaid> model) {
+        public void setModel(@Nullable BedrockModel<EntityMaid> model) {
             this.model = model;
         }
 

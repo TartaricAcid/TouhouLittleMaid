@@ -13,6 +13,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -94,6 +95,13 @@ public class ModelDownloadGui extends Screen {
             }));
         }
 
+        this.addButton(new ImageButton(startX + 194 - 21, startY + 1, 8, 10, 128, 224, 10, BG, 484, 256, b -> {
+            this.mouseScrolled(0, 0, 1);
+        }));
+        this.addButton(new ImageButton(startX + 194 - 21, startY + 2 + 175, 8, 10, 136, 224, 10, BG, 484, 256, b -> {
+            this.mouseScrolled(0, 0, -1);
+        }));
+
         addButton(new Button(startX + 287, startY - 30, 100, 20, new TranslationTextComponent("spectatorMenu.close"), (b) -> {
             if (minecraft != null) {
                 minecraft.setScreen(null);
@@ -113,7 +121,7 @@ public class ModelDownloadGui extends Screen {
         } else {
             minecraft.getTextureManager().bind(BG);
             blit(matrixStack, middleX - 200, middleY - 85, 0, 0, 400, 200, 484, 256);
-            blit(matrixStack, middleX - 19, middleY - 77 + (int) (169 * scroll), 400, 0, 4, 15, 484, 256);
+            blit(matrixStack, middleX - 19, middleY - 66 + (int) (147 * scroll), 400, 0, 4, 15, 484, 256);
             for (int i = 0; i < 4; i++) {
                 blit(matrixStack, middleX - 196 + (28 * i), middleY - 110, 456, 194, 28, 25, 484, 256);
             }

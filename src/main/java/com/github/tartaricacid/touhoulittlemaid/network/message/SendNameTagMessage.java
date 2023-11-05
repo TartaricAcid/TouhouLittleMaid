@@ -55,7 +55,9 @@ public class SendNameTagMessage {
             maid.setCustomName(new StringTextComponent(name));
             maid.setCustomNameVisible(message.alwaysShow);
             maid.setPersistenceRequired();
-            player.getMainHandItem().shrink(1);
+            if (!player.isCreative()) {
+                player.getMainHandItem().shrink(1);
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
+import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -37,6 +38,8 @@ public final class InitEntitiesRender {
         RenderingRegistry.registerEntityRenderingHandler(EntityExtinguishingAgent.TYPE, EntityExtinguishingAgentRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityBox.TYPE, EntityBoxRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityThrowPowerPoint.TYPE, (manager) -> new SpriteRenderer<>(manager, itemRenderer));
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.SLIME, EntityYukkuriSlimeRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityAltar.TYPE, TileEntityAltarRenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityStatue.TYPE, TileEntityStatueRenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityGarageKit.TYPE, TileEntityGarageKitRenderer::new);

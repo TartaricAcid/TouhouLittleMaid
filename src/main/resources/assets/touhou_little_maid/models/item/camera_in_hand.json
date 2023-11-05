@@ -5,8 +5,8 @@
     64
   ],
   "textures": {
-    "0": "touhou_little_maid:items/camera_3d",
-    "particle": "touhou_little_maid:items/camera_3d"
+    "0": "touhou_little_maid:item/camera_3d",
+    "particle": "touhou_little_maid:item/camera_3d"
   },
   "elements": [
     {

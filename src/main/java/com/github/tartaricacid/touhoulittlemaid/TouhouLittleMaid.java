@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
+import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -10,7 +11,10 @@ import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -23,6 +27,7 @@ import java.util.List;
 @Mod(TouhouLittleMaid.MOD_ID)
 public final class TouhouLittleMaid {
     public static final String MOD_ID = "touhou_little_maid";
+    private static final String CLOTH_CONFIG = "cloth-config";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static List<ILittleMaid> EXTENSIONS = Lists.newArrayList();
 
@@ -42,11 +47,18 @@ public final class TouhouLittleMaid {
         InitLootModifier.GLOBAL_LOOT_MODIFIER_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitTrigger.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfig.init());
+        checkModLoad(CLOTH_CONFIG, () -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MenuIntegration::registerModsPage));
         DeferredWorkQueue.runLater(NetworkHandler::init);
         EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
         TaskManager.init();
         BaubleManager.init();
         MultiBlockManager.init();
         ChatBubbleManger.initDefaultChat();
+    }
+
+    private static void checkModLoad(String modId, Runnable runnable) {
+        if (ModList.get().isLoaded(modId)) {
+            runnable.run();
+        }
     }
 }

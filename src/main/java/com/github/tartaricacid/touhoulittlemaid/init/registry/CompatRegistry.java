@@ -1,8 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -16,12 +20,12 @@ public final class CompatRegistry {
 
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
-        event.enqueueWork(() -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new));
+        event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
         event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
     }
 
-    private static void checkModLoad(String modid, Runnable runnable) {
-        if (ModList.get().isLoaded(modid)) {
+    private static void checkModLoad(String modId, Runnable runnable) {
+        if (ModList.get().isLoaded(modId)) {
             runnable.run();
         }
     }

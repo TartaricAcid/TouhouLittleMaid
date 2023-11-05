@@ -3,9 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -26,16 +23,6 @@ public class GuiDownloadButton extends Button {
     public void onPress() {
         if (DownloadStatus.canDownload(info.getStatus())) {
             InfoGetManager.downloadResourcesPack(info);
-        }
-    }
-
-    @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
-        if (info.getStatus() == DownloadStatus.DOWNLOADED && info.hasType(DownloadInfo.TypeEnum.SOUND)) {
-            FontRenderer font = Minecraft.getInstance().font;
-            font.drawWordWrap(new TranslationTextComponent("gui.touhou_little_maid.resources_download.sound.downloaded.tip"),
-                    this.x + 10, this.y + (this.height - 8) / 2 - this.height * 2, 200, 0xffbb1010);
         }
     }
 

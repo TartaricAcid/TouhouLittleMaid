@@ -4,8 +4,8 @@
     32
   ],
   "textures": {
-    "texture": "touhou_little_maid:items/hakurei_gohei_in_hand",
-    "particle": "touhou_little_maid:items/hakurei_gohei_in_hand"
+    "texture": "touhou_little_maid:item/hakurei_gohei_in_hand",
+    "particle": "touhou_little_maid:item/hakurei_gohei_in_hand"
   },
   "elements": [
     {

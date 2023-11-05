@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 
+
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -11,6 +12,8 @@ public interface IModelInfo {
     String getName();
 
     ResourceLocation getModel();
+
+    boolean isGeckoModel();
 
     @Nullable
     List<ResourceLocation> getAnimation();

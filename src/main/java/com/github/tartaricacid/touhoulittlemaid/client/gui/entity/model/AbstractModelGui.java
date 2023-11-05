@@ -79,6 +79,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      */
     protected abstract void notifyModelChange(T entity, E modelInfo);
 
+    protected abstract void addModelCustomTips(E modelItem, List<ITextComponent> tooltips);
+
     protected abstract int getPackIndex();
 
     protected abstract void setPackIndex(int packIndex);
@@ -141,6 +143,25 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 offsetY = offsetY + 30;
             }
         }
+    }
+
+    private void addScrollButton(int startX, int startY) {
+        ImageButton upButton = new ImageButton(startX - 256 / 2 + 253, startY - 73, 14, 10, 24, 15, 10, SIDE, b -> {
+            int row = MathHelper.clamp(getRowIndex() - 1, 0, guiNumber.getRowSize(getPackIndex()));
+            if (row != getRowIndex()) {
+                setRowIndex(row);
+                this.init();
+            }
+        });
+        Button downButton = new ImageButton(startX - 256 / 2 + 253, startY - 73 + 156, 14, 10, 38, 15, 10, SIDE, b -> {
+            int row = MathHelper.clamp(getRowIndex() + 1, 0, guiNumber.getRowSize(getPackIndex()));
+            if (row != getRowIndex()) {
+                setRowIndex(row);
+                this.init();
+            }
+        });
+        this.addButton(upButton);
+        this.addButton(downButton);
     }
 
     private Button.IPressable onModelButtonClick(E modelItem) {
@@ -231,6 +252,9 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 绘制其他文本提示
         drawTooltips(matrixStack, mouseX, mouseY, middleX, middleY);
+
+        // 模型包翻页
+        addScrollButton(middleX, middleY);
     }
 
     private void drawButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -242,11 +266,11 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     private void drawScrollSide(MatrixStack matrixStack, int middleX, int middleY) {
         if (guiNumber.canScroll(getPackIndex(), getRowIndex())) {
             blit(matrixStack, middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
                     24, 0, 12, 15);
         } else {
             blit(matrixStack, middleX - 256 / 2 + 254,
-                    middleY - 72 + (int) (149 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
                     36, 0, 12, 15);
         }
     }
@@ -414,6 +438,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 str.addAll(modelItem.getDescription());
                 // 转换为 ITextComponent
                 List<ITextComponent> tooltips = ParseI18n.parse(str);
+                // 添加额外的提示
+                addModelCustomTips(modelItem, tooltips);
                 // 塞入提示语
                 if (!modelItem.getName().equals(ENCRYPT_EGG_NAME) && !modelItem.getName().equals(NORMAL_EGG_NAME)) {
                     tooltips.add(new TranslationTextComponent("gui.touhou_little_maid.skin.tooltips.show_details")

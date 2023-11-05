@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.config.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.blaze3d.matrix.MatrixStack;
