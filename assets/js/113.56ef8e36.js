@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[113],{393:function(t,o,n){"use strict";n.r(o);var s=n(14),e=Object(s.a)({},(function(){var t=this._self._c;return t("ContentSlotsDistributor",{attrs:{"slot-key":this.$parent.slotKey}},[t("blockquote",[t("p",[this._v("确保你所使用的 Touhou Little Maid 模组为最新版")])])])}),[],!1,null,null,null);o.default=e.exports}}]);
