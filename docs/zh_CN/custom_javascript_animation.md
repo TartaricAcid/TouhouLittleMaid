@@ -108,51 +108,51 @@ Java.asJSONCompatible({
 
 #### 女仆
 
-|             函数名              |    返回值     |                                        备注                                        |
-|:----------------------------:|:----------:|:--------------------------------------------------------------------------------:|
-|        `hasHelmet()`         | `boolean`  |                                女仆穿戴头盔后，返回 `true`                                 |
-|      `hasChestPlate()`       | `boolean`  |                                女仆穿戴胸甲后，返回 `true`                                 |
-|       `hasLeggings()`        | `boolean`  |                                女仆穿戴护腿后，返回 `true`                                 |
-|         `hasBoots()`         | `boolean`  |                                女仆穿戴靴子后，返回 `true`                                 |
-|        `getHelmet()`         |  `String`  |                              当女仆佩戴头盔后，返回头盔物品的注册名称。                               |
-|      `getChestPlate()`       |  `String`  |                              当女仆佩戴胸甲后，返回胸甲物品的注册名称。                               |
-|       `getLeggings()`        |  `String`  |                              当女仆佩戴护腿后，返回护腿物品的注册名称。                               |
-|         `getBoots()`         |  `String`  |                              当女仆佩戴靴子后，返回头盔物品的注册名称。                               |
-|        `isBegging()`         | `boolean`  |                                    女仆是否处于祈求模式                                    |
-|      `isSwingingArms()`      | `boolean`  |             If maid is using arms, this function will return `true`              |
-|     `getSwingProgress()`     |  `float`   |                             Get maid's swinging time                             |
-|         `isRiding()`         | `boolean`  |                                    女仆是否处于骑乘模式                                    |
-|        `isSitting()`         | `boolean`  |                                    女仆是否处于待命模式                                    |
-|    ~~`isHoldTrolley()`~~     | `boolean`  |                                 女仆是否携带手推车或其他实体。                                  |
-| ~~`isRidingMarisaBroom()`~~  | `boolean`  |                       Whether maid is riding Marisa Broom                        |
-|    ~~`isRidingPlayer()`~~    | `boolean`  |                          Whether maid is riding player                           |
-|    ~~`isHoldVehicle()`~~     | `boolean`  |                          Whether maid is riding vehicle                          |
-| ~~`isPortableAudioPlay()`~~  | `boolean`  |                 Whether the maid hold portable audio and play it                 |
-|       `hasBackpack()`        | `boolean`  |                          Whether maid wearing backpack                           |
-|     `getBackpackLevel()`     |   `int`    |                            Get maid's backpack level                             |
-|     ~~`hasSasimono()`~~      | `boolean`  |                          Whether maid wearing sasimono                           |
-|     `isSwingLeftHand()`      | `boolean`  | Whether the maid is swinging left or right arm, return `false` if it's the right |
-| ~~`getLeftHandRotation()`~~  | `float[3]` |                          Get the left arm rotation data                          |
-| ~~`getRightHandRotation()`~~ | `float[3]` |                         Get the right arm rotation data                          |
-|        ~~`getDim()`~~        |   `int`    |                      Get the dimension where the maid is in                      |
-|         `getWorld()`         |  `World`   |                              Get maid's world data                               |
-|         `getTask()`          |  `String`  |                Get maid's task, such as `attack`, `ranged_attack`                |
-|     `hasItemMainhand()`      | `boolean`  |                          Whether maid has mainhand item                          |
-|      `hasItemOffhand()`      | `boolean`  |                          Whether maid has offhand item                           |
-|     `getItemMainhand()`      |  `String`  |                      Get maid mainhand item's registry name                      |
-|      `getItemOffhand()`      |  `String`  |                      Get maid offhand item's registry name                       |
-|         `inWater()`          | `boolean`  |                              Whether maid in water                               |
-|          `inRain()`          | `boolean`  |                               Whether maid in rain                               |
-|        `getAtBiome()`        |  `String`  |                          Get maid's biome register name                          |
-|    ~~`getAtBiomeTemp()`~~    |  `String`  |                        Get maid's biome temperature enum                         |
-|          `onHurt()`          | `boolean`  |                           Whether the maid is on hurt                            |
-|        `getHealth()`         |  `float`   |                                     获取女仆的生命值                                     |
-|       `getMaxHealth()`       |  `float`   |                                    获取女仆的最大生命值                                    |
-|         `isSleep()`          | `boolean`  |                              Whether maid is sleep                               |
-|     `getFavorability()`      |   `int`    |                           Get the maid's favorability                            |
-|        `isOnGround()`        | `boolean`  |                          Whether the maid is on ground                           |
-|      `getArmorValue()`       |  `double`  |                              Get maid's armor value                              |
-|         `getSeed()`          |   `long`   |                          获取一个固定值，每个实体都是不同的，类似于该实体的 UUID                          |
+|             函数名              |    返回值     |                  备注                  |
+|:----------------------------:|:----------:|:------------------------------------:|
+|        `hasHelmet()`         | `boolean`  |          女仆穿戴头盔后，返回 `true`           |
+|      `hasChestPlate()`       | `boolean`  |          女仆穿戴胸甲后，返回 `true`           |
+|       `hasLeggings()`        | `boolean`  |          女仆穿戴护腿后，返回 `true`           |
+|         `hasBoots()`         | `boolean`  |          女仆穿戴靴子后，返回 `true`           |
+|        `getHelmet()`         |  `String`  |        当女仆佩戴头盔后，返回头盔物品的注册名称。         |
+|      `getChestPlate()`       |  `String`  |        当女仆佩戴胸甲后，返回胸甲物品的注册名称。         |
+|       `getLeggings()`        |  `String`  |        当女仆佩戴护腿后，返回护腿物品的注册名称。         |
+|         `getBoots()`         |  `String`  |        当女仆佩戴靴子后，返回头盔物品的注册名称。         |
+|        `isBegging()`         | `boolean`  |              女仆是否处于祈求模式              |
+|      `isSwingingArms()`      | `boolean`  |         如果女仆处于抬手状态，返回 `true`         |
+|     `getSwingProgress()`     |  `float`   |              获取女仆抬手的时间               |
+|         `isRiding()`         | `boolean`  |              女仆是否处于骑乘模式              |
+|        `isSitting()`         | `boolean`  |              女仆是否处于待命模式              |
+|    ~~`isHoldTrolley()`~~     | `boolean`  |           女仆是否携带手推车或其他实体。            |
+| ~~`isRidingMarisaBroom()`~~  | `boolean`  |               女仆是否骑着扫帚               |
+|    ~~`isRidingPlayer()`~~    | `boolean`  |               女仆是否骑着玩家               |
+|    ~~`isHoldVehicle()`~~     | `boolean`  |               女仆是否骑乘载具               |
+| ~~`isPortableAudioPlay()`~~  | `boolean`  |          女仆是否持有便携音箱并处于播放状态           |
+|       `hasBackpack()`        | `boolean`  |               女仆是否穿戴背包               |
+|     `getBackpackLevel()`     |   `int`    |              获取女仆的的背包等级              |
+|     ~~`hasSasimono()`~~      | `boolean`  |              女仆是否穿戴旗指物               |
+|     `isSwingLeftHand()`      | `boolean`  |     女仆是否使用主手或副手，如果是主手，返回 `false`     |
+| ~~`getLeftHandRotation()`~~  | `float[3]` |               获取主手旋转数据               |
+| ~~`getRightHandRotation()`~~ | `float[3]` |               获取副手旋转数据               |
+|        ~~`getDim()`~~        |   `int`    |               获取女仆所处维度               |
+|         `getWorld()`         |  `World`   |              获取女仆的世界数据               |
+|         `getTask()`          |  `String`  | 获取女仆的工作模式，比如`attack`，`ranged_attack` |
+|     `hasItemMainhand()`      | `boolean`  |              是否女仆主手持有物品              |
+|      `hasItemOffhand()`      | `boolean`  |              是否女仆副手持有物品              |
+|     `getItemMainhand()`      |  `String`  |             获取女仆主手物品注册名              |
+|      `getItemOffhand()`      |  `String`  |             获取女仆副手物品注册名              |
+|         `inWater()`          | `boolean`  |               女仆是否在水中                |
+|          `inRain()`          | `boolean`  |               女仆是否在雨中                |
+|        `getAtBiome()`        |  `String`  |             获取女仆的生物群系注册名             |
+|    ~~`getAtBiomeTemp()`~~    |  `String`  |            获取女仆的生物群系温度类型             |
+|          `onHurt()`          | `boolean`  |               女仆是否受到伤害               |
+|        `getHealth()`         |  `float`   |               获取女仆的生命值               |
+|       `getMaxHealth()`       |  `float`   |              获取女仆的最大生命值              |
+|         `isSleep()`          | `boolean`  |               女仆是否在睡觉                |
+|     `getFavorability()`      |   `int`    |               获取女仆的好感度               |
+|        `isOnGround()`        | `boolean`  |               女仆是否在地面                |
+|      `getArmorValue()`       |  `double`  |                女仆的护甲值                |
+|         `getSeed()`          |   `long`   |    获取一个固定值，每个实体都是不同的，类似于该实体的 UUID    |
 
 #### 坐垫
 
@@ -160,11 +160,11 @@ Java.asJSONCompatible({
 |:---------------------:|:---------:|:------------------------------:|
 |  `isRidingPlayer()`   | `boolean` |           坐垫是否被玩家所坐            |
 |   `hasPassenger()`    | `boolean` |            坐垫是否有乘客             |
-|  `getPassengerYaw()`  |  `float`  |   Get chair passenger's yaw    |
-|      `getYaw()`       |  `float`  |        Get chair's yaw         |
-| `getPassengerPitch()` |  `float`  |  Get chair passenger's pitch   |
-|    ~~`getDim()`~~     |   `int`   |       Get chair's dim id       |
-|     `getWorld()`      |  `World`  |     Get chair's world data     |
+|  `getPassengerYaw()`  |  `float`  |          获取坐垫上乘客的 yaw          |
+|      `getYaw()`       |  `float`  |           获取坐垫的 yaw            |
+| `getPassengerPitch()` |  `float`  |         获取坐垫上乘客的 pitch         |
+|    ~~`getDim()`~~     |   `int`   |           获取坐垫的维度 ID           |
+|     `getWorld()`      |  `World`  |           获取坐垫的世界数据            |
 |      `getSeed()`      |  `long`   | 获取一个固定值，每个实体都是不同的，类似于该实体的 UUID |
 
 #### 世界
@@ -184,15 +184,15 @@ Java.asJSONCompatible({
 
 这两个数据主要用于腿部和肢体的旋转，Minecraft原版使用这两个基本数据来计算手臂和腿部摆动的动画。
 
-`Math.cos(limbSwing * 0.6662) * limbSwingAmount`(left hand)
+`Math.cos(limbSwing * 0.6662) * limbSwingAmount`（左手）
 
-`-Math.cos(limbSwing * 0.6662) * limbSwingAmount`(right hand)
+`-Math.cos(limbSwing * 0.6662) * limbSwingAmount`（右手）
 
-`Math.cos(limbSwing * 0.6662) * limbSwingAmount * 1.4`(left leg)
+`Math.cos(limbSwing * 0.6662) * limbSwingAmount * 1.4`（左腿）
 
-`-Math.cos(limbSwing * 0.6662) * limbSwingAmount * 1.4`(right leg)
+`-Math.cos(limbSwing * 0.6662) * limbSwingAmount * 1.4`（右腿）
 
-改变值`0.6662`将控制摆动的频率，乘以公式的系数 (例如，腿部使用`1.4`作为系数) 来改变摆动的幅度。
+改变数值`0.6662`可以控制摆动的频率，乘以系数 (例如，腿部使用`1.4`作为系数) 来改变摆动的幅度。
 
 使用原版Minecraft的手臂和腿摆动公式可以使摆动动画更加自然。
 
@@ -215,7 +215,7 @@ head.setRotateAngleX(headPitch * 0.017453292);
 head.setRotateAngleY(netHeadYaw * 0.017453292);
 ```
 
-> 如果在此部分设置的系数大于'0.017453292'，可能会出现一些错误问题。
+> 如果在此部分设置的系数大于'0.017453292'，可能会出现一些错误。
 
 
 ### `scale` 参数
