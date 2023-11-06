@@ -145,7 +145,6 @@
   "patchouli.touhou_little_maid.book.entries.maid.backpack.name": "배낭",
   "patchouli.touhou_little_maid.book.entries.maid.maid_base.name": "메이드 기본 정보",
   "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.0.text": "메이드는 기본적으로 많은 일들을 할 수 있습니다. 예를 들어 $(li)기본적으로 메이드는 직접적으로 아이템, 화살, 경험치 오브를 주울 수 있습니다. 주 GUI에 이를 조절하는 버튼이 있습니다.;$(li)또한 기본적으로 메이드는 항상 플레이어를 따라다닙니다.",
-  "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.2.text": "$(li)메이드가 얻은 경험치 오브는 병을 들고 메이드를 우클릭시 경험치 병으로 바꿀 수 있습니다.$(li)메이드는 몬스터 머리를 착용할 수 있습니다.$(li)빈 이름표를 들고 메이드를 우클릭시 바로 메이드의 이름을 바꿀 수 있습니다.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_config.name": "메이드 설정",
   "patchouli.touhou_little_maid.book.entries.maid.maid_sound.name": "메이스 음성",
   "patchouli.touhou_little_maid.book.entries.maid.maid_task.name": "메이드 직업",

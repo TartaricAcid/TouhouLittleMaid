@@ -1,60 +1,60 @@
 {
     "title": {
-        "lang": "",
-        "title": "",
-        "description": ""
+        "lang": "tr-TR",
+        "title": "Touhou Little Maid Geliştirme Wikisi",
+        "description": "Touhou Little Maid mod geliştirme ile alâkalı bir wiki var"
     },
     "themeConfig": {
-        "selectText": "",
-        "label": "",
-        "ariaLabel": "",
-        "lastUpdated": "",
+        "selectText": "Diller",
+        "label": "İngilizce",
+        "ariaLabel": "Diller",
+        "lastUpdated": "Son Güncellenme Tarihi",
         "nav": [
             {
-                "text": "",
-                "link": ""
+                "text": "Ana Sayfa",
+                "link": "./"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "GitHub",
+                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
             },
             {
-                "text": "",
-                "link": ""
+                "text": "CurseForge",
+                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
             }
         ],
         "sidebar": [
             {
-                "title": "",
+                "title": "Özel Model",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./custom_model_pack",
+                        "Özel Model Paketi"
                     ],
                     [
-                        "",
-                        ""
+                        "./maid_model_pack_details",
+                        "Maid Model Paket Detayları"
                     ],
                     [
-                        "",
-                        ""
+                        "./chair_model_pack_details",
+                        "Sandalye Model Paketi Detayları"
                     ],
                     [
-                        "",
-                        ""
+                        "./custom_javascript_animation",
+                        "Özel JavaScript Animasyonu"
                     ],
                     [
-                        "",
-                        ""
+                        "./preset_animation",
+                        "Önceden Ayarlanmış Animasyon"
                     ]
                 ]
             },
             {
-                "title": "",
+                "title": "Tarifleri Değiştir",
                 "children": [
                     [
-                        "",
-                        ""
+                        "./custom_altar_recipes",
+                        "Özel Altar Tarifleri"
                     ]
                 ]
             }
