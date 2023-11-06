@@ -24,7 +24,7 @@ public class EntityJoinWorldEvent {
         if (event.getEntity() instanceof AnimalEntity) {
             AnimalEntity animal = (AnimalEntity) event.getEntity();
             animal.goalSelector.availableGoals.stream().filter(goal -> goal.getGoal() instanceof TemptGoal).findFirst().ifPresent(g -> {
-                if (g.getGoal() instanceof TemptGoal) {
+                if (g.getGoal() instanceof TemptGoal && MaidTemptGoal.checkNavigation(((TemptGoal) g.getGoal()).mob)) {
                     TemptGoal temptGoal = (TemptGoal) g.getGoal();
                     animal.goalSelector.addGoal(g.getPriority(), new MaidTemptGoal(temptGoal.mob, temptGoal.speedModifier, temptGoal.items, temptGoal.canScare));
                 }

@@ -10,6 +10,7 @@ import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.GroundPathNavigator;
 
 import java.util.EnumSet;
+import java.util.Objects;
 
 public class MaidTemptGoal extends Goal {
     private static final EntityPredicate TEMP_TARGETING = (new EntityPredicate()).range(10.0D).allowInvulnerable().allowSameTeam().allowNonAttackable().allowUnseeable();
@@ -37,8 +38,12 @@ public class MaidTemptGoal extends Goal {
         this.canScare = canScare;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         if (!(creature.getNavigation() instanceof GroundPathNavigator) && !(creature.getNavigation() instanceof FlyingPathNavigator)) {
-            throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
+            throw new IllegalArgumentException("Unsupported mob type for TemptGoal: " + Objects.requireNonNull(creature.getType().getRegistryName()));
         }
+    }
+
+    public static boolean checkNavigation(CreatureEntity creature) {
+        return creature.getNavigation() instanceof GroundPathNavigator || creature.getNavigation() instanceof FlyingPathNavigator;
     }
 
     public boolean canUse() {
