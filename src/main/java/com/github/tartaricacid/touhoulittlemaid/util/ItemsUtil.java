@@ -22,7 +22,7 @@ public final class ItemsUtil {
      */
     public static void dropEntityItems(Entity entity, IItemHandler itemHandler, int startIndex, int endIndex) {
         for (int i = startIndex; i < endIndex; i++) {
-            Containers.dropItemStack(entity.level, entity.getX(), entity.getY(), entity.getZ(), itemHandler.getStackInSlot(i));
+            entity.spawnAtLocation(itemHandler.getStackInSlot(i));
         }
     }
 

@@ -340,6 +340,8 @@
   "top.touhou_little_maid.entity_maid.task": "Mode: ",
   "top.touhou_little_maid.entity_maid.invulnerable": "Invulnerable",
   "top.touhou_little_maid.entity_maid.schedule": "Schedule: ",
+  "domesticationinnovation.touhou_little_maid.enchantment.undead_curse": "§4Undead Curse enchantment cannot be applied to maids!",
+  "domesticationinnovation.touhou_little_maid.enchantment.blazing_protection": "§4Blazing Protection enchantment cannot be applied to maids!",
   "config.jade.plugin_touhou_little_maid.maid": "Show Maid's Extra Info",
   "patchouli.touhou_little_maid.book.name": "Memorizable Gensokyo",
   "patchouli.touhou_little_maid.book.landing_text": "A mod about the maid and the touhou project.$(br2)Thanks to Snownee for help in coding. $(br)Thanks to Succinum, Pajinyi, ZeniCrow, Tian_mi, Paulzzh, Yuriscat and other artists for producing excellent models and textures.$(br)Thanks to Verclene, the author of little maid mob mod.",
