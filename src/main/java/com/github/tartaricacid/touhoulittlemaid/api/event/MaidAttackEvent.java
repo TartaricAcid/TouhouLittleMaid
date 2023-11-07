@@ -2,17 +2,31 @@ package com.github.tartaricacid.touhoulittlemaid.api.event;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.eventbus.api.Cancelable;
 
-public class MaidAttackEvent extends LivingAttackEvent {
+@Cancelable
+public class MaidAttackEvent extends LivingEvent {
     private final EntityMaid maid;
+    private final DamageSource source;
+    private final float amount;
 
     public MaidAttackEvent(EntityMaid maid, DamageSource source, float amount) {
-        super(maid, source, amount);
+        super(maid);
+        this.source = source;
+        this.amount = amount;
         this.maid = maid;
     }
 
     public EntityMaid getMaid() {
         return maid;
+    }
+
+    public DamageSource getSource() {
+        return source;
+    }
+
+    public float getAmount() {
+        return amount;
     }
 }

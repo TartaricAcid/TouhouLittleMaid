@@ -137,6 +137,9 @@ dependencies {
 
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
 
+    implementation fg.deobf("curse.maven:citadel-331936:${citadel_id}")
+    implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

@@ -58,7 +58,10 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.*;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
@@ -877,8 +880,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     protected void dropEquipment() {
         ItemsUtil.dropEntityItems(this, new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble));
-        ItemMaidBackpack.getInstance(getBackpackLevel()).ifPresent(backpack ->
-                Containers.dropItemStack(level, getX(), getY(), getZ(), backpack.getDefaultInstance()));
+        ItemMaidBackpack.getInstance(getBackpackLevel()).ifPresent(backpack -> spawnAtLocation(backpack.getDefaultInstance()));
         spawnAtLocation(ItemFilm.maidToFilm(this), 0.2f);
     }
 
