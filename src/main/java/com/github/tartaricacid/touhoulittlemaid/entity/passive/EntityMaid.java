@@ -876,8 +876,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     protected void dropEquipment() {
         ItemsUtil.dropEntityItems(this, new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble));
-        ItemMaidBackpack.getInstance(getBackpackLevel()).ifPresent(backpack ->
-                Containers.dropItemStack(level, getX(), getY(), getZ(), backpack.getDefaultInstance()));
+        ItemMaidBackpack.getInstance(getBackpackLevel()).ifPresent(backpack -> spawnAtLocation(backpack.getDefaultInstance()));
         spawnAtLocation(ItemFilm.maidToFilm(this), 0.2f);
     }
 

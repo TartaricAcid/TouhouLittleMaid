@@ -340,6 +340,8 @@
   "top.touhou_little_maid.entity_maid.task": "模式：",
   "top.touhou_little_maid.entity_maid.invulnerable": "无敌",
   "top.touhou_little_maid.entity_maid.schedule": "日程表：",
+  "domesticationinnovation.touhou_little_maid.enchantment.undead_curse": "§4来世诅咒附魔无法用于女仆！",
+  "domesticationinnovation.touhou_little_maid.enchantment.blazing_protection": "§4烈焰保护附魔无法用于女仆！",
   "config.jade.plugin_touhou_little_maid.maid": "显示女仆额外信息",
   "patchouli.touhou_little_maid.book.name": "记忆中的幻想乡",
   "patchouli.touhou_little_maid.book.landing_text": "一个与女仆和东方 Project 有关的模组。$(br2)感谢雪尼在代码方面的帮助。$(br)感谢琥珀酸、帕金伊、天顶乌、天幂、Paulzzh、尤里的猫以及其他美工制作了如此优秀的模型和材质。$(br)感谢 Little Maid Mob 的作者 Verclene。",
