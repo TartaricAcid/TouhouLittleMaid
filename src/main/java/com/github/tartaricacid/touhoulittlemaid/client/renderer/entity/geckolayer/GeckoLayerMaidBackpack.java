@@ -41,6 +41,11 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
         bigModel = new MaidBackpackBigModel(modelSet.bakeLayer(MaidBackpackBigModel.LAYER));
     }
 
+    protected static <T extends LivingEntity> void renderColoredCutoutModel(EntityModel<T> pModel, ResourceLocation pTextureLocation, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, T pEntity, float pRed, float pGreen, float pBlue) {
+        VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.entityCutoutNoCull(pTextureLocation));
+        pModel.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, LivingEntityRenderer.getOverlayCoords(pEntity, 0.0F), pRed, pGreen, pBlue, 1.0F);
+    }
+
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (livingEntity instanceof EntityMaid maid && this.entityRenderer.getGeoModel() != null) {
@@ -66,11 +71,6 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
                 }
             }
         }
-    }
-
-    protected static <T extends LivingEntity> void renderColoredCutoutModel(EntityModel<T> pModel, ResourceLocation pTextureLocation, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, T pEntity, float pRed, float pGreen, float pBlue) {
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.entityCutoutNoCull(pTextureLocation));
-        pModel.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, LivingEntityRenderer.getOverlayCoords(pEntity, 0.0F), pRed, pGreen, pBlue, 1.0F);
     }
 
     protected void translateToBackpack(PoseStack poseStack, GeoModel geoModel) {

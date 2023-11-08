@@ -56,6 +56,19 @@ public class ItemEntityPlaceholder extends Item {
         return null;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static void fillItemCategory(CreativeModeTab.Output items) {
+        ClientLevel world = Minecraft.getInstance().level;
+        if (world == null) {
+            return;
+        }
+        world.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING).forEach(recipe -> {
+            if (!recipe.isItemCraft()) {
+                items.accept(setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), recipe.getId()));
+            }
+        });
+    }
+
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
@@ -82,19 +95,6 @@ public class ItemEntityPlaceholder extends Item {
             }
         }
         return super.useOn(context);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void fillItemCategory(CreativeModeTab.Output items) {
-        ClientLevel world = Minecraft.getInstance().level;
-        if (world == null) {
-            return;
-        }
-        world.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING).forEach(recipe -> {
-            if (!recipe.isItemCraft()) {
-                items.accept(setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), recipe.getId()));
-            }
-        });
     }
 
     @Override

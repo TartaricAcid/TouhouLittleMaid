@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;

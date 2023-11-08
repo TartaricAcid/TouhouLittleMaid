@@ -60,6 +60,15 @@ public class ItemChair extends Item {
         return stack;
     }
 
+    public static void fillItemCategory(CreativeModeTab.Output items) {
+        for (String key : CustomPackLoader.CHAIR_MODELS.getModelIdSet()) {
+            float height = CustomPackLoader.CHAIR_MODELS.getModelMountedYOffset(key);
+            boolean canRide = CustomPackLoader.CHAIR_MODELS.getModelTameableCanRide(key);
+            boolean isNoGravity = CustomPackLoader.CHAIR_MODELS.getModelNoGravity(key);
+            items.accept(setData(new ItemStack(InitItems.CHAIR.get()), new Data(key, height, canRide, isNoGravity)));
+        }
+    }
+
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
@@ -111,16 +120,6 @@ public class ItemChair extends Item {
         chair.moveTo(chair.getX(), chair.getY(), chair.getZ(), yaw, 0.0F);
         chair.setYBodyRot(yaw);
         chair.setYHeadRot(yaw);
-    }
-
-
-    public static void fillItemCategory(CreativeModeTab.Output items) {
-        for (String key : CustomPackLoader.CHAIR_MODELS.getModelIdSet()) {
-            float height = CustomPackLoader.CHAIR_MODELS.getModelMountedYOffset(key);
-            boolean canRide = CustomPackLoader.CHAIR_MODELS.getModelTameableCanRide(key);
-            boolean isNoGravity = CustomPackLoader.CHAIR_MODELS.getModelNoGravity(key);
-            items.accept(setData(new ItemStack(InitItems.CHAIR.get()), new Data(key, height, canRide, isNoGravity)));
-        }
     }
 
     @Override

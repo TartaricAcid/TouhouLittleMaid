@@ -52,13 +52,6 @@ public class BlockGarageKit extends Block implements EntityBlock {
         super(BlockBehaviour.Properties.of().sound(SoundType.MUD).strength(1, 2).noOcclusion());
     }
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TileEntityGarageKit(pos, state);
-    }
-
-
     public static void fillItemCategory(CreativeModeTab.Output items) {
         for (String modelId : CustomPackLoader.MAID_MODELS.getModelIdSet()) {
             ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
@@ -67,6 +60,12 @@ public class BlockGarageKit extends Block implements EntityBlock {
             data.putString(EntityMaid.MODEL_ID_TAG, modelId);
             items.accept(stack);
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityGarageKit(pos, state);
     }
 
     @Override

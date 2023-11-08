@@ -43,12 +43,12 @@ public class GeckoEntityMaidRenderer extends GeoReplacedEntityRenderer<GeckoMaid
         }
     }
 
-    public void setMainInfo(MaidModelInfo mainInfo) {
-        this.mainInfo = mainInfo;
-    }
-
     public MaidModelInfo getMainInfo() {
         return mainInfo;
+    }
+
+    public void setMainInfo(MaidModelInfo mainInfo) {
+        this.mainInfo = mainInfo;
     }
 
     @Override

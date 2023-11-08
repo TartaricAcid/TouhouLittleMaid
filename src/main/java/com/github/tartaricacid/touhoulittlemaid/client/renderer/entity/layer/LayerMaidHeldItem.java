@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -26,10 +28,18 @@ public class LayerMaidHeldItem extends RenderLayer<EntityMaid, BedrockModel<Enti
         ItemStack offLeftItem = maid.getOffhandItem();
         BedrockModel<EntityMaid> model = getParentModel();
         if (!mainRightItem.isEmpty() && model.hasRightArm()) {
-            this.renderArmWithItem(maid, mainRightItem, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, bufferIn, packedLightIn);
+            if (SlashBladeCompat.isSlashBladeItem(mainRightItem)) {
+                SlashBladeRender.renderMaidMainhandSlashBlade(poseStack, bufferIn, packedLightIn, mainRightItem);
+            } else {
+                this.renderArmWithItem(maid, mainRightItem, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, bufferIn, packedLightIn);
+            }
         }
         if (!offLeftItem.isEmpty() && model.hasLeftArm()) {
-            this.renderArmWithItem(maid, offLeftItem, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, poseStack, bufferIn, packedLightIn);
+            if (SlashBladeCompat.isSlashBladeItem(offLeftItem)) {
+                SlashBladeRender.renderMaidOffhandSlashBlade(poseStack, bufferIn, packedLightIn, offLeftItem);
+            } else {
+                this.renderArmWithItem(maid, offLeftItem, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, poseStack, bufferIn, packedLightIn);
+            }
         }
     }
 

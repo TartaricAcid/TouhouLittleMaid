@@ -30,6 +30,10 @@ public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> 
         this.vanillaRender = new ExperienceOrbRenderer(context);
     }
 
+    private static void vertex(VertexConsumer pConsumer, Matrix4f pMatrix, Matrix3f pMatrixNormal, float pX, float pY, int pRed, int pGreen, int pBlue, float pTexU, float pTexV, int pPackedLight) {
+        pConsumer.vertex(pMatrix, pX, pY, 0.0F).color(pRed, pGreen, pBlue, 128).uv(pTexU, pTexV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(pMatrixNormal, 0.0F, 1.0F, 0.0F).endVertex();
+    }
+
     protected int getBlockLightLevel(ExperienceOrb pEntity, BlockPos pPos) {
         return Mth.clamp(super.getBlockLightLevel(pEntity, pPos) + 7, 0, 15);
     }
@@ -64,10 +68,6 @@ public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> 
         vertex(consumer, pose, normal, -0.5F, 0.75F, 255, 255, 255, texU1, texV2, packedLight);
         poseStack.popPose();
         super.render(orb, pEntityYaw, partialTicks, poseStack, buffer, packedLight);
-    }
-
-    private static void vertex(VertexConsumer pConsumer, Matrix4f pMatrix, Matrix3f pMatrixNormal, float pX, float pY, int pRed, int pGreen, int pBlue, float pTexU, float pTexV, int pPackedLight) {
-        pConsumer.vertex(pMatrix, pX, pY, 0.0F).color(pRed, pGreen, pBlue, 128).uv(pTexU, pTexV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(pMatrixNormal, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     public ResourceLocation getTextureLocation(ExperienceOrb pEntity) {

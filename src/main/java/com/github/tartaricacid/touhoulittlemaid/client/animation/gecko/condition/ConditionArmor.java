@@ -25,6 +25,16 @@ public class ConditionArmor {
     private final Map<EquipmentSlot, List<ResourceLocation>> idTest = Maps.newHashMap();
     private final Map<EquipmentSlot, List<TagKey<Item>>> tagTest = Maps.newHashMap();
 
+    @Nullable
+    public static EquipmentSlot getType(String type) {
+        for (EquipmentSlot equipmentslot : EquipmentSlot.values()) {
+            if (equipmentslot.getName().equals(type)) {
+                return equipmentslot;
+            }
+        }
+        return null;
+    }
+
     public void addTest(String name) {
         Matcher matcherId = ID_PRE_REG.matcher(name);
         if (matcherId.find()) {
@@ -113,16 +123,5 @@ public class ConditionArmor {
             return EMPTY;
         }
         return tagListTest.stream().filter(item::is).findFirst().map(itemTagKey -> slot.getName() + "#" + itemTagKey.location()).orElse(EMPTY);
-    }
-
-
-    @Nullable
-    public static EquipmentSlot getType(String type) {
-        for (EquipmentSlot equipmentslot : EquipmentSlot.values()) {
-            if (equipmentslot.getName().equals(type)) {
-                return equipmentslot;
-            }
-        }
-        return null;
     }
 }

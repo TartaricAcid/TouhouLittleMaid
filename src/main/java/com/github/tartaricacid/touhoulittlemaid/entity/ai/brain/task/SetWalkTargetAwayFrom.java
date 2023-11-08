@@ -37,6 +37,16 @@ public class SetWalkTargetAwayFrom<T> extends Behavior<PathfinderMob> {
         return new SetWalkTargetAwayFrom<>(moduleType, speedModifier, desiredDistance, flag, Entity::position);
     }
 
+    private static void moveAwayFrom(PathfinderMob mob, Vec3 vec31, float speed) {
+        for (int i = 0; i < 10; ++i) {
+            Vec3 vec3 = LandRandomPos.getPosAway(mob, 16, 7, vec31);
+            if (vec3 != null) {
+                mob.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(vec3, speed, 0));
+                return;
+            }
+        }
+    }
+
     public boolean checkExtraStartConditions(ServerLevel pLevel, PathfinderMob pOwner) {
         return !this.alreadyWalkingAwayFromPosWithSameSpeed(pOwner) && pOwner.position().closerThan(this.getPosToAvoid(pOwner), this.desiredDistance);
     }
@@ -62,15 +72,5 @@ public class SetWalkTargetAwayFrom<T> extends Behavior<PathfinderMob> {
 
     protected void start(ServerLevel pLevel, PathfinderMob pEntity, long pGameTime) {
         moveAwayFrom(pEntity, this.getPosToAvoid(pEntity), this.speedModifier);
-    }
-
-    private static void moveAwayFrom(PathfinderMob mob, Vec3 vec31, float speed) {
-        for (int i = 0; i < 10; ++i) {
-            Vec3 vec3 = LandRandomPos.getPosAway(mob, 16, 7, vec31);
-            if (vec3 != null) {
-                mob.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(vec3, speed, 0));
-                return;
-            }
-        }
     }
 }
