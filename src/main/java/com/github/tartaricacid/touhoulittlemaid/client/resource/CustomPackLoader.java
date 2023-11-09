@@ -778,7 +778,7 @@ public class CustomPackLoader {
         Map<String, String> newLangData = Maps.newHashMap();
 
         String defaultLangPath = String.format("assets/%s/lang/en_us.lang", namespace);
-        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language);
+        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language.getCode());
         getLanguageMap(zipFile, newLangData, defaultLangPath);
         getLanguageMap(zipFile, newLangData, currentLangPath);
         removeOldLanguageKey(newLangData);
@@ -796,7 +796,7 @@ public class CustomPackLoader {
         Map<String, String> newLangData = Maps.newHashMap();
 
         String defaultLangPath = String.format("assets/%s/lang/en_us.lang", namespace);
-        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language);
+        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language.getCode());
         getLanguageMap(rootPath, newLangData, defaultLangPath);
         getLanguageMap(rootPath, newLangData, currentLangPath);
         removeOldLanguageKey(newLangData);
