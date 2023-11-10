@@ -29,7 +29,7 @@ public class LayerMaidHeldItem extends RenderLayer<EntityMaid, BedrockModel<Enti
         BedrockModel<EntityMaid> model = getParentModel();
         if (!mainRightItem.isEmpty() && model.hasRightArm()) {
             if (SlashBladeCompat.isSlashBladeItem(mainRightItem)) {
-                SlashBladeRender.renderMaidMainhandSlashBlade(poseStack, bufferIn, packedLightIn, mainRightItem);
+                SlashBladeRender.renderMaidMainhandSlashBlade(maid, poseStack, bufferIn, packedLightIn, mainRightItem, partialTicks);
             } else {
                 this.renderArmWithItem(maid, mainRightItem, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, bufferIn, packedLightIn);
             }

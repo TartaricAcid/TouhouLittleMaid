@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.slashblade;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import mods.flammpfeil.slashblade.capability.slashblade.CapabilitySlashBlade;
@@ -42,13 +43,36 @@ public class SlashBladeRender {
         renderSlashBlade(matrixStack, bufferIn, lightIn, stack);
     }
 
-    public static void renderMaidMainhandSlashBlade(PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
+    public static void renderMaidMainhandSlashBlade(EntityMaid maid, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
         if (stack.is(SBItems.slashblade)) {
             matrixStack.pushPose();
-            matrixStack.translate(0.25, 0.85, -0.75);
+            matrixStack.translate(0.25, 0.85, -0.5);
             matrixStack.scale(0.007F, 0.007F, 0.007F);
             matrixStack.mulPose(Axis.YP.rotationDegrees(90));
-            SlashBladeRender.renderSlashBlade(matrixStack, bufferIn, lightIn, stack);
+            if (stack.isEmpty()) {
+                return;
+            }
+            stack.getCapability(CapabilitySlashBlade.BLADESTATE).ifPresent(bladeState -> {
+                ResourceLocation texture = bladeState.getTexture().orElse(BladeModelManager.resourceDefaultTexture);
+                WavefrontObject obj = BladeModelManager.getInstance().getModel(bladeState.getModel().orElse(null));
+                String part;
+                if (bladeState.isBroken()) {
+                    part = "blade_damaged";
+                } else {
+                    part = "blade";
+                }
+                BladeRenderState.renderOverrided(stack, obj, "sheath", texture, matrixStack, bufferIn, lightIn);
+                BladeRenderState.renderOverridedLuminous(stack, obj, "sheath_luminous", texture, matrixStack, bufferIn, lightIn);
+                long time = maid.level.getGameTime() - bladeState.getLastActionTime();
+                if (time < 5) {
+                    float i = time + partialTicks;
+                    matrixStack.translate(0, 0, -0.5 / 0.007);
+                    matrixStack.mulPose(Axis.YP.rotationDegrees(60 + i * 48));
+                    matrixStack.mulPose(Axis.XP.rotationDegrees(90));
+                }
+                BladeRenderState.renderOverrided(stack, obj, part, texture, matrixStack, bufferIn, lightIn);
+                BladeRenderState.renderOverridedLuminous(stack, obj, part + "_luminous", texture, matrixStack, bufferIn, lightIn);
+            });
             matrixStack.popPose();
         }
     }
@@ -56,7 +80,7 @@ public class SlashBladeRender {
     public static void renderMaidOffhandSlashBlade(PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.is(SBItems.slashblade)) {
             matrixStack.pushPose();
-            matrixStack.translate(-0.25, 0.85, -0.75);
+            matrixStack.translate(-0.25, 0.85, -0.5);
             matrixStack.scale(0.007F, 0.007F, 0.007F);
             matrixStack.mulPose(Axis.YP.rotationDegrees(90));
             SlashBladeRender.renderSlashBlade(matrixStack, bufferIn, lightIn, stack);
