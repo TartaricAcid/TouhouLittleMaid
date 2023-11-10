@@ -24,7 +24,8 @@ public class SlashBladeCompat {
 
     public static void swingSlashBlade(EntityMaid maid, ItemStack itemInHand) {
         if (SlashBladeCompat.isSlashBladeItem(itemInHand)) {
-            AttackManager.doSlash(maid, 0, Vec3.ZERO, false, false, 1.0, KnockBacks.smash);
+            int roll = maid.getRandom().nextInt(60) - 30;
+            AttackManager.doSlash(maid, roll, Vec3.ZERO, false, false, 1.0, KnockBacks.toss);
             itemInHand.getCapability(CapabilitySlashBlade.BLADESTATE).ifPresent(bladeState -> bladeState.setLastActionTime(maid.level.getGameTime()));
         }
     }
