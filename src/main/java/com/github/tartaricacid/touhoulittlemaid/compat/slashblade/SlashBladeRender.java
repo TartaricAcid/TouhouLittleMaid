@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.slashblade;
 
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -10,6 +11,7 @@ import mods.flammpfeil.slashblade.client.renderer.util.BladeRenderState;
 import mods.flammpfeil.slashblade.init.SBItems;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,10 +45,17 @@ public class SlashBladeRender {
         renderSlashBlade(matrixStack, bufferIn, lightIn, stack);
     }
 
-    public static void renderMaidMainhandSlashBlade(EntityMaid maid, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
+    public static void renderMaidMainhandSlashBlade(EntityMaid maid, BedrockModel<EntityMaid> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
         if (stack.is(SBItems.slashblade)) {
             matrixStack.pushPose();
-            matrixStack.translate(0.25, 0.85, -0.5);
+            // 主手的刀渲染在左边
+            if (model.hasWaistPositioningModel(HumanoidArm.LEFT)) {
+                model.translateToPositioningWaist(HumanoidArm.LEFT, matrixStack);
+            } else {
+                matrixStack.translate(0.25, 0.85, 0);
+                matrixStack.mulPose(Axis.XP.rotationDegrees(-20));
+            }
+            matrixStack.translate(0, 0, -0.5);
             matrixStack.scale(0.007F, 0.007F, 0.007F);
             matrixStack.mulPose(Axis.YP.rotationDegrees(90));
             if (stack.isEmpty()) {
@@ -77,10 +86,17 @@ public class SlashBladeRender {
         }
     }
 
-    public static void renderMaidOffhandSlashBlade(PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
+    public static void renderMaidOffhandSlashBlade(BedrockModel<EntityMaid> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.is(SBItems.slashblade)) {
             matrixStack.pushPose();
-            matrixStack.translate(-0.25, 0.85, -0.5);
+            // 副手的刀渲染在右边
+            if (model.hasWaistPositioningModel(HumanoidArm.RIGHT)) {
+                model.translateToPositioningWaist(HumanoidArm.RIGHT, matrixStack);
+            } else {
+                matrixStack.translate(-0.25, 0.85, 0);
+                matrixStack.mulPose(Axis.XP.rotationDegrees(-5));
+            }
+            matrixStack.translate(0, 0, -0.5);
             matrixStack.scale(0.007F, 0.007F, 0.007F);
             matrixStack.mulPose(Axis.YP.rotationDegrees(90));
             SlashBladeRender.renderSlashBlade(matrixStack, bufferIn, lightIn, stack);

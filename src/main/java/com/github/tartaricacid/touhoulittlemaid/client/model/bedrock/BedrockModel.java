@@ -363,6 +363,18 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
         }
     }
 
+    public boolean hasWaistPositioningModel(HumanoidArm side) {
+        ModelRendererWrapper waist = (side == HumanoidArm.LEFT ? modelMap.get("waistLeftPositioningBone") : modelMap.get("waistRightPositioningBone"));
+        return waist != null;
+    }
+
+    public void translateToPositioningWaist(HumanoidArm sideIn, PoseStack poseStack) {
+        BedrockPart waist = (sideIn == HumanoidArm.LEFT ? modelMap.get("waistLeftPositioningBone").getModelRenderer() : modelMap.get("waistRightPositioningBone").getModelRenderer());
+        if (waist != null) {
+            waist.translateAndRotate(poseStack);
+        }
+    }
+
     /**
      * 基岩版的旋转中心计算方式和 Java 版不太一样，需要进行转换
      * <p>
