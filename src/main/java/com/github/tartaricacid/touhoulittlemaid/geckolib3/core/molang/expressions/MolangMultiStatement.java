@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.expressio
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.LazyVariable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangParser;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
@@ -19,7 +18,7 @@ public class MolangMultiStatement extends MolangExpression {
     }
 
     @Override
-        public double get() {
+    public double get() {
         double value = 0;
         for (MolangExpression expression : this.expressions) {
             value = expression.get();
@@ -28,7 +27,7 @@ public class MolangMultiStatement extends MolangExpression {
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         StringJoiner builder = new StringJoiner("; ");
         for (MolangExpression expression : this.expressions) {
             builder.add(expression.toString());

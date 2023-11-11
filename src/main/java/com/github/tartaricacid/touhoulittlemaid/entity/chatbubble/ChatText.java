@@ -28,6 +28,19 @@ public final class ChatText {
         this.text = text;
     }
 
+    public static void toBuff(ChatText chatText, PacketBuffer buf) {
+        buf.writeEnum(chatText.type);
+        buf.writeResourceLocation(chatText.iconPath);
+        buf.writeUtf(chatText.text);
+    }
+
+    public static ChatText fromBuff(PacketBuffer buf) {
+        ChatTextType type = buf.readEnum(ChatTextType.class);
+        ResourceLocation iconPath = buf.readResourceLocation();
+        String text = buf.readUtf();
+        return new ChatText(type, iconPath, text);
+    }
+
     public boolean isText() {
         return type == ChatTextType.TEXT;
     }
@@ -54,19 +67,6 @@ public final class ChatText {
             ChatText chatText = (ChatText) obj;
             return type.equals(chatText.type) && iconPath.equals(chatText.iconPath) && text.equals(chatText.text);
         }
-    }
-
-    public static void toBuff(ChatText chatText, PacketBuffer buf) {
-        buf.writeEnum(chatText.type);
-        buf.writeResourceLocation(chatText.iconPath);
-        buf.writeUtf(chatText.text);
-    }
-
-    public static ChatText fromBuff(PacketBuffer buf) {
-        ChatTextType type = buf.readEnum(ChatTextType.class);
-        ResourceLocation iconPath = buf.readResourceLocation();
-        String text = buf.readUtf();
-        return new ChatText(type, iconPath, text);
     }
 
     public static class Serializer implements JsonDeserializer<ChatText> {

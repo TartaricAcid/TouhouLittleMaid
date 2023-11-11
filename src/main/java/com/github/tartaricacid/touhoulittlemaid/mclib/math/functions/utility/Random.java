@@ -13,7 +13,7 @@ public class Random extends Function {
     }
 
     @Override
-        public double get() {
+    public double get() {
         double random = 0;
         if (this.args.length >= 3) {
             this.random.setSeed((long) this.getArg(2));

@@ -25,36 +25,6 @@ public class ChatBubbleInfo {
         return text;
     }
 
-    public static class Text {
-        @SerializedName("replace")
-        private boolean replace = false;
-
-        @SerializedName("main")
-        private HashMap<String, List<ChatText>> main = Maps.newHashMap();
-
-        @SerializedName("special")
-        private HashMap<String, List<ChatText>> special = Maps.newHashMap();
-
-        @SerializedName("other")
-        private HashMap<String, List<ChatText>> other = Maps.newHashMap();
-
-        public boolean isReplace() {
-            return replace;
-        }
-
-        public HashMap<String, List<ChatText>> getMain() {
-            return main;
-        }
-
-        public HashMap<String, List<ChatText>> getSpecial() {
-            return special;
-        }
-
-        public HashMap<String, List<ChatText>> getOther() {
-            return other;
-        }
-    }
-
     public ChatBubbleInfo decorate() {
         if (bg == null) {
             bg = DEFAULT_CHAT_BUBBLE.bg;
@@ -89,6 +59,36 @@ public class ChatBubbleInfo {
             } else {
                 textTo.put(key, chatTexts);
             }
+        }
+    }
+
+    public static class Text {
+        @SerializedName("replace")
+        private boolean replace = false;
+
+        @SerializedName("main")
+        private HashMap<String, List<ChatText>> main = Maps.newHashMap();
+
+        @SerializedName("special")
+        private HashMap<String, List<ChatText>> special = Maps.newHashMap();
+
+        @SerializedName("other")
+        private HashMap<String, List<ChatText>> other = Maps.newHashMap();
+
+        public boolean isReplace() {
+            return replace;
+        }
+
+        public HashMap<String, List<ChatText>> getMain() {
+            return main;
+        }
+
+        public HashMap<String, List<ChatText>> getSpecial() {
+            return special;
+        }
+
+        public HashMap<String, List<ChatText>> getOther() {
+            return other;
         }
     }
 }

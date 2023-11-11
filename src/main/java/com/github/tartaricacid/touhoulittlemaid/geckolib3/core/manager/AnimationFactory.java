@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.manager;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public class AnimationFactory {
@@ -13,7 +12,7 @@ public class AnimationFactory {
         this.animatable = animatable;
     }
 
-        public AnimationData getOrCreateAnimationData(int uniqueID) {
+    public AnimationData getOrCreateAnimationData(int uniqueID) {
         if (!this.animationDataMap.containsKey(uniqueID)) {
             AnimationData data = new AnimationData();
             this.animatable.registerControllers(data);

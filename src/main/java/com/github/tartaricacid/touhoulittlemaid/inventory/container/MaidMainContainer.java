@@ -43,6 +43,20 @@ public class MaidMainContainer extends AbstractMaidContainer {
         }
     }
 
+    public static INamedContainerProvider create(int entityId) {
+        return new INamedContainerProvider() {
+            @Override
+            public ITextComponent getDisplayName() {
+                return new StringTextComponent("Maid Main Container");
+            }
+
+            @Override
+            public Container createMenu(int index, PlayerInventory playerInventory, PlayerEntity player) {
+                return new MaidMainContainer(index, playerInventory, entityId);
+            }
+        };
+    }
+
     private void addMaidHandInv() {
         LazyOptional<IItemHandler> hand = maid.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN);
         hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 79) {
@@ -175,20 +189,5 @@ public class MaidMainContainer extends AbstractMaidContainer {
             }
         }
         return stack1;
-    }
-
-
-    public static INamedContainerProvider create(int entityId) {
-        return new INamedContainerProvider() {
-            @Override
-            public ITextComponent getDisplayName() {
-                return new StringTextComponent("Maid Main Container");
-            }
-
-            @Override
-            public Container createMenu(int index, PlayerInventory playerInventory, PlayerEntity player) {
-                return new MaidMainContainer(index, playerInventory, entityId);
-            }
-        };
     }
 }

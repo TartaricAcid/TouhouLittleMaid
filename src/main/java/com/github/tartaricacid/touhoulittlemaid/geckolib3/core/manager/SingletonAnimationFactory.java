@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.manager;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
-
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -17,7 +16,7 @@ public class SingletonAnimationFactory extends AnimationFactory {
     }
 
     @Override
-        public AnimationData getOrCreateAnimationData(int uniqueID) {
+    public AnimationData getOrCreateAnimationData(int uniqueID) {
         try {
             return this.animationDataMap.get(uniqueID, () -> {
                 AnimationData data = new AnimationData();

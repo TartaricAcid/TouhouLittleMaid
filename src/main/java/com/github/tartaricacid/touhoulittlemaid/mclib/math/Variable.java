@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.mclib.math;
 
 
-
 public class Variable implements IValue {
     private String name;
     private double value;
@@ -16,7 +15,7 @@ public class Variable implements IValue {
     }
 
     @Override
-        public double get() {
+    public double get() {
         return this.value;
     }
 
@@ -25,7 +24,7 @@ public class Variable implements IValue {
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         return this.name;
     }
 }

@@ -114,16 +114,16 @@ public class DownloadInfo {
         return status;
     }
 
+    public void setStatus(DownloadStatus status) {
+        this.status = status;
+    }
+
     public String getFormatData() {
         return formatData;
     }
 
     public String getLicense() {
         return license;
-    }
-
-    public void setStatus(DownloadStatus status) {
-        this.status = status;
     }
 
     public String getFormatFileSize() {

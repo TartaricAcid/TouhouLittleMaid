@@ -6,7 +6,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe;
 
 
-
 @SuppressWarnings("rawtypes")
 public class AnimationPoint {
     /**
@@ -40,7 +39,7 @@ public class AnimationPoint {
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         return "Tick: " + currentTick + " | End Tick: " + animationEndTick + " | Start Value: " + animationStartValue
                 + " | End Value: " + animationEndValue;
     }

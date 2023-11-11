@@ -89,15 +89,15 @@ public class SendEffectMessage {
             this.category = category;
         }
 
+        public static EffectData fromBytes(PacketBuffer buf) {
+            return new EffectData(buf.readUtf(), buf.readInt(), buf.readInt(), buf.readInt());
+        }
+
         public void toBytes(PacketBuffer buf) {
             buf.writeUtf(this.descriptionId);
             buf.writeInt(this.amplifier);
             buf.writeInt(this.duration);
             buf.writeInt(this.category);
-        }
-
-        public static EffectData fromBytes(PacketBuffer buf) {
-            return new EffectData(buf.readUtf(), buf.readInt(), buf.readInt(), buf.readInt());
         }
     }
 }

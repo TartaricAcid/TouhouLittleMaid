@@ -13,12 +13,12 @@ public class DieRoll extends Function {
     }
 
     @Override
-        public int getRequiredArguments() {
+    public int getRequiredArguments() {
         return 3;
     }
 
     @Override
-        public double get() {
+    public double get() {
         double i = 0;
         double total = 0;
         while (i < this.getArg(0)) {

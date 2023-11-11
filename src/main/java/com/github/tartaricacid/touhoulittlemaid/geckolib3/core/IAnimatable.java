@@ -17,12 +17,12 @@ public interface IAnimatable {
      *
      * @param data 数据
      */
-        void registerControllers(AnimationData data);
+    void registerControllers(AnimationData data);
 
     /**
      * 动画实例构造
      *
      * @return AnimationFactory
      */
-        AnimationFactory getFactory();
+    AnimationFactory getFactory();
 }

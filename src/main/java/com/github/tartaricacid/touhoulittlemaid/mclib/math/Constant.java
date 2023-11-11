@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.mclib.math;
 
 
-
 public class Constant implements IValue {
     private double value;
 
@@ -10,7 +9,7 @@ public class Constant implements IValue {
     }
 
     @Override
-        public double get() {
+    public double get() {
         return this.value;
     }
 
@@ -19,7 +18,7 @@ public class Constant implements IValue {
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         return String.valueOf(this.value);
     }
 }

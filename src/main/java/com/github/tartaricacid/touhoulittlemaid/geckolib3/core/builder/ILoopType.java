@@ -42,7 +42,7 @@ public interface ILoopType {
      *
      * @return 是否在动画结束后重复
      */
-        boolean isRepeatingAfterEnd();
+    boolean isRepeatingAfterEnd();
 
     enum EDefaultLoopTypes implements ILoopType {
         /**
@@ -63,7 +63,7 @@ public interface ILoopType {
         }
 
         @Override
-                public boolean isRepeatingAfterEnd() {
+        public boolean isRepeatingAfterEnd() {
             return this.looping;
         }
     }

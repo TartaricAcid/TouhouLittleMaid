@@ -4,7 +4,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util;
 
 
-
 public final class Color {
     public static final Color WHITE = new Color(0xFFFFFFFF);
     public static final Color LIGHT_GRAY = new Color(0xFFC0C0C0);
@@ -155,7 +154,7 @@ public final class Color {
     }
 
     @Override
-        public boolean equals(Object other) {
+    public boolean equals(Object other) {
         if (this == other) {
             return true;
         }
@@ -166,12 +165,12 @@ public final class Color {
     }
 
     @Override
-        public int hashCode() {
+    public int hashCode() {
         return color;
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         return String.valueOf(color);
     }
 }

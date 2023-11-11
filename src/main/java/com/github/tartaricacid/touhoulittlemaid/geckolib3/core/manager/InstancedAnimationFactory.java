@@ -11,7 +11,7 @@ public class InstancedAnimationFactory extends AnimationFactory {
     }
 
     @Override
-        public AnimationData getOrCreateAnimationData(int uniqueID) {
+    public AnimationData getOrCreateAnimationData(int uniqueID) {
         if (this.animationData == null) {
             this.animationData = new AnimationData();
             this.animatable.registerControllers(this.animationData);

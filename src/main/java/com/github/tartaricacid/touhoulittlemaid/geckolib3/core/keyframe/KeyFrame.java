@@ -6,7 +6,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.easing.EasingType;
-
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.List;
@@ -65,12 +64,12 @@ public class KeyFrame<T> {
     }
 
     @Override
-        public int hashCode() {
+    public int hashCode() {
         return Objects.hash(length, startValue, endValue);
     }
 
     @Override
-        public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return obj instanceof KeyFrame && hashCode() == obj.hashCode();
     }
 }

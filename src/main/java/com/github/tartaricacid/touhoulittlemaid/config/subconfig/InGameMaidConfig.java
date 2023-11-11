@@ -27,6 +27,26 @@ public class InGameMaidConfig {
     @SerializedName("show_backpack")
     private boolean showBackpack = true;
 
+    public static void read() {
+        if (CONFIG_FILE.isFile()) {
+            try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(CONFIG_FILE.toPath()), StandardCharsets.UTF_8)) {
+                INSTANCE = CustomPackLoader.GSON.fromJson(reader, InGameMaidConfig.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            INSTANCE = new InGameMaidConfig();
+        }
+    }
+
+    public static void save() {
+        try {
+            FileUtils.write(CONFIG_FILE, CustomPackLoader.GSON.toJson(INSTANCE), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public double getSoundFrequency() {
         return soundFrequency;
     }
@@ -49,25 +69,5 @@ public class InGameMaidConfig {
 
     public void setShowBackpack(boolean showBackpack) {
         this.showBackpack = showBackpack;
-    }
-
-    public static void read() {
-        if (CONFIG_FILE.isFile()) {
-            try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(CONFIG_FILE.toPath()), StandardCharsets.UTF_8)) {
-                INSTANCE = CustomPackLoader.GSON.fromJson(reader, InGameMaidConfig.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            INSTANCE = new InGameMaidConfig();
-        }
-    }
-
-    public static void save() {
-        try {
-            FileUtils.write(CONFIG_FILE, CustomPackLoader.GSON.toJson(INSTANCE), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

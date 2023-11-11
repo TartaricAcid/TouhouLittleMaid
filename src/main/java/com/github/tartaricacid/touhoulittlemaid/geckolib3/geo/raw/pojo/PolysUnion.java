@@ -15,7 +15,7 @@ public class PolysUnion implements Serializable {
 
     protected static class Serializer implements JsonSerializer<PolysUnion>, JsonDeserializer<PolysUnion> {
         @Override
-                public PolysUnion deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public PolysUnion deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             PolysUnion result = new PolysUnion();
             if (json.isJsonArray()) {
                 result.doubleArrayArrayArrayValue = context.deserialize(json, double[][][].class);
@@ -30,7 +30,7 @@ public class PolysUnion implements Serializable {
         }
 
         @Override
-                public JsonElement serialize(PolysUnion src, Type typeOfSrc, JsonSerializationContext context) {
+        public JsonElement serialize(PolysUnion src, Type typeOfSrc, JsonSerializationContext context) {
             return src.doubleArrayArrayArrayValue != null ?
                     context.serialize(src.doubleArrayArrayArrayValue) :
                     new JsonPrimitive(src.enumValue.toValue());

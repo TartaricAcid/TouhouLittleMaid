@@ -37,6 +37,11 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
         this.renderer = entityRendererIn;
     }
 
+    protected static <T extends LivingEntity> void renderColoredCutoutModel(EntityModel<T> pModel, ResourceLocation pTextureLocation, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight, T pEntity, float pRed, float pGreen, float pBlue) {
+        IVertexBuilder ivertexbuilder = pBuffer.getBuffer(RenderType.entityCutoutNoCull(pTextureLocation));
+        pModel.renderToBuffer(pMatrixStack, ivertexbuilder, pPackedLight, LivingRenderer.getOverlayCoords(pEntity, 0.0F), pRed, pGreen, pBlue, 1.0F);
+    }
+
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, LivingEntity livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (livingEntity instanceof EntityMaid && this.entityRenderer.getGeoModel() != null) {
@@ -63,11 +68,6 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
                 }
             }
         }
-    }
-
-    protected static <T extends LivingEntity> void renderColoredCutoutModel(EntityModel<T> pModel, ResourceLocation pTextureLocation, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight, T pEntity, float pRed, float pGreen, float pBlue) {
-        IVertexBuilder ivertexbuilder = pBuffer.getBuffer(RenderType.entityCutoutNoCull(pTextureLocation));
-        pModel.renderToBuffer(pMatrixStack, ivertexbuilder, pPackedLight, LivingRenderer.getOverlayCoords(pEntity, 0.0F), pRed, pGreen, pBlue, 1.0F);
     }
 
     protected void translateToBackpack(MatrixStack matrixStackIn, GeoModel geoModel) {

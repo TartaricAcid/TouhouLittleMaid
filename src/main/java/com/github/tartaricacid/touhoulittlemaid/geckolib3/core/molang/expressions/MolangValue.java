@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.expressio
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangParser;
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.Constant;
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.IValue;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -22,17 +21,17 @@ public class MolangValue extends MolangExpression {
     }
 
     @Override
-        public double get() {
+    public double get() {
         return this.value.get();
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         return (this.returns ? MolangParser.RETURN : "") + this.value.toString();
     }
 
     @Override
-        public JsonElement toJson() {
+    public JsonElement toJson() {
         if (this.value instanceof Constant) {
             return new JsonPrimitive(this.value.get());
         }

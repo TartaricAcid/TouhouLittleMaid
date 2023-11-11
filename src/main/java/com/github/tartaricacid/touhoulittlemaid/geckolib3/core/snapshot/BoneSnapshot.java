@@ -84,7 +84,7 @@ public class BoneSnapshot {
     }
 
     @Override
-        public boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -96,7 +96,7 @@ public class BoneSnapshot {
     }
 
     @Override
-        public int hashCode() {
+    public int hashCode() {
         return name.hashCode();
     }
 }

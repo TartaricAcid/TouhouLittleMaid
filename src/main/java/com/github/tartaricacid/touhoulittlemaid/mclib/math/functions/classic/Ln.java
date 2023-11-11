@@ -10,12 +10,12 @@ public class Ln extends Function {
     }
 
     @Override
-        public int getRequiredArguments() {
+    public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-        public double get() {
+    public double get() {
         return Math.log(this.getArg(0));
     }
 }

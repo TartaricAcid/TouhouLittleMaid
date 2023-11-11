@@ -2,8 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.core;
 
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.IValue;
 
-import com.github.tartaricacid.touhoulittlemaid.mclib.math.IValue;
-
 public class ConstantValue implements IValue {
     private final double value;
 
@@ -32,7 +30,7 @@ public class ConstantValue implements IValue {
     }
 
     @Override
-        public double get() {
+    public double get() {
         return value;
     }
 }

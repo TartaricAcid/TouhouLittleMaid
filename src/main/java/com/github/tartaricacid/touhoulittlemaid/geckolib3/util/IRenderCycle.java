@@ -7,13 +7,11 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.util;
 
 
-
-
 public interface IRenderCycle {
     /**
      * IRenderCycle 名称
      *
      * @return 名称
      */
-        String name();
+    String name();
 }

@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.mclib.math;
 
 
-
 public class Group implements IValue {
     private IValue value;
 
@@ -10,12 +9,12 @@ public class Group implements IValue {
     }
 
     @Override
-        public double get() {
+    public double get() {
         return this.value.get();
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         return "(" + this.value.toString() + ")";
     }
 }

@@ -8,7 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoMo
 
 
 public interface IGeoBuilder {
-        GeoModel constructGeoModel(RawGeometryTree geometryTree);
+    GeoModel constructGeoModel(RawGeometryTree geometryTree);
 
-        GeoBone constructBone(RawBoneGroup bone, ModelProperties properties, GeoBone parent);
+    GeoBone constructBone(RawBoneGroup bone, ModelProperties properties, GeoBone parent);
 }

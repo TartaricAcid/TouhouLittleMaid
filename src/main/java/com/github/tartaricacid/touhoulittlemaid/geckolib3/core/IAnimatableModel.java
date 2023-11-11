@@ -13,7 +13,7 @@ public interface IAnimatableModel<E> {
      *
      * @return 当前的 tick
      */
-        default double getCurrentTick() {
+    default double getCurrentTick() {
         return System.nanoTime() / 1000000.0 / 50.0;
     }
 
@@ -23,7 +23,7 @@ public interface IAnimatableModel<E> {
      * @param animatable 对象
      * @param instanceId 实例 ID
      */
-        default void setCustomAnimations(E animatable, int instanceId) {
+    default void setCustomAnimations(E animatable, int instanceId) {
         setCustomAnimations(animatable, instanceId, null);
     }
 
@@ -34,7 +34,7 @@ public interface IAnimatableModel<E> {
      * @param instanceId     实例 ID
      * @param animationEvent 动画事件
      */
-        default void setCustomAnimations(E animatable, int instanceId, AnimationEvent animationEvent) {
+    default void setCustomAnimations(E animatable, int instanceId, AnimationEvent animationEvent) {
     }
 
     /**
@@ -42,7 +42,7 @@ public interface IAnimatableModel<E> {
      *
      * @return AnimationProcessor
      */
-        AnimationProcessor getAnimationProcessor();
+    AnimationProcessor getAnimationProcessor();
 
     /**
      * 获取动画
@@ -51,7 +51,7 @@ public interface IAnimatableModel<E> {
      * @param animatable 对象
      * @return 动画
      */
-        Animation getAnimation(String name, IAnimatable animatable);
+    Animation getAnimation(String name, IAnimatable animatable);
 
     /**
      * 通过骨骼名获取 IBone
@@ -59,7 +59,7 @@ public interface IAnimatableModel<E> {
      * @param boneName 骨骼名
      * @return IBone
      */
-        default IBone getBone(String boneName) {
+    default IBone getBone(String boneName) {
         IBone bone = getAnimationProcessor().getBone(boneName);
         if (bone == null) {
             throw new RuntimeException("Could not find bone: " + boneName);
@@ -73,5 +73,5 @@ public interface IAnimatableModel<E> {
      * @param animatable 对象
      * @param seekTime   动画时间？？
      */
-        void setMolangQueries(IAnimatable animatable, double seekTime);
+    void setMolangQueries(IAnimatable animatable, double seekTime);
 }

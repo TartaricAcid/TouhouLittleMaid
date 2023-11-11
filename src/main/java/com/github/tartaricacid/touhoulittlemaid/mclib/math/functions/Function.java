@@ -27,7 +27,7 @@ public abstract class Function implements IValue {
     }
 
     @Override
-        public String toString() {
+    public String toString() {
         StringBuilder args = new StringBuilder();
         for (int i = 0; i < this.args.length; i++) {
             args.append(this.args[i].toString());
@@ -48,7 +48,7 @@ public abstract class Function implements IValue {
     /**
      * 获取此函数所需的最小参数量
      */
-        public int getRequiredArguments() {
+    public int getRequiredArguments() {
         return 0;
     }
 }

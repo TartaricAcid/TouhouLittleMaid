@@ -10,12 +10,12 @@ public class Exp extends Function {
     }
 
     @Override
-        public int getRequiredArguments() {
+    public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-        public double get() {
+    public double get() {
         return Math.exp(this.getArg(0));
     }
 }

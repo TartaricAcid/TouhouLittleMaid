@@ -35,10 +35,8 @@ import static com.github.tartaricacid.touhoulittlemaid.util.SoundUtil.isSnowyBio
 
 @Mod.EventBusSubscriber
 public class ChatBubbleManger {
-    public static ChatBubbleInfo DEFAULT_CHAT_BUBBLE = null;
     private static final String DEFAULT_CHAT_BUBBLE_PATH = String.format("/assets/%s/tlm_custom_pack/default_chat_bubble.json", TouhouLittleMaid.MOD_ID);
     private static final Random RANDOM = new Random();
-
     private static final String IDLE_CHAT_TEXT_ID = "idle";
     private static final String SLEEP_CHAT_TEXT_ID = "sleep";
     private static final String WORK_CHAT_TEXT_ID = "work";
@@ -50,14 +48,12 @@ public class ChatBubbleManger {
     private static final String HOT_CHAT_TEXT_ID = "hot";
     private static final String HURT_CHAT_TEXT_ID = "hurt";
     private static final String BEG_CHAT_TEXT_ID = "beg";
-
     private static final long MORNING_START = 0;
     private static final long MORNING_END = 3000;
     private static final long EVENING_START = 12000;
     private static final long EVENING_END = 15000;
     private static final float LOW_TEMPERATURE = 0.15F;
     private static final float HIGH_TEMPERATURE = 0.95F;
-
     /**
      * 显示时长，15 秒
      */
@@ -66,6 +62,7 @@ public class ChatBubbleManger {
      * 检测间隔，60 秒
      */
     private static final int CHECK_RATE = 60 * 20;
+    public static ChatBubbleInfo DEFAULT_CHAT_BUBBLE = null;
 
     public static void addChatBubble(long endTime, ChatText text, EntityMaid maid) {
         if (System.currentTimeMillis() > endTime) {

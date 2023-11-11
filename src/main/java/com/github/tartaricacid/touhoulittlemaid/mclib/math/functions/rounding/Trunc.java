@@ -10,12 +10,12 @@ public class Trunc extends Function {
     }
 
     @Override
-        public int getRequiredArguments() {
+    public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-        public double get() {
+    public double get() {
         double value = this.getArg(0);
 
         return value < 0 ? Math.ceil(value) : Math.floor(value);

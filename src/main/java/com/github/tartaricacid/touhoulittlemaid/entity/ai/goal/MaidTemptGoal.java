@@ -16,16 +16,16 @@ public class MaidTemptGoal extends Goal {
     private static final EntityPredicate TEMP_TARGETING = (new EntityPredicate()).range(10.0D).allowInvulnerable().allowSameTeam().allowNonAttackable().allowUnseeable();
     protected final CreatureEntity mob;
     private final double speedModifier;
+    private final Ingredient items;
+    private final boolean canScare;
+    protected EntityMaid maid;
     private double px;
     private double py;
     private double pz;
     private double pRotX;
     private double pRotY;
-    protected EntityMaid maid;
     private int calmDown;
     private boolean isRunning;
-    private final Ingredient items;
-    private final boolean canScare;
 
     public MaidTemptGoal(CreatureEntity creature, double speedModifier, Ingredient ingredient, boolean canScare) {
         this(creature, speedModifier, canScare, ingredient);

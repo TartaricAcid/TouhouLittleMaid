@@ -14,7 +14,7 @@ public class LocatorValue implements Serializable {
 
     protected static class Serializer implements JsonSerializer<LocatorValue>, JsonDeserializer<LocatorValue> {
         @Override
-                public LocatorValue deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public LocatorValue deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             LocatorValue result = new LocatorValue();
             if (json.isJsonArray()) {
                 result.doubleArrayValue = context.deserialize(json, double[].class);
@@ -25,7 +25,7 @@ public class LocatorValue implements Serializable {
         }
 
         @Override
-                public JsonElement serialize(LocatorValue src, Type typeOfSrc, JsonSerializationContext context) {
+        public JsonElement serialize(LocatorValue src, Type typeOfSrc, JsonSerializationContext context) {
             return src.locatorClassValue != null ?
                     context.serialize(src.locatorClassValue) :
                     context.serialize(src.doubleArrayValue);

@@ -10,12 +10,12 @@ public class Floor extends Function {
     }
 
     @Override
-        public int getRequiredArguments() {
+    public int getRequiredArguments() {
         return 1;
     }
 
     @Override
-        public double get() {
+    public double get() {
         return Math.floor(this.getArg(0));
     }
 }

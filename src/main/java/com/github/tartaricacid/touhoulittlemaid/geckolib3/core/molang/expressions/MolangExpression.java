@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangPars
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.Constant;
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.IValue;
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.Operation;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -39,7 +38,7 @@ public abstract class MolangExpression implements IValue {
         return false;
     }
 
-        public JsonElement toJson() {
+    public JsonElement toJson() {
         return new JsonPrimitive(this.toString());
     }
 }

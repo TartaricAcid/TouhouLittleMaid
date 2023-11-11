@@ -4,75 +4,75 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.snapshot.BoneSnap
 
 
 public interface IBone {
-        float getRotationX();
+    float getRotationX();
 
-        void setRotationX(float value);
+    void setRotationX(float value);
 
-        float getRotationY();
+    float getRotationY();
 
-        void setRotationY(float value);
+    void setRotationY(float value);
 
-        float getRotationZ();
+    float getRotationZ();
 
-        void setRotationZ(float value);
+    void setRotationZ(float value);
 
-        float getPositionX();
+    float getPositionX();
 
-        void setPositionX(float value);
+    void setPositionX(float value);
 
-        float getPositionY();
+    float getPositionY();
 
-        void setPositionY(float value);
+    void setPositionY(float value);
 
-        float getPositionZ();
+    float getPositionZ();
 
-        void setPositionZ(float value);
+    void setPositionZ(float value);
 
-        float getScaleX();
+    float getScaleX();
 
-        void setScaleX(float value);
+    void setScaleX(float value);
 
-        float getScaleY();
+    float getScaleY();
 
-        void setScaleY(float value);
+    void setScaleY(float value);
 
-        float getScaleZ();
+    float getScaleZ();
 
-        void setScaleZ(float value);
+    void setScaleZ(float value);
 
-        float getPivotX();
+    float getPivotX();
 
-        void setPivotX(float value);
+    void setPivotX(float value);
 
-        float getPivotY();
+    float getPivotY();
 
-        void setPivotY(float value);
+    void setPivotY(float value);
 
-        float getPivotZ();
+    float getPivotZ();
 
-        void setPivotZ(float value);
+    void setPivotZ(float value);
 
-        boolean isHidden();
+    boolean isHidden();
 
-        void setHidden(boolean hidden);
+    void setHidden(boolean hidden);
 
-        boolean cubesAreHidden();
+    boolean cubesAreHidden();
 
-        boolean childBonesAreHiddenToo();
+    boolean childBonesAreHiddenToo();
 
-        void setCubesHidden(boolean hidden);
+    void setCubesHidden(boolean hidden);
 
-        void setHidden(boolean selfHidden, boolean skipChildRendering);
+    void setHidden(boolean selfHidden, boolean skipChildRendering);
 
-        void setModelRendererName(String modelRendererName);
+    void setModelRendererName(String modelRendererName);
 
-        void saveInitialSnapshot();
+    void saveInitialSnapshot();
 
-        BoneSnapshot getInitialSnapshot();
+    BoneSnapshot getInitialSnapshot();
 
-        default BoneSnapshot saveSnapshot() {
+    default BoneSnapshot saveSnapshot() {
         return new BoneSnapshot(this);
     }
 
-        String getName();
+    String getName();
 }

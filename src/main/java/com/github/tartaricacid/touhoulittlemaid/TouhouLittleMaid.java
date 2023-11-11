@@ -27,8 +27,8 @@ import java.util.List;
 @Mod(TouhouLittleMaid.MOD_ID)
 public final class TouhouLittleMaid {
     public static final String MOD_ID = "touhou_little_maid";
-    private static final String CLOTH_CONFIG = "cloth-config";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    private static final String CLOTH_CONFIG = "cloth-config";
     public static List<ILittleMaid> EXTENSIONS = Lists.newArrayList();
 
     public TouhouLittleMaid() {

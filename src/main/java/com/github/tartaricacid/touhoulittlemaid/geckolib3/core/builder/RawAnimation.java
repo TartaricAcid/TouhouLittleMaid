@@ -6,7 +6,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder;
 
 
-
 import java.util.Objects;
 
 public class RawAnimation {
@@ -22,7 +21,7 @@ public class RawAnimation {
     }
 
     @Override
-        public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
@@ -34,7 +33,7 @@ public class RawAnimation {
     }
 
     @Override
-        public int hashCode() {
+    public int hashCode() {
         return Objects.hash(this.animationName, this.loopType);
     }
 }

@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang;
 
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.Variable;
 
-
 import java.util.function.DoubleSupplier;
 
 /**
@@ -27,7 +26,7 @@ public class LazyVariable extends Variable {
     }
 
     @Override
-        public void set(double value) {
+    public void set(double value) {
         this.valueSupplier = () -> value;
     }
 
@@ -36,7 +35,7 @@ public class LazyVariable extends Variable {
     }
 
     @Override
-        public double get() {
+    public double get() {
         return this.valueSupplier.getAsDouble();
     }
 }

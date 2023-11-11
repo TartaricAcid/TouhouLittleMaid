@@ -54,6 +54,7 @@ public class AnimationController<T extends IAnimatable> {
      * 复写此数值将用于全局
      */
     public EasingType easingType = EasingType.NONE;
+    public boolean shouldResetTick = false;
     /**
      * 实体对象
      */
@@ -66,7 +67,6 @@ public class AnimationController<T extends IAnimatable> {
     protected Queue<Animation> animationQueue = new LinkedList<>();
     protected Animation currentAnimation;
     protected AnimationBuilder currentAnimationBuilder = new AnimationBuilder();
-    public boolean shouldResetTick = false;
     protected boolean justStartedTransition = false;
     protected boolean needsAnimationReload = false;
     /**

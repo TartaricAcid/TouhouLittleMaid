@@ -1116,12 +1116,12 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         return this.entityData.get(CHAT_BUBBLE);
     }
 
-    public void addChatBubble(long endTime, ChatText text) {
-        ChatBubbleManger.addChatBubble(endTime, text, this);
-    }
-
     public void setChatBubble(MaidChatBubbles bubbles) {
         this.entityData.set(CHAT_BUBBLE, bubbles);
+    }
+
+    public void addChatBubble(long endTime, ChatText text) {
+        ChatBubbleManger.addChatBubble(endTime, text, this);
     }
 
     public int getChatBubbleCount() {

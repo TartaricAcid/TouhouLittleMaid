@@ -15,7 +15,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.AnimationUtils;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.EModelRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.IRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.blaze3d.vertex.VertexBuilderUtils;
@@ -107,18 +106,18 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-        @Nonnull
+    @Nonnull
     public IRenderCycle getCurrentModelRenderCycle() {
         return this.currentModelRenderCycle;
     }
 
     @Override
-        public void setCurrentModelRenderCycle(IRenderCycle currentModelRenderCycle) {
+    public void setCurrentModelRenderCycle(IRenderCycle currentModelRenderCycle) {
         this.currentModelRenderCycle = currentModelRenderCycle;
     }
 
     @Override
-        public void renderEarly(T animatable, MatrixStack poseStack, float partialTick, IRenderTypeBuffer bufferSource,
+    public void renderEarly(T animatable, MatrixStack poseStack, float partialTick, IRenderTypeBuffer bufferSource,
                             IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue,
                             float partialTicks) {
         this.animatable = animatable;
@@ -136,7 +135,7 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-        public void render(T animatable, float entityYaw, float partialTick, MatrixStack poseStack, IRenderTypeBuffer bufferSource, int packedLight) {
+    public void render(T animatable, float entityYaw, float partialTick, MatrixStack poseStack, IRenderTypeBuffer bufferSource, int packedLight) {
         setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
         poseStack.pushPose();
         if (animatable instanceof MobEntity) {
@@ -229,7 +228,7 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-        public void renderRecursively(GeoBone bone, MatrixStack poseStack, IVertexBuilder buffer, int packedLight,
+    public void renderRecursively(GeoBone bone, MatrixStack poseStack, IVertexBuilder buffer, int packedLight,
                                   int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.pushPose();
         RenderUtils.translateMatrixToBone(poseStack, bone);
@@ -279,22 +278,22 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-        public int getInstanceId(T animatable) {
+    public int getInstanceId(T animatable) {
         return animatable.getId();
     }
 
     @Override
-        public GeoModelProvider<T> getGeoModelProvider() {
+    public GeoModelProvider<T> getGeoModelProvider() {
         return this.modelProvider;
     }
 
     @Override
-        public float getWidthScale(T animatable) {
+    public float getWidthScale(T animatable) {
         return this.widthScale;
     }
 
     @Override
-        public float getHeightScale(T entity) {
+    public float getHeightScale(T entity) {
         return this.heightScale;
     }
 
@@ -346,7 +345,7 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-        public boolean shouldShowName(T animatable) {
+    public boolean shouldShowName(T animatable) {
         double nameRenderDistance = animatable.isDiscrete() ? 32d : 64d;
         if (this.entityRenderDispatcher.distanceToSqr(animatable) >= nameRenderDistance * nameRenderDistance) {
             return false;
@@ -363,7 +362,7 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-        public ResourceLocation getTextureLocation(T animatable) {
+    public ResourceLocation getTextureLocation(T animatable) {
         return this.modelProvider.getTextureLocation(animatable);
     }
 
@@ -411,12 +410,12 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
     }
 
     @Override
-        public IRenderTypeBuffer getCurrentRTB() {
+    public IRenderTypeBuffer getCurrentRTB() {
         return this.rtb;
     }
 
     @Override
-        public void setCurrentRTB(IRenderTypeBuffer bufferSource) {
+    public void setCurrentRTB(IRenderTypeBuffer bufferSource) {
         this.rtb = bufferSource;
     }
 }

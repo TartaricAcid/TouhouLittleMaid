@@ -21,11 +21,11 @@ public class MaidBegTask extends Task<EntityMaid> {
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid owner) {
         return owner.getBrain().getMemory(MemoryModuleType.VISIBLE_LIVING_ENTITIES).map(list ->
-                list.stream().filter(owner::isOwnedBy)
-                        .filter(LivingEntity::isAlive)
-                        .filter(e -> e.closerThan(owner, BEG_DISTANCE))
-                        .filter(e -> owner.isWithinRestriction(e.blockPosition()))
-                        .anyMatch((e) -> holdTemptationItem(owner, e)))
+                        list.stream().filter(owner::isOwnedBy)
+                                .filter(LivingEntity::isAlive)
+                                .filter(e -> e.closerThan(owner, BEG_DISTANCE))
+                                .filter(e -> owner.isWithinRestriction(e.blockPosition()))
+                                .anyMatch((e) -> holdTemptationItem(owner, e)))
                 .orElse(false);
     }
 

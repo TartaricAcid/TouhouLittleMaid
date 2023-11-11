@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.easing;
 
 
-
 import java.util.Objects;
 
 public class EasingFunctionArgs {
@@ -22,7 +21,7 @@ public class EasingFunctionArgs {
     }
 
     @Override
-        public boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
