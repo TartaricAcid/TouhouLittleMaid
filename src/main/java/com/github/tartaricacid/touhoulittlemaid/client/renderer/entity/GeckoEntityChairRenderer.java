@@ -36,12 +36,12 @@ public class GeckoEntityChairRenderer extends GeoReplacedEntityRenderer<GeckoCha
         }
     }
 
-    public void setMainInfo(ChairModelInfo mainInfo) {
-        this.mainInfo = mainInfo;
-    }
-
     public ChairModelInfo getMainInfo() {
         return mainInfo;
+    }
+
+    public void setMainInfo(ChairModelInfo mainInfo) {
+        this.mainInfo = mainInfo;
     }
 
     @Override

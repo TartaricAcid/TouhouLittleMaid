@@ -3,8 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 
 public class DirectButton extends Button {
     private Direction direction = Direction.SOUTH;
