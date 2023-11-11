@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
@@ -49,7 +51,11 @@ public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<Enti
                     matrixStack.translate(0, 0, -0.4);
                     break;
             }
-            Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, packedLightIn);
+            if (SlashBladeCompat.isSlashBladeItem(stack)) {
+                SlashBladeRender.renderMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
+            } else {
+                Minecraft.getInstance().getItemInHandRenderer().renderItem(maid, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, packedLightIn);
+            }
             matrixStack.popPose();
         }
     }

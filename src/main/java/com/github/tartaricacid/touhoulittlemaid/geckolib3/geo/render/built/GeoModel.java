@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.raw.pojo.ModelProperties;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +10,8 @@ public class GeoModel {
     public List<GeoBone> topLevelBones = new ObjectArrayList<>();
     public List<GeoBone> leftHandBones = new ObjectArrayList<>();
     public List<GeoBone> rightHandBones = new ObjectArrayList<>();
+    public List<GeoBone> leftWaistBones = new ObjectArrayList<>();
+    public List<GeoBone> rightWaistBones = new ObjectArrayList<>();
     public List<GeoBone> backpackBones = new ObjectArrayList<>();
     public List<GeoBone> headBones = new ObjectArrayList<>();
     public GeoBone head = null;
