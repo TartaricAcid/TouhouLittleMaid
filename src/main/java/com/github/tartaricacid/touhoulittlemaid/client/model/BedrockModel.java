@@ -27,7 +27,6 @@ import javax.script.Invocable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
@@ -365,8 +364,16 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
         }
     }
 
-    public ModelRenderer getRandomModelPart(Random randomIn) {
-        return this.cubes.get(randomIn.nextInt(this.cubes.size()));
+    public boolean hasWaistPositioningModel(HandSide side) {
+        ModelRendererWrapper waist = (side == HandSide.LEFT ? modelMap.get("waistLeftPositioningBone") : modelMap.get("waistRightPositioningBone"));
+        return waist != null;
+    }
+
+    public void translateToPositioningWaist(HandSide sideIn, MatrixStack poseStack) {
+        ModelRenderer waist = (sideIn == HandSide.LEFT ? modelMap.get("waistLeftPositioningBone").getModelRenderer() : modelMap.get("waistRightPositioningBone").getModelRenderer());
+        if (waist != null) {
+            waist.translateAndRotate(poseStack);
+        }
     }
 
     @Override

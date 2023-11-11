@@ -148,6 +148,8 @@ dependencies {
 
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
 
+    implementation fg.deobf("curse.maven:slashblade-241596:${slashblade_id}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

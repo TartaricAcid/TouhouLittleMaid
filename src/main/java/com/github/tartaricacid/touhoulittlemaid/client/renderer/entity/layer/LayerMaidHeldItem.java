@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
@@ -23,10 +25,18 @@ public class LayerMaidHeldItem extends LayerRenderer<EntityMaid, BedrockModel<En
         ItemStack offLeftItem = maid.getOffhandItem();
         BedrockModel<EntityMaid> model = getParentModel();
         if (!mainRightItem.isEmpty() && model.hasRightArm()) {
-            this.renderArmWithItem(maid, mainRightItem, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT, matrixStackIn, bufferIn, packedLightIn);
+            if (SlashBladeCompat.isSlashBladeItem(mainRightItem)) {
+                SlashBladeRender.renderMaidMainhandSlashBlade(maid, model, matrixStackIn, bufferIn, packedLightIn, mainRightItem, partialTicks);
+            } else {
+                this.renderArmWithItem(maid, mainRightItem, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT, matrixStackIn, bufferIn, packedLightIn);
+            }
         }
         if (!offLeftItem.isEmpty() && model.hasLeftArm()) {
-            this.renderArmWithItem(maid, offLeftItem, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT, matrixStackIn, bufferIn, packedLightIn);
+            if (SlashBladeCompat.isSlashBladeItem(offLeftItem)) {
+                SlashBladeRender.renderMaidOffhandSlashBlade(model, matrixStackIn, bufferIn, packedLightIn, offLeftItem);
+            } else {
+                this.renderArmWithItem(maid, offLeftItem, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT, matrixStackIn, bufferIn, packedLightIn);
+            }
         }
     }
 

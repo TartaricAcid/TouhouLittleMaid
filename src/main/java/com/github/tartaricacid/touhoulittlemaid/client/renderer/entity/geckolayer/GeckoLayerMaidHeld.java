@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoRenderer;
@@ -35,10 +37,18 @@ public class GeckoLayerMaidHeld<T extends LivingEntity & IAnimatable> extends Ge
         if (!offhandItem.isEmpty() || !mainHandItem.isEmpty()) {
             matrixStackIn.pushPose();
             if (!geoModel.rightHandBones.isEmpty()) {
-                this.renderArmWithItem(entityLivingBaseIn, mainHandItem, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT, matrixStackIn, bufferIn, packedLightIn);
+                if (SlashBladeCompat.isSlashBladeItem(mainHandItem)) {
+                    SlashBladeRender.renderMaidMainhandSlashBlade(entityLivingBaseIn, geoModel, matrixStackIn, bufferIn, packedLightIn, mainHandItem, partialTicks);
+                } else {
+                    this.renderArmWithItem(entityLivingBaseIn, mainHandItem, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT, matrixStackIn, bufferIn, packedLightIn);
+                }
             }
             if (!geoModel.leftHandBones.isEmpty()) {
-                this.renderArmWithItem(entityLivingBaseIn, offhandItem, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT, matrixStackIn, bufferIn, packedLightIn);
+                if (SlashBladeCompat.isSlashBladeItem(offhandItem)) {
+                    SlashBladeRender.renderMaidOffhandSlashBlade(geoModel, matrixStackIn, bufferIn, packedLightIn, offhandItem);
+                } else {
+                    this.renderArmWithItem(entityLivingBaseIn, offhandItem, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT, matrixStackIn, bufferIn, packedLightIn);
+                }
             }
             matrixStackIn.popPose();
         }

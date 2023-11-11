@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProv
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
@@ -1028,6 +1029,12 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             }
         }
         return super.getLeashOffset();
+    }
+
+    @Override
+    public void swing(Hand pHand) {
+        SlashBladeCompat.swingSlashBlade(this, getItemInHand(pHand));
+        super.swing(pHand);
     }
 
     public void setBackpackDelay() {
