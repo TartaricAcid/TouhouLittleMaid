@@ -22,6 +22,8 @@ public class GeoBuilder implements IGeoBuilder {
     private static final IGeoBuilder DEFAULT_BUILDER = new GeoBuilder();
     private static final String LEFT_HAND_LOCATOR = "LeftHandLocator";
     private static final String RIGHT_HAND_LOCATOR = "RightHandLocator";
+    private static final String LEFT_WAIST_LOCATOR = "LeftWaistLocator";
+    private static final String RIGHT_WAIST_LOCATOR = "RightWaistLocator";
     private static final String BACKPACK_LOCATOR_NAME = "BackpackLocator";
     private static final String HEAD_NAME = "Head";
 
@@ -52,6 +54,14 @@ public class GeoBuilder implements IGeoBuilder {
         model.getBone(BACKPACK_LOCATOR_NAME).ifPresent(b -> {
             getBoneParent(b, model.backpackBones);
             Collections.reverse(model.backpackBones);
+        });
+        model.getBone(LEFT_WAIST_LOCATOR).ifPresent(b -> {
+            getBoneParent(b, model.leftWaistBones);
+            Collections.reverse(model.leftWaistBones);
+        });
+        model.getBone(RIGHT_WAIST_LOCATOR).ifPresent(b -> {
+            getBoneParent(b, model.rightWaistBones);
+            Collections.reverse(model.rightWaistBones);
         });
         model.getBone(HEAD_NAME).ifPresent(b -> {
             model.head = b;
