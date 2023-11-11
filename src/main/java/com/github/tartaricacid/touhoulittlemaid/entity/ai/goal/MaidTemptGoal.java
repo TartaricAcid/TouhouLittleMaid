@@ -12,18 +12,18 @@ import java.util.EnumSet;
 
 public class MaidTemptGoal extends Goal {
     private static final TargetingConditions TEMP_TARGETING = TargetingConditions.forNonCombat().range(10).ignoreLineOfSight();
-    private final TargetingConditions targetingConditions;
     protected final PathfinderMob mob;
+    private final TargetingConditions targetingConditions;
     private final double speedModifier;
+    private final Ingredient items;
+    private final boolean canScare;
+    @Nullable
+    protected EntityMaid maid;
     private double px;
     private double py;
     private double pz;
-    @Nullable
-    protected EntityMaid maid;
     private int calmDown;
     private boolean isRunning;
-    private final Ingredient items;
-    private final boolean canScare;
 
     public MaidTemptGoal(PathfinderMob mob, double speedModifier, Ingredient items, boolean canScare) {
         this.mob = mob;

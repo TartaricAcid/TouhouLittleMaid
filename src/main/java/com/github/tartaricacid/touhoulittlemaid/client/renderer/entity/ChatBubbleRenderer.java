@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ChatBubbleRenderer {
-    private static final List<Pair<Long, ChatText>> TMP_CHAT_BUBBLES = Lists.newArrayList();
     protected static final RenderStateShard.TransparencyStateShard NO_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("no_transparency", RenderSystem::disableBlend, () -> {
     });
+    private static final List<Pair<Long, ChatText>> TMP_CHAT_BUBBLES = Lists.newArrayList();
     private static final String LEFT_ARROW = "left_arrow";
     private static final String MIDDLE_ARROW = "middle_arrow";
     private static final String RIGHT_ARROW = "right_arrow";
