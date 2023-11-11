@@ -138,6 +138,8 @@ dependencies {
     implementation fg.deobf("curse.maven:citadel-331936:${citadel_id}")
     implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
 
+    implementation fg.deobf("curse.maven:slashblade-241596:${slashblade_id}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

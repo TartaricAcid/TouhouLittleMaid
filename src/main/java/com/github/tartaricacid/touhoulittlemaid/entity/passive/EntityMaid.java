@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
@@ -1021,6 +1022,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             }
         }
         return super.getLeashOffset();
+    }
+
+    @Override
+    public void swing(InteractionHand pHand) {
+        SlashBladeCompat.swingSlashBlade(this, getItemInHand(pHand));
+        super.swing(pHand);
     }
 
     public void setBackpackDelay() {
