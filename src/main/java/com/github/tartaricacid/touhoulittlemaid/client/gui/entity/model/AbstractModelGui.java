@@ -10,12 +10,14 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
@@ -35,6 +37,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     };
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select_side.png");
+    private static final ResourceLocation EMPTY_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/empty_model_pack_icon.png");
+    private static final SimpleTexture EMPTY_ICON_TEXTURE = new SimpleTexture(EMPTY_ICON);
     protected final T entity;
     private final SkinGuiNumber<E> guiNumber;
     private final List<CustomModelPack<E>> modelPackList;
@@ -288,6 +292,10 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
             CustomModelPack<E> pack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
             ResourceLocation icon = pack.getIcon();
             if (icon != null) {
+                AbstractTexture iconTexture = Minecraft.getInstance().textureManager.getTexture(icon, EMPTY_ICON_TEXTURE);
+                if (EMPTY_ICON_TEXTURE.equals(iconTexture)) {
+                    icon = EMPTY_ICON;
+                }
                 if (pack.getIconAnimation() == CustomModelPack.AnimationState.UNCHECK) {
                     checkIconAnimation(pack, icon);
                 }

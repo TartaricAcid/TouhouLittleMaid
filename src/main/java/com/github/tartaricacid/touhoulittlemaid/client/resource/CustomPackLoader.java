@@ -242,7 +242,7 @@ public class CustomPackLoader {
         registerFilePackTexture(rootPath, maidModelItem.getTexture());
         // 加载动画
         List<ResourceLocation> animation = maidModelItem.getAnimation();
-        if (animation == null || animation.size() == 0) {
+        if (animation == null || animation.isEmpty()) {
             return;
         }
         AnimationFile animationData = new AnimationFile();
@@ -283,7 +283,7 @@ public class CustomPackLoader {
         registerFilePackTexture(rootPath, chairModelItem.getTexture());
         // 加载动画
         List<ResourceLocation> animation = chairModelItem.getAnimation();
-        if (animation == null || animation.size() == 0) {
+        if (animation == null || animation.isEmpty()) {
             return;
         }
         AnimationFile animationData = new AnimationFile();
@@ -388,7 +388,7 @@ public class CustomPackLoader {
         registerZipPackTexture(zipFile.getName(), maidModelItem.getTexture());
         // 加载动画
         List<ResourceLocation> animation = maidModelItem.getAnimation();
-        if (animation == null || animation.size() == 0) {
+        if (animation == null || animation.isEmpty()) {
             return;
         }
         AnimationFile animationData = new AnimationFile();
@@ -430,7 +430,7 @@ public class CustomPackLoader {
         registerZipPackTexture(zipFile.getName(), chairModelItem.getTexture());
         // 加载动画
         List<ResourceLocation> animation = chairModelItem.getAnimation();
-        if (animation == null || animation.size() == 0) {
+        if (animation == null || animation.isEmpty()) {
             return;
         }
         AnimationFile animationData = new AnimationFile();
@@ -468,7 +468,7 @@ public class CustomPackLoader {
         // 如果加载的模型不为空
         MAID_MODELS.putModel(id, modelJson);
         MAID_MODELS.putInfo(id, maidModelItem);
-        if (animations != null && animations.size() > 0) {
+        if (animations != null && !animations.isEmpty()) {
             MAID_MODELS.putAnimation(id, animations);
         }
     }
@@ -519,7 +519,7 @@ public class CustomPackLoader {
             // 如果加载的模型不为空
             CHAIR_MODELS.putModel(id, modelJson);
             CHAIR_MODELS.putInfo(id, chairModelItem);
-            if (animations != null && animations.size() > 0) {
+            if (animations != null && !animations.isEmpty()) {
                 CHAIR_MODELS.putAnimation(id, animations);
             }
             // 打印日志
@@ -573,7 +573,7 @@ public class CustomPackLoader {
             // 如果加载的模型不为空
             CHAIR_MODELS.putModel(id, modelJson);
             CHAIR_MODELS.putInfo(id, chairModelItem);
-            if (animations != null && animations.size() > 0) {
+            if (animations != null && !animations.isEmpty()) {
                 CHAIR_MODELS.putAnimation(id, animations);
             }
             // 打印日志
