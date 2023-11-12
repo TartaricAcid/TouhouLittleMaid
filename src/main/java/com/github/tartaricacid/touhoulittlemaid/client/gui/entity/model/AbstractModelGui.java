@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -30,6 +31,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     };
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select_side.png");
+    private static final ResourceLocation EMPTY_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/empty_model_pack_icon.png");
     protected final T entity;
     private final SkinGuiNumber<E> guiNumber;
     private final List<CustomModelPack<E>> modelPackList;
@@ -282,6 +284,10 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
             CustomModelPack<E> pack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
             ResourceLocation icon = pack.getIcon();
             if (icon != null) {
+                Texture iconTexture = Minecraft.getInstance().textureManager.getTexture(icon);
+                if (iconTexture == null) {
+                    icon = EMPTY_ICON;
+                }
                 if (pack.getIconAnimation() == CustomModelPack.AnimationState.UNCHECK) {
                     checkIconAnimation(pack, icon);
                 }
