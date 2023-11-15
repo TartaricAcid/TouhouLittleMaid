@@ -21,6 +21,14 @@ public interface AIService {
     Point getPoint(int[][] chessData, Point point);
 
     /**
+     * 获取棋局状态
+     *
+     * @param chessData 已下棋子数据
+     * @param point     落子棋位
+     */
+    Statue getStatue(int[][] chessData, Point point);
+
+    /**
      * AI配置
      */
     class AIConfig {

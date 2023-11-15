@@ -468,6 +468,129 @@ public class ZhiZhangAIService implements AIService {
         return this.bestPoint;
     }
 
+    @Override
+    public Statue getStatue(int[][] chessData, Point point) {
+        int rows = chessData[0].length;
+        int cols = chessData.length;
+        int x = point.x;
+        int y = point.y;
+        int type = point.type;
+
+        // 横轴
+        int k = 1;
+        for (int i = 1; i < 5; i++) {
+            int preX = x - i;
+            if (preX < 0) {
+                break;
+            }
+            if (chessData[preX][y] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+        for (int i = 1; i < 5; i++) {
+            int nextX = x + i;
+            if (nextX > rows - 1) {
+                break;
+            }
+            if (chessData[nextX][y] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+
+        // 纵轴
+        k = 1;
+        for (int i = 1; i < 5; i++) {
+            int preY = y - i;
+            if (preY < 0) {
+                break;
+            }
+            if (chessData[x][preY] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+        for (int i = 1; i < 5; i++) {
+            int nextY = y + i;
+            if (nextY > cols - 1) {
+                break;
+            }
+            if (chessData[x][nextY] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+
+        // 左对角线
+        k = 1;
+        for (int i = 1; i < 5; i++) {
+            int preX = x - i;
+            int preY = y - i;
+            if (preX < 0 || preY < 0) {
+                break;
+            }
+            if (chessData[preX][preY] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+        for (int i = 1; i < 5; i++) {
+            int nextX = x + i;
+            int nextY = y + i;
+            if (nextX > rows - 1 || nextY > cols - 1) {
+                break;
+            }
+            if (chessData[nextX][nextY] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+
+        // 右对角线
+        k = 1;
+        for (int i = 1; i < 5; i++) {
+            int nextX = x + i;
+            int preY = y - i;
+            if (nextX > rows - 1 || preY < 0) {
+                break;
+            }
+            if (chessData[nextX][preY] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+        for (int i = 1; i < 5; i++) {
+            int preX = x - i;
+            int nextY = y + i;
+            if (preX < 0 || nextY > cols - 1) {
+                break;
+            }
+            if (chessData[preX][nextY] != type) {
+                break;
+            }
+            if (++k == 5) {
+                return Statue.WIN;
+            }
+        }
+
+        return Statue.IN_PROGRESS;
+    }
+
     /**
      * 初始化棋盘数据
      *

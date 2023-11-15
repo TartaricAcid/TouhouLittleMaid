@@ -14,6 +14,9 @@ package com.github.tartaricacid.touhoulittlemaid.api.game.gomoku;
  * @date 2021/11/7 5:59 下午
  */
 public class Point {
+    public static final int EMPTY = 0;
+    public static final int BLACK = 1;
+    public static final int WHITE = 2;
     /**
      * 横坐标
      */
