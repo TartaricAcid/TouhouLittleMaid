@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityAltarRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGomokuRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityStatueRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -15,6 +16,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityThrowPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -44,6 +46,7 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityAltar.TYPE, TileEntityAltarRenderer::new);
         BlockEntityRenderers.register(TileEntityStatue.TYPE, TileEntityStatueRenderer::new);
         BlockEntityRenderers.register(TileEntityGarageKit.TYPE, TileEntityGarageKitRenderer::new);
+        BlockEntityRenderers.register(TileEntityGomoku.TYPE, TileEntityGomokuRenderer::new);
     }
 
     @SubscribeEvent
@@ -57,5 +60,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(MaidBackpackSmallModel.LAYER, MaidBackpackSmallModel::createBodyLayer);
         event.registerLayerDefinition(StatueBaseModel.LAYER, StatueBaseModel::createBodyLayer);
         event.registerLayerDefinition(EntityYukkuriModel.LAYER, EntityYukkuriModel::createBodyLayer);
+        event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
     }
 }

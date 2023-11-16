@@ -56,6 +56,7 @@ public class InitCreativeTabs {
                 output.accept(MAID_BEACON.get());
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());
+                output.accept(GOMOKU.get());
                 ItemEntityPlaceholder.fillItemCategory(output);
             }).build());
 
