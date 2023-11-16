@@ -1,0 +1,23 @@
+{
+  "parent": "block/thin_block",
+  "textures": {
+    "0": "minecraft:block/stripped_oak_log",
+    "1": "touhou_little_maid:item/gomoku_top",
+    "particle": "minecraft:block/stripped_oak_log"
+  },
+  "elements": [
+    {
+      "from": [2, 0, 2],
+      "to": [14, 2, 14],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 3], "texture": "#0", "cullface": "north"},
+        "east": {"uv": [0, 0, 16, 3], "texture": "#0", "cullface": "east"},
+        "south": {"uv": [0, 0, 16, 3], "texture": "#0", "cullface": "south"},
+        "west": {"uv": [0, 0, 16, 3], "texture": "#0", "cullface": "west"},
+        "up": {"uv": [2, 14, 14, 2], "texture": "#1"},
+        "down": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "down"}
+      }
+    }
+  ],
+  "display": {}
+}

@@ -11,20 +11,19 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class GomokuModel extends EntityModel<Entity> {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "gomoku");
+public class PieceModel extends EntityModel<Entity> {
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "piece");
     private final ModelPart main;
 
-    public GomokuModel(ModelPart root) {
+    public PieceModel(ModelPart root) {
         this.main = root.getChild("main");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-75.5F, -61.5F, -75.5F, 151.0F, 151.0F, 151.0F, new CubeDeformation(-59.5F))
-                .texOffs(0, 0).addBox(-16.0F, -2.0F, -16.0F, 32.0F, 2.0F, 32.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
-        return LayerDefinition.create(meshdefinition, 512, 512);
+        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(-0.25F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+        return LayerDefinition.create(meshdefinition, 16, 16);
     }
 
     @Override
