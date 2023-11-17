@@ -1,5 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
+import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.AIService;
+import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
+import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
+import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import net.minecraft.core.BlockPos;
@@ -24,10 +28,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class BlockGomoku extends BaseEntityBlock {
     public static final EnumProperty<GomokuPart> PART = EnumProperty.create("part", GomokuPart.class);
+    public static AIService SERVICE = new ZhiZhangAIService(new AIService.AIConfig(1, 10, false, 0, 8));
     public static final VoxelShape LEFT_UP = Block.box(8, 0, 8, 16, 2, 16);
     public static final VoxelShape UP = Block.box(0, 0, 8, 16, 2, 16);
     public static final VoxelShape RIGHT_UP = Block.box(0, 0, 8, 8, 2, 16);
@@ -103,9 +109,87 @@ public class BlockGomoku extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pos, Player pPlayer, InteractionHand pHand, BlockHitResult hit) {
-        Vec3 location = hit.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
-        return super.use(pState, pLevel, pos, pPlayer, pHand, hit);
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!level.isClientSide && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
+            GomokuPart part = state.getValue(PART);
+            Vec3 location = hit.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
+            int[] chessPos = getChessPos(location.x, location.z, part);
+            if (chessPos != null) {
+                BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
+                BlockEntity te = level.getBlockEntity(centerPos);
+                if (te instanceof TileEntityGomoku gomoku) {
+                    int[][] chessData = gomoku.getChessData();
+                    Point playerPoint = new Point(chessPos[0], chessPos[1], Point.BLACK);
+                    if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
+                        gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
+                        gomoku.setInProgress(SERVICE.getStatue(chessData, playerPoint) == Statue.IN_PROGRESS);
+                        if (gomoku.isInProgress()) {
+                            Point aiPoint = SERVICE.getPoint(chessData, playerPoint);
+                            gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
+                            gomoku.setInProgress(SERVICE.getStatue(chessData, aiPoint) == Statue.IN_PROGRESS);
+                        }
+                        gomoku.refresh();
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+            }
+        }
+        return super.use(state, level, pos, player, hand, hit);
+    }
+
+    @Nullable
+    private static int[] getChessPos(double x, double y, GomokuPart part) {
+        switch (part) {
+            case LEFT_UP -> {
+                return getData(x, y, 0.505, 0.505, 0.54, 0.54, 0, 0);
+            }
+            case UP -> {
+                return getData(x, y, 0.037, 0.505, 0.08, 0.54, 4, 0);
+            }
+            case RIGHT_UP -> {
+                return getData(x, y, -0.037, 0.505, -0.01, 0.54, 11, 0);
+            }
+            case LEFT_CENTER -> {
+                return getData(x, y, 0.505, 0.037, 0.54, 0.07, 0, 4);
+            }
+            case CENTER -> {
+                return getData(x, y, 0.037, 0.037, 0.08, 0.07, 4, 4);
+            }
+            case RIGHT_CENTER -> {
+                return getData(x, y, -0.037, 0.037, -0.01, 0.07, 11, 4);
+            }
+            case LEFT_DOWN -> {
+                return getData(x, y, 0.505, 0, 0.54, 0, 0, 11);
+            }
+            case DOWN -> {
+                return getData(x, y, 0.037, 0, 0.08, 0, 4, 11);
+            }
+            case RIGHT_DOWN -> {
+                return getData(x, y, -0.037, 0, -0.01, 0, 11, 11);
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    @Nullable
+    private static int[] getData(double x, double y, double xOffset, double yOffset, double xStartOffset,
+                                 double yStartOffset, int xIndexOffset, int yIndexOffset) {
+        int xIndex = (int) ((x - xOffset) / 0.1316);
+        int yIndex = (int) ((y - yOffset) / 0.1316);
+        double xStart = xStartOffset + xIndex * 0.1316;
+        double xEnd = xStart + 0.07;
+        double yStart = yStartOffset + yIndex * 0.1316;
+        double yEnd = yStart + 0.07;
+        xIndex += xIndexOffset;
+        yIndex += yIndexOffset;
+        boolean checkIndex = 0 <= xIndex && xIndex <= 14 && 0 <= yIndex && yIndex <= 14;
+        boolean checkClick = xStart < x && x < xEnd && yStart < y && y < yEnd;
+        if (checkIndex && checkClick) {
+            return new int[]{xIndex, yIndex};
+        }
+        return null;
     }
 
     @Override

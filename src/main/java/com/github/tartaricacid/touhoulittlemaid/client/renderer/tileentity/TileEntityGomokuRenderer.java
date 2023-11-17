@@ -33,11 +33,11 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
         VertexConsumer checkerBoardBuff = bufferIn.getBuffer(RenderType.entityTranslucent(CHECKER_BOARD_TEXTURE));
         CHECKER_BOARD_MODEL.renderToBuffer(poseStack, checkerBoardBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
-        poseStack.translate(1.055, -0.1, -0.92);
+        poseStack.translate(0.92, -0.1, -1.055);
         int[][] chessData = gomoku.getChessData();
         for (int[] row : chessData) {
             for (int j = 0; j < chessData[0].length; j++) {
-                poseStack.translate(-0.1316, 0, 0);
+                poseStack.translate(0, 0, 0.1316);
                 if (row[j] == Point.BLACK) {
                     VertexConsumer blackPieceBuff = bufferIn.getBuffer(RenderType.entityTranslucent(BLACK_PIECE_TEXTURE));
                     PIECE_MODEL.renderToBuffer(poseStack, blackPieceBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
@@ -47,7 +47,7 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
                     PIECE_MODEL.renderToBuffer(poseStack, whitePieceBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
                 }
             }
-            poseStack.translate(1.974, 0, 0.1316);
+            poseStack.translate(-0.1316, 0, -1.974);
         }
         poseStack.popPose();
     }
