@@ -23,8 +23,10 @@ public class TileEntityGomoku extends BlockEntity {
     public static final BlockEntityType<TileEntityGomoku> TYPE = BlockEntityType.Builder.of(TileEntityGomoku::new, InitBlocks.GOMOKU.get()).build(null);
     private static final String CHESS_DATA = "ChessData";
     private static final String IN_PROGRESS = "InProgress";
+    private static final String PLAYER_TURN = "PlayerTurn";
     private final int[][] chessData = new int[15][15];
     private boolean inProgress = true;
+    private boolean playerTurn = true;
 
     public TileEntityGomoku(BlockPos pPos, BlockState pBlockState) {
         super(TYPE, pPos, pBlockState);
@@ -38,6 +40,7 @@ public class TileEntityGomoku extends BlockEntity {
         }
         getPersistentData().put(CHESS_DATA, listTag);
         getPersistentData().putBoolean(IN_PROGRESS, this.inProgress);
+        getPersistentData().putBoolean(PLAYER_TURN, this.playerTurn);
         super.saveAdditional(tag);
     }
 
@@ -50,6 +53,7 @@ public class TileEntityGomoku extends BlockEntity {
             this.chessData[i] = intArray;
         }
         this.inProgress = getPersistentData().getBoolean(IN_PROGRESS);
+        this.playerTurn = getPersistentData().getBoolean(PLAYER_TURN);
     }
 
     @Override
@@ -77,6 +81,14 @@ public class TileEntityGomoku extends BlockEntity {
 
     public void setChessData(int x, int y, int type) {
         this.chessData[x][y] = type;
+    }
+
+    public boolean isPlayerTurn() {
+        return playerTurn;
+    }
+
+    public void setPlayerTurn(boolean playerTurn) {
+        this.playerTurn = playerTurn;
     }
 
     public boolean isInProgress() {

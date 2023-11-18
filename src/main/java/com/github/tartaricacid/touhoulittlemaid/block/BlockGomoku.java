@@ -5,9 +5,11 @@ import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -123,6 +125,7 @@ public class BlockGomoku extends BaseEntityBlock {
                     if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
                         gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
                         gomoku.setInProgress(SERVICE.getStatue(chessData, playerPoint) == Statue.IN_PROGRESS);
+                        level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
                         if (gomoku.isInProgress()) {
                             Point aiPoint = SERVICE.getPoint(chessData, playerPoint);
                             gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
