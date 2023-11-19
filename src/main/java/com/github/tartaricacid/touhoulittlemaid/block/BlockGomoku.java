@@ -1,11 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.AIService;
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
-import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ChessDataToClientMessage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -35,7 +36,6 @@ import javax.annotation.Nullable;
 
 public class BlockGomoku extends BaseEntityBlock {
     public static final EnumProperty<GomokuPart> PART = EnumProperty.create("part", GomokuPart.class);
-    public static AIService SERVICE = new ZhiZhangAIService(new AIService.AIConfig(1, 10, false, 0, 8));
     public static final VoxelShape LEFT_UP = Block.box(8, 0, 8, 16, 2, 16);
     public static final VoxelShape UP = Block.box(0, 0, 8, 16, 2, 16);
     public static final VoxelShape RIGHT_UP = Block.box(0, 0, 8, 8, 2, 16);
@@ -119,17 +119,16 @@ public class BlockGomoku extends BaseEntityBlock {
             if (chessPos != null) {
                 BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
                 BlockEntity te = level.getBlockEntity(centerPos);
-                if (te instanceof TileEntityGomoku gomoku) {
+                if (te instanceof TileEntityGomoku gomoku && gomoku.isPlayerTurn()) {
                     int[][] chessData = gomoku.getChessData();
                     Point playerPoint = new Point(chessPos[0], chessPos[1], Point.BLACK);
                     if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
                         gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
-                        gomoku.setInProgress(SERVICE.getStatue(chessData, playerPoint) == Statue.IN_PROGRESS);
+                        gomoku.setInProgress(TouhouLittleMaid.SERVICE.getStatue(chessData, playerPoint) == Statue.IN_PROGRESS);
                         level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
                         if (gomoku.isInProgress()) {
-                            Point aiPoint = SERVICE.getPoint(chessData, playerPoint);
-                            gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
-                            gomoku.setInProgress(SERVICE.getStatue(chessData, aiPoint) == Statue.IN_PROGRESS);
+                            gomoku.setPlayerTurn(false);
+                            NetworkHandler.sendToClientPlayer(new ChessDataToClientMessage(centerPos, chessData, playerPoint), player);
                         }
                         gomoku.refresh();
                         return InteractionResult.SUCCESS;
