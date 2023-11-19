@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ChessDataToClientMessage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -25,30 +26,38 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
 public class BlockGomoku extends BaseEntityBlock {
     public static final EnumProperty<GomokuPart> PART = EnumProperty.create("part", GomokuPart.class);
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final VoxelShape LEFT_UP = Block.box(8, 0, 8, 16, 2, 16);
+    public static final VoxelShape LEFT_UP_WITH_BOX = Shapes.or(LEFT_UP, Block.box(11, 0, 2, 16, 4, 7));
     public static final VoxelShape UP = Block.box(0, 0, 8, 16, 2, 16);
     public static final VoxelShape RIGHT_UP = Block.box(0, 0, 8, 8, 2, 16);
+    public static final VoxelShape RIGHT_UP_WITH_BOX = Shapes.or(RIGHT_UP, Block.box(9, 0, 11, 14, 4, 16));
     public static final VoxelShape LEFT_CENTER = Block.box(8, 0, 0, 16, 2, 16);
     public static final VoxelShape CENTER = Block.box(0, 0, 0, 16, 2, 16);
     public static final VoxelShape RIGHT_CENTER = Block.box(0, 0, 0, 8, 2, 16);
     public static final VoxelShape LEFT_DOWN = Block.box(8, 0, 0, 16, 2, 8);
+    public static final VoxelShape LEFT_DOWN_WITH_BOX = Shapes.or(LEFT_DOWN, Block.box(2, 0, 0, 7, 4, 5));
     public static final VoxelShape DOWN = Block.box(0, 0, 0, 16, 2, 8);
     public static final VoxelShape RIGHT_DOWN = Block.box(0, 0, 0, 8, 2, 8);
+    public static final VoxelShape RIGHT_DOWN_WITH_BOX = Shapes.or(RIGHT_DOWN, Block.box(0, 0, 9, 5, 4, 14));
 
     public BlockGomoku() {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F).noOcclusion());
-        this.registerDefaultState(this.stateDefinition.any().setValue(PART, GomokuPart.CENTER));
+        this.registerDefaultState(this.stateDefinition.any().setValue(PART, GomokuPart.CENTER).setValue(FACING, Direction.NORTH));
     }
 
     private static void handleGomokuRemove(Level world, BlockPos pos, BlockState state) {
@@ -90,7 +99,7 @@ public class BlockGomoku extends BaseEntityBlock {
                 }
             }
         }
-        return this.defaultBlockState();
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -196,7 +205,7 @@ public class BlockGomoku extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(PART);
+        builder.add(PART, FACING);
     }
 
     @Nullable
@@ -217,13 +226,21 @@ public class BlockGomoku extends BaseEntityBlock {
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         switch (state.getValue(PART)) {
             case LEFT_UP -> {
-                return LEFT_UP;
+                if (state.getValue(FACING).getAxis() == Direction.Axis.X) {
+                    return LEFT_UP_WITH_BOX;
+                } else {
+                    return LEFT_UP;
+                }
             }
             case UP -> {
                 return UP;
             }
             case RIGHT_UP -> {
-                return RIGHT_UP;
+                if (state.getValue(FACING).getAxis() == Direction.Axis.Z) {
+                    return RIGHT_UP_WITH_BOX;
+                } else {
+                    return RIGHT_UP;
+                }
             }
             case LEFT_CENTER -> {
                 return LEFT_CENTER;
@@ -232,13 +249,21 @@ public class BlockGomoku extends BaseEntityBlock {
                 return RIGHT_CENTER;
             }
             case LEFT_DOWN -> {
-                return LEFT_DOWN;
+                if (state.getValue(FACING).getAxis() == Direction.Axis.Z) {
+                    return LEFT_DOWN_WITH_BOX;
+                } else {
+                    return LEFT_DOWN;
+                }
             }
             case DOWN -> {
                 return DOWN;
             }
             case RIGHT_DOWN -> {
-                return RIGHT_DOWN;
+                if (state.getValue(FACING).getAxis() == Direction.Axis.X) {
+                    return RIGHT_DOWN_WITH_BOX;
+                } else {
+                    return RIGHT_DOWN;
+                }
             }
             default -> {
                 return CENTER;
