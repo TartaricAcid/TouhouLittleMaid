@@ -75,6 +75,80 @@ public class BlockGomoku extends BaseEntityBlock {
         }
     }
 
+    @Nullable
+    private static int[] getChessPos(double x, double y, GomokuPart part) {
+        switch (part) {
+            case LEFT_UP -> {
+                return getData(x, y, 0.505, 0.505, 0.54, 0.54, 0, 0);
+            }
+            case UP -> {
+                return getData(x, y, 0.037, 0.505, 0.08, 0.54, 4, 0);
+            }
+            case RIGHT_UP -> {
+                return getData(x, y, -0.037, 0.505, -0.01, 0.54, 11, 0);
+            }
+            case LEFT_CENTER -> {
+                return getData(x, y, 0.505, 0.037, 0.54, 0.07, 0, 4);
+            }
+            case CENTER -> {
+                return getData(x, y, 0.037, 0.037, 0.08, 0.07, 4, 4);
+            }
+            case RIGHT_CENTER -> {
+                return getData(x, y, -0.037, 0.037, -0.01, 0.07, 11, 4);
+            }
+            case LEFT_DOWN -> {
+                return getData(x, y, 0.505, 0, 0.54, 0, 0, 11);
+            }
+            case DOWN -> {
+                return getData(x, y, 0.037, 0, 0.08, 0, 4, 11);
+            }
+            case RIGHT_DOWN -> {
+                return getData(x, y, -0.037, 0, -0.01, 0, 11, 11);
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    private static boolean isClickChessBox(double x, double y, GomokuPart part, Direction direction) {
+        if (direction.getAxis() == Direction.Axis.Z) {
+            if (part == GomokuPart.RIGHT_UP) {
+                return 0.5625 <= x && x <= 0.875 && 0.6875 <= y && y <= 1;
+            }
+            if (part == GomokuPart.LEFT_DOWN) {
+                return 0.125 <= x && x <= 0.4375 && 0 <= y && y <= 0.3125;
+            }
+        }
+        if (direction.getAxis() == Direction.Axis.X) {
+            if (part == GomokuPart.LEFT_UP) {
+                return 0.6875 <= x && x <= 1 && 0.125 <= y && y <= 0.4375;
+            }
+            if (part == GomokuPart.RIGHT_DOWN) {
+                return 0 <= x && x <= 0.3125 && 0.5625 <= y && y <= 0.875;
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    private static int[] getData(double x, double y, double xOffset, double yOffset, double xStartOffset, double yStartOffset, int xIndexOffset, int yIndexOffset) {
+        int xIndex = (int) ((x - xOffset) / 0.1316);
+        int yIndex = (int) ((y - yOffset) / 0.1316);
+        double xStart = xStartOffset + xIndex * 0.1316;
+        double xEnd = xStart + 0.07;
+        double yStart = yStartOffset + yIndex * 0.1316;
+        double yEnd = yStart + 0.07;
+        xIndex += xIndexOffset;
+        yIndex += yIndexOffset;
+        boolean checkIndex = 0 <= xIndex && xIndex <= 14 && 0 <= yIndex && yIndex <= 14;
+        boolean checkClick = xStart < x && x < xEnd && yStart < y && y < yEnd;
+        if (checkIndex && checkClick) {
+            return new int[]{xIndex, yIndex};
+        }
+        return null;
+    }
+
     @Override
     public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         handleGomokuRemove(world, pos, state);
@@ -123,84 +197,41 @@ public class BlockGomoku extends BaseEntityBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
             GomokuPart part = state.getValue(PART);
+            BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
+            BlockEntity te = level.getBlockEntity(centerPos);
+            if (!(te instanceof TileEntityGomoku gomoku)) {
+                return InteractionResult.FAIL;
+            }
             Vec3 location = hit.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
-            int[] chessPos = getChessPos(location.x, location.z, part);
-            if (chessPos != null) {
-                BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
-                BlockEntity te = level.getBlockEntity(centerPos);
-                if (te instanceof TileEntityGomoku gomoku && gomoku.isPlayerTurn()) {
-                    int[][] chessData = gomoku.getChessData();
-                    Point playerPoint = new Point(chessPos[0], chessPos[1], Point.BLACK);
-                    if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
-                        gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
-                        gomoku.setInProgress(TouhouLittleMaid.SERVICE.getStatue(chessData, playerPoint) == Statue.IN_PROGRESS);
-                        level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
-                        if (gomoku.isInProgress()) {
-                            gomoku.setPlayerTurn(false);
-                            NetworkHandler.sendToClientPlayer(new ChessDataToClientMessage(centerPos, chessData, playerPoint), player);
-                        }
-                        gomoku.refresh();
-                        return InteractionResult.SUCCESS;
-                    }
+            Direction facing = state.getValue(FACING);
+            if (isClickChessBox(location.x, location.z, part, facing)) {
+                level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                gomoku.reset();
+                gomoku.refresh();
+                return InteractionResult.SUCCESS;
+            }
+            if (!gomoku.isPlayerTurn()) {
+                return InteractionResult.FAIL;
+            }
+            int[][] chessData = gomoku.getChessData();
+            int[] clickPos = getChessPos(location.x, location.z, part);
+            if (clickPos == null) {
+                return InteractionResult.FAIL;
+            }
+            Point playerPoint = new Point(clickPos[0], clickPos[1], Point.BLACK);
+            if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
+                gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
+                gomoku.setInProgress(TouhouLittleMaid.SERVICE.getStatue(chessData, playerPoint) == Statue.IN_PROGRESS);
+                level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
+                if (gomoku.isInProgress()) {
+                    gomoku.setPlayerTurn(false);
+                    NetworkHandler.sendToClientPlayer(new ChessDataToClientMessage(centerPos, chessData, playerPoint), player);
                 }
+                gomoku.refresh();
+                return InteractionResult.SUCCESS;
             }
         }
         return super.use(state, level, pos, player, hand, hit);
-    }
-
-    @Nullable
-    private static int[] getChessPos(double x, double y, GomokuPart part) {
-        switch (part) {
-            case LEFT_UP -> {
-                return getData(x, y, 0.505, 0.505, 0.54, 0.54, 0, 0);
-            }
-            case UP -> {
-                return getData(x, y, 0.037, 0.505, 0.08, 0.54, 4, 0);
-            }
-            case RIGHT_UP -> {
-                return getData(x, y, -0.037, 0.505, -0.01, 0.54, 11, 0);
-            }
-            case LEFT_CENTER -> {
-                return getData(x, y, 0.505, 0.037, 0.54, 0.07, 0, 4);
-            }
-            case CENTER -> {
-                return getData(x, y, 0.037, 0.037, 0.08, 0.07, 4, 4);
-            }
-            case RIGHT_CENTER -> {
-                return getData(x, y, -0.037, 0.037, -0.01, 0.07, 11, 4);
-            }
-            case LEFT_DOWN -> {
-                return getData(x, y, 0.505, 0, 0.54, 0, 0, 11);
-            }
-            case DOWN -> {
-                return getData(x, y, 0.037, 0, 0.08, 0, 4, 11);
-            }
-            case RIGHT_DOWN -> {
-                return getData(x, y, -0.037, 0, -0.01, 0, 11, 11);
-            }
-            default -> {
-                return null;
-            }
-        }
-    }
-
-    @Nullable
-    private static int[] getData(double x, double y, double xOffset, double yOffset, double xStartOffset,
-                                 double yStartOffset, int xIndexOffset, int yIndexOffset) {
-        int xIndex = (int) ((x - xOffset) / 0.1316);
-        int yIndex = (int) ((y - yOffset) / 0.1316);
-        double xStart = xStartOffset + xIndex * 0.1316;
-        double xEnd = xStart + 0.07;
-        double yStart = yStartOffset + yIndex * 0.1316;
-        double yEnd = yStart + 0.07;
-        xIndex += xIndexOffset;
-        yIndex += yIndexOffset;
-        boolean checkIndex = 0 <= xIndex && xIndex <= 14 && 0 <= yIndex && yIndex <= 14;
-        boolean checkClick = xStart < x && x < xEnd && yStart < y && y < yEnd;
-        if (checkIndex && checkClick) {
-            return new int[]{xIndex, yIndex};
-        }
-        return null;
     }
 
     @Override

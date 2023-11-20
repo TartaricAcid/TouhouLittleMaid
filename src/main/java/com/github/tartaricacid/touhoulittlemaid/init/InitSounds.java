@@ -43,6 +43,7 @@ public final class InitSounds {
     public static final RegistryObject<SoundEvent> ALBUM_OPEN = registerSound("item.album_open");
     public static final RegistryObject<SoundEvent> ALTAR_CRAFT = registerSound("block.altar_craft");
     public static final RegistryObject<SoundEvent> GOMOKU = registerSound("block.gomoku");
+    public static final RegistryObject<SoundEvent> GOMOKU_RESET = registerSound("block.gomoku_reset");
     public static final RegistryObject<SoundEvent> BOX_OPEN = registerSound("entity.box");
     public static final RegistryObject<SoundEvent> COMPASS_POINT = registerSound("item.compass");
 

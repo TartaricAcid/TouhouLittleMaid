@@ -7,6 +7,8 @@
  */
 package com.github.tartaricacid.touhoulittlemaid.api.game.gomoku;
 
+import net.minecraft.nbt.CompoundTag;
+
 /**
  * 棋子点位
  *
@@ -17,6 +19,7 @@ public class Point {
     public static final int EMPTY = 0;
     public static final int BLACK = 1;
     public static final int WHITE = 2;
+    public static final Point NULL = new Point(-1, -1, 0);
     /**
      * 横坐标
      */
@@ -38,6 +41,34 @@ public class Point {
         this.x = x;
         this.y = y;
         this.type = type;
+    }
+
+    public static CompoundTag toTag(Point point) {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("x", point.x);
+        tag.putInt("y", point.y);
+        tag.putInt("type", point.type);
+        return tag;
+    }
+
+    public static Point fromTag(CompoundTag tag) {
+        int x = tag.getInt("x");
+        int y = tag.getInt("y");
+        int type = tag.getInt("type");
+        return new Point(x, y, type);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        } else if (this == other) {
+            return true;
+        } else if (other instanceof Point otherPoint) {
+            return otherPoint.x == this.x && otherPoint.y == this.y && otherPoint.type == this.type;
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -49,6 +49,9 @@ public class ChessDataToServerMessage {
                     return;
                 }
                 if (level.getBlockEntity(message.pos) instanceof TileEntityGomoku gomoku) {
+                    if (!gomoku.isInProgress() || gomoku.isPlayerTurn() || gomoku.getChessCounter() <= 0) {
+                        return;
+                    }
                     Point aiPoint = message.point;
                     gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
                     gomoku.setInProgress(TouhouLittleMaid.SERVICE.getStatue(gomoku.getChessData(), aiPoint) == Statue.IN_PROGRESS);
