@@ -62,5 +62,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(EntityYukkuriModel.LAYER, EntityYukkuriModel::createBodyLayer);
         event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
         event.registerLayerDefinition(PieceModel.LAYER, PieceModel::createBodyLayer);
+        event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
     }
 }
