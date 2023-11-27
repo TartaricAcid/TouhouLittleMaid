@@ -21,7 +21,11 @@ public final class ItemsUtil {
      */
     public static void dropEntityItems(Entity entity, IItemHandler itemHandler, int startIndex, int endIndex) {
         for (int i = startIndex; i < endIndex; i++) {
-            entity.spawnAtLocation(itemHandler.getStackInSlot(i));
+            ItemStack stackInSlot = itemHandler.getStackInSlot(i);
+            ItemStack extractItem = itemHandler.extractItem(i, stackInSlot.getCount(), false);
+            if (!extractItem.isEmpty()) {
+                entity.spawnAtLocation(extractItem);
+            }
         }
     }
 
