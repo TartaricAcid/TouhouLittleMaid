@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.client.Minecraft;
@@ -36,7 +36,7 @@ public final class EntityCacheUtil {
         maid.deathTime = 0;
         maid.setOnGround(true);
         maid.setInSittingPose(false);
-        maid.setBackpackLevel(BackpackLevel.EMPTY);
+        maid.setMaidBackpackType(BackpackManager.getEmptyBackpack());
         maid.setCustomName(Component.empty());
         if (clearEquipmentData) {
             for (EquipmentSlot slot : EquipmentSlot.values()) {

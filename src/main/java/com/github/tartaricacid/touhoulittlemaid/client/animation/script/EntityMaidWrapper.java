@@ -149,8 +149,9 @@ public final class EntityMaidWrapper implements IMaidData {
     }
 
     @Override
+    @Deprecated
     public int getBackpackLevel() {
-        return maid.getBackpackLevel();
+        return 0;
     }
 
     @Override

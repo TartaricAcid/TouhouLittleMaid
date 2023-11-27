@@ -57,7 +57,7 @@ public class ItemFilm extends Item {
     }
 
     private static void removeMaidSomeData(CompoundTag nbt) {
-        nbt.remove(EntityMaid.BACKPACK_LEVEL_TAG);
+        nbt.remove(EntityMaid.MAID_BACKPACK_TYPE);
         nbt.remove(EntityMaid.MAID_INVENTORY_TAG);
         nbt.remove(EntityMaid.MAID_BAUBLE_INVENTORY_TAG);
         nbt.remove(EntityMaid.EXPERIENCE_TAG);

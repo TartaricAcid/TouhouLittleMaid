@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -117,7 +117,6 @@ public class MaidMainContainer extends AbstractMaidContainer {
 
     private void addMainInv() {
         ItemStackHandler inv = maid.getMaidInv();
-        int level = maid.getBackpackLevel();
 
         // 默认背包
         for (int i = 0; i < 6; i++) {
@@ -133,29 +132,9 @@ public class MaidMainContainer extends AbstractMaidContainer {
             }
         }
 
-        if (level > BackpackLevel.EMPTY) {
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 6 + i, 143 + 18 * i, 59));
-            }
-        }
-
-        if (level > BackpackLevel.SMALL) {
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 12 + i, 143 + 18 * i, 82));
-            }
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 18 + i, 143 + 18 * i, 100));
-            }
-        }
-
-        if (level > BackpackLevel.MIDDLE) {
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 24 + i, 143 + 18 * i, 123));
-            }
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 30 + i, 143 + 18 * i, 141));
-            }
-        }
+        // 背包格子
+        IMaidBackpack backpack = maid.getMaidBackpackType();
+        backpack.getContainer(inv).forEach(this::addSlot);
     }
 
     private void addMaidBauble() {

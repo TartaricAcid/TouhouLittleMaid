@@ -1,18 +1,15 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBackpackBigModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBackpackMiddleModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBackpackSmallModel;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -25,20 +22,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
-    private static final ResourceLocation SMALL = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
-    private static final ResourceLocation MIDDLE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_middle.png");
-    private static final ResourceLocation BIG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_big.png");
     private final GeckoEntityMaidRenderer renderer;
-    private final EntityModel<EntityMaid> smallModel;
-    private final EntityModel<EntityMaid> middleModel;
-    private final EntityModel<EntityMaid> bigModel;
 
     public GeckoLayerMaidBackpack(GeckoEntityMaidRenderer entityRendererIn, EntityModelSet modelSet) {
         super(entityRendererIn);
         this.renderer = entityRendererIn;
-        smallModel = new MaidBackpackSmallModel(modelSet.bakeLayer(MaidBackpackSmallModel.LAYER));
-        middleModel = new MaidBackpackMiddleModel(modelSet.bakeLayer(MaidBackpackMiddleModel.LAYER));
-        bigModel = new MaidBackpackBigModel(modelSet.bakeLayer(MaidBackpackBigModel.LAYER));
     }
 
     protected static <T extends LivingEntity> void renderColoredCutoutModel(EntityModel<T> pModel, ResourceLocation pTextureLocation, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, T pEntity, float pRed, float pGreen, float pBlue) {
@@ -57,18 +45,8 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
                 translateToBackpack(poseStack, geoModel);
                 poseStack.translate(0, 1, 0.25);
                 poseStack.mulPose(Axis.ZP.rotationDegrees(180));
-                switch (maid.getBackpackLevel()) {
-                    case BackpackLevel.SMALL:
-                        renderColoredCutoutModel(smallModel, SMALL, poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f);
-                        return;
-                    case BackpackLevel.MIDDLE:
-                        renderColoredCutoutModel(middleModel, MIDDLE, poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f);
-                        return;
-                    case BackpackLevel.BIG:
-                        renderColoredCutoutModel(bigModel, BIG, poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f);
-                    case BackpackLevel.EMPTY:
-                    default:
-                }
+                IMaidBackpack backpack = maid.getMaidBackpackType();
+                BackpackManager.findBackpackModel(backpack.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
             }
         }
     }

@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeComp
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -36,22 +35,7 @@ public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<Enti
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             matrixStack.translate(0, 0.5, -0.25);
-            switch (maid.getBackpackLevel()) {
-                default:
-                case BackpackLevel.EMPTY:
-                    matrixStack.translate(0, 0.625, 0.2);
-                    break;
-                case BackpackLevel.SMALL:
-                    matrixStack.translate(0, 0.625, -0.05);
-                    break;
-                case BackpackLevel.MIDDLE:
-                    matrixStack.mulPose(Axis.XP.rotationDegrees(-7.5F));
-                    matrixStack.translate(0, 0.625, -0.25);
-                    break;
-                case BackpackLevel.BIG:
-                    matrixStack.translate(0, 0, -0.4);
-                    break;
-            }
+            maid.getMaidBackpackType().offsetBackpackItem(matrixStack);
             if (SlashBladeCompat.isSlashBladeItem(stack)) {
                 SlashBladeRender.renderMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
             } else {

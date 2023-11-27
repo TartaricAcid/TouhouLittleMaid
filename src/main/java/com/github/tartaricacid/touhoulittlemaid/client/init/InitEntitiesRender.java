@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileE
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGomokuRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityStatueRenderer;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityExtinguishingAgent;
