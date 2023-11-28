@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.model;
+package com.github.tartaricacid.touhoulittlemaid.client.model.backpack;
 
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
@@ -12,11 +12,11 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class MaidBackpackMiddleModel extends EntityModel<EntityMaid> {
+public class MiddleBackpackModel extends EntityModel<EntityMaid> {
     public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "backpack_middle");
     private final ModelPart all;
 
-    public MaidBackpackMiddleModel(ModelPart root) {
+    public MiddleBackpackModel(ModelPart root) {
         this.all = root.getChild("all");
     }
 

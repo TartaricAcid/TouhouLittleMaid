@@ -1,4 +1,5 @@
-package com.github.tartaricacid.touhoulittlemaid.client.model;
+package com.github.tartaricacid.touhoulittlemaid.client.model.backpack;
+
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -11,18 +12,20 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class CraftingTableBackpackModel extends EntityModel<EntityMaid> {
-    public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "crafting_table_backpack");
+public class EnderChestBackpackModel extends EntityModel<EntityMaid> {
+    public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "ender_chest_backpack");
     private final ModelPart main;
 
-    public CraftingTableBackpackModel(ModelPart root) {
+    public EnderChestBackpackModel(ModelPart root) {
         this.main = root.getChild("main");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 16.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, -16.0F, -3.0F, 14.0F, 16.0F, 7.0F, new CubeDeformation(0.0F))
+                .texOffs(29, 31).addBox(-1.0F, -15.0F, 4.0F, 2.0F, 8.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 23).addBox(-7.0F, -9.0F, 4.0F, 14.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 

@@ -25,7 +25,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
@@ -867,7 +866,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                 return MaidConfigContainer.create(getId());
             case TabIndex.MAIN:
             default:
-                return MaidMainContainer.create(getId());
+                return this.getMaidBackpackType().getGuiProvider(getId());
         }
     }
 

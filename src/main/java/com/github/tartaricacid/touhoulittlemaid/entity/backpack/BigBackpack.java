@@ -2,36 +2,31 @@ package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
-import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBackpackBigModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.BigBackpackModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.BigBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
-import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class BigBackpack extends IMaidBackpack {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "big_backpack");
-    private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_backpack.png");
 
     @Override
     public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
@@ -53,24 +48,18 @@ public class BigBackpack extends IMaidBackpack {
     }
 
     @Override
-    public List<Slot> getContainer(ItemStackHandler itemHandler) {
-        List<Slot> container = Lists.newLinkedList();
-        for (int i = 0; i < 6; i++) {
-            container.add(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 59));
-        }
-        for (int i = 0; i < 6; i++) {
-            container.add(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 82));
-        }
-        for (int i = 0; i < 6; i++) {
-            container.add(new SlotItemHandler(itemHandler, 18 + i, 143 + 18 * i, 100));
-        }
-        for (int i = 0; i < 6; i++) {
-            container.add(new SlotItemHandler(itemHandler, 24 + i, 143 + 18 * i, 123));
-        }
-        for (int i = 0; i < 6; i++) {
-            container.add(new SlotItemHandler(itemHandler, 30 + i, 143 + 18 * i, 141));
-        }
-        return container;
+    public MenuProvider getGuiProvider(int entityId) {
+        return new MenuProvider() {
+            @Override
+            public Component getDisplayName() {
+                return Component.literal("Maid Big Container");
+            }
+
+            @Override
+            public AbstractMaidContainer createMenu(int index, Inventory playerInventory, Player player) {
+                return new BigBackpackContainer(index, playerInventory, entityId);
+            }
+        };
     }
 
     @Override
@@ -78,19 +67,11 @@ public class BigBackpack extends IMaidBackpack {
         return BackpackLevel.BIG_CAPACITY;
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void drawBackpackScreen(GuiGraphics graphics, EntityMaid maid, int leftPos, int topPos) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, BACKPACK);
-        graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 122);
-    }
-
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
     public EntityModel<EntityMaid> getBackpackModel(EntityModelSet modelSet) {
-        return new MaidBackpackBigModel(modelSet.bakeLayer(MaidBackpackBigModel.LAYER));
+        return new BigBackpackModel(modelSet.bakeLayer(BigBackpackModel.LAYER));
     }
 
     @Nullable

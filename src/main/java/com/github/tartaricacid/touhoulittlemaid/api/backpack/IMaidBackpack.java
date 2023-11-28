@@ -4,20 +4,17 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public abstract class IMaidBackpack {
     public abstract ResourceLocation getId();
@@ -32,12 +29,9 @@ public abstract class IMaidBackpack {
 
     public abstract void onTakeOff(ItemStack stack, @Nullable Player player, EntityMaid maid);
 
-    public abstract List<Slot> getContainer(ItemStackHandler itemHandler);
+    public abstract MenuProvider getGuiProvider(int entityId);
 
     public abstract int getAvailableMaxContainerIndex();
-
-    @OnlyIn(Dist.CLIENT)
-    public abstract void drawBackpackScreen(GuiGraphics graphics, EntityMaid maid, int leftPos, int topPos);
 
     @OnlyIn(Dist.CLIENT)
     public abstract void offsetBackpackItem(PoseStack poseStack);

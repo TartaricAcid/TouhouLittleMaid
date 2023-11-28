@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.*;
+import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityAltarRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGomokuRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityStatueRenderer;
-import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityExtinguishingAgent;
@@ -56,13 +56,14 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(DebugFloorModel.LAYER, DebugFloorModel::createBodyLayer);
         event.registerLayerDefinition(EntityBoxModel.LAYER, EntityBoxModel::createBodyLayer);
         event.registerLayerDefinition(EntityFairyModel.LAYER, EntityFairyModel::createBodyLayer);
-        event.registerLayerDefinition(MaidBackpackBigModel.LAYER, MaidBackpackBigModel::createBodyLayer);
-        event.registerLayerDefinition(MaidBackpackMiddleModel.LAYER, MaidBackpackMiddleModel::createBodyLayer);
-        event.registerLayerDefinition(MaidBackpackSmallModel.LAYER, MaidBackpackSmallModel::createBodyLayer);
+        event.registerLayerDefinition(BigBackpackModel.LAYER, BigBackpackModel::createBodyLayer);
+        event.registerLayerDefinition(MiddleBackpackModel.LAYER, MiddleBackpackModel::createBodyLayer);
+        event.registerLayerDefinition(SmallBackpackModel.LAYER, SmallBackpackModel::createBodyLayer);
         event.registerLayerDefinition(StatueBaseModel.LAYER, StatueBaseModel::createBodyLayer);
         event.registerLayerDefinition(EntityYukkuriModel.LAYER, EntityYukkuriModel::createBodyLayer);
         event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
         event.registerLayerDefinition(PieceModel.LAYER, PieceModel::createBodyLayer);
         event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
+        event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
     }
 }
