@@ -22,9 +22,7 @@ public class CraftingTableBackpackModel extends EntityModel<EntityMaid> {
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, -14.0F, -5.0F, 16.0F, 16.0F, 16.0F, new CubeDeformation(-3.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
-
+        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, -15.0F, -2.0F, 16.0F, 16.0F, 16.0F, new CubeDeformation(-1.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 

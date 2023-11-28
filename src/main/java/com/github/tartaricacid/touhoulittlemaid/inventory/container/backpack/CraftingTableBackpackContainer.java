@@ -12,6 +12,8 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.Optional;
 
@@ -19,12 +21,21 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
     public static final MenuType<CraftingTableBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new CraftingTableBackpackContainer(windowId, inv, data.readInt()));
     private final CraftingContainer craftSlots = new TransientCraftingContainer(this, 3, 3);
     private final ResultContainer resultSlots = new ResultContainer();
-    private ContainerLevelAccess access;
-    private ResultSlot resultSlot;
-    private Player player;
+    private final ContainerLevelAccess access;
+    private final ResultSlot resultSlot;
+    private final Player player;
 
     public CraftingTableBackpackContainer(int id, Inventory inventory, int entityId) {
         super(TYPE, id, inventory, entityId);
+        this.player = inventory.player;
+        this.access = ContainerLevelAccess.create(this.getMaid().level, this.getMaid().blockPosition());
+        this.resultSlot = new ResultSlot(this.player, this.craftSlots, this.resultSlots, 0, 229, 123);
+        this.addSlot(this.resultSlot);
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                this.addSlot(new Slot(this.craftSlots, j + i * 3, 143 + j * 18, 105 + i * 18));
+            }
+        }
     }
 
     @Override
@@ -85,14 +96,12 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
 
     @Override
     protected void addBackpackInv(Inventory inventory) {
-        this.player = inventory.player;
-        this.access = ContainerLevelAccess.create(this.getMaid().level, this.getMaid().blockPosition());
-        this.resultSlot = new ResultSlot(this.player, this.craftSlots, this.resultSlots, 0, 229, 97);
-        this.addSlot(this.resultSlot);
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                this.addSlot(new Slot(this.craftSlots, j + i * 3, 143 + j * 18, 79 + i * 18));
-            }
+        IItemHandler itemHandler = maid.getMaidInv();
+        for (int i = 0; i < 6; i++) {
+            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 59));
+        }
+        for (int i = 0; i < 6; i++) {
+            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 82));
         }
     }
 

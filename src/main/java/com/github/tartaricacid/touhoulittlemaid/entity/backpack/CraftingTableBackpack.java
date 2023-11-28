@@ -4,9 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.CraftingTableBackpackModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.CraftingTableBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -22,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class CraftingTableBackpack extends IMaidBackpack {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "crafting_table");
-    private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_crafting_table.png");
 
     @Override
     public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
@@ -30,6 +32,14 @@ public class CraftingTableBackpack extends IMaidBackpack {
 
     @Override
     public void onTakeOff(ItemStack stack, @Nullable Player player, EntityMaid maid) {
+        Item item = stack.getItem();
+        if (item instanceof ItemMaidBackpack) {
+            if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
+                ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
+            }
+        } else {
+            this.dropAllItems(maid);
+        }
     }
 
     @Override
@@ -49,7 +59,7 @@ public class CraftingTableBackpack extends IMaidBackpack {
 
     @Override
     public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.EMPTY_CAPACITY;
+        return BackpackLevel.CRAFTING_TABLE_CAPACITY;
     }
 
     @Override
