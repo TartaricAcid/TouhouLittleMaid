@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
@@ -152,6 +153,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
     private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
+    private static final String BACKPACK_DATA_TAG = "MaidBackpackData";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final String DEFAULT_SOUND_PACK_ID = "touhou_little_maid";
@@ -169,6 +171,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private int playerHurtSoundCount = 120;
     private int pickupSoundCount = 5;
     private int backpackDelay = 0;
+    private IBackpackData backpackData = null;
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
@@ -293,6 +296,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.updateSwingTime();
         if (!level.isClientSide) {
             ChatBubbleManger.tick(this);
+            if (this.backpackData != null) {
+                this.level.getProfiler().push("maidBackpackData");
+                this.backpackData.serverTick(this);
+                this.level.getProfiler().pop();
+            }
         }
     }
 
@@ -785,6 +793,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.put(RESTRICT_CENTER_TAG, NbtUtils.writeBlockPos(getRestrictCenter()));
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
+        if (this.backpackData != null) {
+            CompoundTag tag = new CompoundTag();
+            this.backpackData.save(tag, this);
+            compound.put(BACKPACK_DATA_TAG, tag);
+        } else {
+            compound.put(BACKPACK_DATA_TAG, new CompoundTag());
+        }
     }
 
     @Override
@@ -845,6 +860,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             ResourceLocation id = new ResourceLocation(compound.getString(MAID_BACKPACK_TYPE));
             IMaidBackpack backpack = BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
             setMaidBackpackType(backpack);
+            if (this.backpackData != null && compound.contains(BACKPACK_DATA_TAG, Tag.TAG_COMPOUND)) {
+                this.backpackData.load(compound.getCompound(BACKPACK_DATA_TAG), this);
+            }
         }
     }
 
@@ -1204,12 +1222,21 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             return;
         }
         this.backpack = backpack;
+        if (this.backpack.hasBackpackData()) {
+            this.backpackData = this.backpack.getBackpackData(this);
+        } else {
+            this.backpackData = null;
+        }
         this.entityData.set(BACKPACK_TYPE, backpack.getId().toString());
     }
 
     public IMaidBackpack getMaidBackpackType() {
         ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
         return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
+    }
+
+    public IBackpackData getBackpackData() {
+        return backpackData;
     }
 
     public void setSchedule(MaidSchedule schedule) {

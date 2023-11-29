@@ -16,6 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
+
 public abstract class IMaidBackpack {
     public abstract ResourceLocation getId();
 
@@ -30,6 +31,15 @@ public abstract class IMaidBackpack {
     public abstract void onTakeOff(ItemStack stack, @Nullable Player player, EntityMaid maid);
 
     public abstract MenuProvider getGuiProvider(int entityId);
+
+    public boolean hasBackpackData() {
+        return false;
+    }
+
+    @Nullable
+    public IBackpackData getBackpackData(EntityMaid maid) {
+        return null;
+    }
 
     public abstract int getAvailableMaxContainerIndex();
 

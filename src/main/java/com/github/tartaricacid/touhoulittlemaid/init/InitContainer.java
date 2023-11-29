@@ -18,6 +18,7 @@ public final class InitContainer {
     public static final RegistryObject<MenuType<BigBackpackContainer>> MAID_BIG_BACKPACK_CONTAINER = CONTAINER_TYPE.register("maid_big_backpack_container", () -> BigBackpackContainer.TYPE);
     public static final RegistryObject<MenuType<CraftingTableBackpackContainer>> MAID_CRAFTING_TABLE_BACKPACK_CONTAINER = CONTAINER_TYPE.register("maid_crafting_table_backpack_container", () -> CraftingTableBackpackContainer.TYPE);
     public static final RegistryObject<MenuType<EnderChestBackpackContainer>> MAID_ENDER_CHEST_CONTAINER = CONTAINER_TYPE.register("maid_ender_chest_container", () -> EnderChestBackpackContainer.TYPE);
+    public static final RegistryObject<MenuType<FurnaceBackpackContainer>> MAID_FURNACE_CONTAINER = CONTAINER_TYPE.register("maid_furnace_container", () -> FurnaceBackpackContainer.TYPE);
 
     public static final RegistryObject<MenuType<MaidConfigContainer>> MAID_CONFIG_CONTAINER = CONTAINER_TYPE.register("maid_config_container", () -> MaidConfigContainer.TYPE);
     public static final RegistryObject<MenuType<WirelessIOContainer>> WIRELESS_IO_CONTAINER = CONTAINER_TYPE.register("wireless_io_container", () -> WirelessIOContainer.TYPE);
