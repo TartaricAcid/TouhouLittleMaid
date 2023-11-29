@@ -133,8 +133,11 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
                 if (this.cookingProgress == this.cookingTotalTime) {
                     this.cookingProgress = 0;
                     this.cookingTotalTime = getTotalCookTime(level);
-                    // FIXME: 2023/11/29 取出时的经验？
-                    this.burn(level.registryAccess(), recipe, this, maxStackSize);
+                    // 如果烧制成功，把经验给女仆
+                    if (this.burn(level.registryAccess(), recipe, this, maxStackSize)) {
+                        int exp = this.createExperience(recipe.getExperience());
+                        maid.setExperience(maid.getExperience() + exp);
+                    }
                 }
             } else {
                 // 否则直接重置烧制进度
@@ -159,6 +162,15 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
             this.cookingProgress = 0;
             this.setChanged();
         }
+    }
+
+    private int createExperience(float recipeExp) {
+        int integer = Mth.floor(recipeExp);
+        float decimal = Mth.frac(recipeExp);
+        if (decimal != 0 && Math.random() < (double) decimal) {
+            ++integer;
+        }
+        return integer;
     }
 
     private boolean isLit() {
