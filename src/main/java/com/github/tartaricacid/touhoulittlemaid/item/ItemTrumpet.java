@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -33,6 +35,13 @@ public class ItemTrumpet extends Item {
                 ((ServerLevel) worldIn).getEntities(EntityMaid.TYPE, Entity::isAlive).stream()
                         .filter(maid -> maid.isOwnedBy(player))
                         .forEach(maid -> teleportToOwner(maid, player));
+                MaidWorldData data = MaidWorldData.get(worldIn);
+                if (data != null) {
+                    data.getPlayerMaidInfos(player).forEach(info -> {
+                        MutableComponent text = Component.translatable("message.touhou_little_maid.trumpet.unloaded_maid", info.getDimension(), info.getChunkPos().toShortString());
+                        player.sendSystemMessage(text);
+                    });
+                }
             }
             player.getCooldowns().addCooldown(this, 200);
         }

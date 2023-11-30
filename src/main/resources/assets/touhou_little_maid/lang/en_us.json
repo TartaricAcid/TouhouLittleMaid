@@ -175,6 +175,7 @@
   "message.touhou_little_maid.gomoku.lose": "Player Lost",
   "message.touhou_little_maid.gomoku.reset": "Right click the chess box to reset",
   "message.touhou_little_maid.gomoku.round": "Round: %d",
+  "message.touhou_little_maid.trumpet.unloaded_maid": "Dimension: %s, Position: %s",
   "commands.touhou_little_maid.pack.reload.info": "All model pack have been reloaded!",
   "commands.touhou_little_maid.power.handle.info": "%d players's power point is changed",
   "commands.touhou_little_maid.maid_num.handle.info": "%d players's maid num is changed",
