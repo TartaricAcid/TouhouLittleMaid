@@ -22,21 +22,20 @@
     <a href="http://page.cfpa.team/TouhouLittleMaid/">Wiki</a>
 </p>
 <p align="center">
-    <a href="#">English</a> | 
-    <a href="#">简体中文</a> | 
-    <a href="#">日本語</a>
+    English (./readme.md)| 
+    简体中文(./readme_zh.md) | 
+    日本語
 </p>
 
-測試This is a Minecraft 1.16.5 Forge mod, which was inspired by the [Little Maid Mob](https://github.com/MMM666/littleMaidMob) mod and [Touhou Project](https://en.wikipedia.org/wiki/Touhou_Project).       
-Added cute maids to Minecraft, who can help with battles, farming and other tasks.      
-The mod supports custom models in the Bedrock Edition Entity format, you can easily switch the maid model, or create your own maid model.
+这是一个受到[Little Maid Mob](https://github.com/MMM666/littleMaidMob)模组和[Touhou Project](https://en.wikipedia.org/wiki/Touhou_Project)启发的 Minecraft 1.16.5 Forge 模组。
+添加了可爱的女仆到《Minecraft》，她们可以帮助战斗、农耕和其他任务。这个模组支持Bedrock版实体格式的自定义模型，你可以轻松切换女仆的模型，或者创建自己的女仆模型。      
 
-## Notice
-- If you have any comments or suggestions, you can visit [Discussions](https://github.com/TartaricAcid/TouhouLittleMaid/discussions) to give us feedback.    
-- If you have any bugs, you can visit [Issues](https://github.com/TartaricAcid/TouhouLittleMaid/issues) to submit issues.
-- You can visit [Releases](https://github.com/TartaricAcid/TouhouLittleMaid/releases) to download the snapshot version mod, but please note that **the snapshot version mod will be very unstable**.
+## 注意事项
+- 如果您有任何意见或建议，可以访问[Discussions](https://github.com/TartaricAcid/TouhouLittleMaid/discussions)页面 给我们反馈。 
+- 如果您发现任何错误，请访问[Issues](https://github.com/TartaricAcid/TouhouLittleMaid/issues)页面 提交问题报告。
+- 您可以访问 [Releases](https://github.com/TartaricAcid/TouhouLittleMaid/releases)页面 下载快照版本的模组，但请注意 **快照版本可能非常不稳定。**
 
-## Authors
+## 作者
 - Programmer: `TartaricAcid`, `Snownee`
 - Artist: `Succinum`, `Pajinyi`, `ZeniCrow`, `Tian_mi`, `Paulzzh`, `YurisCat`
 
