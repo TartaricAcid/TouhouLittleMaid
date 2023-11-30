@@ -16,7 +16,7 @@ public class MaidChunkEvent {
         if (entity instanceof EntityMaid maid && maid.getOwnerUUID() != null) {
             MaidWorldData data = MaidWorldData.get(maid.level);
             if (data != null) {
-                data.removeInfo(maid.getUUID());
+                data.removeInfo(maid);
             }
         }
     }

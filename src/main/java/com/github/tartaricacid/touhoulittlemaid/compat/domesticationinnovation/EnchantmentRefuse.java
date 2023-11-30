@@ -21,7 +21,6 @@ public class EnchantmentRefuse {
     private static final String DOMESTICATION_INNOVATION = "domesticationinnovation";
     private static final ResourceLocation COLLAR_TAG_ID = new ResourceLocation(DOMESTICATION_INNOVATION, "collar_tag");
     private static final ResourceLocation UNDEAD_CURSE_ENCHANTMENT_ID = new ResourceLocation(DOMESTICATION_INNOVATION, "undead_curse");
-    private static final ResourceLocation BLAZING_PROTECTION_ENCHANTMENT_ID = new ResourceLocation(DOMESTICATION_INNOVATION, "blazing_protection");
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteractMaid(PlayerInteractEvent.EntityInteract event) {
@@ -49,11 +48,6 @@ public class EnchantmentRefuse {
             if (UNDEAD_CURSE_ENCHANTMENT_ID.equals(enchantmentsKey)) {
                 event.setCanceled(true);
                 player.sendSystemMessage(Component.translatable("domesticationinnovation.touhou_little_maid.enchantment.undead_curse"));
-                return;
-            }
-            if (BLAZING_PROTECTION_ENCHANTMENT_ID.equals(enchantmentsKey)) {
-                event.setCanceled(true);
-                player.sendSystemMessage(Component.translatable("domesticationinnovation.touhou_little_maid.enchantment.blazing_protection"));
                 return;
             }
         }
