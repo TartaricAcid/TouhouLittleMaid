@@ -22,9 +22,9 @@
     <a href="http://page.cfpa.team/TouhouLittleMaid/">Wiki</a>
 </p>
 <p align="center">
-    English (./readme.md)| 
-    简体中文(./readme_zh.md) | 
-    日本語
+    [English] (./readme.md)| 
+    [简体中文](./readme_zh.md) | 
+    [日本語]
 </p>
 
 This is a Minecraft 1.16.5 Forge mod, which was inspired by the [Little Maid Mob](https://github.com/MMM666/littleMaidMob) mod and [Touhou Project](https://en.wikipedia.org/wiki/Touhou_Project).       
