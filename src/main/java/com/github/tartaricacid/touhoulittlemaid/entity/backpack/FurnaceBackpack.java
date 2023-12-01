@@ -22,7 +22,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -110,7 +109,7 @@ public class FurnaceBackpack extends IMaidBackpack {
 
     @Override
     public Item getItem() {
-        return Items.FURNACE;
+        return InitItems.FURNACE_BACKPACK.get();
     }
 }
 

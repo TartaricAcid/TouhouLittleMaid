@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.EnderChestBackpackModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.EnderChestBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
@@ -80,7 +81,7 @@ public class EnderChestBackpack extends IMaidBackpack {
 
     @Override
     public Item getItem() {
-        return Items.ENDER_CHEST;
+        return InitItems.ENDER_CHEST_BACKPACK.get();
     }
 }
 

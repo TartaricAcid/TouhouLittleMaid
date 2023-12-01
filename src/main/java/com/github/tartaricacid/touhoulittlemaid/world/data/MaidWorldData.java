@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -51,8 +53,10 @@ public class MaidWorldData extends SavedData {
                     BlockPos chunkPos = NbtUtils.readBlockPos(infoTag.getCompound("ChunkPos"));
                     UUID ownerId = infoTag.getUUID("OwnerId");
                     UUID maidId = infoTag.getUUID("MaidId");
+                    long timestamp = infoTag.getLong("Timestamp");
+                    MutableComponent name = Component.Serializer.fromJson(infoTag.getString("Name"));
                     List<MaidInfo> maidInfos = data.infos.computeIfAbsent(ownerId, uuid -> Lists.newArrayList());
-                    maidInfos.add(new MaidInfo(dimension, chunkPos, ownerId, maidId));
+                    maidInfos.add(new MaidInfo(dimension, chunkPos, ownerId, maidId, timestamp, name));
                 }
             }
         }
@@ -70,6 +74,8 @@ public class MaidWorldData extends SavedData {
                 infoTag.put("ChunkPos", NbtUtils.writeBlockPos(info.getChunkPos()));
                 infoTag.putUUID("OwnerId", info.getOwnerId());
                 infoTag.putUUID("MaidId", info.getMaidId());
+                infoTag.putLong("Timestamp", info.getTimestamp());
+                infoTag.putString("Name", Component.Serializer.toJson(info.getName()));
                 listTag.add(infoTag);
             });
             mapTag.put(id.toString(), listTag);
@@ -90,7 +96,9 @@ public class MaidWorldData extends SavedData {
         BlockPos chunkPos = maid.blockPosition();
         UUID ownerId = maid.getOwnerUUID();
         UUID maidId = maid.getUUID();
-        this.addInfo(new MaidInfo(dimension, chunkPos, ownerId, maidId));
+        long timestamp = System.currentTimeMillis();
+        Component name = maid.getDisplayName();
+        this.addInfo(new MaidInfo(dimension, chunkPos, ownerId, maidId, timestamp, name));
     }
 
     public void removeInfo(EntityMaid maid) {

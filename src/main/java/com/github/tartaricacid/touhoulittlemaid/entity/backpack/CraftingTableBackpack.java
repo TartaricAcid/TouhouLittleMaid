@@ -20,11 +20,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
 public class CraftingTableBackpack extends IMaidBackpack {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "crafting_table");
+    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "crafting_table_backpack");
 
     @Override
     public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
@@ -85,6 +84,6 @@ public class CraftingTableBackpack extends IMaidBackpack {
 
     @Override
     public Item getItem() {
-        return Items.CRAFTING_TABLE;
+        return InitItems.CRAFTING_TABLE_BACKPACK.get();
     }
 }
