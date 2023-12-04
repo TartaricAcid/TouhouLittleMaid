@@ -29,11 +29,11 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
         super(TYPE, id, inventory, entityId);
         this.player = inventory.player;
         this.access = ContainerLevelAccess.create(this.getMaid().level, this.getMaid().blockPosition());
-        this.resultSlot = new ResultSlot(this.player, this.craftSlots, this.resultSlots, 0, 229, 123);
+        this.resultSlot = new ResultSlot(this.player, this.craftSlots, this.resultSlots, 0, 229, 119);
         this.addSlot(this.resultSlot);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                this.addSlot(new Slot(this.craftSlots, j + i * 3, 143 + j * 18, 105 + i * 18));
+                this.addSlot(new Slot(this.craftSlots, j + i * 3, 152 + j * 18, 101 + i * 18));
             }
         }
     }
@@ -98,10 +98,10 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
     protected void addBackpackInv(Inventory inventory) {
         IItemHandler itemHandler = maid.getMaidInv();
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 59));
+            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 57));
         }
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 82));
+            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 75));
         }
     }
 

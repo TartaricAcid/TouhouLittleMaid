@@ -27,7 +27,7 @@ public class MiddleBackpackContainerScreen extends AbstractMaidContainerGui<Midd
         super.renderBg(graphics, partialTicks, x, y);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BACKPACK);
-        graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 122);
+        graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 128);
         graphics.fill(leftPos + 142, topPos + 122, leftPos + 250, topPos + 158, 0xaa222222);
         graphics.blit(BACKPACK, leftPos + 190, topPos + 133, 165, 0, 11, 11);
     }

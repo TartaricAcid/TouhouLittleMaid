@@ -29,9 +29,9 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
             furnaceData = new FurnaceBackpackData(this.getMaid());
         }
         this.data = furnaceData.getDataAccess();
-        this.addSlot(new Slot(furnaceData, 0, 161, 105));
-        this.addSlot(new FurnaceBackpackFuelSlot(this, furnaceData, 1, 161, 141));
-        this.addSlot(new FurnaceResultSlot(inventory.player, furnaceData, 2, 221, 123));
+        this.addSlot(new Slot(furnaceData, 0, 161, 101));
+        this.addSlot(new FurnaceBackpackFuelSlot(this, furnaceData, 1, 161, 142));
+        this.addSlot(new FurnaceResultSlot(inventory.player, furnaceData, 2, 221, 121));
         this.addDataSlots(this.data);
     }
 
@@ -39,10 +39,10 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
     protected void addBackpackInv(Inventory inventory) {
         IItemHandler itemHandler = maid.getMaidInv();
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 59));
+            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 57));
         }
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 82));
+            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 75));
         }
     }
 

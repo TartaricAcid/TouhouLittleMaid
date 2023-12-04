@@ -27,6 +27,6 @@ public class EnderChestBackpackContainerScreen extends AbstractMaidContainerGui<
         super.renderBg(graphics, partialTicks, x, y);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BACKPACK);
-        graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 122);
+        graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 128);
     }
 }

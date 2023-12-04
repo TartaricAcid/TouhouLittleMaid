@@ -24,12 +24,12 @@ public class FurnaceBackpackContainerScreen extends AbstractMaidContainerGui<Fur
         super.renderBg(graphics, partialTicks, x, y);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BACKPACK);
-        graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 122);
+        graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 128);
         if (this.menu.isLit()) {
             int litProgress = this.menu.getLitProgress();
-            graphics.blit(BACKPACK, leftPos + 161, topPos + 124 + 12 - litProgress, 165, 12 - litProgress, 14, litProgress + 1);
+            graphics.blit(BACKPACK, leftPos + 161, topPos + 122 + 12 - litProgress, 165, 12 - litProgress, 14, litProgress + 1);
         }
         int burnProgress = this.menu.getBurnProgress();
-        graphics.blit(BACKPACK, leftPos + 184, topPos + 122, 165, 14, burnProgress + 1, 16);
+        graphics.blit(BACKPACK, leftPos + 184, topPos + 120, 165, 14, burnProgress + 1, 16);
     }
 }

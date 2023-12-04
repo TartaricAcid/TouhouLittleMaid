@@ -18,12 +18,14 @@ public class EnderChestBackpackContainer extends MaidMainContainer {
     protected void addBackpackInv(Inventory inventory) {
         PlayerEnderChestContainer enderChestContainer = inventory.player.getEnderChestInventory();
         for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 4; j++) {
-                addSlot(new Slot(enderChestContainer, 6 * j + i, 143 + 18 * i, 69 + j * 18));
-            }
+            addSlot(new Slot(enderChestContainer, i, 143 + 18 * i, 61));
         }
-        for (int i = 0; i < 3; i++) {
-            addSlot(new Slot(enderChestContainer, 24 + i, 143 + 18 * i, 141));
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 5; i++) {
+                addSlot(new Slot(enderChestContainer, 6 + 5 * j + i, 161 + 18 * i, 79 + j * 18));            }
+        }
+        for (int i = 0; i < 6; i++) {
+            addSlot(new Slot(enderChestContainer, 21 + i, 143 + 18 * i, 133));
         }
     }
 }

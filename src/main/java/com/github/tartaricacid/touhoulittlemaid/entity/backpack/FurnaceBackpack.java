@@ -99,7 +99,7 @@ public class FurnaceBackpack extends IMaidBackpack {
 
     @OnlyIn(Dist.CLIENT)
     public void offsetBackpackItem(PoseStack poseStack) {
-        poseStack.translate(0, 0.625, -0.25);
+        poseStack.translate(0, 0.625, 0.25);
     }
 
     @Override

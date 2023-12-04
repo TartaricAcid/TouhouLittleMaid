@@ -63,6 +63,7 @@ public class CraftingTableBackpack extends IMaidBackpack {
 
     @Override
     public void offsetBackpackItem(PoseStack poseStack) {
+        poseStack.translate(0, 0.625, 0.25);
     }
 
     @Nullable

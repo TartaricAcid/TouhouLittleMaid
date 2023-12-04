@@ -46,14 +46,14 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
 
     private void addMaidHandInv() {
         LazyOptional<IItemHandler> hand = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN);
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 79) {
+        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(BLOCK_ATLAS, EMPTY_MAINHAND_SLOT);
             }
         }));
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 1, 121, 79) {
+        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 1, 121, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
@@ -120,13 +120,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
         BaubleItemHandler maidBauble = maid.getMaidBauble();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                addSlot(new SlotItemHandler(maidBauble, i * 3 + j, 86 + 18 * j, 105 + 18 * i) {
-                    @Override
-                    @OnlyIn(Dist.CLIENT)
-                    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                        return Pair.of(BLOCK_ATLAS, EMPTY_BAUBLE_SLOT);
-                    }
-                });
+                addSlot(new SlotItemHandler(maidBauble, i * 3 + j, 86 + 18 * j, 99 + 18 * i));
             }
         }
     }
