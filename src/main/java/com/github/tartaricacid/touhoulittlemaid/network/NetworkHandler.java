@@ -76,6 +76,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(25, RedFoxScrollMessage.class, RedFoxScrollMessage::encode, RedFoxScrollMessage::decode, RedFoxScrollMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(26, SetScrollData.class, SetScrollData::encode, SetScrollData::decode, SetScrollData::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

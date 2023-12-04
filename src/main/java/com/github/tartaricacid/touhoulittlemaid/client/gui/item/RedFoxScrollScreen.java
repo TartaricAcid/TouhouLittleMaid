@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.RedFoxScrollMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SetScrollData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -69,6 +71,7 @@ public class RedFoxScrollScreen extends Screen {
                 if (i < scrollData.size()) {
                     RedFoxScrollMessage.RedFoxScrollData info = scrollData.get(i);
                     this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.red_fox_scroll.track"), b -> {
+                        NetworkHandler.CHANNEL.sendToServer(new SetScrollData(this.selectDim, info.getPos()));
                     }));
                     offsetIn = offsetIn + 42;
                 }
@@ -109,6 +112,11 @@ public class RedFoxScrollScreen extends Screen {
             }
         }
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
     }
 
     private BlockPos getPlayerPos() {

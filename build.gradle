@@ -116,6 +116,10 @@ repositories {
     maven {
         url "https://maven.shedaniel.me/"
     }
+    maven {
+        name = "JourneyMap (Public)"
+        url = "https://jm.gserv.me/repository/maven-public/"
+    }
 }
 
 dependencies {
@@ -141,6 +145,9 @@ dependencies {
     implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
 
     implementation fg.deobf("curse.maven:slashblade-241596:${slashblade_id}")
+
+    compileOnly fg.deobf("info.journeymap:journeymap-api:${journeymap_api_version}")
+    runtimeOnly fg.deobf("curse.maven:journeymap-32274:${journeymap_id}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
