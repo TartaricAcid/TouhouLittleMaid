@@ -15,8 +15,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeComp
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
-import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
-import com.github.tartaricacid.touhoulittlemaid.entity.backpack.EmptyBackpack;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
@@ -828,8 +827,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             setRideable(compound.getBoolean(RIDEABLE_TAG));
         }
         if (compound.contains(BACKPACK_LEVEL_TAG, Tag.TAG_INT)) {
-            // TODO: 2023/11/27
             // 存档迁移
+            int backpackLevel = compound.getInt(BACKPACK_LEVEL_TAG);
+            if (backpackLevel == 1) {
+                BackpackManager.findBackpack(SmallBackpack.ID).ifPresent(this::setMaidBackpackType);
+            }
+            if (backpackLevel == 2) {
+                BackpackManager.findBackpack(MiddleBackpack.ID).ifPresent(this::setMaidBackpackType);
+            }
+            if (backpackLevel == 3) {
+                BackpackManager.findBackpack(BigBackpack.ID).ifPresent(this::setMaidBackpackType);
+            }
+            compound.remove(BACKPACK_LEVEL_TAG);
         }
         if (compound.contains(MAID_INVENTORY_TAG, Tag.TAG_COMPOUND)) {
             maidInv.deserializeNBT(compound.getCompound(MAID_INVENTORY_TAG));
