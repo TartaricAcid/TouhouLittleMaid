@@ -26,6 +26,9 @@ public class FoxScrollScreen extends Screen {
     public FoxScrollScreen(Map<String, List<FoxScrollMessage.FoxScrollData>> data) {
         super(Component.literal("Red Fox Scroll"));
         this.data = data;
+        if (!this.data.isEmpty()) {
+            this.selectDim = this.data.keySet().stream().findFirst().get();
+        }
     }
 
     @Override
@@ -33,22 +36,11 @@ public class FoxScrollScreen extends Screen {
         this.clearWidgets();
         this.leftPos = (this.width - 400) / 2;
         this.topPos = (this.height - 208) / 2;
+        this.addDimensionButtons();
+        this.addPointButtons();
+    }
 
-        int offset = this.topPos;
-        for (String dim : this.data.keySet()) {
-            Component name = Component.literal(dim);
-            FlatColorButton dimButton = new FlatColorButton(leftPos, offset, 150, 19, name, b -> {
-                this.selectDim = dim;
-                this.page = 0;
-                this.init();
-            });
-            if (dim.equals(this.selectDim)) {
-                dimButton.setSelect(true);
-            }
-            this.addRenderableWidget(dimButton);
-            offset = offset + 21;
-        }
-
+    private void addPointButtons() {
         if (StringUtils.isNotBlank(this.selectDim) && this.data.containsKey(this.selectDim)) {
             List<FoxScrollMessage.FoxScrollData> scrollData = this.data.get(this.selectDim);
             if (scrollData.size() > PER_PAGE_COUNT) {
@@ -69,7 +61,7 @@ public class FoxScrollScreen extends Screen {
             for (int i = this.page * PER_PAGE_COUNT; i < this.page * PER_PAGE_COUNT + PER_PAGE_COUNT; i++) {
                 if (i < scrollData.size()) {
                     FoxScrollMessage.FoxScrollData info = scrollData.get(i);
-                    this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.red_fox_scroll.track"), b -> {
+                    this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.fox_scroll.track"), b -> {
                         NetworkHandler.CHANNEL.sendToServer(new SetScrollData(this.selectDim, info.getPos()));
                     }));
                     offsetIn = offsetIn + 42;
@@ -78,9 +70,37 @@ public class FoxScrollScreen extends Screen {
         }
     }
 
+    private void addDimensionButtons() {
+        int offset = this.topPos;
+        for (String dim : this.data.keySet()) {
+            Component name = Component.literal(dim);
+            FlatColorButton dimButton = new FlatColorButton(leftPos, offset, 150, 19, name, b -> {
+                this.selectDim = dim;
+                this.page = 0;
+                this.init();
+            });
+            if (dim.equals(this.selectDim)) {
+                dimButton.setSelect(true);
+            }
+            this.addRenderableWidget(dimButton);
+            offset = offset + 21;
+        }
+    }
+
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderBackground(graphics);
+        if (this.data.isEmpty()) {
+            int x = this.width / 2;
+            int y = this.height / 2 - 5;
+            graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.fox_scroll.empty"), x, y, 0xFF0000);
+            return;
+        }
+        this.renderMain(graphics);
+        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+    }
+
+    private void renderMain(GuiGraphics graphics) {
         if (StringUtils.isNotBlank(this.selectDim) && this.data.containsKey(this.selectDim)) {
             List<FoxScrollMessage.FoxScrollData> scrollData = this.data.get(this.selectDim);
             boolean inSameDim = this.selectDim.equals(this.getPlayerDimension());
@@ -93,11 +113,11 @@ public class FoxScrollScreen extends Screen {
                     Component distanceText;
                     if (inSameDim) {
                         int distance = (int) Math.sqrt(playerPos.distSqr(pos));
-                        distanceText = Component.translatable("gui.touhou_little_maid.red_fox_scroll.distance.same_dimension", distance);
+                        distanceText = Component.translatable("gui.touhou_little_maid.fox_scroll.distance.same_dimension", distance);
                     } else {
-                        distanceText = Component.translatable("gui.touhou_little_maid.red_fox_scroll.distance.different_dimension");
+                        distanceText = Component.translatable("gui.touhou_little_maid.fox_scroll.distance.different_dimension");
                     }
-                    Component posText = Component.translatable("gui.touhou_little_maid.red_fox_scroll.position", pos.toShortString());
+                    Component posText = Component.translatable("gui.touhou_little_maid.fox_scroll.position", pos.toShortString());
                     graphics.fill(leftPos + 152, offsetIn, leftPos + 400 - 22, offsetIn + 40, 0xef58626b);
                     graphics.drawString(font, info.getName(), leftPos + 160, offsetIn + 4, ChatFormatting.GOLD.getColor());
                     graphics.drawString(font, posText, leftPos + 160, offsetIn + 16, ChatFormatting.GRAY.getColor(), false);
@@ -110,7 +130,6 @@ public class FoxScrollScreen extends Screen {
                 graphics.drawCenteredString(font, pageText, leftPos + 400 - 8, topPos + 104 - 5, ChatFormatting.GRAY.getColor());
             }
         }
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
     @Override

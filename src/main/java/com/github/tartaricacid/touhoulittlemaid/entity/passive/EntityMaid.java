@@ -910,7 +910,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     protected void dropEquipment() {
         if (this.getOwnerUUID() != null && !level.isClientSide && !PetBedDrop.hasPetBedPos(this)) {
             // 掉出世界的判断
-            Vec3 position = this.position();
+            Vec3 position = Vec3.atBottomCenterOf(blockPosition());
             // 防止卡在基岩里？
             if (this.getY() < this.level.getMinBuildHeight() + 5) {
                 position = new Vec3(position.x, this.level.getMinBuildHeight() + 5, position.z);

@@ -47,7 +47,7 @@ public class ScrollRenderEvent {
             float scale = 0.02f * (((float) viewDistance + 4.0f) / 3.0f);
             RenderSystem.disableDepthTest();
             RenderSystem.depthMask(false);
-            RenderHelper.renderFloatingText(event.getPoseStack(), Math.round(actualDistance) + " m", trackVec, 0xff1111, scale, -17);
+            RenderHelper.renderFloatingText(event.getPoseStack(), Math.round(actualDistance) + " m", trackVec, 0xff8800, scale, -17);
             RenderHelper.renderFloatingText(event.getPoseStack(), "▼", trackVec, 0xff0000, scale * 1.2f, -5);
         }
     }

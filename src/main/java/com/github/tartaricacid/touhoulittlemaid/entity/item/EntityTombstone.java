@@ -30,9 +30,8 @@ public class EntityTombstone extends Entity {
             .sized(0.8f, 1.2f).clientTrackingRange(10).build("tombstone");
     private static final String OWNER_ID_TAG = "OwnerId";
     private static final String TOMBSTONE_ITEMS_TAG = "TombstoneItems";
-    private static final String MAID_NAME_TAG = "TombstoneItems";
+    private static final String MAID_NAME_TAG = "MaidName";
     private static final EntityDataAccessor<Component> MAID_NAME = SynchedEntityData.defineId(EntityTombstone.class, EntityDataSerializers.COMPONENT);
-
     private final ItemStackHandler items = new ItemStackHandler(64);
     private UUID ownerId = Util.NIL_UUID;
 

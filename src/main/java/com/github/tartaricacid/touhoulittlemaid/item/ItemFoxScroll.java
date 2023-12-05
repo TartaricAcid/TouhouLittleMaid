@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,7 +71,7 @@ public class ItemFoxScroll extends Item {
                 maidInfos = maidWorldData.getPlayerMaidTombstones(player);
             }
             if (maidInfos == null) {
-                return super.use(level, player, hand);
+                maidInfos = Collections.emptyList();
             }
             maidInfos.forEach(info -> {
                 List<FoxScrollMessage.FoxScrollData> scrollData = data.computeIfAbsent(info.getDimension(), dim -> Lists.newArrayList());
@@ -84,6 +85,11 @@ public class ItemFoxScroll extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+        if (stack.getItem() == InitItems.RED_FOX_SCROLL.get()) {
+            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.red").withStyle(ChatFormatting.GRAY));
+        } else if (stack.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
+            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.white").withStyle(ChatFormatting.GRAY));
+        }
         Pair<String, BlockPos> info = getTrackInfo(stack);
         if (info != null) {
             components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", info.getLeft()).withStyle(ChatFormatting.GRAY));
