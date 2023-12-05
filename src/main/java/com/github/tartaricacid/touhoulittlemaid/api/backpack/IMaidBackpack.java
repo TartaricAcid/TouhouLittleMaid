@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.api.backpack;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
@@ -28,7 +29,9 @@ public abstract class IMaidBackpack {
         return this.getItem().getDefaultInstance();
     }
 
-    public abstract void onTakeOff(ItemStack stack, @Nullable Player player, EntityMaid maid);
+    public abstract void onTakeOff(ItemStack stack, Player player, EntityMaid maid);
+
+    public abstract void onSpawnTombstone(EntityMaid maid, EntityTombstone tombstone);
 
     public abstract MenuProvider getGuiProvider(int entityId);
 

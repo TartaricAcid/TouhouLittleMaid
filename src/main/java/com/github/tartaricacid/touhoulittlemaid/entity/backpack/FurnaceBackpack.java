@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.FurnaceBackpackModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.FurnaceBackpackData;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
@@ -36,7 +37,7 @@ public class FurnaceBackpack extends IMaidBackpack {
     }
 
     @Override
-    public void onTakeOff(ItemStack stack, @Nullable Player player, EntityMaid maid) {
+    public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
         Item item = stack.getItem();
         if (item instanceof ItemMaidBackpack) {
             if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
@@ -49,6 +50,18 @@ public class FurnaceBackpack extends IMaidBackpack {
         if (backpackData instanceof FurnaceBackpackData furnaceBackpackData) {
             InvWrapper inv = new InvWrapper(furnaceBackpackData);
             ItemsUtil.dropEntityItems(maid, inv);
+        }
+    }
+
+    @Override
+    public void onSpawnTombstone(EntityMaid maid, EntityTombstone tombstone) {
+        IBackpackData backpackData = maid.getBackpackData();
+        if (backpackData instanceof FurnaceBackpackData furnaceBackpackData) {
+            InvWrapper inv = new InvWrapper(furnaceBackpackData);
+            for (int i = 0; i < inv.getSlots(); i++) {
+                int size = inv.getSlotLimit(i);
+                tombstone.insertItem(inv.extractItem(i, size, false));
+            }
         }
     }
 

@@ -24,7 +24,7 @@ public class MaidChunkEvent {
     @SubscribeEvent
     public static void onMaidLevelWorld(EntityLeaveLevelEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityMaid maid && maid.getOwnerUUID() != null) {
+        if (entity instanceof EntityMaid maid && !maid.level.isClientSide && maid.isAlive() && maid.getOwnerUUID() != null) {
             MaidWorldData data = MaidWorldData.get(maid.level);
             if (data != null) {
                 data.addInfo(maid);

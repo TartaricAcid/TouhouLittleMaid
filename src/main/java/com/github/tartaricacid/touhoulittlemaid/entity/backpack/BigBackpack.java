@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.BigBackpackModel;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
@@ -33,7 +34,7 @@ public class BigBackpack extends IMaidBackpack {
     }
 
     @Override
-    public void onTakeOff(ItemStack stack, @Nullable Player player, EntityMaid maid) {
+    public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
         Item item = stack.getItem();
         if (item instanceof ItemMaidBackpack) {
             if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
@@ -45,6 +46,10 @@ public class BigBackpack extends IMaidBackpack {
         } else {
             this.dropAllItems(maid);
         }
+    }
+
+    @Override
+    public void onSpawnTombstone(EntityMaid maid, EntityTombstone tombstone) {
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemRedFoxScroll;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,8 +36,8 @@ public class SetScrollData {
                     return;
                 }
                 ItemStack item = sender.getMainHandItem();
-                if (item.getItem() == InitItems.RED_FOX_SCROLL.get()) {
-                    ItemRedFoxScroll.setTrackInfo(item, message.dimension, message.pos);
+                if (item.getItem() instanceof ItemFoxScroll) {
+                    ItemFoxScroll.setTrackInfo(item, message.dimension, message.pos);
                 }
             });
         }

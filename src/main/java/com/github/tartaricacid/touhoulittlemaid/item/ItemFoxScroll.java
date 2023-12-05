@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.RedFoxScrollMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollMessage;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
@@ -25,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class ItemRedFoxScroll extends Item {
+public class ItemFoxScroll extends Item {
     private static final String TRACK_INFO = "TrackInfo";
 
-    public ItemRedFoxScroll() {
+    public ItemFoxScroll() {
         super((new Properties()).stacksTo(1));
     }
 
@@ -56,21 +57,27 @@ public class ItemRedFoxScroll extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide && hand == InteractionHand.MAIN_HAND) {
+            ItemStack item = player.getMainHandItem();
             MaidWorldData maidWorldData = MaidWorldData.get(level);
             if (maidWorldData == null) {
                 return super.use(level, player, hand);
             }
-            Map<String, List<RedFoxScrollMessage.RedFoxScrollData>> data = Maps.newHashMap();
-            List<MaidInfo> playerMaidInfos = maidWorldData.getPlayerMaidInfos(player);
-            if (playerMaidInfos == null) {
+            Map<String, List<FoxScrollMessage.FoxScrollData>> data = Maps.newHashMap();
+            List<MaidInfo> maidInfos = null;
+            if (item.getItem() == InitItems.RED_FOX_SCROLL.get()) {
+                maidInfos = maidWorldData.getPlayerMaidInfos(player);
+            } else if (item.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
+                maidInfos = maidWorldData.getPlayerMaidTombstones(player);
+            }
+            if (maidInfos == null) {
                 return super.use(level, player, hand);
             }
-            playerMaidInfos.forEach(info -> {
-                List<RedFoxScrollMessage.RedFoxScrollData> scrollData = data.computeIfAbsent(info.getDimension(), dim -> Lists.newArrayList());
-                scrollData.add(new RedFoxScrollMessage.RedFoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
+            maidInfos.forEach(info -> {
+                List<FoxScrollMessage.FoxScrollData> scrollData = data.computeIfAbsent(info.getDimension(), dim -> Lists.newArrayList());
+                scrollData.add(new FoxScrollMessage.FoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
             });
-            NetworkHandler.sendToClientPlayer(new RedFoxScrollMessage(data), player);
-            return InteractionResultHolder.success(player.getMainHandItem());
+            NetworkHandler.sendToClientPlayer(new FoxScrollMessage(data), player);
+            return InteractionResultHolder.success(item);
         }
         return super.use(level, player, hand);
     }

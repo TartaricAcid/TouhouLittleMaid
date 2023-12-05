@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemRedFoxScroll;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -23,8 +22,8 @@ public class ScrollRenderEvent {
     public static void onRenderWorldLastEvent(RenderLevelStageEvent event) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if (RenderLevelStageEvent.Stage.AFTER_PARTICLES.equals(event.getStage()) && player != null && player.getMainHandItem().is(InitItems.RED_FOX_SCROLL.get())) {
-            Pair<String, BlockPos> info = ItemRedFoxScroll.getTrackInfo(player.getMainHandItem());
+        if (RenderLevelStageEvent.Stage.AFTER_PARTICLES.equals(event.getStage()) && player != null && player.getMainHandItem().getItem() instanceof ItemFoxScroll) {
+            Pair<String, BlockPos> info = ItemFoxScroll.getTrackInfo(player.getMainHandItem());
             if (info == null) {
                 return;
             }

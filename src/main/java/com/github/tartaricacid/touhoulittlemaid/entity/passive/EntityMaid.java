@@ -10,6 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
@@ -21,6 +22,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -36,8 +38,8 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
-import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
@@ -906,11 +908,40 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     @Override
     protected void dropEquipment() {
-        ItemsUtil.dropEntityItems(this, new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble));
-        IMaidBackpack maidBackpack = this.getMaidBackpackType();
-        this.spawnAtLocation(maidBackpack.getTakeOffItemStack(ItemStack.EMPTY, null, this));
-        maidBackpack.onTakeOff(ItemStack.EMPTY, null, this);
-        spawnAtLocation(ItemFilm.maidToFilm(this), 0.2f);
+        if (this.getOwnerUUID() != null && !level.isClientSide && !PetBedDrop.hasPetBedPos(this)) {
+            // 掉出世界的判断
+            Vec3 position = this.position();
+            // 防止卡在基岩里？
+            if (this.getY() < this.level.getMinBuildHeight() + 5) {
+                position = new Vec3(position.x, this.level.getMinBuildHeight() + 5, position.z);
+            }
+            if (this.getY() > this.level.getMaxBuildHeight()) {
+                position = new Vec3(position.x, this.level.getMaxBuildHeight(), position.z);
+            }
+            EntityTombstone tombstone = new EntityTombstone(level, this.getOwnerUUID(), position);
+            tombstone.setMaidName(this.getDisplayName());
+
+            // 女仆物品栏
+            CombinedInvWrapper invWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble);
+            for (int i = 0; i < invWrapper.getSlots(); i++) {
+                int size = invWrapper.getSlotLimit(i);
+                tombstone.insertItem(invWrapper.extractItem(i, size, false));
+            }
+            // 背包额外数据
+            IMaidBackpack maidBackpack = this.getMaidBackpackType();
+            tombstone.insertItem(maidBackpack.getTakeOffItemStack(ItemStack.EMPTY, null, this));
+            maidBackpack.onSpawnTombstone(this, tombstone);
+            // 胶片
+            ItemStack filmItem = ItemFilm.maidToFilm(this);
+            tombstone.insertItem(filmItem);
+            // 全局记录
+            MaidWorldData maidWorldData = MaidWorldData.get(level);
+            if (maidWorldData != null) {
+                maidWorldData.addTombstones(this, tombstone);
+            }
+
+            level.addFreshEntity(tombstone);
+        }
     }
 
     @Override

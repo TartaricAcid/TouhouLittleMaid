@@ -7,10 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileE
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGomokuRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityStatueRenderer;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityExtinguishingAgent;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
@@ -40,6 +37,7 @@ public final class InitEntitiesRender {
         EntityRenderers.register(EntityExtinguishingAgent.TYPE, EntityExtinguishingAgentRenderer::new);
         EntityRenderers.register(EntityBox.TYPE, EntityBoxRender::new);
         EntityRenderers.register(EntityThrowPowerPoint.TYPE, ThrownItemRenderer::new);
+        EntityRenderers.register(EntityTombstone.TYPE, EntityTombstoneRenderer::new);
 
         EntityRenderers.register(EntityType.SLIME, EntityYukkuriSlimeRender::new);
         EntityRenderers.register(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
@@ -66,5 +64,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
         event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
         event.registerLayerDefinition(FurnaceBackpackModel.LAYER, FurnaceBackpackModel::createBodyLayer);
+        event.registerLayerDefinition(TombstoneModel.LAYER, TombstoneModel::createBodyLayer);
     }
 }

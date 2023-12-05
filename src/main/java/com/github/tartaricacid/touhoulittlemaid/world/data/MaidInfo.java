@@ -9,15 +9,15 @@ public final class MaidInfo {
     private final String dimension;
     private final BlockPos chunkPos;
     private final UUID ownerId;
-    private final UUID maidId;
+    private final UUID entityId;
     private final long timestamp;
     private final Component name;
 
-    public MaidInfo(String dimension, BlockPos chunkPos, UUID ownerId, UUID maidId, long timestamp, Component name) {
+    public MaidInfo(String dimension, BlockPos chunkPos, UUID ownerId, UUID entityId, long timestamp, Component name) {
         this.dimension = dimension;
         this.chunkPos = chunkPos;
         this.ownerId = ownerId;
-        this.maidId = maidId;
+        this.entityId = entityId;
         this.timestamp = timestamp;
         this.name = name;
     }
@@ -34,8 +34,8 @@ public final class MaidInfo {
         return ownerId;
     }
 
-    public UUID getMaidId() {
-        return maidId;
+    public UUID getEntityId() {
+        return entityId;
     }
 
     public long getTimestamp() {
