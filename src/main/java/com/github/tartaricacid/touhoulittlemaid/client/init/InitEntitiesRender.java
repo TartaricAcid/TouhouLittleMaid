@@ -3,19 +3,13 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 import com.github.tartaricacid.touhoulittlemaid.client.model.*;
 import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityAltarRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGomokuRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityStatueRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityThrowPowerPoint;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -46,6 +40,9 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityStatue.TYPE, TileEntityStatueRenderer::new);
         BlockEntityRenderers.register(TileEntityGarageKit.TYPE, TileEntityGarageKitRenderer::new);
         BlockEntityRenderers.register(TileEntityGomoku.TYPE, TileEntityGomokuRenderer::new);
+        BlockEntityRenderers.register(TileEntityKeyboard.TYPE, TileEntityKeyboardRenderer::new);
+        BlockEntityRenderers.register(TileEntityBookshelf.TYPE, TileEntityBookshelfRenderer::new);
+        BlockEntityRenderers.register(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
     }
 
     @SubscribeEvent
@@ -65,5 +62,8 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
         event.registerLayerDefinition(FurnaceBackpackModel.LAYER, FurnaceBackpackModel::createBodyLayer);
         event.registerLayerDefinition(TombstoneModel.LAYER, TombstoneModel::createBodyLayer);
+        event.registerLayerDefinition(KeyboardModel.LAYER, KeyboardModel::createBodyLayer);
+        event.registerLayerDefinition(BookshelfModel.LAYER, BookshelfModel::createBodyLayer);
+        event.registerLayerDefinition(ComputerModel.LAYER, ComputerModel::createBodyLayer);
     }
 }

@@ -54,6 +54,9 @@ public class InitCreativeTabs {
                 output.accept(WHITE_FOX_SCROLL.get());
                 output.accept(EXTINGUISHER.get());
                 output.accept(GOMOKU.get());
+                output.accept(KEYBOARD.get());
+                output.accept(BOOKSHELF.get());
+                output.accept(COMPUTER.get());
                 output.accept(CAMERA.get());
                 output.accept(PHOTO.get());
                 output.accept(FILM.get());

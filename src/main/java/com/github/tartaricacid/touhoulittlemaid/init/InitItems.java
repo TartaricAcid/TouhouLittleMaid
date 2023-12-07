@@ -53,6 +53,9 @@ public final class InitItems {
     public static RegistryObject<Item> CRAFTING_TABLE_BACKPACK = ITEMS.register("crafting_table_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
     public static RegistryObject<Item> ENDER_CHEST_BACKPACK = ITEMS.register("ender_chest_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
     public static RegistryObject<Item> FURNACE_BACKPACK = ITEMS.register("furnace_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
+    public static RegistryObject<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties()));
+    public static RegistryObject<Item> BOOKSHELF = ITEMS.register("bookshelf", () -> new BlockItem(InitBlocks.BOOKSHELF.get(), new Item.Properties()));
+    public static RegistryObject<Item> COMPUTER = ITEMS.register("computer", () -> new BlockItem(InitBlocks.COMPUTER.get(), new Item.Properties()));
 
     public static RegistryObject<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityMaid.TYPE, 0x4a6195, 0xffffff, new Item.Properties()));
     public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityFairy.TYPE, 0x171c20, 0xffffff, new Item.Properties()));
