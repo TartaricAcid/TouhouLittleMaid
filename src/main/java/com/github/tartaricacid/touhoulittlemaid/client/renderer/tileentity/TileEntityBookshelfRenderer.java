@@ -29,7 +29,7 @@ public class TileEntityBookshelfRenderer implements BlockEntityRenderer<TileEnti
         poseStack.pushPose();
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
+        poseStack.mulPose(Axis.YN.rotationDegrees(180 - facing.get2DDataValue() * 90));
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
         model.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();

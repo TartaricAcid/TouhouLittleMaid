@@ -32,6 +32,7 @@ public final class InitEntitiesRender {
         EntityRenderers.register(EntityBox.TYPE, EntityBoxRender::new);
         EntityRenderers.register(EntityThrowPowerPoint.TYPE, ThrownItemRenderer::new);
         EntityRenderers.register(EntityTombstone.TYPE, EntityTombstoneRenderer::new);
+        EntityRenderers.register(EntitySit.TYPE, EntitySitRenderer::new);
 
         EntityRenderers.register(EntityType.SLIME, EntityYukkuriSlimeRender::new);
         EntityRenderers.register(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
