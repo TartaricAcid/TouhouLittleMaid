@@ -57,6 +57,9 @@ public class InitCreativeTabs {
                 output.accept(KEYBOARD.get());
                 output.accept(BOOKSHELF.get());
                 output.accept(COMPUTER.get());
+                output.accept(FAVORABILITY_TOOL_ADD.get());
+                output.accept(FAVORABILITY_TOOL_REDUCE.get());
+                output.accept(FAVORABILITY_TOOL_FULL.get());
                 output.accept(CAMERA.get());
                 output.accept(PHOTO.get());
                 output.accept(FILM.get());

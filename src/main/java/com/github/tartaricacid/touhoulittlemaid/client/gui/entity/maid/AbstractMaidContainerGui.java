@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTab
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
@@ -267,7 +268,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addScheduleButton() {
-        scheduleButton = new ScheduleButton<>(leftPos + 9, topPos + 177, this);
+        scheduleButton = new ScheduleButton<>(leftPos + 9, topPos + 187, this);
         this.addRenderableWidget(scheduleButton);
     }
 
@@ -280,7 +281,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addTaskSwitchButton() {
-        taskSwitch = new ImageButton(leftPos + 4, topPos + 149, 71, 21, 0, 42, 22, BUTTON, (b) -> {
+        taskSwitch = new ImageButton(leftPos + 4, topPos + 159, 71, 21, 0, 42, 22, BUTTON, (b) -> {
             taskListOpen = !taskListOpen;
             init();
         });
@@ -288,7 +289,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addRideButton() {
-        ride = new StateSwitchingButton(leftPos + 51, topPos + 196, 20, 20, maid.isRideable()) {
+        ride = new StateSwitchingButton(leftPos + 51, topPos + 206, 20, 20, maid.isRideable()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -300,7 +301,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addPickButton() {
-        pick = new StateSwitchingButton(leftPos + 30, topPos + 196, 20, 20, maid.isPickup()) {
+        pick = new StateSwitchingButton(leftPos + 30, topPos + 206, 20, 20, maid.isPickup()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -312,7 +313,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addHomeButton() {
-        home = new StateSwitchingButton(leftPos + 9, topPos + 196, 20, 20, maid.isHomeModeEnable()) {
+        home = new StateSwitchingButton(leftPos + 9, topPos + 206, 20, 20, maid.isHomeModeEnable()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -324,7 +325,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addDownloadButton() {
-        modelDownload = new ImageButton(leftPos + 20, topPos + 217, 41, 20, 0, 86, 20, BUTTON,
+        modelDownload = new ImageButton(leftPos + 20, topPos + 230, 41, 20, 0, 86, 20, BUTTON,
                 (b) -> {
                     List<DownloadInfo> downloadInfoList;
                     int page = ModelDownloadGui.getCurrentPage();
@@ -348,10 +349,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawCurrentTaskText(GuiGraphics graphics) {
         IMaidTask task = maid.getTask();
-        graphics.renderItem(task.getIcon(), leftPos + 6, topPos + 151);
+        graphics.renderItem(task.getIcon(), leftPos + 6, topPos + 161);
         List<FormattedCharSequence> splitTexts = font.split(task.getName(), 42);
         if (!splitTexts.isEmpty()) {
-            graphics.drawString(font, splitTexts.get(0), leftPos + 28, topPos + 155, 0x333333, false);
+            graphics.drawString(font, splitTexts.get(0), leftPos + 28, topPos + 165, 0x333333, false);
         }
     }
 
@@ -443,9 +444,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             graphics.blit(SIDE, leftPos + 29, topPos + 137, 2, 28, (int) (43 * percent), 5);
             graphics.drawString(font, String.format("%d", count), leftPos + 15, topPos + 136, ChatFormatting.DARK_GRAY.getColor(), false);
         }
+        {
+            graphics.blit(SIDE, leftPos + 5, topPos + 146, 27, 0, 9, 9);
+            graphics.blit(SIDE, leftPos + 27, topPos + 146, 0, 9, 47, 9);
+            int favorability = maid.getFavorability();
+            double percent = FavorabilityManager.getLevelPercent(favorability);
+            graphics.blit(SIDE, leftPos + 29, topPos + 148, 2, 33, (int) (43 * percent), 5);
+            graphics.drawString(font, String.format("%d", FavorabilityManager.getLevel(favorability)), leftPos + 15, topPos + 147, ChatFormatting.DARK_GRAY.getColor(), false);
+        }
 
         graphics.blit(SIDE, leftPos + 94, topPos + 7, 107, 0, 149, 21);
-        graphics.blit(SIDE, leftPos + 6, topPos + 168, 0, 47, 67, 25);
+        graphics.blit(SIDE, leftPos + 6, topPos + 178, 0, 47, 67, 25);
     }
 
     @Override

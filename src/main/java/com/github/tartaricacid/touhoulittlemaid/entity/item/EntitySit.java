@@ -4,11 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -16,6 +13,7 @@ import net.minecraftforge.network.NetworkHooks;
 public class EntitySit extends Entity {
     public static final EntityType<EntitySit> TYPE = EntityType.Builder.<EntitySit>of(EntitySit::new, MobCategory.MISC)
             .sized(0.5f, 0.1f).clientTrackingRange(10).build("sit");
+    private int passengerTick = 0;
 
     public EntitySit(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
@@ -24,14 +22,6 @@ public class EntitySit extends Entity {
     public EntitySit(Level worldIn, Vec3 pos) {
         this(TYPE, worldIn);
         this.setPos(pos);
-    }
-
-    @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
-        if (!player.isPassenger() && !player.isVehicle()) {
-            player.startRiding(this);
-        }
-        return super.interact(player, hand);
     }
 
     @Override
@@ -55,6 +45,18 @@ public class EntitySit extends Entity {
     public void tick() {
         if (!this.level.isClientSide) {
             this.checkBelowWorld();
+            this.checkPassengers();
+        }
+    }
+
+    private void checkPassengers() {
+        if (this.getPassengers().isEmpty()) {
+            passengerTick++;
+        } else {
+            passengerTick = 0;
+        }
+        if (passengerTick > 10) {
+            this.discard();
         }
     }
 
@@ -96,11 +98,6 @@ public class EntitySit extends Entity {
     @Override
     public boolean canCollideWith(Entity entity) {
         return false;
-    }
-
-    @Override
-    public boolean isPickable() {
-        return this.isAlive();
     }
 
     @Override
