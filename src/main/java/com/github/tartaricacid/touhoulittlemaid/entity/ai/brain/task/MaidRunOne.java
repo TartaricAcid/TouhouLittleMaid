@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
@@ -14,7 +15,7 @@ public class MaidRunOne extends RunOne<EntityMaid> {
     }
 
     @Override
-    public boolean tryStart(ServerLevel pLevel, EntityMaid pEntity, long pGameTime) {
-        return !pEntity.isBegging() && super.tryStart(pLevel, pEntity, pGameTime);
+    public boolean tryStart(ServerLevel pLevel, EntityMaid maid, long pGameTime) {
+        return !maid.isBegging() && !(maid.getVehicle() instanceof EntitySit) && super.tryStart(pLevel, maid, pGameTime);
     }
 }

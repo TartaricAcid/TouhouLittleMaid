@@ -99,10 +99,12 @@ public final class MaidBrain {
         BehaviorControl<EntityMaid> firstShuffledTask = new MaidRunOne(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, walkRandomly, noLook));
 
         Pair<Integer, BehaviorControl<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> supplemented = Pair.of(6, firstShuffledTask);
+        Pair<Integer, BehaviorControl<? super EntityMaid>> findJoy = Pair.of(6, new MaidFindJoyTask(0.6f, 12));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> sitJoy = Pair.of(7, new MaidSitJoyTask());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> supplemented = Pair.of(10, firstShuffledTask);
         Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, UpdateActivityFromSchedule.create());
 
-        brain.addActivity(Activity.IDLE, ImmutableList.of(beg, supplemented, updateActivity));
+        brain.addActivity(Activity.IDLE, ImmutableList.of(beg, findJoy, sitJoy, supplemented, updateActivity));
     }
 
     private static void registerWorkGoals(Brain<EntityMaid> brain, EntityMaid maid) {
@@ -141,8 +143,7 @@ public final class MaidBrain {
         Pair<BehaviorControl<? super EntityMaid>, Integer> lookToParrot = Pair.of(SetEntityLookTarget.create(EntityType.PARROT, 5), 1);
         Pair<BehaviorControl<? super EntityMaid>, Integer> noLook = Pair.of(new DoNothing(30, 60), 2);
 
-        Pair<Integer, BehaviorControl<? super EntityMaid>> shuffled = Pair.of(5, new RunOne<>(
-                ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook)));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> shuffled = Pair.of(5, new MaidRunOne(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook)));
         Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, UpdateActivityFromSchedule.create());
 
         brain.addActivity(Activity.RIDE, ImmutableList.of(shuffled, updateActivity));

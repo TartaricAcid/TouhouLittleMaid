@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
-import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityUtils;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.sounds.SoundEvents;
@@ -18,15 +18,15 @@ public class UseFavorabilityToolEvent {
         if (!maid.level.isClientSide) {
             boolean success = false;
             if (stack.getItem() == InitItems.FAVORABILITY_TOOL_ADD.get()) {
-                FavorabilityManager.add(maid, 64);
+                FavorabilityUtils.add(maid, 64);
                 success = true;
             }
             if (stack.getItem() == InitItems.FAVORABILITY_TOOL_REDUCE.get()) {
-                FavorabilityManager.reduce(maid, 64);
+                FavorabilityUtils.reduce(maid, 64);
                 success = true;
             }
             if (stack.getItem() == InitItems.FAVORABILITY_TOOL_FULL.get()) {
-                FavorabilityManager.max(maid);
+                FavorabilityUtils.max(maid);
                 success = true;
             }
             if (success) {

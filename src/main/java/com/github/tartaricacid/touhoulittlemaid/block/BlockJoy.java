@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,6 +11,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -60,6 +63,29 @@ public abstract class BlockJoy extends BaseEntityBlock {
         return super.use(state, worldIn, pos, playerIn, hand, hit);
     }
 
+    public void startMaidSit(EntityMaid maid, BlockState state, Level worldIn, BlockPos pos) {
+        if (worldIn instanceof ServerLevel serverLevel && worldIn.getBlockEntity(pos) instanceof TileEntityJoy joy) {
+            Entity oldSitEntity = serverLevel.getEntity(joy.getSitId());
+            if (oldSitEntity != null && oldSitEntity.isAlive()) {
+                return;
+            }
+            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, this.sitPosition().x, this.sitPosition().y, this.sitPosition().z));
+            newSitEntity.setYRot(state.getValue(FACING).getOpposite().toYRot() + this.sitYRot());
+            worldIn.addFreshEntity(newSitEntity);
+            joy.setSitId(newSitEntity.getUUID());
+            joy.setChanged();
+            maid.startRiding(newSitEntity);
+            float yRot = newSitEntity.getYRot();
+            if (yRot == 0) {
+                maid.getLookControl().setLookAt(pos.getX() + 1, pos.getY(), pos.getZ());
+            }
+            if (yRot == 180) {
+                maid.getLookControl().setLookAt(pos.getX() - 1, pos.getY(), pos.getZ());
+            }
+            maid.setXRot(0);
+        }
+    }
+
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         BlockEntity blockEntity = worldIn.getBlockEntity(pos);
@@ -75,6 +101,11 @@ public abstract class BlockJoy extends BaseEntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
+        return false;
     }
 
     @Override

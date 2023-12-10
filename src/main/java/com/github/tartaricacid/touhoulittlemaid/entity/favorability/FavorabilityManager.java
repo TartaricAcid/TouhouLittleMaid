@@ -1,57 +1,72 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.favorability;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.Maps;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 
-public final class FavorabilityManager {
-    public static final int LEVEL_1 = 64;
-    public static final int LEVEL_2 = 192;
-    public static final int LEVEL_3 = 384;
+import java.util.Map;
 
-    public static int getLevel(int favorability) {
-        if (favorability < LEVEL_1) {
-            return 0;
-        } else if (favorability < LEVEL_2) {
-            return 1;
-        } else if (favorability < LEVEL_3) {
-            return 2;
-        } else {
-            return 3;
-        }
+public class FavorabilityManager {
+    private static final String TAG_NAME = "FavorabilityManagerCounter";
+    private final Map<String, Time> counter;
+
+    public FavorabilityManager() {
+        this.counter = Maps.newHashMap();
     }
 
-    public static double getLevelPercent(int favorability) {
-        if (favorability < LEVEL_1) {
-            return favorability / (double) LEVEL_1;
-        } else if (favorability < LEVEL_2) {
-            return (favorability - LEVEL_1) / (double) (LEVEL_2 - LEVEL_1);
-        } else if (favorability < LEVEL_3) {
-            return (favorability - LEVEL_2) / (double) (LEVEL_3 - LEVEL_2);
-        } else {
-            return 0;
-        }
+    public void tick() {
+        counter.values().forEach(Time::tick);
     }
 
-    public static void add(EntityMaid maid, int addPoint) {
-        int favorability = maid.getFavorability();
-        if (getLevel(favorability) < 3) {
-            int result = favorability + addPoint;
-            if (getLevel(favorability) == 3) {
-                result = LEVEL_3;
+    public void addCooldown(String type, int time) {
+        this.counter.put(type, new Time(time));
+    }
+
+    public boolean canAdd(String type) {
+        if (this.counter.containsKey(type)) {
+            return this.counter.get(type).isZero();
+        }
+        return true;
+    }
+
+    public void addAdditionalSaveData(CompoundTag compound) {
+        CompoundTag data = new CompoundTag();
+        this.counter.forEach((name, time) -> data.putInt(name, time.getTime()));
+        compound.put(TAG_NAME, data);
+    }
+
+    public void readAdditionalSaveData(CompoundTag compound) {
+        if (compound.contains(TAG_NAME, Tag.TAG_COMPOUND)) {
+            CompoundTag data = compound.getCompound(TAG_NAME);
+            for (String name : data.getAllKeys()) {
+                this.counter.put(name, new Time(data.getInt(name)));
             }
-            maid.setFavorability(result);
         }
     }
 
-    public static void reduce(EntityMaid maid, int reducePoint) {
-        int favorability = maid.getFavorability();
-        int result = favorability - reducePoint;
-        if (favorability < 0) {
-            result = 0;
-        }
-        maid.setFavorability(result);
-    }
+    public static class Time {
+        private int time;
 
-    public static void max(EntityMaid maid) {
-        maid.setFavorability(LEVEL_3);
+        public Time(int time) {
+            this.time = time;
+        }
+
+        public int getTime() {
+            return time;
+        }
+
+        public void setTime(int time) {
+            this.time = time;
+        }
+
+        public void tick() {
+            if (time > 0) {
+                time--;
+            }
+        }
+
+        public boolean isZero() {
+            return this.time <= 0;
+        }
     }
 }

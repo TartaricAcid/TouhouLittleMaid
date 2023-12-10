@@ -19,6 +19,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
@@ -163,6 +164,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
+    private final FavorabilityManager favorabilityManager;
 
     public boolean guiOpening = false;
 
@@ -179,6 +181,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
+        this.favorabilityManager = new FavorabilityManager();
     }
 
     public EntityMaid(Level worldIn) {
@@ -302,6 +305,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                 this.backpackData.serverTick(this);
                 this.level.getProfiler().pop();
             }
+            this.favorabilityManager.tick();
         }
     }
 
@@ -794,6 +798,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.put(RESTRICT_CENTER_TAG, NbtUtils.writeBlockPos(getRestrictCenter()));
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
+        this.favorabilityManager.addAdditionalSaveData(compound);
         if (this.backpackData != null) {
             CompoundTag tag = new CompoundTag();
             this.backpackData.save(tag, this);
@@ -875,6 +880,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                 this.backpackData.load(compound.getCompound(BACKPACK_DATA_TAG), this);
             }
         }
+        this.favorabilityManager.readAdditionalSaveData(compound);
     }
 
     public boolean openMaidGui(Player player) {
