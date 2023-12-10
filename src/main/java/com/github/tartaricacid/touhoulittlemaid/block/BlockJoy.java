@@ -75,14 +75,6 @@ public abstract class BlockJoy extends BaseEntityBlock {
             joy.setSitId(newSitEntity.getUUID());
             joy.setChanged();
             maid.startRiding(newSitEntity);
-            float yRot = newSitEntity.getYRot();
-            if (yRot == 0) {
-                maid.getLookControl().setLookAt(pos.getX() + 1, pos.getY(), pos.getZ());
-            }
-            if (yRot == 180) {
-                maid.getLookControl().setLookAt(pos.getX() - 1, pos.getY(), pos.getZ());
-            }
-            maid.setXRot(0);
         }
     }
 
@@ -105,7 +97,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
 
     @Override
     public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
-        return false;
+        return true;
     }
 
     @Override

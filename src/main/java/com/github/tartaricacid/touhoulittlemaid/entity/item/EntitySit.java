@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -26,7 +27,7 @@ public class EntitySit extends Entity {
 
     @Override
     public double getPassengersRidingOffset() {
-        return -0.3;
+        return -0.25;
     }
 
     @Override
@@ -46,6 +47,10 @@ public class EntitySit extends Entity {
         if (!this.level.isClientSide) {
             this.checkBelowWorld();
             this.checkPassengers();
+        }
+        if (this.getFirstPassenger() instanceof EntityMaid maid) {
+            maid.setYRot(this.getYRot());
+            maid.setYHeadRot(this.getYRot());
         }
     }
 
