@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 public class BlockKeyboard extends BlockJoy {
     public static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 10, 12);
+    public static final String TYPE_NAME = "Keyboard";
 
     @Override
     protected Vec3 sitPosition() {
@@ -23,6 +24,11 @@ public class BlockKeyboard extends BlockJoy {
     @Override
     protected int sitYRot() {
         return 0;
+    }
+
+    @Override
+    protected String getTypeName() {
+        return TYPE_NAME;
     }
 
     @Nullable

@@ -22,6 +22,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubble
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -1427,8 +1428,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     public boolean isSitInJoyBlock() {
-        // TODO：待完成
-        return false;
+        return getVehicle() instanceof EntitySit;
+    }
+
+    public FavorabilityManager getFavorabilityManager() {
+        return favorabilityManager;
     }
 
     @Deprecated

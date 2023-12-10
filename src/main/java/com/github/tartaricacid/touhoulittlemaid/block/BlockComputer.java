@@ -18,6 +18,7 @@ public class BlockComputer extends BlockJoy {
             Block.box(6, 3, 6, 10, 9, 10),
             Block.box(1, 9, 1, 15, 12, 15),
             Block.box(0, 12, 0, 16, 14, 16));
+    public static final String TYPE_NAME = "Computer";
 
     @Override
     protected Vec3 sitPosition() {
@@ -27,6 +28,11 @@ public class BlockComputer extends BlockJoy {
     @Override
     protected int sitYRot() {
         return 180;
+    }
+
+    @Override
+    protected String getTypeName() {
+        return TYPE_NAME;
     }
 
     @Nullable

@@ -18,8 +18,8 @@ public class FavorabilityManager {
         counter.values().forEach(Time::tick);
     }
 
-    public void addCooldown(String type, int time) {
-        this.counter.put(type, new Time(time));
+    public void addCooldown(String type, int tickCount) {
+        this.counter.put(type, new Time(tickCount));
     }
 
     public boolean canAdd(String type) {
@@ -31,7 +31,7 @@ public class FavorabilityManager {
 
     public void addAdditionalSaveData(CompoundTag compound) {
         CompoundTag data = new CompoundTag();
-        this.counter.forEach((name, time) -> data.putInt(name, time.getTime()));
+        this.counter.forEach((name, time) -> data.putInt(name, time.getTickCount()));
         compound.put(TAG_NAME, data);
     }
 
@@ -45,28 +45,28 @@ public class FavorabilityManager {
     }
 
     public static class Time {
-        private int time;
+        private int tickCount;
 
-        public Time(int time) {
-            this.time = time;
+        public Time(int tickCount) {
+            this.tickCount = tickCount;
         }
 
-        public int getTime() {
-            return time;
+        public int getTickCount() {
+            return tickCount;
         }
 
-        public void setTime(int time) {
-            this.time = time;
+        public void setTickCount(int tickCount) {
+            this.tickCount = tickCount;
         }
 
         public void tick() {
-            if (time > 0) {
-                time--;
+            if (tickCount > 0) {
+                tickCount--;
             }
         }
 
         public boolean isZero() {
-            return this.time <= 0;
+            return this.tickCount <= 0;
         }
     }
 }

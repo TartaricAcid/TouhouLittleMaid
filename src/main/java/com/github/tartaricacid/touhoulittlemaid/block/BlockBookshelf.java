@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockBookshelf extends BlockJoy {
     public static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 5, 15);
+    public static final String TYPE_NAME = "BookShelf";
 
     @Override
     protected Vec3 sitPosition() {
@@ -22,6 +23,11 @@ public class BlockBookshelf extends BlockJoy {
     @Override
     protected int sitYRot() {
         return -90;
+    }
+
+    @Override
+    protected String getTypeName() {
+        return TYPE_NAME;
     }
 
     @Nullable

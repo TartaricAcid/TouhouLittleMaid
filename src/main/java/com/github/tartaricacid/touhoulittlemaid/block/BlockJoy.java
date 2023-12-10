@@ -38,6 +38,8 @@ public abstract class BlockJoy extends BaseEntityBlock {
 
     protected abstract Vec3 sitPosition();
 
+    protected abstract String getTypeName();
+
     protected abstract int sitYRot();
 
     @Override
@@ -52,7 +54,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
             if (oldSitEntity != null && oldSitEntity.isAlive()) {
                 return super.use(state, worldIn, pos, playerIn, hand, hit);
             }
-            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, this.sitPosition().x, this.sitPosition().y, this.sitPosition().z));
+            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, this.sitPosition().x, this.sitPosition().y, this.sitPosition().z), this.getTypeName());
             newSitEntity.setYRot(state.getValue(FACING).getOpposite().toYRot() + this.sitYRot());
             worldIn.addFreshEntity(newSitEntity);
             joy.setSitId(newSitEntity.getUUID());
@@ -69,7 +71,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
             if (oldSitEntity != null && oldSitEntity.isAlive()) {
                 return;
             }
-            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, this.sitPosition().x, this.sitPosition().y, this.sitPosition().z));
+            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, this.sitPosition().x, this.sitPosition().y, this.sitPosition().z), this.getTypeName());
             newSitEntity.setYRot(state.getValue(FACING).getOpposite().toYRot() + this.sitYRot());
             worldIn.addFreshEntity(newSitEntity);
             joy.setSitId(newSitEntity.getUUID());
