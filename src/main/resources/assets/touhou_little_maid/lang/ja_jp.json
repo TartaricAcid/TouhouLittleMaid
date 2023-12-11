@@ -69,7 +69,7 @@
   "tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist": "ホワイトリスト",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.has": "チェストの座標: %d, %d, %d",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "チェストが設定されていません",
-  "tooltips.touhou_little_maid.maid_beacon.desc": "溜まったPower：%s",
+  "tooltips.touhou_little_maid.maid_beacon.desc": "溜まったP点：%s",
   "gui.touhou_little_maid.schedule.day": "日勤",
   "gui.touhou_little_maid.schedule.night": "夜勤",
   "gui.touhou_little_maid.schedule.all": "24時間労働",
