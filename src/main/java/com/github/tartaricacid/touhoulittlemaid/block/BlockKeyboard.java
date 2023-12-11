@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityKeyboard;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -14,7 +15,6 @@ import javax.annotation.Nullable;
 
 public class BlockKeyboard extends BlockJoy {
     public static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 10, 12);
-    public static final String TYPE_NAME = "Keyboard";
 
     @Override
     protected Vec3 sitPosition() {
@@ -28,7 +28,7 @@ public class BlockKeyboard extends BlockJoy {
 
     @Override
     protected String getTypeName() {
-        return TYPE_NAME;
+        return Type.KEYBOARD.getTypeName();
     }
 
     @Nullable

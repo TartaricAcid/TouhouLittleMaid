@@ -20,9 +20,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleMang
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -182,7 +182,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
-        this.favorabilityManager = new FavorabilityManager();
+        this.favorabilityManager = new FavorabilityManager(this);
     }
 
     public EntityMaid(Level worldIn) {
@@ -780,6 +780,17 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
     }
 
+    public void spawnHeartParticle() {
+        if (this.level.isClientSide) {
+            for (int i = 0; i < 8; ++i) {
+                double offsetX = this.random.nextGaussian() * 0.02;
+                double offsetY = this.random.nextGaussian() * 0.02;
+                double offsetZ = this.random.nextGaussian() * 0.02;
+                level.addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), offsetX, offsetY, offsetZ);
+            }
+        }
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -1109,6 +1120,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         super.swing(pHand);
     }
 
+    @Override
+    public void startSleeping(BlockPos pPos) {
+        super.startSleeping(pPos);
+        this.setHealth(this.getMaxHealth());
+        this.favorabilityManager.apply(Type.SLEEP);
+    }
+
     public void setBackpackDelay() {
         backpackDelay = 20;
     }
@@ -1427,8 +1445,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
     }
 
+    @Deprecated
     public boolean isSitInJoyBlock() {
-        return getVehicle() instanceof EntitySit;
+        return false;
     }
 
     public FavorabilityManager getFavorabilityManager() {

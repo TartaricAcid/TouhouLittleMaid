@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -93,6 +94,21 @@ public class ItemPhoto extends Item {
         }
 
         return InteractionResult.FAIL;
+    }
+
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        if (!entity.isInvulnerable()) {
+            entity.setInvulnerable(true);
+        }
+        Vec3 position = entity.position();
+        int minY = entity.level.getMinBuildHeight();
+        if (position.y < minY) {
+            entity.setNoGravity(true);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.setPos(position.x, minY, position.z);
+        }
+        return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override

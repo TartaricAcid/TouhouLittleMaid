@@ -19,12 +19,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
@@ -147,6 +149,21 @@ public class ItemSmartSlab extends Item {
     @Override
     public boolean isFoil(ItemStack stack) {
         return this.type != Type.EMPTY;
+    }
+
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        if (!entity.isInvulnerable()) {
+            entity.setInvulnerable(true);
+        }
+        Vec3 position = entity.position();
+        int minY = entity.level.getMinBuildHeight();
+        if (position.y < minY) {
+            entity.setNoGravity(true);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.setPos(position.x, minY, position.z);
+        }
+        return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override

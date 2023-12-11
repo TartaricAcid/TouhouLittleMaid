@@ -11,7 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTab
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
-import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityUtils;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
@@ -447,10 +447,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         {
             graphics.blit(SIDE, leftPos + 5, topPos + 146, 27, 0, 9, 9);
             graphics.blit(SIDE, leftPos + 27, topPos + 146, 0, 9, 47, 9);
-            int favorability = maid.getFavorability();
-            double percent = FavorabilityUtils.getLevelPercent(favorability);
+            FavorabilityManager manager = maid.getFavorabilityManager();
+            double percent = manager.getLevelPercent();
             graphics.blit(SIDE, leftPos + 29, topPos + 148, 2, 33, (int) (43 * percent), 5);
-            graphics.drawString(font, String.format("%d", FavorabilityUtils.getLevel(favorability)), leftPos + 15, topPos + 147, ChatFormatting.DARK_GRAY.getColor(), false);
+            graphics.drawString(font, String.format("%d", manager.getLevel()), leftPos + 15, topPos + 147, ChatFormatting.DARK_GRAY.getColor(), false);
         }
 
         graphics.blit(SIDE, leftPos + 94, topPos + 7, 107, 0, 149, 21);

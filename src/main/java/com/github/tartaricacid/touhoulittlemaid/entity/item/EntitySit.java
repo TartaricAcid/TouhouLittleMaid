@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
-import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityUtils;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import net.minecraft.nbt.CompoundTag;
@@ -73,10 +73,8 @@ public class EntitySit extends Entity {
             maid.setYHeadRot(this.getYRot());
         }
         if (tickCount % 20 == 0) {
-            if (maid.getFavorabilityManager().canAdd(this.joyType)) {
-                FavorabilityUtils.add(maid, 2);
-                maid.getFavorabilityManager().addCooldown(this.joyType, 24000);
-            }
+            FavorabilityManager manager = maid.getFavorabilityManager();
+            manager.apply(this.joyType);
             if (!this.isIdleSchedule(maid)) {
                 maid.stopRiding();
             }

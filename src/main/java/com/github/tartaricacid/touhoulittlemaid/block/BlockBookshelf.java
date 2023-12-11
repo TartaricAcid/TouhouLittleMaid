@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityBookshelf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -13,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockBookshelf extends BlockJoy {
     public static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 5, 15);
-    public static final String TYPE_NAME = "BookShelf";
 
     @Override
     protected Vec3 sitPosition() {
@@ -27,7 +27,7 @@ public class BlockBookshelf extends BlockJoy {
 
     @Override
     protected String getTypeName() {
-        return TYPE_NAME;
+        return Type.BOOKSHELF.getTypeName();
     }
 
     @Nullable
