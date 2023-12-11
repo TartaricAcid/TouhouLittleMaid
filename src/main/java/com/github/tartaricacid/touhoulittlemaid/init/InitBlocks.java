@@ -23,6 +23,7 @@ public final class InitBlocks {
     public static RegistryObject<Block> KEYBOARD = BLOCKS.register("keyboard", BlockKeyboard::new);
     public static RegistryObject<Block> BOOKSHELF = BLOCKS.register("bookshelf", BlockBookshelf::new);
     public static RegistryObject<Block> COMPUTER = BLOCKS.register("computer", BlockComputer::new);
+    public static RegistryObject<Block> SHRINE = BLOCKS.register("shrine", BlockShrine::new);
 
     public static RegistryObject<BlockEntityType<TileEntityAltar>> ALTAR_TE = TILE_ENTITIES.register("altar", () -> TileEntityAltar.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityStatue>> STATUE_TE = TILE_ENTITIES.register("statue", () -> TileEntityStatue.TYPE);
@@ -33,4 +34,5 @@ public final class InitBlocks {
     public static RegistryObject<BlockEntityType<TileEntityKeyboard>> KEYBOARD_TE = TILE_ENTITIES.register("keyboard", () -> TileEntityKeyboard.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityBookshelf>> BOOKSHELF_TE = TILE_ENTITIES.register("bookshelf", () -> TileEntityBookshelf.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityComputer>> COMPUTER_TE = TILE_ENTITIES.register("computer", () -> TileEntityComputer.TYPE);
+    public static RegistryObject<BlockEntityType<TileEntityShrine>> SHRINE_TE = TILE_ENTITIES.register("shrine", () -> TileEntityShrine.TYPE);
 }

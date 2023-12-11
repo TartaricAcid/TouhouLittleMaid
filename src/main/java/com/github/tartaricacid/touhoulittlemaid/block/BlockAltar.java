@@ -66,7 +66,7 @@ public class BlockAltar extends Block implements EntityBlock {
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         return this.getAltar(worldIn, pos).filter(altar -> handIn == InteractionHand.MAIN_HAND).map(altar -> {
             if (player.isShiftKeyDown() || player.getMainHandItem().isEmpty()) {
-                takeOutItem(worldIn, pos, altar, player);
+                takeOutItem(worldIn, altar, player);
             } else {
                 takeInOrCraft(worldIn, altar, player);
             }
@@ -207,10 +207,11 @@ public class BlockAltar extends Block implements EntityBlock {
         }
     }
 
-    private void takeOutItem(Level world, BlockPos pos, TileEntityAltar altar, Player player) {
+    private void takeOutItem(Level world, TileEntityAltar altar, Player player) {
         if (altar.isCanPlaceItem()) {
             if (!altar.handler.getStackInSlot(0).isEmpty()) {
-                Block.popResource(world, pos.offset(0, 1, 0), altar.handler.extractItem(0, 1, false));
+                ItemStack extractItem = altar.handler.extractItem(0, 1, false);
+                ItemHandlerHelper.giveItemToPlayer(player, extractItem);
                 altarCraft(world, altar, player);
             }
         }

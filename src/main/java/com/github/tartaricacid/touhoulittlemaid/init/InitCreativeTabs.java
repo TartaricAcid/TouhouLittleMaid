@@ -66,6 +66,7 @@ public class InitCreativeTabs {
                 output.accept(CHISEL.get());
                 output.accept(MAID_BED.get());
                 output.accept(MAID_BEACON.get());
+                output.accept(SHRINE.get());
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());
                 ItemEntityPlaceholder.fillItemCategory(output);

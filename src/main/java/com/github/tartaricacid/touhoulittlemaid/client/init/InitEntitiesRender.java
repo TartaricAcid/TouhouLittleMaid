@@ -44,6 +44,7 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityKeyboard.TYPE, TileEntityKeyboardRenderer::new);
         BlockEntityRenderers.register(TileEntityBookshelf.TYPE, TileEntityBookshelfRenderer::new);
         BlockEntityRenderers.register(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
+        BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
     }
 
     @SubscribeEvent
@@ -66,5 +67,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(KeyboardModel.LAYER, KeyboardModel::createBodyLayer);
         event.registerLayerDefinition(BookshelfModel.LAYER, BookshelfModel::createBodyLayer);
         event.registerLayerDefinition(ComputerModel.LAYER, ComputerModel::createBodyLayer);
+        event.registerLayerDefinition(ShrineModel.LAYER, ShrineModel::createBodyLayer);
     }
 }
