@@ -144,7 +144,7 @@
   "gui.touhou_little_maid.model_gui.easter_egg.normal": "これは通常のイースターエッグモデルです",
   "gui.touhou_little_maid.maid_config.sound_frequency": "メイドの声の周波数",
   "gui.touhou_little_maid.maid_config.show_chat_bubble": "チャットバブルを表示する",
-  "gui.touhou_little_maid.maid_config.show_backpack": "白色バックパック",
+  "gui.touhou_little_maid.maid_config.show_backpack": "バックパックを表示する",
   "message.touhou_little_maid.change_model.disabled": "メイドのモデルの変更が無効化されています。",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "知識不足のためアイテムの使い方がわかりません。",
   "message.touhou_little_maid.altar.not_enough_power": "P点が足りません。",
@@ -278,7 +278,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.mute_bauble.pages.0.text": "この宝玉をもたせると、メイドは喋らなくなります。",
   "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.name": "スポーンエッグの名付け",
   "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.pages.0.text": "メイドに特定の名前を名付けるとモデルが変わります。$(br2)通常、$(#ff0000)=>id$()という名前のメイドは、そのIDに対応するプレイヤーのモデルになることができます。$(br2)メイドのリソースパックでカスタムのモデルのスポーンエッグを追加することもできます。",
-  "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.pages.1.text": "名前$(#ff0000)=>Notch$() を持つメイド最強",
+  "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.pages.1.text": "$(#ff0000)=>Notch$() と名付けられたメイド",
   "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.name": "メイドの召喚",
   "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.pages.0.text": "メイドさんを召喚する方法は非常に特殊であり、祭壇を介して行う必要があります。$(br2)レシピは今後変更される可能性があるので、JEIでご確認ください。$(br2)メイドさんが祭壇に上手く召喚された後、ケーキボックスが発生します。右クリックして開封できます。",
   "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.pages.1.text": "ケーキボックスは3回右クリックする必要があります。$(br2)メイドを雇うにはケーキが必要です。雇うのに必要なアイテムは設定から変更できます。$(br2)雇われたメイドはバニラのペットと同じような行動を取ります。メイドを右クリックするとそのメイドのGUIを開くことができます。",
@@ -333,5 +333,8 @@
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.name": "カスタムモデルを作成",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "リンクを開く",
   "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.name": "カスタムモデルをダウンロードする",
-  "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.link_text": "Discordリンク"
+  "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.link_text": "Discordリンク",
+  "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.name": "バニラ要素の変更",
+  "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.0.text": "スライムのモデルをゆっくりに変更しました。",
+  "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.1.text": "また、経験値オーブ、エンチャントの瓶、不死のトーテムのテクスチャも変更しました。 $(br2)これらはすべて設定ファイルでオフにできます。"
 }
