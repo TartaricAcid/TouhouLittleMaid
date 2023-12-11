@@ -815,6 +815,34 @@ public class BookshelfModel extends EntityModel<Entity> {
 
         PartDefinition bone229 = bone36.addOrReplaceChild("bone229", CubeListBuilder.create().texOffs(78, 45).addBox(3.5016F, -30.8187F, -13.675F, 3.0F, 11.0F, 13.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.4014F, 13.8604F, 3.425F, 0.0F, 0.0F, 0.3927F));
 
+        PartDefinition book = main.addOrReplaceChild("book", CubeListBuilder.create(), PartPose.offsetAndRotation(-13.25F, -13.25F, 2.0F, 0.2134F, -0.002F, 0.8411F));
+
+        PartDefinition bone230 = book.addOrReplaceChild("bone230", CubeListBuilder.create().texOffs(188, 27).addBox(-1.0F, -5.0F, -4.5F, 2.0F, 10.0F, 10.0F, new CubeDeformation(-0.25F))
+                .texOffs(201, 65).addBox(-1.5F, -6.5F, -6.0F, 3.0F, 13.0F, 3.0F, new CubeDeformation(-1.25F))
+                .texOffs(221, 0).addBox(-0.5F, -6.5F, -5.0F, 3.0F, 13.0F, 12.0F, new CubeDeformation(-1.25F)), PartPose.offsetAndRotation(-0.6327F, 0.0761F, 2.0F, 0.0F, 0.0F, 1.5708F));
+
+        PartDefinition bone231 = bone230.addOrReplaceChild("bone231", CubeListBuilder.create(), PartPose.offset(-25.9979F, -11.5961F, 11.6066F));
+
+        PartDefinition bone232 = bone231.addOrReplaceChild("bone232", CubeListBuilder.create().texOffs(231, 48).addBox(-5.5103F, 5.0961F, -32.3005F, 3.0F, 13.0F, 3.0F, new CubeDeformation(-1.25F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.1781F, 0.0F));
+
+        PartDefinition bone233 = bone231.addOrReplaceChild("bone233", CubeListBuilder.create().texOffs(214, 65).addBox(16.7316F, 5.0961F, -26.4099F, 3.0F, 13.0F, 3.0F, new CubeDeformation(-1.25F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.3927F, 0.0F));
+
+        PartDefinition bone234 = book.addOrReplaceChild("bone234", CubeListBuilder.create(), PartPose.offsetAndRotation(-0.6327F, 0.0761F, 2.0F, 0.0F, 0.0F, 1.5708F));
+
+        PartDefinition bone235 = bone234.addOrReplaceChild("bone235", CubeListBuilder.create().texOffs(203, 48).addBox(-0.5F, -5.25F, -1.0F, 1.0F, 10.5F, 6.5F, new CubeDeformation(-0.49F)), PartPose.offsetAndRotation(-0.75F, 0.0F, -4.25F, 0.0F, -0.0654F, 0.0F));
+
+        PartDefinition bone236 = bone235.addOrReplaceChild("bone236", CubeListBuilder.create().texOffs(188, 82).addBox(-0.5F, -5.25F, -0.5F, 1.0F, 10.5F, 5.5F, new CubeDeformation(-0.49F)), PartPose.offsetAndRotation(0.0F, 0.0F, 5.0F, 0.0F, 0.0873F, 0.0F));
+
+        PartDefinition bone257 = bone234.addOrReplaceChild("bone257", CubeListBuilder.create().texOffs(213, 27).addBox(-0.7995F, -5.0F, 0.0001F, 1.0F, 10.0F, 10.0F, new CubeDeformation(-0.25F)), PartPose.offsetAndRotation(-0.7F, 0.0F, -4.0F, -3.1416F, -0.3927F, 3.1416F));
+
+        PartDefinition bone258 = bone234.addOrReplaceChild("bone258", CubeListBuilder.create().texOffs(188, 0).addBox(-2.5386F, -6.5F, -1.306F, 3.0F, 13.0F, 13.0F, new CubeDeformation(-1.25F)), PartPose.offsetAndRotation(-1.0F, 0.0F, -4.0F, -3.1416F, -0.3927F, 3.1416F));
+
+        PartDefinition bone259 = bone234.addOrReplaceChild("bone259", CubeListBuilder.create(), PartPose.offset(-25.9979F, -11.5961F, 11.6066F));
+
+        PartDefinition bone260 = bone259.addOrReplaceChild("bone260", CubeListBuilder.create().texOffs(218, 48).addBox(6.1965F, 5.0961F, -31.5673F, 3.0F, 13.0F, 3.0F, new CubeDeformation(-1.25F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
+
+        PartDefinition bone261 = bone259.addOrReplaceChild("bone261", CubeListBuilder.create().texOffs(188, 65).addBox(16.7316F, 5.0961F, -26.4099F, 3.0F, 13.0F, 3.0F, new CubeDeformation(-1.25F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.3927F, 0.0F));
+
         return LayerDefinition.create(meshdefinition, 256, 256);
     }
 

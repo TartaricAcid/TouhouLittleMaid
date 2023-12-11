@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
@@ -31,6 +33,10 @@ public class AnimationRegister {
         register("swim", Priority.HIGHEST, (maid, event) -> maid.isSwimming());
 
         register("boat", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof Boat);
+        register("gomoku", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.GOMOKU.getTypeName()));
+        register("bookshelf", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.BOOKSHELF.getTypeName()));
+        register("computer", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.COMPUTER.getTypeName()));
+        register("keyboard", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.KEYBOARD.getTypeName()));
         register("sit", Priority.HIGH, (maid, event) -> maid.isInSittingPose());
         register("chair", Priority.HIGH, (maid, event) -> maid.isPassenger());
 

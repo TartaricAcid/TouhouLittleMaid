@@ -4,16 +4,23 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ChessDataToClientMessage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +28,10 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,7 +48,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class BlockGomoku extends BaseEntityBlock {
+public class BlockGomoku extends BlockJoy {
     public static final EnumProperty<GomokuPart> PART = EnumProperty.create("part", GomokuPart.class);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final VoxelShape LEFT_UP = Block.box(8, 0, 8, 16, 2, 16);
@@ -58,6 +68,21 @@ public class BlockGomoku extends BaseEntityBlock {
     public BlockGomoku() {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, GomokuPart.CENTER).setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected Vec3 sitPosition() {
+        return Vec3.ZERO;
+    }
+
+    @Override
+    protected String getTypeName() {
+        return Type.GOMOKU.getTypeName();
+    }
+
+    @Override
+    protected int sitYRot() {
+        return 0;
     }
 
     private static void handleGomokuRemove(Level world, BlockPos pos, BlockState state) {
@@ -195,7 +220,7 @@ public class BlockGomoku extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!level.isClientSide && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
+        if (level instanceof ServerLevel serverLevel && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
             GomokuPart part = state.getValue(PART);
             BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
             BlockEntity te = level.getBlockEntity(centerPos);
@@ -210,6 +235,11 @@ public class BlockGomoku extends BaseEntityBlock {
                 gomoku.refresh();
                 return InteractionResult.SUCCESS;
             }
+            Entity sitEntity = serverLevel.getEntity(gomoku.getSitId());
+            if (sitEntity == null || !sitEntity.isAlive() || !(sitEntity.getFirstPassenger() instanceof EntityMaid)) {
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.no_maid"));
+                return InteractionResult.FAIL;
+            }
             if (!gomoku.isPlayerTurn()) {
                 return InteractionResult.FAIL;
             }
@@ -221,7 +251,11 @@ public class BlockGomoku extends BaseEntityBlock {
             Point playerPoint = new Point(clickPos[0], clickPos[1], Point.BLACK);
             if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
                 gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
-                gomoku.setInProgress(TouhouLittleMaid.SERVICE.getStatue(chessData, playerPoint) == Statue.IN_PROGRESS);
+                Statue statue = TouhouLittleMaid.SERVICE.getStatue(chessData, playerPoint);
+                if (statue == Statue.WIN && sitEntity.getFirstPassenger() instanceof EntityMaid maid && maid.isOwnedBy(player)) {
+                    maid.getFavorabilityManager().apply(Type.GOMOKU_WIN);
+                }
+                gomoku.setInProgress(statue == Statue.IN_PROGRESS);
                 level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
                 if (gomoku.isInProgress()) {
                     gomoku.setPlayerTurn(false);
@@ -231,7 +265,25 @@ public class BlockGomoku extends BaseEntityBlock {
                 return InteractionResult.SUCCESS;
             }
         }
-        return super.use(state, level, pos, player, hand, hit);
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public void startMaidSit(EntityMaid maid, BlockState state, Level worldIn, BlockPos pos) {
+        if (worldIn instanceof ServerLevel serverLevel && worldIn.getBlockEntity(pos) instanceof TileEntityJoy joy) {
+            Entity oldSitEntity = serverLevel.getEntity(joy.getSitId());
+            if (oldSitEntity != null && oldSitEntity.isAlive()) {
+                return;
+            }
+            Direction face = state.getValue(FACING).getClockWise();
+            Vec3 position = new Vec3(0.5 + face.getStepX() * 1.5, 0.1, 0.5 + face.getStepZ() * 1.5);
+            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, position.x, position.y, position.z), this.getTypeName());
+            newSitEntity.setYRot(face.getOpposite().toYRot() + this.sitYRot());
+            worldIn.addFreshEntity(newSitEntity);
+            joy.setSitId(newSitEntity.getUUID());
+            joy.setChanged();
+            maid.startRiding(newSitEntity);
+        }
     }
 
     @Override

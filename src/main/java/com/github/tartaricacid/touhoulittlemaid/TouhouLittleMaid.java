@@ -26,7 +26,7 @@ public final class TouhouLittleMaid {
     public static final String MOD_ID = "touhou_little_maid";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static List<ILittleMaid> EXTENSIONS = Lists.newArrayList();
-    public static AIService SERVICE = new ZhiZhangAIService(new AIService.AIConfig(8, 10, false, 1, 10));
+    public static AIService SERVICE = new ZhiZhangAIService(new AIService.AIConfig(4, 10, false, 0, 6));
 
     public TouhouLittleMaid() {
         InitEntities.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
