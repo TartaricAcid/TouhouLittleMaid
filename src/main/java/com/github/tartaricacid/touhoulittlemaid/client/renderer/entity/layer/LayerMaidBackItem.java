@@ -26,7 +26,7 @@ public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<Enti
 
     @Override
     public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        ItemStack stack = maid.getMaidInv().getStackInSlot(5);
+        ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof Vanishable) {
             if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
                 return;

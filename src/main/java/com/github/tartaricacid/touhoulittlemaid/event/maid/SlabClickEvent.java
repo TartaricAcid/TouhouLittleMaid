@@ -26,9 +26,6 @@ public final class SlabClickEvent {
                 ItemStack output = maidSmartSlab.getDefaultInstance();
                 maid.setHomeModeEnable(false);
                 ItemSmartSlab.storeMaidData(output, maid);
-                if (maid.hasCustomName()) {
-                    output.setHoverName(maid.getCustomName());
-                }
                 maid.spawnExplosionParticle();
                 maid.discard();
                 maid.playSound(SoundEvents.PLAYER_SPLASH, 1.0F, maid.level.random.nextFloat() * 0.1F + 0.9F);

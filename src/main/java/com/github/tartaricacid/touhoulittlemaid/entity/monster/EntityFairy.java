@@ -58,18 +58,13 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        // TODO：待完成
-        // goalSelector.addGoal(0, new AvoidEntityGoal<>(this, EntityScarecrow.class, 10.0F, 1.0D, 1.2D));
         goalSelector.addGoal(1, new FairyAttackGoal(this, 6.0, 1.0));
         goalSelector.addGoal(2, new MoveTowardsRestrictionGoal(this, 1.0));
         goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0));
         goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
         goalSelector.addGoal(5, new LookAtPlayerGoal(this, EntityMaid.class, 8.0F));
         goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-
         targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, EntityMaid.class, 10, true,
-                false, e -> !e.isSleeping()));
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 

@@ -31,7 +31,7 @@ public class GeckoLayerMaidBackItem<T extends LivingEntity & IAnimatable> extend
             return;
         }
         if (entityLivingBaseIn instanceof EntityMaid maid) {
-            ItemStack stack = maid.getMaidInv().getStackInSlot(5);
+            ItemStack stack = maid.getBackpackShowItem();
             if (stack.getItem() instanceof Vanishable) {
                 if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
                     return;

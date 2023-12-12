@@ -44,14 +44,11 @@ public class ItemFilm extends Item {
         CompoundTag filmTag = new CompoundTag();
         CompoundTag maidTag = new CompoundTag();
         maid.setHomeModeEnable(false);
-        maid.addAdditionalSaveData(maidTag);
+        maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
         filmTag.put(MAID_INFO, maidTag);
         film.setTag(filmTag);
-        if (maid.hasCustomName()) {
-            film.setHoverName(maid.getCustomName());
-        }
         return film;
     }
 
@@ -60,9 +57,6 @@ public class ItemFilm extends Item {
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entityOptional.get();
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
-            if (film.hasCustomHoverName()) {
-                maid.setCustomName(film.getHoverName());
-            }
             // 实体生成必须在服务端应用
             if (!worldIn.isClientSide) {
                 worldIn.addFreshEntity(maid);

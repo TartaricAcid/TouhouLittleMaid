@@ -47,7 +47,7 @@ public class ItemSmartSlab extends Item {
     }
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
-        maid.addAdditionalSaveData(stack.getOrCreateTagElement(MAID_INFO));
+        maid.saveWithoutId(stack.getOrCreateTagElement(MAID_INFO));
     }
 
     public static boolean hasMaidData(ItemStack stack) {
@@ -80,7 +80,6 @@ public class ItemSmartSlab extends Item {
             if (maid == null) {
                 return super.useOn(context);
             }
-            maid.moveTo(clickedPos.above(), 0, 0);
             if (this.type == Type.INIT) {
                 return spawnNewMaid(context, player, worldIn, maid);
             }
@@ -103,10 +102,8 @@ public class ItemSmartSlab extends Item {
             if (!player.getUUID().equals(ownerUid)) {
                 return InteractionResult.FAIL;
             }
-            maid.readAdditionalSaveData(maidData);
-            if (stack.hasCustomHoverName()) {
-                maid.setCustomName(stack.getHoverName());
-            }
+            maid.load(maidData);
+            maid.moveTo(context.getClickedPos().above(), 0, 0);
             if (worldIn instanceof ServerLevel) {
                 worldIn.addFreshEntity(maid);
             }
@@ -129,6 +126,7 @@ public class ItemSmartSlab extends Item {
                 if (worldIn instanceof ServerLevel) {
                     maid.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(context.getClickedPos()),
                             MobSpawnType.SPAWN_EGG, null, null);
+                    maid.moveTo(context.getClickedPos().above(), 0, 0);
                     worldIn.addFreshEntity(maid);
                 }
                 maid.spawnExplosionParticle();

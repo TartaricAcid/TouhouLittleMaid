@@ -81,9 +81,6 @@ public class ItemPhoto extends Item {
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entityOptional.get();
             maid.setPos(clickLocation.x, clickLocation.y, clickLocation.z);
-            if (photo.hasCustomHoverName()) {
-                maid.setCustomName(photo.getHoverName());
-            }
             // 实体生成必须在服务端应用
             if (!worldIn.isClientSide) {
                 worldIn.addFreshEntity(maid);

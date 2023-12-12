@@ -146,6 +146,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final EntityDataAccessor<Float> RESTRICT_RADIUS = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<MaidChatBubbles> CHAT_BUBBLE = SynchedEntityData.defineId(EntityMaid.class, MaidChatBubbles.DATA);
     private static final EntityDataAccessor<String> BACKPACK_TYPE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -163,7 +164,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
-    private final ItemStackHandler maidInv = new MaidBackpackHandler(36);
+    private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
     private final FavorabilityManager favorabilityManager;
 
@@ -219,6 +220,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_HOME_RANGE.get().floatValue());
         this.entityData.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
         this.entityData.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
+        this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
     }
 
     @Override
@@ -893,6 +895,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             }
         }
         this.favorabilityManager.readAdditionalSaveData(compound);
+        this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
     }
 
     public boolean openMaidGui(Player player) {
@@ -1280,6 +1283,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     public MaidSchedule getSchedule() {
         return this.entityData.get(SCHEDULE_MODE);
+    }
+
+    public void setBackpackShowItem(ItemStack stack) {
+        this.entityData.set(BACKPACK_ITEM_SHOW, stack);
+    }
+
+    public ItemStack getBackpackShowItem() {
+        return this.entityData.get(BACKPACK_ITEM_SHOW);
     }
 
     public void setMaidBackpackType(IMaidBackpack backpack) {
