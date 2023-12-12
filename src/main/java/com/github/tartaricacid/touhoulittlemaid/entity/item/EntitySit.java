@@ -74,10 +74,8 @@ public class EntitySit extends Entity {
     }
 
     private void tickMaid(EntityMaid maid) {
-        if (tickCount % 2 == 0) {
-            maid.setYRot(this.getYRot());
-            maid.setYHeadRot(this.getYRot());
-        }
+        maid.setYRot(this.getYRot());
+        maid.setYHeadRot(this.getYRot());
         if (tickCount % 20 == 0) {
             FavorabilityManager manager = maid.getFavorabilityManager();
             manager.apply(this.getJoyType());

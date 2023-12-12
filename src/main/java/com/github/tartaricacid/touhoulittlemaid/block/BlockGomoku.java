@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ChessDataToClientMessage;
@@ -90,6 +91,7 @@ public class BlockGomoku extends BlockJoy {
             GomokuPart part = state.getValue(PART);
             BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
             BlockEntity te = world.getBlockEntity(centerPos);
+            popResource(world, centerPos, InitItems.GOMOKU.get().getDefaultInstance());
             if (te instanceof TileEntityGomoku) {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {

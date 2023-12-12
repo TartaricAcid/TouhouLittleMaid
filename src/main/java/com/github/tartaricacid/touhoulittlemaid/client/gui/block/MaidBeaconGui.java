@@ -114,6 +114,7 @@ public class MaidBeaconGui extends Screen {
         }
 
         super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderables.stream().filter(b -> b instanceof BeaconEffectButton).forEach(b -> ((BeaconEffectButton) b).renderToolTip(graphics, this, mouseX, mouseY));
     }
 
     @Override
