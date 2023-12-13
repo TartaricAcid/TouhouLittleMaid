@@ -97,7 +97,7 @@ public class EntitySit extends Entity {
     }
 
     private boolean isGomokuTask(EntityMaid maid) {
-        return Type.GOMOKU.getTypeName().equals(this.getJoyType()) && maid.getTask().getUid().equals(TaskBoardGames.UID);
+        return Type.GOMOKU.getTypeName().equals(this.getJoyType()) && maid.getTask().getUid().equals(TaskBoardGames.UID) && isWorkSchedule(maid);
     }
 
     private boolean isIdleSchedule(EntityMaid maid) {
@@ -112,6 +112,22 @@ public class EntitySit extends Entity {
             }
             default -> {
                 return InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time) == Activity.IDLE;
+            }
+        }
+    }
+
+    private boolean isWorkSchedule(EntityMaid maid) {
+        MaidSchedule schedule = maid.getSchedule();
+        int time = (int) (maid.level.getDayTime() % 24000L);
+        switch (schedule) {
+            case ALL -> {
+                return true;
+            }
+            case NIGHT -> {
+                return InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time) == Activity.WORK;
+            }
+            default -> {
+                return InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time) == Activity.WORK;
             }
         }
     }
