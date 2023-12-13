@@ -22,6 +22,14 @@ public interface ILittleMaid {
     }
 
     /**
+     * 添加女仆的背包
+     *
+     * @param manager 注册器
+     */
+    default void addMaidBackpack(BackpackManager manager) {
+    }
+
+    /**
      * 添加多方块结构
      *
      * @param manager 注册器

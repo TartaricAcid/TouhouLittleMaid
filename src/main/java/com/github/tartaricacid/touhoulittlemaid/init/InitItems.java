@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.*;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
@@ -48,6 +49,20 @@ public final class InitItems {
     public static RegistryObject<Item> MAID_BEACON = ITEMS.register("maid_beacon", ItemMaidBeacon::new);
     public static RegistryObject<Item> MODEL_SWITCHER = ITEMS.register("model_switcher", ItemModelSwitcher::new);
     public static RegistryObject<Item> CHAIR_SHOW = ITEMS.register("chair_show", ItemChairShow::new);
+    public static RegistryObject<Item> GOMOKU = ITEMS.register("gomoku", () -> new BlockItem(InitBlocks.GOMOKU.get(), new Item.Properties()));
+    public static RegistryObject<Item> RED_FOX_SCROLL = ITEMS.register("red_fox_scroll", ItemFoxScroll::new);
+    public static RegistryObject<Item> WHITE_FOX_SCROLL = ITEMS.register("white_fox_scroll", ItemFoxScroll::new);
+    public static RegistryObject<Item> CRAFTING_TABLE_BACKPACK = ITEMS.register("crafting_table_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
+    public static RegistryObject<Item> ENDER_CHEST_BACKPACK = ITEMS.register("ender_chest_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
+    public static RegistryObject<Item> FURNACE_BACKPACK = ITEMS.register("furnace_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
+    public static RegistryObject<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties()));
+    public static RegistryObject<Item> BOOKSHELF = ITEMS.register("bookshelf", () -> new BlockItem(InitBlocks.BOOKSHELF.get(), new Item.Properties()));
+    public static RegistryObject<Item> COMPUTER = ITEMS.register("computer", () -> new BlockItem(InitBlocks.COMPUTER.get(), new Item.Properties()));
+    public static RegistryObject<Item> FAVORABILITY_TOOL_ADD = ITEMS.register("favorability_tool_add", () -> new ItemFavorabilityTool("add"));
+    public static RegistryObject<Item> FAVORABILITY_TOOL_REDUCE = ITEMS.register("favorability_tool_reduce", () -> new ItemFavorabilityTool("reduce"));
+    public static RegistryObject<Item> FAVORABILITY_TOOL_FULL = ITEMS.register("favorability_tool_full", () -> new ItemFavorabilityTool("full"));
+    public static RegistryObject<Item> SHRINE = ITEMS.register("shrine", () -> new BlockItem(InitBlocks.SHRINE.get(), new Item.Properties()));
+
 
     public static RegistryObject<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new SpawnEggItem(EntityMaid.TYPE, 0x4a6195, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));
     public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new SpawnEggItem(EntityFairy.TYPE, 0x171c20, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));

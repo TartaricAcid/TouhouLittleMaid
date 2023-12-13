@@ -66,6 +66,6 @@ public class SpawnParticleMessage {
         /**
          * 粒子类型
          */
-        EXPLOSION, BUBBLE
+        EXPLOSION, BUBBLE, HEART
     }
 }
