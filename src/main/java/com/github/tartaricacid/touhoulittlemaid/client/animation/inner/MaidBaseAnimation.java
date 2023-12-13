@@ -499,32 +499,11 @@ public final class MaidBaseAnimation {
         };
     }
 
+    @Deprecated
     public static IAnimation<EntityMaid> getStatusBackpackLevel() {
         return new IAnimation<EntityMaid>() {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
-                ModelRendererWrapper backpackLevelEmpty = modelMap.get("backpackLevelEmpty");
-                ModelRendererWrapper backpackLevelSmall = modelMap.get("backpackLevelSmall");
-                ModelRendererWrapper backpackLevelMiddle = modelMap.get("backpackLevelMiddle");
-                ModelRendererWrapper backpackLevelBig = modelMap.get("backpackLevelBig");
-
-                int level = maid.getBackpackLevel();
-
-                if (backpackLevelEmpty != null) {
-                    backpackLevelEmpty.setHidden(level != 0);
-                }
-
-                if (backpackLevelSmall != null) {
-                    backpackLevelSmall.setHidden(level != 1);
-                }
-
-                if (backpackLevelMiddle != null) {
-                    backpackLevelMiddle.setHidden(level != 2);
-                }
-
-                if (backpackLevelBig != null) {
-                    backpackLevelBig.setHidden(level != 3);
-                }
             }
         };
     }

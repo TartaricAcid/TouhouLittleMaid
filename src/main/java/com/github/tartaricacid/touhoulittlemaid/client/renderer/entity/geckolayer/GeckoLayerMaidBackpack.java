@@ -1,11 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBackpackBigModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBackpackMiddleModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBackpackSmallModel;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.BigBackpackBModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.MaidBackpackMiddleModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.SmallBackpackModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
@@ -24,13 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
-    private static final ResourceLocation SMALL = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
-    private static final ResourceLocation MIDDLE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_middle.png");
-    private static final ResourceLocation BIG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_big.png");
     private final GeckoEntityMaidRenderer renderer;
-    private final EntityModel<EntityMaid> smallModel = new MaidBackpackSmallModel();
-    private final EntityModel<EntityMaid> middleModel = new MaidBackpackMiddleModel();
-    private final EntityModel<EntityMaid> bigModel = new MaidBackpackBigModel();
 
     public GeckoLayerMaidBackpack(GeckoEntityMaidRenderer entityRendererIn) {
         super(entityRendererIn);
@@ -54,18 +50,8 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
                 translateToBackpack(matrixStackIn, geoModel);
                 matrixStackIn.translate(0, 1, 0.25);
                 matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
-                switch (maid.getBackpackLevel()) {
-                    case BackpackLevel.SMALL:
-                        renderColoredCutoutModel(smallModel, SMALL, matrixStackIn, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f);
-                        return;
-                    case BackpackLevel.MIDDLE:
-                        renderColoredCutoutModel(middleModel, MIDDLE, matrixStackIn, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f);
-                        return;
-                    case BackpackLevel.BIG:
-                        renderColoredCutoutModel(bigModel, BIG, matrixStackIn, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f);
-                    case BackpackLevel.EMPTY:
-                    default:
-                }
+                IMaidBackpack type = maid.getMaidBackpackType();
+                BackpackManager.findBackpackModel(type.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), matrixStackIn, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
             }
         }
     }

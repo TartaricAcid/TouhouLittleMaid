@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.model;
+package com.github.tartaricacid.touhoulittlemaid.client.model.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
-public class MaidBackpackMiddleModel extends EntityModel<EntityMaid> {
+public class MiddleBackpackModel extends EntityModel<EntityMaid> {
     private final ModelRenderer all;
     private final ModelRenderer band2;
     private final ModelRenderer bone73;
@@ -110,7 +110,7 @@ public class MaidBackpackMiddleModel extends EntityModel<EntityMaid> {
     private final ModelRenderer bone41;
     private final ModelRenderer bone42;
 
-    public MaidBackpackMiddleModel() {
+    public MiddleBackpackModel() {
         texWidth = 128;
         texHeight = 128;
 

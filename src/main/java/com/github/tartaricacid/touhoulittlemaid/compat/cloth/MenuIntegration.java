@@ -22,10 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.stream.Collectors;
-
-import static net.minecraft.world.biome.Biome.Category.*;
 
 
 public class MenuIntegration {
@@ -118,12 +115,6 @@ public class MenuIntegration {
                 .setDefaultValue(70).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(new TranslationTextComponent("config.touhou_little_maid.misc.maid_fairy_spawn_probability.desc"))
                 .setSaveConsumer(d -> MiscConfig.MAID_FAIRY_SPAWN_PROBABILITY.set(d)).build());
-
-
-        misc.addEntry(entryBuilder.startStrList(new TranslationTextComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.name"), (List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.get())
-                .setDefaultValue(Lists.newArrayList(NETHER.getName(), THEEND.getName(), NONE.getName(), MUSHROOM.getName()))
-                .setTooltip(new TranslationTextComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.desc"))
-                .setSaveConsumer(l -> MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.set(l)).build());
 
         misc.addEntry(entryBuilder.startDoubleField(new TranslationTextComponent("config.touhou_little_maid.misc.player_death_loss_power_point.name"), MiscConfig.PLAYER_DEATH_LOSS_POWER_POINT.get())
                 .setDefaultValue(1.0).setMin(0).setMax(5)

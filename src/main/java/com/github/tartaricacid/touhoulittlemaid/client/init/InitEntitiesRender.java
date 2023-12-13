@@ -1,20 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityAltarRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityGarageKitRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityStatueRenderer;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityExtinguishingAgent;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.*;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityThrowPowerPoint;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.*;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.entity.EntityType;
@@ -38,10 +31,19 @@ public final class InitEntitiesRender {
         RenderingRegistry.registerEntityRenderingHandler(EntityExtinguishingAgent.TYPE, EntityExtinguishingAgentRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityBox.TYPE, EntityBoxRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityThrowPowerPoint.TYPE, (manager) -> new SpriteRenderer<>(manager, itemRenderer));
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityTombstone.TYPE, EntityTombstoneRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySit.TYPE, EntitySitRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityType.SLIME, EntityYukkuriSlimeRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
+
         ClientRegistry.bindTileEntityRenderer(TileEntityAltar.TYPE, TileEntityAltarRenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityStatue.TYPE, TileEntityStatueRenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityGarageKit.TYPE, TileEntityGarageKitRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityGomoku.TYPE, TileEntityGomokuRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityKeyboard.TYPE, TileEntityKeyboardRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityBookshelf.TYPE, TileEntityBookshelfRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
     }
 }

@@ -20,7 +20,7 @@ public class MaidTabs<T extends AbstractMaidContainer> {
     public MaidTabButton[] getTabs(AbstractMaidContainerGui<T> screen) {
         MaidTabButton main = new MaidTabButton(leftPos + 94, topPos + 5, 107, (b) ->
                 NetworkHandler.CHANNEL.sendToServer(new ToggleTabMessage(entityId, TabIndex.MAIN)));
-        if (screen instanceof MaidMainContainerGui) {
+        if (screen instanceof IBackpackContainerScreen) {
             main.active = false;
         }
 

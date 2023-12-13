@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
@@ -31,6 +33,10 @@ public class AnimationRegister {
         register("swim", Priority.HIGHEST, (maid, event) -> maid.isSwimming());
 
         register("boat", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof BoatEntity);
+        register("gomoku", Priority.HIGH, (maid, event) -> isJoy(maid, Type.GOMOKU));
+        register("bookshelf", Priority.HIGH, (maid, event) -> isJoy(maid, Type.BOOKSHELF));
+        register("computer", Priority.HIGH, (maid, event) -> isJoy(maid, Type.COMPUTER));
+        register("keyboard", Priority.HIGH, (maid, event) -> isJoy(maid, Type.KEYBOARD));
         register("sit", Priority.HIGH, (maid, event) -> maid.isInSittingPose());
         register("chair", Priority.HIGH, (maid, event) -> maid.isPassenger());
 
@@ -259,5 +265,13 @@ public class AnimationRegister {
 
     private static double getSlotValue(EntityMaid maid, EquipmentSlotType slot) {
         return MolangUtils.booleanToFloat(!maid.getItemBySlot(slot).isEmpty());
+    }
+
+    private static boolean isJoy(EntityMaid maid, Type type) {
+        if (maid.getVehicle() instanceof EntitySit) {
+            EntitySit sit = (EntitySit) maid.getVehicle();
+            return sit.getJoyType().equals(type.getTypeName());
+        }
+        return false;
     }
 }

@@ -4,14 +4,13 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -23,17 +22,17 @@ public abstract class IMaidBackpack {
 
     public abstract Item getItem();
 
-    public abstract void onPutOn(ItemStack stack, Player player, EntityMaid maid);
+    public abstract void onPutOn(ItemStack stack, PlayerEntity player, EntityMaid maid);
 
-    public ItemStack getTakeOffItemStack(ItemStack stack, @Nullable Player player, EntityMaid maid) {
+    public ItemStack getTakeOffItemStack(ItemStack stack, @Nullable PlayerEntity player, EntityMaid maid) {
         return this.getItem().getDefaultInstance();
     }
 
-    public abstract void onTakeOff(ItemStack stack, Player player, EntityMaid maid);
+    public abstract void onTakeOff(ItemStack stack, PlayerEntity player, EntityMaid maid);
 
     public abstract void onSpawnTombstone(EntityMaid maid, EntityTombstone tombstone);
 
-    public abstract MenuProvider getGuiProvider(int entityId);
+    public abstract INamedContainerProvider getGuiProvider(int entityId);
 
     public boolean hasBackpackData() {
         return false;
@@ -47,11 +46,11 @@ public abstract class IMaidBackpack {
     public abstract int getAvailableMaxContainerIndex();
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void offsetBackpackItem(PoseStack poseStack);
+    public abstract void offsetBackpackItem(MatrixStack poseStack);
 
     @Nullable
     @OnlyIn(Dist.CLIENT)
-    public abstract EntityModel<EntityMaid> getBackpackModel(EntityModelSet modelSet);
+    public abstract EntityModel<EntityMaid> getBackpackModel();
 
     @Nullable
     @OnlyIn(Dist.CLIENT)

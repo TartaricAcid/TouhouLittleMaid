@@ -29,6 +29,12 @@ public class MaidProvider implements IProbeInfoEntityProvider {
 
                 ITextComponent scheduleTitle = new TranslationTextComponent("top.touhou_little_maid.entity_maid.schedule").append(getActivityTransText(maid));
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(scheduleTitle);
+
+                ITextComponent favorabilityTitle = new TranslationTextComponent("top.touhou_little_maid.entity_maid.favorability", maid.getFavorabilityManager().getLevel());
+                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(favorabilityTitle);
+
+                ITextComponent nextFavorabilityPointTitle = new TranslationTextComponent("top.touhou_little_maid.entity_maid.nex_favorability_point", maid.getFavorabilityManager().nextLevelPoint());
+                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(nextFavorabilityPointTitle);
             }
             if (maid.getIsInvulnerable()) {
                 ITextComponent text = new TranslationTextComponent("top.touhou_little_maid.entity_maid.invulnerable").withStyle(TextFormatting.DARK_PURPLE);

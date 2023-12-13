@@ -1,0 +1,5 @@
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
+
+import javax.annotation.ParametersAreNonnullByDefault;

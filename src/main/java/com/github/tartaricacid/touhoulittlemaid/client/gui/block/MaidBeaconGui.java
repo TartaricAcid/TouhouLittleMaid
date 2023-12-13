@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.BeaconEffectButton;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -8,15 +9,16 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.SetBeaconOverflo
 import com.github.tartaricacid.touhoulittlemaid.network.message.StorageAndTakePowerMessage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon.BeaconEffect;
-import com.github.tartaricacid.touhoulittlemaid.util.ShapeDraw;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -27,9 +29,8 @@ public class MaidBeaconGui extends Screen {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_beacon.png");
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
     private final TileEntityMaidBeacon beacon;
-
-    protected int imageWidth = 256;
-    protected int imageHeight = 105;
+    protected int imageWidth = 300;
+    protected int imageHeight = 113;
     protected int leftPos;
     protected int topPos;
     private boolean overflowDelete;
@@ -48,13 +49,10 @@ public class MaidBeaconGui extends Screen {
         this.children.clear();
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.topPos = (this.height - this.imageHeight) / 2;
-        int start = this.leftPos + 16;
-        int spacing = 26;
-        int y = this.topPos + 15;
 
-        this.addEffectButton(start, spacing, y);
+        this.addEffectButton(this.leftPos + 146, 26, this.topPos + 19);
         this.addStorageAndTakeButton();
-        this.addButton(new Button(leftPos + 7, topPos - 22, 242, 20, getOverflowDeleteButtonText(this.overflowDelete), b -> {
+        this.addButton(new Button(leftPos + 118, topPos + 94, 154, 20, getOverflowDeleteButtonText(this.overflowDelete), b -> {
             this.overflowDelete = !this.overflowDelete;
             NetworkHandler.CHANNEL.sendToServer(new SetBeaconOverflowMessage(beacon.getBlockPos(), this.overflowDelete));
             this.init();
@@ -62,20 +60,11 @@ public class MaidBeaconGui extends Screen {
     }
 
     private void addStorageAndTakeButton() {
-        this.addButton(new Button(leftPos + 16, topPos + 48, 62, 20, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.add_one"), b -> {
+        this.addButton(new Button(leftPos + 118, topPos + 72, 76, 20, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.add_one"), b -> {
             NetworkHandler.CHANNEL.sendToServer(new StorageAndTakePowerMessage(beacon.getBlockPos(), 1, true));
         }));
-        this.addButton(new Button(leftPos + 80, topPos + 48, 62, 20, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.add_all"), b -> {
-            ClientPlayerEntity player = Minecraft.getInstance().player;
-            if (player != null) {
-                player.getCapability(PowerCapabilityProvider.POWER_CAP).ifPresent(power -> NetworkHandler.CHANNEL.sendToServer(new StorageAndTakePowerMessage(beacon.getBlockPos(), power.get(), true)));
-            }
-        }));
-        this.addButton(new Button(leftPos + 16, topPos + 70, 62, 20, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.min_one"), b -> {
+        this.addButton(new Button(leftPos + 196, topPos + 72, 76, 20, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.min_one"), b -> {
             NetworkHandler.CHANNEL.sendToServer(new StorageAndTakePowerMessage(beacon.getBlockPos(), 1, false));
-        }));
-        this.addButton(new Button(leftPos + 80, topPos + 70, 62, 20, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.min_all"), b -> {
-            NetworkHandler.CHANNEL.sendToServer(new StorageAndTakePowerMessage(beacon.getBlockPos(), beacon.getStoragePower(), false));
         }));
     }
 
@@ -107,20 +96,26 @@ public class MaidBeaconGui extends Screen {
         this.renderBackground(matrixStack);
         getMinecraft().textureManager.bind(BG);
         blit(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        blit(matrixStack, leftPos, topPos + 2, 0, 0, 142, 111);
+        blit(matrixStack, leftPos + 118, topPos + 1, 44, 111, 154, 15);
+
+        blit(matrixStack, leftPos + 224, topPos + 44, 44, 126, 12, 12);
+        blit(matrixStack, leftPos + 224, topPos + 58, 44, 138, 12, 12);
+
+        blit(matrixStack, leftPos + 146, topPos + 46, 58, 128, 74, 9);
+        blit(matrixStack, leftPos + 146, topPos + 59, 58, 128, 74, 9);
+        float percent = beacon.getStoragePower() / beacon.getMaxStorage();
+        blit(matrixStack, leftPos + 146, topPos + 48, 58, 138, (int) (74 * percent), 5);
 
         this.renderPlayerPower(matrixStack);
-        drawCenteredString(matrixStack, font, I18n.get("gui.touhou_little_maid.maid_beacon.storage_power", DECIMAL_FORMAT.format(beacon.getStoragePower())), leftPos + 198, topPos + 22, 0xffffff);
+        drawString(matrixStack, font, DECIMAL_FORMAT.format(beacon.getStoragePower()), leftPos + 240, topPos + 46, 0xffffff);
         if (potionIndex == -1) {
-            drawCenteredString(matrixStack, font, I18n.get("gui.touhou_little_maid.maid_beacon.cost_power", DECIMAL_FORMAT.format(0)), leftPos + 198, topPos + 32, 0xffffff);
+            this.drawCenteredStringNoShadow(matrixStack, font, I18n.get("gui.touhou_little_maid.maid_beacon.cost_power", DECIMAL_FORMAT.format(0)), leftPos + 195, topPos + 5, TextFormatting.DARK_GRAY.getColor());
         } else {
-            drawCenteredString(matrixStack, font, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.cost_power", DECIMAL_FORMAT.format(beacon.getEffectCost() * 900)).withStyle(TextFormatting.RED), leftPos + 198, topPos + 32, 0xffffff);
+            this.drawCenteredStringNoShadow(matrixStack, font, new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.cost_power", DECIMAL_FORMAT.format(beacon.getEffectCost() * 900)).withStyle(TextFormatting.RED), leftPos + 195, topPos + 5, 0xffffff);
         }
-
-        ShapeDraw.drawCircle(leftPos + 180, topPos + 70, 20, 64, 0x22066b6d);
-        ShapeDraw.drawSector(leftPos + 180, topPos + 70, 22, 0, beacon.getStoragePower() / beacon.getMaxStorage() * 2 * Math.PI, 64, 0xff40e4e5);
-
-        drawCenteredString(matrixStack, font, String.format("%.2f%%", beacon.getStoragePower() / beacon.getMaxStorage() * 100), leftPos + 223, topPos + 66, 0xffffff);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.buttons.stream().filter(b -> b instanceof BeaconEffectButton).forEach(b -> ((BeaconEffectButton) b).renderToolTip(matrixStack, this, mouseX, mouseY));
     }
 
     @Override
@@ -142,8 +137,9 @@ public class MaidBeaconGui extends Screen {
         ClientPlayerEntity player = Minecraft.getInstance().player;
         if (player != null) {
             player.getCapability(PowerCapabilityProvider.POWER_CAP).ifPresent(power -> {
-                drawCenteredString(matrixStack, font, I18n.get("gui.touhou_little_maid.maid_beacon.player_power",
-                        DECIMAL_FORMAT.format(power.get())), leftPos + 198, topPos + 10 + 2, 0xffffff);
+                float percent = power.get() / PowerCapability.MAX_POWER;
+                blit(matrixStack, leftPos + 146, topPos + 61, 58, 143, (int) (74 * percent), 5);
+                drawString(matrixStack, font, DECIMAL_FORMAT.format(power.get()), leftPos + 240, topPos + 60, 0xffffff);
             });
         }
     }
@@ -151,5 +147,13 @@ public class MaidBeaconGui extends Screen {
     private TranslationTextComponent getOverflowDeleteButtonText(boolean overflowDelete) {
         return overflowDelete ? new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.overflow_delete_true") :
                 new TranslationTextComponent("gui.touhou_little_maid.maid_beacon.overflow_delete_false");
+    }
+
+    private void drawCenteredStringNoShadow(MatrixStack matrixStack, FontRenderer font, String text, int pX, int pY, int color) {
+        font.draw(matrixStack, text, pX - font.width(text) / 2f, pY, color);
+    }
+
+    private void drawCenteredStringNoShadow(MatrixStack matrixStack, FontRenderer font, ITextComponent text, int pX, int pY, int color) {
+        font.draw(matrixStack, text, pX - font.width(text) / 2f, pY, color);
     }
 }

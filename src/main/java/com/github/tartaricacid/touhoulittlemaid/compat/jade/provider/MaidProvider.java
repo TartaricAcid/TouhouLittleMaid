@@ -27,6 +27,8 @@ public class MaidProvider implements IEntityComponentProvider {
                 IMaidTask task = maid.getTask();
                 iTooltip.add(new TranslationTextComponent("top.touhou_little_maid.entity_maid.task").append(task.getName()));
                 iTooltip.add(new TranslationTextComponent("top.touhou_little_maid.entity_maid.schedule").append(getActivityTransText(maid)));
+                iTooltip.add(new TranslationTextComponent("top.touhou_little_maid.entity_maid.favorability", maid.getFavorabilityManager().getLevel()));
+                iTooltip.add(new TranslationTextComponent("top.touhou_little_maid.entity_maid.nex_favorability_point", maid.getFavorabilityManager().nextLevelPoint()));
                 if (maid.getIsInvulnerable()) {
                     iTooltip.add(new TranslationTextComponent("top.touhou_little_maid.entity_maid.invulnerable").withStyle(TextFormatting.DARK_PURPLE));
                 }
