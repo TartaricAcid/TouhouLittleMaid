@@ -53,6 +53,9 @@ public class SpawnParticleMessage {
                 case BUBBLE:
                     maid.spawnBubbleParticle();
                     return;
+                case HEART:
+                    maid.spawnHeartParticle();
+                    return;
                 default:
             }
         }

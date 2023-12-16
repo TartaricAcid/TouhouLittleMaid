@@ -10,6 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -46,7 +47,7 @@ public class ItemSmartSlab extends Item {
     }
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
-        maid.addAdditionalSaveData(stack.getOrCreateTagElement(MAID_INFO));
+        maid.saveWithoutId(stack.getOrCreateTagElement(MAID_INFO));
     }
 
     public static boolean hasMaidData(ItemStack stack) {
@@ -86,7 +87,6 @@ public class ItemSmartSlab extends Item {
             if (maid == null) {
                 return super.useOn(context);
             }
-            maid.moveTo(clickedPos.above(), 0, 0);
             if (this.type == Type.INIT) {
                 return spawnNewMaid(context, player, worldIn, maid);
             }
@@ -109,10 +109,8 @@ public class ItemSmartSlab extends Item {
             if (!player.getUUID().equals(ownerUid)) {
                 return ActionResultType.FAIL;
             }
-            maid.readAdditionalSaveData(maidData);
-            if (stack.hasCustomHoverName()) {
-                maid.setCustomName(stack.getHoverName());
-            }
+            maid.load(maidData);
+            maid.moveTo(context.getClickedPos().above(), 0, 0);
             if (worldIn instanceof ServerWorld) {
                 worldIn.addFreshEntity(maid);
             }
@@ -155,6 +153,21 @@ public class ItemSmartSlab extends Item {
     @Override
     public boolean isFoil(ItemStack stack) {
         return this.type != Type.EMPTY;
+    }
+
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        if (!entity.isInvulnerable()) {
+            entity.setInvulnerable(true);
+        }
+        Vec3 position = entity.position();
+        int minY = entity.level.getMinBuildHeight();
+        if (position.y < minY) {
+            entity.setNoGravity(true);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.setPos(position.x, minY, position.z);
+        }
+        return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override

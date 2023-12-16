@@ -8,6 +8,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -84,9 +85,6 @@ public class ItemPhoto extends Item {
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entityOptional.get();
             maid.setPos(clickLocation.x, clickLocation.y, clickLocation.z);
-            if (photo.hasCustomHoverName()) {
-                maid.setCustomName(photo.getHoverName());
-            }
             // 实体生成必须在服务端应用
             if (!worldIn.isClientSide) {
                 worldIn.addFreshEntity(maid);
@@ -97,6 +95,21 @@ public class ItemPhoto extends Item {
         }
 
         return ActionResultType.FAIL;
+    }
+
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        if (!entity.isInvulnerable()) {
+            entity.setInvulnerable(true);
+        }
+        Vec3 position = entity.position();
+        int minY = entity.level.getMinBuildHeight();
+        if (position.y < minY) {
+            entity.setNoGravity(true);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.setPos(position.x, minY, position.z);
+        }
+        return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override

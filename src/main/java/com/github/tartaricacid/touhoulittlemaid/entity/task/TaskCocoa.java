@@ -11,6 +11,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -61,7 +62,7 @@ public class TaskCocoa implements IFarmTask {
 
     @Override
     public boolean canHarvest(EntityMaid maid, BlockPos cropPos, BlockState cropState) {
-        return cropState.is(Blocks.COCOA) && cropState.getValue(CocoaBlock.AGE) >= 2;
+        return cropState.is(BlockTags.JUNGLE_LOGS) && cropState.getValue(CocoaBlock.AGE) >= 2;
     }
 
     @Override

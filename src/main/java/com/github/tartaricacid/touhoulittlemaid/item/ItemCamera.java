@@ -61,13 +61,10 @@ public class ItemCamera extends Item {
         CompoundNBT photoTag = new CompoundNBT();
         CompoundNBT maidTag = new CompoundNBT();
         maid.setHomeModeEnable(false);
-        maid.addAdditionalSaveData(maidTag);
+        maid.saveWithoutId(maidTag);
         maidTag.putString("id", Objects.requireNonNull(InitEntities.MAID.get().getRegistryName()).toString());
         photoTag.put(MAID_INFO, maidTag);
         photo.setTag(photoTag);
-        if (maid.hasCustomName()) {
-            photo.setHoverName(maid.getCustomName());
-        }
         InventoryHelper.dropItemStack(worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), photo);
     }
 

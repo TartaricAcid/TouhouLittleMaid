@@ -38,6 +38,13 @@ public class ItemTrumpet extends Item {
                         .filter(e -> e instanceof EntityMaid)
                         .filter(e -> ((EntityMaid) e).isOwnedBy(player))
                         .forEach(e -> teleportToOwner((EntityMaid) e, player));
+                MaidWorldData data = MaidWorldData.get(worldIn);
+                if (data != null) {
+                    List<MaidInfo> infos = data.getPlayerMaidInfos(player);
+                    if (infos != null && !infos.isEmpty()) {
+                        player.sendSystemMessage(Component.translatable("message.touhou_little_maid.trumpet.unloaded_maid", infos.size()).withStyle(ChatFormatting.DARK_RED));
+                    }
+                }
             }
             player.getCooldowns().addCooldown(this, 200);
         }

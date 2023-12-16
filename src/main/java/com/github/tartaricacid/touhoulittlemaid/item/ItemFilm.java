@@ -36,15 +36,30 @@ public class ItemFilm extends Item {
         CompoundNBT filmTag = new CompoundNBT();
         CompoundNBT maidTag = new CompoundNBT();
         maid.setHomeModeEnable(false);
-        maid.addAdditionalSaveData(maidTag);
+        maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(InitEntities.MAID.get().getRegistryName()).toString());
         filmTag.put(MAID_INFO, maidTag);
         film.setTag(filmTag);
-        if (maid.hasCustomName()) {
-            film.setHoverName(maid.getCustomName());
-        }
         return film;
+    }
+
+    public static void filmToMaid(ItemStack film, Level worldIn, BlockPos pos, Player player) {
+        Optional<Entity> entityOptional = EntityType.create(getMaidData(film), worldIn);
+        if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid) {
+            EntityMaid maid = (EntityMaid) entityOptional.get();
+            maid.setPos(pos.getX(), pos.getY(), pos.getZ());
+            // 实体生成必须在服务端应用
+            if (!worldIn.isClientSide) {
+                worldIn.addFreshEntity(maid);
+                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.EXPLOSION));
+                worldIn.playSound(null, pos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
+            }
+            film.shrink(1);
+        }
+        if (!worldIn.isClientSide) {
+            player.sendSystemMessage(Component.translatable("tooltips.touhou_little_maid.film.no_data.desc"));
+        }
     }
 
     private static boolean hasMaidData(ItemStack stack) {
@@ -59,7 +74,7 @@ public class ItemFilm extends Item {
     }
 
     private static void removeMaidSomeData(CompoundNBT nbt) {
-        nbt.remove(EntityMaid.BACKPACK_LEVEL_TAG);
+        nbt.remove(EntityMaid.MAID_BACKPACK_TYPE);
         nbt.remove(EntityMaid.MAID_INVENTORY_TAG);
         nbt.remove(EntityMaid.MAID_BAUBLE_INVENTORY_TAG);
         nbt.remove(EntityMaid.EXPERIENCE_TAG);
@@ -76,6 +91,13 @@ public class ItemFilm extends Item {
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (!entity.isInvulnerable()) {
             entity.setInvulnerable(true);
+        }
+        Vec3 position = entity.position();
+        int minY = entity.level.getMinBuildHeight();
+        if (position.y < minY) {
+            entity.setNoGravity(true);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.setPos(position.x, minY, position.z);
         }
         return super.onEntityItemUpdate(stack, entity);
     }

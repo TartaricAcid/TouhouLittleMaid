@@ -55,18 +55,13 @@ public class EntityFairy extends MonsterEntity implements IRangedAttackMob, IFly
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new SwimGoal(this));
-        // TODO：待完成
-        // goalSelector.addGoal(0, new AvoidEntityGoal<>(this, EntityScarecrow.class, 10.0F, 1.0D, 1.2D));
         goalSelector.addGoal(1, new FairyAttackGoal(this, 6.0, 1.0));
         goalSelector.addGoal(2, new MoveTowardsRestrictionGoal(this, 1.0));
         goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0));
         goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         goalSelector.addGoal(5, new LookAtGoal(this, EntityMaid.class, 8.0F));
         goalSelector.addGoal(6, new LookRandomlyGoal(this));
-
         targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, EntityMaid.class, 10, true,
-                false, e -> !e.isSleeping()));
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 

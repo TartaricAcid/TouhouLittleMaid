@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
@@ -11,9 +13,12 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeComp
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
@@ -21,20 +26,16 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
-import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
@@ -57,7 +58,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
@@ -115,6 +115,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
     public static final String SOUND_PACK_ID_TAG = "SoundPackId";
+    public static final String MAID_BACKPACK_TYPE = "MaidBackpackType";
     public static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     public static final String MAID_INVENTORY_TAG = "MaidInventory";
     public static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
@@ -127,7 +128,6 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     private static final DataParameter<Boolean> DATA_HOME_MODE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_RIDEABLE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_INVULNERABLE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> DATA_BACKPACK_LEVEL = EntityDataManager.defineId(EntityMaid.class, DataSerializers.INT);
     private static final DataParameter<Integer> DATA_HUNGER = EntityDataManager.defineId(EntityMaid.class, DataSerializers.INT);
     private static final DataParameter<Integer> DATA_FAVORABILITY = EntityDataManager.defineId(EntityMaid.class, DataSerializers.INT);
     private static final DataParameter<Integer> DATA_EXPERIENCE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.INT);
@@ -138,6 +138,8 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     private static final DataParameter<BlockPos> RESTRICT_CENTER = EntityDataManager.defineId(EntityMaid.class, DataSerializers.BLOCK_POS);
     private static final DataParameter<Float> RESTRICT_RADIUS = EntityDataManager.defineId(EntityMaid.class, DataSerializers.FLOAT);
     private static final DataParameter<MaidChatBubbles> CHAT_BUBBLE = EntityDataManager.defineId(EntityMaid.class, MaidChatBubbles.DATA);
+    private static final DataParameter<String> BACKPACK_TYPE = EntityDataManager.defineId(EntityMaid.class, DataSerializers.STRING);
+    private static final DataParameter<ItemStack> BACKPACK_ITEM_SHOW = EntityDataManager.defineId(EntityMaid.class, DataSerializers.ITEM_STACK);
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -148,28 +150,33 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
     private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
+    private static final String BACKPACK_DATA_TAG = "MaidBackpackData";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final String DEFAULT_SOUND_PACK_ID = "touhou_little_maid";
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
-    private final ItemStackHandler maidInv = new MaidBackpackHandler(36);
+    private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
+    private final FavorabilityManager favorabilityManager;
 
     public boolean guiOpening = false;
 
     private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
+    private IMaidBackpack backpack = BackpackManager.getEmptyBackpack();
     private int playerHurtSoundCount = 120;
     private int pickupSoundCount = 5;
     private int backpackDelay = 0;
+    private IBackpackData backpackData = null;
 
     protected EntityMaid(EntityType<EntityMaid> type, World world) {
         super(type, world);
         ((GroundPathNavigator) this.getNavigation()).setCanOpenDoors(true);
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(PathNodeType.COCOA, -1.0F);
+        this.favorabilityManager = new FavorabilityManager(this);
     }
 
     public EntityMaid(World worldIn) {
@@ -195,7 +202,6 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         this.entityData.define(DATA_HOME_MODE, false);
         this.entityData.define(DATA_RIDEABLE, true);
         this.entityData.define(DATA_INVULNERABLE, false);
-        this.entityData.define(DATA_BACKPACK_LEVEL, 0);
         this.entityData.define(DATA_HUNGER, 0);
         this.entityData.define(DATA_FAVORABILITY, 0);
         this.entityData.define(DATA_EXPERIENCE, 0);
@@ -206,6 +212,8 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         this.entityData.define(RESTRICT_CENTER, BlockPos.ZERO);
         this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_HOME_RANGE.get().floatValue());
         this.entityData.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
+        this.entityData.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
+        this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
     }
 
     @Override
@@ -288,6 +296,12 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         this.updateSwingTime();
         if (!level.isClientSide) {
             ChatBubbleManger.tick(this);
+            if (this.backpackData != null) {
+                this.level.getProfiler().push("maidBackpackData");
+                this.backpackData.serverTick(this);
+                this.level.getProfiler().pop();
+            }
+            this.favorabilityManager.tick();
         }
     }
 
@@ -765,6 +779,17 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         }
     }
 
+    public void spawnHeartParticle() {
+        if (this.level.isClientSide) {
+            for (int i = 0; i < 8; ++i) {
+                double offsetX = this.random.nextGaussian() * 0.02;
+                double offsetY = this.random.nextGaussian() * 0.02;
+                double offsetZ = this.random.nextGaussian() * 0.02;
+                level.addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), offsetX, offsetY, offsetZ);
+            }
+        }
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
@@ -774,7 +799,6 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         compound.putBoolean(PICKUP_TAG, isPickup());
         compound.putBoolean(HOME_TAG, isHomeModeEnable());
         compound.putBoolean(RIDEABLE_TAG, isRideable());
-        compound.putInt(BACKPACK_LEVEL_TAG, getBackpackLevel());
         compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT());
         compound.put(MAID_BAUBLE_INVENTORY_TAG, maidBauble.serializeNBT());
         compound.putBoolean(STRUCK_BY_LIGHTNING_TAG, isStruckByLightning());
@@ -784,6 +808,15 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         compound.putInt(EXPERIENCE_TAG, getExperience());
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.put(RESTRICT_CENTER_TAG, NBTUtil.writeBlockPos(getRestrictCenter()));
+        compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
+        this.favorabilityManager.addAdditionalSaveData(compound);
+        if (this.backpackData != null) {
+            CompoundNBT tag = new CompoundNBT();
+            this.backpackData.save(tag, this);
+            compound.put(BACKPACK_DATA_TAG, tag);
+        } else {
+            compound.put(BACKPACK_DATA_TAG, new CompoundNBT());
+        }
     }
 
     @Override
@@ -810,7 +843,18 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             setRideable(compound.getBoolean(RIDEABLE_TAG));
         }
         if (compound.contains(BACKPACK_LEVEL_TAG, Constants.NBT.TAG_INT)) {
-            setBackpackLevel(compound.getInt(BACKPACK_LEVEL_TAG));
+            // 存档迁移
+            int backpackLevel = compound.getInt(BACKPACK_LEVEL_TAG);
+            if (backpackLevel == 1) {
+                BackpackManager.findBackpack(SmallBackpack.ID).ifPresent(this::setMaidBackpackType);
+            }
+            if (backpackLevel == 2) {
+                BackpackManager.findBackpack(MiddleBackpack.ID).ifPresent(this::setMaidBackpackType);
+            }
+            if (backpackLevel == 3) {
+                BackpackManager.findBackpack(BigBackpack.ID).ifPresent(this::setMaidBackpackType);
+            }
+            compound.remove(BACKPACK_LEVEL_TAG);
         }
         if (compound.contains(MAID_INVENTORY_TAG, Constants.NBT.TAG_COMPOUND)) {
             maidInv.deserializeNBT(compound.getCompound(MAID_INVENTORY_TAG));
@@ -839,6 +883,16 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         if (compound.contains(RESTRICT_CENTER_TAG, Constants.NBT.TAG_COMPOUND)) {
             setRestrictCenter(NBTUtil.readBlockPos(compound.getCompound(RESTRICT_CENTER_TAG)));
         }
+        if (compound.contains(MAID_BACKPACK_TYPE, Constants.NBT.TAG_STRING)) {
+            ResourceLocation id = new ResourceLocation(compound.getString(MAID_BACKPACK_TYPE));
+            IMaidBackpack backpack = BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
+            setMaidBackpackType(backpack);
+            if (this.backpackData != null && compound.contains(BACKPACK_DATA_TAG, Constants.NBT.TAG_COMPOUND)) {
+                this.backpackData.load(compound.getCompound(BACKPACK_DATA_TAG), this);
+            }
+        }
+        this.favorabilityManager.readAdditionalSaveData(compound);
+        this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
     }
 
     public boolean openMaidGui(PlayerEntity player) {
@@ -859,7 +913,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
                 return MaidConfigContainer.create(getId());
             case TabIndex.MAIN:
             default:
-                return MaidMainContainer.create(getId());
+                return this.getMaidBackpackType().getGuiProvider(getId());
         }
     }
 
@@ -881,10 +935,40 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     @Override
     protected void dropEquipment() {
-        ItemsUtil.dropEntityItems(this, new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble));
-        ItemMaidBackpack.getInstance(getBackpackLevel()).ifPresent(backpack ->
-                InventoryHelper.dropItemStack(level, getX(), getY(), getZ(), backpack.getDefaultInstance()));
-        spawnAtLocation(ItemFilm.maidToFilm(this), 0.2f);
+        if (this.getOwnerUUID() != null && !level.isClientSide) {
+            // 掉出世界的判断
+            Vec3 position = Vec3.atBottomCenterOf(blockPosition());
+            // 防止卡在基岩里？
+            if (this.getY() < this.level.getMinBuildHeight() + 5) {
+                position = new Vec3(position.x, this.level.getMinBuildHeight() + 5, position.z);
+            }
+            if (this.getY() > this.level.getMaxBuildHeight()) {
+                position = new Vec3(position.x, this.level.getMaxBuildHeight(), position.z);
+            }
+            EntityTombstone tombstone = new EntityTombstone(level, this.getOwnerUUID(), position);
+            tombstone.setMaidName(this.getDisplayName());
+
+            // 女仆物品栏
+            CombinedInvWrapper invWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble);
+            for (int i = 0; i < invWrapper.getSlots(); i++) {
+                int size = invWrapper.getSlotLimit(i);
+                tombstone.insertItem(invWrapper.extractItem(i, size, false));
+            }
+            // 背包额外数据
+            IMaidBackpack maidBackpack = this.getMaidBackpackType();
+            tombstone.insertItem(maidBackpack.getTakeOffItemStack(ItemStack.EMPTY, null, this));
+            maidBackpack.onSpawnTombstone(this, tombstone);
+            // 胶片
+            ItemStack filmItem = ItemFilm.maidToFilm(this);
+            tombstone.insertItem(filmItem);
+            // 全局记录
+            MaidWorldData maidWorldData = MaidWorldData.get(level);
+            if (maidWorldData != null) {
+                maidWorldData.addTombstones(this, tombstone);
+            }
+
+            level.addFreshEntity(tombstone);
+        }
     }
 
     @Override
@@ -1037,6 +1121,13 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         super.swing(pHand);
     }
 
+    @Override
+    public void startSleeping(BlockPos pPos) {
+        super.startSleeping(pPos);
+        this.setHealth(this.getMaxHealth());
+        this.favorabilityManager.apply(Type.SLEEP);
+    }
+
     public void setBackpackDelay() {
         backpackDelay = 20;
     }
@@ -1144,16 +1235,8 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         this.entityData.set(DATA_RIDEABLE, rideable);
     }
 
-    public int getBackpackLevel() {
-        return this.entityData.get(DATA_BACKPACK_LEVEL);
-    }
-
-    public void setBackpackLevel(int level) {
-        this.entityData.set(DATA_BACKPACK_LEVEL, level);
-    }
-
     public boolean hasBackpack() {
-        return getBackpackLevel() > 0;
+        return getMaidBackpackType() != BackpackManager.getEmptyBackpack();
     }
 
     public int getHunger() {
@@ -1207,12 +1290,42 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         }
     }
 
+    public void setBackpackShowItem(ItemStack stack) {
+        this.entityData.set(BACKPACK_ITEM_SHOW, stack);
+    }
+
+    public ItemStack getBackpackShowItem() {
+        return this.entityData.get(BACKPACK_ITEM_SHOW);
+    }
+
+    public void setMaidBackpackType(IMaidBackpack backpack) {
+        if (backpack == this.backpack) {
+            return;
+        }
+        this.backpack = backpack;
+        if (this.backpack.hasBackpackData()) {
+            this.backpackData = this.backpack.getBackpackData(this);
+        } else {
+            this.backpackData = null;
+        }
+        this.entityData.set(BACKPACK_TYPE, backpack.getId().toString());
+    }
+
+    public IMaidBackpack getMaidBackpackType() {
+        ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
+        return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
+    }
+
+    public IBackpackData getBackpackData() {
+        return backpackData;
+    }
+
     public ItemStackHandler getMaidInv() {
         return maidInv;
     }
 
     public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
-        RangedWrapper combinedInvWrapper = new RangedWrapper(maidInv, 0, BackpackLevel.BACKPACK_CAPACITY_MAP.get(getBackpackLevel()));
+        RangedWrapper combinedInvWrapper = new RangedWrapper(maidInv, 0, getMaidBackpackType().getAvailableMaxContainerIndex());
         return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
     }
 
@@ -1341,9 +1454,13 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         }
     }
 
+    @Deprecated
     public boolean isSitInJoyBlock() {
-        // TODO：待完成
         return false;
+    }
+
+    public FavorabilityManager getFavorabilityManager() {
+        return favorabilityManager;
     }
 
     @Deprecated

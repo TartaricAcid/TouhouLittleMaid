@@ -22,7 +22,9 @@ public final class ItemsUtil {
      */
     public static void dropEntityItems(Entity entity, IItemHandler itemHandler, int startIndex, int endIndex) {
         for (int i = startIndex; i < endIndex; i++) {
-            InventoryHelper.dropItemStack(entity.level, entity.getX(), entity.getY(), entity.getZ(), itemHandler.getStackInSlot(i));
+            ItemStack stackInSlot = itemHandler.getStackInSlot(i);
+            ItemStack extractItem = itemHandler.extractItem(i, stackInSlot.getCount(), false);
+            InventoryHelper.dropItemStack(entity.level, entity.getX(), entity.getY(), entity.getZ(), extractItem);
         }
     }
 
@@ -31,6 +33,13 @@ public final class ItemsUtil {
      */
     public static void dropEntityItems(Entity entity, IItemHandler itemHandler) {
         dropEntityItems(entity, itemHandler, 0, itemHandler.getSlots());
+    }
+
+    /**
+     * 掉落指定起始的物品
+     */
+    public static void dropEntityItems(Entity entity, IItemHandler itemHandler, int startIndex) {
+        dropEntityItems(entity, itemHandler, startIndex, itemHandler.getSlots());
     }
 
     /**
