@@ -4,39 +4,43 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.world.storage.WorldSavedData;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class MaidWorldData extends SavedData {
+public class MaidWorldData extends WorldSavedData {
     private static final String IDENTIFIER = "touhou_little_maid_world_data";
     private static final String MAID_INFOS_TAG = "MaidInfos";
     private static final String MAID_TOMBSTONES_TAG = "MaidTombstones";
     private final Map<UUID, List<MaidInfo>> infos = Maps.newHashMap();
     private final Map<UUID, List<MaidInfo>> tombstones = Maps.newHashMap();
 
+    public MaidWorldData() {
+        super(IDENTIFIER);
+    }
+
     @Nullable
-    public static MaidWorldData get(Level level) {
-        if (level instanceof ServerLevel) {
-            ServerLevel overWorld = level.getServer().getLevel(Level.OVERWORLD);
+    public static MaidWorldData get(World level) {
+        if (level instanceof ServerWorld) {
+            ServerWorld overWorld = level.getServer().getLevel(World.OVERWORLD);
             if (overWorld == null) {
                 return null;
             }
-            DimensionDataStorage storage = overWorld.getDataStorage();
+            DimensionSavedDataManager storage = overWorld.getDataStorage();
             MaidWorldData data = storage.computeIfAbsent(MaidWorldData::load, MaidWorldData::new, IDENTIFIER);
             data.setDirty();
             return data;
@@ -44,7 +48,7 @@ public class MaidWorldData extends SavedData {
         return null;
     }
 
-    public static MaidWorldData load(CompoundTag tag) {
+    public static MaidWorldData load(CompoundNBT tag) {
         MaidWorldData data = new MaidWorldData();
         if (tag.contains(MAID_INFOS_TAG, Tag.TAG_COMPOUND)) {
             CompoundTag infosTag = tag.getCompound(MAID_INFOS_TAG);
@@ -84,7 +88,7 @@ public class MaidWorldData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundNBT save(CompoundNBT tag) {
         CompoundTag infosTag = new CompoundTag();
         infos.forEach((id, data) -> {
             ListTag listTag = new ListTag();

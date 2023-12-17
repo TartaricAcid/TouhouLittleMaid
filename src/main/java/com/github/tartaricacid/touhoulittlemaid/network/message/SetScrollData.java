@@ -1,11 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -18,12 +18,12 @@ public class SetScrollData {
         this.pos = pos;
     }
 
-    public static void encode(SetScrollData message, FriendlyByteBuf buf) {
+    public static void encode(SetScrollData message, PacketBuffer buf) {
         buf.writeUtf(message.dimension);
         buf.writeBlockPos(message.pos);
     }
 
-    public static SetScrollData decode(FriendlyByteBuf buf) {
+    public static SetScrollData decode(PacketBuffer buf) {
         return new SetScrollData(buf.readUtf(), buf.readBlockPos());
     }
 

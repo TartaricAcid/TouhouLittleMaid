@@ -4,12 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.item.FoxScrollScreen;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class FoxScrollMessage {
         this.data = data;
     }
 
-    public static void encode(FoxScrollMessage message, FriendlyByteBuf buf) {
+    public static void encode(FoxScrollMessage message, PacketBuffer buf) {
         buf.writeVarInt(message.data.size());
         message.data.forEach((dim, scrollData) -> {
             buf.writeVarInt(scrollData.size());
@@ -31,7 +31,7 @@ public class FoxScrollMessage {
         });
     }
 
-    public static FoxScrollMessage decode(FriendlyByteBuf buf) {
+    public static FoxScrollMessage decode(PacketBuffer buf) {
         Map<String, List<FoxScrollData>> data = Maps.newHashMap();
         int dimLength = buf.readVarInt();
         for (int i = 0; i < dimLength; i++) {
@@ -70,13 +70,13 @@ public class FoxScrollMessage {
             this.timestamp = timestamp;
         }
 
-        public static void encode(FoxScrollData data, FriendlyByteBuf buf) {
+        public static void encode(FoxScrollData data, PacketBuffer buf) {
             buf.writeBlockPos(data.pos);
             buf.writeComponent(data.name);
             buf.writeLong(data.timestamp);
         }
 
-        public static FoxScrollData decode(FriendlyByteBuf buf) {
+        public static FoxScrollData decode(PacketBuffer buf) {
             return new FoxScrollData(buf.readBlockPos(), buf.readComponent(), buf.readLong());
         }
 

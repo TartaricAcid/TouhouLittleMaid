@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.world.data;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 
 import java.util.UUID;
 
@@ -11,9 +11,9 @@ public final class MaidInfo {
     private final UUID ownerId;
     private final UUID entityId;
     private final long timestamp;
-    private final Component name;
+    private final ITextComponent name;
 
-    public MaidInfo(String dimension, BlockPos chunkPos, UUID ownerId, UUID entityId, long timestamp, Component name) {
+    public MaidInfo(String dimension, BlockPos chunkPos, UUID ownerId, UUID entityId, long timestamp, ITextComponent name) {
         this.dimension = dimension;
         this.chunkPos = chunkPos;
         this.ownerId = ownerId;
@@ -42,7 +42,7 @@ public final class MaidInfo {
         return timestamp;
     }
 
-    public Component getName() {
+    public ITextComponent getName() {
         return name;
     }
 }

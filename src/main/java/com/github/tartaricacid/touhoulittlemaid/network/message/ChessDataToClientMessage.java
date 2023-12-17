@@ -2,14 +2,15 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
+import com.github.tartaricacid.touhoulittlemaid.api.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -25,7 +26,7 @@ public class ChessDataToClientMessage {
         this.point = point;
     }
 
-    public static void encode(ChessDataToClientMessage message, FriendlyByteBuf buf) {
+    public static void encode(ChessDataToClientMessage message, PacketBuffer buf) {
         buf.writeBlockPos(message.pos);
         buf.writeVarInt(message.chessData.length);
         for (int[] row : message.chessData) {
@@ -36,7 +37,7 @@ public class ChessDataToClientMessage {
         buf.writeVarInt(message.point.type);
     }
 
-    public static ChessDataToClientMessage decode(FriendlyByteBuf buf) {
+    public static ChessDataToClientMessage decode(PacketBuffer buf) {
         BlockPos blockPos = buf.readBlockPos();
         int length = buf.readVarInt();
         int[][] chessData = new int[length][length];
