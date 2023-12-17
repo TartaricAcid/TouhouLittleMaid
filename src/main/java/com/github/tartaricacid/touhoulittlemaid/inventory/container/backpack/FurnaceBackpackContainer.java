@@ -2,25 +2,25 @@ package com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.FurnaceBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
-import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.FurnaceResultSlot;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.FurnaceResultSlot;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.util.IIntArray;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class FurnaceBackpackContainer extends MaidMainContainer {
-    public static final MenuType<FurnaceBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new FurnaceBackpackContainer(windowId, inv, data.readInt()));
-    private final ContainerData data;
+    public static final ContainerType<FurnaceBackpackContainer> TYPE = IForgeContainerType.create((windowId, inv, data) -> new FurnaceBackpackContainer(windowId, inv, data.readInt()));
+    private final IIntArray data;
 
-    public FurnaceBackpackContainer(int id, Inventory inventory, int entityId) {
+    public FurnaceBackpackContainer(int id, PlayerInventory inventory, int entityId) {
         super(TYPE, id, inventory, entityId);
         FurnaceBackpackData furnaceData;
         if (this.getMaid().getBackpackData() instanceof FurnaceBackpackData) {
@@ -36,7 +36,7 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
     }
 
     @Override
-    protected void addBackpackInv(Inventory inventory) {
+    protected void addBackpackInv(PlayerInventory inventory) {
         IItemHandler itemHandler = maid.getMaidInv();
         for (int i = 0; i < 6; i++) {
             addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 57));
@@ -47,7 +47,7 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
     }
 
     private boolean isFuel(ItemStack stack) {
-        return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
+        return ForgeHooks.getBurnTime(stack, IRecipeType.SMELTING) > 0;
     }
 
     public int getBurnProgress() {
@@ -71,9 +71,13 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
     public static class FurnaceBackpackFuelSlot extends Slot {
         private final FurnaceBackpackContainer furnaceBackpackContainer;
 
-        public FurnaceBackpackFuelSlot(FurnaceBackpackContainer furnaceBackpackContainer, Container container, int slot, int pX, int pY) {
+        public FurnaceBackpackFuelSlot(FurnaceBackpackContainer furnaceBackpackContainer, IInventory container, int slot, int pX, int pY) {
             super(container, slot, pX, pY);
             this.furnaceBackpackContainer = furnaceBackpackContainer;
+        }
+
+        public static boolean isBucket(ItemStack stack) {
+            return stack.getItem() == Items.BUCKET;
         }
 
         public boolean mayPlace(ItemStack stack) {
@@ -82,10 +86,6 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
 
         public int getMaxStackSize(ItemStack stack) {
             return isBucket(stack) ? 1 : super.getMaxStackSize(stack);
-        }
-
-        public static boolean isBucket(ItemStack stack) {
-            return stack.is(Items.BUCKET);
         }
     }
 }

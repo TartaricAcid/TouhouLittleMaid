@@ -1,35 +1,40 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.CraftResultInventory;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.CraftingResultSlot;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.network.play.server.SSetSlotPacket;
+import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.world.World;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.Optional;
 
 public class CraftingTableBackpackContainer extends MaidMainContainer {
-    public static final MenuType<CraftingTableBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new CraftingTableBackpackContainer(windowId, inv, data.readInt()));
-    private final CraftingContainer craftSlots = new TransientCraftingContainer(this, 3, 3);
-    private final ResultContainer resultSlots = new ResultContainer();
-    private final ContainerLevelAccess access;
-    private final ResultSlot resultSlot;
-    private final Player player;
+    public static final ContainerType<CraftingTableBackpackContainer> TYPE = IForgeContainerType.create((windowId, inv, data) -> new CraftingTableBackpackContainer(windowId, inv, data.readInt()));
+    private final CraftingInventory craftSlots = new CraftingInventory(this, 3, 3);
+    private final CraftResultInventory resultSlots = new CraftResultInventory();
+    private final IWorldPosCallable access;
+    private final CraftingResultSlot resultSlot;
+    private final PlayerEntity player;
 
-    public CraftingTableBackpackContainer(int id, Inventory inventory, int entityId) {
+    public CraftingTableBackpackContainer(int id, PlayerInventory inventory, int entityId) {
         super(TYPE, id, inventory, entityId);
         this.player = inventory.player;
-        this.access = ContainerLevelAccess.create(this.getMaid().level, this.getMaid().blockPosition());
-        this.resultSlot = new ResultSlot(this.player, this.craftSlots, this.resultSlots, 0, 229, 119);
+        this.access = IWorldPosCallable.create(this.getMaid().level, this.getMaid().blockPosition());
+        this.resultSlot = new CraftingResultSlot(this.player, this.craftSlots, this.resultSlots, 0, 229, 119);
         this.addSlot(this.resultSlot);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -39,14 +44,14 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
     }
 
     @Override
-    public void slotsChanged(Container container) {
-        this.access.execute((level, blockPos) -> slotChangedCraftingGrid(this, level, this.player, this.craftSlots, this.resultSlots));
+    public void slotsChanged(IInventory container) {
+        this.access.execute((level, blockPos) -> slotChangedCraftingGrid(containerId, level, this.player, this.craftSlots, this.resultSlots));
     }
 
     @Override
-    public void removed(Player player) {
+    public void removed(PlayerEntity player) {
         super.removed(player);
-        this.access.execute((level, blockPos) -> this.clearContainer(player, this.craftSlots));
+        this.access.execute((level, blockPos) -> this.clearContainer(player, level, this.craftSlots));
     }
 
     @Override
@@ -55,7 +60,7 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public ItemStack quickMoveStack(PlayerEntity player, int index) {
         ItemStack stack1 = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -79,7 +84,7 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
                 return ItemStack.EMPTY;
             }
             if (stack2.isEmpty()) {
-                slot.setByPlayer(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
@@ -95,7 +100,7 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
     }
 
     @Override
-    protected void addBackpackInv(Inventory inventory) {
+    protected void addBackpackInv(PlayerInventory inventory) {
         IItemHandler itemHandler = maid.getMaidInv();
         for (int i = 0; i < 6; i++) {
             addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 57));
@@ -105,23 +110,19 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
         }
     }
 
-    private void slotChangedCraftingGrid(AbstractContainerMenu menu, Level level, Player player, CraftingContainer container, ResultContainer result) {
-        if (!level.isClientSide && level.getServer() != null) {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
-            ItemStack stack1 = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container, level);
+    protected void slotChangedCraftingGrid(int menuId, World level, PlayerEntity player, CraftingInventory container, CraftResultInventory result) {
+        if (!level.isClientSide) {
+            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+            ItemStack itemStack = ItemStack.EMPTY;
+            Optional<ICraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, container, level);
             if (optional.isPresent()) {
-                CraftingRecipe recipe = optional.get();
-                if (result.setRecipeUsed(level, serverPlayer, recipe)) {
-                    ItemStack stack2 = recipe.assemble(container, level.registryAccess());
-                    if (stack2.isItemEnabled(level.enabledFeatures())) {
-                        stack1 = stack2;
-                    }
+                ICraftingRecipe icraftingrecipe = optional.get();
+                if (result.setRecipeUsed(level, serverPlayer, icraftingrecipe)) {
+                    itemStack = icraftingrecipe.assemble(container);
                 }
             }
-            result.setItem(0, stack1);
-            menu.setRemoteSlot(0, stack1);
-            serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(menu.containerId, menu.incrementStateId(), resultSlot.index, stack1));
+            result.setItem(0, itemStack);
+            serverPlayer.connection.send(new SSetSlotPacket(menuId, 0, itemStack));
         }
     }
 }

@@ -6,15 +6,11 @@ import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
@@ -58,7 +54,7 @@ public class BackpackManager {
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
         BACKPACK_MODEL_MAP = Maps.newHashMap();
-        BACKPACK_ID_MAP.forEach((id, backpack) -> BACKPACK_MODEL_MAP.put(id, Pair.of(backpack.getBackpackModel(modelSet), backpack.getBackpackTexture())));
+        BACKPACK_ID_MAP.forEach((id, backpack) -> BACKPACK_MODEL_MAP.put(id, Pair.of(backpack.getBackpackModel(), backpack.getBackpackTexture())));
         BACKPACK_MODEL_MAP = ImmutableMap.copyOf(BACKPACK_MODEL_MAP);
     }
 
@@ -74,7 +70,7 @@ public class BackpackManager {
         return Optional.ofNullable(BACKPACK_ITEM_MAP.get(stack.getItem()));
     }
 
-    public static void addBackpackCooldown(Player player) {
+    public static void addBackpackCooldown(PlayerEntity player) {
         for (Item backpack : BACKPACK_ITEM_MAP.keySet()) {
             player.getCooldowns().addCooldown(backpack, 20);
         }

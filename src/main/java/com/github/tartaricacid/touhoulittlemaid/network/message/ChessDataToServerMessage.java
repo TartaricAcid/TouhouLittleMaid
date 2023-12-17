@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
@@ -52,18 +53,22 @@ public class ChessDataToServerMessage {
                 if (!level.isLoaded(message.pos)) {
                     return;
                 }
-                if (level.getBlockEntity(message.pos) instanceof TileEntityGomoku gomoku) {
+                if (level.getBlockEntity(message.pos) instanceof TileEntityGomoku) {
+                    TileEntityGomoku gomoku = (TileEntityGomoku) level.getBlockEntity(message.pos);
                     if (!gomoku.isInProgress() || gomoku.isPlayerTurn() || gomoku.getChessCounter() <= 0) {
                         return;
                     }
                     Point aiPoint = message.point;
                     gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
-                    if (level instanceof ServerWorld && ((ServerWorld) level).getEntity(gomoku.getSitId()) instanceof EntitySit
-                            && ((EntitySit) ((ServerWorld) level).getEntity(gomoku.getSitId())).getFirstPassenger() instanceof EntityMaid) {
-                        EntityMaid maid = (EntityMaid) ((EntitySit) ((ServerWorld) level).getEntity(gomoku.getSitId())).getFirstPassenger();
-                        EntitySit sit = (EntitySit) ((ServerWorld) level).getEntity(gomoku.getSitId());
-                        ServerWorld serverLevel = (ServerWorld) level;
-                        maid.swing(Hand.MAIN_HAND);
+                    if (level instanceof ServerWorld) {
+                        ServerWorld serverWorld = (ServerWorld) level;
+                        Entity entity = serverWorld.getEntity(gomoku.getSitId());
+                        if (entity instanceof EntitySit) {
+                            Entity firstPassenger = ((EntitySit) entity).getFirstPassenger();
+                            if (firstPassenger instanceof EntityMaid) {
+                                ((EntityMaid) firstPassenger).swing(Hand.MAIN_HAND);
+                            }
+                        }
                     }
                     gomoku.setInProgress(TouhouLittleMaid.SERVICE.getStatue(gomoku.getChessData(), aiPoint) == Statue.IN_PROGRESS);
                     level.playSound(null, message.pos, InitSounds.GOMOKU.get(), SoundCategory.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);

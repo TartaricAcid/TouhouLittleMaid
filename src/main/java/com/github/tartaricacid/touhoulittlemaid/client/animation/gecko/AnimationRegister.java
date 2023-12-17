@@ -133,7 +133,6 @@ public class AnimationRegister {
         parser.register(new LazyVariable("tlm.is_begging", MolangUtils.FALSE));
         parser.register(new LazyVariable("tlm.is_sitting", MolangUtils.FALSE));
         parser.register(new LazyVariable("tlm.has_backpack", MolangUtils.FALSE));
-        parser.register(new LazyVariable("tlm.backpack_level", 0));
     }
 
     public static void setParserValue(AnimationEvent<GeckoMaidEntity> animationEvent, MolangParser parser, EntityModelData data, EntityMaid maid) {
@@ -212,7 +211,6 @@ public class AnimationRegister {
         parser.setValue("tlm.is_begging", () -> MolangUtils.booleanToFloat(maid.isBegging()));
         parser.setValue("tlm.is_sitting", () -> MolangUtils.booleanToFloat(maid.isInSittingPose()));
         parser.setValue("tlm.has_backpack", () -> MolangUtils.booleanToFloat(maid.hasBackpack()));
-        parser.setValue("tlm.backpack_level", maid::getBackpackLevel);
     }
 
     private static void register(String animationName, ILoopType loopType, int priority, BiPredicate<EntityMaid, AnimationEvent<GeckoMaidEntity>> predicate) {

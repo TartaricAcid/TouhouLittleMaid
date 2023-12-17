@@ -3,8 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.event;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -26,9 +24,9 @@ public final class AddInformationEvent {
             event.getToolTip().add(new TranslationTextComponent("tooltips.touhou_little_maid.bauble.usage").withStyle(TextFormatting.GRAY));
         }
         if (BackpackManager.findBackpack(event.getItemStack()).isPresent()) {
-            event.getToolTip().add(Component.literal(" "));
-            event.getToolTip().add(Component.translatable("tooltips.touhou_little_maid.backpack.desc"));
-            event.getToolTip().add(Component.translatable("tooltips.touhou_little_maid.backpack.usage").withStyle(ChatFormatting.GRAY));
+            event.getToolTip().add(new StringTextComponent(" "));
+            event.getToolTip().add(new TranslationTextComponent("tooltips.touhou_little_maid.backpack.desc"));
+            event.getToolTip().add(new TranslationTextComponent("tooltips.touhou_little_maid.backpack.usage").withStyle(TextFormatting.GRAY));
         }
     }
 }

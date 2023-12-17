@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
@@ -54,6 +55,7 @@ public final class TouhouLittleMaid {
         DeferredWorkQueue.runLater(NetworkHandler::init);
         EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
         TaskManager.init();
+        BackpackManager.init();
         BaubleManager.init();
         MultiBlockManager.init();
         ChatBubbleManger.initDefaultChat();

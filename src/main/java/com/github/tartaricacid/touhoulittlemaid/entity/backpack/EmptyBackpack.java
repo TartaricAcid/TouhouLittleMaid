@@ -7,18 +7,17 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.EmptyBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -38,11 +37,11 @@ public class EmptyBackpack extends IMaidBackpack {
     }
 
     @Override
-    public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
+    public void onPutOn(ItemStack stack, PlayerEntity player, EntityMaid maid) {
     }
 
     @Override
-    public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
+    public void onTakeOff(ItemStack stack, PlayerEntity player, EntityMaid maid) {
     }
 
     @Override
@@ -50,15 +49,15 @@ public class EmptyBackpack extends IMaidBackpack {
     }
 
     @Override
-    public MenuProvider getGuiProvider(int entityId) {
-        return new MenuProvider() {
+    public INamedContainerProvider getGuiProvider(int entityId) {
+        return new INamedContainerProvider() {
             @Override
-            public Component getDisplayName() {
-                return Component.literal("Maid Empty Container");
+            public ITextComponent getDisplayName() {
+                return new StringTextComponent("Maid Empty Container");
             }
 
             @Override
-            public AbstractMaidContainer createMenu(int index, Inventory playerInventory, Player player) {
+            public AbstractMaidContainer createMenu(int index, PlayerInventory playerInventory, PlayerEntity player) {
                 return new EmptyBackpackContainer(index, playerInventory, entityId);
             }
         };
@@ -73,7 +72,7 @@ public class EmptyBackpack extends IMaidBackpack {
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
-    public EntityModel<EntityMaid> getBackpackModel(EntityModelSet modelSet) {
+    public EntityModel<EntityMaid> getBackpackModel() {
         return null;
     }
 
@@ -85,7 +84,7 @@ public class EmptyBackpack extends IMaidBackpack {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void offsetBackpackItem(PoseStack poseStack) {
+    public void offsetBackpackItem(MatrixStack poseStack) {
         poseStack.translate(0, 0.625, 0.2);
     }
 }

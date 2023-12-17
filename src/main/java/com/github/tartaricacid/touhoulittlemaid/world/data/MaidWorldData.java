@@ -4,18 +4,18 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.nbt.*;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerWorld;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -41,81 +41,80 @@ public class MaidWorldData extends WorldSavedData {
                 return null;
             }
             DimensionSavedDataManager storage = overWorld.getDataStorage();
-            MaidWorldData data = storage.computeIfAbsent(MaidWorldData::load, MaidWorldData::new, IDENTIFIER);
+            MaidWorldData data = storage.computeIfAbsent(MaidWorldData::new, IDENTIFIER);
             data.setDirty();
             return data;
         }
         return null;
     }
 
-    public static MaidWorldData load(CompoundNBT tag) {
-        MaidWorldData data = new MaidWorldData();
-        if (tag.contains(MAID_INFOS_TAG, Tag.TAG_COMPOUND)) {
-            CompoundTag infosTag = tag.getCompound(MAID_INFOS_TAG);
+
+    public void load(CompoundNBT tag) {
+        if (tag.contains(MAID_INFOS_TAG, Constants.NBT.TAG_COMPOUND)) {
+            CompoundNBT infosTag = tag.getCompound(MAID_INFOS_TAG);
             for (String key : infosTag.getAllKeys()) {
-                ListTag listTag = infosTag.getList(key, Tag.TAG_COMPOUND);
+                ListNBT listTag = infosTag.getList(key, Constants.NBT.TAG_COMPOUND);
                 for (int i = 0; i < listTag.size(); i++) {
-                    CompoundTag infoTag = listTag.getCompound(i);
+                    CompoundNBT infoTag = listTag.getCompound(i);
                     String dimension = infoTag.getString("Dimension");
-                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag.getCompound("ChunkPos"));
+                    BlockPos chunkPos = NBTUtil.readBlockPos(infoTag.getCompound("ChunkPos"));
                     UUID ownerId = infoTag.getUUID("OwnerId");
                     UUID maidId = infoTag.getUUID("MaidId");
                     long timestamp = infoTag.getLong("Timestamp");
-                    MutableComponent name = Component.Serializer.fromJson(infoTag.getString("Name"));
-                    List<MaidInfo> maidInfos = data.infos.computeIfAbsent(ownerId, uuid -> Lists.newArrayList());
+                    IFormattableTextComponent name = ITextComponent.Serializer.fromJson(infoTag.getString("Name"));
+                    List<MaidInfo> maidInfos = this.infos.computeIfAbsent(ownerId, uuid -> Lists.newArrayList());
                     maidInfos.add(new MaidInfo(dimension, chunkPos, ownerId, maidId, timestamp, name));
                 }
             }
         }
-        if (tag.contains(MAID_TOMBSTONES_TAG, Tag.TAG_COMPOUND)) {
-            CompoundTag tombstonesTag = tag.getCompound(MAID_TOMBSTONES_TAG);
+        if (tag.contains(MAID_TOMBSTONES_TAG, Constants.NBT.TAG_COMPOUND)) {
+            CompoundNBT tombstonesTag = tag.getCompound(MAID_TOMBSTONES_TAG);
             for (String key : tombstonesTag.getAllKeys()) {
-                ListTag listTag = tombstonesTag.getList(key, Tag.TAG_COMPOUND);
+                ListNBT listTag = tombstonesTag.getList(key, Constants.NBT.TAG_COMPOUND);
                 for (int i = 0; i < listTag.size(); i++) {
-                    CompoundTag infoTag = listTag.getCompound(i);
+                    CompoundNBT infoTag = listTag.getCompound(i);
                     String dimension = infoTag.getString("Dimension");
-                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag.getCompound("ChunkPos"));
+                    BlockPos chunkPos = NBTUtil.readBlockPos(infoTag.getCompound("ChunkPos"));
                     UUID ownerId = infoTag.getUUID("OwnerId");
                     UUID tombstoneId = infoTag.getUUID("TombstoneId");
                     long timestamp = infoTag.getLong("Timestamp");
-                    MutableComponent name = Component.Serializer.fromJson(infoTag.getString("Name"));
-                    List<MaidInfo> tombstoneInfos = data.tombstones.computeIfAbsent(ownerId, uuid -> Lists.newArrayList());
+                    IFormattableTextComponent name = ITextComponent.Serializer.fromJson(infoTag.getString("Name"));
+                    List<MaidInfo> tombstoneInfos = this.tombstones.computeIfAbsent(ownerId, uuid -> Lists.newArrayList());
                     tombstoneInfos.add(new MaidInfo(dimension, chunkPos, ownerId, tombstoneId, timestamp, name));
                 }
             }
         }
-        return data;
     }
 
     @Override
     public CompoundNBT save(CompoundNBT tag) {
-        CompoundTag infosTag = new CompoundTag();
+        CompoundNBT infosTag = new CompoundNBT();
         infos.forEach((id, data) -> {
-            ListTag listTag = new ListTag();
+            ListNBT listTag = new ListNBT();
             data.forEach(info -> {
-                CompoundTag infoTag = new CompoundTag();
+                CompoundNBT infoTag = new CompoundNBT();
                 infoTag.putString("Dimension", info.getDimension());
-                infoTag.put("ChunkPos", NbtUtils.writeBlockPos(info.getChunkPos()));
+                infoTag.put("ChunkPos", NBTUtil.writeBlockPos(info.getChunkPos()));
                 infoTag.putUUID("OwnerId", info.getOwnerId());
                 infoTag.putUUID("MaidId", info.getEntityId());
                 infoTag.putLong("Timestamp", info.getTimestamp());
-                infoTag.putString("Name", Component.Serializer.toJson(info.getName()));
+                infoTag.putString("Name", ITextComponent.Serializer.toJson(info.getName()));
                 listTag.add(infoTag);
             });
             infosTag.put(id.toString(), listTag);
         });
 
-        CompoundTag tombstonesTag = new CompoundTag();
+        CompoundNBT tombstonesTag = new CompoundNBT();
         tombstones.forEach((id, data) -> {
-            ListTag listTag = new ListTag();
+            ListNBT listTag = new ListNBT();
             data.forEach(info -> {
-                CompoundTag infoTag = new CompoundTag();
+                CompoundNBT infoTag = new CompoundNBT();
                 infoTag.putString("Dimension", info.getDimension());
-                infoTag.put("ChunkPos", NbtUtils.writeBlockPos(info.getChunkPos()));
+                infoTag.put("ChunkPos", NBTUtil.writeBlockPos(info.getChunkPos()));
                 infoTag.putUUID("OwnerId", info.getOwnerId());
                 infoTag.putUUID("TombstoneId", info.getEntityId());
                 infoTag.putLong("Timestamp", info.getTimestamp());
-                infoTag.putString("Name", Component.Serializer.toJson(info.getName()));
+                infoTag.putString("Name", ITextComponent.Serializer.toJson(info.getName()));
                 listTag.add(infoTag);
             });
             tombstonesTag.put(id.toString(), listTag);
@@ -138,7 +137,7 @@ public class MaidWorldData extends WorldSavedData {
         UUID ownerId = maid.getOwnerUUID();
         UUID maidId = maid.getUUID();
         long timestamp = System.currentTimeMillis();
-        Component name = maid.getDisplayName();
+        ITextComponent name = maid.getDisplayName();
         this.addInfo(new MaidInfo(dimension, chunkPos, ownerId, maidId, timestamp, name));
     }
 
@@ -157,7 +156,7 @@ public class MaidWorldData extends WorldSavedData {
     }
 
     @Nullable
-    public List<MaidInfo> getPlayerMaidInfos(Player player) {
+    public List<MaidInfo> getPlayerMaidInfos(PlayerEntity player) {
         return this.infos.get(player.getUUID());
     }
 
@@ -174,7 +173,7 @@ public class MaidWorldData extends WorldSavedData {
         UUID ownerId = maid.getOwnerUUID();
         UUID tombstoneId = tombstone.getUUID();
         long timestamp = System.currentTimeMillis();
-        Component name = maid.getDisplayName();
+        ITextComponent name = maid.getDisplayName();
         this.addTombstones(new MaidInfo(dimension, chunkPos, ownerId, tombstoneId, timestamp, name));
     }
 
@@ -193,7 +192,7 @@ public class MaidWorldData extends WorldSavedData {
     }
 
     @Nullable
-    public List<MaidInfo> getPlayerMaidTombstones(Player player) {
+    public List<MaidInfo> getPlayerMaidTombstones(PlayerEntity player) {
         return this.tombstones.get(player.getUUID());
     }
 }

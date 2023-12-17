@@ -17,7 +17,6 @@ public class TileEntityGomoku extends TileEntityJoy {
     private static final String PLAYER_TURN = "PlayerTurn";
     private static final String CHESS_COUNTER = "ChessCounter";
     private static final String LATEST_CHESS_POINT = "LatestChessPoint";
-
     private int[][] chessData = new int[15][15];
     private boolean inProgress = true;
     private boolean playerTurn = true;
@@ -97,4 +96,6 @@ public class TileEntityGomoku extends TileEntityJoy {
     public Point getLatestChessPoint() {
         return latestChessPoint;
     }
+
+
 }

@@ -4,10 +4,10 @@ import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,17 +18,17 @@ public class HandleBackpackEvent {
     @SubscribeEvent
     public static void onInteractMaid(InteractMaidEvent event) {
         ItemStack stack = event.getStack();
-        Player player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
         EntityMaid maid = event.getMaid();
         IMaidBackpack maidBackpack = maid.getMaidBackpackType();
-        if (stack.is(Tags.Items.SHEARS)) {
+        if (stack.getItem().is(Tags.Items.SHEARS)) {
             if (maid.isOwnedBy(player) && !maid.backpackHasDelay() && maidBackpack != BackpackManager.getEmptyBackpack()) {
                 maid.setBackpackDelay();
                 player.getCooldowns().addCooldown(stack.getItem(), 20);
                 ItemHandlerHelper.giveItemToPlayer(player, maidBackpack.getTakeOffItemStack(stack, player, maid));
                 maidBackpack.onTakeOff(stack, player, maid);
                 maid.setMaidBackpackType(BackpackManager.getEmptyBackpack());
-                stack.hurtAndBreak(1, player, m -> m.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                stack.hurtAndBreak(1, player, m -> m.broadcastBreakEvent(Hand.MAIN_HAND));
                 maid.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
                 event.setCanceled(true);
             }

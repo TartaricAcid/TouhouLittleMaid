@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model.backpack;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
-public class FurnaceBackpackModel extends EntityModel<Entity> {
+public class FurnaceBackpackModel extends EntityModel<EntityMaid> {
     private final ModelRenderer main;
     private final ModelRenderer bone466;
     private final ModelRenderer bone36;
@@ -166,8 +166,7 @@ public class FurnaceBackpackModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        //previously the render function, render code was moved to a method below
+    public void setupAnim(EntityMaid entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
     @Override

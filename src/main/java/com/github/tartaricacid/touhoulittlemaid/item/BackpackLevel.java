@@ -1,9 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.google.common.collect.Maps;
-
-import java.util.Map;
-
 public final class BackpackLevel {
     public static final int EMPTY_CAPACITY = 6;
     public static final int SMALL_CAPACITY = 12;

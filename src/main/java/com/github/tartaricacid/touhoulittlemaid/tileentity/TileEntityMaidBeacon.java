@@ -25,15 +25,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileEntityMaidBeacon extends TileEntity implements ITickableTileEntity {
-    public static final TileEntityType<TileEntityMaidBeacon> TYPE = TileEntityType.Builder.of(TileEntityMaidBeacon::new, InitBlocks.MAID_BEACON.get()).build(null);
-    public static final String POTION_INDEX_TAG = "PotionIndex";
+    public static final String POTION_INDEX_TAG = "PotionIndex";    public static final TileEntityType<TileEntityMaidBeacon> TYPE = TileEntityType.Builder.of(TileEntityMaidBeacon::new, InitBlocks.MAID_BEACON.get()).build(null);
     public static final String STORAGE_POWER_TAG = "StoragePower";
     public static final String OVERFLOW_DELETE_TAG = "OverflowDelete";
-
     private int potionIndex = -1;
     private float storagePower;
     private boolean overflowDelete = false;
-
     public TileEntityMaidBeacon() {
         super(TYPE);
     }
@@ -179,4 +176,6 @@ public class TileEntityMaidBeacon extends TileEntity implements ITickableTileEnt
             return effect;
         }
     }
+
+
 }

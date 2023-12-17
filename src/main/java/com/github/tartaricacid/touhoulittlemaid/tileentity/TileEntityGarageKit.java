@@ -13,12 +13,10 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 
 public class TileEntityGarageKit extends TileEntity {
-    public static final TileEntityType<TileEntityGarageKit> TYPE = TileEntityType.Builder.of(TileEntityGarageKit::new, InitBlocks.GARAGE_KIT.get()).build(null);
-    private static final String FACING_TAG = "GarageKitFacing";
+    private static final String FACING_TAG = "GarageKitFacing";    public static final TileEntityType<TileEntityGarageKit> TYPE = TileEntityType.Builder.of(TileEntityGarageKit::new, InitBlocks.GARAGE_KIT.get()).build(null);
     private static final String EXTRA_DATA = "ExtraData";
     private Direction facing = Direction.NORTH;
     private CompoundNBT extraData = new CompoundNBT();
-
     public TileEntityGarageKit() {
         super(TYPE);
     }
@@ -72,4 +70,6 @@ public class TileEntityGarageKit extends TileEntity {
             level.sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.DEFAULT);
         }
     }
+
+
 }

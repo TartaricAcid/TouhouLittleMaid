@@ -19,6 +19,7 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -160,12 +161,11 @@ public class ItemSmartSlab extends Item {
         if (!entity.isInvulnerable()) {
             entity.setInvulnerable(true);
         }
-        Vec3 position = entity.position();
-        int minY = entity.level.getMinBuildHeight();
-        if (position.y < minY) {
+        Vector3d position = entity.position();
+        if (position.y < 0) {
             entity.setNoGravity(true);
-            entity.setDeltaMovement(Vec3.ZERO);
-            entity.setPos(position.x, minY, position.z);
+            entity.setDeltaMovement(Vector3d.ZERO);
+            entity.setPos(position.x, 0, position.z);
         }
         return super.onEntityItemUpdate(stack, entity);
     }

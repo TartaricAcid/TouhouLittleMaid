@@ -4,13 +4,23 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -21,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
@@ -44,7 +55,7 @@ public class ItemFilm extends Item {
         return film;
     }
 
-    public static void filmToMaid(ItemStack film, Level worldIn, BlockPos pos, Player player) {
+    public static void filmToMaid(ItemStack film, World worldIn, BlockPos pos, PlayerEntity player) {
         Optional<Entity> entityOptional = EntityType.create(getMaidData(film), worldIn);
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entityOptional.get();
@@ -53,12 +64,12 @@ public class ItemFilm extends Item {
             if (!worldIn.isClientSide) {
                 worldIn.addFreshEntity(maid);
                 NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.EXPLOSION));
-                worldIn.playSound(null, pos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
+                worldIn.playSound(null, pos, InitSounds.ALTAR_CRAFT.get(), SoundCategory.VOICE, 1.0f, 1.0f);
             }
             film.shrink(1);
         }
         if (!worldIn.isClientSide) {
-            player.sendSystemMessage(Component.translatable("tooltips.touhou_little_maid.film.no_data.desc"));
+            player.sendMessage(new TranslationTextComponent("tooltips.touhou_little_maid.film.no_data.desc"), Util.NIL_UUID);
         }
     }
 
@@ -92,12 +103,11 @@ public class ItemFilm extends Item {
         if (!entity.isInvulnerable()) {
             entity.setInvulnerable(true);
         }
-        Vec3 position = entity.position();
-        int minY = entity.level.getMinBuildHeight();
-        if (position.y < minY) {
+        Vector3d position = entity.position();
+        if (position.y < 0) {
             entity.setNoGravity(true);
-            entity.setDeltaMovement(Vec3.ZERO);
-            entity.setPos(position.x, minY, position.z);
+            entity.setDeltaMovement(Vector3d.ZERO);
+            entity.setPos(position.x, 0, position.z);
         }
         return super.onEntityItemUpdate(stack, entity);
     }

@@ -4,9 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -17,7 +17,7 @@ public class UseFavorabilityToolEvent {
         EntityMaid maid = event.getMaid();
         FavorabilityManager manager = maid.getFavorabilityManager();
         ItemStack stack = event.getStack();
-        Player player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
         int point = player.isShiftKeyDown() ? 1 : 64;
         boolean success = false;
         if (stack.getItem() == InitItems.FAVORABILITY_TOOL_ADD.get()) {

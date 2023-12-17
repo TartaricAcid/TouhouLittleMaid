@@ -45,6 +45,11 @@ public abstract class BlockJoy extends Block {
     protected abstract int sitYRot();
 
     @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }

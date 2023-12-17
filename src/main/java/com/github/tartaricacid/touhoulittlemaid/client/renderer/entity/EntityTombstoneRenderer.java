@@ -3,19 +3,21 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.TombstoneModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
-import org.joml.Matrix4f;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone.png");
@@ -26,39 +28,39 @@ public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
     private static final int NAME_SHOW_DISTANCE = 64;
     private final TombstoneModel tombstoneModel;
 
-    public EntityTombstoneRenderer(EntityRendererProvider.Context manager) {
+    public EntityTombstoneRenderer(EntityRendererManager manager) {
         super(manager);
-        tombstoneModel = new TombstoneModel(manager.bakeLayer(TombstoneModel.LAYER));
+        tombstoneModel = new TombstoneModel();
     }
 
     @Override
-    public void render(EntityTombstone tombstone, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLight) {
+    public void render(EntityTombstone tombstone, float entityYaw, float partialTicks, MatrixStack poseStack, IRenderTypeBuffer bufferIn, int packedLight) {
         poseStack.pushPose();
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.translate(0.0, -1.501, 0.0);
         tombstoneModel.setupAnim(tombstone, 0, 0, -0.1f, 0, 0);
         RenderType renderType = RenderType.entityTranslucent(getTextureLocation(tombstone));
-        VertexConsumer buffer = bufferIn.getBuffer(renderType);
+        IVertexBuilder buffer = bufferIn.getBuffer(renderType);
         tombstoneModel.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
         if (this.shouldShowName(tombstone)) {
-            this.renderNameTag(tombstone, Component.translatable("entity.touhou_little_maid.tombstone.display").withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE), 1.6f, poseStack, bufferIn, packedLight);
+            this.renderNameTag(tombstone, new TranslationTextComponent("entity.touhou_little_maid.tombstone.display").withStyle(TextFormatting.GOLD, TextFormatting.UNDERLINE), 1.6f, poseStack, bufferIn, packedLight);
             this.renderNameTag(tombstone, tombstone.getMaidName(), 1.85f, poseStack, bufferIn, packedLight);
         }
     }
 
     @Override
     protected boolean shouldShowName(EntityTombstone tombstone) {
-        return !tombstone.getMaidName().equals(Component.empty());
+        return !tombstone.getMaidName().equals(StringTextComponent.EMPTY);
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityTombstone entity) {
         ResourceLocation dimension = entity.level.dimension().location();
-        if (dimension.equals(Level.NETHER.location())) {
+        if (dimension.equals(World.NETHER.location())) {
             return THE_NETHER_TEXTURE;
         }
-        if (dimension.equals(Level.END.location())) {
+        if (dimension.equals(World.END.location())) {
             return THE_END_TEXTURE;
         }
         if (dimension.equals(TWILIGHT_FOREST_NAME)) {
@@ -67,7 +69,7 @@ public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
         return DEFAULT_TEXTURE;
     }
 
-    private void renderNameTag(EntityTombstone tombstone, Component component, float yOffset, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    private void renderNameTag(EntityTombstone tombstone, ITextComponent component, float yOffset, MatrixStack poseStack, IRenderTypeBuffer bufferSource, int packedLight) {
         double distance = this.entityRenderDispatcher.distanceToSqr(tombstone);
         if (distance < (NAME_SHOW_DISTANCE * NAME_SHOW_DISTANCE)) {
             poseStack.pushPose();
@@ -75,9 +77,9 @@ public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
             poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
             poseStack.scale(-0.025F, -0.025F, 0.025F);
             Matrix4f matrix4f = poseStack.last().pose();
-            Font font = this.getFont();
+            FontRenderer font = this.getFont();
             float width = (float) (-font.width(component) / 2);
-            font.drawInBatch(component, width, 0, -1, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
+            font.drawInBatch(component, width, 0, -1, false, matrix4f, bufferSource, false, 0, packedLight);
             poseStack.popPose();
         }
     }

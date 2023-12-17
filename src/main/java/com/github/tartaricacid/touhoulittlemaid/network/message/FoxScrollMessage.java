@@ -4,9 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.item.FoxScrollScreen;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.chat.Component;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -61,10 +61,10 @@ public class FoxScrollMessage {
 
     public static class FoxScrollData {
         private final BlockPos pos;
-        private final Component name;
+        private final ITextComponent name;
         private final long timestamp;
 
-        public FoxScrollData(BlockPos pos, Component name, long timestamp) {
+        public FoxScrollData(BlockPos pos, ITextComponent name, long timestamp) {
             this.pos = pos;
             this.name = name;
             this.timestamp = timestamp;
@@ -84,7 +84,7 @@ public class FoxScrollMessage {
             return pos;
         }
 
-        public Component getName() {
+        public ITextComponent getName() {
             return name;
         }
 

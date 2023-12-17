@@ -21,6 +21,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Favorability
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -37,6 +38,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMes
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.block.Block;
@@ -937,13 +939,13 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     protected void dropEquipment() {
         if (this.getOwnerUUID() != null && !level.isClientSide) {
             // 掉出世界的判断
-            Vec3 position = Vec3.atBottomCenterOf(blockPosition());
+            Vector3d position = Vector3d.atBottomCenterOf(blockPosition());
             // 防止卡在基岩里？
-            if (this.getY() < this.level.getMinBuildHeight() + 5) {
-                position = new Vec3(position.x, this.level.getMinBuildHeight() + 5, position.z);
+            if (this.getY() < 5) {
+                position = new Vector3d(position.x, 5, position.z);
             }
             if (this.getY() > this.level.getMaxBuildHeight()) {
-                position = new Vec3(position.x, this.level.getMaxBuildHeight(), position.z);
+                position = new Vector3d(position.x, this.level.getMaxBuildHeight(), position.z);
             }
             EntityTombstone tombstone = new EntityTombstone(level, this.getOwnerUUID(), position);
             tombstone.setMaidName(this.getDisplayName());
@@ -1290,12 +1292,17 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         }
     }
 
+    public ItemStack getBackpackShowItem() {
+        return this.entityData.get(BACKPACK_ITEM_SHOW);
+    }
+
     public void setBackpackShowItem(ItemStack stack) {
         this.entityData.set(BACKPACK_ITEM_SHOW, stack);
     }
 
-    public ItemStack getBackpackShowItem() {
-        return this.entityData.get(BACKPACK_ITEM_SHOW);
+    public IMaidBackpack getMaidBackpackType() {
+        ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
+        return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
     }
 
     public void setMaidBackpackType(IMaidBackpack backpack) {
@@ -1309,11 +1316,6 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             this.backpackData = null;
         }
         this.entityData.set(BACKPACK_TYPE, backpack.getId().toString());
-    }
-
-    public IMaidBackpack getMaidBackpackType() {
-        ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
-        return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
     }
 
     public IBackpackData getBackpackData() {

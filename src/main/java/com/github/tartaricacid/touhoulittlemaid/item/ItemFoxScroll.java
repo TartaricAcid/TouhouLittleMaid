@@ -7,18 +7,19 @@ import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.ChatFormatting;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
@@ -27,11 +28,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
+
 public class ItemFoxScroll extends Item {
     private static final String TRACK_INFO = "TrackInfo";
 
     public ItemFoxScroll() {
-        super((new Properties()).stacksTo(1));
+        super((new Properties()).tab(MAIN_TAB).stacksTo(1));
     }
 
     public static boolean hasTrackInfo(ItemStack scroll) {
@@ -39,25 +42,25 @@ public class ItemFoxScroll extends Item {
     }
 
     public static void setTrackInfo(ItemStack scroll, String dimension, BlockPos pos) {
-        CompoundTag tag = scroll.getOrCreateTagElement(TRACK_INFO);
+        CompoundNBT tag = scroll.getOrCreateTagElement(TRACK_INFO);
         tag.putString("Dimension", dimension);
-        tag.put("Position", NbtUtils.writeBlockPos(pos));
+        tag.put("Position", NBTUtil.writeBlockPos(pos));
     }
 
     @Nullable
     public static Pair<String, BlockPos> getTrackInfo(ItemStack scroll) {
         if (hasTrackInfo(scroll)) {
-            CompoundTag tag = Objects.requireNonNull(scroll.getTag()).getCompound(TRACK_INFO);
+            CompoundNBT tag = Objects.requireNonNull(scroll.getTag()).getCompound(TRACK_INFO);
             String dimension = tag.getString("Dimension");
-            BlockPos position = NbtUtils.readBlockPos(tag.getCompound("Position"));
+            BlockPos position = NBTUtil.readBlockPos(tag.getCompound("Position"));
             return Pair.of(dimension, position);
         }
         return null;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (!level.isClientSide && hand == InteractionHand.MAIN_HAND) {
+    public ActionResult<ItemStack> use(World level, PlayerEntity player, Hand hand) {
+        if (!level.isClientSide && hand == Hand.MAIN_HAND) {
             ItemStack item = player.getMainHandItem();
             MaidWorldData maidWorldData = MaidWorldData.get(level);
             if (maidWorldData == null) {
@@ -78,22 +81,22 @@ public class ItemFoxScroll extends Item {
                 scrollData.add(new FoxScrollMessage.FoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
             });
             NetworkHandler.sendToClientPlayer(new FoxScrollMessage(data), player);
-            return InteractionResultHolder.success(item);
+            return ActionResult.success(item);
         }
         return super.use(level, player, hand);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, @Nullable World pLevel, List<ITextComponent> components, ITooltipFlag pIsAdvanced) {
         if (stack.getItem() == InitItems.RED_FOX_SCROLL.get()) {
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.red").withStyle(ChatFormatting.GRAY));
+            components.add(new TranslationTextComponent("tooltips.touhou_little_maid.fox_scroll.red").withStyle(TextFormatting.GRAY));
         } else if (stack.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.white").withStyle(ChatFormatting.GRAY));
+            components.add(new TranslationTextComponent("tooltips.touhou_little_maid.fox_scroll.white").withStyle(TextFormatting.GRAY));
         }
         Pair<String, BlockPos> info = getTrackInfo(stack);
         if (info != null) {
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", info.getLeft()).withStyle(ChatFormatting.GRAY));
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.position", info.getRight().toShortString()).withStyle(ChatFormatting.GRAY));
+            components.add(new TranslationTextComponent("tooltips.touhou_little_maid.fox_scroll.dimension", info.getLeft()).withStyle(TextFormatting.GRAY));
+            components.add(new TranslationTextComponent("tooltips.touhou_little_maid.fox_scroll.position", info.getRight().toShortString()).withStyle(TextFormatting.GRAY));
         }
         super.appendHoverText(stack, pLevel, components, pIsAdvanced);
     }

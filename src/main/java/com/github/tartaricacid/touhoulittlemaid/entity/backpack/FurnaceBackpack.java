@@ -13,16 +13,16 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.Fur
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -33,11 +33,11 @@ public class FurnaceBackpack extends IMaidBackpack {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "furnace_backpack");
 
     @Override
-    public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
+    public void onPutOn(ItemStack stack, PlayerEntity player, EntityMaid maid) {
     }
 
     @Override
-    public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
+    public void onTakeOff(ItemStack stack, PlayerEntity player, EntityMaid maid) {
         Item item = stack.getItem();
         if (item instanceof ItemMaidBackpack) {
             if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
@@ -47,7 +47,8 @@ public class FurnaceBackpack extends IMaidBackpack {
             this.dropAllItems(maid);
         }
         IBackpackData backpackData = maid.getBackpackData();
-        if (backpackData instanceof FurnaceBackpackData furnaceBackpackData) {
+        if (backpackData instanceof FurnaceBackpackData) {
+            FurnaceBackpackData furnaceBackpackData = (FurnaceBackpackData) backpackData;
             InvWrapper inv = new InvWrapper(furnaceBackpackData);
             ItemsUtil.dropEntityItems(maid, inv);
         }
@@ -56,7 +57,8 @@ public class FurnaceBackpack extends IMaidBackpack {
     @Override
     public void onSpawnTombstone(EntityMaid maid, EntityTombstone tombstone) {
         IBackpackData backpackData = maid.getBackpackData();
-        if (backpackData instanceof FurnaceBackpackData furnaceBackpackData) {
+        if (backpackData instanceof FurnaceBackpackData) {
+            FurnaceBackpackData furnaceBackpackData = (FurnaceBackpackData) backpackData;
             InvWrapper inv = new InvWrapper(furnaceBackpackData);
             for (int i = 0; i < inv.getSlots(); i++) {
                 int size = inv.getSlotLimit(i);
@@ -66,15 +68,15 @@ public class FurnaceBackpack extends IMaidBackpack {
     }
 
     @Override
-    public MenuProvider getGuiProvider(int entityId) {
-        return new MenuProvider() {
+    public INamedContainerProvider getGuiProvider(int entityId) {
+        return new INamedContainerProvider() {
             @Override
-            public Component getDisplayName() {
-                return Component.literal("Maid Furnace Container");
+            public ITextComponent getDisplayName() {
+                return new StringTextComponent("Maid Furnace Container");
             }
 
             @Override
-            public AbstractMaidContainer createMenu(int index, Inventory playerInventory, Player player) {
+            public AbstractMaidContainer createMenu(int index, PlayerInventory playerInventory, PlayerEntity player) {
                 return new FurnaceBackpackContainer(index, playerInventory, entityId);
             }
         };
@@ -99,8 +101,8 @@ public class FurnaceBackpack extends IMaidBackpack {
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
-    public EntityModel<EntityMaid> getBackpackModel(EntityModelSet modelSet) {
-        return new FurnaceBackpackModel(modelSet.bakeLayer(FurnaceBackpackModel.LAYER));
+    public EntityModel<EntityMaid> getBackpackModel() {
+        return new FurnaceBackpackModel();
     }
 
     @Nullable
@@ -111,7 +113,7 @@ public class FurnaceBackpack extends IMaidBackpack {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void offsetBackpackItem(PoseStack poseStack) {
+    public void offsetBackpackItem(MatrixStack poseStack) {
         poseStack.translate(0, 0.625, 0.25);
     }
 

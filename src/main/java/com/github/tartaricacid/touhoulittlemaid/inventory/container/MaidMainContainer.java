@@ -2,21 +2,19 @@ package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.*;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -28,9 +26,9 @@ import javax.annotation.Nonnull;
 import static net.minecraft.inventory.container.PlayerContainer.*;
 
 public abstract class MaidMainContainer extends AbstractMaidContainer {
+    protected static final int PLAYER_INVENTORY_SIZE = 36;
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlotType[] SLOT_IDS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-    protected static final int PLAYER_INVENTORY_SIZE = 36;
 
     public MaidMainContainer(ContainerType<?> type, int id, PlayerInventory inventory, int entityId) {
         super(type, id, inventory, entityId);
@@ -38,7 +36,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
             this.addMaidArmorInv();
             this.addMaidBauble();
             this.addMaidHandInv();
-            this.addMainInv();
+            this.addMainDefaultInv();
             this.addMainDefaultInv();
             this.addBackpackInv(inventory);
         }

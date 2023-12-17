@@ -1,17 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.sun.javafx.geom.Vec3d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public final class RenderHelper {
-    public static void renderFloatingText(MatrixStack poseStack, String text, Vec3d vec, int color, float scale, float yOffset) {
+    public static void renderFloatingText(MatrixStack poseStack, String text, Vector3d vec, int color, float scale, float yOffset) {
         renderFloatingText(poseStack, text, vec.x + 0.5, vec.y + 1.5, vec.z + 0.5, color, scale, true, yOffset, true);
     }
 

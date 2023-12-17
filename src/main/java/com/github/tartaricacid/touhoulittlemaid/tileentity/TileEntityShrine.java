@@ -16,8 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class TileEntityShrine extends TileEntity {
-    public static final TileEntityType<TileEntityShrine> TYPE = TileEntityType.Builder.of(TileEntityShrine::new, InitBlocks.SHRINE.get()).build(null);
-    private static final String STORAGE_ITEM = "StorageItem";
+    private static final String STORAGE_ITEM = "StorageItem";    public static final TileEntityType<TileEntityShrine> TYPE = TileEntityType.Builder.of(TileEntityShrine::new, InitBlocks.SHRINE.get()).build(null);
     private final ItemStackHandler handler = new ItemStackHandler() {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
@@ -29,7 +28,6 @@ public class TileEntityShrine extends TileEntity {
             return 1;
         }
     };
-
     public TileEntityShrine() {
         super(TYPE);
     }
@@ -91,4 +89,6 @@ public class TileEntityShrine extends TileEntity {
     public boolean canInsert(ItemStack stack) {
         return handler.isItemValid(0, stack);
     }
+
+
 }
