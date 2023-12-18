@@ -8,9 +8,6 @@
   "item_group.touhou_little_maid.chair": "Touhou Küçük Hizmetçi: Sandalye",
   "item.touhou_little_maid.maid_spawn_egg": "Hizmetçi Doğdurma Yumurtası",
   "item.touhou_little_maid.fairy_spawn_egg": "Peri Hizmetçi Doğurma Yumurtası",
-  "item.touhou_little_maid.maid_backpack_small": "Küçük Sırt Çantası",
-  "item.touhou_little_maid.maid_backpack_middle": "Orta sırt çantası",
-  "item.touhou_little_maid.maid_backpack_big": "Büyük sırt çantası",
   "item.touhou_little_maid.chair": "Sandalye",
   "item.touhou_little_maid.hakurei_gohei": "Hakurei'nin Gohei'si",
   "item.touhou_little_maid.extinguisher": "Yangın Sönüdürücü",
@@ -46,5 +43,17 @@
   "task.touhou_little_maid.feed_animal": "Çiftleştir",
   "task.touhou_little_maid.extinguishing": "Söndürülüyor",
   "task.touhou_little_maid.desc.condition": "[Extra Kondisyon]",
-  "task.touhou_little_maid.idle.desc": "Hizmetçi Görevde Bir şey Yapmayacak"
+  "task.touhou_little_maid.idle.desc": "Hizmetçi Görevde Bir şey Yapmayacak",
+  "patchouli.touhou_little_maid.book.categories.overview.name": "Genel Bakış",
+  "patchouli.touhou_little_maid.book.entries.maid.backpack.name": "Sırt çantası",
+  "patchouli.touhou_little_maid.book.entries.maid.backpack.pages.1.text": "Küçük sırt çantası olan bir Maid.",
+  "patchouli.touhou_little_maid.book.entries.maid.item_magnet.name": "Eşya Mıknatısı",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.3.text": "$(li)Creeper'lar Maid'lerden kaçar.",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.name": "Maid Bauble Aksesuarı",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_config.name": "Maid Konfigürasyonu",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_skin.name": "Maid Dış Görünümü",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_sound.name": "Maid Sesi",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_task.name": "Maid Görevi",
+  "patchouli.touhou_little_maid.book.entries.maid.mute_bauble.name": "Bauble Aksesuarını Sustur",
+  "patchouli.touhou_little_maid.book.entries.maid.naming_eggs.name": "Yumurtaları İsimlendirmek"
 }

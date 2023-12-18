@@ -97,7 +97,7 @@
   "tooltips.touhou_little_maid.fox_scroll.position": "Position: [%s]",
   "tooltips.touhou_little_maid.fox_scroll.red": "Used to find maids on unloaded chunks",
   "tooltips.touhou_little_maid.fox_scroll.white": "Used to find maid's tombstone",
-  "tooltips.touhou_little_maid.favorability_tool.add": "Right click maid to add 64 (shift is 1) point favorability",
+  "tooltips.touhou_little_maid.favorability_tool.add": "Right click maid to add 64 (shift is 1) point favorability,",
   "tooltips.touhou_little_maid.favorability_tool.reduce": "Right click maid to reduce 64 (shift is 1) point favorability",
   "tooltips.touhou_little_maid.favorability_tool.full": "Right click maid to add full favorability",
   "gui.touhou_little_maid.schedule.day": "Day Shift",

@@ -40,6 +40,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMes
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
@@ -68,6 +69,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -99,6 +102,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -583,6 +587,42 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                     this.setHealth(health - damageAfterAbsorption);
                     this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAfterAbsorption);
                 }
+            }
+        }
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel serverLevel, ITeleporter teleporter) {
+        if (this.level instanceof ServerLevel && !this.isRemoved()) {
+            final int MAX_RETRY = 16;
+            for (int i = 0; i < MAX_RETRY; ++i) {
+                if (TeleportHelper.teleport(this)) {
+                    this.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 1, true, false));
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        if (this.getOwnerUUID() != null) {
+            MaidWorldData data = MaidWorldData.get(this.level);
+            if (data != null) {
+                data.removeInfo(this);
+            }
+        }
+    }
+
+    @Override
+    public void onRemovedFromWorld() {
+        super.onRemovedFromWorld();
+        if (!this.level.isClientSide && this.getOwnerUUID() != null) {
+            MaidWorldData data = MaidWorldData.get(this.level);
+            if (data != null) {
+                data.addInfo(this);
             }
         }
     }
