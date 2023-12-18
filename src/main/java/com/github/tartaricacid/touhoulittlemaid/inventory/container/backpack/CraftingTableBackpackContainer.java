@@ -45,7 +45,7 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
 
     @Override
     public void slotsChanged(IInventory container) {
-        this.access.execute((level, blockPos) -> slotChangedCraftingGrid(containerId, level, this.player, this.craftSlots, this.resultSlots));
+        this.access.execute((level, blockPos) -> slotChangedCraftingGrid(this.containerId, level, this.player, this.craftSlots, this.resultSlots));
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
                 }
             }
             result.setItem(0, itemStack);
-            serverPlayer.connection.send(new SSetSlotPacket(menuId, 0, itemStack));
+            serverPlayer.connection.send(new SSetSlotPacket(menuId, resultSlot.index, itemStack));
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -47,10 +48,16 @@ public class MaidConfigMessage {
                 Entity entity = sender.level.getEntity(message.id);
                 if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
                     EntityMaid maid = (EntityMaid) entity;
-                    maid.setHomeModeEnable(message.home);
-                    maid.setPickup(message.pick);
-                    maid.setRideable(message.ride);
-                    if (maid.getVehicle() != null) {
+                    if (maid.isHomeModeEnable() != message.home) {
+                        maid.setHomeModeEnable(message.home);
+                    }
+                    if (maid.isPickup() != message.pick) {
+                        maid.setPickup(message.pick);
+                    }
+                    if (maid.isRideable() != message.ride) {
+                        maid.setRideable(message.ride);
+                    }
+                    if (maid.getVehicle() != null && !(maid.getVehicle() instanceof EntitySit)) {
                         maid.stopRiding();
                     }
                     if (maid.getSchedule() != message.schedule) {

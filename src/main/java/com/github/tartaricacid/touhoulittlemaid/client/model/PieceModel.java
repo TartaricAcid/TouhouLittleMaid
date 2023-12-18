@@ -15,7 +15,7 @@ public class PieceModel extends EntityModel<Entity> {
 
         main = new ModelRenderer(this);
         main.setPos(0.0F, 24.0F, 0.0F);
-        main.texOffs(0, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, 0.0F, false);
+        main.texOffs(0, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, -0.25F, false);
     }
 
     @Override

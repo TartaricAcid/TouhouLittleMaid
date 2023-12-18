@@ -37,7 +37,6 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
             this.addMaidBauble();
             this.addMaidHandInv();
             this.addMainDefaultInv();
-            this.addMainDefaultInv();
             this.addBackpackInv(inventory);
         }
     }

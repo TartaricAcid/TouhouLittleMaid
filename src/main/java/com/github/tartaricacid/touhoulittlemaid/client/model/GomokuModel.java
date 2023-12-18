@@ -23,7 +23,7 @@ public class GomokuModel extends EntityModel<Entity> {
         main.texOffs(0, 0).addBox(-16.0F, -2.0F, -16.0F, 32.0F, 2.0F, 32.0F, 0.0F, false);
 
         blackBox = new ModelRenderer(this);
-        blackBox.setPos(0.0F, 24.0F, 0.0F);
+        blackBox.setPos(0.0F, 24.0F, -21.0F);
         blackBox.texOffs(69, 11).addBox(-22.0F, -1.0F, 8.0F, 5.0F, 1.0F, 5.0F, 0.0F, false);
         blackBox.texOffs(12, 99).addBox(-21.5F, -2.95F, 8.5F, 4.0F, 1.0F, 4.0F, 0.0F, false);
         blackBox.texOffs(12, 99).addBox(-20.25F, -3.85F, 8.9F, 2.0F, 1.0F, 2.0F, -0.25F, false);
@@ -40,7 +40,7 @@ public class GomokuModel extends EntityModel<Entity> {
         bone2.texOffs(12, 99).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, -0.25F, false);
 
         whiteBox = new ModelRenderer(this);
-        whiteBox.setPos(0.0F, 24.0F, 0.0F);
+        whiteBox.setPos(0.0F, 24.0F, 21.0F);
         whiteBox.texOffs(69, 11).addBox(17.0F, -1.0F, -13.0F, 5.0F, 1.0F, 5.0F, 0.0F, true);
         whiteBox.texOffs(44, 96).addBox(17.5F, -2.95F, -12.5F, 4.0F, 1.0F, 4.0F, 0.0F, true);
         whiteBox.texOffs(44, 96).addBox(18.25F, -3.85F, -10.9F, 2.0F, 1.0F, 2.0F, -0.25F, true);

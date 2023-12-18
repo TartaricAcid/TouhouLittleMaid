@@ -62,7 +62,7 @@ public class TaskCocoa implements IFarmTask {
 
     @Override
     public boolean canHarvest(EntityMaid maid, BlockPos cropPos, BlockState cropState) {
-        return cropState.is(BlockTags.JUNGLE_LOGS) && cropState.getValue(CocoaBlock.AGE) >= 2;
+        return cropState.is(Blocks.COCOA) && cropState.getValue(CocoaBlock.AGE) >= 2;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class TaskCocoa implements IFarmTask {
     public boolean canPlant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
         basePos = basePos.above();
         baseState = maid.level.getBlockState(basePos);
-        if (baseState.is(Blocks.JUNGLE_LOG) && seed.getItem() == Items.COCOA_BEANS) {
+        if (baseState.is(BlockTags.JUNGLE_LOGS) && seed.getItem() == Items.COCOA_BEANS) {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 BlockState state = maid.level.getBlockState(basePos.relative(direction));
                 if (state.getMaterial().isReplaceable()) {

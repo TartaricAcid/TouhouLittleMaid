@@ -38,6 +38,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMes
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
+import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
@@ -72,6 +73,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
@@ -94,6 +97,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -580,6 +584,42 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
                     this.setHealth(health - damageAfterAbsorption);
                     this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAfterAbsorption);
                 }
+            }
+        }
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerWorld pServer, ITeleporter teleporter) {
+        final int MAX_RETRY = 16;
+        if (this.level instanceof ServerWorld && this.isAlive()) {
+            for (int i = 0; i < MAX_RETRY; ++i) {
+                if (TeleportHelper.teleport(this)) {
+                    this.addEffect(new EffectInstance(Effects.GLOWING, 200, 1, true, false));
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        if (this.getOwnerUUID() != null) {
+            MaidWorldData data = MaidWorldData.get(this.level);
+            if (data != null) {
+                data.removeInfo(this);
+            }
+        }
+    }
+
+    @Override
+    public void onRemovedFromWorld() {
+        super.onRemovedFromWorld();
+        if (!this.level.isClientSide && this.getOwnerUUID() != null) {
+            MaidWorldData data = MaidWorldData.get(this.level);
+            if (data != null) {
+                data.addInfo(this);
             }
         }
     }

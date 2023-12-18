@@ -134,6 +134,7 @@ public class ItemSmartSlab extends Item {
                 if (worldIn instanceof ServerWorld) {
                     maid.finalizeSpawn((ServerWorld) worldIn, worldIn.getCurrentDifficultyAt(context.getClickedPos()),
                             SpawnReason.SPAWN_EGG, null, null);
+                    maid.moveTo(context.getClickedPos().above(), 0, 0);
                     worldIn.addFreshEntity(maid);
                 }
                 maid.spawnExplosionParticle();
