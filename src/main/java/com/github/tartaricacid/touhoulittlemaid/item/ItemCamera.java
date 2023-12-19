@@ -61,13 +61,10 @@ public class ItemCamera extends Item {
         CompoundTag photoTag = new CompoundTag();
         CompoundTag maidTag = new CompoundTag();
         maid.setHomeModeEnable(false);
-        maid.addAdditionalSaveData(maidTag);
+        maid.saveWithoutId(maidTag);
         maidTag.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
         photoTag.put(MAID_INFO, maidTag);
         photo.setTag(photoTag);
-        if (maid.hasCustomName()) {
-            photo.setHoverName(maid.getCustomName());
-        }
         Containers.dropItemStack(worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), photo);
     }
 

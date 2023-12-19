@@ -2,12 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
-import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +15,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -29,46 +25,32 @@ import javax.annotation.Nonnull;
 import static net.minecraft.world.inventory.InventoryMenu.*;
 
 
-public class MaidMainContainer extends AbstractMaidContainer {
-    public static final MenuType<MaidMainContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new MaidMainContainer(windowId, inv, data.readInt()));
-    public static final int PLAYER_INVENTORY_SIZE = 36;
+public abstract class MaidMainContainer extends AbstractMaidContainer {
+    protected static final int PLAYER_INVENTORY_SIZE = 36;
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
-    public MaidMainContainer(int id, Inventory inventory, int entityId) {
-        super(TYPE, id, inventory, entityId);
+    public MaidMainContainer(MenuType<?> type, int id, Inventory inventory, int entityId) {
+        super(type, id, inventory, entityId);
         if (maid != null) {
             this.addMaidArmorInv();
             this.addMaidBauble();
             this.addMaidHandInv();
-            this.addMainInv();
+            this.addMainDefaultInv();
+            this.addBackpackInv(inventory);
         }
-    }
-
-    public static MenuProvider create(int entityId) {
-        return new MenuProvider() {
-            @Override
-            public Component getDisplayName() {
-                return Component.literal("Maid Main Container");
-            }
-
-            @Override
-            public AbstractMaidContainer createMenu(int index, Inventory playerInventory, Player player) {
-                return new MaidMainContainer(index, playerInventory, entityId);
-            }
-        };
     }
 
     private void addMaidHandInv() {
         LazyOptional<IItemHandler> hand = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN);
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 79) {
+        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(BLOCK_ATLAS, ReloadResourceEvent.EMPTY_MAINHAND_SLOT);
             }
         }));
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 1, 121, 79) {
+        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 1, 121, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
@@ -112,10 +94,8 @@ public class MaidMainContainer extends AbstractMaidContainer {
         }));
     }
 
-    private void addMainInv() {
+    private void addMainDefaultInv() {
         ItemStackHandler inv = maid.getMaidInv();
-        int level = maid.getBackpackLevel();
-
         // 默认背包
         for (int i = 0; i < 6; i++) {
             addSlot(new SlotItemHandler(inv, i, 143 + 18 * i, 37));
@@ -129,43 +109,15 @@ public class MaidMainContainer extends AbstractMaidContainer {
                 });
             }
         }
-
-        if (level > BackpackLevel.EMPTY) {
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 6 + i, 143 + 18 * i, 59));
-            }
-        }
-
-        if (level > BackpackLevel.SMALL) {
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 12 + i, 143 + 18 * i, 82));
-            }
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 18 + i, 143 + 18 * i, 100));
-            }
-        }
-
-        if (level > BackpackLevel.MIDDLE) {
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 24 + i, 143 + 18 * i, 123));
-            }
-            for (int i = 0; i < 6; i++) {
-                addSlot(new SlotItemHandler(inv, 30 + i, 143 + 18 * i, 141));
-            }
-        }
     }
+
+    protected abstract void addBackpackInv(Inventory inventory);
 
     private void addMaidBauble() {
         BaubleItemHandler maidBauble = maid.getMaidBauble();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                addSlot(new SlotItemHandler(maidBauble, i * 3 + j, 86 + 18 * j, 105 + 18 * i) {
-                    @Override
-                    @OnlyIn(Dist.CLIENT)
-                    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                        return Pair.of(BLOCK_ATLAS, ReloadResourceEvent.EMPTY_BAUBLE_SLOT);
-                    }
-                });
+                addSlot(new SlotItemHandler(maidBauble, i * 3 + j, 86 + 18 * j, 99 + 18 * i));
             }
         }
     }

@@ -1,0 +1,19 @@
+{
+  "sortnum": 7,
+  "name": "patchouli.touhou_little_maid.book.entries.maid.other_backpack.name",
+  "icon": "touhou_little_maid:crafting_table_backpack",
+  "category": "touhou_little_maid:maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:crafting_table_backpack,touhou_little_maid:ender_chest_backpack,touhou_little_maid:furnace_backpack",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.other_backpack.pages.0.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/other_backpack.png"
+      ]
+    }
+  ]
+}

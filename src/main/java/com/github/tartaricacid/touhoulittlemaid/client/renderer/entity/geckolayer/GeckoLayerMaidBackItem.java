@@ -32,7 +32,7 @@ public class GeckoLayerMaidBackItem<T extends LivingEntity & IAnimatable> extend
             return;
         }
         if (entityLivingBaseIn instanceof EntityMaid maid) {
-            ItemStack stack = maid.getMaidInv().getStackInSlot(5);
+            ItemStack stack = maid.getBackpackShowItem();
             if (stack.getItem() instanceof Vanishable) {
                 if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
                     return;
@@ -41,22 +41,7 @@ public class GeckoLayerMaidBackItem<T extends LivingEntity & IAnimatable> extend
                 matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
                 matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
                 matrixStack.translate(0, 0.5, -0.25);
-                switch (maid.getBackpackLevel()) {
-                    default:
-                    case BackpackLevel.EMPTY:
-                        matrixStack.translate(0, 0.625, 0.2);
-                        break;
-                    case BackpackLevel.SMALL:
-                        matrixStack.translate(0, 0.625, -0.05);
-                        break;
-                    case BackpackLevel.MIDDLE:
-                        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-7.5F));
-                        matrixStack.translate(0, 0.625, -0.25);
-                        break;
-                    case BackpackLevel.BIG:
-                        matrixStack.translate(0, 0, -0.4);
-                        break;
-                }
+                maid.getMaidBackpackType().offsetBackpackItem(matrixStack);
                 if (SlashBladeCompat.isSlashBladeItem(stack)) {
                     SlashBladeRender.renderGeckoMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
                 } else {

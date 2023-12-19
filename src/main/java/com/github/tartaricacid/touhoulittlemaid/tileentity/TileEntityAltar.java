@@ -24,8 +24,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 
 public class TileEntityAltar extends BlockEntity {
-    private static final String STORAGE_ITEM = "StorageItem";
     public static final BlockEntityType<TileEntityAltar> TYPE = BlockEntityType.Builder.of(TileEntityAltar::new, InitBlocks.ALTAR.get()).build(null);
+    private static final String STORAGE_ITEM = "StorageItem";
     private static final String IS_RENDER = "IsRender";
     private static final String CAN_PLACE_ITEM = "CanPlaceItem";
     private static final String STORAGE_STATE_ID = "StorageBlockStateId";

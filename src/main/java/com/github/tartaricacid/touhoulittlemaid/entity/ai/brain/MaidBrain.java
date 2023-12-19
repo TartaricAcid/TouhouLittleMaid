@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.*;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.google.common.collect.ImmutableList;
@@ -97,13 +98,15 @@ public final class MaidBrain {
         Pair<Behavior<? super EntityMaid>, Integer> walkRandomly = Pair.of(new RandomStroll(0.3f, 5, 3), 1);
         Pair<Behavior<? super EntityMaid>, Integer> noLook = Pair.of(new DoNothing(40, 80), 2);
         RunOne<EntityMaid> firstShuffledTask = new RunOne<>(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, walkRandomly, noLook));
-        RunIf<EntityMaid> supplementedTask = new RunIf<>(e -> !e.isBegging(), firstShuffledTask);
+        RunIf<EntityMaid> supplementedTask = new RunIf<>(MaidBrain::lookAroundCondition, firstShuffledTask);
 
         Pair<Integer, Behavior<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
-        Pair<Integer, Behavior<? super EntityMaid>> supplemented = Pair.of(6, supplementedTask);
+        Pair<Integer, Behavior<? super EntityMaid>> findJoy = Pair.of(6, new MaidFindJoyTask(0.6f, 12));
+        Pair<Integer, Behavior<? super EntityMaid>> sitJoy = Pair.of(7, new MaidSitJoyTask());
+        Pair<Integer, Behavior<? super EntityMaid>> supplemented = Pair.of(10, supplementedTask);
         Pair<Integer, Behavior<? super EntityMaid>> updateActivity = Pair.of(99, new UpdateActivityFromSchedule());
 
-        brain.addActivity(Activity.IDLE, ImmutableList.of(beg, supplemented, updateActivity));
+        brain.addActivity(Activity.IDLE, ImmutableList.of(beg, findJoy, sitJoy, supplemented, updateActivity));
     }
 
     private static void registerWorkGoals(Brain<EntityMaid> brain, EntityMaid maid) {
@@ -142,10 +145,14 @@ public final class MaidBrain {
         Pair<Behavior<? super EntityMaid>, Integer> lookToParrot = Pair.of(new SetEntityLookTarget(EntityType.PARROT, 5), 1);
         Pair<Behavior<? super EntityMaid>, Integer> noLook = Pair.of(new DoNothing(30, 60), 2);
 
-        Pair<Integer, Behavior<? super EntityMaid>> shuffled = Pair.of(5, new RunOne<>(
-                ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook)));
+        RunOne<EntityMaid> firstShuffledTask = new RunOne<>(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook));
+        Pair<Integer, Behavior<? super EntityMaid>> shuffled = Pair.of(5, new RunIf<>(MaidBrain::lookAroundCondition, firstShuffledTask));
         Pair<Integer, Behavior<? super EntityMaid>> updateActivity = Pair.of(99, new UpdateActivityFromSchedule());
 
         brain.addActivity(Activity.RIDE, ImmutableList.of(shuffled, updateActivity));
+    }
+
+    public static boolean lookAroundCondition(EntityMaid maid) {
+        return !maid.isBegging() && !(maid.getVehicle() instanceof EntitySit);
     }
 }

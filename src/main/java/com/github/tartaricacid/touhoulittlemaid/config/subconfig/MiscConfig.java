@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -28,11 +27,6 @@ public final class MiscConfig {
 
         builder.comment("Maid fairy's spawn probability (zombie is 100, enderman is 10)");
         MAID_FAIRY_SPAWN_PROBABILITY = builder.defineInRange("MaidFairySpawnProbability", 70, 0, Integer.MAX_VALUE);
-
-        builder.comment("The following biome do not spawn maid fairy");
-        MAID_FAIRY_BLACKLIST_BIOME = builder.defineList("MaidFairyBlacklistBiome",
-                Lists.newArrayList(Biomes.THE_VOID.location().toString(),
-                        Biomes.MUSHROOM_FIELDS.location().toString()), MiscConfig::checkId);
 
         builder.comment("The following dimension do not spawn maid fairy");
         MAID_FAIRY_BLACKLIST_DIMENSION = builder.defineList("MaidFairyBlacklistDimension",

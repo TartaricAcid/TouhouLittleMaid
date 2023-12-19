@@ -30,7 +30,7 @@ public class ExtraLifeBauble implements IMaidBauble {
                 stack.hurtAndBreak(1, maid, m -> maid.sendItemBreakMessage(stack));
                 maid.getMaidBauble().setStackInSlot(slot, stack);
                 maid.setHealth(maid.getMaxHealth());
-                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.EXPLOSION));
+                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.HEART));
                 maid.playSound(SoundEvents.GLASS_BREAK, 1.0f, 1.0f);
             }
         }

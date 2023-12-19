@@ -1,3 +1,6 @@
 {
-  "parent": "touhou_little_maid:block/model_switcher"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "touhou_little_maid:item/model_switcher"
+  }
 }

@@ -53,6 +53,9 @@ public class SpawnParticleMessage {
                 case BUBBLE:
                     maid.spawnBubbleParticle();
                     return;
+                case HEART:
+                    maid.spawnHeartParticle();
+                    return;
                 default:
             }
         }
@@ -66,6 +69,6 @@ public class SpawnParticleMessage {
         /**
          * 粒子类型
          */
-        EXPLOSION, BUBBLE
+        EXPLOSION, BUBBLE, HEART
     }
 }

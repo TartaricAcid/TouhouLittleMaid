@@ -8,9 +8,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.StateSwitchingButton;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
@@ -18,6 +20,7 @@ import java.util.function.Consumer;
 public class BeaconEffectButton extends StateSwitchingButton {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_beacon.png");
     private final TextureAtlasSprite sprite;
+    private final Component tooltips;
     private final int potionIndex;
     private final BlockPos pos;
     private final Consumer<Boolean> onClick;
@@ -26,6 +29,7 @@ public class BeaconEffectButton extends StateSwitchingButton {
         super(xIn, yIn, 22, 22, potionIndex == effect.ordinal());
         this.initTextureValues(0, 111, 22, 22, BG);
         this.sprite = Minecraft.getInstance().getMobEffectTextures().get(effect.getEffect());
+        this.tooltips = effect.getEffect().getDisplayName();
         this.potionIndex = effect.ordinal();
         this.pos = beacon.getBlockPos();
         this.onClick = onClick;
@@ -44,5 +48,11 @@ public class BeaconEffectButton extends StateSwitchingButton {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.sprite.atlas().location());
         blit(poseStack, this.x + 2, this.y + 2, this.getBlitOffset(), 18, 18, this.sprite);
+    }
+
+    public void renderToolTip(PoseStack poseStack, Screen screen, int pMouseX, int pMouseY) {
+        if (this.isHovered) {
+            screen.renderTooltip(poseStack, tooltips, pMouseX, pMouseY);
+        }
     }
 }

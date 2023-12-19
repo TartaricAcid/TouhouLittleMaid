@@ -30,6 +30,13 @@ public final class ItemsUtil {
     }
 
     /**
+     * 掉落指定起始的物品
+     */
+    public static void dropEntityItems(Entity entity, IItemHandler itemHandler, int startIndex) {
+        dropEntityItems(entity, itemHandler, startIndex, itemHandler.getSlots());
+    }
+
+    /**
      * 掉落全部物品
      */
     public static void dropEntityItems(Entity entity, IItemHandler itemHandler) {
