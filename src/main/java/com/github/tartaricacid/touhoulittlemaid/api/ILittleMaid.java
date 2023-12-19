@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 
@@ -19,6 +20,14 @@ public interface ILittleMaid {
      * @param manager 注册器
      */
     default void addMaidTask(TaskManager manager) {
+    }
+
+    /**
+     * 添加女仆的背包
+     *
+     * @param manager 注册器
+     */
+    default void addMaidBackpack(BackpackManager manager) {
     }
 
     /**

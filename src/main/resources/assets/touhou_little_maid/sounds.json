@@ -227,6 +227,20 @@
       "touhou_little_maid:block/altar_craft_2"
     ]
   },
+  "block.gomoku": {
+    "category": "block",
+    "subtitle": "subtitle.touhou_little_maid.block.gomoku",
+    "sounds": [
+      "touhou_little_maid:block/piece"
+    ]
+  },
+  "block.gomoku_reset": {
+    "category": "block",
+    "subtitle": "subtitle.touhou_little_maid.block.gomoku_reset",
+    "sounds": [
+      "touhou_little_maid:block/gomoku_reset"
+    ]
+  },
   "entity.box": {
     "category": "voice",
     "subtitle": "subtitle.touhou_little_maid.entity.box",

@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -73,7 +74,7 @@ public class TaskCocoa implements IFarmTask {
     public boolean canPlant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
         basePos = basePos.above();
         baseState = maid.level.getBlockState(basePos);
-        if (baseState.is(Blocks.JUNGLE_LOG) && seed.getItem() == Items.COCOA_BEANS) {
+        if (baseState.is(BlockTags.JUNGLE_LOGS) && seed.getItem() == Items.COCOA_BEANS) {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 BlockState state = maid.level.getBlockState(basePos.relative(direction));
                 if (state.getMaterial().isReplaceable()) {

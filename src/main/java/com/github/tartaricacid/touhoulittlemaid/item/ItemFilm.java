@@ -4,23 +4,34 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 
@@ -28,7 +39,7 @@ public class ItemFilm extends Item {
     public static final String MAID_INFO = "MaidInfo";
 
     public ItemFilm() {
-        super((new Item.Properties()).tab(MAIN_TAB).stacksTo(1));
+        super((new Properties()).tab(MAIN_TAB).stacksTo(1));
     }
 
     public static ItemStack maidToFilm(EntityMaid maid) {
@@ -36,15 +47,30 @@ public class ItemFilm extends Item {
         CompoundTag filmTag = new CompoundTag();
         CompoundTag maidTag = new CompoundTag();
         maid.setHomeModeEnable(false);
-        maid.addAdditionalSaveData(maidTag);
+        maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(InitEntities.MAID.get().getRegistryName()).toString());
         filmTag.put(MAID_INFO, maidTag);
         film.setTag(filmTag);
-        if (maid.hasCustomName()) {
-            film.setHoverName(maid.getCustomName());
-        }
         return film;
+    }
+
+    public static void filmToMaid(ItemStack film, Level worldIn, BlockPos pos, Player player) {
+        Optional<Entity> entityOptional = EntityType.create(getMaidData(film), worldIn);
+        if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid) {
+            EntityMaid maid = (EntityMaid) entityOptional.get();
+            maid.setPos(pos.getX(), pos.getY(), pos.getZ());
+            // 实体生成必须在服务端应用
+            if (!worldIn.isClientSide) {
+                worldIn.addFreshEntity(maid);
+                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.EXPLOSION));
+                worldIn.playSound(null, pos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
+            }
+            film.shrink(1);
+        }
+        if (!worldIn.isClientSide) {
+            player.sendMessage(new TranslatableComponent("tooltips.touhou_little_maid.film.no_data.desc"), Util.NIL_UUID);
+        }
     }
 
     private static boolean hasMaidData(ItemStack stack) {
@@ -59,7 +85,7 @@ public class ItemFilm extends Item {
     }
 
     private static void removeMaidSomeData(CompoundTag nbt) {
-        nbt.remove(EntityMaid.BACKPACK_LEVEL_TAG);
+        nbt.remove(EntityMaid.MAID_BACKPACK_TYPE);
         nbt.remove(EntityMaid.MAID_INVENTORY_TAG);
         nbt.remove(EntityMaid.MAID_BAUBLE_INVENTORY_TAG);
         nbt.remove(EntityMaid.EXPERIENCE_TAG);
@@ -70,12 +96,27 @@ public class ItemFilm extends Item {
         nbt.remove("HurtTime");
         nbt.remove("DeathTime");
         nbt.remove("HurtByTimestamp");
+        nbt.remove("Pos");
+        nbt.remove("Motion");
+        nbt.remove("FallDistance");
+        nbt.remove("Fire");
+        nbt.remove("Air");
+        nbt.remove("TicksFrozen");
+        nbt.remove("HasVisualFire");
+        nbt.remove("Passengers");
     }
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (!entity.isInvulnerable()) {
             entity.setInvulnerable(true);
+        }
+        Vec3 position = entity.position();
+        int minY = entity.level.getMinBuildHeight();
+        if (position.y < minY) {
+            entity.setNoGravity(true);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.setPos(position.x, minY, position.z);
         }
         return super.onEntityItemUpdate(stack, entity);
     }

@@ -16,11 +16,13 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -28,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +53,7 @@ public class ItemSmartSlab extends Item {
     }
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
-        maid.addAdditionalSaveData(stack.getOrCreateTagElement(MAID_INFO));
+        maid.saveWithoutId(stack.getOrCreateTagElement(MAID_INFO));
     }
 
     public static boolean hasMaidData(ItemStack stack) {
@@ -62,6 +65,21 @@ public class ItemSmartSlab extends Item {
             return Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO);
         }
         return new CompoundTag();
+    }
+
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        if (!entity.isInvulnerable()) {
+            entity.setInvulnerable(true);
+        }
+        Vec3 position = entity.position();
+        int minY = entity.level.getMinBuildHeight();
+        if (position.y < minY) {
+            entity.setNoGravity(true);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.setPos(position.x, minY, position.z);
+        }
+        return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override
@@ -90,7 +108,6 @@ public class ItemSmartSlab extends Item {
             if (maid == null) {
                 return super.useOn(context);
             }
-            maid.moveTo(clickedPos.above(), 0, 0);
             if (this.type == Type.INIT) {
                 return spawnNewMaid(context, player, worldIn, maid);
             }
@@ -113,10 +130,8 @@ public class ItemSmartSlab extends Item {
             if (!player.getUUID().equals(ownerUid)) {
                 return InteractionResult.FAIL;
             }
-            maid.readAdditionalSaveData(maidData);
-            if (stack.hasCustomHoverName()) {
-                maid.setCustomName(stack.getHoverName());
-            }
+            maid.load(maidData);
+            maid.moveTo(context.getClickedPos().above(), 0, 0);
             if (worldIn instanceof ServerLevel) {
                 worldIn.addFreshEntity(maid);
             }
@@ -139,6 +154,7 @@ public class ItemSmartSlab extends Item {
                 if (worldIn instanceof ServerLevel) {
                     maid.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(context.getClickedPos()),
                             MobSpawnType.SPAWN_EGG, null, null);
+                    maid.moveTo(context.getClickedPos().above(), 0, 0);
                     worldIn.addFreshEntity(maid);
                 }
                 maid.spawnExplosionParticle();
@@ -165,7 +181,7 @@ public class ItemSmartSlab extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (this.type == Type.INIT) {
-            TranslatableComponent text = new TranslatableComponent("tooltips.touhou_little_maid.smart_slab.maid_name",
+            MutableComponent text = new TranslatableComponent("tooltips.touhou_little_maid.smart_slab.maid_name",
                     I18n.get("tooltips.touhou_little_maid.smart_slab.maid_name.unknown"));
             tooltip.add(text.withStyle(ChatFormatting.GRAY));
         }

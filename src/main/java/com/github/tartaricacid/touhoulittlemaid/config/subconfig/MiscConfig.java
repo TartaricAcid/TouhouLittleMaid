@@ -29,13 +29,6 @@ public final class MiscConfig {
         builder.comment("Maid fairy's spawn probability (zombie is 100, enderman is 10)");
         MAID_FAIRY_SPAWN_PROBABILITY = builder.defineInRange("MaidFairySpawnProbability", 70, 0, Integer.MAX_VALUE);
 
-        List<String> biomes = Lists.newArrayList();
-        Arrays.stream(values()).forEach(a -> biomes.add(a.getName()));
-        builder.comment("The following biome do not spawn maid fairy",
-                "Available names: " + StringUtils.join(biomes, ", "));
-        MAID_FAIRY_BLACKLIST_BIOME = builder.defineList("MaidFairyBlacklistBiome", Lists.newArrayList(NETHER.getName(), THEEND.getName(),
-                NONE.getName(), MUSHROOM.getName()), MiscConfig::checkBiome);
-
         builder.comment("Loss power point after player death");
         PLAYER_DEATH_LOSS_POWER_POINT = builder.defineInRange("PlayerDeathLossPowerPoint", 1.0, 0, 5);
 

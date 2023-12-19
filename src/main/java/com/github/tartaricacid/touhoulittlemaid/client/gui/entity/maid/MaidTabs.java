@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.IBackpackContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.TabIndex;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
@@ -20,7 +21,7 @@ public class MaidTabs<T extends AbstractMaidContainer> {
     public MaidTabButton[] getTabs(AbstractMaidContainerGui<T> screen) {
         MaidTabButton main = new MaidTabButton(leftPos + 94, topPos + 5, 107, (b) ->
                 NetworkHandler.CHANNEL.sendToServer(new ToggleTabMessage(entityId, TabIndex.MAIN)));
-        if (screen instanceof MaidMainContainerGui) {
+        if (screen instanceof IBackpackContainerScreen) {
             main.active = false;
         }
 

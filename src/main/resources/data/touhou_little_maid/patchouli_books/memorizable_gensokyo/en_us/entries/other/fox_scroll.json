@@ -1,0 +1,19 @@
+{
+  "sortnum": 13,
+  "name": "patchouli.touhou_little_maid.book.entries.other.fox_scroll.name",
+  "icon": "touhou_little_maid:red_fox_scroll",
+  "category": "touhou_little_maid:other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:red_fox_scroll,touhou_little_maid:white_fox_scroll",
+      "text": "patchouli.touhou_little_maid.book.entries.other.fox_scroll.pages.0.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/fox_scroll.png"
+      ]
+    }
+  ]
+}

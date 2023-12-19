@@ -1,0 +1,14 @@
+{
+  "pools": [
+    {
+      "name": "shrine",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "touhou_little_maid:shrine"
+        }
+      ]
+    }
+  ]
+}

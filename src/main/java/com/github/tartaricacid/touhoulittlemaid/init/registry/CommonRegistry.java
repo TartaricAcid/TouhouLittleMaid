@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,5 +14,6 @@ public final class CommonRegistry {
         event.enqueueWork(ServerCustomPackLoader::reloadPacks);
         event.enqueueWork(CommandRegistry::registerArgumentTypes);
         event.enqueueWork(NetworkHandler::init);
+        event.enqueueWork(BackpackManager::initItemIndex);
     }
 }
