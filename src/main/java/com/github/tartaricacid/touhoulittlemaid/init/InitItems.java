@@ -17,6 +17,9 @@ public final class InitItems {
     public static RegistryObject<Item> MAID_BACKPACK_SMALL = ITEMS.register("maid_backpack_small", ItemMaidBackpack::new);
     public static RegistryObject<Item> MAID_BACKPACK_MIDDLE = ITEMS.register("maid_backpack_middle", ItemMaidBackpack::new);
     public static RegistryObject<Item> MAID_BACKPACK_BIG = ITEMS.register("maid_backpack_big", ItemMaidBackpack::new);
+    public static RegistryObject<Item> CRAFTING_TABLE_BACKPACK = ITEMS.register("crafting_table_backpack", ItemMaidBackpack::new);
+    public static RegistryObject<Item> ENDER_CHEST_BACKPACK = ITEMS.register("ender_chest_backpack", ItemMaidBackpack::new);
+    public static RegistryObject<Item> FURNACE_BACKPACK = ITEMS.register("furnace_backpack", ItemMaidBackpack::new);
     public static RegistryObject<Item> CHAIR = ITEMS.register("chair", ItemChair::new);
     public static RegistryObject<Item> HAKUREI_GOHEI = ITEMS.register("hakurei_gohei", ItemHakureiGohei::new);
     public static RegistryObject<Item> MAID_BED = ITEMS.register("maid_bed", ItemMaidBed::new);
@@ -50,9 +53,6 @@ public final class InitItems {
     public static RegistryObject<Item> GOMOKU = ITEMS.register("gomoku", () -> new BlockItem(InitBlocks.GOMOKU.get(), new Item.Properties()));
     public static RegistryObject<Item> RED_FOX_SCROLL = ITEMS.register("red_fox_scroll", ItemFoxScroll::new);
     public static RegistryObject<Item> WHITE_FOX_SCROLL = ITEMS.register("white_fox_scroll", ItemFoxScroll::new);
-    public static RegistryObject<Item> CRAFTING_TABLE_BACKPACK = ITEMS.register("crafting_table_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
-    public static RegistryObject<Item> ENDER_CHEST_BACKPACK = ITEMS.register("ender_chest_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
-    public static RegistryObject<Item> FURNACE_BACKPACK = ITEMS.register("furnace_backpack", () -> new Item((new Item.Properties()).stacksTo(1)));
     public static RegistryObject<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties()));
     public static RegistryObject<Item> BOOKSHELF = ITEMS.register("bookshelf", () -> new BlockItem(InitBlocks.BOOKSHELF.get(), new Item.Properties()));
     public static RegistryObject<Item> COMPUTER = ITEMS.register("computer", () -> new BlockItem(InitBlocks.COMPUTER.get(), new Item.Properties()));

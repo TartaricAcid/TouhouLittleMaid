@@ -9,7 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.CraftingTableBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
@@ -35,13 +34,14 @@ public class CraftingTableBackpack extends IMaidBackpack {
     @Override
     public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
         Item item = stack.getItem();
-        if (item instanceof ItemMaidBackpack) {
-            if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
-                ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
-            }
-        } else {
-            this.dropAllItems(maid);
+        if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
+            ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
+            return;
         }
+        if (item == InitItems.MAID_BACKPACK_MIDDLE.get() || item == InitItems.MAID_BACKPACK_BIG.get()) {
+            return;
+        }
+        this.dropAllItems(maid);
     }
 
     @Override

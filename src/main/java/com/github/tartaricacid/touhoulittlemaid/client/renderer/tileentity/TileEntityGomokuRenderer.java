@@ -70,6 +70,9 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
         poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
+        if (facing == Direction.SOUTH || facing == Direction.NORTH) {
+            poseStack.mulPose(Axis.YN.rotationDegrees(180));
+        }
         VertexConsumer checkerBoardBuff = bufferIn.getBuffer(RenderType.entityTranslucent(CHECKER_BOARD_TEXTURE));
         CHECKER_BOARD_MODEL.renderToBuffer(poseStack, checkerBoardBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
