@@ -95,7 +95,7 @@ public class MaidBeaconGui extends Screen {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         getMinecraft().textureManager.bind(BG);
-        blit(matrixStack, leftPos, topPos, 0, 0, 142, 111);
+
         blit(matrixStack, leftPos, topPos + 2, 0, 0, 142, 111);
         blit(matrixStack, leftPos + 118, topPos + 1, 44, 111, 154, 15);
 
