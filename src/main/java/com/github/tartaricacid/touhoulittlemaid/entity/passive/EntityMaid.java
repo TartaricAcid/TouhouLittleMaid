@@ -619,7 +619,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     public void onRemovedFromWorld() {
         super.onRemovedFromWorld();
-        if (!this.level.isClientSide && this.getOwnerUUID() != null) {
+        if (!this.level.isClientSide && this.isAlive() && this.getOwnerUUID() != null) {
             MaidWorldData data = MaidWorldData.get(this.level);
             if (data != null) {
                 data.addInfo(this);
