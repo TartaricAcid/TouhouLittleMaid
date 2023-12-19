@@ -9,7 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.SmallBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -34,9 +33,11 @@ public class SmallBackpack extends IMaidBackpack {
 
     @Override
     public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
-        if (!(stack.getItem() instanceof ItemMaidBackpack)) {
-            this.dropAllItems(maid);
+        Item item = stack.getItem();
+        if (item == InitItems.MAID_BACKPACK_SMALL.get() || item == InitItems.MAID_BACKPACK_MIDDLE.get() || item == InitItems.MAID_BACKPACK_BIG.get()) {
+            return;
         }
+        this.dropAllItems(maid);
     }
 
     @Override

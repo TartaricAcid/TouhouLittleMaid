@@ -59,7 +59,7 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
             poseStack.mulPose(Vector3f.YN.rotationDegrees(180 + camera.getYRot()));
             poseStack.scale(0.015625F, -0.015625F, 0.015625F);
             float width = (float) (-this.font.width("▼") / 2) + 0.5f;
-            this.font.drawInBatch("▼", width, -1.5f, 0xFF0000, false, poseStack.last().pose(), bufferIn, true, 0, combinedLightIn);
+            this.font.drawInBatch("▼", width, -1.5f, 0xFF0000, false, poseStack.last().pose(), bufferIn, false, 0, combinedLightIn);
             poseStack.popPose();
         }
     }
@@ -70,6 +70,9 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Vector3f.ZN.rotationDegrees(180));
         poseStack.mulPose(Vector3f.YN.rotationDegrees(facing.get2DDataValue() * 90));
+        if (facing == Direction.SOUTH || facing == Direction.NORTH) {
+            poseStack.mulPose(Vector3f.YN.rotationDegrees(180));
+        }
         VertexConsumer checkerBoardBuff = bufferIn.getBuffer(RenderType.entityTranslucent(CHECKER_BOARD_TEXTURE));
         CHECKER_BOARD_MODEL.renderToBuffer(poseStack, checkerBoardBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
@@ -122,10 +125,10 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
             poseStack.mulPose(Vector3f.YN.rotationDegrees(180 + camera.getYRot()));
             poseStack.mulPose(Vector3f.XN.rotationDegrees(camera.getXRot()));
             poseStack.scale(0.03F, -0.03F, 0.03F);
-            this.font.drawInBatch(loseTips, loseTipsWidth, -10, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, true, 0, combinedLightIn);
+            this.font.drawInBatch(loseTips, loseTipsWidth, -10, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, false, 0, combinedLightIn);
             poseStack.scale(0.5F, 0.5F, 0.5F);
-            this.font.drawInBatch(roundTips, roundTipsWidth, -30, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, true, 0, combinedLightIn);
-            this.font.drawInBatch(resetTips, resetTipsWidth, 0, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, true, 0, combinedLightIn);
+            this.font.drawInBatch(roundTips, roundTipsWidth, -30, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, false, 0, combinedLightIn);
+            this.font.drawInBatch(resetTips, resetTipsWidth, 0, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, false, 0, combinedLightIn);
             poseStack.popPose();
         }
     }
