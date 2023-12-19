@@ -53,7 +53,7 @@ public class TileEntityGomokuRenderer extends TileEntityRenderer<TileEntityGomok
             poseStack.mulPose(Vector3f.YN.rotationDegrees(180 + camera.getYRot()));
             poseStack.scale(0.015625F, -0.015625F, 0.015625F);
             float width = (float) (-renderer.font.width("▼") / 2) + 0.5f;
-            renderer.font.drawInBatch("▼", width, -1.5f, 0xFF0000, false, poseStack.last().pose(), bufferIn, true, 0, combinedLightIn);
+            renderer.font.drawInBatch("▼", width, -1.5f, 0xFF0000, false, poseStack.last().pose(), bufferIn, false, 0, combinedLightIn);
             poseStack.popPose();
         }
     }

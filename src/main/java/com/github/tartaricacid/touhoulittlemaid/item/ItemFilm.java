@@ -96,6 +96,14 @@ public class ItemFilm extends Item {
         nbt.remove("HurtTime");
         nbt.remove("DeathTime");
         nbt.remove("HurtByTimestamp");
+        nbt.remove("Pos");
+        nbt.remove("Motion");
+        nbt.remove("FallDistance");
+        nbt.remove("Fire");
+        nbt.remove("Air");
+        nbt.remove("TicksFrozen");
+        nbt.remove("HasVisualFire");
+        nbt.remove("Passengers");
     }
 
     @Override

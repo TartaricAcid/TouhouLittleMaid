@@ -37,13 +37,14 @@ public class MiddleBackpack extends IMaidBackpack {
     @Override
     public void onTakeOff(ItemStack stack, PlayerEntity player, EntityMaid maid) {
         Item item = stack.getItem();
-        if (item instanceof ItemMaidBackpack) {
-            if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
-                ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
-            }
-        } else {
-            this.dropAllItems(maid);
+        if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
+            ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
+            return;
         }
+        if (item == InitItems.MAID_BACKPACK_MIDDLE.get() || item == InitItems.MAID_BACKPACK_BIG.get()) {
+            return;
+        }
+        this.dropAllItems(maid);
     }
 
     @Override

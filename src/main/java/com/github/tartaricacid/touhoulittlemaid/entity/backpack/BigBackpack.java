@@ -36,16 +36,18 @@ public class BigBackpack extends IMaidBackpack {
     @Override
     public void onTakeOff(ItemStack stack, PlayerEntity player, EntityMaid maid) {
         Item item = stack.getItem();
-        if (item instanceof ItemMaidBackpack) {
-            if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
-                ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
-            }
-            if (item == InitItems.MAID_BACKPACK_MIDDLE.get()) {
-                ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.MIDDLE_CAPACITY);
-            }
-        } else {
-            this.dropAllItems(maid);
+        if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
+            ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
+            return;
         }
+        if (item == InitItems.MAID_BACKPACK_MIDDLE.get()) {
+            ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.MIDDLE_CAPACITY);
+            return;
+        }
+        if (item == InitItems.MAID_BACKPACK_BIG.get()) {
+            return;
+        }
+        this.dropAllItems(maid);
     }
 
     @Override
