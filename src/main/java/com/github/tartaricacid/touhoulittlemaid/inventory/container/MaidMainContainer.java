@@ -27,7 +27,6 @@ import static net.minecraft.world.inventory.InventoryMenu.*;
 
 public abstract class MaidMainContainer extends AbstractMaidContainer {
     protected static final int PLAYER_INVENTORY_SIZE = 36;
-    private static final ResourceLocation EMPTY_BAUBLE_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_bauble_slot");
     private static final ResourceLocation EMPTY_MAINHAND_SLOT = new ResourceLocation("item/empty_slot_sword");
     private static final ResourceLocation EMPTY_BACK_SHOW_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_back_show_slot");
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
