@@ -24,7 +24,7 @@ public class TankBackpackContainer extends MaidMainContainer {
         }
         this.data = tankData.getDataAccess();
         this.addSlot(new Slot(tankData, 0, 161, 101));
-        this.addSlot(new Slot(tankData, 1, 161, 142));
+        this.addSlot(new Slot(tankData, 1, 161, 141));
         this.addDataSlots(this.data);
     }
 

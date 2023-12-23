@@ -28,7 +28,7 @@ public final class MaidConfig {
         MAID_NTR_ITEM = builder.define("MaidNtrItem", "minecraft:structure_void");
 
         builder.comment("The max range of maid home mode");
-        MAID_HOME_RANGE = builder.defineInRange("MaidHomeRange", 8, 3, 64);
+        MAID_HOME_RANGE = builder.defineInRange("MaidHomeRange", 12, 3, 64);
 
         builder.comment("Maid can switch models freely");
         MAID_CHANGE_MODEL = builder.define("MaidChangeModel", true);

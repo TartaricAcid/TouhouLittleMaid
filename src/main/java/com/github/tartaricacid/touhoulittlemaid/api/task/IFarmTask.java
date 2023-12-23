@@ -102,7 +102,7 @@ public interface IFarmTask extends IMaidTask {
      */
     @Override
     default List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f, 16);
+        MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f, 24);
         MaidFarmPlantTask maidFarmPlantTask = new MaidFarmPlantTask(this);
         return Lists.newArrayList(Pair.of(5, maidFarmMoveTask), Pair.of(6, maidFarmPlantTask));
     }

@@ -52,6 +52,11 @@ public class TankBackpack extends IMaidBackpack {
     public void onSpawnTombstone(EntityMaid maid, EntityTombstone tombstone) {
     }
 
+    @Override
+    public boolean hasBackpackData() {
+        return true;
+    }
+
     @Nullable
     @Override
     public IBackpackData getBackpackData(EntityMaid maid) {

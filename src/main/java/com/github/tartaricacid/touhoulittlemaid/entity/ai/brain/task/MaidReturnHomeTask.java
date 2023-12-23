@@ -12,7 +12,7 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 public class MaidReturnHomeTask extends MaidCheckRateTask {
-    private static final int MAX_DELAY_TIME = 100;
+    private static final int MAX_DELAY_TIME = 200;
     private static final int TOO_CLOSED_RANGE = 3;
     private static final int MAX_TELEPORT_ATTEMPTS_TIMES = 10;
     private static final int MIN_TELEPORT_DISTANCE = 12;

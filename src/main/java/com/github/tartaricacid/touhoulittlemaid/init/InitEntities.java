@@ -88,7 +88,7 @@ public final class InitEntities {
 
     @SubscribeEvent
     public static void addEntityAttributeEvent(EntityAttributeCreationEvent event) {
-        event.put(EntityMaid.TYPE, Monster.createMonsterAttributes().build());
+        event.put(EntityMaid.TYPE, EntityMaid.createAttributes().build());
         event.put(EntityChair.TYPE, LivingEntity.createLivingAttributes().build());
         event.put(EntityFairy.TYPE, EntityFairy.createFairyAttributes().build());
     }
