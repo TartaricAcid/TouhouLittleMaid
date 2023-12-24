@@ -152,6 +152,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final EntityDataAccessor<MaidChatBubbles> CHAT_BUBBLE = SynchedEntityData.defineId(EntityMaid.class, MaidChatBubbles.DATA);
     private static final EntityDataAccessor<String> BACKPACK_TYPE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -230,6 +231,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.entityData.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
         this.entityData.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
         this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
+        this.entityData.define(BACKPACK_FLUID, "");
     }
 
     @Override
@@ -1324,6 +1326,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     public void setSwingingArms(boolean swingingArms) {
         this.entityData.set(DATA_ARM_RISE, swingingArms);
+    }
+
+    public String getBackpackFluid() {
+        return this.entityData.get(BACKPACK_FLUID);
+    }
+
+    public void setBackpackFluid(String fluidName) {
+        this.entityData.set(BACKPACK_FLUID, fluidName);
     }
 
     public MaidSchedule getSchedule() {

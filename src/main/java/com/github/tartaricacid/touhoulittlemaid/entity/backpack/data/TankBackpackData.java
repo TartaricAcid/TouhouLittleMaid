@@ -2,18 +2,18 @@ package com.github.tartaricacid.touhoulittlemaid.entity.backpack.data;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.MaidFluidUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TankBackpackData extends SimpleContainer implements IBackpackData {
     public static final int CAPACITY = 10 * FluidType.BUCKET_VOLUME;
@@ -22,24 +22,22 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
     private final ContainerData dataAccess = new ContainerData() {
         public int get(int index) {
             if (index == 0) {
-                return TankBackpackData.this.tank.getFluidAmount();
+                return TankBackpackData.this.tankFluidCount;
             }
             return 0;
         }
 
         public void set(int index, int value) {
             if (index == 0) {
-                FluidStack fluid = TankBackpackData.this.tank.getFluid();
-                if (!fluid.isEmpty()) {
-                    fluid.setAmount(value);
-                }
+                TankBackpackData.this.tankFluidCount = value;
             }
         }
 
         public int getCount() {
-            return 2;
+            return 1;
         }
     };
+    private int tankFluidCount = 0;
 
     public TankBackpackData(EntityMaid maid) {
         super(1);
@@ -48,20 +46,24 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
 
     @Override
     public void setItem(int index, ItemStack stack) {
-        super.setItem(index, stack);
-        CombinedInvWrapper availableInv = this.maid.getAvailableInv(false);
-        FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(stack, tank, availableInv, Integer.MAX_VALUE, null, true);
-        if (!fluidActionResult.isSuccess()) {
-            fluidActionResult = FluidUtil.tryEmptyContainerAndStow(stack, tank, availableInv, Integer.MAX_VALUE, null, true);
-        }
-        if (fluidActionResult.isSuccess()) {
-            ItemStack result = fluidActionResult.getResult();
-            ItemStack remainder = ItemHandlerHelper.insertItemStacked(availableInv, result, false);
-            if (!remainder.isEmpty()) {
-                this.maid.spawnAtLocation(remainder);
+        if (!this.maid.level.isClientSide) {
+            CombinedInvWrapper availableInv = this.maid.getAvailableInv(false);
+            FluidActionResult fluidActionResult = MaidFluidUtil.tankToBucket(stack, tank, availableInv);
+            if (!fluidActionResult.isSuccess()) {
+                MaidFluidUtil.bucketToTank(stack, tank, availableInv);
             }
-            this.getItem(0).shrink(result.getCount());
+            this.tankFluidCount = tank.getFluidAmount();
+            ResourceLocation key = ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid());
+            if (key != null) {
+                maid.setBackpackFluid(key.toString());
+            }
         }
+        super.setItem(index, stack);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
     }
 
     @Override
@@ -73,6 +75,11 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
     public void load(CompoundTag tag, EntityMaid maid) {
         tank.readFromNBT(tag.getCompound("Tanks"));
         this.fromTag(tag.getList("Items", Tag.TAG_COMPOUND));
+        this.tankFluidCount = tank.getFluidAmount();
+        ResourceLocation key = ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid());
+        if (key != null) {
+            maid.setBackpackFluid(key.toString());
+        }
     }
 
     @Override

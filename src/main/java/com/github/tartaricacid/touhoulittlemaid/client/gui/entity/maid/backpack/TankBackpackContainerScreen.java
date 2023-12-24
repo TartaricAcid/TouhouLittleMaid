@@ -2,8 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.TankBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.TankBackpackContainer;
+import com.github.tartaricacid.touhoulittlemaid.util.MaidFluidRender;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -28,6 +30,15 @@ public class TankBackpackContainerScreen extends AbstractMaidContainerGui<TankBa
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BACKPACK);
         graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 128);
+
+        RenderSystem.enableBlend();
+        MaidFluidRender.drawFluid(graphics, leftPos + 197, topPos + 104, 34, 50, maid.getBackpackFluid(), this.menu.getFluidCount(), TankBackpackData.CAPACITY);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderSystem.disableBlend();
+        graphics.blit(BACKPACK, leftPos + 197, topPos + 104, 165, 0, 34, 50);
+
+
         graphics.drawString(font, this.menu.getFluidCount() + " mB", leftPos + 145, topPos + 130, 0x000000, false);
+        graphics.drawString(font, MaidFluidRender.getFluidName(maid.getBackpackFluid(), this.menu.getFluidCount()), leftPos + 145, topPos + 140, 0x000000, false);
     }
 }
