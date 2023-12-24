@@ -28,5 +28,6 @@ public class TankBackpackContainerScreen extends AbstractMaidContainerGui<TankBa
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BACKPACK);
         graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 128);
+        graphics.drawString(font, this.menu.getFluidCount() + " mB", leftPos + 145, topPos + 130, 0x000000, false);
     }
 }

@@ -60,7 +60,7 @@ public class TankBackpack extends IMaidBackpack {
     @Nullable
     @Override
     public IBackpackData getBackpackData(EntityMaid maid) {
-        return new TankBackpackData();
+        return new TankBackpackData(maid);
     }
 
     @Override
