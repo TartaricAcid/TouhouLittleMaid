@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
@@ -17,6 +16,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class TankBackpackData extends SimpleContainer implements IBackpackData {
     public static final int CAPACITY = 10 * FluidType.BUCKET_VOLUME;
+    private static final int INPUT_INDEX = 0;
+    private static final int OUTPUT_INDEX = 1;
     private final EntityMaid maid;
     private final FluidTank tank = new FluidTank(CAPACITY);
     private final ContainerData dataAccess = new ContainerData() {
@@ -40,7 +41,7 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
     private int tankFluidCount = 0;
 
     public TankBackpackData(EntityMaid maid) {
-        super(1);
+        super(2);
         this.maid = maid;
     }
 
@@ -48,9 +49,11 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
     public void setItem(int index, ItemStack stack) {
         if (!this.maid.level.isClientSide) {
             CombinedInvWrapper availableInv = this.maid.getAvailableInv(false);
-            FluidActionResult fluidActionResult = MaidFluidUtil.tankToBucket(stack, tank, availableInv);
-            if (!fluidActionResult.isSuccess()) {
+            if (index == INPUT_INDEX) {
                 MaidFluidUtil.bucketToTank(stack, tank, availableInv);
+            }
+            if (index == OUTPUT_INDEX) {
+                MaidFluidUtil.tankToBucket(stack, tank, availableInv);
             }
             this.tankFluidCount = tank.getFluidAmount();
             ResourceLocation key = ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid());
@@ -73,13 +76,8 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
 
     @Override
     public void load(CompoundTag tag, EntityMaid maid) {
-        tank.readFromNBT(tag.getCompound("Tanks"));
+        this.loadTank(tag.getCompound("Tanks"), maid);
         this.fromTag(tag.getList("Items", Tag.TAG_COMPOUND));
-        this.tankFluidCount = tank.getFluidAmount();
-        ResourceLocation key = ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid());
-        if (key != null) {
-            maid.setBackpackFluid(key.toString());
-        }
     }
 
     @Override
@@ -90,5 +88,18 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
 
     @Override
     public void serverTick(EntityMaid maid) {
+    }
+
+    public FluidTank getTank() {
+        return tank;
+    }
+
+    public void loadTank(CompoundTag nbt, EntityMaid maid) {
+        tank.readFromNBT(nbt);
+        this.tankFluidCount = tank.getFluidAmount();
+        ResourceLocation key = ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid());
+        if (key != null) {
+            maid.setBackpackFluid(key.toString());
+        }
     }
 }

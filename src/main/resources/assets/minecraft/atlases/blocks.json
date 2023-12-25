@@ -2,7 +2,11 @@
   "sources": [
     {
       "type": "single",
-      "resource": "touhou_little_maid:slot/empty_bauble_slot"
+      "resource": "touhou_little_maid:slot/tank_input_slot"
+    },
+    {
+      "type": "single",
+      "resource": "touhou_little_maid:slot/tank_output_slot"
     },
     {
       "type": "single",

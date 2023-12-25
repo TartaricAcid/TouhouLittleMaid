@@ -20,6 +20,7 @@ public final class InitItems {
     public static RegistryObject<Item> CRAFTING_TABLE_BACKPACK = ITEMS.register("crafting_table_backpack", ItemMaidBackpack::new);
     public static RegistryObject<Item> ENDER_CHEST_BACKPACK = ITEMS.register("ender_chest_backpack", ItemMaidBackpack::new);
     public static RegistryObject<Item> FURNACE_BACKPACK = ITEMS.register("furnace_backpack", ItemMaidBackpack::new);
+    public static RegistryObject<Item> TANK_BACKPACK = ITEMS.register("tank_backpack", ItemTankBackpack::new);
     public static RegistryObject<Item> CHAIR = ITEMS.register("chair", ItemChair::new);
     public static RegistryObject<Item> HAKUREI_GOHEI = ITEMS.register("hakurei_gohei", ItemHakureiGohei::new);
     public static RegistryObject<Item> MAID_BED = ITEMS.register("maid_bed", ItemMaidBed::new);

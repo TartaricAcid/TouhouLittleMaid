@@ -35,7 +35,7 @@ public final class MaidFluidRender {
     public static Component getFluidName(String fluidId, int amount) {
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidId));
         if (amount <= 0 || fluid == null || fluid.isSame(Fluids.EMPTY)) {
-            return Component.empty();
+            return Component.translatable("tooltips.touhou_little_maid.tank_backpack.empty_fluid");
         }
         return fluid.getFluidType().getDescription();
     }

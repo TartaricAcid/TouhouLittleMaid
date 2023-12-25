@@ -6,10 +6,13 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.TankBackpac
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.TankBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.util.MaidFluidRender;
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -32,13 +35,20 @@ public class TankBackpackContainerScreen extends AbstractMaidContainerGui<TankBa
         graphics.blit(BACKPACK, leftPos + 85, topPos + 36, 0, 0, 165, 128);
 
         RenderSystem.enableBlend();
-        MaidFluidRender.drawFluid(graphics, leftPos + 197, topPos + 104, 34, 50, maid.getBackpackFluid(), this.menu.getFluidCount(), TankBackpackData.CAPACITY);
+        MaidFluidRender.drawFluid(graphics, leftPos + 200, topPos + 108, 29, 50, maid.getBackpackFluid(), this.menu.getFluidCount(), TankBackpackData.CAPACITY);
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
         graphics.blit(BACKPACK, leftPos + 197, topPos + 104, 165, 0, 34, 50);
 
-
-        graphics.drawString(font, this.menu.getFluidCount() + " mB", leftPos + 145, topPos + 130, 0x000000, false);
-        graphics.drawString(font, MaidFluidRender.getFluidName(maid.getBackpackFluid(), this.menu.getFluidCount()), leftPos + 145, topPos + 140, 0x000000, false);
+        boolean xInRange = leftPos + 196 <= x && x <= leftPos + 196 + 29;
+        boolean yInRange = topPos + 108 <= y && y <= topPos + 108 + 50;
+        if (xInRange && yInRange) {
+            MutableComponent fluidInfo = Component.translatable("tooltips.touhou_little_maid.tank_backpack.fluid",
+                    MaidFluidRender.getFluidName(maid.getBackpackFluid(), this.menu.getFluidCount()),
+                    this.menu.getFluidCount()).withStyle(ChatFormatting.GRAY);
+            MutableComponent capacityInfo = Component.translatable("tooltips.touhou_little_maid.tank_backpack.capacity", TankBackpackData.CAPACITY)
+                    .withStyle(ChatFormatting.GRAY);
+            graphics.renderComponentTooltip(font, Lists.newArrayList(fluidInfo, capacityInfo), x, y);
+        }
     }
 }
