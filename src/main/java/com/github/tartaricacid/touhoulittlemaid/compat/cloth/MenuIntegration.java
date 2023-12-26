@@ -60,9 +60,21 @@ public class MenuIntegration {
                 .setDefaultValue(Items.STRUCTURE_VOID).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_ntr_item.desc"))
                 .setSaveConsumer(s -> MaidConfig.MAID_NTR_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
 
-        maid.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.maid.maid_home_range.name"), MaidConfig.MAID_HOME_RANGE.get(), 3, 64)
-                .setDefaultValue(8).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_home_range.desc"))
-                .setSaveConsumer(i -> MaidConfig.MAID_HOME_RANGE.set(i)).build());
+        maid.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.maid.maid_work_range.name"), MaidConfig.MAID_WORK_RANGE.get(), 3, 64)
+                .setDefaultValue(12).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_work_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_WORK_RANGE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.maid.maid_idle_range.name"), MaidConfig.MAID_IDLE_RANGE.get(), 3, 32)
+                .setDefaultValue(6).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_idle_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_IDLE_RANGE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.maid.maid_sleep_range.name"), MaidConfig.MAID_SLEEP_RANGE.get(), 3, 32)
+                .setDefaultValue(6).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_sleep_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_SLEEP_RANGE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.maid.maid_non_home_range.name"), MaidConfig.MAID_NON_HOME_RANGE.get(), 3, 32)
+                .setDefaultValue(8).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_non_home_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_NON_HOME_RANGE.set(i)).build());
 
         maid.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.maid.maid_change_model.name"), MaidConfig.MAID_CHANGE_MODEL.get())
                 .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_change_model.desc"))

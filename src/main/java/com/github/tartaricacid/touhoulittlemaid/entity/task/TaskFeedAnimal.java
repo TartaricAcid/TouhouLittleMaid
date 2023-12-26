@@ -38,6 +38,6 @@ public class TaskFeedAnimal implements IMaidTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(5, new MaidFeedAnimalTask(12, 0.6f, 30)));
+        return Lists.newArrayList(Pair.of(5, new MaidFeedAnimalTask(0.6f, 30)));
     }
 }

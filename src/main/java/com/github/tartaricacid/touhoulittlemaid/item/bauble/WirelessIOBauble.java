@@ -18,7 +18,6 @@ import java.util.Objects;
 import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.bytes2Booleans;
 
 public class WirelessIOBauble implements IMaidBauble {
-    public static final int MAX_DISTANCE = 16;
     private static final int SLOT_NUM = 38;
 
     @Nonnull
@@ -96,7 +95,8 @@ public class WirelessIOBauble implements IMaidBauble {
             if (bindingPos == null) {
                 return;
             }
-            if (maid.distanceToSqr(bindingPos.getX(), bindingPos.getY(), bindingPos.getZ()) > (MAX_DISTANCE * MAX_DISTANCE)) {
+            float maxDistance = maid.getRestrictRadius();
+            if (maid.distanceToSqr(bindingPos.getX(), bindingPos.getY(), bindingPos.getZ()) > (maxDistance * maxDistance)) {
                 return;
             }
 

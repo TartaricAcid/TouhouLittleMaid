@@ -1,21 +1,19 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-@OnlyIn(Dist.CLIENT)
 public final class RenderHelper {
     public static void renderFloatingText(PoseStack poseStack, String text, Vec3 vec, int color, float scale, float yOffset) {
         renderFloatingText(poseStack, text, vec.x + 0.5, vec.y + 1.5, vec.z + 0.5, color, scale, true, yOffset, true);
     }
-
 
     public static void renderFloatingText(PoseStack poseStack, String text, double x, double y, double z, int color, float scale, boolean center, float yOffset, boolean seeThrough) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -34,6 +32,27 @@ public final class RenderHelper {
             font.drawInBatch(text, fontX, yOffset, color, false, poseStack.last().pose(), buffer, seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL, 0, 0xf000f0);
             poseStack.popPose();
             buffer.endBatch();
+        }
+    }
+
+    public static void renderCylinder(PoseStack poseStack, VertexConsumer consumer, Vec3 centerPos, double radius, int precision, float red, float green, float blue) {
+        Matrix4f matrix4f = poseStack.last().pose();
+        Matrix3f matrix3f = poseStack.last().normal();
+        double precisionAngle = 2 * Math.PI / precision;
+        for (int i = precision; i >= 0; i--) {
+            double x1 = centerPos.x + radius * Math.cos(i * precisionAngle);
+            double x2 = centerPos.x + radius * Math.cos((i - 1) * precisionAngle);
+            double y = centerPos.y;
+            double z1 = centerPos.z + radius * Math.sin(i * precisionAngle);
+            double z2 = centerPos.z + radius * Math.sin((i - 1) * precisionAngle);
+            consumer.vertex(matrix4f, (float) x1, (float) y, (float) z1).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+            consumer.vertex(matrix4f, (float) x2, (float) y, (float) z2).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+
+            consumer.vertex(matrix4f, (float) x1, (float) y, (float) z1).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+            consumer.vertex(matrix4f, (float) x2, (float) y, (float) z2).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
+            consumer.vertex(matrix4f, (float) x1, (float) y, (float) z1).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
+            consumer.vertex(matrix4f, (float) x2, (float) y, (float) z2).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
         }
     }
 }

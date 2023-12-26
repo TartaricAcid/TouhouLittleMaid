@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -50,6 +52,11 @@ public class MaidConfigMessage {
                     EntityMaid maid = (EntityMaid) entity;
                     if (maid.isHomeModeEnable() != message.home) {
                         maid.setHomeModeEnable(message.home);
+                        if (message.home) {
+                            maid.getSchedulePos().setHomeModeEnable(maid, maid.blockPosition());
+                        } else {
+                            maid.restrictTo(BlockPos.ZERO, MaidConfig.MAID_NON_HOME_RANGE.get());
+                        }
                     }
                     if (maid.isPickup() != message.pick) {
                         maid.setPickup(message.pick);

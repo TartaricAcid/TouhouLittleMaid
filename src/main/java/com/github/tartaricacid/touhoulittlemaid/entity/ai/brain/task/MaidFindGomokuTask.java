@@ -9,8 +9,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class MaidFindGomokuTask extends MaidMoveToBlockTask {
-    public MaidFindGomokuTask(float movementSpeed, int searchLength) {
-        super(movementSpeed, searchLength);
+    public MaidFindGomokuTask(float movementSpeed) {
+        super(movementSpeed);
     }
 
     @Override

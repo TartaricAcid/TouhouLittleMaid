@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 
 public class MaidFindBedTask extends MaidMoveToBlockTask {
-    public MaidFindBedTask(float movementSpeed, int searchLength) {
-        super(movementSpeed, searchLength);
+    public MaidFindBedTask(float movementSpeed) {
+        super(movementSpeed);
     }
 
     @Override

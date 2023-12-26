@@ -36,7 +36,7 @@ public class TaskCocoa implements IFarmTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f, 24) {
+        MaidFarmMoveTask maidFarmMoveTask = new MaidFarmMoveTask(this, 0.6f) {
             @Override
             protected boolean checkPathReach(EntityMaid maid, BlockPos pos) {
                 for (int x = -1; x <= 1; x++) {

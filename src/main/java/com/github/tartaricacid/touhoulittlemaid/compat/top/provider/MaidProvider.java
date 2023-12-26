@@ -2,9 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.top.provider;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -48,19 +46,7 @@ public class MaidProvider implements IProbeInfoEntityProvider {
     }
 
     private MutableComponent getActivityTransText(EntityMaid maid) {
-        MaidSchedule schedule = maid.getSchedule();
-        int time = (int) (maid.level().getDayTime() % 24000L);
-        switch (schedule) {
-            case ALL -> {
-                return getActivityTransText(Activity.WORK);
-            }
-            case NIGHT -> {
-                return getActivityTransText(InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time));
-            }
-            default -> {
-                return getActivityTransText(InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time));
-            }
-        }
+        return getActivityTransText(maid.getScheduleDetail());
     }
 
     private MutableComponent getActivityTransText(Activity activity) {

@@ -4,10 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDamageEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChatBubbleInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
@@ -176,22 +174,7 @@ public class ChatBubbleManger {
     }
 
     private static void addMainChatText(EntityMaid maid) {
-        MaidSchedule schedule = maid.getSchedule();
-        int time = (int) (maid.level().getDayTime() % 24000L);
-        Activity activity;
-        switch (schedule) {
-            default:
-            case DAY:
-                activity = InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time);
-                break;
-            case NIGHT:
-                activity = InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time);
-                break;
-            case ALL:
-                activity = Activity.WORK;
-                break;
-        }
-
+        Activity activity = maid.getScheduleDetail();
         if (activity == Activity.IDLE) {
             addMainChatText(maid, IDLE_CHAT_TEXT_ID);
             return;

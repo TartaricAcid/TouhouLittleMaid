@@ -36,7 +36,7 @@ public final class MaidBrain {
 
     public static ImmutableList<SensorType<? extends Sensor<? super EntityMaid>>> getSensorTypes() {
         return ImmutableList.of(
-                SensorType.NEAREST_LIVING_ENTITIES,
+                InitEntities.MAID_NEAREST_LIVING_ENTITY_SENSOR.get(),
                 SensorType.HURT_BY,
                 InitEntities.MAID_HOSTILES_SENSOR.get(),
                 InitEntities.MAID_PICKUP_ENTITIES_SENSOR.get()
@@ -80,8 +80,8 @@ public final class MaidBrain {
         Pair<Integer, BehaviorControl<? super EntityMaid>> maidAwait = Pair.of(1, new MaidAwaitTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> interactWithDoor = Pair.of(2, InteractWithDoor.create());
         Pair<Integer, BehaviorControl<? super EntityMaid>> walkToTarget = Pair.of(2, new MoveToTargetSink());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> followOwner = Pair.of(3, new MaidFollowOwnerTask(0.5f, 8, 2));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> pickupItem = Pair.of(10, new MaidPickupEntitiesTask(EntityMaid::isPickup, 8, 0.6f));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> followOwner = Pair.of(3, new MaidFollowOwnerTask(0.5f, 2));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> pickupItem = Pair.of(10, new MaidPickupEntitiesTask(EntityMaid::isPickup, 0.6f));
         Pair<Integer, BehaviorControl<? super EntityMaid>> maidReturnHome = Pair.of(20, new MaidReturnHomeTask(0.5f));
         Pair<Integer, BehaviorControl<? super EntityMaid>> clearSleep = Pair.of(99, new MaidClearSleepTask());
 
@@ -99,16 +99,16 @@ public final class MaidBrain {
         BehaviorControl<EntityMaid> firstShuffledTask = new MaidRunOne(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, walkRandomly, noLook));
 
         Pair<Integer, BehaviorControl<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> findJoy = Pair.of(6, new MaidFindJoyTask(0.6f, 12));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> findJoy = Pair.of(6, new MaidFindJoyTask(0.6f));
         Pair<Integer, BehaviorControl<? super EntityMaid>> sitJoy = Pair.of(7, new MaidSitJoyTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> supplemented = Pair.of(10, firstShuffledTask);
-        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, UpdateActivityFromSchedule.create());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
         brain.addActivity(Activity.IDLE, ImmutableList.of(beg, findJoy, sitJoy, supplemented, updateActivity));
     }
 
     private static void registerWorkGoals(Brain<EntityMaid> brain, EntityMaid maid) {
-        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, UpdateActivityFromSchedule.create());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
         List<Pair<Integer, BehaviorControl<? super EntityMaid>>> pairMaidList = maid.getTask().createBrainTasks(maid);
         if (pairMaidList.isEmpty()) {
             pairMaidList = Lists.newArrayList(updateActivity);
@@ -120,17 +120,17 @@ public final class MaidBrain {
     }
 
     private static void registerRestGoals(Brain<EntityMaid> brain) {
-        Pair<Integer, BehaviorControl<? super EntityMaid>> findBed = Pair.of(5, new MaidFindBedTask(0.6f, 12));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> findBed = Pair.of(5, new MaidFindBedTask(0.6f));
         Pair<Integer, BehaviorControl<? super EntityMaid>> sleep = Pair.of(6, new MaidSleepTask());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, UpdateActivityFromSchedule.create());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
         brain.addActivity(Activity.REST, ImmutableList.of(findBed, sleep, updateActivity));
     }
 
     private static void registerPanicGoals(Brain<EntityMaid> brain) {
         Pair<Integer, BehaviorControl<? super EntityMaid>> clearHurt = Pair.of(5, new MaidClearHurtTask());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> runAway = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.NEAREST_HOSTILE, 0.7f, 6, false));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> runAwayHurt = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.HURT_BY_ENTITY, 0.7f, 6, false));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> runAway = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.NEAREST_HOSTILE, 0.7f, false));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> runAwayHurt = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.HURT_BY_ENTITY, 0.7f, false));
 
         brain.addActivity(Activity.PANIC, ImmutableList.of(clearHurt, runAway, runAwayHurt));
     }
@@ -144,7 +144,7 @@ public final class MaidBrain {
         Pair<BehaviorControl<? super EntityMaid>, Integer> noLook = Pair.of(new DoNothing(30, 60), 2);
 
         Pair<Integer, BehaviorControl<? super EntityMaid>> shuffled = Pair.of(5, new MaidRunOne(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook)));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, UpdateActivityFromSchedule.create());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
         brain.addActivity(Activity.RIDE, ImmutableList.of(shuffled, updateActivity));
     }

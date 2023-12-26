@@ -52,7 +52,7 @@ public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
         int time = (int) (maid.level().getDayTime() % 24000L);
         int hour = (time / 1000 + 6) % 24;
         int minute = (time % 1000) * 60 / 1000;
-        Activity activity;
+        Activity activity = maid.getScheduleDetail();
 
         List<Component> out = Lists.newArrayList();
         out.add(Component.literal(String.format("§n%s§7 %s:%s", getScheduleTransText(), DECIMAL_FORMAT.format(hour), DECIMAL_FORMAT.format(minute))));
@@ -61,7 +61,6 @@ public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
                 out.add(Component.literal(String.format("§a█ 00:00-24:00 %s", getActivityTransText(Activity.WORK))));
                 break;
             case NIGHT:
-                activity = InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time);
                 if (activity == Activity.WORK) {
                     out.add(Component.literal(String.format("§a█ 18:00-06:00 %s", getActivityTransText(Activity.WORK))));
                 } else {
@@ -82,7 +81,6 @@ public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
                 break;
             case DAY:
             default:
-                activity = InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time);
                 if (activity == Activity.WORK) {
                     out.add(Component.literal(String.format("§a█ 06:00-18:00 %s", getActivityTransText(Activity.WORK))));
                 } else {

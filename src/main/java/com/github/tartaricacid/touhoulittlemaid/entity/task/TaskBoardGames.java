@@ -39,7 +39,7 @@ public class TaskBoardGames implements IMaidTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        Pair<Integer, BehaviorControl<? super EntityMaid>> findGomoku = Pair.of(5, new MaidFindGomokuTask(0.6f, 12));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> findGomoku = Pair.of(5, new MaidFindGomokuTask(0.6f));
         Pair<Integer, BehaviorControl<? super EntityMaid>> sitGomoku = Pair.of(6, new MaidSitJoyTask());
         return Lists.newArrayList(findGomoku, sitGomoku);
     }
