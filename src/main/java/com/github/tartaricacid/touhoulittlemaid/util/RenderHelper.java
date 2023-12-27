@@ -35,6 +35,19 @@ public final class RenderHelper {
         }
     }
 
+    public static void renderLine(PoseStack poseStack, VertexConsumer consumer, Vec3 start, Vec3 end, float red, float green, float blue) {
+        Matrix4f matrix4f = poseStack.last().pose();
+        Matrix3f matrix3f = poseStack.last().normal();
+        consumer.vertex(matrix4f, (float) start.x, (float) start.y, (float) start.z).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+        consumer.vertex(matrix4f, (float) end.x, (float) end.y, (float) end.z).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+
+        consumer.vertex(matrix4f, (float) start.x, (float) start.y, (float) start.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+        consumer.vertex(matrix4f, (float) end.x, (float) end.y, (float) end.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
+        consumer.vertex(matrix4f, (float) start.x, (float) start.y, (float) start.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
+        consumer.vertex(matrix4f, (float) end.x, (float) end.y, (float) end.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
+    }
+
     public static void renderCylinder(PoseStack poseStack, VertexConsumer consumer, Vec3 centerPos, double radius, int precision, float red, float green, float blue) {
         Matrix4f matrix4f = poseStack.last().pose();
         Matrix3f matrix3f = poseStack.last().normal();

@@ -1,11 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,9 +16,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemKappaCompass extends Item {
     public ItemKappaCompass() {
@@ -74,6 +80,7 @@ public class ItemKappaCompass extends Item {
             if (player.isDiscrete()) {
                 maid.getSchedulePos().clear(maid);
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.maid_clear"));
+                player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
                 return InteractionResult.SUCCESS;
             }
             CompoundTag tag = compass.getTagElement("KappaCompassData");
@@ -93,6 +100,7 @@ public class ItemKappaCompass extends Item {
                 maid.getSchedulePos().setConfigured(true);
                 maid.getSchedulePos().restrictTo(maid);
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.maid_write"));
+                player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
                 return InteractionResult.SUCCESS;
             }
             player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.no_data"));
@@ -137,6 +145,25 @@ public class ItemKappaCompass extends Item {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.work", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
             }
         }
+        player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+        if (hasKappaCompassData(stack)) {
+            BlockPos workPos = getPoint(Activity.WORK, stack);
+            BlockPos idlePos = getPoint(Activity.IDLE, stack);
+            BlockPos sleepPos = getPoint(Activity.REST, stack);
+            if (workPos != null) {
+                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.work", workPos.getX(), workPos.getY(), workPos.getZ()).withStyle(ChatFormatting.GRAY));
+            }
+            if (idlePos != null) {
+                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.idle", idlePos.getX(), idlePos.getY(), idlePos.getZ()).withStyle(ChatFormatting.GRAY));
+            }
+            if (sleepPos != null) {
+                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.sleep", sleepPos.getX(), sleepPos.getY(), sleepPos.getZ()).withStyle(ChatFormatting.GRAY));
+            }
+        }
     }
 }

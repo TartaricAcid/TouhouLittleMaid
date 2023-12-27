@@ -13,10 +13,10 @@ public class MaidUpdateActivityFromSchedule extends Behavior<EntityMaid> {
         super(ImmutableMap.of());
     }
 
-    protected void start(ServerLevel level, EntityMaid maid, long gameTIme) {
+    protected void start(ServerLevel level, EntityMaid maid, long gameTime) {
         Brain<EntityMaid> brain = maid.getBrain();
         long dayTime = level.getDayTime();
-        if (maid.tickCount % 20 == 0) {
+        if (gameTime - brain.lastScheduleUpdate > 20L) {
             Activity activity = brain.getSchedule().getActivityAt((int) (dayTime % 24000L));
             if (!brain.isActive(activity)) {
                 maid.getSchedulePos().restrictTo(maid);
