@@ -196,7 +196,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.favorabilityManager = new FavorabilityManager(this);
-        this.schedulePos = new SchedulePos(BlockPos.ZERO);
+        this.schedulePos = new SchedulePos(BlockPos.ZERO, world.dimension().location());
     }
 
     public EntityMaid(Level worldIn) {

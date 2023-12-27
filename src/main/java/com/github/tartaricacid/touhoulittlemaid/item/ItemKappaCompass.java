@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -33,6 +34,11 @@ public class ItemKappaCompass extends Item {
         tag.put(activity.getName(), NbtUtils.writeBlockPos(pos));
     }
 
+    public static void addDimension(ResourceLocation dimension, ItemStack compass) {
+        CompoundTag tag = compass.getOrCreateTagElement("KappaCompassData");
+        tag.putString("Dimension", dimension.toString());
+    }
+
     @Nullable
     public static BlockPos getPoint(Activity activity, ItemStack compass) {
         CompoundTag tag = compass.getTagElement("KappaCompassData");
@@ -49,6 +55,15 @@ public class ItemKappaCompass extends Item {
             if (tag.contains(name, Tag.TAG_COMPOUND)) {
                 return NbtUtils.readBlockPos(tag.getCompound(name));
             }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static ResourceLocation getDimension(ItemStack compass) {
+        CompoundTag tag = compass.getTagElement("KappaCompassData");
+        if (tag != null) {
+            return new ResourceLocation(tag.getString("Dimension"));
         }
         return null;
     }
@@ -84,7 +99,13 @@ public class ItemKappaCompass extends Item {
                 return InteractionResult.SUCCESS;
             }
             CompoundTag tag = compass.getTagElement("KappaCompassData");
-            if (tag != null) {
+            ResourceLocation dimension = getDimension(compass);
+            if (tag != null || dimension != null) {
+                if (!maid.level.dimension().location().equals(dimension)) {
+                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.maid_dimension_check"));
+                    return InteractionResult.CONSUME;
+                }
+                maid.getSchedulePos().setDimension(dimension);
                 BlockPos point = getPoint(Activity.WORK, compass);
                 if (point != null) {
                     maid.getSchedulePos().setWorkPos(point);
@@ -104,7 +125,7 @@ public class ItemKappaCompass extends Item {
                 return InteractionResult.SUCCESS;
             }
             player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.no_data"));
-            return InteractionResult.FAIL;
+            return InteractionResult.CONSUME;
         }
         return super.interactLivingEntity(compass, player, livingEntity, hand);
     }
@@ -144,6 +165,7 @@ public class ItemKappaCompass extends Item {
                 addPoint(Activity.WORK, clickedPos, compass);
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.work", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
             }
+            addDimension(player.level.dimension().location(), compass);
         }
         player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
         return InteractionResult.SUCCESS;
@@ -152,9 +174,13 @@ public class ItemKappaCompass extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
         if (hasKappaCompassData(stack)) {
+            ResourceLocation dimension = getDimension(stack);
             BlockPos workPos = getPoint(Activity.WORK, stack);
             BlockPos idlePos = getPoint(Activity.IDLE, stack);
             BlockPos sleepPos = getPoint(Activity.REST, stack);
+            if (dimension != null) {
+                components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", dimension.toString()).withStyle(ChatFormatting.GRAY));
+            }
             if (workPos != null) {
                 components.add(Component.translatable("message.touhou_little_maid.kappa_compass.work", workPos.getX(), workPos.getY(), workPos.getZ()).withStyle(ChatFormatting.GRAY));
             }

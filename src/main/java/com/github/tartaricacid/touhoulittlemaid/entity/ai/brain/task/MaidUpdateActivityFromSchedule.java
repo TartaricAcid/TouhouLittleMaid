@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -9,6 +10,8 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.schedule.Activity;
 
 public class MaidUpdateActivityFromSchedule extends Behavior<EntityMaid> {
+    private Activity cacheActivity;
+
     public MaidUpdateActivityFromSchedule() {
         super(ImmutableMap.of());
     }
@@ -18,7 +21,11 @@ public class MaidUpdateActivityFromSchedule extends Behavior<EntityMaid> {
         long dayTime = level.getDayTime();
         if (gameTime - brain.lastScheduleUpdate > 20L) {
             Activity activity = brain.getSchedule().getActivityAt((int) (dayTime % 24000L));
-            if (!brain.isActive(activity)) {
+            if (this.cacheActivity == null) {
+                this.cacheActivity = activity;
+            }
+            if (!this.cacheActivity.equals(activity) && !maid.isSleeping() && !(maid.getVehicle() instanceof EntitySit)) {
+                this.cacheActivity = activity;
                 maid.getSchedulePos().restrictTo(maid);
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
             }

@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -40,6 +41,10 @@ public class CompassRenderEvent {
             if (!ItemKappaCompass.hasKappaCompassData(stack)) {
                 return;
             }
+            ResourceLocation dimension = ItemKappaCompass.getDimension(stack);
+            if (dimension != null && !mc.player.level.dimension().location().equals(dimension)) {
+                return;
+            }
             BlockPos workPos = ItemKappaCompass.getPoint(Activity.WORK, stack);
             Vec3 camera = event.getCamera().getPosition().reverse();
             event.getPoseStack().pushPose();
@@ -49,10 +54,10 @@ public class CompassRenderEvent {
                 double radius = MaidConfig.MAID_WORK_RANGE.get() + 0.1;
                 VertexConsumer buffer = mc.renderBuffers().bufferSource().getBuffer(RenderType.LINES);
                 RenderHelper.renderCylinder(event.getPoseStack(), buffer, centerPos, radius, 16, 1.0F, 0, 0);
-                Vec3 textPos = new Vec3(workPos.getX() + 0.5, workPos.getY() + 0.5, workPos.getZ() + 0.5);
+                Vec3 textPos = new Vec3(workPos.getX() + 0.5, workPos.getY() + 2, workPos.getZ() + 0.5);
                 String text = I18n.get("message.touhou_little_maid.kappa_compass.work_area");
-                RenderHelper.renderFloatingText(event.getPoseStack(), text, textPos, 0xff1111, 0.15f, -5);
-                RenderHelper.renderFloatingText(event.getPoseStack(), "▼", textPos, 0xff1111, 0.15f, 5);
+                RenderHelper.renderFloatingText(event.getPoseStack(), text, textPos.x, textPos.y, textPos.z, 0xff1111, 0.15f, true, -5, false);
+                RenderHelper.renderFloatingText(event.getPoseStack(), "▼", textPos.x, textPos.y, textPos.z, 0xff1111, 0.15f, true, 5, false);
             }
 
             BlockPos idlePos = ItemKappaCompass.getPoint(Activity.IDLE, stack);
@@ -61,7 +66,7 @@ public class CompassRenderEvent {
                 double radius = MaidConfig.MAID_IDLE_RANGE.get();
                 VertexConsumer buffer = mc.renderBuffers().bufferSource().getBuffer(RenderType.LINES);
                 RenderHelper.renderCylinder(event.getPoseStack(), buffer, centerPos, radius, 16, 0, 1.0F, 0);
-                Vec3 textPos = new Vec3(idlePos.getX() + 0.5, idlePos.getY() + 0.5, idlePos.getZ() + 0.5);
+                Vec3 textPos = new Vec3(idlePos.getX() + 0.5, idlePos.getY() + 2, idlePos.getZ() + 0.5);
                 if (idlePos.equals(workPos)) {
                     textPos = textPos.add(0, 1, 0);
                 } else if (workPos != null) {
@@ -69,8 +74,8 @@ public class CompassRenderEvent {
                     RenderHelper.renderLine(event.getPoseStack(), buffer, centerPos, prePos, 1.0f, 1.0f, 1.0f);
                 }
                 String text = I18n.get("message.touhou_little_maid.kappa_compass.idle_area");
-                RenderHelper.renderFloatingText(event.getPoseStack(), text, textPos, 0x11ff11, 0.15f, -5);
-                RenderHelper.renderFloatingText(event.getPoseStack(), "▼", textPos, 0x11ff11, 0.15f, 5);
+                RenderHelper.renderFloatingText(event.getPoseStack(), text, textPos.x, textPos.y, textPos.z, 0x11ff11, 0.15f, true, -5, false);
+                RenderHelper.renderFloatingText(event.getPoseStack(), "▼", textPos.x, textPos.y, textPos.z, 0x11ff11, 0.15f, true, 5, false);
             }
 
             BlockPos resetPos = ItemKappaCompass.getPoint(Activity.REST, stack);
@@ -79,16 +84,18 @@ public class CompassRenderEvent {
                 double radius = MaidConfig.MAID_SLEEP_RANGE.get() - 0.1;
                 VertexConsumer buffer = mc.renderBuffers().bufferSource().getBuffer(RenderType.LINES);
                 RenderHelper.renderCylinder(event.getPoseStack(), buffer, centerPos, radius, 16, 0, 0, 1.0F);
-                Vec3 textPos = new Vec3(resetPos.getX() + 0.5, resetPos.getY() + 0.5, resetPos.getZ() + 0.5);
+                Vec3 textPos = new Vec3(resetPos.getX() + 0.5, resetPos.getY() + 2, resetPos.getZ() + 0.5);
                 if (resetPos.equals(idlePos)) {
                     textPos = textPos.add(0, 2, 0);
-                } else if (idlePos != null) {
+                } else if (idlePos != null && workPos != null) {
                     Vec3 prePos = camera.add(idlePos.getX() + 0.5, idlePos.getY() + 0.5, idlePos.getZ() + 0.5);
+                    RenderHelper.renderLine(event.getPoseStack(), buffer, centerPos, prePos, 1.0f, 1.0f, 1.0f);
+                    prePos = camera.add(workPos.getX() + 0.5, workPos.getY() + 0.5, workPos.getZ() + 0.5);
                     RenderHelper.renderLine(event.getPoseStack(), buffer, centerPos, prePos, 1.0f, 1.0f, 1.0f);
                 }
                 String text = I18n.get("message.touhou_little_maid.kappa_compass.sleep_area");
-                RenderHelper.renderFloatingText(event.getPoseStack(), text, textPos, 0x1111ff, 0.15f, -5);
-                RenderHelper.renderFloatingText(event.getPoseStack(), "▼", textPos, 0x1111ff, 0.15f, 5);
+                RenderHelper.renderFloatingText(event.getPoseStack(), text, textPos.x, textPos.y, textPos.z, 0x1111ff, 0.15f, true, -5, false);
+                RenderHelper.renderFloatingText(event.getPoseStack(), "▼", textPos.x, textPos.y, textPos.z, 0x1111ff, 0.15f, true, 5, false);
             }
             event.getPoseStack().popPose();
         }
