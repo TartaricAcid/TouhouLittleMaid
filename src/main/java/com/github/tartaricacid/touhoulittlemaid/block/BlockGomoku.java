@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -238,7 +238,8 @@ public class BlockGomoku extends BlockJoy {
                 return InteractionResult.SUCCESS;
             }
             Entity sitEntity = serverLevel.getEntity(gomoku.getSitId());
-            if (sitEntity == null || !sitEntity.isAlive() || !(sitEntity.getFirstPassenger() instanceof EntityMaid)) {
+            // 不检查女仆是否是自己的，意味着你可以和其他人的女仆对弈
+            if (sitEntity == null || !sitEntity.isAlive() || !(sitEntity.getFirstPassenger() instanceof EntityMaid maid)) {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.no_maid"));
                 return InteractionResult.FAIL;
             }
@@ -253,15 +254,17 @@ public class BlockGomoku extends BlockJoy {
             Point playerPoint = new Point(clickPos[0], clickPos[1], Point.BLACK);
             if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
                 gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
-                Statue statue = TouhouLittleMaid.SERVICE.getStatue(chessData, playerPoint);
-                if (statue == Statue.WIN && sitEntity.getFirstPassenger() instanceof EntityMaid maid && maid.isOwnedBy(player)) {
+                Statue statue = MaidGomokuAI.getStatue(chessData, playerPoint);
+                // 但是和其他人女仆对弈不加好感哦
+                if (statue == Statue.WIN && maid.isOwnedBy(player)) {
                     maid.getFavorabilityManager().apply(Type.GOMOKU_WIN);
+                    MaidGomokuAI.addMaidCount(maid);
                 }
                 gomoku.setInProgress(statue == Statue.IN_PROGRESS);
                 level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
                 if (gomoku.isInProgress()) {
                     gomoku.setPlayerTurn(false);
-                    NetworkHandler.sendToClientPlayer(new ChessDataToClientMessage(centerPos, chessData, playerPoint), player);
+                    NetworkHandler.sendToClientPlayer(new ChessDataToClientMessage(centerPos, chessData, playerPoint, MaidGomokuAI.getMaidCount(maid)), player);
                 }
                 gomoku.refresh();
                 return InteractionResult.SUCCESS;

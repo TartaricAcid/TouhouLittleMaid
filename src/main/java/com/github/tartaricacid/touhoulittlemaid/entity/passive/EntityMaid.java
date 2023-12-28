@@ -155,6 +155,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final EntityDataAccessor<String> BACKPACK_TYPE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -165,6 +166,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
     private static final String BACKPACK_DATA_TAG = "MaidBackpackData";
+    private static final String GAME_SKILL_TAG = "MaidGameSkillData";
     @Deprecated
     private static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     @Deprecated
@@ -239,6 +241,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.entityData.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
         this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
         this.entityData.define(BACKPACK_FLUID, StringUtils.EMPTY);
+        this.entityData.define(GAME_SKILL, new CompoundTag());
     }
 
     @Override
@@ -865,6 +868,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         compound.putInt(EXPERIENCE_TAG, getExperience());
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
+        compound.put(GAME_SKILL_TAG, getGameSkill());
         this.favorabilityManager.addAdditionalSaveData(compound);
         this.schedulePos.save(compound);
         if (this.backpackData != null) {
@@ -936,6 +940,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
         if (compound.contains(EXPERIENCE_TAG, Tag.TAG_INT)) {
             setExperience(compound.getInt(EXPERIENCE_TAG));
+        }
+        if (compound.contains(GAME_SKILL_TAG, Tag.TAG_COMPOUND)) {
+            setGameSkill(compound.getCompound(GAME_SKILL_TAG));
         }
         if (compound.contains(RESTRICT_CENTER_TAG, Tag.TAG_COMPOUND)) {
             // 存档迁移
@@ -1455,6 +1462,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     public void setInSittingPose(boolean inSittingPose) {
         super.setInSittingPose(inSittingPose);
         setOrderedToSit(inSittingPose);
+    }
+
+    public CompoundTag getGameSkill() {
+        return this.entityData.get(GAME_SKILL);
+    }
+
+    public void setGameSkill(CompoundTag gameSkill) {
+        this.entityData.set(GAME_SKILL, gameSkill, true);
     }
 
     public boolean hasHelmet() {

@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTab
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -392,6 +393,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                     .append(Component.translatable("tooltips.touhou_little_maid.info.favorability")
                             .append(":\u0020").withStyle(ChatFormatting.AQUA))
                     .append(String.valueOf(maid.getFavorability())));
+            list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
+                    .append(Component.translatable("block.touhou_little_maid.gomoku")
+                            .append(":\u0020").withStyle(ChatFormatting.AQUA))
+                    .append(Component.translatable("tooltips.touhou_little_maid.info.game_skill.gomoku", MaidGomokuAI.getMaidCount(maid), MaidGomokuAI.getRank(maid))));
 
             graphics.renderComponentTooltip(font, list, mouseX, mouseY);
         }

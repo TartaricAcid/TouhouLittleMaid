@@ -1,8 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.AIService;
-import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
@@ -26,7 +24,6 @@ public final class TouhouLittleMaid {
     public static final String MOD_ID = "touhou_little_maid";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static List<ILittleMaid> EXTENSIONS = Lists.newArrayList();
-    public static AIService SERVICE = new ZhiZhangAIService(new AIService.AIConfig(4, 10, false, 0, 6));
 
     public TouhouLittleMaid() {
         InitEntities.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());

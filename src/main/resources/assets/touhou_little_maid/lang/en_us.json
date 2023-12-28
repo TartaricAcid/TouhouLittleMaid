@@ -67,6 +67,7 @@
   "tooltips.touhou_little_maid.info.model_name": "Model Name",
   "tooltips.touhou_little_maid.info.experience": "Experience",
   "tooltips.touhou_little_maid.info.favorability": "Favorability",
+  "tooltips.touhou_little_maid.info.game_skill.gomoku": "Lose: %d, Rank: %d",
   "tooltips.touhou_little_maid.bauble.desc": "§a[Maid Bauble]",
   "tooltips.touhou_little_maid.bauble.usage": "Need to be placed in the maid's bauble inventory",
   "tooltips.touhou_little_maid.backpack.desc": "§6[Maid Backpack]",
