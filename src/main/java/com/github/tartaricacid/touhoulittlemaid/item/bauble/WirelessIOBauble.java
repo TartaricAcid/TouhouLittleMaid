@@ -1,12 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestCheck;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -101,15 +102,15 @@ public class WirelessIOBauble implements IMaidBauble {
             }
 
             BlockEntity te = maid.level.getBlockEntity(bindingPos);
-            if (!(te instanceof ChestBlockEntity)) {
+            if (!(te instanceof RandomizableContainerBlockEntity)) {
                 return;
             }
-            int openCount = ChestBlockEntity.getOpenCount(maid.level, bindingPos);
+            int openCount = IronChestCheck.getOpenCount(maid.level, bindingPos, te);
             if (openCount > 0) {
                 return;
             }
 
-            ChestBlockEntity chest = (ChestBlockEntity) te;
+            RandomizableContainerBlockEntity chest = (RandomizableContainerBlockEntity) te;
             chest.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(chestInv -> {
                 IItemHandler maidInv = maid.getAvailableInv(false);
                 boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);

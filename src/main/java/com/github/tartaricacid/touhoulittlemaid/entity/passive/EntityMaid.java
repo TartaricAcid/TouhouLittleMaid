@@ -173,7 +173,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private static final String DEFAULT_SOUND_PACK_ID = "touhou_little_maid";
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
@@ -221,7 +220,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
-        this.entityData.define(DATA_SOUND_PACK_ID, DEFAULT_SOUND_PACK_ID);
+        this.entityData.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
         this.entityData.define(DATA_TASK, TaskIdle.UID.toString());
         this.entityData.define(DATA_BEGGING, false);
         this.entityData.define(DATA_PICKUP, true);
