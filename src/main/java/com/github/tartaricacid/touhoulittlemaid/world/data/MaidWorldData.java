@@ -166,7 +166,7 @@ public class MaidWorldData extends SavedData {
 
     public void addTombstones(EntityMaid maid, EntityTombstone tombstone) {
         String dimension = maid.level.dimension().location().toString();
-        BlockPos chunkPos = maid.blockPosition();
+        BlockPos chunkPos = tombstone.blockPosition();
         UUID ownerId = maid.getOwnerUUID();
         UUID tombstoneId = tombstone.getUUID();
         long timestamp = System.currentTimeMillis();
