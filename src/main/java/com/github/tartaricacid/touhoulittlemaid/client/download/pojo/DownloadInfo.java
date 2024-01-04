@@ -51,6 +51,12 @@ public class DownloadInfo {
     @SerializedName("license")
     private String license = "All Right Reserved";
 
+    @SerializedName("key_word")
+    private List<String> keyWord = Lists.newArrayList();
+
+    @SerializedName("old_version")
+    private List<Long> oldVersion = Lists.newArrayList();
+
     /**
      * type: maid, chair, sound
      */
@@ -128,6 +134,14 @@ public class DownloadInfo {
 
     public String getFormatFileSize() {
         return formatFileSize;
+    }
+
+    public List<String> getKeyWord() {
+        return keyWord;
+    }
+
+    public List<Long> getOldVersion() {
+        return oldVersion;
     }
 
     public DownloadInfo decorate() {

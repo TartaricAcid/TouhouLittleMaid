@@ -2,8 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
-import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
@@ -327,17 +325,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void addDownloadButton() {
         modelDownload = new ImageButton(leftPos + 20, topPos + 230, 41, 20, 0, 86, 20, BUTTON,
-                (b) -> {
-                    List<DownloadInfo> downloadInfoList;
-                    int page = ModelDownloadGui.getCurrentPage();
-                    if (page == 0) {
-                        downloadInfoList = InfoGetManager.DOWNLOAD_INFO_LIST_ALL;
-                    } else {
-                        DownloadInfo.TypeEnum typeEnum = DownloadInfo.TypeEnum.getTypeByIndex(page - 1);
-                        downloadInfoList = InfoGetManager.getTypedDownloadInfoList(typeEnum);
-                    }
-                    Minecraft.getInstance().setScreen(new ModelDownloadGui(downloadInfoList));
-                });
+                (b) -> Minecraft.getInstance().setScreen(new ModelDownloadGui()));
         this.addRenderableWidget(modelDownload);
     }
 
