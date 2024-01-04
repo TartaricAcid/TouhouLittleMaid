@@ -48,6 +48,15 @@ public class EntityScarecrow extends AbstractEntityFromItem {
 
     @Override
     protected boolean canKillEntity(EntityPlayer player) {
+        if (!(player.getHeldItemMainhand().isEmpty())) {
+            ItemStack mainHandItem = player.getHeldItemMainhand();
+            if (mainHandItem.hasTagCompound()) {
+                NBTTagCompound tag = mainHandItem.getTagCompound();
+                if (tag.hasKey("SlashBlade")) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
