@@ -46,7 +46,7 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class InfoGetManager {
-    private static final String ROOT_URL = "http://tlm.cfpa.team:29434/";
+    private static final String ROOT_URL = "file:///C:/Users/943/Desktop/";
     private static final String INFO_JSON_URL = ROOT_URL + "info.json";
     private static final String INFO_JSON_MD5_URL = ROOT_URL + "info.json.md5";
 
@@ -89,7 +89,7 @@ public class InfoGetManager {
     }
 
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
-    private static void downloadAndReadInfoJsonFile() {
+    public static void downloadAndReadInfoJsonFile() {
         downloadAndReadInfoJsonFile(null);
     }
 

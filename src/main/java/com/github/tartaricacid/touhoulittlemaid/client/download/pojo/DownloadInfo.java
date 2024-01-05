@@ -51,8 +51,11 @@ public class DownloadInfo {
     @SerializedName("license")
     private String license = "All Right Reserved";
 
-    @SerializedName("key_word")
-    private List<String> keyWord = Lists.newArrayList();
+    @SerializedName("website")
+    private String website = "";
+
+    @SerializedName("keyword")
+    private String keyword = "";
 
     @SerializedName("old_version")
     private List<Long> oldVersion = Lists.newArrayList();
@@ -136,8 +139,12 @@ public class DownloadInfo {
         return formatFileSize;
     }
 
-    public List<String> getKeyWord() {
-        return keyWord;
+    public String getWebsite() {
+        return website;
+    }
+
+    public String getKeyword() {
+        return keyword;
     }
 
     public List<Long> getOldVersion() {

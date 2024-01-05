@@ -8,12 +8,16 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatCol
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.PackInfoButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -25,22 +29,19 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class ModelDownloadGui extends Screen {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
     private static final String PACK_FILE_SUFFIX = ".zip";
-    private final List<Long> crc32Infos = Lists.newArrayList();
+    private final Map<Long, String> crc32Infos = Maps.newHashMap();
     private final List<DownloadInfo> showInfos = Lists.newArrayList();
-    private int currentPage;
     private Condition condition = Condition.ALL;
+    private EditBox textField;
     private int selectIndex = -1;
+    private int currentPage;
     private int x;
     private int y;
-    private EditBox textField;
 
     public ModelDownloadGui() {
         super(Component.literal("New Model Pack Download GUI"));
@@ -75,12 +76,12 @@ public class ModelDownloadGui extends Screen {
     private void addPackHandleButtons() {
         if (0 <= this.selectIndex && this.selectIndex < this.showInfos.size()) {
             DownloadInfo info = this.showInfos.get(this.selectIndex);
-            this.addRenderableWidget(new FlatColorButton(x + 272, y + 50, 20, 20, Component.empty(), b -> {
-            }).setTooltips("gui.touhou_little_maid.resources_download.open_link"));
+            this.addRenderableWidget(new FlatColorButton(x + 272, y + 50, 20, 20, Component.empty(), b -> openPackWebsite(info))
+                    .setTooltips("gui.touhou_little_maid.resources_download.open_link"));
             this.addRenderableWidget(new FlatColorButton(x + 294, y + 50, 102, 20, getStatueText(info), b -> {
             }));
-            this.addRenderableWidget(new FlatColorButton(x + 398, y + 50, 20, 20, Component.empty(), b -> {
-            }).setTooltips("gui.touhou_little_maid.resources_download.delete"));
+            this.addRenderableWidget(new FlatColorButton(x + 398, y + 50, 20, 20, Component.empty(), b -> deletePack(info))
+                    .setTooltips("gui.touhou_little_maid.resources_download.delete"));
         }
     }
 
@@ -132,8 +133,9 @@ public class ModelDownloadGui extends Screen {
                 .setTooltips("gui.touhou_little_maid.resources_download.downloaded"));
         this.addRenderableWidget(new FlatColorButton(x + 179, y + 2, 20, 20, Component.empty(), b -> setCondition(Condition.NOT_DOWNLOAD))
                 .setTooltips("gui.touhou_little_maid.resources_download.not_download"));
-        this.addRenderableWidget(new FlatColorButton(x + 400, y + 2, 20, 20, Component.empty(), b -> this.getMinecraft().setScreen(null))
-                .setTooltips("gui.touhou_little_maid.skin.button.close"));
+        this.addRenderableWidget(new FlatColorButton(x + 400, y + 2, 20, 20, Component.empty(), b -> {
+            InfoGetManager.downloadAndReadInfoJsonFile();
+        }).setTooltips("gui.touhou_little_maid.skin.button.close"));
         this.addRenderableWidget(new FlatColorButton(x + 270, y + 218, 150, 17, Component.translatable("gui.touhou_little_maid.resources_download.open_folder"),
                 b -> Util.getPlatform().openFile(CustomPackLoader.PACK_FOLDER.toFile())));
     }
@@ -154,7 +156,7 @@ public class ModelDownloadGui extends Screen {
 
         if (textField != null && StringUtils.isNotBlank(textField.getValue())) {
             String search = this.textField.getValue().toLowerCase(Locale.US);
-            this.showInfos.removeIf(info -> info.getKeyWord().stream().noneMatch(keyword -> keyword.contains(search)));
+            this.showInfos.removeIf(info -> !info.getKeyword().contains(search));
         }
     }
 
@@ -171,14 +173,14 @@ public class ModelDownloadGui extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         this.renderBase(graphics);
-        this.renderSearchBox(graphics, pMouseX, pMouseY, pPartialTick);
+        this.renderSearchBox(graphics, mouseX, mouseY, pPartialTick);
         this.renderPageNumber(graphics);
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        super.render(graphics, mouseX, mouseY, pPartialTick);
         this.renderBaseButtons(graphics);
         this.renderPackHandleButtons(graphics);
-        this.renderables.stream().filter(b -> b instanceof FlatColorButton).forEach(b -> ((FlatColorButton) b).renderToolTip(graphics, this, pMouseX, pMouseY));
+        this.renderables.stream().filter(b -> b instanceof FlatColorButton).forEach(b -> ((FlatColorButton) b).renderToolTip(graphics, this, mouseX, mouseY));
     }
 
     private void renderPageNumber(GuiGraphics graphics) {
@@ -190,24 +192,24 @@ public class ModelDownloadGui extends Screen {
     private void renderPackHandleButtons(GuiGraphics graphics) {
         if (0 <= this.selectIndex && this.selectIndex < this.showInfos.size()) {
             DownloadInfo info = this.showInfos.get(this.selectIndex);
-            graphics.drawCenteredString(font, Component.translatable(info.getName()), x + 345, y + 34, ChatFormatting.WHITE.getColor());
+            graphics.drawCenteredString(font, Component.translatable(info.getName()), x + 345, y + 34, 0xffffff);
             graphics.blit(BG, x + 400, y + 52, 0, 16, 16, 16);
             graphics.blit(BG, x + 274, y + 52, 16, 16, 16, 16);
         }
     }
 
     private void renderBaseButtons(GuiGraphics graphics) {
-        graphics.blit(BG, x + 69 + 2, y + 4, 0, 0, 16, 16);
-        graphics.blit(BG, x + 91 + 2, y + 4, 16, 0, 16, 16);
-        graphics.blit(BG, x + 113 + 2, y + 4, 32, 0, 16, 16);
-        graphics.blit(BG, x + 135 + 2, y + 4, 48, 0, 16, 16);
-        graphics.blit(BG, x + 157 + 2, y + 4, 64, 0, 16, 16);
-        graphics.blit(BG, x + 179 + 2, y + 4, 80, 0, 16, 16);
+        graphics.blit(BG, x + 71, y + 4, 0, 0, 16, 16);
+        graphics.blit(BG, x + 93, y + 4, 16, 0, 16, 16);
+        graphics.blit(BG, x + 115, y + 4, 32, 0, 16, 16);
+        graphics.blit(BG, x + 137, y + 4, 48, 0, 16, 16);
+        graphics.blit(BG, x + 159, y + 4, 64, 0, 16, 16);
+        graphics.blit(BG, x + 181, y + 4, 80, 0, 16, 16);
         graphics.blit(BG, x + 402, y + 4, 32, 16, 16, 16);
     }
 
     private void renderSearchBox(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.resources_download.hot_search"), x + 274, y + 102, ChatFormatting.WHITE.getColor());
+        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.resources_download.hot_search"), x + 274, y + 102, 0xffffff);
         textField.render(graphics, pMouseX, pMouseY, pPartialTick);
         if (textField.getValue().isEmpty() && !textField.isFocused()) {
             graphics.drawString(font, Component.translatable("gui.touhou_little_maid.resources_download.search").withStyle(ChatFormatting.ITALIC), x + 277, y + 83, 0x777777);
@@ -292,7 +294,7 @@ public class ModelDownloadGui extends Screen {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (file.getFileName().toString().endsWith(PACK_FILE_SUFFIX)) {
-                        crc32Infos.add(FileUtils.checksumCRC32(file.toFile()));
+                        crc32Infos.put(FileUtils.checksumCRC32(file.toFile()), file.toFile().getName());
                     }
                     return super.visitFile(file, attrs);
                 }
@@ -308,9 +310,13 @@ public class ModelDownloadGui extends Screen {
                 continue;
             }
             info.setStatus(DownloadStatus.NOT_DOWNLOAD);
-            for (Long crc32 : this.crc32Infos) {
+            for (Long crc32 : this.crc32Infos.keySet()) {
                 if (crc32.equals(info.getChecksum())) {
                     info.setStatus(DownloadStatus.DOWNLOADED);
+                    break;
+                }
+                if (info.getOldVersion().contains(crc32)) {
+                    info.setStatus(DownloadStatus.NEED_UPDATE);
                     break;
                 }
             }
@@ -322,6 +328,50 @@ public class ModelDownloadGui extends Screen {
             this.condition = condition;
             this.currentPage = 0;
             this.init();
+        }
+    }
+
+    private void openPackWebsite(DownloadInfo info) {
+        String website = info.getWebsite();
+        if (StringUtils.isNotBlank(website)) {
+            this.getMinecraft().setScreen(new ConfirmLinkScreen(yes -> {
+                if (yes) {
+                    Util.getPlatform().openUri(website);
+                }
+                this.getMinecraft().setScreen(this);
+            }, website, false));
+        }
+    }
+
+    private void deletePack(DownloadInfo info) {
+        Set<String> deleteFiles = Sets.newHashSet();
+        deleteFiles.add(info.getFileName());
+        info.getOldVersion().forEach(version -> {
+            if (crc32Infos.containsKey(version)) {
+                deleteFiles.add(crc32Infos.get(version));
+            }
+        });
+        if (info.getStatus() == DownloadStatus.DOWNLOADED || info.getStatus() == DownloadStatus.NEED_UPDATE) {
+            this.getMinecraft().setScreen(new ConfirmScreen(yes -> {
+                this.deleteFiles(yes, deleteFiles);
+                this.getMinecraft().setScreen(this);
+            }, Component.translatable("gui.touhou_little_maid.resources_download.delete.confirm"), Component.translatable(info.getName())));
+        }
+    }
+
+    private void deleteFiles(boolean yes, Set<String> deleteFiles) {
+        if (yes) {
+            for (String fileName : deleteFiles) {
+                try {
+                    Path file = CustomPackLoader.PACK_FOLDER.resolve(fileName);
+                    if (Files.isRegularFile(file)) {
+                        Files.delete(file);
+                    }
+                    this.getCrc32Infos();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
