@@ -46,8 +46,8 @@ public class LayerMaidBanner extends RenderLayer<EntityMaid, BedrockModel<Entity
                 return;
             }
             matrixStack.pushPose();
-            matrixStack.translate(0, 0.25, 0);
-            matrixStack.scale(0.7F, 0.7F, 0.7F);
+            matrixStack.translate(0, 0.5, 0.025);
+            matrixStack.scale(0.5F, 0.5F, 0.5F);
             matrixStack.mulPose(Axis.XN.rotationDegrees(5));
             VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
             bannerModel.renderToBuffer(matrixStack, buffer, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

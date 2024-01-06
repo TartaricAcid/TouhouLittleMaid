@@ -24,11 +24,22 @@ public class MaidBannerModel extends EntityModel<Entity> {
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(34, 49).addBox(-1.0F, -68.0F, 10.0F, 2.0F, 2.0F, 13.0F, new CubeDeformation(0.05F))
-                .texOffs(34, 49).addBox(-1.0F, -68.0F, -3.0F, 2.0F, 2.0F, 13.0F, new CubeDeformation(0.05F))
-                .texOffs(56, 0).addBox(-1.0F, -35.0F, -1.0F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(56, 0).addBox(-1.0F, -70.0F, -1.0F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
-        PartDefinition banner = partdefinition.addOrReplaceChild("banner", CubeListBuilder.create().texOffs(0, 0).addBox(1.0F, -66.0F, -1.0F, 20.0F, 40.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 24.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(34, 49).addBox(-1.0F, -68.0F, 10.0F, 2.0F, 2.0F, 13.0F, new CubeDeformation(0.1F))
+                .texOffs(34, 49).addBox(-1.0F, -68.0F, -3.0F, 2.0F, 2.0F, 13.0F, new CubeDeformation(0.1F))
+                .texOffs(56, 0).addBox(-1.0F, -35.0F, -1.0F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.05F))
+                .texOffs(56, 0).addBox(-1.0F, -70.0F, -1.0F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.05F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+
+        PartDefinition bone = main.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(56, 0).addBox(-1.0F, -26.0F, 1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 0).addBox(-1.0F, -46.0F, 1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 0).addBox(-1.0F, -36.0F, 1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 0).addBox(-1.0F, -56.0F, 1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition bone2 = main.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(56, 0).addBox(-1.0F, -66.0F, 6.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 0).addBox(-1.0F, -66.0F, 16.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition banner = partdefinition.addOrReplaceChild("banner", CubeListBuilder.create().texOffs(0, 0).addBox(2.0F, -65.0F, -0.5F, 20.0F, 40.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 24.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 

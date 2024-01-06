@@ -51,8 +51,8 @@ public class GeckoLayerMaidBanner<T extends LivingEntity & IAnimatable> extends 
             if (geoModel != null && !geoModel.backpackBones.isEmpty()) {
                 matrixStack.pushPose();
                 translateToBackpack(matrixStack, geoModel);
-                matrixStack.translate(0, -1.5, 0);
-                matrixStack.scale(0.7F, 0.7F, 0.7F);
+                matrixStack.translate(0, -1.5, 0.02);
+                matrixStack.scale(0.65F, 0.65F, 0.65F);
                 matrixStack.mulPose(Axis.XN.rotationDegrees(5));
                 VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
                 bannerModel.renderToBuffer(matrixStack, buffer, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
