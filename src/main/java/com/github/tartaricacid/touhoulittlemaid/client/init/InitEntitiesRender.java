@@ -69,5 +69,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(BookshelfModel.LAYER, BookshelfModel::createBodyLayer);
         event.registerLayerDefinition(ComputerModel.LAYER, ComputerModel::createBodyLayer);
         event.registerLayerDefinition(ShrineModel.LAYER, ShrineModel::createBodyLayer);
+        event.registerLayerDefinition(MaidBannerModel.LAYER, MaidBannerModel::createBodyLayer);
     }
 }
