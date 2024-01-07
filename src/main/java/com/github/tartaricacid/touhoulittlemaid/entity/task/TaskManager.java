@@ -34,6 +34,7 @@ public final class TaskManager {
         manager.add(new TaskSugarCane());
         manager.add(new TaskMelon());
         manager.add(new TaskCocoa());
+        manager.add(new TaskHoney());
         manager.add(new TaskGrass());
         manager.add(new TaskSnow());
         manager.add(new TaskFeedOwner());

@@ -177,6 +177,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(taskSwitch, graphics, x, y, "gui.touhou_little_maid.task.switch");
         renderMaidInfo(graphics, x, y);
         renderScheduleInfo(graphics, x, y);
+        renderTaskButtonInfo(graphics, x, y);
     }
 
     @Override
@@ -252,8 +253,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             desc.add(Component.literal("\u0020"));
             desc.add(Component.translatable("task.touhou_little_maid.desc.condition").withStyle(ChatFormatting.GOLD));
         }
-        MutableComponent prefix = Component.literal("-\u0020");
         for (Pair<String, Predicate<EntityMaid>> line : conditions) {
+            MutableComponent prefix = Component.literal("-\u0020");
             String key = String.format("task.%s.%s.condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
             MutableComponent condition = Component.translatable(key);
             if (line.getSecond().test(maid)) {
@@ -394,6 +395,14 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (scheduleButton.isHovered()) {
             graphics.renderComponentTooltip(font, scheduleButton.getTooltips(), mouseX, mouseY);
         }
+    }
+
+    private void renderTaskButtonInfo(GuiGraphics graphics, int x, int y) {
+        this.renderables.stream().filter(b -> b instanceof TaskButton).forEach(b -> {
+            if (((TaskButton) b).isHovered()) {
+                ((TaskButton) b).renderToolTip(graphics, getMinecraft(), x, y);
+            }
+        });
     }
 
     private void drawMaidCharacter(GuiGraphics graphics, int x, int y) {

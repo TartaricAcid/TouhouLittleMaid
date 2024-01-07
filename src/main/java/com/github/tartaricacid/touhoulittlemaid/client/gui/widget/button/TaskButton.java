@@ -65,12 +65,9 @@ public class TaskButton extends Button {
         graphics.blit(this.resourceLocation, this.getX(), this.getY(), (float) this.xTexStart, (float) i, this.width, this.height, this.textureWidth, this.textureHeight);
         graphics.renderItem(task.getIcon(), this.getX() + 2, this.getY() + 2);
         graphics.drawString(minecraft.font, task.getName(), this.getX() + 23, this.getY() + 6, 0x333333, false);
-        if (this.isHovered()) {
-            this.renderToolTip(graphics, minecraft, mouseX, mouseY);
-        }
     }
 
-    private void renderToolTip(GuiGraphics graphics, Minecraft mc, int mouseX, int mouseY) {
+    public void renderToolTip(GuiGraphics graphics, Minecraft mc, int mouseX, int mouseY) {
         if (!this.tooltips.isEmpty()) {
             graphics.renderComponentTooltip(mc.font, this.tooltips, mouseX, mouseY);
         }

@@ -25,7 +25,7 @@ public class MaidShearTask extends MaidCheckRateTask {
     private final float speedModifier;
     private LivingEntity shearableEntity = null;
 
-    public MaidShearTask(int maxDistToWalk, float speedModifier) {
+    public MaidShearTask(float speedModifier) {
         super(ImmutableMap.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
         this.speedModifier = speedModifier;
