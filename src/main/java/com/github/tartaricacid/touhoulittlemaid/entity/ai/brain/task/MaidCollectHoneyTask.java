@@ -123,9 +123,9 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
         BlockPos blockPos = maid.blockPosition();
         PoiManager poiManager = world.getPoiManager();
         int range = (int) maid.getRestrictRadius();
-        return poiManager.getInRange((type) -> type.is(PoiTypeTags.BEE_HOME), blockPos, range, PoiManager.Occupancy.ANY)
+        return poiManager.getInRange(type -> type.is(PoiTypeTags.BEE_HOME), blockPos, range, PoiManager.Occupancy.ANY)
                 .map(PoiRecord::getPos).filter(pos -> canCollectHoney(world, pos))
-                .min(Comparator.comparingDouble((pos) -> pos.distSqr(blockPos))).orElse(null);
+                .min(Comparator.comparingDouble(pos -> pos.distSqr(blockPos))).orElse(null);
     }
 
     private boolean canCollectHoney(ServerLevel world, BlockPos hivePos) {

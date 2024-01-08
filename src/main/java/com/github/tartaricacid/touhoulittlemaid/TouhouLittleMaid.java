@@ -41,6 +41,7 @@ public final class TouhouLittleMaid {
         InitRecipes.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitLootModifier.GLOBAL_LOOT_MODIFIER_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitCommand.ARGUMENT_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
+        InitPoi.POI_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitTrigger.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfig.init());
         EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
