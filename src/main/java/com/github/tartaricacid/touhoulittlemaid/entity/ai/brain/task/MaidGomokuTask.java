@@ -34,7 +34,7 @@ public class MaidGomokuTask extends MaidCheckRateTask {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid maid) {
-        if (super.checkExtraStartConditions(worldIn, maid) && maid.getVehicle() == null && !maid.isInSittingPose()) {
+        if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
             BlockPos gomokuPos = findGomoku(worldIn, maid);
             if (gomokuPos != null && maid.isWithinRestriction(gomokuPos)) {
                 if (gomokuPos.distToCenterSqr(maid.position()) < this.closeEnoughDist) {
@@ -80,5 +80,9 @@ public class MaidGomokuTask extends MaidCheckRateTask {
             return worldIn.getEntity(gomoku.getSitId()) != null;
         }
         return true;
+    }
+
+    private boolean maidStateConditions(EntityMaid maid) {
+        return !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
     }
 }

@@ -45,7 +45,7 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid maid) {
-        if (super.checkExtraStartConditions(worldIn, maid)) {
+        if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
             BlockPos beehivePos = findBeehive(worldIn, maid);
             if (beehivePos != null && maid.isWithinRestriction(beehivePos)) {
                 if (beehivePos.distToCenterSqr(maid.position()) < this.closeEnoughDist) {
@@ -134,5 +134,9 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
 
     public void resetHoneyLevel(Level level, BlockState state, BlockPos pos) {
         level.setBlock(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, 0), Block.UPDATE_ALL);
+    }
+
+    private boolean maidStateConditions(EntityMaid maid) {
+        return !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
     }
 }

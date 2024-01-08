@@ -34,7 +34,7 @@ public class MaidJoyTask extends MaidCheckRateTask {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid maid) {
-        if (super.checkExtraStartConditions(worldIn, maid) && maid.getVehicle() == null && !maid.isInSittingPose()) {
+        if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
             BlockPos joyPos = findJoy(worldIn, maid);
             if (joyPos != null && maid.isWithinRestriction(joyPos)) {
                 if (joyPos.distToCenterSqr(maid.position()) < this.closeEnoughDist) {
@@ -80,5 +80,9 @@ public class MaidJoyTask extends MaidCheckRateTask {
             return worldIn.getEntity(joy.getSitId()) != null;
         }
         return true;
+    }
+
+    private boolean maidStateConditions(EntityMaid maid) {
+        return !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
     }
 }
