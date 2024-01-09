@@ -1,0 +1,63 @@
+{
+    "title": {
+        "lang": "zh-CN",
+        "title": "Touhou Little Maid 开发 Wiki",
+        "description": "有关于车万女仆的开发文档"
+    },
+    "themeConfig": {
+        "selectText": "选择语言",
+        "label": "简体中文",
+        "ariaLabel": "Languages",
+        "lastUpdated": "上次更新",
+        "nav": [
+            {
+                "text": "主页",
+                "link": "./"
+            },
+            {
+                "text": "GitHub",
+                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
+            },
+            {
+                "text": "CurseForge",
+                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
+            }
+        ],
+        "sidebar": [
+            {
+                "title": "自定义模型",
+                "children": [
+                    [
+                        "./zh_CN/custom_model_pack",
+                        "自定义模型包"
+                    ],
+                    [
+                        "./zh_CN/maid_model_pack_details",
+                        "女仆模型包详解"
+                    ],
+                    [
+                        "./zh_CN/chair_model_pack_details",
+                        "坐垫模型包详解"
+                    ],
+                    [
+                        "./zh_CN/custom_javascript_animation",
+                        "自定义动画脚本"
+                    ],
+                    [
+                        "./zh_CN/preset_animation",
+                        "预设动画"
+                    ]
+                ]
+            },
+            {
+                "title": "合成修改",
+                "children": [
+                    [
+                        "./zh_CN/custom_altar_recipes",
+                        "自定义祭坛合成"
+                    ]
+                ]
+            }
+        ]
+    }
+}

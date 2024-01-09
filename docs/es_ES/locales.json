@@ -1,0 +1,63 @@
+{
+    "title": {
+        "lang": "es-ES",
+        "title": "Touhou Little Maid: Principal",
+        "description": ""
+    },
+    "themeConfig": {
+        "selectText": "",
+        "label": "",
+        "ariaLabel": "",
+        "lastUpdated": "",
+        "nav": [
+            {
+                "text": "",
+                "link": ""
+            },
+            {
+                "text": "",
+                "link": ""
+            },
+            {
+                "text": "",
+                "link": ""
+            }
+        ],
+        "sidebar": [
+            {
+                "title": "",
+                "children": [
+                    [
+                        "",
+                        ""
+                    ],
+                    [
+                        "",
+                        ""
+                    ],
+                    [
+                        "",
+                        ""
+                    ],
+                    [
+                        "",
+                        ""
+                    ],
+                    [
+                        "",
+                        ""
+                    ]
+                ]
+            },
+            {
+                "title": "",
+                "children": [
+                    [
+                        "",
+                        ""
+                    ]
+                ]
+            }
+        ]
+    }
+}

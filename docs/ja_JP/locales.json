@@ -1,0 +1,63 @@
+{
+    "title": {
+        "lang": "ja-JP",
+        "title": "東方リトルメイドwiki",
+        "description": "東方リトルメイドmodの開発に関するwikiがあります"
+    },
+    "themeConfig": {
+        "selectText": "言語",
+        "label": "日本語",
+        "ariaLabel": "言語",
+        "lastUpdated": "最終アップデート",
+        "nav": [
+            {
+                "text": "Home",
+                "link": "./"
+            },
+            {
+                "text": "GitHub",
+                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
+            },
+            {
+                "text": "CurseForge",
+                "link": "https://www.cursseforge.com/minecraft/mc-mods/touhou-little-maid"
+            }
+        ],
+        "sidebar": [
+            {
+                "title": "カスタムモデル",
+                "children": [
+                    [
+                        "./ja_JP/custom_model_pack",
+                        "カスタムモデルパック"
+                    ],
+                    [
+                        "./ja_JP/maid_model_pack_details",
+                        "メイドモデルパックの詳細"
+                    ],
+                    [
+                        "./ja_JP/chair_model_pack_details",
+                        "椅子モデルパックの詳細"
+                    ],
+                    [
+                        "./ja_JP/custom_javascript_animation",
+                        "JavaScriptアニメーションのカスタマイズ"
+                    ],
+                    [
+                        "./ja_JP/preset_animation",
+                        "プリセット アニメーション"
+                    ]
+                ]
+            },
+            {
+                "title": "レシピの変更",
+                "children": [
+                    [
+                        "./ja_JP/custom_altar_recipes",
+                        "祭壇レシピの変更"
+                    ]
+                ]
+            }
+        ]
+    }
+}
