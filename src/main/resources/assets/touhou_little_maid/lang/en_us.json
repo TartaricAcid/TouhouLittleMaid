@@ -221,6 +221,8 @@
   "message.touhou_little_maid.gomoku.round": "Round: %d",
   "message.touhou_little_maid.gomoku.no_maid": "There are no maid participating in the gomoku game",
   "message.touhou_little_maid.gomoku.not_owner": "The maid participating in the game is not yours",
+  "message.touhou_little_maid.gomoku.rank_up.title": "§6§nCongratulations",
+  "message.touhou_little_maid.gomoku.rank_up.subtitle": "Your maid's gomoku skills have improved!",
   "message.touhou_little_maid.trumpet.unloaded_maid": "There are also %d maids on unloaded chunks, use the Red Fox Scroll to find them!",
   "message.touhou_little_maid.shrine.not_film": "Only film can be placed in the shrine!",
   "message.touhou_little_maid.shrine.health_low": "Player's HP is too low!",

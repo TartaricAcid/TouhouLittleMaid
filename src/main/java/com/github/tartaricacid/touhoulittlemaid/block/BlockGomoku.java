@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ChessDataToClientMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import net.minecraft.core.BlockPos;
@@ -260,9 +261,15 @@ public class BlockGomoku extends BlockJoy {
                 gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
                 Statue statue = MaidGomokuAI.getStatue(chessData, playerPoint);
                 // 但是和其他人女仆对弈不加好感哦
-                if (statue == Statue.WIN && maid.isOwnedBy(player)) {
+                if (statue == Statue.WIN) {
                     maid.getFavorabilityManager().apply(Type.GOMOKU_WIN);
+                    int rankBefore = MaidGomokuAI.getRank(maid);
                     MaidGomokuAI.addMaidCount(maid);
+                    int rankAfter = MaidGomokuAI.getRank(maid);
+                    // 女仆升段啦
+                    if (rankBefore < rankAfter) {
+                        NetworkHandler.sendToClientPlayer(new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.RANK_UP), player);
+                    }
                 }
                 gomoku.setInProgress(statue == Statue.IN_PROGRESS);
                 level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
