@@ -1,0 +1,33 @@
+{
+  "type": "touhou_little_maid:altar_crafting",
+  "output": {
+    "type": "minecraft:item",
+    "nbt": {
+      "Item": {
+        "id": "touhou_little_maid:kappa_compass",
+        "Count": 1
+      }
+    }
+  },
+  "power": 0.1,
+  "ingredients": [
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:dyes/cyan"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    }
+  ]
+}
