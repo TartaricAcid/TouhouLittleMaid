@@ -24,6 +24,7 @@ import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -178,7 +179,20 @@ public class ModelDownloadGui extends Screen {
         super.render(graphics, mouseX, mouseY, pPartialTick);
         this.renderBaseButtons(graphics);
         this.renderPackHandleButtons(graphics);
+        this.renderNoDataTips(graphics);
         this.renderables.stream().filter(b -> b instanceof FlatColorButton).forEach(b -> ((FlatColorButton) b).renderToolTip(graphics, this, mouseX, mouseY));
+    }
+
+    private void renderNoDataTips(GuiGraphics graphics) {
+        if (!InfoGetManager.DOWNLOAD_INFO_LIST_ALL.isEmpty()) {
+            return;
+        }
+        List<FormattedCharSequence> split = font.split(Component.translatable("gui.touhou_little_maid.resources_download.fail"), 200);
+        int yOffset = y + 100;
+        for (FormattedCharSequence sequence : split) {
+            graphics.drawCenteredString(font, sequence, x + 134, yOffset, ChatFormatting.RED.getColor());
+            yOffset += 12;
+        }
     }
 
     private void renderPageNumber(GuiGraphics graphics) {
