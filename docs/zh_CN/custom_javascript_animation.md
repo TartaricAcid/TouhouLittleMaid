@@ -1,4 +1,5 @@
 # 自定义 JavaScript 动画
+
 通过 JavaScript 文件，你可以为女仆或坐垫添加自定义动画。
 
 - 本 wiki 适用于 Touhou Little Maid 模组 `1.12.2` 和 `1.16.5` 版本；
@@ -8,7 +9,7 @@
 
 ## 基本格式
 
-动画脚本放置在文件夹任意位置均可，只需要在对应模型字段处声明动画文件位置即可。 我建议将它放入 `animation` 文件夹中。
+动画脚本放置在文件夹任意位置均可，只需要在对应模型字段处声明动画文件位置即可。 我建议将它放入 `animation` 文件夹中。 获取女仆的好感度
 
 下面是通用模板：
 
@@ -90,11 +91,12 @@ Java.asJSONCompatible({
 
 其他复杂的运动均可通过相关函数来实现。
 
-## 游戏内热重载功能
+## Hot Reload
 
 因为干巴巴的函数式并不能确定该动画是否表现正确，我们添加了游戏内的动画热重载功能。
 
 加载模型资源包后，只需使用以下命令即可重新加载所有动画数据。
+
 - 1.12.2: `/maid_res reload`
 - 1.16.5: `/tlm pack reload`
 
@@ -106,77 +108,76 @@ Java.asJSONCompatible({
 
 依据附加动画的对象不同，`entity` 参数可用的函数也不相同。
 
-#### 女仆
+#### Maid
 
-|             函数名              |    返回值     |                  备注                  |
-|:----------------------------:|:----------:|:------------------------------------:|
-|        `hasHelmet()`         | `boolean`  |          女仆穿戴头盔后，返回 `true`           |
-|      `hasChestPlate()`       | `boolean`  |          女仆穿戴胸甲后，返回 `true`           |
-|       `hasLeggings()`        | `boolean`  |          女仆穿戴护腿后，返回 `true`           |
-|         `hasBoots()`         | `boolean`  |          女仆穿戴靴子后，返回 `true`           |
-|        `getHelmet()`         |  `String`  |        当女仆佩戴头盔后，返回头盔物品的注册名称。         |
-|      `getChestPlate()`       |  `String`  |        当女仆佩戴胸甲后，返回胸甲物品的注册名称。         |
-|       `getLeggings()`        |  `String`  |        当女仆佩戴护腿后，返回护腿物品的注册名称。         |
-|         `getBoots()`         |  `String`  |        当女仆佩戴靴子后，返回头盔物品的注册名称。         |
-|        `isBegging()`         | `boolean`  |              女仆是否处于祈求模式              |
-|      `isSwingingArms()`      | `boolean`  |         如果女仆处于抬手状态，返回 `true`         |
-|     `getSwingProgress()`     |  `float`   |              获取女仆抬手的时间               |
-|         `isRiding()`         | `boolean`  |              女仆是否处于骑乘模式              |
-|        `isSitting()`         | `boolean`  |              女仆是否处于待命模式              |
-|    ~~`isHoldTrolley()`~~     | `boolean`  |           女仆是否携带手推车或其他实体。            |
-| ~~`isRidingMarisaBroom()`~~  | `boolean`  |               女仆是否骑着扫帚               |
-|    ~~`isRidingPlayer()`~~    | `boolean`  |               女仆是否骑着玩家               |
-|    ~~`isHoldVehicle()`~~     | `boolean`  |               女仆是否骑乘载具               |
-| ~~`isPortableAudioPlay()`~~  | `boolean`  |          女仆是否持有便携音箱并处于播放状态           |
-|       `hasBackpack()`        | `boolean`  |               女仆是否穿戴背包               |
-|     `getBackpackLevel()`     |   `int`    |              获取女仆的的背包等级              |
-|     ~~`hasSasimono()`~~      | `boolean`  |              女仆是否穿戴旗指物               |
-|     `isSwingLeftHand()`      | `boolean`  |     女仆是否使用主手或副手，如果是主手，返回 `false`     |
-| ~~`getLeftHandRotation()`~~  | `float[3]` |               获取主手旋转数据               |
-| ~~`getRightHandRotation()`~~ | `float[3]` |               获取副手旋转数据               |
-|        ~~`getDim()`~~        |   `int`    |               获取女仆所处维度               |
-|         `getWorld()`         |  `World`   |              获取女仆的世界数据               |
-|         `getTask()`          |  `String`  | 获取女仆的工作模式，比如`attack`，`ranged_attack` |
-|     `hasItemMainhand()`      | `boolean`  |              是否女仆主手持有物品              |
-|      `hasItemOffhand()`      | `boolean`  |              是否女仆副手持有物品              |
-|     `getItemMainhand()`      |  `String`  |             获取女仆主手物品注册名              |
-|      `getItemOffhand()`      |  `String`  |             获取女仆副手物品注册名              |
-|         `inWater()`          | `boolean`  |               女仆是否在水中                |
-|          `inRain()`          | `boolean`  |               女仆是否在雨中                |
+|              函数名             |     返回值    |                  备注                  |
+| :--------------------------: | :--------: | :----------------------------------: |
+|         `hasHelmet()`        |  `boolean` |           女仆穿戴头盔后，返回 `true`          |
+|       `hasChestPlate()`      |  `boolean` |           女仆穿戴胸甲后，返回 `true`          |
+|        `hasLeggings()`       |  `boolean` |           女仆穿戴护腿后，返回 `true`          |
+|         `hasBoots()`         |  `boolean` |           女仆穿戴靴子后，返回 `true`          |
+|         `getHelmet()`        |  `String`  |         当女仆佩戴头盔后，返回头盔物品的注册名称。        |
+|       `getChestPlate()`      |  `String`  |         当女仆佩戴胸甲后，返回胸甲物品的注册名称。        |
+|        `getLeggings()`       |  `String`  |         当女仆佩戴护腿后，返回护腿物品的注册名称。        |
+|         `getBoots()`         |  `String`  |         当女仆佩戴靴子后，返回头盔物品的注册名称。        |
+|         `isBegging()`        |  `boolean` |              女仆是否处于祈求模式              |
+|      `isSwingingArms()`      |  `boolean` |         如果女仆处于抬手状态，返回 `true`         |
+|     `getSwingProgress()`     |   `float`  |               获取女仆抬手的时间              |
+|         `isRiding()`         |  `boolean` |              女仆是否处于骑乘模式              |
+|         `isSitting()`        |  `boolean` |              女仆是否处于待命模式              |
+|     ~~`isHoldTrolley()`~~    |  `boolean` |            女仆是否携带手推车或其他实体。           |
+|  ~~`isRidingMarisaBroom()`~~ |  `boolean` |  Whether maid is riding Marisa Broom |
+|    ~~`isRidingPlayer()`~~    |  `boolean` |               女仆是否骑着玩家               |
+|     ~~`isHoldVehicle()`~~    |  `boolean` |               女仆是否骑乘载具               |
+|  ~~`isPortableAudioPlay()`~~ |  `boolean` |           女仆是否持有便携音箱并处于播放状态          |
+|        `hasBackpack()`       |  `boolean` |               女仆是否穿戴背包               |
+|     `getBackpackLevel()`     |    `int`   |              获取女仆的的背包等级              |
+|      ~~`hasSasimono()`~~     |  `boolean` |     Whether maid wearing sasimono    |
+|      `isSwingLeftHand()`     |  `boolean` |     女仆是否使用主手或副手，如果是主手，返回 `false`     |
+|  ~~`getLeftHandRotation()`~~ | `float[3]` |               获取副手旋转数据               |
+| ~~`getRightHandRotation()`~~ | `float[3]` |               获取主手旋转数据               |
+|        ~~`getDim()`~~        |    `int`   |               获取女仆所处维度               |
+|         `getWorld()`         |   `World`  |               获取女仆的世界数据              |
+|          `getTask()`         |  `String`  | 获取女仆的工作模式，比如`attack`，`ranged_attack` |
+|      `hasItemMainhand()`     |  `boolean` |              是否女仆主手持有物品              |
+|      `hasItemOffhand()`      |  `boolean` |              是否女仆副手持有物品              |
+|      `getItemMainhand()`     |  `String`  |              获取女仆主手物品注册名             |
+|      `getItemOffhand()`      |  `String`  |              获取女仆副手物品注册名             |
+|          `inWater()`         |  `boolean` |                女仆是否在水中               |
+|          `inRain()`          |  `boolean` |                女仆是否在雨中               |
 |        `getAtBiome()`        |  `String`  |             获取女仆的生物群系注册名             |
-|    ~~`getAtBiomeTemp()`~~    |  `String`  |            获取女仆的生物群系温度类型             |
-|          `onHurt()`          | `boolean`  |               女仆是否受到伤害               |
-|        `getHealth()`         |  `float`   |               获取女仆的生命值               |
-|       `getMaxHealth()`       |  `float`   |              获取女仆的最大生命值              |
-|         `isSleep()`          | `boolean`  |               女仆是否在睡觉                |
-|     `getFavorability()`      |   `int`    |               获取女仆的好感度               |
-|        `isOnGround()`        | `boolean`  |               女仆是否在地面                |
-|      `getArmorValue()`       |  `double`  |                女仆的护甲值                |
-|         `getSeed()`          |   `long`   |    获取一个固定值，每个实体都是不同的，类似于该实体的 UUID    |
+|    ~~`getAtBiomeTemp()`~~    |  `String`  |             获取女仆的生物群系温度类型            |
+|          `onHurt()`          |  `boolean` |               女仆是否受到伤害               |
+|         `getHealth()`        |   `float`  |           Get maid's health          |
+|       `getMaxHealth()`       |   `float`  |         Get maid's max health        |
+|          `isSleep()`         |  `boolean` |                女仆是否在睡觉               |
+|      `getFavorability()`     |    `int`   |      Get the maid's favorability     |
+|        `isOnGround()`        |  `boolean` |                女仆是否在地面               |
+|       `getArmorValue()`      |  `double`  |                女仆的护甲值                |
+|          `getSeed()`         |   `long`   |    获取一个固定值，每个实体都是不同的，类似于该实体的 UUID    |
 
 #### 坐垫
 
 |          函数名          |    返回值    |               备注               |
-|:---------------------:|:---------:|:------------------------------:|
-|  `isRidingPlayer()`   | `boolean` |           坐垫是否被玩家所坐            |
-|   `hasPassenger()`    | `boolean` |            坐垫是否有乘客             |
+| :-------------------: | :-------: | :----------------------------: |
+|   `isRidingPlayer()`  | `boolean` |            坐垫是否被玩家所坐           |
+|    `hasPassenger()`   | `boolean` |             坐垫是否有乘客            |
 |  `getPassengerYaw()`  |  `float`  |          获取坐垫上乘客的 yaw          |
-|      `getYaw()`       |  `float`  |           获取坐垫的 yaw            |
+|       `getYaw()`      |  `float`  |            获取坐垫的 yaw           |
 | `getPassengerPitch()` |  `float`  |         获取坐垫上乘客的 pitch         |
-|    ~~`getDim()`~~     |   `int`   |           获取坐垫的维度 ID           |
-|     `getWorld()`      |  `World`  |           获取坐垫的世界数据            |
-|      `getSeed()`      |  `long`   | 获取一个固定值，每个实体都是不同的，类似于该实体的 UUID |
+|     ~~`getDim()`~~    |   `int`   |           获取坐垫的维度 ID           |
+|      `getWorld()`     |  `World`  |            获取坐垫的世界数据           |
+|      `getSeed()`      |   `long`  | 获取一个固定值，每个实体都是不同的，类似于该实体的 UUID |
 
 #### 世界
-|       函数名        |    返回值    |           备注            |
-|:----------------:|:---------:|:-----------------------:|
-| `getWorldTime()` |  `long`   | 获取当前世界的时间（tick，0-24000） |
-|    `isDay()`     | `boolean` |        当前世界是否为白天        |
-|   `isNight()`    | `boolean` |        当前世界是否为黑夜        |
-|  `isRaining()`   | `boolean` |        当前世界是否在降雨        |
+
+|        函数名       |    返回值    |            备注           |
+| :--------------: | :-------: | :---------------------: |
+| `getWorldTime()` |   `long`  | 获取当前世界的时间（tick，0-24000） |
+|     `isDay()`    | `boolean` |        当前世界是否为白天        |
+|    `isNight()`   | `boolean` |        当前世界是否为黑夜        |
+|   `isRaining()`  | `boolean` |        当前世界是否在降雨        |
 | `isThundering()` | `boolean` |       当前世界是否处于雷雨中       |
-
-
 
 ### `limbSwing` 和 `limbSwingAmount` 参数
 
@@ -196,13 +197,9 @@ Java.asJSONCompatible({
 
 使用原版Minecraft的手臂和腿摆动公式可以使摆动动画更加自然。
 
-
-
 ### `ageInTicks` 参数
 
 浮点数，一个从 0 开始每 tick 都会自加的变量，大多数动画中都会用到的自变量。
-
-
 
 ### `netHeadYaw` 和 `headPitch` 参数
 
@@ -217,26 +214,24 @@ head.setRotateAngleY(netHeadYaw * 0.017453292);
 
 > 如果在此部分设置的系数大于'0.017453292'，可能会出现一些错误。
 
-
 ### `scale` 参数
 
 浮点数，固定为 0.0625。
 
 一个含义不明的值。
 
-
-
 ### modelMap 参数
 
 一个使用字符串作为键的保存组的 Map。
 
-您可以通过`modelMap.get("xxx")`获取相应的组。 如果没有与名称匹配的组，返回`undefined`
+您可以通过`modelMap.get("xxx")`获取相应的组。 如果没有与名称匹配的组，返回`undefined` If there is no group that matches the name, return `undefined`
 
 假设我们想获取目标组`head`：
 
 ```javascript
 head = modelMap.get("head");
 ```
+
 然后我们可以使用这个`head`组来设置各种参数，制作动画。
 
 当然，为了预防起见，最好对该组进行检查，以确保它存在。
@@ -248,40 +243,36 @@ if (head != undefined) {
 }
 ```
 
-
-
 ### 组
 
 我们可以通过`modelMap.get("xxx")`获取各种组，以下是可用于获取到的组的函数列表。
 
-|                  函数名                  |    返回值    |              备注               |
-|:-------------------------------------:|:---------:|:-----------------------------:|
-| `setRotateAngleX(float rotateAngleX)` |     无     |          设置组的 X 轴角度           |
-| `setRotateAngleY(float rotateAngleY)` |     无     |          设置组的 Y 轴角度           |
-| `setRotateAngleZ(float rotateAngleZ)` |     无     |          设置组的 Z 轴角度           |
-|      `setOffsetX(float offsetX)`      |     无     |         设置组的 X 轴坐标偏移          |
-|      `setOffsetY(float offsetY)`      |     无     |         设置组的 Y 轴坐标偏移          |
-|      `setOffsetZ(float offsetZ)`      |     无     |         设置组的 Z 轴坐标偏移          |
+|                  函数名                  |    返回值    |               备注              |
+| :-----------------------------------: | :-------: | :---------------------------: |
+| `setRotateAngleX(float rotateAngleX)` |     无     |           设置组的 X 轴角度          |
+| `setRotateAngleY(float rotateAngleY)` |     无     |           设置组的 Y 轴角度          |
+| `setRotateAngleZ(float rotateAngleZ)` |     无     |           设置组的 Z 轴角度          |
+|      `setOffsetX(float offsetX)`      |     无     |          设置组的 X 轴坐标偏移         |
+|      `setOffsetY(float offsetY)`      |     无     |          设置组的 Y 轴坐标偏移         |
+|      `setOffsetZ(float offsetZ)`      |     无     |          设置组的 Z 轴坐标偏移         |
 |      `setHidden(boolean hidden)`      |     无     |            设置组是否隐藏            |
-|          `getRotateAngleX()`          |  `float`  |          获取组的 X 轴角度           |
-|          `getRotateAngleY()`          |  `float`  |          获取组的 Y 轴角度           |
-|          `getRotateAngleZ()`          |  `float`  |          获取组的 Z 轴角度           |
+|          `getRotateAngleX()`          |  `float`  |           获取组的 X 轴角度          |
+|          `getRotateAngleY()`          |  `float`  |           获取组的 Y 轴角度          |
+|          `getRotateAngleZ()`          |  `float`  |           获取组的 Z 轴角度          |
 |        `getInitRotateAngleX()`        |  `float`  | 获取 ModelRenderer 的初始化 X 轴旋转角度 |
 |        `getInitRotateAngleY()`        |  `float`  | 获取 ModelRenderer 的初始化 Y 轴旋转角度 |
 |        `getInitRotateAngleZ()`        |  `float`  | 获取 ModelRenderer 的初始化 Z 轴旋转角度 |
-|            `getOffsetX()`             |  `float`  |         获取组的 X 轴坐标偏移          |
-|            `getOffsetY()`             |  `float`  |         获取组的 Y 轴坐标偏移          |
-|            `getOffsetZ()`             |  `float`  |         获取组的 Z 轴坐标偏移          |
-|             `isHidden()`              | `boolean` |            检查组是否隐藏            |
-
-
+|             `getOffsetX()`            |  `float`  |          获取组的 X 轴坐标偏移         |
+|             `getOffsetY()`            |  `float`  |          获取组的 Y 轴坐标偏移         |
+|             `getOffsetZ()`            |  `float`  |          获取组的 Z 轴坐标偏移         |
+|              `isHidden()`             | `boolean` |            检查组是否隐藏            |
 
 ### GlWrapper
 
 在脚本的最开头，我们使用了一个叫做 `GlWrapper` 的工具，它可以进行各种平移、旋转和缩放操作。
 
-|                       函数名                        | 返回值 |                      备注                      |
-|:------------------------------------------------:|:---:|:--------------------------------------------:|
+|                        函数名                       | 返回值 |                      备注                      |
+| :----------------------------------------------: | :-: | :------------------------------------------: |
 |      `translate(float x, float y, float z)`      |  无  |                将实体移动至坐标 x y z                |
 | `rotate(float angle, float x, float y, float z)` |  无  | 以直线 `(0, 0, 0) (x, y, z)` 为轴，将其旋转 `angle` 度。 |
 |        `scale(float x, float y, float z)`        |  无  |              将实体在三条轴上缩放 x y z 倍              |
