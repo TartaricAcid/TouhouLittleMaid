@@ -6,14 +6,11 @@ tagline: Touhou Little Maid modunun geliştirme amaçlı wikisi bulunmaktadır
 actionText: Başlangıç →
 actionLink: /custom_model_pack
 features:
-  - 
-    title: Özel Model
+  - title: Özel Model
     details: Özel maid veya sandalye model paketi nasıl yapılır
-  - 
-    title: Tarif Düzenleme
+  - title: Modify Recipes
     details: Datapack aracılığıyla tarif düzenleme
-  - 
-    title: Mod Geliştirme
+  - title: Mod Geliştirme
     details: Modu derleme veya eklenti geliştirme
 footer: MIT Lisanslı | Telif hakkı © 2021-günümüz TartaricAcid
 ---
