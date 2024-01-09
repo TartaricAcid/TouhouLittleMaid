@@ -1,7 +1,0 @@
-files:
-  - source: /src/main/resources/assets/touhou_little_maid/lang/en_us.json
-    translation: /src/main/resources/assets/touhou_little_maid/lang/%locale%.json
-  - source: /docs/*.md
-    translation: /docs/%locale_with_underscore%/%original_file_name%
-  - source: /docs/*.json
-    translation: /docs/%locale_with_underscore%/%original_file_name%
