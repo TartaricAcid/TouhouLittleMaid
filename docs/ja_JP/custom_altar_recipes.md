@@ -1,6 +1,7 @@
 # 祭壇レシピのカスタマイズ
 
 ## 1.16.5
+
 1.16.5では、祭壇のレシピを追加するためにデータパックを使用します
 
 **データパックの使用方法を理解している必要があります**
@@ -47,6 +48,7 @@
 ```
 
 ## 1.12.2
+
 Touhou Little Maid in 1.12.2 added compability to `CraftTweaker`, use `CraftTweaker` to add/edit altar recipes
 
 **この機能を使用する前に、 `CraftTweaker` の基本的なスクリプト記述方法を理解していることを確認してください。**
