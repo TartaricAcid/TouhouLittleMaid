@@ -3,7 +3,7 @@ name: Vuepress Build Page
 on:
   push:
     branches:
-      - 1.16.5
+      - "1.20"
     paths:
       - 'docs/**'
 
