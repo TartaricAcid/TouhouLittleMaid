@@ -1,6 +1,7 @@
-# 自定义祭坛合成
+# Custom Altar Recipes
 
 ## 1.16.5
+
 Touhou Little Maid在 1.16.5 使用数据包添加祭坛配方
 
 **请确保您知道如何使用 Minecaft 原版数据包**
@@ -47,6 +48,7 @@ Touhou Little Maid在 1.16.5 使用数据包添加祭坛配方
 ```
 
 ## 1.12.2
+
 Touhou Little Maid 在 1.12.2 中添加对 `CraftTweaker` 的兼容，现在可以通过 `CraftTweaker` 进行祭坛物品合成的修改了。
 
 **使用此功能前请确保你已经了解基本的 `CraftTweaker` 脚本书写方式。**

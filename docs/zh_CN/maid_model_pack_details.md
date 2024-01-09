@@ -1,4 +1,5 @@
 # 女仆模型包详解
+
 - 本 wiki 适用于 Touhou Little Maid 模组 `1.12.2` 和 `1.16.5` 最新版；
 - 需要了解原版 Minecraft 的资源包结构；
 - 需要了解 JSON 格式；
@@ -109,9 +110,10 @@
 如果我们书写了 `model` 或者 `texture` 字段，那么其内容并无限制，你甚至可以调用其他模型包中的模型，只需要书写对资源地址即可。
 
 ## 动态图标
+
 图标没有大小限制，支持静态图标和动态图标。
 
-任意为 1:1 的图标均会被解析为静态图标。 不为 1:1 的长图，会以 0.1 秒的间隔逐次显示，从而形成动态图效果。
+鉴于部分作者制作的模型比较特殊，与女仆本身拥有多种附加的外形显示不兼容。 此处专门对非标模型提供了适配的做法： 任意为 1:1 的图标均会被解析为静态图标。 不为 1:1 的长图，会以 0.1 秒的间隔逐次显示，从而形成动态图效果。
 
 > 下图就为模组自带的图标，左侧被解析为静态图标，右侧被解析为动态图标
 
@@ -120,7 +122,7 @@
 ## 模型文件
 
 - 本模组使用基岩版 `1.10.0` 或 `1.12.0` JSON 文件来进行模型的加载，该文件可以通过建模软件 [Blockbench](https://blockbench.net/) 直接导出，不需要对其做任何修改。
-- 我们提供了许多预设动画，你只需要创建一个特殊名称的组，那么插件就会在导出模型是依据组名生成对应的动画脚本引用。 想要了解所有可用动画，请查看 [预设动画](/preset_animation.md) 篇章。
+- 我们提供了许多预设动画，你只需要创建一个特殊名称的组，那么插件就会在导出模型是依据组名生成对应的动画脚本引用。 想要了解所有可用动画，请查看 [预设动画](/preset_animation.md) 篇章。 For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
 - 模型也支持 JavaScript 自定义动画，你可以在自定义动画章节中找到对应介绍。
 
 ## 国际化
@@ -159,15 +161,15 @@ pack.vanilla_touhou_model.desc=默认的模型包
 
 ## 兼容性问题
 
-鉴于部分作者制作的模型比较特殊，与女仆本身拥有多种附加的外形显示不兼容。 此处专门对非标模型提供了适配的做法：
+Since models made by some authors are more unique, they may have some compability issues with maids' various addtional appearance parts. Here we address the issue with these non-standard models and how you can overcome it:
 
-|            问题             |                      解决方法                       |
-|:-------------------------:|:-----------------------------------------------:|
-|           动画不协调           |              编写自定义 JavaScript 动画脚本              |
-|        手臂持有物品位置不对         |                   使用定位骨骼进行定位                    |
-|         禁止显示手部物品          | 只要 `armLeft` 或者 `armRight` 骨骼不存在，那么对应的手持物品就不会显示 |
-|          背包位置不正确          |                   使用定位骨骼进行定位                    |
-| 背包、拉杆箱、载具、扫帚，自定义头颅等位置兼容不对 |                  采用如下书写关闭这些功能                   |
+|                        问题                       |                             解决方法                            |
+| :---------------------------------------------: | :---------------------------------------------------------: |
+|                      动画不协调                      |                    编写自定义 JavaScript 动画脚本                    |
+|                    手臂持有物品位置不对                   |         Use positional group to define the position         |
+|                     禁止显示手部物品                    |       只要 `armLeft` 或者 `armRight` 骨骼不存在，那么对应的手持物品就不会显示       |
+|                     背包位置不正确                     |         Use positional group to define the position         |
+| Backpack, trolley, vehicles, broom, custom head | Write some fields as shown in the example below to close it |
 
 ```json {5-10}
 {
@@ -191,7 +193,9 @@ pack.vanilla_touhou_model.desc=默认的模型包
 彩蛋的书写方式非常简单，模组会自动识别其为彩蛋模型，也不会出现在皮肤选择界面。
 
 ### 普通彩蛋
-如下为普通命名彩蛋的书写方式。 普通命名彩蛋下，女仆只需要命名为下面 `tag` 字段，就会调用该模型。
+
+Below is the script for normal naming easter egg. 如下为普通命名彩蛋的书写方式。 普通命名彩蛋下，女仆只需要命名为下面 `tag` 字段，就会调用该模型。
+
 ```json {5-7}
 {
     "pack_name": "Touhou Project Model Pack",
@@ -203,8 +207,10 @@ pack.vanilla_touhou_model.desc=默认的模型包
     }]
 }
 ```
+
 ### 加密彩蛋
-如下为加密彩蛋的书写方式。 加密彩蛋彩蛋下，女仆需要特定命名，该命名的 SHA-1 值为如下的 `tag` 字段，才会调用该模型。
+
+Below  is the script for encrypted naming easter egg. 如下为加密彩蛋的书写方式。 加密彩蛋彩蛋下，女仆需要特定命名，该命名的 SHA-1 值为如下的 `tag` 字段，才会调用该模型。
 
 如下书写方式，当女仆命名为 `IKUN~` 时，因为这个字符的 SHA-1 值为 `6dadb86d91cc4c0c2c7860e1cb16cec01e1b6511`，符合 `tag` 字段，会调用该模型。
 
@@ -223,14 +229,14 @@ pack.vanilla_touhou_model.desc=默认的模型包
 
 ## 其他问题
 
-### 贴图闪烁（Z-fighting）问题
+### Z-fighting Issue
 
 这是 OpenGL 本身的一个问题，我们在制作模型过程中使用了平面、或者是两个重合的立方体，就会出现此问题。
 
 ![004](https://i.imgur.com/daYk77e.png)
 
-对于平面图形导致的问题，只为其中某一面附上材质，另一面留空可以解决此问题；对于两个重合几何体，只需要微移几何体，或者对重合部分的材质进行剔除即可。
+For the issue of one flat cube, you can add texture to one of the sides and keep the others empty, it will solve the issue; for two coinciding cube, move the cube slightly, or delete the coinciding cube.
 
-### 文件名大小写问题
+### Uppercase & Lowercase
 
 在 Minecraft 中，所有文件名都必须是小写。

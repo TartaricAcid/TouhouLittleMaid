@@ -1,7 +1,7 @@
 {
     "title": {
         "lang": "pt-BR",
-        "title": "Touhou Little Maid Dev Wiki",
+        "title": "",
         "description": "Existe um wiki relacionado ao desenvolvimento do mod Touhou Little Maid"
     },
     "themeConfig": {
@@ -12,15 +12,15 @@
         "nav": [
             {
                 "text": "Casa",
-                "link": "./"
+                "link": ""
             },
             {
-                "text": "GitHub",
-                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
+                "text": "",
+                "link": ""
             },
             {
-                "text": "CurseForge",
-                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
+                "text": "",
+                "link": ""
             }
         ],
         "sidebar": [

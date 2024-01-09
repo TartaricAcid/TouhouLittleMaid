@@ -1,4 +1,5 @@
 # メイドモデルパックの詳細
+
 - This wiki applies to Touhou Little Maid mod in `1.12.2` or `1.16.5` latest version;
 - Requires understanding of vanilla Minecraft's resource pack structure;
 - Requires understanding of JSON format;
@@ -109,6 +110,7 @@ For the example above, `model_id` is `touhou_little_maid:hakurei_reimu`, then th
 If we filled the field for `model` or `texture`, then the content has no limit, and can even share a model or texture for multiple characters.
 
 ## Animated Icon
+
 Icon does not have size limit, supports both static and animated icons.
 
 Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon that is not 1:1 scale, will be displayed slowly with a 0.1 second interval, which creates the animated effect.
@@ -161,13 +163,13 @@ For the first example, if we did not fill the `name` file, then the system will 
 
 Since models made by some authors are more unique, they may have some compability issues with maids' various addtional appearance parts. Here we address the issue with these non-standard models and how you can overcome it:
 
-|                     Issues                      |                                                   Solution                                                   |
-|:-----------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
+|                      Issues                     |                                                   Solution                                                   |
+| :---------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
 |             Uncoordinated animation             |                                  Write a custom JavaScript animation script                                  |
-|      Hold items are in incorrect position       |                                 Use positional group to define the position                                  |
-|           Disable showing hold items            | As long as `armLeft` or `armRight` group does not exist, then the corresponding hold items will not be shown |
-|        Backpack is in incorrect position        |                                 Use positional group to define the position                                  |
-| Backpack, trolley, vehicles, broom, custom head |                         Write some fields as shown in the example below to close it                          |
+|       Hold items are in incorrect position      |                                  Use positional group to define the position                                 |
+|            Disable showing hold items           | As long as `armLeft` or `armRight` group does not exist, then the corresponding hold items will not be shown |
+|        Backpack is in incorrect position        |                                  Use positional group to define the position                                 |
+| Backpack, trolley, vehicles, broom, custom head |                          Write some fields as shown in the example below to close it                         |
 
 ```json {5-10}
 {
@@ -191,7 +193,9 @@ We added maid naming easter egg function, specially named maid can use special m
 Writing easter egg script is pretty simple, the model will automatically detect it as easter egg models, and it won't show in skin menu.
 
 ### Normal Easter Eggs
+
 Below is the script for normal naming easter egg. Under normal naming easter egg, maid only need to be named as shown in the `tag` field to use the model.
+
 ```json {5-7}
 {
     "pack_name": "Touhou Project Model Pack",
@@ -203,7 +207,9 @@ Below is the script for normal naming easter egg. Under normal naming easter egg
     }]
 }
 ```
+
 ### Encrypted Easter Eggs
+
 Below  is the script for encrypted naming easter egg. For encrypted naming easter egg, maid has to be specially named, the naming has to be the same as SHA-1 value in the `tag` below to use the model.
 
 As the script below, when maid is named `IKUN~`, because the characters' SHA-1 value is `6dadb86d91cc4c0c2c7860e1cb16cec01e1b6511`, same as `tag` field, it will use said model.

@@ -1,6 +1,7 @@
 # Custom Altar Recipes
 
 ## 1.16.5
+
 Touhou Little Maid in 1.16.5 use datapack to add altar recipes
 
 **Please make sure you know how to use the Minecaft vanilla datapack**
@@ -47,6 +48,7 @@ Touhou Little Maid in 1.16.5 use datapack to add altar recipes
 ```
 
 ## 1.12.2
+
 Touhou Little Maid in 1.12.2 added compability to `CraftTweaker`, use `CraftTweaker` to add/edit altar recipes
 
 **Before using this function, please make sure you have understood the basic script writing method for `CraftTweaker`.**

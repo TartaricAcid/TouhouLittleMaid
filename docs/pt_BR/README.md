@@ -6,14 +6,11 @@ tagline: Existe uma wiki relacionado ao desenvolvimento do mod Touhou Little Mai
 actionText: Começando →
 actionLink: /pt_BR/custom_model_pack
 features:
-  - 
-    title: Modelo Personalizado
+  - title: Modelo Personalizado
     details: Como fazer um pacote de modelo personalizado da empregada ou cadeira
-  - 
-    title: Modificar Receitas
+  - title: Modificar Receitas
     details: Como modificar receitas por pacote de dados
-  - 
-    title: Desenvolver Mod
+  - title: Desenvolver Mod
     details: Como compatibilizar o mod Touhou Little Maid ou desenvolver uma adição
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---

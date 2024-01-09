@@ -6,14 +6,11 @@ tagline: 東方リトルメイドmodの開発に関するwikiがあります
 actionText: はじめに→
 actionLink: /ja_JP/custom_model_pack
 features:
-  - 
-    title: カスタムモデル
+  - title: カスタムモデル
     details: カスタムメイドや椅子のモデルパッケージの作り方
-  - 
-    title: レシピの変更
+  - title: レシピの変更
     details: データパックでのレシピの変更方法
-  - 
-    title: Develop Mod
+  - title: Develop Mod
     details: How to compat Touhou Little Maid mod, or develop an addition
 footer: MIT Licensed | Copyright © 2021-present TartaricAcid
 ---

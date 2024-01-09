@@ -12,15 +12,15 @@
         "nav": [
             {
                 "text": "Ana Sayfa",
-                "link": "./"
+                "link": ""
             },
             {
-                "text": "GitHub",
-                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
+                "text": "",
+                "link": ""
             },
             {
-                "text": "CurseForge",
-                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
+                "text": "",
+                "link": ""
             }
         ],
         "sidebar": [
@@ -28,23 +28,23 @@
                 "title": "Özel Model",
                 "children": [
                     [
-                        "./custom_model_pack",
+                        "",
                         "Özel Model Paketi"
                     ],
                     [
-                        "./maid_model_pack_details",
+                        "",
                         "Maid Model Paket Detayları"
                     ],
                     [
-                        "./chair_model_pack_details",
+                        "",
                         "Sandalye Model Paketi Detayları"
                     ],
                     [
-                        "./custom_javascript_animation",
+                        "",
                         "Özel JavaScript Animasyonu"
                     ],
                     [
-                        "./preset_animation",
+                        "",
                         "Önceden Ayarlanmış Animasyon"
                     ]
                 ]
@@ -53,7 +53,7 @@
                 "title": "Tarifleri Değiştir",
                 "children": [
                     [
-                        "./custom_altar_recipes",
+                        "",
                         "Özel Altar Tarifleri"
                     ]
                 ]

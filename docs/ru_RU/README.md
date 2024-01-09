@@ -6,14 +6,11 @@ tagline: Вики, связанная с разработкой Touhou Little Ma
 actionText: Начать →
 actionLink: /ru_RU/custom_model_pack
 features:
-  - 
-    title: Пользовательская модель
+  - title: Пользовательская модель
     details: Как сделать свою горничную, или модель стула
-  - 
-    title: Изменить рецепты
+  - title: Изменить рецепты
     details: Как изменить рецепты по набору данных
-  - 
-    title: Разработка мода
+  - title: Разработка мода
     details: Как совместить Touhou Little Maid, или разработать дополнение
 footer: MIT Лицензировано | Авторское право © 2021-present TartaricAcid
 ---

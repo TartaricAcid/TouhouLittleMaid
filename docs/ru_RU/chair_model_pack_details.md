@@ -1,4 +1,5 @@
 # Детали моделей стульев
+
 - Этот вики применяется для Touhou Little Maid `1.12.2` и `1.16.5` последней версии;
 - Требует понимания структуры набора ресурсов ванильного Minecraft;
 - Требует понимания формата JSON;
@@ -115,9 +116,11 @@ For the example above, `model_id` is `touhou_little_maid:cushion`, then the mode
 If we filled the field for `model` or `texture`, then the content has no limit, and can even share a model or texture for multiple characters.
 
 `mounted_height` is the height of the entity when it is riding the model, the unit is the pixels above ground, you can use decimals.
+
 > The `X` and `Z` position of the riding entity will always be the center of the chair entity, please preset the `X` and `Z` of the chair models when designing the models.
 
 ## Анимированная иконка
+
 Icon does not have size limit, supports both static and animated icons.
 
 Any icon with a scale of 1:1 will be interpreted as static icon. Any long icon that is not 1:1 scale, will be displayed slowly with a 0.1 second interval, which creates the animated effect.
