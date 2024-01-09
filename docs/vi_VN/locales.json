@@ -7,20 +7,20 @@
     "themeConfig": {
         "selectText": "Ngôn ngữ",
         "label": "Tiếng Việt",
-        "ariaLabel": "Languages",
+        "ariaLabel": "",
         "lastUpdated": "Cập nhật lần cuối",
         "nav": [
             {
                 "text": "Trang chủ",
-                "link": "./"
+                "link": ""
             },
             {
-                "text": "GitHub",
-                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
+                "text": "",
+                "link": ""
             },
             {
-                "text": "CurseForge",
-                "link": "https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid"
+                "text": "",
+                "link": ""
             }
         ],
         "sidebar": [
