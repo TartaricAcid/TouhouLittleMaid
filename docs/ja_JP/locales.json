@@ -11,15 +11,15 @@
         "lastUpdated": "最終アップデート",
         "nav": [
             {
-                "text": "Home",
-                "link": "./"
+                "text": "",
+                "link": ""
             },
             {
-                "text": "GitHub",
-                "link": "https://github.com/TartaricAcid/TouhouLittleMaid"
+                "text": "",
+                "link": ""
             },
             {
-                "text": "CurseForge",
+                "text": "",
                 "link": "https://www.cursseforge.com/minecraft/mc-mods/touhou-little-maid"
             }
         ],
