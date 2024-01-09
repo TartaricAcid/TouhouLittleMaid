@@ -238,9 +238,13 @@ public class BlockGomoku extends BlockJoy {
                 return InteractionResult.SUCCESS;
             }
             Entity sitEntity = serverLevel.getEntity(gomoku.getSitId());
-            // 不检查女仆是否是自己的，意味着你可以和其他人的女仆对弈
             if (sitEntity == null || !sitEntity.isAlive() || !(sitEntity.getFirstPassenger() instanceof EntityMaid maid)) {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.no_maid"));
+                return InteractionResult.FAIL;
+            }
+            // 检查是不是自己的女仆
+            if (!maid.isOwnedBy(player)) {
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.not_owner"));
                 return InteractionResult.FAIL;
             }
             if (!gomoku.isPlayerTurn()) {

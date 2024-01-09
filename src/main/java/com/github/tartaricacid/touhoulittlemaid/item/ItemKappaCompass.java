@@ -179,17 +179,22 @@ public class ItemKappaCompass extends Item {
             BlockPos idlePos = getPoint(Activity.IDLE, stack);
             BlockPos sleepPos = getPoint(Activity.REST, stack);
             if (dimension != null) {
-                components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", dimension.toString()).withStyle(ChatFormatting.GRAY));
+                components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", dimension.toString()).withStyle(ChatFormatting.GOLD));
             }
             if (workPos != null) {
-                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.work", workPos.getX(), workPos.getY(), workPos.getZ()).withStyle(ChatFormatting.GRAY));
+                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.work", workPos.getX(), workPos.getY(), workPos.getZ()).withStyle(ChatFormatting.RED));
             }
             if (idlePos != null) {
-                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.idle", idlePos.getX(), idlePos.getY(), idlePos.getZ()).withStyle(ChatFormatting.GRAY));
+                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.idle", idlePos.getX(), idlePos.getY(), idlePos.getZ()).withStyle(ChatFormatting.GREEN));
             }
             if (sleepPos != null) {
-                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.sleep", sleepPos.getX(), sleepPos.getY(), sleepPos.getZ()).withStyle(ChatFormatting.GRAY));
+                components.add(Component.translatable("message.touhou_little_maid.kappa_compass.sleep", sleepPos.getX(), sleepPos.getY(), sleepPos.getZ()).withStyle(ChatFormatting.BLUE));
             }
+            components.add(Component.empty());
         }
+        components.add(Component.translatable("message.touhou_little_maid.kappa_compass.usage.set_pos"));
+        components.add(Component.translatable("message.touhou_little_maid.kappa_compass.usage.clear_pos"));
+        components.add(Component.translatable("message.touhou_little_maid.kappa_compass.usage.write_pos_to_maid"));
+        components.add(Component.translatable("message.touhou_little_maid.kappa_compass.usage.clear_maid_pos"));
     }
 }
