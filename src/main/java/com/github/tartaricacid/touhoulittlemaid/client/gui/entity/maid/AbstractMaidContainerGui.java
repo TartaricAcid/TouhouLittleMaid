@@ -2,8 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
-import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
@@ -11,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTab
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -166,6 +165,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(taskSwitch, matrixStack, x, y, "gui.touhou_little_maid.task.switch");
         renderMaidInfo(matrixStack, x, y);
         renderScheduleInfo(matrixStack, x, y);
+        renderTaskButtonInfo(matrixStack, x, y);
     }
 
     @Override
@@ -241,8 +241,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             desc.add(new StringTextComponent("\u0020"));
             desc.add(new TranslationTextComponent("task.touhou_little_maid.desc.condition").withStyle(TextFormatting.GOLD));
         }
-        StringTextComponent prefix = new StringTextComponent("-\u0020");
         for (Pair<String, Predicate<EntityMaid>> line : conditions) {
+            StringTextComponent prefix = new StringTextComponent("-\u0020");
             String key = String.format("task.%s.%s.condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
             TranslationTextComponent condition = new TranslationTextComponent(key);
             if (line.getSecond().test(maid)) {
@@ -314,17 +314,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void addDownloadButton() {
         modelDownload = new ImageButton(leftPos + 20, topPos + 230, 41, 20, 0, 86, 20, BUTTON,
-                (b) -> {
-                    List<DownloadInfo> downloadInfoList;
-                    int page = ModelDownloadGui.getCurrentPage();
-                    if (page == 0) {
-                        downloadInfoList = InfoGetManager.DOWNLOAD_INFO_LIST_ALL;
-                    } else {
-                        DownloadInfo.TypeEnum typeEnum = DownloadInfo.TypeEnum.getTypeByIndex(page - 1);
-                        downloadInfoList = InfoGetManager.getTypedDownloadInfoList(typeEnum);
-                    }
-                    Minecraft.getInstance().setScreen(new ModelDownloadGui(downloadInfoList));
-                });
+                (b) -> Minecraft.getInstance().setScreen(new ModelDownloadGui()));
         this.addButton(modelDownload);
     }
 
@@ -380,6 +370,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                     .append(new TranslationTextComponent("tooltips.touhou_little_maid.info.favorability")
                             .append(":\u0020").withStyle(TextFormatting.AQUA))
                     .append(String.valueOf(maid.getFavorability())));
+            list.add(new StringTextComponent(prefix).withStyle(TextFormatting.WHITE)
+                    .append(new TranslationTextComponent("block.touhou_little_maid.gomoku")
+                            .append(":\u0020").withStyle(TextFormatting.AQUA))
+                    .append(new TranslationTextComponent("tooltips.touhou_little_maid.info.game_skill.gomoku", MaidGomokuAI.getMaidCount(maid), MaidGomokuAI.getRank(maid))));
 
             renderComponentTooltip(matrixStack, list, mouseX, mouseY);
         }
@@ -389,6 +383,14 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (scheduleButton.isHovered()) {
             renderComponentTooltip(matrixStack, scheduleButton.getTooltips(), mouseX, mouseY);
         }
+    }
+
+    private void renderTaskButtonInfo(MatrixStack matrixStack, int x, int y) {
+        this.buttons.stream().filter(b -> b instanceof TaskButton).forEach(b -> {
+            if (b.isHovered()) {
+                b.renderToolTip(matrixStack, x, y);
+            }
+        });
     }
 
     private void drawMaidCharacter(int x, int y) {

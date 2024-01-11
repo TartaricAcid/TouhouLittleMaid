@@ -68,8 +68,5 @@ public class TaskButton extends Button {
         blit(matrixStack, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, this.textureWidth, this.textureHeight);
         itemRenderer.renderGuiItem(task.getIcon(), this.x + 2, this.y + 2);
         minecraft.font.draw(matrixStack, task.getName(), this.x + 23, this.y + 6, 0x333333);
-        if (this.isHovered()) {
-            this.renderToolTip(matrixStack, mouseX, mouseY);
-        }
     }
 }

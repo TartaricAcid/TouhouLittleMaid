@@ -49,7 +49,7 @@ public class MaidConfigMessage {
                 if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
                     EntityMaid maid = (EntityMaid) entity;
                     if (maid.isHomeModeEnable() != message.home) {
-                        maid.setHomeModeEnable(message.home);
+                        handleHome(message, sender, maid);
                     }
                     if (maid.isPickup() != message.pick) {
                         maid.setPickup(message.pick);
@@ -67,5 +67,26 @@ public class MaidConfigMessage {
             });
         }
         context.setPacketHandled(true);
+    }
+
+    private static void handleHome(MaidConfigMessage message, ServerPlayer sender, EntityMaid maid) {
+        if (message.home) {
+            ResourceLocation dimension = maid.getSchedulePos().getDimension();
+            if (!dimension.equals(maid.level.dimension().location())) {
+                CheckSchedulePosMessage tips = new CheckSchedulePosMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_dimension_check"));
+                NetworkHandler.sendToClientPlayer(tips, sender);
+                return;
+            }
+            BlockPos nearestPos = maid.getSchedulePos().getNearestPos(maid);
+            if (nearestPos != null && nearestPos.distSqr(maid.blockPosition()) > 32 * 32) {
+                CheckSchedulePosMessage tips = new CheckSchedulePosMessage(new TranslationTextComponent("message.touhou_little_maid.check_schedule_pos.too_far"));
+                NetworkHandler.sendToClientPlayer(tips, sender);
+                return;
+            }
+            maid.getSchedulePos().setHomeModeEnable(maid, maid.blockPosition());
+        } else {
+            maid.restrictTo(BlockPos.ZERO, MaidConfig.MAID_NON_HOME_RANGE.get());
+        }
+        maid.setHomeModeEnable(message.home);
     }
 }

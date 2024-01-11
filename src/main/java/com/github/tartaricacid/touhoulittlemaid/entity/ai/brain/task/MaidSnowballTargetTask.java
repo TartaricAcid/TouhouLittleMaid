@@ -18,7 +18,6 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Optional;
 
 public class MaidSnowballTargetTask extends Task<EntityMaid> {
-    private static final int MAX_STOP_ATTACK_DISTANCE = 16;
     private static final float CHANCE_STOPPING = 1 / 32F;
     private final int attackCooldown;
     private boolean canThrow = false;
@@ -110,9 +109,10 @@ public class MaidSnowballTargetTask extends Task<EntityMaid> {
         return optional.isPresent() && optional.get().isAlive();
     }
 
-    private boolean inMaxDistance(LivingEntity entity) {
+    private boolean inMaxDistance(EntityMaid entity) {
+        int maxStopAttackDistance = (int) entity.getRestrictRadius();
         Optional<LivingEntity> optional = entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
-        return optional.isPresent() && entity.distanceTo(optional.get()) <= MAX_STOP_ATTACK_DISTANCE;
+        return optional.isPresent() && entity.distanceTo(optional.get()) <= maxStopAttackDistance;
     }
 
     private boolean chanceStop(LivingEntity entity) {

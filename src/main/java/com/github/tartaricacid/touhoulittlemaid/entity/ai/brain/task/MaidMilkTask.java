@@ -22,14 +22,12 @@ import java.util.List;
 
 public class MaidMilkTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 40;
-    private final int maxDistToWalk;
     private final float speedModifier;
     private LivingEntity milkTarget = null;
 
-    public MaidMilkTask(int maxDistToWalk, float speedModifier) {
+    public MaidMilkTask(float speedModifier) {
         super(ImmutableMap.of(MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
-        this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
         this.setMaxCheckRate(MAX_DELAY_TIME);
     }
@@ -47,7 +45,7 @@ public class MaidMilkTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         milkTarget = null;
-
+        int maxDistToWalk = (int) maid.getRestrictRadius();
         this.getEntities(maid).stream()
                 .filter(e -> e.closerThan(maid, maxDistToWalk))
                 .filter(e -> maid.isWithinRestriction(e.blockPosition()))

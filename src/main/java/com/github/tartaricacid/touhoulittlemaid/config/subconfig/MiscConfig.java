@@ -1,7 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
 
+import com.google.common.collect.Lists;
+import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.util.List;
 
 import static net.minecraft.world.biome.Biome.Category.byName;
 
@@ -9,6 +13,7 @@ import static net.minecraft.world.biome.Biome.Category.byName;
 public final class MiscConfig {
     public static ForgeConfigSpec.DoubleValue MAID_FAIRY_POWER_POINT;
     public static ForgeConfigSpec.IntValue MAID_FAIRY_SPAWN_PROBABILITY;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> MAID_FAIRY_BLACKLIST_BIOME;
     public static ForgeConfigSpec.DoubleValue PLAYER_DEATH_LOSS_POWER_POINT;
     public static ForgeConfigSpec.BooleanValue GIVE_SMART_SLAB;
     public static ForgeConfigSpec.BooleanValue GIVE_PATCHOULI_BOOK;
@@ -24,6 +29,11 @@ public final class MiscConfig {
 
         builder.comment("Maid fairy's spawn probability (zombie is 100, enderman is 10)");
         MAID_FAIRY_SPAWN_PROBABILITY = builder.defineInRange("MaidFairySpawnProbability", 70, 0, Integer.MAX_VALUE);
+
+        builder.comment("The following biome do not spawn maid fairy");
+        MAID_FAIRY_BLACKLIST_BIOME = builder.defineList("MaidFairyBlacklistBiome",
+                Lists.newArrayList(Biomes.THE_VOID.location().toString(),
+                        Biomes.MUSHROOM_FIELDS.location().toString()), MiscConfig::checkBiome);
 
         builder.comment("Loss power point after player death");
         PLAYER_DEATH_LOSS_POWER_POINT = builder.defineInRange("PlayerDeathLossPowerPoint", 1.0, 0, 5);

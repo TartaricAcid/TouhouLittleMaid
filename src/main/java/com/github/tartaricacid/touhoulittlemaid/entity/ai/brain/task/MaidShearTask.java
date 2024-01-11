@@ -21,14 +21,12 @@ import java.util.Random;
 
 public class MaidShearTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
-    private final int maxDistToWalk;
     private final float speedModifier;
     private LivingEntity shearableEntity = null;
 
-    public MaidShearTask(int maxDistToWalk, float speedModifier) {
+    public MaidShearTask(float speedModifier) {
         super(ImmutableMap.of(MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
-        this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
         this.setMaxCheckRate(MAX_DELAY_TIME);
     }
@@ -37,6 +35,7 @@ public class MaidShearTask extends MaidCheckRateTask {
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         ItemStack mainhandItem = maid.getMainHandItem();
         shearableEntity = null;
+        int maxDistToWalk = (int) maid.getRestrictRadius();
 
         this.getEntities(maid).stream()
                 .filter(e -> e.closerThan(maid, maxDistToWalk))

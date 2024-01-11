@@ -1,11 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskBoardGames;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -114,20 +112,15 @@ public class EntitySit extends Entity {
     }
 
     private boolean isGomokuTask(EntityMaid maid) {
-        return Type.GOMOKU.getTypeName().equals(this.getJoyType()) && maid.getTask().getUid().equals(TaskBoardGames.UID);
+        return Type.GOMOKU.getTypeName().equals(this.getJoyType()) && maid.getTask().getUid().equals(TaskBoardGames.UID) && isWorkSchedule(maid);
     }
 
     private boolean isIdleSchedule(EntityMaid maid) {
-        MaidSchedule schedule = maid.getSchedule();
-        int time = (int) (maid.level.getDayTime() % 24000L);
-        switch (schedule) {
-            case ALL:
-                return false;
-            case NIGHT:
-                return InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time) == Activity.IDLE;
-            default:
-                return InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time) == Activity.IDLE;
-        }
+        return maid.getScheduleDetail() == Activity.IDLE;
+    }
+
+    private boolean isWorkSchedule(EntityMaid maid) {
+        return maid.getScheduleDetail() == Activity.WORK;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
-import com.github.tartaricacid.touhoulittlemaid.api.gomoku.Point;
+import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;

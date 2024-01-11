@@ -1,8 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.gomoku.AIService;
-import com.github.tartaricacid.touhoulittlemaid.api.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
@@ -33,7 +31,6 @@ public final class TouhouLittleMaid {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     private static final String CLOTH_CONFIG = "cloth-config";
     public static List<ILittleMaid> EXTENSIONS = Lists.newArrayList();
-    public static AIService SERVICE = new ZhiZhangAIService(new AIService.AIConfig(4, 10, false, 0, 6));
 
     public TouhouLittleMaid() {
         InitEntities.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -49,6 +46,7 @@ public final class TouhouLittleMaid {
         InitSounds.SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitRecipes.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitLootModifier.GLOBAL_LOOT_MODIFIER_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
+        InitPoi.POI_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitTrigger.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfig.init());
         checkModLoad(CLOTH_CONFIG, () -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MenuIntegration::registerModsPage));

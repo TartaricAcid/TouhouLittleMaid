@@ -1,10 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -32,6 +35,40 @@ public final class RenderHelper {
             font.drawInBatch(text, fontX, yOffset, color, false, poseStack.last().pose(), buffer, seeThrough, 0, 0xf000f0);
             poseStack.popPose();
             buffer.endBatch();
+        }
+    }
+
+    public static void renderLine(MatrixStack poseStack, IVertexBuilder consumer, Vector3d start, Vector3d end, float red, float green, float blue) {
+        Matrix4f matrix4f = poseStack.last().pose();
+        Matrix3f matrix3f = poseStack.last().normal();
+        consumer.vertex(matrix4f, (float) start.x, (float) start.y, (float) start.z).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+        consumer.vertex(matrix4f, (float) end.x, (float) end.y, (float) end.z).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+
+        consumer.vertex(matrix4f, (float) start.x, (float) start.y, (float) start.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+        consumer.vertex(matrix4f, (float) end.x, (float) end.y, (float) end.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
+        consumer.vertex(matrix4f, (float) start.x, (float) start.y, (float) start.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
+        consumer.vertex(matrix4f, (float) end.x, (float) end.y, (float) end.z).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
+    }
+
+    public static void renderCylinder(MatrixStack poseStack, IVertexBuilder consumer, Vector3d centerPos, double radius, int precision, float red, float green, float blue) {
+        Matrix4f matrix4f = poseStack.last().pose();
+        Matrix3f matrix3f = poseStack.last().normal();
+        double precisionAngle = 2 * Math.PI / precision;
+        for (int i = precision; i >= 0; i--) {
+            double x1 = centerPos.x + radius * Math.cos(i * precisionAngle);
+            double x2 = centerPos.x + radius * Math.cos((i - 1) * precisionAngle);
+            double y = centerPos.y;
+            double z1 = centerPos.z + radius * Math.sin(i * precisionAngle);
+            double z2 = centerPos.z + radius * Math.sin((i - 1) * precisionAngle);
+            consumer.vertex(matrix4f, (float) x1, (float) y, (float) z1).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+            consumer.vertex(matrix4f, (float) x2, (float) y, (float) z2).color(red, green, blue, 1.0F).normal(matrix3f, 1.0F, 0.0F, 0.0F).endVertex();
+
+            consumer.vertex(matrix4f, (float) x1, (float) y, (float) z1).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+            consumer.vertex(matrix4f, (float) x2, (float) y, (float) z2).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
+            consumer.vertex(matrix4f, (float) x1, (float) y, (float) z1).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
+            consumer.vertex(matrix4f, (float) x2, (float) y, (float) z2).color(red, green, blue, 1.0F).normal(matrix3f, 0.0F, 0.0F, 1.0F).endVertex();
         }
     }
 }

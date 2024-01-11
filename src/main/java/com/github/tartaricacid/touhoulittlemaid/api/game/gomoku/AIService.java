@@ -5,7 +5,7 @@
  *   Version 2.0, January 2004
  * http://www.apache.org/licenses/
  */
-package com.github.tartaricacid.touhoulittlemaid.api.gomoku;
+package com.github.tartaricacid.touhoulittlemaid.api.game.gomoku;
 
 /**
  * @author anlingyi

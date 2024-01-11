@@ -3,7 +3,13 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TallBlockItem;
@@ -25,9 +31,14 @@ import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
 public class ItemMaidBeacon extends TallBlockItem {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
     private static final String STORAGE_DATA_TAG = "StorageData";
+    private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     public ItemMaidBeacon() {
         super(InitBlocks.MAID_BEACON.get(), (new Item.Properties()).stacksTo(1).tab(MAIN_TAB));
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 3, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -3.2, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
     }
 
     public static ItemStack tileEntityToItemStack(TileEntityMaidBeacon beacon) {
@@ -56,5 +67,10 @@ public class ItemMaidBeacon extends TallBlockItem {
             }
         }
         tooltip.add(new TranslationTextComponent("tooltips.touhou_little_maid.maid_beacon.desc", DECIMAL_FORMAT.format(numPower)).withStyle(TextFormatting.GRAY));
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+        return equipmentSlot == EquipmentSlotType.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 }

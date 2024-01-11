@@ -18,15 +18,13 @@ import java.util.List;
 
 public class MaidFeedAnimalTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
-    private final int maxDistToWalk;
     private final float speedModifier;
     private final int maxAnimalCount;
     private AnimalEntity feedEntity = null;
 
-    public MaidFeedAnimalTask(int maxDistToWalk, float speedModifier, int maxAnimalCount) {
+    public MaidFeedAnimalTask(float speedModifier, int maxAnimalCount) {
         super(ImmutableMap.of(MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
-        this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
         this.maxAnimalCount = maxAnimalCount;
         this.setMaxCheckRate(MAX_DELAY_TIME);
@@ -35,7 +33,7 @@ public class MaidFeedAnimalTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         feedEntity = null;
-
+        int maxDistToWalk = (int) maid.getRestrictRadius();
         long animalCount = this.getEntities(maid).stream()
                 .filter(e -> e.closerThan(maid, maxDistToWalk))
                 .filter(e -> maid.isWithinRestriction(e.blockPosition()))

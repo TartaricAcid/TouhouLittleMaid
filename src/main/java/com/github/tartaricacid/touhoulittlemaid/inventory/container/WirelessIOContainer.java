@@ -33,12 +33,15 @@ public class WirelessIOContainer extends Container {
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int button, ClickType clickTypeIn, PlayerEntity player) {
         // 禁阻一切对当前手持物品的交互，防止刷物品 bug
         if (slotId == 27 + player.inventory.selected) {
             return player.inventory.getItem(slotId);
         }
-        ItemStack stack = super.clicked(slotId, dragType, clickTypeIn, player);
+        if (clickTypeIn == ClickType.SWAP) {
+            return player.inventory.getItem(slotId);
+        }
+        ItemStack stack = super.clicked(slotId, button, clickTypeIn, player);
         ItemWirelessIO.setFilterList(wirelessIO, filterListInv);
         return stack;
     }
@@ -71,10 +74,10 @@ public class WirelessIOContainer extends Container {
             ItemStack stack2 = slot.getItem();
             stack1 = stack2.copy();
             if (index < 36) {
-                if (!this.moveItemStackTo(stack2, 36, 45, true)) {
+                if (!this.moveItemStackTo(stack2, 27, 36, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(stack2, 0, 36, false)) {
+            } else if (!this.moveItemStackTo(stack2, 0, 27, false)) {
                 return ItemStack.EMPTY;
             }
             if (stack2.isEmpty()) {

@@ -17,18 +17,16 @@ import java.util.function.Predicate;
 
 public class MaidPickupEntitiesTask extends Task<EntityMaid> {
     private final Predicate<EntityMaid> predicate;
-    private final int maxDistToWalk;
     private final float speedModifier;
 
-    public MaidPickupEntitiesTask(int maxDistToWalk, float speedModifier) {
-        this(Predicates.alwaysTrue(), maxDistToWalk, speedModifier);
+    public MaidPickupEntitiesTask(float speedModifier) {
+        this(Predicates.alwaysTrue(), speedModifier);
     }
 
-    public MaidPickupEntitiesTask(Predicate<EntityMaid> predicate, int maxDistToWalk, float speedModifier) {
+    public MaidPickupEntitiesTask(Predicate<EntityMaid> predicate, float speedModifier) {
         super(ImmutableMap.of(InitEntities.VISIBLE_PICKUP_ENTITIES.get(), MemoryModuleStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
         this.predicate = predicate;
-        this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
     }
 
@@ -39,6 +37,7 @@ public class MaidPickupEntitiesTask extends Task<EntityMaid> {
 
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
+        int maxDistToWalk = (int) maid.getRestrictRadius();
         getItems(maid).stream()
                 .filter(e -> e.closerThan(maid, maxDistToWalk) && e.isAlive() && !e.isInWater())
                 .filter(maid::canPathReach).findFirst()

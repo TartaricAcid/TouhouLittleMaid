@@ -42,7 +42,7 @@ public class TaskTorch implements IMaidTask {
 
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        MaidTorchMoveTask maidTorchMoveTask = new MaidTorchMoveTask(0.6f, 16);
+        MaidTorchMoveTask maidTorchMoveTask = new MaidTorchMoveTask(0.6f);
         MaidTorchPlaceTask maidTorchPlaceTask = new MaidTorchPlaceTask(2);
         return Lists.newArrayList(Pair.of(5, maidTorchMoveTask), Pair.of(6, maidTorchPlaceTask));
     }

@@ -17,9 +17,10 @@ import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ReloadResourceEvent {
-    public static final ResourceLocation EMPTY_BAUBLE_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_bauble_slot");
-    public static final ResourceLocation EMPTY_MAINHAND_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_mainhand_slot");
     public static final ResourceLocation BLOCK_ATLAS_TEXTURE = new ResourceLocation("textures/atlas/blocks.png");
+    public static final ResourceLocation TANK_INPUT_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/tank_input_slot");
+    public static final ResourceLocation TANK_OUTPUT_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/tank_output_slot");
+    public static final ResourceLocation EMPTY_MAINHAND_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_mainhand_slot");
     public static final ResourceLocation EMPTY_BACK_SHOW_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_back_show_slot");
 
     @SubscribeEvent
@@ -32,7 +33,8 @@ public final class ReloadResourceEvent {
     @SubscribeEvent
     public static void onTextureStitchEventPre(TextureStitchEvent.Pre event) {
         if (BLOCK_ATLAS_TEXTURE.equals(event.getMap().location())) {
-            event.addSprite(EMPTY_BAUBLE_SLOT);
+            event.addSprite(TANK_INPUT_SLOT);
+            event.addSprite(TANK_OUTPUT_SLOT);
             event.addSprite(EMPTY_MAINHAND_SLOT);
             event.addSprite(EMPTY_BACK_SHOW_SLOT);
         }

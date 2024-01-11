@@ -8,10 +8,11 @@ import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.brain.task.*;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.SwordItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
@@ -40,10 +41,10 @@ public class TaskAttack implements IAttackTask {
 
     @Override
     public List<Pair<Integer, Task<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        SupplementedTask<EntityMaid> supplementedTask = new SupplementedTask<>(this::hasSword,
+        SupplementedTask<EntityMaid> supplementedTask = new SupplementedTask<>(this::hasAssaultWeapon,
                 new ForgetAttackTargetTask<>(IAttackTask::findFirstValidAttackTarget));
         FindNewAttackTargetTask<EntityMaid> findTargetTask = new FindNewAttackTargetTask<>(
-                (target) -> !hasSword(maid) || farAway(target, maid));
+                (target) -> !hasAssaultWeapon(maid) || farAway(target, maid));
         MoveToTargetTask moveToTargetTask = new MoveToTargetTask(0.6f);
         AttackTargetTask attackTargetTask = new AttackTargetTask(20);
 
@@ -57,11 +58,11 @@ public class TaskAttack implements IAttackTask {
 
     @Override
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
-        return Collections.singletonList(Pair.of("has_sword", this::hasSword));
+        return Collections.singletonList(Pair.of("assault_weapon", this::hasAssaultWeapon));
     }
 
-    private boolean hasSword(EntityMaid maid) {
-        return maid.getMainHandItem().getItem() instanceof SwordItem;
+    private boolean hasAssaultWeapon(EntityMaid maid) {
+        return maid.getMainHandItem().getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE);
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {

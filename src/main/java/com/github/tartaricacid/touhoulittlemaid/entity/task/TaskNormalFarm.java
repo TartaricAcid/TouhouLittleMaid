@@ -62,8 +62,8 @@ public class TaskNormalFarm implements IFarmTask {
             Block cropBlock = cropState.getBlock();
             if (cropBlock instanceof CropsBlock) {
                 CropsBlock crop = (CropsBlock) cropBlock;
-                TileEntity tileentity = cropState.hasTileEntity() ? maid.level.getBlockEntity(cropPos) : null;
-                Block.dropResources(cropState, maid.level, cropPos, tileentity, maid, maid.getMainHandItem());
+                TileEntity blockEntity = cropState.hasTileEntity() ? maid.level.getBlockEntity(cropPos) : null;
+                Block.dropResources(cropState, maid.level, cropPos, blockEntity, maid, maid.getMainHandItem());
                 maid.level.setBlock(cropPos, crop.defaultBlockState(), Constants.BlockFlags.DEFAULT);
                 return;
             }

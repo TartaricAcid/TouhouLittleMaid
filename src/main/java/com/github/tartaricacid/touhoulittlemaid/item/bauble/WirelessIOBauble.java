@@ -18,7 +18,6 @@ import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert
 import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class WirelessIOBauble implements IMaidBauble {
-    public static final int MAX_DISTANCE = 16;
     private static final int SLOT_NUM = 38;
 
     @Nonnull
@@ -96,20 +95,21 @@ public class WirelessIOBauble implements IMaidBauble {
             if (bindingPos == null) {
                 return;
             }
-            if (maid.distanceToSqr(bindingPos.getX(), bindingPos.getY(), bindingPos.getZ()) > (MAX_DISTANCE * MAX_DISTANCE)) {
+            float maxDistance = maid.getRestrictRadius();
+            if (maid.distanceToSqr(bindingPos.getX(), bindingPos.getY(), bindingPos.getZ()) > (maxDistance * maxDistance)) {
                 return;
             }
 
             TileEntity te = maid.level.getBlockEntity(bindingPos);
-            if (!(te instanceof ChestTileEntity)) {
+            if (!(te instanceof RandomizableContainerBlockEntity)) {
                 return;
             }
-            int openCount = ChestTileEntity.getOpenCount(maid.level, bindingPos);
+            int openCount = IronChestCheck.getOpenCount(maid.level, bindingPos, te);
             if (openCount > 0) {
                 return;
             }
 
-            ChestTileEntity chest = (ChestTileEntity) te;
+            RandomizableContainerBlockEntity chest = (RandomizableContainerBlockEntity) te;
             chest.getCapability(ITEM_HANDLER_CAPABILITY, null).ifPresent(chestInv -> {
                 IItemHandler maidInv = maid.getAvailableInv(false);
                 boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);

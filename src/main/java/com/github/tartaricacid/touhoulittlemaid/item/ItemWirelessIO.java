@@ -140,8 +140,8 @@ public class ItemWirelessIO extends Item implements INamedContainerProvider {
         Hand hand = context.getHand();
         TileEntity te = worldIn.getBlockEntity(pos);
 
-        if (te instanceof ChestTileEntity && player != null) {
-            ChestTileEntity chest = (ChestTileEntity) te;
+        if (te instanceof RandomizableContainerBlockEntity && player != null && (te instanceof ChestBlockEntity || IronChestCheck.isIronChest(te))) {
+            RandomizableContainerBlockEntity chest = (RandomizableContainerBlockEntity) te;
             if (chest.canOpen(player) && hand == Hand.MAIN_HAND) {
                 ItemStack stack = player.getMainHandItem();
                 setBindingPos(stack, pos);

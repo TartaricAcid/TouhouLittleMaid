@@ -156,13 +156,9 @@ public class FurnaceBackpackData extends Inventory implements IBackpackData {
         ItemStack slotItem = this.getItem(index);
         boolean isSameItem = !stack.isEmpty() && ItemStack.tagMatches(slotItem, stack);
         super.setItem(index, stack);
-        if (stack.getCount() > this.getMaxStackSize()) {
-            stack.setCount(this.getMaxStackSize());
-        }
         if (index == 0 && !isSameItem) {
             this.cookingTotalTime = getTotalCookTime(this.level);
             this.cookingProgress = 0;
-            this.setChanged();
         }
     }
 

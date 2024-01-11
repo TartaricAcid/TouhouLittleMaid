@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,7 +14,7 @@ public final class DismountMaidEvent {
         PlayerEntity player = event.getPlayer();
         EntityMaid maid = event.getMaid();
 
-        if (player.isShiftKeyDown()) {
+        if (player.isShiftKeyDown() && player.getMainHandItem().getItem() != InitItems.KAPPA_COMPASS.get()) {
             if (maid.getVehicle() == null && maid.getPassengers().isEmpty()) {
                 return;
             }

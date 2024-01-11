@@ -22,8 +22,13 @@ public final class MobSpawnInfoRegistry {
         if (SPAWNER_DATA == null) {
             SPAWNER_DATA = new MobSpawnInfo.Spawners(InitEntities.FAIRY.get(), MiscConfig.MAID_FAIRY_SPAWN_PROBABILITY.get(), 2, 4);
         }
-        if (canZombieSpawn) {
+        Holder<Biome> biome = level.getBiome(event.getPos());
+        if (biomeIsOkay(biome) && canZombieSpawn) {
             event.getSpawns().addSpawn(EntityClassification.MONSTER, SPAWNER_DATA);
         }
+    }
+
+    private static boolean biomeIsOkay(Holder<Biome> biome) {
+        return MAID_FAIRY_BLACKLIST_BIOME.get().stream().noneMatch(name -> biome.is(new ResourceLocation(name)));
     }
 }

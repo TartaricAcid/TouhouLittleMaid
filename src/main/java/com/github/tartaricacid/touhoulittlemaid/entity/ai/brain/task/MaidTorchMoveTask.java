@@ -13,8 +13,8 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 public class MaidTorchMoveTask extends MaidMoveToBlockTask {
     private static final int LOW_BRIGHTNESS = 9;
 
-    public MaidTorchMoveTask(float movementSpeed, int searchLength) {
-        super(movementSpeed, searchLength);
+    public MaidTorchMoveTask(float movementSpeed) {
+        super(movementSpeed);
     }
 
     @Override
