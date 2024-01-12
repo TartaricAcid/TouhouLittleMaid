@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestCheck;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
 import net.minecraft.client.resources.I18n;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.ByteArrayNBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -140,8 +142,8 @@ public class ItemWirelessIO extends Item implements INamedContainerProvider {
         Hand hand = context.getHand();
         TileEntity te = worldIn.getBlockEntity(pos);
 
-        if (te instanceof RandomizableContainerBlockEntity && player != null && (te instanceof ChestBlockEntity || IronChestCheck.isIronChest(te))) {
-            RandomizableContainerBlockEntity chest = (RandomizableContainerBlockEntity) te;
+        if (te instanceof LockableLootTileEntity && player != null && (te instanceof ChestTileEntity || IronChestCheck.isIronChest(te))) {
+            LockableLootTileEntity chest = (LockableLootTileEntity) te;
             if (chest.canOpen(player) && hand == Hand.MAIN_HAND) {
                 ItemStack stack = player.getMainHandItem();
                 setBindingPos(stack, pos);

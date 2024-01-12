@@ -1,11 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -69,7 +74,7 @@ public class MaidConfigMessage {
         context.setPacketHandled(true);
     }
 
-    private static void handleHome(MaidConfigMessage message, ServerPlayer sender, EntityMaid maid) {
+    private static void handleHome(MaidConfigMessage message, ServerPlayerEntity sender, EntityMaid maid) {
         if (message.home) {
             ResourceLocation dimension = maid.getSchedulePos().getDimension();
             if (!dimension.equals(maid.level.dimension().location())) {

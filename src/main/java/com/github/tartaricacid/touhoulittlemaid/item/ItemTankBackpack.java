@@ -3,17 +3,18 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.TankBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import net.minecraft.TextFormatting;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemTankBackpack extends ItemMaidBackpack {
@@ -32,16 +33,16 @@ public class ItemTankBackpack extends ItemMaidBackpack {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, @Nullable World pLevel, List<ITextComponent> components, ITooltipFlag pIsAdvanced) {
         CompoundNBT nbt = stack.getTagElement("Tanks");
         if (nbt != null) {
-            MutableComponent fluidInfo;
+            IFormattableTextComponent fluidInfo;
             FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(nbt);
             if (fluidStack.getFluid() == Fluids.EMPTY || fluidStack.getAmount() == 0) {
                 fluidInfo = new TranslationTextComponent("tooltips.touhou_little_maid.tank_backpack.empty_fluid").withStyle(TextFormatting.GRAY);
             } else {
                 fluidInfo = new TranslationTextComponent("tooltips.touhou_little_maid.tank_backpack.fluid",
-                        fluidStack.getFluid().getFluidType().getDescription(), fluidStack.getAmount()).withStyle(TextFormatting.GRAY);
+                        fluidStack.getDisplayName(), fluidStack.getAmount()).withStyle(TextFormatting.GRAY);
             }
             components.add(fluidInfo);
         }

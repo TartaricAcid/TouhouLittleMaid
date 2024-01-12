@@ -4,25 +4,22 @@ import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.MaidFluidUtil;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.IIntArray;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class TankBackpackData extends Inventory implements IBackpackData {
-    public static final int CAPACITY = 10 * FluidType.BUCKET_VOLUME;
+    public static final int CAPACITY = 10 * 1000;
     private static final int INPUT_INDEX = 0;
     private static final int OUTPUT_INDEX = 1;
     private final EntityMaid maid;
     private final FluidTank tank = new FluidTank(CAPACITY);
-    private final ContainerData dataAccess = new ContainerData() {
+    private final IIntArray dataAccess = new IIntArray() {
         public int get(int index) {
             if (index == 0) {
                 return TankBackpackData.this.tankFluidCount;
@@ -79,7 +76,7 @@ public class TankBackpackData extends Inventory implements IBackpackData {
     @Override
     public void load(CompoundNBT tag, EntityMaid maid) {
         this.loadTank(tag.getCompound("Tanks"), maid);
-        this.fromTag(tag.getList("Items", Tag.TAG_COMPOUND));
+        this.fromTag(tag.getList("Items", Constants.NBT.TAG_COMPOUND));
     }
 
     @Override

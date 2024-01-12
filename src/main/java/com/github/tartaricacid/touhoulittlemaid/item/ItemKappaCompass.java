@@ -2,36 +2,35 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import net.minecraft.TextFormatting;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.schedule.Activity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemKappaCompass extends Item {
     public ItemKappaCompass() {
-        super((new Item.Properties()).stacksTo(1));
+        super((new Item.Properties()).stacksTo(1).tab(MaidGroup.MAIN_TAB));
     }
 
     public static void addPoint(Activity activity, BlockPos pos, ItemStack compass) {
         CompoundNBT tag = compass.getOrCreateTagElement("KappaCompassData");
-        tag.put(activity.getName(), NbtUtils.writeBlockPos(pos));
+        tag.put(activity.getName(), NBTUtil.writeBlockPos(pos));
     }
 
     public static void addDimension(ResourceLocation dimension, ItemStack compass) {
@@ -44,16 +43,16 @@ public class ItemKappaCompass extends Item {
         CompoundNBT tag = compass.getTagElement("KappaCompassData");
         if (tag != null) {
             String name = activity.getName();
-            if (tag.contains(name, Tag.TAG_COMPOUND)) {
-                return NbtUtils.readBlockPos(tag.getCompound(name));
+            if (tag.contains(name, Constants.NBT.TAG_COMPOUND)) {
+                return NBTUtil.readBlockPos(tag.getCompound(name));
             }
             name = Activity.IDLE.getName();
-            if (tag.contains(name, Tag.TAG_COMPOUND)) {
-                return NbtUtils.readBlockPos(tag.getCompound(name));
+            if (tag.contains(name, Constants.NBT.TAG_COMPOUND)) {
+                return NBTUtil.readBlockPos(tag.getCompound(name));
             }
             name = Activity.WORK.getName();
-            if (tag.contains(name, Tag.TAG_COMPOUND)) {
-                return NbtUtils.readBlockPos(tag.getCompound(name));
+            if (tag.contains(name, Constants.NBT.TAG_COMPOUND)) {
+                return NBTUtil.readBlockPos(tag.getCompound(name));
             }
         }
         return null;
@@ -72,13 +71,13 @@ public class ItemKappaCompass extends Item {
         CompoundNBT tag = compass.getTagElement("KappaCompassData");
         int count = 0;
         if (tag != null) {
-            if (tag.contains(Activity.WORK.getName(), Tag.TAG_COMPOUND)) {
+            if (tag.contains(Activity.WORK.getName(), Constants.NBT.TAG_COMPOUND)) {
                 count++;
             }
-            if (tag.contains(Activity.IDLE.getName(), Tag.TAG_COMPOUND)) {
+            if (tag.contains(Activity.IDLE.getName(), Constants.NBT.TAG_COMPOUND)) {
                 count++;
             }
-            if (tag.contains(Activity.REST.getName(), Tag.TAG_COMPOUND)) {
+            if (tag.contains(Activity.REST.getName(), Constants.NBT.TAG_COMPOUND)) {
                 count++;
             }
         }
@@ -90,20 +89,21 @@ public class ItemKappaCompass extends Item {
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack compass, Player player, LivingEntity livingEntity, InteractionHand hand) {
-        if (livingEntity instanceof EntityMaid maid && !maid.level.isClientSide) {
+    public ActionResultType interactLivingEntity(ItemStack compass, PlayerEntity player, LivingEntity livingEntity, Hand hand) {
+        if (livingEntity instanceof EntityMaid && !livingEntity.level.isClientSide) {
+            EntityMaid maid = (EntityMaid) livingEntity;
             if (player.isDiscrete()) {
                 maid.getSchedulePos().clear(maid);
-                player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_clear"));
-                player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
-                return InteractionResult.SUCCESS;
+                player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_clear"), Util.NIL_UUID);
+                player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundCategory.PLAYERS, 0.8f, 1.5f);
+                return ActionResultType.SUCCESS;
             }
             CompoundNBT tag = compass.getTagElement("KappaCompassData");
             ResourceLocation dimension = getDimension(compass);
             if (tag != null || dimension != null) {
                 if (!maid.level.dimension().location().equals(dimension)) {
-                    player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_dimension_check"));
-                    return InteractionResult.CONSUME;
+                    player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_dimension_check"), Util.NIL_UUID);
+                    return ActionResultType.CONSUME;
                 }
                 maid.getSchedulePos().setDimension(dimension);
                 BlockPos point = getPoint(Activity.WORK, compass);
@@ -120,19 +120,19 @@ public class ItemKappaCompass extends Item {
                 }
                 maid.getSchedulePos().setConfigured(true);
                 maid.getSchedulePos().restrictTo(maid);
-                player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_write"));
-                player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
-                return InteractionResult.SUCCESS;
+                player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_write"), Util.NIL_UUID);
+                player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundCategory.PLAYERS, 0.8f, 1.5f);
+                return ActionResultType.SUCCESS;
             }
-            player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.no_data"));
-            return InteractionResult.CONSUME;
+            player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.no_data"), Util.NIL_UUID);
+            return ActionResultType.CONSUME;
         }
         return super.interactLivingEntity(compass, player, livingEntity, hand);
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Player player = context.getPlayer();
+    public ActionResultType useOn(ItemUseContext context) {
+        PlayerEntity player = context.getPlayer();
         ItemStack compass = context.getItemInHand();
         BlockPos clickedPos = context.getClickedPos();
         if (player == null || context.getLevel().isClientSide) {
@@ -140,39 +140,39 @@ public class ItemKappaCompass extends Item {
         }
         if (player.isDiscrete()) {
             compass.removeTagKey("KappaCompassData");
-            player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.clear"));
+            player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.clear"), Util.NIL_UUID);
         } else {
             int recordCount = getRecordCount(compass);
             if (recordCount >= 3) {
-                player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.full"));
+                player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.full"), Util.NIL_UUID);
             } else if (recordCount == 2) {
                 BlockPos idlePos = getPoint(Activity.IDLE, compass);
                 if (idlePos != null && idlePos.distSqr(clickedPos) > 64 * 64) {
-                    player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.far_away"));
+                    player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.far_away"), Util.NIL_UUID);
                     return super.useOn(context);
                 }
                 addPoint(Activity.REST, clickedPos, compass);
-                player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.sleep", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
+                player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.sleep", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()), Util.NIL_UUID);
             } else if (recordCount == 1) {
                 BlockPos workPos = getPoint(Activity.WORK, compass);
                 if (workPos != null && workPos.distSqr(clickedPos) > 64 * 64) {
-                    player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.far_away"));
+                    player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.far_away"), Util.NIL_UUID);
                     return super.useOn(context);
                 }
                 addPoint(Activity.IDLE, clickedPos, compass);
-                player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.idle", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
+                player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.idle", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()), Util.NIL_UUID);
             } else {
                 addPoint(Activity.WORK, clickedPos, compass);
-                player.sendSystemMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.work", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
+                player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.work", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()), Util.NIL_UUID);
             }
             addDimension(player.level.dimension().location(), compass);
         }
-        player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
-        return InteractionResult.SUCCESS;
+        player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundCategory.PLAYERS, 0.8f, 1.5f);
+        return ActionResultType.SUCCESS;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, @Nullable World pLevel, List<ITextComponent> components, ITooltipFlag pIsAdvanced) {
         if (hasKappaCompassData(stack)) {
             ResourceLocation dimension = getDimension(stack);
             BlockPos workPos = getPoint(Activity.WORK, stack);
@@ -190,7 +190,7 @@ public class ItemKappaCompass extends Item {
             if (sleepPos != null) {
                 components.add(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.sleep", sleepPos.getX(), sleepPos.getY(), sleepPos.getZ()).withStyle(TextFormatting.BLUE));
             }
-            components.add(Component.empty());
+            components.add(StringTextComponent.EMPTY);
         }
         components.add(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.usage.set_pos"));
         components.add(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.usage.clear_pos"));

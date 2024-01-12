@@ -4,26 +4,25 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.PoiTypeTags;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.village.poi.PoiManager;
-import net.minecraft.world.entity.ai.village.poi.PoiRecord;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ToolActions;
+import net.minecraft.block.BeehiveBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.ai.brain.BrainUtil;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPosWrapper;
+import net.minecraft.village.PointOfInterest;
+import net.minecraft.village.PointOfInterestManager;
+import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
@@ -36,23 +35,23 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
     private final int closeEnoughDist;
 
     public MaidCollectHoneyTask(float speed, int closeEnoughDist) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
-                InitEntities.TARGET_POS.get(), MemoryStatus.VALUE_ABSENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT,
+                InitEntities.TARGET_POS.get(), MemoryModuleStatus.VALUE_ABSENT));
         this.speed = speed;
         this.closeEnoughDist = closeEnoughDist;
         this.setMaxCheckRate(MAX_DELAY_TIME);
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid maid) {
+    protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid maid) {
         if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
             BlockPos beehivePos = findBeehive(worldIn, maid);
             if (beehivePos != null && maid.isWithinRestriction(beehivePos)) {
-                if (beehivePos.distToCenterSqr(maid.position()) < this.closeEnoughDist) {
-                    maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(beehivePos));
+                if (beehivePos.distSqr(maid.blockPosition()) < Math.pow(this.closeEnoughDist, 2)) {
+                    maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosWrapper(beehivePos));
                     return true;
                 }
-                BehaviorUtils.setWalkAndLookTargetMemories(maid, beehivePos, speed, 1);
+                BrainUtil.setWalkAndLookTargetMemories(maid, beehivePos, speed, 1);
                 this.setNextCheckTickCount(5);
             } else {
                 maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
@@ -62,7 +61,7 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
     }
 
     @Override
-    protected void start(ServerLevel level, EntityMaid maid, long gameTime) {
+    protected void start(ServerWorld level, EntityMaid maid, long gameTime) {
         maid.getBrain().getMemory(InitEntities.TARGET_POS.get()).ifPresent(target -> {
             BlockPos hivePos = target.currentBlockPosition();
             BlockState hiveBlockState = level.getBlockState(hivePos);
@@ -76,8 +75,8 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
         });
     }
 
-    private void collectHoneyBottle(ServerLevel level, EntityMaid maid, CombinedInvWrapper maidAvailableInv, BlockState hiveBlockState, BlockPos hivePos) {
-        ItemStack bottle = ItemsUtil.getStack(maidAvailableInv, stack -> stack.is(Items.GLASS_BOTTLE));
+    private void collectHoneyBottle(ServerWorld level, EntityMaid maid, CombinedInvWrapper maidAvailableInv, BlockState hiveBlockState, BlockPos hivePos) {
+        ItemStack bottle = ItemsUtil.getStack(maidAvailableInv, stack -> stack.getItem() == Items.GLASS_BOTTLE);
         if (!bottle.isEmpty()) {
             ItemStack honeyBottle = new ItemStack(Items.HONEY_BOTTLE);
             ItemStack result = ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyBottle, true);
@@ -86,18 +85,18 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
                 return;
             }
             bottle.shrink(1);
-            level.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyBottle, false);
             resetHoneyLevel(level, hiveBlockState, hivePos);
-            maid.swing(InteractionHand.MAIN_HAND);
+            maid.swing(Hand.MAIN_HAND);
             maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
             maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
             maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
         }
     }
 
-    private boolean collectHoneyComb(ServerLevel level, EntityMaid maid, CombinedInvWrapper maidAvailableInv, BlockState hiveBlockState, BlockPos hivePos) {
-        boolean hasShears = maid.getMainHandItem().canPerformAction(ToolActions.SHEARS_HARVEST);
+    private boolean collectHoneyComb(ServerWorld level, EntityMaid maid, CombinedInvWrapper maidAvailableInv, BlockState hiveBlockState, BlockPos hivePos) {
+        boolean hasShears = maid.getMainHandItem().getItem() == Items.SHEARS;
         if (hasShears) {
             ItemStack honeyComb = new ItemStack(Items.HONEYCOMB, 3);
             ItemStack result = ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyComb, true);
@@ -105,11 +104,11 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
             if (!result.isEmpty()) {
                 return false;
             }
-            level.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyComb, false);
             resetHoneyLevel(level, hiveBlockState, hivePos);
-            maid.swing(InteractionHand.MAIN_HAND);
-            maid.getMainHandItem().hurtAndBreak(1, maid, e -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+            maid.swing(Hand.MAIN_HAND);
+            maid.getMainHandItem().hurtAndBreak(1, maid, e -> e.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
             maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
             maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
             maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
@@ -119,21 +118,21 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
     }
 
     @Nullable
-    private BlockPos findBeehive(ServerLevel world, EntityMaid maid) {
+    private BlockPos findBeehive(ServerWorld world, EntityMaid maid) {
         BlockPos blockPos = maid.blockPosition();
-        PoiManager poiManager = world.getPoiManager();
+        PointOfInterestManager poiManager = world.getPoiManager();
         int range = (int) maid.getRestrictRadius();
-        return poiManager.getInRange(type -> type.is(PoiTypeTags.BEE_HOME), blockPos, range, PoiManager.Occupancy.ANY)
-                .map(PoiRecord::getPos).filter(pos -> canCollectHoney(world, pos))
+        return poiManager.getInRange(type -> type == PointOfInterestType.BEEHIVE || type == PointOfInterestType.BEE_NEST, blockPos, range, PointOfInterestManager.Status.ANY)
+                .map(PointOfInterest::getPos).filter(pos -> canCollectHoney(world, pos))
                 .min(Comparator.comparingDouble(pos -> pos.distSqr(blockPos))).orElse(null);
     }
 
-    private boolean canCollectHoney(ServerLevel world, BlockPos hivePos) {
+    private boolean canCollectHoney(ServerWorld world, BlockPos hivePos) {
         return world.getBlockState(hivePos).getValue(BeehiveBlock.HONEY_LEVEL) >= 5;
     }
 
-    public void resetHoneyLevel(Level level, BlockState state, BlockPos pos) {
-        level.setBlock(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, 0), Block.UPDATE_ALL);
+    public void resetHoneyLevel(World level, BlockState state, BlockPos pos) {
+        level.setBlock(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, 0), Constants.BlockFlags.DEFAULT);
     }
 
     private boolean maidStateConditions(EntityMaid maid) {

@@ -3,26 +3,26 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.CheckSchedulePosGui;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class CheckSchedulePosMessage {
-    private final Component tips;
+    private final ITextComponent tips;
 
-    public CheckSchedulePosMessage(Component tips) {
+    public CheckSchedulePosMessage(ITextComponent tips) {
         this.tips = tips;
     }
 
-    public static void encode(CheckSchedulePosMessage message, FriendlyByteBuf buf) {
+    public static void encode(CheckSchedulePosMessage message, PacketBuffer buf) {
         buf.writeComponent(message.tips);
     }
 
-    public static CheckSchedulePosMessage decode(FriendlyByteBuf buf) {
+    public static CheckSchedulePosMessage decode(PacketBuffer buf) {
         return new CheckSchedulePosMessage(buf.readComponent());
     }
 
@@ -40,7 +40,8 @@ public class CheckSchedulePosMessage {
         if (mc.player == null) {
             return;
         }
-        if (mc.screen instanceof AbstractMaidContainerGui<?> parent) {
+        if (mc.screen instanceof AbstractMaidContainerGui<?>) {
+            AbstractMaidContainerGui<?> parent = (AbstractMaidContainerGui<?>) mc.screen;
             mc.setScreen(new CheckSchedulePosGui(parent, message.tips));
         }
     }

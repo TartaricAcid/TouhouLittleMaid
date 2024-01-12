@@ -2,75 +2,76 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.memory.WalkTarget;
-import net.minecraft.world.entity.ai.util.LandRandomPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.brain.memory.WalkTarget;
+import net.minecraft.entity.ai.brain.task.RunAwayTask;
+import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.function.Function;
 
-public class SetWalkTargetAwayFrom<T> extends Behavior<PathfinderMob> {
+public class SetWalkTargetAwayFrom<T> extends Task<CreatureEntity> {
     private final MemoryModuleType<T> walkAwayFromMemory;
     private final float speedModifier;
-    private final Function<T, Vec3> toPosition;
+    private final Function<T, Vector3d> toPosition;
 
-    public SetWalkTargetAwayFrom(MemoryModuleType<T> walkAwayFromMemory, float speedModifier, boolean ignoreOtherWalkTarget, Function<T, Vec3> toPosition) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, ignoreOtherWalkTarget ? MemoryStatus.REGISTERED : MemoryStatus.VALUE_ABSENT, walkAwayFromMemory, MemoryStatus.VALUE_PRESENT));
+    public SetWalkTargetAwayFrom(MemoryModuleType<T> walkAwayFromMemory, float speedModifier, boolean ignoreOtherWalkTarget, Function<T, Vector3d> toPosition) {
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, ignoreOtherWalkTarget ? MemoryModuleStatus.REGISTERED : MemoryModuleStatus.VALUE_ABSENT, walkAwayFromMemory, MemoryModuleStatus.VALUE_PRESENT));
         this.walkAwayFromMemory = walkAwayFromMemory;
         this.speedModifier = speedModifier;
         this.toPosition = toPosition;
     }
 
-    public static SetWalkTargetAwayFrom<BlockPos> pos(MemoryModuleType<BlockPos> memoryModuleType, float speedModifier, boolean ignoreOtherWalkTarget) {
-        return new SetWalkTargetAwayFrom<>(memoryModuleType, speedModifier, ignoreOtherWalkTarget, Vec3::atBottomCenterOf);
+    public static RunAwayTask<BlockPos> pos(MemoryModuleType<BlockPos> walkAwayFromMemory, float speedModifier, int desiredDistance, boolean ignoreOtherWalkTarget) {
+        return new RunAwayTask<>(walkAwayFromMemory, speedModifier, desiredDistance, ignoreOtherWalkTarget, Vector3d::atBottomCenterOf);
     }
 
-    public static SetWalkTargetAwayFrom<? extends Entity> entity(MemoryModuleType<? extends Entity> moduleType, float speedModifier, boolean ignoreOtherWalkTarget) {
-        return new SetWalkTargetAwayFrom<>(moduleType, speedModifier, ignoreOtherWalkTarget, Entity::position);
+    public static RunAwayTask<? extends Entity> entity(MemoryModuleType<? extends Entity> walkAwayFromMemory, float speedModifier, int desiredDistance, boolean ignoreOtherWalkTarget) {
+        return new RunAwayTask<>(walkAwayFromMemory, speedModifier, desiredDistance, ignoreOtherWalkTarget, Entity::position);
     }
 
-    private static void moveAwayFrom(PathfinderMob mob, Vec3 vec31, float speed) {
-        int radius = (int) mob.getRestrictRadius();
-        for (int i = 0; i < 10; ++i) {
-            Vec3 vec3 = LandRandomPos.getPosAway(mob, radius, 7, vec31);
-            if (vec3 != null) {
-                mob.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(vec3, speed, 0));
-                return;
-            }
-        }
+    protected boolean checkExtraStartConditions(ServerWorld serverWorld, CreatureEntity creature) {
+        int radius = (int) creature.getRestrictRadius();
+        return !this.alreadyWalkingAwayFromPosWithSameSpeed(creature) && creature.position().closerThan(this.getPosToAvoid(creature), radius);
     }
 
-    public boolean checkExtraStartConditions(ServerLevel pLevel, PathfinderMob pOwner) {
-        int radius = (int) pOwner.getRestrictRadius();
-        return !this.alreadyWalkingAwayFromPosWithSameSpeed(pOwner) && pOwner.position().closerThan(this.getPosToAvoid(pOwner), radius);
+    private Vector3d getPosToAvoid(CreatureEntity creature) {
+        return this.toPosition.apply(creature.getBrain().getMemory(this.walkAwayFromMemory).get());
     }
 
-    private Vec3 getPosToAvoid(PathfinderMob mob) {
-        return this.toPosition.apply(mob.getBrain().getMemory(this.walkAwayFromMemory).get());
-    }
-
-    private boolean alreadyWalkingAwayFromPosWithSameSpeed(PathfinderMob mob) {
-        if (!mob.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
+    private boolean alreadyWalkingAwayFromPosWithSameSpeed(CreatureEntity creature) {
+        if (!creature.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
             return false;
         } else {
-            WalkTarget walktarget = mob.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get();
+            WalkTarget walktarget = creature.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get();
             if (walktarget.getSpeedModifier() != this.speedModifier) {
                 return false;
             } else {
-                Vec3 vec3 = walktarget.getTarget().currentPosition().subtract(mob.position());
-                Vec3 vec31 = this.getPosToAvoid(mob).subtract(mob.position());
-                return vec3.dot(vec31) < 0.0D;
+                Vector3d subtract = walktarget.getTarget().currentPosition().subtract(creature.position());
+                Vector3d vector3d = this.getPosToAvoid(creature).subtract(creature.position());
+                return subtract.dot(vector3d) < 0.0D;
             }
         }
     }
 
-    protected void start(ServerLevel pLevel, PathfinderMob pEntity, long pGameTime) {
+    protected void start(ServerWorld pLevel, CreatureEntity pEntity, long pGameTime) {
         moveAwayFrom(pEntity, this.getPosToAvoid(pEntity), this.speedModifier);
+    }
+
+    private static void moveAwayFrom(CreatureEntity creature, Vector3d vec, float speedModifier) {
+        int radius = (int) creature.getRestrictRadius();
+        for (int i = 0; i < 10; ++i) {
+            Vector3d vector3d = RandomPositionGenerator.getLandPosAvoid(creature, radius, 7, vec);
+            if (vector3d != null) {
+                creature.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(vector3d, speedModifier, 0));
+                return;
+            }
+        }
     }
 }

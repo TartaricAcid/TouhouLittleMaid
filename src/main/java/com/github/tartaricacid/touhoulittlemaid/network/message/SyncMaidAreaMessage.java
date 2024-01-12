@@ -2,12 +2,12 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.MaidAreaRenderEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.SchedulePos;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -20,7 +20,7 @@ public class SyncMaidAreaMessage {
         this.schedulePos = schedulePos;
     }
 
-    public static void encode(SyncMaidAreaMessage message, FriendlyByteBuf buf) {
+    public static void encode(SyncMaidAreaMessage message, PacketBuffer buf) {
         SchedulePos pos = message.schedulePos;
         buf.writeVarInt(message.id);
         buf.writeBlockPos(pos.getWorkPos());
@@ -29,7 +29,7 @@ public class SyncMaidAreaMessage {
         buf.writeResourceLocation(pos.getDimension());
     }
 
-    public static SyncMaidAreaMessage decode(FriendlyByteBuf buf) {
+    public static SyncMaidAreaMessage decode(PacketBuffer buf) {
         int maidId = buf.readVarInt();
         BlockPos workPos = buf.readBlockPos();
         BlockPos idlePos = buf.readBlockPos();

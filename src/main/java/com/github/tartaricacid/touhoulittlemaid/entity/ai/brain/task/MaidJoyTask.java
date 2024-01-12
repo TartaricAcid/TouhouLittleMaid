@@ -6,16 +6,16 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitPoi;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.village.poi.PoiManager;
-import net.minecraft.world.entity.ai.village.poi.PoiRecord;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.ai.brain.BrainUtil;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPosWrapper;
+import net.minecraft.village.PointOfInterest;
+import net.minecraft.village.PointOfInterestManager;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -25,23 +25,23 @@ public class MaidJoyTask extends MaidCheckRateTask {
     private final float speed;
 
     public MaidJoyTask(float movementSpeed, int closeEnoughDist) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
-                InitEntities.TARGET_POS.get(), MemoryStatus.VALUE_ABSENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT,
+                InitEntities.TARGET_POS.get(), MemoryModuleStatus.VALUE_ABSENT));
         this.closeEnoughDist = closeEnoughDist;
         this.speed = movementSpeed;
         this.setMaxCheckRate(10);
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid maid) {
+    protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid maid) {
         if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
             BlockPos joyPos = findJoy(worldIn, maid);
             if (joyPos != null && maid.isWithinRestriction(joyPos)) {
-                if (joyPos.distToCenterSqr(maid.position()) < this.closeEnoughDist) {
-                    maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(joyPos));
+                if (joyPos.distSqr(maid.blockPosition()) < Math.pow(this.closeEnoughDist, 2)) {
+                    maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosWrapper(joyPos));
                     return true;
                 }
-                BehaviorUtils.setWalkAndLookTargetMemories(maid, joyPos, speed, 1);
+                BrainUtil.setWalkAndLookTargetMemories(maid, joyPos, speed, 1);
                 this.setNextCheckTickCount(5);
             } else {
                 maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
@@ -51,11 +51,12 @@ public class MaidJoyTask extends MaidCheckRateTask {
     }
 
     @Override
-    protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
+    protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         maid.getBrain().getMemory(InitEntities.TARGET_POS.get()).ifPresent(targetPos -> {
             BlockPos pos = targetPos.currentBlockPosition();
             BlockState blockState = worldIn.getBlockState(pos);
-            if (blockState.getBlock() instanceof BlockJoy blockJoy) {
+            if (blockState.getBlock() instanceof BlockJoy) {
+                BlockJoy blockJoy = (BlockJoy) blockState.getBlock();
                 blockJoy.startMaidSit(maid, blockState, worldIn, pos);
             }
         });
@@ -65,18 +66,19 @@ public class MaidJoyTask extends MaidCheckRateTask {
     }
 
     @Nullable
-    private BlockPos findJoy(ServerLevel world, EntityMaid maid) {
+    private BlockPos findJoy(ServerWorld world, EntityMaid maid) {
         BlockPos blockPos = maid.blockPosition();
-        PoiManager poiManager = world.getPoiManager();
+        PointOfInterestManager poiManager = world.getPoiManager();
         int range = (int) maid.getRestrictRadius();
-        return poiManager.getInRange(type -> type.get().equals(InitPoi.JOY_BLOCK.get()), blockPos, range, PoiManager.Occupancy.ANY)
-                .map(PoiRecord::getPos).filter(pos -> !isOccupied(world, pos))
+        return poiManager.getInRange(type -> type.equals(InitPoi.JOY_BLOCK.get()), blockPos, range, PointOfInterestManager.Status.ANY)
+                .map(PointOfInterest::getPos).filter(pos -> !isOccupied(world, pos))
                 .min(Comparator.comparingDouble(pos -> pos.distSqr(blockPos))).orElse(null);
     }
 
-    private boolean isOccupied(ServerLevel worldIn, BlockPos pos) {
-        BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te instanceof TileEntityJoy joy) {
+    private boolean isOccupied(ServerWorld worldIn, BlockPos pos) {
+        TileEntity te = worldIn.getBlockEntity(pos);
+        if (te instanceof TileEntityJoy) {
+            TileEntityJoy joy = (TileEntityJoy) te;
             return worldIn.getEntity(joy.getSitId()) != null;
         }
         return true;

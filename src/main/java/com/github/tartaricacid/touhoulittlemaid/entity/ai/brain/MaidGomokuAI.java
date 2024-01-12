@@ -6,7 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.Tag;
+import net.minecraftforge.common.util.Constants;
 
 public final class MaidGomokuAI {
     public static final AIService EASY = new ZhiZhangAIService(new AIService.AIConfig(1, 10, false, 0, 6));
@@ -44,7 +44,7 @@ public final class MaidGomokuAI {
 
     public static int getMaidCount(EntityMaid maid) {
         CompoundNBT gameSkill = maid.getGameSkill();
-        if (gameSkill.contains("Gomoku", Tag.TAG_INT)) {
+        if (gameSkill.contains("Gomoku", Constants.NBT.TAG_INT)) {
             return gameSkill.getInt("Gomoku");
         }
         return 0;
@@ -52,7 +52,7 @@ public final class MaidGomokuAI {
 
     public static void addMaidCount(EntityMaid maid) {
         CompoundNBT gameSkill = maid.getGameSkill();
-        if (gameSkill.contains("Gomoku", Tag.TAG_INT)) {
+        if (gameSkill.contains("Gomoku", Constants.NBT.TAG_INT)) {
             gameSkill.putInt("Gomoku", gameSkill.getInt("Gomoku") + 1);
         } else {
             gameSkill.putInt("Gomoku", 1);

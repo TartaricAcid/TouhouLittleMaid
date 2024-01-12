@@ -113,6 +113,7 @@ import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
 import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -122,8 +123,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class EntityMaid extends TameableEntity implements ICrossbowUser {
-    public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, EntityClassification.CREATURE)
-            .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
+    public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, EntityClassification.CREATURE).sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
     public static final String SOUND_PACK_ID_TAG = "SoundPackId";
     public static final String MAID_BACKPACK_TYPE = "MaidBackpackType";
@@ -334,9 +334,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             ItemStack stack = playerIn.getMainHandItem();
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
-            if (MinecraftForge.EVENT_BUS.post(event)
-                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                    || openMaidGui(playerIn)) {
+            if (MinecraftForge.EVENT_BUS.post(event) || stack.interactLivingEntity(playerIn, this, hand).consumesAction() || openMaidGui(playerIn)) {
                 return ActionResultType.SUCCESS;
             }
         } else {
@@ -364,8 +362,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
                 }
             } else {
                 if (player instanceof ServerPlayerEntity) {
-                    TranslationTextComponent msg = new TranslationTextComponent("message.touhou_little_maid.owner_maid_num.can_not_add",
-                            cap.get(), cap.getMaxNum());
+                    TranslationTextComponent msg = new TranslationTextComponent("message.touhou_little_maid.owner_maid_num.can_not_add", cap.get(), cap.getMaxNum());
                     ((ServerPlayerEntity) player).sendMessage(msg, ChatType.GAME_INFO, Util.NIL_UUID);
                 }
             }
@@ -378,8 +375,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         super.pushEntities();
         // 只有拾物模式开启，驯服状态下才可以捡起物品
         if (this.isPickup() && this.isTame()) {
-            List<Entity> entityList = this.level.getEntities(this,
-                    this.getBoundingBox().inflate(0.5, 0, 0.5), this::canPickup);
+            List<Entity> entityList = this.level.getEntities(this, this.getBoundingBox().inflate(0.5, 0, 0.5), this::canPickup);
             if (!entityList.isEmpty() && this.isAlive()) {
                 for (Entity entityPickup : entityList) {
                     // 如果是物品
@@ -716,8 +712,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             boolean fireResistant = damageSource.isFire() && stack.getItem().isFireResistant();
             if (!fireResistant && stack.getItem() instanceof ArmorItem) {
                 final int index = i;
-                stack.hurtAndBreak((int) damage, this,
-                        (maid) -> maid.broadcastBreakEvent(EquipmentSlotType.byTypeAndIndex(EquipmentSlotType.Group.ARMOR, index)));
+                stack.hurtAndBreak((int) damage, this, (maid) -> maid.broadcastBreakEvent(EquipmentSlotType.byTypeAndIndex(EquipmentSlotType.Group.ARMOR, index)));
             }
         }
     }
@@ -786,12 +781,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     private void spawnPortalParticle() {
         if (this.level.isClientSide && this.getIsInvulnerable() && this.getOwner() != null) {
-            this.level.addParticle(ParticleTypes.PORTAL,
-                    this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
-                    this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D,
-                    this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
-                    (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
-                    (this.random.nextDouble() - 0.5D) * 2.0D);
+            this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
         }
     }
 
@@ -802,11 +792,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
                 double yRandom = this.random.nextGaussian() * 0.02D;
                 double zRandom = this.random.nextGaussian() * 0.02D;
 
-                this.level.addParticle(ParticleTypes.ENTITY_EFFECT,
-                        this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - xRandom * 10.0D,
-                        this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()) - yRandom * 10.0D,
-                        this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - zRandom * 10.0D,
-                        0.9, 0.1, 0.1);
+                this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - xRandom * 10.0D, this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()) - yRandom * 10.0D, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - zRandom * 10.0D, 0.9, 0.1, 0.1);
             }
         }
     }
@@ -817,11 +803,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
                 float mx = (random.nextFloat() - 0.5F) * 0.02F;
                 float my = (random.nextFloat() - 0.5F) * 0.02F;
                 float mz = (random.nextFloat() - 0.5F) * 0.02F;
-                level.addParticle(ParticleTypes.CLOUD,
-                        getX() + random.nextFloat() - 0.5F,
-                        getY() + random.nextFloat() - 0.5F,
-                        getZ() + random.nextFloat() - 0.5F,
-                        mx, my, mz);
+                level.addParticle(ParticleTypes.CLOUD, getX() + random.nextFloat() - 0.5F, getY() + random.nextFloat() - 0.5F, getZ() + random.nextFloat() - 0.5F, mx, my, mz);
             }
         }
     }
@@ -832,8 +814,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
                 double offsetX = 2 * random.nextDouble() - 1;
                 double offsetY = random.nextDouble() / 2;
                 double offsetZ = 2 * random.nextDouble() - 1;
-                level.addParticle(ParticleTypes.BUBBLE, getX() + offsetX, getY() + offsetY, getZ() + offsetZ,
-                        0, 0.1, 0);
+                level.addParticle(ParticleTypes.BUBBLE, getX() + offsetX, getY() + offsetY, getZ() + offsetZ, 0, 0.1, 0);
             }
         }
     }
@@ -855,8 +836,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.particleEngine.createTrackingEmitter(this, ParticleTypes.TOTEM_OF_UNDYING, 30);
             this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BELL_BLOCK, this.getSoundSource(), 1.0F, 1.0F, false);
-            minecraft.gui.setTitles(new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.title"),
-                    new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.subtitle"), 10, 70, 20);
+            minecraft.gui.setTitles(new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.title"), new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.subtitle"), 10, 70, 20);
         }
     }
 
@@ -1463,7 +1443,17 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     }
 
     public void setGameSkill(CompoundNBT gameSkill) {
-        this.entityData.set(GAME_SKILL, gameSkill, true);
+        this.forceSyncData(GAME_SKILL, gameSkill, true);
+    }
+
+    public <T> void forceSyncData(DataParameter<T> key, T value, boolean force) {
+        EntityDataManager.DataEntry<T> entry = this.entityData.getItem(key);
+        if (force || ObjectUtils.notEqual(value, entry.getValue())) {
+            entry.setValue(value);
+            this.entityData.entity.onSyncedDataUpdated(key);
+            entry.setDirty(true);
+            this.entityData.isDirty = true;
+        }
     }
 
     public boolean hasHelmet() {
@@ -1519,8 +1509,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     public boolean placeItemBlock(Hand hand, BlockPos placePos, Direction direction, ItemStack stack) {
         if (stack.getItem() instanceof BlockItem) {
-            return ((BlockItem) stack.getItem()).place(new BlockItemUseContext(level, null, hand, stack,
-                    getBlockRayTraceResult(placePos, direction))).consumesAction();
+            return ((BlockItem) stack.getItem()).place(new BlockItemUseContext(level, null, hand, stack, getBlockRayTraceResult(placePos, direction))).consumesAction();
         }
         return false;
     }
@@ -1534,11 +1523,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     }
 
     private BlockRayTraceResult getBlockRayTraceResult(BlockPos pos, Direction direction) {
-        return new BlockRayTraceResult(
-                new Vector3d((double) pos.getX() + 0.5D + (double) direction.getStepX() * 0.5D,
-                        (double) pos.getY() + 0.5D + (double) direction.getStepY() * 0.5D,
-                        (double) pos.getZ() + 0.5D + (double) direction.getStepZ() * 0.5D),
-                direction, pos, false);
+        return new BlockRayTraceResult(new Vector3d((double) pos.getX() + 0.5D + (double) direction.getStepX() * 0.5D, (double) pos.getY() + 0.5D + (double) direction.getStepY() * 0.5D, (double) pos.getZ() + 0.5D + (double) direction.getStepZ() * 0.5D), direction, pos, false);
     }
 
     @Deprecated

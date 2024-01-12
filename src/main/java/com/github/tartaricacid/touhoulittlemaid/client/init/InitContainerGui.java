@@ -23,6 +23,7 @@ public final class InitContainerGui {
         evt.enqueueWork(() -> ScreenManager.register(CraftingTableBackpackContainer.TYPE, CraftingTableBackpackContainerScreen::new));
         evt.enqueueWork(() -> ScreenManager.register(EnderChestBackpackContainer.TYPE, EnderChestBackpackContainerScreen::new));
         evt.enqueueWork(() -> ScreenManager.register(FurnaceBackpackContainer.TYPE, FurnaceBackpackContainerScreen::new));
+        evt.enqueueWork(() -> ScreenManager.register(TankBackpackContainer.TYPE, TankBackpackContainerScreen::new));
 
         evt.enqueueWork(() -> ScreenManager.register(MaidConfigContainer.TYPE, MaidConfigContainerGui::new));
         evt.enqueueWork(() -> ScreenManager.register(WirelessIOContainer.TYPE, WirelessIOContainerGui::new));

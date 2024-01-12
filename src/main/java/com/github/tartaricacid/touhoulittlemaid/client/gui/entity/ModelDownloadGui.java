@@ -57,6 +57,7 @@ public class ModelDownloadGui extends Screen {
 
     @Override
     protected void init() {
+        this.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
         this.buttons.clear();
         this.children.clear();
         this.x = (width - 420) / 2;
