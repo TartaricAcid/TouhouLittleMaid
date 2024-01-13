@@ -39,6 +39,8 @@ public class TankBackpackContainerScreen extends AbstractMaidContainerGui<TankBa
         RenderSystem.color4f(1, 1, 1, 1);
         RenderSystem.disableAlphaTest();
         RenderSystem.disableBlend();
+
+        getMinecraft().textureManager.bind(BACKPACK);
         blit(matrixStack, leftPos + 197, topPos + 104, 165, 0, 34, 50);
 
         boolean xInRange = leftPos + 196 <= x && x <= leftPos + 196 + 29;

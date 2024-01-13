@@ -11,7 +11,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -70,7 +69,7 @@ public class MaidAreaRenderEvent {
         Vector3d maidPos = camera.add(maid.position());
         RenderHelper.renderLine(poseStack, mc.renderBuffers().bufferSource().getBuffer(RenderType.LINES), restrictPos, maidPos, 1.0f, 0.2f, 0.2f);
         AxisAlignedBB aabb = maid.getBoundingBox().move(0, -1, 0).move(camera);
-        DebugRenderer.renderFilledBox(aabb, 0.8F, 0.8F, 0.2F, 0.75F);
+        RenderHelper.addChainedFilledBoxVertices(poseStack, mc.renderBuffers().bufferSource(), aabb, 0.8F, 0.8F, 0.2F, 0.75F);
 
         if (workPos != null) {
             Vector3d centerPos = camera.add(workPos.getX() + 0.5, workPos.getY() + 0.5, workPos.getZ() + 0.5);

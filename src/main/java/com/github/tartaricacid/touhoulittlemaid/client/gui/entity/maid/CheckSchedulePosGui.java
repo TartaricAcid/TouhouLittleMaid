@@ -37,7 +37,7 @@ public class CheckSchedulePosGui extends Screen {
         List<IReorderingProcessor> split = font.split(tips, 300);
         int startY = middleY - 10 - split.size() * font.lineHeight;
         for (IReorderingProcessor text : split) {
-            drawCenteredString(matrixStack, font, (ITextComponent) text, middleX, startY, 0xFFFFFF);
+            font.drawShadow(matrixStack, text, (float) (middleX - font.width(text) / 2), startY, 0xFFFFFF);
             startY += font.lineHeight;
         }
         super.render(matrixStack, mouseX, mouseY, partialTicks);

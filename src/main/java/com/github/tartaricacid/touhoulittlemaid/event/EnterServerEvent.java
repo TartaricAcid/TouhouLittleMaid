@@ -13,6 +13,7 @@ public final class EnterServerEvent {
     public static void onAttachCapabilityEvent(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getPlayer() instanceof ServerPlayerEntity) {
             InitTrigger.GIVE_SMART_SLAB_CONFIG.trigger((ServerPlayerEntity) event.getPlayer());
+            InitTrigger.GIVE_PATCHOULI_BOOK_CONFIG.trigger((ServerPlayerEntity) event.getEntity());
         }
     }
 }

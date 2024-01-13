@@ -22,7 +22,6 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -205,7 +204,7 @@ public class ModelDownloadGui extends Screen {
         List<IReorderingProcessor> split = font.split(new TranslationTextComponent("gui.touhou_little_maid.resources_download.fail"), 200);
         int yOffset = y + 100;
         for (IReorderingProcessor sequence : split) {
-            drawCenteredString(matrixStack, font, (ITextComponent) sequence, x + 134, yOffset, TextFormatting.RED.getColor());
+            font.drawShadow(matrixStack, sequence, (float) (x + 134 - font.width(sequence) / 2), yOffset, TextFormatting.RED.getColor());
             yOffset += 12;
         }
     }
@@ -316,7 +315,8 @@ public class ModelDownloadGui extends Screen {
     public void onClose() {
         if (this.needReload && this.getMinecraft().player != null) {
             this.getMinecraft().gui.setTitles(new TranslationTextComponent("gui.touhou_little_maid.resources_download.need_reload.title"),
-                    new TranslationTextComponent("gui.touhou_little_maid.resources_download.need_reload.subtitle"),
+                    null, 10, 70, 20);
+            this.getMinecraft().gui.setTitles(null, new TranslationTextComponent("gui.touhou_little_maid.resources_download.need_reload.subtitle"),
                     10, 70, 20);
             this.getMinecraft().player.sendMessage(new TranslationTextComponent("gui.touhou_little_maid.resources_download.need_reload.subtitle"), Util.NIL_UUID);
         }

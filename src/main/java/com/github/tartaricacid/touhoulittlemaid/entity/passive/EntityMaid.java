@@ -836,7 +836,8 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.particleEngine.createTrackingEmitter(this, ParticleTypes.TOTEM_OF_UNDYING, 30);
             this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BELL_BLOCK, this.getSoundSource(), 1.0F, 1.0F, false);
-            minecraft.gui.setTitles(new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.title"), new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.subtitle"), 10, 70, 20);
+            minecraft.gui.setTitles(new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.title"), null, 10, 70, 20);
+            minecraft.gui.setTitles(null, new TranslationTextComponent("message.touhou_little_maid.gomoku.rank_up.subtitle"), 10, 70, 20);
         }
     }
 
