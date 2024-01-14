@@ -8,7 +8,6 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.memory.WalkTarget;
-import net.minecraft.entity.ai.brain.task.RunAwayTask;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -28,12 +27,12 @@ public class SetWalkTargetAwayFrom<T> extends Task<CreatureEntity> {
         this.toPosition = toPosition;
     }
 
-    public static RunAwayTask<BlockPos> pos(MemoryModuleType<BlockPos> walkAwayFromMemory, float speedModifier, int desiredDistance, boolean ignoreOtherWalkTarget) {
-        return new RunAwayTask<>(walkAwayFromMemory, speedModifier, desiredDistance, ignoreOtherWalkTarget, Vector3d::atBottomCenterOf);
+    public static SetWalkTargetAwayFrom<BlockPos> pos(MemoryModuleType<BlockPos> walkAwayFromMemory, float speedModifier, boolean ignoreOtherWalkTarget) {
+        return new SetWalkTargetAwayFrom<>(walkAwayFromMemory, speedModifier, ignoreOtherWalkTarget, Vector3d::atBottomCenterOf);
     }
 
-    public static RunAwayTask<? extends Entity> entity(MemoryModuleType<? extends Entity> walkAwayFromMemory, float speedModifier, int desiredDistance, boolean ignoreOtherWalkTarget) {
-        return new RunAwayTask<>(walkAwayFromMemory, speedModifier, desiredDistance, ignoreOtherWalkTarget, Entity::position);
+    public static SetWalkTargetAwayFrom<? extends Entity> entity(MemoryModuleType<? extends Entity> walkAwayFromMemory, float speedModifier, boolean ignoreOtherWalkTarget) {
+        return new SetWalkTargetAwayFrom<>(walkAwayFromMemory, speedModifier, ignoreOtherWalkTarget, Entity::position);
     }
 
     protected boolean checkExtraStartConditions(ServerWorld serverWorld, CreatureEntity creature) {

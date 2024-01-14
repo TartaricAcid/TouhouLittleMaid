@@ -45,25 +45,6 @@ public class TankBackpackData extends Inventory implements IBackpackData {
     }
 
     @Override
-    public void setItem(int index, ItemStack stack) {
-        if (!this.maid.level.isClientSide) {
-            CombinedInvWrapper availableInv = this.maid.getAvailableInv(false);
-            if (index == INPUT_INDEX) {
-                MaidFluidUtil.bucketToTank(stack, tank, availableInv);
-            }
-            if (index == OUTPUT_INDEX) {
-                MaidFluidUtil.tankToBucket(stack, tank, availableInv);
-            }
-            this.tankFluidCount = tank.getFluidAmount();
-            ResourceLocation key = ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid());
-            if (key != null) {
-                maid.setBackpackFluid(key.toString());
-            }
-        }
-        super.setItem(index, stack);
-    }
-
-    @Override
     public int getMaxStackSize() {
         return 1;
     }
@@ -87,6 +68,31 @@ public class TankBackpackData extends Inventory implements IBackpackData {
 
     @Override
     public void serverTick(EntityMaid maid) {
+        boolean shouldUpdate = false;
+
+        ItemStack inputStack = this.getItem(INPUT_INDEX);
+        if (!inputStack.isEmpty() && tank.getFluidAmount() < CAPACITY) {
+            CombinedInvWrapper availableInv = this.maid.getAvailableInv(false);
+            MaidFluidUtil.bucketToTank(inputStack, tank, availableInv);
+            setItem(INPUT_INDEX, inputStack);
+            shouldUpdate = true;
+        }
+
+        ItemStack outputStack = this.getItem(OUTPUT_INDEX);
+        if (!outputStack.isEmpty() && 0 < tank.getFluidAmount()) {
+            CombinedInvWrapper availableInv = this.maid.getAvailableInv(false);
+            MaidFluidUtil.tankToBucket(outputStack, tank, availableInv);
+            setItem(OUTPUT_INDEX, outputStack);
+            shouldUpdate = true;
+        }
+
+        if (shouldUpdate) {
+            this.tankFluidCount = tank.getFluidAmount();
+            ResourceLocation key = ForgeRegistries.FLUIDS.getKey(tank.getFluid().getFluid());
+            if (key != null) {
+                maid.setBackpackFluid(key.toString());
+            }
+        }
     }
 
     public FluidTank getTank() {

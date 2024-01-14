@@ -73,6 +73,9 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
                 this.collectHoneyBottle(level, maid, maidAvailableInv, hiveBlockState, hivePos);
             }
         });
+        maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
+        maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
+        maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
     }
 
     private void collectHoneyBottle(ServerWorld level, EntityMaid maid, CombinedInvWrapper maidAvailableInv, BlockState hiveBlockState, BlockPos hivePos) {
@@ -89,9 +92,6 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
             ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyBottle, false);
             resetHoneyLevel(level, hiveBlockState, hivePos);
             maid.swing(Hand.MAIN_HAND);
-            maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
-            maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
-            maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
         }
     }
 
@@ -109,9 +109,6 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
             resetHoneyLevel(level, hiveBlockState, hivePos);
             maid.swing(Hand.MAIN_HAND);
             maid.getMainHandItem().hurtAndBreak(1, maid, e -> e.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
-            maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
-            maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
-            maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
             return true;
         }
         return false;
