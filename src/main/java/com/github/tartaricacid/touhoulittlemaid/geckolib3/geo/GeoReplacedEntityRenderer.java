@@ -13,7 +13,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.IRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.mojang.blaze3d.vertex.VertexBuilderUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -231,12 +230,8 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
                 getTextureLocation(entity));
 
         if (Minecraft.getInstance().player != null && !entity.isInvisibleTo(Minecraft.getInstance().player)) {
-            IVertexBuilder glintBuffer = bufferSource.getBuffer(RenderType.entityGlintDirect());
-            IVertexBuilder translucentBuffer = bufferSource
-                    .getBuffer(RenderType.entityTranslucentCull(getTextureLocation(entity)));
-            render(model, entity, partialTick, renderType, poseStack, bufferSource,
-                    glintBuffer != translucentBuffer ? VertexBuilderUtils.create(glintBuffer, translucentBuffer)
-                            : null,
+            IVertexBuilder translucentBuffer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(entity)));
+            render(model, entity, partialTick, renderType, poseStack, bufferSource, translucentBuffer,
                     packedLight, getPackedOverlay(livingEntity, getOverlayProgress(livingEntity, partialTick)),
                     renderColor.getRed() / 255f, renderColor.getGreen() / 255f,
                     renderColor.getBlue() / 255f, renderColor.getAlpha() / 255f);

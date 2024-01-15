@@ -17,7 +17,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.IRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.mojang.blaze3d.vertex.VertexBuilderUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -205,12 +204,8 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
         RenderType renderType = getRenderType(animatable, partialTick, poseStack, bufferSource, null, packedLight,
                 getTextureLocation(animatable));
         if (Minecraft.getInstance().player != null && !animatable.isInvisibleTo(Minecraft.getInstance().player)) {
-            IVertexBuilder glintBuffer = bufferSource.getBuffer(RenderType.entityGlintDirect());
-            IVertexBuilder translucentBuffer = bufferSource
-                    .getBuffer(RenderType.entityTranslucentCull(getTextureLocation(animatable)));
-            render(model, animatable, partialTick, renderType, poseStack, bufferSource,
-                    glintBuffer != translucentBuffer ? VertexBuilderUtils.create(glintBuffer, translucentBuffer)
-                            : null,
+            IVertexBuilder translucentBuffer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(animatable)));
+            render(model, animatable, partialTick, renderType, poseStack, bufferSource, translucentBuffer,
                     packedLight, getOverlay(animatable, 0), renderColor.getRed() / 255f,
                     renderColor.getGreen() / 255f, renderColor.getBlue() / 255f,
                     renderColor.getAlpha() / 255f);
