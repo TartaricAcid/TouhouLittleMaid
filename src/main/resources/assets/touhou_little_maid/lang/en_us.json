@@ -332,6 +332,7 @@
   "task.touhou_little_maid.attack.condition.assault_weapon": "Mainhand holds an assault weapon",
   "task.touhou_little_maid.ranged_attack.desc": "Maid will use bows to attack surrounding hostile mobs",
   "task.touhou_little_maid.ranged_attack.condition.has_bow": "Mainhand holds a bow",
+  "task.touhou_little_maid.ranged_attack.condition.has_arrow": "Have a arrow in inventory",
   "task.touhou_little_maid.danmaku_attack.desc": "Maid will use danmaku to attack surrounding hostile mobs",
   "task.touhou_little_maid.danmaku_attack.condition.has_gohei": "Mainhand holds a hakurei's gohei",
   "task.touhou_little_maid.farm.desc": "Maid will plant or harvest normal crops around",

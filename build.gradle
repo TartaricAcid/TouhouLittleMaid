@@ -152,6 +152,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
 
+    implementation fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

@@ -1228,6 +1228,19 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     }
 
     @Override
+    public boolean isWithinRestriction() {
+        return this.isWithinRestriction(this.blockPosition());
+    }
+
+    @Override
+    public boolean isWithinRestriction(BlockPos pos) {
+        if (hasRestriction()) {
+            return this.getRestrictCenter().distSqr(pos) < (double) (this.getRestrictRadius() * this.getRestrictRadius());
+        }
+        return true;
+    }
+
+    @Override
     public void restrictTo(BlockPos pos, int distance) {
         this.entityData.set(RESTRICT_CENTER, pos);
         this.entityData.set(RESTRICT_RADIUS, (float) distance);
