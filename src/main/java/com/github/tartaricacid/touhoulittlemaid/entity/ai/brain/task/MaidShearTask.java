@@ -22,14 +22,12 @@ import java.util.List;
 
 public class MaidShearTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
-    private final int maxDistToWalk;
     private final float speedModifier;
     private LivingEntity shearableEntity = null;
 
-    public MaidShearTask(int maxDistToWalk, float speedModifier) {
+    public MaidShearTask(float speedModifier) {
         super(ImmutableMap.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
         this.setMaxCheckRate(MAX_DELAY_TIME);
     }
@@ -43,6 +41,7 @@ public class MaidShearTask extends MaidCheckRateTask {
             return;
         }
 
+        int maxDistToWalk = (int) maid.getRestrictRadius();
         this.getEntities(maid)
                 .find(e -> e.closerThan(maid, maxDistToWalk))
                 .filter(e -> maid.isWithinRestriction(e.blockPosition()))
@@ -58,7 +57,7 @@ public class MaidShearTask extends MaidCheckRateTask {
 
         if (shearableEntity != null && shearableEntity.closerThan(maid, 2)) {
             RandomSource rand = maid.getRandom();
-            int level = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, mainHandItem);
+            int level = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.BLOCK_FORTUNE, mainHandItem);
             List<ItemStack> drops = ((IForgeShearable) shearableEntity).onSheared(null, mainHandItem,
                     maid.level, shearableEntity.blockPosition(), level);
             drops.forEach(stack -> {

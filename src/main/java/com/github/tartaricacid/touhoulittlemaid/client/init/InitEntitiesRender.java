@@ -64,9 +64,11 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
         event.registerLayerDefinition(FurnaceBackpackModel.LAYER, FurnaceBackpackModel::createBodyLayer);
         event.registerLayerDefinition(TombstoneModel.LAYER, TombstoneModel::createBodyLayer);
+        event.registerLayerDefinition(TankBackpackModel.LAYER, TankBackpackModel::createBodyLayer);
         event.registerLayerDefinition(KeyboardModel.LAYER, KeyboardModel::createBodyLayer);
         event.registerLayerDefinition(BookshelfModel.LAYER, BookshelfModel::createBodyLayer);
         event.registerLayerDefinition(ComputerModel.LAYER, ComputerModel::createBodyLayer);
         event.registerLayerDefinition(ShrineModel.LAYER, ShrineModel::createBodyLayer);
+        event.registerLayerDefinition(MaidBannerModel.LAYER, MaidBannerModel::createBodyLayer);
     }
 }

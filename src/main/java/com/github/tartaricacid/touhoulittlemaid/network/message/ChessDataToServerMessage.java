@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -61,7 +61,7 @@ public class ChessDataToServerMessage {
                     if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(gomoku.getSitId()) instanceof EntitySit sit && sit.getFirstPassenger() instanceof EntityMaid maid) {
                         maid.swing(InteractionHand.MAIN_HAND);
                     }
-                    gomoku.setInProgress(TouhouLittleMaid.SERVICE.getStatue(gomoku.getChessData(), aiPoint) == Statue.IN_PROGRESS);
+                    gomoku.setInProgress(MaidGomokuAI.getStatue(gomoku.getChessData(), aiPoint) == Statue.IN_PROGRESS);
                     level.playSound(null, message.pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
                     if (gomoku.isInProgress()) {
                         gomoku.setPlayerTurn(true);

@@ -40,19 +40,7 @@ public class MaidProvider implements IEntityComponentProvider {
     }
 
     private MutableComponent getActivityTransText(EntityMaid maid) {
-        MaidSchedule schedule = maid.getSchedule();
-        int time = (int) (maid.level.getDayTime() % 24000L);
-        switch (schedule) {
-            case ALL -> {
-                return getActivityTransText(Activity.WORK);
-            }
-            case NIGHT -> {
-                return getActivityTransText(InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time));
-            }
-            default -> {
-                return getActivityTransText(InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time));
-            }
-        }
+        return getActivityTransText(maid.getScheduleDetail());
     }
 
     private MutableComponent getActivityTransText(Activity activity) {

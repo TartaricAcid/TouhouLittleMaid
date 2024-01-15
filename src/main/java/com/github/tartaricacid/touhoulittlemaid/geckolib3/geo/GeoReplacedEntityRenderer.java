@@ -14,7 +14,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexMultiConsumer;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -224,12 +223,8 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
                 getTextureLocation(entity));
 
         if (Minecraft.getInstance().player != null && !entity.isInvisibleTo(Minecraft.getInstance().player)) {
-            VertexConsumer glintBuffer = bufferSource.getBuffer(RenderType.entityGlintDirect());
-            VertexConsumer translucentBuffer = bufferSource
-                    .getBuffer(RenderType.entityTranslucentCull(getTextureLocation(entity)));
-            render(model, entity, partialTick, renderType, poseStack, bufferSource,
-                    glintBuffer != translucentBuffer ? VertexMultiConsumer.create(glintBuffer, translucentBuffer)
-                            : null,
+            VertexConsumer translucentBuffer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(animatable)));
+            render(model, animatable, partialTick, renderType, poseStack, bufferSource, translucentBuffer,
                     packedLight, getPackedOverlay(livingEntity, getOverlayProgress(livingEntity, partialTick)),
                     renderColor.getRed() / 255f, renderColor.getGreen() / 255f,
                     renderColor.getBlue() / 255f, renderColor.getAlpha() / 255f);

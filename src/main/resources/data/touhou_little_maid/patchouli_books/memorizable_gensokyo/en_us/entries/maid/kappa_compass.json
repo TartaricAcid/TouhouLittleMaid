@@ -1,0 +1,17 @@
+{
+  "sortnum": 1,
+  "name": "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.name",
+  "icon": "touhou_little_maid:kappa_compass",
+  "category": "touhou_little_maid:other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:kappa_compass",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.pages.0.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.pages.1.text"
+    }
+  ]
+}

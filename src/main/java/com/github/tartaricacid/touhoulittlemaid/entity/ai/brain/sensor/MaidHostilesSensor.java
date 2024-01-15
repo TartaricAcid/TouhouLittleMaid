@@ -29,9 +29,7 @@ public class MaidHostilesSensor extends Sensor<LivingEntity> {
     private Optional<LivingEntity> getNearestHostile(LivingEntity livingEntity) {
         return this.getVisibleEntities(livingEntity).flatMap(entities ->
                 entities.find(enemy -> isHostile(enemy) && this.isClose(livingEntity, enemy))
-                        .min((enemy1, enemy2) -> {
-                            return this.compareMobDistance(livingEntity, enemy1, enemy2);
-                        }));
+                        .min((enemy1, enemy2) -> this.compareMobDistance(livingEntity, enemy1, enemy2)));
     }
 
     private Optional<NearestVisibleLivingEntities> getVisibleEntities(LivingEntity livingEntity) {

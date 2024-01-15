@@ -26,6 +26,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
+import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
@@ -44,6 +45,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,6 +62,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -72,6 +75,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -80,6 +84,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -113,6 +118,8 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -126,7 +133,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     public static final String MODEL_ID_TAG = "ModelId";
     public static final String SOUND_PACK_ID_TAG = "SoundPackId";
     public static final String MAID_BACKPACK_TYPE = "MaidBackpackType";
-    public static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     public static final String MAID_INVENTORY_TAG = "MaidInventory";
     public static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
     public static final String EXPERIENCE_TAG = "MaidExperience";
@@ -150,6 +156,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final EntityDataAccessor<MaidChatBubbles> CHAT_BUBBLE = SynchedEntityData.defineId(EntityMaid.class, MaidChatBubbles.DATA);
     private static final EntityDataAccessor<String> BACKPACK_TYPE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -159,17 +167,21 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private static final String HUNGER_TAG = "MaidHunger";
     private static final String FAVORABILITY_TAG = "MaidFavorability";
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
-    private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
     private static final String BACKPACK_DATA_TAG = "MaidBackpackData";
+    private static final String GAME_SKILL_TAG = "MaidGameSkillData";
+    @Deprecated
+    private static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
+    @Deprecated
+    private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
-    private static final String DEFAULT_SOUND_PACK_ID = "touhou_little_maid";
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
     private final FavorabilityManager favorabilityManager;
+    private final SchedulePos schedulePos;
 
     public boolean guiOpening = false;
 
@@ -187,10 +199,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.favorabilityManager = new FavorabilityManager(this);
+        this.schedulePos = new SchedulePos(BlockPos.ZERO, world.dimension().location());
     }
 
     public EntityMaid(Level worldIn) {
         this(TYPE, worldIn);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 64).add(Attributes.ATTACK_KNOCKBACK).add(Attributes.ATTACK_DAMAGE);
     }
 
     public static boolean canInsertItem(ItemStack stack) {
@@ -205,7 +222,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
-        this.entityData.define(DATA_SOUND_PACK_ID, DEFAULT_SOUND_PACK_ID);
+        this.entityData.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
         this.entityData.define(DATA_TASK, TaskIdle.UID.toString());
         this.entityData.define(DATA_BEGGING, false);
         this.entityData.define(DATA_PICKUP, true);
@@ -220,10 +237,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.entityData.define(DATA_ARM_RISE, false);
         this.entityData.define(SCHEDULE_MODE, MaidSchedule.DAY);
         this.entityData.define(RESTRICT_CENTER, BlockPos.ZERO);
-        this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_HOME_RANGE.get().floatValue());
+        this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_NON_HOME_RANGE.get().floatValue());
         this.entityData.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
         this.entityData.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
         this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
+        this.entityData.define(BACKPACK_FLUID, StringUtils.EMPTY);
+        this.entityData.define(GAME_SKILL, new CompoundTag());
     }
 
     @Override
@@ -832,6 +851,17 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public void spawnRankUpParticle() {
+        if (this.level.isClientSide) {
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.particleEngine.createTrackingEmitter(this, ParticleTypes.TOTEM_OF_UNDYING, 30);
+            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BELL_BLOCK, this.getSoundSource(), 1.0F, 1.0F, false);
+            minecraft.gui.setTitle(Component.translatable("message.touhou_little_maid.gomoku.rank_up.title"));
+            minecraft.gui.setSubtitle(Component.translatable("message.touhou_little_maid.gomoku.rank_up.subtitle"));
+        }
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -849,9 +879,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         compound.putInt(FAVORABILITY_TAG, getFavorability());
         compound.putInt(EXPERIENCE_TAG, getExperience());
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
-        compound.put(RESTRICT_CENTER_TAG, NbtUtils.writeBlockPos(getRestrictCenter()));
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
+        compound.put(GAME_SKILL_TAG, getGameSkill());
         this.favorabilityManager.addAdditionalSaveData(compound);
+        this.schedulePos.save(compound);
         if (this.backpackData != null) {
             CompoundTag tag = new CompoundTag();
             this.backpackData.save(tag, this);
@@ -869,6 +900,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
         if (compound.contains(SOUND_PACK_ID_TAG, Tag.TAG_STRING)) {
             setSoundPackId(compound.getString(SOUND_PACK_ID_TAG));
+        }
+        if (compound.contains(SCHEDULE_MODE_TAG, Tag.TAG_STRING)) {
+            setSchedule(MaidSchedule.valueOf(compound.getString(SCHEDULE_MODE_TAG)));
         }
         if (compound.contains(TASK_TAG, Tag.TAG_STRING)) {
             ResourceLocation uid = new ResourceLocation(compound.getString(TASK_TAG));
@@ -919,11 +953,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         if (compound.contains(EXPERIENCE_TAG, Tag.TAG_INT)) {
             setExperience(compound.getInt(EXPERIENCE_TAG));
         }
-        if (compound.contains(SCHEDULE_MODE_TAG, Tag.TAG_STRING)) {
-            setSchedule(MaidSchedule.valueOf(compound.getString(SCHEDULE_MODE_TAG)));
+        if (compound.contains(GAME_SKILL_TAG, Tag.TAG_COMPOUND)) {
+            setGameSkill(compound.getCompound(GAME_SKILL_TAG));
         }
         if (compound.contains(RESTRICT_CENTER_TAG, Tag.TAG_COMPOUND)) {
-            setRestrictCenter(NbtUtils.readBlockPos(compound.getCompound(RESTRICT_CENTER_TAG)));
+            // 存档迁移
+            BlockPos blockPos = NbtUtils.readBlockPos(compound.getCompound(RESTRICT_CENTER_TAG));
+            this.schedulePos.setHomeModeEnable(this, blockPos);
+            compound.remove(RESTRICT_CENTER_TAG);
         }
         if (compound.contains(MAID_BACKPACK_TYPE, Tag.TAG_STRING)) {
             ResourceLocation id = new ResourceLocation(compound.getString(MAID_BACKPACK_TYPE));
@@ -934,6 +971,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             }
         }
         this.favorabilityManager.readAdditionalSaveData(compound);
+        this.schedulePos.load(compound, this);
         this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
     }
 
@@ -1207,18 +1245,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     public void setHomeModeEnable(boolean enable) {
         this.entityData.set(DATA_HOME_MODE, enable);
-        if (enable) {
-            setRestrictCenter(this.blockPosition());
-        }
-    }
-
-    @Override
-    public BlockPos getRestrictCenter() {
-        return this.entityData.get(RESTRICT_CENTER);
-    }
-
-    public void setRestrictCenter(BlockPos center) {
-        this.entityData.set(RESTRICT_CENTER, center);
     }
 
     @Override
@@ -1235,13 +1261,29 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @Override
-    public boolean hasRestriction() {
-        return this.isHomeModeEnable();
+    public void restrictTo(BlockPos pos, int distance) {
+        this.entityData.set(RESTRICT_CENTER, pos);
+        this.entityData.set(RESTRICT_RADIUS, (float) distance);
+    }
+
+    @Override
+    public BlockPos getRestrictCenter() {
+        return this.entityData.get(RESTRICT_CENTER);
     }
 
     @Override
     public float getRestrictRadius() {
         return this.entityData.get(RESTRICT_RADIUS);
+    }
+
+    @Override
+    public void clearRestriction() {
+        this.schedulePos.clear(this);
+    }
+
+    @Override
+    public boolean hasRestriction() {
+        return this.isHomeModeEnable();
     }
 
     public MaidChatBubbles getChatBubble() {
@@ -1320,17 +1362,44 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.entityData.set(DATA_ARM_RISE, swingingArms);
     }
 
-    public ItemStack getBackpackShowItem() {
-        return this.entityData.get(BACKPACK_ITEM_SHOW);
+    public String getBackpackFluid() {
+        return this.entityData.get(BACKPACK_FLUID);
+    }
+
+    public void setBackpackFluid(String fluidName) {
+        this.entityData.set(BACKPACK_FLUID, fluidName);
+    }
+
+    public MaidSchedule getSchedule() {
+        return this.entityData.get(SCHEDULE_MODE);
+    }
+
+    public Activity getScheduleDetail() {
+        MaidSchedule schedule = this.getSchedule();
+        int time = (int) (this.level.getDayTime() % 24000L);
+        switch (schedule) {
+            case ALL -> {
+                return Activity.WORK;
+            }
+            case NIGHT -> {
+                return InitEntities.MAID_NIGHT_SHIFT_SCHEDULES.get().getActivityAt(time);
+            }
+            default -> {
+                return InitEntities.MAID_DAY_SHIFT_SCHEDULES.get().getActivityAt(time);
+            }
+        }
+    }
+
+    public SchedulePos getSchedulePos() {
+        return schedulePos;
     }
 
     public void setBackpackShowItem(ItemStack stack) {
         this.entityData.set(BACKPACK_ITEM_SHOW, stack);
     }
 
-    public IMaidBackpack getMaidBackpackType() {
-        ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
-        return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
+    public ItemStack getBackpackShowItem() {
+        return this.entityData.get(BACKPACK_ITEM_SHOW);
     }
 
     public void setMaidBackpackType(IMaidBackpack backpack) {
@@ -1346,12 +1415,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.entityData.set(BACKPACK_TYPE, backpack.getId().toString());
     }
 
-    public IBackpackData getBackpackData() {
-        return backpackData;
+    public IMaidBackpack getMaidBackpackType() {
+        ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
+        return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
     }
 
-    public MaidSchedule getSchedule() {
-        return this.entityData.get(SCHEDULE_MODE);
+    public IBackpackData getBackpackData() {
+        return backpackData;
     }
 
     public void setSchedule(MaidSchedule schedule) {
@@ -1404,6 +1474,24 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     public void setInSittingPose(boolean inSittingPose) {
         super.setInSittingPose(inSittingPose);
         setOrderedToSit(inSittingPose);
+    }
+
+    public CompoundTag getGameSkill() {
+        return this.entityData.get(GAME_SKILL);
+    }
+
+    public void setGameSkill(CompoundTag gameSkill) {
+        this.forceSyncData(GAME_SKILL, gameSkill, true);
+    }
+
+    public <T> void forceSyncData(EntityDataAccessor<T> key, T value, boolean force) {
+        SynchedEntityData.DataItem<T> dataItem = this.entityData.getItem(key);
+        if (force || ObjectUtils.notEqual(value, dataItem.getValue())) {
+            dataItem.setValue(value);
+            this.entityData.entity.onSyncedDataUpdated(key);
+            dataItem.setDirty(true);
+            this.entityData.isDirty = true;
+        }
     }
 
     public boolean hasHelmet() {

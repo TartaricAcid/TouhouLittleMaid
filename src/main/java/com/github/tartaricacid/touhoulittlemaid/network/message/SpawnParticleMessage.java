@@ -56,6 +56,9 @@ public class SpawnParticleMessage {
                 case HEART:
                     maid.spawnHeartParticle();
                     return;
+                case RANK_UP:
+                    maid.spawnRankUpParticle();
+                    return;
                 default:
             }
         }
@@ -69,6 +72,6 @@ public class SpawnParticleMessage {
         /**
          * 粒子类型
          */
-        EXPLOSION, BUBBLE, HEART
+        EXPLOSION, BUBBLE, HEART, RANK_UP
     }
 }

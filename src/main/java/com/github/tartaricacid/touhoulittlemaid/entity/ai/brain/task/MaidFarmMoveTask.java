@@ -13,8 +13,8 @@ public class MaidFarmMoveTask extends MaidMoveToBlockTask {
     private final NonNullList<ItemStack> seeds = NonNullList.create();
     private final IFarmTask task;
 
-    public MaidFarmMoveTask(IFarmTask task, float movementSpeed, int searchLength) {
-        super(movementSpeed, searchLength);
+    public MaidFarmMoveTask(IFarmTask task, float movementSpeed) {
+        super(movementSpeed);
         this.task = task;
     }
 

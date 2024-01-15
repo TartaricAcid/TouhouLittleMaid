@@ -13,8 +13,8 @@ import java.util.List;
 
 
 public class FlatColorButton extends Button {
-    private boolean isSelect = false;
     private List<Component> tooltips;
+    protected boolean isSelect = false;
 
     public FlatColorButton(int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress pOnPress) {
         super(pX, pY, pWidth, pHeight, pMessage, pOnPress);

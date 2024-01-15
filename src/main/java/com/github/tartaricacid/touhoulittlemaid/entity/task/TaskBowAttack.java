@@ -27,7 +27,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -53,10 +52,10 @@ public class TaskBowAttack implements IRangedAttackTask {
 
     @Override
     public List<Pair<Integer, Behavior<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        RunIf<EntityMaid> supplementedTask = new RunIf<>(this::hasBow,
+        RunIf<EntityMaid> supplementedTask = new RunIf<>(e -> hasBow(e) && hasArrow(e),
                 new StartAttacking<>(IAttackTask::findFirstValidAttackTarget));
         StopAttackingIfTargetInvalid<EntityMaid> findTargetTask = new StopAttackingIfTargetInvalid<>(
-                (target) -> !hasBow(maid) || farAway(target, maid));
+                (target) -> !hasBow(maid) || !hasArrow(maid) || farAway(target, maid));
         SetWalkTargetFromAttackTargetIfTargetOutOfReach moveToTargetTask = new SetWalkTargetFromAttackTargetIfTargetOutOfReach(0.6f);
         MaidAttackStrafingTask maidAttackStrafingTask = new MaidAttackStrafingTask();
         MaidShootTargetTask shootTargetTask = new MaidShootTargetTask(2);
@@ -91,11 +90,15 @@ public class TaskBowAttack implements IRangedAttackTask {
 
     @Override
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
-        return Collections.singletonList(Pair.of("has_bow", this::hasBow));
+        return Lists.newArrayList(Pair.of("has_bow", this::hasBow), Pair.of("has_arrow", this::hasArrow));
     }
 
     private boolean hasBow(EntityMaid maid) {
         return maid.getMainHandItem().getItem() instanceof BowItem;
+    }
+
+    private boolean hasArrow(EntityMaid maid) {
+        return findArrow(maid) >= 0;
     }
 
     private int findArrow(EntityMaid maid) {

@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.util.Mth;
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -50,6 +51,15 @@ public class DownloadInfo {
 
     @SerializedName("license")
     private String license = "All Right Reserved";
+
+    @SerializedName("website")
+    private String website = "";
+
+    @SerializedName("keyword")
+    private String keyword = "";
+
+    @SerializedName("old_version")
+    private List<Long> oldVersion = Lists.newArrayList();
 
     /**
      * type: maid, chair, sound
@@ -130,14 +140,33 @@ public class DownloadInfo {
         return formatFileSize;
     }
 
+    public String getWebsite() {
+        return website;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public List<Long> getOldVersion() {
+        return oldVersion;
+    }
+
     public DownloadInfo decorate() {
         this.formatFileSize = readableFileSize(getFileSize());
         this.formatData = DATE_FORMAT.format(new Date(this.uploadTime));
+        if (StringUtils.isNotBlank(this.keyword)) {
+            this.keyword = this.keyword.toLowerCase(Locale.US);
+        }
         return this;
     }
 
     public boolean hasType(TypeEnum typeEnum) {
         return type.contains(typeEnum.getName());
+    }
+
+    public int getTypeCount() {
+        return type.size();
     }
 
     public enum TypeEnum {

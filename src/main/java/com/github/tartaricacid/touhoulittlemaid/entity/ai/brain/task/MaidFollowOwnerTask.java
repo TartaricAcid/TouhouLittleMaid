@@ -18,23 +18,22 @@ import javax.annotation.Nullable;
 
 public class MaidFollowOwnerTask extends Behavior<EntityMaid> {
     private static final int MAX_TELEPORT_ATTEMPTS_TIMES = 10;
-    private static final int MIN_TELEPORT_DISTANCE = 12;
     private final float speedModifier;
     private final int stopDistance;
-    private final int startDistance;
 
-    public MaidFollowOwnerTask(float speedModifier, int startDistance, int stopDistance) {
+    public MaidFollowOwnerTask(float speedModifier, int stopDistance) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED));
         this.speedModifier = speedModifier;
-        this.startDistance = startDistance;
         this.stopDistance = stopDistance;
     }
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         LivingEntity owner = maid.getOwner();
+        int startDistance = (int) maid.getRestrictRadius() - 2;
+        int minTeleportDistance = startDistance + 4;
         if (ownerStateConditions(owner) && maidStateConditions(maid) && !maid.closerThan(owner, startDistance)) {
-            if (!maid.closerThan(owner, MIN_TELEPORT_DISTANCE)) {
+            if (!maid.closerThan(owner, minTeleportDistance)) {
                 teleportToOwner(maid, owner);
             } else if (!ownerIsWalkTarget(maid, owner)) {
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, owner, speedModifier, stopDistance);
@@ -76,6 +75,7 @@ public class MaidFollowOwnerTask extends Behavior<EntityMaid> {
 
     private boolean canTeleportTo(EntityMaid maid, BlockPos pos) {
         BlockPathTypes pathNodeType = WalkNodeEvaluator.getBlockPathTypeStatic(maid.level, pos.mutable());
+        // Fixme: 水面也可以传送
         if (pathNodeType == BlockPathTypes.WALKABLE) {
             BlockPos blockPos = pos.subtract(maid.blockPosition());
             return maid.level.noCollision(maid, maid.getBoundingBox().move(blockPos));
