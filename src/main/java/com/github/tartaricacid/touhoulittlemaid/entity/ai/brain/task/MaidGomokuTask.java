@@ -37,7 +37,7 @@ public class MaidGomokuTask extends MaidCheckRateTask {
         if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
             BlockPos gomokuPos = findGomoku(worldIn, maid);
             if (gomokuPos != null && maid.isWithinRestriction(gomokuPos)) {
-                if (gomokuPos.distToCenterSqr(maid.position()) < this.closeEnoughDist) {
+                if (gomokuPos.distToCenterSqr(maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
                     maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(gomokuPos));
                     return true;
                 }

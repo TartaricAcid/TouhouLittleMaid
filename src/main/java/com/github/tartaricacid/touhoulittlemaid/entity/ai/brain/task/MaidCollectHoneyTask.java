@@ -48,7 +48,7 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
         if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
             BlockPos beehivePos = findBeehive(worldIn, maid);
             if (beehivePos != null && maid.isWithinRestriction(beehivePos)) {
-                if (beehivePos.distToCenterSqr(maid.position()) < this.closeEnoughDist) {
+                if (beehivePos.distToCenterSqr(maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
                     maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(beehivePos));
                     return true;
                 }
@@ -74,6 +74,9 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
                 this.collectHoneyBottle(level, maid, maidAvailableInv, hiveBlockState, hivePos);
             }
         });
+        maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
+        maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
+        maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
     }
 
     private void collectHoneyBottle(ServerLevel level, EntityMaid maid, CombinedInvWrapper maidAvailableInv, BlockState hiveBlockState, BlockPos hivePos) {
@@ -90,9 +93,6 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
             ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyBottle, false);
             resetHoneyLevel(level, hiveBlockState, hivePos);
             maid.swing(InteractionHand.MAIN_HAND);
-            maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
-            maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
-            maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
         }
     }
 
@@ -110,9 +110,6 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
             resetHoneyLevel(level, hiveBlockState, hivePos);
             maid.swing(InteractionHand.MAIN_HAND);
             maid.getMainHandItem().hurtAndBreak(1, maid, e -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
-            maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());
-            maid.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
-            maid.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
             return true;
         }
         return false;
