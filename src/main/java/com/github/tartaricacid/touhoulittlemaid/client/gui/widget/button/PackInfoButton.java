@@ -38,7 +38,6 @@ public class PackInfoButton extends FlatColorButton {
             fillGradient(matrixStack, this.x, this.y, this.x + this.width, this.y + this.height, 0xff_434242, 0xff_434242);
         }
         if (info.getStatus() == DownloadStatus.NEED_UPDATE) {
-            minecraft.getTextureManager().bind(BG);
             blit(matrixStack, this.x + 240, this.y + 15, 48, 16, 16, 16);
         }
         if (this.isHovered()) {

@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -67,6 +68,10 @@ public class MaidConfigMessage {
                     }
                     if (maid.getSchedule() != message.schedule) {
                         maid.setSchedule(message.schedule);
+                        maid.getSchedulePos().restrictTo(maid);
+                        if (maid.isHomeModeEnable()) {
+                            BrainUtil.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
+                        }
                     }
                 }
             });
