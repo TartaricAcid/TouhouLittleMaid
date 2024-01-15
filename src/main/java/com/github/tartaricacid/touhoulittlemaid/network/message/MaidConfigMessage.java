@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -67,6 +68,10 @@ public class MaidConfigMessage {
                     }
                     if (maid.getSchedule() != message.schedule) {
                         maid.setSchedule(message.schedule);
+                        maid.getSchedulePos().restrictTo(maid);
+                        if (maid.isHomeModeEnable()) {
+                            BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
+                        }
                     }
                 }
             });
