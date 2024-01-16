@@ -1,12 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestCheck;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -18,7 +19,6 @@ import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert
 import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class WirelessIOBauble implements IMaidBauble {
-    public static final int MAX_DISTANCE = 16;
     private static final int SLOT_NUM = 38;
 
     @Nonnull
@@ -96,20 +96,21 @@ public class WirelessIOBauble implements IMaidBauble {
             if (bindingPos == null) {
                 return;
             }
-            if (maid.distanceToSqr(bindingPos.getX(), bindingPos.getY(), bindingPos.getZ()) > (MAX_DISTANCE * MAX_DISTANCE)) {
+            float maxDistance = maid.getRestrictRadius();
+            if (maid.distanceToSqr(bindingPos.getX(), bindingPos.getY(), bindingPos.getZ()) > (maxDistance * maxDistance)) {
                 return;
             }
 
             BlockEntity te = maid.level.getBlockEntity(bindingPos);
-            if (!(te instanceof ChestBlockEntity)) {
+            if (!(te instanceof RandomizableContainerBlockEntity)) {
                 return;
             }
-            int openCount = ChestBlockEntity.getOpenCount(maid.level, bindingPos);
+            int openCount = IronChestCheck.getOpenCount(maid.level, bindingPos, te);
             if (openCount > 0) {
                 return;
             }
 
-            ChestBlockEntity chest = (ChestBlockEntity) te;
+            RandomizableContainerBlockEntity chest = (RandomizableContainerBlockEntity) te;
             chest.getCapability(ITEM_HANDLER_CAPABILITY, null).ifPresent(chestInv -> {
                 IItemHandler maidInv = maid.getAvailableInv(false);
                 boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);

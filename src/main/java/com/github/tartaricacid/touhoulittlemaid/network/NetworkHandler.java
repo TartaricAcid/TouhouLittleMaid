@@ -78,6 +78,10 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(26, SetScrollData.class, SetScrollData::encode, SetScrollData::decode, SetScrollData::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(27, CheckSchedulePosMessage.class, CheckSchedulePosMessage::encode, CheckSchedulePosMessage::decode, CheckSchedulePosMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(28, SyncMaidAreaMessage.class, SyncMaidAreaMessage::encode, SyncMaidAreaMessage::decode, SyncMaidAreaMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

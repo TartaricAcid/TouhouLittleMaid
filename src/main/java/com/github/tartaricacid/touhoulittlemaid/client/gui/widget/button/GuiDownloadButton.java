@@ -1,44 +1,35 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
-import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-
-import java.util.Locale;
 
 public class GuiDownloadButton extends Button {
     private final DownloadInfo info;
 
-    public GuiDownloadButton(int x, int y, int width, int height, DownloadInfo info) {
-        super(x, y, width, height, TextComponent.EMPTY, (b) -> {
-        });
+    public GuiDownloadButton(int pX, int pY, int pWidth, int pHeight, DownloadInfo info, OnPress pOnPress) {
+        super(pX, pY, pWidth, pHeight, TextComponent.EMPTY, pOnPress);
         this.info = info;
-    }
-
-    @Override
-    public void onPress() {
-        if (DownloadStatus.canDownload(info.getStatus())) {
-            InfoGetManager.downloadResourcesPack(info);
+        if (!DownloadStatus.canDownload(info.getStatus())) {
+            this.active = false;
         }
-    }
-
-    @Override
-    protected int getYImage(boolean isHovered) {
-        int i = 1;
-        if (!this.active || !DownloadStatus.canDownload(info.getStatus())) {
-            i = 0;
-        } else if (isHovered) {
-            i = 2;
-        }
-        return i;
     }
 
     @Override
     public Component getMessage() {
-        return new TranslatableComponent(String.format("gui.touhou_little_maid.resources_download.%s", info.getStatus().name().toLowerCase(Locale.US)));
+        MutableComponent text;
+        switch (info.getStatus()) {
+            default -> text = new TranslatableComponent("gui.touhou_little_maid.resources_download.not_download");
+            case DOWNLOADED -> text = new TranslatableComponent("gui.touhou_little_maid.resources_download.downloaded");
+            case DOWNLOADING ->
+                    text = new TranslatableComponent("gui.touhou_little_maid.resources_download.downloading");
+            case NEED_UPDATE ->
+                    text = new TranslatableComponent("gui.touhou_little_maid.resources_download.need_update");
+        }
+        return text;
     }
 }

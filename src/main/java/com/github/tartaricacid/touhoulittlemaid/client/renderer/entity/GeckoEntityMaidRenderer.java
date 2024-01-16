@@ -2,10 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.model.GeckoMaidModel;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.GeckoLayerMaidBackItem;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.GeckoLayerMaidBackpack;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.GeckoLayerMaidBipedHead;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.GeckoLayerMaidHeld;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoReplacedEntityRenderer;
@@ -28,6 +25,7 @@ public class GeckoEntityMaidRenderer extends GeoReplacedEntityRenderer<GeckoMaid
         addLayer(new GeckoLayerMaidBipedHead<>(this, renderManager.getModelSet()));
         addLayer(new GeckoLayerMaidBackpack<>(this, renderManager.getModelSet()));
         addLayer(new GeckoLayerMaidBackItem<>(this));
+        addLayer(new GeckoLayerMaidBanner<>(this, renderManager.getModelSet()));
     }
 
     @Override

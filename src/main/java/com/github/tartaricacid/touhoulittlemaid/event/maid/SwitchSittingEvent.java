@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,7 +19,7 @@ public final class SwitchSittingEvent {
         EntityMaid maid = event.getMaid();
         Level world = event.getWorld();
 
-        if (player.isShiftKeyDown()) {
+        if (player.isShiftKeyDown() && !player.getMainHandItem().is(InitItems.KAPPA_COMPASS.get())) {
             maid.setInSittingPose(!maid.isInSittingPose());
             if (maid.isInSittingPose()) {
                 maid.getNavigation().stop();

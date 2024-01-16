@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
@@ -49,7 +50,7 @@ public final class BaubleManager {
     @Nullable
     public static IMaidBauble getBauble(ItemStack stack) {
         Item item = stack.getItem();
-        return getBauble(RegistryObject.of(item.getRegistryName(), item::getRegistryType));
+        return getBauble(RegistryObject.create(ForgeRegistries.ITEMS.getKey(item), ForgeRegistries.ITEMS));
     }
 
     public void bind(RegistryObject<Item> item, IMaidBauble bauble) {
@@ -57,6 +58,6 @@ public final class BaubleManager {
     }
 
     public void bind(Item item, IMaidBauble bauble) {
-        BAUBLES.put(RegistryObject.of(item.getRegistryName(), item::getRegistryType), bauble);
+        BAUBLES.put(RegistryObject.create(ForgeRegistries.ITEMS.getKey(item), ForgeRegistries.ITEMS), bauble);
     }
 }

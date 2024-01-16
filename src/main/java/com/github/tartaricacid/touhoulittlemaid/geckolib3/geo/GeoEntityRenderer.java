@@ -194,12 +194,8 @@ public abstract class GeoEntityRenderer<T extends LivingEntity & IAnimatable> ex
         RenderType renderType = getRenderType(animatable, partialTick, poseStack, bufferSource, null, packedLight,
                 getTextureLocation(animatable));
         if (Minecraft.getInstance().player != null && !animatable.isInvisibleTo(Minecraft.getInstance().player)) {
-            VertexConsumer glintBuffer = bufferSource.getBuffer(RenderType.entityGlintDirect());
-            VertexConsumer translucentBuffer = bufferSource
-                    .getBuffer(RenderType.entityTranslucentCull(getTextureLocation(animatable)));
-            render(model, animatable, partialTick, renderType, poseStack, bufferSource,
-                    glintBuffer != translucentBuffer ? VertexMultiConsumer.create(glintBuffer, translucentBuffer)
-                            : null,
+            VertexConsumer translucentBuffer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(animatable)));
+            render(model, animatable, partialTick, renderType, poseStack, bufferSource, translucentBuffer,
                     packedLight, getOverlay(animatable, 0), renderColor.getRed() / 255f,
                     renderColor.getGreen() / 255f, renderColor.getBlue() / 255f,
                     renderColor.getAlpha() / 255f);

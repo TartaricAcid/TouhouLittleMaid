@@ -69,9 +69,21 @@ public class MenuIntegration {
                 .setSaveConsumer(s -> MaidConfig.MAID_NTR_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
 
 
-        maid.addEntry(entryBuilder.startIntSlider(new TranslatableComponent("config.touhou_little_maid.maid.maid_home_range.name"), MaidConfig.MAID_HOME_RANGE.get(), 3, 64)
-                .setDefaultValue(8).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_home_range.desc"))
-                .setSaveConsumer(i -> MaidConfig.MAID_HOME_RANGE.set(i)).build());
+        maid.addEntry(entryBuilder.startIntSlider(new TranslatableComponent("config.touhou_little_maid.maid.maid_work_range.name"), MaidConfig.MAID_WORK_RANGE.get(), 3, 64)
+                .setDefaultValue(12).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_work_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_WORK_RANGE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntSlider(new TranslatableComponent("config.touhou_little_maid.maid.maid_idle_range.name"), MaidConfig.MAID_IDLE_RANGE.get(), 3, 32)
+                .setDefaultValue(6).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_idle_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_IDLE_RANGE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntSlider(new TranslatableComponent("config.touhou_little_maid.maid.maid_sleep_range.name"), MaidConfig.MAID_SLEEP_RANGE.get(), 3, 32)
+                .setDefaultValue(6).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_sleep_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_SLEEP_RANGE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntSlider(new TranslatableComponent("config.touhou_little_maid.maid.maid_non_home_range.name"), MaidConfig.MAID_NON_HOME_RANGE.get(), 3, 32)
+                .setDefaultValue(8).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_non_home_range.desc"))
+                .setSaveConsumer(i -> MaidConfig.MAID_NON_HOME_RANGE.set(i)).build());
 
 
         maid.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.maid.maid_change_model.name"), MaidConfig.MAID_CHANGE_MODEL.get())
@@ -118,7 +130,13 @@ public class MenuIntegration {
                 .setDefaultValue(70).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_spawn_probability.desc"))
                 .setSaveConsumer(d -> MiscConfig.MAID_FAIRY_SPAWN_PROBABILITY.set(d)).build());
-        
+
+
+        misc.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.name"), (List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.get())
+                .setDefaultValue(Lists.newArrayList(NETHER.getName(), THEEND.getName(), NONE.getName(), MUSHROOM.getName()))
+                .setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.desc"))
+                .setSaveConsumer(l -> MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.set(l)).build());
+
 
         misc.addEntry(entryBuilder.startDoubleField(new TranslatableComponent("config.touhou_little_maid.misc.player_death_loss_power_point.name"), MiscConfig.PLAYER_DEATH_LOSS_POWER_POINT.get())
                 .setDefaultValue(1.0).setMin(0).setMax(5)

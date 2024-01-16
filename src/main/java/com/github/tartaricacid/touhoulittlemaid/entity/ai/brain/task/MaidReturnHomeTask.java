@@ -13,10 +13,9 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import java.util.Random;
 
 public class MaidReturnHomeTask extends MaidCheckRateTask {
-    private static final int MAX_DELAY_TIME = 100;
+    private static final int MAX_DELAY_TIME = 200;
     private static final int TOO_CLOSED_RANGE = 3;
     private static final int MAX_TELEPORT_ATTEMPTS_TIMES = 10;
-    private static final int MIN_TELEPORT_DISTANCE = 12;
     private final float walkSpeed;
 
     public MaidReturnHomeTask(float walkSpeed) {
@@ -33,7 +32,8 @@ public class MaidReturnHomeTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         double distanceSqr = maid.getRestrictCenter().distSqr(maid.blockPosition());
-        if (distanceSqr > (MIN_TELEPORT_DISTANCE * MIN_TELEPORT_DISTANCE)) {
+        int minTeleportDistance = (int) maid.getRestrictRadius() + 4;
+        if (distanceSqr > (minTeleportDistance * minTeleportDistance)) {
             teleportToPos(maid);
         } else {
             BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), walkSpeed, 1);
@@ -68,6 +68,7 @@ public class MaidReturnHomeTask extends MaidCheckRateTask {
 
     private boolean canTeleportTo(EntityMaid maid, BlockPos pos) {
         BlockPathTypes pathNodeType = WalkNodeEvaluator.getBlockPathTypeStatic(maid.level, pos.mutable());
+        // Fixme: 水面也可以传送?
         if (pathNodeType == BlockPathTypes.WALKABLE) {
             BlockPos blockPos = pos.subtract(maid.blockPosition());
             return maid.level.noCollision(maid, maid.getBoundingBox().move(blockPos));

@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "spotlight",
-      "item": "touhou_little_maid:crafting_table_backpack,touhou_little_maid:ender_chest_backpack,touhou_little_maid:furnace_backpack",
+      "item": "touhou_little_maid:crafting_table_backpack,touhou_little_maid:ender_chest_backpack,touhou_little_maid:furnace_backpack,touhou_little_maid:tank_backpack",
       "text": "patchouli.touhou_little_maid.book.entries.maid.other_backpack.pages.0.text"
     },
     {

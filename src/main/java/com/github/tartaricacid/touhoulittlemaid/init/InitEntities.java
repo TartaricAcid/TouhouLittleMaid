@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.sensor.MaidHostilesSensor;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.sensor.MaidNearestLivingEntitySensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.sensor.MaidPickupEntitiesSensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
@@ -57,6 +58,7 @@ public final class InitEntities {
 
     public static RegistryObject<MemoryModuleType<List<Entity>>> VISIBLE_PICKUP_ENTITIES = MEMORY_MODULE_TYPES.register("visible_pickup_entities", () -> new MemoryModuleType<>(Optional.empty()));
     public static RegistryObject<MemoryModuleType<PositionTracker>> TARGET_POS = MEMORY_MODULE_TYPES.register("target_pos", () -> new MemoryModuleType<>(Optional.empty()));
+    public static RegistryObject<SensorType<MaidNearestLivingEntitySensor>> MAID_NEAREST_LIVING_ENTITY_SENSOR = SENSOR_TYPES.register("maid_nearest_living_entity", () -> new SensorType<>(MaidNearestLivingEntitySensor::new));
     public static RegistryObject<SensorType<MaidHostilesSensor>> MAID_HOSTILES_SENSOR = SENSOR_TYPES.register("maid_hostiles", () -> new SensorType<>(MaidHostilesSensor::new));
     public static RegistryObject<SensorType<MaidPickupEntitiesSensor>> MAID_PICKUP_ENTITIES_SENSOR = SENSOR_TYPES.register("maid_pickup_entities", () -> new SensorType<>(MaidPickupEntitiesSensor::new));
     public static RegistryObject<Schedule> MAID_DAY_SHIFT_SCHEDULES = SCHEDULES.register("maid_day_shift_schedules",
@@ -88,7 +90,7 @@ public final class InitEntities {
 
     @SubscribeEvent
     public static void addEntityAttributeEvent(EntityAttributeCreationEvent event) {
-        event.put(EntityMaid.TYPE, Monster.createMonsterAttributes().build());
+        event.put(EntityMaid.TYPE, EntityMaid.createAttributes().build());
         event.put(EntityChair.TYPE, LivingEntity.createLivingAttributes().build());
         event.put(EntityFairy.TYPE, EntityFairy.createFairyAttributes().build());
     }

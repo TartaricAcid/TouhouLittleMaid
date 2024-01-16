@@ -38,6 +38,6 @@ public class TaskShears implements IMaidTask {
 
     @Override
     public List<Pair<Integer, Behavior<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(5, new MaidShearTask(8, 0.6f)));
+        return Lists.newArrayList(Pair.of(5, new MaidShearTask(0.6f)));
     }
 }

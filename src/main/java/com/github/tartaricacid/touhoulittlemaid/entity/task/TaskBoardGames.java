@@ -2,8 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFindGomokuTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidSitJoyTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidGomokuTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -39,8 +38,7 @@ public class TaskBoardGames implements IMaidTask {
 
     @Override
     public List<Pair<Integer, Behavior<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        Pair<Integer, Behavior<? super EntityMaid>> findGomoku = Pair.of(5, new MaidFindGomokuTask(0.6f, 12));
-        Pair<Integer, Behavior<? super EntityMaid>> sitGomoku = Pair.of(6, new MaidSitJoyTask());
-        return Lists.newArrayList(findGomoku, sitGomoku);
+        Pair<Integer, Behavior<? super EntityMaid>> gomoku = Pair.of(5, new MaidGomokuTask(0.6f, 2));
+        return Lists.newArrayList(gomoku);
     }
 }

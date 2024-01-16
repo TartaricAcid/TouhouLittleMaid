@@ -9,11 +9,12 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,10 +41,10 @@ public class TaskAttack implements IAttackTask {
 
     @Override
     public List<Pair<Integer, Behavior<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        RunIf<EntityMaid> supplementedTask = new RunIf<>(this::hasSword,
+        RunIf<EntityMaid> supplementedTask = new RunIf<>(this::hasAssaultWeapon,
                 new StartAttacking<>(IAttackTask::findFirstValidAttackTarget));
         StopAttackingIfTargetInvalid<EntityMaid> findTargetTask = new StopAttackingIfTargetInvalid<>(
-                (target) -> !hasSword(maid) || farAway(target, maid));
+                (target) -> !hasAssaultWeapon(maid) || farAway(target, maid));
         SetWalkTargetFromAttackTargetIfTargetOutOfReach moveToTargetTask = new SetWalkTargetFromAttackTargetIfTargetOutOfReach(0.6f);
         MeleeAttack attackTargetTask = new MeleeAttack(20);
 
@@ -57,11 +58,11 @@ public class TaskAttack implements IAttackTask {
 
     @Override
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
-        return Collections.singletonList(Pair.of("has_sword", this::hasSword));
+        return Collections.singletonList(Pair.of("assault_weapon", this::hasAssaultWeapon));
     }
 
-    private boolean hasSword(EntityMaid maid) {
-        return maid.getMainHandItem().getItem() instanceof SwordItem;
+    private boolean hasAssaultWeapon(EntityMaid maid) {
+        return maid.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE);
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {

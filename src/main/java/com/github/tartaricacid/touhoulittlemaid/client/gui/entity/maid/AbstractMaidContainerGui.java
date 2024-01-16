@@ -2,8 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
-import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
@@ -11,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTab
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -182,6 +181,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(taskSwitch, poseStack, x, y, "gui.touhou_little_maid.task.switch");
         renderMaidInfo(poseStack, x, y);
         renderScheduleInfo(poseStack, x, y);
+        renderTaskButtonInfo(poseStack, x, y);
     }
 
     @Override
@@ -257,8 +257,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             desc.add(new TextComponent("\u0020"));
             desc.add(new TranslatableComponent("task.touhou_little_maid.desc.condition").withStyle(ChatFormatting.GOLD));
         }
-        TextComponent prefix = new TextComponent("-\u0020");
         for (Pair<String, Predicate<EntityMaid>> line : conditions) {
+            MutableComponent prefix = new TextComponent("-\u0020");
             String key = String.format("task.%s.%s.condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
             TranslatableComponent condition = new TranslatableComponent(key);
             if (line.getSecond().test(maid)) {
@@ -330,17 +330,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void addDownloadButton() {
         modelDownload = new ImageButton(leftPos + 20, topPos + 230, 41, 20, 0, 86, 20, BUTTON,
-                (b) -> {
-                    List<DownloadInfo> downloadInfoList;
-                    int page = ModelDownloadGui.getCurrentPage();
-                    if (page == 0) {
-                        downloadInfoList = InfoGetManager.DOWNLOAD_INFO_LIST_ALL;
-                    } else {
-                        DownloadInfo.TypeEnum typeEnum = DownloadInfo.TypeEnum.getTypeByIndex(page - 1);
-                        downloadInfoList = InfoGetManager.getTypedDownloadInfoList(typeEnum);
-                    }
-                    Minecraft.getInstance().setScreen(new ModelDownloadGui(downloadInfoList));
-                });
+                (b) -> Minecraft.getInstance().setScreen(new ModelDownloadGui()));
         this.addRenderableWidget(modelDownload);
     }
 
@@ -396,9 +386,21 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                     .append(new TranslatableComponent("tooltips.touhou_little_maid.info.favorability")
                             .append(":\u0020").withStyle(ChatFormatting.AQUA))
                     .append(String.valueOf(maid.getFavorability())));
+            list.add(new TextComponent(prefix).withStyle(ChatFormatting.WHITE)
+                    .append(new TranslatableComponent("block.touhou_little_maid.gomoku")
+                            .append(":\u0020").withStyle(ChatFormatting.AQUA))
+                    .append(new TranslatableComponent("tooltips.touhou_little_maid.info.game_skill.gomoku", MaidGomokuAI.getMaidCount(maid), MaidGomokuAI.getRank(maid))));
 
             renderComponentTooltip(poseStack, list, mouseX, mouseY);
         }
+    }
+
+    private void renderTaskButtonInfo(PoseStack poseStack, int x, int y) {
+        this.renderables.stream().filter(b -> b instanceof TaskButton).forEach(b -> {
+            if (((TaskButton) b).isHoveredOrFocused()) {
+                ((TaskButton) b).renderToolTip(poseStack, x, y);
+            }
+        });
     }
 
     private void renderScheduleInfo(PoseStack poseStack, int mouseX, int mouseY) {

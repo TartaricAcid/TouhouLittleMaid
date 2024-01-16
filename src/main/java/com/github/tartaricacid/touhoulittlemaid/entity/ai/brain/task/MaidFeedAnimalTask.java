@@ -15,15 +15,13 @@ import net.minecraft.world.item.ItemStack;
 
 public class MaidFeedAnimalTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
-    private final int maxDistToWalk;
     private final float speedModifier;
     private final int maxAnimalCount;
     private Animal feedEntity = null;
 
-    public MaidFeedAnimalTask(int maxDistToWalk, float speedModifier, int maxAnimalCount) {
+    public MaidFeedAnimalTask(float speedModifier, int maxAnimalCount) {
         super(ImmutableMap.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.maxDistToWalk = maxDistToWalk;
         this.speedModifier = speedModifier;
         this.maxAnimalCount = maxAnimalCount;
         this.setMaxCheckRate(MAX_DELAY_TIME);
@@ -32,7 +30,7 @@ public class MaidFeedAnimalTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         feedEntity = null;
-
+        int maxDistToWalk = (int) maid.getRestrictRadius();
         long animalCount = this.getEntities(maid)
                 .find(e -> e.closerThan(maid, maxDistToWalk))
                 .filter(e -> maid.isWithinRestriction(e.blockPosition()))

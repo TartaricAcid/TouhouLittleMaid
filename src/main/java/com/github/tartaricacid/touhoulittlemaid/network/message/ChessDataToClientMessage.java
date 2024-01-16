@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -18,11 +18,13 @@ public class ChessDataToClientMessage {
     private final BlockPos pos;
     private final int[][] chessData;
     private final Point point;
+    private final int count;
 
-    public ChessDataToClientMessage(BlockPos pos, int[][] chessData, Point point) {
+    public ChessDataToClientMessage(BlockPos pos, int[][] chessData, Point point, int count) {
         this.pos = pos;
         this.chessData = chessData;
         this.point = point;
+        this.count = count;
     }
 
     public static void encode(ChessDataToClientMessage message, FriendlyByteBuf buf) {
@@ -34,6 +36,7 @@ public class ChessDataToClientMessage {
         buf.writeVarInt(message.point.x);
         buf.writeVarInt(message.point.y);
         buf.writeVarInt(message.point.type);
+        buf.writeVarInt(message.count);
     }
 
     public static ChessDataToClientMessage decode(FriendlyByteBuf buf) {
@@ -44,7 +47,8 @@ public class ChessDataToClientMessage {
             chessData[i] = buf.readVarIntArray();
         }
         Point pointIn = new Point(buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
-        return new ChessDataToClientMessage(blockPos, chessData, pointIn);
+        int count = buf.readVarInt();
+        return new ChessDataToClientMessage(blockPos, chessData, pointIn, count);
     }
 
     public static void handle(ChessDataToClientMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -57,7 +61,7 @@ public class ChessDataToClientMessage {
 
     @OnlyIn(Dist.CLIENT)
     private static void onHandle(ChessDataToClientMessage message) {
-        Point aiPoint = TouhouLittleMaid.SERVICE.getPoint(message.chessData, message.point);
+        Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(message.chessData, message.point);
         int time = (int) (Math.random() * 1250) + 250;
         try {
             Thread.sleep(time);

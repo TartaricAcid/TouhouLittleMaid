@@ -88,15 +88,15 @@ public class ItemFoxScroll extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
-        if (stack.getItem() == InitItems.RED_FOX_SCROLL.get()) {
-            components.add(new TranslatableComponent("tooltips.touhou_little_maid.fox_scroll.red").withStyle(ChatFormatting.GRAY));
-        } else if (stack.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
-            components.add(new TranslatableComponent("tooltips.touhou_little_maid.fox_scroll.white").withStyle(ChatFormatting.GRAY));
-        }
         Pair<String, BlockPos> info = getTrackInfo(stack);
         if (info != null) {
             components.add(new TranslatableComponent("tooltips.touhou_little_maid.fox_scroll.dimension", info.getLeft()).withStyle(ChatFormatting.GRAY));
             components.add(new TranslatableComponent("tooltips.touhou_little_maid.fox_scroll.position", info.getRight().toShortString()).withStyle(ChatFormatting.GRAY));
+        }
+        if (stack.getItem() == InitItems.RED_FOX_SCROLL.get()) {
+            components.add(new TranslatableComponent("tooltips.touhou_little_maid.fox_scroll.red").withStyle(ChatFormatting.GRAY));
+        } else if (stack.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
+            components.add(new TranslatableComponent("tooltips.touhou_little_maid.fox_scroll.white").withStyle(ChatFormatting.GRAY));
         }
         super.appendHoverText(stack, pLevel, components, pIsAdvanced);
     }

@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class FlatColorButton extends Button {
-    private boolean isSelect = false;
+    protected boolean isSelect = false;
     private List<Component> tooltips;
 
     public FlatColorButton(int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress pOnPress) {
