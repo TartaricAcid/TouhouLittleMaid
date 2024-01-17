@@ -188,6 +188,8 @@
   "gui.touhou_little_maid.resources_download.hot_search_key": "Klee, Stelle, Lamu, Arisu, Suzuran, Nahida, Frieren, Nagato, Elaina, Cheshire, Honkai, Nyaruko, Fate",
   "gui.touhou_little_maid.resources_download.need_reload.title": "§6§nReload Warning",
   "gui.touhou_little_maid.resources_download.need_reload.subtitle": "Use §4§o/tlm pack reload§r command to reload package!",
+  "gui.touhou_little_maid.resources_download.state.downloading": "Downloading %s file...",
+  "gui.touhou_little_maid.resources_download.state.downloaded": "Downloaded %s file, Time taken: %.3fs",
   "gui.touhou_little_maid.model_gui.easter_egg.encrypt": "This is an encrypted named easter egg model",
   "gui.touhou_little_maid.model_gui.easter_egg.normal": "This is a normal named easter egg model",
   "gui.touhou_little_maid.maid_config.sound_frequency": "Maid Sound Freq",

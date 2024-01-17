@@ -5,12 +5,16 @@ import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInf
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.language.ClientLanguage;
 import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -22,6 +26,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,6 +43,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author TartaricAcid
@@ -175,22 +181,38 @@ public class InfoGetManager {
                 File fileInTlmModel = CustomPackLoader.PACK_FOLDER.resolve(info.getFileName()).toFile();
                 File fileInCache = PACK_FOLDER.resolve(info.getFileName()).toFile();
                 if (!fileInCache.isFile() || FileUtils.checksumCRC32(fileInCache) != info.getChecksum()) {
-                    TouhouLittleMaid.LOGGER.info("Downloading {} file...", info.getFileName());
+                    sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloading", info.getFileName()));
+                    StopWatch stopWatch = StopWatch.createStarted();
                     FileUtils.copyURLToFile(url, fileInCache, 60_000, 60_000);
-                    TouhouLittleMaid.LOGGER.info("Downloaded {} file", info.getFileName());
+                    stopWatch.stop();
+                    sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloaded",
+                            info.getFileName(), stopWatch.getTime(TimeUnit.MILLISECONDS) / 1000.0));
                 } else {
-                    TouhouLittleMaid.LOGGER.info("file {} existed in cache folder", info.getFileName());
+                    sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloaded",
+                            info.getFileName(), 0.943));
                 }
-                Files.copy(fileInCache.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                CustomPackLoader.readModelFromZipFile(fileInTlmModel);
-                ServerCustomPackLoader.reloadPacks();
-                info.setStatus(DownloadStatus.DOWNLOADED);
+                if (ZipFileCheck.isZipFile(fileInCache)) {
+                    Files.copy(fileInCache.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    CustomPackLoader.readModelFromZipFile(fileInTlmModel);
+                    ServerCustomPackLoader.reloadPacks();
+                    info.setStatus(DownloadStatus.DOWNLOADED);
+                } else {
+                    info.setStatus(DownloadStatus.NOT_DOWNLOAD);
+                    TouhouLittleMaid.LOGGER.error("{} file is corrupt and cannot be loaded.", info.getFileName());
+                }
             } catch (IOException e) {
                 info.setStatus(DownloadStatus.NOT_DOWNLOAD);
                 e.printStackTrace();
             }
         }, String.format("Download-Resources-Pack-File-%s", info.getName()));
         thread.start();
+    }
+
+    private static void sendDownloadMessage(MutableComponent component) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            player.sendSystemMessage(component);
+        }
     }
 
     public static List<DownloadInfo> getTypedDownloadInfoList(DownloadInfo.TypeEnum typeEnum) {
