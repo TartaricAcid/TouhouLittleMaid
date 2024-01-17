@@ -80,6 +80,10 @@ public class MenuIntegration {
                 .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_change_model.desc"))
                 .setSaveConsumer(MaidConfig.MAID_CHANGE_MODEL::set).build());
 
+        maid.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.maid.maid_gomoku_owner_limit.name"), MaidConfig.MAID_GOMOKU_OWNER_LIMIT.get())
+                .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_gomoku_owner_limit.desc"))
+                .setSaveConsumer(MaidConfig.MAID_GOMOKU_OWNER_LIMIT::set).build());
+
         maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.owner_max_maid_num.name"), MaidConfig.OWNER_MAX_MAID_NUM.get())
                 .setDefaultValue(Integer.MAX_VALUE).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.owner_max_maid_num.desc"))

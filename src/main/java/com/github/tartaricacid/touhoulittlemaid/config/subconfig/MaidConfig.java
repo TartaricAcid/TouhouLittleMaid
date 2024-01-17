@@ -15,6 +15,7 @@ public final class MaidConfig {
     public static ForgeConfigSpec.IntValue MAID_SLEEP_RANGE;
     public static ForgeConfigSpec.IntValue MAID_NON_HOME_RANGE;
     public static ForgeConfigSpec.BooleanValue MAID_CHANGE_MODEL;
+    public static ForgeConfigSpec.BooleanValue MAID_GOMOKU_OWNER_LIMIT;
     public static ForgeConfigSpec.IntValue OWNER_MAX_MAID_NUM;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_RANGED_ATTACK_IGNORE;
 
@@ -44,6 +45,9 @@ public final class MaidConfig {
 
         builder.comment("Maid can switch models freely");
         MAID_CHANGE_MODEL = builder.define("MaidChangeModel", true);
+
+        builder.comment("Maid can only play gomoku with her owner");
+        MAID_GOMOKU_OWNER_LIMIT = builder.define("MaidGomokuOwnerLimit", true);
 
         builder.comment("The maximum number of maids the player own");
         OWNER_MAX_MAID_NUM = builder.defineInRange("OwnerMaxMaidNum", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);

@@ -273,6 +273,8 @@
   "config.touhou_little_maid.maid.owner_max_maid_num.desc": "The maximum number of maids the player own",
   "config.touhou_little_maid.maid.maid_ranged_attack_ignore.name": "Maid Ranged Attack Ignore",
   "config.touhou_little_maid.maid.maid_ranged_attack_ignore.desc": "The entity that the maid will not hurt when in ranged attack",
+  "config.touhou_little_maid.maid.maid_gomoku_owner_limit.name": "Maid Gomoku Owner Limit",
+  "config.touhou_little_maid.maid.maid_gomoku_owner_limit.desc": "Maid can only play gomoku with her owner",
   "config.touhou_little_maid.chair.chair_change_model.name": "Chair Change Model",
   "config.touhou_little_maid.chair.chair_change_model.desc": "Chair can switch models freely",
   "config.touhou_little_maid.chair.chair_can_destroyed_by_anyone.name": "Chair Can Destroyed by Anyone",
