@@ -65,6 +65,8 @@ public class InfoGetManager {
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_CHAIR = Lists.newArrayList();
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_SOUND = Lists.newArrayList();
 
+    public static Statue STATUE = Statue.FIRST;
+
     public static void checkInfoJsonFile() {
         if (!ROOT_FOLDER.toFile().isDirectory()) {
             try {
@@ -107,10 +109,12 @@ public class InfoGetManager {
                     String md5Remote = IOUtils.toString(new URL(INFO_JSON_MD5_URL), StandardCharsets.UTF_8);
                     if (md5Remote.equals(md5)) {
                         TouhouLittleMaid.LOGGER.info("info.json file no update required");
+                        STATUE = Statue.NOT_UPDATE;
                     } else {
                         TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
                         FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
                         TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
+                        STATUE = Statue.UPDATE;
                     }
                 } else {
                     TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
@@ -225,5 +229,9 @@ public class InfoGetManager {
             case MAID:
                 return DOWNLOAD_INFO_LIST_MAID;
         }
+    }
+
+    public enum Statue {
+        FIRST, UPDATE, NOT_UPDATE
     }
 }

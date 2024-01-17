@@ -133,6 +133,8 @@
   "gui.touhou_little_maid.button.maid_riding_set.false": "Entity Riding Is Disable",
   "gui.touhou_little_maid.button.maid_riding_set.desc": "§7Click this button to set whether the maid will ride on other entities",
   "gui.touhou_little_maid.button.model_download": "Open Model Pack Download GUI",
+  "gui.touhou_little_maid.button.model_download.statue.first": "Click here to download more models and sounds!",
+  "gui.touhou_little_maid.button.model_download.statue.update": "There are some new models and sounds!",
   "gui.touhou_little_maid.name_tag.edit_box": "Name Tag Edit Box",
   "gui.touhou_little_maid.tag.always_show": "Whether to always show the name",
   "gui.touhou_little_maid.wireless_io.filter_mode": "Switch Filter Mode",

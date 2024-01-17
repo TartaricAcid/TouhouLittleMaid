@@ -2,9 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidDownloadButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
@@ -24,7 +24,6 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.StateSwitchingButton;
@@ -66,7 +65,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private ImageButton pageUp;
     private ImageButton pageClose;
     private ImageButton taskSwitch;
-    private ImageButton modelDownload;
+    private MaidDownloadButton modelDownload;
     private ScheduleButton<T> scheduleButton;
     private boolean taskListOpen;
     private int counterTime = 0;
@@ -178,6 +177,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderMaidInfo(graphics, x, y);
         renderScheduleInfo(graphics, x, y);
         renderTaskButtonInfo(graphics, x, y);
+        modelDownload.renderExtraTips(graphics);
     }
 
     @Override
@@ -325,8 +325,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addDownloadButton() {
-        modelDownload = new ImageButton(leftPos + 20, topPos + 230, 41, 20, 0, 86, 20, BUTTON,
-                (b) -> Minecraft.getInstance().setScreen(new ModelDownloadGui()));
+        modelDownload = new MaidDownloadButton(leftPos + 20, topPos + 230, BUTTON);
         this.addRenderableWidget(modelDownload);
     }
 

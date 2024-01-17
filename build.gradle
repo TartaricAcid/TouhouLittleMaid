@@ -130,6 +130,12 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
+    compileOnly fg.deobf("org.violetmoon.zeta:Zeta:1.0-beta-4.37")
+    runtimeOnly fg.deobf("org.violetmoon.zeta:Zeta:1.0-beta-4.37")
+
+    compileOnly fg.deobf("org.violetmoon.quark:Quark:4.0-beta-431.3235")
+    runtimeOnly fg.deobf("org.violetmoon.quark:Quark:4.0-beta-431.3235")
+
     implementation fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
