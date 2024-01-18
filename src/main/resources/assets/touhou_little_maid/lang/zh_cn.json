@@ -350,7 +350,6 @@
   "task.touhou_little_maid.milk.condition.has_bucket": "背包内有桶",
   "task.touhou_little_maid.torch.desc": "女仆会主动在周围暗处放置火把",
   "task.touhou_little_maid.torch.condition.has_torch": "背包内有火把",
-  "task.touhou_little_maid.feed_animal.desc": "女仆会主动繁殖周围的动物",
   "task.touhou_little_maid.extinguishing.desc": "女仆会主动扑灭周围的火",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "主手持有灭火器",
   "task.touhou_little_maid.board_games.desc": "女仆会寻找周围的五子棋盘",
