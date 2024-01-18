@@ -14,6 +14,7 @@ public final class MaidConfig {
     public static ForgeConfigSpec.IntValue MAID_IDLE_RANGE;
     public static ForgeConfigSpec.IntValue MAID_SLEEP_RANGE;
     public static ForgeConfigSpec.IntValue MAID_NON_HOME_RANGE;
+    public static ForgeConfigSpec.IntValue FEED_ANIMAL_MAX_NUMBER;
     public static ForgeConfigSpec.BooleanValue MAID_CHANGE_MODEL;
     public static ForgeConfigSpec.BooleanValue MAID_GOMOKU_OWNER_LIMIT;
     public static ForgeConfigSpec.IntValue OWNER_MAX_MAID_NUM;
@@ -42,6 +43,9 @@ public final class MaidConfig {
 
         builder.comment("The max range of maid's Non-Home mode");
         MAID_NON_HOME_RANGE = builder.defineInRange("MaidNonHomeRange", 8, 3, 32);
+
+        builder.comment("The max number of animals around when the maid breeds animals");
+        FEED_ANIMAL_MAX_NUMBER = builder.defineInRange("FeedAnimalMaxNumber", 50, 6, 65536);
 
         builder.comment("Maid can switch models freely");
         MAID_CHANGE_MODEL = builder.define("MaidChangeModel", true);

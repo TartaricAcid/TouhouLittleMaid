@@ -76,6 +76,10 @@ public class MenuIntegration {
                 .setDefaultValue(8).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_non_home_range.desc"))
                 .setSaveConsumer(i -> MaidConfig.MAID_NON_HOME_RANGE.set(i)).build());
 
+        maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.feed_animal_max_number.name"), MaidConfig.FEED_ANIMAL_MAX_NUMBER.get())
+                .setMin(6).setMax(65536).setDefaultValue(50).setTooltip(Component.translatable("config.touhou_little_maid.maid.feed_animal_max_number.desc"))
+                .setSaveConsumer(i -> MaidConfig.FEED_ANIMAL_MAX_NUMBER.set(i)).build());
+
         maid.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.maid.maid_change_model.name"), MaidConfig.MAID_CHANGE_MODEL.get())
                 .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_change_model.desc"))
                 .setSaveConsumer(MaidConfig.MAID_CHANGE_MODEL::set).build());

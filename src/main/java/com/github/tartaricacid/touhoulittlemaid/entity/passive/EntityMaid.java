@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
@@ -81,7 +82,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -741,36 +741,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        if (this.getOwner() instanceof Player player) {
-            LivingEntity lastHurtByMob = player.getLastHurtByMob();
-            if (target.equals(lastHurtByMob) && checkCanAttackEntity(lastHurtByMob)) {
-                return true;
-            }
-            LivingEntity lastHurtMob = player.getLastHurtMob();
-            if (target.equals(lastHurtMob) && checkCanAttackEntity(lastHurtMob)) {
+        if (this.getTask() instanceof IAttackTask attackTask) {
+            if (attackTask.canAttack(this, target)) {
                 return true;
             }
         }
-        LivingEntity maidLastHurtByMob = this.getLastHurtByMob();
-        if (target.equals(maidLastHurtByMob) && checkCanAttackEntity(maidLastHurtByMob)) {
-            return true;
-        }
-        if (target instanceof Enemy) {
-            return super.canAttack(target);
-        }
-        return false;
-    }
-
-    private boolean checkCanAttackEntity(LivingEntity target) {
-        // 不能攻击玩家
-        if (target instanceof Player) {
-            return false;
-        }
-        // 有主的宠物也不攻击
-        if (target instanceof TamableAnimal tamableAnimal) {
-            return tamableAnimal.getOwnerUUID() == null;
-        }
-        return true;
+        return super.canAttack(target);
     }
 
     public void sendItemBreakMessage(ItemStack stack) {
