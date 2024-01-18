@@ -27,6 +27,9 @@ public class InGameMaidConfig {
     @SerializedName("show_backpack")
     private boolean showBackpack = true;
 
+    @SerializedName("show_back_item")
+    private boolean showBackItem = true;
+
     public static void read() {
         if (CONFIG_FILE.isFile()) {
             try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(CONFIG_FILE.toPath()), StandardCharsets.UTF_8)) {
@@ -69,5 +72,13 @@ public class InGameMaidConfig {
 
     public void setShowBackpack(boolean showBackpack) {
         this.showBackpack = showBackpack;
+    }
+
+    public boolean isShowBackItem() {
+        return showBackItem;
+    }
+
+    public void setShowBackItem(boolean showBackItem) {
+        this.showBackItem = showBackItem;
     }
 }

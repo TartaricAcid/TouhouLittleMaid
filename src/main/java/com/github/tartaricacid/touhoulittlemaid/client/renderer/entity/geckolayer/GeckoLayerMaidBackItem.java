@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEnti
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
@@ -33,14 +34,18 @@ public class GeckoLayerMaidBackItem<T extends LivingEntity & IAnimatable> extend
         if (entityLivingBaseIn instanceof EntityMaid maid) {
             ItemStack stack = maid.getBackpackShowItem();
             if (stack.getItem() instanceof Vanishable) {
-                if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+                if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible()) {
                     return;
                 }
                 matrixStack.pushPose();
                 matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
                 matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
                 matrixStack.translate(0, 0.5, -0.25);
-                maid.getMaidBackpackType().offsetBackpackItem(matrixStack);
+                if (InGameMaidConfig.INSTANCE.isShowBackpack()) {
+                    maid.getMaidBackpackType().offsetBackpackItem(matrixStack);
+                } else {
+                    BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);
+                }
                 if (SlashBladeCompat.isSlashBladeItem(stack)) {
                     SlashBladeRender.renderGeckoMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
                 } else {

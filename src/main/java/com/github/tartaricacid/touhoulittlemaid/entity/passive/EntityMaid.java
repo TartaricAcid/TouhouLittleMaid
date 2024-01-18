@@ -20,6 +20,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidScriptBookManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
@@ -181,6 +182,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
     private final FavorabilityManager favorabilityManager;
+    private final MaidScriptBookManager scriptBookManager;
     private final SchedulePos schedulePos;
 
     public boolean guiOpening = false;
@@ -199,6 +201,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.favorabilityManager = new FavorabilityManager(this);
+        this.scriptBookManager = new MaidScriptBookManager();
         this.schedulePos = new SchedulePos(BlockPos.ZERO, world.dimension().location());
     }
 
@@ -858,6 +861,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
         compound.put(GAME_SKILL_TAG, getGameSkill());
         this.favorabilityManager.addAdditionalSaveData(compound);
+        this.scriptBookManager.addAdditionalSaveData(compound);
         this.schedulePos.save(compound);
         if (this.backpackData != null) {
             CompoundTag tag = new CompoundTag();
@@ -947,6 +951,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             }
         }
         this.favorabilityManager.readAdditionalSaveData(compound);
+        this.scriptBookManager.readAdditionalSaveData(compound);
         this.schedulePos.load(compound, this);
         this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
     }
@@ -1276,6 +1281,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     public int getChatBubbleCount() {
         return ChatBubbleManger.getChatBubbleCount(this);
+    }
+
+    public MaidScriptBookManager getScriptBookManager() {
+        return scriptBookManager;
     }
 
     public boolean isPickup() {

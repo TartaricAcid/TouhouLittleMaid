@@ -7,7 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class MaidChatBubbles {
     public static final Pair<Long, ChatText> EMPTY = Pair.of(-1L, ChatText.EMPTY_CHAT_TEXT);
     public static final MaidChatBubbles DEFAULT = new MaidChatBubbles(EMPTY, EMPTY, EMPTY);
-    public static final EntityDataSerializer<MaidChatBubbles> DATA = new EntityDataSerializer<MaidChatBubbles>() {
+    public static final EntityDataSerializer<MaidChatBubbles> DATA = new EntityDataSerializer<>() {
         @Override
         public void write(FriendlyByteBuf buf, MaidChatBubbles value) {
             buf.writeLong(value.getBubble1().getLeft());

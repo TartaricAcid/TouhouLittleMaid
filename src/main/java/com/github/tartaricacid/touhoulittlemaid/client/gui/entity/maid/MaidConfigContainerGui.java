@@ -48,9 +48,20 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         };
         showBackpack.initTextureValues(22, 0, -22, 0, ICON);
 
+        StateSwitchingButton showBackItem = new StateSwitchingButton(left + 10, top + 10 + 24 * 2, 22, 22, INSTANCE.isShowBackItem()) {
+            @Override
+            public void onClick(double mouseX, double mouseY) {
+                this.isStateTriggered = !this.isStateTriggered;
+                INSTANCE.setShowBackItem(this.isStateTriggered);
+                InGameMaidConfig.save();
+            }
+        };
+        showBackItem.initTextureValues(22, 0, -22, 0, ICON);
+
         this.addRenderableWidget(showChatBubble);
         this.addRenderableWidget(showBackpack);
-        this.addRenderableWidget(new MaidSoundFreqButton(left + 10, top + 15 + 24 * 2));
+        this.addRenderableWidget(showBackItem);
+        this.addRenderableWidget(new MaidSoundFreqButton(left + 10, top + 15 + 24 * 3));
     }
 
     @Override
@@ -58,6 +69,7 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         super.renderBg(graphics, partialTicks, x, y);
         graphics.drawString(font, Component.translatable("gui.touhou_little_maid.maid_config.show_chat_bubble"), left + 38, top + 17, 0x333333, false);
         graphics.drawString(font, Component.translatable("gui.touhou_little_maid.maid_config.show_backpack"), left + 38, top + 17 + 24, 0x333333, false);
+        graphics.drawString(font, Component.translatable("gui.touhou_little_maid.maid_config.show_back_item"), left + 38, top + 17 + 24 * 2, 0x333333, false);
     }
 
     @Override

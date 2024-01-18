@@ -44,7 +44,7 @@ public class GeckoLayerMaidBanner<T extends LivingEntity & IAnimatable> extends 
     @Override
     public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (livingEntity instanceof EntityMaid maid && maid.getBackpackShowItem().getItem() instanceof BannerItem bannerItem) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible()) {
                 return;
             }
             GeoModel geoModel = this.entityRenderer.getGeoModel();
