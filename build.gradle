@@ -152,6 +152,10 @@ dependencies {
 
     implementation fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
 
+    implementation "curse.maven:kotlin-for-forge-351264:4983659"
+    implementation fg.deobf("curse.maven:libipn-679177:4870127")
+    implementation fg.deobf("curse.maven:inventory-profiles-next-495267:4813458")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
