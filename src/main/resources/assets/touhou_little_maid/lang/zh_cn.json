@@ -243,7 +243,6 @@
   "message.touhou_little_maid.kappa_compass.usage.clear_pos": "§6- §bShift 右击方块清除坐标",
   "message.touhou_little_maid.kappa_compass.usage.write_pos_to_maid": "§d- §2右击女仆写入坐标",
   "message.touhou_little_maid.kappa_compass.usage.clear_maid_pos": "§d- §2Shift 右击女仆清除坐标",
-  "message.touhou_little_maid.check_schedule_pos.too_far": "距离女仆划定的区域过远",
   "commands.touhou_little_maid.pack.reload.info": "所有的模型包已经重载！",
   "commands.touhou_little_maid.power.handle.info": "修改了 %d 位玩家的 P 点",
   "commands.touhou_little_maid.maid_num.handle.info": "修改了 %d 位玩家的女仆数量",
