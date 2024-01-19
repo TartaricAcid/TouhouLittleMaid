@@ -249,7 +249,7 @@
   "message.touhou_little_maid.kappa_compass.usage.clear_pos": "§6- §bShift 右击方块清除坐标",
   "message.touhou_little_maid.kappa_compass.usage.write_pos_to_maid": "§d- §2右击女仆写入坐标",
   "message.touhou_little_maid.kappa_compass.usage.clear_maid_pos": "§d- §2Shift 右击女仆清除坐标",
-  "message.touhou_little_maid.check_schedule_pos.too_far": "§c§距离记录的坐标过远\n\n§6§n请使用河童的罗盘 Shift 右击女仆来清除记录的坐标",
+  "message.touhou_little_maid.check_schedule_pos.too_far": "§c§l距离记录的坐标过远\n\n§6§n请使用河童的罗盘 Shift 右击女仆来清除记录的坐标",
   "message.touhou_little_maid.check_schedule_pos.dimension": "§c§l记录的维度与女仆当前所处维度不一致\n\n§6§n请使用河童的罗盘 Shift 右击女仆来清除记录的坐标",
   "message.touhou_little_maid.script_book.remove": "成功清除女仆的聊天气泡台本",
   "message.touhou_little_maid.script_book.install": "成功写入女仆的聊天气泡台本",
