@@ -173,7 +173,6 @@
   "task.touhou_little_maid.milk.condition.has_bucket": "Cần có xô trong túi đồ",
   "task.touhou_little_maid.torch.desc": "Maid sẽ cố đặt đuốc ở nơi tối hơn xung quanh",
   "task.touhou_little_maid.torch.condition.has_torch": "Cần có đuốc trong túi đồ",
-  "task.touhou_little_maid.feed_animal.desc": "Maid sẽ cố lai giống cho động vật xung quanh",
   "task.touhou_little_maid.extinguishing.desc": "Maid sẽ cố dập lửa xung quanh",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Cần có dụng cụ dập lửa ở tay chính",
   "subtitle.touhou_little_maid.maid.mode.idle": "Maid đang chờ",
