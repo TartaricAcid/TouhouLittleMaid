@@ -2,10 +2,14 @@ package com.github.tartaricacid.touhoulittlemaid.entity.chatbubble;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MaidScriptBookManager {
+    private static final Gson GSON = new Gson();
     private static final String STORE_TAG = "MaidScriptBook";
     private static final String PAGES_TAG = "pages";
     private static final String SEPARATOR = "\n\n";
@@ -30,7 +35,16 @@ public class MaidScriptBookManager {
         if (tag == null || !tag.contains(PAGES_TAG, Tag.TAG_LIST)) {
             return false;
         }
-        this.scriptsTags = tag.getList(PAGES_TAG, Tag.TAG_STRING).copy();
+        if (stack.getItem() == Items.WRITTEN_BOOK) {
+            ListTag list = tag.getList(PAGES_TAG, Tag.TAG_STRING).copy();
+            this.scriptsTags = new ListTag();
+            for (int i = 0; i < list.size(); i++) {
+                BookText bookText = GSON.fromJson(list.getString(i), BookText.class);
+                this.scriptsTags.add(StringTag.valueOf(bookText.text));
+            }
+        } else {
+            this.scriptsTags = tag.getList(PAGES_TAG, Tag.TAG_STRING).copy();
+        }
         loadFromTag(this.scriptsTags);
         return true;
     }
@@ -86,5 +100,10 @@ public class MaidScriptBookManager {
 
     public List<ChatText> getScripts(String type) {
         return this.scripts.getOrDefault(type, Lists.newArrayList());
+    }
+
+    private static class BookText {
+        @SerializedName("text")
+        private String text;
     }
 }

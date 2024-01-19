@@ -58,11 +58,11 @@ public class ChatBubbleManger {
     /**
      * 显示时长，15 秒
      */
-    private static final long DURATION = 5 * 1000;
+    private static final long DURATION = 15 * 1000;
     /**
      * 检测间隔，60 秒
      */
-    private static final int CHECK_RATE = 8 * 20;
+    private static final int CHECK_RATE = 60 * 20;
     public static ChatBubbleInfo DEFAULT_CHAT_BUBBLE = null;
 
     public static void addChatBubble(long endTime, ChatText text, EntityMaid maid) {
