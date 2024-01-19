@@ -93,6 +93,16 @@ public class MenuIntegration {
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.owner_max_maid_num.desc"))
                 .setSaveConsumer(i -> MaidConfig.OWNER_MAX_MAID_NUM.set(i)).build());
 
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist.name"), MaidConfig.MAID_BACKPACK_BLACKLIST.get())
+                .setDefaultValue(MaidConfig.MAID_BACKPACK_BLACKLIST.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_BACKPACK_BLACKLIST.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_attack_ignore.name"), MaidConfig.MAID_ATTACK_IGNORE.get())
+                .setDefaultValue(Lists.newArrayList())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_attack_ignore.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_ATTACK_IGNORE.set(l)).build());
+
         maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_ranged_attack_ignore.name"), MaidConfig.MAID_RANGED_ATTACK_IGNORE.get())
                 .setDefaultValue(Lists.newArrayList())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_ranged_attack_ignore.desc"))

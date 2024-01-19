@@ -1,11 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.api.task;
 
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 
@@ -54,6 +57,10 @@ public interface IAttackTask extends IMaidTask {
         LivingEntity maidLastHurtByMob = maid.getLastHurtByMob();
         if (target.equals(maidLastHurtByMob) && checkCanAttackEntity(maidLastHurtByMob)) {
             return true;
+        }
+        ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(target.getType());
+        if (key != null && MaidConfig.MAID_ATTACK_IGNORE.get().contains(key.toString())) {
+            return false;
         }
         return target instanceof Enemy;
     }

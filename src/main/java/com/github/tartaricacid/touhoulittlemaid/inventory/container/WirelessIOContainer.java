@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,6 +14,7 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class WirelessIOContainer extends AbstractContainerMenu {
     public static final MenuType<WirelessIOContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new WirelessIOContainer(windowId, inv, data.readItem()));
@@ -100,6 +102,11 @@ public class WirelessIOContainer extends AbstractContainerMenu {
         @Override
         public int getMaxStackSize() {
             return 1;
+        }
+
+        @Override
+        public boolean mayPlace(@NotNull ItemStack stack) {
+            return EntityMaid.canInsertItem(stack) && super.mayPlace(stack);
         }
     }
 }

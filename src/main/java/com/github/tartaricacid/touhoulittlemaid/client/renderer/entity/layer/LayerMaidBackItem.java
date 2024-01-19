@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
@@ -29,7 +30,7 @@ public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<Enti
     public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof Vanishable) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
                 return;
             }
             matrixStack.pushPose();

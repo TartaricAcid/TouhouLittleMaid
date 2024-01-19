@@ -18,6 +18,8 @@ public final class MaidConfig {
     public static ForgeConfigSpec.BooleanValue MAID_CHANGE_MODEL;
     public static ForgeConfigSpec.BooleanValue MAID_GOMOKU_OWNER_LIMIT;
     public static ForgeConfigSpec.IntValue OWNER_MAX_MAID_NUM;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_BACKPACK_BLACKLIST;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_ATTACK_IGNORE;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_RANGED_ATTACK_IGNORE;
 
     public static void init(ForgeConfigSpec.Builder builder) {
@@ -55,6 +57,12 @@ public final class MaidConfig {
 
         builder.comment("The maximum number of maids the player own");
         OWNER_MAX_MAID_NUM = builder.defineInRange("OwnerMaxMaidNum", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
+
+        builder.comment("These items cannot be placed in the maid backpack");
+        MAID_BACKPACK_BLACKLIST = builder.define("MaidBackpackBlackList", Lists.newArrayList());
+
+        builder.comment("The entity that the maid will not recognize as targets for attack");
+        MAID_ATTACK_IGNORE = builder.define("MaidAttackIgnore", Lists.newArrayList());
 
         builder.comment("The entity that the maid will not hurt when in ranged attack");
         MAID_RANGED_ATTACK_IGNORE = builder.define("MaidRangedAttackIgnore", Lists.newArrayList());

@@ -29,7 +29,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
@@ -94,8 +93,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
@@ -214,11 +211,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     public static boolean canInsertItem(ItemStack stack) {
-        if (stack.getItem() instanceof BlockItem) {
-            Block block = ((BlockItem) stack.getItem()).getBlock();
-            return !(block instanceof ShulkerBoxBlock);
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        if (key != null && MaidConfig.MAID_BACKPACK_BLACKLIST.get().contains(key.toString())) {
+            return false;
         }
-        return stack.getItem() != InitItems.PHOTO.get();
+        return stack.getItem().canFitInsideContainerItems();
     }
 
     @Override
@@ -745,9 +742,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     public boolean canAttack(LivingEntity target) {
         if (this.getTask() instanceof IAttackTask attackTask) {
-            if (attackTask.canAttack(this, target)) {
-                return true;
-            }
+            return attackTask.canAttack(this, target);
         }
         return super.canAttack(target);
     }
