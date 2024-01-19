@@ -32,7 +32,7 @@ public final class TipsHelper {
         }
 
         Font font = Minecraft.getInstance().font;
-        List<FormattedCharSequence> split = font.split(text, 150);
+        List<FormattedCharSequence> split = font.split(text, 124);
         int size = split.size();
 
         if (size == 1) {
