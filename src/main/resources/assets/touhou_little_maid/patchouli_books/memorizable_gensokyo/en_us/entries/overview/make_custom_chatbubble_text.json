@@ -1,0 +1,38 @@
+{
+  "sortnum": 6,
+  "name": "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.name",
+  "icon": "minecraft:written_book",
+  "category": "touhou_little_maid:overview",
+  "pages": [
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.0.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/book_chatbubble.png"
+      ],
+      "text": "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.1.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.2.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.3.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.4.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/task_tooltip.png"
+      ],
+      "text": "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.5.text"
+    }
+  ]
+}

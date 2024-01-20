@@ -266,6 +266,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             }
             desc.add(prefix.append(condition));
         }
+        if (this.getMinecraft().options.advancedItemTooltips) {
+            desc.add(CommonComponents.SPACE);
+            desc.add(Component.translatable("task.touhou_little_maid.advanced.id", maidTask.getUid().getPath()).withStyle(ChatFormatting.DARK_GRAY));
+        }
         return desc;
     }
 

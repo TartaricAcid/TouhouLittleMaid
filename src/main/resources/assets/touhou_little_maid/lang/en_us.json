@@ -375,6 +375,7 @@
   "task.touhou_little_maid.extinguishing.desc": "Maid will try to extinguish the surrounding fire",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Mainhand holds a extinguisher",
   "task.touhou_little_maid.board_games.desc": "Maid will search around the gomoku board",
+  "task.touhou_little_maid.advanced.id": "Task ID: %s",
   "button.touhou_little_maid.maid.mode.idle": "Idle",
   "button.touhou_little_maid.maid.mode.attack": "Attack",
   "button.touhou_little_maid.maid.mode.range_attack": "Range Attack",
@@ -585,5 +586,12 @@
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.0.text": "We modified the slime model to the yukkuri.",
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.1.text": "We also changed the textures of Experience Orbs, Bottle of Experience, and Totem of Undying. $(br2)These can all be turned off in the configuration file.",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.name": "Favorability",
-  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "Favorability can increase the maid's health and attack.$(br2)Improve maid favorability:$(li)When the maid in idle schedule, she plays with the keyboard, computer, bookshelf and gomoku.$(li)Maid sleep.$(br2)Reduce maid favorability:$(li)Death of the maid."
+  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "Favorability can increase the maid's health and attack.$(br2)Improve maid favorability:$(li)When the maid in idle schedule, she plays with the keyboard, computer, bookshelf and gomoku.$(li)Maid sleep.$(br2)Reduce maid favorability:$(li)Death of the maid.",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.name": "Custom Chat Bubble Text",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.0.text": "You can use a Book and Quill to customize the maid's chat bubble text.$(br2)Just write the text in the format shown on the right, and use a blank line to separate each text.$(br2)You can write multiple pages and each page will be parsed.",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.1.text": "You can even insert vanilla formatting characters to display colored text.",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.2.text": "But there must be a type names on the first line of each page. It specifies under what circumstances the text is displayed.$(br2)The available type names are these:$(br)Schedule Related:$(li)work: Displayed during any work schedule$(li)idle: displayed during rest schedule or idle task$(li)sleep: displayed during sleeping",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.3.text": "Special Situation:$(li)morning: Display in the morning$(li)night: Displayed in the evening$(li)rain: displayed when it rains$(li)snow: Displayed when it snows$(li)cold: Displayed when in a cold biome$(li)hot: Displayed when in a hot biome$(li)hurt: displayed when injured$(li)beg: Displayed when beg",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.4.text": "Work Task:$(li)Will be displayed in specific working task, such as attack, farm, etc.$(br2)When you have written the text, you only need to right click on the maid to write the text.$(br)If you right click the maid with a Book and Quill (or Written Book) while holding down the Shift key, you can clear the maid's text.$(br)If you hold a blank Book and Quill and right click on a maid who already has a text, you can copy the maid's text to the book.",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.5.text": "When the advanced tooltips function (F3+H) is turned on, you can see the task id."
 }
