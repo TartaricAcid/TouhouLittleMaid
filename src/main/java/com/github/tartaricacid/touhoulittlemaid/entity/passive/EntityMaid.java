@@ -292,6 +292,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @Override
+    public void rideTick() {
+        super.rideTick();
+        if (this.getVehicle() != null) {
+            Entity vehicle = this.getVehicle();
+            this.setYHeadRot(vehicle.getYRot());
+            this.setYBodyRot(vehicle.getYRot());
+        }
+    }
+
+    @Override
     public void baseTick() {
         super.baseTick();
         if (backpackDelay > 0) {

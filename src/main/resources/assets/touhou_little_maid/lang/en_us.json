@@ -356,6 +356,7 @@
   "task.touhou_little_maid.farm.desc": "Maid will plant or harvest normal crops around",
   "task.touhou_little_maid.sugar_cane.desc": "Maid will plant or harvest sugar cane around",
   "task.touhou_little_maid.melon.desc": "Maid will harvest melon around",
+  "task.touhou_little_maid.melon.condition.has_silk_touch": "Mainhand holds a silk touch tool causes the melon itself to drop",
   "task.touhou_little_maid.cocoa.desc": "Maid will plant or harvest cocoa around",
   "task.touhou_little_maid.honey.desc": "Maid will collect honey from surrounding beehives",
   "task.touhou_little_maid.honey.condition.has_bottle": "Mainhand hold a shear (collect honey comb)",
