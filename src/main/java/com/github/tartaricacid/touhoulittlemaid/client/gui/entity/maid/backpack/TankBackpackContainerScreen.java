@@ -23,8 +23,8 @@ import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
 @IPNGuiHint(button = IPNButton.SORT, horizontalOffset = -36, bottom = -12)
 @IPNGuiHint(button = IPNButton.SORT_COLUMNS, horizontalOffset = -24, bottom = -24)
 @IPNGuiHint(button = IPNButton.SORT_ROWS, horizontalOffset = -12, bottom = -36)
-@IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = 353, top = 199)
-@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = 353, top = 196)
+@IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = -5)
+@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
 public class TankBackpackContainerScreen extends AbstractMaidContainerGui<TankBackpackContainer> implements IBackpackContainerScreen {
     private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_tank.png");
     private final EntityMaid maid;

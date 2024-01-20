@@ -19,8 +19,8 @@ import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMa
 @IPNGuiHint(button = IPNButton.SORT, horizontalOffset = -36, bottom = -12)
 @IPNGuiHint(button = IPNButton.SORT_COLUMNS, horizontalOffset = -24, bottom = -24)
 @IPNGuiHint(button = IPNButton.SORT_ROWS, horizontalOffset = -12, bottom = -36)
-@IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = 353, top = 199)
-@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = 353, top = 196)
+@IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = -5)
+@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
 public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigContainer> {
     private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_config.png");
     private int left;
