@@ -11,7 +11,7 @@ public class SortButtonScreen {
 
     public static void renderBackground(GuiGraphics graphics, int x, int y) {
         if (ModList.get().isLoaded(IPN_ID)) {
-            graphics.blit(SIDE, x, y, 0, 73, 17, 48);
+            graphics.blit(SIDE, x, y, 0, 73, 17, 72);
         }
     }
 }
