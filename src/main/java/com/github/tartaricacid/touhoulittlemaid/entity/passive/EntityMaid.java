@@ -340,7 +340,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                 this.backpackData.serverTick(this);
                 this.level.getProfiler().pop();
             }
+
+            this.level.getProfiler().push("maidFavorability");
             this.favorabilityManager.tick();
+            this.level.getProfiler().pop();
+
+            this.level.getProfiler().push("maidSchedulePos");
+            this.schedulePos.tick(this);
+            this.level.getProfiler().pop();
         }
     }
 
@@ -1270,6 +1277,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     public boolean hasRestriction() {
         return this.isHomeModeEnable();
+    }
+
+    public BlockPos getBrainSearchPos() {
+        if (this.hasRestriction()) {
+            return this.getRestrictCenter();
+        } else {
+            return this.blockPosition();
+        }
+    }
+
+    public boolean canBrainMoving() {
+        return !this.isInSittingPose() && !this.isPassenger() && !this.isSleeping() && !this.isLeashed();
     }
 
     public MaidChatBubbles getChatBubble() {

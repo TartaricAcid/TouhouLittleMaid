@@ -1,16 +1,21 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.schedule.Activity;
 
 import javax.annotation.Nullable;
 
 public final class SchedulePos {
+    private static final int MAX_TELEPORT_ATTEMPTS_TIMES = 10;
+
     private BlockPos workPos;
     private BlockPos idlePos;
     private BlockPos sleepPos;
@@ -46,6 +51,25 @@ public final class SchedulePos {
 
     public void setDimension(ResourceLocation dimension) {
         this.dimension = dimension;
+    }
+
+    public void tick(EntityMaid maid) {
+        if (maid.tickCount % 40 == 0) {
+            this.restrictTo(maid);
+            if (maid.isWithinRestriction()) {
+                return;
+            }
+            if (!maid.canBrainMoving()) {
+                return;
+            }
+            double distanceSqr = maid.getRestrictCenter().distSqr(maid.blockPosition());
+            int minTeleportDistance = (int) maid.getRestrictRadius() + 4;
+            if (distanceSqr > (minTeleportDistance * minTeleportDistance) && !this.sameWithRestrictCenter(maid)) {
+                teleport(maid);
+            } else {
+                BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
+            }
+        }
     }
 
     public void save(CompoundTag compound) {
@@ -144,5 +168,20 @@ public final class SchedulePos {
             return pos;
         }
         return null;
+    }
+
+    private boolean sameWithRestrictCenter(EntityMaid maid) {
+        BlockPos restrictCenter = maid.getRestrictCenter();
+        return maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET)
+                .filter(walkTarget -> walkTarget.getTarget().currentBlockPosition().equals(restrictCenter))
+                .isPresent();
+    }
+
+    private void teleport(EntityMaid maid) {
+        for (int i = 0; i < MAX_TELEPORT_ATTEMPTS_TIMES; ++i) {
+            if (TeleportHelper.teleportToRestrictCenter(maid)) {
+                return;
+            }
+        }
     }
 }
