@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.api.task;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -63,5 +64,13 @@ public interface IAttackTask extends IMaidTask {
             return false;
         }
         return target instanceof Enemy;
+    }
+
+    default boolean hasExtraAttack(EntityMaid maid, Entity target) {
+        return false;
+    }
+
+    default boolean doExtraAttack(EntityMaid maid, Entity target) {
+        return false;
     }
 }

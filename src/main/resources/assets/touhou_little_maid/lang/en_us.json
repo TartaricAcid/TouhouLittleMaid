@@ -348,6 +348,7 @@
   "task.touhou_little_maid.idle.desc": "Maid will not do anything in this task",
   "task.touhou_little_maid.attack.desc": "Maid will melee attack surrounding hostile mobs",
   "task.touhou_little_maid.attack.condition.assault_weapon": "Mainhand holds an assault weapon",
+  "task.touhou_little_maid.attack.condition.extinguisher": "Offhand holds a fire extinguisher can cause additional damage to fire-immune mob",
   "task.touhou_little_maid.ranged_attack.desc": "Maid will use bows to attack surrounding hostile mobs",
   "task.touhou_little_maid.ranged_attack.condition.has_bow": "Mainhand holds a bow",
   "task.touhou_little_maid.ranged_attack.condition.has_arrow": "Have a arrow in inventory",

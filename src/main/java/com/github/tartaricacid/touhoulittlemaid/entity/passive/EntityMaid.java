@@ -580,6 +580,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     public boolean doHurtTarget(Entity entityIn) {
         boolean result = super.doHurtTarget(entityIn);
         this.getMainHandItem().hurtAndBreak(1, this, (maid) -> maid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        if (this.getTask() instanceof IAttackTask attackTask && attackTask.hasExtraAttack(this, entityIn)) {
+            boolean extraResult = attackTask.doExtraAttack(this, entityIn);
+            return result && extraResult;
+        }
         return result;
     }
 
