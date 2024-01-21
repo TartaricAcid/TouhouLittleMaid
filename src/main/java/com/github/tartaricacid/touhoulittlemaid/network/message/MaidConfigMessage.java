@@ -83,7 +83,7 @@ public class MaidConfigMessage {
         if (message.home) {
             ResourceLocation dimension = maid.getSchedulePos().getDimension();
             if (!dimension.equals(maid.level.dimension().location())) {
-                CheckSchedulePosMessage tips = new CheckSchedulePosMessage(new TranslationTextComponent("message.touhou_little_maid.kappa_compass.maid_dimension_check"));
+                CheckSchedulePosMessage tips = new CheckSchedulePosMessage(new TranslationTextComponent("message.touhou_little_maid.check_schedule_pos.dimension"));
                 NetworkHandler.sendToClientPlayer(tips, sender);
                 return;
             }

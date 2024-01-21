@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Comparator;
@@ -31,9 +32,13 @@ public class MaidPickupEntitiesSensor extends Sensor<EntityMaid> {
             return;
         }
         float radius = maid.getRestrictRadius();
-        List<Entity> allEntities = worldIn.getEntitiesOfClass(Entity.class,
-                maid.getBoundingBox().inflate(radius, VERTICAL_SEARCH_RANGE, radius),
-                Entity::isAlive);
+        AxisAlignedBB aabb;
+        if (maid.hasRestriction()) {
+            aabb = new AxisAlignedBB(maid.getRestrictCenter()).inflate(radius, VERTICAL_SEARCH_RANGE, radius);
+        } else {
+            aabb = maid.getBoundingBox().inflate(radius, VERTICAL_SEARCH_RANGE, radius);
+        }
+        List<Entity> allEntities = worldIn.getEntitiesOfClass(Entity.class, aabb, Entity::isAlive);
         allEntities.sort(Comparator.comparingDouble(maid::distanceToSqr));
         List<Entity> optional = allEntities.stream()
                 .filter(e -> maid.canPickup(e, true))

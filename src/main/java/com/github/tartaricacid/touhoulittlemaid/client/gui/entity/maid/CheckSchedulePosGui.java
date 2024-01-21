@@ -35,10 +35,10 @@ public class CheckSchedulePosGui extends Screen {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         renderBackground(matrixStack);
         List<IReorderingProcessor> split = font.split(tips, 300);
-        int startY = middleY - 10 - split.size() * font.lineHeight;
+        int startY = middleY - 10 - split.size() * (font.lineHeight + 3);
         for (IReorderingProcessor text : split) {
             font.drawShadow(matrixStack, text, (float) (middleX - font.width(text) / 2), startY, 0xFFFFFF);
-            startY += font.lineHeight;
+            startY += font.lineHeight + 3;
         }
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }

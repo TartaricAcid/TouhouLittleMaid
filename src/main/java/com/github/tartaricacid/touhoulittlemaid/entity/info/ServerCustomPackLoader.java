@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerChairModels;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerMaidModels;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
+import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -83,7 +84,15 @@ public final class ServerCustomPackLoader {
         }
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".zip")) {
-                readModelFromZipFile(file);
+                try {
+                    if (ZipFileCheck.isZipFile(file)) {
+                        readModelFromZipFile(file);
+                    } else {
+                        TouhouLittleMaid.LOGGER.error("{} file is corrupt and cannot be loaded.", file.getName());
+                    }
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
             if (file.isDirectory()) {
                 readModelFromFolder(file);

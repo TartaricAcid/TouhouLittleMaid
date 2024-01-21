@@ -178,7 +178,6 @@
   "task.touhou_little_maid.milk.condition.has_bucket": "Возьмите ведро в инвентарь",
   "task.touhou_little_maid.torch.desc": "Горничная будет ставить факела в темных местах в округе",
   "task.touhou_little_maid.torch.condition.has_torch": "Возьмите факел в инвентарь",
-  "task.touhou_little_maid.feed_animal.desc": "Горничная будет кормить окружающих существ",
   "task.touhou_little_maid.extinguishing.desc": "Горничная будет тушить окружающий огонь",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Ведущая рука держит огнетушитель",
   "subtitle.touhou_little_maid.maid.mode.idle": "Звук стоящей горничной",

@@ -4,12 +4,13 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public final class DismountMaidEvent {
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void onInteract(InteractMaidEvent event) {
         PlayerEntity player = event.getPlayer();
         EntityMaid maid = event.getMaid();

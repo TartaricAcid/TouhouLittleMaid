@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
@@ -17,6 +18,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidScriptBookManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
@@ -58,7 +60,6 @@ import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -175,6 +176,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
     private final FavorabilityManager favorabilityManager;
+    private final MaidScriptBookManager scriptBookManager;
     private final SchedulePos schedulePos;
 
     public boolean guiOpening = false;
@@ -193,6 +195,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(PathNodeType.COCOA, -1.0F);
         this.favorabilityManager = new FavorabilityManager(this);
+        this.scriptBookManager = new MaidScriptBookManager();
         this.schedulePos = new SchedulePos(BlockPos.ZERO, world.dimension().location());
     }
 
@@ -209,7 +212,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             return !(block instanceof ShulkerBoxBlock);
         }
-        return stack.getItem() != InitItems.PHOTO.get();
+        return stack.getItem() != InitItems.SMART_SLAB_HAS_MAID.get() && stack.getItem() != InitItems.PHOTO.get();
     }
 
     @Override
@@ -299,6 +302,16 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         this.onMaidSleep();
     }
 
+    @Override
+    public void rideTick() {
+        super.rideTick();
+        if (this.getVehicle() != null) {
+            Entity vehicle = this.getVehicle();
+            this.setYHeadRot(vehicle.yRot);
+            this.setYBodyRot(vehicle.yRot);
+        }
+    }
+
     private void onMaidSleep() {
         if (isSleeping()) {
             getSleepingPos().ifPresent(pos -> setPos(pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5));
@@ -324,7 +337,13 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
                 this.backpackData.serverTick(this);
                 this.level.getProfiler().pop();
             }
+            this.level.getProfiler().push("maidFavorability");
             this.favorabilityManager.tick();
+            this.level.getProfiler().pop();
+
+            this.level.getProfiler().push("maidSchedulePos");
+            this.schedulePos.tick(this);
+            this.level.getProfiler().pop();
         }
     }
 
@@ -555,6 +574,11 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
     public boolean doHurtTarget(Entity entityIn) {
         boolean result = super.doHurtTarget(entityIn);
         this.getMainHandItem().hurtAndBreak(1, this, (maid) -> maid.broadcastBreakEvent(Hand.MAIN_HAND));
+        if (this.getTask() instanceof IAttackTask && ((IAttackTask) this.getTask()).hasExtraAttack(this, entityIn)) {
+            IAttackTask attackTask = (IAttackTask) this.getTask();
+            boolean extraResult = attackTask.doExtraAttack(this, entityIn);
+            return result && extraResult;
+        }
         return result;
     }
 
@@ -732,38 +756,11 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        if (this.getOwner() instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) this.getOwner();
-            LivingEntity lastHurtByMob = player.getLastHurtByMob();
-            if (target.equals(lastHurtByMob) && checkCanAttackEntity(lastHurtByMob)) {
-                return true;
-            }
-            LivingEntity lastHurtMob = player.getLastHurtMob();
-            if (target.equals(lastHurtMob) && checkCanAttackEntity(lastHurtMob)) {
-                return true;
-            }
+        if (this.getTask() instanceof IAttackTask) {
+            IAttackTask attackTask = (IAttackTask) this.getTask();
+            return attackTask.canAttack(this, target);
         }
-        LivingEntity maidLastHurtByMob = this.getLastHurtByMob();
-        if (target.equals(maidLastHurtByMob) && checkCanAttackEntity(maidLastHurtByMob)) {
-            return true;
-        }
-        if (target instanceof IMob) {
-            return super.canAttack(target);
-        }
-        return false;
-    }
-
-    private boolean checkCanAttackEntity(LivingEntity target) {
-        // 不能攻击玩家
-        if (target instanceof PlayerEntity) {
-            return false;
-        }
-        // 有主的宠物也不攻击
-        if (target instanceof TameableEntity) {
-            TameableEntity tamableAnimal = (TameableEntity) target;
-            return tamableAnimal.getOwnerUUID() == null;
-        }
-        return true;
+        return super.canAttack(target);
     }
 
     public void sendItemBreakMessage(ItemStack stack) {
@@ -861,6 +858,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
         compound.put(GAME_SKILL_TAG, getGameSkill());
         this.favorabilityManager.addAdditionalSaveData(compound);
+        this.scriptBookManager.addAdditionalSaveData(compound);
         this.schedulePos.save(compound);
         if (this.backpackData != null) {
             CompoundNBT tag = new CompoundNBT();
@@ -950,6 +948,7 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
             }
         }
         this.favorabilityManager.readAdditionalSaveData(compound);
+        this.scriptBookManager.readAdditionalSaveData(compound);
         this.schedulePos.load(compound, this);
         this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
     }
@@ -1265,6 +1264,18 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
         return this.isHomeModeEnable();
     }
 
+    public BlockPos getBrainSearchPos() {
+        if (this.hasRestriction()) {
+            return this.getRestrictCenter();
+        } else {
+            return this.blockPosition();
+        }
+    }
+
+    public boolean canBrainMoving() {
+        return !this.isInSittingPose() && !this.isPassenger() && !this.isSleeping() && !this.isLeashed();
+    }
+
     public MaidChatBubbles getChatBubble() {
         return this.entityData.get(CHAT_BUBBLE);
     }
@@ -1279,6 +1290,10 @@ public class EntityMaid extends TameableEntity implements ICrossbowUser {
 
     public int getChatBubbleCount() {
         return ChatBubbleManger.getChatBubbleCount(this);
+    }
+
+    public MaidScriptBookManager getScriptBookManager() {
+        return scriptBookManager;
     }
 
     public boolean isPickup() {

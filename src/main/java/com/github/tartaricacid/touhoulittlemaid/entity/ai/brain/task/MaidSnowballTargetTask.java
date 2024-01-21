@@ -109,10 +109,9 @@ public class MaidSnowballTargetTask extends Task<EntityMaid> {
         return optional.isPresent() && optional.get().isAlive();
     }
 
-    private boolean inMaxDistance(EntityMaid entity) {
-        int maxStopAttackDistance = (int) entity.getRestrictRadius();
-        Optional<LivingEntity> optional = entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
-        return optional.isPresent() && entity.distanceTo(optional.get()) <= maxStopAttackDistance;
+    private boolean inMaxDistance(EntityMaid maid) {
+        Optional<LivingEntity> optional = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
+        return optional.isPresent() && maid.isWithinRestriction(optional.get().blockPosition());
     }
 
     private boolean chanceStop(LivingEntity entity) {

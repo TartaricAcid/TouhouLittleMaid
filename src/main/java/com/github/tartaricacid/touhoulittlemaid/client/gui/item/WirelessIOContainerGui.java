@@ -14,7 +14,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.anti_ad.mc.ipn.api.IPNIgnore;
 
+@IPNIgnore
 public class WirelessIOContainerGui extends ContainerScreen<WirelessIOContainer> {
     private static final ResourceLocation MAIN = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io.png");
     private boolean isMaidToChest;

@@ -37,7 +37,7 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, LivingEntity livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (livingEntity instanceof EntityMaid && this.entityRenderer.getGeoModel() != null) {
             EntityMaid maid = (EntityMaid) livingEntity;
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
                 return;
             }
             GeoModel geoModel = this.entityRenderer.getGeoModel();
@@ -45,8 +45,8 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
                 translateToBackpack(matrixStackIn, geoModel);
                 matrixStackIn.translate(0, 1, 0.25);
                 matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
-                IMaidBackpack type = maid.getMaidBackpackType();
-                BackpackManager.findBackpackModel(type.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), matrixStackIn, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
+                IMaidBackpack backpack = InGameMaidConfig.INSTANCE.isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
+                BackpackManager.findBackpackModel(backpack.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), matrixStackIn, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
             }
         }
     }

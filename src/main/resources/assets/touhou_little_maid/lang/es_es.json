@@ -157,7 +157,6 @@
   "task.touhou_little_maid.milk.condition.has_bucket": "Tener un cubo de leche en el inventario",
   "task.touhou_little_maid.torch.desc": "La maid kawai intentara colocar antorchas en las zonas oscuras al rededor suyo",
   "task.touhou_little_maid.torch.condition.has_torch": "Tener una antorcha en el inventario",
-  "task.touhou_little_maid.feed_animal.desc": "La hermosa maid intentara alimentar a los animales cercanos",
   "task.touhou_little_maid.extinguishing.desc": "La linda maid intentara ser bombero apagando el fuego cerca de ella",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Tiene que tener un extintor en la mano principal, no querras que apague el fuego con las manos",
   "subtitle.touhou_little_maid.maid.mode.idle": "Maid ociosa",

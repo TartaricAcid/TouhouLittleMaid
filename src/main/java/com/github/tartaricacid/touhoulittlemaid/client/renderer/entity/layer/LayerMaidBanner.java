@@ -41,7 +41,7 @@ public class LayerMaidBanner extends LayerRenderer<EntityMaid, BedrockModel<Enti
         ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof BannerItem) {
             BannerItem bannerItem = (BannerItem) stack.getItem();
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible()) {
                 return;
             }
             matrixStack.pushPose();

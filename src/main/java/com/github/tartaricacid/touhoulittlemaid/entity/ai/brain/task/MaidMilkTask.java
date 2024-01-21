@@ -45,9 +45,7 @@ public class MaidMilkTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerWorld worldIn, EntityMaid maid, long gameTimeIn) {
         milkTarget = null;
-        int maxDistToWalk = (int) maid.getRestrictRadius();
         this.getEntities(maid).stream()
-                .filter(e -> e.closerThan(maid, maxDistToWalk))
                 .filter(e -> maid.isWithinRestriction(e.blockPosition()))
                 .filter(Entity::isAlive)
                 .filter(e -> e instanceof CowEntity)

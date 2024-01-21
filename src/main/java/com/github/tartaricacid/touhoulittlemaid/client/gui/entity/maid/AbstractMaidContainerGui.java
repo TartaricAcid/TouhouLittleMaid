@@ -2,13 +2,14 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.ModelDownloadGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidDownloadButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.compat.ipn.SortButtonScreen;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -24,7 +25,6 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.ToggleWidget;
@@ -62,7 +62,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private ImageButton pageUp;
     private ImageButton pageClose;
     private ImageButton taskSwitch;
-    private ImageButton modelDownload;
+    private MaidDownloadButton modelDownload;
     private ScheduleButton<T> scheduleButton;
     private boolean taskListOpen;
     private int counterTime = 0;
@@ -106,6 +106,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderBackground(matrixStack);
         getMinecraft().textureManager.bind(BG);
         blit(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        SortButtonScreen.renderBackground(matrixStack, leftPos + 249, topPos + 166);
         this.drawMaidCharacter(x, y);
         this.drawBaseInfoGui(matrixStack);
         this.drawTaskListBg(matrixStack);
@@ -166,6 +167,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderMaidInfo(matrixStack, x, y);
         renderScheduleInfo(matrixStack, x, y);
         renderTaskButtonInfo(matrixStack, x, y);
+        modelDownload.renderExtraTips(matrixStack);
     }
 
     @Override
@@ -252,6 +254,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             }
             desc.add(prefix.append(condition));
         }
+        if (this.getMinecraft().options.advancedItemTooltips) {
+            desc.add(StringTextComponent.EMPTY);
+            desc.add(new TranslationTextComponent("task.touhou_little_maid.advanced.id", maidTask.getUid().getPath()).withStyle(TextFormatting.DARK_GRAY));
+        }
         return desc;
     }
 
@@ -313,8 +319,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addDownloadButton() {
-        modelDownload = new ImageButton(leftPos + 20, topPos + 230, 41, 20, 0, 86, 20, BUTTON,
-                (b) -> Minecraft.getInstance().setScreen(new ModelDownloadGui()));
+        modelDownload = new MaidDownloadButton(leftPos + 20, topPos + 230, BUTTON);
         this.addButton(modelDownload);
     }
 

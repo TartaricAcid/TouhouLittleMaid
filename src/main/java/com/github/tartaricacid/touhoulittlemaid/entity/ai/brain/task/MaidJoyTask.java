@@ -34,7 +34,7 @@ public class MaidJoyTask extends MaidCheckRateTask {
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld worldIn, EntityMaid maid) {
-        if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
+        if (super.checkExtraStartConditions(worldIn, maid) && maid.canBrainMoving()) {
             BlockPos joyPos = findJoy(worldIn, maid);
             if (joyPos != null && maid.isWithinRestriction(joyPos)) {
                 if (joyPos.distSqr(maid.blockPosition()) < Math.pow(this.closeEnoughDist, 2)) {
@@ -67,12 +67,12 @@ public class MaidJoyTask extends MaidCheckRateTask {
 
     @Nullable
     private BlockPos findJoy(ServerWorld world, EntityMaid maid) {
-        BlockPos blockPos = maid.blockPosition();
+        BlockPos blockPos = maid.getBrainSearchPos();
         PointOfInterestManager poiManager = world.getPoiManager();
         int range = (int) maid.getRestrictRadius();
         return poiManager.getInRange(type -> type.equals(InitPoi.JOY_BLOCK.get()), blockPos, range, PointOfInterestManager.Status.ANY)
                 .map(PointOfInterest::getPos).filter(pos -> !isOccupied(world, pos))
-                .min(Comparator.comparingDouble(pos -> pos.distSqr(blockPos))).orElse(null);
+                .min(Comparator.comparingDouble(pos -> pos.distSqr(maid.blockPosition()))).orElse(null);
     }
 
     private boolean isOccupied(ServerWorld worldIn, BlockPos pos) {
@@ -82,9 +82,5 @@ public class MaidJoyTask extends MaidCheckRateTask {
             return worldIn.getEntity(joy.getSitId()) != null;
         }
         return true;
-    }
-
-    private boolean maidStateConditions(EntityMaid maid) {
-        return !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
     }
 }

@@ -22,7 +22,7 @@ public class LayerMaidBackpack extends LayerRenderer<EntityMaid, BedrockModel<En
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+        if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
             return;
         }
 
@@ -35,7 +35,7 @@ public class LayerMaidBackpack extends LayerRenderer<EntityMaid, BedrockModel<En
         } else {
             matrixStackIn.translate(0, -0.5, 0.25);
         }
-        IMaidBackpack backpack = maid.getMaidBackpackType();
+        IMaidBackpack backpack = InGameMaidConfig.INSTANCE.isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
         BackpackManager.findBackpackModel(backpack.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), matrixStackIn, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
     }
 }

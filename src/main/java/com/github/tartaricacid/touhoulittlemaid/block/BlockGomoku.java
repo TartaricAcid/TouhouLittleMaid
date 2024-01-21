@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
@@ -231,7 +232,7 @@ public class BlockGomoku extends BlockJoy {
             }
             EntityMaid maid = (EntityMaid) sitEntity.getPassengers().get(0);
             // 检查是不是自己的女仆
-            if (!maid.isOwnedBy(player)) {
+            if (MaidConfig.MAID_GOMOKU_OWNER_LIMIT.get() && !maid.isOwnedBy(player)) {
                 player.sendMessage(new TranslationTextComponent("message.touhou_little_maid.gomoku.not_owner"), Util.NIL_UUID);
                 return ActionResultType.FAIL;
             }
@@ -247,8 +248,8 @@ public class BlockGomoku extends BlockJoy {
             if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
                 gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
                 Statue statue = MaidGomokuAI.getStatue(chessData, playerPoint);
-                // 但是和其他人女仆对弈不加好感哦
-                if (statue == Statue.WIN) {
+                // 但是和其他人的女仆对弈不加好感哦
+                if (statue == Statue.WIN && maid.isOwnedBy(player)) {
                     maid.getFavorabilityManager().apply(Type.GOMOKU_WIN);
                     int rankBefore = MaidGomokuAI.getRank(maid);
                     MaidGomokuAI.addMaidCount(maid);
