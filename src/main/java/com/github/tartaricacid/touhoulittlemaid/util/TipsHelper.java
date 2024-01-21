@@ -49,9 +49,7 @@ public final class TipsHelper {
             graphics.blit(BUTTON, startX, yOffset, 10, 128, last, 20);
             graphics.blit(BUTTON, xOffset + textWidth - 10, yOffset, 30, 128, 10, 20);
             graphics.blit(BUTTON, xOffset + textWidth - 20, yOffset - 2, 42, 128, 16, 16);
-            if (!text.equals(Component.empty())) {
-                graphics.drawString(font, text, xOffset + 5, yOffset + 4, 0XFFFF55, false);
-            }
+            graphics.drawString(font, text, xOffset + 5, yOffset + 4, 0XFFFF55, false);
         }
 
         if (size == 2) {
