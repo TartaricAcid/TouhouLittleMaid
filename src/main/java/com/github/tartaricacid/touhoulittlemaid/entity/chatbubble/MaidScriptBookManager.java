@@ -35,15 +35,19 @@ public class MaidScriptBookManager {
         if (tag == null || !tag.contains(PAGES_TAG, Tag.TAG_LIST)) {
             return false;
         }
+        ListTag pagesTag = tag.getList(PAGES_TAG, Tag.TAG_STRING);
+        if (pagesTag.isEmpty()) {
+            return false;
+        }
         if (stack.getItem() == Items.WRITTEN_BOOK) {
-            ListTag list = tag.getList(PAGES_TAG, Tag.TAG_STRING).copy();
+            ListTag list = pagesTag.copy();
             this.scriptsTags = new ListTag();
             for (int i = 0; i < list.size(); i++) {
                 BookText bookText = GSON.fromJson(list.getString(i), BookText.class);
                 this.scriptsTags.add(StringTag.valueOf(bookText.text));
             }
         } else {
-            this.scriptsTags = tag.getList(PAGES_TAG, Tag.TAG_STRING).copy();
+            this.scriptsTags = pagesTag.copy();
         }
         loadFromTag(this.scriptsTags);
         return true;
@@ -56,7 +60,7 @@ public class MaidScriptBookManager {
 
     public boolean copyScript(ItemStack stack) {
         CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(PAGES_TAG, Tag.TAG_LIST)) {
+        if (tag == null || !tag.contains(PAGES_TAG, Tag.TAG_LIST) || tag.getList(PAGES_TAG, Tag.TAG_STRING).isEmpty()) {
             CompoundTag stackTag = stack.getOrCreateTag();
             stackTag.put(PAGES_TAG, this.scriptsTags.copy());
             return true;

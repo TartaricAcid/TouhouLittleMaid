@@ -130,12 +130,6 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
-    compileOnly fg.deobf("org.violetmoon.zeta:Zeta:1.0-beta-4.37")
-    runtimeOnly fg.deobf("org.violetmoon.zeta:Zeta:1.0-beta-4.37")
-
-    compileOnly fg.deobf("org.violetmoon.quark:Quark:4.0-beta-431.3235")
-    runtimeOnly fg.deobf("org.violetmoon.quark:Quark:4.0-beta-431.3235")
-
     implementation fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
@@ -152,9 +146,9 @@ dependencies {
 
     implementation fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
 
-    implementation "curse.maven:kotlin-for-forge-351264:4983659"
-    implementation fg.deobf("curse.maven:libipn-679177:4870127")
-    implementation fg.deobf("curse.maven:inventory-profiles-next-495267:4813458")
+    implementation "curse.maven:kotlin-for-forge-351264:${kotlin_id}"
+    implementation fg.deobf("curse.maven:libipn-679177:${libipn_id}")
+    implementation fg.deobf("curse.maven:inventory-profiles-next-495267:${ipn_id}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
