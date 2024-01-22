@@ -23,7 +23,7 @@ public class MaidUpdateActivityFromSchedule extends Task<EntityMaid> {
             if (this.cacheActivity == null) {
                 this.cacheActivity = activity;
             }
-            if (!this.cacheActivity.equals(activity) && maid.canBrainMoving()) {
+            if (!this.cacheActivity.equals(activity) && maid.isHomeModeEnable() && maid.canBrainMoving()) {
                 this.cacheActivity = activity;
                 maid.getSchedulePos().restrictTo(maid);
                 BrainUtil.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
