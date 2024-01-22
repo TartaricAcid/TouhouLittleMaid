@@ -1,0 +1,82 @@
+package com.github.tartaricacid.touhoulittlemaid.client.overlay;
+
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.Maps;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+
+import java.util.List;
+import java.util.Map;
+
+public class MaidTipsOverlay implements IGuiOverlay {
+    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_tips_icon.png");
+    private static final Map<Item, MutableComponent> TIPS = Maps.newHashMap();
+
+    public static void init() {
+        addTips("overlay.touhou_little_maid.compass.tips", Items.COMPASS);
+        addTips("overlay.touhou_little_maid.golden_apple.tips", Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE);
+        addTips("overlay.touhou_little_maid.potion.tips", Items.POTION);
+        addTips("overlay.touhou_little_maid.milk_bucket.tips", Items.MILK_BUCKET);
+        addTips("overlay.touhou_little_maid.script_book.tips", Items.WRITABLE_BOOK, Items.WRITTEN_BOOK);
+        addTips("overlay.touhou_little_maid.glass_bottle.tips", Items.GLASS_BOTTLE);
+        addTips("overlay.touhou_little_maid.name_tag.tips", Items.NAME_TAG);
+        addTips("overlay.touhou_little_maid.lead.tips", Items.LEAD);
+    }
+
+    @Override
+    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+        Minecraft minecraft = gui.getMinecraft();
+        Options options = minecraft.options;
+        if (!options.getCameraType().isFirstPerson()) {
+            return;
+        }
+        if (minecraft.gameMode == null || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+            return;
+        }
+        if (!(minecraft.hitResult instanceof EntityHitResult result)) {
+            return;
+        }
+        if (!(result.getEntity() instanceof EntityMaid maid)) {
+            return;
+        }
+        LocalPlayer player = minecraft.player;
+        if (player == null) {
+            return;
+        }
+        if (!maid.isAlive() || !maid.isOwnedBy(player)) {
+            return;
+        }
+        MutableComponent tip = TIPS.get(player.getMainHandItem().getItem());
+        if (tip != null) {
+            List<FormattedCharSequence> split = minecraft.font.split(tip, 150);
+            int offset = (screenHeight / 2 - 5) - split.size() * 10;
+            guiGraphics.renderItem(player.getMainHandItem(), screenWidth / 2 - 8, offset);
+            guiGraphics.blit(ICON, screenWidth / 2 + 2, offset - 4, 16, 16, 16, 16, 16, 16);
+            offset += 18;
+            for (FormattedCharSequence sequence : split) {
+                int width = minecraft.font.width(sequence);
+                guiGraphics.drawString(minecraft.font, sequence, (screenWidth - width) / 2, offset, 0xFFFFFF);
+                offset += 10;
+            }
+        }
+    }
+
+    private static void addTips(String key, Item... items) {
+        for (Item item : items) {
+            TIPS.put(item, Component.translatable(key));
+        }
+    }
+}
