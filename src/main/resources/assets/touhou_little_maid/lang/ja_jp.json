@@ -180,7 +180,6 @@
   "task.touhou_little_maid.milk.condition.has_bucket": "インベントリにバケツを持っている",
   "task.touhou_little_maid.torch.desc": "メイドは暗い場所にトーチを設置しようとします",
   "task.touhou_little_maid.torch.condition.has_torch": "インベントリに松明を持っている",
-  "task.touhou_little_maid.feed_animal.desc": "メイドは周囲の動物を繁殖させようとします",
   "task.touhou_little_maid.extinguishing.desc": "メイドは周囲の火を消そうとします",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "メイドが消火器を持っている",
   "subtitle.touhou_little_maid.maid.mode.idle": "メイドの待機の音",

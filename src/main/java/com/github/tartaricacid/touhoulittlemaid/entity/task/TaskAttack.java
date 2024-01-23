@@ -2,21 +2,26 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityExtinguishingAgent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -57,12 +62,34 @@ public class TaskAttack implements IAttackTask {
     }
 
     @Override
+    public boolean hasExtraAttack(EntityMaid maid, Entity target) {
+        return maid.getOffhandItem().is(InitItems.EXTINGUISHER.get()) && target.fireImmune();
+    }
+
+    @Override
+    public boolean doExtraAttack(EntityMaid maid, Entity target) {
+        Level world = maid.level;
+        AABB aabb = target.getBoundingBox().inflate(1.5, 1, 1.5);
+        List<EntityExtinguishingAgent> extinguishingAgents = world.getEntitiesOfClass(EntityExtinguishingAgent.class, aabb, Entity::isAlive);
+        if (extinguishingAgents.isEmpty()) {
+            world.addFreshEntity(new EntityExtinguishingAgent(world, target.position()));
+            maid.getOffhandItem().hurtAndBreak(1, maid, (m) -> m.broadcastBreakEvent(InteractionHand.OFF_HAND));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
-        return Collections.singletonList(Pair.of("assault_weapon", this::hasAssaultWeapon));
+        return Lists.newArrayList(Pair.of("assault_weapon", this::hasAssaultWeapon), Pair.of("extinguisher", this::hasExtinguisher));
     }
 
     private boolean hasAssaultWeapon(EntityMaid maid) {
         return maid.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE);
+    }
+
+    private boolean hasExtinguisher(EntityMaid maid) {
+        return maid.getOffhandItem().is(InitItems.EXTINGUISHER.get());
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {

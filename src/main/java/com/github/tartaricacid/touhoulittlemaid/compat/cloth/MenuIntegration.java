@@ -52,7 +52,6 @@ public class MenuIntegration {
                 .setDefaultValue(Items.CAKE).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_tamed_item.desc"))
                 .setSaveConsumer(s -> MaidConfig.MAID_TAMED_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
 
-
         maid.addEntry(entryBuilder.startDropdownMenu(new TranslatableComponent("config.touhou_little_maid.maid.maid_temptation_item.name"),
                         DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(ForgeRegistries.ITEMS.getValue(new ResourceLocation(MaidConfig.MAID_TEMPTATION_ITEM.get()))),
                         DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
@@ -60,14 +59,12 @@ public class MenuIntegration {
                 .setDefaultValue(Items.CAKE).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_temptation_item.desc"))
                 .setSaveConsumer(s -> MaidConfig.MAID_TEMPTATION_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
 
-
         maid.addEntry(entryBuilder.startDropdownMenu(new TranslatableComponent("config.touhou_little_maid.maid.maid_ntr_item.name"),
                         DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(ForgeRegistries.ITEMS.getValue(new ResourceLocation(MaidConfig.MAID_NTR_ITEM.get()))),
                         DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
                 .setSelections(Registry.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
                 .setDefaultValue(Items.STRUCTURE_VOID).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_ntr_item.desc"))
                 .setSaveConsumer(s -> MaidConfig.MAID_NTR_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
-
 
         maid.addEntry(entryBuilder.startIntSlider(new TranslatableComponent("config.touhou_little_maid.maid.maid_work_range.name"), MaidConfig.MAID_WORK_RANGE.get(), 3, 64)
                 .setDefaultValue(12).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_work_range.desc"))
@@ -85,17 +82,32 @@ public class MenuIntegration {
                 .setDefaultValue(8).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_non_home_range.desc"))
                 .setSaveConsumer(i -> MaidConfig.MAID_NON_HOME_RANGE.set(i)).build());
 
+        maid.addEntry(entryBuilder.startIntField(new TranslatableComponent("config.touhou_little_maid.maid.feed_animal_max_number.name"), MaidConfig.FEED_ANIMAL_MAX_NUMBER.get())
+                .setMin(6).setMax(65536).setDefaultValue(50).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.feed_animal_max_number.desc"))
+                .setSaveConsumer(i -> MaidConfig.FEED_ANIMAL_MAX_NUMBER.set(i)).build());
 
         maid.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.maid.maid_change_model.name"), MaidConfig.MAID_CHANGE_MODEL.get())
                 .setDefaultValue(true).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_change_model.desc"))
                 .setSaveConsumer(MaidConfig.MAID_CHANGE_MODEL::set).build());
 
+        maid.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.maid.maid_gomoku_owner_limit.name"), MaidConfig.MAID_GOMOKU_OWNER_LIMIT.get())
+                .setDefaultValue(true).setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_gomoku_owner_limit.desc"))
+                .setSaveConsumer(MaidConfig.MAID_GOMOKU_OWNER_LIMIT::set).build());
 
         maid.addEntry(entryBuilder.startIntField(new TranslatableComponent("config.touhou_little_maid.maid.owner_max_maid_num.name"), MaidConfig.OWNER_MAX_MAID_NUM.get())
                 .setDefaultValue(Integer.MAX_VALUE).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.owner_max_maid_num.desc"))
                 .setSaveConsumer(i -> MaidConfig.OWNER_MAX_MAID_NUM.set(i)).build());
 
+        maid.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.maid.maid_backpack_blacklist.name"), MaidConfig.MAID_BACKPACK_BLACKLIST.get())
+                .setDefaultValue(Lists.newArrayList())
+                .setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_backpack_blacklist.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_BACKPACK_BLACKLIST.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.maid.maid_attack_ignore.name"), MaidConfig.MAID_ATTACK_IGNORE.get())
+                .setDefaultValue(Lists.newArrayList())
+                .setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_attack_ignore.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_ATTACK_IGNORE.set(l)).build());
 
         maid.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.maid.maid_ranged_attack_ignore.name"), MaidConfig.MAID_RANGED_ATTACK_IGNORE.get())
                 .setDefaultValue(Lists.newArrayList())
@@ -131,18 +143,15 @@ public class MenuIntegration {
                 .setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_spawn_probability.desc"))
                 .setSaveConsumer(d -> MiscConfig.MAID_FAIRY_SPAWN_PROBABILITY.set(d)).build());
 
-
-        misc.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.name"), (List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.get())
-                .setDefaultValue(Lists.newArrayList(NETHER.getName(), THEEND.getName(), NONE.getName(), MUSHROOM.getName()))
-                .setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.desc"))
-                .setSaveConsumer(l -> MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.set(l)).build());
-
-
         misc.addEntry(entryBuilder.startDoubleField(new TranslatableComponent("config.touhou_little_maid.misc.player_death_loss_power_point.name"), MiscConfig.PLAYER_DEATH_LOSS_POWER_POINT.get())
                 .setDefaultValue(1.0).setMin(0).setMax(5)
                 .setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.player_death_loss_power_point.desc"))
                 .setSaveConsumer(d -> MiscConfig.PLAYER_DEATH_LOSS_POWER_POINT.set(d)).build());
 
+        misc.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.name"), (List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.get())
+                .setDefaultValue(Lists.newArrayList(NETHER.getName(), THEEND.getName(), NONE.getName(), MUSHROOM.getName()))
+                .setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.desc"))
+                .setSaveConsumer(l -> MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.set(l)).build());
 
         misc.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.misc.give_smart_slab.name"), MiscConfig.GIVE_SMART_SLAB.get())
                 .setDefaultValue(true).setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.give_smart_slab.desc"))

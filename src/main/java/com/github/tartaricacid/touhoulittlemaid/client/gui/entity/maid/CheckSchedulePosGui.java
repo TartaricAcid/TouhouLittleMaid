@@ -35,10 +35,10 @@ public class CheckSchedulePosGui extends Screen {
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         renderBackground(poseStack);
         List<FormattedCharSequence> split = font.split(tips, 300);
-        int startY = middleY - 10 - split.size() * font.lineHeight;
+        int startY = middleY - 10 - split.size() * (font.lineHeight + 3);
         for (FormattedCharSequence text : split) {
             drawCenteredString(poseStack, font, text, middleX, startY, 0xFFFFFF);
-            startY += font.lineHeight;
+            startY += font.lineHeight + 3;
         }
         super.render(poseStack, mouseX, mouseY, partialTicks);
     }

@@ -23,7 +23,7 @@ public class LayerMaidBackpack extends RenderLayer<EntityMaid, BedrockModel<Enti
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+        if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
             return;
         }
         // 稍微缩放，避免整数倍的 z-flight
@@ -35,7 +35,7 @@ public class LayerMaidBackpack extends RenderLayer<EntityMaid, BedrockModel<Enti
         } else {
             poseStack.translate(0, -0.5, 0.25);
         }
-        IMaidBackpack type = maid.getMaidBackpackType();
+        IMaidBackpack type = InGameMaidConfig.INSTANCE.isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
         BackpackManager.findBackpackModel(type.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
     }
 }

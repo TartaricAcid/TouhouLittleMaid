@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Comparator;
 import java.util.List;
@@ -31,9 +32,13 @@ public class MaidPickupEntitiesSensor extends Sensor<EntityMaid> {
             return;
         }
         float radius = maid.getRestrictRadius();
-        List<Entity> allEntities = worldIn.getEntitiesOfClass(Entity.class,
-                maid.getBoundingBox().inflate(radius, VERTICAL_SEARCH_RANGE, radius),
-                Entity::isAlive);
+        AABB aabb;
+        if (maid.hasRestriction()) {
+            aabb = new AABB(maid.getRestrictCenter()).inflate(radius, VERTICAL_SEARCH_RANGE, radius);
+        } else {
+            aabb = maid.getBoundingBox().inflate(radius, VERTICAL_SEARCH_RANGE, radius);
+        }
+        List<Entity> allEntities = worldIn.getEntitiesOfClass(Entity.class, aabb, Entity::isAlive);
         allEntities.sort(Comparator.comparingDouble(maid::distanceToSqr));
         List<Entity> optional = allEntities.stream()
                 .filter(e -> maid.canPickup(e, true))

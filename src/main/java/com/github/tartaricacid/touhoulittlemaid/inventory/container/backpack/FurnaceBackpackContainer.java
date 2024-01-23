@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.FurnaceBackpackData;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,7 +30,12 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
             furnaceData = new FurnaceBackpackData(this.getMaid());
         }
         this.data = furnaceData.getDataAccess();
-        this.addSlot(new Slot(furnaceData, 0, 161, 101));
+        this.addSlot(new Slot(furnaceData, 0, 161, 101) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return EntityMaid.canInsertItem(stack);
+            }
+        });
         this.addSlot(new FurnaceBackpackFuelSlot(this, furnaceData, 1, 161, 142));
         this.addSlot(new FurnaceResultSlot(inventory.player, furnaceData, 2, 221, 121));
         this.addDataSlots(this.data);

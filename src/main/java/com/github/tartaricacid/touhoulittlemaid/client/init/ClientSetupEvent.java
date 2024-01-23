@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.AnimationRegister;
+import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,5 +16,6 @@ public class ClientSetupEvent {
         event.enqueueWork(AnimationRegister::registerAnimationState);
         event.enqueueWork(AnimationRegister::registerVariables);
         event.enqueueWork(InGameMaidConfig::read);
+        event.enqueueWork(MaidTipsOverlay::init);
     }
 }

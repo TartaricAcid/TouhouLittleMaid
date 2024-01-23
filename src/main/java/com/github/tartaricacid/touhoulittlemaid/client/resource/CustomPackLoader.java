@@ -20,6 +20,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
+import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
@@ -114,7 +115,15 @@ public class CustomPackLoader {
         }
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".zip")) {
-                readModelFromZipFile(file);
+                try {
+                    if (ZipFileCheck.isZipFile(file)) {
+                        readModelFromZipFile(file);
+                    } else {
+                        TouhouLittleMaid.LOGGER.error("{} file is corrupt and cannot be loaded.", file.getName());
+                    }
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
             if (file.isDirectory()) {
                 readModelFromFolder(file);

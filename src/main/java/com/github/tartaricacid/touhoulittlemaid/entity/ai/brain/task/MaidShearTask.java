@@ -41,10 +41,8 @@ public class MaidShearTask extends MaidCheckRateTask {
             return;
         }
 
-        int maxDistToWalk = (int) maid.getRestrictRadius();
         this.getEntities(maid)
-                .find(e -> e.closerThan(maid, maxDistToWalk))
-                .filter(e -> maid.isWithinRestriction(e.blockPosition()))
+                .find(e -> maid.isWithinRestriction(e.blockPosition()))
                 .filter(Entity::isAlive)
                 .filter(e -> e instanceof IForgeShearable)
                 .filter(e -> ((IForgeShearable) e).isShearable(mainHandItem, maid.level, e.blockPosition()))

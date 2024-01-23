@@ -34,7 +34,7 @@ public class MaidGomokuTask extends MaidCheckRateTask {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid maid) {
-        if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
+        if (super.checkExtraStartConditions(worldIn, maid) && maid.canBrainMoving()) {
             BlockPos gomokuPos = findGomoku(worldIn, maid);
             if (gomokuPos != null && maid.isWithinRestriction(gomokuPos)) {
                 if (gomokuPos.distToCenterSqr(maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
@@ -66,12 +66,12 @@ public class MaidGomokuTask extends MaidCheckRateTask {
 
     @Nullable
     private BlockPos findGomoku(ServerLevel world, EntityMaid maid) {
-        BlockPos blockPos = maid.blockPosition();
+        BlockPos blockPos = maid.getBrainSearchPos();
         PoiManager poiManager = world.getPoiManager();
         int range = (int) maid.getRestrictRadius();
         return poiManager.getInRange(type -> type.equals(InitPoi.JOY_BLOCK.get()), blockPos, range, PoiManager.Occupancy.ANY)
                 .map(PoiRecord::getPos).filter(pos -> !isOccupied(world, pos))
-                .min(Comparator.comparingDouble(pos -> pos.distSqr(blockPos))).orElse(null);
+                .min(Comparator.comparingDouble(pos -> pos.distSqr(maid.blockPosition()))).orElse(null);
     }
 
     private boolean isOccupied(ServerLevel worldIn, BlockPos pos) {
@@ -80,9 +80,5 @@ public class MaidGomokuTask extends MaidCheckRateTask {
             return worldIn.getEntity(gomoku.getSitId()) != null;
         }
         return true;
-    }
-
-    private boolean maidStateConditions(EntityMaid maid) {
-        return !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
     }
 }

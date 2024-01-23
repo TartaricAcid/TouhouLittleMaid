@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
@@ -42,7 +43,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -245,7 +245,7 @@ public class BlockGomoku extends BlockJoy {
                 return InteractionResult.FAIL;
             }
             // 检查是不是自己的女仆
-            if (!maid.isOwnedBy(player)) {
+            if (MaidConfig.MAID_GOMOKU_OWNER_LIMIT.get() && !maid.isOwnedBy(player)) {
                 player.sendMessage(new TranslatableComponent("message.touhou_little_maid.gomoku.not_owner"), Util.NIL_UUID);
                 return InteractionResult.FAIL;
             }
@@ -261,7 +261,8 @@ public class BlockGomoku extends BlockJoy {
             if (gomoku.isInProgress() && chessData[playerPoint.x][playerPoint.y] == Point.EMPTY) {
                 gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
                 Statue statue = MaidGomokuAI.getStatue(chessData, playerPoint);
-                if (statue == Statue.WIN) {
+                // 但是和其他人的女仆对弈不加好感哦
+                if (statue == Statue.WIN && maid.isOwnedBy(player)) {
                     maid.getFavorabilityManager().apply(Type.GOMOKU_WIN);
                     int rankBefore = MaidGomokuAI.getRank(maid);
                     MaidGomokuAI.addMaidCount(maid);
@@ -369,10 +370,5 @@ public class BlockGomoku extends BlockJoy {
                 return CENTER;
             }
         }
-    }
-
-    @Override
-    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
-        return false;
     }
 }

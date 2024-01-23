@@ -23,16 +23,12 @@ public class MaidUpdateActivityFromSchedule extends Behavior<EntityMaid> {
             if (this.cacheActivity == null) {
                 this.cacheActivity = activity;
             }
-            if (!this.cacheActivity.equals(activity) && this.maidStateConditions(maid)) {
+            if (!this.cacheActivity.equals(activity) && maid.isHomeModeEnable() && maid.canBrainMoving()) {
                 this.cacheActivity = activity;
                 maid.getSchedulePos().restrictTo(maid);
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
             }
         }
         brain.updateActivityFromSchedule(dayTime, level.getGameTime());
-    }
-
-    private boolean maidStateConditions(EntityMaid maid) {
-        return maid.isHomeModeEnable() && !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
     }
 }

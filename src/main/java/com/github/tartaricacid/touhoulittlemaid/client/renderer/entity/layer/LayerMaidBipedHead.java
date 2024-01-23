@@ -60,7 +60,6 @@ public class LayerMaidBipedHead extends RenderLayer<EntityMaid, BedrockModel<Ent
             }
             poseStack.popPose();
         }
-
         ItemStack stack = maid.getMaidInv().getStackInSlot(5);
         if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
             Block block = ((BlockItem) stack.getItem()).getBlock();

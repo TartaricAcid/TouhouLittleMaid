@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.carryon.BlackList;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
@@ -17,12 +18,14 @@ public final class CompatRegistry {
     private static final String TOP = "theoneprobe";
     private static final String PATCHOULI = "patchouli";
     private static final String CLOTH_CONFIG = "cloth_config";
+    private static final String CARRY_ON_ID = "carryon";
 
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
         event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
         event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
         event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MenuIntegration::registerModsPage)));
+        event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
     }
 
     private static void checkModLoad(String modId, Runnable runnable) {

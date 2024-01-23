@@ -35,7 +35,7 @@ public class MaidBedTask extends MaidCheckRateTask {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid maid) {
-        if (super.checkExtraStartConditions(worldIn, maid) && this.maidStateConditions(maid)) {
+        if (super.checkExtraStartConditions(worldIn, maid) && maid.canBrainMoving()) {
             BlockPos bedPos = findBed(worldIn, maid);
             if (bedPos != null && maid.isWithinRestriction(bedPos)) {
                 if (bedPos.distToCenterSqr(maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
@@ -68,14 +68,10 @@ public class MaidBedTask extends MaidCheckRateTask {
 
     @Nullable
     private BlockPos findBed(ServerLevel world, EntityMaid maid) {
-        BlockPos blockPos = maid.blockPosition();
+        BlockPos blockPos = maid.getBrainSearchPos();
         PoiManager poiManager = world.getPoiManager();
         int range = (int) maid.getRestrictRadius();
         return poiManager.getInRange(type -> type.equals(InitPoi.MAID_BED.get()), blockPos, range, PoiManager.Occupancy.ANY)
-                .map(PoiRecord::getPos).min(Comparator.comparingDouble(pos -> pos.distSqr(blockPos))).orElse(null);
-    }
-
-    private boolean maidStateConditions(EntityMaid maid) {
-        return !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
+                .map(PoiRecord::getPos).min(Comparator.comparingDouble(pos -> pos.distSqr(maid.blockPosition()))).orElse(null);
     }
 }
