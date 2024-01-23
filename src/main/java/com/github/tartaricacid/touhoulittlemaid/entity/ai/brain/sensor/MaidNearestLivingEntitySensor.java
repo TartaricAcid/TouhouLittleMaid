@@ -19,7 +19,12 @@ public class MaidNearestLivingEntitySensor extends Sensor<EntityMaid> {
 
     protected void doTick(ServerLevel world, EntityMaid maid) {
         float radius = maid.getRestrictRadius();
-        AABB aabb = maid.getBoundingBox().inflate(radius, VERTICAL_SEARCH_RANGE, radius);
+        AABB aabb;
+        if (maid.hasRestriction()) {
+            aabb = new AABB(maid.getRestrictCenter()).inflate(radius, VERTICAL_SEARCH_RANGE, radius);
+        } else {
+            aabb = maid.getBoundingBox().inflate(radius, VERTICAL_SEARCH_RANGE, radius);
+        }
         List<LivingEntity> list = world.getEntitiesOfClass(LivingEntity.class, aabb, (entity) -> entity != maid && entity.isAlive());
         list.sort(Comparator.comparingDouble(maid::distanceToSqr));
         Brain<EntityMaid> brain = maid.getBrain();

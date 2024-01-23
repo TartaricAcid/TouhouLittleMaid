@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
@@ -30,17 +31,14 @@ public class MaidFeedAnimalTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         feedEntity = null;
-        int maxDistToWalk = (int) maid.getRestrictRadius();
         long animalCount = this.getEntities(maid)
-                .find(e -> e.closerThan(maid, maxDistToWalk))
-                .filter(e -> maid.isWithinRestriction(e.blockPosition()))
+                .find(e -> maid.isWithinRestriction(e.blockPosition()))
                 .filter(Entity::isAlive)
                 .filter(e -> e instanceof Animal).count();
 
         if (animalCount < maxAnimalCount) {
             this.getEntities(maid)
-                    .find(e -> e.closerThan(maid, maxDistToWalk))
-                    .filter(e -> maid.isWithinRestriction(e.blockPosition()))
+                    .find(e -> maid.isWithinRestriction(e.blockPosition()))
                     .filter(Entity::isAlive)
                     .filter(e -> e instanceof Animal)
                     .filter(e -> ((Animal) e).getAge() == 0)
@@ -62,6 +60,8 @@ public class MaidFeedAnimalTask extends MaidCheckRateTask {
                 }
                 feedEntity = null;
             }
+        } else {
+            ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.feed_animal.max_number");
         }
     }
 

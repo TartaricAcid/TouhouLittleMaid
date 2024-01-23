@@ -37,9 +37,8 @@ public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
-        int maxDistToWalk = (int) maid.getRestrictRadius();
         getItems(maid).stream()
-                .filter(e -> e.closerThan(maid, maxDistToWalk) && e.isAlive() && !e.isInWater())
+                .filter(e -> maid.isWithinRestriction(e.blockPosition()) && e.isAlive() && !e.isInWater())
                 .filter(maid::canPathReach).findFirst()
                 .ifPresent(e -> BehaviorUtils.setWalkAndLookTargetMemories(maid, e, this.speedModifier, 0));
     }

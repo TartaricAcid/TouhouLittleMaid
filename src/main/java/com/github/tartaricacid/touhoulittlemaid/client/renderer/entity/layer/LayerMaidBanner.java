@@ -42,7 +42,7 @@ public class LayerMaidBanner extends RenderLayer<EntityMaid, BedrockModel<Entity
     public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof BannerItem bannerItem) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible()) {
                 return;
             }
             matrixStack.pushPose();

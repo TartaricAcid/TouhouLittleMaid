@@ -66,6 +66,11 @@ public class ItemSmartSlab extends Item {
     }
 
     @Override
+    public boolean canFitInsideContainerItems() {
+        return this.type != Type.HAS_MAID;
+    }
+
+    @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (!entity.isInvulnerable()) {
             entity.setInvulnerable(true);

@@ -73,7 +73,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
 
                         @Override
                         public boolean mayPlace(@Nonnull ItemStack stack) {
-                            return stack.canEquip(EquipmentSlot, maid);
+                            return stack.canEquip(EquipmentSlot, maid) && stack.getItem().canFitInsideContainerItems();
                         }
 
                         @Override

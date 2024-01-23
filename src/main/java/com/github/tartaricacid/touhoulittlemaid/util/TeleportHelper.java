@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 
 public final class TeleportHelper {
@@ -13,6 +14,18 @@ public final class TeleportHelper {
             double x = maid.getX() + (maid.getRandom().nextDouble() - 0.5) * 16;
             double y = maid.getY() + maid.getRandom().nextInt(16) - 8;
             double z = maid.getZ() + (maid.getRandom().nextDouble() - 0.5) * 16;
+            return teleport(maid, x, y, z);
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean teleportToRestrictCenter(EntityMaid maid) {
+        BlockPos blockPos = maid.getRestrictCenter();
+        if (!maid.level.isClientSide() && maid.isAlive()) {
+            int x = blockPos.getX() + randomIntInclusive(maid.getRandom(), -3, 3);
+            int y = blockPos.getY() + randomIntInclusive(maid.getRandom(), -1, 1);
+            int z = blockPos.getZ() + randomIntInclusive(maid.getRandom(), -3, 3);
             return teleport(maid, x, y, z);
         } else {
             return false;
@@ -37,5 +50,9 @@ public final class TeleportHelper {
         } else {
             return false;
         }
+    }
+
+    private static int randomIntInclusive(RandomSource random, int min, int max) {
+        return random.nextInt(max - min + 1) + min;
     }
 }

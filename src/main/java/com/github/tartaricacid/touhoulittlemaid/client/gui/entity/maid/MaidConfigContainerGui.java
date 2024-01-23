@@ -9,9 +9,18 @@ import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.anti_ad.mc.ipn.api.IPNButton;
+import org.anti_ad.mc.ipn.api.IPNGuiHint;
+import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig.INSTANCE;
 
+@IPNPlayerSideOnly
+@IPNGuiHint(button = IPNButton.SORT, horizontalOffset = -36, bottom = -12)
+@IPNGuiHint(button = IPNButton.SORT_COLUMNS, horizontalOffset = -24, bottom = -24)
+@IPNGuiHint(button = IPNButton.SORT_ROWS, horizontalOffset = -12, bottom = -36)
+@IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = -5)
+@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
 public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigContainer> {
     private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_config.png");
     private int left;
@@ -48,9 +57,20 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         };
         showBackpack.initTextureValues(22, 0, -22, 0, ICON);
 
+        StateSwitchingButton showBackItem = new StateSwitchingButton(left + 10, top + 10 + 24 * 2, 22, 22, INSTANCE.isShowBackItem()) {
+            @Override
+            public void onClick(double mouseX, double mouseY) {
+                this.isStateTriggered = !this.isStateTriggered;
+                INSTANCE.setShowBackItem(this.isStateTriggered);
+                InGameMaidConfig.save();
+            }
+        };
+        showBackItem.initTextureValues(22, 0, -22, 0, ICON);
+
         this.addRenderableWidget(showChatBubble);
         this.addRenderableWidget(showBackpack);
-        this.addRenderableWidget(new MaidSoundFreqButton(left + 10, top + 15 + 24 * 2));
+        this.addRenderableWidget(showBackItem);
+        this.addRenderableWidget(new MaidSoundFreqButton(left + 10, top + 15 + 24 * 3));
     }
 
     @Override
@@ -58,6 +78,7 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         super.renderBg(matrixStack, partialTicks, x, y);
         font.draw(matrixStack, Component.translatable("gui.touhou_little_maid.maid_config.show_chat_bubble"), left + 38, top + 17, 0x333333);
         font.draw(matrixStack, Component.translatable("gui.touhou_little_maid.maid_config.show_backpack"), left + 38, top + 17 + 24, 0x333333);
+        font.draw(matrixStack, Component.translatable("gui.touhou_little_maid.maid_config.show_back_item"), left + 38, top + 17 + 24 * 2, 0x333333);
     }
 
     @Override

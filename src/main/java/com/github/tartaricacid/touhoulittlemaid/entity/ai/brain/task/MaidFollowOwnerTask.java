@@ -88,7 +88,7 @@ public class MaidFollowOwnerTask extends Behavior<EntityMaid> {
     }
 
     private boolean maidStateConditions(EntityMaid maid) {
-        return !maid.isHomeModeEnable() && !maid.isInSittingPose() && !maid.isSleeping() && !maid.isLeashed() && !maid.isPassenger();
+        return !maid.isHomeModeEnable() && maid.canBrainMoving();
     }
 
     private boolean ownerStateConditions(@Nullable LivingEntity owner) {

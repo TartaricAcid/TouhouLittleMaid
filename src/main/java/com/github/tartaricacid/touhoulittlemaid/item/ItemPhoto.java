@@ -50,6 +50,11 @@ public class ItemPhoto extends Item {
     }
 
     @Override
+    public boolean canFitInsideContainerItems() {
+        return false;
+    }
+
+    @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (!entity.isInvulnerable()) {
             entity.setInvulnerable(true);
