@@ -4,12 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +20,7 @@ import net.minecraft.world.GameType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -40,6 +41,17 @@ public class MaidTipsOverlay {
         addTips("overlay.touhou_little_maid.glass_bottle.tips", Items.GLASS_BOTTLE);
         addTips("overlay.touhou_little_maid.name_tag.tips", Items.NAME_TAG);
         addTips("overlay.touhou_little_maid.lead.tips", Items.LEAD);
+        addTips("overlay.touhou_little_maid.debug_stick.tips", Items.DEBUG_STICK);
+    }
+
+    private static ITextComponent checkSpecialTips(ItemStack mainhandItem, EntityMaid maid, ClientPlayerEntity player) {
+        if (!maid.isOwnedBy(player) && maid.getNtrItem().test(mainhandItem)) {
+            return new TranslationTextComponent("overlay.touhou_little_maid.ntr_item.tips");
+        }
+        if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.getItem().is(Tags.Items.SHEARS)) {
+            return new TranslationTextComponent("overlay.touhou_little_maid.remove_backpack.tips");
+        }
+        return null;
     }
 
     @SubscribeEvent
@@ -71,10 +83,16 @@ public class MaidTipsOverlay {
         if (player == null) {
             return;
         }
-        if (!maid.isAlive() || !maid.isOwnedBy(player)) {
+        if (!maid.isAlive()) {
             return;
         }
-        ITextComponent tip = TIPS.get(player.getMainHandItem().getItem());
+        ITextComponent tip = null;
+        if (maid.isOwnedBy(player)) {
+            tip = TIPS.get(player.getMainHandItem().getItem());
+        }
+        if (tip == null) {
+            tip = checkSpecialTips(player.getMainHandItem(), maid, player);
+        }
         if (tip != null) {
             int screenWidth = minecraft.getWindow().getGuiScaledWidth();
             int screenHeight = minecraft.getWindow().getGuiScaledHeight();
