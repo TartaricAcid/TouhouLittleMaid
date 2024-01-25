@@ -150,6 +150,8 @@ dependencies {
     implementation fg.deobf("curse.maven:libipn-679177:${libipn_id}")
     implementation fg.deobf("curse.maven:inventory-profiles-next-495267:${ipn_id}")
 
+    implementation fg.deobf("org.embeddedt:embeddium-1.20.1:${embeddedt_id}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

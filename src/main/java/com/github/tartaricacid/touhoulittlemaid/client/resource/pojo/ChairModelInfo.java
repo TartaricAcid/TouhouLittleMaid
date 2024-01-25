@@ -28,6 +28,9 @@ public class ChairModelInfo implements IModelInfo {
     @SerializedName("texture")
     private ResourceLocation texture;
 
+    @SerializedName("extra_textures")
+    private List<ResourceLocation> extraTextures;
+
     @SerializedName("model_id")
     private ResourceLocation modelId;
 
@@ -55,6 +58,11 @@ public class ChairModelInfo implements IModelInfo {
     @Override
     public ResourceLocation getTexture() {
         return texture;
+    }
+
+    @Override
+    public List<ResourceLocation> getExtraTextures() {
+        return extraTextures;
     }
 
     @Override
@@ -111,6 +119,25 @@ public class ChairModelInfo implements IModelInfo {
 
     @SuppressWarnings("unchecked")
     @Override
+    public ChairModelInfo extra(ResourceLocation newModelId, ResourceLocation texture) {
+        ChairModelInfo cloneInfo = new ChairModelInfo();
+        cloneInfo.modelId = newModelId;
+        cloneInfo.texture = texture;
+        cloneInfo.name = this.name;
+        cloneInfo.description = this.description;
+        cloneInfo.model = this.model;
+        cloneInfo.renderItemScale = this.renderItemScale;
+        cloneInfo.renderEntityScale = this.renderEntityScale;
+        cloneInfo.animation = this.animation;
+        cloneInfo.mountedYOffset = this.mountedYOffset;
+        cloneInfo.tameableCanRide = this.tameableCanRide;
+        cloneInfo.noGravity = this.noGravity;
+        cloneInfo.isGeckoModel = this.isGeckoModel;
+        return cloneInfo;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public ChairModelInfo decorate() {
         // description 设置为空列表
         if (description == null) {
@@ -132,7 +159,7 @@ public class ChairModelInfo implements IModelInfo {
             name = String.format("{model.%s.%s.name}", modelId.getNamespace(), modelId.getPath());
         }
         if (isGeckoModel) {
-            if (animation == null || animation.size() == 0) {
+            if (animation == null || animation.isEmpty()) {
                 animation = Collections.singletonList(GeckoModelLoader.DEFAULT_CHAIR_ANIMATION);
             } else {
                 animation = animation.stream().filter(res -> res.getPath().endsWith(GECKO_ANIMATION)).collect(Collectors.toList());
