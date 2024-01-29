@@ -20,9 +20,14 @@ public interface IModelInfo {
 
     ResourceLocation getTexture();
 
+    @Nullable
+    List<ResourceLocation> getExtraTextures();
+
     List<String> getDescription();
 
     float getRenderItemScale();
 
     <T extends IModelInfo> T decorate();
+
+    <T extends IModelInfo> T extra(ResourceLocation newModelId, ResourceLocation texture);
 }
