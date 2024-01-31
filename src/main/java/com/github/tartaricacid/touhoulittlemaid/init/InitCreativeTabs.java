@@ -71,6 +71,7 @@ public class InitCreativeTabs {
                 output.accept(SHRINE.get());
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());
+                output.accept(BROOM.get());
                 ItemEntityPlaceholder.fillItemCategory(output);
             }).build());
 

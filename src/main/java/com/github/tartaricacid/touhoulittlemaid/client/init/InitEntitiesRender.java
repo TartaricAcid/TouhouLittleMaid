@@ -33,6 +33,7 @@ public final class InitEntitiesRender {
         EntityRenderers.register(EntityThrowPowerPoint.TYPE, ThrownItemRenderer::new);
         EntityRenderers.register(EntityTombstone.TYPE, EntityTombstoneRenderer::new);
         EntityRenderers.register(EntitySit.TYPE, EntitySitRenderer::new);
+        EntityRenderers.register(EntityBroom.TYPE, EntityBroomRender::new);
 
         EntityRenderers.register(EntityType.SLIME, EntityYukkuriSlimeRender::new);
         EntityRenderers.register(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
@@ -44,6 +45,7 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityKeyboard.TYPE, TileEntityKeyboardRenderer::new);
         BlockEntityRenderers.register(TileEntityBookshelf.TYPE, TileEntityBookshelfRenderer::new);
         BlockEntityRenderers.register(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
+        BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
         BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
     }
 
@@ -70,5 +72,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(ComputerModel.LAYER, ComputerModel::createBodyLayer);
         event.registerLayerDefinition(ShrineModel.LAYER, ShrineModel::createBodyLayer);
         event.registerLayerDefinition(MaidBannerModel.LAYER, MaidBannerModel::createBodyLayer);
+        event.registerLayerDefinition(BroomModel.LAYER, BroomModel::createBodyLayer);
     }
 }
