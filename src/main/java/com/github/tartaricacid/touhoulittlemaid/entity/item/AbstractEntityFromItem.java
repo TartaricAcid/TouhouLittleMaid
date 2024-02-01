@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -50,11 +52,6 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
      * @return 物品堆
      */
     protected abstract ItemStack getKilledStack();
-
-    @Override
-    public void kill() {
-        this.remove(Entity.RemovalReason.KILLED);
-    }
 
     @Override
     public boolean hurt(@Nonnull DamageSource source, float amount) {
@@ -104,6 +101,47 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
             }
             this.spawnAtLocation(itemstack, 0.0F);
         }
+    }
+
+    /**
+     * 不允许被挤走，所以此处留空
+     */
+    @Override
+    public void push(Entity entityIn) {
+    }
+
+    @Override
+    protected void doPush(Entity entity) {
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    public void kill() {
+        this.remove(Entity.RemovalReason.KILLED);
+        this.gameEvent(GameEvent.ENTITY_DIE);
+    }
+
+    @Override
+    public boolean skipAttackInteraction(Entity entity) {
+        return entity instanceof Player && !this.level.mayInteract((Player) entity, this.blockPosition());
+    }
+
+    @Override
+    public void thunderHit(ServerLevel pLevel, LightningBolt pLightning) {
+    }
+
+    @Override
+    public boolean showVehicleHealth() {
+        return false;
+    }
+
+    @Override
+    public boolean isAffectedByPotions() {
+        return false;
     }
 
     @Override

@@ -4,6 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -21,10 +27,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
-public class EntityBroom extends AbstractEntityFromItem {
+public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity {
     public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC)
             .sized(0.5f, 0.25f).clientTrackingRange(10).build("broom");
+
+    private static final EntityDataAccessor<Optional<UUID>> OWNER_ID = SynchedEntityData.defineId(EntityBroom.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final String OWNER_UUID_TAG = "OwnerUUID";
 
     private boolean keyForward = false;
     private boolean keyBack = false;
@@ -61,9 +73,29 @@ public class EntityBroom extends AbstractEntityFromItem {
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(OWNER_ID, Optional.empty());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains(OWNER_UUID_TAG)) {
+            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG))));
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        this.entityData.get(OWNER_ID).ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG, uuid));
+    }
+
+    @Override
     public void travel(Vec3 vec3) {
         Entity entity = this.getControllingPassenger();
-        if (entity instanceof Player player && this.isVehicle()) {
+        if (entity instanceof Player player && this.isVehicle() && this.hasPassenger(e -> e instanceof EntityMaid)) {
             if (level.isClientSide) {
                 // 不要问我为什么客户端数据能跑到服务端来
                 // 一定是玄学
@@ -80,25 +112,43 @@ public class EntityBroom extends AbstractEntityFromItem {
 
             this.moveRelative(0.02f, new Vec3(strafe, vertical, forward));
             this.move(MoverType.SELF, this.getDeltaMovement());
-        } else if (!this.onGround()) {
+            return;
+        }
+        if (!this.onGround()) {
             // 玩家没有坐在扫帚上，那就让它掉下来
             super.travel(new Vec3(0, -0.3f, 0));
-        } else {
-            super.travel(vec3);
+            return;
         }
+        super.travel(vec3);
     }
 
     @Override
     protected void pushEntities() {
-        if (this.getPassengers().size() > 1) {
+        // 已经坐满两人，不执行
+        if (this.getPassengers().size() >= 2) {
+            return;
+        }
+        // 已经坐了一人，但不是玩家，不执行
+        if (!this.getPassengers().isEmpty() && !(this.getControllingPassenger() instanceof Player)) {
             return;
         }
         if (!level.isClientSide) {
             List<EntityMaid> list = level.getEntitiesOfClass(EntityMaid.class,
-                    getBoundingBox().expandTowards(0.5, 0.1, 0.5),
-                    e -> e.canBrainMoving() && e.getPassengers().isEmpty() && EntitySelector.pushableBy(this).test(e));
+                    getBoundingBox().expandTowards(0.5, 0.1, 0.5), this::canMaidRide);
             list.stream().findFirst().ifPresent(entity -> entity.startRiding(this));
         }
+    }
+
+    private boolean canMaidRide(EntityMaid maid) {
+        if (maid.canBrainMoving() && !maid.isVehicle() && EntitySelector.pushableBy(this).test(maid)) {
+            UUID maidOwnerUUID = maid.getOwnerUUID();
+            UUID broomOwnerUUID = this.getOwnerUUID();
+            if (maidOwnerUUID == null || broomOwnerUUID == null) {
+                return false;
+            }
+            return maidOwnerUUID.equals(broomOwnerUUID);
+        }
+        return false;
     }
 
     @Override
@@ -133,8 +183,13 @@ public class EntityBroom extends AbstractEntityFromItem {
     @Override
     public InteractionResult interact(Player player, InteractionHand pHand) {
         if (!player.isDiscrete() && !this.isPassenger() && !(this.getControllingPassenger() instanceof Player)) {
-            if (this.getPassengers().size() < 2) {
-                player.startRiding(this);
+            if (this.getPassengers().size() <= 1) {
+                if (player.getUUID().equals(this.getOwnerUUID())) {
+                    player.startRiding(this);
+                } else {
+                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.broom.not_the_owner"));
+                    return InteractionResult.FAIL;
+                }
             }
             return InteractionResult.sidedSuccess(this.level.isClientSide);
         }
@@ -163,7 +218,7 @@ public class EntityBroom extends AbstractEntityFromItem {
 
     @Override
     protected boolean canKillEntity(Player player) {
-        return false;
+        return player.getUUID().equals(this.getOwnerUUID());
     }
 
     @Override
@@ -191,15 +246,12 @@ public class EntityBroom extends AbstractEntityFromItem {
         this.resetFallDistance();
     }
 
-    /**
-     * 不允许被挤走，所以此处留空
-     */
-    @Override
-    public void push(Entity entityIn) {
+    @Nullable
+    public UUID getOwnerUUID() {
+        return this.entityData.get(OWNER_ID).orElse(null);
     }
 
-    @Override
-    public boolean isPushable() {
-        return false;
+    public void setOwnerUUID(@Nullable UUID uuid) {
+        this.entityData.set(OWNER_ID, Optional.ofNullable(uuid));
     }
 }

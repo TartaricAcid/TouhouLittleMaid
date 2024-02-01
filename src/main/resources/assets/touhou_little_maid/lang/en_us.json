@@ -269,6 +269,8 @@
   "message.touhou_little_maid.script_book.remove": "Successfully clear the maid's chat bubble script",
   "message.touhou_little_maid.script_book.install": "Successfully install the maid's chat bubble script",
   "message.touhou_little_maid.script_book.copy": "Successfully copy the maid's chat bubble script",
+  "message.touhou_little_maid.broom.not_the_owner": "You are not the owner of this broom!",
+  "message.touhou_little_maid.broom.unable_fly": "You need a maid to sit on your broom before you can use it",
   "commands.touhou_little_maid.pack.reload.info": "All model pack have been reloaded!",
   "commands.touhou_little_maid.power.handle.info": "%d players's power point is changed",
   "commands.touhou_little_maid.maid_num.handle.info": "%d players's maid num is changed",

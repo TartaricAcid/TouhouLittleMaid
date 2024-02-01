@@ -38,6 +38,9 @@ public class ItemBroom extends Item {
                     if (broom == null) {
                         return InteractionResult.FAIL;
                     }
+                    if (context.getPlayer() != null) {
+                        broom.setOwnerUUID(context.getPlayer().getUUID());
+                    }
                     world.addFreshEntity(broom);
                     world.playSound(null, broom.getX(), broom.getY(), broom.getZ(), SoundEvents.WOOL_PLACE, SoundSource.BLOCKS, 0.75F, 0.8F);
                 }

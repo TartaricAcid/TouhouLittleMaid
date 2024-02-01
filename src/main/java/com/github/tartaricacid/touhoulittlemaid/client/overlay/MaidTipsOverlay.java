@@ -80,6 +80,7 @@ public class MaidTipsOverlay implements IGuiOverlay {
             tip = checkSpecialTips(player.getMainHandItem(), maid, player);
         }
         if (tip != null) {
+            gui.setupOverlayRenderState(true, false);
             List<FormattedCharSequence> split = minecraft.font.split(tip, 150);
             int offset = (screenHeight / 2 - 5) - split.size() * 10;
             guiGraphics.renderItem(player.getMainHandItem(), screenWidth / 2 - 8, offset);
