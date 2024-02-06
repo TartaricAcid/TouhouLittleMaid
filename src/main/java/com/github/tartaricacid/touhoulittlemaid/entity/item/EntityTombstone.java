@@ -170,4 +170,8 @@ public class EntityTombstone extends Entity {
     public Component getMaidName() {
         return this.entityData.get(MAID_NAME);
     }
+
+    public ItemStackHandler getItems() {
+        return items;
+    }
 }

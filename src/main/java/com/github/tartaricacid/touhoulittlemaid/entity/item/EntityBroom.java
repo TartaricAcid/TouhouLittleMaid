@@ -4,8 +4,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,9 +16,14 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -24,6 +31,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,13 +42,21 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity {
-    public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC)
-            .sized(0.5f, 0.25f).clientTrackingRange(10).build("broom");
+public class EntityBroom extends AbstractEntityFromItem implements HasCustomInventoryScreen, MenuProvider, OwnableEntity {
+    public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build("broom");
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_ID = SynchedEntityData.defineId(EntityBroom.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final String OWNER_UUID_TAG = "OwnerUUID";
+    private static final String CHEST_TAG = "BroomChest";
 
+    private final SimpleContainer inventory = new SimpleContainer(27) {
+        @Override
+        public boolean stillValid(Player player) {
+            return EntityBroom.this.isAlive();
+        }
+    };
+
+    private LazyOptional<InvWrapper> itemHandler = LazyOptional.of(() -> new InvWrapper(inventory));
     private boolean keyForward = false;
     private boolean keyBack = false;
     private boolean keyLeft = false;
@@ -84,12 +103,16 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
         if (compound.contains(OWNER_UUID_TAG)) {
             setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG))));
         }
+        if (compound.contains(CHEST_TAG, Tag.TAG_LIST)) {
+            this.inventory.fromTag(compound.getList(CHEST_TAG, Tag.TAG_COMPOUND));
+        }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         this.entityData.get(OWNER_ID).ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG, uuid));
+        compound.put(CHEST_TAG, this.inventory.createTag());
     }
 
     @Override
@@ -133,8 +156,7 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
             return;
         }
         if (!level.isClientSide) {
-            List<EntityMaid> list = level.getEntitiesOfClass(EntityMaid.class,
-                    getBoundingBox().expandTowards(0.5, 0.1, 0.5), this::canMaidRide);
+            List<EntityMaid> list = level.getEntitiesOfClass(EntityMaid.class, getBoundingBox().expandTowards(0.5, 0.1, 0.5), this::canMaidRide);
             list.stream().findFirst().ifPresent(entity -> entity.startRiding(this));
         }
     }
@@ -186,19 +208,78 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand pHand) {
+    public InteractionResult interact(Player player, InteractionHand hand) {
         if (!player.isDiscrete() && !this.isPassenger() && !(this.getControllingPassenger() instanceof Player)) {
             if (this.getPassengers().size() <= 1) {
                 if (player.getUUID().equals(this.getOwnerUUID())) {
                     player.startRiding(this);
                 } else {
-                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.broom.not_the_owner"));
+                    if (hand == InteractionHand.MAIN_HAND && this.level.isClientSide) {
+                        player.sendSystemMessage(Component.translatable("message.touhou_little_maid.broom.not_the_owner"));
+                    }
                     return InteractionResult.FAIL;
                 }
             }
             return InteractionResult.sidedSuccess(this.level.isClientSide);
         }
-        return super.interact(player, pHand);
+
+        if (player.isDescending()) {
+            if (player.getUUID().equals(this.getOwnerUUID())) {
+                this.openCustomInventoryScreen(player);
+            } else {
+                if (hand == InteractionHand.MAIN_HAND && this.level.isClientSide) {
+                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.broom.not_the_owner"));
+                }
+                return InteractionResult.FAIL;
+            }
+        }
+
+        return super.interact(player, hand);
+    }
+
+    @Override
+    public void openCustomInventoryScreen(Player player) {
+        if (!this.level.isClientSide && player.getUUID().equals(this.getOwnerUUID())) {
+            player.openMenu(this);
+        }
+    }
+
+    @Override
+    protected void dropExtraItems() {
+        if (this.inventory != null) {
+            for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+                ItemStack stack = this.inventory.getItem(i);
+                if (!stack.isEmpty()) {
+                    this.spawnAtLocation(stack);
+                }
+            }
+        }
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+        return ChestMenu.threeRows(pContainerId, pPlayerInventory, this.inventory);
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER) {
+            return itemHandler.cast();
+        }
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        itemHandler.invalidate();
+    }
+
+    @Override
+    public void reviveCaps() {
+        super.reviveCaps();
+        itemHandler = LazyOptional.of(() -> new InvWrapper(this.inventory));
     }
 
     @Nullable
@@ -258,5 +339,9 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
 
     public void setOwnerUUID(@Nullable UUID uuid) {
         this.entityData.set(OWNER_ID, Optional.ofNullable(uuid));
+    }
+
+    public SimpleContainer getInventory() {
+        return inventory;
     }
 }

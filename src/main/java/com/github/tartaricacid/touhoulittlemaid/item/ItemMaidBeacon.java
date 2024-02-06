@@ -26,7 +26,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class ItemMaidBeacon extends DoubleHighBlockItem {
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
     private static final String STORAGE_DATA_TAG = "StorageData";
     private static final String FORGE_DATA_TAG = "ForgeData";
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;

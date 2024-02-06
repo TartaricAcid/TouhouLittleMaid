@@ -37,6 +37,19 @@ public class BroomModel extends EntityModel<EntityBroom> {
 
         PartDefinition handle = all.addOrReplaceChild("handle", CubeListBuilder.create().texOffs(0, 17).addBox(-1.0F, -1.0F, -28.0F, 2.0F, 2.0F, 32.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 9.0F));
 
+        PartDefinition chest = all.addOrReplaceChild("chest", CubeListBuilder.create().texOffs(71, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+                .texOffs(71, 16).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 2.0F, 8.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, -0.75F, 12.25F));
+
+        PartDefinition bone6 = chest.addOrReplaceChild("bone6", CubeListBuilder.create(), PartPose.offset(0.5F, -9.5F, 0.0F));
+
+        PartDefinition bone2 = bone6.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(104, 0).addBox(-0.5F, -3.5F, -1.0F, 1.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
+
+        PartDefinition bone4 = bone6.addOrReplaceChild("bone4", CubeListBuilder.create().texOffs(104, 2).addBox(-1.5F, -2.5F, 0.0F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.7854F, 0.0F, 0.0F));
+
+        PartDefinition bone5 = bone6.addOrReplaceChild("bone5", CubeListBuilder.create().texOffs(104, 2).addBox(-1.5F, -2.5F, -1.0F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.7854F, 0.0F, 0.0F));
+
+        PartDefinition bone3 = bone6.addOrReplaceChild("bone3", CubeListBuilder.create().texOffs(104, 0).mirror().addBox(-0.5F, -3.5F, -1.0F, 1.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-1.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+
         return LayerDefinition.create(meshdefinition, 128, 64);
     }
 

@@ -13,7 +13,10 @@ import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public class MaidProvider implements IEntityComponentProvider {
+public enum MaidProvider implements IEntityComponentProvider {
+
+    INSTANCE;
+
     private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid");
 
     @Override

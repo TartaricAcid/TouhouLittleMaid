@@ -12,5 +12,6 @@ public class BlackList {
                 .forEach(id -> InterModComms.sendTo(CARRY_ON_ID, "blacklistBlock", id::toString));
         InterModComms.sendTo(CARRY_ON_ID, "blacklistEntity", () -> TouhouLittleMaid.MOD_ID + ":tombstone");
         InterModComms.sendTo(CARRY_ON_ID, "blacklistEntity", () -> TouhouLittleMaid.MOD_ID + ":sit");
+        InterModComms.sendTo(CARRY_ON_ID, "blacklistEntity", () -> TouhouLittleMaid.MOD_ID + ":broom");
     }
 }
