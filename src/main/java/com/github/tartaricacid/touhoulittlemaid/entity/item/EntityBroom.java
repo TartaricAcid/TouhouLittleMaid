@@ -210,20 +210,23 @@ public class EntityBroom extends AbstractEntityFromItem implements HasCustomInve
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!player.isDiscrete() && !this.isPassenger() && !(this.getControllingPassenger() instanceof Player)) {
-            if (this.getPassengers().size() <= 1) {
-                if (player.getUUID().equals(this.getOwnerUUID())) {
+            if (this.getPassengers().size() > 1) {
+                return InteractionResult.sidedSuccess(this.level.isClientSide);
+            }
+            if (player.getUUID().equals(this.getOwnerUUID())) {
+                if (!level.isClientSide) {
                     player.startRiding(this);
-                } else {
-                    if (hand == InteractionHand.MAIN_HAND && this.level.isClientSide) {
-                        player.sendSystemMessage(Component.translatable("message.touhou_little_maid.broom.not_the_owner"));
-                    }
-                    return InteractionResult.FAIL;
                 }
+            } else {
+                if (hand == InteractionHand.MAIN_HAND && this.level.isClientSide) {
+                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.broom.not_the_owner"));
+                }
+                return InteractionResult.FAIL;
             }
             return InteractionResult.sidedSuccess(this.level.isClientSide);
         }
 
-        if (player.isDescending()) {
+        if (player.isSecondaryUseActive()) {
             if (player.getUUID().equals(this.getOwnerUUID())) {
                 this.openCustomInventoryScreen(player);
             } else {
