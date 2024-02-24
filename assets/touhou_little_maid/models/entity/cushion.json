@@ -1,0 +1,19 @@
+{
+  "format_version": "1.10.0",
+  "geometry.model": {
+    "texturewidth": 64,
+    "textureheight": 64,
+    "visible_bounds_width": 2,
+    "visible_bounds_height": 1,
+    "visible_bounds_offset": [0, 0.5, 0],
+    "bones": [
+      {
+        "name": "chair",
+        "pivot": [0, 0, 0],
+        "cubes": [
+          {"origin": [-7, 0, -7], "size": [14, 3, 14], "uv": [0, 0]}
+        ]
+      }
+    ]
+  }
+}

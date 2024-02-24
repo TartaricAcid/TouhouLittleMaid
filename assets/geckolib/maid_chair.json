@@ -1,0 +1,17 @@
+{
+	"pack_name": "{chair_pack.geckolib.name}",
+	"version": "1.0.0",
+	"icon": "geckolib:textures/chair_icon.png",	
+	"description": ["{chair_pack.geckolib.desc}"],
+	"author": ["qingluka"],
+	"date": "2023-10-12",
+	"model_list": [
+		{
+			"model_id": "geckolib:qingluka",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/qingluka.animation.json"],
+			"render_entity_scale": 0.8,
+			"description": ["{model.geckolib.qingluka.desc}"]
+		}
+	]
+}

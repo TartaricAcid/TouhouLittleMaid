@@ -1,0 +1,70 @@
+{
+	"format_version": "1.10.0",
+	"geometry.model": {
+		"texturewidth": 128,
+		"textureheight": 128,
+		"visible_bounds_width": 3,
+		"visible_bounds_height": 4.5,
+		"visible_bounds_offset": [0, 1.75, 0],
+		"bones": [
+			{
+				"name": "cabinet",
+				"pivot": [-8, 0, 0],
+				"cubes": [
+					{"origin": [-16, 0, -7], "size": [32, 8, 14], "uv": [0, 0]},
+					{"origin": [-15, 0, -8], "size": [30, 1, 1], "uv": [62, 62]},
+					{"origin": [-15, 7, -8], "size": [30, 1, 1], "uv": [62, 62]},
+					{"origin": [-14.5, 1.5, -8], "size": [14, 5, 1], "uv": [62, 54]},
+					{"origin": [0.5, 1.5, -8], "size": [14, 5, 1], "uv": [62, 54]},
+					{"origin": [0.5, 1.5, 7], "size": [14, 5, 1], "uv": [62, 54]},
+					{"origin": [-14.5, 1.5, 7], "size": [14, 5, 1], "uv": [62, 54]},
+					{"origin": [-15, 7, 7], "size": [30, 1, 1], "uv": [62, 62]},
+					{"origin": [-15, 0, 7], "size": [30, 1, 1], "uv": [62, 62]},
+					{"origin": [-15, 15, -7], "size": [30, 1, 14], "uv": [0, 39]},
+					{"origin": [-15, 23, -7], "size": [30, 1, 14], "uv": [0, 39]},
+					{"origin": [-15, 31, -7], "size": [30, 1, 14], "uv": [0, 39]},
+					{"origin": [-15, 39, -7], "size": [30, 1, 14], "uv": [0, 39]},
+					{"origin": [-16, 47, -8], "size": [32, 1, 16], "uv": [0, 22]},
+					{"origin": [-16, 0, -8], "size": [1, 47, 1], "uv": [62, 64]},
+					{"origin": [15, 0, -8], "size": [1, 47, 1], "uv": [62, 64]},
+					{"origin": [15, 0, 7], "size": [1, 47, 1], "uv": [62, 64]},
+					{"origin": [-16, 0, 7], "size": [1, 47, 1], "uv": [62, 64]},
+					{"origin": [-16, 8, -7], "size": [1, 39, 14], "uv": [0, 54]},
+					{"origin": [15, 8, -7], "size": [1, 39, 14], "uv": [0, 54]}
+				]
+			},
+			{
+				"name": "frontLeftDoor",
+				"parent": "cabinet",
+				"pivot": [-14.5, 0, -7.5],
+				"cubes": [
+					{"origin": [-15, 8, -8], "size": [15, 39, 1], "uv": [30, 54]}
+				]
+			},
+			{
+				"name": "frontRightDoor",
+				"parent": "cabinet",
+				"pivot": [14.5, 0, -7.5],
+				"cubes": [
+					{"origin": [0, 8, -8], "size": [15, 39, 1], "uv": [30, 54]}
+				]
+			},
+			{
+				"name": "rearLeftDoor",
+				"parent": "cabinet",
+				"pivot": [14.5, 0, 7.5],
+				"cubes": [
+					{"origin": [0, 8, 7], "size": [15, 39, 1], "uv": [30, 54]}
+				]
+			},
+			{
+				"name": "rearRightDoor",
+				"parent": "cabinet",
+				"pivot": [-14.5, 0, 7.5],
+				"cubes": [
+					{"origin": [-15, 8, 7], "size": [15, 39, 1], "uv": [30, 54]}
+				]
+			}
+		]
+	}
+}

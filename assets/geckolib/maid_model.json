@@ -1,0 +1,24 @@
+{
+	"pack_name": "{maid_pack.geckolib.name}",
+	"version": "1.0.0",
+	"author": ["godzilla256", "星屑海螺"],
+	"description": ["{maid_pack.geckolib.desc}"],
+	"date": "2023-10-10",
+	"icon": "geckolib:textures/maid_icon.png",
+	"model_list": [
+		{
+			"model_id": "geckolib:winefox",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/winefox.animation.json"],
+			"render_entity_scale": 0.7,
+			"description": ["{model.geckolib.winefox.desc}"]
+		},
+		{
+			"model_id": "geckolib:foxmaid",
+			"is_gecko": true,
+			"render_entity_scale": 0.7,
+			"description": ["{model.geckolib.foxmaid.desc}"],
+			"animation": ["geckolib:animation/foxmaid.animation.json"]
+		}
+	]
+}

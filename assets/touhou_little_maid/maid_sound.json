@@ -1,0 +1,9 @@
+{
+  "pack_name": "{pack.touhou_little_maid.sound.name}",
+  "author": ["Amitaro"],
+  "description": "{pack.touhou_little_maid.sound.desc}",
+  "icon": "touhou_little_maid:textures/sound_icon.png",
+  "version": "1.0.0",
+  "date": "2020-03-14",
+  "url": "https://amitaro.net/"
+}

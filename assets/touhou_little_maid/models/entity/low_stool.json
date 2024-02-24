@@ -1,0 +1,91 @@
+{
+  "format_version": "1.10.0",
+  "geometry.model": {
+    "texturewidth": 64,
+    "textureheight": 64,
+    "visible_bounds_width": 2,
+    "visible_bounds_height": 1,
+    "visible_bounds_offset": [0, 0.5, 0],
+    "bones": [
+      {
+        "name": "bone",
+        "pivot": [0, -8, 0],
+        "cubes": [
+          {"origin": [-4, 7, -4], "size": [8, 1, 8], "uv": [0, 0]}
+        ]
+      },
+      {
+        "name": "bone8",
+        "parent": "bone",
+        "pivot": [3, -8, -2],
+        "rotation": [5, 0, 0],
+        "cubes": [
+          {"origin": [-3, 1.60704, 3.79514], "size": [6, 1, 1], "uv": [12, 10]}
+        ]
+      },
+      {
+        "name": "bone9",
+        "parent": "bone",
+        "pivot": [3, -8, -2],
+        "rotation": [-5, 0, 0],
+        "cubes": [
+          {"origin": [-3, 1.95566, -4.81036], "size": [6, 1, 1], "uv": [12, 10]}
+        ]
+      },
+      {
+        "name": "bone6",
+        "parent": "bone",
+        "pivot": [-4.5, -8, -2],
+        "rotation": [0, 0, -5],
+        "cubes": [
+          {"origin": [3.7807, 2.38991, -3], "size": [1, 1, 6], "uv": [2, 11]}
+        ]
+      },
+      {
+        "name": "bone7",
+        "parent": "bone",
+        "pivot": [-4.5, -8, -2],
+        "rotation": [0, 0, 5],
+        "cubes": [
+          {"origin": [-4.81495, 3.17431, -3], "size": [1, 1, 6], "uv": [2, 11]}
+        ]
+      },
+      {
+        "name": "bone2",
+        "parent": "bone",
+        "pivot": [-2.5, 7, 2.5],
+        "rotation": [5, 0, 5],
+        "cubes": [
+          {"origin": [-3.5, 0, 2.5], "size": [1, 7, 1], "uv": [17, 17]}
+        ]
+      },
+      {
+        "name": "bone3",
+        "parent": "bone",
+        "pivot": [-2.5, 7, -2.5],
+        "rotation": [-5, 0, 5],
+        "cubes": [
+          {"origin": [-3.5, 0, -3.5], "size": [1, 7, 1], "uv": [17, 17]}
+        ]
+      },
+      {
+        "name": "bone4",
+        "parent": "bone",
+        "pivot": [2.5, 7, -2.5],
+        "rotation": [-5, 0, -5],
+        "cubes": [
+          {"origin": [2.5, 0, -3.5], "size": [1, 7, 1], "uv": [17, 17]}
+        ]
+      },
+      {
+        "name": "bone5",
+        "parent": "bone",
+        "pivot": [2.5, 7, 2.5],
+        "rotation": [5, 0, -5],
+        "cubes": [
+          {"origin": [2.5, 0, 2.5], "size": [1, 7, 1], "uv": [17, 17]}
+        ]
+      }
+    ]
+  }
+}
