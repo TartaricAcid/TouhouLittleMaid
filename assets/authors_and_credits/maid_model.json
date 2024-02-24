@@ -74,6 +74,10 @@
 				"touhou_little_maid:animation/maid/default/leg/default.js",
 				"touhou_little_maid:animation/maid/default/sit/default.js"
 			]
+		},
+		{
+			"model_id": "authors_and_credits:clocklalier",
+			"description": ["{model.authors_and_credits.clocklalier.desc}", "{model.authors_and_credits.clocklalier.author.desc}"]
 		}
 	]
 }

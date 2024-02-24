@@ -1,8 +1,6 @@
-# Model Pack
 pack.touhou_little_maid.maid.name=Touhou Project Model
 pack.touhou_little_maid.maid.desc=Default Model
 pack.touhou_little_maid.chair.name=Deafult Chair Model
-
 model.touhou_little_maid.hakurei_reimu.name=Reimu Hakurei
 model.touhou_little_maid.yakumo_ran.name=Ran Yakumo
 model.touhou_little_maid.inubashiri_momizi.name=Momiji Inubashiri
@@ -119,7 +117,6 @@ model.touhou_little_maid.watatsuki_no_toyohime.name=Watatsuki no Toyohime
 model.touhou_little_maid.watatsuki_no_yorihime.name=Watatsuki no Yorihime
 model.touhou_little_maid.yorigami_jyoon.name=Joon Yorigami
 model.touhou_little_maid.reisen.name=Reisen
-
 model.touhou_little_maid.hakurei_reimu.desc=§7Shrine Maiden of Paradise
 model.touhou_little_maid.yakumo_ran.desc=§7Shikigami of the Gap Youkai
 model.touhou_little_maid.inubashiri_momizi.desc=§7The Petty Patrol Tengu
@@ -235,7 +232,6 @@ model.touhou_little_maid.watatsuki_no_toyohime.desc=§7The Moon Princess Connect
 model.touhou_little_maid.watatsuki_no_yorihime.desc=§7The Moon Princess Possessed by Divine Spirits
 model.touhou_little_maid.yorigami_jyoon.desc=§7The Most-Despicable and Disastrous Younger Twin Sister
 model.touhou_little_maid.reisen.desc=§7-
-
 model.touhou_little_maid.cushion.name=Cushion
 model.touhou_little_maid.class_desk.name=Class Desk
 model.touhou_little_maid.class_chair.name=Class Chair
@@ -260,10 +256,7 @@ model.touhou_little_maid.park_bench.name=Park Bench
 model.touhou_little_maid.rinnosuke_children_toys.name=Rinnosuke Children's Toys
 model.touhou_little_maid.moto.name=Moto
 model.touhou_little_maid.bowl.name=Shinmyoumaru's Bowl
-
 model.touhou_little_maid.moesumika.desc=§7Tips: the name of the MineCraft Gensoukyo server mascot (in English lowercase)
-
-# Chat Bubble
 chat_bubble.touhou_little_maid.morning.1=Good Morning
 chat_bubble.touhou_little_maid.night.1=Good Night
 chat_bubble.touhou_little_maid.hot.1=So Hot...
@@ -271,7 +264,37 @@ chat_bubble.touhou_little_maid.cold.1=So Cold...
 chat_bubble.touhou_little_maid.rain.1=Raining
 chat_bubble.touhou_little_maid.snow.1=Snowing
 chat_bubble.touhou_little_maid.hurt.1=OUCH!
-
-# Sound Info
 pack.touhou_little_maid.sound.name=Default Sound
 pack.touhou_little_maid.sound.desc=This voice was delivered by Amitoro's Voice Material Studio
+model.touhou_little_maid.tenkyu_chimata.name=Chimata Tenkyuu
+model.touhou_little_maid.tenkyu_chimata.desc=§7God of the Unowned
+model.touhou_little_maid.goutokuzi_mike.name=Mike Goutokuji
+model.touhou_little_maid.goutokuzi_mike.desc=§7Lucky Charm for Prosperous Commerce
+model.touhou_little_maid.yamashiro_takane.name=Takane Yamashiro
+model.touhou_little_maid.yamashiro_takane.desc=§7Business Youkai of the Mountain's Recess
+model.touhou_little_maid.iizunamaru_megumu.name=Megumu Iizunamaru
+model.touhou_little_maid.iizunamaru_megumu.desc=§7Chief of the Crow Tengu
+model.touhou_little_maid.komakusa_sannyo.name=Sannyo Komakusa
+model.touhou_little_maid.komakusa_sannyo.desc=§7Highland-Dwelling Yamajorou
+model.touhou_little_maid.kudamaki_tsukasa.name=Tsukasa Kudamaki
+model.touhou_little_maid.kudamaki_tsukasa.desc=§7Wicked White Fox Who Whispers in Ears
+model.touhou_little_maid.himemushi_momoyo.name=Momoyo Himemushi
+model.touhou_little_maid.himemushi_momoyo.desc=§7Onyx Dragon-Eater
+model.touhou_little_maid.tamatsukuri_misumaru.name=Misumaru Tamatsukuri
+model.touhou_little_maid.tamatsukuri_misumaru.desc=§7Genuine Magatama-Producing Craftsman
+model.touhou_little_maid.toutetsu_yuma.name=Yuuma Toutetsu
+model.touhou_little_maid.toutetsu_yuma.desc=§7Undefeated Matriarch of the Gouyoku Alliance
+model.touhou_little_maid.miyadeguchi_mizuchi.name=Mizuchi Miyadeguchi
+model.touhou_little_maid.miyadeguchi_mizuchi.desc=§7Jailbreak King
+model.touhou_little_maid.nippaku_zanmu.name=Zanmu Nippaku
+model.touhou_little_maid.nippaku_zanmu.desc=§7King of the Silent Bliss of Nirvana
+model.touhou_little_maid.tenkajin_chiyari.name=Chiyari Tenkajin
+model.touhou_little_maid.tenkajin_chiyari.desc=§7Monster of Tainted Organic Material
+model.touhou_little_maid.son_biten.name=Son Biten
+model.touhou_little_maid.son_biten.desc=§7Great Sage of the Small Sanctuary
+model.touhou_little_maid.mitsugashira_enoko.name=Enoko Mitsugashira
+model.touhou_little_maid.mitsugashira_enoko.desc=§7Cerberus of Forested Silence
+model.touhou_little_maid.yomotsu_hisami.name=Hisami Yomotsu
+model.touhou_little_maid.yomotsu_hisami.desc=§7Beautiful Stalker of Hell
+model.touhou_little_maid.morichika_rinnosuke.name=Rinnosuke Morichika
+model.touhou_little_maid.morichika_rinnosuke.desc=§7Store Owner of Kourindou
