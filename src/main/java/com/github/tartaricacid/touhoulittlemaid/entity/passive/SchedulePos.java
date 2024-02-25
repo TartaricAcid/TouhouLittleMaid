@@ -54,7 +54,7 @@ public final class SchedulePos {
     }
 
     public void tick(EntityMaid maid) {
-        if (maid.tickCount % 40 == 0) {
+        if (maid.isHomeModeEnable() && maid.tickCount % 40 == 0) {
             this.restrictTo(maid);
             if (maid.isWithinRestriction()) {
                 return;
