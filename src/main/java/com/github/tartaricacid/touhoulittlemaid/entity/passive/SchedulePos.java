@@ -54,7 +54,7 @@ public final class SchedulePos {
     }
 
     public void tick(EntityMaid maid) {
-        if (maid.isHomeModeEnable() && maid.tickCount % 40 == 0) {
+        if (maid.tickCount % 40 == 0) {
             this.restrictTo(maid);
             if (maid.isWithinRestriction()) {
                 return;
@@ -95,6 +95,9 @@ public final class SchedulePos {
     }
 
     public void restrictTo(EntityMaid maid) {
+        if (!maid.isHomeModeEnable()) {
+            return;
+        }
         Activity activity = maid.getScheduleDetail();
         if (activity == Activity.WORK) {
             maid.restrictTo(this.workPos, MaidConfig.MAID_WORK_RANGE.get());
