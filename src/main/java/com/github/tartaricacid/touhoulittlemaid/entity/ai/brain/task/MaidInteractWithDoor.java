@@ -16,31 +16,31 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.mutable.MutableObject;
+// import org.apache.commons.lang3.mutable.MutableInt;
+// import org.apache.commons.lang3.mutable.MutableObject;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class MaidInteractWithDoor {
-    private static final int COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE = 20;
+    // private static final int COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE = 20;
     private static final double SKIP_CLOSING_DOOR_IF_FURTHER_AWAY_THAN = 8;
     private static final double MAX_DISTANCE_TO_HOLD_DOOR_OPEN_FOR_OTHER_MOBS = 2;
 
     public static BehaviorControl<LivingEntity> create() {
-        MutableObject<Node> mutableObject = new MutableObject<>();
-        MutableInt mutableInt = new MutableInt();
+        // MutableObject<Node> mutableObject = new MutableObject<>();
+        // MutableInt mutableInt = new MutableInt();
         return BehaviorBuilder.create((instance) -> instance.group(instance.present(MemoryModuleType.PATH), instance.registered(MemoryModuleType.DOORS_TO_CLOSE),
                 instance.registered(MemoryModuleType.NEAREST_LIVING_ENTITIES)).apply(instance, (pathMemory, doorToCloseMemory, livingEntityMemory) -> (serverLevel, entity, time) -> {
             Path path = instance.get(pathMemory);
             Optional<Set<GlobalPos>> doorToClosePos = instance.tryGet(doorToCloseMemory);
             if (!path.notStarted() && !path.isDone()) {
-                if (Objects.equals(mutableObject.getValue(), path.getNextNode())) {
-                    mutableInt.setValue(COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE);
-                } else if (mutableInt.decrementAndGet() > 0) {
-                    return false;
-                }
-                mutableObject.setValue(path.getNextNode());
+                // if (Objects.equals(mutableObject.getValue(), path.getNextNode())) {
+                //     mutableInt.setValue(COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE);
+                // } else if (mutableInt.decrementAndGet() > 0) {
+                //     return false;
+                // }
+                // mutableObject.setValue(path.getNextNode());
                 Node previousNode = path.getPreviousNode();
                 Node nextNode = path.getNextNode();
                 BlockPos previousNodeBlockPos = previousNode.asBlockPos();
@@ -58,8 +58,8 @@ public class MaidInteractWithDoor {
                     DoorBlock doorBlock = (DoorBlock) nextNodeBlockState.getBlock();
                     if (!doorBlock.isOpen(nextNodeBlockState)) {
                         doorBlock.setOpen(entity, serverLevel, nextNodeBlockState, nextNodeBlockPos, true);
-                        doorToClosePos = rememberDoorToClose(doorToCloseMemory, doorToClosePos, serverLevel, nextNodeBlockPos);
                     }
+                    doorToClosePos = rememberDoorToClose(doorToCloseMemory, doorToClosePos, serverLevel, nextNodeBlockPos);
                 }
                 doorToClosePos.ifPresent((doorPos) -> closeDoorsThatIHaveOpenedOrPassedThrough(serverLevel, entity, previousNode, nextNode, doorPos, instance.tryGet(livingEntityMemory)));
                 return true;
@@ -74,7 +74,7 @@ public class MaidInteractWithDoor {
         while (doorPosIterator.hasNext()) {
             GlobalPos globalPos = doorPosIterator.next();
             BlockPos blockPos = globalPos.pos();
-            if ((previous == null || !previous.asBlockPos().equals(blockPos)) && (next == null || !next.asBlockPos().equals(blockPos))) {
+            if ((next == null || !next.asBlockPos().equals(blockPos)) && !entity.blockPosition().equals(blockPos)) {
                 if (isDoorTooFarAway(serverLevel, entity, globalPos)) {
                     doorPosIterator.remove();
                 } else {
