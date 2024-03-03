@@ -81,7 +81,7 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
                     // 这里大致解释下计数的意思，也就是蓄力，蓄力越长自然射的越远
                     // 只有蓄力超过 1 秒才会进行发射
                     // 当有快速射击附魔时，加快拉弓速度
-                    if (level > 4 || ticksUsingItem >= (20 - (level - 1) * 5)) {
+                    if (level > 4 || ticksUsingItem >= (20 - level * 5)) {
                         owner.stopUsingItem();
                         owner.performRangedAttack(target, BowItem.getPowerForTime(ticksUsingItem));
                         this.attackTime = this.attackCooldown;
