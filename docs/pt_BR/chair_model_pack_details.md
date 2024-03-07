@@ -2,7 +2,7 @@
 
 - Esta wiki se aplica ao mod Touhou Little Maid na versão mais recente `1.12.2` ou `1.16.5`;
 - Requer compreensão da estrutura do pacote de recursos do Minecraft;
-- Requires understanding of JSON format;
+- Requer o entendimento do formato JSON;
 - Currently only supports models for **1.10.0 or 1.12.0 Bedrock Edition Model**.
 - For file editing software, we recommend `Visual Studio Code`, all related files requires to be saved using `UTF-8 without BOM`.
 

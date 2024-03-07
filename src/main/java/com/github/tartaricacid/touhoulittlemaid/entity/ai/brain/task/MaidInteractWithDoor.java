@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class MaidInteractWithDoor {
-    private static final int COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE = 20;
+    private static final int COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE = 3;
     private static final double SKIP_CLOSING_DOOR_IF_FURTHER_AWAY_THAN = 8;
     private static final double MAX_DISTANCE_TO_HOLD_DOOR_OPEN_FOR_OTHER_MOBS = 2;
 
@@ -74,7 +74,8 @@ public class MaidInteractWithDoor {
         while (doorPosIterator.hasNext()) {
             GlobalPos globalPos = doorPosIterator.next();
             BlockPos blockPos = globalPos.pos();
-            if ((previous == null || !previous.asBlockPos().equals(blockPos)) && (next == null || !next.asBlockPos().equals(blockPos))) {
+            if ((previous == null || !previous.asBlockPos().equals(blockPos) || (next != null && entity.blockPosition().equals(next.asBlockPos())))
+                    && (next == null || !next.asBlockPos().equals(blockPos))) {
                 if (isDoorTooFarAway(serverLevel, entity, globalPos)) {
                     doorPosIterator.remove();
                 } else {
