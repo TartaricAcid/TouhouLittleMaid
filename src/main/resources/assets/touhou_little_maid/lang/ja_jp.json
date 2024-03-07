@@ -165,7 +165,6 @@
   "task.touhou_little_maid.idle.desc": "何もしません",
   "task.touhou_little_maid.attack.desc": "メイドは周辺の敵対モブを攻撃する",
   "task.touhou_little_maid.ranged_attack.desc": "メイドは弓を使って周囲の敵対モブを攻撃する",
-  "task.touhou_little_maid.ranged_attack.condition.has_bow": "メイドが弓を持っている",
   "task.touhou_little_maid.danmaku_attack.desc": "メイドは弾幕を放って周囲の敵対モブを攻撃する",
   "task.touhou_little_maid.danmaku_attack.condition.has_gohei": "メイドが博麗のお祓い棒を持っている",
   "task.touhou_little_maid.farm.desc": "メイドは作物を植えたり収穫したりします",

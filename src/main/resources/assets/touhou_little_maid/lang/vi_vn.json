@@ -158,7 +158,6 @@
   "task.touhou_little_maid.idle.desc": "Maid sẽ không làm gì trong công việc này",
   "task.touhou_little_maid.attack.desc": "Maid sẽ tấn công cận chiến với quái vật xung quanh",
   "task.touhou_little_maid.ranged_attack.desc": "Maid sẽ dùng cung để bắn quái vật xung quanh",
-  "task.touhou_little_maid.ranged_attack.condition.has_bow": "Tay chính cần có cung",
   "task.touhou_little_maid.danmaku_attack.desc": "Maid sẽ dùng danmaku để tấng công quái vật xung quanh",
   "task.touhou_little_maid.danmaku_attack.condition.has_gohei": "Tay chính cần có cây Gohei của Hakurei",
   "task.touhou_little_maid.farm.desc": "Maid sẽ trồng và thu hoạch cây trồng xung quanh",
