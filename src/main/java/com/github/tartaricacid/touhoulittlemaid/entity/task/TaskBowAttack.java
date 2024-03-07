@@ -22,10 +22,10 @@ import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTar
 import net.minecraft.world.entity.ai.behavior.StartAttacking;
 import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.FireworkRocketEntity;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
@@ -33,8 +33,6 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
-
-import static net.minecraft.world.item.ProjectileWeaponItem.ARROW_OR_FIREWORK;
 
 public class TaskBowAttack implements IRangedAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "ranged_attack");
@@ -58,8 +56,8 @@ public class TaskBowAttack implements IRangedAttackTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(e -> hasProjectileWeapon(e) && hasAmmunition(e), IAttackTask::findFirstValidAttackTarget);
-        BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create((target) -> !hasProjectileWeapon(maid) || !hasAmmunition(maid) || farAway(target, maid));
+        BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(e -> hasBow(e) && hasArrow(e), IAttackTask::findFirstValidAttackTarget);
+        BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create((target) -> !hasBow(maid) || !hasArrow(maid) || farAway(target, maid));
         BehaviorControl<Mob> moveToTargetTask = SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(0.6f);
         BehaviorControl<EntityMaid> maidAttackStrafingTask = new MaidAttackStrafingTask();
         BehaviorControl<EntityMaid> shootTargetTask = new MaidShootTargetTask(2);
@@ -75,40 +73,30 @@ public class TaskBowAttack implements IRangedAttackTask {
 
     @Override
     public void performRangedAttack(EntityMaid shooter, LivingEntity target, float distanceFactor) {
-        Projectile projectile = getAmmunition(shooter,distanceFactor);
-        if (projectile == null) return;
-        boolean flag = projectile instanceof FireworkRocketEntity;
-        ItemStack mainHandItem = shooter.getMainHandItem();
-        if (mainHandItem.is(Items.CROSSBOW) || mainHandItem.getItem() instanceof BowItem) {
-            shootProjectile(shooter,target,distanceFactor,0);
-            boolean multishot = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT,mainHandItem) > 0;
-            if (multishot) {
-                shootProjectile(shooter,target,distanceFactor,10);
-                shootProjectile(shooter,target,distanceFactor,-10);
+        AbstractArrow entityArrow = getArrow(shooter, distanceFactor);
+
+        if (entityArrow != null) {
+            ItemStack mainHandItem = shooter.getMainHandItem();
+            if (mainHandItem.getItem() instanceof BowItem) {
+                double x = target.getX() - shooter.getX();
+                double y = target.getBoundingBox().minY + target.getBbHeight() / 3.0F - entityArrow.position().y;
+                double z = target.getZ() - shooter.getZ();
+                double pitch = Math.sqrt(x * x + z * z) * 0.15D;
+                entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
+                mainHandItem.hurtAndBreak(1, shooter, (maid) -> maid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                shooter.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (shooter.getRandom().nextFloat() * 0.4F + 0.8F));
+                shooter.level.addFreshEntity(entityArrow);
             }
-            shrinkAmmunition(shooter);
-            int damage = flag ? 3 : 1;
-            if (multishot) damage *= 3;
-            mainHandItem.hurtAndBreak(damage, shooter, (maid) -> maid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
         }
     }
 
     @Override
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of("has_bow", this::hasProjectileWeapon), Pair.of("has_arrow", this::hasAmmunition));
-    }
-
-    private boolean hasProjectileWeapon(EntityMaid maid) {
-        return (maid.getMainHandItem().getItem() instanceof BowItem) || (maid.getMainHandItem().is(Items.CROSSBOW));
+        return Lists.newArrayList(Pair.of("has_bow", this::hasBow), Pair.of("has_arrow", this::hasArrow));
     }
 
     private boolean hasBow(EntityMaid maid) {
         return maid.getMainHandItem().getItem() instanceof BowItem;
-    }
-
-    private boolean hasAmmunition(EntityMaid maid) {
-        if (hasBow(maid)) return hasArrow(maid);
-        return findAmmunition(maid) >= 0;
     }
 
     private boolean hasArrow(EntityMaid maid) {
@@ -124,86 +112,31 @@ public class TaskBowAttack implements IRangedAttackTask {
         return -1;
     }
 
-    private int findAmmunition(EntityMaid maid) {
-        ItemStack mainHandItem = maid.getMainHandItem();
-        if(mainHandItem.is(Items.CROSSBOW) || mainHandItem.getItem() instanceof BowItem) {
-            CombinedInvWrapper handler = maid.getAvailableInv(true);
-            return ItemsUtil.findStackSlot(handler, ARROW_OR_FIREWORK);
-        }
-        return -1;
-    }
-
-    private void shootProjectile(EntityMaid shooter, LivingEntity target, float distanceFactor, float pProjectileAngle) {
-        Projectile projectile = getAmmunition(shooter,distanceFactor);
-        if (projectile == null) return;
-        ItemStack mainHandItem = shooter.getMainHandItem();
-        shooter.shootCrossbowProjectile(target, mainHandItem, projectile,pProjectileAngle);
-        shooter.level.addFreshEntity(projectile);
-    }
-
     @Nullable
-    private Projectile getAmmunition(EntityMaid maid,float chargeTime) {
-        int ammunitionSlot = findAmmunition(maid);
-        int arrowSlot = findArrow(maid);
-        if (ammunitionSlot < 0) {
+    private AbstractArrow getArrow(EntityMaid maid, float chargeTime) {
+        int slot = findArrow(maid);
+        if (slot < 0) {
             return null;
         }
-        Projectile projectile;
+
         CombinedInvWrapper handler = maid.getAvailableInv(true);
+        ItemStack arrowStack = handler.getStackInSlot(slot);
         ItemStack mainHandItem = maid.getMainHandItem();
-        ItemStack ammunitionStack = handler.getStackInSlot(ammunitionSlot);
-        ItemStack arrowStack = handler.getStackInSlot(arrowSlot);
-        if(mainHandItem.is(Items.CROSSBOW)){
-            if (ammunitionStack.is(Items.FIREWORK_ROCKET)) {
-                projectile = new FireworkRocketEntity(maid.level, ammunitionStack, maid, maid.getX(), maid.getEyeY() - (double) 0.15F, maid.getZ(), true);
-            } else {
-                ArrowItem arrowitem = (ArrowItem) (ammunitionStack.getItem() instanceof ArrowItem ? ammunitionStack.getItem() : Items.ARROW);
-                AbstractArrow ammunition = arrowitem.createArrow(maid.level(), ammunitionStack, maid);
+        AbstractArrow arrowEntity = ProjectileUtil.getMobArrow(maid, arrowStack, chargeTime);
 
-                ammunition.setSoundEvent(SoundEvents.CROSSBOW_HIT);
-                ammunition.setShotFromCrossbow(true);
-                int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PIERCING, mainHandItem);
-                if (i > 0) {
-                    ammunition.setPierceLevel((byte) i);
-                }
-
-                projectile = ammunition;
-            }
-        } else {
-            if (arrowSlot < 0) return null;
-            AbstractArrow arrowEntity = ProjectileUtil.getMobArrow(maid, arrowStack, chargeTime);
-            if (mainHandItem.getItem() instanceof BowItem) {
-                arrowEntity = ((BowItem) mainHandItem.getItem()).customArrow(arrowEntity);
-            }
-            // 无限附魔不存在或者小于 0 时
-            if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.INFINITY_ARROWS, mainHandItem) <= 0) {
-                // 记得把箭设置为可以拾起状态
-                arrowEntity.pickup = AbstractArrow.Pickup.ALLOWED;
-            }
-            projectile = arrowEntity;
+        if (mainHandItem.getItem() instanceof BowItem) {
+            arrowEntity = ((BowItem) mainHandItem.getItem()).customArrow(arrowEntity);
         }
-
-        return projectile;
-    }
-
-    private void shrinkAmmunition(EntityMaid maid) {
-        int ammunitionSlot = findAmmunition(maid);
-        int arrowSlot = findArrow(maid);
-        CombinedInvWrapper handler = maid.getAvailableInv(true);
-        ItemStack mainHandItem = maid.getMainHandItem();
-        ItemStack ammunitionStack = handler.getStackInSlot(ammunitionSlot);
-        ItemStack arrowStack = handler.getStackInSlot(arrowSlot);
+        // 无限附魔不存在或者小于 0 时
         if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.INFINITY_ARROWS, mainHandItem) <= 0) {
-            if (mainHandItem.is(Items.CROSSBOW)) {
-                ammunitionStack.shrink(1);
-                handler.setStackInSlot(ammunitionSlot,ammunitionStack);
-            }else {
-                arrowStack.shrink(1);
-                handler.setStackInSlot(arrowSlot, arrowStack);
-            }
+            arrowStack.shrink(1);
+            handler.setStackInSlot(slot, arrowStack);
+            // 记得把箭设置为可以拾起状态
+            arrowEntity.pickup = AbstractArrow.Pickup.ALLOWED;
         }
-    }
 
+        return arrowEntity;
+    }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {
         return maid.distanceTo(target) > MAX_STOP_ATTACK_DISTANCE;
