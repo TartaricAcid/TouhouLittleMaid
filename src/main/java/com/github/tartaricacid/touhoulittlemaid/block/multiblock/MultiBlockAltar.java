@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block.multiblock;
 
+import java.util.HashMap;
+
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
@@ -9,9 +11,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -34,8 +38,23 @@ public class MultiBlockAltar implements IMultiBlock {
     @Override
     public boolean isMatch(Level world, BlockPos posStart, Direction direction, StructureTemplate template) {
         StructureTemplate.Palette palette = template.palettes.get(0);
+        HashMap<BlockPos, BlockState> logType = new HashMap<>();
         for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
-            if (!world.getBlockState(posStart.offset(blockInfo.pos())).equals(blockInfo.state())) {
+            BlockState blockState = world.getBlockState(posStart.offset(blockInfo.pos()));
+            if (blockInfo.state().is(BlockTags.LOGS)) {
+                BlockPos blockPos = blockInfo.pos().atY(0);
+                if (logType.get(blockPos) != null) {
+                    if (!logType.get(blockPos).equals(blockState)) {
+                        return false;
+                    }
+                } else {
+                    if (blockState.is(BlockTags.LOGS) && blockState.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y) {
+                        logType.put(blockPos, blockState);
+                    } else {
+                        return false;
+                    }
+                }
+            } else if (!blockState.equals(blockInfo.state())) {
                 return false;
             }
         }
@@ -50,7 +69,7 @@ public class MultiBlockAltar implements IMultiBlock {
 
         for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
             posList.add(posStart.offset(blockInfo.pos()));
-            if (blockInfo.pos().getY() == 2 && blockInfo.state().is(Blocks.OAK_LOG)) {
+            if (blockInfo.pos().getY() == 2 && blockInfo.state().is(BlockTags.LOGS)) {
                 canPlaceItemPosList.add(posStart.offset(blockInfo.pos()));
             }
         }
@@ -58,12 +77,13 @@ public class MultiBlockAltar implements IMultiBlock {
         BlockPos currentCenterPos = posStart.subtract(getCenterPos(direction));
         for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
             BlockPos currentPos = posStart.offset(blockInfo.pos());
+            BlockState currentState = worldIn.getBlockState(currentPos);
             worldIn.setBlock(currentPos, InitBlocks.ALTAR.get().defaultBlockState(), Block.UPDATE_ALL);
             BlockEntity te = worldIn.getBlockEntity(currentPos);
             if (te instanceof TileEntityAltar) {
                 boolean isRender = currentPos.equals(currentCenterPos);
-                boolean canPlaceItem = blockInfo.pos().getY() == 2 && blockInfo.state().is(Blocks.OAK_LOG);
-                ((TileEntityAltar) te).setForgeData(blockInfo.state(), isRender,
+                boolean canPlaceItem = blockInfo.pos().getY() == 2 && blockInfo.state().is(BlockTags.LOGS);
+                ((TileEntityAltar) te).setForgeData(currentState, isRender,
                         canPlaceItem, direction, posList, canPlaceItemPosList);
             }
         }
