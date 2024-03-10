@@ -29,6 +29,7 @@ public final class TaskManager {
         manager.add(IDLE_TASK);
         manager.add(new TaskAttack());
         manager.add(new TaskBowAttack());
+        manager.add(new TaskCrossBowAttack());
         manager.add(new TaskDanmakuAttack());
         manager.add(new TaskNormalFarm());
         manager.add(new TaskSugarCane());

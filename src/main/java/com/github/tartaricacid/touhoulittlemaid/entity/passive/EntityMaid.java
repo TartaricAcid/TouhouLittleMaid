@@ -41,6 +41,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
@@ -79,6 +80,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -709,6 +711,30 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     public void onCrossbowAttackPerformed() {
         this.noActionTime = 0;
+    }
+
+    //实现CrossbowAttackMob接口中拿到目标实体的方法
+    @Nullable
+    public LivingEntity getTarget() {
+        return this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
+    }
+
+    //弩在装载时的tryLoadProjectiles方法会从这里拿到需要装填的物品
+    @Override
+    public ItemStack getProjectile(ItemStack pWeaponStack) {
+        //优先检查副手有没有烟花
+        if (this.getOffhandItem().getItem() instanceof FireworkRocketItem) {
+            return this.getOffhandItem();
+        }
+        CombinedInvWrapper handler = this.getAvailableInv(true);
+        int slot = ItemsUtil.findStackSlot(handler, ((CrossbowItem) this.getMainHandItem().getItem()).getAllSupportedProjectiles());
+        if (slot < 0) {
+            //不存在时，返回空
+            return ItemStack.EMPTY;
+        }   else {
+            //拿到弹药物品
+            return handler.getStackInSlot(slot);
+        }
     }
 
     @Override
