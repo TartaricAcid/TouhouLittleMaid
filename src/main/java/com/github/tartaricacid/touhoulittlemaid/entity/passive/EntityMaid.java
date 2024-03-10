@@ -1113,12 +1113,17 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        int skipRandom = random.nextInt(ServerCustomPackLoader.SERVER_MAID_MODELS.getModelSize());
-        Optional<String> modelId = ServerCustomPackLoader.SERVER_MAID_MODELS.getModelIdSet().stream().skip(skipRandom).findFirst();
-        return modelId.map(id -> {
-            this.setModelId(id);
-            return spawnDataIn;
-        }).orElse(spawnDataIn);
+        int modelSize = ServerCustomPackLoader.SERVER_MAID_MODELS.getModelSize();
+        // 这里居然可能为 0
+        if (modelSize > 0) {
+            int skipRandom = random.nextInt(modelSize);
+            Optional<String> modelId = ServerCustomPackLoader.SERVER_MAID_MODELS.getModelIdSet().stream().skip(skipRandom).findFirst();
+            return modelId.map(id -> {
+                this.setModelId(id);
+                return spawnDataIn;
+            }).orElse(spawnDataIn);
+        }
+        return spawnDataIn;
     }
 
     @Override
