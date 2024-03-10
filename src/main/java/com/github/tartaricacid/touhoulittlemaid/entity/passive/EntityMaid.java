@@ -41,6 +41,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
@@ -79,6 +80,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -709,6 +711,26 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     public void onCrossbowAttackPerformed() {
         this.noActionTime = 0;
+    }
+
+    @Nullable
+    public LivingEntity getTarget() {
+        return this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
+    }
+
+    //
+    @Override
+    public ItemStack getProjectile(ItemStack pWeaponStack) {
+        if (this.getOffhandItem().getItem() instanceof FireworkRocketItem) {
+            return this.getOffhandItem();
+        }
+        CombinedInvWrapper handler = this.getAvailableInv(true);
+        int slot = ItemsUtil.findStackSlot(handler, ((CrossbowItem) this.getMainHandItem().getItem()).getAllSupportedProjectiles());
+        if (slot < 0) {
+            return Items.AIR.getDefaultInstance();
+        }   else {
+            return handler.getStackInSlot(slot);
+        }
     }
 
     @Override
