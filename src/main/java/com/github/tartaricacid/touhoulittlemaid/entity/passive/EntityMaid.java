@@ -713,22 +713,26 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.noActionTime = 0;
     }
 
+    //实现CrossbowAttackMob接口中拿到目标实体的方法
     @Nullable
     public LivingEntity getTarget() {
         return this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
     }
 
-    //
+    //弩在装载时的tryLoadProjectiles方法会从这里拿到需要装填的物品
     @Override
     public ItemStack getProjectile(ItemStack pWeaponStack) {
+        //优先检查副手有没有烟花
         if (this.getOffhandItem().getItem() instanceof FireworkRocketItem) {
             return this.getOffhandItem();
         }
         CombinedInvWrapper handler = this.getAvailableInv(true);
         int slot = ItemsUtil.findStackSlot(handler, ((CrossbowItem) this.getMainHandItem().getItem()).getAllSupportedProjectiles());
         if (slot < 0) {
-            return Items.AIR.getDefaultInstance();
+            //不存在时，返回空
+            return ItemStack.EMPTY;
         }   else {
+            //拿到弹药物品
             return handler.getStackInSlot(slot);
         }
     }
