@@ -36,6 +36,11 @@ public class FavorabilityManager {
     private static final int LEVEL_2_ATTACK_DAMAGE = 5;
     private static final int LEVEL_3_ATTACK_DAMAGE = 10;
 
+    private static final int LEVEL_0_ATTACK_DISTANCE = 2;
+    private static final int LEVEL_1_ATTACK_DISTANCE = 3;
+    private static final int LEVEL_2_ATTACK_DISTANCE = 5;
+    private static final int LEVEL_3_ATTACK_DISTANCE = 7;
+
     private static final String TAG_NAME = "FavorabilityManagerCounter";
 
     private final Map<String, Time> counter;
@@ -148,6 +153,18 @@ public class FavorabilityManager {
             default -> {
                 return LEVEL_0_ATTACK_DAMAGE;
             }
+        }
+    }
+
+    public int getAttackDistanceByPoint(int favorability) {
+        if (favorability < LEVEL_1_POINT) {
+            return LEVEL_0_ATTACK_DISTANCE;
+        } else if (favorability < LEVEL_2_POINT) {
+            return LEVEL_1_ATTACK_DISTANCE;
+        } else if (favorability < LEVEL_3_POINT) {
+            return LEVEL_2_ATTACK_DISTANCE;
+        } else {
+            return LEVEL_3_ATTACK_DISTANCE;
         }
     }
 

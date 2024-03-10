@@ -581,6 +581,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @Override
+    public double getMeleeAttackRangeSqr(LivingEntity entity) {
+        int attackDistance = this.favorabilityManager.getAttackDistanceByPoint(this.getFavorability());
+        return attackDistance * attackDistance;
+    }
+
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         boolean result = super.doHurtTarget(entityIn);
         this.getMainHandItem().hurtAndBreak(1, this, (maid) -> maid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
