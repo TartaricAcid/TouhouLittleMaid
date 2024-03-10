@@ -15,16 +15,20 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.*;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TaskCrossBowAttack  implements IRangedAttackTask {
+public class TaskCrossBowAttack implements IRangedAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "crossbow_attack");
     private static final int MAX_STOP_ATTACK_DISTANCE = 16;
+
     @Override
     public ResourceLocation getUid() {
         return UID;
@@ -60,7 +64,7 @@ public class TaskCrossBowAttack  implements IRangedAttackTask {
 
     @Override
     public void performRangedAttack(EntityMaid shooter, LivingEntity target, float distanceFactor) {
-        shooter.performCrossbowAttack(shooter,1.6F);
+        shooter.performCrossbowAttack(shooter, 1.6F);
     }
 
     @Override

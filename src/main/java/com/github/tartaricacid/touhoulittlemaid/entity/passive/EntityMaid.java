@@ -381,8 +381,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                         cap.add();
                     }
                     this.tame(player);
+                    // 清掉寻路，清掉敌对记忆
                     this.navigation.stop();
                     this.setTarget(null);
+                    this.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
                     this.level.broadcastEntityEvent(this, (byte) 7);
                     this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
                     return InteractionResult.SUCCESS;
@@ -391,7 +393,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                 if (player instanceof ServerPlayer) {
                     MutableComponent msg = Component.translatable("message.touhou_little_maid.owner_maid_num.can_not_add",
                             cap.get(), cap.getMaxNum());
-                    ((ServerPlayer) player).sendSystemMessage(msg);
+                    player.sendSystemMessage(msg);
                 }
             }
             return InteractionResult.PASS;
@@ -713,26 +715,27 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.noActionTime = 0;
     }
 
-    //实现CrossbowAttackMob接口中拿到目标实体的方法
+    @Override
     @Nullable
     public LivingEntity getTarget() {
+        // 实现 CrossbowAttackMob 接口中拿到目标实体的方法
         return this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
     }
 
-    //弩在装载时的tryLoadProjectiles方法会从这里拿到需要装填的物品
+    // 弩在装载时的 tryLoadProjectiles 方法会从这里拿到需要装填的物品
     @Override
-    public ItemStack getProjectile(ItemStack pWeaponStack) {
-        //优先检查副手有没有烟花
+    public ItemStack getProjectile(ItemStack weaponStack) {
+        // 烟花只检查副手：优先检查副手有没有烟花
         if (this.getOffhandItem().getItem() instanceof FireworkRocketItem) {
             return this.getOffhandItem();
         }
         CombinedInvWrapper handler = this.getAvailableInv(true);
         int slot = ItemsUtil.findStackSlot(handler, ((CrossbowItem) this.getMainHandItem().getItem()).getAllSupportedProjectiles());
         if (slot < 0) {
-            //不存在时，返回空
+            // 不存在时，返回空
             return ItemStack.EMPTY;
-        }   else {
-            //拿到弹药物品
+        } else {
+            // 拿到弹药物品
             return handler.getStackInSlot(slot);
         }
     }
