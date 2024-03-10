@@ -733,6 +733,26 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.noActionTime = 0;
     }
 
+    @Nullable
+    public LivingEntity getTarget() {
+        return this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
+    }
+
+    //
+    @Override
+    public ItemStack getProjectile(ItemStack pWeaponStack) {
+        if (this.getOffhandItem().getItem() instanceof FireworkRocketItem) {
+            return this.getOffhandItem();
+        }
+        CombinedInvWrapper handler = this.getAvailableInv(true);
+        int slot = ItemsUtil.findStackSlot(handler, ((CrossbowItem) this.getMainHandItem().getItem()).getAllSupportedProjectiles());
+        if (slot < 0) {
+            return Items.AIR.getDefaultInstance();
+        }   else {
+            return handler.getStackInSlot(slot);
+        }
+    }
+
     @Override
     @Nullable
     public LivingEntity getTarget() {
