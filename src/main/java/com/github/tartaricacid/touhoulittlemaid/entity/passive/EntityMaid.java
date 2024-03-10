@@ -78,6 +78,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -713,6 +714,17 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
 
     @Override
     public void shootCrossbowProjectile(LivingEntity target, ItemStack crossbow, Projectile projectileEntity, float projectileAngle) {
+        // 弩箭伤害也和好感度挂钩
+        // 但是烟花火箭的伤害是很特殊的，就不应用了
+        if (projectileEntity instanceof AbstractArrow arrow) {
+            AttributeInstance attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE);
+            double attackValue = 2.0;
+            if (attackDamage != null) {
+                attackValue = attackDamage.getBaseValue();
+            }
+            float multiplier = (float) (attackValue / 2.0f);
+            arrow.setBaseDamage(arrow.getBaseDamage() * multiplier);
+        }
         this.shootCrossbowProjectile(this, target, projectileEntity, projectileAngle, 1.6F);
     }
 

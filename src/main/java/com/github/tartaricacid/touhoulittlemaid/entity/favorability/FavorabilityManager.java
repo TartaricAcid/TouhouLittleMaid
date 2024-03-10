@@ -32,9 +32,9 @@ public class FavorabilityManager {
     private static final int LEVEL_3_HEALTH = 80;
 
     private static final int LEVEL_0_ATTACK_DAMAGE = 2;
-    private static final int LEVEL_1_ATTACK_DAMAGE = 2;
-    private static final int LEVEL_2_ATTACK_DAMAGE = 5;
-    private static final int LEVEL_3_ATTACK_DAMAGE = 10;
+    private static final int LEVEL_1_ATTACK_DAMAGE = 3;
+    private static final int LEVEL_2_ATTACK_DAMAGE = 4;
+    private static final int LEVEL_3_ATTACK_DAMAGE = 6;
 
     private static final int LEVEL_0_ATTACK_DISTANCE = 2;
     private static final int LEVEL_1_ATTACK_DISTANCE = 3;

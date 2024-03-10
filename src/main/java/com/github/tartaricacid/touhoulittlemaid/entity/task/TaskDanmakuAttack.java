@@ -17,6 +17,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTargetOutOfReach;
 import net.minecraft.world.entity.ai.behavior.StartAttacking;
@@ -78,23 +80,29 @@ public class TaskDanmakuAttack implements IRangedAttackTask {
                 // 1 自机狙
                 // <=5 60 度扇形
                 // >5 120 度扇形
+                // 弹幕伤害也和好感度挂钩
+                AttributeInstance attackDamage = shooter.getAttribute(Attributes.ATTACK_DAMAGE);
+                float attackValue = 2.0f;
+                if (attackDamage != null) {
+                    attackValue = (float) attackDamage.getBaseValue();
+                }
                 if (entityCount <= 1) {
                     DanmakuShoot.create().setWorld(level).setThrower(shooter)
                             .setTarget(target).setRandomColor().setRandomType()
-                            .setDamage(2 * (distanceFactor + 1)).setGravity(0)
+                            .setDamage(attackValue * (distanceFactor + 1)).setGravity(0)
                             .setVelocity(0.3f * (distanceFactor + 1))
                             .setInaccuracy(0.2f).aimedShot();
                 } else if (entityCount <= 5) {
                     DanmakuShoot.create().setWorld(level).setThrower(shooter)
                             .setTarget(target).setRandomColor().setRandomType()
-                            .setDamage(2 * (distanceFactor + 1.2f)).setGravity(0)
+                            .setDamage(attackValue * (distanceFactor + 1.2f)).setGravity(0)
                             .setVelocity(0.3f * (distanceFactor + 1))
                             .setInaccuracy(0.2f).setFanNum(8).setYawTotal(Math.PI / 3)
                             .fanShapedShot();
                 } else {
                     DanmakuShoot.create().setWorld(level).setThrower(shooter)
                             .setTarget(target).setRandomColor().setRandomType()
-                            .setDamage(2 * (distanceFactor + 1.5f)).setGravity(0)
+                            .setDamage(attackValue * (distanceFactor + 1.5f)).setGravity(0)
                             .setVelocity(0.3f * (distanceFactor + 1))
                             .setInaccuracy(0.2f).setFanNum(32).setYawTotal(2 * Math.PI / 3)
                             .fanShapedShot();
