@@ -4,21 +4,17 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.LanguageLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.resources.language.ClientLanguage;
-import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -28,7 +24,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,9 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -147,33 +140,6 @@ public class InfoGetManager {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(InfoGetManager::checkInfoJsonFile);
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onResourceReload(TextureStitchEvent.Post event) {
-        String currentLanguage = Minecraft.getInstance().getLanguageManager().getSelected();
-
-        Map<String, String> oldLangData = Language.getInstance().getLanguageData();
-        Map<String, String> newLangData = Maps.newHashMap();
-        newLangData.putAll(oldLangData);
-
-        for (DownloadInfo info : DOWNLOAD_INFO_LIST_ALL) {
-            @Nonnull HashMap<String, String> langMap = info.getLanguage("en_us");
-            for (String key : langMap.keySet()) {
-                newLangData.put(key, langMap.get(key));
-            }
-
-            @Nullable HashMap<String, String> currentLangMap = info.getLanguage(currentLanguage);
-            if (currentLangMap != null) {
-                for (String key : currentLangMap.keySet()) {
-                    newLangData.put(key, currentLangMap.get(key));
-                }
-            }
-        }
-
-        if (Language.getInstance() instanceof ClientLanguage) {
-            ((ClientLanguage) Language.getInstance()).storage = newLangData;
-        }
     }
 
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
