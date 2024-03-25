@@ -19,14 +19,12 @@ public class JadePlugin implements IWailaPlugin {
 
         registration.registerEntityComponent(MaidProvider.INSTANCE, EntityMaid.class);
 
-        registration.registerItemStorageClient(BroomProvider.INSTANCE);
         registration.registerItemStorageClient(TombstoneProvider.INSTANCE);
         registration.registerItemStorageClient(AltarProvider.INSTANCE);
     }
 
     @Override
     public void register(IWailaCommonRegistration registration) {
-        registration.registerItemStorage(BroomProvider.INSTANCE, EntityBroom.class);
         registration.registerItemStorage(TombstoneProvider.INSTANCE, EntityTombstone.class);
         registration.registerItemStorage(AltarProvider.INSTANCE, TileEntityAltar.class);
     }
