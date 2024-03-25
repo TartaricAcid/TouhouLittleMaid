@@ -1250,6 +1250,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        // 修正睡觉时渲染问题，默认 64 格内渲染
+        double range = 64.0 * getViewScale();
+        return distance < range * range;
+    }
+
+    @Override
     public void startSleeping(BlockPos pPos) {
         super.startSleeping(pPos);
         this.setHealth(this.getMaxHealth());

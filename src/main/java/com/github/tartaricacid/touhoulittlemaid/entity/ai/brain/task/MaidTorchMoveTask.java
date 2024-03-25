@@ -14,7 +14,7 @@ public class MaidTorchMoveTask extends MaidMoveToBlockTask {
     private static final int LOW_BRIGHTNESS = 9;
 
     public MaidTorchMoveTask(float movementSpeed) {
-        super(movementSpeed);
+        super(movementSpeed, 2);
     }
 
     @Override
