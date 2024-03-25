@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ConditionalUse {
     private final List<ResourceLocation> idTest = Lists.newArrayList();
     private final List<TagKey<Item>> tagTest = Lists.newArrayList();
     private final List<UseAnim> extraTest = Lists.newArrayList();
+    private final List<String> innerTest = Lists.newArrayList();
 
     public ConditionalUse(InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND) {
@@ -60,6 +62,7 @@ public class ConditionalUse {
                 return;
             }
             Arrays.stream(UseAnim.values()).filter(a -> a.name().toLowerCase(Locale.US).equals(substring)).findFirst().ifPresent(extraTest::add);
+            innerTest.add(name);
         }
     }
 
@@ -106,8 +109,12 @@ public class ConditionalUse {
     }
 
     private String doExtraTest(EntityMaid maid, InteractionHand hand) {
-        if (extraTest.isEmpty()) {
+        if (extraTest.isEmpty() && innerTest.isEmpty()) {
             return EMPTY;
+        }
+        String innerName = InnerClassify.doClassifyTest(extraPre, maid, hand);
+        if (StringUtils.isNotBlank(innerName) && this.innerTest.contains(innerName)) {
+            return innerName;
         }
         UseAnim anim = maid.getItemInHand(hand).getUseAnimation();
         if (this.extraTest.contains(anim)) {

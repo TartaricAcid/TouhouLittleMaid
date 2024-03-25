@@ -185,6 +185,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private final MaidScriptBookManager scriptBookManager;
     private final SchedulePos schedulePos;
 
+    public final ItemStack[] handItemsForAnimation = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
     public boolean guiOpening = false;
 
     private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
