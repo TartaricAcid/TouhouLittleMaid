@@ -94,7 +94,7 @@ public class EntityDanmaku extends ThrowableProjectile {
         }
 
         if (thrower != null && !hit.is(thrower)) {
-            DamageSource source = this.damageSources().thrown(thrower, this);
+            DamageSource source = this.damageSources().thrown(this, thrower);
             hit.hurt(source, this.getDamage());
             this.discard();
         }
