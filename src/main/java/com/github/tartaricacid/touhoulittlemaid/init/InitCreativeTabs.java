@@ -8,6 +8,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -73,6 +77,9 @@ public class InitCreativeTabs {
                 output.accept(CHAIR_SHOW.get());
                 output.accept(BROOM.get());
                 ItemEntityPlaceholder.fillItemCategory(output);
+                output.accept(getEnchantmentBook(InitEnchantments.IMPEDING));
+                output.accept(getEnchantmentBook(InitEnchantments.SPEEDY));
+                output.accept(getEnchantmentBook(InitEnchantments.ENDERS_ENDER));
             }).build());
 
     public static RegistryObject<CreativeModeTab> GARAGE_KIT_TAB = TABS.register("chair", () -> CreativeModeTab.builder()
@@ -88,4 +95,10 @@ public class InitCreativeTabs {
             .displayItems((par, output) -> {
                 BlockGarageKit.fillItemCategory(output);
             }).build());
+
+    private static ItemStack getEnchantmentBook(RegistryObject<Enchantment> registryObject) {
+        Enchantment enchantment = registryObject.get();
+        EnchantmentInstance instance = new EnchantmentInstance(enchantment, enchantment.getMaxLevel());
+        return EnchantedBookItem.createForEnchantment(instance);
+    }
 }

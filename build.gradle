@@ -154,6 +154,9 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:catalogue-459701:${catalogue_id}")
 
+    runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
+    runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

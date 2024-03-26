@@ -36,6 +36,7 @@ public final class TouhouLittleMaid {
         InitBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitBlocks.TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        InitEnchantments.ENCHANTMENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitCreativeTabs.TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitContainer.CONTAINER_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
         InitSounds.SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());

@@ -2,8 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -11,6 +9,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
@@ -22,7 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class EntityDanmaku extends ThrowableProjectile {
     public static final EntityType<EntityDanmaku> TYPE = EntityType.Builder.<EntityDanmaku>of(EntityDanmaku::new, MobCategory.MISC)
-            .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(10).build("danmaku");
+            .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(10).noSave().build("danmaku");
 
     private static final int MAX_TICKS_EXISTED = 200;
     private static final EntityDataAccessor<Integer> DANMAKU_TYPE = SynchedEntityData.defineId(EntityDanmaku.class, EntityDataSerializers.INT);
@@ -30,10 +30,8 @@ public class EntityDanmaku extends ThrowableProjectile {
     private static final EntityDataAccessor<Float> DAMAGE = SynchedEntityData.defineId(EntityDanmaku.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> GRAVITY = SynchedEntityData.defineId(EntityDanmaku.class, EntityDataSerializers.FLOAT);
 
-    private static final String DANMAKU_TYPE_TAG = "DanmakuType";
-    private static final String DANMAKU_COLOR_TAG = "DanmakuColor";
-    private static final String DANMAKU_DAMAGE_TAG = "DanmakuDamage";
-    private static final String DANMAKU_GRAVITY_TAG = "DanmakuGravity";
+    private int impedingLevel = 0;
+    private boolean hurtEnderman = false;
 
     public EntityDanmaku(EntityType<? extends ThrowableProjectile> type, Level worldIn) {
         super(type, worldIn);
@@ -94,8 +92,17 @@ public class EntityDanmaku extends ThrowableProjectile {
         }
 
         if (thrower != null && !hit.is(thrower)) {
-            DamageSource source = this.damageSources().thrown(this, thrower);
+            DamageSource source;
+            if (this.hurtEnderman) {
+                source = this.damageSources().indirectMagic(this, thrower);
+            } else {
+                source = this.damageSources().thrown(this, thrower);
+            }
             hit.hurt(source, this.getDamage());
+            if (this.impedingLevel > 0 && hit instanceof LivingEntity livingEntity) {
+                int duration = (20 + this.impedingLevel * 10) * 20;
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration, this.impedingLevel));
+            }
             this.discard();
         }
     }
@@ -106,32 +113,6 @@ public class EntityDanmaku extends ThrowableProjectile {
         if (this.tickCount > MAX_TICKS_EXISTED) {
             this.discard();
         }
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.contains(DANMAKU_TYPE_TAG, Tag.TAG_INT)) {
-            setDanmakuType(DanmakuType.getType(compound.getInt(DANMAKU_TYPE_TAG)));
-        }
-        if (compound.contains(DANMAKU_COLOR_TAG, Tag.TAG_INT)) {
-            setColor(DanmakuColor.getColor(compound.getInt(DANMAKU_COLOR_TAG)));
-        }
-        if (compound.contains(DANMAKU_DAMAGE_TAG, Tag.TAG_FLOAT)) {
-            setDamage(compound.getFloat(DANMAKU_DAMAGE_TAG));
-        }
-        if (compound.contains(DANMAKU_GRAVITY_TAG, Tag.TAG_FLOAT)) {
-            setGravityVelocity(compound.getFloat(DANMAKU_GRAVITY_TAG));
-        }
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt(DANMAKU_TYPE_TAG, getDanmakuType().ordinal());
-        compound.putInt(DANMAKU_COLOR_TAG, getColor().ordinal());
-        compound.putFloat(DANMAKU_DAMAGE_TAG, getDamage());
-        compound.putFloat(DANMAKU_GRAVITY_TAG, getGravity());
     }
 
     @Override
@@ -173,6 +154,16 @@ public class EntityDanmaku extends ThrowableProjectile {
 
     public EntityDanmaku setDamage(float damage) {
         this.entityData.set(DAMAGE, damage);
+        return this;
+    }
+
+    public EntityDanmaku setImpedingLevel(int impedingLevel) {
+        this.impedingLevel = impedingLevel;
+        return this;
+    }
+
+    public EntityDanmaku setHurtEnderman(boolean hurtEnderman) {
+        this.hurtEnderman = hurtEnderman;
         return this;
     }
 
