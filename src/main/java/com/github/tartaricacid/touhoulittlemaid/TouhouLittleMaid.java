@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
+import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
@@ -49,6 +50,7 @@ public final class TouhouLittleMaid {
         BackpackManager.init();
         BaubleManager.init();
         MultiBlockManager.init();
+        ChestManager.init();
         ChatBubbleManger.initDefaultChat();
     }
 }

@@ -1,13 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 
+import com.github.tartaricacid.touhoulittlemaid.api.bauble.IChestType;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
-import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestCheck;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -100,35 +100,38 @@ public class WirelessIOBauble implements IMaidBauble {
             if (maid.distanceToSqr(bindingPos.getX(), bindingPos.getY(), bindingPos.getZ()) > (maxDistance * maxDistance)) {
                 return;
             }
-
             BlockEntity te = maid.level.getBlockEntity(bindingPos);
-            if (!(te instanceof RandomizableContainerBlockEntity)) {
+            if (te == null) {
                 return;
             }
-            int openCount = IronChestCheck.getOpenCount(maid.level, bindingPos, te);
-            if (openCount > 0) {
+            for (IChestType type : ChestManager.getAllChestTypes()) {
+                if (!type.isChest(te)) {
+                    continue;
+                }
+                int openCount = type.getOpenCount(maid.level, bindingPos, te);
+                if (openCount > 0) {
+                    return;
+                }
+                te.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(chestInv -> {
+                    IItemHandler maidInv = maid.getAvailableInv(false);
+                    boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
+                    boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);
+                    byte[] slotConfigTmp = ItemWirelessIO.getSlotConfig(baubleItem);
+                    if (slotConfigTmp != null) {
+                        slotConfigTmp[maidInv.getSlots() - 2] = slotConfigTmp[SLOT_NUM - 2];
+                        slotConfigTmp[maidInv.getSlots() - 1] = slotConfigTmp[SLOT_NUM - 1];
+                    }
+                    boolean[] slotConfigData = bytes2Booleans(slotConfigTmp, SLOT_NUM);
+                    IItemHandler filterList = ItemWirelessIO.getFilterList(baubleItem);
+
+                    if (isMaidToChest) {
+                        maidToChest(maidInv, chestInv, isBlacklist, filterList, slotConfigData);
+                    } else {
+                        chestToMaid(chestInv, maidInv, isBlacklist, filterList, slotConfigData);
+                    }
+                });
                 return;
             }
-
-            RandomizableContainerBlockEntity chest = (RandomizableContainerBlockEntity) te;
-            chest.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(chestInv -> {
-                IItemHandler maidInv = maid.getAvailableInv(false);
-                boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
-                boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);
-                byte[] slotConfigTmp = ItemWirelessIO.getSlotConfig(baubleItem);
-                if (slotConfigTmp != null) {
-                    slotConfigTmp[maidInv.getSlots() - 2] = slotConfigTmp[SLOT_NUM - 2];
-                    slotConfigTmp[maidInv.getSlots() - 1] = slotConfigTmp[SLOT_NUM - 1];
-                }
-                boolean[] slotConfigData = bytes2Booleans(slotConfigTmp, SLOT_NUM);
-                IItemHandler filterList = ItemWirelessIO.getFilterList(baubleItem);
-
-                if (isMaidToChest) {
-                    maidToChest(maidInv, chestInv, isBlacklist, filterList, slotConfigData);
-                } else {
-                    chestToMaid(chestInv, maidInv, isBlacklist, filterList, slotConfigData);
-                }
-            });
         }
     }
 
