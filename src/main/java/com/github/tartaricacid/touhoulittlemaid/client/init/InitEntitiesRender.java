@@ -36,6 +36,7 @@ public final class InitEntitiesRender {
         EntityRenderers.register(EntityBroom.TYPE, EntityBroomRender::new);
 
         EntityRenderers.register(EntityType.SLIME, EntityYukkuriSlimeRender::new);
+        EntityRenderers.register(EntityType.MAGMA_CUBE, EntityMarisaYukkuriSlimeRender::new);
         EntityRenderers.register(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
 
         BlockEntityRenderers.register(TileEntityAltar.TYPE, TileEntityAltarRenderer::new);
@@ -60,6 +61,7 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(SmallBackpackModel.LAYER, SmallBackpackModel::createBodyLayer);
         event.registerLayerDefinition(StatueBaseModel.LAYER, StatueBaseModel::createBodyLayer);
         event.registerLayerDefinition(EntityYukkuriModel.LAYER, EntityYukkuriModel::createBodyLayer);
+        event.registerLayerDefinition(EntityMarisaYukkuriModel.LAYER, EntityMarisaYukkuriModel::createBodyLayer);
         event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
         event.registerLayerDefinition(PieceModel.LAYER, PieceModel::createBodyLayer);
         event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
