@@ -14,6 +14,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.bytes2Booleans;
@@ -116,8 +117,10 @@ public class WirelessIOBauble implements IMaidBauble {
                     IItemHandler maidInv = maid.getAvailableInv(false);
                     boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
                     boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);
-                    byte[] slotConfigTmp = ItemWirelessIO.getSlotConfig(baubleItem);
-                    if (slotConfigTmp != null) {
+                    byte[] slotConfig = ItemWirelessIO.getSlotConfig(baubleItem);
+                    byte[] slotConfigTmp = null;
+                    if (slotConfig != null) {
+                        slotConfigTmp = Arrays.copyOf(slotConfig, slotConfig.length);
                         slotConfigTmp[maidInv.getSlots() - 2] = slotConfigTmp[SLOT_NUM - 2];
                         slotConfigTmp[maidInv.getSlots() - 1] = slotConfigTmp[SLOT_NUM - 1];
                     }
