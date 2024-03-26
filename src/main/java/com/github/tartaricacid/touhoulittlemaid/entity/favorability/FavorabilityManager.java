@@ -84,7 +84,7 @@ public class FavorabilityManager {
         this.counter.put(type, new Time(tickCount));
     }
 
-    private boolean canAdd(String type) {
+    public boolean canAdd(String type) {
         if (this.counter.containsKey(type)) {
             return this.counter.get(type).isZero();
         }

@@ -1550,6 +1550,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
     }
 
+    public EntityHandsInvWrapper getHandsInvWrapper() {
+        return handsInvWrapper;
+    }
+
     public BaubleItemHandler getMaidBauble() {
         return maidBauble;
     }
