@@ -39,6 +39,10 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
         this.defaultModifiers = builder.build();
     }
 
+    public static boolean isGohei(ItemStack stack) {
+        return stack.getItem() instanceof ItemHakureiGohei;
+    }
+
     @Override
     public Predicate<ItemStack> getAllSupportedProjectiles() {
         return Predicates.alwaysTrue();

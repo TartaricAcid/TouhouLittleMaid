@@ -3340,7 +3340,7 @@
 			"loop": true,
 			"animation_length": 2
 		},
-		"use_mainhand$touhou_little_maid:hakurei_gohei": {
+		"use_mainhand:gohei": {
 			"animation_length": 0.75,
 			"bones": {
 				"UpBody": {

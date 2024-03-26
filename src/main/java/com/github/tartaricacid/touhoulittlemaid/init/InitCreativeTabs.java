@@ -32,6 +32,7 @@ public class InitCreativeTabs {
                 output.accept(MAID_SPAWN_EGG.get());
                 output.accept(FAIRY_SPAWN_EGG.get());
                 output.accept(HAKUREI_GOHEI.get());
+                output.accept(SANAE_GOHEI.get());
                 output.accept(POWER_POINT.get());
                 output.accept(SMART_SLAB_EMPTY.get());
                 output.accept(SMART_SLAB_INIT.get());
