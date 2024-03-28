@@ -7,7 +7,7 @@ public class Type {
     public static final Type GOMOKU = new Type("Gomoku", 2, 24000);
     public static final Type SLEEP = new Type("Sleep", 2, 24000);
     public static final Type GOMOKU_WIN = new Type("GomokuWin", 8, 12000);
-    public static final Type WORK_MEAL = new Type("WorkMeal", 1, 6000);
+    public static final Type WORK_MEAL = new Type("WorkMeal", 1, 2 * 60 * 20);
     public static final Type HOME_MEAL = new Type("HomeMeal", 4, 24000);
     public static final Type DEATH = new Type("Death", -2, 12000);
 

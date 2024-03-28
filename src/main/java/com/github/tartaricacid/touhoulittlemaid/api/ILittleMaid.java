@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.api;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 
@@ -45,5 +46,13 @@ public interface ILittleMaid {
      * @param manager 注册器
      */
     default void addChestType(ChestManager manager) {
+    }
+
+    /**
+     * 添加女仆饭类型
+     *
+     * @param manager 注册器
+     */
+    default void addMaidMeal(MaidMealManager manager) {
     }
 }

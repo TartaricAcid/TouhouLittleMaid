@@ -81,11 +81,10 @@ public final class MaidBrain {
         Pair<Integer, BehaviorControl<? super EntityMaid>> interactWithDoor = Pair.of(2, MaidInteractWithDoor.create());
         Pair<Integer, BehaviorControl<? super EntityMaid>> walkToTarget = Pair.of(2, new MoveToTargetSink());
         Pair<Integer, BehaviorControl<? super EntityMaid>> followOwner = Pair.of(3, new MaidFollowOwnerTask(0.5f, 2));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> eatWorkMeal = Pair.of(4, new MaidWorkMealTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> pickupItem = Pair.of(10, new MaidPickupEntitiesTask(EntityMaid::isPickup, 0.6f));
         Pair<Integer, BehaviorControl<? super EntityMaid>> clearSleep = Pair.of(99, new MaidClearSleepTask());
 
-        brain.addActivity(Activity.CORE, ImmutableList.of(swim, look, maidPanic, maidAwait, interactWithDoor, walkToTarget, followOwner, eatWorkMeal, pickupItem, clearSleep));
+        brain.addActivity(Activity.CORE, ImmutableList.of(swim, look, maidPanic, maidAwait, interactWithDoor, walkToTarget, followOwner, pickupItem, clearSleep));
     }
 
     private static void registerIdleGoals(Brain<EntityMaid> brain) {
@@ -115,6 +114,7 @@ public final class MaidBrain {
             pairMaidList.add(updateActivity);
         }
         pairMaidList.add(Pair.of(6, new MaidBegTask()));
+        pairMaidList.add(Pair.of(7, new MaidWorkMealTask()));
         brain.addActivity(Activity.WORK, ImmutableList.copyOf(pairMaidList));
     }
 

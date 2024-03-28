@@ -285,10 +285,15 @@ public final class MaidBaseAnimation {
                         armLeft.setRotateAngleX((float) (-Math.cos(limbSwing * 0.67) * 0.7 * limbSwingAmount));
                         armLeft.setRotateAngleY(armLeft.getInitRotateAngleY());
                         armLeft.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.05) * 0.05 + armLeft.getInitRotateAngleZ()));
-                        // 手部使用动画
+                        // 手部攻击动画
                         if (maid.attackAnim > 0.0 && isSwingLeftHand(maid)) {
                             armLeft.setRotateAngleX((float) (armLeft.getRotateAngleX() - (f2 * 1.2 + f3)));
                             armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
+                        }
+                        // 使用动画
+                        if (maid.isUsingItem() && maid.getUsedItemHand() == InteractionHand.OFF_HAND) {
+                            armLeft.setRotateAngleX((float) (armLeft.getInitRotateAngleX() - Math.PI * 80 / 180.0));
+                            armLeft.setRotateAngleY((float) (armLeft.getInitRotateAngleY() + Math.PI * 25 / 180.0));
                         }
                     }
                 }
@@ -305,10 +310,15 @@ public final class MaidBaseAnimation {
                         armRight.setRotateAngleX((float) (Math.cos(limbSwing * 0.67) * 0.7 * limbSwingAmount));
                         armRight.setRotateAngleY(armRight.getInitRotateAngleY());
                         armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.05 + armRight.getInitRotateAngleZ()));
-                        // 手部使用动画
+                        // 手部攻击动画
                         if (maid.attackAnim > 0.0 && !isSwingLeftHand(maid)) {
                             armRight.setRotateAngleX((float) (armRight.getRotateAngleX() - (f2 * 1.2 + f3)));
                             armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
+                        }
+                        // 使用动画
+                        if (maid.isUsingItem() && maid.getUsedItemHand() == InteractionHand.MAIN_HAND) {
+                            armRight.setRotateAngleX((float) (armRight.getInitRotateAngleX() - Math.PI * 80 / 180.0));
+                            armRight.setRotateAngleY((float) (armRight.getInitRotateAngleY() - Math.PI * 20 / 180.0));
                         }
                     }
                 }
