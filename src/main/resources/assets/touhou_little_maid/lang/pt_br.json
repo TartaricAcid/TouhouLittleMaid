@@ -171,6 +171,7 @@
   "task.touhou_little_maid.idle.desc": "A empregada não fará nada nesta tarefa",
   "task.touhou_little_maid.attack.desc": "A empregada atacará corpo a corpo os mobs hostis ao redor",
   "task.touhou_little_maid.ranged_attack.desc": "A empregada usará arcos para atacar mobs hostis ao redor",
+  "task.touhou_little_maid.ranged_attack.condition.has_bow": "Mão principal segura um arco",
   "task.touhou_little_maid.danmaku_attack.desc": "A empregada vai usar um danmaku para atacar mobs hostis ao redor",
   "task.touhou_little_maid.danmaku_attack.condition.has_gohei": "Mão principal segura um Gohei da Hakurei",
   "task.touhou_little_maid.farm.desc": "A empregada plantará ou colherá colheitas normais ao redor",
