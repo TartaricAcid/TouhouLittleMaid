@@ -132,7 +132,7 @@ Any icon with a scale of 1:1 will be interpreted as static icon. 任何长宽比
 ## 模型文件
 
 - 本模组使用基岩版 `1.10.0` 或 `1.12.0` JSON 文件来进行模型的加载，该文件可以通过建模软件 [Blockbench](https://blockbench.net/) 直接导出，不需要对其做任何修改。
-- 我们提供了许多预设动画，你只需要创建一个特殊名称的组，那么插件就会在导出模型是依据组名生成对应的动画脚本引用。 想要了解所有可用动画，请查看 [预设动画](/preset_animation.md) 篇章。 For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
+- 我们提供了许多预设动画，你只需要创建一个特殊名称的组，那么插件就会在导出模型是依据组名生成对应的动画脚本引用。 想要了解所有可用动画，请查看 [预设动画](/preset_animation.md) 篇章。 For all available names, please see the [Preset Animation](/preset_animation.md) chapter. For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
 - 模型也支持 JavaScript 自定义动画，你可以在自定义动画章节中找到对应介绍。
 
 ## 国际化
