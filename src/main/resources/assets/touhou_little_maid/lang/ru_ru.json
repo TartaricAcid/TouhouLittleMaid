@@ -163,6 +163,7 @@
   "task.touhou_little_maid.idle.desc": "Горничная ничего не будет делать в этой задаче",
   "task.touhou_little_maid.attack.desc": "Горничная будет бить враждебных мобов",
   "task.touhou_little_maid.ranged_attack.desc": "Горничная будет стрелять в враждебных мобов",
+  "task.touhou_little_maid.ranged_attack.condition.has_bow": "Ведущая рука держит лук",
   "task.touhou_little_maid.danmaku_attack.desc": "Горничная будет использовать данмаку в враждебных мобов",
   "task.touhou_little_maid.danmaku_attack.condition.has_gohei": "Ведущая рука держит гохей",
   "task.touhou_little_maid.farm.desc": "Горничная будет сажать и собирать посевы в округе",
