@@ -7,6 +7,7 @@
 
 > `tlm-utils` 插件可以自动依据组名调用正确的动画脚本引用，你只需点击 `分析动画` 按钮。 ![img](https://i.imgur.com/iyCKwMx.gif)
 > ![img](https://i.imgur.com/iyCKwMx.gif)
+> ![img](https://i.imgur.com/iyCKwMx.gif)
 
 Blockbech 插件提供了所有可用的预设动画，你可以右击大纲界面打开预设动画菜单\
 ![img](https://i.imgur.com/N17PbiE.gif)
