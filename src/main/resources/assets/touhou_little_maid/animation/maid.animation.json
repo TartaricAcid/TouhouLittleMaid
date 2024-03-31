@@ -3332,7 +3332,8 @@
 		"empty": {
 			"loop": true,
 			"animation_length": 2
-		},"hold_mainhand:empty": {
+		},
+		"hold_mainhand:empty": {
 			"loop": true,
 			"animation_length": 2
 		},
@@ -8566,6 +8567,26 @@
 						},
 						"2.0": [1, 1, 1]
 					}
+				}
+			}
+		},
+		"hold_mainhand$touhou_little_maid:picnic_basket": {
+			"loop": true,
+			"bones": {
+				"RightHandLocator": {
+					"rotation": [0, 0, -10],
+					"position": [-0.95106, -0.30902, 0],
+					"scale": 1.2
+				}
+			}
+		},
+		"hold_offhand$touhou_little_maid:picnic_basket": {
+			"loop": true,
+			"bones": {
+				"LeftHandLocator": {
+					"rotation": [0, 0, 10],
+					"position": [0.95106, -0.30902, 0],
+					"scale": 1.2
 				}
 			}
 		}

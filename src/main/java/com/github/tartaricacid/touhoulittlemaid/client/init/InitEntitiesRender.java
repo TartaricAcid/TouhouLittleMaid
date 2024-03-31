@@ -48,6 +48,7 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
         BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
         BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
+        BlockEntityRenderers.register(TileEntityPicnicMat.TYPE, PicnicMatRender::new);
     }
 
     @SubscribeEvent
@@ -75,5 +76,7 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(ShrineModel.LAYER, ShrineModel::createBodyLayer);
         event.registerLayerDefinition(MaidBannerModel.LAYER, MaidBannerModel::createBodyLayer);
         event.registerLayerDefinition(BroomModel.LAYER, BroomModel::createBodyLayer);
+        event.registerLayerDefinition(PicnicBasketModel.LAYER, PicnicBasketModel::createBodyLayer);
+        event.registerLayerDefinition(PicnicMatModel.LAYER, PicnicMatModel::createBodyLayer);
     }
 }
