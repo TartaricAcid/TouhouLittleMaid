@@ -12,5 +12,5 @@ public enum MaidMealType {
     /**
      * 回血餐
      */
-    RESTORE_MEAL
+    HEAL_MEAL
 }

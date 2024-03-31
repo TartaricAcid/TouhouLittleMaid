@@ -867,7 +867,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
     }
 
-    private void spawnRestoreHealthParticle(int particleCount) {
+    public void spawnRestoreHealthParticle(int particleCount) {
         if (this.level.isClientSide) {
             for (int i = 0; i < particleCount; ++i) {
                 double xRandom = this.random.nextGaussian() * 0.02D;
