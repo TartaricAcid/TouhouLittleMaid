@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemPicnicBasket;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -129,12 +130,20 @@ public class BlockPicnicMat extends Block implements EntityBlock {
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 BlockPos searchPos = pos.offset(i, 0, j);
-                worldIn.setBlock(searchPos, state, Block.UPDATE_ALL);
+                // 正中心的不用放置
+                if (!searchPos.equals(pos)) {
+                    worldIn.setBlock(searchPos, state, Block.UPDATE_ALL);
+                }
                 BlockEntity blockEntity = worldIn.getBlockEntity(searchPos);
                 if (blockEntity instanceof TileEntityPicnicMat picnicMat) {
                     picnicMat.setCenterPos(pos);
                 }
             }
+        }
+        // 给中心方块存入物品
+        BlockEntity blockEntity = worldIn.getBlockEntity(pos);
+        if (blockEntity instanceof TileEntityPicnicMat picnicMat && stack.is(InitItems.PICNIC_BASKET.get())) {
+            picnicMat.setHandler(ItemPicnicBasket.getContainer(stack));
         }
     }
 
@@ -173,7 +182,11 @@ public class BlockPicnicMat extends Block implements EntityBlock {
             return;
         }
         BlockPos centerPos = picnicMat.getCenterPos();
-        popResource(world, centerPos, InitItems.PICNIC_BASKET.get().getDefaultInstance());
+        if (world.getBlockEntity(centerPos) instanceof TileEntityPicnicMat picnicMatCenter) {
+            ItemStack stack = InitItems.PICNIC_BASKET.get().getDefaultInstance();
+            ItemPicnicBasket.setContainer(stack, picnicMatCenter.getHandler());
+            popResource(world, centerPos, stack);
+        }
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 BlockPos offset = centerPos.offset(i, 0, j);

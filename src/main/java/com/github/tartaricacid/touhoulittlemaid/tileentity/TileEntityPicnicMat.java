@@ -53,6 +53,17 @@ public class TileEntityPicnicMat extends BlockEntity {
         return handler.getStackInSlot(slotId).isEmpty();
     }
 
+    public void setHandler(ItemStackHandler stackHandler) {
+        for (int i = 0; i < stackHandler.getSlots(); i++) {
+            ItemStack stack = stackHandler.getStackInSlot(i);
+            if (i >= this.handler.getSlots()) {
+                return;
+            }
+            this.handler.setStackInSlot(i, stack);
+        }
+        this.refresh();
+    }
+
     public ItemStackHandler getHandler() {
         return handler;
     }
