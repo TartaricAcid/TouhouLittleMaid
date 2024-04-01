@@ -5,6 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +23,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +38,59 @@ public class BlockPicnicMat extends Block implements EntityBlock {
     public BlockPicnicMat() {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
+        if (worldIn.isClientSide) {
+            return InteractionResult.PASS;
+        }
+        if (hand != InteractionHand.MAIN_HAND) {
+            return InteractionResult.PASS;
+        }
+        if (!(worldIn.getBlockEntity(pos) instanceof TileEntityPicnicMat picnicMat)) {
+            return InteractionResult.FAIL;
+        }
+        BlockPos centerPos = picnicMat.getCenterPos();
+        if (!(worldIn.getBlockEntity(centerPos) instanceof TileEntityPicnicMat picnicMatCenter)) {
+            return InteractionResult.FAIL;
+        }
+        ItemStack itemInHand = playerIn.getItemInHand(hand);
+        if (itemInHand.isEdible()) {
+            return placeFood(itemInHand, playerIn, picnicMatCenter);
+        }
+        if (itemInHand.isEmpty() && playerIn.isDiscrete()) {
+            return takeFood(playerIn, picnicMatCenter);
+        }
+        return InteractionResult.PASS;
+    }
+
+
+    private static InteractionResult placeFood(ItemStack food, Player playerIn, TileEntityPicnicMat picnicMatCenter) {
+        int count = food.getCount();
+        ItemStack resultStack = ItemHandlerHelper.insertItemStacked(picnicMatCenter.getHandler(), food.copy(), false);
+        picnicMatCenter.refresh();
+        int shrinkCount = count - resultStack.getCount();
+        if (shrinkCount <= 0) {
+            return InteractionResult.FAIL;
+        }
+        food.shrink(shrinkCount);
+        return InteractionResult.SUCCESS;
+    }
+
+    private static InteractionResult takeFood(Player playerIn, TileEntityPicnicMat picnicMatCenter) {
+        ItemStackHandler handler = picnicMatCenter.getHandler();
+        int size = handler.getSlots() - 1;
+        for (int i = size; i >= 0; i--) {
+            ItemStack stack = handler.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                ItemStack outputStack = handler.extractItem(i, handler.getSlotLimit(i), false);
+                picnicMatCenter.refresh();
+                ItemHandlerHelper.giveItemToPlayer(playerIn, outputStack);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return InteractionResult.FAIL;
     }
 
     @Override
