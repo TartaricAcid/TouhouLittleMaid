@@ -122,6 +122,7 @@
   "tooltips.touhou_little_maid.tank_backpack.empty_fluid": "Empty",
   "tooltips.touhou_little_maid.tank_backpack.fluid": "%s: %d mB",
   "tooltips.touhou_little_maid.tank_backpack.capacity": "Capacity: %d mB",
+  "tooltips.touhou_little_maid.item_container.empty": "Empty",
   "overlay.touhou_little_maid.compass.tips": "Right click to display the maid's task area",
   "overlay.touhou_little_maid.golden_apple.tips": "Golden apple can be fed to maid",
   "overlay.touhou_little_maid.potion.tips": "Potion can be fed to maid",
