@@ -14,12 +14,10 @@ import net.minecraft.world.entity.Entity;
 public class PicnicMatModel extends EntityModel<Entity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "picnic_mat");
     private final ModelPart all;
-    private final ModelPart sit;
     private final ModelPart hide;
 
     public PicnicMatModel(ModelPart root) {
         this.all = root.getChild("all");
-        this.sit = root.getChild("sit");
         this.hide = root.getChild("hide");
     }
 
@@ -521,7 +519,6 @@ public class PicnicMatModel extends EntityModel<Entity> {
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         all.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        sit.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hide.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 

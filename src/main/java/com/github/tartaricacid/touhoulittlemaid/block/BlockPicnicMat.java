@@ -1,13 +1,20 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
+import com.github.tartaricacid.touhoulittlemaid.block.properties.PicnicMatPart;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemPicnicBasket;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,22 +30,76 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class BlockPicnicMat extends Block implements EntityBlock {
+    public static final EnumProperty<PicnicMatPart> PART = EnumProperty.create("part", PicnicMatPart.class);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final VoxelShape AABB = Block.box(0, 0, 0, 16, 1, 16);
 
     public BlockPicnicMat() {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F).noOcclusion());
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(PART, PicnicMatPart.CENTER));
+    }
+
+    public void startMaidSit(EntityMaid maid, BlockState state, Level worldIn, BlockPos pos) {
+        if (worldIn instanceof ServerLevel serverLevel && worldIn.getBlockEntity(pos) instanceof TileEntityPicnicMat picnicMat) {
+            // 只能选中中心方块
+            if (!state.getValue(PART).isCenter()) {
+                return;
+            }
+            // 遍历，寻找是否有空位
+            boolean hasEmptySit = false;
+            int sitIndex = -1;
+            for (UUID uuid : picnicMat.getSitIds()) {
+                sitIndex++;
+                if (uuid.equals(Util.NIL_UUID)) {
+                    hasEmptySit = true;
+                    break;
+                }
+                Entity oldSitEntity = serverLevel.getEntity(uuid);
+                if (oldSitEntity == null || !oldSitEntity.isAlive()) {
+                    hasEmptySit = true;
+                    break;
+                }
+            }
+            if (hasEmptySit) {
+                Vec3 sitPosition = this.sitPosition(sitIndex);
+                EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, sitPosition.x, sitPosition.y + 0.0625, sitPosition.z), Type.HOME_MEAL.getTypeName());
+                double y = sitPosition.z < 0 ? -1 : 1;
+                double x = sitPosition.x < 0 ? -1 : 1;
+                double rotOffset = Math.toDegrees(Math.atan2(y, x));
+                newSitEntity.setYRot((float) rotOffset + 90);
+                worldIn.addFreshEntity(newSitEntity);
+                picnicMat.setSitId(sitIndex, newSitEntity.getUUID());
+                maid.startRiding(newSitEntity);
+            }
+        }
+    }
+
+    private Vec3 sitPosition(int sitIndex) {
+        switch (sitIndex) {
+            case 0:
+                return new Vec3(2, 0, 2);
+            case 1:
+                return new Vec3(-1, 0, 2);
+            case 2:
+                return new Vec3(-1, 0, -1);
+            case 3:
+            default:
+                return new Vec3(2, 0, -1);
+        }
     }
 
     @Override
@@ -132,7 +193,7 @@ public class BlockPicnicMat extends Block implements EntityBlock {
                 BlockPos searchPos = pos.offset(i, 0, j);
                 // 正中心的不用放置
                 if (!searchPos.equals(pos)) {
-                    worldIn.setBlock(searchPos, state, Block.UPDATE_ALL);
+                    worldIn.setBlock(searchPos, state.setValue(PART, PicnicMatPart.SIDE), Block.UPDATE_ALL);
                 }
                 BlockEntity blockEntity = worldIn.getBlockEntity(searchPos);
                 if (blockEntity instanceof TileEntityPicnicMat picnicMat) {
@@ -155,7 +216,7 @@ public class BlockPicnicMat extends Block implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, PART);
     }
 
     @Nullable
@@ -167,6 +228,11 @@ public class BlockPicnicMat extends Block implements EntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
+        return true;
     }
 
     @Override
@@ -186,6 +252,17 @@ public class BlockPicnicMat extends Block implements EntityBlock {
             ItemStack stack = InitItems.PICNIC_BASKET.get().getDefaultInstance();
             ItemPicnicBasket.setContainer(stack, picnicMatCenter.getHandler());
             popResource(world, centerPos, stack);
+            if (world instanceof ServerLevel serverLevel) {
+                for (UUID uuid : picnicMatCenter.getSitIds()) {
+                    if (uuid.equals(Util.NIL_UUID)) {
+                        continue;
+                    }
+                    Entity entity = serverLevel.getEntity(uuid);
+                    if (entity instanceof EntitySit) {
+                        entity.discard();
+                    }
+                }
+            }
         }
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {

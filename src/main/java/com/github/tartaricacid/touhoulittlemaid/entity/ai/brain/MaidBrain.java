@@ -99,11 +99,12 @@ public final class MaidBrain {
         BehaviorControl<EntityMaid> firstShuffledTask = new MaidRunOne(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, walkRandomly, noLook));
 
         Pair<Integer, BehaviorControl<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> joy = Pair.of(6, new MaidJoyTask(0.6f, 2));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> homeMeal = Pair.of(6, new MaidFindHomeMealTask(0.6f, 2));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> joy = Pair.of(7, new MaidJoyTask(0.6f, 2));
         Pair<Integer, BehaviorControl<? super EntityMaid>> supplemented = Pair.of(10, firstShuffledTask);
         Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
-        brain.addActivity(Activity.IDLE, ImmutableList.of(beg, joy, supplemented, updateActivity));
+        brain.addActivity(Activity.IDLE, ImmutableList.of(beg, homeMeal, joy, supplemented, updateActivity));
     }
 
     private static void registerWorkGoals(Brain<EntityMaid> brain, EntityMaid maid) {

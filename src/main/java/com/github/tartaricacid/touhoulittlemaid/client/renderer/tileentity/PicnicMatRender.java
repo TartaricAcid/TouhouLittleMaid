@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockPicnicMat;
 import com.github.tartaricacid.touhoulittlemaid.client.model.PicnicMatModel;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_mat.png");
@@ -28,8 +29,9 @@ public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat>
 
     @Override
     public void render(TileEntityPicnicMat picnicMat, float partialTick, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        if (picnicMat.getCenterPos().equals(picnicMat.getBlockPos())) {
-            Direction facing = picnicMat.getBlockState().getValue(BlockGomoku.FACING);
+        BlockState blockState = picnicMat.getBlockState();
+        if (blockState.getValue(BlockPicnicMat.PART).isCenter()) {
+            Direction facing = blockState.getValue(BlockPicnicMat.FACING);
             poseStack.pushPose();
             poseStack.translate(0.5, 1.5, 0.5);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));

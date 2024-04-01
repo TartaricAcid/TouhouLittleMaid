@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.EntityPlaceholderModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.PicnicBasketModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.ShrineModel;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -16,6 +17,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class PicnicBasketRender extends BlockEntityWithoutLevelRenderer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_basket.png");
+    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/item/picnic_basket.png");
+    private static final EntityPlaceholderModel GUI_MODEL = new EntityPlaceholderModel();
     private final PicnicBasketModel model;
 
     public PicnicBasketRender(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
@@ -25,11 +28,19 @@ public class PicnicBasketRender extends BlockEntityWithoutLevelRenderer {
 
     @Override
     public void renderByItem(ItemStack pStack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        poseStack.pushPose();
-        poseStack.translate(0.5, 1.5, 0.5);
-        poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        RenderType renderType = RenderType.entityTranslucent(TEXTURE);
-        model.renderToBuffer(poseStack, buffer.getBuffer(renderType), packedLight, packedOverlay, 1, 1, 1, 1);
-        poseStack.popPose();
+        if (displayContext == ItemDisplayContext.GUI) {
+            poseStack.pushPose();
+            poseStack.translate(0.5, 1.5, 0.5);
+            poseStack.mulPose(Axis.ZN.rotationDegrees(180));
+            GUI_MODEL.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entityTranslucent(GUI_TEXTURE)), packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            poseStack.popPose();
+        } else {
+            poseStack.pushPose();
+            poseStack.translate(0.5, 1.5, 0.5);
+            poseStack.mulPose(Axis.ZN.rotationDegrees(180));
+            RenderType renderType = RenderType.entityTranslucent(TEXTURE);
+            model.renderToBuffer(poseStack, buffer.getBuffer(renderType), packedLight, packedOverlay, 1, 1, 1, 1);
+            poseStack.popPose();
+        }
     }
 }
