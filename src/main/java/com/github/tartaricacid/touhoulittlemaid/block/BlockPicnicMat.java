@@ -76,7 +76,7 @@ public class BlockPicnicMat extends Block implements EntityBlock {
             }
             if (hasEmptySit) {
                 Vec3 sitPosition = this.sitPosition(sitIndex);
-                EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, sitPosition.x, sitPosition.y + 0.0625, sitPosition.z), Type.HOME_MEAL.getTypeName());
+                EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, sitPosition.x, sitPosition.y + 0.0625, sitPosition.z), Type.ON_HOME_MEAL.getTypeName(), pos);
                 double y = sitPosition.z < 0 ? -1 : 1;
                 double x = sitPosition.x < 0 ? -1 : 1;
                 double rotOffset = Math.toDegrees(Math.atan2(y, x));

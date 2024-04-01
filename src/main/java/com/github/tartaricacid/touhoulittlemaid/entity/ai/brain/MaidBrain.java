@@ -143,9 +143,11 @@ public final class MaidBrain {
         Pair<BehaviorControl<? super EntityMaid>, Integer> lookToParrot = Pair.of(SetEntityLookTarget.create(EntityType.PARROT, 5), 1);
         Pair<BehaviorControl<? super EntityMaid>, Integer> noLook = Pair.of(new DoNothing(30, 60), 2);
 
+        Pair<Integer, BehaviorControl<? super EntityMaid>> homeMeal = Pair.of(4, new MaidHomeMealTask());
+
         Pair<Integer, BehaviorControl<? super EntityMaid>> shuffled = Pair.of(5, new MaidRunOne(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook)));
         Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
-        brain.addActivity(Activity.RIDE, ImmutableList.of(shuffled, updateActivity));
+        brain.addActivity(Activity.RIDE, ImmutableList.of(homeMeal, shuffled, updateActivity));
     }
 }

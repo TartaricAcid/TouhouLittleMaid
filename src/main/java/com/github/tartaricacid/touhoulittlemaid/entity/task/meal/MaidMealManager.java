@@ -23,6 +23,7 @@ public class MaidMealManager {
         MaidMealManager manager = new MaidMealManager();
         manager.addMaidMeal(MaidMealType.WORK_MEAL, new DefaultMaidWorkMeal());
         manager.addMaidMeal(MaidMealType.HEAL_MEAL, new DefaultMaidHealSelfMeal());
+        manager.addMaidMeal(MaidMealType.HOME_MEAL, new DefaultMaidHomeMeal());
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.addMaidMeal(manager);
         }
