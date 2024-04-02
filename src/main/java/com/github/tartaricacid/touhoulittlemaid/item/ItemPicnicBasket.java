@@ -81,8 +81,13 @@ public class ItemPicnicBasket extends BlockItem implements MenuProvider {
     }
 
     @Override
+    public String getDescriptionId() {
+        return "item.touhou_little_maid.picnic_basket";
+    }
+
+    @Override
     public Component getDisplayName() {
-        return Component.translatable("item.touhou_little_maid.picnic_basket");
+        return Component.translatable(this.getDescriptionId());
     }
 
     @Nullable

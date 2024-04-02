@@ -35,8 +35,8 @@ public class TileEntityPicnicMat extends BlockEntity {
             return stack.getItem().isEdible();
         }
     };
+    private final UUID[] sitIds = new UUID[]{Util.NIL_UUID, Util.NIL_UUID, Util.NIL_UUID, Util.NIL_UUID};
     private BlockPos centerPos = BlockPos.ZERO;
-    private UUID[] sitIds = new UUID[]{Util.NIL_UUID, Util.NIL_UUID, Util.NIL_UUID, Util.NIL_UUID};
 
     public TileEntityPicnicMat(BlockPos pos, BlockState blockState) {
         super(TYPE, pos, blockState);

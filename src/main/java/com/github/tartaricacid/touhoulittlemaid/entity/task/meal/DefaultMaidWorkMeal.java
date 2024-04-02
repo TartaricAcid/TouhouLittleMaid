@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task.meal;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.IMaidMeal;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -14,7 +15,7 @@ public class DefaultMaidWorkMeal implements IMaidMeal {
 
     @Override
     public boolean canMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
-        return stack.isEdible();
+        return stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get());
     }
 
     @Override

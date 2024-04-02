@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import java.util.List;
 
@@ -35,9 +36,29 @@ public class MaidHealSelfTask extends MaidCheckRateTask {
         List<IMaidMeal> maidMeals = MaidMealManager.getMaidMeals(MaidMealType.HEAL_MEAL);
         for (InteractionHand hand : InteractionHand.values()) {
             ItemStack itemInHand = maid.getItemInHand(hand);
+
+            emptyItemCheck:
             if (itemInHand.isEmpty()) {
+                // 尝试在背包中寻找食物放入
+                RangedWrapper backpackInv = maid.getAvailableBackpackInv();
+                for (int i = 0; i < backpackInv.getSlots(); i++) {
+                    ItemStack stack = backpackInv.getStackInSlot(i);
+                    if (stack.isEmpty()) {
+                        continue;
+                    }
+                    for (IMaidMeal maidMeal : maidMeals) {
+                        if (maidMeal.canMaidEat(maid, stack, hand)) {
+                            maid.setItemInHand(hand, stack.copy());
+                            backpackInv.setStackInSlot(i, ItemStack.EMPTY);
+                            itemInHand = maid.getItemInHand(hand);
+                            break emptyItemCheck;
+                        }
+                    }
+                }
+                // 搜索完所有的物品都没有合适的，就不执行后续内容了
                 continue;
             }
+
             for (IMaidMeal maidMeal : maidMeals) {
                 if (maidMeal.canMaidEat(maid, itemInHand, hand)) {
                     maidMeal.onMaidEat(maid, itemInHand, hand);

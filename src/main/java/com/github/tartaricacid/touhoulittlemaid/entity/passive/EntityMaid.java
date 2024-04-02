@@ -1546,8 +1546,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
-        RangedWrapper combinedInvWrapper = new RangedWrapper(maidInv, 0, getMaidBackpackType().getAvailableMaxContainerIndex());
+        RangedWrapper combinedInvWrapper = this.getAvailableBackpackInv();
         return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
+    }
+
+    public RangedWrapper getAvailableBackpackInv() {
+        return new RangedWrapper(maidInv, 0, getMaidBackpackType().getAvailableMaxContainerIndex());
     }
 
     public EntityHandsInvWrapper getHandsInvWrapper() {
