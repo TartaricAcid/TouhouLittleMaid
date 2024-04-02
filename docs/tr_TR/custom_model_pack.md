@@ -30,7 +30,7 @@ Plugin site: http\://page.cfpa.team/TLM-Utils-Plugins/
 
 First you need to understand how to use Blockbench, and second you need to install the `tlm-utils` plugin.\
 When everything is done, you can start to make a model package according to the instructions below.\
-When everything is done, you can start to make a model package according to the instructions below.
+Herşey yaptıldıktan sonra, aşağıdaki talimatlar ile model paketi yapmaya başlayabilirsiniz.
 
 ## 1. Create a default model
 
