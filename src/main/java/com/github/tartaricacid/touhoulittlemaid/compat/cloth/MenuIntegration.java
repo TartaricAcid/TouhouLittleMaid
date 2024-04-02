@@ -185,6 +185,10 @@ public class MenuIntegration {
                 .setDefaultValue(6).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(Component.translatable("config.touhou_little_maid.misc.shrine_lamp_max_range.desc"))
                 .setSaveConsumer(d -> MiscConfig.SHRINE_LAMP_MAX_RANGE.set(d)).build());
+
+        misc.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.misc.close_optifine_warning.name"), MiscConfig.CLOSE_OPTIFINE_WARNING.get())
+                .setDefaultValue(false).setTooltip(Component.translatable("config.touhou_little_maid.misc.close_optifine_warning.desc"))
+                .setSaveConsumer(MiscConfig.CLOSE_OPTIFINE_WARNING::set).build());
     }
 
     private static void vanillaConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
