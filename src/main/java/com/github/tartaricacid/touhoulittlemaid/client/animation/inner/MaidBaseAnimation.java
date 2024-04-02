@@ -70,6 +70,7 @@ public final class MaidBaseAnimation {
             @Override
             public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper blink = modelMap.get("blink");
+                ModelRendererWrapper blink2 = modelMap.get("blink2");
 
                 if (blink != null) {
                     if (maid.isSleeping()) {
@@ -78,6 +79,15 @@ public final class MaidBaseAnimation {
                     }
                     float remainder = (ageInTicks + Math.abs(maid.getUUID().getLeastSignificantBits()) % 10) % 60;
                     blink.setHidden(!(55 < remainder && remainder < 60));
+                }
+
+                if (blink2 != null) {
+                    if (maid.isSleeping()) {
+                        blink2.setHidden(false);
+                        return;
+                    }
+                    float remainder = (ageInTicks + Math.abs(maid.getUUID().getLeastSignificantBits()) % 10) % 60;
+                    blink2.setHidden(!(55 < remainder && remainder < 60));
                 }
             }
         };
