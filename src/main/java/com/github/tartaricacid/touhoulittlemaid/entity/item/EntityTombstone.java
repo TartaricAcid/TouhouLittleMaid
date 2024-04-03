@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -51,7 +52,9 @@ public class EntityTombstone extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (player.getUUID().equals(this.ownerId)) {
+        ItemStack itemInHand = player.getItemInHand(hand);
+        // NTR 工具可以收回墓碑
+        if (player.getUUID().equals(this.ownerId) || EntityMaid.getNtrItem().test(itemInHand)) {
             for (int i = 0; i < this.items.getSlots(); i++) {
                 int size = this.items.getSlotLimit(i);
                 ItemStack extractItem = this.items.extractItem(i, size, false);

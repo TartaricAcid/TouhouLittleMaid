@@ -1727,11 +1727,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @SuppressWarnings("all")
-    public Ingredient getNtrItem() {
+    public static Ingredient getNtrItem() {
         return getConfigIngredient(MaidConfig.MAID_NTR_ITEM.get(), Items.STRUCTURE_VOID);
     }
 
-    private Ingredient getConfigIngredient(String config, Item defaultItem) {
+    private static Ingredient getConfigIngredient(String config, Item defaultItem) {
         if (config.startsWith(MaidConfig.TAG_PREFIX)) {
             ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
             if (tags != null) {
