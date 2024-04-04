@@ -26,8 +26,8 @@ public class PlayerLoggedInNotice {
         if (missingPatchouli) {
             MutableComponent title = Component.translatable("message.touhou_little_maid.missing_patchouli.title")
                     .withStyle(style -> style.withColor(ChatFormatting.GREEN).withBold(true));
-            ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, I18n.get("message.touhou_little_maid.missing_patchouli.click_url"));
-            HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("message.touhou_little_maid.missing_patchouli.hover_url"));
+            ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, I18n.get("message.touhou_little_maid.missing_patchouli.url"));
+            HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("message.touhou_little_maid.missing_patchouli.url"));
             MutableComponent base = Component.translatable("message.touhou_little_maid.missing_patchouli.click_here")
                     .withStyle(style -> style.withColor(ChatFormatting.GOLD).withBold(false).withUnderlined(true).withClickEvent(clickEvent).withHoverEvent(hoverEvent));
             event.getEntity().sendSystemMessage(title.append(CommonComponents.SPACE).append(base));

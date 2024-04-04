@@ -1,0 +1,33 @@
+{
+  "type": "touhou_little_maid:altar_crafting",
+  "output": {
+    "type": "minecraft:item",
+    "nbt": {
+      "Item": {
+        "id": "touhou_little_maid:picnic_basket",
+        "Count": 1
+      }
+    }
+  },
+  "power": 0.2,
+  "ingredients": [
+    {
+      "tag": "forge:chests/wooden"
+    },
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
+      "tag": "minecraft:wool_carpets"
+    }
+  ]
+}
