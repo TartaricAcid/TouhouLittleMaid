@@ -37,6 +37,7 @@ public class AnimationRegister {
         register("bookshelf", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.BOOKSHELF.getTypeName()));
         register("computer", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.COMPUTER.getTypeName()));
         register("keyboard", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.KEYBOARD.getTypeName()));
+        register("picnic", Priority.HIGH, (maid, event) -> maid.getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.ON_HOME_MEAL.getTypeName()));
         register("sit", Priority.HIGH, (maid, event) -> maid.isInSittingPose());
         register("chair", Priority.HIGH, (maid, event) -> maid.isPassenger());
 

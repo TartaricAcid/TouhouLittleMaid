@@ -11,7 +11,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Optional;
@@ -75,7 +74,7 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
                     // 否则开始进行远程攻击
                     int ticksUsingItem = owner.getTicksUsingItem();
                     // 拿到快速射击附魔的等级
-                    int level = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE,owner.getMainHandItem());
+                    int level = owner.getMainHandItem().getEnchantmentLevel(Enchantments.QUICK_CHARGE);
 
                     // 物品最大使用计数大于 20 才可以
                     // 这里大致解释下计数的意思，也就是蓄力，蓄力越长自然射的越远
@@ -83,7 +82,8 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
                     // 当有快速射击附魔时，加快拉弓速度
                     if (level > 4 || ticksUsingItem >= (20 - level * 5)) {
                         owner.stopUsingItem();
-                        owner.performRangedAttack(target, BowItem.getPowerForTime(ticksUsingItem));
+                        int powerTime = Math.max(ticksUsingItem, 20);
+                        owner.performRangedAttack(target, BowItem.getPowerForTime(powerTime));
                         this.attackTime = this.attackCooldown;
                     }
                 }

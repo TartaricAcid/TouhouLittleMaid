@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -12,27 +13,33 @@ public final class DanmakuShoot {
     private static final double MAX_YAW = 2 * Math.PI;
     private static final int MIN_FAN_NUM = 2;
 
-    private Level world;
-    private LivingEntity thrower;
-    private DanmakuColor color;
-    private DanmakuType type;
-    private float gravity;
-    private float damage;
-    private LivingEntity target;
-    private float velocity;
-    private float inaccuracy;
-    private double yawTotal;
-    private int fanNum;
+    private Level world = null;
+    private LivingEntity thrower = null;
+    private LivingEntity target = null;
+    private DanmakuColor color = DanmakuColor.RED;
+    private DanmakuType type = DanmakuType.PELLET;
+    private int impedingLevel = 0;
+    private float gravity = 0.01f;
+    private float damage = 1.0f;
+    private float velocity = 0.2f;
+    private float inaccuracy = 0.2f;
+    private double yawTotal = 0;
+    private int fanNum = 0;
+    private boolean hurtEnderman = false;
 
     public static DanmakuShoot create() {
         return new DanmakuShoot();
     }
 
     public void aimedShot() {
+        Preconditions.checkNotNull(world);
+        Preconditions.checkNotNull(thrower);
+        Preconditions.checkNotNull(target);
         if (!world.isClientSide) {
             EntityDanmaku danmaku = new EntityDanmaku(world, thrower)
                     .setDamage(damage).setGravityVelocity(gravity)
-                    .setDanmakuType(type).setColor(color);
+                    .setDanmakuType(type).setColor(color)
+                    .setImpedingLevel(impedingLevel).setHurtEnderman(hurtEnderman);
             float offset = 0.3f / target.getBbHeight();
             danmaku.shoot(target.getX() - thrower.getX(), target.getY() - thrower.getY() - offset, target.getZ() - thrower.getZ(), velocity, inaccuracy);
             world.addFreshEntity(danmaku);
@@ -41,10 +48,11 @@ public final class DanmakuShoot {
     }
 
     public void fanShapedShot() {
-        if (yawTotal < 0 || yawTotal > MAX_YAW || fanNum < MIN_FAN_NUM) {
-            return;
-        }
-
+        Preconditions.checkNotNull(world);
+        Preconditions.checkNotNull(thrower);
+        Preconditions.checkNotNull(target);
+        Preconditions.checkArgument(yawTotal >= 0 && yawTotal <= MAX_YAW, "yaw should >=0 and <= 2π");
+        Preconditions.checkArgument(fanNum >= MIN_FAN_NUM, "fan number should >=2");
         if (!world.isClientSide) {
             float offset = 0.3f / target.getBbHeight();
             Vec3 v = new Vec3(target.getX() - thrower.getX(), target.getY() - thrower.getY() - offset, target.getZ() - thrower.getZ());
@@ -56,7 +64,8 @@ public final class DanmakuShoot {
 
                 EntityDanmaku danmaku = new EntityDanmaku(world, thrower)
                         .setDamage(damage).setGravityVelocity(gravity)
-                        .setDanmakuType(type).setColor(color);
+                        .setDanmakuType(type).setColor(color)
+                        .setImpedingLevel(impedingLevel).setHurtEnderman(hurtEnderman);
                 danmaku.shoot(v1.x, v1.y, v1.z, velocity, inaccuracy);
                 world.addFreshEntity(danmaku);
             }
@@ -126,6 +135,16 @@ public final class DanmakuShoot {
 
     public DanmakuShoot setFanNum(int fanNum) {
         this.fanNum = fanNum;
+        return this;
+    }
+
+    public DanmakuShoot setImpedingLevel(int level) {
+        this.impedingLevel = level;
+        return this;
+    }
+
+    public DanmakuShoot setHurtEnderman(boolean hurtEnderman) {
+        this.hurtEnderman = hurtEnderman;
         return this;
     }
 }

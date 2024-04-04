@@ -16,6 +16,6 @@ public class MaidRunOne extends RunOne<EntityMaid> {
 
     @Override
     public boolean tryStart(ServerLevel pLevel, EntityMaid maid, long pGameTime) {
-        return !maid.isBegging() && !(maid.getVehicle() instanceof EntitySit) && super.tryStart(pLevel, maid, pGameTime);
+        return !maid.isBegging() && !maid.isSleeping() && !(maid.getVehicle() instanceof EntitySit) && super.tryStart(pLevel, maid, pGameTime);
     }
 }

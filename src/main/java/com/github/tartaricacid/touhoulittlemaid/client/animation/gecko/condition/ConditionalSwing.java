@@ -7,34 +7,62 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class ConditionalSwing {
-    private static final String ID_PRE = "swing$";
-    private static final String TAG_PRE = "swing#";
     private static final String EMPTY = "";
-    private static final int PRE_SIZE = 6;
+    private final int preSize;
+    private final String idPre;
+    private final String tagPre;
+    private final String extraPre;
     private final List<ResourceLocation> idTest = Lists.newArrayList();
     private final List<TagKey<Item>> tagTest = Lists.newArrayList();
+    private final List<UseAnim> extraTest = Lists.newArrayList();
+    private final List<String> innerTest = Lists.newArrayList();
+
+    public ConditionalSwing(InteractionHand hand) {
+        if (hand == InteractionHand.MAIN_HAND) {
+            idPre = "swing$";
+            tagPre = "swing#";
+            extraPre = "swing:";
+            preSize = 6;
+        } else {
+            idPre = "swing_offhand$";
+            tagPre = "swing_offhand#";
+            extraPre = "swing_offhand:";
+            preSize = 14;
+        }
+    }
 
     public void addTest(String name) {
-        if (name.length() <= PRE_SIZE) {
+        if (name.length() <= preSize) {
             return;
         }
-        String substring = name.substring(PRE_SIZE);
-        if (name.startsWith(ID_PRE) && ResourceLocation.isValidResourceLocation(substring)) {
-            idTest.add(new ResourceLocation(name.substring(PRE_SIZE)));
+        String substring = name.substring(preSize);
+        if (name.startsWith(idPre) && ResourceLocation.isValidResourceLocation(substring)) {
+            idTest.add(new ResourceLocation(substring));
         }
-        if (name.startsWith(TAG_PRE) && ResourceLocation.isValidResourceLocation(substring)) {
+        if (name.startsWith(tagPre) && ResourceLocation.isValidResourceLocation(substring)) {
             ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
             if (tags == null) {
                 return;
             }
             TagKey<Item> tagKey = tags.createTagKey(new ResourceLocation(substring));
             tagTest.add(tagKey);
+        }
+        if (name.startsWith(extraPre)) {
+            if (substring.equals(UseAnim.NONE.name().toLowerCase(Locale.US))) {
+                return;
+            }
+            Arrays.stream(UseAnim.values()).filter(a -> a.name().toLowerCase(Locale.US).equals(substring)).findFirst().ifPresent(extraTest::add);
+            innerTest.add(name);
         }
     }
 
@@ -44,7 +72,11 @@ public class ConditionalSwing {
         }
         String result = doIdTest(maid, hand);
         if (result.isEmpty()) {
-            return doTagTest(maid, hand);
+            result = doTagTest(maid, hand);
+            if (result.isEmpty()) {
+                return doExtraTest(maid, hand);
+            }
+            return result;
         }
         return result;
     }
@@ -59,7 +91,7 @@ public class ConditionalSwing {
             return EMPTY;
         }
         if (idTest.contains(registryName)) {
-            return ID_PRE + registryName;
+            return idPre + registryName;
         }
         return EMPTY;
     }
@@ -73,6 +105,21 @@ public class ConditionalSwing {
         if (tags == null) {
             return EMPTY;
         }
-        return tagTest.stream().filter(itemInHand::is).findFirst().map(itemTagKey -> TAG_PRE + itemTagKey.location()).orElse(EMPTY);
+        return tagTest.stream().filter(itemInHand::is).findFirst().map(itemTagKey -> tagPre + itemTagKey.location()).orElse(EMPTY);
+    }
+
+    private String doExtraTest(EntityMaid maid, InteractionHand hand) {
+        if (extraTest.isEmpty() && innerTest.isEmpty()) {
+            return EMPTY;
+        }
+        String innerName = InnerClassify.doClassifyTest(extraPre, maid, hand);
+        if (StringUtils.isNotBlank(innerName) && this.innerTest.contains(innerName)) {
+            return innerName;
+        }
+        UseAnim anim = maid.getItemInHand(hand).getUseAnimation();
+        if (this.extraTest.contains(anim)) {
+            return extraPre + anim.name().toLowerCase(Locale.US);
+        }
+        return EMPTY;
     }
 }

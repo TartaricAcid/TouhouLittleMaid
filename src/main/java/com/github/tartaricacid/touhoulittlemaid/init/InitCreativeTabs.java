@@ -8,6 +8,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -28,6 +32,7 @@ public class InitCreativeTabs {
                 output.accept(MAID_SPAWN_EGG.get());
                 output.accept(FAIRY_SPAWN_EGG.get());
                 output.accept(HAKUREI_GOHEI.get());
+                output.accept(SANAE_GOHEI.get());
                 output.accept(POWER_POINT.get());
                 output.accept(SMART_SLAB_EMPTY.get());
                 output.accept(SMART_SLAB_INIT.get());
@@ -67,12 +72,16 @@ public class InitCreativeTabs {
                 output.accept(FILM.get());
                 output.accept(CHISEL.get());
                 output.accept(MAID_BED.get());
+                output.accept(PICNIC_BASKET.get());
                 output.accept(MAID_BEACON.get());
                 output.accept(SHRINE.get());
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());
                 output.accept(BROOM.get());
                 ItemEntityPlaceholder.fillItemCategory(output);
+                output.accept(getEnchantmentBook(InitEnchantments.IMPEDING));
+                output.accept(getEnchantmentBook(InitEnchantments.SPEEDY));
+                output.accept(getEnchantmentBook(InitEnchantments.ENDERS_ENDER));
             }).build());
 
     public static RegistryObject<CreativeModeTab> GARAGE_KIT_TAB = TABS.register("chair", () -> CreativeModeTab.builder()
@@ -88,4 +97,10 @@ public class InitCreativeTabs {
             .displayItems((par, output) -> {
                 BlockGarageKit.fillItemCategory(output);
             }).build());
+
+    private static ItemStack getEnchantmentBook(RegistryObject<Enchantment> registryObject) {
+        Enchantment enchantment = registryObject.get();
+        EnchantmentInstance instance = new EnchantmentInstance(enchantment, enchantment.getMaxLevel());
+        return EnchantedBookItem.createForEnchantment(instance);
+    }
 }

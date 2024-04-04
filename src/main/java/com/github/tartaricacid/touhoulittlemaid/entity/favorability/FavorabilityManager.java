@@ -8,8 +8,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Map;
 
@@ -32,9 +34,19 @@ public class FavorabilityManager {
     private static final int LEVEL_3_HEALTH = 80;
 
     private static final int LEVEL_0_ATTACK_DAMAGE = 2;
-    private static final int LEVEL_1_ATTACK_DAMAGE = 2;
-    private static final int LEVEL_2_ATTACK_DAMAGE = 5;
-    private static final int LEVEL_3_ATTACK_DAMAGE = 10;
+    private static final int LEVEL_1_ATTACK_DAMAGE = 3;
+    private static final int LEVEL_2_ATTACK_DAMAGE = 4;
+    private static final int LEVEL_3_ATTACK_DAMAGE = 6;
+
+    private static final int LEVEL_0_ATTACK_DISTANCE = 2;
+    private static final int LEVEL_1_ATTACK_DISTANCE = 3;
+    private static final int LEVEL_2_ATTACK_DISTANCE = 5;
+    private static final int LEVEL_3_ATTACK_DISTANCE = 7;
+
+    private static final double LEVEL_0_SWEEP_RANGE = 1;
+    private static final double LEVEL_1_SWEEP_RANGE = 2;
+    private static final double LEVEL_2_SWEEP_RANGE = 3;
+    private static final double LEVEL_3_SWEEP_RANGE = 4;
 
     private static final String TAG_NAME = "FavorabilityManagerCounter";
 
@@ -68,11 +80,22 @@ public class FavorabilityManager {
         }
     }
 
+    public void apply(Type type, int point) {
+        if (this.canAdd(type.getTypeName())) {
+            if (type.isReduce()) {
+                this.reduce(point);
+            } else {
+                this.add(point);
+            }
+            this.addCooldown(type.getTypeName(), type.getCooldown());
+        }
+    }
+
     private void addCooldown(String type, int tickCount) {
         this.counter.put(type, new Time(tickCount));
     }
 
-    private boolean canAdd(String type) {
+    public boolean canAdd(String type) {
         if (this.counter.containsKey(type)) {
             return this.counter.get(type).isZero();
         }
@@ -149,6 +172,35 @@ public class FavorabilityManager {
                 return LEVEL_0_ATTACK_DAMAGE;
             }
         }
+    }
+
+    public int getAttackDistanceByPoint(int favorability) {
+        if (favorability < LEVEL_1_POINT) {
+            return LEVEL_0_ATTACK_DISTANCE;
+        } else if (favorability < LEVEL_2_POINT) {
+            return LEVEL_1_ATTACK_DISTANCE;
+        } else if (favorability < LEVEL_3_POINT) {
+            return LEVEL_2_ATTACK_DISTANCE;
+        } else {
+            return LEVEL_3_ATTACK_DISTANCE;
+        }
+    }
+
+    public AABB getSweepRange(Entity target, int favorability) {
+        AABB boundingBox = target.getBoundingBox();
+        if (favorability < LEVEL_1_POINT) {
+            return sweepRangeTransform(boundingBox, LEVEL_0_SWEEP_RANGE);
+        } else if (favorability < LEVEL_2_POINT) {
+            return sweepRangeTransform(boundingBox, LEVEL_1_SWEEP_RANGE);
+        } else if (favorability < LEVEL_3_POINT) {
+            return sweepRangeTransform(boundingBox, LEVEL_2_SWEEP_RANGE);
+        } else {
+            return sweepRangeTransform(boundingBox, LEVEL_3_SWEEP_RANGE);
+        }
+    }
+
+    private AABB sweepRangeTransform(AABB boundingBox, double range) {
+        return boundingBox.inflate(range, Math.max(range / 4, 0.25), range);
     }
 
     public int getPointByLevel(int level) {
