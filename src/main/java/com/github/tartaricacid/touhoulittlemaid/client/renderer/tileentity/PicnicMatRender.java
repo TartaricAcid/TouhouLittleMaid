@@ -36,7 +36,6 @@ public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat>
             poseStack.translate(0.5, 1.5, 0.5);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
             poseStack.mulPose(Axis.YN.rotationDegrees(180 - facing.get2DDataValue() * 90));
-            VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
             {
                 this.model.getHideModel().getChild("basketHide").visible = !picnicMat.isEmpty(0);
                 this.model.getHideModel().getChild("breadHide").visible = !picnicMat.isEmpty(1);
@@ -51,6 +50,7 @@ public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat>
                 renderFood(picnicMat, 7, 0.375f, 1.575f, 1.4125f, poseStack, bufferIn, combinedLightIn, combinedOverlayIn);
                 renderFood(picnicMat, 8, -0.05f, 1.2f, 1.25f, poseStack, bufferIn, combinedLightIn, combinedOverlayIn);
             }
+            VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
             model.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
             poseStack.popPose();
         }
