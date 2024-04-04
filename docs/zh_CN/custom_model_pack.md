@@ -2,13 +2,14 @@
 
 Touhou Little Maid 模组支持自定义模型包，你可以通过 Blockbench 这样的软件快速制作你喜欢的模型。 游戏可以读取 zip 压缩文件格式的模型包，或者直接读取文件夹。
 The game can read the model package in zip compressed file format, or directly read the folder.
+The game can read the model package in zip compressed file format, or directly read the folder.
 
 该模型包兼容的模组版本 `1.12.2` 和 `1.16.5` 完全相同，只是加载方法略有不同：
 
 - `1.12.2`：模型包需要像原版资源包一样加载。
 - `1.16.5`：模型包需要放置在游戏目录下的 `tlm_custom_pack` 文件夹中。
 
-即使你是新手，从零开始制作一个自定义模型包也不难。 你只需要以下免费软件： You only need the following free software:
+即使你是新手，从零开始制作一个自定义模型包也不难。 你只需要以下免费软件： You only need the following free software: You only need the following free software:
 
 - Blockbench: 一个由 `JannisX11` 开发的专门用于 Minecraft 3D 建模的软件。
 
@@ -30,13 +31,15 @@ The game can read the model package in zip compressed file format, or directly r
 
 首先你需要了解如何使用 Blockbench，其次你需要安装 `tlm-utils` 插件。\
 当一切完成后，你可以根据下面的说明开始制作一个模型包。\
+When everything is done, you can start to make a model package according to the instructions below.\
 When everything is done, you can start to make a model package according to the instructions below.
 
 ## 1. 创建默认模型
 
-创建一个默认模型，它将自动创建一个默认的基岩版模型，你可以在此基础上进行修改。\
-如果你选择 `坐垫`，没有默认模型。\
-If you choose `chair`, there is no default model.
+3. 创建材质\
+   创建一个默认模型，它将自动创建一个默认的基岩版模型，你可以在此基础上进行修改。\
+   如果你选择 `坐垫`，没有默认模型。\
+   If you choose `chair`, there is no default model.
 
 ![img](https://i.imgur.com/h6ufpuS.gif)
 

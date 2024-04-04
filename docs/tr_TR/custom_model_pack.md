@@ -29,11 +29,13 @@ Plugin site: http\://page.cfpa.team/TLM-Utils-Plugins/
 # Quick Start
 
 First you need to understand how to use Blockbench, and second you need to install the `tlm-utils` plugin.\
-When everything is done, you can start to make a model package according to the instructions below.
+When everything is done, you can start to make a model package according to the instructions below.\
+Herşey yaptıldıktan sonra, aşağıdaki talimatlar ile model paketi yapmaya başlayabilirsiniz.
 
 ## 1. Create a default model
 
 Create a default model, it will automatically create a default Bedrock Edition model, you can modify on this basis.\
+If you choose `chair`, there is no default model.\
 If you choose `chair`, there is no default model.
 
 ![img](https://i.imgur.com/h6ufpuS.gif)
@@ -53,7 +55,7 @@ Need to pay attention to several points:
 
 3. Pay attention to the pivot point.
 
-## 3) Create textures
+## 3) 3) Create textures
 
 You can edit the textures directly in Blockbench, or you can edit the textures through other image editors.
 

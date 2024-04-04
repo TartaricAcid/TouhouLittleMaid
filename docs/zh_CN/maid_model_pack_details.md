@@ -122,7 +122,7 @@
 ## 模型文件
 
 - 本模组使用基岩版 `1.10.0` 或 `1.12.0` JSON 文件来进行模型的加载，该文件可以通过建模软件 [Blockbench](https://blockbench.net/) 直接导出，不需要对其做任何修改。
-- 我们提供了许多预设动画，你只需要创建一个特殊名称的组，那么插件就会在导出模型是依据组名生成对应的动画脚本引用。 想要了解所有可用动画，请查看 [预设动画](/preset_animation.md) 篇章。 For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
+- 鉴于部分作者制作的模型比较特殊，与女仆本身拥有多种附加的外形显示不兼容。 此处专门对非标模型提供了适配的做法： 任意为 1:1 的图标均会被解析为静态图标。 不为 1:1 的长图，会以 0.1 秒的间隔逐次显示，从而形成动态图效果。 我们提供了许多预设动画，你只需要创建一个特殊名称的组，那么插件就会在导出模型是依据组名生成对应的动画脚本引用。 想要了解所有可用动画，请查看 [预设动画](/preset_animation.md) 篇章。 For all available names, please see the [Preset Animation](/preset_animation.md) chapter.
 - 模型也支持 JavaScript 自定义动画，你可以在自定义动画章节中找到对应介绍。
 
 ## 国际化
