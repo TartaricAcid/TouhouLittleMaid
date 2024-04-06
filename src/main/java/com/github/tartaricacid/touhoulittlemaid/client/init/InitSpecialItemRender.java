@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class InitSpecialItemRender {
     private static final List<Pair<ModelResourceLocation, ModelResourceLocation>> PERSPECTIVE_MODEL_LIST = Lists.newArrayList();
@@ -37,6 +36,7 @@ public final class InitSpecialItemRender {
     public static void register(RegisterEvent event) {
         if (ForgeRegistries.ITEMS.equals(event.getForgeRegistry())) {
             addInHandModel(InitItems.HAKUREI_GOHEI.get());
+            addInHandModel(InitItems.SANAE_GOHEI.get());
             addInHandModel(InitItems.EXTINGUISHER.get());
             addInHandModel(InitItems.CAMERA.get());
             addInHandModel(InitItems.MAID_BEACON.get());
@@ -53,6 +53,7 @@ public final class InitSpecialItemRender {
             PerspectiveBakedModel model = new PerspectiveBakedModel(registry.get(pair.getLeft()), registry.get(pair.getRight()));
             registry.put(pair.getLeft(), model);
         }
+
         for (Triple<ModelResourceLocation, ModelResourceLocation, Supplier<Boolean>> triple : REPLACEABLE_MODEL_LIST) {
             ReplaceableBakedModel model = new ReplaceableBakedModel(registry.get(triple.getLeft()), registry.get(triple.getMiddle()), triple.getRight());
             registry.put(triple.getLeft(), model);

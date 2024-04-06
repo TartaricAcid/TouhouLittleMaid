@@ -26,6 +26,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -39,8 +40,10 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -52,6 +55,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
     private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
     @Nullable
@@ -107,10 +111,20 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (this.maid == null) {
             return;
         }
+        drawModInfo(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTicks);
         this.drawEffectInfo(poseStack);
         this.drawCurrentTaskText(poseStack);
         this.renderTooltip(poseStack, mouseX, mouseY);
+    }
+
+    // 增加一些额外信息，通过截图就能方便作者检查错误
+    @SuppressWarnings("all")
+    private void drawModInfo(PoseStack poseStack) {
+        String minecraftVersion = SharedConstants.getCurrentVersion().getName();
+        String modVersion = ModList.get().getModFileById(TouhouLittleMaid.MOD_ID).versionString();
+        String debugInfo = String.format("%s-%s", minecraftVersion, modVersion);
+        drawCenteredString(poseStack, font, debugInfo, leftPos + 80 / 2, topPos - 4, ChatFormatting.GRAY.getColor());
     }
 
     @SuppressWarnings("all")
@@ -434,48 +448,57 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, SIDE);
-            blit(poseStack, leftPos + 5, topPos + 113, 0, 0, 9, 9);
-            blit(poseStack, leftPos + 27, topPos + 113, 0, 9, 47, 9);
+            blit(poseStack, leftPos + 53, topPos + 113, 0, 0, 9, 9);
+            blit(poseStack, leftPos + 5, topPos + 113, 0, 9, 47, 9);
             double hp = maid.getHealth() / maid.getMaxHealth();
-            blit(poseStack, leftPos + 29, topPos + 115, 2, 18, (int) (43 * hp), 5);
-            getMinecraft().font.draw(poseStack, String.format("%.0f", maid.getHealth()), leftPos + 15, topPos + 114, ChatFormatting.DARK_GRAY.getColor());
+            blit(poseStack, leftPos + 7, topPos + 115, 2, 18, (int) (43 * hp), 5);
+            drawNumberScale(poseStack, maid.getHealth(), leftPos + 63, topPos + 114);
         }
         {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, SIDE);
-            blit(poseStack, leftPos + 5, topPos + 124, 9, 0, 9, 9);
-            blit(poseStack, leftPos + 27, topPos + 124, 0, 9, 47, 9);
+            blit(poseStack, leftPos + 53, topPos + 124, 9, 0, 9, 9);
+            blit(poseStack, leftPos + 5, topPos + 124, 0, 9, 47, 9);
             double armor = maid.getAttributeValue(Attributes.ARMOR) / 20;
-            blit(poseStack, leftPos + 29, topPos + 126, 2, 23, (int) (43 * armor), 5);
-            getMinecraft().font.draw(poseStack, String.format("%d", maid.getArmorValue()), leftPos + 15, topPos + 125, ChatFormatting.DARK_GRAY.getColor());
+            blit(poseStack, leftPos + 7, topPos + 126, 2, 23, (int) (43 * armor), 5);
+            drawNumberScale(poseStack, maid.getArmorValue(), leftPos + 63, topPos + 125);
         }
         {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, SIDE);
-            blit(poseStack, leftPos + 5, topPos + 135, 18, 0, 9, 9);
-            blit(poseStack, leftPos + 27, topPos + 135, 0, 9, 47, 9);
+            blit(poseStack, leftPos + 53, topPos + 135, 18, 0, 9, 9);
+            blit(poseStack, leftPos + 5, topPos + 135, 0, 9, 47, 9);
 
             int exp = maid.getExperience();
             int count = exp / 120;
             double percent = (exp % 120) / 120.0;
-            blit(poseStack, leftPos + 29, topPos + 137, 2, 28, (int) (43 * percent), 5);
-            getMinecraft().font.draw(poseStack, String.format("%d", count), leftPos + 15, topPos + 136, ChatFormatting.DARK_GRAY.getColor());
+            blit(poseStack, leftPos + 7, topPos + 137, 2, 28, (int) (43 * percent), 5);
+            drawNumberScale(poseStack, count, leftPos + 63, topPos + 136);
         }
         {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, SIDE);
-            blit(poseStack, leftPos + 5, topPos + 146, 27, 0, 9, 9);
-            blit(poseStack, leftPos + 27, topPos + 146, 0, 9, 47, 9);
+            blit(poseStack, leftPos + 53, topPos + 146, 27, 0, 9, 9);
+            blit(poseStack, leftPos + 5, topPos + 146, 0, 9, 47, 9);
             FavorabilityManager manager = maid.getFavorabilityManager();
             double percent = manager.getLevelPercent();
-            blit(poseStack, leftPos + 29, topPos + 148, 2, 33, (int) (43 * percent), 5);
-            getMinecraft().font.draw(poseStack, String.format("%d", manager.getLevel()), leftPos + 15, topPos + 147, ChatFormatting.DARK_GRAY.getColor());
+            blit(poseStack, leftPos + 7, topPos + 148, 2, 33, (int) (43 * percent), 5);
+            drawNumberScale(poseStack, manager.getLevel(), leftPos + 63, topPos + 147);
         }
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, SIDE);
         blit(poseStack, leftPos + 94, topPos + 7, 107, 0, 149, 21);
         blit(poseStack, leftPos + 6, topPos + 178, 0, 47, 67, 25);
+    }
+
+    @SuppressWarnings("all")
+    private void drawNumberScale(PoseStack poseStack, double value, int posX, int posY) {
+        String text = DECIMAL_FORMAT.format(value);
+        poseStack.pushPose();
+        poseStack.scale(0.5f, 0.5f, 1);
+        getMinecraft().font.draw(poseStack, text, posX * 2, posY * 2 + font.lineHeight / 2, ChatFormatting.DARK_GRAY.getColor());
+        poseStack.popPose();
     }
 
     @Override

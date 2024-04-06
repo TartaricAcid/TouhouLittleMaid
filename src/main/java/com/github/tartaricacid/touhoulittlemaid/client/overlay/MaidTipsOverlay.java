@@ -44,7 +44,7 @@ public class MaidTipsOverlay implements IGuiOverlay {
     }
 
     private static MutableComponent checkSpecialTips(ItemStack mainhandItem, EntityMaid maid, LocalPlayer player) {
-        if (!maid.isOwnedBy(player) && maid.getNtrItem().test(mainhandItem)) {
+        if (!maid.isOwnedBy(player) && EntityMaid.getNtrItem().test(mainhandItem)) {
             return Component.translatable("overlay.touhou_little_maid.ntr_item.tips");
         }
         if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.is(Tags.Items.SHEARS)) {
@@ -84,6 +84,7 @@ public class MaidTipsOverlay implements IGuiOverlay {
             tip = checkSpecialTips(player.getMainHandItem(), maid, player);
         }
         if (tip != null) {
+            gui.setupOverlayRenderState(true, false);
             List<FormattedCharSequence> split = minecraft.font.split(tip, 150);
             int offset = (screenHeight / 2 - 5) - split.size() * 10;
             Minecraft.getInstance().getItemRenderer().renderGuiItem(player.getMainHandItem(), screenWidth / 2 - 8, offset);

@@ -7,7 +7,9 @@
   "mixins": [
     "MixinArrowEntity"
   ],
-  "client": [],
+  "client": [
+    "client.LanguageMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

@@ -1,18 +1,24 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public final class RenderHelper {
@@ -125,5 +131,27 @@ public final class RenderHelper {
 
         tesselator.end();
         RenderSystem.enableTexture();
+    }
+
+    public static void renderEntityInInventory(PoseStack poseStack, int pX, int pY, int scale, Quaternion pose, @Nullable Quaternion cameraOrientation, LivingEntity entity) {
+        poseStack.pushPose();
+        poseStack.translate(pX, pY, 50.0D);
+        poseStack.mulPoseMatrix(Matrix4f.createScaleMatrix((float) scale, (float) scale, (float) (-scale)));
+        poseStack.mulPose(pose);
+        Lighting.setupForEntityInInventory();
+        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        if (cameraOrientation != null) {
+            cameraOrientation.conj();
+            entityrenderdispatcher.overrideCameraOrientation(cameraOrientation);
+        }
+        entityrenderdispatcher.setRenderShadow(false);
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        RenderSystem.runAsFancy(() -> entityrenderdispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, poseStack, bufferSource, 15728880));
+        RenderSystem.disableDepthTest();
+        bufferSource.endBatch();
+        RenderSystem.enableDepthTest();
+        entityrenderdispatcher.setRenderShadow(true);
+        poseStack.popPose();
+        Lighting.setupFor3DItems();
     }
 }

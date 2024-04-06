@@ -19,6 +19,7 @@ public final class MiscConfig {
     public static ForgeConfigSpec.DoubleValue SHRINE_LAMP_EFFECT_COST;
     public static ForgeConfigSpec.DoubleValue SHRINE_LAMP_MAX_STORAGE;
     public static ForgeConfigSpec.IntValue SHRINE_LAMP_MAX_RANGE;
+    public static ForgeConfigSpec.BooleanValue CLOSE_OPTIFINE_WARNING;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("misc");
@@ -56,6 +57,9 @@ public final class MiscConfig {
 
         builder.comment("Shrine Lamp Max Range Of Absorb Power Point");
         SHRINE_LAMP_MAX_RANGE = builder.defineInRange("ShrineLampMaxRange", 6, 0, Integer.MAX_VALUE);
+
+        builder.comment("Whether to turn off the Optifine warning");
+        CLOSE_OPTIFINE_WARNING = builder.define("CloseOptifineWarning", false);
 
         builder.pop();
     }

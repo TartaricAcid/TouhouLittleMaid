@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -9,10 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -52,11 +50,6 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
     protected abstract ItemStack getKilledStack();
 
     @Override
-    public void kill() {
-        this.remove(Entity.RemovalReason.KILLED);
-    }
-
-    @Override
     public boolean hurt(@Nonnull DamageSource source, float amount) {
         if (!this.level.isClientSide && !this.dead && this.isAlive()) {
             // 如果实体是无敌的
@@ -75,21 +68,8 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
         if (player.isShiftKeyDown()) {
             this.ejectPassengers();
             this.playSound(getHitSound(), 1.0f, 1.0f);
-            if (player.isCreative() && !this.hasCustomName()) {
-                this.discard();
-            } else {
-                if (canKillEntity(player)) {
-                    this.killEntity();
-                }
-            }
-            LazyOptional<IItemHandler> itemHandler = this.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
-            if (!level.isClientSide) {
-                itemHandler.ifPresent((handler) -> {
-                    for (int i = 0; i < handler.getSlots(); ++i) {
-                        ItemStack itemstack = handler.getStackInSlot(i);
-                        Containers.dropItemStack(level, getX(), getY(), getZ(), itemstack);
-                    }
-                });
+            if (player.isCreative() || canKillEntity(player)) {
+                this.killEntity();
             }
         }
         return true;
@@ -103,7 +83,52 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
                 itemstack.setHoverName(this.getCustomName());
             }
             this.spawnAtLocation(itemstack, 0.0F);
+            this.dropExtraItems();
         }
+    }
+
+    protected void dropExtraItems() {
+    }
+
+    /**
+     * 不允许被挤走，所以此处留空
+     */
+    @Override
+    public void push(Entity entityIn) {
+    }
+
+    @Override
+    protected void doPush(Entity entity) {
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    public void kill() {
+        this.remove(RemovalReason.KILLED);
+        this.gameEvent(GameEvent.ENTITY_DIE);
+    }
+
+    @Override
+    public boolean skipAttackInteraction(Entity entity) {
+        return entity instanceof Player && !this.level.mayInteract((Player) entity, this.blockPosition());
+    }
+
+    @Override
+    public void thunderHit(ServerLevel pLevel, LightningBolt pLightning) {
+    }
+
+    @Override
+    public boolean showVehicleHealth() {
+        return false;
+    }
+
+    @Override
+    public boolean isAffectedByPotions() {
+        return false;
     }
 
     @Override

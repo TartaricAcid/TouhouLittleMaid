@@ -7,8 +7,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidAttackS
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
+import com.github.tartaricacid.touhoulittlemaid.init.InitEnchantments;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -16,9 +18,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -69,32 +75,58 @@ public class TaskDanmakuAttack implements IRangedAttackTask {
     public void performRangedAttack(EntityMaid shooter, LivingEntity target, float distanceFactor) {
         shooter.getBrain().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).ifPresent(livingEntities -> {
             ItemStack mainHandItem = shooter.getMainHandItem();
-            if (mainHandItem.getItem() == InitItems.HAKUREI_GOHEI.get()) {
+            if (ItemHakureiGohei.isGohei(mainHandItem)) {
                 long entityCount = livingEntities.stream().filter(shooter::canAttack).count();
                 Level level = shooter.level;
                 // 分为三档
                 // 1 自机狙
                 // <=5 60 度扇形
                 // >5 120 度扇形
+                // 弹幕伤害也和好感度挂钩
+                AttributeInstance attackDamage = shooter.getAttribute(Attributes.ATTACK_DAMAGE);
+                float attackValue = 2.0f;
+                if (attackDamage != null) {
+                    attackValue = (float) attackDamage.getBaseValue();
+                }
+                int impedingLevel = EnchantmentHelper.getTagEnchantmentLevel(InitEnchantments.IMPEDING.get(), mainHandItem);
+                int speedyLevel = EnchantmentHelper.getTagEnchantmentLevel(InitEnchantments.SPEEDY.get(), mainHandItem);
+                int multiShotLevel = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.MULTISHOT, mainHandItem);
+                int endersEnderLevel = EnchantmentHelper.getTagEnchantmentLevel(InitEnchantments.ENDERS_ENDER.get(), mainHandItem);
+                float speed = (0.3f * (distanceFactor + 1)) * (speedyLevel + 1);
+                boolean hurtEnderman = endersEnderLevel > 0;
+
                 if (entityCount <= 1) {
-                    DanmakuShoot.create().setWorld(level).setThrower(shooter)
-                            .setTarget(target).setRandomColor().setRandomType()
-                            .setDamage(2 * (distanceFactor + 1)).setGravity(0)
-                            .setVelocity(0.3f * (distanceFactor + 1))
-                            .setInaccuracy(0.2f).aimedShot();
+                    if (multiShotLevel > 0) {
+                        DanmakuShoot.create().setWorld(level).setThrower(shooter)
+                                .setTarget(target).setRandomColor().setRandomType()
+                                .setDamage(attackValue * (distanceFactor + 1.2f)).setGravity(0)
+                                .setVelocity(speed).setHurtEnderman(hurtEnderman)
+                                .setInaccuracy(1.0f).setFanNum(3).setYawTotal(Math.PI / 12)
+                                .setImpedingLevel(impedingLevel)
+                                .fanShapedShot();
+                    } else {
+                        DanmakuShoot.create().setWorld(level).setThrower(shooter)
+                                .setTarget(target).setRandomColor().setRandomType()
+                                .setDamage(attackValue * (distanceFactor + 1)).setGravity(0)
+                                .setVelocity(speed).setHurtEnderman(hurtEnderman)
+                                .setInaccuracy(0.2f).setImpedingLevel(impedingLevel)
+                                .aimedShot();
+                    }
                 } else if (entityCount <= 5) {
                     DanmakuShoot.create().setWorld(level).setThrower(shooter)
                             .setTarget(target).setRandomColor().setRandomType()
-                            .setDamage(2 * (distanceFactor + 1.2f)).setGravity(0)
-                            .setVelocity(0.3f * (distanceFactor + 1))
+                            .setDamage(attackValue * (distanceFactor + 1.2f)).setGravity(0)
+                            .setVelocity(speed).setHurtEnderman(hurtEnderman)
                             .setInaccuracy(0.2f).setFanNum(8).setYawTotal(Math.PI / 3)
+                            .setImpedingLevel(impedingLevel)
                             .fanShapedShot();
                 } else {
                     DanmakuShoot.create().setWorld(level).setThrower(shooter)
                             .setTarget(target).setRandomColor().setRandomType()
-                            .setDamage(2 * (distanceFactor + 1.5f)).setGravity(0)
-                            .setVelocity(0.3f * (distanceFactor + 1))
+                            .setDamage(attackValue * (distanceFactor + 1.5f)).setGravity(0)
+                            .setVelocity(speed).setHurtEnderman(hurtEnderman)
                             .setInaccuracy(0.2f).setFanNum(32).setYawTotal(2 * Math.PI / 3)
+                            .setImpedingLevel(impedingLevel)
                             .fanShapedShot();
                 }
                 mainHandItem.hurtAndBreak(1, shooter, (maid) -> maid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
@@ -108,7 +140,7 @@ public class TaskDanmakuAttack implements IRangedAttackTask {
     }
 
     private boolean hasGohei(EntityMaid maid) {
-        return maid.getMainHandItem().getItem() == InitItems.HAKUREI_GOHEI.get();
+        return ItemHakureiGohei.isGohei(maid.getMainHandItem());
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {

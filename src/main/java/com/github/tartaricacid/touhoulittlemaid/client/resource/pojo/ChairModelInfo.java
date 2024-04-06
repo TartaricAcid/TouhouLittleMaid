@@ -28,6 +28,9 @@ public class ChairModelInfo implements IModelInfo {
     @SerializedName("texture")
     private ResourceLocation texture;
 
+    @SerializedName("extra_textures")
+    private List<ResourceLocation> extraTextures;
+
     @SerializedName("model_id")
     private ResourceLocation modelId;
 
@@ -58,8 +61,8 @@ public class ChairModelInfo implements IModelInfo {
     }
 
     @Override
-    public boolean isGeckoModel() {
-        return isGeckoModel;
+    public List<ResourceLocation> getExtraTextures() {
+        return extraTextures;
     }
 
     @Override
@@ -88,6 +91,11 @@ public class ChairModelInfo implements IModelInfo {
         return model;
     }
 
+    @Override
+    public boolean isGeckoModel() {
+        return isGeckoModel;
+    }
+
     public float getMountedYOffset() {
         return mountedYOffset;
     }
@@ -107,6 +115,25 @@ public class ChairModelInfo implements IModelInfo {
 
     public boolean isNoGravity() {
         return noGravity;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ChairModelInfo extra(ResourceLocation newModelId, ResourceLocation texture) {
+        ChairModelInfo cloneInfo = new ChairModelInfo();
+        cloneInfo.modelId = newModelId;
+        cloneInfo.texture = texture;
+        cloneInfo.name = this.name;
+        cloneInfo.description = this.description;
+        cloneInfo.model = this.model;
+        cloneInfo.renderItemScale = this.renderItemScale;
+        cloneInfo.renderEntityScale = this.renderEntityScale;
+        cloneInfo.animation = this.animation;
+        cloneInfo.mountedYOffset = this.mountedYOffset;
+        cloneInfo.tameableCanRide = this.tameableCanRide;
+        cloneInfo.noGravity = this.noGravity;
+        cloneInfo.isGeckoModel = this.isGeckoModel;
+        return cloneInfo;
     }
 
     @SuppressWarnings("unchecked")

@@ -107,6 +107,21 @@ public class MenuIntegration {
                 .setDefaultValue(Lists.newArrayList())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_ranged_attack_ignore.desc"))
                 .setSaveConsumer(l -> MaidConfig.MAID_RANGED_ATTACK_IGNORE.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_work_meals_block_list.name"), MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get())
+                .setDefaultValue(MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_work_meals_block_list.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_home_meals_block_list.name"), MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.get())
+                .setDefaultValue(MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_home_meals_block_list.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_heal_meals_block_list.name"), MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.get())
+                .setDefaultValue(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_heal_meals_block_list.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.set(l)).build());
     }
 
     private static void chairConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
@@ -170,6 +185,10 @@ public class MenuIntegration {
                 .setDefaultValue(6).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(Component.translatable("config.touhou_little_maid.misc.shrine_lamp_max_range.desc"))
                 .setSaveConsumer(d -> MiscConfig.SHRINE_LAMP_MAX_RANGE.set(d)).build());
+
+        misc.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.misc.close_optifine_warning.name"), MiscConfig.CLOSE_OPTIFINE_WARNING.get())
+                .setDefaultValue(false).setTooltip(Component.translatable("config.touhou_little_maid.misc.close_optifine_warning.desc"))
+                .setSaveConsumer(MiscConfig.CLOSE_OPTIFINE_WARNING::set).build());
     }
 
     private static void vanillaConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {

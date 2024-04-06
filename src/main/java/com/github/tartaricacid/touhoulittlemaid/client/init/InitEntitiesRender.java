@@ -33,8 +33,10 @@ public final class InitEntitiesRender {
         EntityRenderers.register(EntityThrowPowerPoint.TYPE, ThrownItemRenderer::new);
         EntityRenderers.register(EntityTombstone.TYPE, EntityTombstoneRenderer::new);
         EntityRenderers.register(EntitySit.TYPE, EntitySitRenderer::new);
+        EntityRenderers.register(EntityBroom.TYPE, EntityBroomRender::new);
 
         EntityRenderers.register(EntityType.SLIME, EntityYukkuriSlimeRender::new);
+        EntityRenderers.register(EntityType.MAGMA_CUBE, EntityMarisaYukkuriSlimeRender::new);
         EntityRenderers.register(EntityType.EXPERIENCE_ORB, ReplaceExperienceOrbRenderer::new);
 
         BlockEntityRenderers.register(TileEntityAltar.TYPE, TileEntityAltarRenderer::new);
@@ -45,6 +47,8 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityBookshelf.TYPE, TileEntityBookshelfRenderer::new);
         BlockEntityRenderers.register(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
         BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
+        BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
+        BlockEntityRenderers.register(TileEntityPicnicMat.TYPE, PicnicMatRender::new);
     }
 
     @SubscribeEvent
@@ -58,17 +62,21 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(SmallBackpackModel.LAYER, SmallBackpackModel::createBodyLayer);
         event.registerLayerDefinition(StatueBaseModel.LAYER, StatueBaseModel::createBodyLayer);
         event.registerLayerDefinition(EntityYukkuriModel.LAYER, EntityYukkuriModel::createBodyLayer);
+        event.registerLayerDefinition(EntityMarisaYukkuriModel.LAYER, EntityMarisaYukkuriModel::createBodyLayer);
         event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
         event.registerLayerDefinition(PieceModel.LAYER, PieceModel::createBodyLayer);
         event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
         event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
         event.registerLayerDefinition(FurnaceBackpackModel.LAYER, FurnaceBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(TombstoneModel.LAYER, TombstoneModel::createBodyLayer);
         event.registerLayerDefinition(TankBackpackModel.LAYER, TankBackpackModel::createBodyLayer);
+        event.registerLayerDefinition(TombstoneModel.LAYER, TombstoneModel::createBodyLayer);
         event.registerLayerDefinition(KeyboardModel.LAYER, KeyboardModel::createBodyLayer);
         event.registerLayerDefinition(BookshelfModel.LAYER, BookshelfModel::createBodyLayer);
         event.registerLayerDefinition(ComputerModel.LAYER, ComputerModel::createBodyLayer);
         event.registerLayerDefinition(ShrineModel.LAYER, ShrineModel::createBodyLayer);
         event.registerLayerDefinition(MaidBannerModel.LAYER, MaidBannerModel::createBodyLayer);
+        event.registerLayerDefinition(BroomModel.LAYER, BroomModel::createBodyLayer);
+        event.registerLayerDefinition(PicnicBasketModel.LAYER, PicnicBasketModel::createBodyLayer);
+        event.registerLayerDefinition(PicnicMatModel.LAYER, PicnicMatModel::createBodyLayer);
     }
 }

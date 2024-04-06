@@ -19,10 +19,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -89,18 +86,6 @@ public class EntityChair extends AbstractEntityFromItem {
                     e -> !e.isInSittingPose() && !e.isPassenger() && e.getPassengers().isEmpty());
             list.stream().findFirst().ifPresent(entity -> entity.startRiding(this));
         }
-    }
-
-    /**
-     * 不允许被挤走，所以此处留空
-     */
-    @Override
-    public void push(Entity entityIn) {
-    }
-
-    @Override
-    public boolean isPushable() {
-        return false;
     }
 
     /**
@@ -192,8 +177,11 @@ public class EntityChair extends AbstractEntityFromItem {
     @Nullable
     @Override
     public Entity getControllingPassenger() {
-        List<Entity> list = this.getPassengers();
-        return list.isEmpty() ? null : list.get(0);
+        Entity firstPassenger = getFirstPassenger();
+        if (firstPassenger instanceof LivingEntity livingEntity) {
+            return livingEntity;
+        }
+        return super.getControllingPassenger();
     }
 
     public String getModelId() {

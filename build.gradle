@@ -128,25 +128,33 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
-    implementation fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
+    runtimeOnly fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
 
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
 
-    implementation fg.deobf("curse.maven:citadel-331936:${citadel_id}")
+    runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
     implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
 
     implementation fg.deobf("curse.maven:slashblade-241596:${slashblade_id}")
 
     implementation fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
 
-    implementation fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
+    runtimeOnly fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
 
-    implementation "curse.maven:kotlin-for-forge-351264:${kotlin_id}"
-    implementation fg.deobf("curse.maven:libipn-679177:${libipn_id}")
+    runtimeOnly "curse.maven:kotlin-for-forge-351264:${kotlin_id}"
+    runtimeOnly fg.deobf("curse.maven:libipn-679177:${libipn_id}")
     implementation fg.deobf("curse.maven:inventory-profiles-next-495267:${ipn_id}")
+
+    runtimeOnly fg.deobf("org.embeddedt:embeddium-1.19.2:${embeddedt_id}")
+    runtimeOnly fg.deobf("curse.maven:oculus-581495:${oculus_id}")
+
+    runtimeOnly fg.deobf("curse.maven:catalogue-459701:${catalogue_id}")
+
+    //runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
+    //runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

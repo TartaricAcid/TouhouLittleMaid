@@ -6,13 +6,14 @@
   "pages": [
     {
       "type": "spotlight",
-      "item": "touhou_little_maid:hakurei_gohei",
+      "item": "touhou_little_maid:hakurei_gohei,touhou_little_maid:sanae_gohei",
       "link_recipe": true,
       "text": "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.pages.0.text"
     },
     {
       "type": "crafting",
       "recipe": "touhou_little_maid:hakurei_gohei",
+      "recipe2": "touhou_little_maid:sanae_gohei",
       "text": "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.pages.1.text"
     }
   ]

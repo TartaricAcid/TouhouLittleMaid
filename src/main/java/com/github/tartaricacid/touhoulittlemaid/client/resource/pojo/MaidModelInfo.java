@@ -36,6 +36,9 @@ public class MaidModelInfo implements IModelInfo {
     @SerializedName("texture")
     private ResourceLocation texture;
 
+    @SerializedName("extra_textures")
+    private List<ResourceLocation> extraTextures;
+
     @SerializedName("model_id")
     private ResourceLocation modelId;
 
@@ -78,6 +81,11 @@ public class MaidModelInfo implements IModelInfo {
     @Override
     public ResourceLocation getTexture() {
         return texture;
+    }
+
+    @Override
+    public List<ResourceLocation> getExtraTextures() {
+        return extraTextures;
     }
 
     @Override
@@ -128,6 +136,7 @@ public class MaidModelInfo implements IModelInfo {
         return renderEntityScale;
     }
 
+    @Deprecated
     public boolean isShowHata() {
         return showHata;
     }
@@ -140,14 +149,17 @@ public class MaidModelInfo implements IModelInfo {
         return showCustomHead;
     }
 
+    @Deprecated
     public boolean isCanHoldTrolley() {
         return canHoldTrolley;
     }
 
+    @Deprecated
     public boolean isCanHoldVehicle() {
         return canHoldVehicle;
     }
 
+    @Deprecated
     public boolean isCanRidingBroom() {
         return canRidingBroom;
     }
@@ -155,6 +167,31 @@ public class MaidModelInfo implements IModelInfo {
     @Nullable
     public EasterEgg getEasterEgg() {
         return easterEgg;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MaidModelInfo extra(ResourceLocation newModelId, ResourceLocation texture) {
+        MaidModelInfo cloneInfo = new MaidModelInfo();
+        cloneInfo.modelId = newModelId;
+        cloneInfo.texture = texture;
+        cloneInfo.name = this.name;
+        cloneInfo.description = this.description;
+        cloneInfo.chatBubble = this.chatBubble;
+        cloneInfo.model = this.model;
+        cloneInfo.useSoundPackId = this.useSoundPackId;
+        cloneInfo.renderItemScale = this.renderItemScale;
+        cloneInfo.renderEntityScale = this.renderEntityScale;
+        cloneInfo.animation = this.animation;
+        cloneInfo.showHata = this.showHata;
+        cloneInfo.showBackpack = this.showBackpack;
+        cloneInfo.showCustomHead = this.showCustomHead;
+        cloneInfo.canHoldTrolley = this.canHoldTrolley;
+        cloneInfo.canHoldVehicle = this.canHoldVehicle;
+        cloneInfo.canRidingBroom = this.canRidingBroom;
+        cloneInfo.easterEgg = this.easterEgg;
+        cloneInfo.isGeckoModel = this.isGeckoModel;
+        return cloneInfo;
     }
 
     @SuppressWarnings("unchecked")
@@ -188,13 +225,13 @@ public class MaidModelInfo implements IModelInfo {
             name = String.format("{model.%s.%s.name}", modelId.getNamespace(), modelId.getPath());
         }
         if (isGeckoModel) {
-            if (animation == null || animation.size() == 0) {
+            if (animation == null || animation.isEmpty()) {
                 animation = Collections.singletonList(GeckoModelLoader.DEFAULT_MAID_ANIMATION);
             } else {
                 animation = animation.stream().filter(res -> res.getPath().endsWith(GECKO_ANIMATION)).collect(Collectors.toList());
             }
         } else {
-            if (animation == null || animation.size() == 0) {
+            if (animation == null || animation.isEmpty()) {
                 animation = Lists.newArrayList(
                         new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
                         new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/blink.js"),

@@ -58,7 +58,11 @@ public class ReplaceableBakedModel implements BakedModel {
 
     @Override
     public ItemOverrides getOverrides() {
-        return ItemOverrides.EMPTY;
+        if (isReplace.get()) {
+            return this.replacedBakedModel.getOverrides();
+        } else {
+            return this.rawBakedModel.getOverrides();
+        }
     }
 
     @Override

@@ -14,7 +14,7 @@ public class MaidFarmMoveTask extends MaidMoveToBlockTask {
     private final IFarmTask task;
 
     public MaidFarmMoveTask(IFarmTask task, float movementSpeed) {
-        super(movementSpeed);
+        super(movementSpeed, 2);
         this.task = task;
     }
 

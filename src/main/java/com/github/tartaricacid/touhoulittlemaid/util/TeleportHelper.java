@@ -24,7 +24,8 @@ public final class TeleportHelper {
         BlockPos blockPos = maid.getRestrictCenter();
         if (!maid.level.isClientSide() && maid.isAlive()) {
             int x = blockPos.getX() + randomIntInclusive(maid.getRandom(), -3, 3);
-            int y = blockPos.getY() + randomIntInclusive(maid.getRandom(), -1, 1);
+            // 防止有人搭建二楼，所以向上搜索
+            int y = blockPos.getY() + randomIntInclusive(maid.getRandom(), 0, 3);
             int z = blockPos.getZ() + randomIntInclusive(maid.getRandom(), -3, 3);
             return teleport(maid, x, y, z);
         } else {
@@ -32,7 +33,7 @@ public final class TeleportHelper {
         }
     }
 
-    public static boolean teleport(EntityMaid maid, double x, double y, double z) {
+    private static boolean teleport(EntityMaid maid, double x, double y, double z) {
         BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, y, z);
         while (blockPos.getY() > maid.level.getMinBuildHeight() && !maid.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
             blockPos.move(Direction.DOWN);

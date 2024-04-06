@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class MaidInteractWithDoor extends Behavior<LivingEntity> {
+    private static final int COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE = 3;
     private static final double SKIP_CLOSING_DOOR_IF_FURTHER_AWAY_THAN = 8;
     private static final double MAX_DISTANCE_TO_HOLD_DOOR_OPEN_FOR_OTHER_MOBS = 2;
     @Nullable
@@ -32,11 +33,12 @@ public class MaidInteractWithDoor extends Behavior<LivingEntity> {
                 MemoryModuleType.DOORS_TO_CLOSE, MemoryStatus.REGISTERED));
     }
 
+    @Override
     protected boolean checkExtraStartConditions(ServerLevel serverWorld, LivingEntity entity) {
         Path path = entity.getBrain().getMemory(MemoryModuleType.PATH).get();
         if (!path.notStarted() && !path.isDone()) {
             if (!Objects.equals(this.lastCheckedNode, path.getNextNode())) {
-                this.remainingCooldown = 20;
+                this.remainingCooldown = COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE;
                 return true;
             } else {
                 if (this.remainingCooldown > 0) {
@@ -49,6 +51,7 @@ public class MaidInteractWithDoor extends Behavior<LivingEntity> {
         }
     }
 
+    @Override
     protected void start(ServerLevel serverWorld, LivingEntity entity, long gameTime) {
         Path path = entity.getBrain().getMemory(MemoryModuleType.PATH).get();
         this.lastCheckedNode = path.getNextNode();
@@ -82,7 +85,8 @@ public class MaidInteractWithDoor extends Behavior<LivingEntity> {
             while (iterator.hasNext()) {
                 GlobalPos globalpos = iterator.next();
                 BlockPos blockpos = globalpos.pos();
-                if ((pathPoint == null || !pathPoint.asBlockPos().equals(blockpos)) && (pathPoint1 == null || !pathPoint1.asBlockPos().equals(blockpos))) {
+                if ((pathPoint == null || !pathPoint.asBlockPos().equals(blockpos) || (pathPoint1 != null && entity.blockPosition().equals(pathPoint1.asBlockPos())))
+                        && (pathPoint1 == null || !pathPoint1.asBlockPos().equals(blockpos))) {
                     if (isDoorTooFarAway(serverWorld, entity, globalpos)) {
                         iterator.remove();
                     } else {

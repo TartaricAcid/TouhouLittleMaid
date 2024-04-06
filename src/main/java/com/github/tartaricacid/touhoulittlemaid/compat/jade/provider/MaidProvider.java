@@ -2,9 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.jade.provider;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -15,7 +13,10 @@ import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public class MaidProvider implements IEntityComponentProvider {
+public enum MaidProvider implements IEntityComponentProvider {
+
+    INSTANCE;
+
     private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid");
 
     @Override

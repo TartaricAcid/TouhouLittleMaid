@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -35,7 +36,16 @@ public class MultiBlockAltar implements IMultiBlock {
     public boolean isMatch(Level world, BlockPos posStart, Direction direction, StructureTemplate template) {
         StructureTemplate.Palette palette = template.palettes.get(0);
         for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
-            if (!world.getBlockState(posStart.offset(blockInfo.pos)).equals(blockInfo.state)) {
+            BlockState worldState = world.getBlockState(posStart.offset(blockInfo.pos));
+            BlockState infoState = blockInfo.state;
+            // 如果是木头，只检查 tag
+            if (infoState.is(Blocks.OAK_LOG)) {
+                if (!worldState.is(BlockTags.LOGS)) {
+                    return false;
+                }
+            }
+            // 其他情况照常检查
+            else if (!worldState.equals(infoState)) {
                 return false;
             }
         }
@@ -50,7 +60,7 @@ public class MultiBlockAltar implements IMultiBlock {
 
         for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
             posList.add(posStart.offset(blockInfo.pos));
-            if (blockInfo.pos.getY() == 2 && blockInfo.state.is(Blocks.OAK_LOG)) {
+            if (blockInfo.pos.getY() == 2 && blockInfo.state.is(BlockTags.LOGS)) {
                 canPlaceItemPosList.add(posStart.offset(blockInfo.pos));
             }
         }
@@ -58,12 +68,13 @@ public class MultiBlockAltar implements IMultiBlock {
         BlockPos currentCenterPos = posStart.subtract(getCenterPos(direction));
         for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
             BlockPos currentPos = posStart.offset(blockInfo.pos);
+            BlockState currentState = worldIn.getBlockState(currentPos);
             worldIn.setBlock(currentPos, InitBlocks.ALTAR.get().defaultBlockState(), Block.UPDATE_ALL);
             BlockEntity te = worldIn.getBlockEntity(currentPos);
             if (te instanceof TileEntityAltar) {
                 boolean isRender = currentPos.equals(currentCenterPos);
-                boolean canPlaceItem = blockInfo.pos.getY() == 2 && blockInfo.state.is(Blocks.OAK_LOG);
-                ((TileEntityAltar) te).setForgeData(blockInfo.state, isRender,
+                boolean canPlaceItem = blockInfo.pos.getY() == 2 && blockInfo.state.is(BlockTags.LOGS);
+                ((TileEntityAltar) te).setForgeData(currentState, isRender,
                         canPlaceItem, direction, posList, canPlaceItemPosList);
             }
         }

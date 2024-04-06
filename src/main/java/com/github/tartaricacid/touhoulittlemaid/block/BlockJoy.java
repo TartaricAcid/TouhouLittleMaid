@@ -59,7 +59,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
                 return super.use(state, worldIn, pos, playerIn, hand, hit);
             }
             Vec3 sitPos = new Vec3(pos.getX() + this.sitPosition().x, pos.getY() + this.sitPosition().y, pos.getZ() + this.sitPosition().z);
-            EntitySit newSitEntity = new EntitySit(worldIn, sitPos, this.getTypeName());
+            EntitySit newSitEntity = new EntitySit(worldIn, sitPos, this.getTypeName(), pos);
             newSitEntity.setYRot(state.getValue(FACING).getOpposite().toYRot() + this.sitYRot());
             worldIn.addFreshEntity(newSitEntity);
             joy.setSitId(newSitEntity.getUUID());
@@ -77,7 +77,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
                 return;
             }
             Vec3 sitPos = new Vec3(pos.getX() + this.sitPosition().x, pos.getY() + this.sitPosition().y, pos.getZ() + this.sitPosition().z);
-            EntitySit newSitEntity = new EntitySit(worldIn, sitPos, this.getTypeName());
+            EntitySit newSitEntity = new EntitySit(worldIn, sitPos, this.getTypeName(), pos);
             newSitEntity.setYRot(state.getValue(FACING).getOpposite().toYRot() + this.sitYRot());
             worldIn.addFreshEntity(newSitEntity);
             joy.setSitId(newSitEntity.getUUID());

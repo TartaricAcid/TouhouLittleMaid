@@ -4,7 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Favorability
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskBoardGames;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,15 +26,17 @@ public class EntitySit extends Entity {
             .sized(0.5f, 0.1f).clientTrackingRange(10).build("sit");
     private static final EntityDataAccessor<String> SIT_TYPE = SynchedEntityData.defineId(EntitySit.class, EntityDataSerializers.STRING);
     private int passengerTick = 0;
+    private BlockPos associatedBlockPos = BlockPos.ZERO;
 
     public EntitySit(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
 
-    public EntitySit(Level worldIn, Vec3 pos, String joyType) {
+    public EntitySit(Level worldIn, Vec3 pos, String joyType, BlockPos associatedBlockPos) {
         this(TYPE, worldIn);
         this.setPos(pos);
         this.setJoyType(joyType);
+        this.associatedBlockPos = associatedBlockPos;
     }
 
     @Override
@@ -50,6 +54,9 @@ public class EntitySit extends Entity {
         if (tag.contains("SitJoyType", Tag.TAG_STRING)) {
             this.setJoyType(tag.getString("SitJoyType"));
         }
+        if (tag.contains("AssociatedBlockPos", Tag.TAG_COMPOUND)) {
+            this.associatedBlockPos = NbtUtils.readBlockPos(tag.getCompound("AssociatedBlockPos"));
+        }
     }
 
     @Override
@@ -57,6 +64,7 @@ public class EntitySit extends Entity {
         if (StringUtils.isNotBlank(this.getJoyType())) {
             tag.putString("SitJoyType", this.getJoyType());
         }
+        tag.put("AssociatedBlockPos", NbtUtils.writeBlockPos(this.associatedBlockPos));
     }
 
     @Override
@@ -103,6 +111,10 @@ public class EntitySit extends Entity {
 
     private boolean isWorkSchedule(EntityMaid maid) {
         return maid.getScheduleDetail() == Activity.WORK;
+    }
+
+    public BlockPos getAssociatedBlockPos() {
+        return associatedBlockPos;
     }
 
     @Override
