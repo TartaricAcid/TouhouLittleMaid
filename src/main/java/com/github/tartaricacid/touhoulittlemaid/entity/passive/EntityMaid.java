@@ -106,6 +106,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.ITeleporter;
@@ -185,6 +186,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     private final MaidScriptBookManager scriptBookManager;
     private final SchedulePos schedulePos;
 
+    public final ItemStack[] handItemsForAnimation = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
     public boolean guiOpening = false;
 
     private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
@@ -588,15 +590,41 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
-        boolean result = super.doHurtTarget(entityIn);
+    public boolean doHurtTarget(Entity target) {
+        boolean result = super.doHurtTarget(target);
+        if (result) {
+            doSweepHurt(target);
+        }
         this.getMainHandItem().hurtAndBreak(1, this, (maid) -> maid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-        if (this.getTask() instanceof IAttackTask attackTask && attackTask.hasExtraAttack(this, entityIn)) {
-            boolean extraResult = attackTask.doExtraAttack(this, entityIn);
+        if (this.getTask() instanceof IAttackTask attackTask && attackTask.hasExtraAttack(this, target)) {
+            boolean extraResult = attackTask.doExtraAttack(this, target);
             return result && extraResult;
         }
         return result;
     }
+
+    private void doSweepHurt(Entity target) {
+        ItemStack mainhandItem = this.getItemInHand(InteractionHand.MAIN_HAND);
+        boolean canSweep = mainhandItem.canPerformAction(ToolActions.SWORD_SWEEP);
+        float sweepingDamageRatio = EnchantmentHelper.getSweepingDamageRatio(this);
+        if (canSweep && sweepingDamageRatio > 0) {
+            float baseDamage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+            float sweepDamage = 1.0f + sweepingDamageRatio * baseDamage;
+            AABB sweepRange = this.getFavorabilityManager().getSweepRange(target, this.getFavorability());
+            List<LivingEntity> hurtEntities = this.level.getEntitiesOfClass(LivingEntity.class, sweepRange);
+            for (LivingEntity entity : hurtEntities) {
+                if (entity != this && entity != target && !this.isAlliedTo(entity) && canAttack(entity) && canAttackType(entity.getType())) {
+                    float posX = Mth.sin(this.getYRot() * ((float) Math.PI / 180F));
+                    float posY = -Mth.cos(this.getYRot() * ((float) Math.PI / 180F));
+                    entity.knockback(0.4, posX, posY);
+                    entity.hurt(this.damageSources().mobAttack(this), sweepDamage);
+                }
+            }
+            this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, this.getSoundSource(), 1, 1);
+            this.spawnSweepAttackParticle();
+        }
+    }
+
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
@@ -863,7 +891,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
     }
 
-    private void spawnRestoreHealthParticle(int particleCount) {
+    public void spawnRestoreHealthParticle(int particleCount) {
         if (this.level.isClientSide) {
             for (int i = 0; i < particleCount; ++i) {
                 double xRandom = this.random.nextGaussian() * 0.02D;
@@ -925,6 +953,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
             this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BELL_BLOCK, this.getSoundSource(), 1.0F, 1.0F, false);
             minecraft.gui.setTitle(Component.translatable("message.touhou_little_maid.gomoku.rank_up.title"));
             minecraft.gui.setSubtitle(Component.translatable("message.touhou_little_maid.gomoku.rank_up.subtitle"));
+        }
+    }
+
+    private void spawnSweepAttackParticle() {
+        double xOffset = -Mth.sin(this.getYRot() * ((float) Math.PI / 180F));
+        double zOffset = Mth.cos(this.getYRot() * ((float) Math.PI / 180F));
+        if (this.level instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(ParticleTypes.SWEEP_ATTACK,
+                    this.getX() + xOffset, this.getY(0.5),
+                    this.getZ() + zOffset, 0, xOffset, 0, zOffset, 0);
         }
     }
 
@@ -1274,6 +1312,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        // 修正睡觉时渲染问题，默认 64 格内渲染
+        double range = 64.0 * getViewScale();
+        return distance < range * range;
+    }
+
+    @Override
     public void startSleeping(BlockPos pPos) {
         super.startSleeping(pPos);
         this.setHealth(this.getMaxHealth());
@@ -1525,8 +1570,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
-        RangedWrapper combinedInvWrapper = new RangedWrapper(maidInv, 0, getMaidBackpackType().getAvailableMaxContainerIndex());
+        RangedWrapper combinedInvWrapper = this.getAvailableBackpackInv();
         return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
+    }
+
+    public RangedWrapper getAvailableBackpackInv() {
+        return new RangedWrapper(maidInv, 0, getMaidBackpackType().getAvailableMaxContainerIndex());
+    }
+
+    public EntityHandsInvWrapper getHandsInvWrapper() {
+        return handsInvWrapper;
     }
 
     public BaubleItemHandler getMaidBauble() {
@@ -1698,11 +1751,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @SuppressWarnings("all")
-    public Ingredient getNtrItem() {
+    public static Ingredient getNtrItem() {
         return getConfigIngredient(MaidConfig.MAID_NTR_ITEM.get(), Items.STRUCTURE_VOID);
     }
 
-    private Ingredient getConfigIngredient(String config, Item defaultItem) {
+    private static Ingredient getConfigIngredient(String config, Item defaultItem) {
         if (config.startsWith(MaidConfig.TAG_PREFIX)) {
             ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
             if (tags != null) {

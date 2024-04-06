@@ -37,6 +37,7 @@ public final class InitSpecialItemRender {
     public static void register(RegisterEvent event) {
         if (event.getRegistryKey().equals(Registries.ITEM)) {
             addInHandModel(InitItems.HAKUREI_GOHEI.get());
+            addInHandModel(InitItems.SANAE_GOHEI.get());
             addInHandModel(InitItems.EXTINGUISHER.get());
             addInHandModel(InitItems.CAMERA.get());
             addInHandModel(InitItems.MAID_BEACON.get());

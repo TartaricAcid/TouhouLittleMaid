@@ -2,10 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.compat.jade;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.compat.jade.provider.*;
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
@@ -19,15 +19,15 @@ public class JadePlugin implements IWailaPlugin {
 
         registration.registerEntityComponent(MaidProvider.INSTANCE, EntityMaid.class);
 
-        registration.registerItemStorageClient(BroomProvider.INSTANCE);
         registration.registerItemStorageClient(TombstoneProvider.INSTANCE);
         registration.registerItemStorageClient(AltarProvider.INSTANCE);
+        registration.registerItemStorageClient(PicnicMatProvider.INSTANCE);
     }
 
     @Override
     public void register(IWailaCommonRegistration registration) {
-        registration.registerItemStorage(BroomProvider.INSTANCE, EntityBroom.class);
         registration.registerItemStorage(TombstoneProvider.INSTANCE, EntityTombstone.class);
         registration.registerItemStorage(AltarProvider.INSTANCE, TileEntityAltar.class);
+        registration.registerItemStorage(PicnicMatProvider.INSTANCE, TileEntityPicnicMat.class);
     }
 }

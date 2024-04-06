@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui;
+package com.github.tartaricacid.touhoulittlemaid.client.gui.mod;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -21,8 +21,6 @@ public class OptifineScreen extends Screen {
     private final MutableComponent text = Component.translatable("gui.touhou_little_maid.optifine_warning.text");
     private final String embeddiumUrl = "https://www.curseforge.com/minecraft/mc-mods/embeddium";
     private final String oculusUrl = "https://www.curseforge.com/minecraft/mc-mods/oculus";
-    private Button embeddiumButton;
-    private Button oculusButton;
     private Button exitButton;
     private int ticksUntilEnable = 20 * 10;
     private MultiLineLabel message = MultiLineLabel.EMPTY;
@@ -40,8 +38,8 @@ public class OptifineScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        this.embeddiumButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.touhou_little_maid.optifine_warning.embeddium"), b -> openUrl(embeddiumUrl)).bounds(this.width / 2 - 155, this.height * 3 / 4 - 15, 150, 20).build());
-        this.oculusButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.touhou_little_maid.optifine_warning.oculus"), b -> openUrl(oculusUrl)).bounds(this.width / 2 + 5, this.height * 3 / 4 - 15, 150, 20).build());
+        this.addRenderableWidget(Button.builder(Component.translatable("gui.touhou_little_maid.optifine_warning.embeddium"), b -> openUrl(embeddiumUrl)).bounds(this.width / 2 - 155, this.height * 3 / 4 - 15, 150, 20).build());
+        this.addRenderableWidget(Button.builder(Component.translatable("gui.touhou_little_maid.optifine_warning.oculus"), b -> openUrl(oculusUrl)).bounds(this.width / 2 + 5, this.height * 3 / 4 - 15, 150, 20).build());
         this.exitButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_PROCEED, (pressed) -> Minecraft.getInstance().setScreen(this.lastScreen)).bounds(this.width / 2 - 75, this.height * 3 / 4 + 25, 150, 20).build());
         this.exitButton.active = false;
         this.message = MultiLineLabel.create(this.font, text, this.width - 50);
@@ -53,9 +51,6 @@ public class OptifineScreen extends Screen {
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 30, 16777215);
         this.message.renderCentered(graphics, this.width / 2, 70);
         super.render(graphics, mouseX, mouseY, partialTicks);
-        this.embeddiumButton.render(graphics, mouseX, mouseY, partialTicks);
-        this.oculusButton.render(graphics, mouseX, mouseY, partialTicks);
-        this.exitButton.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     @Override

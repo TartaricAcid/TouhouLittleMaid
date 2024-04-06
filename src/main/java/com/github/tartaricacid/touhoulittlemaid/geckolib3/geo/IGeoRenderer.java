@@ -156,7 +156,7 @@ public interface IGeoRenderer<T> {
     default RenderType getRenderType(T animatable, float partialTick, PoseStack poseStack,
                                      @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight,
                                      ResourceLocation texture) {
-        return RenderType.entityCutout(texture);
+        return RenderType.entityTranslucent(texture);
     }
 
 

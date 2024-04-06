@@ -9,7 +9,7 @@
 
 ## 基本格式
 
-动画脚本放置在文件夹任意位置均可，只需要在对应模型字段处声明动画文件位置即可。 我建议将它放入 `animation` 文件夹中。 获取女仆的好感度
+动画脚本放置在文件夹任意位置均可，只需要在对应模型字段处声明动画文件位置即可。 我建议将它放入 `animation` 文件夹中。 获取女仆的好感度 获取女仆的好感度
 
 下面是通用模板：
 
@@ -224,7 +224,7 @@ head.setRotateAngleY(netHeadYaw * 0.017453292);
 
 一个使用字符串作为键的保存组的 Map。
 
-您可以通过`modelMap.get("xxx")`获取相应的组。 如果没有与名称匹配的组，返回`undefined` If there is no group that matches the name, return `undefined`
+您可以通过`modelMap.get("xxx")`获取相应的组。 如果没有与名称匹配的组，返回`undefined` If there is no group that matches the name, return `undefined` If there is no group that matches the name, return `undefined`
 
 假设我们想获取目标组`head`：
 
@@ -263,8 +263,8 @@ if (head != undefined) {
 |        `getInitRotateAngleY()`        |  `float`  | 获取 ModelRenderer 的初始化 Y 轴旋转角度 |
 |        `getInitRotateAngleZ()`        |  `float`  | 获取 ModelRenderer 的初始化 Z 轴旋转角度 |
 |             `getOffsetX()`            |  `float`  |          获取组的 X 轴坐标偏移         |
-|             `getOffsetY()`            |  `float`  |          获取组的 Y 轴坐标偏移         |
-|             `getOffsetZ()`            |  `float`  |          获取组的 Z 轴坐标偏移         |
+|             `getOffsetY()`            |  `float`  |          获取组的 Z 轴坐标偏移         |
+|             `getOffsetZ()`            |  `float`  |          获取组的 Y 轴坐标偏移         |
 |              `isHidden()`             | `boolean` |            检查组是否隐藏            |
 
 ### GlWrapper

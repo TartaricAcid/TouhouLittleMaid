@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.StateSwitchingButton;
@@ -39,8 +40,10 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -52,6 +55,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
     private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
     @Nullable
@@ -107,10 +111,20 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (this.maid == null) {
             return;
         }
+        drawModInfo(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.drawEffectInfo(graphics);
         this.drawCurrentTaskText(graphics);
         this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    // 增加一些额外信息，通过截图就能方便作者检查错误
+    @SuppressWarnings("all")
+    private void drawModInfo(GuiGraphics graphics) {
+        String minecraftVersion = SharedConstants.getCurrentVersion().getName();
+        String modVersion = ModList.get().getModFileById(TouhouLittleMaid.MOD_ID).versionString();
+        String debugInfo = String.format("%s-%s", minecraftVersion, modVersion);
+        graphics.drawCenteredString(font, debugInfo, leftPos + 80 / 2, topPos - 4, ChatFormatting.GRAY.getColor());
     }
 
     @SuppressWarnings("all")
@@ -428,40 +442,49 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private void drawBaseInfoGui(GuiGraphics graphics) {
         graphics.pose().translate(0, 0, 200);
         {
-            graphics.blit(SIDE, leftPos + 5, topPos + 113, 0, 0, 9, 9);
-            graphics.blit(SIDE, leftPos + 27, topPos + 113, 0, 9, 47, 9);
+            graphics.blit(SIDE, leftPos + 53, topPos + 113, 0, 0, 9, 9);
+            graphics.blit(SIDE, leftPos + 5, topPos + 113, 0, 9, 47, 9);
             double hp = maid.getHealth() / maid.getMaxHealth();
-            graphics.blit(SIDE, leftPos + 29, topPos + 115, 2, 18, (int) (43 * hp), 5);
-            graphics.drawString(font, String.format("%.0f", maid.getHealth()), leftPos + 15, topPos + 114, ChatFormatting.DARK_GRAY.getColor(), false);
+            graphics.blit(SIDE, leftPos + 7, topPos + 115, 2, 18, (int) (43 * hp), 5);
+            drawNumberScale(graphics, maid.getHealth(), leftPos + 63, topPos + 114);
         }
         {
-            graphics.blit(SIDE, leftPos + 5, topPos + 124, 9, 0, 9, 9);
-            graphics.blit(SIDE, leftPos + 27, topPos + 124, 0, 9, 47, 9);
+            graphics.blit(SIDE, leftPos + 53, topPos + 124, 9, 0, 9, 9);
+            graphics.blit(SIDE, leftPos + 5, topPos + 124, 0, 9, 47, 9);
             double armor = maid.getAttributeValue(Attributes.ARMOR) / 20;
-            graphics.blit(SIDE, leftPos + 29, topPos + 126, 2, 23, (int) (43 * armor), 5);
-            graphics.drawString(font, String.format("%d", maid.getArmorValue()), leftPos + 15, topPos + 125, ChatFormatting.DARK_GRAY.getColor(), false);
+            graphics.blit(SIDE, leftPos + 7, topPos + 126, 2, 23, (int) (43 * armor), 5);
+            drawNumberScale(graphics, maid.getArmorValue(), leftPos + 63, topPos + 125);
         }
         {
-            graphics.blit(SIDE, leftPos + 5, topPos + 135, 18, 0, 9, 9);
-            graphics.blit(SIDE, leftPos + 27, topPos + 135, 0, 9, 47, 9);
+            graphics.blit(SIDE, leftPos + 53, topPos + 135, 18, 0, 9, 9);
+            graphics.blit(SIDE, leftPos + 5, topPos + 135, 0, 9, 47, 9);
 
             int exp = maid.getExperience();
             int count = exp / 120;
             double percent = (exp % 120) / 120.0;
-            graphics.blit(SIDE, leftPos + 29, topPos + 137, 2, 28, (int) (43 * percent), 5);
-            graphics.drawString(font, String.format("%d", count), leftPos + 15, topPos + 136, ChatFormatting.DARK_GRAY.getColor(), false);
+            graphics.blit(SIDE, leftPos + 7, topPos + 137, 2, 28, (int) (43 * percent), 5);
+            drawNumberScale(graphics, count, leftPos + 63, topPos + 136);
         }
         {
-            graphics.blit(SIDE, leftPos + 5, topPos + 146, 27, 0, 9, 9);
-            graphics.blit(SIDE, leftPos + 27, topPos + 146, 0, 9, 47, 9);
+            graphics.blit(SIDE, leftPos + 53, topPos + 146, 27, 0, 9, 9);
+            graphics.blit(SIDE, leftPos + 5, topPos + 146, 0, 9, 47, 9);
             FavorabilityManager manager = maid.getFavorabilityManager();
             double percent = manager.getLevelPercent();
-            graphics.blit(SIDE, leftPos + 29, topPos + 148, 2, 33, (int) (43 * percent), 5);
-            graphics.drawString(font, String.format("%d", manager.getLevel()), leftPos + 15, topPos + 147, ChatFormatting.DARK_GRAY.getColor(), false);
+            graphics.blit(SIDE, leftPos + 7, topPos + 148, 2, 33, (int) (43 * percent), 5);
+            drawNumberScale(graphics, manager.getLevel(), leftPos + 63, topPos + 147);
         }
 
         graphics.blit(SIDE, leftPos + 94, topPos + 7, 107, 0, 149, 21);
         graphics.blit(SIDE, leftPos + 6, topPos + 178, 0, 47, 67, 25);
+    }
+
+    @SuppressWarnings("all")
+    private void drawNumberScale(GuiGraphics graphics, double value, int posX, int posY) {
+        String text = DECIMAL_FORMAT.format(value);
+        graphics.pose().pushPose();
+        graphics.pose().scale(0.5f, 0.5f, 1);
+        graphics.drawString(font, text, posX * 2, posY * 2 + font.lineHeight / 2, ChatFormatting.DARK_GRAY.getColor(), false);
+        graphics.pose().popPose();
     }
 
     @Override

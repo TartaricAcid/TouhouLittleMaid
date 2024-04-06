@@ -294,7 +294,7 @@ public class BlockGomoku extends BlockJoy {
             }
             Direction face = state.getValue(FACING).getClockWise();
             Vec3 position = new Vec3(0.5 + face.getStepX() * 1.5, 0.1, 0.5 + face.getStepZ() * 1.5);
-            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, position.x, position.y, position.z), this.getTypeName());
+            EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, position.x, position.y, position.z), this.getTypeName(), pos);
             newSitEntity.setYRot(face.getOpposite().toYRot() + this.sitYRot());
             worldIn.addFreshEntity(newSitEntity);
             joy.setSitId(newSitEntity.getUUID());

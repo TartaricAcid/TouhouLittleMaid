@@ -1,0 +1,16 @@
+{
+  "sortnum": 4,
+  "name": "patchouli.touhou_little_maid.book.entries.maid.maid_meal.name",
+  "icon": "minecraft:bread",
+  "category": "touhou_little_maid:maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_meal.pages.0.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_meal.pages.1.text"
+    }
+  ]
+}

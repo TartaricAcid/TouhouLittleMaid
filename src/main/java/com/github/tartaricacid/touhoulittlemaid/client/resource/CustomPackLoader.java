@@ -21,19 +21,15 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.language.ClientLanguage;
-import net.minecraft.locale.Language;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -49,7 +45,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +63,6 @@ public class CustomPackLoader {
     public static final MaidModels MAID_MODELS = MaidModels.getInstance();
     public static final ChairModels CHAIR_MODELS = ChairModels.getInstance();
     private static final Set<ResourceLocation> TMP_REGISTER_TEXTURE = Sets.newHashSet();
-    private static final String COMMENT_SYMBOL = "#";
     private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
     public static final Path PACK_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve(CUSTOM_PACK_DIR_NAME);
     private static final String DEFAULT_PACK_NAME = "touhou_little_maid-1.0.0.zip";
@@ -81,6 +75,7 @@ public class CustomPackLoader {
         MAID_MODELS.clearAll();
         CHAIR_MODELS.clearAll();
         TMP_REGISTER_TEXTURE.clear();
+        LanguageLoader.clear();
         CustomSoundLoader.clear();
 
         // 读取
@@ -99,6 +94,7 @@ public class CustomPackLoader {
         }
         checkDefaultPack();
         loadPacks(packFolder);
+        LanguageLoader.loadDownloadInfoLanguages();
     }
 
     private static void checkDefaultPack() {
@@ -142,7 +138,7 @@ public class CustomPackLoader {
                     String domain = domainDir.getName();
                     loadMaidModelPack(rootPath, domain);
                     loadChairModelPack(rootPath, domain);
-                    readLanguageFile(rootPath, domain);
+                    LanguageLoader.readLanguageFile(rootPath, domain);
                     CustomSoundLoader.loadSoundPack(rootPath, domain);
                 }
             }
@@ -155,14 +151,17 @@ public class CustomPackLoader {
         try (ZipFile zipFile = new ZipFile(file)) {
             Enumeration<? extends ZipEntry> iteration = zipFile.entries();
             while (iteration.hasMoreElements()) {
-                Matcher matcher = DOMAIN.matcher(iteration.nextElement().getName());
+                String filePath = iteration.nextElement().getName();
+                Matcher matcher = DOMAIN.matcher(filePath);
                 if (matcher.find()) {
                     String domain = matcher.group(1);
                     loadMaidModelPack(zipFile, domain);
                     loadChairModelPack(zipFile, domain);
-                    readLanguageFile(zipFile, domain);
                     CustomSoundLoader.loadSoundPack(zipFile, domain);
+                    continue;
                 }
+                // 语言文件单独加载
+                LanguageLoader.readLanguageFile(zipFile, filePath);
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -777,89 +776,5 @@ public class CustomPackLoader {
                 TMP_REGISTER_TEXTURE.add(texturePath);
             }
         }
-    }
-
-    private static void readLanguageFile(ZipFile zipFile, String namespace) throws IOException {
-        String language = Minecraft.getInstance().getLanguageManager().getSelected();
-
-        Map<String, String> oldLangData = Language.getInstance().getLanguageData();
-        Map<String, String> newLangData = Maps.newHashMap();
-
-        String defaultLangPath = String.format("assets/%s/lang/en_us.lang", namespace);
-        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language);
-        getLanguageMap(zipFile, newLangData, defaultLangPath);
-        getLanguageMap(zipFile, newLangData, currentLangPath);
-        removeOldLanguageKey(newLangData);
-
-        languageMapMerge(oldLangData, newLangData);
-        if (Language.getInstance() instanceof ClientLanguage) {
-            ((ClientLanguage) Language.getInstance()).storage = newLangData;
-        }
-    }
-
-    private static void readLanguageFile(Path rootPath, String namespace) throws IOException {
-        String language = Minecraft.getInstance().getLanguageManager().getSelected();
-
-        Map<String, String> oldLangData = Language.getInstance().getLanguageData();
-        Map<String, String> newLangData = Maps.newHashMap();
-
-        String defaultLangPath = String.format("assets/%s/lang/en_us.lang", namespace);
-        String currentLangPath = String.format("assets/%s/lang/%s.lang", namespace, language);
-        getLanguageMap(rootPath, newLangData, defaultLangPath);
-        getLanguageMap(rootPath, newLangData, currentLangPath);
-        removeOldLanguageKey(newLangData);
-
-        languageMapMerge(oldLangData, newLangData);
-        if (Language.getInstance() instanceof ClientLanguage) {
-            ((ClientLanguage) Language.getInstance()).storage = newLangData;
-        }
-    }
-
-    private static void getLanguageMap(Path rootPath, Map<String, String> langData, String defaultLangPath) throws IOException {
-        File file = rootPath.resolve(defaultLangPath).toFile();
-        if (!file.isFile()) {
-            return;
-        }
-        try (InputStream stream = Files.newInputStream(file.toPath())) {
-            List<String> lines = IOUtils.readLines(stream, StandardCharsets.UTF_8);
-            for (String s : lines) {
-                if (!s.startsWith(COMMENT_SYMBOL)) {
-                    String[] map = s.split("=", 2);
-                    if (map.length == 2) {
-                        langData.put(map[0], map[1]);
-                    }
-                }
-            }
-        }
-    }
-
-    private static void getLanguageMap(ZipFile zipFile, Map<String, String> langData, String defaultLangPath) throws IOException {
-        ZipEntry entry = zipFile.getEntry(defaultLangPath);
-        if (entry == null) {
-            return;
-        }
-        try (InputStream stream = zipFile.getInputStream(entry)) {
-            List<String> lines = IOUtils.readLines(stream, StandardCharsets.UTF_8);
-            for (String s : lines) {
-                if (!s.startsWith(COMMENT_SYMBOL)) {
-                    String[] map = s.split("=", 2);
-                    if (map.length == 2) {
-                        langData.put(map[0], map[1]);
-                    }
-                }
-            }
-        }
-    }
-
-    private static void languageMapMerge(Map<String, String> oldLangData, Map<String, String> newLangData) {
-        for (String key : oldLangData.keySet()) {
-            if (!newLangData.containsKey(key)) {
-                newLangData.put(key, oldLangData.get(key));
-            }
-        }
-    }
-
-    private static void removeOldLanguageKey(Map<String, String> langData) {
-        langData.remove("subtitle.touhou_little_maid.other.credit");
     }
 }

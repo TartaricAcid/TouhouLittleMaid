@@ -12,4 +12,5 @@ public class InitPoi {
 
     public static final RegistryObject<PoiType> MAID_BED = POI_TYPES.register("maid_bed", MaidPoiManager::getMaidBed);
     public static final RegistryObject<PoiType> JOY_BLOCK = POI_TYPES.register("joy_block", MaidPoiManager::getJoyBlock);
+    public static final RegistryObject<PoiType> HOME_MEAL_BLOCK = POI_TYPES.register("home_meal", MaidPoiManager::getHomeMeal);
 }
