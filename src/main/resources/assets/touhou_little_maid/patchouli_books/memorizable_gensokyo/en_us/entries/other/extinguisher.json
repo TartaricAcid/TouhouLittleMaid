@@ -1,0 +1,13 @@
+{
+  "sortnum": 3,
+  "name": "patchouli.touhou_little_maid.book.entries.other.extinguisher.name",
+  "icon": "touhou_little_maid:extinguisher",
+  "category": "touhou_little_maid:other",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:extinguisher",
+      "text": "patchouli.touhou_little_maid.book.entries.other.extinguisher.pages.0.text"
+    }
+  ]
+}

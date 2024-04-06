@@ -1,0 +1,17 @@
+{
+  "sortnum": 2,
+  "name": "patchouli.touhou_little_maid.book.entries.overview.power_point.name",
+  "icon": "touhou_little_maid:power_point",
+  "category": "touhou_little_maid:overview",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:power_point",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.power_point.pages.0.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.power_point.pages.1.text"
+    }
+  ]
+}

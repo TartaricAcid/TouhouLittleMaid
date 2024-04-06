@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitEnchantments;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -22,6 +23,7 @@ public class MaidGroup extends CreativeModeTab {
         super(String.format("touhou_little_maid.%s", label));
         this.displayName = Component.translatable(String.format("item_group.%s.%s", TouhouLittleMaid.MOD_ID, label));
         this.iconItem = iconItem;
+        this.setEnchantmentCategories(InitEnchantments.GOHEI);
     }
 
     @Override

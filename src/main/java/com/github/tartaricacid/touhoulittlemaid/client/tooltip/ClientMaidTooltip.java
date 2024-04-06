@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemMaidToolti
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
@@ -60,6 +61,8 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
             return;
         }
 
+        poseStack.pushPose();
+        poseStack.translate(0, 0, blitOffset);
         MutableComponent customNameComponent = null;
         if (StringUtils.isNotBlank(customName)) {
             customNameComponent = Component.Serializer.fromJson(customName);
@@ -69,6 +72,7 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
         } else {
             font.draw(poseStack, name.withStyle(ChatFormatting.GRAY), pX, pY + 2, 0xFFFFFF);
         }
+        poseStack.popPose();
 
         int width = this.getWidth(font);
         int posX = pX + width / 2;
@@ -97,8 +101,14 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
             maid.setModelId(info.getModelId().toString());
         }
 
-        RenderSystem.enableScissor(pX, posY - 50, pX + width, posY);
-        RenderHelper.renderEntityInInventory(poseStack, posX, posY, (int) (25 * info.getRenderItemScale()), pose, null, maid);
+        Window window = Minecraft.getInstance().getWindow();
+        double windowGuiScale = window.getGuiScale();
+        int scissorX = (int) (pX * windowGuiScale);
+        int scissorY = (int) (window.getHeight() - (posY * windowGuiScale));
+        int scissorW = (int) (width * windowGuiScale);
+        int scissorH = (int) (50 * windowGuiScale);
+        RenderSystem.enableScissor(scissorX, scissorY, scissorW, scissorH);
+        RenderHelper.renderEntityInInventory(poseStack, posX, posY, blitOffset, (int) (25 * info.getRenderItemScale()), pose, null, maid);
         RenderSystem.disableScissor();
     }
 }

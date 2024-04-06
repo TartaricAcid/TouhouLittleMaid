@@ -17,9 +17,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
+
 public class ItemBroom extends Item {
     public ItemBroom() {
-        super((new Properties()).stacksTo(1));
+        super((new Properties()).stacksTo(1).tab(MAIN_TAB));
     }
 
     @Override

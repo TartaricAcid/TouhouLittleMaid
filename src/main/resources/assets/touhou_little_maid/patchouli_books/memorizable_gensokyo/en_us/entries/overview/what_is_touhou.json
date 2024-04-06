@@ -1,0 +1,14 @@
+{
+  "sortnum": 0,
+  "name": "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.name",
+  "icon": "touhou_little_maid:hakurei_gohei",
+  "category": "touhou_little_maid:overview",
+  "pages": [
+    {
+      "type": "link",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.text",
+      "url": "https://en.touhouwiki.net/wiki/Touhou_Wiki",
+      "link_text": "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text"
+    }
+  ]
+}

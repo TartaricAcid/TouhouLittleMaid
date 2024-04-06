@@ -151,9 +151,9 @@ public final class MaidBrain {
         Pair<Behavior<? super EntityMaid>, Integer> lookToWolf = Pair.of(new SetEntityLookTarget(EntityType.WOLF, 5), 1);
         Pair<Behavior<? super EntityMaid>, Integer> lookToCat = Pair.of(new SetEntityLookTarget(EntityType.CAT, 5), 1);
         Pair<Behavior<? super EntityMaid>, Integer> lookToParrot = Pair.of(new SetEntityLookTarget(EntityType.PARROT, 5), 1);
-        Pair<Behavior<? super EntityMaid>, Integer> walkRandomly = Pair.of(new RandomStroll(0.3f, 5, 3), 1);
+        Pair<Behavior<? super EntityMaid>, Integer> walkRandomly = Pair.of(new MaidRandomStroll(0.3f, 5, 3), 1);
         Pair<Behavior<? super EntityMaid>, Integer> noLook = Pair.of(new DoNothing(30, 60), 2);
-        RunOne<EntityMaid> firstShuffledTask = new RunOne<>(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, noLook));
+        RunOne<EntityMaid> firstShuffledTask = new RunOne<>(ImmutableList.of(lookToPlayer, lookToMaid, lookToWolf, lookToCat, lookToParrot, walkRandomly, noLook));
         return new RunIf<>(MaidBrain::lookAroundCondition, firstShuffledTask);
     }
 

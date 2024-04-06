@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -20,8 +21,7 @@ import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class EntityDanmaku extends ThrowableProjectile {
-    public static final EntityType<EntityDanmaku> TYPE = EntityType.Builder.<EntityDanmaku>of(EntityDanmaku::new, MobCategory.MISC)
-            .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(10).noSave().build("danmaku");
+    public static final EntityType<EntityDanmaku> TYPE = EntityType.Builder.<EntityDanmaku>of(EntityDanmaku::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(10).noSave().build("danmaku");
 
     private static final int MAX_TICKS_EXISTED = 200;
     private static final EntityDataAccessor<Integer> DANMAKU_TYPE = SynchedEntityData.defineId(EntityDanmaku.class, EntityDataSerializers.INT);
@@ -93,7 +93,7 @@ public class EntityDanmaku extends ThrowableProjectile {
         if (thrower != null && !hit.is(thrower)) {
             DamageSource source;
             if (this.hurtEnderman) {
-                source = DamageSource.indirectMagic(this, thrower);
+                source = (new EntityDamageSource("indirectMagic", thrower)).bypassArmor().setMagic();
             } else {
                 source = new EntityDamageSourceDanmaku(this, thrower);
             }

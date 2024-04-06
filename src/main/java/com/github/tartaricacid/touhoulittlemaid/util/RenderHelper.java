@@ -133,9 +133,9 @@ public final class RenderHelper {
         RenderSystem.enableTexture();
     }
 
-    public static void renderEntityInInventory(PoseStack poseStack, int pX, int pY, int scale, Quaternion pose, @Nullable Quaternion cameraOrientation, LivingEntity entity) {
+    public static void renderEntityInInventory(PoseStack poseStack, int pX, int pY, int blitOffset, int scale, Quaternion pose, @Nullable Quaternion cameraOrientation, LivingEntity entity) {
         poseStack.pushPose();
-        poseStack.translate(pX, pY, 50.0D);
+        poseStack.translate(pX, pY, blitOffset + 50);
         poseStack.mulPoseMatrix(Matrix4f.createScaleMatrix((float) scale, (float) scale, (float) (-scale)));
         poseStack.mulPose(pose);
         Lighting.setupForEntityInInventory();

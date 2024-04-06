@@ -1,0 +1,24 @@
+{
+  "sortnum": 1,
+  "name": "patchouli.touhou_little_maid.book.entries.maid.maid_base.name",
+  "icon": "touhou_little_maid:maid_spawn_egg",
+  "category": "touhou_little_maid:maid",
+  "pages": [
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.0.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.1.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.2.text"
+    },
+    {
+      "type": "text",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.3.text"
+    }
+  ]
+}

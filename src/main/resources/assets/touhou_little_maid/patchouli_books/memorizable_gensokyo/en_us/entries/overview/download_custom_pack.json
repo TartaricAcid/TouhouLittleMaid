@@ -1,0 +1,21 @@
+{
+  "sortnum": 6,
+  "name": "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.name",
+  "icon": "minecraft:book",
+  "category": "touhou_little_maid:overview",
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/download_model.png"
+      ],
+      "text": "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.1.text"
+    },
+    {
+      "type": "link",
+      "text": "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.text",
+      "url": "https://discord.gg/re4xQtb",
+      "link_text": "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.link_text"
+    }
+  ]
+}

@@ -166,17 +166,14 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
         this.fallDistance = 0;
 
         // 施加上下晃动
-        if (!this.isOnGround()) {
-            this.addDeltaMovement(new Vec3(0, 0.01 * Math.sin(this.tickCount * Math.PI / 18), 0));
-        }
+        // 因为 1.19/1.20 的变动，无法使用
+        // if (!this.isOnGround()) {
+        //    this.addDeltaMovement(new Vec3(0, 0.01 * Math.sin(this.tickCount * Math.PI / 18), 0));
+        // }
 
         // 与旋转有关系的一堆东西，用来控制扫帚朝向
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
         this.setRot(player.getYRot(), player.getXRot());
-    }
-
-    public void addDeltaMovement(Vec3 pAddend) {
-        this.setDeltaMovement(this.getDeltaMovement().add(pAddend));
     }
 
     @Override

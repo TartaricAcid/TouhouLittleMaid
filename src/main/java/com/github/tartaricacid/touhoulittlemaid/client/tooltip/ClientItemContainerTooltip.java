@@ -50,7 +50,10 @@ public class ClientItemContainerTooltip implements ClientTooltipComponent {
     @Override
     public void renderImage(Font font, int pX, int pY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
         if (emptyTip != null) {
+            poseStack.pushPose();
+            poseStack.translate(0, 0, blitOffset);
             font.drawShadow(poseStack, emptyTip, pX, pY, ChatFormatting.GRAY.getColor());
+            poseStack.popPose();
         } else {
             int i = 0;
             for (ItemStack stack : this.items) {
