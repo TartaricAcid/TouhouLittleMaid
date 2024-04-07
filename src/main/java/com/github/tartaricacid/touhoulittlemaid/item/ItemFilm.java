@@ -15,14 +15,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -30,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ItemFilm extends Item {
+public class ItemFilm extends AbstractFilmItem {
     public static final String MAID_INFO = "MaidInfo";
     private static final String CUSTOM_NAME = "CustomName";
 
@@ -53,8 +51,7 @@ public class ItemFilm extends Item {
 
     public static void filmToMaid(ItemStack film, Level worldIn, BlockPos pos, Player player) {
         Optional<Entity> entityOptional = EntityType.create(getMaidData(film), worldIn);
-        if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) entityOptional.get();
+        if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid maid) {
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             // 实体生成必须在服务端应用
             if (!worldIn.isClientSide) {
@@ -100,21 +97,6 @@ public class ItemFilm extends Item {
         nbt.remove("TicksFrozen");
         nbt.remove("HasVisualFire");
         nbt.remove("Passengers");
-    }
-
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.isInvulnerable()) {
-            entity.setInvulnerable(true);
-        }
-        Vec3 position = entity.position();
-        int minY = entity.level.getMinBuildHeight();
-        if (position.y < minY) {
-            entity.setNoGravity(true);
-            entity.setDeltaMovement(Vec3.ZERO);
-            entity.setPos(position.x, minY, position.z);
-        }
-        return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override
