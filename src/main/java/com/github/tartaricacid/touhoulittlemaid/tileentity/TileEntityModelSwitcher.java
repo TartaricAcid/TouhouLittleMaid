@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class TileEntityModelSwitcher extends BlockEntity {
-    public static final String INFO_LIST = "info_list";    public static final BlockEntityType<TileEntityModelSwitcher> TYPE = BlockEntityType.Builder.of(TileEntityModelSwitcher::new, InitBlocks.MODEL_SWITCHER.get()).build(null);
-    public static final String ENTITY_UUID = "entity_uuid";
+    public static final String INFO_LIST = "info_list";
+    public static final String ENTITY_UUID = "entity_uuid";    public static final BlockEntityType<TileEntityModelSwitcher> TYPE = BlockEntityType.Builder.of(TileEntityModelSwitcher::new, InitBlocks.MODEL_SWITCHER.get()).build(null);
     public static final String LIST_INDEX = "list_index";
     private List<ModeInfo> infoList = Lists.newArrayList();
     private boolean isPowered;
@@ -185,6 +185,8 @@ public class TileEntityModelSwitcher extends BlockEntity {
             this.direction = Direction.from2DDataValue(nbt.getInt("direction"));
         }
     }
+
+
 
 
 }

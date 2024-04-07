@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.VanillaConfig;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -40,7 +41,6 @@ public class MenuIntegration {
         vanillaConfig(root, entryBuilder);
         return root;
     }
-
 
     @SuppressWarnings("all")
     private static void maidConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
@@ -113,6 +113,38 @@ public class MenuIntegration {
                 .setDefaultValue(Lists.newArrayList())
                 .setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_ranged_attack_ignore.desc"))
                 .setSaveConsumer(l -> MaidConfig.MAID_RANGED_ATTACK_IGNORE.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.maid.maid_work_meals_block_list.name"), MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get())
+                .setDefaultValue(Lists.newArrayList(
+                        getItemId(Items.PUFFERFISH),
+                        getItemId(Items.POISONOUS_POTATO),
+                        getItemId(Items.ROTTEN_FLESH),
+                        getItemId(Items.SPIDER_EYE),
+                        getItemId(Items.CHORUS_FRUIT)
+                ))
+                .setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_work_meals_block_list.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.maid.maid_home_meals_block_list.name"), MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.get())
+                .setDefaultValue(Lists.newArrayList(
+                        getItemId(Items.PUFFERFISH),
+                        getItemId(Items.POISONOUS_POTATO),
+                        getItemId(Items.ROTTEN_FLESH),
+                        getItemId(Items.SPIDER_EYE),
+                        getItemId(Items.CHORUS_FRUIT)
+                ))
+                .setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_home_meals_block_list.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(new TranslatableComponent("config.touhou_little_maid.maid.maid_heal_meals_block_list.name"), MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.get())
+                .setDefaultValue(Lists.newArrayList(
+                        getItemId(Items.PUFFERFISH),
+                        getItemId(Items.POISONOUS_POTATO),
+                        getItemId(Items.ROTTEN_FLESH),
+                        getItemId(Items.SPIDER_EYE)
+                ))
+                .setTooltip(new TranslatableComponent("config.touhou_little_maid.maid.maid_heal_meals_block_list.desc"))
+                .setSaveConsumer(l -> MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.set(l)).build());
     }
 
 
@@ -179,6 +211,10 @@ public class MenuIntegration {
                 .setDefaultValue(6).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.shrine_lamp_max_range.desc"))
                 .setSaveConsumer(d -> MiscConfig.SHRINE_LAMP_MAX_RANGE.set(d)).build());
+
+        misc.addEntry(entryBuilder.startBooleanToggle(new TranslatableComponent("config.touhou_little_maid.misc.close_optifine_warning.name"), MiscConfig.CLOSE_OPTIFINE_WARNING.get())
+                .setDefaultValue(false).setTooltip(new TranslatableComponent("config.touhou_little_maid.misc.close_optifine_warning.desc"))
+                .setSaveConsumer(MiscConfig.CLOSE_OPTIFINE_WARNING::set).build());
     }
 
     private static void vanillaConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
@@ -204,5 +240,11 @@ public class MenuIntegration {
     public static void registerModsPage() {
         ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () ->
                 new ConfigGuiHandler.ConfigGuiFactory((client, parent) -> getConfigBuilder().setParentScreen(parent).build()));
+    }
+
+    private static String getItemId(Item item) {
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+        Preconditions.checkNotNull(key);
+        return key.toString();
     }
 }

@@ -316,7 +316,8 @@ public abstract class GeoReplacedEntityRenderer<T extends IAnimatable> extends E
         if (this.entityRenderDispatcher.distanceToSqr(entity) >= nameRenderDistance * nameRenderDistance) {
             return false;
         }
-        return entity == this.entityRenderDispatcher.crosshairPickEntity && entity.hasCustomName() && Minecraft.renderNames();
+        return entity.shouldShowName() || (entity == this.entityRenderDispatcher.crosshairPickEntity && entity.hasCustomName())
+                && Minecraft.renderNames();
     }
 
     protected float getSwingProgress(LivingEntity entity, float partialTick) {

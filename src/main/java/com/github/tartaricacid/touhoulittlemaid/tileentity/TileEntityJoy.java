@@ -62,11 +62,11 @@ public abstract class TileEntityJoy extends BlockEntity {
         return new AABB(worldPosition.offset(-2, 0, -2), worldPosition.offset(2, 1, 2));
     }
 
-    public void setSitId(UUID sitId) {
-        this.sitId = sitId;
-    }
-
     public UUID getSitId() {
         return this.sitId;
+    }
+
+    public void setSitId(UUID sitId) {
+        this.sitId = sitId;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.top;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.top.provider.MaidProvider;
+import com.github.tartaricacid.touhoulittlemaid.compat.top.provider.ShrineLampProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 
 import javax.annotation.Nullable;
@@ -12,6 +13,7 @@ public final class TheOneProbeInfo implements Function<ITheOneProbe, Void> {
     public Void apply(@Nullable ITheOneProbe probe) {
         if (probe != null) {
             probe.registerEntityProvider(new MaidProvider());
+            probe.registerBlockDisplayOverride(new ShrineLampProvider());
         }
         return null;
     }

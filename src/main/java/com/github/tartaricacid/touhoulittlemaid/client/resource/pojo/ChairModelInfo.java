@@ -66,11 +66,6 @@ public class ChairModelInfo implements IModelInfo {
     }
 
     @Override
-    public boolean isGeckoModel() {
-        return isGeckoModel;
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -94,6 +89,11 @@ public class ChairModelInfo implements IModelInfo {
     @Override
     public ResourceLocation getModel() {
         return model;
+    }
+
+    @Override
+    public boolean isGeckoModel() {
+        return isGeckoModel;
     }
 
     public float getMountedYOffset() {

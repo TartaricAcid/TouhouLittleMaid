@@ -21,7 +21,7 @@ public final class ApplyPotionEffectEvent {
         Level world = event.getWorld();
         Player player = event.getPlayer();
 
-        if (stack.getItem() == Items.POTION) {
+        if (player.isDiscrete() && stack.getItem() == Items.POTION) {
             stack.getItem().finishUsingItem(stack.copy(), world, maid);
             if (!player.isCreative()) {
                 stack.shrink(1);
@@ -31,7 +31,7 @@ public final class ApplyPotionEffectEvent {
             event.setCanceled(true);
         }
 
-        if (stack.getItem() == Items.MILK_BUCKET) {
+        if (player.isDiscrete() && stack.getItem() == Items.MILK_BUCKET) {
             maid.curePotionEffects(stack);
             if (!player.isCreative()) {
                 stack.shrink(1);

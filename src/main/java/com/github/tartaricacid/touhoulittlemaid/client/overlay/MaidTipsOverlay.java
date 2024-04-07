@@ -48,7 +48,7 @@ public class MaidTipsOverlay {
     }
 
     private static MutableComponent checkSpecialTips(ItemStack mainhandItem, EntityMaid maid, LocalPlayer player) {
-        if (!maid.isOwnedBy(player) && maid.getNtrItem().test(mainhandItem)) {
+        if (!maid.isOwnedBy(player) && EntityMaid.getNtrItem().test(mainhandItem)) {
             return new TranslatableComponent("overlay.touhou_little_maid.ntr_item.tips");
         }
         if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.is(Tags.Items.SHEARS)) {

@@ -25,6 +25,16 @@ public enum GomokuPart implements StringRepresentable {
         this.posY = posY;
     }
 
+    @Nullable
+    public static GomokuPart getPartByPos(int x, int y) {
+        for (GomokuPart part : GomokuPart.values()) {
+            if (part.getPosX() == x && part.getPosY() == y) {
+                return part;
+            }
+        }
+        return null;
+    }
+
     public int getPosX() {
         return posX;
     }
@@ -44,15 +54,5 @@ public enum GomokuPart implements StringRepresentable {
 
     public boolean isCenter() {
         return this == CENTER;
-    }
-
-    @Nullable
-    public static GomokuPart getPartByPos(int x, int y) {
-        for (GomokuPart part : GomokuPart.values()) {
-            if (part.getPosX() == x && part.getPosY() == y) {
-                return part;
-            }
-        }
-        return null;
     }
 }

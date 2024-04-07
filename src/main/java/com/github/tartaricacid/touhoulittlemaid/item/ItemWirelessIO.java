@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestCheck;
+import com.github.tartaricacid.touhoulittlemaid.api.bauble.IChestType;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
@@ -27,8 +28,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -142,9 +141,18 @@ public class ItemWirelessIO extends Item implements MenuProvider {
         InteractionHand hand = context.getHand();
         BlockEntity te = worldIn.getBlockEntity(pos);
 
-        if (te instanceof RandomizableContainerBlockEntity && player != null && (te instanceof ChestBlockEntity || IronChestCheck.isIronChest(te))) {
-            RandomizableContainerBlockEntity chest = (RandomizableContainerBlockEntity) te;
-            if (chest.canOpen(player) && hand == InteractionHand.MAIN_HAND) {
+        if (hand != InteractionHand.MAIN_HAND) {
+            return super.useOn(context);
+        }
+        if (player == null) {
+            return super.useOn(context);
+        }
+
+        for (IChestType type : ChestManager.getAllChestTypes()) {
+            if (!type.isChest(te)) {
+                continue;
+            }
+            if (type.canOpenByPlayer(te, player)) {
                 ItemStack stack = player.getMainHandItem();
                 setBindingPos(stack, pos);
                 return InteractionResult.sidedSuccess(worldIn.isClientSide);

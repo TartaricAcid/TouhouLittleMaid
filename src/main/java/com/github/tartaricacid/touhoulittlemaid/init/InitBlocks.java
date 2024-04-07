@@ -19,6 +19,7 @@ public final class InitBlocks {
     public static RegistryObject<Block> GARAGE_KIT = BLOCKS.register("garage_kit", BlockGarageKit::new);
     public static RegistryObject<Block> MAID_BEACON = BLOCKS.register("maid_beacon", BlockMaidBeacon::new);
     public static RegistryObject<Block> MODEL_SWITCHER = BLOCKS.register("model_switcher", BlockModelSwitcher::new);
+    public static RegistryObject<Block> PICNIC_MAT = BLOCKS.register("picnic_mat", BlockPicnicMat::new);
     public static RegistryObject<Block> GOMOKU = BLOCKS.register("gomoku", BlockGomoku::new);
     public static RegistryObject<Block> KEYBOARD = BLOCKS.register("keyboard", BlockKeyboard::new);
     public static RegistryObject<Block> BOOKSHELF = BLOCKS.register("bookshelf", BlockBookshelf::new);
@@ -35,4 +36,5 @@ public final class InitBlocks {
     public static RegistryObject<BlockEntityType<TileEntityBookshelf>> BOOKSHELF_TE = TILE_ENTITIES.register("bookshelf", () -> TileEntityBookshelf.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityComputer>> COMPUTER_TE = TILE_ENTITIES.register("computer", () -> TileEntityComputer.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityShrine>> SHRINE_TE = TILE_ENTITIES.register("shrine", () -> TileEntityShrine.TYPE);
+    public static RegistryObject<BlockEntityType<TileEntityPicnicMat>> PICNIC_MAT_TE = TILE_ENTITIES.register("picnic_mat", () -> TileEntityPicnicMat.TYPE);
 }

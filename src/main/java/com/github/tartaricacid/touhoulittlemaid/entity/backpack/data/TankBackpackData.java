@@ -19,6 +19,7 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
     private static final int OUTPUT_INDEX = 1;
     private final EntityMaid maid;
     private final FluidTank tank = new FluidTank(CAPACITY);
+    private int tankFluidCount = 0;
     private final ContainerData dataAccess = new ContainerData() {
         public int get(int index) {
             if (index == 0) {
@@ -37,7 +38,6 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
             return 1;
         }
     };
-    private int tankFluidCount = 0;
 
     public TankBackpackData(EntityMaid maid) {
         super(2);

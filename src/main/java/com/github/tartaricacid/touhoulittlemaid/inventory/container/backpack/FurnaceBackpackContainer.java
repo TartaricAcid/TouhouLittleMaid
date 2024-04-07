@@ -82,16 +82,16 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
             this.furnaceBackpackContainer = furnaceBackpackContainer;
         }
 
+        public static boolean isBucket(ItemStack stack) {
+            return stack.is(Items.BUCKET);
+        }
+
         public boolean mayPlace(ItemStack stack) {
             return this.furnaceBackpackContainer.isFuel(stack) || isBucket(stack);
         }
 
         public int getMaxStackSize(ItemStack stack) {
             return isBucket(stack) ? 1 : super.getMaxStackSize(stack);
-        }
-
-        public static boolean isBucket(ItemStack stack) {
-            return stack.is(Items.BUCKET);
         }
     }
 }

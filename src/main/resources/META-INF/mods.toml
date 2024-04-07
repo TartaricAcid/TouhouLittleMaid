@@ -1,12 +1,14 @@
 modLoader = "javafml"
 loaderVersion = "[40,)"
 license = "CC-BY-NC-SA"
+issueTrackerURL = "https://github.com/TartaricAcid/TouhouLittleMaid/issues"
 
 [[mods]]
 modId = "touhou_little_maid"
 version = "${file.jarVersion}"
 displayName = "Touhou Little Maid"
-# logoFile="examplemod.png"
+displayURL = "https://discord.gg/re4xQtb"
+logoFile = "logo.png"
 credits = "Verclene, ZUN"
 # A text field displayed in the mod UI
 authors = "TartaricAcid, Snownee, Succinum, Pajinyi, ZeniCrow, Paulzzh, Yuriscat, Lappland162"
@@ -15,3 +17,17 @@ description = "A new version of the minecraft mod inspired by the LittleMaidReen
 
 [modproperties.touhou_little_maid]
 catalogueItemIcon="touhou_little_maid:hakurei_gohei"
+
+[[dependencies.touhou_little_maid]]
+modId = "forge"
+mandatory = true
+versionRange = "[40,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.touhou_little_maid]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18,1.18.3)"
+ordering = "NONE"
+side = "BOTH"

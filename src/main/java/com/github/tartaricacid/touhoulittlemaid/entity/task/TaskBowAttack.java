@@ -16,6 +16,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -132,6 +134,15 @@ public class TaskBowAttack implements IRangedAttackTask {
             // 记得把箭设置为可以拾起状态
             arrowEntity.pickup = AbstractArrow.Pickup.ALLOWED;
         }
+
+        // 箭伤害也和好感度挂钩
+        AttributeInstance attackDamage = maid.getAttribute(Attributes.ATTACK_DAMAGE);
+        double attackValue = 2.0;
+        if (attackDamage != null) {
+            attackValue = attackDamage.getBaseValue();
+        }
+        float multiplier = (float) (attackValue / 2.0f);
+        arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() * multiplier);
 
         return arrowEntity;
     }

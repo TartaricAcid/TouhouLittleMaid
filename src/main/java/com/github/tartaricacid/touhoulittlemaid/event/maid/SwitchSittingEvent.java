@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -24,6 +25,7 @@ public final class SwitchSittingEvent {
             maid.setInSittingPose(!maid.isInSittingPose());
             if (maid.isInSittingPose()) {
                 maid.getNavigation().stop();
+                maid.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
                 maid.setTarget(null);
             }
             if (maid.hasRestriction() && maid.canBrainMoving()) {

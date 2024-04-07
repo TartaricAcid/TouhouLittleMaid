@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.event;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -29,7 +30,7 @@ public final class ShowPowerEvent {
                 return;
             }
             ItemStack stack = player.getMainHandItem();
-            if (stack.getItem() != InitItems.HAKUREI_GOHEI.get()) {
+            if (!ItemHakureiGohei.isGohei(stack)) {
                 return;
             }
             ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();

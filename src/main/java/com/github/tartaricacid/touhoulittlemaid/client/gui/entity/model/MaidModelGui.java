@@ -13,6 +13,7 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
 
@@ -79,6 +80,7 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         }
     }
 
+    @Override
     protected void notifyModelChange(EntityMaid maid, MaidModelInfo info) {
         if (info.getEasterEgg() == null) {
             NetworkHandler.CHANNEL.sendToServer(new MaidModelMessage(maid.getId(), info.getModelId()));
@@ -86,6 +88,9 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
             if (StringUtils.isNotBlank(useSoundPackId)) {
                 NetworkHandler.CHANNEL.sendToServer(new SetMaidSoundIdMessage(maid.getId(), useSoundPackId));
             }
+            // 切换模型时，重置手部动作
+            maid.handItemsForAnimation[0] = ItemStack.EMPTY;
+            maid.handItemsForAnimation[1] = ItemStack.EMPTY;
         }
     }
 

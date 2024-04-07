@@ -116,8 +116,8 @@ public class DownloadInfo {
         return desc;
     }
 
-    public HashMap<String, String> getLanguage(String region) {
-        return language.get(region);
+    public HashMap<String, HashMap<String, String>> getLanguages() {
+        return language;
     }
 
     public DownloadStatus getStatus() {

@@ -37,22 +37,6 @@ public final class SchedulePos {
         this(workPos, workPos, dimension);
     }
 
-    public void setWorkPos(BlockPos workPos) {
-        this.workPos = workPos;
-    }
-
-    public void setIdlePos(BlockPos idlePos) {
-        this.idlePos = idlePos;
-    }
-
-    public void setSleepPos(BlockPos sleepPos) {
-        this.sleepPos = sleepPos;
-    }
-
-    public void setDimension(ResourceLocation dimension) {
-        this.dimension = dimension;
-    }
-
     public void tick(EntityMaid maid) {
         if (maid.tickCount % 40 == 0) {
             this.restrictTo(maid);
@@ -95,6 +79,9 @@ public final class SchedulePos {
     }
 
     public void restrictTo(EntityMaid maid) {
+        if (!maid.isHomeModeEnable()) {
+            return;
+        }
         Activity activity = maid.getScheduleDetail();
         if (activity == Activity.WORK) {
             maid.restrictTo(this.workPos, MaidConfig.MAID_WORK_RANGE.get());
@@ -109,28 +96,44 @@ public final class SchedulePos {
         }
     }
 
-    public void setConfigured(boolean configured) {
-        this.configured = configured;
-    }
-
     public BlockPos getWorkPos() {
         return workPos;
+    }
+
+    public void setWorkPos(BlockPos workPos) {
+        this.workPos = workPos;
     }
 
     public BlockPos getIdlePos() {
         return idlePos;
     }
 
+    public void setIdlePos(BlockPos idlePos) {
+        this.idlePos = idlePos;
+    }
+
     public BlockPos getSleepPos() {
         return sleepPos;
+    }
+
+    public void setSleepPos(BlockPos sleepPos) {
+        this.sleepPos = sleepPos;
     }
 
     public boolean isConfigured() {
         return configured;
     }
 
+    public void setConfigured(boolean configured) {
+        this.configured = configured;
+    }
+
     public ResourceLocation getDimension() {
         return dimension;
+    }
+
+    public void setDimension(ResourceLocation dimension) {
+        this.dimension = dimension;
     }
 
     public void clear(EntityMaid maid) {

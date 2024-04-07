@@ -21,12 +21,44 @@ public class ZhiZhangAIService implements AIService {
      * 用于初始化 Zobrist 随机值
      */
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
+    /**
+     * 声明一个最大值
+     */
+    private static final int INFINITY = 999999999;
+    /**
+     * 棋型分数表
+     */
+    private static final Map<String, Integer> SCORE = new LinkedHashMap<>();
+    /**
+     * 黑子 Zobrist
+     */
+    private static final long[][] BLACK_ZOBRIST = new long[15][15];
+    /**
+     * 白子 Zobrist
+     */
+    private static final long[][] WHITE_ZOBRIST = new long[15][15];
+
+    static {
+        // 初始化棋型分数表
+        for (ChessModel chessScore : ChessModel.values()) {
+            for (String value : chessScore.values) {
+                SCORE.put(value, chessScore.score);
+            }
+        }
+
+        // 初始化Zobrist随机值
+        for (int i = 0; i < BLACK_ZOBRIST.length; i++) {
+            for (int j = 0; j < BLACK_ZOBRIST.length; j++) {
+                BLACK_ZOBRIST[i][j] = RANDOM.nextLong();
+                WHITE_ZOBRIST[i][j] = RANDOM.nextLong();
+            }
+        }
+    }
 
     /**
      * AI配置
      */
     private final AIConfig aiConfig;
-
     /**
      * 已下棋子数据
      */
@@ -51,340 +83,30 @@ public class ZhiZhangAIService implements AIService {
      * AI最佳下棋点位
      */
     private Point bestPoint;
-
     /**
      * 当前回合数
      */
     private int rounds;
-
     /**
      * 统计
      */
     private Statistics statistics;
-
     /**
      * 最佳落子路径
      */
     private Stack<Point> pathStack;
-
     /**
      * 最佳落子路径
      */
     private Stack<Point> bestPathStack;
-
     /**
      * 当前局面的hashcode
      */
     private long hashcode;
-
     /**
      * 局面缓存
      */
     private Map<Long, SituationCache> situationCacheMap;
-
-    /**
-     * 声明一个最大值
-     */
-    private static final int INFINITY = 999999999;
-
-    /**
-     * 棋型分数表
-     */
-    private static final Map<String, Integer> SCORE = new LinkedHashMap<>();
-
-    /**
-     * 黑子 Zobrist
-     */
-    private static final long[][] BLACK_ZOBRIST = new long[15][15];
-
-    /**
-     * 白子 Zobrist
-     */
-    private static final long[][] WHITE_ZOBRIST = new long[15][15];
-
-    static {
-        // 初始化棋型分数表
-        for (ChessModel chessScore : ChessModel.values()) {
-            for (String value : chessScore.values) {
-                SCORE.put(value, chessScore.score);
-            }
-        }
-
-        // 初始化Zobrist随机值
-        for (int i = 0; i < BLACK_ZOBRIST.length; i++) {
-            for (int j = 0; j < BLACK_ZOBRIST.length; j++) {
-                BLACK_ZOBRIST[i][j] = RANDOM.nextLong();
-                WHITE_ZOBRIST[i][j] = RANDOM.nextLong();
-            }
-        }
-    }
-
-    private enum ChessModel {
-        /**
-         * 连五
-         */
-        LIANWU(10000000, new String[]{"11111"}),
-        /**
-         * 活四
-         */
-        HUOSI(1000000, new String[]{"011110"}),
-        /**
-         * 活三
-         */
-        HUOSAN(10000, new String[]{"001110", "011100", "010110", "011010"}),
-        /**
-         * 冲四
-         */
-        CHONGSI(9000, new String[]{"11110", "01111", "10111", "11011", "11101"}),
-        /**
-         * 活二
-         */
-        HUOER(100, new String[]{"001100", "011000", "000110", "001010", "010100"}),
-        /**
-         * 活一
-         */
-        HUOYI(80, new String[]{"010200", "002010", "020100", "001020", "201000", "000102", "000201"}),
-        /**
-         * 眠三
-         */
-        MIANSAN(30, new String[]{"001112", "010112", "011012", "211100", "211010"}),
-        /**
-         * 眠二
-         */
-        MIANER(10, new String[]{"011200", "001120", "002110", "021100", "110000", "000011", "000112", "211000"}),
-        /**
-         * 眠一
-         */
-        MIANYI(1, new String[]{"001200", "002100", "000210", "000120", "210000", "000012"});
-
-        /**
-         * 分数
-         */
-        final int score;
-        /**
-         * 局势数组
-         */
-        final String[] values;
-
-        ChessModel(int score, String[] values) {
-            this.score = score;
-            this.values = values;
-        }
-    }
-
-    /**
-     * 风险评分
-     */
-    private enum RiskScore {
-        /**
-         * 高风险
-         */
-        HIGH_RISK(800000),
-        /**
-         * 中风险
-         */
-        MEDIUM_RISK(500000),
-        /**
-         * 低风险
-         */
-        LOW_RISK(100000);
-
-        final int score;
-
-        RiskScore(int score) {
-            this.score = score;
-        }
-
-        /**
-         * 判断分数是否处于区间 [leftScore, rightScore)
-         *
-         * @param score      分数
-         * @param leftScore  左区分值
-         * @param rightScore 右区分值
-         * @return
-         */
-        public static boolean between(int score, RiskScore leftScore, RiskScore rightScore) {
-            return score >= leftScore.score && score < rightScore.score;
-        }
-    }
-
-    /**
-     * 统计
-     */
-    private static class Statistics {
-        /**
-         * 搜索深度
-         */
-        private int depth;
-        /**
-         * 最佳点位
-         */
-        private Point point;
-        /**
-         * 分数
-         */
-        private int score;
-        /**
-         * 极大极小搜索耗时（秒）
-         */
-        private double minimaxTime;
-        /**
-         * 搜索节点数
-         */
-        private int nodes;
-        /**
-         * 剪枝数
-         */
-        private int cuts;
-        /**
-         * 算杀深度
-         */
-        private int vcxDepth;
-        /**
-         * 算杀命中 0.未命中 1.vcf 2.vct
-         */
-        private int vcx;
-        /**
-         * 算杀耗时（秒）
-         */
-        private double vcxTime;
-        /**
-         * 局面缓存数
-         */
-        private int caches;
-        /**
-         * 局面缓存命中数
-         */
-        private int cacheHits;
-
-        public void incrNodes() {
-            this.nodes++;
-        }
-
-        public void incrCuts() {
-            this.cuts++;
-        }
-
-        public void incrCacheHits() {
-            this.cacheHits++;
-        }
-
-        public int getDepth() {
-            return depth;
-        }
-
-        public Point getPoint() {
-            return point;
-        }
-
-        public int getScore() {
-            return score;
-        }
-
-        public double getMinimaxTime() {
-            return minimaxTime;
-        }
-
-        public int getNodes() {
-            return nodes;
-        }
-
-        public int getCuts() {
-            return cuts;
-        }
-
-        public int getVcxDepth() {
-            return vcxDepth;
-        }
-
-        public int getVcx() {
-            return vcx;
-        }
-
-        public double getVcxTime() {
-            return vcxTime;
-        }
-
-        public int getCaches() {
-            return caches;
-        }
-
-        public int getCacheHits() {
-            return cacheHits;
-        }
-
-        public void setDepth(int depth) {
-            this.depth = depth;
-        }
-
-        public void setPoint(Point point) {
-            this.point = point;
-        }
-
-        public void setScore(int score) {
-            this.score = score;
-        }
-
-        public void setMinimaxTime(double minimaxTime) {
-            this.minimaxTime = minimaxTime;
-        }
-
-        public void setNodes(int nodes) {
-            this.nodes = nodes;
-        }
-
-        public void setCuts(int cuts) {
-            this.cuts = cuts;
-        }
-
-        public void setVcxDepth(int vcxDepth) {
-            this.vcxDepth = vcxDepth;
-        }
-
-        public void setVcx(int vcx) {
-            this.vcx = vcx;
-        }
-
-        public void setVcxTime(double vcxTime) {
-            this.vcxTime = vcxTime;
-        }
-
-        public void setCaches(int caches) {
-            this.caches = caches;
-        }
-
-        public void setCacheHits(int cacheHits) {
-            this.cacheHits = cacheHits;
-        }
-    }
-
-    /**
-     * 局面缓存
-     */
-    private static class SituationCache {
-        /**
-         * 存储VCX点位
-         */
-        private Point point;
-        /**
-         * 局面分数
-         */
-        private int score;
-        /**
-         * 搜索深度
-         */
-        private final int depth;
-
-        public SituationCache(int score, int depth) {
-            this.score = score;
-            this.depth = depth;
-        }
-
-        public SituationCache(Point point, int depth) {
-            this.point = point;
-            this.depth = depth;
-        }
-    }
 
     public ZhiZhangAIService() {
         this(new AIConfig(6, 10, false, 0, 6));
@@ -1679,5 +1401,272 @@ public class ZhiZhangAIService implements AIService {
 
         // 返回该位置的棋子
         return this.chessData[x][y];
+    }
+
+    private enum ChessModel {
+        /**
+         * 连五
+         */
+        LIANWU(10000000, new String[]{"11111"}),
+        /**
+         * 活四
+         */
+        HUOSI(1000000, new String[]{"011110"}),
+        /**
+         * 活三
+         */
+        HUOSAN(10000, new String[]{"001110", "011100", "010110", "011010"}),
+        /**
+         * 冲四
+         */
+        CHONGSI(9000, new String[]{"11110", "01111", "10111", "11011", "11101"}),
+        /**
+         * 活二
+         */
+        HUOER(100, new String[]{"001100", "011000", "000110", "001010", "010100"}),
+        /**
+         * 活一
+         */
+        HUOYI(80, new String[]{"010200", "002010", "020100", "001020", "201000", "000102", "000201"}),
+        /**
+         * 眠三
+         */
+        MIANSAN(30, new String[]{"001112", "010112", "011012", "211100", "211010"}),
+        /**
+         * 眠二
+         */
+        MIANER(10, new String[]{"011200", "001120", "002110", "021100", "110000", "000011", "000112", "211000"}),
+        /**
+         * 眠一
+         */
+        MIANYI(1, new String[]{"001200", "002100", "000210", "000120", "210000", "000012"});
+
+        /**
+         * 分数
+         */
+        final int score;
+        /**
+         * 局势数组
+         */
+        final String[] values;
+
+        ChessModel(int score, String[] values) {
+            this.score = score;
+            this.values = values;
+        }
+    }
+
+    /**
+     * 风险评分
+     */
+    private enum RiskScore {
+        /**
+         * 高风险
+         */
+        HIGH_RISK(800000),
+        /**
+         * 中风险
+         */
+        MEDIUM_RISK(500000),
+        /**
+         * 低风险
+         */
+        LOW_RISK(100000);
+
+        final int score;
+
+        RiskScore(int score) {
+            this.score = score;
+        }
+
+        /**
+         * 判断分数是否处于区间 [leftScore, rightScore)
+         *
+         * @param score      分数
+         * @param leftScore  左区分值
+         * @param rightScore 右区分值
+         * @return
+         */
+        public static boolean between(int score, RiskScore leftScore, RiskScore rightScore) {
+            return score >= leftScore.score && score < rightScore.score;
+        }
+    }
+
+    /**
+     * 统计
+     */
+    private static class Statistics {
+        /**
+         * 搜索深度
+         */
+        private int depth;
+        /**
+         * 最佳点位
+         */
+        private Point point;
+        /**
+         * 分数
+         */
+        private int score;
+        /**
+         * 极大极小搜索耗时（秒）
+         */
+        private double minimaxTime;
+        /**
+         * 搜索节点数
+         */
+        private int nodes;
+        /**
+         * 剪枝数
+         */
+        private int cuts;
+        /**
+         * 算杀深度
+         */
+        private int vcxDepth;
+        /**
+         * 算杀命中 0.未命中 1.vcf 2.vct
+         */
+        private int vcx;
+        /**
+         * 算杀耗时（秒）
+         */
+        private double vcxTime;
+        /**
+         * 局面缓存数
+         */
+        private int caches;
+        /**
+         * 局面缓存命中数
+         */
+        private int cacheHits;
+
+        public void incrNodes() {
+            this.nodes++;
+        }
+
+        public void incrCuts() {
+            this.cuts++;
+        }
+
+        public void incrCacheHits() {
+            this.cacheHits++;
+        }
+
+        public int getDepth() {
+            return depth;
+        }
+
+        public void setDepth(int depth) {
+            this.depth = depth;
+        }
+
+        public Point getPoint() {
+            return point;
+        }
+
+        public void setPoint(Point point) {
+            this.point = point;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        public double getMinimaxTime() {
+            return minimaxTime;
+        }
+
+        public void setMinimaxTime(double minimaxTime) {
+            this.minimaxTime = minimaxTime;
+        }
+
+        public int getNodes() {
+            return nodes;
+        }
+
+        public void setNodes(int nodes) {
+            this.nodes = nodes;
+        }
+
+        public int getCuts() {
+            return cuts;
+        }
+
+        public void setCuts(int cuts) {
+            this.cuts = cuts;
+        }
+
+        public int getVcxDepth() {
+            return vcxDepth;
+        }
+
+        public void setVcxDepth(int vcxDepth) {
+            this.vcxDepth = vcxDepth;
+        }
+
+        public int getVcx() {
+            return vcx;
+        }
+
+        public void setVcx(int vcx) {
+            this.vcx = vcx;
+        }
+
+        public double getVcxTime() {
+            return vcxTime;
+        }
+
+        public void setVcxTime(double vcxTime) {
+            this.vcxTime = vcxTime;
+        }
+
+        public int getCaches() {
+            return caches;
+        }
+
+        public void setCaches(int caches) {
+            this.caches = caches;
+        }
+
+        public int getCacheHits() {
+            return cacheHits;
+        }
+
+        public void setCacheHits(int cacheHits) {
+            this.cacheHits = cacheHits;
+        }
+    }
+
+    /**
+     * 局面缓存
+     */
+    private static class SituationCache {
+        /**
+         * 搜索深度
+         */
+        private final int depth;
+        /**
+         * 存储VCX点位
+         */
+        private Point point;
+        /**
+         * 局面分数
+         */
+        private int score;
+
+        public SituationCache(int score, int depth) {
+            this.score = score;
+            this.depth = depth;
+        }
+
+        public SituationCache(Point point, int depth) {
+            this.point = point;
+            this.depth = depth;
+        }
     }
 }

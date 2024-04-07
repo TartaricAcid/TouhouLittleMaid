@@ -1,7 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -18,9 +23,14 @@ public final class MaidConfig {
     public static ForgeConfigSpec.BooleanValue MAID_CHANGE_MODEL;
     public static ForgeConfigSpec.BooleanValue MAID_GOMOKU_OWNER_LIMIT;
     public static ForgeConfigSpec.IntValue OWNER_MAX_MAID_NUM;
+
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_BACKPACK_BLACKLIST;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_ATTACK_IGNORE;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_RANGED_ATTACK_IGNORE;
+
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_WORK_MEALS_BLOCK_LIST;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("maid");
@@ -67,6 +77,38 @@ public final class MaidConfig {
         builder.comment("The entity that the maid will not hurt when in ranged attack");
         MAID_RANGED_ATTACK_IGNORE = builder.define("MaidRangedAttackIgnore", Lists.newArrayList());
 
+        builder.comment("These items cannot be used as a maid's work meals");
+        MAID_WORK_MEALS_BLOCK_LIST = builder.define("MaidWorkMealsBlockList", Lists.newArrayList(
+                getItemId(Items.PUFFERFISH),
+                getItemId(Items.POISONOUS_POTATO),
+                getItemId(Items.ROTTEN_FLESH),
+                getItemId(Items.SPIDER_EYE),
+                getItemId(Items.CHORUS_FRUIT)
+        ));
+
+        builder.comment("These items cannot be used as a maid's home meals");
+        MAID_HOME_MEALS_BLOCK_LIST = builder.define("MaidHomeMealsBlockList", Lists.newArrayList(
+                getItemId(Items.PUFFERFISH),
+                getItemId(Items.POISONOUS_POTATO),
+                getItemId(Items.ROTTEN_FLESH),
+                getItemId(Items.SPIDER_EYE),
+                getItemId(Items.CHORUS_FRUIT)
+        ));
+
+        builder.comment("These items cannot be used as a maid's heal meals");
+        MAID_HEAL_MEALS_BLOCK_LIST = builder.define("MaidHealMealsBlockList", Lists.newArrayList(
+                getItemId(Items.PUFFERFISH),
+                getItemId(Items.POISONOUS_POTATO),
+                getItemId(Items.ROTTEN_FLESH),
+                getItemId(Items.SPIDER_EYE)
+        ));
+
         builder.pop();
+    }
+
+    private static String getItemId(Item item) {
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+        Preconditions.checkNotNull(key);
+        return key.toString();
     }
 }

@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class TileEntityGarageKit extends BlockEntity {
-    private static final String FACING_TAG = "GarageKitFacing";    public static final BlockEntityType<TileEntityGarageKit> TYPE = BlockEntityType.Builder.of(TileEntityGarageKit::new, InitBlocks.GARAGE_KIT.get()).build(null);
-    private static final String EXTRA_DATA = "ExtraData";
+    private static final String FACING_TAG = "GarageKitFacing";
+    private static final String EXTRA_DATA = "ExtraData";    public static final BlockEntityType<TileEntityGarageKit> TYPE = BlockEntityType.Builder.of(TileEntityGarageKit::new, InitBlocks.GARAGE_KIT.get()).build(null);
     private Direction facing = Direction.NORTH;
     private CompoundTag extraData = new CompoundTag();
     public TileEntityGarageKit(BlockPos blockPos, BlockState blockState) {
@@ -65,6 +65,8 @@ public class TileEntityGarageKit extends BlockEntity {
             level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
         }
     }
+
+
 
 
 }
