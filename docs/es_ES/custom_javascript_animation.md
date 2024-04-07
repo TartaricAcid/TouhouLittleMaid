@@ -271,8 +271,8 @@ We can get various group via `modelMap.get("xxx")`, the following are the functi
 
 On the top of the script we used a tool called `GlWrapper`, that can make various translation, rotation and scaling operations.
 
-|                   Function name                  | Return value |                                       Note                                       |
-| :----------------------------------------------: | :----------: | :------------------------------------------------------------------------------: |
-|      `translate(float x, float y, float z)`      |     None     |                        Move the entity to coordiate x y z                        |
+|                   Function name                  | Return value |                                               Note                                               |
+| :----------------------------------------------: | :----------: | :----------------------------------------------------------------------------------------------: |
+|      `translate(float x, float y, float z)`      |     None     |                                Move the entity to coordiate x y z                                |
 | `rotate(float angle, float x, float y, float z)` |     None     | Using a straight line`(0, 0, 0) (x, y, z)` as axis, rotate it by `angle` degree. |
-|        `scale(float x, float y, float z)`        |     None     |                     Scale entity on three axis by x y z times                    |
+|        `scale(float x, float y, float z)`        |     None     |                             Scale entity on three axis by x y z times                            |
