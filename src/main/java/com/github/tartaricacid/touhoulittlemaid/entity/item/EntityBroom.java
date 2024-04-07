@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -189,15 +188,8 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
             if (this.getPassengers().size() > 1) {
                 return InteractionResult.sidedSuccess(this.level.isClientSide);
             }
-            if (player.getUUID().equals(this.getOwnerUUID())) {
-                if (!level.isClientSide) {
-                    player.startRiding(this);
-                }
-            } else {
-                if (hand == InteractionHand.MAIN_HAND && this.level.isClientSide) {
-                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.broom.not_the_owner"));
-                }
-                return InteractionResult.FAIL;
+            if (!level.isClientSide) {
+                player.startRiding(this);
             }
             return InteractionResult.sidedSuccess(this.level.isClientSide);
         }
@@ -226,7 +218,7 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
 
     @Override
     protected boolean canKillEntity(Player player) {
-        return player.getUUID().equals(this.getOwnerUUID());
+        return true;
     }
 
     @Override
