@@ -293,7 +293,6 @@
   "message.touhou_little_maid.script_book.remove": "成功清除女仆的聊天气泡台本",
   "message.touhou_little_maid.script_book.install": "成功写入女仆的聊天气泡台本",
   "message.touhou_little_maid.script_book.copy": "成功复制女仆的聊天气泡台本",
-  "message.touhou_little_maid.broom.not_the_owner": "你不是这个扫帚的主人！",
   "message.touhou_little_maid.broom.unable_fly": "你需要一个女仆也坐在扫帚上才能使用它",
   "commands.touhou_little_maid.pack.reload.info": "所有的模型包已经重载！",
   "commands.touhou_little_maid.power.handle.info": "修改了 %d 位玩家的 P 点",
