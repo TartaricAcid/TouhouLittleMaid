@@ -12,19 +12,19 @@ It is not difficult to make a custom model package from scratch, even if you are
 
 - Blockbench: A software develped by `JannisX11` specifically for Minecraft 3D modelling.
 
-  Official website: https\://blockbench.net/
+  Official website: https://blockbench.net/
 
   The mod only supports Bedrock Edition model format, and does not support Bedrock Edition animation files.
 
 - Visual Studio Code: An Integrated Development Environment made by Microsoft.
 
-  Official website: https\://code.visualstudio.com/
+  Official website: https://code.visualstudio.com/
 
   Mainly used to edit language files, optional.
 
 In addition, I also wrote a blockbench plugin for exporting custom models, only applicable to Blockbench 4.0
 
-Plugin site: http\://page.cfpa.team/TLM-Utils-Plugins/
+Plugin site: http://page.cfpa.team/TLM-Utils-Plugins/
 
 # Quick Start
 
