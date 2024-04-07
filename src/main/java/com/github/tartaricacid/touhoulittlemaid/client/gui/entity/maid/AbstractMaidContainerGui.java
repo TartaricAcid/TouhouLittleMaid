@@ -124,7 +124,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         String minecraftVersion = SharedConstants.getCurrentVersion().getName();
         String modVersion = ModList.get().getModFileById(TouhouLittleMaid.MOD_ID).versionString();
         String debugInfo = String.format("%s-%s", minecraftVersion, modVersion);
-        drawCenteredString(poseStack, font, debugInfo, leftPos + 80 / 2, topPos - 4, ChatFormatting.GRAY.getColor());
+        drawCenteredString(poseStack, font, debugInfo, leftPos + 80 / 2, topPos - 4, 0xFFFFFF);
     }
 
     @SuppressWarnings("all")
