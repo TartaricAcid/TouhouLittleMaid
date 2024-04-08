@@ -11,6 +11,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import static com.github.tartaricacid.touhoulittlemaid.item.MaidGroup.MAIN_TAB;
+
 public final class InitItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TouhouLittleMaid.MOD_ID);
 
@@ -52,20 +54,20 @@ public final class InitItems {
     public static RegistryObject<Item> MAID_BEACON = ITEMS.register("maid_beacon", ItemMaidBeacon::new);
     public static RegistryObject<Item> MODEL_SWITCHER = ITEMS.register("model_switcher", ItemModelSwitcher::new);
     public static RegistryObject<Item> CHAIR_SHOW = ITEMS.register("chair_show", ItemChairShow::new);
-    public static RegistryObject<Item> GOMOKU = ITEMS.register("gomoku", () -> new BlockItem(InitBlocks.GOMOKU.get(), new Item.Properties()));
     public static RegistryObject<Item> RED_FOX_SCROLL = ITEMS.register("red_fox_scroll", ItemFoxScroll::new);
     public static RegistryObject<Item> WHITE_FOX_SCROLL = ITEMS.register("white_fox_scroll", ItemFoxScroll::new);
-    public static RegistryObject<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties()));
-    public static RegistryObject<Item> BOOKSHELF = ITEMS.register("bookshelf", () -> new BlockItem(InitBlocks.BOOKSHELF.get(), new Item.Properties()));
-    public static RegistryObject<Item> COMPUTER = ITEMS.register("computer", () -> new BlockItem(InitBlocks.COMPUTER.get(), new Item.Properties()));
+    public static RegistryObject<Item> GOMOKU = ITEMS.register("gomoku", () -> new BlockItem(InitBlocks.GOMOKU.get(), new Item.Properties().tab(MAIN_TAB)));
+    public static RegistryObject<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties().tab(MAIN_TAB)));
+    public static RegistryObject<Item> BOOKSHELF = ITEMS.register("bookshelf", () -> new BlockItem(InitBlocks.BOOKSHELF.get(), new Item.Properties().tab(MAIN_TAB)));
+    public static RegistryObject<Item> COMPUTER = ITEMS.register("computer", () -> new BlockItem(InitBlocks.COMPUTER.get(), new Item.Properties().tab(MAIN_TAB)));
     public static RegistryObject<Item> FAVORABILITY_TOOL_ADD = ITEMS.register("favorability_tool_add", () -> new ItemFavorabilityTool("add"));
     public static RegistryObject<Item> FAVORABILITY_TOOL_REDUCE = ITEMS.register("favorability_tool_reduce", () -> new ItemFavorabilityTool("reduce"));
     public static RegistryObject<Item> FAVORABILITY_TOOL_FULL = ITEMS.register("favorability_tool_full", () -> new ItemFavorabilityTool("full"));
-    public static RegistryObject<Item> SHRINE = ITEMS.register("shrine", () -> new BlockItem(InitBlocks.SHRINE.get(), new Item.Properties()));
+    public static RegistryObject<Item> SHRINE = ITEMS.register("shrine", () -> new BlockItem(InitBlocks.SHRINE.get(), new Item.Properties().tab(MAIN_TAB)));
     public static RegistryObject<Item> KAPPA_COMPASS = ITEMS.register("kappa_compass", ItemKappaCompass::new);
     public static RegistryObject<Item> BROOM = ITEMS.register("broom", ItemBroom::new);
     public static RegistryObject<Item> PICNIC_BASKET = ITEMS.register("picnic_basket", () -> new ItemPicnicBasket(InitBlocks.PICNIC_MAT.get()));
 
-    public static RegistryObject<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityMaid.TYPE, 0x4a6195, 0xffffff, new Item.Properties()));
-    public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityFairy.TYPE, 0x171c20, 0xffffff, new Item.Properties()));
+    public static RegistryObject<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityMaid.TYPE, 0x4a6195, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));
+    public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityFairy.TYPE, 0x171c20, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));
 }
