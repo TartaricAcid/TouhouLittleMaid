@@ -22,7 +22,7 @@ public class HandleBackpackEvent {
         EntityMaid maid = event.getMaid();
         IMaidBackpack maidBackpack = maid.getMaidBackpackType();
         if (stack.is(Tags.Items.SHEARS)) {
-            if (maid.isOwnedBy(player) && !maid.backpackHasDelay() && maidBackpack != BackpackManager.getEmptyBackpack()) {
+            if (maid.isOwnedBy(player) && maid.backpackHasDelay() && maidBackpack != BackpackManager.getEmptyBackpack()) {
                 maid.setBackpackDelay();
                 player.getCooldowns().addCooldown(stack.getItem(), 20);
                 ItemHandlerHelper.giveItemToPlayer(player, maidBackpack.getTakeOffItemStack(stack, player, maid));
@@ -34,7 +34,7 @@ public class HandleBackpackEvent {
             }
         } else {
             BackpackManager.findBackpack(stack).ifPresent(backpack -> {
-                if (maid.isOwnedBy(player) && !maid.backpackHasDelay() && backpack != BackpackManager.getEmptyBackpack() && backpack != maidBackpack) {
+                if (maid.isOwnedBy(player) && maid.backpackHasDelay() && backpack != BackpackManager.getEmptyBackpack() && backpack != maidBackpack) {
                     maid.setBackpackDelay();
                     BackpackManager.addBackpackCooldown(player);
                     ItemHandlerHelper.giveItemToPlayer(player, maidBackpack.getTakeOffItemStack(stack, player, maid));

@@ -1069,12 +1069,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     private MenuProvider getGuiProvider(int tabIndex) {
-        switch (tabIndex) {
-            case TabIndex.CONFIG:
-                return MaidConfigContainer.create(getId());
-            case TabIndex.MAIN:
-            default:
-                return this.getMaidBackpackType().getGuiProvider(getId());
+        if (tabIndex == TabIndex.CONFIG) {
+            return MaidConfigContainer.create(getId());
+        }else {
+            return this.getMaidBackpackType().getGuiProvider(getId());
         }
     }
 
@@ -1305,7 +1303,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     public boolean backpackHasDelay() {
-        return backpackDelay > 0;
+        return backpackDelay <= 0;
     }
 
     public String getModelId() {
@@ -1652,20 +1650,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         return canDestroyBlock(pos) && level.destroyBlock(pos, dropBlock, this);
     }
 
-    public boolean placeItemBlock(InteractionHand hand, BlockPos placePos, Direction direction, ItemStack stack) {
+    public void placeItemBlock(InteractionHand hand, BlockPos placePos, Direction direction, ItemStack stack) {
         if (stack.getItem() instanceof BlockItem) {
-            return ((BlockItem) stack.getItem()).place(new BlockPlaceContext(level, null, hand, stack,
-                    getBlockRayTraceResult(placePos, direction))).consumesAction();
+            ((BlockItem) stack.getItem()).place(new BlockPlaceContext(level, null, hand, stack,
+                    getBlockRayTraceResult(placePos, direction)));
         }
-        return false;
     }
 
-    public boolean placeItemBlock(BlockPos placePos, Direction direction, ItemStack stack) {
-        return placeItemBlock(InteractionHand.MAIN_HAND, placePos, direction, stack);
+    public void placeItemBlock(BlockPos placePos, Direction direction, ItemStack stack) {
+        placeItemBlock(InteractionHand.MAIN_HAND, placePos, direction, stack);
     }
 
-    public boolean placeItemBlock(BlockPos placePos, ItemStack stack) {
-        return placeItemBlock(placePos, Direction.UP, stack);
+    public void placeItemBlock(BlockPos placePos, ItemStack stack) {
+        placeItemBlock(placePos, Direction.UP, stack);
     }
 
     private BlockHitResult getBlockRayTraceResult(BlockPos pos, Direction direction) {
