@@ -96,7 +96,13 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -1647,7 +1653,41 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     public boolean destroyBlock(BlockPos pos, boolean dropBlock) {
-        return canDestroyBlock(pos) && level.destroyBlock(pos, dropBlock, this);
+        return canDestroyBlock(pos) && destroyBlock(level, pos, dropBlock, this);
+    }
+
+    public boolean destroyBlock(Level level, BlockPos blockPos, boolean dropBlock, @Nullable Entity entity) {
+        BlockState blockState = level.getBlockState(blockPos);
+        if (blockState.isAir()) {
+            return false;
+        } else {
+            FluidState fluidState = level.getFluidState(blockPos);
+            if (!(blockState.getBlock() instanceof BaseFireBlock)) {
+                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(blockState));
+            }
+            if (dropBlock) {
+                BlockEntity blockEntity = blockState.hasBlockEntity() ? level.getBlockEntity(blockPos) : null;
+                dropResourcesToMaidInv(blockState, level, blockPos, blockEntity, this, ItemStack.EMPTY);
+            }
+            boolean setResult = level.setBlock(blockPos, fluidState.createLegacyBlock(), Block.UPDATE_ALL);
+            if (setResult) {
+                level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(entity, blockState));
+            }
+            return setResult;
+        }
+    }
+
+    public void dropResourcesToMaidInv(BlockState state, Level level, BlockPos pos, @Nullable BlockEntity blockEntity, EntityMaid maid, ItemStack tool) {
+        if (level instanceof ServerLevel serverLevel) {
+            CombinedInvWrapper availableInv = this.getAvailableInv(false);
+            Block.getDrops(state, serverLevel, pos, blockEntity, maid, tool).forEach(stack -> {
+                ItemStack remindItemStack = ItemHandlerHelper.insertItemStacked(availableInv, stack, false);
+                if (!remindItemStack.isEmpty()) {
+                    Block.popResource(level, pos, remindItemStack);
+                }
+            });
+            state.spawnAfterBreak(serverLevel, pos, tool, true);
+        }
     }
 
     public void placeItemBlock(InteractionHand hand, BlockPos placePos, Direction direction, ItemStack stack) {
