@@ -48,7 +48,7 @@ minecraft {
         client2 {
             parent minecraft.runs.client
             workingDirectory project.file('run/client_b')
-            args '--username', 'Crystal1921'
+            args '--username', 'tartaric_acid'
             mods {
                 touhoulittlemaid {
                     source sourceSets.main
