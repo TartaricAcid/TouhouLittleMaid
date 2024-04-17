@@ -8,10 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMes
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-import static com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid.canInsertItem;
 
 public class DefaultMaidHealSelfMeal implements IMaidMeal {
     private static final int MAX_PROBABILITY = 5;
@@ -31,9 +27,6 @@ public class DefaultMaidHealSelfMeal implements IMaidMeal {
             float total = nutrition + nutrition * saturationModifier * 2;
             // 原版的熟牛肉之类的一般在 20 左右（除了迷之炖菜为 34.2）
             if (maid.getRandom().nextInt(MAX_PROBABILITY) < total) {
-                if(stack.is(Items.HONEY_BOTTLE) || canInsertItem(stack)){
-                    ItemHandlerHelper.insertItemStacked(maid.getAvailableInv(true), new ItemStack(Items.GLASS_BOTTLE), false);
-                }
                 float healCount = Math.max(total / MAX_PROBABILITY, 1);
                 maid.heal(healCount);
                 NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.HEAL, stack.getUseDuration()));
