@@ -4,19 +4,16 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemMaidTooltip;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,8 +26,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ItemFilm extends AbstractFilmItem {
-    public static final String MAID_INFO = "MaidInfo";
-    private static final String CUSTOM_NAME = "CustomName";
 
     public ItemFilm() {
         super((new Item.Properties()).stacksTo(1));
@@ -66,17 +61,6 @@ public class ItemFilm extends AbstractFilmItem {
         }
     }
 
-    private static boolean hasMaidData(ItemStack stack) {
-        return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO).isEmpty();
-    }
-
-    private static CompoundTag getMaidData(ItemStack stack) {
-        if (hasMaidData(stack)) {
-            return Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO);
-        }
-        return new CompoundTag();
-    }
-
     private static void removeMaidSomeData(CompoundTag nbt) {
         nbt.remove(EntityMaid.MAID_BACKPACK_TYPE);
         nbt.remove(EntityMaid.MAID_INVENTORY_TAG);
@@ -109,19 +93,5 @@ public class ItemFilm extends AbstractFilmItem {
         if (!hasMaidData(stack)) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.film.no_data.desc").withStyle(ChatFormatting.DARK_RED));
         }
-    }
-
-    @Override
-    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        CompoundTag maidData = getMaidData(stack);
-        if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-            String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
-            String customName = "";
-            if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
-                customName = maidData.getString(CUSTOM_NAME);
-            }
-            return Optional.of(new ItemMaidTooltip(modelId, customName));
-        }
-        return Optional.empty();
     }
 }

@@ -71,7 +71,7 @@ public class WirelessIOContainer extends AbstractContainerMenu {
     public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack stack1 = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot.hasItem()) {
+        if (slot != null && slot.hasItem()) {
             ItemStack stack2 = slot.getItem();
             stack1 = stack2.copy();
             if (index < 27) {
@@ -94,7 +94,7 @@ public class WirelessIOContainer extends AbstractContainerMenu {
         return wirelessIO;
     }
 
-    private static class WirelessIOSlotItemHandler extends SlotItemHandler {
+    private class WirelessIOSlotItemHandler extends SlotItemHandler {
         private WirelessIOSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
             super(itemHandler, index, xPosition, yPosition);
         }

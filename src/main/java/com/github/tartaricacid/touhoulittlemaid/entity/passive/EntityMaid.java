@@ -1310,7 +1310,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     public boolean backpackHasDelay() {
-        return backpackDelay <= 0;
+        return backpackDelay > 0;
     }
 
     public String getModelId() {
@@ -1691,19 +1691,20 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
     }
 
-    public void placeItemBlock(InteractionHand hand, BlockPos placePos, Direction direction, ItemStack stack) {
+    public boolean placeItemBlock(InteractionHand hand, BlockPos placePos, Direction direction, ItemStack stack) {
         if (stack.getItem() instanceof BlockItem) {
-            ((BlockItem) stack.getItem()).place(new BlockPlaceContext(level, null, hand, stack,
-                    getBlockRayTraceResult(placePos, direction)));
+            return ((BlockItem) stack.getItem()).place(new BlockPlaceContext(level, null, hand, stack,
+                    getBlockRayTraceResult(placePos, direction))).consumesAction();
         }
+        return false;
     }
 
-    public void placeItemBlock(BlockPos placePos, Direction direction, ItemStack stack) {
-        placeItemBlock(InteractionHand.MAIN_HAND, placePos, direction, stack);
+    public boolean placeItemBlock(BlockPos placePos, Direction direction, ItemStack stack) {
+        return placeItemBlock(InteractionHand.MAIN_HAND, placePos, direction, stack);
     }
 
-    public void placeItemBlock(BlockPos placePos, ItemStack stack) {
-        placeItemBlock(placePos, Direction.UP, stack);
+    public boolean placeItemBlock(BlockPos placePos, ItemStack stack) {
+        return placeItemBlock(placePos, Direction.UP, stack);
     }
 
     private BlockHitResult getBlockRayTraceResult(BlockPos pos, Direction direction) {
