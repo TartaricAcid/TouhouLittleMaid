@@ -1076,10 +1076,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     private MenuProvider getGuiProvider(int tabIndex) {
-        if (tabIndex == TabIndex.CONFIG) {
-            return MaidConfigContainer.create(getId());
-        }else {
-            return this.getMaidBackpackType().getGuiProvider(getId());
+        switch (tabIndex) {
+            case TabIndex.CONFIG:
+                return MaidConfigContainer.create(getId());
+            case TabIndex.MAIN:
+            default:
+                return this.getMaidBackpackType().getGuiProvider(getId());
         }
     }
 
