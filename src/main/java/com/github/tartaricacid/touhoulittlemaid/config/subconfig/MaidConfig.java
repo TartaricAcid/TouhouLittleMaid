@@ -32,6 +32,8 @@ public final class MaidConfig {
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST;
 
+    public static ForgeConfigSpec.ConfigValue<String> MAID_HEAL_MEALS_BLOCK_LIST_MATCH;
+
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("maid");
 
@@ -102,6 +104,9 @@ public final class MaidConfig {
                 getItemId(Items.ROTTEN_FLESH),
                 getItemId(Items.SPIDER_EYE)
         ));
+
+        builder.comment("These items cannot be used as a maid's heal meals which matches");
+        MAID_HEAL_MEALS_BLOCK_LIST_MATCH = builder.define("MaidHealMealsBlockListMatch", "");
 
         builder.pop();
     }
