@@ -15,7 +15,7 @@ public class DefaultMaidHomeMeal implements IMaidMeal {
 
     @Override
     public boolean canMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
-        return stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.get());
+        return stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.get())&& !IMaidMeal.isBlockListMatch(stack,HOME_MEAL_MATCH);
     }
 
     @Override
