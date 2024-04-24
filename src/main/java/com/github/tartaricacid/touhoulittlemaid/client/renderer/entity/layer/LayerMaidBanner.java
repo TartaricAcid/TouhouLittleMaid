@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.event.client.EntityMaidRenderable;
 import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBannerModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
@@ -19,6 +20,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +29,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 
 import java.util.List;
 
-public class LayerMaidBanner extends RenderLayer<EntityMaid, BedrockModel<EntityMaid>> {
+public class LayerMaidBanner extends RenderLayer<Mob, BedrockModel<Mob>> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_banner.png");
     private final EntityMaidRenderer renderer;
     private final MaidBannerModel bannerModel;
@@ -39,10 +41,12 @@ public class LayerMaidBanner extends RenderLayer<EntityMaid, BedrockModel<Entity
     }
 
     @Override
-    public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+		EntityMaidRenderable maid = EntityMaidRenderable.convert(mob);
+		if (maid == null) return;
         ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof BannerItem bannerItem) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || mob.isSleeping() || mob.isInvisible()) {
                 return;
             }
             matrixStack.pushPose();

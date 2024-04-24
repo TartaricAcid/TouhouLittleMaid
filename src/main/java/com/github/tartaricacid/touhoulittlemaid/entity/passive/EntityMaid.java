@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
+import com.github.tartaricacid.touhoulittlemaid.api.event.client.EntityMaidRenderable;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
@@ -135,7 +136,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
+public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, EntityMaidRenderable {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
@@ -1264,7 +1265,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getBoundingBoxForCulling() {
-        BedrockModel<EntityMaid> model = CustomPackLoader.MAID_MODELS.getModel(getModelId()).orElse(null);
+        BedrockModel<Mob> model = CustomPackLoader.MAID_MODELS.getModel(getModelId()).orElse(null);
         if (model == null) {
             return super.getBoundingBoxForCulling();
         }
@@ -1274,10 +1275,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     @OnlyIn(Dist.CLIENT)
     public Vec3 getLeashOffset() {
-        Optional<BedrockModel<EntityMaid>> modelOptional = CustomPackLoader.MAID_MODELS.getModel(this.getModelId());
+        Optional<BedrockModel<Mob>> modelOptional = CustomPackLoader.MAID_MODELS.getModel(this.getModelId());
         Optional<MaidModelInfo> infoOptional = CustomPackLoader.MAID_MODELS.getInfo(this.getModelId());
         if (modelOptional.isPresent() && infoOptional.isPresent()) {
-            BedrockModel<EntityMaid> model = modelOptional.get();
+            BedrockModel<Mob> model = modelOptional.get();
             float renderEntityScale = infoOptional.get().getRenderEntityScale();
             if (model.hasHead()) {
                 BedrockPart head = model.getHead();
@@ -1789,4 +1790,20 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         }
         return Ingredient.of(defaultItem);
     }
+
+    @Override
+    public EntityMaid asStrictMaid() {
+        return this;
+    }
+
+    @Override
+    public Mob asEntity() {
+        return this;
+    }
+
+    @Override
+    public ItemStack getHeadBlock(Mob mob) {
+        return getMaidInv().getStackInSlot(5);
+    }
+
 }
