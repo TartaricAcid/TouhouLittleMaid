@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.EntityMaidRenderable;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -49,8 +49,7 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
             Item item = head.getItem();
             poseStack.pushPose();
             this.getParentModel().getHead().translateAndRotate(poseStack);
-            if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof AbstractSkullBlock) {
-                AbstractSkullBlock skullBlock = (AbstractSkullBlock) ((BlockItem) item).getBlock();
+            if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof AbstractSkullBlock skullBlock) {
                 poseStack.scale(1.1875F, -1.1875F, -1.1875F);
                 GameProfile gameprofile = getSkullGameProfile(head);
                 poseStack.translate(-0.5D, 0.0D, -0.5D);
@@ -61,9 +60,11 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
             }
             poseStack.popPose();
         }
-        EntityMaidRenderable maid = EntityMaidRenderable.convert(mob);
-        if (maid == null) return;
-        ItemStack stack = maid.getHeadBlock(mob);
+        IMaid maid = IMaid.convert(mob);
+        if (maid == null) {
+            return;
+        }
+        ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {

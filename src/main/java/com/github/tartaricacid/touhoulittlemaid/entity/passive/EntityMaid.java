@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
@@ -9,7 +10,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.EntityMaidRenderable;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
@@ -136,7 +136,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, EntityMaidRenderable {
+public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
@@ -1316,6 +1316,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, Enti
         return backpackDelay > 0;
     }
 
+    @Override
     public String getModelId() {
         return this.entityData.get(DATA_MODEL_ID);
     }
@@ -1515,6 +1516,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, Enti
         this.entityData.set(BACKPACK_ITEM_SHOW, stack);
     }
 
+    @Override
     public ItemStack getBackpackShowItem() {
         return this.entityData.get(BACKPACK_ITEM_SHOW);
     }
@@ -1532,6 +1534,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, Enti
         this.entityData.set(BACKPACK_TYPE, backpack.getId().toString());
     }
 
+    @Override
     public IMaidBackpack getMaidBackpackType() {
         ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
         return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
@@ -1800,10 +1803,4 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, Enti
     public Mob asEntity() {
         return this;
     }
-
-    @Override
-    public ItemStack getHeadBlock(Mob mob) {
-        return getMaidInv().getStackInSlot(5);
-    }
-
 }

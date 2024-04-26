@@ -1,12 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.EntityMaidRenderable;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBannerModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -42,8 +41,10 @@ public class LayerMaidBanner extends RenderLayer<Mob, BedrockModel<Mob>> {
 
     @Override
     public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		EntityMaidRenderable maid = EntityMaidRenderable.convert(mob);
-		if (maid == null) return;
+        IMaid maid = IMaid.convert(mob);
+        if (maid == null) {
+            return;
+        }
         ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof BannerItem bannerItem) {
             if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || mob.isSleeping() || mob.isInvisible()) {

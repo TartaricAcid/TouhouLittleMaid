@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;

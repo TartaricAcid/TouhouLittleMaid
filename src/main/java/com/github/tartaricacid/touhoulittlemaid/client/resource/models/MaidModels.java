@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource.models;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.world.entity.Mob;

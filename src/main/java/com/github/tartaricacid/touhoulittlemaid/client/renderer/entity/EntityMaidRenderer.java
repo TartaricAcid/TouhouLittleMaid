@@ -1,10 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.EntityMaidRenderable;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
@@ -45,8 +45,10 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
     @Override
     public void render(Mob entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
-        EntityMaidRenderable maid = EntityMaidRenderable.convert(entity);
-        if (maid == null) return;
+        IMaid maid = IMaid.convert(entity);
+        if (maid == null) {
+            return;
+        }
         // 读取默认模型，用于清除不存在模型的缓存残留
         CustomPackLoader.MAID_MODELS.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.model = model);
         CustomPackLoader.MAID_MODELS.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
@@ -69,6 +71,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
         // 渲染聊天气泡
         EntityMaid maidEntity = maid.asStrictMaid();
+        // 暂定只能女仆显示
         if (maidEntity != null && InGameMaidConfig.INSTANCE.isShowChatBubble()) {
             ChatBubbleRenderer.renderChatBubble(this, maidEntity, poseStack, bufferIn, packedLightIn);
         }

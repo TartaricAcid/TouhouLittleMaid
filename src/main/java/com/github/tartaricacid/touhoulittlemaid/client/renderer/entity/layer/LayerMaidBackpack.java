@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.EntityMaidRenderable;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
@@ -25,8 +25,10 @@ public class LayerMaidBackpack extends RenderLayer<Mob, BedrockModel<Mob>> {
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        EntityMaid maid = EntityMaidRenderable.convertToMaid(mob);
-        if (maid == null) return;
+        EntityMaid maid = IMaid.convertToMaid(mob);
+        if (maid == null) {
+            return;
+        }
         if (!renderer.getMainInfo().isShowBackpack() || mob.isSleeping() || mob.isInvisible()) {
             return;
         }
