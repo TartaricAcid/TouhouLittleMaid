@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.VanillaConfig;
+import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
 import com.google.common.collect.Lists;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -122,6 +123,30 @@ public class MenuIntegration {
                 .setDefaultValue(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_heal_meals_block_list.desc"))
                 .setSaveConsumer(l -> MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.set(l)).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_work_meals_block_list_regex.name"), MaidConfig.MAID_WORK_MEALS_BLOCK_LIST_REGEX.get())
+                .setDefaultValue(MaidConfig.MAID_WORK_MEALS_BLOCK_LIST_REGEX.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_work_meals_block_list_regex.desc"))
+                .setSaveConsumer(l -> {
+                    MaidConfig.MAID_WORK_MEALS_BLOCK_LIST_REGEX.set(l);
+                    MaidMealRegConfigEvent.handleConfig(MaidConfig.MAID_WORK_MEALS_BLOCK_LIST_REGEX.get(), MaidMealRegConfigEvent.WORK_MEAL_REGEX);
+                }).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_home_meals_block_list_regex.name"), MaidConfig.MAID_HOME_MEALS_BLOCK_LIST_REGEX.get())
+                .setDefaultValue(MaidConfig.MAID_HOME_MEALS_BLOCK_LIST_REGEX.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_home_meals_block_list_regex.desc"))
+                .setSaveConsumer(l -> {
+                    MaidConfig.MAID_HOME_MEALS_BLOCK_LIST_REGEX.set(l);
+                    MaidMealRegConfigEvent.handleConfig(MaidConfig.MAID_HOME_MEALS_BLOCK_LIST_REGEX.get(), MaidMealRegConfigEvent.HOME_MEAL_REGEX);
+                }).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_heal_meals_block_list_regex.name"), MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.get())
+                .setDefaultValue(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_heal_meals_block_list_regex.desc"))
+                .setSaveConsumer(l -> {
+                    MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.set(l);
+                    MaidMealRegConfigEvent.handleConfig(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.get(), MaidMealRegConfigEvent.HEAL_MEAL_REGEX);
+                }).build());
     }
 
     private static void chairConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
