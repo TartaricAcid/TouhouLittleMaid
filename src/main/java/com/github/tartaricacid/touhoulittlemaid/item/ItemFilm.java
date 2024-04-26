@@ -30,9 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ItemFilm extends Item {
-    public static final String MAID_INFO = "MaidInfo";
-    private static final String CUSTOM_NAME = "CustomName";
+public class ItemFilm extends AbstractStoreMaidItem {
 
     public ItemFilm() {
         super((new Item.Properties()).stacksTo(1));
@@ -69,17 +67,6 @@ public class ItemFilm extends Item {
         }
     }
 
-    private static boolean hasMaidData(ItemStack stack) {
-        return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO).isEmpty();
-    }
-
-    private static CompoundTag getMaidData(ItemStack stack) {
-        if (hasMaidData(stack)) {
-            return Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO);
-        }
-        return new CompoundTag();
-    }
-
     private static void removeMaidSomeData(CompoundTag nbt) {
         nbt.remove(EntityMaid.MAID_BACKPACK_TYPE);
         nbt.remove(EntityMaid.MAID_INVENTORY_TAG);
@@ -103,21 +90,6 @@ public class ItemFilm extends Item {
     }
 
     @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.isInvulnerable()) {
-            entity.setInvulnerable(true);
-        }
-        Vec3 position = entity.position();
-        int minY = entity.level.getMinBuildHeight();
-        if (position.y < minY) {
-            entity.setNoGravity(true);
-            entity.setDeltaMovement(Vec3.ZERO);
-            entity.setPos(position.x, minY, position.z);
-        }
-        return super.onEntityItemUpdate(stack, entity);
-    }
-
-    @Override
     public boolean isFoil(ItemStack stack) {
         return true;
     }
@@ -127,19 +99,5 @@ public class ItemFilm extends Item {
         if (!hasMaidData(stack)) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.film.no_data.desc").withStyle(ChatFormatting.DARK_RED));
         }
-    }
-
-    @Override
-    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        CompoundTag maidData = getMaidData(stack);
-        if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-            String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
-            String customName = "";
-            if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
-                customName = maidData.getString(CUSTOM_NAME);
-            }
-            return Optional.of(new ItemMaidTooltip(modelId, customName));
-        }
-        return Optional.empty();
     }
 }

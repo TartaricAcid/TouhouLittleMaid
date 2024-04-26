@@ -27,23 +27,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ItemPhoto extends Item {
+public class ItemPhoto extends AbstractStoreMaidItem{
     private static final String MAID_INFO = "MaidInfo";
     private static final String CUSTOM_NAME = "CustomName";
 
     public ItemPhoto() {
         super((new Properties()).stacksTo(1));
-    }
-
-    public static boolean hasMaidData(ItemStack stack) {
-        return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO).isEmpty();
-    }
-
-    public static CompoundTag getMaidData(ItemStack stack) {
-        if (hasMaidData(stack)) {
-            return Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO);
-        }
-        return new CompoundTag();
     }
 
     @Override
@@ -93,21 +82,6 @@ public class ItemPhoto extends Item {
     }
 
     @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.isInvulnerable()) {
-            entity.setInvulnerable(true);
-        }
-        Vec3 position = entity.position();
-        int minY = entity.level.getMinBuildHeight();
-        if (position.y < minY) {
-            entity.setNoGravity(true);
-            entity.setDeltaMovement(Vec3.ZERO);
-            entity.setPos(position.x, minY, position.z);
-        }
-        return super.onEntityItemUpdate(stack, entity);
-    }
-
-    @Override
     public boolean canFitInsideContainerItems() {
         return false;
     }
@@ -117,19 +91,5 @@ public class ItemPhoto extends Item {
         if (!hasMaidData(stack)) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.photo.no_data.desc").withStyle(ChatFormatting.DARK_RED));
         }
-    }
-
-    @Override
-    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        CompoundTag maidData = getMaidData(stack);
-        if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-            String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
-            String customName = "";
-            if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
-                customName = maidData.getString(CUSTOM_NAME);
-            }
-            return Optional.of(new ItemMaidTooltip(modelId, customName));
-        }
-        return Optional.empty();
     }
 }

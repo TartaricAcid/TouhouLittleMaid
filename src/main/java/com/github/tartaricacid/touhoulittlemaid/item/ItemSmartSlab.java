@@ -36,7 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ItemSmartSlab extends Item {
+public class ItemSmartSlab extends AbstractStoreMaidItem{
     private static final String MAID_INFO = "MaidInfo";
     private static final String MAID_OWNER = "Owner";
     private static final String CUSTOM_NAME = "CustomName";
@@ -49,17 +49,6 @@ public class ItemSmartSlab extends Item {
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
         maid.saveWithoutId(stack.getOrCreateTagElement(MAID_INFO));
-    }
-
-    public static boolean hasMaidData(ItemStack stack) {
-        return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO).isEmpty();
-    }
-
-    public static CompoundTag getMaidData(ItemStack stack) {
-        if (hasMaidData(stack)) {
-            return Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO);
-        }
-        return new CompoundTag();
     }
 
     @Override
@@ -156,21 +145,6 @@ public class ItemSmartSlab extends Item {
     }
 
     @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.isInvulnerable()) {
-            entity.setInvulnerable(true);
-        }
-        Vec3 position = entity.position();
-        int minY = entity.level.getMinBuildHeight();
-        if (position.y < minY) {
-            entity.setNoGravity(true);
-            entity.setDeltaMovement(Vec3.ZERO);
-            entity.setPos(position.x, minY, position.z);
-        }
-        return super.onEntityItemUpdate(stack, entity);
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (this.type == Type.INIT) {
@@ -184,15 +158,7 @@ public class ItemSmartSlab extends Item {
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         if (this.type == Type.HAS_MAID) {
-            CompoundTag maidData = getMaidData(stack);
-            if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-                String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
-                String customName = "";
-                if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
-                    customName = maidData.getString(CUSTOM_NAME);
-                }
-                return Optional.of(new ItemMaidTooltip(modelId, customName));
-            }
+            super.getTooltipImage(stack);
         }
         return Optional.empty();
     }
