@@ -12,6 +12,7 @@ import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -26,7 +27,11 @@ public final class CompatRegistry {
         event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
         event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
         event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MenuIntegration::registerModsPage)));
-        event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClothConfigScreen::registerNoClothConfigPage));
+        event.enqueueWork(() -> {
+            if (FMLEnvironment.dist == Dist.CLIENT) {
+                ClothConfigScreen.registerNoClothConfigPage();
+            }
+        });
         event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
     }
 
