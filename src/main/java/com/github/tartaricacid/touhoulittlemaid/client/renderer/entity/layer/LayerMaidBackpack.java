@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
@@ -11,8 +12,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.world.entity.Mob;
 
-public class LayerMaidBackpack extends RenderLayer<EntityMaid, BedrockModel<EntityMaid>> {
+public class LayerMaidBackpack extends RenderLayer<Mob, BedrockModel<Mob>> {
     private final EntityMaidRenderer renderer;
 
     public LayerMaidBackpack(EntityMaidRenderer renderer, EntityModelSet modelSet) {
@@ -22,8 +24,12 @@ public class LayerMaidBackpack extends RenderLayer<EntityMaid, BedrockModel<Enti
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        EntityMaid maid = IMaid.convertToMaid(mob);
+        if (maid == null) {
+            return;
+        }
+        if (!renderer.getMainInfo().isShowBackpack() || mob.isSleeping() || mob.isInvisible()) {
             return;
         }
         // 稍微缩放，避免整数倍的 z-flight
