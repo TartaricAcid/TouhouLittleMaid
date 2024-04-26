@@ -32,9 +32,9 @@ public final class MaidConfig {
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST;
 
-    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_WORK_MEALS_BLOCK_LIST_MATCH;
-    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST_MATCH;
-    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST_MATCH;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_WORK_MEALS_BLOCK_LIST_REGEX;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST_REGEX;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST_REGEX;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("maid");
@@ -107,16 +107,16 @@ public final class MaidConfig {
                 getItemId(Items.SPIDER_EYE)
         ));
 
-        builder.comment("These items cannot be used as a maid's work meals which match the pattern");
-        MAID_WORK_MEALS_BLOCK_LIST_MATCH = builder.define("MaidWorkMealsBlockListMatch", Lists.newArrayList(
+        builder.comment("These items cannot be used as a maid's work meals which match the regex");
+        MAID_WORK_MEALS_BLOCK_LIST_REGEX = builder.define("MaidWorkMealsBlockListRegEx", Lists.newArrayList(
         ));
 
-        builder.comment("These items cannot be used as a maid's home meals which match the pattern");
-        MAID_HOME_MEALS_BLOCK_LIST_MATCH = builder.define("MaidHomeMealsBlockListMatch", Lists.newArrayList(
+        builder.comment("These items cannot be used as a maid's home meals which match the regex");
+        MAID_HOME_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHomeMealsBlockListRegEx", Lists.newArrayList(
         ));
 
-        builder.comment("These items cannot be used as a maid's heal meals which match the pattern");
-        MAID_HEAL_MEALS_BLOCK_LIST_MATCH = builder.define("MaidHealMealsBlockListMatch", Lists.newArrayList(
+        builder.comment("These items cannot be used as a maid's heal meals which match the regex");
+        MAID_HEAL_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHealMealsBlockListRegEx", Lists.newArrayList(
         ));
 
         builder.pop();
