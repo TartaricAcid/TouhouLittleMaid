@@ -12,7 +12,9 @@ import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import vazkii.patchouli.common.item.ItemModBook;
@@ -78,7 +80,9 @@ public class InitCreativeTabs {
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());
                 output.accept(BROOM.get());
-                ItemEntityPlaceholder.fillItemCategory(output);
+                if (FMLEnvironment.dist == Dist.CLIENT) {
+                    ItemEntityPlaceholder.fillItemCategory(output);
+                }
                 output.accept(getEnchantmentBook(InitEnchantments.IMPEDING));
                 output.accept(getEnchantmentBook(InitEnchantments.SPEEDY));
                 output.accept(getEnchantmentBook(InitEnchantments.ENDERS_ENDER));
