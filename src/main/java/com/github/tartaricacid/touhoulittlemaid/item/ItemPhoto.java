@@ -20,8 +20,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemPhoto extends AbstractStoreMaidItem{
-
+public class ItemPhoto extends AbstractStoreMaidItem {
     public ItemPhoto() {
         super((new Properties()).stacksTo(1));
     }

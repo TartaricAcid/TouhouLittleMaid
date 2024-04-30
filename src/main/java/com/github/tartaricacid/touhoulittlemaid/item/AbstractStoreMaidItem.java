@@ -16,15 +16,16 @@ import java.util.Optional;
 public abstract class AbstractStoreMaidItem extends Item {
     static final String MAID_INFO = "MaidInfo";
     static final String CUSTOM_NAME = "CustomName";
-    public AbstractStoreMaidItem(Properties pProperties) {
-        super(pProperties);
+
+    public AbstractStoreMaidItem(Properties properties) {
+        super(properties);
     }
 
-    static boolean hasMaidData(ItemStack stack) {
+    public static boolean hasMaidData(ItemStack stack) {
         return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO).isEmpty();
     }
 
-    static CompoundTag getMaidData(ItemStack stack) {
+    public static CompoundTag getMaidData(ItemStack stack) {
         if (hasMaidData(stack)) {
             return Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO);
         }

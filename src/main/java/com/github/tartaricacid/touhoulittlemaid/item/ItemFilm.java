@@ -26,7 +26,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ItemFilm extends AbstractStoreMaidItem {
-
     public ItemFilm() {
         super((new Item.Properties()).stacksTo(1));
     }

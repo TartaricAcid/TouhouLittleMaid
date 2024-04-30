@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ItemSmartSlab extends AbstractStoreMaidItem{
+public class ItemSmartSlab extends AbstractStoreMaidItem {
     private static final String MAID_OWNER = "Owner";
     private final Type type;
 
