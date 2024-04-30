@@ -1141,6 +1141,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
+    public ItemStack eat(Level level, ItemStack food) {
+        ItemStack foodAfterEat = super.eat(level, food);
+        MinecraftForge.EVENT_BUS.post(new MaidAfterEatEvent(this, foodAfterEat));
+        return foodAfterEat;
+    }
+
+    @Override
     protected boolean isAlwaysExperienceDropper() {
         return true;
     }
