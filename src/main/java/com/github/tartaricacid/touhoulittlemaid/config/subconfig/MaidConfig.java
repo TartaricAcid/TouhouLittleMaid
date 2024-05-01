@@ -125,10 +125,10 @@ public final class MaidConfig {
         MAID_HEAL_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHealMealsBlockListRegEx", Lists.newArrayList(
         ));
 
-        builder.comment("This define which type of food class");
+        builder.comment("This define which type of food class, §cmust be used with Maid Eaten Return Container List, §ethere are a one-to-one correspondence between the two.");
         MAID_EATEN_CLASS_LIST = builder.define("MaidEatenClassList", getEatenReturnInfo().getFirst());
 
-        builder.comment("This define which type of food returns what kind of container");
+        builder.comment("These items will be returned to the container when the maid eat them, §cmust be used with Maid Eaten Class List, §ethere are a one-to-one correspondence between the two.");
         MAID_EATEN_RETURN_CONTAINER_LIST = builder.define("MaidEatenReturnContainerList", getEatenReturnInfo().getSecond());
 
         builder.pop();
