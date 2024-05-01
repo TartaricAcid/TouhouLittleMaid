@@ -3,15 +3,16 @@ package com.github.tartaricacid.touhoulittlemaid.event;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.google.common.base.Preconditions;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +34,12 @@ public class MaidEatenRetConEvent {
     public static void handleConfig(List<String> classList, List<String> itemList, Map<Class<?>, ItemStack> classItemStackHashMap) {
         classItemStackHashMap.clear();
         if (classList.size() != itemList.size()) {
-            classItemStackHashMap.putAll(MaidConfig.getDefaultRetCon());
+            classItemStackHashMap.putAll(getDefaultRetCon());
 
-            MaidConfig.getCompatRetConMap().forEach((className, itemId) -> {
+            getCompatRetConMap().forEach((className, itemId) -> {
                 try {
                     Class<?> aClass = Class.forName(className);
                     ItemStack itemStack = getItemStack(itemId);
-                    Preconditions.checkNotNull(itemStack);
                     classItemStackHashMap.put(aClass, itemStack);
                 } catch (ClassNotFoundException e) {
                     TouhouLittleMaid.LOGGER.error(e);
@@ -57,7 +57,6 @@ public class MaidEatenRetConEvent {
                 Class<?> clazz = Class.forName(classList.get(i));
                 String itemId = itemList.get(i);
                 ItemStack itemStack = getItemStack(itemId);
-                Preconditions.checkNotNull(itemStack);
                 classItemStackHashMap.put(clazz, itemStack);
             } catch (Exception e) {
                 TouhouLittleMaid.LOGGER.error(e);
@@ -65,19 +64,58 @@ public class MaidEatenRetConEvent {
         }
     }
 
+    public static Map<Class<?>, ItemStack> getDefaultRetCon() {
+        Map<Class<?>, ItemStack> classItemStackLinkedHashMap = new LinkedHashMap<>();
+        classItemStackLinkedHashMap.put(BowlFoodItem.class, Items.BOWL.getDefaultInstance());
+        classItemStackLinkedHashMap.put(HoneyBottleItem.class, Items.GLASS_BOTTLE.getDefaultInstance());
+        return classItemStackLinkedHashMap;
+    }
 
-    @Nullable
-    private static ItemStack getItemStack(String itemId) {
-        ResourceLocation location;
-        if (itemId.contains(":")) {
-            location = new ResourceLocation(itemId.split(":")[0], itemId.split(":")[1]);
-        } else {
-            location = new ResourceLocation(itemId);
+    public static Map<String, String> getCompatRetConMap() {
+        Map<String, String> stringStringLinkedHashMap = new LinkedHashMap<>();
+        // 注意：子类一定要在前面
+        // 农夫乐事系列
+        if (ModList.get().isLoaded("miners_delight")) {
+            stringStringLinkedHashMap.put("com.sammy.minersdelight.content.item.CopperCupFoodItem", "miners_delight:copper_cup");
         }
-        Item value = ForgeRegistries.ITEMS.getValue(location);
-        if (value != null) {
-            return new ItemStack(value);
+        if (ModList.get().isLoaded("farmersdelight")) {
+            stringStringLinkedHashMap.put("vectorwing.farmersdelight.common.item.DrinkableItem", getItemId(Items.GLASS_BOTTLE));
+            stringStringLinkedHashMap.put("vectorwing.farmersdelight.common.item.ConsumableItem", getItemId(Items.BOWL));
         }
-        return null;
+
+        // 其他
+
+        return stringStringLinkedHashMap;
+    }
+
+    public static Pair<List<String>, List<String>> getEatenReturnInfo() {
+        List<String> classList = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
+
+        getDefaultRetCon().forEach((class1, itemStack) -> {
+            classList.add(class1.getName());
+            stringList.add(getItemId(itemStack.getItem()));
+        });
+
+        getCompatRetConMap().forEach((className, itemId) -> {
+            classList.add(className);
+            stringList.add(itemId);
+        });
+
+        return new Pair<>(classList, stringList);
+    }
+
+    public static String getItemId(Item item) {
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+        Preconditions.checkNotNull(key);
+        return key.toString();
+    }
+
+
+    public static ItemStack getItemStack(String itemId) {
+        ResourceLocation resourceLocation = new ResourceLocation(itemId);
+        Item value = ForgeRegistries.ITEMS.getValue(resourceLocation);
+        Preconditions.checkNotNull(value);
+        return new ItemStack(value);
     }
 }

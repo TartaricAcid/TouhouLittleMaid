@@ -2,16 +2,15 @@ package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
+
+import static com.github.tartaricacid.touhoulittlemaid.event.MaidEatenRetConEvent.getEatenReturnInfo;
 
 public final class MaidConfig {
     public static final String TAG_PREFIX = "#";
@@ -134,48 +133,6 @@ public final class MaidConfig {
         builder.pop();
     }
 
-    public static LinkedHashMap<Class<?>, ItemStack> getDefaultRetCon() {
-        LinkedHashMap<Class<?>, ItemStack> classItemStackLinkedHashMap = new LinkedHashMap<>();
-        classItemStackLinkedHashMap.put(BowlFoodItem.class, Items.BOWL.getDefaultInstance());
-        classItemStackLinkedHashMap.put(HoneyBottleItem.class, Items.GLASS_BOTTLE.getDefaultInstance());
-        return classItemStackLinkedHashMap;
-    }
-
-    public static LinkedHashMap<String, String> getCompatRetConMap() {
-        LinkedHashMap<String, String> stringStringLinkedHashMap = new LinkedHashMap<>();
-        // 注意：子类一定要在前面
-        // 农夫乐事系列
-        if (ModList.get().isLoaded("miners_delight")){
-            stringStringLinkedHashMap.put("com.sammy.minersdelight.content.item.CopperCupFoodItem", "miners_delight:copper_cup");
-        }
-        if (ModList.get().isLoaded("farmersdelight")){
-            stringStringLinkedHashMap.put("vectorwing.farmersdelight.common.item.DrinkableItem", getItemId(Items.GLASS_BOTTLE));
-            stringStringLinkedHashMap.put("vectorwing.farmersdelight.common.item.ConsumableItem", getItemId(Items.BOWL));
-        }
-
-        // 其他
-
-        return stringStringLinkedHashMap;
-    }
-
-    public static Pair<List<String>, List<String>> getEatenReturnInfo() {
-        Pair<List<String>, List<String>> list;
-        List<String> classList = new ArrayList<>();
-        List<String> stringList = new ArrayList<>();
-
-        getDefaultRetCon().forEach((class1, itemStack) ->{
-            classList.add(class1.getName());
-            stringList.add(getItemId(itemStack.getItem()));
-        });
-
-        getCompatRetConMap().forEach((className, itemId) ->{
-            classList.add(className);
-            stringList.add(itemId);
-        });
-
-        list = new Pair<>(classList, stringList);
-        return list;
-    }
 
     private static String getItemId(Item item) {
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
