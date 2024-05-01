@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.VanillaConfig;
+import com.github.tartaricacid.touhoulittlemaid.event.MaidEatenRetConEvent;
 import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
 import com.google.common.collect.Lists;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -146,6 +147,22 @@ public class MenuIntegration {
                 .setSaveConsumer(l -> {
                     MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.set(l);
                     MaidMealRegConfigEvent.handleConfig(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.get(), MaidMealRegConfigEvent.HEAL_MEAL_REGEX);
+                }).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_eaten_class_list.name"), MaidConfig.MAID_EATEN_CLASS_LIST.get())
+                .setDefaultValue(MaidConfig.MAID_EATEN_CLASS_LIST.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_eaten_class_list.desc"))
+                .setSaveConsumer(l -> {
+                    MaidConfig.MAID_EATEN_CLASS_LIST.set(l);
+                    MaidEatenRetConEvent.handleConfig(MaidConfig.MAID_EATEN_CLASS_LIST.get(), MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.get(), MaidEatenRetConEvent.EATEN_RETURN_MAP);
+                }).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_eaten_return_container_list.name"), MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.get())
+                .setDefaultValue(MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_eaten_return_container_list.desc"))
+                .setSaveConsumer(l -> {
+                    MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.set(l);
+                    MaidEatenRetConEvent.handleConfig(MaidConfig.MAID_EATEN_CLASS_LIST.get(), MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.get(), MaidEatenRetConEvent.EATEN_RETURN_MAP);
                 }).build());
     }
 
