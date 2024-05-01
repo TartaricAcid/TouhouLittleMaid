@@ -161,7 +161,7 @@ public class MenuIntegration {
                 .setDefaultValue(MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_eaten_return_container_list.desc"))
                 .setSaveConsumer(l -> {
-                    MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.set(l);
+                    MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.set(l);
                     MaidEatenRetConEvent.handleConfig(MaidConfig.MAID_EATEN_CLASS_LIST.get(), MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.get(), MaidEatenRetConEvent.EATEN_RETURN_MAP);
                 }).build());
     }
