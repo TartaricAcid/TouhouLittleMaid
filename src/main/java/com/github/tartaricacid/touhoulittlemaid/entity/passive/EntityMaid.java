@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
@@ -138,7 +139,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
+public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
@@ -1164,6 +1165,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     }
 
     @Override
+    public ItemStack eat(Level level, ItemStack food) {
+        ItemStack foodAfterEat = super.eat(level, food);
+        MinecraftForge.EVENT_BUS.post(new MaidAfterEatEvent(this, foodAfterEat));
+        return foodAfterEat;
+    }
+
+    @Override
     protected boolean isAlwaysExperienceDropper() {
         return true;
     }
@@ -1288,7 +1296,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getBoundingBoxForCulling() {
-        BedrockModel<EntityMaid> model = CustomPackLoader.MAID_MODELS.getModel(getModelId()).orElse(null);
+        BedrockModel<Mob> model = CustomPackLoader.MAID_MODELS.getModel(getModelId()).orElse(null);
         if (model == null) {
             return super.getBoundingBoxForCulling();
         }
@@ -1298,10 +1306,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
     @Override
     @OnlyIn(Dist.CLIENT)
     public Vec3 getLeashOffset() {
-        Optional<BedrockModel<EntityMaid>> modelOptional = CustomPackLoader.MAID_MODELS.getModel(this.getModelId());
+        Optional<BedrockModel<Mob>> modelOptional = CustomPackLoader.MAID_MODELS.getModel(this.getModelId());
         Optional<MaidModelInfo> infoOptional = CustomPackLoader.MAID_MODELS.getInfo(this.getModelId());
         if (modelOptional.isPresent() && infoOptional.isPresent()) {
-            BedrockModel<EntityMaid> model = modelOptional.get();
+            BedrockModel<Mob> model = modelOptional.get();
             float renderEntityScale = infoOptional.get().getRenderEntityScale();
             if (model.hasHead()) {
                 BedrockPart head = model.getHead();
@@ -1339,6 +1347,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         return backpackDelay > 0;
     }
 
+    @Override
     public String getModelId() {
         return this.entityData.get(DATA_MODEL_ID);
     }
@@ -1541,6 +1550,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         return schedulePos;
     }
 
+    @Override
     public ItemStack getBackpackShowItem() {
         return this.entityData.get(BACKPACK_ITEM_SHOW);
     }
@@ -1549,6 +1559,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
         this.entityData.set(BACKPACK_ITEM_SHOW, stack);
     }
 
+    @Override
     public IMaidBackpack getMaidBackpackType() {
         ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
         return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
@@ -1748,6 +1759,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob {
                         (double) pos.getY() + 0.5D + (double) direction.getStepY() * 0.5D,
                         (double) pos.getZ() + 0.5D + (double) direction.getStepZ() * 0.5D),
                 direction, pos, false);
+    }
+
+    @Override
+    public EntityMaid asStrictMaid() {
+        return this;
+    }
+
+    @Override
+    public Mob asEntity() {
+        return this;
     }
 
     @Deprecated

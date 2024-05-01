@@ -38,9 +38,9 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
     private final String customName;
 
     public ClientMaidTooltip(ItemMaidTooltip tooltip) {
-        this.info = CustomPackLoader.MAID_MODELS.getInfo(tooltip.getModelId()).orElse(null);
-        this.name = (this.info == null ? new TextComponent("") : new TranslatableComponent(ParseI18n.getI18nKey(info.getName())));
-        this.customName = tooltip.getCustomName();
+        this.info = CustomPackLoader.MAID_MODELS.getInfo(tooltip.modelId()).orElse(null);
+        this.name = this.info == null ? new TextComponent("") : new TranslatableComponent((ParseI18n.getI18nKey(info.getName())));
+        this.customName = tooltip.customName();
     }
 
     @Override

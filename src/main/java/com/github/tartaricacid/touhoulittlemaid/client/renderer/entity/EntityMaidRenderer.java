@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,7 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<EntityMaid>> {
+public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private final GeckoEntityMaidRenderer geckoEntityMaidRenderer;
@@ -42,15 +44,19 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
     }
 
     @Override
-    public void render(EntityMaid entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(Mob entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
+        IMaid maid = IMaid.convert(entity);
+        if (maid == null) {
+            return;
+        }
         // 读取默认模型，用于清除不存在模型的缓存残留
         CustomPackLoader.MAID_MODELS.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.model = model);
         CustomPackLoader.MAID_MODELS.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
         CustomPackLoader.MAID_MODELS.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
 
         MaidModels.ModelData eventModelData = new MaidModels.ModelData(model, mainInfo, mainAnimations);
-        if (MinecraftForge.EVENT_BUS.post(new RenderMaidEvent(entity, eventModelData))) {
-            BedrockModel<EntityMaid> bedrockModel = eventModelData.getModel();
+        if (MinecraftForge.EVENT_BUS.post(new RenderMaidEvent(maid, eventModelData))) {
+            BedrockModel<Mob> bedrockModel = eventModelData.getModel();
             if (bedrockModel != null) {
                 this.model = bedrockModel;
             }
@@ -58,14 +64,16 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
             this.mainAnimations = eventModelData.getAnimations();
         } else {
             // 通过模型 id 获取对应数据
-            CustomPackLoader.MAID_MODELS.getModel(entity.getModelId()).ifPresent(model -> this.model = model);
-            CustomPackLoader.MAID_MODELS.getInfo(entity.getModelId()).ifPresent(info -> this.mainInfo = info);
-            CustomPackLoader.MAID_MODELS.getAnimation(entity.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
+            CustomPackLoader.MAID_MODELS.getModel(maid.getModelId()).ifPresent(model -> this.model = model);
+            CustomPackLoader.MAID_MODELS.getInfo(maid.getModelId()).ifPresent(info -> this.mainInfo = info);
+            CustomPackLoader.MAID_MODELS.getAnimation(maid.getModelId()).ifPresent(animations -> this.mainAnimations = animations);
         }
 
         // 渲染聊天气泡
-        if (InGameMaidConfig.INSTANCE.isShowChatBubble()) {
-            ChatBubbleRenderer.renderChatBubble(this, entity, poseStack, bufferIn, packedLightIn);
+        EntityMaid maidEntity = maid.asStrictMaid();
+        // 暂定只能女仆显示
+        if (maidEntity != null && InGameMaidConfig.INSTANCE.isShowChatBubble()) {
+            ChatBubbleRenderer.renderChatBubble(this, maidEntity, poseStack, bufferIn, packedLightIn);
         }
 
         // GeckoLib 接管渲染
@@ -83,13 +91,13 @@ public class EntityMaidRenderer extends MobRenderer<EntityMaid, BedrockModel<Ent
     }
 
     @Override
-    protected void scale(EntityMaid maid, PoseStack poseStack, float partialTickTime) {
+    protected void scale(Mob maid, PoseStack poseStack, float partialTickTime) {
         float scale = mainInfo.getRenderEntityScale();
         poseStack.scale(scale, scale, scale);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMaid maid) {
+    public ResourceLocation getTextureLocation(Mob maid) {
         if (mainInfo == null) {
             return DEFAULT_TEXTURE;
         }

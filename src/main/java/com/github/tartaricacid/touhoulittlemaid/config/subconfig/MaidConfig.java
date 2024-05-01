@@ -32,6 +32,10 @@ public final class MaidConfig {
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST;
 
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_WORK_MEALS_BLOCK_LIST_REGEX;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST_REGEX;
+    public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST_REGEX;
+
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("maid");
 
@@ -101,6 +105,18 @@ public final class MaidConfig {
                 getItemId(Items.POISONOUS_POTATO),
                 getItemId(Items.ROTTEN_FLESH),
                 getItemId(Items.SPIDER_EYE)
+        ));
+
+        builder.comment("These items cannot be used as a maid's work meals which match the regex");
+        MAID_WORK_MEALS_BLOCK_LIST_REGEX = builder.define("MaidWorkMealsBlockListRegEx", Lists.newArrayList(
+        ));
+
+        builder.comment("These items cannot be used as a maid's home meals which match the regex");
+        MAID_HOME_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHomeMealsBlockListRegEx", Lists.newArrayList(
+        ));
+
+        builder.comment("These items cannot be used as a maid's heal meals which match the regex");
+        MAID_HEAL_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHealMealsBlockListRegEx", Lists.newArrayList(
         ));
 
         builder.pop();

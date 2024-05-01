@@ -14,6 +14,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -58,7 +59,7 @@ public final class PlayerMaidModels {
         };
     }
 
-    public static BedrockModel<EntityMaid> getPlayerMaidModel(String name) {
+    public static BedrockModel<Mob> getPlayerMaidModel(String name) {
         GameProfile newProfile = null;
         Minecraft minecraft = Minecraft.getInstance();
 

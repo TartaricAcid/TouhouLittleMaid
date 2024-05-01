@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -56,7 +57,7 @@ public class SlashBladeRender {
         renderSlashBlade(matrixStack, bufferIn, lightIn, stack);
     }
 
-    public static void renderMaidMainhandSlashBlade(EntityMaid maid, BedrockModel<EntityMaid> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
+    public static void renderMaidMainhandSlashBlade(Mob maid, BedrockModel<Mob> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
         if (stack.is(SBItems.slashblade)) {
             matrixStack.pushPose();
             // 主手的刀渲染在左边
@@ -139,7 +140,7 @@ public class SlashBladeRender {
         }
     }
 
-    public static void renderMaidOffhandSlashBlade(BedrockModel<EntityMaid> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
+    public static void renderMaidOffhandSlashBlade(BedrockModel<Mob> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.is(SBItems.slashblade)) {
             matrixStack.pushPose();
             // 副手的刀渲染在右边

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
@@ -20,7 +20,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +34,7 @@ import net.minecraftforge.common.IPlantable;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class GeckoLayerMaidBipedHead<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
+public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLayerRenderer<T> {
     private static final String SKULL_OWNER_TAG = "SkullOwner";
     private final GeckoEntityMaidRenderer maidRenderer;
     private final Map<SkullBlock.Type, SkullModelBase> skullModels;
@@ -46,9 +46,9 @@ public class GeckoLayerMaidBipedHead<T extends LivingEntity & IAnimatable> exten
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entityLivingBaseIn instanceof EntityMaid maid && this.maidRenderer.getGeoModel() != null) {
-            ItemStack head = maid.getItemBySlot(EquipmentSlot.HEAD);
+    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (this.maidRenderer.getGeoModel() != null) {
+            ItemStack head = entity.getItemBySlot(EquipmentSlot.HEAD);
             GeoModel geoModel = this.maidRenderer.getGeoModel();
             if (!head.isEmpty() && maidRenderer.getMainInfo().isShowCustomHead() && !geoModel.headBones.isEmpty()) {
                 Item item = head.getItem();
@@ -66,11 +66,15 @@ public class GeckoLayerMaidBipedHead<T extends LivingEntity & IAnimatable> exten
                 }
                 poseStack.popPose();
             }
-            ItemStack stack = maid.getMaidInv().getStackInSlot(5);
+            IMaid maid = IMaid.convert(entity);
+            if (maid == null) {
+                return;
+            }
+            ItemStack stack = maid.getBackpackShowItem();
             if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && !geoModel.headBones.isEmpty()) {
                 Block block = ((BlockItem) stack.getItem()).getBlock();
                 if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
-                    BlockState plant = ((IPlantable) block).getPlant(maid.level, maid.blockPosition());
+                    BlockState plant = ((IPlantable) block).getPlant(entity.level, entity.blockPosition());
                     poseStack.pushPose();
                     this.translateToHead(poseStack, geoModel);
                     poseStack.scale(-0.8F, 0.8F, -0.8F);

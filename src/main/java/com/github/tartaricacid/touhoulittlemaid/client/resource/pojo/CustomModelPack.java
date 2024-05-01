@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.Md5Utils;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -124,7 +124,7 @@ public class CustomModelPack<T extends IModelInfo> {
             List<ResourceLocation> extraTextures = item.getExtraTextures();
             if (extraTextures != null && !extraTextures.isEmpty()) {
                 extraTextures.forEach(r -> {
-                    String suffix = DigestUtils.md5Hex(r.getPath()).toLowerCase(Locale.US);
+                    String suffix = Md5Utils.md5Hex(r.getPath()).toLowerCase(Locale.US);
                     ResourceLocation newModelId = new ResourceLocation(modelId.getNamespace(), modelId.getPath() + "_" + suffix);
                     newModelList.add(item.extra(newModelId, r));
                 });

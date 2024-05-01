@@ -30,16 +30,16 @@ public class MaidMealManager {
         ALL_MEAL_TYPES = ImmutableMap.copyOf(ALL_MEAL_TYPES);
     }
 
+    public void addMaidMeal(MaidMealType type, IMaidMeal maidMeal) {
+        ALL_MEAL_TYPES.putIfAbsent(type, Lists.newArrayList());
+        ALL_MEAL_TYPES.get(type).add(maidMeal);
+    }
+
     public static List<IMaidMeal> getMaidMeals(MaidMealType type) {
         List<IMaidMeal> maidMeals = ALL_MEAL_TYPES.get(type);
         if (maidMeals == null) {
             return Collections.emptyList();
         }
         return maidMeals;
-    }
-
-    public void addMaidMeal(MaidMealType type, IMaidMeal maidMeal) {
-        ALL_MEAL_TYPES.putIfAbsent(type, Lists.newArrayList());
-        ALL_MEAL_TYPES.get(type).add(maidMeal);
     }
 }

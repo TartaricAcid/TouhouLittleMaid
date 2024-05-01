@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
@@ -20,8 +21,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 
-public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
+public class GeckoLayerMaidBackpack<T extends Mob & IAnimatable> extends GeoLayerRenderer<T> {
     private final GeckoEntityMaidRenderer renderer;
 
     public GeckoLayerMaidBackpack(GeckoEntityMaidRenderer entityRendererIn, EntityModelSet modelSet) {
@@ -35,9 +37,13 @@ public class GeckoLayerMaidBackpack<T extends LivingEntity & IAnimatable> extend
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (livingEntity instanceof EntityMaid maid && this.entityRenderer.getGeoModel() != null) {
-            if (!renderer.getMainInfo().isShowBackpack() || maid.isSleeping() || maid.isInvisible()) {
+    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        EntityMaid maid = IMaid.convertToMaid(entity);
+        if (maid == null) {
+            return;
+        }
+        if (this.entityRenderer.getGeoModel() != null) {
+            if (!renderer.getMainInfo().isShowBackpack() || entity.isSleeping() || entity.isInvisible()) {
                 return;
             }
             GeoModel geoModel = this.entityRenderer.getGeoModel();

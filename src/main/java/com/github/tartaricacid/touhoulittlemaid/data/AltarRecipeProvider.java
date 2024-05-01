@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.util.NBTToJson;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
@@ -89,7 +88,7 @@ public class AltarRecipeProvider implements DataProvider {
             addEntityRecipes(InitEntities.BOX.get(), extraData, 0.5f, gemDiamond, gemLapis, ingotGold, redstone, ingotIron, coal);
         }
         {
-            addEntityRecipes("reborn_maid", InitEntities.MAID.get(), new CompoundTag(), 0.5f, film, ItemFilm.MAID_INFO,
+            addEntityRecipes("reborn_maid", InitEntities.MAID.get(), new CompoundTag(), 0.5f, film, "MaidInfo",
                     film, gemLapis, ingotGold, redstone, ingotIron, coal);
         }
         addEntityRecipes(EntityType.LIGHTNING_BOLT, 0.2f, gunpowder, gunpowder, gunpowder, blazePowder, blazePowder, blazePowder);

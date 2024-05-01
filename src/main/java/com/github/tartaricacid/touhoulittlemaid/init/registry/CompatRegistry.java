@@ -7,11 +7,11 @@ import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegis
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -25,8 +25,16 @@ public final class CompatRegistry {
     public static void onEnqueue(final InterModEnqueueEvent event) {
         event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
         event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
-        event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MenuIntegration::registerModsPage)));
-        event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClothConfigScreen::registerNoClothConfigPage));
+        event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> {
+            if (FMLEnvironment.dist == Dist.CLIENT) {
+                MenuIntegration.registerModsPage();
+            }
+        }));
+        event.enqueueWork(() -> {
+            if (FMLEnvironment.dist == Dist.CLIENT) {
+                ClothConfigScreen.registerNoClothConfigPage();
+            }
+        });
         event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
     }
 

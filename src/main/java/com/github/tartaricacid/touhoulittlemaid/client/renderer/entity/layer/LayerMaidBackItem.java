@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
@@ -7,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeComp
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
@@ -15,10 +15,11 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Vanishable;
 
-public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<EntityMaid>> {
+public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
     private final EntityMaidRenderer renderer;
 
     public LayerMaidBackItem(EntityMaidRenderer renderer) {
@@ -27,10 +28,14 @@ public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<Enti
     }
 
     @Override
-    public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        IMaid maid = IMaid.convert(mob);
+        if (maid == null) {
+            return;
+        }
         ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof Vanishable) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || maid.isSleeping() || maid.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || mob.isSleeping() || mob.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
                 return;
             }
             matrixStack.pushPose();
@@ -45,7 +50,7 @@ public class LayerMaidBackItem extends RenderLayer<EntityMaid, BedrockModel<Enti
             if (SlashBladeCompat.isSlashBladeItem(stack)) {
                 SlashBladeRender.renderMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
             } else {
-                Minecraft.getInstance().getItemRenderer().renderStatic(maid, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, maid.level, packedLightIn, OverlayTexture.NO_OVERLAY, maid.getId());
+                Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, mob.level, packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
             }
             matrixStack.popPose();
         }

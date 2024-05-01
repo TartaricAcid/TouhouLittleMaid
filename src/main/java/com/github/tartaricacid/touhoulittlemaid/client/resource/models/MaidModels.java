@@ -3,9 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource.models;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,7 +20,7 @@ public final class MaidModels {
     private static final String JSON_FILE_NAME = "maid_model.json";
     private static MaidModels INSTANCE;
     private final List<CustomModelPack<MaidModelInfo>> packList;
-    private final HashMap<String, BedrockModel<EntityMaid>> idModelMap;
+    private final HashMap<String, BedrockModel<Mob>> idModelMap;
     private final HashMap<String, MaidModelInfo> idInfoMap;
     private final HashMap<String, List<Object>> idAnimationMap;
     private final HashMap<String, ModelData> easterEggNormalTagModelMap;
@@ -67,7 +67,7 @@ public final class MaidModels {
         this.packList.add(pack);
     }
 
-    public void putModel(String modelId, BedrockModel<EntityMaid> modelJson) {
+    public void putModel(String modelId, BedrockModel<Mob> modelJson) {
         this.idModelMap.put(modelId, modelJson);
     }
 
@@ -79,7 +79,7 @@ public final class MaidModels {
         this.idAnimationMap.put(modelId, animationJs);
     }
 
-    public Optional<BedrockModel<EntityMaid>> getModel(String modelId) {
+    public Optional<BedrockModel<Mob>> getModel(String modelId) {
         return Optional.ofNullable(idModelMap.get(modelId));
     }
 
@@ -123,22 +123,22 @@ public final class MaidModels {
     }
 
     public static class ModelData {
-        private BedrockModel<EntityMaid> model;
+        private BedrockModel<Mob> model;
         private MaidModelInfo info;
         private List<Object> animations;
 
-        public ModelData(@Nullable BedrockModel<EntityMaid> model, MaidModelInfo info, @Nullable List<Object> animations) {
+        public ModelData(@Nullable BedrockModel<Mob> model, MaidModelInfo info, @Nullable List<Object> animations) {
             this.model = model;
             this.info = info;
             this.animations = animations;
         }
 
         @Nullable
-        public BedrockModel<EntityMaid> getModel() {
+        public BedrockModel<Mob> getModel() {
             return model;
         }
 
-        public void setModel(@Nullable BedrockModel<EntityMaid> model) {
+        public void setModel(@Nullable BedrockModel<Mob> model) {
             this.model = model;
         }
 

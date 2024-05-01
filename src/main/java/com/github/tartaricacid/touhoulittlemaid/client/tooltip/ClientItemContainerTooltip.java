@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +20,7 @@ public class ClientItemContainerTooltip implements ClientTooltipComponent {
     private @Nullable MutableComponent emptyTip = null;
 
     public ClientItemContainerTooltip(ItemContainerTooltip containerTooltip) {
-        IItemHandler handler = containerTooltip.getHandler();
+        IItemHandler handler = containerTooltip.handler();
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stack = handler.getStackInSlot(i);
             if (!stack.isEmpty()) {
