@@ -29,7 +29,7 @@ public final class SpecialMaidRenderEvent {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRenderPlayerNamedMaid(RenderMaidEvent event) {
-        Component customName = event.getMaid().getCustomName();
+        Component customName = event.getMaid().asEntity().getCustomName();
         if (customName == null) {
             return;
         }
@@ -46,7 +46,7 @@ public final class SpecialMaidRenderEvent {
 
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void onRenderEncryptNamedMaid(RenderMaidEvent event) {
-        Component customName = event.getMaid().getCustomName();
+        Component customName = event.getMaid().asEntity().getCustomName();
         if (customName == null) {
             return;
         }
@@ -58,7 +58,7 @@ public final class SpecialMaidRenderEvent {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onRenderNormalNamedMaid(RenderMaidEvent event) {
-        Component customName = event.getMaid().getCustomName();
+        Component customName = event.getMaid().asEntity().getCustomName();
         if (customName == null) {
             return;
         }

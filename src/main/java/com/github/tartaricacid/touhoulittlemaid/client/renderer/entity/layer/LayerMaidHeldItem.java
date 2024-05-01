@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMai
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -13,9 +12,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 
-public class LayerMaidHeldItem extends RenderLayer<EntityMaid, BedrockModel<EntityMaid>> {
+public class LayerMaidHeldItem extends RenderLayer<Mob, BedrockModel<Mob>> {
     private final ItemInHandRenderer itemInHandRenderer;
 
     public LayerMaidHeldItem(EntityMaidRenderer maidRenderer, ItemInHandRenderer pItemInHandRenderer) {
@@ -24,10 +24,10 @@ public class LayerMaidHeldItem extends RenderLayer<EntityMaid, BedrockModel<Enti
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, EntityMaid maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob maid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack mainRightItem = maid.getMainHandItem();
         ItemStack offLeftItem = maid.getOffhandItem();
-        BedrockModel<EntityMaid> model = getParentModel();
+        BedrockModel<Mob> model = getParentModel();
         if (!mainRightItem.isEmpty() && model.hasRightArm() && !RenderFixer.isCarryOnRender(mainRightItem, bufferIn)) {
             if (SlashBladeCompat.isSlashBladeItem(mainRightItem)) {
                 SlashBladeRender.renderMaidMainhandSlashBlade(maid, model, poseStack, bufferIn, packedLightIn, mainRightItem, partialTicks);
@@ -44,7 +44,7 @@ public class LayerMaidHeldItem extends RenderLayer<EntityMaid, BedrockModel<Enti
         }
     }
 
-    private void renderArmWithItem(EntityMaid maid, ItemStack itemStack, ItemTransforms.TransformType transformTypeIn, HumanoidArm handSide, PoseStack poseStack, MultiBufferSource typeBuffer, int combinedLightIn) {
+    private void renderArmWithItem(Mob maid, ItemStack itemStack, ItemTransforms.TransformType transformTypeIn, HumanoidArm handSide, PoseStack poseStack, MultiBufferSource typeBuffer, int combinedLightIn) {
         if (!itemStack.isEmpty()) {
             poseStack.pushPose();
             boolean isLeft = handSide == HumanoidArm.LEFT;

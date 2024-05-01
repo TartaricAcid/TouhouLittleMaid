@@ -19,7 +19,7 @@ public class ClientItemContainerTooltip implements ClientTooltipComponent {
     private @Nullable MutableComponent emptyTip = null;
 
     public ClientItemContainerTooltip(ItemContainerTooltip containerTooltip) {
-        IItemHandler handler = containerTooltip.getHandler();
+        IItemHandler handler = containerTooltip.handler();
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stack = handler.getStackInSlot(i);
             if (!stack.isEmpty()) {

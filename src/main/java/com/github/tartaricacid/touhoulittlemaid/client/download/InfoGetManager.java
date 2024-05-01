@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class InfoGetManager {
-    private static final String ROOT_URL = "http://tlm.cfpa.team:29434/";
+    private static final String ROOT_URL = "https://tlmdl.cfpa.team/";
     private static final String INFO_JSON_URL = ROOT_URL + "info.json";
     private static final String INFO_JSON_MD5_URL = ROOT_URL + "info.json.md5";
 
