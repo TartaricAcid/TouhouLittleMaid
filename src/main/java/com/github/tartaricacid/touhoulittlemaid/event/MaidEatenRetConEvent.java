@@ -37,7 +37,10 @@ public class MaidEatenRetConEvent {
 
             MaidConfig.getCompatRetConMap().forEach((className, itemId) -> {
                 try {
-                    classItemStackHashMap.put(Class.forName(className), getItemStack(itemId));
+                    Class<?> aClass = Class.forName(className);
+                    ItemStack itemStack = getItemStack(itemId);
+                    Preconditions.checkNotNull(itemStack);
+                    classItemStackHashMap.put(aClass, itemStack);
                 } catch (ClassNotFoundException e) {
                     TouhouLittleMaid.LOGGER.error(e);
                 }
