@@ -38,7 +38,7 @@ The mod supports custom models in the Bedrock Edition Entity format, you can eas
 
 ## Authors
 - Programmer: `TartaricAcid`, `Snownee`
-- Artist: `Succinum`, `Pajinyi`, `ZeniCrow`, `Tian_mi`, `Paulzzh`, `YurisCat`
+- Artist: `Succinum`, `Pajinyi`, `CrystalizedSun`, `ZeniCrow`, `Tian_mi`, `Paulzzh`, `YurisCat`
 
 ## Credits
 - MMM and Verclene: Made the [Little Maid Mob](https://github.com/MMM666/littleMaidMob) mod
