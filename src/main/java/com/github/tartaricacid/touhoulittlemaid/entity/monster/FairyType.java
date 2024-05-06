@@ -4,5 +4,18 @@ public enum FairyType {
     // 女仆发色
     BLACK,
     ORANGE,
-    WHITE
+    WHITE,
+    YELLOW,
+    BROWN,
+    RED,
+    GREEN,
+    BLUE,
+    PINK,
+    LIME,
+    CYAN,
+    PURPLE,
+    GRAY,
+    LIGHT_GRAY,
+    LIGHT_BLUE,
+    MAGENTA
 }
