@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAfterEatEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -27,5 +28,20 @@ public class DefaultEatenEvent {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void maidEatFinish(LivingEntityUseItemEvent.Finish event) {
+
+        if (!(event.getEntity() instanceof EntityMaid)) return;
+        // 防止一些模组食物食用不按照官方写法：
+        // 数量为1直接返回容器，反之给予容器
+        // let'do 系列就是直接给予容器的...
+        if (!event.getItem().isEdible() && !event.getResultStack().isEmpty()) return;
+
+        ItemStack craftingRemainingItem = event.getItem().getCraftingRemainingItem();
+        if (craftingRemainingItem.isEmpty()) return;
+
+        event.setResultStack(craftingRemainingItem);
     }
 }
