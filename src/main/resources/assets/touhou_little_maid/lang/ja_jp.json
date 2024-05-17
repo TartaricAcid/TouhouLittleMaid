@@ -186,6 +186,8 @@
   "message.touhou_little_maid.photo.have_no_nbt_data": "この写真にはメイドのデータがありません。",
   "message.touhou_little_maid.chisel.hit_block_error": "粘土ブロックに右クリックして使用します",
   "message.touhou_little_maid.chisel.offhand_not_photo": "オフハンドにメイドの写真を持ってください",
+  "message.touhou_little_maid.kappa_compass.work_area": "作業エリア",
+  "message.touhou_little_maid.kappa_compass.sleep_area": "就寝エリア",
   "commands.touhou_little_maid.pack.reload.info": "すべてのモデルパックが再読み込みされました！",
   "commands.touhou_little_maid.power.handle.info": "%d プレイヤーの霊力が変更されました",
   "commands.touhou_little_maid.maid_num.handle.info": "%d プレイヤーのメイド番号が変更されました",
