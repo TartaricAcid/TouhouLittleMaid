@@ -503,6 +503,7 @@
   "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.pages.3.text": "祭壇のオークの柱上部を右クリックするとアイテムを設置できます。手ぶらで右クリックしてアイテムを回収します。$(br2)アイテムがレシピ通りに設置されプレイヤーのP点が足りている時、祭壇はクラフトを開始します。$(br2)P点不足でクラフトが中断された場合、十分なP点が得られてからもう一度右クリックすることでクラフトがまた開始されます。",
   "patchouli.touhou_little_maid.book.entries.overview.power_point.name": "P点",
   "patchouli.touhou_little_maid.book.entries.overview.power_point.pages.0.text": "P点はこのmodにとって重要な素材です。$(l:overview/world_spawn#fairy)妖精メイド$()を倒すとドロップします。$(br2)$(l:overview/multiblocks_altar)祭壇$() でのクラフトにも消費します。",
+  "patchouli.touhou_little_maid.book.entries.overview.power_point.pages.1.text": "$(l:overview/gohei_and_danmaku)お祓い棒$()を持っているとき、ゲーム画面の左上に現在の所持Pアイテムが表示されます。 $(br2)Pアイテムの最大値は5で、これ以上は増えません。",
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.name": "東方プロジェクト",
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.text": "東方プロジェクトは、日本の同人サークル[上海アリス幻想楽団]のZUN氏がプロデュースするファンダムプロダクションのシリーズです。",
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text": "東方wiki",
@@ -517,5 +518,6 @@
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.0.text": "スライムのモデルをゆっくりに変更しました。",
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.1.text": "また、経験値オーブ、エンチャントの瓶、不死のトーテムのテクスチャも変更しました。 $(br2)これらはすべて設定ファイルでオフにできます。",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.name": "好感度",
-  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度はメイドの体力と攻撃力を高めることができます。$(br2)メイドの好感度を向上させる:$(li)メイドが暇なときにキーボード、コンピューター、本棚、五目並べで遊ぶ。$(li)メイドが睡眠を取る。$(br2))メイドの好感度低下:$(li)メイドの死亡。"
+  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度はメイドの体力と攻撃力を高めることができます。$(br2)メイドの好感度を向上させる:$(li)メイドが暇なときにキーボード、コンピューター、本棚、五目並べで遊ぶ。$(li)メイドが睡眠を取る。$(br2))メイドの好感度低下:$(li)メイドの死亡。",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.name": "カスタムチャットバブルテキスト"
 }
