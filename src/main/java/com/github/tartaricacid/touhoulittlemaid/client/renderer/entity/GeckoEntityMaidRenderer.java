@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.model.GeckoMaidModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.*;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import org.jetbrains.annotations.Nullable;
 
 public class GeckoEntityMaidRenderer extends GeoReplacedEntityRenderer<GeckoMaidEntity> {
@@ -30,7 +32,14 @@ public class GeckoEntityMaidRenderer extends GeoReplacedEntityRenderer<GeckoMaid
 
     @Override
     public void render(Entity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        if (this.animatable != null && entity instanceof EntityMaid maid) {
+        if (!(entity instanceof Mob mob)) {
+            return;
+        }
+        EntityMaid maid = IMaid.convertToMaid(mob);
+        if (maid == null) {
+            return;
+        }
+        if (this.animatable != null) {
             this.animatable.setMaid(maid, mainInfo);
         }
         ResourceLocation location = this.modelProvider.getModelLocation(animatable);
