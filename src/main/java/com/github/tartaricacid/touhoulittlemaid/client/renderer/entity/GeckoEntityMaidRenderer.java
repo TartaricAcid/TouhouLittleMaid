@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.model.GeckoMaidModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoReplacedEntityRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
@@ -35,7 +34,7 @@ public class GeckoEntityMaidRenderer extends GeoReplacedEntityRenderer<GeckoMaid
         if (!(entity instanceof Mob mob)) {
             return;
         }
-        EntityMaid maid = IMaid.convertToMaid(mob);
+        IMaid maid = IMaid.convert(mob);
         if (maid == null) {
             return;
         }
@@ -70,7 +69,7 @@ public class GeckoEntityMaidRenderer extends GeoReplacedEntityRenderer<GeckoMaid
 
     @Override
     public int getInstanceId(Object animatable) {
-        if (animatable instanceof EntityMaid maid) {
+        if (animatable instanceof Mob maid) {
             return maid.getId();
         }
         return super.getInstanceId(22943);

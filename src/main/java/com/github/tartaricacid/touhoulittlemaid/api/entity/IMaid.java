@@ -2,8 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.api.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.event.ConvertMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * 目前仅用于渲染
  */
-public interface IMaid {
+public interface IMaid extends IEntity {
     /**
      * 转换为接口，同时发送转换事件
      *
@@ -60,6 +62,10 @@ public interface IMaid {
         return BackpackManager.getEmptyBackpack();
     }
 
+	default boolean hasBackpack() {
+		return getMaidBackpackType() != BackpackManager.getEmptyBackpack();
+	}
+
     /**
      * 转换成女仆对象
      *
@@ -79,4 +85,32 @@ public interface IMaid {
      * 转成原实体对象
      */
     Mob asEntity();
+
+
+	default int getExperience() {
+		return 0;
+	}
+
+	default boolean isInSittingPose() {
+		return false;
+	}
+
+	default boolean isSwingingArms() {
+		return false;
+	}
+
+	default boolean isBegging() {
+		return false;
+	}
+
+	ItemStack getHandItemsForAnimation(InteractionHand hand);
+
+	void setHandItemsForAnimation(InteractionHand hand, ItemStack stack);
+
+	int getFavorability();
+
+	int getDim();
+
+	IMaidTask getTask();
+
 }

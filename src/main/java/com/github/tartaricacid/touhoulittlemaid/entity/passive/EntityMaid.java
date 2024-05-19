@@ -41,7 +41,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
-import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
@@ -1443,10 +1442,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_RIDEABLE, rideable);
     }
 
-    public boolean hasBackpack() {
-        return getMaidBackpackType() != BackpackManager.getEmptyBackpack();
-    }
-
     public int getHunger() {
         return this.entityData.get(DATA_HUNGER);
     }
@@ -1619,31 +1614,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(GAME_SKILL, gameSkill, true);
     }
 
-    public boolean hasHelmet() {
-        return !getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-    }
-
-    public boolean hasChestPlate() {
-        return !getItemBySlot(EquipmentSlot.CHEST).isEmpty();
-    }
-
-    public boolean hasLeggings() {
-        return !getItemBySlot(EquipmentSlot.LEGS).isEmpty();
-    }
-
-    public boolean hasBoots() {
-        return !getItemBySlot(EquipmentSlot.FEET).isEmpty();
-    }
-
-    public boolean onHurt() {
-        return hurtTime > 0;
-    }
-
-    @Deprecated
-    public boolean hasSasimono() {
-        return false;
-    }
-
     public List<SendEffectMessage.EffectData> getEffects() {
         return effects;
     }
@@ -1728,25 +1698,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 direction, pos, false);
     }
 
-    @Deprecated
-    public String getAtBiomeTemp() {
-        float temp = BiomeCacheUtil.getCacheBiome(this).getBaseTemperature();
-        if (temp < 0.15) {
-            return "COLD";
-        } else if (temp < 0.55) {
-            return "OCEAN";
-        } else if (temp < 0.95) {
-            return "MEDIUM";
-        } else {
-            return "WARM";
-        }
-    }
-
-    @Deprecated
-    public boolean isSitInJoyBlock() {
-        return false;
-    }
-
     public FavorabilityManager getFavorabilityManager() {
         return favorabilityManager;
     }
@@ -1810,4 +1761,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public Mob asEntity() {
         return this;
     }
+
+	@Override
+	public ItemStack getHandItemsForAnimation(InteractionHand hand) {
+		return handItemsForAnimation[hand.ordinal()];
+	}
+
+	@Override
+	public void setHandItemsForAnimation(InteractionHand hand, ItemStack stack) {
+		handItemsForAnimation[hand.ordinal()] = stack;
+	}
+
 }
