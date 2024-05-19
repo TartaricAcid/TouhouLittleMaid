@@ -100,7 +100,7 @@ public final class AnimationManager {
         if (checkSwingAndUse(maid, InteractionHand.OFF_HAND)) {
 			ItemStack offhandItem = maid.asEntity().getItemInHand(InteractionHand.OFF_HAND);
             if (!isSameItem(maid, offhandItem, InteractionHand.OFF_HAND)) {
-				maid.setHandItemsForAnimation(InteractionHand.OFF_HAND, offhandItem);
+				maid.getHandItemsForAnimation()[InteractionHand.OFF_HAND.ordinal()] = offhandItem;
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.LOOP);
             }
 
@@ -131,7 +131,7 @@ public final class AnimationManager {
         if (checkSwingAndUse(maid, InteractionHand.MAIN_HAND)) {
 			ItemStack mainHandItem = maid.asEntity().getItemInHand(InteractionHand.MAIN_HAND);
             if (!isSameItem(maid, mainHandItem, InteractionHand.MAIN_HAND)) {
-				maid.setHandItemsForAnimation(InteractionHand.MAIN_HAND, mainHandItem);
+				maid.getHandItemsForAnimation()[InteractionHand.MAIN_HAND.ordinal()] = mainHandItem;
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.LOOP);
             }
 
@@ -148,7 +148,7 @@ public final class AnimationManager {
     }
 
 	private boolean isSameItem(IMaid maid, ItemStack maidItem, InteractionHand hand) {
-		ItemStack preItem = maid.getHandItemsForAnimation(hand);
+		ItemStack preItem = maid.getHandItemsForAnimation()[hand.ordinal()];
         if (preItem.isDamaged()) {
             return ItemStack.isSameItem(maidItem, preItem);
         }

@@ -1702,21 +1702,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return favorabilityManager;
     }
 
-    @Deprecated
-    public int getDim() {
-        ResourceKey<Level> dim = this.level.dimension();
-        if (dim.equals(Level.OVERWORLD)) {
-            return 0;
-        }
-        if (dim.equals(Level.NETHER)) {
-            return -1;
-        }
-        if (dim.equals(Level.END)) {
-            return 1;
-        }
-        return 0;
-    }
-
 
     @SuppressWarnings("all")
     public Ingredient getTamedItem() {
@@ -1762,14 +1747,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return this;
     }
 
-	@Override
-	public ItemStack getHandItemsForAnimation(InteractionHand hand) {
-		return handItemsForAnimation[hand.ordinal()];
-	}
-
-	@Override
-	public void setHandItemsForAnimation(InteractionHand hand, ItemStack stack) {
-		handItemsForAnimation[hand.ordinal()] = stack;
-	}
+    @Override
+    public ItemStack[] getHandItemsForAnimation() {
+        return handItemsForAnimation;
+    }
 
 }
