@@ -140,7 +140,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
     implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
 
-    implementation fg.deobf("curse.maven:slashblade-resharped-1022428:${slashblade_id}")
+    implementation fg.deobf("curse.maven:slashblade-241596:${slashblade_id}")
 
     implementation fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
 
