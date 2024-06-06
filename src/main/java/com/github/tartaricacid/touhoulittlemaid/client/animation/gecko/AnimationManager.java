@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.*;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
@@ -70,7 +70,7 @@ public final class AnimationManager {
 
     @NotNull
     public PlayState predicateMain(AnimationEvent<GeckoMaidEntity> event) {
-        EntityMaid maid = event.getAnimatable().getMaid();
+		IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -87,20 +87,20 @@ public final class AnimationManager {
     }
 
     public PlayState predicateOffhandHold(AnimationEvent<GeckoMaidEntity> event) {
-        EntityMaid maid = event.getAnimatable().getMaid();
+		IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (!maid.swinging && !maid.isUsingItem()) {
-            ItemStack offhandItem = maid.getItemInHand(InteractionHand.OFF_HAND);
+		if (!maid.asEntity().swinging && !maid.asEntity().isUsingItem()) {
+			ItemStack offhandItem = maid.asEntity().getItemInHand(InteractionHand.OFF_HAND);
             if (offhandItem.is(Items.CROSSBOW) && CrossbowItem.isCharged(offhandItem)) {
                 return playAnimation(event, "hold_offhand:charged_crossbow", ILoopType.EDefaultLoopTypes.LOOP);
             }
         }
         if (checkSwingAndUse(maid, InteractionHand.OFF_HAND)) {
-            ItemStack offhandItem = maid.getItemInHand(InteractionHand.OFF_HAND);
+			ItemStack offhandItem = maid.asEntity().getItemInHand(InteractionHand.OFF_HAND);
             if (!isSameItem(maid, offhandItem, InteractionHand.OFF_HAND)) {
-                maid.handItemsForAnimation[InteractionHand.OFF_HAND.ordinal()] = offhandItem;
+				maid.getHandItemsForAnimation()[InteractionHand.OFF_HAND.ordinal()] = offhandItem;
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.LOOP);
             }
 
@@ -117,21 +117,21 @@ public final class AnimationManager {
     }
 
     public PlayState predicateMainhandHold(AnimationEvent<GeckoMaidEntity> event) {
-        EntityMaid maid = event.getAnimatable().getMaid();
+		IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (!maid.swinging && !maid.isUsingItem()) {
-            ItemStack mainHandItem = maid.getItemInHand(InteractionHand.MAIN_HAND);
+		if (!maid.asEntity().swinging && !maid.asEntity().isUsingItem()) {
+			ItemStack mainHandItem = maid.asEntity().getItemInHand(InteractionHand.MAIN_HAND);
             if (mainHandItem.is(Items.CROSSBOW) && CrossbowItem.isCharged(mainHandItem)) {
                 return playAnimation(event, "hold_mainhand:charged_crossbow", ILoopType.EDefaultLoopTypes.LOOP);
             }
         }
 
         if (checkSwingAndUse(maid, InteractionHand.MAIN_HAND)) {
-            ItemStack mainHandItem = maid.getItemInHand(InteractionHand.MAIN_HAND);
+			ItemStack mainHandItem = maid.asEntity().getItemInHand(InteractionHand.MAIN_HAND);
             if (!isSameItem(maid, mainHandItem, InteractionHand.MAIN_HAND)) {
-                maid.handItemsForAnimation[InteractionHand.MAIN_HAND.ordinal()] = mainHandItem;
+				maid.getHandItemsForAnimation()[InteractionHand.MAIN_HAND.ordinal()] = mainHandItem;
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.LOOP);
             }
 
@@ -147,8 +147,8 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
-    private boolean isSameItem(EntityMaid maid, ItemStack maidItem, InteractionHand hand) {
-        ItemStack preItem = maid.handItemsForAnimation[hand.ordinal()];
+	private boolean isSameItem(IMaid maid, ItemStack maidItem, InteractionHand hand) {
+		ItemStack preItem = maid.getHandItemsForAnimation()[hand.ordinal()];
         if (preItem.isDamaged()) {
             return ItemStack.isSameItem(maidItem, preItem);
         }
@@ -156,39 +156,39 @@ public final class AnimationManager {
     }
 
     public PlayState predicateSwing(AnimationEvent<GeckoMaidEntity> event) {
-        EntityMaid maid = event.getAnimatable().getMaid();
+		IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (maid.swinging && !maid.isSleeping()) {
-            if (maid.swingTime == 0) {
+		if (maid.asEntity().swinging && !maid.asEntity().isSleeping()) {
+			if (maid.asEntity().swingTime == 0) {
                 // 空动画用于重置 PLAY_ONCE 动画
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
             }
             ResourceLocation id = event.getAnimatable().getAnimation();
-            ConditionalSwing conditionalSwing = (maid.swingingArm == InteractionHand.MAIN_HAND) ? ConditionManager.getSwingMainhand(id) : ConditionManager.getSwingOffhand(id);
+			ConditionalSwing conditionalSwing = (maid.asEntity().swingingArm == InteractionHand.MAIN_HAND) ? ConditionManager.getSwingMainhand(id) : ConditionManager.getSwingOffhand(id);
             if (conditionalSwing != null) {
-                String name = conditionalSwing.doTest(maid, maid.swingingArm);
+				String name = conditionalSwing.doTest(maid, maid.asEntity().swingingArm);
                 if (StringUtils.isNoneBlank(name)) {
                     return playAnimation(event, name, ILoopType.EDefaultLoopTypes.PLAY_ONCE);
                 }
             }
-            String defaultSwing = (maid.swingingArm == InteractionHand.MAIN_HAND) ? "swing_hand" : "swing_offhand";
+			String defaultSwing = (maid.asEntity().swingingArm == InteractionHand.MAIN_HAND) ? "swing_hand" : "swing_offhand";
             return playAnimation(event, defaultSwing, ILoopType.EDefaultLoopTypes.PLAY_ONCE);
         }
         return PlayState.CONTINUE;
     }
 
     public PlayState predicateUse(AnimationEvent<GeckoMaidEntity> event) {
-        EntityMaid maid = event.getAnimatable().getMaid();
+		IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (maid.isUsingItem() && !maid.isSleeping()) {
-            if (maid.getTicksUsingItem() == 1) {
+		if (maid.asEntity().isUsingItem() && !maid.asEntity().isSleeping()) {
+			if (maid.asEntity().getTicksUsingItem() == 1) {
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
             }
-            if (maid.getUsedItemHand() == InteractionHand.MAIN_HAND) {
+			if (maid.asEntity().getUsedItemHand() == InteractionHand.MAIN_HAND) {
                 ResourceLocation id = event.getAnimatable().getAnimation();
                 ConditionalUse conditionalUse = ConditionManager.getUseMainhand(id);
                 if (conditionalUse != null) {
@@ -214,7 +214,7 @@ public final class AnimationManager {
     }
 
     public PlayState predicateBeg(AnimationEvent<GeckoMaidEntity> event) {
-        EntityMaid maid = event.getAnimatable().getMaid();
+		IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -225,11 +225,11 @@ public final class AnimationManager {
     }
 
     public PlayState predicateArmor(AnimationEvent<GeckoMaidEntity> event, EquipmentSlot slot) {
-        EntityMaid maid = event.getAnimatable().getMaid();
+		IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
-        ItemStack itemBySlot = maid.getItemBySlot(slot);
+		ItemStack itemBySlot = maid.asEntity().getItemBySlot(slot);
         if (itemBySlot.isEmpty()) {
             return PlayState.STOP;
         }
@@ -251,10 +251,10 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
-    private boolean checkSwingAndUse(EntityMaid maid, InteractionHand hand) {
-        if (maid.swinging && maid.swingingArm == hand) {
+	private boolean checkSwingAndUse(IMaid maid, InteractionHand hand) {
+		if (maid.asEntity().swinging && maid.asEntity().swingingArm == hand) {
             return false;
         }
-        return !maid.isUsingItem() || maid.getUsedItemHand() != hand;
+		return !maid.asEntity().isUsingItem() || maid.asEntity().getUsedItemHand() != hand;
     }
 }

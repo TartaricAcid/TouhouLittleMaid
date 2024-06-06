@@ -1,10 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.inner;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Mob;
 
 import java.util.HashMap;
 
@@ -44,10 +45,10 @@ public final class MaidBaseAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid.default.js"), getMaidDefault());
     }
 
-    public static IAnimation<EntityMaid> getHeadDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHeadDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper head = modelMap.get("head");
                 if (head != null) {
                     head.setRotateAngleX(headPitch * 0.017453292f);
@@ -65,10 +66,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHeadBlink() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHeadBlink() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper blink = modelMap.get("blink");
                 ModelRendererWrapper blink2 = modelMap.get("blink2");
 
@@ -93,10 +94,12 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHeadBeg() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHeadBeg() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
                 ModelRendererWrapper head = modelMap.get("head");
                 ModelRendererWrapper ahoge = modelMap.get("ahoge");
                 ModelRendererWrapper begShow = modelMap.get("begShow");
@@ -128,10 +131,10 @@ public final class MaidBaseAnimation {
     }
 
 
-    public static IAnimation<EntityMaid> getHeadMusicShake() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHeadMusicShake() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper head = modelMap.get("head");
 
                 if (head != null) {
@@ -143,10 +146,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHairPonytailSwing() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHairPonytailSwing() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper hairPonytailSwing = modelMap.get("hairPonytailSwing");
 
                 if (hairPonytailSwing != null) {
@@ -157,10 +160,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHairSwing() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHairSwing() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper hairLeftSwing = modelMap.get("hairLeftSwing");
                 ModelRendererWrapper hairRightSwing = modelMap.get("hairRightSwing");
 
@@ -175,10 +178,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getEarShake() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getEarShake() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper earLeftShake = modelMap.get("earLeftShake");
                 ModelRendererWrapper earRightShake = modelMap.get("earRightShake");
 
@@ -203,14 +206,17 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getEarBegShake() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getEarBegShake() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper earLeftShake = modelMap.get("earLeftBegShake");
                 ModelRendererWrapper earRightShake = modelMap.get("earRightBegShake");
 
-                float time = (ageInTicks + Math.abs(maid.getUUID().getLeastSignificantBits()) % 10) % 40;
+                float time = (ageInTicks + Math.abs(mob.getUUID().getLeastSignificantBits()) % 10) % 40;
                 if (maid.isBegging() && time < Math.PI * 4) {
                     float rotationZ = (float) Math.abs(Math.sin(time * 0.25)) * 0.4f;
                     if (earLeftShake != null) {
@@ -231,14 +237,17 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getLegDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getLegDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper legLeft = modelMap.get("legLeft");
                 ModelRendererWrapper legRight = modelMap.get("legRight");
 
-                boolean isFarm = "farm".equals(maid.getTask().getUid().getPath()) && maid.swingTime > 0;
+                boolean isFarm = "farm".equals(maid.getTask().getUid().getPath()) && maid.asEntity().swingTime > 0;
 
                 if (isFarm) {
                     GlWrapper.translate(0, 0.0713625, -0.35876875);
@@ -267,16 +276,19 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
-                double f1 = 1.0 - Math.pow(1.0 - maid.attackAnim, 4);
+                double f1 = 1.0 - Math.pow(1.0 - mob.attackAnim, 4);
                 double f2 = Math.sin(f1 * Math.PI);
-                double f3 = Math.sin(maid.attackAnim * Math.PI) * -0.7 * 0.75;
+                double f3 = Math.sin(mob.attackAnim * Math.PI) * -0.7 * 0.75;
 
                 float[] rotation;
                 if (armLeft != null) {
@@ -296,12 +308,12 @@ public final class MaidBaseAnimation {
                         armLeft.setRotateAngleY(armLeft.getInitRotateAngleY());
                         armLeft.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.05) * 0.05 + armLeft.getInitRotateAngleZ()));
                         // 手部攻击动画
-                        if (maid.attackAnim > 0.0 && isSwingLeftHand(maid)) {
+                        if (mob.attackAnim > 0.0 && isSwingLeftHand(mob)) {
                             armLeft.setRotateAngleX((float) (armLeft.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
+                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(mob.attackAnim * Math.PI) * -0.4));
                         }
                         // 使用动画
-                        if (maid.isUsingItem() && maid.getUsedItemHand() == InteractionHand.OFF_HAND) {
+                        if (mob.isUsingItem() && mob.getUsedItemHand() == InteractionHand.OFF_HAND) {
                             armLeft.setRotateAngleX((float) (armLeft.getInitRotateAngleX() - Math.PI * 80 / 180.0));
                             armLeft.setRotateAngleY((float) (armLeft.getInitRotateAngleY() + Math.PI * 25 / 180.0));
                         }
@@ -321,12 +333,12 @@ public final class MaidBaseAnimation {
                         armRight.setRotateAngleY(armRight.getInitRotateAngleY());
                         armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.05 + armRight.getInitRotateAngleZ()));
                         // 手部攻击动画
-                        if (maid.attackAnim > 0.0 && !isSwingLeftHand(maid)) {
+                        if (mob.attackAnim > 0.0 && !isSwingLeftHand(mob)) {
                             armRight.setRotateAngleX((float) (armRight.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
+                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(mob.attackAnim * Math.PI) * -0.4));
                         }
                         // 使用动画
-                        if (maid.isUsingItem() && maid.getUsedItemHand() == InteractionHand.MAIN_HAND) {
+                        if (mob.isUsingItem() && mob.getUsedItemHand() == InteractionHand.MAIN_HAND) {
                             armRight.setRotateAngleX((float) (armRight.getInitRotateAngleX() - Math.PI * 80 / 180.0));
                             armRight.setRotateAngleY((float) (armRight.getInitRotateAngleY() - Math.PI * 20 / 180.0));
                         }
@@ -337,10 +349,13 @@ public final class MaidBaseAnimation {
     }
 
 
-    public static IAnimation<EntityMaid> getArmSwing() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmSwing() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
@@ -359,10 +374,13 @@ public final class MaidBaseAnimation {
     }
 
 
-    public static IAnimation<EntityMaid> getSitDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSitDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper head = modelMap.get("head");
                 ModelRendererWrapper legLeft = modelMap.get("legLeft");
                 ModelRendererWrapper legRight = modelMap.get("legRight");
@@ -374,10 +392,10 @@ public final class MaidBaseAnimation {
                     head.setOffsetY(0);
                 }
 
-                if (isPassengerMarisaBroom(maid)) {
+                if (isPassengerMarisaBroom(mob)) {
                     // 坐在扫帚上时，应用待命的动作
                     ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
-                } else if (maid.isPassenger()) {
+                } else if (mob.isPassenger()) {
                     ridingPosture(legLeft, legRight);
                 } else if (maid.isInSittingPose()) {
                     sittingPosture(armLeft, armRight, legLeft, legRight);
@@ -386,10 +404,13 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getSitNoLeg() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSitNoLeg() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper head = modelMap.get("head");
                 ModelRendererWrapper legLeft = modelMap.get("legLeft");
                 ModelRendererWrapper legRight = modelMap.get("legRight");
@@ -401,10 +422,10 @@ public final class MaidBaseAnimation {
                     head.setOffsetY(0);
                 }
 
-                if (isPassengerMarisaBroom(maid)) {
+                if (isPassengerMarisaBroom(mob)) {
                     // 坐在扫帚上时，应用待命的动作
                     ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
-                } else if (maid.isPassenger()) {
+                } else if (mob.isPassenger()) {
                     ridingPosture(legLeft, legRight);
                 } else if (maid.isInSittingPose()) {
                     sittingNoLegPosture(armLeft, armRight);
@@ -413,30 +434,36 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getSitSkirtHidden() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSitSkirtHidden() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper sittingHiddenSkirt = modelMap.get("sittingHiddenSkirt");
                 if (sittingHiddenSkirt != null) {
-                    sittingHiddenSkirt.setHidden(isPassengerMarisaBroom(maid) || maid.isPassenger() || maid.isInSittingPose());
+                    sittingHiddenSkirt.setHidden(isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isInSittingPose());
                 }
 
                 ModelRendererWrapper reverseSittingHiddenSkirt = modelMap.get("_sittingHiddenSkirt");
                 if (reverseSittingHiddenSkirt != null) {
-                    reverseSittingHiddenSkirt.setHidden(!isPassengerMarisaBroom(maid) && !maid.isPassenger() && !maid.isInSittingPose());
+                    reverseSittingHiddenSkirt.setHidden(!isPassengerMarisaBroom(mob) && !mob.isPassenger() && !maid.isInSittingPose());
                 }
             }
         };
     }
 
-    public static IAnimation<EntityMaid> getSitSkirtRotation() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSitSkirtRotation() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper sittingRotationSkirt = modelMap.get("sittingRotationSkirt");
                 if (sittingRotationSkirt != null) {
-                    if (isPassengerMarisaBroom(maid) || maid.isPassenger() || maid.isInSittingPose()) {
+                    if (isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isInSittingPose()) {
                         sittingRotationSkirt.setRotateAngleX(-0.567f);
                     } else {
                         sittingRotationSkirt.setRotateAngleX(sittingRotationSkirt.getInitRotateAngleX());
@@ -446,13 +473,16 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getSitSkirtRotationSwing() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSitSkirtRotationSwing() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper sittingRotationSwingSkirt = modelMap.get("sittingRotationSwingSkirt");
                 if (sittingRotationSwingSkirt != null) {
-                    if (isPassengerMarisaBroom(maid) || maid.isPassenger() || maid.isInSittingPose()) {
+                    if (isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isInSittingPose()) {
                         sittingRotationSwingSkirt.setRotateAngleX(-0.567f);
                         sittingRotationSwingSkirt.setRotateAngleZ(sittingRotationSwingSkirt.getInitRotateAngleZ());
                     } else {
@@ -465,10 +495,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getWingDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getWingDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper wingLeft = modelMap.get("wingLeft");
                 ModelRendererWrapper wingRight = modelMap.get("wingRight");
 
@@ -484,10 +514,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getSleepDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSleepDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper sleepHide = modelMap.get("sleepHide");
                 ModelRendererWrapper sleepShow = modelMap.get("sleepShow");
 
@@ -502,10 +532,13 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getStatusBackpack() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getStatusBackpack() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper backpackShow = modelMap.get("backpackShow");
                 ModelRendererWrapper backpackHidden = modelMap.get("backpackHidden");
 
@@ -520,18 +553,21 @@ public final class MaidBaseAnimation {
     }
 
     @Deprecated
-    public static IAnimation<EntityMaid> getStatusBackpackLevel() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getStatusBackpackLevel() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
             }
         };
     }
 
-    public static IAnimation<EntityMaid> getStatusSasimono() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getStatusSasimono() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper sasimonoShow = modelMap.get("sasimonoShow");
                 ModelRendererWrapper sasimonoHidden = modelMap.get("sasimonoHidden");
 
@@ -545,10 +581,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTailDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTailDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper tail = modelMap.get("tail");
 
                 if (tail != null) {
@@ -561,10 +597,10 @@ public final class MaidBaseAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getMaidDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getMaidDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 getHeadDefault().setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, maid, modelMap);
                 getHeadBlink().setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, maid, modelMap);
                 getHeadBeg().setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, maid, modelMap);
@@ -629,12 +665,12 @@ public final class MaidBaseAnimation {
         GlWrapper.translate(0, -0.4, -0.3);
     }
 
-    private static boolean isSwingLeftHand(EntityMaid maid) {
+    private static boolean isSwingLeftHand(Mob maid) {
         return maid.swingingArm == InteractionHand.OFF_HAND;
     }
 
     @Deprecated
-    public static boolean isPassengerMarisaBroom(EntityMaid maid) {
+    public static boolean isPassengerMarisaBroom(Mob maid) {
         return false;
     }
 

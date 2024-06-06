@@ -1,9 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.inner;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Mob;
 
 import java.util.HashMap;
 
@@ -25,10 +26,10 @@ public final class MaidExtraAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/health/rotation.js"), getHealthRotation());
     }
 
-    public static IAnimation<EntityMaid> getArmExtra() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmExtra() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper armLeft = modelMap.get("armLeftExtraA");
                 ModelRendererWrapper armRight = modelMap.get("armRightExtraA");
 
@@ -90,10 +91,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmVertical() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmVertical() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper armLeftVertical = modelMap.get("armLeftVertical");
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 if (armLeftVertical != null) {
@@ -115,10 +116,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHeadExtra() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHeadExtra() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper headExtraA = modelMap.get("headExtraA");
                 if (headExtraA != null) {
                     headExtraA.setRotateAngleX(headPitch * 0.017453292f);
@@ -140,10 +141,13 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHeadHurt() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHeadHurt() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper hurtBlink = modelMap.get("hurtBlink");
 
                 if (hurtBlink != null) {
@@ -153,10 +157,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHeadReverseBlink() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHeadReverseBlink() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 // The previous typo is reserved for compatibility
                 ModelRendererWrapper reverseBlink = modelMap.get("_bink");
                 ModelRendererWrapper reverseBlinkCorrect = modelMap.get("_blink");
@@ -169,10 +173,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getLegExtra() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getLegExtra() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper legLeftExtraA = modelMap.get("legLeftExtraA");
                 ModelRendererWrapper legRightExtraA = modelMap.get("legRightExtraA");
 
@@ -190,10 +194,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getLegVertical() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getLegVertical() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper legLeftVertical = modelMap.get("legLeftVertical");
                 ModelRendererWrapper legLeft = modelMap.get("legLeft");
                 if (legLeftVertical != null) {
@@ -215,10 +219,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHealthLessShow() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHealthLessShow() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper healthLessQuarterShow = modelMap.get("healthLessQuarterShow");
                 ModelRendererWrapper healthLessHalfShow = modelMap.get("healthLessHalfShow");
                 ModelRendererWrapper healthLessThreeQuartersShow = modelMap.get("healthLessThreeQuartersShow");
@@ -240,10 +244,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHealthMoreShow() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHealthMoreShow() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper healthMoreQuarterShow = modelMap.get("healthMoreQuarterShow");
                 ModelRendererWrapper healthMoreHalfShow = modelMap.get("healthMoreHalfShow");
                 ModelRendererWrapper healthMoreThreeQuartersShow = modelMap.get("healthMoreThreeQuartersShow");
@@ -265,10 +269,10 @@ public final class MaidExtraAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getHealthRotation() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getHealthRotation() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper healthRotationX90 = modelMap.get("healthRotationX90");
 
                 if (healthRotationX90 != null) {
@@ -279,12 +283,12 @@ public final class MaidExtraAnimation {
         };
     }
 
-    private static boolean isSwingLeftHand(EntityMaid maid) {
+    private static boolean isSwingLeftHand(Mob maid) {
         return maid.swingingArm == InteractionHand.OFF_HAND;
     }
 
     @Deprecated
-    public static boolean isPassengerMarisaBroom(EntityMaid maid) {
+    public static boolean isPassengerMarisaBroom(Mob maid) {
         return false;
     }
 

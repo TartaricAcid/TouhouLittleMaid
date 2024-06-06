@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.inner;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 
 import java.util.HashMap;
 
@@ -14,10 +15,13 @@ public final class SpecialAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/special/wakasagihime_sit.js"), getSpecialWakasagihime());
     }
 
-    public static IAnimation<EntityMaid> getSpecialHecatia() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSpecialHecatia() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper earthHair = modelMap.get("earthHair");
                 ModelRendererWrapper logoEarth = modelMap.get("logoEarth");
                 ModelRendererWrapper earthTop = modelMap.get("earthTop");
@@ -102,10 +106,13 @@ public final class SpecialAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getSpecialWakasagihime() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getSpecialWakasagihime() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 

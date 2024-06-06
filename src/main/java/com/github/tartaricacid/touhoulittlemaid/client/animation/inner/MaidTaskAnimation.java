@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.inner;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 
 import java.util.HashMap;
 
@@ -28,10 +29,13 @@ public final class MaidTaskAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/torch.js"), getTaskTorch());
     }
 
-    public static IAnimation<EntityMaid> getTaskAttack() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskAttack() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper attackHidden = modelMap.get("attackHidden");
 
                 if (attackHidden != null) {
@@ -46,10 +50,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskDanmakuAttack() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskDanmakuAttack() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper danmakuAttackHidden = modelMap.get("danmakuAttackHidden");
 
                 if (danmakuAttackHidden != null) {
@@ -64,10 +71,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskFarm() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskFarm() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper farmHidden = modelMap.get("farmHidden");
 
                 if (farmHidden != null) {
@@ -82,10 +92,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskFeedAnimal() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskFeedAnimal() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper feedAnimalHidden = modelMap.get("feedAnimalHidden");
 
                 if (feedAnimalHidden != null) {
@@ -100,10 +113,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskIdle() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskIdle() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper idleHidden = modelMap.get("idleHidden");
 
                 if (idleHidden != null) {
@@ -118,10 +134,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskMilk() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskMilk() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper milkHidden = modelMap.get("milkHidden");
 
                 if (milkHidden != null) {
@@ -136,10 +155,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskShears() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskShears() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper shearsHidden = modelMap.get("shearsHidden");
 
                 if (shearsHidden != null) {
@@ -154,10 +176,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskSugarCane() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskSugarCane() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper sugarCaneHidden = modelMap.get("sugarCaneHidden");
 
                 if (sugarCaneHidden != null) {
@@ -172,10 +197,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskCocoa() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskCocoa() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper cocoaHidden = modelMap.get("cocoaHidden");
 
                 if (cocoaHidden != null) {
@@ -190,10 +218,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskExtinguishing() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskExtinguishing() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper extinguishingHidden = modelMap.get("extinguishingHidden");
 
                 if (extinguishingHidden != null) {
@@ -208,10 +239,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskFeed() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskFeed() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper feedHidden = modelMap.get("feedHidden");
 
                 if (feedHidden != null) {
@@ -226,10 +260,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskGrass() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskGrass() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper grassHidden = modelMap.get("grassHidden");
 
                 if (grassHidden != null) {
@@ -244,10 +281,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskMelon() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskMelon() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper melonHidden = modelMap.get("melonHidden");
 
                 if (melonHidden != null) {
@@ -262,10 +302,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskRangedAttack() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskRangedAttack() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper rangedAttackHidden = modelMap.get("rangedAttackHidden");
 
                 if (rangedAttackHidden != null) {
@@ -280,10 +323,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskSnow() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskSnow() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper snowHidden = modelMap.get("snowHidden");
 
                 if (snowHidden != null) {
@@ -298,10 +344,13 @@ public final class MaidTaskAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getTaskTorch() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getTaskTorch() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper torchHidden = modelMap.get("torchHidden");
 
                 if (torchHidden != null) {
