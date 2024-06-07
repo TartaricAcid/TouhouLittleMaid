@@ -113,7 +113,7 @@ public final class PlayerMaidAnimation {
                     playerRidingBroomPosture(head, armLeft, armRight, legLeft, legRight);
                 } else if (mob.isPassenger()) {
                     playerRidingPosture(legLeft, legRight);
-                } else if (maid.isInSittingPose()) {
+                } else if (maid.isMaidInSittingPose()) {
                     playerSittingPosture(armLeft, armRight, legLeft, legRight);
                 }
             }

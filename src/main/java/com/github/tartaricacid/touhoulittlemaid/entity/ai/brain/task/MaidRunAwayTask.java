@@ -26,7 +26,7 @@ public class MaidRunAwayTask<T> extends SetWalkTargetAwayFrom<T> {
     @Override
     protected void start(ServerLevel worldIn, PathfinderMob entityIn, long gameTimeIn) {
         if (entityIn instanceof EntityMaid maid) {
-            if (maid.isInSittingPose()) {
+            if (maid.isMaidInSittingPose()) {
                 maid.setInSittingPose(false);
             }
             if (maid.isPassenger()) {

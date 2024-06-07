@@ -59,7 +59,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -369,8 +368,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
             if (MinecraftForge.EVENT_BUS.post(event)
-                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                    || openMaidGui(playerIn)) {
+                || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
+                || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;
             }
         } else {
@@ -1230,7 +1229,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height * (isInSittingPose() ? 0.65F : 0.85F);
+        return sizeIn.height * (isMaidInSittingPose() ? 0.65F : 0.85F);
     }
 
     @Override
@@ -1339,6 +1338,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_SOUND_PACK_ID, soundPackId);
     }
 
+    @Override
+    public boolean isMaidInSittingPose() {
+        return super.isInSittingPose();
+    }
+
+    @Override
     public boolean isBegging() {
         return this.entityData.get(DATA_BEGGING);
     }
@@ -1403,7 +1408,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public boolean canBrainMoving() {
-        return !this.isInSittingPose() && !this.isPassenger() && !this.isSleeping() && !this.isLeashed();
+        return !this.isMaidInSittingPose() && !this.isPassenger() && !this.isSleeping() && !this.isLeashed();
     }
 
     public MaidChatBubbles getChatBubble() {
@@ -1450,6 +1455,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_HUNGER, hunger);
     }
 
+    @Override
     public int getFavorability() {
         return this.entityData.get(DATA_FAVORABILITY);
     }
@@ -1458,6 +1464,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_FAVORABILITY, favorability);
     }
 
+    @Override
     public int getExperience() {
         return this.entityData.get(DATA_EXPERIENCE);
     }
@@ -1474,6 +1481,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_STRUCK_BY_LIGHTNING, isStruck);
     }
 
+    @Override
     public boolean isSwingingArms() {
         return this.entityData.get(DATA_ARM_RISE);
     }

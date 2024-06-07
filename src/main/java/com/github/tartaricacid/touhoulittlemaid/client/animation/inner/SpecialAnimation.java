@@ -116,7 +116,7 @@ public final class SpecialAnimation {
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
-                if (maid.isInSittingPose()) {
+                if (maid.isMaidInSittingPose()) {
                     if (armLeft != null) {
                         armLeft.setRotateAngleX(-0.798f);
                         armLeft.setRotateAngleZ(0.274f);

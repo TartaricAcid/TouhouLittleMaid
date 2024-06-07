@@ -72,127 +72,129 @@ public interface IMaid {
      */
     Mob asEntity();
 
-	// 下方为女仆物品使用接口
+    // 下方为女仆物品使用接口
 
-	/**
-	 * 物品使用缓存，应当创建 ItemStack[] 来缓存数据。
-	 * 如果实体会使用物品，理应Override这个方法，在实体中缓存。
-	 */
-	default ItemStack[] getHandItemsForAnimation() {
-		return new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
-	}
+    /**
+     * 物品使用缓存，应当创建 ItemStack[] 来缓存数据。
+     * 如果实体会使用物品，理应Override这个方法，在实体中缓存。
+     */
+    default ItemStack[] getHandItemsForAnimation() {
+        return new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
+    }
 
-	/**
-	 * 女仆任务：
-	 * 如果实体会进行类似女仆任务的行为，则可以在这里模拟，以供动画使用。
-	 * 例如攻击，远程攻击等等
-	 * */
-	default IMaidTask getTask() {
-		return TaskManager.getIdleTask();
-	}
+    /**
+     * 女仆任务：
+     * 如果实体会进行类似女仆任务的行为，则可以在这里模拟，以供动画使用。
+     * 例如攻击，远程攻击等等
+     */
+    default IMaidTask getTask() {
+        return TaskManager.getIdleTask();
+    }
 
-	/**
-	 * 女仆手臂是否举起：在攻击动画中使用
-	 * */
-	default boolean isSwingingArms() {
-		return false;
-	}
+    /**
+     * 女仆手臂是否举起：在攻击动画中使用
+     */
+    default boolean isSwingingArms() {
+        return false;
+    }
 
-	// 下方为女仆属性接口
+    // 下方为女仆属性接口
 
-	default int getExperience() {
-		return 0;
-	}
+    default int getExperience() {
+        return 0;
+    }
 
-	default boolean isInSittingPose() {
-		return false;
-	}
+    default boolean isMaidInSittingPose() {
+        return false;
+    }
 
-	default boolean isBegging() {
-		return false;
-	}
+    default boolean isBegging() {
+        return false;
+    }
 
-	default int getFavorability() {
-		return 0;
-	}
+    default int getFavorability() {
+        return 0;
+    }
 
-	/**
-	 * 获取背部显示物品
-	 */
-	default ItemStack getBackpackShowItem() {
-		return ItemStack.EMPTY;
-	}
+    /**
+     * 获取背部显示物品
+     */
+    default ItemStack getBackpackShowItem() {
+        return ItemStack.EMPTY;
+    }
 
-	/**
-	 * 背包类型
-	 */
-	default IMaidBackpack getMaidBackpackType() {
-		return BackpackManager.getEmptyBackpack();
-	}
+    /**
+     * 背包类型
+     */
+    default IMaidBackpack getMaidBackpackType() {
+        return BackpackManager.getEmptyBackpack();
+    }
 
-	default boolean hasBackpack() {
-		return getMaidBackpackType() != BackpackManager.getEmptyBackpack();
-	}
+    default boolean hasBackpack() {
+        return getMaidBackpackType() != BackpackManager.getEmptyBackpack();
+    }
 
-	//下方为MC实体属性，无需Override
+    // 下方为 MC 实体属性，无需 Override
 
-	default boolean hasHelmet() {
-		return !asEntity().getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-	}
+    default boolean hasHelmet() {
+        return !asEntity().getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+    }
 
-	default boolean hasChestPlate() {
-		return !asEntity().getItemBySlot(EquipmentSlot.CHEST).isEmpty();
-	}
+    default boolean hasChestPlate() {
+        return !asEntity().getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+    }
 
-	default boolean hasLeggings() {
-		return !asEntity().getItemBySlot(EquipmentSlot.LEGS).isEmpty();
-	}
+    default boolean hasLeggings() {
+        return !asEntity().getItemBySlot(EquipmentSlot.LEGS).isEmpty();
+    }
 
-	default boolean hasBoots() {
-		return !asEntity().getItemBySlot(EquipmentSlot.FEET).isEmpty();
-	}
+    default boolean hasBoots() {
+        return !asEntity().getItemBySlot(EquipmentSlot.FEET).isEmpty();
+    }
 
-	default boolean onHurt() {
-		return asEntity().hurtTime > 0;
-	}
+    default boolean onHurt() {
+        return asEntity().hurtTime > 0;
+    }
 
-	@Deprecated
-	default String getAtBiomeTemp() {
-		float temp = BiomeCacheUtil.getCacheBiome(asEntity()).getBaseTemperature();
-		if (temp < 0.15) {
-			return "COLD";
-		} else if (temp < 0.55) {
-			return "OCEAN";
-		} else if (temp < 0.95) {
-			return "MEDIUM";
-		} else {
-			return "WARM";
-		}
-	}
+    // 下方为 Deprecated 方法，仅用于适配旧版本模型，无需 Override
 
-	@Deprecated
-	default boolean hasSasimono() {
-		return false;
-	}
+    @Deprecated
+    default String getAtBiomeTemp() {
+        float temp = BiomeCacheUtil.getCacheBiome(asEntity()).getBaseTemperature();
+        if (temp < 0.15) {
+            return "COLD";
+        } else if (temp < 0.55) {
+            return "OCEAN";
+        } else if (temp < 0.95) {
+            return "MEDIUM";
+        } else {
+            return "WARM";
+        }
+    }
 
-	@Deprecated
-	default boolean isSitInJoyBlock() {
-		return false;
-	}
+    @Deprecated
+    default boolean hasSasimono() {
+        return false;
+    }
 
-	@Deprecated
-	default int getDim() {
-		ResourceKey<Level> dim = asEntity().level.dimension();
-		if (dim.equals(Level.OVERWORLD)) {
-			return 0;
-		}
-		if (dim.equals(Level.NETHER)) {
-			return -1;
-		}
-		if (dim.equals(Level.END)) {
-			return 1;
-		}
-		return 0;
-	}
+    @Deprecated
+    default boolean isSitInJoyBlock() {
+        return false;
+    }
+
+    @Deprecated
+    default int getDim() {
+        ResourceKey<Level> dim = asEntity().level.dimension();
+        if (dim.equals(Level.OVERWORLD)) {
+            return 0;
+        }
+        if (dim.equals(Level.NETHER)) {
+            return -1;
+        }
+        if (dim.equals(Level.END)) {
+            return 1;
+        }
+        return 0;
+    }
 
 }

@@ -397,7 +397,7 @@ public final class MaidBaseAnimation {
                     ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
                 } else if (mob.isPassenger()) {
                     ridingPosture(legLeft, legRight);
-                } else if (maid.isInSittingPose()) {
+                } else if (maid.isMaidInSittingPose()) {
                     sittingPosture(armLeft, armRight, legLeft, legRight);
                 }
             }
@@ -427,7 +427,7 @@ public final class MaidBaseAnimation {
                     ridingBroomPosture(head, armLeft, armRight, legLeft, legRight);
                 } else if (mob.isPassenger()) {
                     ridingPosture(legLeft, legRight);
-                } else if (maid.isInSittingPose()) {
+                } else if (maid.isMaidInSittingPose()) {
                     sittingNoLegPosture(armLeft, armRight);
                 }
             }
@@ -443,12 +443,12 @@ public final class MaidBaseAnimation {
 
                 ModelRendererWrapper sittingHiddenSkirt = modelMap.get("sittingHiddenSkirt");
                 if (sittingHiddenSkirt != null) {
-                    sittingHiddenSkirt.setHidden(isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isInSittingPose());
+                    sittingHiddenSkirt.setHidden(isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isMaidInSittingPose());
                 }
 
                 ModelRendererWrapper reverseSittingHiddenSkirt = modelMap.get("_sittingHiddenSkirt");
                 if (reverseSittingHiddenSkirt != null) {
-                    reverseSittingHiddenSkirt.setHidden(!isPassengerMarisaBroom(mob) && !mob.isPassenger() && !maid.isInSittingPose());
+                    reverseSittingHiddenSkirt.setHidden(!isPassengerMarisaBroom(mob) && !mob.isPassenger() && !maid.isMaidInSittingPose());
                 }
             }
         };
@@ -463,7 +463,7 @@ public final class MaidBaseAnimation {
 
                 ModelRendererWrapper sittingRotationSkirt = modelMap.get("sittingRotationSkirt");
                 if (sittingRotationSkirt != null) {
-                    if (isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isInSittingPose()) {
+                    if (isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isMaidInSittingPose()) {
                         sittingRotationSkirt.setRotateAngleX(-0.567f);
                     } else {
                         sittingRotationSkirt.setRotateAngleX(sittingRotationSkirt.getInitRotateAngleX());
@@ -482,7 +482,7 @@ public final class MaidBaseAnimation {
 
                 ModelRendererWrapper sittingRotationSwingSkirt = modelMap.get("sittingRotationSwingSkirt");
                 if (sittingRotationSwingSkirt != null) {
-                    if (isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isInSittingPose()) {
+                    if (isPassengerMarisaBroom(mob) || mob.isPassenger() || maid.isMaidInSittingPose()) {
                         sittingRotationSwingSkirt.setRotateAngleX(-0.567f);
                         sittingRotationSwingSkirt.setRotateAngleZ(sittingRotationSwingSkirt.getInitRotateAngleZ());
                     } else {

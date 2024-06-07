@@ -39,7 +39,7 @@ public class AnimationRegister {
         register("computer", Priority.HIGH, (maid, event) -> maid.asEntity().getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.COMPUTER.getTypeName()));
         register("keyboard", Priority.HIGH, (maid, event) -> maid.asEntity().getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.KEYBOARD.getTypeName()));
         register("picnic", Priority.HIGH, (maid, event) -> maid.asEntity().getVehicle() instanceof EntitySit sit && sit.getJoyType().equals(Type.ON_HOME_MEAL.getTypeName()));
-        register("sit", Priority.HIGH, (maid, event) -> maid.isInSittingPose());
+        register("sit", Priority.HIGH, (maid, event) -> maid.isMaidInSittingPose());
         register("chair", Priority.HIGH, (maid, event) -> maid.asEntity().isPassenger());
 
         register("swim_stand", Priority.NORMAL, (maid, event) -> maid.asEntity().isInWater());
@@ -213,7 +213,7 @@ public class AnimationRegister {
         parser.setValue("ysm.hurt_time", () -> mob.hurtTime);
 
         parser.setValue("tlm.is_begging", () -> MolangUtils.booleanToFloat(maid.isBegging()));
-        parser.setValue("tlm.is_sitting", () -> MolangUtils.booleanToFloat(maid.isInSittingPose()));
+        parser.setValue("tlm.is_sitting", () -> MolangUtils.booleanToFloat(maid.isMaidInSittingPose()));
         parser.setValue("tlm.has_backpack", () -> MolangUtils.booleanToFloat(maid.hasBackpack()));
     }
 

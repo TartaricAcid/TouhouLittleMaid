@@ -140,7 +140,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean isSitting() {
-        return maid.isInSittingPose();
+        return maid.isMaidInSittingPose();
     }
 
     @Override
