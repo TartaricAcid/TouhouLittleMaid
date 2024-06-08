@@ -2,12 +2,17 @@ package com.github.tartaricacid.touhoulittlemaid.event.food;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAfterEatEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+
+import java.util.List;
+
+import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST;
 
 @Mod.EventBusSubscriber
 public class DefaultEatenEvent {
@@ -16,6 +21,17 @@ public class DefaultEatenEvent {
         ItemStack foodAfterEat = event.getFoodAfterEat();
         if (!foodAfterEat.isEmpty()) {
             ItemStack craftingRemainingItem = foodAfterEat.getCraftingRemainingItem();
+
+            if (craftingRemainingItem.isEmpty()) {
+                String itemId = ItemsUtil.getItemId(foodAfterEat.getItem());
+                for (List<String> strings : MAID_EATEN_RETURN_CONTAINER_LIST.get()) {
+                    if (strings.get(0).equals(itemId)) {
+                        craftingRemainingItem = ItemsUtil.getItemStack(strings.get(1));
+                        break;
+                    }
+                }
+            }
+
             if (!craftingRemainingItem.isEmpty()) {
                 EntityMaid maid = event.getMaid();
                 CombinedInvWrapper availableInv = maid.getAvailableInv(false);
