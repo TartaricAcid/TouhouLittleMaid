@@ -34,6 +34,9 @@ public abstract class AbstractStoreMaidItem extends Item {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        if (!entity.isCurrentlyGlowing()) {
+            entity.setGlowingTag(true);
+        }
         if (!entity.isInvulnerable()) {
             entity.setInvulnerable(true);
         }
