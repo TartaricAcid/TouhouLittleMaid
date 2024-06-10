@@ -1,14 +1,18 @@
 package com.github.tartaricacid.touhoulittlemaid.event.food;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAfterEatEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -26,7 +30,7 @@ public class DefaultEatenEvent {
                 String itemId = ItemsUtil.getItemId(foodAfterEat.getItem());
                 for (List<String> strings : MAID_EATEN_RETURN_CONTAINER_LIST.get()) {
                     if (strings.get(0).equals(itemId)) {
-                        craftingRemainingItem = ItemsUtil.getItemStack(strings.get(1));
+                        craftingRemainingItem = getItemStack(strings.get(1));
                         break;
                     }
                 }
@@ -42,6 +46,17 @@ public class DefaultEatenEvent {
                     maid.level.addFreshEntity(itemEntity);
                 }
             }
+        }
+    }
+
+    private static ItemStack getItemStack(String itemId) {
+        ResourceLocation resourceLocation = new ResourceLocation(itemId);
+        Item value = ForgeRegistries.ITEMS.getValue(resourceLocation);
+        if (value != null) {
+            return new ItemStack(value);
+        }else {
+            TouhouLittleMaid.LOGGER.warn("Can't find item: " + itemId + ", please check your MaidEatenReturnContainerList config entry.");
+            return ItemStack.EMPTY;
         }
     }
 }
