@@ -59,6 +59,16 @@ public interface IMaidTask {
     }
 
     /**
+     * 获取任务启用的条件提示文本
+     *
+     * @param maid 女仆对象
+     * @return 条件名（用于自动生成对应的 key）和对应条件布尔值的组合列表
+     */
+    default List<Pair<String, Predicate<EntityMaid>>> getEnableConditionDesc(EntityMaid maid) {
+        return Collections.emptyList();
+    }
+
+    /**
      * 获取当前模式名称
      *
      * @return 当前模式名称

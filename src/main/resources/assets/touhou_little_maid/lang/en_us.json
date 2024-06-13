@@ -401,6 +401,7 @@
   "task.touhou_little_maid.board_games": "Games",
   "task.touhou_little_maid.desc.title": "[Tips]",
   "task.touhou_little_maid.desc.condition": "[Extra Condition]",
+  "task.touhou_little_maid.desc.enable_condition": "[Enable Condition]",
   "task.touhou_little_maid.idle.desc": "Maid will not do anything in this task",
   "task.touhou_little_maid.attack.desc": "Maid will melee attack surrounding hostile mobs",
   "task.touhou_little_maid.attack.condition.assault_weapon": "Mainhand holds an assault weapon",

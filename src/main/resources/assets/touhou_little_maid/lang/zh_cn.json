@@ -401,6 +401,7 @@
   "task.touhou_little_maid.board_games": "游戏",
   "task.touhou_little_maid.desc.title": "[提示]",
   "task.touhou_little_maid.desc.condition": "[额外条件]",
+  "task.touhou_little_maid.desc.enable_condition": "[启用条件]",
   "task.touhou_little_maid.idle.desc": "此工作模式下，女仆什么也不会做",
   "task.touhou_little_maid.attack.desc": "女仆会主动攻击周围的敌对生物",
   "task.touhou_little_maid.attack.condition.assault_weapon": "女仆主手持有攻击性武器",
