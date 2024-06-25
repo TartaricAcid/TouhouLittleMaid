@@ -119,12 +119,7 @@ public final class MaidConfig {
         ));
 
         builder.comment("These entries configure the container returned after a maid has eaten", "Eg: [\"minecraft:beetroot_soup\", \"minecraft:bowl\"]");
-        // 不知道原版碗类食物要不要走进配置？就干脆不走了
-        MAID_EATEN_RETURN_CONTAINER_LIST = builder.define("MaidEatenReturnContainerList", Lists.newArrayList(
-//                Arrays.asList(getItemId(Items.MUSHROOM_STEW), getItemId(Items.BOWL)),
-//                Arrays.asList(getItemId(Items.BEETROOT_SOUP), getItemId(Items.BOWL)),
-//                Arrays.asList(getItemId(Items.RABBIT_STEW), getItemId(Items.BOWL))
-        ));
+        MAID_EATEN_RETURN_CONTAINER_LIST = builder.define("MaidEatenReturnContainerList", Lists.newArrayList());
 
         builder.pop();
     }
