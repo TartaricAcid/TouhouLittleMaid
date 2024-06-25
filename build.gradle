@@ -131,6 +131,10 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
+    // rei
+    runtimeOnly fg.deobf("curse.maven:architectury-api-419699:${architectury_api_id}")
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 

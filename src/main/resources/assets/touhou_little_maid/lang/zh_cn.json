@@ -344,6 +344,8 @@
   "config.touhou_little_maid.maid.maid_home_meals_block_list_regex.desc": "匹配的物品不能用于女仆的家庭餐，请使用正则全词匹配",
   "config.touhou_little_maid.maid.maid_heal_meals_block_list_regex.name": "女仆回血餐黑名单（正则匹配）",
   "config.touhou_little_maid.maid.maid_heal_meals_block_list_regex.desc": "匹配的物品不能用于女仆的回血餐，请使用正则全词匹配",
+  "config.touhou_little_maid.maid.maid_eaten_return_container_list.name": "女仆用餐后返回容器的列表",
+  "config.touhou_little_maid.maid.maid_eaten_return_container_list.desc": "这些条目配置了女仆用餐后要返回的容器\n例如: §eminecraft:beetroot_soup§c,§eminecraft:bowl",
   "config.touhou_little_maid.chair.chair_change_model.name": "坐垫能否切换模型",
   "config.touhou_little_maid.chair.chair_change_model.desc": "坐垫能否自由切换模型",
   "config.touhou_little_maid.chair.chair_can_destroyed_by_anyone.name": "坐垫可破坏",

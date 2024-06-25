@@ -186,8 +186,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(modelDownload, graphics, x, y, "gui.touhou_little_maid.button.model_download");
         renderTransTooltip(skin, graphics, x, y, "gui.touhou_little_maid.button.skin");
         renderTransTooltip(sound, graphics, x, y, "gui.touhou_little_maid.button.sound");
-        renderTransTooltip(pageUp, graphics, x, y, "gui.touhou_little_maid.task.next_page");
-        renderTransTooltip(pageDown, graphics, x, y, "gui.touhou_little_maid.task.previous_page");
+        renderTransTooltip(pageUp, graphics, x, y, "gui.touhou_little_maid.task.previous_page");
+        renderTransTooltip(pageDown, graphics, x, y, "gui.touhou_little_maid.task.next_page");
         renderTransTooltip(pageClose, graphics, x, y, "gui.touhou_little_maid.task.close");
         renderTransTooltip(taskSwitch, graphics, x, y, "gui.touhou_little_maid.task.switch");
         renderMaidInfo(graphics, x, y);
@@ -351,7 +351,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawTaskPageCount(GuiGraphics graphics) {
         if (taskListOpen) {
-            String text = String.format("%d/%d", TASK_PAGE + 1, TaskManager.getTaskIndex().size() / TASK_COUNT_PER_PAGE + 1);
+            String text = String.format("%d/%d", TASK_PAGE + 1, (TaskManager.getTaskIndex().size() - 1) / TASK_COUNT_PER_PAGE + 1);
             graphics.drawString(font, text, -48, 12, 0x333333, false);
         }
     }

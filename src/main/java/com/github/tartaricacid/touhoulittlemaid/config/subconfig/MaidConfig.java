@@ -1,14 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil.getItemId;
 
 public final class MaidConfig {
     public static final String TAG_PREFIX = "#";
@@ -35,6 +33,7 @@ public final class MaidConfig {
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_WORK_MEALS_BLOCK_LIST_REGEX;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST_REGEX;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST_REGEX;
+    public static ForgeConfigSpec.ConfigValue<List<List<String>>> MAID_EATEN_RETURN_CONTAINER_LIST;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("maid");
@@ -119,12 +118,14 @@ public final class MaidConfig {
         MAID_HEAL_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHealMealsBlockListRegEx", Lists.newArrayList(
         ));
 
-        builder.pop();
-    }
+        builder.comment("These entries configure the container returned after a maid has eaten", "Eg: [\"minecraft:beetroot_soup\", \"minecraft:bowl\"]");
+        // 不知道原版碗类食物要不要走进配置？就干脆不走了
+        MAID_EATEN_RETURN_CONTAINER_LIST = builder.define("MaidEatenReturnContainerList", Lists.newArrayList(
+//                Arrays.asList(getItemId(Items.MUSHROOM_STEW), getItemId(Items.BOWL)),
+//                Arrays.asList(getItemId(Items.BEETROOT_SOUP), getItemId(Items.BOWL)),
+//                Arrays.asList(getItemId(Items.RABBIT_STEW), getItemId(Items.BOWL))
+        ));
 
-    private static String getItemId(Item item) {
-        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
-        Preconditions.checkNotNull(key);
-        return key.toString();
+        builder.pop();
     }
 }
