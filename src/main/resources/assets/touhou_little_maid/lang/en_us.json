@@ -504,6 +504,7 @@
   "subtitle.touhou_little_maid.block.gomoku_reset": "Gomoku Reset Sound",
   "subtitle.touhou_little_maid.entity.box": "Box Open Sound",
   "subtitle.touhou_little_maid.item.compass": "Compass Select Point Sound",
+  "emi.category.touhou_little_maid.altar": "Altar Craft",
   "jei.touhou_little_maid.altar_craft.title": "Altar Craft",
   "jei.touhou_little_maid.altar_craft.result": "Result: %s",
   "jei.touhou_little_maid.altar_craft.item_craft.result": "Craft an Item",
