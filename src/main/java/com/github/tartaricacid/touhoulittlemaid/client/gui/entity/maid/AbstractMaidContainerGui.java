@@ -495,20 +495,12 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         }
     }
 
-    @Override
-    public int getGuiLeft() {
-        if (taskListOpen) {
-            return leftPos - 93;
-        }
-        return leftPos;
+    public boolean isTaskListOpen() {
+        return taskListOpen;
     }
 
-    @Override
-    public int getXSize() {
-        if (taskListOpen) {
-            return imageWidth + 93;
-        }
-        return imageWidth;
+    public int[] getTaskListAreas() {
+        return new int[] { leftPos - 93, topPos + 5, 92, 251 };
     }
 
     public EntityMaid getMaid() {

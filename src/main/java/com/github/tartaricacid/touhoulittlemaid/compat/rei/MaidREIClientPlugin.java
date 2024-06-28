@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.rei;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.CraftingTableBackpackContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.FurnaceBackpackContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.compat.rei.altar.ReiAltarRecipeCategory;
@@ -15,6 +16,8 @@ import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.entry.CollapsibleEntryRegistry;
+import me.shedaniel.rei.api.client.registry.screen.ExclusionZones;
+import me.shedaniel.rei.api.client.registry.screen.ExclusionZonesProvider;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -28,6 +31,8 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @REIPluginClient
@@ -95,5 +100,24 @@ public class MaidREIClientPlugin implements REIClientPlugin {
         registry.register(new BackpackTransferHandler(CraftingTableBackpackContainer.class, BuiltinPlugin.CRAFTING, 71, 9, 0, 70));
         registry.register(new BackpackTransferHandler(FurnaceBackpackContainer.class, BuiltinPlugin.SMELTING, 70, 1, 0, 70));
         registry.register(new BackpackTransferHandler(FurnaceBackpackContainer.class, BuiltinPlugin.FUEL, 71, 1, 0, 70));
+    }
+
+    /**
+     * Registers screen exclusion zones
+     *
+     * @param zones the exclusion zones registry
+     */
+    @Override
+    public void registerExclusionZones(ExclusionZones zones) {
+        zones.register(AbstractMaidContainerGui.class, new ExclusionZonesProvider<AbstractMaidContainerGui<?>>() {
+            @Override
+            public Collection<Rectangle> provide(AbstractMaidContainerGui screen) {
+                if (screen.isTaskListOpen()){
+                    int[] taskListAreas = screen.getTaskListAreas();
+                    return Collections.singletonList(new Rectangle(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
+                }
+                return Collections.emptyList();
+            }
+        });
     }
 }

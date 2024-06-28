@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.emi;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.compat.emi.altar.EmiAltarRecipeCategory;
 import com.github.tartaricacid.touhoulittlemaid.compat.emi.altar.EmiAltarRecipeMaker;
 import com.github.tartaricacid.touhoulittlemaid.compat.emi.transfer.BackpackRecipeHandler;
@@ -12,6 +13,7 @@ import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.Bounds;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import java.util.List;
 public class MaidEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory ALTAR = new EmiAltarRecipeCategory();
 
-    private static void registerAltarRecipeCategory(EmiRegistry registry) {
+    private void registerAltarRecipeCategory(EmiRegistry registry) {
         registry.addCategory(ALTAR);
         registry.addWorkstation(ALTAR, EmiStack.of(InitItems.HAKUREI_GOHEI.get()));
         registry.addWorkstation(ALTAR, EmiStack.of(InitItems.SANAE_GOHEI.get()));
@@ -30,7 +32,7 @@ public class MaidEmiPlugin implements EmiPlugin {
     }
 
     // 用来隐藏过多的手办和坐垫
-    private static void hideStacks(EmiRegistry registry) {
+    private void hideStacks(EmiRegistry registry) {
         List<ItemStack> groupItems = new ArrayList<>();
         groupItems.add(InitItems.GARAGE_KIT.get().getDefaultInstance());
         groupItems.add(InitItems.CHAIR.get().getDefaultInstance());
@@ -52,16 +54,28 @@ public class MaidEmiPlugin implements EmiPlugin {
         }
     }
 
-    private static void registerRecipeHandlers(EmiRegistry registry) {
+    private void registerRecipeHandlers(EmiRegistry registry) {
         registry.addRecipeHandler(CraftingTableBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.CRAFTING, 71, 9, 0, 70));
         registry.addRecipeHandler(FurnaceBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.SMELTING, 70, 1, 0, 70));
         registry.addRecipeHandler(FurnaceBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.FUEL, 71, 1, 0, 70));
+    }
+
+    private void registerExclusionArea(EmiRegistry registry) {
+        registry.addGenericExclusionArea(((screen, consumer) -> {
+            if (!(screen instanceof AbstractMaidContainerGui<?> maidContainerGui)) return;
+
+            if (maidContainerGui.isTaskListOpen()) {
+                int[] taskListAreas = maidContainerGui.getTaskListAreas();
+                consumer.accept(new Bounds(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
+            }
+        }));
     }
 
     @Override
     public void register(EmiRegistry registry) {
         registerAltarRecipeCategory(registry);
         registerRecipeHandlers(registry);
+        registerExclusionArea(registry);
         hideStacks(registry);
     }
 }
