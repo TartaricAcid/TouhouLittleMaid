@@ -32,6 +32,7 @@ public class EmiAltarRecipe implements EmiRecipe {
         this.powerCost = powerCost;
         this.langKey = langKey;
     }
+
     @Override
     public EmiRecipeCategory getCategory() {
         return MaidEmiPlugin.ALTAR;

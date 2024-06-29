@@ -25,26 +25,18 @@ import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.forge.REIPluginClient;
 import me.shedaniel.rei.plugin.common.BuiltinPlugin;
-import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 @REIPluginClient
 public class MaidREIClientPlugin implements REIClientPlugin {
-
     public static final CategoryIdentifier<ReiAltarRecipeDisplay> ALTAR = CategoryIdentifier.of(TouhouLittleMaid.MOD_ID, "plugin/altar");
 
-    /**
-     * Registers entries to collapse on the entry panel.
-     *
-     * @param registry the collapsible entry registry
-     */
     @Override
     @SuppressWarnings("UnstableApiUsage")
     public void registerCollapsibleEntries(CollapsibleEntryRegistry registry) {
@@ -57,44 +49,23 @@ public class MaidREIClientPlugin implements REIClientPlugin {
         }
     }
 
-    /**
-     * Registers new categories
-     *
-     * @param registry the category registry
-     */
     @Override
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new ReiAltarRecipeCategory());
-
         registry.addWorkstations(ALTAR, EntryStacks.of(InitItems.SANAE_GOHEI.get()), EntryStacks.of(InitItems.HAKUREI_GOHEI.get()));
     }
 
-    /**
-     * Registers new displays for categories
-     *
-     * @param registry the display registry
-     */
     @Override
     public void registerDisplays(DisplayRegistry registry) {
         ReiAltarRecipeMaker.registerAltarRecipes(registry);
     }
 
-    /**
-     * Registers screen deciders
-     *
-     * @param registry the screen registry
-     */
     @Override
     public void registerScreens(ScreenRegistry registry) {
         registry.registerContainerClickArea(new Rectangle(213, 121, 13, 12), CraftingTableBackpackContainerScreen.class, BuiltinPlugin.CRAFTING);
         registry.registerContainerClickArea(new Rectangle(183, 118, 28, 24), FurnaceBackpackContainerScreen.class, BuiltinPlugin.SMELTING, BuiltinPlugin.FUEL);
     }
 
-    /**
-     * Registers new transfer handlers
-     *
-     * @param registry the registry
-     */
     @Override
     public void registerTransferHandlers(TransferHandlerRegistry registry) {
         registry.register(new BackpackTransferHandler(CraftingTableBackpackContainer.class, BuiltinPlugin.CRAFTING, 71, 9, 0, 70));
@@ -102,22 +73,14 @@ public class MaidREIClientPlugin implements REIClientPlugin {
         registry.register(new BackpackTransferHandler(FurnaceBackpackContainer.class, BuiltinPlugin.FUEL, 71, 1, 0, 70));
     }
 
-    /**
-     * Registers screen exclusion zones
-     *
-     * @param zones the exclusion zones registry
-     */
     @Override
     public void registerExclusionZones(ExclusionZones zones) {
-        zones.register(AbstractMaidContainerGui.class, new ExclusionZonesProvider<AbstractMaidContainerGui<?>>() {
-            @Override
-            public Collection<Rectangle> provide(AbstractMaidContainerGui screen) {
-                if (screen.isTaskListOpen()){
-                    int[] taskListAreas = screen.getTaskListAreas();
-                    return Collections.singletonList(new Rectangle(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
-                }
-                return Collections.emptyList();
+        zones.register(AbstractMaidContainerGui.class, (ExclusionZonesProvider<AbstractMaidContainerGui<?>>) screen -> {
+            if (screen.isTaskListOpen()) {
+                int[] taskListAreas = screen.getTaskListAreas();
+                return Collections.singletonList(new Rectangle(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
             }
+            return Collections.emptyList();
         });
     }
 }

@@ -10,8 +10,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import java.util.List;
 
 public final class EmiAltarRecipeMaker {
-
-    public static void registerAltarRecipes(EmiRegistry registry){
+    public static void registerAltarRecipes(EmiRegistry registry) {
         List<AltarRecipe> allRecipesFor = registry.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING);
         JERIUtil.recipeWarp(allRecipesFor, (recipeId, inputs, output, powerCost, langKey) -> {
             List<EmiIngredient> inputs1 = inputs.stream()
@@ -19,9 +18,7 @@ public final class EmiAltarRecipeMaker {
                     .map(EmiIngredient::of)
                     .toList();
             List<EmiStack> outputs = List.of(EmiStack.of(output));
-
             registry.addRecipe(new EmiAltarRecipe(recipeId, inputs1, outputs, powerCost, langKey));
         });
     }
-
 }

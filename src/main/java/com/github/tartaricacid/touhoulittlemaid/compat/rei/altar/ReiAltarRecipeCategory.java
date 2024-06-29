@@ -7,11 +7,9 @@ import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
-import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
-import me.shedaniel.rei.api.common.entry.EntryStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
@@ -29,70 +27,34 @@ public class ReiAltarRecipeCategory implements DisplayCategory<ReiAltarRecipeDis
     private final Renderer icon;
 
     public ReiAltarRecipeCategory() {
-        icon = (graphics, bounds, mouseX, mouseY, delta) -> graphics.blit(ALTAR_ICON, bounds.x, bounds.y, 0, 0, 16, 16, 16, 16);
+        this.icon = (graphics, bounds, mouseX, mouseY, delta) -> graphics.blit(ALTAR_ICON, bounds.x, bounds.y, 0, 0, 16, 16, 16, 16);
     }
 
-    /**
-     * Returns the identifier of this {@link DisplayCategory}.
-     * This identifier must be the same one used to register the category
-     * in {@link CategoryRegistry}.
-     *
-     * @return the identifier of this category
-     */
     @Override
     public CategoryIdentifier<? extends ReiAltarRecipeDisplay> getCategoryIdentifier() {
         return MaidREIClientPlugin.ALTAR;
     }
 
-    /**
-     * Returns the category title for the category.
-     *
-     * @return the title
-     */
     @Override
     public Component getTitle() {
         return TITLE;
     }
 
-    /**
-     * Returns the renderer of the icon displayed in the category tab.
-     * <p>
-     * A simple implementation is the {@link EntryStack}.
-     *
-     * @return the renderer of the icon
-     */
     @Override
     public Renderer getIcon() {
         return icon;
     }
 
-    /**
-     * Returns the display height, the display height is consistent between all displays in the category.
-     *
-     * @return the display height
-     */
     @Override
     public int getDisplayHeight() {
         return 125;
     }
 
-    /**
-     * Returns the display width, the display width can be display-dependent.
-     *
-     * @param display the display
-     * @return the display width
-     */
     @Override
     public int getDisplayWidth(ReiAltarRecipeDisplay display) {
         return 160;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param display
-     * @param bounds
-     */
     @Override
     public List<Widget> setupDisplay(ReiAltarRecipeDisplay display, Rectangle bounds) {
         int darkGray = 0x555555;
@@ -110,7 +72,6 @@ public class ReiAltarRecipeCategory implements DisplayCategory<ReiAltarRecipeDis
         widgets.add(Widgets.createSlot(new Point(startX + 100, startY + 35)).entries(getInput(display.getInputEntries(), 4)).markInput());
         widgets.add(Widgets.createSlot(new Point(startX + 100, startY + 55)).entries(getInput(display.getInputEntries(), 5)).markInput());
         widgets.add(Widgets.createSlot(new Point(startX + 140 - 5, startY + 5)).entries(display.getOutputEntries().get(0)).markOutput());
-
 
         widgets.add(Widgets.createTexturedWidget(POWER_ICON, startX + 72, startY + 38, 32, 0, 16, 16, 64, 64));
         widgets.add(Widgets.withTranslate(Widgets.createDrawableWidget((guiGraphics, mouseX, mouseY, v) -> {

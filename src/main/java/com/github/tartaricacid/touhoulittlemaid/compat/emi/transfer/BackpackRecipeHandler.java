@@ -24,11 +24,6 @@ public class BackpackRecipeHandler<C extends MaidMainContainer> implements Stand
         this.inventorySlotCount = inventorySlotCount;
     }
 
-    /**
-     * @param handler
-     * @return The slots for the recipe handler to source ingredients from.
-     * Typically this should include the player's inventory, and crafting slots.
-     */
     @Override
     public List<Slot> getInputSources(C handler) {
         List<Slot> slots = new ArrayList<>();
@@ -38,10 +33,6 @@ public class BackpackRecipeHandler<C extends MaidMainContainer> implements Stand
         return slots;
     }
 
-    /**
-     * @param handler
-     * @return The slots where inputs should be placed to perform crafting.
-     */
     @Override
     public List<Slot> getCraftingSlots(C handler) {
         List<Slot> slots = new ArrayList<>();
@@ -51,10 +42,6 @@ public class BackpackRecipeHandler<C extends MaidMainContainer> implements Stand
         return slots;
     }
 
-    /**
-     * @param recipe
-     * @return Whether the handler is applicable for the provided recipe.
-     */
     @Override
     public boolean supportsRecipe(EmiRecipe recipe) {
         return recipe.getCategory() == recipeCategory;

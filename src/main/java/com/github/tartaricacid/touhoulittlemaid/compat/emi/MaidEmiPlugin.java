@@ -31,7 +31,9 @@ public class MaidEmiPlugin implements EmiPlugin {
         EmiAltarRecipeMaker.registerAltarRecipes(registry);
     }
 
-    // 用来隐藏过多的手办和坐垫
+    /**
+     * 用来隐藏过多的手办和坐垫
+     */
     private void hideStacks(EmiRegistry registry) {
         List<ItemStack> groupItems = new ArrayList<>();
         groupItems.add(InitItems.GARAGE_KIT.get().getDefaultInstance());
@@ -62,8 +64,9 @@ public class MaidEmiPlugin implements EmiPlugin {
 
     private void registerExclusionArea(EmiRegistry registry) {
         registry.addGenericExclusionArea(((screen, consumer) -> {
-            if (!(screen instanceof AbstractMaidContainerGui<?> maidContainerGui)) return;
-
+            if (!(screen instanceof AbstractMaidContainerGui<?> maidContainerGui)) {
+                return;
+            }
             if (maidContainerGui.isTaskListOpen()) {
                 int[] taskListAreas = maidContainerGui.getTaskListAreas();
                 consumer.accept(new Bounds(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));

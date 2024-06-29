@@ -523,7 +523,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     public int[] getTaskListAreas() {
-        return new int[] { leftPos - 93, topPos + 5, 92, 251 };
+        return new int[]{leftPos - 93, topPos + 5, 92, 251};
     }
 
     public EntityMaid getMaid() {

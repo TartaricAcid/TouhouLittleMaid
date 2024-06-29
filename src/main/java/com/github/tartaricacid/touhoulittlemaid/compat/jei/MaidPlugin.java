@@ -62,11 +62,11 @@ public class MaidPlugin implements IModPlugin {
         registerTaskListArea(registration);
     }
 
-    private void registerTaskListArea(IGuiHandlerRegistration registration){
+    private void registerTaskListArea(IGuiHandlerRegistration registration) {
         registration.addGenericGuiContainerHandler(AbstractMaidContainerGui.class, new IGuiContainerHandler<AbstractMaidContainerGui<?>>() {
             @Override
             public List<Rect2i> getGuiExtraAreas(AbstractMaidContainerGui containerScreen) {
-                if (containerScreen.isTaskListOpen()){
+                if (containerScreen.isTaskListOpen()) {
                     int[] taskListAreas = containerScreen.getTaskListAreas();
                     return Collections.singletonList(new Rect2i(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
                 }

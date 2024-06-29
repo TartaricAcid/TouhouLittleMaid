@@ -32,8 +32,8 @@ public class BackpackTransferHandler implements SimpleTransferHandler {
     @Override
     public ApplicabilityResult checkApplicable(Context context) {
         if (!containerClass.isInstance(context.getMenu())
-                || !categoryIdentifier.equals(context.getDisplay().getCategoryIdentifier())
-                || context.getContainerScreen() == null) {
+            || !categoryIdentifier.equals(context.getDisplay().getCategoryIdentifier())
+            || context.getContainerScreen() == null) {
             return ApplicabilityResult.createNotApplicable();
         } else {
             return ApplicabilityResult.createApplicable();

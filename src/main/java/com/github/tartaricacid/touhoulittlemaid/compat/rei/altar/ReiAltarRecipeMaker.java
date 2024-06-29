@@ -10,11 +10,9 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import java.util.Arrays;
 import java.util.List;
 
-public final class ReiAltarRecipeMaker{
-
+public final class ReiAltarRecipeMaker {
     public static void registerAltarRecipes(DisplayRegistry registry) {
         List<AltarRecipe> allRecipesFor = registry.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING);
-
         JERIUtil.recipeWarp(allRecipesFor, ((recipeId, inputs, output, powerCost, langKey) -> {
             List<EntryIngredient> inputs1 = inputs.stream()
                     .filter(it -> !it.isEmpty())
@@ -27,5 +25,4 @@ public final class ReiAltarRecipeMaker{
             registry.add(new ReiAltarRecipeDisplay(recipeId, inputs1, outputs, powerCost, langKey));
         }));
     }
-
 }

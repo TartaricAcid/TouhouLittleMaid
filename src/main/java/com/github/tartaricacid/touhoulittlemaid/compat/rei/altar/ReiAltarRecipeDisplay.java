@@ -24,23 +24,11 @@ public class ReiAltarRecipeDisplay implements Display {
         this.langKey = langKey;
     }
 
-    /**
-     * Returns the list of inputs for this display. This only affects the stacks resolving for the display,
-     * and not necessarily the stacks that are displayed.
-     *
-     * @return a list of inputs
-     */
     @Override
     public List<EntryIngredient> getInputEntries() {
         return inputs;
     }
 
-    /**
-     * Returns the list of outputs for this display. This only affects the stacks resolving for the display,
-     * and not necessarily the stacks that are displayed.
-     *
-     * @return a list of outputs
-     */
     @Override
     public List<EntryIngredient> getOutputEntries() {
         return outputs;
@@ -58,21 +46,11 @@ public class ReiAltarRecipeDisplay implements Display {
         return langKey;
     }
 
-    /**
-     * Returns the identifier of the category this display belongs to.
-     *
-     * @return the identifier of the category
-     */
     @Override
     public CategoryIdentifier<?> getCategoryIdentifier() {
         return MaidREIClientPlugin.ALTAR;
     }
 
-    /**
-     * Returns the display location from data packs.
-     *
-     * @return the display location
-     */
     @Override
     public Optional<ResourceLocation> getDisplayLocation() {
         return Optional.of(id);
