@@ -251,9 +251,14 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawPerTaskButton(List<IMaidTask> tasks, int count, int index) {
         final IMaidTask maidTask = tasks.get(index);
-        TaskButton button = new TaskButton(maidTask, leftPos - 89, topPos + 23 + 19 * count,
+        boolean enable = maidTask.isEnable(maid);
+        TaskButton button = new TaskButton(maidTask, enable, leftPos - 89, topPos + 23 + 19 * count,
                 83, 19, 93, 28, 20, TASK, 256, 256,
-                (b) -> NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid())),
+                (b) -> {
+                    if (enable) {
+                        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+                    }
+                },
                 getTaskTooltips(maidTask), Component.empty());
         this.addRenderableWidget(button);
         button.visible = taskListOpen;
@@ -263,6 +268,25 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         List<Component> desc = ParseI18n.keysToTrans(maidTask.getDescription(maid), ChatFormatting.GRAY);
         if (!desc.isEmpty()) {
             desc.add(0, Component.translatable("task.touhou_little_maid.desc.title").withStyle(ChatFormatting.GOLD));
+        }
+        if (!maidTask.isEnable(maid)) {
+            List<Pair<String, Predicate<EntityMaid>>> enableConditionDesc = maidTask.getEnableConditionDesc(maid);
+            //不判空是想让作者注明任务启用条件
+            desc.add(Component.literal("\u0020"));
+            desc.add(Component.translatable("task.touhou_little_maid.desc.enable_condition").withStyle(ChatFormatting.GOLD));
+
+            for (Pair<String, Predicate<EntityMaid>> line : enableConditionDesc) {
+                MutableComponent prefix = Component.literal("-\u0020");
+                String key = String.format("task.%s.%s.enable_condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
+                MutableComponent condition = Component.translatable(key);
+                if (line.getSecond().test(maid)) {
+                    condition.withStyle(ChatFormatting.GREEN);
+                } else {
+                    condition.withStyle(ChatFormatting.RED);
+                }
+                desc.add(prefix.append(condition));
+
+            }
         }
         List<Pair<String, Predicate<EntityMaid>>> conditions = maidTask.getConditionDescription(maid);
         if (!conditions.isEmpty()) {

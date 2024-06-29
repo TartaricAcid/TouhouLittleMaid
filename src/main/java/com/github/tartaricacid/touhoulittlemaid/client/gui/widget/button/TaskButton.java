@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 @OnlyIn(Dist.CLIENT)
 public class TaskButton extends Button {
     private final IMaidTask task;
+    private final boolean enable;
     private final ResourceLocation resourceLocation;
     private final int xTexStart;
     private final int yTexStart;
@@ -25,21 +26,22 @@ public class TaskButton extends Button {
     private final int textureHeight;
     private final List<Component> tooltips;
 
-    public TaskButton(IMaidTask task, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, OnPress onPressIn) {
-        this(task, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, 256, 256, onPressIn);
+    public TaskButton(IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, OnPress onPressIn) {
+        this(task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, 256, 256, onPressIn);
     }
 
-    public TaskButton(IMaidTask task, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int textureWidth, int textureHeight, OnPress onPressIn) {
-        this(task, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureWidth, textureHeight, onPressIn, Component.empty());
+    public TaskButton(IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int textureWidth, int textureHeight, OnPress onPressIn) {
+        this(task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureWidth, textureHeight, onPressIn, Component.empty());
     }
 
-    public TaskButton(IMaidTask task, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, Component title) {
-        this(task, x, y, width, height, xTexStart, yTexStart, yDiffText, resourceLocation, textureWidth, textureHeight, onPress, Collections.emptyList(), title);
+    public TaskButton(IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, Component title) {
+        this(task, enable, x, y, width, height, xTexStart, yTexStart, yDiffText, resourceLocation, textureWidth, textureHeight, onPress, Collections.emptyList(), title);
     }
 
-    public TaskButton(IMaidTask task, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, List<Component> tooltips, Component title) {
+    public TaskButton(IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, List<Component> tooltips, Component title) {
         super(x, y, width, height, title, onPress, Supplier::get);
         this.task = task;
+        this.enable = enable;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
         this.xTexStart = xTexStart;
@@ -53,6 +55,22 @@ public class TaskButton extends Button {
         return task;
     }
 
+    /**
+     * Called when a mouse button is clicked within the GUI element.
+     * <p>
+     *
+     * @param pMouseX the X coordinate of the mouse.
+     * @param pMouseY the Y coordinate of the mouse.
+     * @param pButton the button that was clicked.
+     * @return {@code true} if the event is consumed, {@code false} otherwise.
+     */
+    @Override
+    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        // 禁用声音...
+        if (!enable) return false;
+        return super.mouseClicked(pMouseX, pMouseY, pButton);
+    }
+
     @Override
     @SuppressWarnings("all")
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
@@ -63,6 +81,11 @@ public class TaskButton extends Button {
         }
         RenderSystem.enableDepthTest();
         graphics.blit(this.resourceLocation, this.getX(), this.getY(), (float) this.xTexStart, (float) i, this.width, this.height, this.textureWidth, this.textureHeight);
+        if (!enable) {
+            // 不知为啥设定渲染高度是19，但渲染出来的是20...
+            graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x80000000);
+            graphics.blit(this.resourceLocation, this.getX() + 72, this.getY(), (float) 93, (float) 68, 7, 19, this.textureWidth, this.textureHeight);
+        }
         graphics.renderItem(task.getIcon(), this.getX() + 2, this.getY() + 2);
         graphics.drawString(minecraft.font, task.getName(), this.getX() + 23, this.getY() + 6, 0x333333, false);
     }
