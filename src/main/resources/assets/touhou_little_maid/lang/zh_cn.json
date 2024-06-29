@@ -505,6 +505,7 @@
   "subtitle.touhou_little_maid.block.gomoku_reset": "五子棋：重置",
   "subtitle.touhou_little_maid.entity.box": "盒子：打开",
   "subtitle.touhou_little_maid.item.compass": "罗盘：选择点",
+  "emi.category.touhou_little_maid.altar": "祭坛合成",
   "jei.touhou_little_maid.altar_craft.title": "祭坛合成",
   "jei.touhou_little_maid.altar_craft.result": "结果：%s",
   "jei.touhou_little_maid.altar_craft.item_craft.result": "合成物品",
