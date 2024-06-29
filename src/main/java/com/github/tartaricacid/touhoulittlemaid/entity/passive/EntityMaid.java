@@ -1601,6 +1601,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (task == this.task) {
             return;
         }
+        if (!task.isEnable(this)) {
+            return;
+        }
         this.task = task;
         this.entityData.set(DATA_TASK, task.getUid().toString());
         if (level instanceof ServerLevel) {

@@ -271,7 +271,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         }
         if (!maidTask.isEnable(maid)) {
             List<Pair<String, Predicate<EntityMaid>>> enableConditionDesc = maidTask.getEnableConditionDesc(maid);
-            //不判空是想让作者注明任务启用条件
+            // 强制显示启用条件提示
             desc.add(Component.literal("\u0020"));
             desc.add(Component.translatable("task.touhou_little_maid.desc.enable_condition").withStyle(ChatFormatting.GOLD));
 
@@ -285,7 +285,6 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                     condition.withStyle(ChatFormatting.RED);
                 }
                 desc.add(prefix.append(condition));
-
             }
         }
         List<Pair<String, Predicate<EntityMaid>>> conditions = maidTask.getConditionDescription(maid);

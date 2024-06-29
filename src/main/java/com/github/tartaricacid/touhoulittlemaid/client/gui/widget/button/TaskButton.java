@@ -55,19 +55,12 @@ public class TaskButton extends Button {
         return task;
     }
 
-    /**
-     * Called when a mouse button is clicked within the GUI element.
-     * <p>
-     *
-     * @param pMouseX the X coordinate of the mouse.
-     * @param pMouseY the Y coordinate of the mouse.
-     * @param pButton the button that was clicked.
-     * @return {@code true} if the event is consumed, {@code false} otherwise.
-     */
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        // 禁用声音...
-        if (!enable) return false;
+        // 禁用声音
+        if (!enable) {
+            return false;
+        }
         return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
