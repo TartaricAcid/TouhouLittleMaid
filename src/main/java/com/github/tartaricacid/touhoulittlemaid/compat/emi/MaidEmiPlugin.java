@@ -10,10 +10,13 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.Fur
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
+import dev.emi.emi.api.recipe.EmiInfoRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -74,11 +77,20 @@ public class MaidEmiPlugin implements EmiPlugin {
         }));
     }
 
+    private void registerInfoRecipe(EmiRegistry registry){
+        registry.addRecipe(getInfoRecipe(InitItems.GARAGE_KIT.get(), Component.translatable("jei.touhou_little_maid.garage_kit.info")));
+    }
+
+    private EmiInfoRecipe getInfoRecipe(Item item, Component component){
+        return new EmiInfoRecipe(List.of(EmiStack.of(item)), List.of(component), null);
+    }
+
     @Override
     public void register(EmiRegistry registry) {
         registerAltarRecipeCategory(registry);
         registerRecipeHandlers(registry);
         registerExclusionArea(registry);
+        registerInfoRecipe(registry);
         hideStacks(registry);
     }
 }
