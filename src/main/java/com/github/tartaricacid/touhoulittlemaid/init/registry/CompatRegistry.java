@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.mod.ClothConfigScreen
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.BlackList;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
