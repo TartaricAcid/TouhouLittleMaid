@@ -306,7 +306,6 @@
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text": "Touhou Вики",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "Задать место появления в мире",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.0.text": "Этот мод добавляет одного моба. $(br2)Добыча моба является важным ингредиентом для крафта.$(br2)Шанс спавна враждебных существ в этом моде можно изменить в конфигурационном файле. Если значение равно 0, то этим монстрам запрещен спавн.",
-  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "Появляется в мире ночью, будет летать и одновременно стрелять данмаку, чтобы атаковать игроков и горничных.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.name": "Сделать Пользовательскую Модель",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.text": "Я специально разработал плагин для Blockbench для создания пака моделей. Посетите ссылку ниже, чтобы узнать, как установить плагин.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "Открыть Ссылку",
