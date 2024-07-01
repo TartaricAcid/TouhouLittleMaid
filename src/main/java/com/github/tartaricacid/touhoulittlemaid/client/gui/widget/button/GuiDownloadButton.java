@@ -20,6 +20,9 @@ public class GuiDownloadButton extends Button {
     @Override
     public Component getMessage() {
         MutableComponent text;
+        if (info == null) {
+            return Component.translatable("selectWorld.futureworld.error.title");
+        }
         switch (info.getStatus()) {
             default -> text = Component.translatable("gui.touhou_little_maid.resources_download.not_download");
             case DOWNLOADED -> text = Component.translatable("gui.touhou_little_maid.resources_download.downloaded");
