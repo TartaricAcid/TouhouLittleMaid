@@ -5,12 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "touhou_little_maid.refmap.json",
   "mixins": [
+    "EntityMixin",
     "MixinArrowEntity",
     "MixinStructureTemplate"
   ],
-  "client": [
-    "client.LanguageMixin"
-  ],
+  "client": ["client.HumanoidModelMixin", "client.LanguageMixin"],
   "injectors": {
     "defaultRequire": 1
   }

@@ -13,12 +13,14 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfi
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -94,6 +96,16 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     protected void scale(Mob maid, PoseStack poseStack, float partialTickTime) {
         float scale = mainInfo.getRenderEntityScale();
         poseStack.scale(scale, scale, scale);
+    }
+
+    @Override
+    protected void setupRotations(Mob mob, PoseStack poseStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks) {
+        super.setupRotations(mob, poseStack, pAgeInTicks, pRotationYaw, pPartialTicks);
+        if (mob.getVehicle() instanceof Player && !this.mainInfo.isGeckoModel()) {
+            poseStack.translate(-0.375, 0.8325, 0.375);
+            poseStack.mulPose(Axis.ZN.rotationDegrees(65));
+            poseStack.mulPose(Axis.YN.rotationDegrees(-80));
+        }
     }
 
     @Override

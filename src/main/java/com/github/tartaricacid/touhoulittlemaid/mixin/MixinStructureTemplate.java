@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Mixin(StructureTemplate.class)
 public abstract class MixinStructureTemplate {
-    @Inject(method = "createEntityIgnoreException", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "createEntityIgnoreException(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/nbt/CompoundTag;)Ljava/util/Optional;", at = @At("RETURN"), cancellable = true)
     private static void createEntityIgnoreException(ServerLevelAccessor accessor, CompoundTag tag, CallbackInfoReturnable<Optional<Entity>> ci) {
         ci.getReturnValue().ifPresent(entity -> {
             ServerLevel level = accessor.getLevel();
