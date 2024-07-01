@@ -15,6 +15,8 @@ public class ConditionManager {
     public static Map<ResourceLocation, ConditionalHold> HOLD_OFFHAND = Maps.newHashMap();
     public static Map<ResourceLocation, ConditionTAC> TAC = Maps.newHashMap();
     public static Map<ResourceLocation, ConditionArmor> ARMOR = Maps.newHashMap();
+    public static Map<ResourceLocation, ConditionalVehicle> VEHICLE = Maps.newHashMap();
+    public static Map<ResourceLocation, ConditionalPassenger> PASSENGER = Maps.newHashMap();
 
     public static void addTest(ResourceLocation id, String name) {
         SWING.computeIfAbsent(id, k -> new ConditionalSwing(InteractionHand.MAIN_HAND)).addTest(name);
@@ -25,6 +27,8 @@ public class ConditionManager {
         HOLD_OFFHAND.computeIfAbsent(id, k -> new ConditionalHold(InteractionHand.OFF_HAND)).addTest(name);
         TAC.computeIfAbsent(id, k -> new ConditionTAC()).addTest(name);
         ARMOR.computeIfAbsent(id, k -> new ConditionArmor()).addTest(name);
+        VEHICLE.computeIfAbsent(id, k -> new ConditionalVehicle()).addTest(name);
+        PASSENGER.computeIfAbsent(id, k -> new ConditionalPassenger()).addTest(name);
     }
 
     public static void clear() {
@@ -66,5 +70,13 @@ public class ConditionManager {
 
     public static ConditionTAC getTAC(ResourceLocation id) {
         return TAC.get(id);
+    }
+
+    public static ConditionalVehicle getVehicle(ResourceLocation id) {
+        return VEHICLE.get(id);
+    }
+
+    public static ConditionalPassenger getPassenger(ResourceLocation id) {
+        return PASSENGER.get(id);
     }
 }

@@ -14,7 +14,9 @@ import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public final class AnimationManager {
@@ -77,6 +80,13 @@ public final class AnimationManager {
             return PlayState.STOP;
         }
         for (int i = Priority.HIGHEST; i <= Priority.LOWEST; i++) {
+            // 载具动画单独检查
+            if (i == Priority.HIGH) {
+                PlayState vehicleAnimation = getVehicleAnimation(event);
+                if (vehicleAnimation != null) {
+                    return vehicleAnimation;
+                }
+            }
             for (AnimationState state : data[i]) {
                 if (state.getPredicate().test(maid, event)) {
                     String animationName = state.getAnimationName();
@@ -254,6 +264,48 @@ public final class AnimationManager {
         String defaultName = slot.getName() + ":default";
         if (GeckoLibCache.getInstance().getAnimations().get(animation).animations().containsKey(defaultName)) {
             return playAnimation(event, defaultName, ILoopType.EDefaultLoopTypes.LOOP);
+        }
+        return PlayState.STOP;
+    }
+
+    @Nullable
+    public PlayState getVehicleAnimation(AnimationEvent<GeckoMaidEntity> event) {
+        Mob mob = event.getAnimatable().getMaid().asEntity();
+        if (mob == null) {
+            return null;
+        }
+        Entity vehicle = mob.getVehicle();
+        if (vehicle == null || !vehicle.isAlive()) {
+            return null;
+        }
+        ResourceLocation id = event.getAnimatable().getAnimation();
+        ConditionalVehicle vehicleCondition = ConditionManager.getVehicle(id);
+        if (vehicleCondition != null) {
+            String name = vehicleCondition.doTest(mob);
+            if (StringUtils.isNoneBlank(name)) {
+                return playAnimation(event, name, ILoopType.EDefaultLoopTypes.LOOP);
+            }
+        }
+        return null;
+    }
+
+    public PlayState predicatePassengerAnimation(AnimationEvent<GeckoMaidEntity> event) {
+        Mob mob = event.getAnimatable().getMaid().asEntity();
+        if (mob == null) {
+            return PlayState.STOP;
+        }
+        Entity passenger = mob.getFirstPassenger();
+        if (passenger == null || !passenger.isAlive()) {
+            return PlayState.STOP;
+        }
+
+        ResourceLocation id = event.getAnimatable().getAnimation();
+        ConditionalPassenger conditionalPassenger = ConditionManager.getPassenger(id);
+        if (conditionalPassenger != null) {
+            String name = conditionalPassenger.doTest(mob);
+            if (StringUtils.isNoneBlank(name)) {
+                return playAnimation(event, name, ILoopType.EDefaultLoopTypes.LOOP);
+            }
         }
         return PlayState.STOP;
     }

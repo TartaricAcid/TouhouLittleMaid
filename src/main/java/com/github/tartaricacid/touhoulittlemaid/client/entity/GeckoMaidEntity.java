@@ -33,6 +33,7 @@ public class GeckoMaidEntity implements IAnimatable {
         data.addAnimationController(new AnimationController<>(this, "swing", 2, manager::predicateSwing));
         data.addAnimationController(new AnimationController<>(this, "use", 2, manager::predicateUse));
         data.addAnimationController(new AnimationController<>(this, "beg", 2, manager::predicateBeg));
+        data.addAnimationController(new AnimationController<>(this, "passenger", 2, manager::predicatePassengerAnimation));
         for (int i = 0; i < 8; i++) {
             String controllerName = String.format("parallel_%d_controller", i);
             String animationName = String.format("parallel%d", i);
