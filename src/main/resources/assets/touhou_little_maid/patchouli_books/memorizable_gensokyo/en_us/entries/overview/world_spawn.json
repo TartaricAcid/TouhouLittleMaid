@@ -14,6 +14,13 @@
       "offset": 0.125,
       "text": "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text",
       "anchor": "fairy"
+    },
+    {
+      "type": "image",
+      "images": [
+        "touhou_little_maid:textures/book/replace_allay.png"
+      ],
+      "text": "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.2.text"
     }
   ]
 }

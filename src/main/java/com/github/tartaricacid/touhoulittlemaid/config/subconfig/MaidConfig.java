@@ -21,6 +21,7 @@ public final class MaidConfig {
     public static ForgeConfigSpec.BooleanValue MAID_CHANGE_MODEL;
     public static ForgeConfigSpec.BooleanValue MAID_GOMOKU_OWNER_LIMIT;
     public static ForgeConfigSpec.IntValue OWNER_MAX_MAID_NUM;
+    public static ForgeConfigSpec.DoubleValue REPLACE_ALLAY_PERCENT;
 
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_BACKPACK_BLACKLIST;
     public static ForgeConfigSpec.ConfigValue<List<String>> MAID_ATTACK_IGNORE;
@@ -79,6 +80,9 @@ public final class MaidConfig {
 
         builder.comment("The entity that the maid will not hurt when in ranged attack");
         MAID_RANGED_ATTACK_IGNORE = builder.define("MaidRangedAttackIgnore", Lists.newArrayList());
+
+        builder.comment("Percentage chance of replace Allays spawn in pillager outposts with Maids");
+        REPLACE_ALLAY_PERCENT = builder.defineInRange("ReplaceAllayPercent", 0.2, 0, 1);
 
         builder.comment("These items cannot be used as a maid's work meals");
         MAID_WORK_MEALS_BLOCK_LIST = builder.define("MaidWorkMealsBlockList", Lists.newArrayList(
