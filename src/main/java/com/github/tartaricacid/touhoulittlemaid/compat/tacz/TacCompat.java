@@ -26,11 +26,23 @@ public class TacCompat {
     private static final String TACZ_ID = "tacz";
     private static boolean INSTALLED = false;
 
-    public static void addGunTask(TaskManager manager) {
+    public static void initAndAddGunTask(TaskManager manager) {
         if (ModList.get().isLoaded(TACZ_ID)) {
             manager.add(new TaskGunAttack());
             INSTALLED = true;
         }
+    }
+
+    public static boolean isGun(ItemStack stack) {
+        if (INSTALLED) {
+            return TacInnerCompat.isGun(stack);
+        }
+        return false;
+    }
+
+    public static boolean isGrenade(ItemStack itemStack) {
+        // TODO 手雷还没有
+        return false;
     }
 
     @Nullable
@@ -39,13 +51,6 @@ public class TacCompat {
             return TacInnerCompat.getGunId(stack);
         }
         return null;
-    }
-
-    public static boolean isGun(ItemStack stack) {
-        if (INSTALLED) {
-            return TacInnerCompat.isGun(stack);
-        }
-        return false;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -70,11 +75,7 @@ public class TacCompat {
         }
     }
 
-    public static boolean isGrenade(ItemStack itemStack) {
-        // TODO 手雷还没有
-        return false;
-    }
-
+    @OnlyIn(Dist.CLIENT)
     public static void renderBackGun(ItemStack offhandItem, GeoModel geoModel, IMaid maid, PoseStack poseStack, int packedLight) {
         if (INSTALLED && isGun(offhandItem)) {
             poseStack.pushPose();
@@ -83,6 +84,7 @@ public class TacCompat {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
     public static PlayState playGunMainAnimation(IMaid maid, AnimationEvent<GeckoMaidEntity> event, String animationName, ILoopType loopType) {
         if (INSTALLED && isGun(maid.asEntity().getMainHandItem())) {
@@ -91,6 +93,7 @@ public class TacCompat {
         return null;
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
     public static PlayState playGunHoldAnimation(ItemStack mainHandItem, AnimationEvent<GeckoMaidEntity> event) {
         if (INSTALLED && isGun(mainHandItem)) {

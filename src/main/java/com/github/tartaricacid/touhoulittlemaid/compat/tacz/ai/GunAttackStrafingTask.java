@@ -13,7 +13,6 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.ItemStack;
 
 public class GunAttackStrafingTask extends Behavior<EntityMaid> {
-    private final int maxAttackDistance = 16;
     private boolean strafingClockwise;
     private boolean strafingBackwards;
     private int strafingTime = -1;
@@ -44,6 +43,7 @@ public class GunAttackStrafingTask extends Behavior<EntityMaid> {
         }
         owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> {
             double distance = owner.distanceTo(target);
+            float maxAttackDistance = owner.getRestrictRadius();
 
             // 如果在最大攻击距离之内，而且看见的时长足够长
             if (distance < maxAttackDistance) {
@@ -66,14 +66,14 @@ public class GunAttackStrafingTask extends Behavior<EntityMaid> {
             // 如果攻击时间大于 -1
             if (this.strafingTime > -1) {
                 // 依据距离远近决定是否前后走位
-                if (distance > maxAttackDistance * 0.5) {
+                if (distance > maxAttackDistance * 0.65) {
                     this.strafingBackwards = false;
-                } else if (distance < maxAttackDistance * 0.2) {
+                } else if (distance < maxAttackDistance * 0.6) {
                     this.strafingBackwards = true;
                 }
 
                 // 应用走位
-                owner.getMoveControl().strafe(this.strafingBackwards ? -0.3F : 0.3F, this.strafingClockwise ? 0.3F : -0.3F);
+                owner.getMoveControl().strafe(this.strafingBackwards ? -0.4F : 0.4F, this.strafingClockwise ? 0.2F : -0.2F);
                 owner.setYRot(Mth.rotateIfNecessary(owner.getYRot(), owner.yHeadRot, 0.0F));
                 BehaviorUtils.lookAtEntity(owner, target);
             } else {

@@ -32,6 +32,10 @@ public final class TaskManager {
         manager.add(new TaskBowAttack());
         manager.add(new TaskCrossBowAttack());
         manager.add(new TaskDanmakuAttack());
+
+        // TacZ 兼容
+        TacCompat.initAndAddGunTask(manager);
+
         manager.add(new TaskNormalFarm());
         manager.add(new TaskSugarCane());
         manager.add(new TaskMelon());
@@ -49,7 +53,6 @@ public final class TaskManager {
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.addMaidTask(manager);
         }
-        TacCompat.addGunTask(manager);
         TASK_MAP = ImmutableMap.copyOf(TASK_MAP);
         TASK_INDEX = ImmutableList.copyOf(TASK_INDEX);
     }

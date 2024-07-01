@@ -58,6 +58,18 @@ public interface IMaidTask {
     }
 
     /**
+     * 默认情况下，女仆在工作模式启用时，会随机的走动，或者四处张望
+     * <p>
+     * 但是有些需要专心致志的工作模式，这样做反而会带来问题。将其设置为 false 就能禁止这种情况
+     *
+     * @param maid 女仆对象
+     * @return 禁用四处张望和随机走动 AI
+     */
+    default boolean enableLookAndRandomWalk(EntityMaid maid) {
+        return true;
+    }
+
+    /**
      * 获取任务启用的条件提示文本
      *
      * @param maid 女仆对象

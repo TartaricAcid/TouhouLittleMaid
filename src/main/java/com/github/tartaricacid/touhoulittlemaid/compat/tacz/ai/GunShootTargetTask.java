@@ -2,10 +2,14 @@ package com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
+import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.entity.IGunOperator;
 import com.tacz.guns.api.entity.ShootResult;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.api.item.gun.FireMode;
+import com.tacz.guns.resource.index.CommonGunIndex;
+import com.tacz.guns.resource.pojo.data.gun.GunData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.Behavior;
@@ -17,13 +21,11 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Optional;
 
 public class GunShootTargetTask extends Behavior<EntityMaid> {
-    private final int attackCooldown;
-    private int attackTime = -1;
+    private int attackCooldown = -1;
     private int seeTime;
 
-    public GunShootTargetTask(int attackCooldown) {
+    public GunShootTargetTask() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
-        this.attackCooldown = attackCooldown;
     }
 
     @Override
@@ -66,18 +68,22 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
             }
 
             // 如果实体手部处于激活状态
-            if (--this.attackTime <= 0 && this.seeTime >= -60 && canSee) {
-                this.performGunAttack(owner, target);
+            if (--this.attackCooldown <= 0 && this.seeTime >= -60 && canSee) {
+                ItemStack mainHandItem = owner.getMainHandItem();
+                IGun iGun = IGun.getIGunOrNull(mainHandItem);
+                if (iGun == null) {
+                    this.attackCooldown = 100;
+                    return;
+                }
+                ResourceLocation gunId = iGun.getGunId(mainHandItem);
+                TimelessAPI.getCommonGunIndex(gunId).ifPresentOrElse(index -> this.performGunAttack(owner, target, mainHandItem, iGun, index), () -> this.attackCooldown = 100);
             }
         });
     }
 
-    public void performGunAttack(EntityMaid shooter, LivingEntity target) {
-        ItemStack mainHandItem = shooter.getMainHandItem();
-        IGun iGun = IGun.getIGunOrNull(mainHandItem);
-        if (iGun == null) {
-            return;
-        }
+    public void performGunAttack(EntityMaid shooter, LivingEntity target, ItemStack gunItem, IGun iGun, CommonGunIndex gunIndex) {
+        GunData gunData = gunIndex.getGunData();
+
         double x = target.getX() - shooter.getX();
         double y = target.getEyeY() - shooter.getEyeY();
         double z = target.getZ() - shooter.getZ();
@@ -89,41 +95,43 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
         ShootResult result = gunOperator.shoot(() -> pitch, () -> yaw);
 
         if (result == ShootResult.ID_NOT_EXIST || result == ShootResult.NOT_GUN) {
-            this.attackTime = 50;
+            this.attackCooldown = 100;
             return;
         }
 
         if (result == ShootResult.NOT_DRAW) {
             gunOperator.draw(shooter::getMainHandItem);
-            this.attackTime = this.attackCooldown;
+            // 多加 2 tick，用来平衡延迟
+            this.attackCooldown = Math.round(gunData.getDrawTime() * 20) + 2;
             return;
         }
 
         if (result == ShootResult.NEED_BOLT) {
             gunOperator.bolt();
-            this.attackTime = 20;
+            this.attackCooldown = Math.round(gunData.getBoltActionTime() * 20) + 2;
             return;
         }
 
         if (result == ShootResult.NO_AMMO) {
             gunOperator.reload();
-            this.attackTime = 20;
+            float emptyTime = gunData.getReloadData().getCooldown().getEmptyTime();
+            this.attackCooldown = Math.round(emptyTime * 20) + 2;
             return;
         }
 
-        FireMode fireMode = iGun.getFireMode(mainHandItem);
+        FireMode fireMode = iGun.getFireMode(gunItem);
         if (fireMode == FireMode.SEMI || fireMode == FireMode.BURST) {
-            this.attackTime = 8 + shooter.getRandom().nextInt(5);
+            this.attackCooldown = 10 + shooter.getRandom().nextInt(5);
             return;
         }
 
-        this.attackTime = this.attackCooldown;
+        this.attackCooldown = 2;
     }
 
     @Override
     protected void stop(ServerLevel worldIn, EntityMaid entityIn, long gameTimeIn) {
         this.seeTime = 0;
-        this.attackTime = -1;
+        this.attackCooldown = -1;
         entityIn.setSwingingArms(false);
     }
 }

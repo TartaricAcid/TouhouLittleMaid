@@ -19,9 +19,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
+@OnlyIn(Dist.CLIENT)
 public class GunMaidRender {
     public static void addItemTranslate(PoseStack matrixStack, ItemStack itemStack, boolean isLeft) {
         if (!isLeft && itemStack.getItem() instanceof IGun) {
@@ -57,7 +60,7 @@ public class GunMaidRender {
         TimelessAPI.getCommonGunIndex(gun.getGunId(heldItem)).ifPresent(index -> {
             String weaponType = index.getType();
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-            if (isType(weaponType, GunTabType.PISTOL) && !geoModel.tacPistolBones.isEmpty()) {
+            if (isPistol(weaponType) && !geoModel.tacPistolBones.isEmpty()) {
                 int size = geoModel.tacPistolBones.size();
                 for (int i = 0; i < size - 1; i++) {
                     RenderUtils.prepMatrixForBone(poseStack, geoModel.tacPistolBones.get(i));
@@ -75,7 +78,7 @@ public class GunMaidRender {
                 MultiBufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
                 renderer.renderStatic(heldItem, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, player.level(), player.getId());
             }
-            if (!isType(weaponType, GunTabType.PISTOL) && !geoModel.tacRifleBones.isEmpty()) {
+            if (!isPistol(weaponType) && !geoModel.tacRifleBones.isEmpty()) {
                 int size = geoModel.tacRifleBones.size();
                 for (int i = 0; i < size - 1; i++) {
                     RenderUtils.prepMatrixForBone(poseStack, geoModel.tacRifleBones.get(i));
@@ -94,7 +97,7 @@ public class GunMaidRender {
         });
     }
 
-    private static boolean isType(String type, GunTabType tabType) {
-        return type.equals(tabType.name().toLowerCase(Locale.ENGLISH));
+    private static boolean isPistol(String type) {
+        return type.equals(GunTabType.PISTOL.name().toLowerCase(Locale.ENGLISH));
     }
 }

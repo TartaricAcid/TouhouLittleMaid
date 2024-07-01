@@ -4,9 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.tacz.guns.api.item.IGun;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
+@OnlyIn(Dist.CLIENT)
 public class GunBaseAnimation {
     public static boolean onSwingGun(IMaid maid, @Nullable ModelRendererWrapper armLeft, @Nullable ModelRendererWrapper armRight) {
         EntityMaid strictMaid = maid.asStrictMaid();
