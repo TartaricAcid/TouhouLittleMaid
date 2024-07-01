@@ -25,6 +25,8 @@ import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.forge.REIPluginClient;
 import me.shedaniel.rei.plugin.common.BuiltinPlugin;
+import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -58,6 +60,7 @@ public class MaidREIClientPlugin implements REIClientPlugin {
     @Override
     public void registerDisplays(DisplayRegistry registry) {
         ReiAltarRecipeMaker.registerAltarRecipes(registry);
+        registerInfoDisplay(registry);
     }
 
     @Override
@@ -82,5 +85,14 @@ public class MaidREIClientPlugin implements REIClientPlugin {
             }
             return Collections.emptyList();
         });
+    }
+
+    private void registerInfoDisplay(DisplayRegistry registry) {
+        registry.add(getInfoDisplay(InitItems.GARAGE_KIT.get(), Component.translatable("jei.touhou_little_maid.garage_kit.info")));
+    }
+
+    private DefaultInformationDisplay getInfoDisplay(Item item, Component component) {
+        return DefaultInformationDisplay.createFromEntry(EntryStacks.of(item), item.getDescription())
+                .line(component);
     }
 }
