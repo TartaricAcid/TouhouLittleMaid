@@ -297,7 +297,6 @@
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.text": "Touhou Project là một dòng game doujin Nhật Bản, được phát triển độc lập bởi ZUN là thành viên duy nhất của Team Shanghai Alice, nổi bật với lối chơi Shoot 'em Ups.",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "Quái vật",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.0.text": "Mod này chỉ thêm một quá vật. $(br2)Vật phẩm rơi ra từ con quái này rất quan trọng trong việc chế tạo nguyên liệu.$(br2)Tỉ lệ xuất hiện của con quái này có thể được điều chỉnh trong tệp tuỳ chỉnh. Khi tỉ lệ được đặt là 0, con quái này sẽ không bao giờ xuất hiện.",
-  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "Xuất hiện trong moi quần thể vào đêm, nó sẽ bay xung quanh và bắn danmaku vào người chơi hoặc maid.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.name": "Tự xây dựng mô hình",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.text": "Tôi có làm một plugin cho BlockBench để giúp bạn nhiều hơn trong việc tự tạo gói mô hình, dùng liên kết bên dưới để biết cách tải và cài đặt plugin.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "Mở liên kết",
