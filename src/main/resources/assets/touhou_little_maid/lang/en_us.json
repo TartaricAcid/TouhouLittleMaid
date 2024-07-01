@@ -648,7 +648,7 @@
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text": "Touhou Wiki",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "World Spawn",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.0.text": "This mod adds one mobs. $(br2)The looting of mob are important crafting ingredient.$(br2)The chance of spawn hostile creatures in this mod can be modified in the configuration file. When set to 0, these monsters can be prohibited from spawn.",
-  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "Spawn in the any biome at night, it will fly and shoot danmaku to attack players or maids.",
+  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "Spawn in any biome at night, it will fly and shoot danmaku to attack players or iron golems.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.name": "Make Custom Model",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.0.text": "Making a custom model pack is very simple, all you need is Blockbench software, Blockbench is a free and open source software that is easy to use. $(br2)The custom model also supports Bedrock Edition animations, as well as a rich set of molang variables.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.text": "I specially designed a plugin for making model pack for Blockbench, visit the link below to learn how to install the plugin.",

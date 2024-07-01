@@ -648,7 +648,7 @@
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text": "Touhou 百科",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "世界生成",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.0.text": "这个模组添加了一种怪物。$(br2)怪物的掉落物是重要的合成材料。$(br2)本模组敌对性生物的生成几率均可在配置文件中进行修改，设置为 0 时可以禁止这些怪物生成。",
-  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "在任意群系的夜晚生成，会以飞行状态弹幕攻击玩家和女仆。",
+  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "在任意群系的夜晚生成，会以飞行状态弹幕攻击玩家或铁傀儡。",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.name": "制作自定义模型",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.0.text": "制作一个自定义模型包非常简单，你只需要 Blockbech。 Blockbench 是一个免费开源的软件，而且非常易于上手。$(br2)自定义模型也支持基岩版动画，并且提供了大量 molang 参数可用。",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.text": "我特意设计了一个 Blockbench 插件用于制作模型包，访问下方链接学习如何安装此插件。",
