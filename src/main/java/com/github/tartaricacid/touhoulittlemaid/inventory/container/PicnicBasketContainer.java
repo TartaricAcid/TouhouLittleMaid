@@ -44,7 +44,7 @@ public class PicnicBasketContainer extends AbstractContainerMenu {
     @Override
     public void clicked(int slotId, int button, ClickType clickTypeIn, Player player) {
         // 禁阻一切对当前手持物品的交互，防止刷物品 bug
-        if (slotId == 27 + player.getInventory().selected) {
+        if (slotId == 36 + player.getInventory().selected) {
             return;
         }
         if (clickTypeIn == ClickType.SWAP) {
