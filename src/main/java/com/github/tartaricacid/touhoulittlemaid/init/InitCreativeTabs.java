@@ -92,14 +92,18 @@ public class InitCreativeTabs {
             .title(Component.translatable("item_group.touhou_little_maid.chair"))
             .icon(() -> InitItems.CHAIR.get().getDefaultInstance())
             .displayItems((par, output) -> {
-                ItemChair.fillItemCategory(output);
+                if (FMLEnvironment.dist == Dist.CLIENT) {
+                    ItemChair.fillItemCategory(output);
+                }
             }).build());
 
     public static RegistryObject<CreativeModeTab> CHAIR_TAB = TABS.register("garage_kit", () -> CreativeModeTab.builder()
             .title(Component.translatable("item_group.touhou_little_maid.garage_kit"))
             .icon(() -> InitItems.GARAGE_KIT.get().getDefaultInstance())
             .displayItems((par, output) -> {
-                BlockGarageKit.fillItemCategory(output);
+                if (FMLEnvironment.dist == Dist.CLIENT) {
+                    BlockGarageKit.fillItemCategory(output);
+                }
             }).build());
 
     private static ItemStack getEnchantmentBook(RegistryObject<Enchantment> registryObject) {

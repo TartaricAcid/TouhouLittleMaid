@@ -60,6 +60,7 @@ public class ItemChair extends Item {
         return stack;
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void fillItemCategory(CreativeModeTab.Output items) {
         for (String key : CustomPackLoader.CHAIR_MODELS.getModelIdSet()) {
             float height = CustomPackLoader.CHAIR_MODELS.getModelMountedYOffset(key);
