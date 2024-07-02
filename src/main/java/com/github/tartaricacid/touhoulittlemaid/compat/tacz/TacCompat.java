@@ -76,10 +76,10 @@ public class TacCompat {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void renderBackGun(ItemStack offhandItem, GeoModel geoModel, IMaid maid, PoseStack poseStack, int packedLight) {
+    public static void renderBackGun(ItemStack offhandItem, GeoModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource bufferIn, int packedLight) {
         if (INSTALLED && isGun(offhandItem)) {
             poseStack.pushPose();
-            GunMaidRender.renderBackGun(offhandItem, geoModel, maid.asEntity(), poseStack, packedLight);
+            GunMaidRender.renderBackGun(offhandItem, geoModel, maid, poseStack, bufferIn, packedLight);
             poseStack.popPose();
         }
     }
