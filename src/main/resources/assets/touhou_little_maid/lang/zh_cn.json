@@ -297,6 +297,8 @@
   "message.touhou_little_maid.script_book.copy": "成功复制女仆的聊天气泡台本",
   "message.touhou_little_maid.broom.unable_fly": "你需要一个女仆也坐在扫帚上才能使用它",
   "message.touhou_little_maid.saddle.how_to_eject": "使用鞍再次右击即可放下女仆",
+  "message.touhou_little_maid.tombstone.not_yours.1": "这个女仆墓碑不是你的！如果你是服务器管理员，请使用 NTR 物品来移除它",
+  "message.touhou_little_maid.tombstone.not_yours.2": "当前 NTR 物品：",
   "commands.touhou_little_maid.pack.reload.info": "所有的模型包已经重载！",
   "commands.touhou_little_maid.power.handle.info": "修改了 %d 位玩家的 P 点",
   "commands.touhou_little_maid.maid_num.handle.info": "修改了 %d 位玩家的女仆数量",
