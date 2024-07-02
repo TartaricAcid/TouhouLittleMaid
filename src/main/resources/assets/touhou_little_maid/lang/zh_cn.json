@@ -548,7 +548,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.0.text": "女仆拥有许许多多的基本行为，比如：$(li)默认情况下女仆会主动拾取周围的物品、箭、经验球和 P 点，女仆的主界面有按钮可以切换拾物模式；$(li)默认情况下，女仆总是跟随着玩家。",
   "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.1.text": "$(li)Shift 空手右击女仆能够切换待命模式。待命模式下的女仆什么也不会做，哪怕是规避风险。$(li)当女仆骑在其他实体上时，只需要 Shift 右击就可以把她们弄下来。$(li)玩家可以 Shift 右击女仆来对其使用金苹果或药水这样的物品。",
   "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.2.text": "$(li)当玩家手持玻璃瓶右击女仆时，女仆先前拾取的经验会转换成附魔之瓶。$(li)女仆能够装备并渲染头颅。$(li)用空白的命名牌右击女仆，能够直接命名。$(li)当女仆手持动物的吸引物时，能够吸引周围的动物。",
-  "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.3.text": "$(li)苦力怕会躲避女仆。",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.3.text": "$(li)使用鞍右击女仆将其抱在怀里。$(li)苦力怕会躲避女仆。",
   "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.name": "女仆饰品",
   "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.pages.0.text": "本模组添加了数个饰品，当女仆在特定情况下时会触发这些饰品来保护她。$(li)绀珠之药：能够避免6次女仆的死亡。",
   "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.pages.1.text": "$(li)保护饰品：当女仆受到对应伤害时，能够触发对应的保护。$(li)闪避布：当女仆被弹射物攻击时，行为将会和末影人一致。",
