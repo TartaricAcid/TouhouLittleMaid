@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.entity.IGunOperator;
@@ -18,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -44,8 +46,10 @@ public class GunGeckoAnimation {
      */
     public static PlayState playGunMainAnimation(AnimationEvent<GeckoMaidEntity> event, String animationName, ILoopType loopType) {
         String tacName = "tac:" + animationName;
-        ResourceLocation animation = event.getAnimatable().getAnimation();
-        if (GeckoLibCache.getInstance().getAnimations().get(animation).animations().containsKey(tacName)) {
+        GeckoMaidEntity animatable = event.getAnimatable();
+        ResourceLocation animation = animatable.getAnimation();
+        AnimationFile animationFile = GeckoLibCache.getInstance().getAnimations().get(animation);
+        if (!isMaidCarrying(animatable.getMaid()) && animationFile.animations().containsKey(tacName)) {
             return playAnimation(event, tacName, loopType);
         }
         return playAnimation(event, animationName, loopType);
@@ -72,6 +76,9 @@ public class GunGeckoAnimation {
         String weaponType = gunIndex.getType();
         IMaid maid = event.getAnimatable().getMaid();
         if (maid == null) {
+            return PlayState.STOP;
+        }
+        if (isMaidCarrying(maid)) {
             return PlayState.STOP;
         }
         Mob entity = maid.asEntity();
@@ -153,5 +160,10 @@ public class GunGeckoAnimation {
 
     private static boolean isType(String type, GunTabType tabType) {
         return type.equals(tabType.name().toLowerCase(Locale.ENGLISH));
+    }
+
+    private static boolean isMaidCarrying(IMaid maid) {
+        Mob entity = maid.asEntity();
+        return entity.getVehicle() instanceof Player;
     }
 }
