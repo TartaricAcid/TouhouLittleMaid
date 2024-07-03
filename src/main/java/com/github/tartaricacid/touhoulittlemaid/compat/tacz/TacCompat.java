@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunBaseAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunGeckoAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunMaidRender;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.event.GunHurtMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.task.TaskGunAttack;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
@@ -18,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
@@ -28,6 +30,7 @@ public class TacCompat {
 
     public static void initAndAddGunTask(TaskManager manager) {
         if (ModList.get().isLoaded(TACZ_ID)) {
+            MinecraftForge.EVENT_BUS.register(new GunHurtMaidEvent());
             manager.add(new TaskGunAttack());
             INSTALLED = true;
         }
