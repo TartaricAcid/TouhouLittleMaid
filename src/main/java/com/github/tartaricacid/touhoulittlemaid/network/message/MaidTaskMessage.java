@@ -37,8 +37,8 @@ public class MaidTaskMessage {
                     return;
                 }
                 Entity entity = sender.level.getEntity(message.id);
-                if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
-                    ((EntityMaid) entity).setTask(TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask()));
+                if (entity instanceof EntityMaid maid && ((EntityMaid) entity).isOwnedBy(sender)) {
+                    maid.setTask(TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask()));
                 }
             });
         }

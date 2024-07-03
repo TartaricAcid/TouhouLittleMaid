@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidHurtEvent;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;

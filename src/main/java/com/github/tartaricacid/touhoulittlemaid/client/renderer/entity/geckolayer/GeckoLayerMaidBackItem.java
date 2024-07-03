@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEnti
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
@@ -37,10 +38,10 @@ public class GeckoLayerMaidBackItem<T extends Mob & IAnimatable> extends GeoLaye
             return;
         }
         ItemStack stack = maid.getBackpackShowItem();
+        if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || entity.isSleeping() || entity.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+            return;
+        }
         if (stack.getItem() instanceof Vanishable) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || entity.isSleeping() || entity.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
-                return;
-            }
             matrixStack.pushPose();
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
@@ -56,6 +57,10 @@ public class GeckoLayerMaidBackItem<T extends Mob & IAnimatable> extends GeoLaye
                 Minecraft.getInstance().getItemRenderer().renderStatic(entity, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, entity.level, packedLightIn, OverlayTexture.NO_OVERLAY, entity.getId());
             }
             matrixStack.popPose();
+            return;
         }
+
+        // TACZ 背部枪械渲染
+        TacCompat.renderBackGun(stack, entityRenderer.getGeoModel(), maid, matrixStack, bufferIn, packedLightIn);
     }
 }

@@ -10,7 +10,7 @@ import mods.flammpfeil.slashblade.capability.slashblade.CapabilitySlashBlade;
 import mods.flammpfeil.slashblade.client.renderer.model.BladeModelManager;
 import mods.flammpfeil.slashblade.client.renderer.model.obj.WavefrontObject;
 import mods.flammpfeil.slashblade.client.renderer.util.BladeRenderState;
-import mods.flammpfeil.slashblade.init.SBItems;
+import mods.flammpfeil.slashblade.item.ItemSlashBlade;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
@@ -22,12 +22,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SlashBladeRender {
+    private static final ResourceLocation RESOURCE_DEFAULT_MODEL = new ResourceLocation("slashblade", "model/blade.obj");
+    private static final ResourceLocation RESOURCE_DEFAULT_TEXTURE = new ResourceLocation("slashblade", "model/blade.png");
+
     public static void renderSlashBlade(PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.isEmpty()) {
             return;
         }
         stack.getCapability(CapabilitySlashBlade.BLADESTATE).ifPresent(bladeState -> {
-            ResourceLocation texture = bladeState.getTexture().orElse(BladeModelManager.resourceDefaultTexture);
+            ResourceLocation texture = bladeState.getTexture().orElse(RESOURCE_DEFAULT_TEXTURE);
             WavefrontObject obj = BladeModelManager.getInstance().getModel(bladeState.getModel().orElse(null));
             String part;
             if (bladeState.isBroken()) {
@@ -57,7 +60,7 @@ public class SlashBladeRender {
     }
 
     public static void renderMaidMainhandSlashBlade(Mob maid, BedrockModel<Mob> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
-        if (stack.is(SBItems.slashblade)) {
+        if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 主手的刀渲染在左边
             if (model.hasWaistPositioningModel(HumanoidArm.LEFT)) {
@@ -73,8 +76,8 @@ public class SlashBladeRender {
                 return;
             }
             stack.getCapability(CapabilitySlashBlade.BLADESTATE).ifPresent(bladeState -> {
-                ResourceLocation texture = bladeState.getTexture().orElse(BladeModelManager.resourceDefaultTexture);
-                WavefrontObject obj = BladeModelManager.getInstance().getModel(bladeState.getModel().orElse(null));
+                ResourceLocation texture = bladeState.getTexture().orElse(RESOURCE_DEFAULT_TEXTURE);
+                WavefrontObject obj = BladeModelManager.getInstance().getModel(bladeState.getModel().orElse(RESOURCE_DEFAULT_MODEL));
                 String part;
                 if (bladeState.isBroken()) {
                     part = "blade_damaged";
@@ -98,7 +101,7 @@ public class SlashBladeRender {
     }
 
     public static void renderMaidMainhandSlashBlade(LivingEntity maid, GeoModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
-        if (stack.is(SBItems.slashblade)) {
+        if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 主手的刀渲染在左边
             if (!model.leftWaistBones.isEmpty()) {
@@ -115,8 +118,8 @@ public class SlashBladeRender {
                 return;
             }
             stack.getCapability(CapabilitySlashBlade.BLADESTATE).ifPresent(bladeState -> {
-                ResourceLocation texture = bladeState.getTexture().orElse(BladeModelManager.resourceDefaultTexture);
-                WavefrontObject obj = BladeModelManager.getInstance().getModel(bladeState.getModel().orElse(null));
+                ResourceLocation texture = bladeState.getTexture().orElse(RESOURCE_DEFAULT_TEXTURE);
+                WavefrontObject obj = BladeModelManager.getInstance().getModel(bladeState.getModel().orElse(RESOURCE_DEFAULT_MODEL));
                 String part;
                 if (bladeState.isBroken()) {
                     part = "blade_damaged";
@@ -140,7 +143,7 @@ public class SlashBladeRender {
     }
 
     public static void renderMaidOffhandSlashBlade(BedrockModel<Mob> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
-        if (stack.is(SBItems.slashblade)) {
+        if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 副手的刀渲染在右边
             if (model.hasWaistPositioningModel(HumanoidArm.RIGHT)) {
@@ -158,7 +161,7 @@ public class SlashBladeRender {
     }
 
     public static void renderMaidOffhandSlashBlade(GeoModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
-        if (stack.is(SBItems.slashblade)) {
+        if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 副手的刀渲染在右边
             if (!model.rightWaistBones.isEmpty()) {

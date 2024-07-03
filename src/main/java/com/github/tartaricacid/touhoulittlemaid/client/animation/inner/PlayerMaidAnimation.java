@@ -1,10 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.inner;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Mob;
 
 import java.util.HashMap;
 
@@ -18,16 +19,19 @@ public final class PlayerMaidAnimation {
         INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/player/sit/default.js"), getPlayerSitDefault());
     }
 
-    public static IAnimation<EntityMaid> getPlayerArmDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getPlayerArmDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
-                double f1 = 1.0 - Math.pow(1.0 - maid.attackAnim, 4);
+                double f1 = 1.0 - Math.pow(1.0 - mob.attackAnim, 4);
                 double f2 = Math.sin(f1 * Math.PI);
-                double f3 = Math.sin(maid.attackAnim * Math.PI) * -0.7 * 0.75;
+                double f3 = Math.sin(mob.attackAnim * Math.PI) * -0.7 * 0.75;
 
                 if (armLeft != null) {
                     if (maid.isSitInJoyBlock()) {
@@ -46,12 +50,12 @@ public final class PlayerMaidAnimation {
                         armLeft.setRotateAngleY(0);
                         armLeft.setRotateAngleZ((float) (Math.cos(ageInTicks * 0.05) * 0.025 - 0.05));
                         // 手部攻击动画
-                        if (maid.attackAnim > 0.0 && isSwingLeftHand(maid)) {
+                        if (mob.attackAnim > 0.0 && isSwingLeftHand(mob)) {
                             armLeft.setRotateAngleX((float) (armLeft.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
+                            armLeft.setRotateAngleZ((float) (armLeft.getRotateAngleZ() + Math.sin(mob.attackAnim * Math.PI) * -0.4));
                         }
                         // 使用动画
-                        if (maid.isUsingItem() && maid.getUsedItemHand() == InteractionHand.OFF_HAND) {
+                        if (mob.isUsingItem() && mob.getUsedItemHand() == InteractionHand.OFF_HAND) {
                             armLeft.setRotateAngleX((float) (armLeft.getInitRotateAngleX() - Math.PI * 80 / 180.0));
                             armLeft.setRotateAngleY((float) (armLeft.getInitRotateAngleY() + Math.PI * 25 / 180.0));
                         }
@@ -71,12 +75,12 @@ public final class PlayerMaidAnimation {
                         armRight.setRotateAngleY(0);
                         armRight.setRotateAngleZ((float) (-Math.cos(ageInTicks * 0.05) * 0.025 + 0.05));
                         // 手部攻击动画
-                        if (maid.attackAnim > 0.0 && !isSwingLeftHand(maid)) {
+                        if (mob.attackAnim > 0.0 && !isSwingLeftHand(mob)) {
                             armRight.setRotateAngleX((float) (armRight.getRotateAngleX() - (f2 * 1.2 + f3)));
-                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(maid.attackAnim * Math.PI) * -0.4));
+                            armRight.setRotateAngleZ((float) (armRight.getRotateAngleZ() + Math.sin(mob.attackAnim * Math.PI) * -0.4));
                         }
                         // 使用动画
-                        if (maid.isUsingItem() && maid.getUsedItemHand() == InteractionHand.MAIN_HAND) {
+                        if (mob.isUsingItem() && mob.getUsedItemHand() == InteractionHand.MAIN_HAND) {
                             armRight.setRotateAngleX((float) (armRight.getInitRotateAngleX() - Math.PI * 80 / 180.0));
                             armRight.setRotateAngleY((float) (armRight.getInitRotateAngleY() - Math.PI * 20 / 180.0));
                         }
@@ -86,10 +90,13 @@ public final class PlayerMaidAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getPlayerSitDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getPlayerSitDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper head = modelMap.get("head");
                 ModelRendererWrapper legLeft = modelMap.get("legLeft");
                 ModelRendererWrapper legRight = modelMap.get("legRight");
@@ -104,9 +111,9 @@ public final class PlayerMaidAnimation {
                 if (isPassengerMarisaBroom()) {
                     // 坐在扫帚上时，应用待命的动作
                     playerRidingBroomPosture(head, armLeft, armRight, legLeft, legRight);
-                } else if (maid.isPassenger()) {
+                } else if (mob.isPassenger()) {
                     playerRidingPosture(legLeft, legRight);
-                } else if (maid.isInSittingPose()) {
+                } else if (maid.isMaidInSittingPose()) {
                     playerSittingPosture(armLeft, armRight, legLeft, legRight);
                 }
             }
@@ -176,7 +183,7 @@ public final class PlayerMaidAnimation {
         ridingPosture(legLeft, legRight);
     }
 
-    private static boolean isSwingLeftHand(EntityMaid maid) {
+    private static boolean isSwingLeftHand(Mob maid) {
         return maid.swingingArm == InteractionHand.OFF_HAND;
     }
 

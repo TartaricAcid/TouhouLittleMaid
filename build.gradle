@@ -4,17 +4,19 @@ buildscript {
         maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
+apply plugin: 'eclipse'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
 
@@ -94,6 +96,10 @@ mixin {
 
 repositories {
     maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
         // location of the maven that hosts JEI files since January 2023
         // Patchouli
         name = "Jared's maven"
@@ -125,6 +131,15 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
+    // rei
+    compileOnly fg.deobf("curse.maven:architectury-api-419699:${architectury_api_id}")
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+
+    // emi
+    // Forge (see below block as well if you use Forge Gradle)
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
@@ -149,6 +164,8 @@ dependencies {
     implementation fg.deobf("curse.maven:inventory-profiles-next-495267:${ipn_id}")
 
     runtimeOnly fg.deobf("curse.maven:catalogue-459701:${catalogue_id}")
+
+    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:${tacz_id}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

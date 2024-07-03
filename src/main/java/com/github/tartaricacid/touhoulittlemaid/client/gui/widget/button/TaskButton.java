@@ -15,6 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class TaskButton extends Button {
     private final IMaidTask task;
+    private final boolean enable;
     private final ResourceLocation resourceLocation;
     private final int xTexStart;
     private final int yTexStart;
@@ -22,21 +23,22 @@ public class TaskButton extends Button {
     private final int textureWidth;
     private final int textureHeight;
 
-    public TaskButton(IMaidTask task, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, OnPress onPressIn) {
-        this(task, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, 256, 256, onPressIn);
+    public TaskButton(IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, OnPress onPressIn) {
+        this(task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, 256, 256, onPressIn);
     }
 
-    public TaskButton(IMaidTask task, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int textureWidth, int textureHeight, OnPress onPressIn) {
-        this(task, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureWidth, textureHeight, onPressIn, Component.empty());
+    public TaskButton(IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int textureWidth, int textureHeight, OnPress onPressIn) {
+        this(task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureWidth, textureHeight, onPressIn, Component.empty());
     }
 
-    public TaskButton(IMaidTask task, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, Component title) {
-        this(task, x, y, width, height, xTexStart, yTexStart, yDiffText, resourceLocation, textureWidth, textureHeight, onPress, NO_TOOLTIP, title);
+    public TaskButton(IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, Component title) {
+        this(task, enable, x, y, width, height, xTexStart, yTexStart, yDiffText, resourceLocation, textureWidth, textureHeight, onPress, NO_TOOLTIP, title);
     }
 
-    public TaskButton(IMaidTask task, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, OnTooltip tooltip, Component title) {
+    public TaskButton(IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, OnTooltip tooltip, Component title) {
         super(x, y, width, height, title, onPress, tooltip);
         this.task = task;
+        this.enable = enable;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
         this.xTexStart = xTexStart;
@@ -49,9 +51,13 @@ public class TaskButton extends Button {
         return task;
     }
 
-    public void setPosition(int xIn, int yIn) {
-        this.x = xIn;
-        this.y = yIn;
+    @Override
+    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        // 禁用声音
+        if (!enable) {
+            return false;
+        }
+        return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
     @Override
@@ -67,7 +73,19 @@ public class TaskButton extends Button {
         }
         RenderSystem.enableDepthTest();
         blit(poseStack, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, this.textureWidth, this.textureHeight);
+        if (!enable) {
+            // 不知为啥设定渲染高度是19，但渲染出来的是20...
+            fill(poseStack, this.x, this.y, this.x + this.width, this.y + this.height, 0x80000000);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, this.resourceLocation);
+            blit(poseStack, this.x + 72, this.y, (float) 93, (float) 68, 7, 19, this.textureWidth, this.textureHeight);
+        }
+
+        float blitOffset = itemRenderer.blitOffset;
+        itemRenderer.blitOffset = 10;
         itemRenderer.renderGuiItem(task.getIcon(), this.x + 2, this.y + 2);
+        itemRenderer.blitOffset = blitOffset;
+
         minecraft.font.draw(poseStack, task.getName(), this.x + 23, this.y + 6, 0x333333);
         if (this.isHoveredOrFocused()) {
             this.renderToolTip(poseStack, mouseX, mouseY);

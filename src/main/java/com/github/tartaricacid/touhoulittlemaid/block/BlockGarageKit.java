@@ -26,10 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,12 +54,6 @@ public class BlockGarageKit extends Block implements EntityBlock {
         super(BlockBehaviour.Properties.of(Material.CLAY).strength(1, 2).noOcclusion());
     }
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TileEntityGarageKit(pos, state);
-    }
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
@@ -73,6 +64,12 @@ public class BlockGarageKit extends Block implements EntityBlock {
             data.putString(EntityMaid.MODEL_ID_TAG, modelId);
             items.add(stack);
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityGarageKit(pos, state);
     }
 
     @Override

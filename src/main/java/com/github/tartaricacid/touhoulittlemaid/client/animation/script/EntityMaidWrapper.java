@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.script;
 
 import com.github.tartaricacid.touhoulittlemaid.api.animation.IMaidData;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -15,13 +15,13 @@ public final class EntityMaidWrapper implements IMaidData {
     private final float[] handRotation = new float[]{0, 0, 0};
     private float swingProgress;
     private boolean isRiding;
-    private EntityMaid maid;
+    private IMaid maid;
 
-    public void setData(EntityMaid maid, float swingProgress, boolean isRiding) {
+    public void setData(IMaid maid, float swingProgress, boolean isRiding) {
         this.maid = maid;
         this.swingProgress = swingProgress;
         this.isRiding = isRiding;
-        this.world.setData(maid.level);
+        this.world.setData(maid.asEntity().level);
     }
 
     public void clearData() {
@@ -41,12 +41,12 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean hasHelmet() {
-        return !maid.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+        return maid.hasHelmet();
     }
 
     @Override
     public String getHelmet() {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.HEAD).getItem());
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.asEntity().getItemBySlot(EquipmentSlot.HEAD).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -55,12 +55,12 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean hasChestPlate() {
-        return !maid.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+        return maid.hasChestPlate();
     }
 
     @Override
     public String getChestPlate() {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.CHEST).getItem());
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.asEntity().getItemBySlot(EquipmentSlot.CHEST).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -69,12 +69,12 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean hasLeggings() {
-        return !maid.getItemBySlot(EquipmentSlot.LEGS).isEmpty();
+        return maid.hasLeggings();
     }
 
     @Override
     public String getLeggings() {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.LEGS).getItem());
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.asEntity().getItemBySlot(EquipmentSlot.LEGS).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -83,12 +83,12 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean hasBoots() {
-        return !maid.getItemBySlot(EquipmentSlot.FEET).isEmpty();
+        return maid.hasBoots();
     }
 
     @Override
     public String getBoots() {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getItemBySlot(EquipmentSlot.FEET).getItem());
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.asEntity().getItemBySlot(EquipmentSlot.FEET).getItem());
         if (res != null) {
             return res.toString();
         }
@@ -97,12 +97,12 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean hasItemMainhand() {
-        return maid.getMainHandItem().isEmpty();
+        return maid.asEntity().getMainHandItem().isEmpty();
     }
 
     @Override
     public String getItemMainhand() {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getMainHandItem().getItem());
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.asEntity().getMainHandItem().getItem());
         if (res != null) {
             return res.toString();
         }
@@ -111,12 +111,12 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean hasItemOffhand() {
-        return maid.getOffhandItem().isEmpty();
+        return maid.asEntity().getOffhandItem().isEmpty();
     }
 
     @Override
     public String getItemOffhand() {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.getOffhandItem().getItem());
+        ResourceLocation res = ForgeRegistries.ITEMS.getKey(maid.asEntity().getOffhandItem().getItem());
         if (res != null) {
             return res.toString();
         }
@@ -140,7 +140,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean isSitting() {
-        return maid.isInSittingPose();
+        return maid.isMaidInSittingPose();
     }
 
     @Override
@@ -156,17 +156,17 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean inWater() {
-        return maid.isInWater();
+        return maid.asEntity().isInWater();
     }
 
     @Override
     public boolean inRain() {
-        return maid.level.isRainingAt(maid.blockPosition());
+        return maid.asEntity().level.isRainingAt(maid.asEntity().blockPosition());
     }
 
     @Override
     public boolean isSwingLeftHand() {
-        return maid.swingingArm == InteractionHand.OFF_HAND;
+        return maid.asEntity().swingingArm == InteractionHand.OFF_HAND;
     }
 
     @Override
@@ -176,27 +176,27 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public float getHealth() {
-        return maid.getHealth();
+        return maid.asEntity().getHealth();
     }
 
     @Override
     public float getMaxHealth() {
-        return maid.getMaxHealth();
+        return maid.asEntity().getMaxHealth();
     }
 
     @Override
     public double getArmorValue() {
-        return maid.getAttributeValue(Attributes.ARMOR);
+        return maid.asEntity().getAttributeValue(Attributes.ARMOR);
     }
 
     @Override
     public boolean onHurt() {
-        return maid.hurtTime > 0;
+        return maid.asEntity().hurtTime > 0;
     }
 
     @Override
     public boolean isSleep() {
-        return maid.isSleeping();
+        return maid.asEntity().isSleeping();
     }
 
     @Override
@@ -206,12 +206,12 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public long getSeed() {
-        return Math.abs(maid.getUUID().getLeastSignificantBits());
+        return Math.abs(maid.asEntity().getUUID().getLeastSignificantBits());
     }
 
     @Override
     public String getAtBiome() {
-        ResourceLocation res = ForgeRegistries.BIOMES.getKey(BiomeCacheUtil.getCacheBiome(maid));
+        ResourceLocation res = ForgeRegistries.BIOMES.getKey(BiomeCacheUtil.getCacheBiome(maid.asEntity()));
         if (res != null) {
             return res.getPath();
         }
@@ -220,7 +220,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean isOnGround() {
-        return !maid.isOnGround();
+        return !maid.asEntity().isOnGround();
     }
 
     @Override
@@ -249,7 +249,7 @@ public final class EntityMaidWrapper implements IMaidData {
 
     @Override
     public boolean isRidingPlayer() {
-        return maid.getVehicle() instanceof Player;
+        return maid.asEntity().getVehicle() instanceof Player;
     }
 
     @Override

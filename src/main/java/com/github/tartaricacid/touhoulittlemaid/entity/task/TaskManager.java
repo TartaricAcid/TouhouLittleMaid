@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -31,6 +32,10 @@ public final class TaskManager {
         manager.add(new TaskBowAttack());
         manager.add(new TaskCrossBowAttack());
         manager.add(new TaskDanmakuAttack());
+
+        // TacZ 兼容
+        TacCompat.initAndAddGunTask(manager);
+
         manager.add(new TaskNormalFarm());
         manager.add(new TaskSugarCane());
         manager.add(new TaskMelon());

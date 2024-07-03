@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMai
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -34,10 +35,12 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
             return;
         }
         ItemStack stack = maid.getBackpackShowItem();
+        if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem()
+            || mob.isSleeping() || mob.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+            return;
+        }
+
         if (stack.getItem() instanceof Vanishable) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || mob.isSleeping() || mob.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
-                return;
-            }
             matrixStack.pushPose();
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
@@ -53,6 +56,10 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
                 Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemTransforms.TransformType.FIXED, false, matrixStack, bufferIn, mob.level, packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
             }
             matrixStack.popPose();
+            return;
         }
+
+        // TAC 兼容
+        TacCompat.renderBackGun(matrixStack, bufferIn, packedLightIn, stack, maid);
     }
 }

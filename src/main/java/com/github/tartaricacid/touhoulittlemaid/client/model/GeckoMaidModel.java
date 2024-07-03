@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.AnimationRegister;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangParser;
@@ -55,7 +55,7 @@ public class GeckoMaidModel extends AnimatedGeoModel {
         MolangParser parser = GeckoLibCache.getInstance().parser;
         if (!Minecraft.getInstance().isPaused() && extraData.size() == 1 && extraData.get(0) instanceof EntityModelData data
                 && animatable instanceof GeckoMaidEntity geckoMaidEntity && geckoMaidEntity.getMaid() != null) {
-            EntityMaid maid = geckoMaidEntity.getMaid();
+			IMaid maid = geckoMaidEntity.getMaid();
             AnimationRegister.setParserValue(animationEvent, parser, data, maid);
             super.setCustomAnimations(animatable, instanceId, animationEvent);
             IBone head = getCurrentModel().head;

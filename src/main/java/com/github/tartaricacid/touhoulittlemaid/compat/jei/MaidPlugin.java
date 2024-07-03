@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.jei;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.CraftingTableBackpackContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.FurnaceBackpackContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.compat.jei.altar.AltarRecipeCategory;
@@ -13,9 +14,14 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.registration.*;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.Collections;
+import java.util.List;
 
 @JeiPlugin
 public class MaidPlugin implements IModPlugin {
@@ -53,6 +59,20 @@ public class MaidPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(CraftingTableBackpackContainerScreen.class, 213, 121, 13, 12, RecipeTypes.CRAFTING);
         registration.addRecipeClickArea(FurnaceBackpackContainerScreen.class, 183, 118, 28, 24, RecipeTypes.SMELTING, RecipeTypes.FUELING);
+        registerTaskListArea(registration);
+    }
+
+    private void registerTaskListArea(IGuiHandlerRegistration registration) {
+        registration.addGenericGuiContainerHandler(AbstractMaidContainerGui.class, new IGuiContainerHandler<AbstractMaidContainerGui<?>>() {
+            @Override
+            public List<Rect2i> getGuiExtraAreas(AbstractMaidContainerGui containerScreen) {
+                if (containerScreen.isTaskListOpen()) {
+                    int[] taskListAreas = containerScreen.getTaskListAreas();
+                    return Collections.singletonList(new Rect2i(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
+                }
+                return Collections.emptyList();
+            }
+        });
     }
 
     @Override

@@ -41,7 +41,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
-import com.github.tartaricacid.touhoulittlemaid.util.BiomeCacheUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
@@ -60,7 +59,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -1231,7 +1229,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height * (isInSittingPose() ? 0.65F : 0.85F);
+        return sizeIn.height * (isMaidInSittingPose() ? 0.65F : 0.85F);
     }
 
     @Override
@@ -1340,6 +1338,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_SOUND_PACK_ID, soundPackId);
     }
 
+    @Override
+    public boolean isMaidInSittingPose() {
+        return super.isInSittingPose();
+    }
+
+    @Override
     public boolean isBegging() {
         return this.entityData.get(DATA_BEGGING);
     }
@@ -1404,7 +1408,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public boolean canBrainMoving() {
-        return !this.isInSittingPose() && !this.isPassenger() && !this.isSleeping() && !this.isLeashed();
+        return !this.isMaidInSittingPose() && !this.isPassenger() && !this.isSleeping() && !this.isLeashed();
     }
 
     public MaidChatBubbles getChatBubble() {
@@ -1443,10 +1447,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_RIDEABLE, rideable);
     }
 
-    public boolean hasBackpack() {
-        return getMaidBackpackType() != BackpackManager.getEmptyBackpack();
-    }
-
     public int getHunger() {
         return this.entityData.get(DATA_HUNGER);
     }
@@ -1455,6 +1455,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_HUNGER, hunger);
     }
 
+    @Override
     public int getFavorability() {
         return this.entityData.get(DATA_FAVORABILITY);
     }
@@ -1463,6 +1464,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_FAVORABILITY, favorability);
     }
 
+    @Override
     public int getExperience() {
         return this.entityData.get(DATA_EXPERIENCE);
     }
@@ -1479,6 +1481,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_STRUCK_BY_LIGHTNING, isStruck);
     }
 
+    @Override
     public boolean isSwingingArms() {
         return this.entityData.get(DATA_ARM_RISE);
     }
@@ -1588,7 +1591,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_INVULNERABLE, isInvulnerable);
     }
 
-
+    @Override
     public IMaidTask getTask() {
         ResourceLocation uid = new ResourceLocation(entityData.get(DATA_TASK));
         return TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
@@ -1596,6 +1599,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public void setTask(IMaidTask task) {
         if (task == this.task) {
+            return;
+        }
+        if (!task.isEnable(this)) {
             return;
         }
         this.task = task;
@@ -1627,31 +1633,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             dataItem.setDirty(true);
             this.entityData.isDirty = true;
         }
-    }
-
-    public boolean hasHelmet() {
-        return !getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-    }
-
-    public boolean hasChestPlate() {
-        return !getItemBySlot(EquipmentSlot.CHEST).isEmpty();
-    }
-
-    public boolean hasLeggings() {
-        return !getItemBySlot(EquipmentSlot.LEGS).isEmpty();
-    }
-
-    public boolean hasBoots() {
-        return !getItemBySlot(EquipmentSlot.FEET).isEmpty();
-    }
-
-    public boolean onHurt() {
-        return hurtTime > 0;
-    }
-
-    @Deprecated
-    public boolean hasSasimono() {
-        return false;
     }
 
     public List<SendEffectMessage.EffectData> getEffects() {
@@ -1738,52 +1719,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 direction, pos, false);
     }
 
-    @Deprecated
-    public String getAtBiomeTemp() {
-        float temp = BiomeCacheUtil.getCacheBiome(this).getBaseTemperature();
-        if (temp < 0.15) {
-            return "COLD";
-        } else if (temp < 0.55) {
-            return "OCEAN";
-        } else if (temp < 0.95) {
-            return "MEDIUM";
-        } else {
-            return "WARM";
-        }
-    }
-
-    @Deprecated
-    public boolean isSitInJoyBlock() {
-        return false;
-    }
-
     public FavorabilityManager getFavorabilityManager() {
         return favorabilityManager;
-    }
-
-    @Override
-    public EntityMaid asStrictMaid() {
-        return this;
-    }
-
-    @Override
-    public Mob asEntity() {
-        return this;
-    }
-
-    @Deprecated
-    public int getDim() {
-        ResourceKey<Level> dim = this.level.dimension();
-        if (dim.equals(Level.OVERWORLD)) {
-            return 0;
-        }
-        if (dim.equals(Level.NETHER)) {
-            return -1;
-        }
-        if (dim.equals(Level.END)) {
-            return 1;
-        }
-        return 0;
     }
 
 
@@ -1820,4 +1757,20 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         }
         return Ingredient.of(defaultItem);
     }
+
+    @Override
+    public EntityMaid asStrictMaid() {
+        return this;
+    }
+
+    @Override
+    public Mob asEntity() {
+        return this;
+    }
+
+    @Override
+    public ItemStack[] getHandItemsForAnimation() {
+        return handItemsForAnimation;
+    }
+
 }

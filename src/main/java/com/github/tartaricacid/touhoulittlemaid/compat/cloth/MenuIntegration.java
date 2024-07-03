@@ -19,9 +19,7 @@ import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MenuIntegration {
@@ -94,6 +92,11 @@ public class MenuIntegration {
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.owner_max_maid_num.desc"))
                 .setSaveConsumer(i -> MaidConfig.OWNER_MAX_MAID_NUM.set(i)).build());
 
+        maid.addEntry(entryBuilder.startDoubleField(Component.translatable("config.touhou_little_maid.maid.replace_allay_percent.name"), MaidConfig.REPLACE_ALLAY_PERCENT.get())
+                .setDefaultValue(0.2).setMin(0).setMax(1)
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.replace_allay_percent.desc"))
+                .setSaveConsumer(i -> MaidConfig.REPLACE_ALLAY_PERCENT.set(i)).build());
+
         maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist.name"), MaidConfig.MAID_BACKPACK_BLACKLIST.get())
                 .setDefaultValue(MaidConfig.MAID_BACKPACK_BLACKLIST.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist.desc"))
@@ -146,6 +149,19 @@ public class MenuIntegration {
                 .setSaveConsumer(l -> {
                     MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.set(l);
                     MaidMealRegConfigEvent.handleConfig(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.get(), MaidMealRegConfigEvent.HEAL_MEAL_REGEX);
+                }).build());
+
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_eaten_return_container_list.name"), MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.get().stream().map(s -> s.get(0) + "," + s.get(1)).toList())
+                .setDefaultValue(MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.getDefault().stream().map(s -> s.get(0) + "," + s.get(1)).toList())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_eaten_return_container_list.desc"))
+                .setSaveConsumer(l -> {
+                    List<List<String>> maidMealContainerList = new ArrayList<>();
+                    for (String s : l) {
+                        String[] split = s.split(",");
+                        if (split.length != 2) continue;
+                        maidMealContainerList.add(Arrays.asList(split[0], split[1]));
+                    }
+                    MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.set(maidMealContainerList);
                 }).build());
     }
 

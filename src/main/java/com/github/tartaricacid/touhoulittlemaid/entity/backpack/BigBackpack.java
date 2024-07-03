@@ -9,7 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.BigBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
@@ -88,9 +87,10 @@ public class BigBackpack extends IMaidBackpack {
         return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_big.png");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void offsetBackpackItem(PoseStack poseStack) {
-        poseStack.translate(0, 0, -0.4);
+        poseStack.translate(0, 0.25, -0.25);
     }
 
     @Override

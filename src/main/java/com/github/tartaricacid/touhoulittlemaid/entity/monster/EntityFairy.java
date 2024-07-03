@@ -9,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -92,16 +93,22 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
+        float damageBase = 1;
+        Difficulty difficulty = target.level.getDifficulty();
+        switch (difficulty) {
+            case NORMAL -> damageBase = 1.5f;
+            case HARD -> damageBase = 2f;
+        }
         if (this.random.nextFloat() <= AIMED_SHOT_PROBABILITY) {
             DanmakuShoot.create().setWorld(level).setThrower(this)
                     .setTarget(target).setRandomColor().setRandomType()
-                    .setDamage(distanceFactor + 1).setGravity(0)
+                    .setDamage(distanceFactor + damageBase).setGravity(0)
                     .setVelocity(0.2f * (distanceFactor + 1))
                     .setInaccuracy(0.2f).aimedShot();
         } else {
             DanmakuShoot.create().setWorld(level).setThrower(this)
                     .setTarget(target).setRandomColor().setRandomType()
-                    .setDamage(distanceFactor + 1.5f).setGravity(0)
+                    .setDamage(distanceFactor + damageBase + 0.5f).setGravity(0)
                     .setVelocity(0.2f * (distanceFactor + 1))
                     .setInaccuracy(0.2f).setFanNum(3).setYawTotal(Math.PI / 6)
                     .fanShapedShot();
