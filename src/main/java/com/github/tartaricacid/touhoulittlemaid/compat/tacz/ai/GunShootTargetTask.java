@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.entity.IGunOperator;
 import com.tacz.guns.api.entity.ShootResult;
+import com.tacz.guns.api.item.GunTabType;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.api.item.gun.FireMode;
 import com.tacz.guns.resource.index.CommonGunIndex;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public class GunShootTargetTask extends Behavior<EntityMaid> {
@@ -99,6 +101,23 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
             return;
         }
 
+        // 如果是狙击枪，应用瞄准
+        String sniper = GunTabType.SNIPER.name().toLowerCase(Locale.ENGLISH);
+        if (gunIndex.getType().equals(sniper) && !gunOperator.getSynIsAiming()) {
+            gunOperator.aim(true);
+            // 多加 2 tick，用来平衡延迟
+            this.attackCooldown = Math.round(gunData.getAimTime() * 20) + 2;
+            return;
+        }
+
+        // 如果是非狙击枪，就不要瞄准了，不然太超模了
+        if (!gunIndex.getType().equals(sniper) && gunOperator.getSynIsAiming()) {
+            gunOperator.aim(false);
+            // 多加 2 tick，用来平衡延迟
+            this.attackCooldown = Math.round(gunData.getAimTime() * 20) + 2;
+            return;
+        }
+
         if (result == ShootResult.NOT_DRAW) {
             gunOperator.draw(shooter::getMainHandItem);
             // 多加 2 tick，用来平衡延迟
@@ -129,9 +148,26 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
     }
 
     @Override
-    protected void stop(ServerLevel worldIn, EntityMaid entityIn, long gameTimeIn) {
+    protected void stop(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         this.seeTime = 0;
         this.attackCooldown = -1;
-        entityIn.setSwingingArms(false);
+        maid.setSwingingArms(false);
+        // 停止瞄准
+        this.stopAim(maid);
+    }
+
+    private void stopAim(EntityMaid maid) {
+        ItemStack mainHandItem = maid.getMainHandItem();
+        IGun iGun = IGun.getIGunOrNull(mainHandItem);
+        if (iGun == null) {
+            return;
+        }
+        ResourceLocation gunId = iGun.getGunId(mainHandItem);
+        TimelessAPI.getCommonGunIndex(gunId).ifPresent(gunIndex -> {
+            IGunOperator gunOperator = IGunOperator.fromLivingEntity(maid);
+            if (gunOperator.getSynIsAiming()) {
+                gunOperator.aim(false);
+            }
+        });
     }
 }
