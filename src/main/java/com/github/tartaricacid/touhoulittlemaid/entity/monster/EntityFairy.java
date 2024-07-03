@@ -4,11 +4,13 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.goal.FairyAttackGoal;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.DanmakuShoot;
+import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -156,5 +158,21 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     @Override
     public boolean isFlying() {
         return !this.onGround;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return InitSounds.FAIRY_AMBIENT.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return InitSounds.FAIRY_HURT.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return InitSounds.FAIRY_DEATH.get();
     }
 }

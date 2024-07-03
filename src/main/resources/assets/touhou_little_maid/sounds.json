@@ -254,5 +254,29 @@
     "sounds": [
       "touhou_little_maid:item/point"
     ]
+  },
+  "entity.fairy.ambient": {
+    "sounds": [
+      "minecraft:mob/rabbit/idle1",
+      "minecraft:mob/rabbit/idle2",
+      "minecraft:mob/rabbit/idle3",
+      "minecraft:mob/rabbit/idle4"
+    ],
+    "subtitle": "touhou_little_maid.subtitles.entity.fairy.ambient"
+  },
+  "entity.fairy.death": {
+    "sounds": [
+      "minecraft:mob/rabbit/bunnymurder"
+    ],
+    "subtitle": "touhou_little_maid.subtitles.entity.fairy.death"
+  },
+  "entity.fairy.hurt": {
+    "sounds": [
+      "minecraft:mob/rabbit/hurt1",
+      "minecraft:mob/rabbit/hurt2",
+      "minecraft:mob/rabbit/hurt3",
+      "minecraft:mob/rabbit/hurt4"
+    ],
+    "subtitle": "touhou_little_maid.subtitles.entity.fairy.hurt"
   }
 }
