@@ -49,9 +49,15 @@ public class InfoGetManager {
     private static final String INFO_JSON_URL = ROOT_URL + "info.json";
     private static final String INFO_JSON_MD5_URL = ROOT_URL + "info.json.md5";
 
+    private static final String ROOT_URL_BACKUP = "http://tlm.cfpa.team:29434/";
+    private static final String INFO_JSON_URL_BACKUP = ROOT_URL_BACKUP + "info.json";
+    private static final String INFO_JSON_MD5_URL_BACKUP = ROOT_URL_BACKUP + "info.json.md5";
+
     private static final Path ROOT_FOLDER = getRootPath();
     private static final Path INFO_JSON_FILE = ROOT_FOLDER.resolve("info.json");
     private static final Path PACK_FOLDER = ROOT_FOLDER.resolve("file");
+
+    private static boolean USE_BACKUP_URL = false;
 
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_ALL = Lists.newArrayList();
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_MAID = Lists.newArrayList();
@@ -97,44 +103,55 @@ public class InfoGetManager {
     private static void downloadAndReadInfoJsonFile(@Nullable String md5) {
         Thread thread = new Thread(() -> {
             try {
-                File file = INFO_JSON_FILE.toFile();
-                if (StringUtils.isNotBlank(md5)) {
-                    String md5Remote = IOUtils.toString(new URL(INFO_JSON_MD5_URL), StandardCharsets.UTF_8);
-                    if (md5Remote.equals(md5)) {
-                        TouhouLittleMaid.LOGGER.info("info.json file no update required");
-                        STATUE = Statue.NOT_UPDATE;
-                    } else {
-                        TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
-                        FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
-                        TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
-                        STATUE = Statue.UPDATE;
-                    }
-                } else {
-                    TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
-                    FileUtils.copyURLToFile(new URL(INFO_JSON_URL), file, 30_000, 30_000);
-                    TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
+                downloadAndReadInfoJsonFileInner(md5, INFO_JSON_MD5_URL, INFO_JSON_URL);
+            } catch (IOException exception) {
+                try {
+                    downloadAndReadInfoJsonFileInner(md5, INFO_JSON_MD5_URL_BACKUP, INFO_JSON_URL_BACKUP);
+                    USE_BACKUP_URL = true;
+                    TouhouLittleMaid.LOGGER.info("Download info from backup url!");
+                } catch (IOException backupException) {
+                    exception.printStackTrace();
+                    backupException.printStackTrace();
                 }
-                DOWNLOAD_INFO_LIST_ALL = CustomPackLoader.GSON.fromJson(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8),
-                        new TypeToken<List<DownloadInfo>>() {
-                        }.getType());
-                DOWNLOAD_INFO_LIST_ALL.forEach(DownloadInfo::decorate);
-
-                DOWNLOAD_INFO_LIST_ALL.forEach(downloadInfo -> {
-                    if (downloadInfo.hasType(DownloadInfo.TypeEnum.MAID)) {
-                        DOWNLOAD_INFO_LIST_MAID.add(downloadInfo);
-                    }
-                    if (downloadInfo.hasType(DownloadInfo.TypeEnum.CHAIR)) {
-                        DOWNLOAD_INFO_LIST_CHAIR.add(downloadInfo);
-                    }
-                    if (downloadInfo.hasType(DownloadInfo.TypeEnum.SOUND)) {
-                        DOWNLOAD_INFO_LIST_SOUND.add(downloadInfo);
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }, "Download-Info-Json-File");
         thread.start();
+    }
+
+    private static void downloadAndReadInfoJsonFileInner(@Nullable String md5, String md5Url, String infoJsonUrl) throws IOException {
+        File file = INFO_JSON_FILE.toFile();
+        if (StringUtils.isNotBlank(md5)) {
+            String md5Remote = IOUtils.toString(new URL(md5Url), StandardCharsets.UTF_8);
+            if (md5Remote.equals(md5)) {
+                TouhouLittleMaid.LOGGER.info("info.json file no update required");
+                STATUE = Statue.NOT_UPDATE;
+            } else {
+                TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
+                FileUtils.copyURLToFile(new URL(infoJsonUrl), file, 30_000, 30_000);
+                TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
+                STATUE = Statue.UPDATE;
+            }
+        } else {
+            TouhouLittleMaid.LOGGER.info("Downloading info.json file...");
+            FileUtils.copyURLToFile(new URL(infoJsonUrl), file, 30_000, 30_000);
+            TouhouLittleMaid.LOGGER.info("Downloaded info.json file");
+        }
+        DOWNLOAD_INFO_LIST_ALL = CustomPackLoader.GSON.fromJson(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8),
+                new TypeToken<List<DownloadInfo>>() {
+                }.getType());
+        DOWNLOAD_INFO_LIST_ALL.forEach(DownloadInfo::decorate);
+
+        DOWNLOAD_INFO_LIST_ALL.forEach(downloadInfo -> {
+            if (downloadInfo.hasType(DownloadInfo.TypeEnum.MAID)) {
+                DOWNLOAD_INFO_LIST_MAID.add(downloadInfo);
+            }
+            if (downloadInfo.hasType(DownloadInfo.TypeEnum.CHAIR)) {
+                DOWNLOAD_INFO_LIST_CHAIR.add(downloadInfo);
+            }
+            if (downloadInfo.hasType(DownloadInfo.TypeEnum.SOUND)) {
+                DOWNLOAD_INFO_LIST_SOUND.add(downloadInfo);
+            }
+        });
     }
 
     @SubscribeEvent
@@ -147,7 +164,11 @@ public class InfoGetManager {
         Thread thread = new Thread(() -> {
             info.setStatus(DownloadStatus.DOWNLOADING);
             try {
-                URL url = new URL(new URL(ROOT_URL), info.getUrl());
+                String rootUrl = ROOT_URL;
+                if (USE_BACKUP_URL) {
+                    rootUrl = ROOT_URL_BACKUP;
+                }
+                URL url = new URL(new URL(rootUrl), info.getUrl());
                 File fileInTlmModel = CustomPackLoader.PACK_FOLDER.resolve(info.getFileName()).toFile();
                 File fileInCache = PACK_FOLDER.resolve(info.getFileName()).toFile();
                 if (!fileInCache.isFile() || FileUtils.checksumCRC32(fileInCache) != info.getChecksum()) {

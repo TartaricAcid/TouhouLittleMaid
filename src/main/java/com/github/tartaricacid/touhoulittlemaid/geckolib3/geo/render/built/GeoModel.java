@@ -13,6 +13,8 @@ public class GeoModel {
     public List<GeoBone> leftWaistBones = new ObjectArrayList<>();
     public List<GeoBone> rightWaistBones = new ObjectArrayList<>();
     public List<GeoBone> backpackBones = new ObjectArrayList<>();
+    public List<GeoBone> tacPistolBones = new ObjectArrayList<>();
+    public List<GeoBone> tacRifleBones = new ObjectArrayList<>();
     public List<GeoBone> headBones = new ObjectArrayList<>();
     public GeoBone head = null;
     public ModelProperties properties;

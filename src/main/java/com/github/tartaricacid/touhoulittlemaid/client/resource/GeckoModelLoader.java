@@ -28,9 +28,11 @@ import java.util.Map;
 
 public class GeckoModelLoader {
     public static final ResourceLocation DEFAULT_MAID_ANIMATION = new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid.animation.json");
+    public static final ResourceLocation DEFAULT_TAC_ANIMATION = new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/tac.animation.json");
     public static final ResourceLocation DEFAULT_CHAIR_ANIMATION = new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/chair.animation.json");
     public static AnimationFile DEFAULT_MAID_ANIMATION_FILE = new AnimationFile();
     public static AnimationFile DEFAULT_CHAIR_ANIMATION_FILE = new AnimationFile();
+    public static AnimationFile DEFAULT_TAC_ANIMATION_FILE = new AnimationFile();
 
     public static void reload() {
         clearAllCache();
@@ -49,6 +51,11 @@ public class GeckoModelLoader {
 
     public static void registerMaidAnimations(ResourceLocation id, AnimationFile animationFile) {
         DEFAULT_MAID_ANIMATION_FILE.animations().forEach((name, action) -> {
+            if (!animationFile.animations().containsKey(name)) {
+                animationFile.putAnimation(name, action);
+            }
+        });
+        DEFAULT_TAC_ANIMATION_FILE.animations().forEach((name, action) -> {
             if (!animationFile.animations().containsKey(name)) {
                 animationFile.putAnimation(name, action);
             }
@@ -107,6 +114,11 @@ public class GeckoModelLoader {
         }
         try (InputStream stream = Minecraft.getInstance().getResourceManager().getResource(DEFAULT_CHAIR_ANIMATION).getInputStream()) {
             DEFAULT_CHAIR_ANIMATION_FILE = getAnimationFile(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (InputStream stream = Minecraft.getInstance().getResourceManager().getResource(DEFAULT_TAC_ANIMATION).getInputStream()) {
+            DEFAULT_TAC_ANIMATION_FILE = getAnimationFile(stream);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -22,8 +22,8 @@ public final class SwitchSittingEvent {
         Level world = event.getWorld();
 
         if (player.isShiftKeyDown() && !player.getMainHandItem().is(InitItems.KAPPA_COMPASS.get())) {
-            maid.setInSittingPose(!maid.isInSittingPose());
-            if (maid.isInSittingPose()) {
+            maid.setInSittingPose(!maid.isMaidInSittingPose());
+            if (maid.isMaidInSittingPose()) {
                 maid.getNavigation().stop();
                 maid.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
                 maid.setTarget(null);

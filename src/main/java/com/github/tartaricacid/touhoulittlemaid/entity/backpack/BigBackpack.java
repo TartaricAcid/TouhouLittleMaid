@@ -88,9 +88,10 @@ public class BigBackpack extends IMaidBackpack {
         return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_big.png");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void offsetBackpackItem(PoseStack poseStack) {
-        poseStack.translate(0, 0, -0.4);
+        poseStack.translate(0, 0.25, -0.25);
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -17,6 +18,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -24,6 +26,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class EntityTombstone extends Entity {
@@ -53,8 +56,9 @@ public class EntityTombstone extends Entity {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
+        Ingredient ntrItem = EntityMaid.getNtrItem();
         // NTR 工具可以收回墓碑
-        if (player.getUUID().equals(this.ownerId) || EntityMaid.getNtrItem().test(itemInHand)) {
+        if (player.getUUID().equals(this.ownerId) || ntrItem.test(itemInHand)) {
             for (int i = 0; i < this.items.getSlots(); i++) {
                 int size = this.items.getSlotLimit(i);
                 ItemStack extractItem = this.items.extractItem(i, size, false);
@@ -62,6 +66,13 @@ public class EntityTombstone extends Entity {
             }
             this.discard();
             return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
+            ItemStack stack = Arrays.stream(ntrItem.getItems()).findFirst().orElse(ItemStack.EMPTY);
+            Component displayName = stack.getDisplayName();
+            player.sendMessage(new TranslatableComponent("message.touhou_little_maid.tombstone.not_yours.1"), Util.NIL_UUID);
+            player.sendMessage(new TranslatableComponent("message.touhou_little_maid.tombstone.not_yours.2").append(displayName), Util.NIL_UUID);
         }
         return super.interact(player, hand);
     }

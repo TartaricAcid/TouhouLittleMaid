@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
@@ -8,8 +8,8 @@ import net.minecraft.world.item.*;
 public class InnerClassify {
     private static final String EMPTY = "";
 
-    public static String doClassifyTest(String extraPre, EntityMaid maid, InteractionHand hand) {
-        ItemStack itemInHand = maid.getItemInHand(hand);
+	public static String doClassifyTest(String extraPre, IMaid maid, InteractionHand hand) {
+		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
         Item item = itemInHand.getItem();
         if (item instanceof ItemHakureiGohei) {
             return extraPre + "gohei";

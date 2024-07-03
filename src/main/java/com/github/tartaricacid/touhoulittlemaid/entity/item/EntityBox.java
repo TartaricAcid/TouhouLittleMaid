@@ -21,7 +21,7 @@ public class EntityBox extends Entity {
     public static final int FIRST_STAGE = 64;
     public static final int SECOND_STAGE = 60;
     public static final int THIRD_STAGE = 0;
-    public static final int MAX_TEXTURE_SIZE = 7;
+    public static final int MAX_TEXTURE_SIZE = 8;
     private static final EntityDataAccessor<Integer> OPEN_STAGE = SynchedEntityData.defineId(EntityBox.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TEXTURE_INDEX = SynchedEntityData.defineId(EntityBox.class, EntityDataSerializers.INT);
     public static final EntityType<EntityBox> TYPE = EntityType.Builder.<EntityBox>of(EntityBox::new, MobCategory.MISC)

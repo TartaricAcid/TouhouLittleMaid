@@ -3403,6 +3403,72 @@
 		"pre_parallel7": {
 			"loop": true
 		},
+		"vehicle$minecraft:player": {
+			"loop": true,
+			"bones": {
+				"Root": {
+					"rotation": [0, -90, -115],
+					"position": [15, 30.5, 11]
+				},
+				"AllBody": {
+					"rotation": [0, 0, 0]
+				},
+				"UpBody": {
+					"rotation": [50, 0, 0],
+					"position": [0, 1, 0.75]
+				},
+				"Head": {
+					"rotation": [27.5, 0, 0]
+				},
+				"LongHair": {
+					"rotation": [37.5, 0, 0]
+				},
+				"LeftArm": {
+					"rotation": [-16.77609, 44.19145, -7.81185]
+				},
+				"LeftForeArm": {
+					"rotation": [-97.5, 0, 0]
+				},
+				"RightArm": {
+					"rotation": [-16.36648, -42.10287, -4.20805]
+				},
+				"RightForeArm": {
+					"rotation": [-127.5, 0, 0]
+				},
+				"LeftLeg": {
+					"rotation": [-7.61435, 9.91358, -1.31845]
+				},
+				"LeftLowerLeg": {
+					"rotation": [65, 0, 0]
+				},
+				"LeftFoot": {
+					"rotation": [27.5, 0, 0]
+				},
+				"RightLeg": {
+					"rotation": [-2.17539, -10.01806, -1.21764]
+				},
+				"RightLowerLeg": {
+					"rotation": [65, 0, 0]
+				},
+				"RightFoot": {
+					"rotation": [7.5, 0, 0]
+				},
+				"RightHand": {
+					"rotation": [0, 0, 0]
+				},
+				"LeftHand": {
+					"rotation": [0, 0, 0]
+				},
+				"Tail": {
+					"rotation": [20, 0, 0],
+					"position": [0, 0, -3]
+				},
+				"clothe": {
+					"rotation": [-37.5, 0, 0],
+					"scale": [1.065, 1, 1]
+				}
+			}
+		},
 		"empty": {
 			"loop": true,
 			"animation_length": 2

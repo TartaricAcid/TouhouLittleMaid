@@ -4,20 +4,21 @@ buildscript {
         maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
+apply plugin: 'eclipse'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
-
 
 version = mod_version
 group = 'com.github.tartaricacid'
@@ -96,6 +97,10 @@ mixin {
 
 repositories {
     maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 Maven"
         url = "https://dvs1.progwml6.com/files/maven/"
@@ -128,6 +133,10 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}")
 
+    // rei
+    compileOnly fg.deobf("curse.maven:architectury-api-419699:${architectury_api_id}")
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
@@ -155,6 +164,8 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
     runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
+
+    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:${tacz_id}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

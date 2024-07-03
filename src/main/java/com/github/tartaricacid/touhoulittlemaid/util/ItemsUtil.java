@@ -3,11 +3,15 @@ package com.github.tartaricacid.touhoulittlemaid.util;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -107,5 +111,25 @@ public final class ItemsUtil {
             }
         }
         return -1;
+    }
+
+    /**
+     * 获取物品Id
+     */
+    public static String getItemId(Item item) {
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+        Preconditions.checkNotNull(key);
+        return key.toString();
+    }
+
+
+    /**
+     * 获取物品
+     */
+    public static ItemStack getItemStack(String itemId) {
+        ResourceLocation resourceLocation = new ResourceLocation(itemId);
+        Item value = ForgeRegistries.ITEMS.getValue(resourceLocation);
+        Preconditions.checkNotNull(value);
+        return new ItemStack(value);
     }
 }

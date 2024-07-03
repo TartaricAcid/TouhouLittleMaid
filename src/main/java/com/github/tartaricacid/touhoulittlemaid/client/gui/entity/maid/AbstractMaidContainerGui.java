@@ -190,8 +190,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(modelDownload, poseStack, x, y, "gui.touhou_little_maid.button.model_download");
         renderTransTooltip(skin, poseStack, x, y, "gui.touhou_little_maid.button.skin");
         renderTransTooltip(sound, poseStack, x, y, "gui.touhou_little_maid.button.sound");
-        renderTransTooltip(pageUp, poseStack, x, y, "gui.touhou_little_maid.task.next_page");
-        renderTransTooltip(pageDown, poseStack, x, y, "gui.touhou_little_maid.task.previous_page");
+        renderTransTooltip(pageUp, poseStack, x, y, "gui.touhou_little_maid.task.previous_page");
+        renderTransTooltip(pageDown, poseStack, x, y, "gui.touhou_little_maid.task.next_page");
         renderTransTooltip(pageClose, poseStack, x, y, "gui.touhou_little_maid.task.close");
         renderTransTooltip(taskSwitch, poseStack, x, y, "gui.touhou_little_maid.task.switch");
         renderMaidInfo(poseStack, x, y);
@@ -255,9 +255,14 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawPerTaskButton(List<IMaidTask> tasks, int count, int index) {
         final IMaidTask maidTask = tasks.get(index);
-        TaskButton button = new TaskButton(maidTask, leftPos - 89, topPos + 23 + 19 * count,
+        boolean enable = maidTask.isEnable(maid);
+        TaskButton button = new TaskButton(maidTask, enable, leftPos - 89, topPos + 23 + 19 * count,
                 83, 19, 93, 28, 20, TASK, 256, 256,
-                (b) -> NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid())),
+                (b) -> {
+                    if (enable) {
+                        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+                    }
+                },
                 (b, m, x, y) -> renderComponentTooltip(m, getTaskTooltips(maidTask), x, y), TextComponent.EMPTY);
         this.addRenderableWidget(button);
         button.visible = taskListOpen;
@@ -268,6 +273,24 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (!desc.isEmpty()) {
             desc.add(0, new TranslatableComponent("task.touhou_little_maid.desc.title").withStyle(ChatFormatting.GOLD));
         }
+        if (!maidTask.isEnable(maid)) {
+            List<Pair<String, Predicate<EntityMaid>>> enableConditionDesc = maidTask.getEnableConditionDesc(maid);
+            // 强制显示启用条件提示
+            desc.add(new TextComponent("\u0020"));
+            desc.add(new TranslatableComponent("task.touhou_little_maid.desc.enable_condition").withStyle(ChatFormatting.GOLD));
+
+            for (Pair<String, Predicate<EntityMaid>> line : enableConditionDesc) {
+                MutableComponent prefix = new TextComponent("-\u0020");
+                String key = String.format("task.%s.%s.enable_condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
+                MutableComponent condition = new TranslatableComponent(key);
+                if (line.getSecond().test(maid)) {
+                    condition.withStyle(ChatFormatting.GREEN);
+                } else {
+                    condition.withStyle(ChatFormatting.RED);
+                }
+                desc.add(prefix.append(condition));
+            }
+        }
         List<Pair<String, Predicate<EntityMaid>>> conditions = maidTask.getConditionDescription(maid);
         if (!conditions.isEmpty()) {
             desc.add(new TextComponent("\u0020"));
@@ -276,7 +299,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         for (Pair<String, Predicate<EntityMaid>> line : conditions) {
             MutableComponent prefix = new TextComponent("-\u0020");
             String key = String.format("task.%s.%s.condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
-            TranslatableComponent condition = new TranslatableComponent(key);
+            MutableComponent condition = new TranslatableComponent(key);
             if (line.getSecond().test(maid)) {
                 condition.withStyle(ChatFormatting.GREEN);
             } else {
@@ -355,14 +378,19 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawTaskPageCount(PoseStack poseStack) {
         if (taskListOpen) {
-            String text = String.format("%d/%d", TASK_PAGE + 1, TaskManager.getTaskIndex().size() / TASK_COUNT_PER_PAGE + 1);
+            String text = String.format("%d/%d", TASK_PAGE + 1, (TaskManager.getTaskIndex().size() - 1) / TASK_COUNT_PER_PAGE + 1);
             font.draw(poseStack, text, -48, 12, 0x333333);
         }
     }
 
     private void drawCurrentTaskText(PoseStack poseStack) {
         IMaidTask task = maid.getTask();
+
+        float blitOffset = itemRenderer.blitOffset;
+        itemRenderer.blitOffset = 10;
         itemRenderer.renderGuiItem(task.getIcon(), leftPos + 6, topPos + 161);
+        itemRenderer.blitOffset = blitOffset;
+
         List<FormattedCharSequence> splitTexts = font.split(task.getName(), 42);
         if (!splitTexts.isEmpty()) {
             font.draw(poseStack, splitTexts.get(0), leftPos + 28, topPos + 165, 0x333333);
@@ -511,20 +539,12 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         }
     }
 
-    @Override
-    public int getGuiLeft() {
-        if (taskListOpen) {
-            return leftPos - 93;
-        }
-        return leftPos;
+    public boolean isTaskListOpen() {
+        return taskListOpen;
     }
 
-    @Override
-    public int getXSize() {
-        if (taskListOpen) {
-            return imageWidth + 93;
-        }
-        return imageWidth;
+    public int[] getTaskListAreas() {
+        return new int[]{leftPos - 93, topPos + 5, 92, 251};
     }
 
     public EntityMaid getMaid() {

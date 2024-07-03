@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model.bedrock;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.IAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityChairWrapper;
@@ -9,7 +10,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,6 +17,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -253,8 +254,10 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
     public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         if (animations != null) {
             Invocable invocable = (Invocable) CustomJsAnimationManger.NASHORN;
-            if (entityIn instanceof EntityMaid) {
-                setupMaidAnim((EntityMaid) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, invocable);
+            if (entityIn instanceof Mob mob) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid != null)
+                    setupMaidAnim(maid, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, invocable);
                 return;
             }
             if (entityIn instanceof EntityChair) {
@@ -273,11 +276,11 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
 
     @SuppressWarnings("unchecked")
-    private void setupMaidAnim(EntityMaid entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, Invocable invocable) {
+    private void setupMaidAnim(IMaid entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, Invocable invocable) {
         try {
             for (Object animation : animations) {
                 if (animation instanceof IAnimation) {
-                    ((IAnimation<EntityMaid>) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0, entityIn, modelMap);
+                    ((IAnimation<Mob>) animation).setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0, entityIn.asEntity(), modelMap);
                 } else {
                     entityMaidWrapper.setData(entityIn, attackTime, riding);
                     invocable.invokeMethod(animation, "animation", entityMaidWrapper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0.0625f, modelMap);

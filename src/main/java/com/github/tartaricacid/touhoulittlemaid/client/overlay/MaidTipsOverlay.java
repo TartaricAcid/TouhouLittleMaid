@@ -45,6 +45,7 @@ public class MaidTipsOverlay {
         addTips("overlay.touhou_little_maid.name_tag.tips", Items.NAME_TAG);
         addTips("overlay.touhou_little_maid.lead.tips", Items.LEAD);
         addTips("overlay.touhou_little_maid.debug_stick.tips", Items.DEBUG_STICK);
+        addTips("overlay.touhou_little_maid.saddle.tips", Items.SADDLE);
     }
 
     private static MutableComponent checkSpecialTips(ItemStack mainhandItem, EntityMaid maid, LocalPlayer player) {

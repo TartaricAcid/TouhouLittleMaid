@@ -25,6 +25,8 @@ public class GeoBuilder implements IGeoBuilder {
     private static final String LEFT_WAIST_LOCATOR = "LeftWaistLocator";
     private static final String RIGHT_WAIST_LOCATOR = "RightWaistLocator";
     private static final String BACKPACK_LOCATOR_NAME = "BackpackLocator";
+    private static final String TAC_PISTOL_LOCATOR_NAME = "PistolLocator";
+    private static final String TAC_RIFLE_LOCATOR_NAME = "RifleLocator";
     private static final String HEAD_NAME = "Head";
 
     public static void registerGeoBuilder(String modid, IGeoBuilder builder) {
@@ -51,6 +53,10 @@ public class GeoBuilder implements IGeoBuilder {
             getBoneParent(b, model.rightHandBones);
             Collections.reverse(model.rightHandBones);
         });
+        model.getBone(BACKPACK_LOCATOR_NAME).ifPresent(b -> {
+            getBoneParent(b, model.backpackBones);
+            Collections.reverse(model.backpackBones);
+        });
         model.getBone(LEFT_WAIST_LOCATOR).ifPresent(b -> {
             getBoneParent(b, model.leftWaistBones);
             Collections.reverse(model.leftWaistBones);
@@ -59,9 +65,13 @@ public class GeoBuilder implements IGeoBuilder {
             getBoneParent(b, model.rightWaistBones);
             Collections.reverse(model.rightWaistBones);
         });
-        model.getBone(BACKPACK_LOCATOR_NAME).ifPresent(b -> {
-            getBoneParent(b, model.backpackBones);
-            Collections.reverse(model.backpackBones);
+        model.getBone(TAC_PISTOL_LOCATOR_NAME).ifPresent(b -> {
+            getBoneParent(b, model.tacPistolBones);
+            Collections.reverse(model.tacPistolBones);
+        });
+        model.getBone(TAC_RIFLE_LOCATOR_NAME).ifPresent(b -> {
+            getBoneParent(b, model.tacRifleBones);
+            Collections.reverse(model.tacRifleBones);
         });
         model.getBone(HEAD_NAME).ifPresent(b -> {
             model.head = b;

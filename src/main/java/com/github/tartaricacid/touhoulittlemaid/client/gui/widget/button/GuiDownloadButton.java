@@ -22,13 +22,14 @@ public class GuiDownloadButton extends Button {
     @Override
     public Component getMessage() {
         MutableComponent text;
+        if (info == null) {
+            return new TranslatableComponent("selectWorld.futureworld.error.title");
+        }
         switch (info.getStatus()) {
             default -> text = new TranslatableComponent("gui.touhou_little_maid.resources_download.not_download");
             case DOWNLOADED -> text = new TranslatableComponent("gui.touhou_little_maid.resources_download.downloaded");
-            case DOWNLOADING ->
-                    text = new TranslatableComponent("gui.touhou_little_maid.resources_download.downloading");
-            case NEED_UPDATE ->
-                    text = new TranslatableComponent("gui.touhou_little_maid.resources_download.need_update");
+            case DOWNLOADING -> text = new TranslatableComponent("gui.touhou_little_maid.resources_download.downloading");
+            case NEED_UPDATE -> text = new TranslatableComponent("gui.touhou_little_maid.resources_download.need_update");
         }
         return text;
     }

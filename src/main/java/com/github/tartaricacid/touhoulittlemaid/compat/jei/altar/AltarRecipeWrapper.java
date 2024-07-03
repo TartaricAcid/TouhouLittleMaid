@@ -1,8 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.jei.altar;
 
-import com.google.common.collect.Lists;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
 
@@ -12,14 +10,9 @@ public class AltarRecipeWrapper {
     private final float powerCost;
     private final String langKey;
 
-    AltarRecipeWrapper(List<Ingredient> inputs, ItemStack output, float powerCost, String langKey) {
-        this.inputs = Lists.newArrayList();
+    AltarRecipeWrapper(List<List<ItemStack>> inputs, ItemStack output, float powerCost, String langKey) {
+        this.inputs = inputs;
         this.output = output;
-        for (Ingredient input : inputs) {
-            if (!input.isEmpty()) {
-                this.inputs.add(Lists.newArrayList(input.getItems()));
-            }
-        }
         this.powerCost = powerCost;
         this.langKey = langKey;
     }

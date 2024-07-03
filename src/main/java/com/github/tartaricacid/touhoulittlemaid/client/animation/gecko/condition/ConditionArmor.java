@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
@@ -78,8 +78,8 @@ public class ConditionArmor {
         }
     }
 
-    public String doTest(EntityMaid maid, EquipmentSlot slot) {
-        ItemStack item = maid.getItemBySlot(slot);
+	public String doTest(IMaid maid, EquipmentSlot slot) {
+		ItemStack item = maid.asEntity().getItemBySlot(slot);
         if (item.isEmpty()) {
             return EMPTY;
         }
@@ -90,7 +90,7 @@ public class ConditionArmor {
         return result;
     }
 
-    private String doIdTest(EntityMaid maid, EquipmentSlot slot) {
+	private String doIdTest(IMaid maid, EquipmentSlot slot) {
         if (idTest.isEmpty()) {
             return EMPTY;
         }
@@ -98,7 +98,7 @@ public class ConditionArmor {
             return EMPTY;
         }
         List<ResourceLocation> idListTest = idTest.get(slot);
-        ItemStack item = maid.getItemBySlot(slot);
+		ItemStack item = maid.asEntity().getItemBySlot(slot);
         ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(item.getItem());
         if (registryName == null) {
             return EMPTY;
@@ -109,7 +109,7 @@ public class ConditionArmor {
         return EMPTY;
     }
 
-    private String doTagTest(EntityMaid maid, EquipmentSlot slot) {
+	private String doTagTest(IMaid maid, EquipmentSlot slot) {
         if (tagTest.isEmpty()) {
             return EMPTY;
         }
@@ -117,7 +117,7 @@ public class ConditionArmor {
             return EMPTY;
         }
         List<TagKey<Item>> tagListTest = tagTest.get(slot);
-        ItemStack item = maid.getItemBySlot(slot);
+		ItemStack item = maid.asEntity().getItemBySlot(slot);
         ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
         if (tags == null) {
             return EMPTY;

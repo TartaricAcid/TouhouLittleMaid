@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.inner;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 
 import java.util.HashMap;
 
@@ -25,10 +26,13 @@ public final class MaidArmorAnimation {
 
     }
 
-    public static IAnimation<EntityMaid> getArmorDefault() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorDefault() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper helmet = modelMap.get("helmet");
                 ModelRendererWrapper chestPlate = modelMap.get("chestPlate");
                 ModelRendererWrapper chestPlateLeft = modelMap.get("chestPlateLeft");
@@ -78,10 +82,13 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorReverse() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorReverse() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper reverseHelmet = modelMap.get("_helmet");
                 ModelRendererWrapper reverseChestPlate = modelMap.get("_chestPlate");
                 ModelRendererWrapper reverseChestPlateLeft = modelMap.get("_chestPlateLeft");
@@ -131,10 +138,13 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorTempCold() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorTempCold() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper helmetTempCold = modelMap.get("helmetTempCold");
                 ModelRendererWrapper chestPlateTempCold = modelMap.get("chestPlateTempCold");
                 ModelRendererWrapper chestPlateLeftTempCold = modelMap.get("chestPlateLeftTempCold");
@@ -186,10 +196,13 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorTempMedium() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorTempMedium() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper helmetTempMedium = modelMap.get("helmetTempMedium");
                 ModelRendererWrapper chestPlateTempMedium = modelMap.get("chestPlateTempMedium");
                 ModelRendererWrapper chestPlateLeftTempMedium = modelMap.get("chestPlateLeftTempMedium");
@@ -241,10 +254,13 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorTempOcean() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorTempOcean() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper helmetTempOcean = modelMap.get("helmetTempOcean");
                 ModelRendererWrapper chestPlateTempOcean = modelMap.get("chestPlateTempOcean");
                 ModelRendererWrapper chestPlateLeftTempOcean = modelMap.get("chestPlateLeftTempOcean");
@@ -296,10 +312,13 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorTempWarm() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorTempWarm() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob mob, HashMap<String, ModelRendererWrapper> modelMap) {
+                IMaid maid = IMaid.convert(mob);
+                if (maid == null) return;
+
                 ModelRendererWrapper helmetTempWarm = modelMap.get("helmetTempWarm");
                 ModelRendererWrapper chestPlateTempWarm = modelMap.get("chestPlateTempWarm");
                 ModelRendererWrapper chestPlateLeftTempWarm = modelMap.get("chestPlateLeftTempWarm");
@@ -351,10 +370,10 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorValueFull() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorValueFull() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper helmetValueFull = modelMap.get("helmetValueFull");
                 ModelRendererWrapper chestPlateValueFull = modelMap.get("chestPlateValueFull");
                 ModelRendererWrapper chestPlateLeftValueFull = modelMap.get("chestPlateLeftValueFull");
@@ -406,10 +425,10 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorValueHigh() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorValueHigh() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper helmetValueHigh = modelMap.get("helmetValueHigh");
                 ModelRendererWrapper chestPlateValueHigh = modelMap.get("chestPlateValueHigh");
                 ModelRendererWrapper chestPlateLeftValueHigh = modelMap.get("chestPlateLeftValueHigh");
@@ -461,10 +480,10 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorValueLow() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorValueLow() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper helmetValueLow = modelMap.get("helmetValueLow");
                 ModelRendererWrapper chestPlateValueLow = modelMap.get("chestPlateValueLow");
                 ModelRendererWrapper chestPlateLeftValueLow = modelMap.get("chestPlateLeftValueLow");
@@ -517,10 +536,10 @@ public final class MaidArmorAnimation {
     }
 
 
-    public static IAnimation<EntityMaid> getArmorValueNormal() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorValueNormal() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper helmetValueNormal = modelMap.get("helmetValueNormal");
                 ModelRendererWrapper chestPlateValueNormal = modelMap.get("chestPlateValueNormal");
                 ModelRendererWrapper chestPlateLeftValueNormal = modelMap.get("chestPlateLeftValueNormal");
@@ -572,10 +591,10 @@ public final class MaidArmorAnimation {
         };
     }
 
-    public static IAnimation<EntityMaid> getArmorWeatherRaining() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorWeatherRaining() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper helmetWeatherRaining = modelMap.get("helmetWeatherRaining");
                 ModelRendererWrapper chestPlateWeatherRaining = modelMap.get("chestPlateWeatherRaining");
                 ModelRendererWrapper chestPlateLeftWeatherRaining = modelMap.get("chestPlateLeftWeatherRaining");
@@ -628,10 +647,10 @@ public final class MaidArmorAnimation {
     }
 
 
-    public static IAnimation<EntityMaid> getArmorWeatherThundering() {
-        return new IAnimation<EntityMaid>() {
+    public static IAnimation<Mob> getArmorWeatherThundering() {
+        return new IAnimation<Mob>() {
             @Override
-            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, EntityMaid maid, HashMap<String, ModelRendererWrapper> modelMap) {
+            public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Mob maid, HashMap<String, ModelRendererWrapper> modelMap) {
                 ModelRendererWrapper helmetWeatherThundering = modelMap.get("helmetWeatherThundering");
                 ModelRendererWrapper chestPlateWeatherThundering = modelMap.get("chestPlateWeatherThundering");
                 ModelRendererWrapper chestPlateLeftWeatherThundering = modelMap.get("chestPlateLeftWeatherThundering");
