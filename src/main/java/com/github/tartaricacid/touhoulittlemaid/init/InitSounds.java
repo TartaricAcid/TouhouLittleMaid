@@ -46,6 +46,9 @@ public final class InitSounds {
     public static final RegistryObject<SoundEvent> GOMOKU_RESET = registerSound("block.gomoku_reset");
     public static final RegistryObject<SoundEvent> BOX_OPEN = registerSound("entity.box");
     public static final RegistryObject<SoundEvent> COMPASS_POINT = registerSound("item.compass");
+    public static final RegistryObject<SoundEvent> FAIRY_AMBIENT = registerSound("entity.fairy.ambient");
+    public static final RegistryObject<SoundEvent> FAIRY_DEATH = registerSound("entity.fairy.death");
+    public static final RegistryObject<SoundEvent> FAIRY_HURT = registerSound("entity.fairy.hurt");
 
     private static RegistryObject<SoundEvent> registerSound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(TouhouLittleMaid.MOD_ID, name), 16.0F));
