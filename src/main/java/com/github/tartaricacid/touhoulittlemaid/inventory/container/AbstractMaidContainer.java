@@ -39,7 +39,9 @@ public abstract class AbstractMaidContainer extends AbstractContainerMenu {
     @Override
     public void removed(Player playerIn) {
         super.removed(playerIn);
-        maid.guiOpening = false;
+        if (maid != null) {
+            maid.guiOpening = false;
+        }
     }
 
     @Override
