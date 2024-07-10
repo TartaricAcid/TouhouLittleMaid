@@ -66,7 +66,7 @@ public class EmptyBackpack extends IMaidBackpack {
 
     @Override
     public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.EMPTY_CAPACITY;
+        return BackpackLevel.EMPTY_CAPACITY.getSlotSize();
     }
 
     @Nullable
@@ -81,6 +81,11 @@ public class EmptyBackpack extends IMaidBackpack {
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
         return null;
+    }
+
+    @Override
+    public BackpackLevel getBackpackLevel() {
+        return BackpackLevel.EMPTY_CAPACITY;
     }
 
     @OnlyIn(Dist.CLIENT)

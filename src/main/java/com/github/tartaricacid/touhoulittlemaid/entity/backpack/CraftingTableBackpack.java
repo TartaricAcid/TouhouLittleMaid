@@ -9,7 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.CraftingTableBackpackContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
-import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -29,19 +28,6 @@ public class CraftingTableBackpack extends IMaidBackpack {
 
     @Override
     public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
-    }
-
-    @Override
-    public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
-        Item item = stack.getItem();
-        if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
-            ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
-            return;
-        }
-        if (item == InitItems.MAID_BACKPACK_MIDDLE.get() || item == InitItems.MAID_BACKPACK_BIG.get()) {
-            return;
-        }
-        this.dropAllItems(maid);
     }
 
     @Override
@@ -65,7 +51,7 @@ public class CraftingTableBackpack extends IMaidBackpack {
 
     @Override
     public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.CRAFTING_TABLE_CAPACITY;
+        return BackpackLevel.CRAFTING_TABLE_CAPACITY.getSlotSize();
     }
 
     @Override
@@ -86,6 +72,11 @@ public class CraftingTableBackpack extends IMaidBackpack {
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
         return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/crafting_table_backpack.png");
+    }
+
+    @Override
+    public BackpackLevel getBackpackLevel() {
+        return BackpackLevel.CRAFTING_TABLE_CAPACITY;
     }
 
     @Override

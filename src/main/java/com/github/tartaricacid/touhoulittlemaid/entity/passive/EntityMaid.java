@@ -1763,4 +1763,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return handItemsForAnimation;
     }
 
+    public IMaidBackpack getBackpack() {
+        return backpack;
+    }
+
 }

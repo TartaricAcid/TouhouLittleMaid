@@ -32,15 +32,6 @@ public class SmallBackpack extends IMaidBackpack {
     }
 
     @Override
-    public void onTakeOff(ItemStack stack, Player player, EntityMaid maid) {
-        Item item = stack.getItem();
-        if (item == InitItems.MAID_BACKPACK_SMALL.get() || item == InitItems.MAID_BACKPACK_MIDDLE.get() || item == InitItems.MAID_BACKPACK_BIG.get()) {
-            return;
-        }
-        this.dropAllItems(maid);
-    }
-
-    @Override
     public void onSpawnTombstone(EntityMaid maid, EntityTombstone tombstone) {
     }
 
@@ -61,7 +52,7 @@ public class SmallBackpack extends IMaidBackpack {
 
     @Override
     public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.SMALL_CAPACITY;
+        return BackpackLevel.SMALL_CAPACITY.getSlotSize();
     }
 
     @Nullable
@@ -76,6 +67,11 @@ public class SmallBackpack extends IMaidBackpack {
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
         return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
+    }
+
+    @Override
+    public BackpackLevel getBackpackLevel() {
+        return BackpackLevel.SMALL_CAPACITY;
     }
 
     @OnlyIn(Dist.CLIENT)

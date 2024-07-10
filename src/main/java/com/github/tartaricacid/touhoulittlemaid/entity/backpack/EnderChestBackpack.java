@@ -56,7 +56,7 @@ public class EnderChestBackpack extends IMaidBackpack {
 
     @Override
     public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.EMPTY_CAPACITY;
+        return BackpackLevel.EMPTY_CAPACITY.getSlotSize();
     }
 
     @Nullable
@@ -71,6 +71,11 @@ public class EnderChestBackpack extends IMaidBackpack {
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
         return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/ender_chest_backpack.png");
+    }
+
+    @Override
+    public BackpackLevel getBackpackLevel() {
+        return BackpackLevel.EMPTY_CAPACITY;
     }
 
     @OnlyIn(Dist.CLIENT)

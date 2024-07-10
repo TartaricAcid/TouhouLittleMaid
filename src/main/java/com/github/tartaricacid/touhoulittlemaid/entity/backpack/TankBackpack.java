@@ -59,15 +59,7 @@ public class TankBackpack extends IMaidBackpack {
             ItemsUtil.dropEntityItems(maid, inv);
         }
 
-        Item item = stack.getItem();
-        if (item == InitItems.MAID_BACKPACK_SMALL.get()) {
-            ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.SMALL_CAPACITY);
-            return;
-        }
-        if (item == InitItems.MAID_BACKPACK_MIDDLE.get() || item == InitItems.MAID_BACKPACK_BIG.get()) {
-            return;
-        }
-        this.dropAllItems(maid);
+        super.onTakeOff(stack, player, maid);
     }
 
     @Override
@@ -119,7 +111,7 @@ public class TankBackpack extends IMaidBackpack {
 
     @Override
     public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.TANK_CAPACITY;
+        return BackpackLevel.TANK_CAPACITY.getSlotSize();
     }
 
     @Nullable
@@ -134,6 +126,11 @@ public class TankBackpack extends IMaidBackpack {
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
         return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tank_backpack.png");
+    }
+
+    @Override
+    public BackpackLevel getBackpackLevel() {
+        return BackpackLevel.TANK_CAPACITY;
     }
 
     @OnlyIn(Dist.CLIENT)
