@@ -62,7 +62,9 @@ public abstract class IMaidBackpack {
         return null;
     }
 
-    public abstract int getAvailableMaxContainerIndex();
+    public int getAvailableMaxContainerIndex() {
+        return getBackpackLevel().getSlotSize();
+    }
 
     @OnlyIn(Dist.CLIENT)
     public abstract void offsetBackpackItem(PoseStack poseStack);

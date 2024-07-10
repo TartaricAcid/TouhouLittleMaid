@@ -54,11 +54,6 @@ public class EnderChestBackpack extends IMaidBackpack {
         };
     }
 
-    @Override
-    public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.EMPTY_CAPACITY.getSlotSize();
-    }
-
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)

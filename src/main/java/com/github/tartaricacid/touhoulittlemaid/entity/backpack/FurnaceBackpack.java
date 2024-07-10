@@ -84,11 +84,6 @@ public class FurnaceBackpack extends IMaidBackpack {
         return new FurnaceBackpackData(maid);
     }
 
-    @Override
-    public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.FURNACE_CAPACITY.getSlotSize();
-    }
-
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)

@@ -51,11 +51,6 @@ public class MiddleBackpack extends IMaidBackpack {
         };
     }
 
-    @Override
-    public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.MIDDLE_CAPACITY.getSlotSize();
-    }
-
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)

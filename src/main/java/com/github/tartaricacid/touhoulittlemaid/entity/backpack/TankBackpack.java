@@ -109,11 +109,6 @@ public class TankBackpack extends IMaidBackpack {
         };
     }
 
-    @Override
-    public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.TANK_CAPACITY.getSlotSize();
-    }
-
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)

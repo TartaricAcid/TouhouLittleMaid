@@ -50,11 +50,6 @@ public class CraftingTableBackpack extends IMaidBackpack {
     }
 
     @Override
-    public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.CRAFTING_TABLE_CAPACITY.getSlotSize();
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public void offsetBackpackItem(PoseStack poseStack) {
         poseStack.translate(0, 0.625, 0.25);

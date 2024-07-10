@@ -50,11 +50,6 @@ public class BigBackpack extends IMaidBackpack {
         };
     }
 
-    @Override
-    public int getAvailableMaxContainerIndex() {
-        return BackpackLevel.BIG_CAPACITY.getSlotSize();
-    }
-
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
