@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-public enum BackpackLevel {
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackLevel;
+
+public enum BackpackLevel implements IBackpackLevel {
     EMPTY_CAPACITY(6),
     SMALL_CAPACITY(12),
     MIDDLE_CAPACITY(24),
@@ -15,6 +17,7 @@ public enum BackpackLevel {
         this.slotSize = slotSize;
     }
 
+    @Override
     public int getSlotSize() {
         return slotSize;
     }

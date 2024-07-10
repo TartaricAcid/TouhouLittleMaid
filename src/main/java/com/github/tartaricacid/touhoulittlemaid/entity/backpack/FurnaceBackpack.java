@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.FurnaceBackpackModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.FurnaceBackpackData;
@@ -99,7 +100,7 @@ public class FurnaceBackpack extends IMaidBackpack {
     }
 
     @Override
-    public BackpackLevel getBackpackLevel() {
+    public IBackpackLevel getBackpackLevel() {
         return BackpackLevel.FURNACE_CAPACITY;
     }
 

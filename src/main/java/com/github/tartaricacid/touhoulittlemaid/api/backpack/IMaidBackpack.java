@@ -77,7 +77,7 @@ public abstract class IMaidBackpack {
     @OnlyIn(Dist.CLIENT)
     public abstract ResourceLocation getBackpackTexture();
 
-    public abstract BackpackLevel getBackpackLevel();
+    public abstract IBackpackLevel getBackpackLevel();
 
     protected final void dropAllItems(EntityMaid maid) {
         ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.EMPTY_CAPACITY.getSlotSize());

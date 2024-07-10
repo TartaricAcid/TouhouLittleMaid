@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackLevel;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.SmallBackpackModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
@@ -65,7 +66,7 @@ public class SmallBackpack extends IMaidBackpack {
     }
 
     @Override
-    public BackpackLevel getBackpackLevel() {
+    public IBackpackLevel getBackpackLevel() {
         return BackpackLevel.SMALL_CAPACITY;
     }
 
