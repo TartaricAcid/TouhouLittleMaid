@@ -37,10 +37,11 @@ public abstract class IMaidBackpack {
         Optional<IMaidBackpack> itemBackpack = BackpackManager.findBackpack(stack);
 
         if(stack.getItem() instanceof ItemMaidBackpack backpackItem && itemBackpack.isPresent()) {
-            IMaidBackpack iItemBackpack = itemBackpack.get();
+            int maidBackpackSlotSize = maidBackpack.getBackpackLevel().getSlotSize();
+            int itemBackpackSlotSize = itemBackpack.get().getBackpackLevel().getSlotSize();
 
-            if (maidBackpack.getBackpackLevel().getSlotSize() > iItemBackpack.getBackpackLevel().getSlotSize()) {
-                ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), iItemBackpack.getBackpackLevel().getSlotSize());
+            if (maidBackpackSlotSize > itemBackpackSlotSize) {
+                ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), itemBackpackSlotSize);
             }
 
             return;
