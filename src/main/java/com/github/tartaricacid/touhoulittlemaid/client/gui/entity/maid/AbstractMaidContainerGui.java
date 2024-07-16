@@ -1,10 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.*;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidDownloadButton;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.compat.ipn.SortButtonScreen;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
@@ -253,7 +257,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 (b) -> {
                     if (enable) {
-                        taskBtnPressed(maidTask, true);
+                        taskButtonPressed(maidTask, true);
                     }
                 },
                 getTaskTooltips(maidTask), Component.empty());
@@ -261,8 +265,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         button.visible = taskListOpen;
     }
 
-    // 用于开放切换任务时对当前Gui的操作
-    protected void taskBtnPressed(IMaidTask maidTask, boolean enable) {
+    // 用于开放切换任务时对当前 GUI 的操作
+    protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
         NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
     }
 
@@ -442,9 +446,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void renderTaskButtonInfo(GuiGraphics graphics, int x, int y) {
-        this.renderables.stream().filter(b -> b instanceof ITooltipBtn).forEach(b -> {
-            if (((ITooltipBtn) b).isHovered()) {
-                ((ITooltipBtn) b).renderTooltip(graphics, getMinecraft(), x, y);
+        this.renderables.stream().filter(b -> b instanceof ITooltipButton).forEach(b -> {
+            ITooltipButton tooltipButton = (ITooltipButton) b;
+            if (tooltipButton.isHovered()) {
+                tooltipButton.renderTooltip(graphics, getMinecraft(), x, y);
             }
         });
     }
