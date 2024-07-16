@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
+import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @OnlyIn(Dist.CLIENT)
-public class TaskButton extends Button {
+public class TaskButton extends Button implements ITooltipButton {
     private final IMaidTask task;
     private final boolean enable;
     private final ResourceLocation resourceLocation;
@@ -83,7 +84,8 @@ public class TaskButton extends Button {
         graphics.drawString(minecraft.font, task.getName(), this.getX() + 23, this.getY() + 6, 0x333333, false);
     }
 
-    public void renderToolTip(GuiGraphics graphics, Minecraft mc, int mouseX, int mouseY) {
+    @Override
+    public void renderTooltip(GuiGraphics graphics, Minecraft mc, int mouseX, int mouseY) {
         if (!this.tooltips.isEmpty()) {
             graphics.renderComponentTooltip(mc.font, this.tooltips, mouseX, mouseY);
         }

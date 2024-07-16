@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
+import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import net.minecraft.network.FriendlyByteBuf;
@@ -37,8 +38,12 @@ public class MaidTaskMessage {
                     return;
                 }
                 Entity entity = sender.level.getEntity(message.id);
-                if (entity instanceof EntityMaid maid && ((EntityMaid) entity).isOwnedBy(sender)) {
-                    maid.setTask(TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask()));
+                if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
+                    IMaidTask task = TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask());
+                    if (!task.isEnable(maid)) {
+                        return;
+                    }
+                    maid.setTask(task);
                 }
             });
         }

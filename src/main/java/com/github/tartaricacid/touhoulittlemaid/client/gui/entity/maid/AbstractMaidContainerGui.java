@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
@@ -256,12 +257,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 (b) -> {
                     if (enable) {
-                        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+                        taskButtonPressed(maidTask, true);
                     }
                 },
                 getTaskTooltips(maidTask), Component.empty());
         this.addRenderableWidget(button);
         button.visible = taskListOpen;
+    }
+
+    // 用于开放切换任务时对当前 GUI 的操作
+    protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
+        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
     }
 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
@@ -440,9 +446,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void renderTaskButtonInfo(GuiGraphics graphics, int x, int y) {
-        this.renderables.stream().filter(b -> b instanceof TaskButton).forEach(b -> {
-            if (((TaskButton) b).isHovered()) {
-                ((TaskButton) b).renderToolTip(graphics, getMinecraft(), x, y);
+        this.renderables.stream().filter(b -> b instanceof ITooltipButton).forEach(b -> {
+            ITooltipButton tooltipButton = (ITooltipButton) b;
+            if (tooltipButton.isHovered()) {
+                tooltipButton.renderTooltip(graphics, getMinecraft(), x, y);
             }
         });
     }
