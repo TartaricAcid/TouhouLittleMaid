@@ -316,7 +316,6 @@
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.text": "O Touhou Project é uma série de jogos de doujin japonesa de ZUN, membro da Sole Team Shanghai Alice, especializada em Shoot 'em Ups.",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "Geração de Mundo",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.0.text": "Este mod adiciona um mob. $(br2)O saque do mob é um importante ingrediente de criação.$(br2)A chance de gerar criaturas hostis neste mod pode ser modificada no arquivo de configuração. Quando definido como 0, esses monstros são proibidos de aparecer.",
-  "patchouli.touhou_little_maid.book.entries.overview.world_spawn.pages.1.text": "Gerar em qualquer bioma à noite, ela voará e atirará danmaku para atacar jogadores ou empregadas.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.name": "Criar Modelo Personalizado",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.text": "Eu desenhei especialmente um plugin para fazer pacote de modelo para Blockbench, acesse o link abaixo para saber como instalar o plugin.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "Abrir Link",
