@@ -256,12 +256,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 (b) -> {
                     if (enable) {
-                        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+                        taskBtnPressed(maidTask, true);
                     }
                 },
                 getTaskTooltips(maidTask), Component.empty());
         this.addRenderableWidget(button);
         button.visible = taskListOpen;
+    }
+
+    // 用于开放切换任务时对当前Gui的操作
+    protected void taskBtnPressed(IMaidTask maidTask, boolean enable) {
+        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
     }
 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
