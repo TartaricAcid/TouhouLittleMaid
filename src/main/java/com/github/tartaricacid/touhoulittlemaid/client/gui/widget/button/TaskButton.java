@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @OnlyIn(Dist.CLIENT)
-public class TaskButton extends Button {
+public class TaskButton extends Button implements ITooltipBtn{
     private final IMaidTask task;
     private final boolean enable;
     private final ResourceLocation resourceLocation;
@@ -83,7 +83,8 @@ public class TaskButton extends Button {
         graphics.drawString(minecraft.font, task.getName(), this.getX() + 23, this.getY() + 6, 0x333333, false);
     }
 
-    public void renderToolTip(GuiGraphics graphics, Minecraft mc, int mouseX, int mouseY) {
+    @Override
+    public void renderTooltip(GuiGraphics graphics, Minecraft mc, int mouseX, int mouseY) {
         if (!this.tooltips.isEmpty()) {
             graphics.renderComponentTooltip(mc.font, this.tooltips, mouseX, mouseY);
         }

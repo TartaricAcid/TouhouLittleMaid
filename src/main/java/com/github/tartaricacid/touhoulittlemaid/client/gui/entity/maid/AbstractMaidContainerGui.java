@@ -4,10 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidDownloadButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.compat.ipn.SortButtonScreen;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
@@ -445,9 +442,9 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void renderTaskButtonInfo(GuiGraphics graphics, int x, int y) {
-        this.renderables.stream().filter(b -> b instanceof TaskButton).forEach(b -> {
-            if (((TaskButton) b).isHovered()) {
-                ((TaskButton) b).renderToolTip(graphics, getMinecraft(), x, y);
+        this.renderables.stream().filter(b -> b instanceof ITooltipBtn).forEach(b -> {
+            if (((ITooltipBtn) b).isHovered()) {
+                ((ITooltipBtn) b).renderTooltip(graphics, getMinecraft(), x, y);
             }
         });
     }
