@@ -65,7 +65,7 @@ public class MaidHealSelfTask extends MaidCheckRateTask {
         // 尝试在背包中寻找食物放入
         boolean hasFood = false;
         RangedWrapper backpackInv = maid.getAvailableBackpackInv();
-        emptyItemCheck:
+        swapItemCheck:
         for (int i = 0; i < backpackInv.getSlots(); i++) {
             ItemStack stack = backpackInv.getStackInSlot(i);
             if (stack.isEmpty()) {
@@ -80,7 +80,7 @@ public class MaidHealSelfTask extends MaidCheckRateTask {
                     ItemHandlerHelper.insertItemStacked(backpackInv, handStack, false);
                     itemInHand = maid.getItemInHand(eanHand);
                     hasFood = true;
-                    break emptyItemCheck;
+                    break swapItemCheck;
                 }
             }
         }
