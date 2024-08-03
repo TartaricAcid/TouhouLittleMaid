@@ -99,7 +99,7 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
     }
 
     @Override
-    protected void setupRotations(EntityChair chair, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {
+    protected void setupRotations(EntityChair chair, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, float pScale) {
         poseStack.mulPose(Axis.YP.rotationDegrees(180 - rotationYaw));
     }
 

@@ -5,13 +5,11 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 
 public class EntityBoxModel extends AbstractModel<EntityBox> {
     public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "box");
@@ -55,8 +53,7 @@ public class EntityBoxModel extends AbstractModel<EntityBox> {
     }
 
     @Override
-    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        EntityBox entityIn = (EntityBox) entity;
+    public void setupAnim(EntityBox entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         int stage = entityIn.getOpenStage();
         if (stage == EntityBox.FIRST_STAGE) {
             top.visible = true;

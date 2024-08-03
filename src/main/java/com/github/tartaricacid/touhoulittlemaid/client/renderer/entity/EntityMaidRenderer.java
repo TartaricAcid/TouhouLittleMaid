@@ -99,8 +99,8 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     }
 
     @Override
-    protected void setupRotations(Mob mob, PoseStack poseStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks) {
-        super.setupRotations(mob, poseStack, pAgeInTicks, pRotationYaw, pPartialTicks);
+    protected void setupRotations(Mob mob, PoseStack poseStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks, float pScale) {
+        super.setupRotations(mob, poseStack, pAgeInTicks, pRotationYaw, pPartialTicks, pScale);
         if (mob.getVehicle() instanceof Player && !this.mainInfo.isGeckoModel()) {
             poseStack.translate(-0.375, 0.8325, 0.375);
             poseStack.mulPose(Axis.ZN.rotationDegrees(65));

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.AbstractModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityBoxModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.google.common.collect.Lists;
@@ -19,7 +20,7 @@ import java.util.stream.IntStream;
 
 public class EntityBoxRender extends EntityRenderer<EntityBox> {
     private final List<ResourceLocation> texturesGroup = Lists.newArrayList();
-    private final EntityModel<EntityBox> boxModel;
+    private final AbstractModel<EntityBox> boxModel;
 
     public EntityBoxRender(EntityRendererProvider.Context manager) {
         super(manager);

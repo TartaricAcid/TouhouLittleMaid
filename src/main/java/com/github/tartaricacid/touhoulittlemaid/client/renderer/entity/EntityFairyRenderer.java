@@ -32,8 +32,8 @@ public class EntityFairyRenderer extends MobRenderer<EntityFairy, EntityFairyMod
     }
 
     @Override
-    protected void setupRotations(EntityFairy fairy, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.setupRotations(fairy, poseStack, ageInTicks, rotationYaw, partialTicks);
+    protected void setupRotations(EntityFairy fairy, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, float pScale) {
+        super.setupRotations(fairy, poseStack, ageInTicks, rotationYaw, partialTicks, pScale);
         if (!fairy.onGround()) {
             poseStack.mulPose(Axis.XN.rotation(8 * (float) Math.PI / 180.0f));
         }

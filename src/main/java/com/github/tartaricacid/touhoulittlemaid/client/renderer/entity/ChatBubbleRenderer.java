@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.neoforged.neoforge.client.ClientHooks;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 
@@ -37,7 +38,7 @@ public class ChatBubbleRenderer {
 
     public static void renderChatBubble(EntityMaidRenderer renderer, EntityMaid maid, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         double distance = renderer.getDispatcher().distanceToSqr(maid);
-        if (ForgeHooksClient.isNameplateInRenderDistance(maid, distance)) {
+        if (ClientHooks.isNameplateInRenderDistance(maid, distance)) {
             getTmpChatBubbles(maid);
             Font font = renderer.getFont();
 
@@ -154,9 +155,8 @@ public class ChatBubbleRenderer {
 
     private static void renderIcon(int startX, int startY, ResourceLocation iconPath, RenderData data) {
         VertexConsumer iconVertexBuilder = data.buffer.getBuffer(chatBubbleRender(iconPath));
-        AbstractTexture texture = Minecraft.getInstance().textureManager.getTexture(iconPath);
-        if (texture instanceof SizeTexture) {
-            SizeTexture sizeTexture = (SizeTexture) texture;
+        AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(iconPath);
+        if (texture instanceof SizeTexture sizeTexture) {
             int textureHeight = sizeTexture.getHeight();
             int textureWidth = sizeTexture.getWidth();
             int count = textureHeight / (textureWidth / 3);
