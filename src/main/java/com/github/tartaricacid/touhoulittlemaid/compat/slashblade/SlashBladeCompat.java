@@ -8,7 +8,7 @@ import mods.flammpfeil.slashblade.util.AttackManager;
 import mods.flammpfeil.slashblade.util.KnockBacks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public class SlashBladeCompat {
     private static final String SLASH_BLADE = "slashblade";

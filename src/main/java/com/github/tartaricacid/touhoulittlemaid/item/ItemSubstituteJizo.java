@@ -12,13 +12,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class ItemSubstituteJizo extends Item {
     public ItemSubstituteJizo() {
         super((new Properties()).stacksTo(1));

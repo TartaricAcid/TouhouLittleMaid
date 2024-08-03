@@ -146,6 +146,7 @@ dependencies {
     implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
     implementation "curse.maven:jade-324717:5444008"
     implementation "maven.modrinth:carry-on:2LfOJ5LW"
+    implementation "maven.modrinth:cloth-config:15.0.128+neoforge"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -4,18 +4,17 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.mod.ClothConfigScreen
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.BlackList;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public final class CompatRegistry {
     public static final String TOP = "theoneprobe";
     public static final String PATCHOULI = "patchouli";

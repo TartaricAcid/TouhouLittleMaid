@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public final class ChairConfig {
-    public static ForgeConfigSpec.BooleanValue CHAIR_CHANGE_MODEL;
-    public static ForgeConfigSpec.BooleanValue CHAIR_CAN_DESTROYED_BY_ANYONE;
+    public static ModConfigSpec.BooleanValue CHAIR_CHANGE_MODEL;
+    public static ModConfigSpec.BooleanValue CHAIR_CAN_DESTROYED_BY_ANYONE;
 
-    public static void init(ForgeConfigSpec.Builder builder) {
+    public static void init(ModConfigSpec.Builder builder) {
         builder.push("chair");
 
         builder.comment("Chair can switch models freely");

@@ -8,8 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class DefaultEatenEvent {
     @SubscribeEvent
     public static void onAfterMaidEat(MaidAfterEatEvent event) {

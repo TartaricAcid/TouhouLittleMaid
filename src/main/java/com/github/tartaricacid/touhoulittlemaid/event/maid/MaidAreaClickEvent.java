@@ -8,10 +8,10 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.SyncMaidAreaMess
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class MaidAreaClickEvent {
     @SubscribeEvent
     public static void onInteract(InteractMaidEvent event) {

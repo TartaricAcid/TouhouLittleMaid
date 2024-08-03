@@ -8,12 +8,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public final class EntityHurtEvent {
     @SubscribeEvent
     public static void onArrowImpact(ProjectileImpactEvent event) {

@@ -15,9 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.ModLoadingContext;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,25 +37,25 @@ public class MenuIntegration {
     private static void maidConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
         ConfigCategory maid = root.getOrCreateCategory(Component.translatable("entity.touhou_little_maid.maid"));
         maid.addEntry(entryBuilder.startDropdownMenu(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item.name"),
-                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(ForgeRegistries.ITEMS.getValue(new ResourceLocation(MaidConfig.MAID_TAMED_ITEM.get()))),
+                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(BuiltInRegistries.ITEM.get(ResourceLocation.parse(MaidConfig.MAID_TAMED_ITEM.get()))),
                         DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
                 .setSelections(BuiltInRegistries.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
                 .setDefaultValue(Items.CAKE).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item.desc"))
-                .setSaveConsumer(s -> MaidConfig.MAID_TAMED_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
+                .setSaveConsumer(s -> MaidConfig.MAID_TAMED_ITEM.set(BuiltInRegistries.ITEM.getKey(s).toString())).build());
 
         maid.addEntry(entryBuilder.startDropdownMenu(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item.name"),
-                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(ForgeRegistries.ITEMS.getValue(new ResourceLocation(MaidConfig.MAID_TEMPTATION_ITEM.get()))),
+                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(BuiltInRegistries.ITEM.get(ResourceLocation.parse(MaidConfig.MAID_TEMPTATION_ITEM.get()))),
                         DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
                 .setSelections(BuiltInRegistries.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
                 .setDefaultValue(Items.CAKE).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item.desc"))
-                .setSaveConsumer(s -> MaidConfig.MAID_TEMPTATION_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
+                .setSaveConsumer(s -> MaidConfig.MAID_TEMPTATION_ITEM.set(BuiltInRegistries.ITEM.getKey(s).toString())).build());
 
         maid.addEntry(entryBuilder.startDropdownMenu(Component.translatable("config.touhou_little_maid.maid.maid_ntr_item.name"),
-                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(ForgeRegistries.ITEMS.getValue(new ResourceLocation(MaidConfig.MAID_NTR_ITEM.get()))),
+                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(BuiltInRegistries.ITEM.get(ResourceLocation.parse(MaidConfig.MAID_NTR_ITEM.get()))),
                         DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
                 .setSelections(BuiltInRegistries.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
                 .setDefaultValue(Items.STRUCTURE_VOID).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_ntr_item.desc"))
-                .setSaveConsumer(s -> MaidConfig.MAID_NTR_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
+                .setSaveConsumer(s -> MaidConfig.MAID_NTR_ITEM.set(BuiltInRegistries.ITEM.getKey(s).toString())).build());
 
         maid.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.maid.maid_work_range.name"), MaidConfig.MAID_WORK_RANGE.get(), 3, 64)
                 .setDefaultValue(12).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_work_range.desc"))

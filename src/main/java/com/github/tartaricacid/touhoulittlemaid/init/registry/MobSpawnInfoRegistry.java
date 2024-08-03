@@ -9,9 +9,9 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.LevelEvent;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConf
 import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig.MAID_FAIRY_BLACKLIST_DIMENSION;
 
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public final class MobSpawnInfoRegistry {
     private static MobSpawnSettings.SpawnerData SPAWNER_DATA;
 
@@ -46,6 +46,6 @@ public final class MobSpawnInfoRegistry {
     }
 
     private static boolean biomeIsOkay(Holder<Biome> biome) {
-        return MAID_FAIRY_BLACKLIST_BIOME.get().stream().noneMatch(name -> biome.is(new ResourceLocation(name)));
+        return MAID_FAIRY_BLACKLIST_BIOME.get().stream().noneMatch(name -> biome.is(ResourceLocation.parse(name)));
     }
 }

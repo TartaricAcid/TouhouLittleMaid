@@ -6,12 +6,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class BowlFoodEvent {
     @SubscribeEvent
     public static void onAfterMaidEat(MaidAfterEatEvent event) {

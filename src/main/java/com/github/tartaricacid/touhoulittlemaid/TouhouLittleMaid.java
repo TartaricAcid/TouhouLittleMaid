@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
-import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -14,9 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +28,6 @@ public final class TouhouLittleMaid {
     public TouhouLittleMaid(IEventBus modEventBus, ModContainer modContainer) {
         initRegister(modEventBus);
         InitTrigger.init();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfig.init());
         ChatBubbleManger.initDefaultChat();
         modApiInit();
     }
@@ -54,6 +50,10 @@ public final class TouhouLittleMaid {
         InitLootModifier.GLOBAL_LOOT_MODIFIER_SERIALIZER.register(eventBus);
         InitCommand.ARGUMENT_TYPE.register(eventBus);
         InitPoi.POI_TYPES.register(eventBus);
+        /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表
+        驯养革新 Domestication Innovation
+
+         */
     }
 
     private static void modApiInit() {

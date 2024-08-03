@@ -2,12 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.compat.ironchest;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IChestType;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
-import com.progwml6.ironchest.common.block.regular.entity.AbstractIronChestBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public final class IronChestType implements IChestType {
     private static final String IRON_CHEST_ID = "ironchest";

@@ -15,8 +15,8 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -34,7 +34,7 @@ import static com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomP
 import static com.github.tartaricacid.touhoulittlemaid.util.SoundUtil.isRainBiome;
 import static com.github.tartaricacid.touhoulittlemaid.util.SoundUtil.isSnowyBiome;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class ChatBubbleManger {
     private static final Cache<Integer, ChatText> INNER_CHAT_TEXT_CACHE = CacheBuilder.newBuilder().expireAfterWrite(25, TimeUnit.SECONDS).build();
     private static final String DEFAULT_CHAT_BUBBLE_PATH = String.format("/assets/%s/tlm_custom_pack/default_chat_bubble.json", TouhouLittleMaid.MOD_ID);

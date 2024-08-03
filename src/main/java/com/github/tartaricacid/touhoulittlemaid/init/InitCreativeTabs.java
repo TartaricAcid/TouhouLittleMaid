@@ -12,25 +12,26 @@ import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
-import vazkii.patchouli.common.item.ItemModBook;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.*;
 
 public class InitCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TouhouLittleMaid.MOD_ID);
 
-    public static RegistryObject<CreativeModeTab> MAIN_TAB = TABS.register("main", () -> CreativeModeTab.builder()
+    public static DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB = TABS.register("main", () -> CreativeModeTab.builder()
             .title(Component.translatable("item_group.touhou_little_maid.main"))
             .icon(() -> InitItems.HAKUREI_GOHEI.get().getDefaultInstance())
             .displayItems((par, output) -> {
-                if (ModList.get().isLoaded("patchouli")) {
-                    output.accept(ItemModBook.forBook(new ResourceLocation(TouhouLittleMaid.MOD_ID, "memorizable_gensokyo")));
-                }
+//                if (ModList.get().isLoaded("patchouli")) {
+//                    output.accept(ItemModBook.forBook(new ResourceLocation(TouhouLittleMaid.MOD_ID, "memorizable_gensokyo")));
+//                }
+// TODO 帕秋莉手册
                 output.accept(MAID_SPAWN_EGG.get());
                 output.accept(FAIRY_SPAWN_EGG.get());
                 output.accept(HAKUREI_GOHEI.get());
@@ -88,7 +89,7 @@ public class InitCreativeTabs {
                 output.accept(getEnchantmentBook(InitEnchantments.ENDERS_ENDER));
             }).build());
 
-    public static RegistryObject<CreativeModeTab> GARAGE_KIT_TAB = TABS.register("chair", () -> CreativeModeTab.builder()
+    public static DeferredHolder<CreativeModeTab, CreativeModeTab> GARAGE_KIT_TAB = TABS.register("chair", () -> CreativeModeTab.builder()
             .title(Component.translatable("item_group.touhou_little_maid.chair"))
             .icon(() -> InitItems.CHAIR.get().getDefaultInstance())
             .displayItems((par, output) -> {
@@ -97,7 +98,7 @@ public class InitCreativeTabs {
                 }
             }).build());
 
-    public static RegistryObject<CreativeModeTab> CHAIR_TAB = TABS.register("garage_kit", () -> CreativeModeTab.builder()
+    public static DeferredHolder<CreativeModeTab, CreativeModeTab> CHAIR_TAB = TABS.register("garage_kit", () -> CreativeModeTab.builder()
             .title(Component.translatable("item_group.touhou_little_maid.garage_kit"))
             .icon(() -> InitItems.GARAGE_KIT.get().getDefaultInstance())
             .displayItems((par, output) -> {
@@ -106,7 +107,7 @@ public class InitCreativeTabs {
                 }
             }).build());
 
-    private static ItemStack getEnchantmentBook(RegistryObject<Enchantment> registryObject) {
+    private static ItemStack getEnchantmentBook(DeferredHolder<Enchantment,Enchantment> registryObject) {
         Enchantment enchantment = registryObject.get();
         EnchantmentInstance instance = new EnchantmentInstance(enchantment, enchantment.getMaxLevel());
         return EnchantedBookItem.createForEnchantment(instance);

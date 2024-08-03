@@ -1,14 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class VanillaConfig {
-    public static ForgeConfigSpec.BooleanValue REPLACE_SLIME_MODEL;
-    public static ForgeConfigSpec.BooleanValue REPLACE_XP_TEXTURE;
-    public static ForgeConfigSpec.BooleanValue REPLACE_TOTEM_TEXTURE;
-    public static ForgeConfigSpec.BooleanValue REPLACE_XP_BOTTLE_TEXTURE;
+    public static ModConfigSpec.BooleanValue REPLACE_SLIME_MODEL;
+    public static ModConfigSpec.BooleanValue REPLACE_XP_TEXTURE;
+    public static ModConfigSpec.BooleanValue REPLACE_TOTEM_TEXTURE;
+    public static ModConfigSpec.BooleanValue REPLACE_XP_BOTTLE_TEXTURE;
 
-    public static void init(ForgeConfigSpec.Builder builder) {
+    public static void init(ModConfigSpec.Builder builder) {
         builder.push("vanilla");
 
         builder.comment("Whether to replace the vanilla slime model with the yukkuri.");

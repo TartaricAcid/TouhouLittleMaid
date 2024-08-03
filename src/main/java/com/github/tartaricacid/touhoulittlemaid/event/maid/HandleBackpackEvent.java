@@ -9,11 +9,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class HandleBackpackEvent {
     @SubscribeEvent
     public static void onInteractMaid(InteractMaidEvent event) {
