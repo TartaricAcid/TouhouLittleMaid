@@ -5,7 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModel
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.Cancelable;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 @Cancelable
 @OnlyIn(Dist.CLIENT)

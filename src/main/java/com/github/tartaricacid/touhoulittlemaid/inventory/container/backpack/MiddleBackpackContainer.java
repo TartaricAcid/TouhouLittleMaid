@@ -4,8 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainCont
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class MiddleBackpackContainer extends MaidMainContainer {
     public static final MenuType<MiddleBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new MiddleBackpackContainer(windowId, inv, data.readInt()));

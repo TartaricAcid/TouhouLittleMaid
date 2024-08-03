@@ -147,6 +147,9 @@ dependencies {
     implementation "curse.maven:jade-324717:5444008"
     implementation "maven.modrinth:carry-on:2LfOJ5LW"
     implementation "maven.modrinth:cloth-config:15.0.128+neoforge"
+    implementation "maven.modrinth:the-one-probe:1.21_neo-12.0.3"
+    implementation "maven.modrinth:emi:1.1.10+1.21+neoforge"
+    implementation "maven.modrinth:rei:16.0.744+neoforge"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

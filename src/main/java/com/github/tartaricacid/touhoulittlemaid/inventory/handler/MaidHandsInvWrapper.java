@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.inventory.handler;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
+import net.neoforged.neoforge.items.wrapper.EntityHandsInvWrapper;
 
 import javax.annotation.Nonnull;
 

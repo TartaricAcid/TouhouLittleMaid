@@ -7,7 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public class MaidFarmMoveTask extends MaidMoveToBlockTask {
     private final NonNullList<ItemStack> seeds = NonNullList.create();

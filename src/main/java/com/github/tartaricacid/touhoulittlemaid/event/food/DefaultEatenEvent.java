@@ -4,15 +4,16 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAfterEatEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 import java.util.List;
 
@@ -50,13 +51,8 @@ public class DefaultEatenEvent {
     }
 
     private static ItemStack getItemStack(String itemId) {
-        ResourceLocation resourceLocation = new ResourceLocation(itemId);
-        Item value = ForgeRegistries.ITEMS.getValue(resourceLocation);
-        if (value != null) {
-            return new ItemStack(value);
-        }else {
-            TouhouLittleMaid.LOGGER.warn("Can't find item: " + itemId + ", please check your MaidEatenReturnContainerList config entry.");
-            return ItemStack.EMPTY;
-        }
+        ResourceLocation resourceLocation = ResourceLocation.parse(itemId);
+        Item value = BuiltInRegistries.ITEM.get(resourceLocation);
+        return new ItemStack(value);
     }
 }
