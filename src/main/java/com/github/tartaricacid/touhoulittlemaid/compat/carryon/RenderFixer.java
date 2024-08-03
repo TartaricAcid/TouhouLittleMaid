@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.carryon;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public class RenderFixer {
     private static final String CARRY_ON_ID = "carryon";
