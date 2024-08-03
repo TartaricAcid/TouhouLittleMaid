@@ -21,8 +21,8 @@
 //import net.minecraft.world.entity.Pose;
 //import net.minecraft.world.entity.player.Player;
 //import net.minecraft.world.item.ItemStack;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.api.distmarker.OnlyIn;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.api.distmarker.OnlyIn;
 //import org.apache.commons.lang3.StringUtils;
 //import org.jetbrains.annotations.NotNull;
 //
