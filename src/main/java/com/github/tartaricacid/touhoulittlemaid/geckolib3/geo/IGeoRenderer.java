@@ -130,8 +130,8 @@ public interface IGeoRenderer<T> {
         for (GeoVertex vertex : quad.vertices) {
             Vector3f position = vertex.position;
             Vector4f vector4f = poseState.transform(new Vector4f(position.x(), position.y(), position.z(), 1.0f));
-            buffer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha, vertex.textureU,
-                    vertex.textureV, packedOverlay, packedLight, normal.x(), normal.y(), normal.z());
+            buffer.addVertex(vector4f.x(), vector4f.y(), vector4f.z()).setColor(red, green, blue, alpha).setUv(vertex.textureU, vertex.textureV)
+                    .setOverlay(packedOverlay).setLight(packedLight).setNormal(normal.x(), normal.y(), normal.z());
         }
     }
 
