@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.api.task;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -59,7 +60,7 @@ public interface IAttackTask extends IMaidTask {
         if (target.equals(maidLastHurtByMob) && checkCanAttackEntity(maidLastHurtByMob)) {
             return true;
         }
-        ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(target.getType());
+        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
         if (key != null && MaidConfig.MAID_ATTACK_IGNORE.get().contains(key.toString())) {
             return false;
         }

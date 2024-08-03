@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class MaidBannerModel extends EntityModel<Entity> {
+public class MaidBannerModel extends AbstractModel<Entity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "maid_banner");
     private final ModelPart main;
     private final ModelPart banner;
@@ -48,8 +48,8 @@ public class MaidBannerModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        main.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 
     public ModelPart getBanner() {

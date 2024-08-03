@@ -8,7 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.Entity;
 
-public class EntityPlaceholderModel extends EntityModel<Entity> {
+public class EntityPlaceholderModel extends AbstractModel<Entity> {
     private final BedrockPart bone;
 
     public EntityPlaceholderModel() {
@@ -22,7 +22,7 @@ public class EntityPlaceholderModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         bone.render(poseStack, buffer, packedLight, packedOverlay);
     }
 }

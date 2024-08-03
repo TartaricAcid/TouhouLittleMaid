@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ImageButtonWithId;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TouhouImageButton;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.SizeTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
@@ -12,7 +13,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -116,7 +116,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         }
 
         // 关闭当前界面的按键
-        this.addRenderableWidget(new ImageButton(startX + 122, startY - 97, 21, 17, 58, 201, 18, BG,
+        this.addRenderableWidget(new TouhouImageButton(startX + 122, startY - 97, 21, 17, 58, 201, 18, BG,
                 (b) -> getMinecraft().submit(() -> getMinecraft().setScreen(null))));
 
         // 添加切换页面的按钮
@@ -143,7 +143,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 开始添加按键，顺便装填按键对应模型的索引
         for (E modelItem : pack.getModelList().subList(fromIndex, toIndex)) {
-            this.addRenderableWidget(new ImageButton(startX + offsetX - 8, startY + offsetY - 26, 15, 24, 41, 201, 24, BG, onModelButtonClick(modelItem)));
+            this.addRenderableWidget(new TouhouImageButton(startX + offsetX - 8, startY + offsetY - 26, 15, 24, 41, 201, 24, BG, onModelButtonClick(modelItem)));
 
             // 往右绘制
             offsetX = offsetX + 20;
@@ -157,14 +157,14 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     }
 
     private void addScrollButton(int startX, int startY) {
-        ImageButton upButton = new ImageButton(startX - 256 / 2 + 253, startY - 73, 14, 10, 24, 15, 10, SIDE, b -> {
+        TouhouImageButton upButton = new TouhouImageButton(startX - 256 / 2 + 253, startY - 73, 14, 10, 24, 15, 10, SIDE, b -> {
             int row = Mth.clamp(getRowIndex() - 1, 0, guiNumber.getRowSize(getPackIndex()));
             if (row != getRowIndex()) {
                 setRowIndex(row);
                 this.init();
             }
         });
-        Button downButton = new ImageButton(startX - 256 / 2 + 253, startY - 73 + 156, 14, 10, 38, 15, 10, SIDE, b -> {
+        Button downButton = new TouhouImageButton(startX - 256 / 2 + 253, startY - 73 + 156, 14, 10, 38, 15, 10, SIDE, b -> {
             int row = Mth.clamp(getRowIndex() + 1, 0, guiNumber.getRowSize(getPackIndex()));
             if (row != getRowIndex()) {
                 setRowIndex(row);
@@ -210,7 +210,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
     private void addTabButton(int startX, int startY, int index) {
         if (index == guiNumber.getTabIndex(getPackIndex())) {
-            this.addRenderableWidget(new ImageButton(startX - 98 + 28 * index, startY - 108, 28, 31, 116, 224, 0, BG, NO_PRESS));
+            this.addRenderableWidget(new TouhouImageButton(startX - 98 + 28 * index, startY - 108, 28, 31, 116, 224, 0, BG, NO_PRESS));
         } else if (index < guiNumber.getTabSize(getPackIndex())) {
             this.addRenderableWidget(new ImageButtonWithId(index, startX - 98 + 28 * index, startY - 105, 28, 25, 116, 194, 0, BG,
                     (b) -> {
@@ -219,7 +219,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                         this.init();
                     }));
         } else {
-            ImageButton buttonImage = new ImageButton(startX - 98 + 28 * index, startY - 105, 28, 25, 116, 194, 0, BG, NO_PRESS);
+            TouhouImageButton buttonImage = new TouhouImageButton(startX - 98 + 28 * index, startY - 105, 28, 25, 116, 194, 0, BG, NO_PRESS);
             buttonImage.visible = false;
             this.addRenderableWidget(buttonImage);
         }
@@ -234,7 +234,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         int middleY = this.height / 2 + 5;
 
         // 绘制灰色默认背景
-        renderBackground(graphics);
+        renderBackground(graphics, mouseX, mouseY, partialTicks);
 
         // 绘制 GUI 背景
         graphics.blit(BG, middleX - 256 / 2, middleY - 80, 0, 0, 256, 180);
@@ -288,7 +288,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
             CustomModelPack<E> pack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
             ResourceLocation icon = pack.getIcon();
             if (icon != null) {
-                AbstractTexture iconTexture = Minecraft.getInstance().textureManager.getTexture(icon, EMPTY_ICON_TEXTURE);
+                AbstractTexture iconTexture = Minecraft.getInstance().getTextureManager().getTexture(icon, EMPTY_ICON_TEXTURE);
                 if (EMPTY_ICON_TEXTURE.equals(iconTexture)) {
                     icon = EMPTY_ICON;
                 }
@@ -316,7 +316,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     }
 
     private void checkIconAnimation(CustomModelPack<E> pack, ResourceLocation icon) {
-        AbstractTexture iconText = getMinecraft().textureManager.getTexture(icon);
+        AbstractTexture iconText = getMinecraft().getTextureManager().getTexture(icon);
         if (iconText instanceof SizeTexture) {
             int width = ((SizeTexture) iconText).getWidth();
             int height = ((SizeTexture) iconText).getHeight();
@@ -489,15 +489,15 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        if (delta != 0) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
+        if (deltaY != 0) {
             int index = 0;
             // 向上滚
-            if (delta > 0) {
+            if (deltaY > 0) {
                 index = 1;
             }
             // 向下滚
-            if (delta < 0) {
+            if (deltaY < 0) {
                 index = -1;
             }
             int row = Mth.clamp(getRowIndex() - index, 0, guiNumber.getRowSize(getPackIndex()));
@@ -507,7 +507,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 return true;
             }
         }
-        return super.mouseScrolled(mouseX, mouseY, delta);
+        return super.mouseScrolled(mouseX, mouseY, deltaX, deltaY);
     }
 
     @Override

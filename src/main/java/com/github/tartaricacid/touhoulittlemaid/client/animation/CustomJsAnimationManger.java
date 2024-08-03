@@ -5,8 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.io.IOUtils;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 

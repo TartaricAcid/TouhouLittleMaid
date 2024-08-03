@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
-public class MaidDownloadButton extends ImageButton {
+public class MaidDownloadButton extends TouhouImageButton {
     public MaidDownloadButton(int pX, int pY, ResourceLocation texture) {
         super(pX, pY, 41, 20, 0, 86, 20, texture, (b) -> {
             InfoGetManager.STATUE = InfoGetManager.Statue.NOT_UPDATE;

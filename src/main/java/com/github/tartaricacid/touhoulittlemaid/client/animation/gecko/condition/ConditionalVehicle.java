@@ -33,7 +33,7 @@ public class ConditionalVehicle {
             idTest.add(new ResourceLocation(substring));
         }
         if (name.startsWith(tagPre) && ResourceLocation.isValidResourceLocation(substring)) {
-            ITagManager<EntityType<?>> tags = ForgeRegistries.ENTITY_TYPES.tags();
+            ITagManager<EntityType<?>> tags = BuiltInRegistries.ENTITY_TYPE.tags();
             if (tags == null) {
                 return;
             }
@@ -58,7 +58,7 @@ public class ConditionalVehicle {
         if (idTest.isEmpty()) {
             return EMPTY;
         }
-        ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(vehicle.getType());
+        ResourceLocation registryName = BuiltInRegistries.ENTITY_TYPE.getKey(vehicle.getType());
         if (registryName == null) {
             return EMPTY;
         }
@@ -72,7 +72,7 @@ public class ConditionalVehicle {
         if (tagTest.isEmpty()) {
             return EMPTY;
         }
-        ITagManager<EntityType<?>> tags = ForgeRegistries.ENTITY_TYPES.tags();
+        ITagManager<EntityType<?>> tags = BuiltInRegistries.ENTITY_TYPE.tags();
         if (tags == null) {
             return EMPTY;
         }

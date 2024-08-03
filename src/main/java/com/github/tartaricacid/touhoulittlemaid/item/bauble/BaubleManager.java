@@ -6,17 +6,18 @@ import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
 public final class BaubleManager {
-    private static Map<RegistryObject<Item>, IMaidBauble> BAUBLES;
+    private static Map<DeferredHolder<Item,Item>, IMaidBauble> BAUBLES;
 
     private BaubleManager() {
         BAUBLES = Maps.newHashMap();
@@ -43,21 +44,21 @@ public final class BaubleManager {
     }
 
     @Nullable
-    public static IMaidBauble getBauble(RegistryObject<Item> item) {
+    public static IMaidBauble getBauble(DeferredHolder<Item,Item> item) {
         return BAUBLES.get(item);
     }
 
     @Nullable
     public static IMaidBauble getBauble(ItemStack stack) {
         Item item = stack.getItem();
-        return getBauble(RegistryObject.create(ForgeRegistries.ITEMS.getKey(item), ForgeRegistries.ITEMS));
+        return getBauble(DeferredHolder.create(Registries.ITEM,BuiltInRegistries.ITEM.getKey(item)));
     }
 
-    public void bind(RegistryObject<Item> item, IMaidBauble bauble) {
+    public void bind(DeferredHolder<Item,Item> item, IMaidBauble bauble) {
         BAUBLES.put(item, bauble);
     }
 
     public void bind(Item item, IMaidBauble bauble) {
-        BAUBLES.put(RegistryObject.create(ForgeRegistries.ITEMS.getKey(item), ForgeRegistries.ITEMS), bauble);
+        BAUBLES.put(DeferredHolder.create(Registries.ITEM,BuiltInRegistries.ITEM.getKey(item)), bauble);
     }
 }

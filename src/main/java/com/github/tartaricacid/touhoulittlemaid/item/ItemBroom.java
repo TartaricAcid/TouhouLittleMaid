@@ -58,7 +58,7 @@ public class ItemBroom extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("tooltips.touhou_little_maid.broom.desc").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.broom.desc").withStyle(ChatFormatting.GRAY));
     }
 }

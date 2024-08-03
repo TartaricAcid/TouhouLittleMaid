@@ -318,7 +318,7 @@ public class AltarModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         pillar.render(poseStack, buffer, packedLight, packedOverlay);
         pillar2.render(poseStack, buffer, packedLight, packedOverlay);
         pillar3.render(poseStack, buffer, packedLight, packedOverlay);

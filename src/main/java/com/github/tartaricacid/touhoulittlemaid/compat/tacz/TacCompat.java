@@ -19,7 +19,7 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraftforge.api.distmarker.Dist;
 //import net.minecraftforge.api.distmarker.OnlyIn;
-//import net.minecraftforge.common.MinecraftForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import net.neoforged.fml.ModList;
 //
 //import javax.annotation.Nullable;
@@ -30,7 +30,7 @@
 //
 //    public static void initAndAddGunTask(TaskManager manager) {
 //        if (ModList.get().isLoaded(TACZ_ID)) {
-//            MinecraftForge.EVENT_BUS.register(new GunHurtMaidEvent());
+//            NeoForge.EVENT_BUS.register(new GunHurtMaidEvent());
 //            manager.add(new TaskGunAttack());
 //            INSTALLED = true;
 //        }

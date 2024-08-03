@@ -95,7 +95,7 @@ public class BigBackpackModel extends EntityModel<EntityMaid> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
         poseStack.pushPose();
         poseStack.scale(1.5f, 1.5f, 1.5f);
         poseStack.translate(0, -0.46, -0.04);

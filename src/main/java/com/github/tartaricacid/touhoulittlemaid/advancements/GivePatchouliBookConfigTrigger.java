@@ -3,34 +3,30 @@ package com.github.tartaricacid.touhoulittlemaid.advancements;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Optional;
+
 public class GivePatchouliBookConfigTrigger extends SimpleCriterionTrigger<GivePatchouliBookConfigTrigger.Instance> {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "give_patchouli_book_config");
-
-    @Override
-    protected GivePatchouliBookConfigTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate entityPredicate, DeserializationContext conditionsParser) {
-        return new GivePatchouliBookConfigTrigger.Instance(entityPredicate);
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return ID;
-    }
-
-
     public void trigger(ServerPlayer serverPlayer) {
         super.trigger(serverPlayer, instance -> MiscConfig.GIVE_PATCHOULI_BOOK.get());
     }
 
-    public static class Instance extends AbstractCriterionTriggerInstance {
-        public Instance(ContextAwarePredicate player) {
-            super(ID, player);
-        }
+    @Override
+    public Codec<Instance> codec() {
+        return Instance.CODEC;
+    }
+
+    public record Instance(Optional<ContextAwarePredicate> player) implements SimpleInstance {
+        public static final Codec<GivePatchouliBookConfigTrigger.Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(GivePatchouliBookConfigTrigger.Instance::player))
+                .apply(instance, GivePatchouliBookConfigTrigger.Instance::new));
     }
 }

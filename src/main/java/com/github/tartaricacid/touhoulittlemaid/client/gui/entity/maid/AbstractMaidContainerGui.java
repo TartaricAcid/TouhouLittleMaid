@@ -5,10 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidDownloadButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.compat.ipn.SortButtonScreen;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
@@ -28,7 +25,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -64,13 +60,13 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private StateSwitchingButton home;
     private StateSwitchingButton pick;
     private StateSwitchingButton ride;
-    private ImageButton info;
-    private ImageButton skin;
-    private ImageButton sound;
-    private ImageButton pageDown;
-    private ImageButton pageUp;
-    private ImageButton pageClose;
-    private ImageButton taskSwitch;
+    private TouhouImageButton info;
+    private TouhouImageButton skin;
+    private TouhouImageButton sound;
+    private TouhouImageButton pageDown;
+    private TouhouImageButton pageUp;
+    private TouhouImageButton pageClose;
+    private TouhouImageButton taskSwitch;
     private MaidDownloadButton modelDownload;
     private ScheduleButton<T> scheduleButton;
     private boolean taskListOpen;
@@ -146,7 +142,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 if (effect.duration == -1) {
                     duration = I18n.get("effect.duration.infinite");
                 } else {
-                    duration = StringUtil.formatTickDuration(effect.duration);
+                    duration = StringUtil.formatTickDuration(effect.duration, 20);
                 }
                 text = text.append(CommonComponents.SPACE).append(duration);
                 graphics.drawString(font, text, leftPos - font.width(text) - 3, topPos + yOffset + 5, getPotionColor(effect.category));
@@ -170,7 +166,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
         graphics.pose().translate(0, 0, -100);
-        renderBackground(graphics);
+        renderBackground(graphics, x, y, partialTicks);
         graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         SortButtonScreen.renderBackground(graphics, leftPos + 249, topPos + 166);
         this.drawMaidCharacter(graphics, x, y);
@@ -203,29 +199,29 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addStateButton() {
-        skin = new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidModelGui(maid)));
-        sound = new ImageButton(leftPos + 52, topPos + 14, 9, 9, 144, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidSoundPackGui(maid)));
-        info = new ImageButton(leftPos + 8, topPos + 14, 9, 9, 72, 65, 10, BUTTON, NO_ACTION);
+        skin = new TouhouImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidModelGui(maid)));
+        sound = new TouhouImageButton(leftPos + 52, topPos + 14, 9, 9, 144, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidSoundPackGui(maid)));
+        info = new TouhouImageButton(leftPos + 8, topPos + 14, 9, 9, 72, 65, 10, BUTTON, NO_ACTION);
         this.addRenderableWidget(skin);
         this.addRenderableWidget(sound);
         this.addRenderableWidget(info);
     }
 
     private void addTaskControlButton() {
-        pageDown = new ImageButton(leftPos - 72, topPos + 9, 16, 13, 93, 0, 14, TASK, (b) -> {
+        pageDown = new TouhouImageButton(leftPos - 72, topPos + 9, 16, 13, 93, 0, 14, TASK, (b) -> {
             List<IMaidTask> tasks = TaskManager.getTaskIndex();
             if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < tasks.size()) {
                 TASK_PAGE++;
                 init();
             }
         });
-        pageUp = new ImageButton(leftPos - 89, topPos + 9, 16, 13, 110, 0, 14, TASK, (b) -> {
+        pageUp = new TouhouImageButton(leftPos - 89, topPos + 9, 16, 13, 110, 0, 14, TASK, (b) -> {
             if (TASK_PAGE > 0) {
                 TASK_PAGE--;
                 init();
             }
         });
-        pageClose = new ImageButton(leftPos - 19, topPos + 9, 13, 13, 127, 0, 14, TASK, (b) -> {
+        pageClose = new TouhouImageButton(leftPos - 19, topPos + 9, 13, 13, 127, 0, 14, TASK, (b) -> {
             taskListOpen = false;
             init();
         });
@@ -278,11 +274,11 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (!maidTask.isEnable(maid)) {
             List<Pair<String, Predicate<EntityMaid>>> enableConditionDesc = maidTask.getEnableConditionDesc(maid);
             // 强制显示启用条件提示
-            desc.add(Component.literal("\u0020"));
+            desc.add(Component.literal(" "));
             desc.add(Component.translatable("task.touhou_little_maid.desc.enable_condition").withStyle(ChatFormatting.GOLD));
 
             for (Pair<String, Predicate<EntityMaid>> line : enableConditionDesc) {
-                MutableComponent prefix = Component.literal("-\u0020");
+                MutableComponent prefix = Component.literal("- ");
                 String key = String.format("task.%s.%s.enable_condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
                 MutableComponent condition = Component.translatable(key);
                 if (line.getSecond().test(maid)) {
@@ -330,7 +326,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addTaskSwitchButton() {
-        taskSwitch = new ImageButton(leftPos + 4, topPos + 159, 71, 21, 0, 42, 22, BUTTON, (b) -> {
+        taskSwitch = new TouhouImageButton(leftPos + 4, topPos + 159, 71, 21, 0, 42, 22, BUTTON, (b) -> {
             taskListOpen = !taskListOpen;
             init();
         });
@@ -414,25 +410,25 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             if (maid.getOwner() != null) {
                 list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
                         .append(Component.translatable("tooltips.touhou_little_maid.info.owner")
-                                .append(":\u0020").withStyle(ChatFormatting.AQUA))
+                                .append(": ").withStyle(ChatFormatting.AQUA))
                         .append(maid.getOwner().getDisplayName()));
             }
             CustomPackLoader.MAID_MODELS.getInfo(maid.getModelId()).ifPresent((info) -> list.add(Component.literal(prefix)
                     .withStyle(ChatFormatting.WHITE)
                     .append(Component.translatable("tooltips.touhou_little_maid.info.model_name")
-                            .append(":\u0020").withStyle(ChatFormatting.AQUA))
+                            .append(": ").withStyle(ChatFormatting.AQUA))
                     .append(ParseI18n.parse(info.getName()))));
             list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
                     .append(Component.translatable("tooltips.touhou_little_maid.info.experience")
-                            .append(":\u0020").withStyle(ChatFormatting.AQUA))
+                            .append(": ").withStyle(ChatFormatting.AQUA))
                     .append(String.valueOf(maid.getExperience())));
             list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
                     .append(Component.translatable("tooltips.touhou_little_maid.info.favorability")
-                            .append(":\u0020").withStyle(ChatFormatting.AQUA))
+                            .append(": ").withStyle(ChatFormatting.AQUA))
                     .append(String.valueOf(maid.getFavorability())));
             list.add(Component.literal(prefix).withStyle(ChatFormatting.WHITE)
                     .append(Component.translatable("block.touhou_little_maid.gomoku")
-                            .append(":\u0020").withStyle(ChatFormatting.AQUA))
+                            .append(": ").withStyle(ChatFormatting.AQUA))
                     .append(Component.translatable("tooltips.touhou_little_maid.info.game_skill.gomoku", MaidGomokuAI.getMaidCount(maid), MaidGomokuAI.getRank(maid))));
 
             graphics.renderComponentTooltip(font, list, mouseX, mouseY);
@@ -537,7 +533,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         return maid;
     }
 
-    private void renderTransTooltip(ImageButton button, GuiGraphics graphics, int x, int y, String key) {
+    private void renderTransTooltip(TouhouImageButton button, GuiGraphics graphics, int x, int y, String key) {
         if (button.isHovered()) {
             graphics.renderComponentTooltip(font, Collections.singletonList(Component.translatable(key)), x, y);
         }

@@ -37,7 +37,7 @@ public class ItemFilm extends AbstractStoreMaidItem {
         maid.setHomeModeEnable(false);
         maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
-        maidTag.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
+        maidTag.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
         filmTag.put(MAID_INFO, maidTag);
         film.setTag(filmTag);
         return film;

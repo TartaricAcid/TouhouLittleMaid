@@ -11,8 +11,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
-public class EntityBoxModel extends EntityModel<EntityBox> {
+public class EntityBoxModel extends AbstractModel<EntityBox> {
     public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "box");
     private final ModelPart bottom;
     private final ModelPart x1;
@@ -54,7 +55,8 @@ public class EntityBoxModel extends EntityModel<EntityBox> {
     }
 
     @Override
-    public void setupAnim(EntityBox entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        EntityBox entityIn = (EntityBox) entity;
         int stage = entityIn.getOpenStage();
         if (stage == EntityBox.FIRST_STAGE) {
             top.visible = true;
@@ -78,12 +80,12 @@ public class EntityBoxModel extends EntityModel<EntityBox> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        bottom.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        x1.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        x2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        z1.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        z2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        top.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        bottom.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        x1.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        x2.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        z1.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        z2.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        top.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 }

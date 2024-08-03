@@ -137,7 +137,7 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
     public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable AltarRecipeInventory inventory) {
         if (extraData != null) {
             CompoundTag nbt = this.extraData.copy();
-            nbt.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(entityType)).toString());
+            nbt.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)).toString());
             Entity resultEntity = EntityType.loadEntityRecursive(nbt, world, (e) -> {
                 e.moveTo(pos.getX(), pos.getY(), pos.getZ(), e.getYRot(), e.getXRot());
                 this.finalizeSpawn(world, pos, e);

@@ -12,7 +12,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class DebugFloorModel extends EntityModel<Entity> {
+public class DebugFloorModel extends AbstractModel<Entity> {
     public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "debug_floor");
     private final ModelPart floor;
 
@@ -35,7 +35,7 @@ public class DebugFloorModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         floor.render(poseStack, buffer, packedLight, packedOverlay);
     }
 }
