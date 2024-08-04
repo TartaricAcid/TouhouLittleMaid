@@ -13,12 +13,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class FurnaceBackpackContainer extends MaidMainContainer {
-    public static final MenuType<FurnaceBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new FurnaceBackpackContainer(windowId, inv, data.readInt()));
+    public static final MenuType<FurnaceBackpackContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new FurnaceBackpackContainer(windowId, inv, data.readInt()));
     private final ContainerData data;
 
     public FurnaceBackpackContainer(int id, Inventory inventory, int entityId) {

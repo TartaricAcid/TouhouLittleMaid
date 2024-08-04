@@ -41,7 +41,7 @@ public final class PlayerMaidModels {
             new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/swing.js"),
             new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/player/sit/default.js")
     );
-    private static final ResourceLocation TEXTURE_ALEX = new ResourceLocation("textures/entity/alex.png");
+    private static final ResourceLocation TEXTURE_ALEX = ResourceLocation.withDefaultNamespace("textures/entity/alex.png");
     private static final List<Object> PLAYER_MAID_ANIMATIONS = Lists.newArrayList();
     private static MaidModelInfo playerMaidInfo;
     private static ResourceLocation playerSkin;

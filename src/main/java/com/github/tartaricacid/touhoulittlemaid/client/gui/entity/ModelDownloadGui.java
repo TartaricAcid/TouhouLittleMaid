@@ -73,7 +73,7 @@ public class ModelDownloadGui extends Screen {
         textField.setTextColor(0xF3EFE0);
         textField.setFocused(focus);
         textField.setValue(textCache);
-        textField.moveCursorToEnd();
+        textField.moveCursorToEnd(Screen.hasShiftDown());
         this.addWidget(this.textField);
     }
 
@@ -234,11 +234,6 @@ public class ModelDownloadGui extends Screen {
         String value = this.textField.getValue();
         super.resize(minecraft, width, height);
         this.textField.setValue(value);
-    }
-
-    @Override
-    public void tick() {
-        this.textField.tick();
     }
 
     @Override

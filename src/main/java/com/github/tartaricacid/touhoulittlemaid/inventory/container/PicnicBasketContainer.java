@@ -9,13 +9,13 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class PicnicBasketContainer extends AbstractContainerMenu {
-    public static final MenuType<PicnicBasketContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new PicnicBasketContainer(windowId, inv, data.readItem()));
+    public static final MenuType<PicnicBasketContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new PicnicBasketContainer(windowId, inv, data.readItem()));
     private final ItemStack picnicBasket;
     private final ItemStackHandler container;
 
@@ -27,7 +27,7 @@ public class PicnicBasketContainer extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(container, i, 8 + i * 18, 18) {
                 @Override
                 public boolean mayPlace(@NotNull ItemStack stack) {
-                    return stack.isEdible();
+                    return stack.getFoodProperties(null) != null;
                 }
             });
         }

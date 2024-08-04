@@ -11,14 +11,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 import java.util.Optional;
 
 public class CraftingTableBackpackContainer extends MaidMainContainer {
-    public static final MenuType<CraftingTableBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new CraftingTableBackpackContainer(windowId, inv, data.readInt()));
+    public static final MenuType<CraftingTableBackpackContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new CraftingTableBackpackContainer(windowId, inv, data.readInt()));
     private final CraftingContainer craftSlots = new TransientCraftingContainer(this, 3, 3);
     private final ResultContainer resultSlots = new ResultContainer();
     private final ContainerLevelAccess access;

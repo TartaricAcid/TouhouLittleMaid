@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 
 public class NameTagGui extends Screen {
-    private static final ResourceLocation TEXTURES = new ResourceLocation("textures/gui/container/beacon.png");
+    private static final ResourceLocation TEXTURES = ResourceLocation.withDefaultNamespace("textures/gui/container/beacon.png");
     private final EntityMaid maid;
     private EditBox textField;
     private Button alwaysShowButton;
@@ -53,18 +53,13 @@ public class NameTagGui extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         int middleX = this.width / 2;
         int middleY = this.height / 2;
-        renderBackground(graphics);
+        renderBackground(graphics,mouseX,mouseY,partialTicks);
         textField.render(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         graphics.blit(TEXTURES, middleX + 80, middleY - 26, alwaysShow ? 88 : 110, 220, 20, 20);
         if (alwaysShowButton.isHovered()) {
             graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.tag.always_show"), mouseX, mouseY);
         }
-    }
-
-    @Override
-    public void tick() {
-        this.textField.tick();
     }
 
     @Override

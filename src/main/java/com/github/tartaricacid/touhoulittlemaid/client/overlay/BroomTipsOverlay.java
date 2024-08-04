@@ -11,8 +11,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+//import net.minecraftforge.client.gui.overlay.ForgeGui;
+//import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.List;
 

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.DirectButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ImageButtonWithId;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TouhouImageButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -14,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class ModelSwitcherGui extends Screen {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/model_switcher.png");
-    private static final ResourceLocation DEFAULT_MODEL_ID = new ResourceLocation("touhou_little_maid:hakurei_reimu");
+    private static final ResourceLocation DEFAULT_MODEL_ID = ResourceLocation.parse("touhou_little_maid:hakurei_reimu");
     private final List<TileEntityModelSwitcher.ModeInfo> infoList;
     private final BlockPos pos;
     private final int maxRow = 6;
@@ -115,13 +115,13 @@ public class ModelSwitcherGui extends Screen {
     }
 
     private void addPageButton() {
-        this.addRenderableWidget(new ImageButton(leftPos + 141, topPos + 7, 13, 16, 0, 204, 16, BG, b -> {
+        this.addRenderableWidget(new TouhouImageButton(leftPos + 141, topPos + 7, 13, 16, 0, 204, 16, BG, b -> {
             if (page > 0) {
                 page = page - 1;
                 this.init();
             }
         }));
-        this.addRenderableWidget(new ImageButton(leftPos + 236, topPos + 7, 13, 16, 13, 204, 16, BG, b -> {
+        this.addRenderableWidget(new TouhouImageButton(leftPos + 236, topPos + 7, 13, 16, 13, 204, 16, BG, b -> {
             if ((page + 1) <= (infoList.size() - 1) / maxRow) {
                 page = page + 1;
                 this.init();
@@ -161,7 +161,7 @@ public class ModelSwitcherGui extends Screen {
         if (this.maid == null) {
             return;
         }
-        this.renderBackground(graphics);
+        this.renderBackground(graphics,pMouseX,pMouseY,pPartialTick);
         graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         if (bindUuid != null) {
             graphics.drawCenteredString(font, bindUuid.toString(), leftPos + 128, topPos - 10, 0xffffff);
@@ -193,7 +193,6 @@ public class ModelSwitcherGui extends Screen {
     @Override
     public void tick() {
         if (this.description != null) {
-            this.description.tick();
             if (0 <= selectedIndex && selectedIndex < infoList.size()) {
                 infoList.get(selectedIndex).setText(description.getValue());
             }
