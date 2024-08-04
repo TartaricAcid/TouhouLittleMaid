@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.init.registry;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.mod.ClothConfigScreen;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.BlackList;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
-import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
+//import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -24,7 +24,8 @@ public final class CompatRegistry {
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
         event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
-        event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
+//        event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
+        //TODO 帕秋莉手册
         event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> {
             if (FMLEnvironment.dist == Dist.CLIENT) {
                 MenuIntegration.registerModsPage();

@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Type;
 
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
+
 public final class ChatText {
     public static final ResourceLocation EMPTY_ICON_PATH = new ResourceLocation(TouhouLittleMaid.MOD_ID, "empty");
     public static final ChatText EMPTY_CHAT_TEXT = new ChatText(ChatTextType.EMPTY, EMPTY_ICON_PATH, StringUtils.EMPTY);
@@ -78,8 +80,8 @@ public final class ChatText {
 
             if (text.startsWith(ICON_IDENTIFIER_CHAR) && text.endsWith(ICON_IDENTIFIER_CHAR)) {
                 String substring = text.substring(1, text.length() - 1);
-                if (ResourceLocation.isValidResourceLocation(substring)) {
-                    return new ChatText(ChatTextType.ICON, new ResourceLocation(substring), StringUtils.EMPTY);
+                if (isValidResourceLocation(substring)) {
+                    return new ChatText(ChatTextType.ICON, ResourceLocation.withDefaultNamespace(substring), StringUtils.EMPTY);
                 }
                 return EMPTY_CHAT_TEXT;
             }

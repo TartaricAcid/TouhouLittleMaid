@@ -8,13 +8,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.core.registries.Registries;
-import net.minecraftforge.registries.tags.ITagManager;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
 
 public class ConditionalHold {
     private static final String EMPTY_MAINHAND = "hold_mainhand:empty";
@@ -48,10 +48,10 @@ public class ConditionalHold {
             return;
         }
         String substring = name.substring(preSize);
-        if (name.startsWith(idPre) && ResourceLocation.isValidResourceLocation(substring)) {
+        if (name.startsWith(idPre) && isValidResourceLocation(substring)) {
             idTest.add(new ResourceLocation(substring));
         }
-        if (name.startsWith(tagPre) && ResourceLocation.isValidResourceLocation(substring)) {
+        if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
             ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
             if (tags == null) {
                 return;

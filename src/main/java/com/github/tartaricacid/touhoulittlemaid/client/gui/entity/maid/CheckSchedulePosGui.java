@@ -31,7 +31,7 @@ public class CheckSchedulePosGui extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(graphics);
+        renderBackground(graphics,mouseX,mouseY,partialTicks);
         List<FormattedCharSequence> split = font.split(tips, 300);
         int startY = middleY - 10 - split.size() * (font.lineHeight + 3);
         for (FormattedCharSequence text : split) {

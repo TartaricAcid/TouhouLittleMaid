@@ -3,19 +3,20 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.conditio
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.registries.Registries;
-import net.minecraftforge.registries.tags.ITagManager;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
 
 public class ConditionArmor {
     private static final Pattern ID_PRE_REG = Pattern.compile("^(.+?)\\$(.*?)$");
@@ -33,10 +34,10 @@ public class ConditionArmor {
                 return;
             }
             String id = matcherId.group(2);
-            if (!ResourceLocation.isValidResourceLocation(id)) {
+            if (!isValidResourceLocation(id)) {
                 return;
             }
-            ResourceLocation res = new ResourceLocation(id);
+            ResourceLocation res = ResourceLocation.withDefaultNamespace(id);
             if (idTest.containsKey(type)) {
                 idTest.get(type).add(res);
             } else {
@@ -52,14 +53,14 @@ public class ConditionArmor {
                 return;
             }
             String id = matcherTag.group(2);
-            if (!ResourceLocation.isValidResourceLocation(id)) {
+            if (!isValidResourceLocation(id)) {
                 return;
             }
-            ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
+            ITagManager<Item> tags = BuiltInRegistries.ITEM.getTags();
             if (tags == null) {
                 return;
             }
-            TagKey<Item> tagKey = tags.createTagKey(new ResourceLocation(id));
+            TagKey<Item> tagKey = tags.createTagKey(ResourceLocation.withDefaultNamespace(id));
             if (tagTest.containsKey(type)) {
                 tagTest.get(type).add(tagKey);
             } else {
@@ -89,7 +90,7 @@ public class ConditionArmor {
         }
         List<ResourceLocation> idListTest = idTest.get(slot);
 		ItemStack item = maid.asEntity().getItemBySlot(slot);
-        ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(item.getItem());
+        ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(item.getItem());
         if (registryName == null) {
             return EMPTY;
         }

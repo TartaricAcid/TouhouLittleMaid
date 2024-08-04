@@ -8,8 +8,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.mojang.blaze3d.audio.OggAudioStream;
 import com.mojang.blaze3d.audio.SoundBuffer;
+import net.minecraft.client.sounds.JOrbisAudioStream;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import org.apache.logging.log4j.Marker;
@@ -136,7 +136,7 @@ public class CustomSoundLoader {
         }
         for (File file : files) {
             if (file.isFile()) {
-                try (InputStream stream = Files.newInputStream(file.toPath()); OggAudioStream audioStream = new OggAudioStream(stream)) {
+                try (InputStream stream = Files.newInputStream(file.toPath()); JOrbisAudioStream audioStream = new JOrbisAudioStream(stream)) {
                     ByteBuffer bytebuffer = audioStream.readAll();
                     sounds.add(new SoundBuffer(bytebuffer, audioStream.getFormat()));
                     LOGGER.debug(MARKER, "sound: {}", file.getName());
@@ -256,7 +256,7 @@ public class CustomSoundLoader {
     private static void loadSounds(ZipFile zipFile, Map<ResourceLocation, List<SoundBuffer>> buffers, ZipEntry zipEntry, String subDir, String fileName, SoundEvent soundEvent, String checkSubDir, String checkFileName) {
         List<SoundBuffer> sounds = buffers.computeIfAbsent(soundEvent.getLocation(), res -> Lists.newArrayList());
         if (checkSubDir.equals(subDir) && checkFileName(checkFileName, fileName)) {
-            try (InputStream zipEntryStream = zipFile.getInputStream(zipEntry); OggAudioStream audioStream = new OggAudioStream(zipEntryStream)) {
+            try (InputStream zipEntryStream = zipFile.getInputStream(zipEntry); JOrbisAudioStream audioStream = new JOrbisAudioStream(zipEntryStream)) {
                 ByteBuffer bytebuffer = audioStream.readAll();
                 sounds.add(new SoundBuffer(bytebuffer, audioStream.getFormat()));
                 LOGGER.debug(MARKER, "sound: {}", fileName);

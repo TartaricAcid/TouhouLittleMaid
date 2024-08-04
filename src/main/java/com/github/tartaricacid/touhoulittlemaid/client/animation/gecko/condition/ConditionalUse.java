@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
+
 public class ConditionalUse {
     private static final String EMPTY = "";
     private final int preSize;
@@ -46,10 +48,10 @@ public class ConditionalUse {
             return;
         }
         String substring = name.substring(preSize);
-        if (name.startsWith(idPre) && ResourceLocation.isValidResourceLocation(substring)) {
+        if (name.startsWith(idPre) && isValidResourceLocation(substring)) {
             idTest.add(new ResourceLocation(substring));
         }
-        if (name.startsWith(tagPre) && ResourceLocation.isValidResourceLocation(substring)) {
+        if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
             ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
             if (tags == null) {
                 return;

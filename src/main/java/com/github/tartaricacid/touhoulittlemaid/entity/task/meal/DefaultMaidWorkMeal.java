@@ -25,14 +25,14 @@ public class DefaultMaidWorkMeal implements IMaidMeal {
         FoodProperties foodProperties = stack.getFoodProperties(maid);
         if (foodProperties != null) {
             maid.startUsingItem(hand);
-            int nutrition = foodProperties.getNutrition();
-            float saturationModifier = foodProperties.getSaturationModifier();
+            int nutrition = foodProperties.nutrition();
+            float saturationModifier = foodProperties.saturation();
             float total = nutrition + nutrition * saturationModifier * 2;
             // 原版的熟牛肉之类的一般在 20 左右（除了迷之炖菜为 34.2）
             int point = maid.getRandom().nextInt(MAX_PROBABILITY) < total ? 0 : 1;
             maid.getFavorabilityManager().apply(Type.WORK_MEAL, point);
             if (point == 1) {
-                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.HEART, stack.getUseDuration()));
+                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.HEART, stack.getUseDuration(maid)));
             }
         }
     }

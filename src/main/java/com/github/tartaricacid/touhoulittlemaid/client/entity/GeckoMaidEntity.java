@@ -40,7 +40,7 @@ public class GeckoMaidEntity implements IAnimatable {
             data.addAnimationController(new AnimationController<>(this, controllerName, 0, e -> manager.predicateParallel(e, animationName)));
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+            if (slot.getType() == EquipmentSlot.Type.ANIMAL_ARMOR) {
                 String controllerName = String.format("%s_controller", slot.getName());
                 data.addAnimationController(new AnimationController<>(this, controllerName, 0, e -> manager.predicateArmor(e, slot)));
             }

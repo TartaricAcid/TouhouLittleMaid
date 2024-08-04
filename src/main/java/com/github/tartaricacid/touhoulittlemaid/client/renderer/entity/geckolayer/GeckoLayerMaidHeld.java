@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
-import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
+//import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+//import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoRenderer;
@@ -37,18 +37,18 @@ public class GeckoLayerMaidHeld<T extends LivingEntity & IAnimatable> extends Ge
         if (!offhandItem.isEmpty() || !mainHandItem.isEmpty()) {
             poseStack.pushPose();
             if (!geoModel.rightHandBones.isEmpty() && !RenderFixer.isCarryOnRender(mainHandItem, bufferIn)) {
-                if (SlashBladeCompat.isSlashBladeItem(mainHandItem)) {
-                    SlashBladeRender.renderMaidMainhandSlashBlade(entityLivingBaseIn, geoModel, poseStack, bufferIn, packedLightIn, mainHandItem, partialTicks);
-                } else {
+                //TODO 拔刀剑兼容
+//                if (SlashBladeCompat.isSlashBladeItem(mainHandItem)) {
+//                    SlashBladeRender.renderMaidMainhandSlashBlade(entityLivingBaseIn, geoModel, poseStack, bufferIn, packedLightIn, mainHandItem, partialTicks);
+//                } else {
                     this.renderArmWithItem(entityLivingBaseIn, mainHandItem, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, bufferIn, packedLightIn);
-                }
+
             }
             if (!geoModel.leftHandBones.isEmpty() && !RenderFixer.isCarryOnRender(offhandItem, bufferIn)) {
-                if (SlashBladeCompat.isSlashBladeItem(offhandItem)) {
-                    SlashBladeRender.renderMaidOffhandSlashBlade(geoModel, poseStack, bufferIn, packedLightIn, offhandItem);
-                } else {
+//                if (SlashBladeCompat.isSlashBladeItem(offhandItem)) {
+//                    SlashBladeRender.renderMaidOffhandSlashBlade(geoModel, poseStack, bufferIn, packedLightIn, offhandItem);
+//                } else {
                     this.renderArmWithItem(entityLivingBaseIn, offhandItem, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, poseStack, bufferIn, packedLightIn);
-                }
             }
             poseStack.popPose();
         }

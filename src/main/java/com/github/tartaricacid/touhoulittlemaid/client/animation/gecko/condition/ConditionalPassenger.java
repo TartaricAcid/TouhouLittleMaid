@@ -11,6 +11,8 @@ import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
+
 public class ConditionalPassenger {
     private static final String EMPTY = "";
     private final List<ResourceLocation> idTest = Lists.newArrayList();
@@ -29,10 +31,10 @@ public class ConditionalPassenger {
             return;
         }
         String substring = name.substring(preSize);
-        if (name.startsWith(idPre) && ResourceLocation.isValidResourceLocation(substring)) {
+        if (name.startsWith(idPre) && isValidResourceLocation(substring)) {
             idTest.add(new ResourceLocation(substring));
         }
-        if (name.startsWith(tagPre) && ResourceLocation.isValidResourceLocation(substring)) {
+        if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
             ITagManager<EntityType<?>> tags = BuiltInRegistries.ENTITY_TYPE.tags();
             if (tags == null) {
                 return;

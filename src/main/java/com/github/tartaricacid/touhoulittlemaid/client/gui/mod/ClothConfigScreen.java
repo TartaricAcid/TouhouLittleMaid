@@ -10,9 +10,7 @@ import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.ConfigScreenHandler;
 import net.neoforged.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import org.apache.commons.lang3.StringUtils;
 
 public class ClothConfigScreen extends Screen {
@@ -36,7 +34,7 @@ public class ClothConfigScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackground(graphics);
+        renderBackground(graphics,pMouseX,pMouseY,pPartialTick);
         this.message.renderCentered(graphics, this.width / 2, 80);
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }

@@ -15,11 +15,11 @@ public final class FestivalAnimation {
     private static final ULocale CHINESE = new ULocale("@calendar=chinese");
 
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/new_year.js"), getNewYear());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/christmas.js"), getChristmas());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/spring_festival.js"), getSpringFestival());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/duanwu.js"), getDuanwu());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/festival/mid_autumn.js"), getMidAutumn());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/festival/new_year.js"), getNewYear());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/festival/christmas.js"), getChristmas());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/festival/spring_festival.js"), getSpringFestival());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/festival/duanwu.js"), getDuanwu());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/festival/mid_autumn.js"), getMidAutumn());
     }
 
     public static IAnimation<LivingEntity> getNewYear() {

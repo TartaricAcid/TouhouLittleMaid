@@ -378,7 +378,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             ItemStack stack = playerIn.getMainHandItem();
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
-            if (NeoForge.EVENT_BUS.post(event)
+            if (NeoForge.EVENT_BUS.post(event).isCanceled()
                     || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
                     || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;

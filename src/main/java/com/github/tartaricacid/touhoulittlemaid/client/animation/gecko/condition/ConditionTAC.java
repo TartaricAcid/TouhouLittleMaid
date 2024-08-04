@@ -1,12 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition;
 
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
 
 public class ConditionTAC {
     private static final String EMPTY = "";
@@ -22,7 +23,7 @@ public class ConditionTAC {
             return;
         }
         String itemId = split[1];
-        if (ResourceLocation.isValidResourceLocation(itemId)) {
+        if (isValidResourceLocation(itemId)) {
             nameTest.add(name);
             idTest.add(new ResourceLocation(itemId));
         }

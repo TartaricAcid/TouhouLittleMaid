@@ -8,6 +8,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
+
 public final class MiscConfig {
     public static ModConfigSpec.DoubleValue MAID_FAIRY_POWER_POINT;
     public static ModConfigSpec.IntValue MAID_FAIRY_SPAWN_PROBABILITY;
@@ -66,7 +68,7 @@ public final class MiscConfig {
 
     private static boolean checkId(Object o) {
         if (o instanceof String name) {
-            return ResourceLocation.isValidPath(name);
+            return isValidResourceLocation(name);
         }
         return false;
     }
