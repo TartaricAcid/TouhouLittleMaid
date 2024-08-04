@@ -24,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
@@ -33,6 +34,13 @@ import java.util.function.Consumer;
 
 public class ItemEntityPlaceholder extends Item {
     private static final String RECIPES_ID_TAG = "RecipeId";
+    public static final IClientItemExtensions itemExtensions = new IClientItemExtensions() {
+        @Override
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            Minecraft minecraft = Minecraft.getInstance();
+            return new TileEntityEntityPlaceholderRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+        }
+    };
 
     public ItemEntityPlaceholder() {
         super(new Item.Properties().stacksTo(1));
@@ -65,17 +73,6 @@ public class ItemEntityPlaceholder extends Item {
         world.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING).forEach(recipe -> {
             if (!recipe.isItemCraft()) {
                 items.accept(setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), recipe.getId()));
-            }
-        });
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                Minecraft minecraft = Minecraft.getInstance();
-                return new TileEntityEntityPlaceholderRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
             }
         });
     }

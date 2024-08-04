@@ -56,6 +56,64 @@ public class BlockAltar extends Block implements EntityBlock {
         super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
     }
 
+    public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
+        @Override
+        public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
+            if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientLevel) {
+                BlockPos pos = blockTarget.getBlockPos();
+                this.getAltar(world, pos).ifPresent(altar -> this.crack(clientLevel, pos, altar.getStorageState(), blockTarget.getDirection()));
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addDestroyEffects(BlockState state, Level world, BlockPos pos, ParticleEngine manager) {
+            this.getAltar(world, pos).ifPresent(altar -> Minecraft.getInstance().particleEngine.destroy(pos, altar.getStorageState()));
+            return true;
+        }
+
+        private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
+            BlockEntity te = world.getBlockEntity(pos);
+            if (te instanceof TileEntityAltar) {
+                return Optional.of((TileEntityAltar) te);
+            }
+            return Optional.empty();
+        }
+
+        @OnlyIn(Dist.CLIENT)
+        private void crack(ClientLevel world, BlockPos pos, BlockState state, Direction side) {
+            if (state.getRenderShape() != RenderShape.INVISIBLE) {
+                int posX = pos.getX();
+                int posY = pos.getY();
+                int posZ = pos.getZ();
+                AABB aabb = state.getShape(world, pos).bounds();
+                double x = posX + world.random.nextDouble() * (aabb.maxX - aabb.minX - 0.2) + 0.1 + aabb.minX;
+                double y = posY + world.random.nextDouble() * (aabb.maxY - aabb.minY - 0.2) + 0.1 + aabb.minY;
+                double z = posZ + world.random.nextDouble() * (aabb.maxZ - aabb.minZ - 0.2) + 0.1 + aabb.minZ;
+                if (side == Direction.DOWN) {
+                    y = posY + aabb.minY - 0.1;
+                }
+                if (side == Direction.UP) {
+                    y = posY + aabb.maxY + 0.1;
+                }
+                if (side == Direction.NORTH) {
+                    z = posZ + aabb.minZ - 0.1;
+                }
+                if (side == Direction.SOUTH) {
+                    z = posZ + aabb.maxZ + 0.1;
+                }
+                if (side == Direction.WEST) {
+                    x = posX + aabb.minX - 0.1;
+                }
+                if (side == Direction.EAST) {
+                    x = posX + aabb.maxX + 0.1;
+                }
+                TerrainParticle diggingParticle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
+                Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
+            }
+        }
+    };
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -115,69 +173,6 @@ public class BlockAltar extends Block implements EntityBlock {
         return this.getAltar(world, pos)
                 .map(altar -> new ItemStack(altar.getStorageState().getBlock()))
                 .orElse(super.getCloneItemStack(state, target, world, pos, player));
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
-        consumer.accept(new IClientBlockExtensions() {
-            @Override
-            public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
-                if (target instanceof BlockHitResult && world instanceof ClientLevel) {
-                    BlockHitResult blockTarget = (BlockHitResult) target;
-                    BlockPos pos = blockTarget.getBlockPos();
-                    ClientLevel clientLevel = (ClientLevel) world;
-                    this.getAltar(world, pos).ifPresent(altar -> this.crack(clientLevel, pos, altar.getStorageState(), blockTarget.getDirection()));
-                }
-                return true;
-            }
-
-            @Override
-            public boolean addDestroyEffects(BlockState state, Level world, BlockPos pos, ParticleEngine manager) {
-                this.getAltar(world, pos).ifPresent(altar -> Minecraft.getInstance().particleEngine.destroy(pos, altar.getStorageState()));
-                return true;
-            }
-
-            private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
-                BlockEntity te = world.getBlockEntity(pos);
-                if (te instanceof TileEntityAltar) {
-                    return Optional.of((TileEntityAltar) te);
-                }
-                return Optional.empty();
-            }
-
-            @OnlyIn(Dist.CLIENT)
-            private void crack(ClientLevel world, BlockPos pos, BlockState state, Direction side) {
-                if (state.getRenderShape() != RenderShape.INVISIBLE) {
-                    int posX = pos.getX();
-                    int posY = pos.getY();
-                    int posZ = pos.getZ();
-                    AABB aabb = state.getShape(world, pos).bounds();
-                    double x = posX + world.random.nextDouble() * (aabb.maxX - aabb.minX - 0.2) + 0.1 + aabb.minX;
-                    double y = posY + world.random.nextDouble() * (aabb.maxY - aabb.minY - 0.2) + 0.1 + aabb.minY;
-                    double z = posZ + world.random.nextDouble() * (aabb.maxZ - aabb.minZ - 0.2) + 0.1 + aabb.minZ;
-                    if (side == Direction.DOWN) {
-                        y = posY + aabb.minY - 0.1;
-                    }
-                    if (side == Direction.UP) {
-                        y = posY + aabb.maxY + 0.1;
-                    }
-                    if (side == Direction.NORTH) {
-                        z = posZ + aabb.minZ - 0.1;
-                    }
-                    if (side == Direction.SOUTH) {
-                        z = posZ + aabb.maxZ + 0.1;
-                    }
-                    if (side == Direction.WEST) {
-                        x = posX + aabb.minX - 0.1;
-                    }
-                    if (side == Direction.EAST) {
-                        x = posX + aabb.maxX + 0.1;
-                    }
-                    TerrainParticle diggingParticle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
-                    Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
-                }
-            }
-        });
     }
 
     @Override

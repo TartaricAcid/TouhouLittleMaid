@@ -12,6 +12,7 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -36,13 +37,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraft.core.registries.Registries;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class BlockGarageKit extends Block implements EntityBlock {
     public static final VoxelShape BLOCK_AABB = Block.box(4, 0, 4, 12, 16, 12);
@@ -51,6 +50,56 @@ public class BlockGarageKit extends Block implements EntityBlock {
     public BlockGarageKit() {
         super(BlockBehaviour.Properties.of().sound(SoundType.MUD).strength(1, 2).noOcclusion());
     }
+
+    public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
+        @Override
+        public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
+            if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientWorld) {
+                BlockPos pos = blockTarget.getBlockPos();
+                this.crack(clientWorld, pos, Blocks.CLAY.defaultBlockState(), blockTarget.getDirection());
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addDestroyEffects(BlockState state, Level world, BlockPos pos, ParticleEngine manager) {
+            Minecraft.getInstance().particleEngine.destroy(pos, Blocks.CLAY.defaultBlockState());
+            return true;
+        }
+
+        @OnlyIn(Dist.CLIENT)
+        private void crack(ClientLevel world, BlockPos pos, BlockState state, Direction side) {
+            if (state.getRenderShape() != RenderShape.INVISIBLE) {
+                int posX = pos.getX();
+                int posY = pos.getY();
+                int posZ = pos.getZ();
+                AABB aabb = state.getShape(world, pos).bounds();
+                double x = posX + world.random.nextDouble() * (aabb.maxX - aabb.minX - 0.2) + 0.1 + aabb.minX;
+                double y = posY + world.random.nextDouble() * (aabb.maxY - aabb.minY - 0.2) + 0.1 + aabb.minY;
+                double z = posZ + world.random.nextDouble() * (aabb.maxZ - aabb.minZ - 0.2) + 0.1 + aabb.minZ;
+                if (side == Direction.DOWN) {
+                    y = posY + aabb.minY - 0.1;
+                }
+                if (side == Direction.UP) {
+                    y = posY + aabb.maxY + 0.1;
+                }
+                if (side == Direction.NORTH) {
+                    z = posZ + aabb.minZ - 0.1;
+                }
+                if (side == Direction.SOUTH) {
+                    z = posZ + aabb.maxZ + 0.1;
+                }
+                if (side == Direction.WEST) {
+                    x = posX + aabb.minX - 0.1;
+                }
+                if (side == Direction.EAST) {
+                    x = posX + aabb.maxX + 0.1;
+                }
+                TerrainParticle diggingParticle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
+                Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
+            }
+        }
+    };
 
     @OnlyIn(Dist.CLIENT)
     public static void fillItemCategory(CreativeModeTab.Output items) {
@@ -121,61 +170,6 @@ public class BlockGarageKit extends Block implements EntityBlock {
 
         garageKit.setData(garageKit.getFacing(), data);
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
-        consumer.accept(new IClientBlockExtensions() {
-            @Override
-            public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
-                if (target instanceof BlockHitResult && world instanceof ClientLevel) {
-                    BlockHitResult blockTarget = (BlockHitResult) target;
-                    BlockPos pos = blockTarget.getBlockPos();
-                    ClientLevel clientWorld = (ClientLevel) world;
-                    this.crack(clientWorld, pos, Blocks.CLAY.defaultBlockState(), blockTarget.getDirection());
-                }
-                return true;
-            }
-
-            @Override
-            public boolean addDestroyEffects(BlockState state, Level world, BlockPos pos, ParticleEngine manager) {
-                Minecraft.getInstance().particleEngine.destroy(pos, Blocks.CLAY.defaultBlockState());
-                return true;
-            }
-
-            @OnlyIn(Dist.CLIENT)
-            private void crack(ClientLevel world, BlockPos pos, BlockState state, Direction side) {
-                if (state.getRenderShape() != RenderShape.INVISIBLE) {
-                    int posX = pos.getX();
-                    int posY = pos.getY();
-                    int posZ = pos.getZ();
-                    AABB aabb = state.getShape(world, pos).bounds();
-                    double x = posX + world.random.nextDouble() * (aabb.maxX - aabb.minX - 0.2) + 0.1 + aabb.minX;
-                    double y = posY + world.random.nextDouble() * (aabb.maxY - aabb.minY - 0.2) + 0.1 + aabb.minY;
-                    double z = posZ + world.random.nextDouble() * (aabb.maxZ - aabb.minZ - 0.2) + 0.1 + aabb.minZ;
-                    if (side == Direction.DOWN) {
-                        y = posY + aabb.minY - 0.1;
-                    }
-                    if (side == Direction.UP) {
-                        y = posY + aabb.maxY + 0.1;
-                    }
-                    if (side == Direction.NORTH) {
-                        z = posZ + aabb.minZ - 0.1;
-                    }
-                    if (side == Direction.SOUTH) {
-                        z = posZ + aabb.maxZ + 0.1;
-                    }
-                    if (side == Direction.WEST) {
-                        x = posX + aabb.minX - 0.1;
-                    }
-                    if (side == Direction.EAST) {
-                        x = posX + aabb.maxX + 0.1;
-                    }
-                    TerrainParticle diggingParticle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
-                    Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
-                }
-            }
-        });
     }
 
     private ItemStack getGarageKitFromWorld(BlockGetter world, BlockPos pos) {

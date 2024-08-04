@@ -10,6 +10,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -17,6 +18,13 @@ import java.util.function.Consumer;
 public class ItemGarageKit extends BlockItem {
     private static final String ENTITY_INFO = "EntityInfo";
     private static final CompoundTag DEFAULT_DATA = getDefaultData();
+    public static final IClientItemExtensions itemExtensions = new IClientItemExtensions() {
+        @Override
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            Minecraft minecraft = Minecraft.getInstance();
+            return new TileEntityItemStackGarageKitRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+        }
+    };
 
     public ItemGarageKit() {
         super(InitBlocks.GARAGE_KIT.get(), (new Item.Properties()).stacksTo(1));
@@ -38,16 +46,5 @@ public class ItemGarageKit extends BlockItem {
         data.putString("id", "touhou_little_maid:maid");
         data.putString(EntityMaid.MODEL_ID_TAG, "touhou_little_maid:hakurei_reimu");
         return data;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                Minecraft minecraft = Minecraft.getInstance();
-                return new TileEntityItemStackGarageKitRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
-            }
-        });
     }
 }

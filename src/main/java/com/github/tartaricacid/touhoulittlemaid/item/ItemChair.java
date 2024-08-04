@@ -31,16 +31,21 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
+    public static final IClientItemExtensions itemExtensions = new IClientItemExtensions() {
+        @Override
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            Minecraft minecraft = Minecraft.getInstance();
+            return new TileEntityItemStackChairRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+        }
+    };
 
     public ItemChair() {
         super((new Properties()).stacksTo(1));
@@ -68,17 +73,6 @@ public class ItemChair extends Item {
             boolean isNoGravity = CustomPackLoader.CHAIR_MODELS.getModelNoGravity(key);
             items.accept(setData(new ItemStack(InitItems.CHAIR.get()), new Data(key, height, canRide, isNoGravity)));
         }
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                Minecraft minecraft = Minecraft.getInstance();
-                return new TileEntityItemStackChairRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
-            }
-        });
     }
 
     @Override
