@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.*;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
@@ -91,8 +90,9 @@ public final class AnimationManager {
                 if (state.getPredicate().test(maid, event)) {
                     String animationName = state.getAnimationName();
                     ILoopType loopType = state.getLoopType();
-                    PlayState gunMainAnimation = TacCompat.playGunMainAnimation(maid, event, animationName, loopType);
-                    return Objects.requireNonNullElseGet(gunMainAnimation, () -> playAnimation(event, animationName, loopType));
+                    //TODO : tacz
+//                    PlayState gunMainAnimation = TacCompat.playGunMainAnimation(maid, event, animationName, loopType);
+//                    return Objects.requireNonNullElseGet(gunMainAnimation, () -> playAnimation(event, animationName, loopType));
                 }
             }
         }
@@ -136,10 +136,11 @@ public final class AnimationManager {
         }
         if (!maid.asEntity().swinging && !maid.asEntity().isUsingItem()) {
             ItemStack mainHandItem = maid.asEntity().getItemInHand(InteractionHand.MAIN_HAND);
-            PlayState gunHoldAnimation = TacCompat.playGunHoldAnimation(mainHandItem, event);
-            if (gunHoldAnimation != null) {
-                return gunHoldAnimation;
-            }
+            //TODO : tacz
+//            PlayState gunHoldAnimation = TacCompat.playGunHoldAnimation(mainHandItem, event);
+//            if (gunHoldAnimation != null) {
+//                return gunHoldAnimation;
+//            }
             if (mainHandItem.is(Items.CROSSBOW) && CrossbowItem.isCharged(mainHandItem)) {
                 return playAnimation(event, "hold_mainhand:charged_crossbow", ILoopType.EDefaultLoopTypes.LOOP);
             }

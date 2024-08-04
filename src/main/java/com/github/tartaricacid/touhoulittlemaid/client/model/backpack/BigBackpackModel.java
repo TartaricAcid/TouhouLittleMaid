@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.model.backpack;
 
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.AbstractModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,7 +14,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
 
-public class BigBackpackModel extends EntityModel<EntityMaid> {
+public class BigBackpackModel extends AbstractModel<EntityMaid> {
     public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "backpack_big");
     private final ModelPart bone;
 
@@ -99,7 +100,7 @@ public class BigBackpackModel extends EntityModel<EntityMaid> {
         poseStack.pushPose();
         poseStack.scale(1.5f, 1.5f, 1.5f);
         poseStack.translate(0, -0.46, -0.04);
-        bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        bone.render(poseStack, vertexConsumer, packedLight, packedOverlay);
         poseStack.popPose();
     }
 }

@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.IAnimatio
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityChairWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityMaidWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
+import com.github.tartaricacid.touhoulittlemaid.client.model.AbstractModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
@@ -30,7 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
+public class BedrockModel<T extends LivingEntity> extends AbstractModel<T> {
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -268,7 +269,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         for (BedrockPart model : shouldRender) {
             model.render(poseStack, buffer, packedLight, packedOverlay);
         }

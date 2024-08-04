@@ -32,7 +32,7 @@ public final class ApplyPotionEffectEvent {
         }
 
         if (player.isDiscrete() && stack.getItem() == Items.MILK_BUCKET) {
-            maid.curePotionEffects(stack);
+            maid.removeEffectsCuredBy(net.neoforged.neoforge.common.EffectCures.MILK);
             if (!player.isCreative()) {
                 stack.shrink(1);
                 ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.BUCKET));

@@ -48,12 +48,12 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
         double currentTick = animatable instanceof Entity livingEntity ? livingEntity.tickCount : getCurrentTick();
 
         if (manager.startTick == -1) {
-            manager.startTick = currentTick + mc.getFrameTime();
+            manager.startTick = currentTick + mc.getTimer().getGameTimeDeltaPartialTick(false);
         }
 
         if (!mc.isPaused() || manager.shouldPlayWhilePaused) {
             if (animatable instanceof LivingEntity) {
-                manager.tick = currentTick + mc.getFrameTime();
+                manager.tick = currentTick + mc.getTimer().getGameTimeDeltaPartialTick(false);
                 double gameTick = manager.tick;
                 double deltaTicks = gameTick - this.lastGameTickTime;
                 this.seekTime += deltaTicks;

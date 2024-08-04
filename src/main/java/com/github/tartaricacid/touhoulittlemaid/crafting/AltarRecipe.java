@@ -5,8 +5,9 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -19,8 +20,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.RecipeMatcher;
-import net.minecraft.core.registries.Registries;
+import net.neoforged.neoforge.common.util.RecipeMatcher;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -68,8 +68,8 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
     }
 
     @Override
-    public ItemStack assemble(AltarRecipeInventory inv, RegistryAccess access) {
-        return getResultItem(access).copy();
+    public ItemStack assemble(AltarRecipeInventory recipeInventory, HolderLookup.Provider provider) {
+        return getResultItem(provider).copy();
     }
 
     @Override
@@ -78,16 +78,15 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return inputs;
-    }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider p_336125_) {
         return resultItem;
     }
 
     @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return inputs;
+    }
+
     public ResourceLocation getId() {
         return this.id;
     }
@@ -99,7 +98,7 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
 
     @Override
     public RecipeType<?> getType() {
-        return InitRecipes.ALTAR_CRAFTING;
+        return InitRecipes.ALTAR_CRAFTING.get();
     }
 
     @Override
@@ -181,7 +180,7 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
 
     private void finalizeSpawn(ServerLevel world, BlockPos pos, @Nullable Entity entity) {
         if (entity instanceof Mob) {
-            ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(pos), MobSpawnType.SPAWN_EGG, null, null);
+            ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(pos), MobSpawnType.SPAWN_EGG, null);
         }
     }
 

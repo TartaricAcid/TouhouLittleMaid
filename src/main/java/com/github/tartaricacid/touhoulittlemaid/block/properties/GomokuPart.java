@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block.properties;
 
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -38,7 +39,7 @@ public enum GomokuPart implements StringRepresentable {
     }
 
     @Override
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return this.name;
     }
 

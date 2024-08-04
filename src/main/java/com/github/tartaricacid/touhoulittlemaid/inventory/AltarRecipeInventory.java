@@ -6,8 +6,9 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeInput;
 
-public class AltarRecipeInventory implements Container {
+public class AltarRecipeInventory implements Container, RecipeInput {
     public static final int RECIPES_SIZE = 6;
     public final NonNullList<ItemStack> items = NonNullList.withSize(RECIPES_SIZE, ItemStack.EMPTY);
 
@@ -36,6 +37,11 @@ public class AltarRecipeInventory implements Container {
     @Override
     public ItemStack getItem(int index) {
         return this.getContainerSize() <= index ? ItemStack.EMPTY : this.items.get(index);
+    }
+
+    @Override
+    public int size() {
+        return 6;
     }
 
     @Override
