@@ -32,7 +32,7 @@ public class ItemTankBackpack extends ItemMaidBackpack {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         CompoundTag nbt = stack.getTagElement("Tanks");
         if (nbt != null) {
             MutableComponent fluidInfo;

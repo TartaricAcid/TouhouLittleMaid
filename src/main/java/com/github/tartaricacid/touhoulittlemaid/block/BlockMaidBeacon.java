@@ -103,7 +103,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide && player.isCreative()) {
             Position position = state.getValue(POSITION);
             if (position != Position.DOWN) {
@@ -115,7 +115,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
                 }
             }
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override

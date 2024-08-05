@@ -55,7 +55,7 @@ public class BlockMaidBed extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide && player.isCreative()) {
             BedPart bedpart = state.getValue(PART);
             if (bedpart == BedPart.FOOT) {
@@ -67,7 +67,7 @@ public class BlockMaidBed extends HorizontalDirectionalBlock {
                 }
             }
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override

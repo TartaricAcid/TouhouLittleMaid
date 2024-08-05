@@ -157,7 +157,7 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide) {
             this.getAltar(worldIn, pos).ifPresent(altar -> {
                 this.restoreStorageBlock(worldIn, pos, altar.getBlockPosList());
@@ -167,7 +167,7 @@ public class BlockAltar extends Block implements EntityBlock {
                 }
             });
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override

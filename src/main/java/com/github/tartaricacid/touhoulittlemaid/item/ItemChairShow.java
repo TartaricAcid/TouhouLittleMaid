@@ -17,7 +17,7 @@ public class ItemChairShow extends Item {
 
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, @Nullable Item.TooltipContext pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         tooltip.add((Component.translatable("tooltips.touhou_little_maid.chair_show.desc")).withStyle(ChatFormatting.GRAY));
     }
 }

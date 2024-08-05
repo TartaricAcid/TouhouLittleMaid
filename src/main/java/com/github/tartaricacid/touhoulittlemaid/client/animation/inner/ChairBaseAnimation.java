@@ -10,8 +10,8 @@ import static com.github.tartaricacid.touhoulittlemaid.client.animation.inner.In
 
 public final class ChairBaseAnimation {
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/chair/passenger/hidden.js"), getPassengerHidden());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/chair/passenger/rotation.js"), getPassengerRotation());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/chair/passenger/hidden.js"), getPassengerHidden());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/chair/passenger/rotation.js"), getPassengerRotation());
     }
 
     public static IAnimation<EntityChair> getPassengerHidden() {

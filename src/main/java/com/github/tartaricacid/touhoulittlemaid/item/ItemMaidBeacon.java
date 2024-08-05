@@ -17,7 +17,6 @@ import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -55,7 +54,7 @@ public class ItemMaidBeacon extends DoubleHighBlockItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         float numPower = 0f;
         CompoundTag tag = stack.getOrCreateTagElement(STORAGE_DATA_TAG);
         if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {

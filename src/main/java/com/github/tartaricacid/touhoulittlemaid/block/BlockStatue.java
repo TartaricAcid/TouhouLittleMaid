@@ -93,7 +93,7 @@ public class BlockStatue extends Block implements EntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide) {
             this.getStatue(worldIn, pos).ifPresent(statue -> {
                 this.restoreClayBlock(worldIn, pos, statue);
@@ -102,7 +102,7 @@ public class BlockStatue extends Block implements EntityBlock {
                 }
             });
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override

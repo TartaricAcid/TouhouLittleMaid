@@ -167,7 +167,7 @@ public class ItemWirelessIO extends Item implements MenuProvider {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         boolean maidToChest = isMaidToChest(stack);
         boolean isBlacklist = isBlacklist(stack);
         BlockPos pos = getBindingPos(stack);

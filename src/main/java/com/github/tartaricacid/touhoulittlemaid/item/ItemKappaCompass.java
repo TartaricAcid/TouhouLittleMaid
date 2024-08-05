@@ -172,7 +172,7 @@ public class ItemKappaCompass extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> components, TooltipFlag flagIn) {
         if (hasKappaCompassData(stack)) {
             ResourceLocation dimension = getDimension(stack);
             BlockPos workPos = getPoint(Activity.WORK, stack);

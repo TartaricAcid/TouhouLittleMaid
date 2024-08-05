@@ -1,13 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition;
 
 import com.google.common.collect.Lists;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.core.registries.Registries;
-import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.List;
 
@@ -61,9 +60,6 @@ public class ConditionalPassenger {
             return EMPTY;
         }
         ResourceLocation registryName = BuiltInRegistries.ENTITY_TYPE.getKey(passenger.getType());
-        if (registryName == null) {
-            return EMPTY;
-        }
         if (idTest.contains(registryName)) {
             return idPre + registryName;
         }
@@ -74,7 +70,7 @@ public class ConditionalPassenger {
         if (tagTest.isEmpty()) {
             return EMPTY;
         }
-        ITagManager<EntityType<?>> tags = BuiltInRegistries.ENTITY_TYPE.tags();
+        ITagManager<EntityType<?>> tags = BuiltInRegistries.ENTITY_TYPE.getTags();
         if (tags == null) {
             return EMPTY;
         }

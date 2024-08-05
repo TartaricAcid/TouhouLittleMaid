@@ -84,7 +84,7 @@ public class ItemFoxScroll extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> components, TooltipFlag flagIn) {
         Pair<String, BlockPos> info = getTrackInfo(stack);
         if (info != null) {
             components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", info.getLeft()).withStyle(ChatFormatting.GOLD));
@@ -96,6 +96,6 @@ public class ItemFoxScroll extends Item {
         } else if (stack.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
             components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.white").withStyle(ChatFormatting.GRAY));
         }
-        super.appendHoverText(stack, pLevel, components, pIsAdvanced);
+        super.appendHoverText(stack, worldIn, components, flagIn);
     }
 }
