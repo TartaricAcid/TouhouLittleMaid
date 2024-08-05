@@ -11,22 +11,22 @@ import static com.github.tartaricacid.touhoulittlemaid.client.animation.inner.In
 
 public final class MaidTaskAnimation {
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/attack.js"), getTaskAttack());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/danmaku_attack.js"), getTaskDanmakuAttack());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/farm.js"), getTaskFarm());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/feed_animal.js"), getTaskFeedAnimal());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/idle.js"), getTaskIdle());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/milk.js"), getTaskMilk());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/shears.js"), getTaskShears());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/sugar_cane.js"), getTaskSugarCane());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/cocoa.js"), getTaskCocoa());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/extinguishing.js"), getTaskExtinguishing());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/feed.js"), getTaskFeed());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/grass.js"), getTaskGrass());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/melon.js"), getTaskMelon());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/ranged_attack.js"), getTaskRangedAttack());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/snow.js"), getTaskSnow());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/task/torch.js"), getTaskTorch());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/attack.js"), getTaskAttack());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/danmaku_attack.js"), getTaskDanmakuAttack());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/farm.js"), getTaskFarm());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/feed_animal.js"), getTaskFeedAnimal());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/idle.js"), getTaskIdle());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/milk.js"), getTaskMilk());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/shears.js"), getTaskShears());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/sugar_cane.js"), getTaskSugarCane());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/cocoa.js"), getTaskCocoa());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/extinguishing.js"), getTaskExtinguishing());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/feed.js"), getTaskFeed());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/grass.js"), getTaskGrass());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/melon.js"), getTaskMelon());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/ranged_attack.js"), getTaskRangedAttack());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/snow.js"), getTaskSnow());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/task/torch.js"), getTaskTorch());
     }
 
     public static IAnimation<Mob> getTaskAttack() {

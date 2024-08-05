@@ -3,10 +3,10 @@ package com.github.tartaricacid.touhoulittlemaid.event;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.google.common.collect.Lists;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraft.core.registries.Registries;
+import net.neoforged.fml.event.config.ModConfigEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class MaidMealRegConfigEvent {
         List<String> list = Lists.newArrayList();
         for (String match : matchList) {
             Pattern pattern = Pattern.compile(match);
-            ForgeRegistries.ITEMS.getKeys().stream().filter(id -> pattern.matcher(id.toString()).matches()).forEach(e -> list.add(e.toString()));
+            BuiltInRegistries.ITEM.getAny().stream().filter(id -> pattern.matcher(id.toString()).matches()).forEach(e -> list.add(e.toString()));
         }
         return list;
     }

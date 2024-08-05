@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
@@ -97,7 +97,7 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
     }
 
     private boolean collectHoneyComb(ServerLevel level, EntityMaid maid, CombinedInvWrapper maidAvailableInv, BlockState hiveBlockState, BlockPos hivePos) {
-        boolean hasShears = maid.getMainHandItem().canPerformAction(ToolActions.SHEARS_HARVEST);
+        boolean hasShears = maid.getMainHandItem().canPerformAction(ItemAbilities.SHEARS_HARVEST);
         if (hasShears) {
             ItemStack honeyComb = new ItemStack(Items.HONEYCOMB, 3);
             ItemStack result = ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyComb, true);
@@ -109,7 +109,7 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
             ItemHandlerHelper.insertItemStacked(maidAvailableInv, honeyComb, false);
             resetHoneyLevel(level, hiveBlockState, hivePos);
             maid.swing(InteractionHand.MAIN_HAND);
-            maid.getMainHandItem().hurtAndBreak(1, maid, e -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+            maid.getMainHandItem().hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
             return true;
         }
         return false;

@@ -19,6 +19,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -99,7 +100,7 @@ public class MaidSoundPackGui extends Screen {
             ResourceLocation soundEvent = soundIds.get(i);
             this.addRenderableWidget(new SoundElementButton(startX + 245, startY + yOffset, 152, 12, soundEvent, buffers.get(soundEvent), otherColor, (b) -> {
                 SoundElementButton soundButton = (SoundElementButton) b;
-                SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(soundButton.getSoundEvent());
+                SoundEvent event = BuiltInRegistries.SOUND_EVENT.get(soundButton.getSoundEvent());
                 if (minecraft != null && event != null) {
                     minecraft.getSoundManager().play(new MaidSoundInstance(event, this.selectSoundId, this.maid, true));
                 }

@@ -11,18 +11,18 @@ import static com.github.tartaricacid.touhoulittlemaid.client.animation.inner.In
 
 public final class MaidArmorAnimation {
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/default.js"), getArmorDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/reverse.js"), getArmorReverse());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/temp/cold.js"), getArmorTempCold());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/temp/medium.js"), getArmorTempMedium());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/temp/ocean.js"), getArmorTempOcean());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/temp/warm.js"), getArmorTempWarm());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/value/value_full.js"), getArmorValueFull());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/value/value_high.js"), getArmorValueHigh());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/value/value_low.js"), getArmorValueLow());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/value/value_normal.js"), getArmorValueNormal());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/weather/raining.js"), getArmorWeatherRaining());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/armor/weather/thundering.js"), getArmorWeatherThundering());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/default.js"), getArmorDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/reverse.js"), getArmorReverse());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/temp/cold.js"), getArmorTempCold());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/temp/medium.js"), getArmorTempMedium());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/temp/ocean.js"), getArmorTempOcean());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/temp/warm.js"), getArmorTempWarm());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/value/value_full.js"), getArmorValueFull());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/value/value_high.js"), getArmorValueHigh());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/value/value_low.js"), getArmorValueLow());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/value/value_normal.js"), getArmorValueNormal());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/weather/raining.js"), getArmorWeatherRaining());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/armor/weather/thundering.js"), getArmorWeatherThundering());
 
     }
 

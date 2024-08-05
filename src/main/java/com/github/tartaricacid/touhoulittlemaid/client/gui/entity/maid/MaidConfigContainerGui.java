@@ -9,18 +9,19 @@ import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import org.anti_ad.mc.ipn.api.IPNButton;
-import org.anti_ad.mc.ipn.api.IPNGuiHint;
-import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
+//import org.anti_ad.mc.ipn.api.IPNButton;
+//import org.anti_ad.mc.ipn.api.IPNGuiHint;
+//import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig.INSTANCE;
 
-@IPNPlayerSideOnly
-@IPNGuiHint(button = IPNButton.SORT, horizontalOffset = -36, bottom = -12)
-@IPNGuiHint(button = IPNButton.SORT_COLUMNS, horizontalOffset = -24, bottom = -24)
-@IPNGuiHint(button = IPNButton.SORT_ROWS, horizontalOffset = -12, bottom = -36)
-@IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = -5)
-@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
+//@IPNPlayerSideOnly
+//@IPNGuiHint(button = IPNButton.SORT, horizontalOffset = -36, bottom = -12)
+//@IPNGuiHint(button = IPNButton.SORT_COLUMNS, horizontalOffset = -24, bottom = -24)
+//@IPNGuiHint(button = IPNButton.SORT_ROWS, horizontalOffset = -12, bottom = -36)
+//@IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = -5)
+//@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
+//TODO IPN兼容
 public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigContainer> {
     private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_config.png");
     private int left;
