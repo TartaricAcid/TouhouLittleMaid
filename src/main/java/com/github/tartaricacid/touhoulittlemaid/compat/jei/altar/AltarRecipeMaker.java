@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public final class AltarRecipeMaker {
     }
 
     public List<AltarRecipeWrapper> getAltarRecipes() {
-        List<AltarRecipe> altarRecipesMap = recipeManager.getAllRecipesFor(InitRecipes.ALTAR_CRAFTING);
+        List<RecipeHolder<AltarRecipe>> altarRecipesMap = recipeManager.getAllRecipesFor(InitRecipes.ALTAR_CRAFTING.get());
 
         List<AltarRecipeWrapper> recipes = Lists.newArrayList();
         JERIUtil.recipeWarp(altarRecipesMap, (recipeId, inputs, output, powerCost, langKey) -> {

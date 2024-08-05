@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.core.BlockPos;
@@ -60,7 +60,7 @@ public class StorageAndTakePowerMessage {
         context.setPacketHandled(true);
     }
 
-    private static void storageLogic(float powerNum, PowerCapability playerPower, TileEntityMaidBeacon beacon) {
+    private static void storageLogic(float powerNum, PowerAttachment playerPower, TileEntityMaidBeacon beacon) {
         boolean playerPowerIsEnough = powerNum <= playerPower.get();
         boolean beaconNotFull = powerNum + beacon.getStoragePower() <= beacon.getMaxStorage();
         if (playerPowerIsEnough) {
@@ -74,16 +74,16 @@ public class StorageAndTakePowerMessage {
         }
     }
 
-    private static void takeLogic(float powerNum, PowerCapability playerPower, TileEntityMaidBeacon beacon) {
+    private static void takeLogic(float powerNum, PowerAttachment playerPower, TileEntityMaidBeacon beacon) {
         boolean beaconIsEnough = powerNum <= beacon.getStoragePower();
-        boolean playerNotFull = powerNum + playerPower.get() < PowerCapability.MAX_POWER;
+        boolean playerNotFull = powerNum + playerPower.get() < PowerAttachment.MAX_POWER;
         if (beaconIsEnough) {
             if (playerNotFull) {
                 beacon.setStoragePower(beacon.getStoragePower() - powerNum);
                 playerPower.add(powerNum);
             } else {
-                beacon.setStoragePower(beacon.getStoragePower() - PowerCapability.MAX_POWER + playerPower.get());
-                playerPower.set(PowerCapability.MAX_POWER);
+                beacon.setStoragePower(beacon.getStoragePower() - PowerAttachment.MAX_POWER + playerPower.get());
+                playerPower.set(PowerAttachment.MAX_POWER);
             }
         }
     }

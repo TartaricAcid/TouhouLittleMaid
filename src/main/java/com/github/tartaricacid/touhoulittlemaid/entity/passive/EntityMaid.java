@@ -7,6 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.capability.Capabilities;
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
@@ -54,7 +56,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -90,6 +91,8 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.EnchantedItemInUse;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -119,9 +122,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.MAID_NUM;
 
 public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
@@ -390,33 +394,26 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     private InteractionResult tameMaid(ItemStack stack, Player player) {
-        return player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP).map(cap -> {
-            if (cap.canAdd() || player.isCreative()) {
-                boolean isNormal = !isTame() && getTamedItem().test(stack);
-                boolean isNtr = getNtrItem().test(stack);
-                if (isNormal || isNtr) {
-                    if (!player.isCreative()) {
-                        stack.shrink(1);
-                        cap.add();
-                    }
-                    this.tame(player);
-                    // 清掉寻路，清掉敌对记忆
-                    this.navigation.stop();
-                    this.setTarget(null);
-                    this.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
-                    this.level.broadcastEntityEvent(this, (byte) 7);
-                    this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
-                    return InteractionResult.SUCCESS;
+        MaidNumAttachment cap = player.getData(MAID_NUM);
+        if (cap.canAdd() || player.isCreative()) {
+            boolean isNormal = !isTame() && getTamedItem().test(stack);
+            boolean isNtr = getNtrItem().test(stack);
+            if (isNormal || isNtr) {
+                if (!player.isCreative()) {
+                    stack.shrink(1);
+                    cap.add();
                 }
-            } else {
-                if (player instanceof ServerPlayer) {
-                    MutableComponent msg = Component.translatable("message.touhou_little_maid.owner_maid_num.can_not_add",
-                            cap.get(), cap.getMaxNum());
-                    player.sendSystemMessage(msg);
-                }
+                this.tame(player);
+                // 清掉寻路，清掉敌对记忆
+                this.navigation.stop();
+                this.setTarget(null);
+                this.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                this.level.broadcastEntityEvent(this, (byte) 7);
+                this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
+                return InteractionResult.SUCCESS;
             }
-            return InteractionResult.PASS;
-        }).orElse(InteractionResult.PASS);
+        }
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -500,9 +497,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-            Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
-            if (entry != null) {
-                ItemStack itemstack = entry.getValue();
+            Optional<EnchantedItemInUse> entry = EnchantmentHelper.getRandomItemWith(EnchantmentEffectComponents.REPAIR_WITH_XP, this, ItemStack::isDamaged);
+            if (entry.isPresent()) {
+                ItemStack itemstack = entry.get().itemStack();
                 if (!itemstack.isEmpty() && itemstack.isDamaged()) {
                     int i = Math.min((int) (entityXPOrb.value * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
                     entityXPOrb.value -= (i / 2);
@@ -673,7 +670,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                     ((ServerPlayer) damageSrc.getEntity()).awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(damageDealtAbsorbed * 10));
                 }
                 MaidDamageEvent maidDamageEvent = new MaidDamageEvent(this, damageSrc, damageAfterAbsorption);
-                damageAfterAbsorption = NeoForge.EVENT_BUS.post(maidDamageEvent) ? 0 : maidDamageEvent.getAmount();
+                damageAfterAbsorption = NeoForge.EVENT_BUS.post(maidDamageEvent).isCanceled() ? 0 : maidDamageEvent.getAmount();
                 damageAfterAbsorption = ForgeHooks.onLivingDamage(this, damageSrc, damageAfterAbsorption);
                 if (damageAfterAbsorption != 0) {
                     float health = this.getHealth();
@@ -723,7 +720,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public void die(DamageSource cause) {
-        if (!NeoForge.EVENT_BUS.post(new MaidDeathEvent(this, cause))) {
+        if (!NeoForge.EVENT_BUS.post(new MaidDeathEvent(this, cause)).isCanceled()) {
             super.die(cause);
         }
     }
@@ -1096,22 +1093,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER) {
-            if (facing == null) {
-                return LazyOptional.of(() -> new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble)).cast();
-            }
-            if (facing.getAxis().isVertical()) {
-                return LazyOptional.of(() -> handsInvWrapper).cast();
-            }
-            if (facing.getAxis().isHorizontal()) {
-                return LazyOptional.of(() -> armorInvWrapper).cast();
-            }
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
     protected void dropEquipment() {
         if (this.getOwnerUUID() != null && !level.isClientSide && !PetBedDrop.hasPetBedPos(this)) {
             // 掉出世界的判断
@@ -1162,7 +1143,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public int getExperienceReward() {
+    public int getBaseExperienceReward() {
         return this.getExperience();
     }
 
@@ -1199,7 +1180,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        if (NeoForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+        if (NeoForge.EVENT_BUS.post(new MaidPlaySoundEvent(this)).isCanceled()) {
             return null;
         }
         return task.getAmbientSound(this);
@@ -1208,7 +1189,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        if (NeoForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+        if (NeoForge.EVENT_BUS.post(new MaidPlaySoundEvent(this)).isCanceled()) {
             return null;
         }
         if (damageSourceIn.is(DamageTypeTags.IS_FIRE)) {
@@ -1306,7 +1287,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public void swing(InteractionHand pHand) {
-        SlashBladeCompat.swingSlashBlade(this, getItemInHand(pHand));
+        //TODO 拔刀剑兼容
+//        SlashBladeCompat.swingSlashBlade(this, getItemInHand(pHand));
         super.swing(pHand);
     }
 
@@ -1603,7 +1585,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public IMaidTask getTask() {
-        ResourceLocation uid = new ResourceLocation(entityData.get(DATA_TASK));
+        ResourceLocation uid = ResourceLocation.withDefaultNamespace(entityData.get(DATA_TASK));
         return TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
     }
 

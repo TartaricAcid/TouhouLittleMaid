@@ -50,6 +50,7 @@ public final class TouhouLittleMaid {
         InitCommand.ARGUMENT_TYPE.register(eventBus);
         InitPoi.POI_TYPES.register(eventBus);
         InitTrigger.TRIGGERS.register(eventBus);
+        InitDataAttachment.ATTACHMENT_TYPES.register(eventBus);
         /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表
         驯养革新 Domestication Innovation
         更多箱子 Iron Chests

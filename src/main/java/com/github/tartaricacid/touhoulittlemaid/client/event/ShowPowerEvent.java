@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -13,8 +14,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
@@ -40,7 +39,8 @@ public final class ShowPowerEvent {
                 POWER_POINT = InitItems.POWER_POINT.get().getDefaultInstance();
             }
             graphics.renderItem(POWER_POINT, 5, 5);
-            player.getCapability(PowerCapabilityProvider.POWER_CAP).ifPresent(cap -> graphics.drawString(font, String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff));
+            PowerAttachment cap = player.getData(InitDataAttachment.POWER_NUM);
+            graphics.drawString(font, String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff)
             RenderSystem.enableBlend();
         }
     }

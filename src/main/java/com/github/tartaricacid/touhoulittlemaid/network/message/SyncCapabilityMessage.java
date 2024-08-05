@@ -1,14 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class SyncCapabilityMessage {
     private final float power;

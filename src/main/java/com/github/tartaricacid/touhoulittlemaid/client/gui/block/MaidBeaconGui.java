@@ -1,9 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.BeaconEffectButton;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SetBeaconOverflowMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.StorageAndTakePowerMessage;
@@ -135,11 +136,10 @@ public class MaidBeaconGui extends Screen {
     private void renderPlayerPower(GuiGraphics graphics) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            player.getCapability(PowerCapabilityProvider.POWER_CAP).ifPresent(power -> {
-                float percent = power.get() / PowerCapability.MAX_POWER;
-                graphics.blit(BG, leftPos + 146, topPos + 61, 58, 143, (int) (74 * percent), 5);
-                graphics.drawString(font, DECIMAL_FORMAT.format(power.get()), leftPos + 240, topPos + 60, 0xffffff);
-            });
+            PowerAttachment power = player.getData(InitDataAttachment.POWER_NUM);
+            float percent = power.get() / PowerAttachment.MAX_POWER;
+            graphics.blit(BG, leftPos + 146, topPos + 61, 58, 143, (int) (74 * percent), 5);
+            graphics.drawString(font, DECIMAL_FORMAT.format(power.get()), leftPos + 240, topPos + 60, 0xffffff);
         }
     }
 

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbMessage;
@@ -28,6 +28,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
 
 public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnData {
     public static final EntityType<EntityPowerPoint> TYPE = EntityType.Builder.<EntityPowerPoint>of(EntityPowerPoint::new, MobCategory.MISC)
@@ -244,22 +246,20 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
         }
 
         if (this.throwTime == 0 && player.takeXpDelay == 0) {
-            LazyOptional<PowerCapability> powerCap = player.getCapability(PowerCapabilityProvider.POWER_CAP, null);
-            powerCap.ifPresent((power) -> {
-                player.takeXpDelay = 2;
-                this.take(player, 1);
-                if (this.value > 0) {
-                    if (power.get() + value / 100.0f > PowerCapability.MAX_POWER) {
-                        power.add(PowerCapability.MAX_POWER - power.get());
-                        int residualValue = value - (int) (PowerCapability.MAX_POWER * 100) + (int) (power.get() * 100);
-                        // 和原版设计不同，该数值过大，故缩小一些
-                        player.giveExperiencePoints(transPowerValueToXpValue(residualValue));
-                    } else {
-                        power.add(value / 100.0f);
-                    }
+            PowerAttachment power = this.getData(POWER_NUM);
+            player.takeXpDelay = 2;
+            this.take(player, 1);
+            if (this.value > 0) {
+                if (power.get() + value / 100.0f > PowerAttachment.MAX_POWER) {
+                    power.add(PowerAttachment.MAX_POWER - power.get());
+                    int residualValue = value - (int) (PowerAttachment.MAX_POWER * 100) + (int) (power.get() * 100);
+                    // 和原版设计不同，该数值过大，故缩小一些
+                    player.giveExperiencePoints(transPowerValueToXpValue(residualValue));
+                } else {
+                    power.add(value / 100.0f);
                 }
-                this.discard();
-            });
+            }
+            this.discard();
         }
     }
 

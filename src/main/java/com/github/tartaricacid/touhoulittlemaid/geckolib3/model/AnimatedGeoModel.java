@@ -48,6 +48,7 @@ public abstract class AnimatedGeoModel<T extends IAnimatable> extends GeoModelPr
         double currentTick = animatable instanceof Entity livingEntity ? livingEntity.tickCount : getCurrentTick();
 
         if (manager.startTick == -1) {
+            //TODO : 这里应该传入true还是false
             manager.startTick = currentTick + mc.getTimer().getGameTimeDeltaPartialTick(false);
         }
 

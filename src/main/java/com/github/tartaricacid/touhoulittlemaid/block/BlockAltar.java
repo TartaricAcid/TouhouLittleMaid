@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
+import com.github.tartaricacid.touhoulittlemaid.capability.Capabilities;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
@@ -47,7 +49,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble.RANDOM;
 
@@ -235,9 +236,9 @@ public class BlockAltar extends Block implements EntityBlock {
         if (inv.isEmpty()) {
             return;
         }
-        playerIn.getCapability(PowerCapabilityProvider.POWER_CAP, null)
-                .ifPresent(power -> world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING, inv, world)
-                        .ifPresent(recipe -> spawnResultEntity(world, playerIn, power, recipe, inv, altar)));
+        PowerAttachment powerAttachment = playerIn.getData(InitDataAttachment.POWER_NUM);
+        world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), inv, world)
+                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), inv, altar));
     }
 
     private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
@@ -248,7 +249,7 @@ public class BlockAltar extends Block implements EntityBlock {
         return Optional.empty();
     }
 
-    private void spawnResultEntity(Level world, Player playerIn, PowerCapability power,
+    private void spawnResultEntity(Level world, Player playerIn, PowerAttachment power,
                                    AltarRecipe altarRecipe, AltarRecipeInventory inventory, TileEntityAltar altar) {
         if (power.get() >= altarRecipe.getPowerCost()) {
             power.min(altarRecipe.getPowerCost());

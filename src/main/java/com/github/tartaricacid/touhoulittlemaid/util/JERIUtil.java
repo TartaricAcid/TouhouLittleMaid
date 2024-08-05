@@ -8,6 +8,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,8 +17,9 @@ import java.util.Locale;
 
 public final class JERIUtil {
 
-    public static void recipeWarp(List<AltarRecipe> altarRecipes, AltarRecipeMaker maker) {
-        for (AltarRecipe altarRecipe : altarRecipes) {
+    public static void recipeWarp(List<RecipeHolder<AltarRecipe>> altarRecipes, AltarRecipeMaker maker) {
+        for (RecipeHolder<AltarRecipe> altarRecipeHolder : altarRecipes) {
+            AltarRecipe altarRecipe = altarRecipeHolder.value();
             ResourceLocation recipeId = altarRecipe.getId();
             ItemStack output = altarRecipe.getResultItem(Minecraft.getInstance().level.registryAccess());
             if (!altarRecipe.isItemCraft()) {

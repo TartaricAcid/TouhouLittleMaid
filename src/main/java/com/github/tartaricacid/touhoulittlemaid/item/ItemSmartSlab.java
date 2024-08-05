@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
@@ -29,6 +31,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.MAID_NUM;
 
 public class ItemSmartSlab extends AbstractStoreMaidItem {
     private static final String MAID_OWNER = "Owner";
@@ -99,31 +103,30 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
     }
 
     private InteractionResult spawnNewMaid(UseOnContext context, Player player, Level worldIn, EntityMaid maid) {
-        return player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP).map(cap -> {
-            if (cap.canAdd() || player.isCreative()) {
-                if (!player.isCreative()) {
-                    cap.add();
-                }
-                maid.tame(player);
-                if (worldIn instanceof ServerLevel) {
-                    maid.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(context.getClickedPos()),
-                            MobSpawnType.SPAWN_EGG, null, null);
-                    maid.moveTo(context.getClickedPos().above(), 0, 0);
-                    worldIn.addFreshEntity(maid);
-                }
-                maid.spawnExplosionParticle();
-                maid.playSound(SoundEvents.PLAYER_SPLASH, 1.0F, worldIn.random.nextFloat() * 0.1F + 0.9F);
-                player.setItemInHand(context.getHand(), InitItems.SMART_SLAB_EMPTY.get().getDefaultInstance());
-                player.getCooldowns().addCooldown(InitItems.SMART_SLAB_EMPTY.get(), 20);
-                return InteractionResult.sidedSuccess(worldIn.isClientSide);
-            } else {
-                if (worldIn.isClientSide) {
-                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.owner_maid_num.can_not_add",
-                            cap.get(), cap.getMaxNum()));
-                }
-                return super.useOn(context);
+        MaidNumAttachment cap = player.getData(MAID_NUM);
+        if (cap.canAdd() || player.isCreative()) {
+            if (!player.isCreative()) {
+                cap.add();
             }
-        }).orElse(super.useOn(context));
+            maid.tame(player);
+            if (worldIn instanceof ServerLevel) {
+                maid.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(context.getClickedPos()),
+                        MobSpawnType.SPAWN_EGG, null, null);
+                maid.moveTo(context.getClickedPos().above(), 0, 0);
+                worldIn.addFreshEntity(maid);
+            }
+            maid.spawnExplosionParticle();
+            maid.playSound(SoundEvents.PLAYER_SPLASH, 1.0F, worldIn.random.nextFloat() * 0.1F + 0.9F);
+            player.setItemInHand(context.getHand(), InitItems.SMART_SLAB_EMPTY.get().getDefaultInstance());
+            player.getCooldowns().addCooldown(InitItems.SMART_SLAB_EMPTY.get(), 20);
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        } else {
+            if (worldIn.isClientSide) {
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.owner_maid_num.can_not_add",
+                        cap.get(), cap.getMaxNum()));
+            }
+            return super.useOn(context);
+        }
     }
 
     @Override
