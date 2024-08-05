@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInstance;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -49,7 +50,7 @@ public class PlayMaidSoundMessage {
         if (mc.level != null) {
             Entity entity = mc.level.getEntity(message.entityId);
             if (entity instanceof EntityMaid maid) {
-                SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(message.soundEvent);
+                SoundEvent event = BuiltInRegistries.SOUND_EVENT.get(message.soundEvent);
                 if (event != null) {
                     mc.getSoundManager().play(new MaidSoundInstance(event, message.id, maid));
                 }
