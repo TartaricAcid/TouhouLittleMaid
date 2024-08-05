@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatCol
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SetScrollData;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.FoxScrollPackage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,13 +18,13 @@ import java.util.Map;
 
 public class FoxScrollScreen extends Screen {
     private static final int PER_PAGE_COUNT = 5;
-    private final Map<String, List<FoxScrollMessage.FoxScrollData>> data;
+    private final Map<String, List<FoxScrollPackage.FoxScrollData>> data;
     private int leftPos;
     private int topPos;
     private String selectDim;
     private int page = 0;
 
-    public FoxScrollScreen(Map<String, List<FoxScrollMessage.FoxScrollData>> data) {
+    public FoxScrollScreen(Map<String, List<FoxScrollPackage.FoxScrollData>> data) {
         super(Component.literal("Red Fox Scroll"));
         this.data = data;
         if (!this.data.isEmpty()) {
@@ -42,7 +43,7 @@ public class FoxScrollScreen extends Screen {
 
     private void addPointButtons() {
         if (StringUtils.isNotBlank(this.selectDim) && this.data.containsKey(this.selectDim)) {
-            List<FoxScrollMessage.FoxScrollData> scrollData = this.data.get(this.selectDim);
+            List<FoxScrollPackage.FoxScrollData> scrollData = this.data.get(this.selectDim);
             if (scrollData.size() > PER_PAGE_COUNT) {
                 addRenderableWidget(new FlatColorButton(leftPos + 400 - 20, topPos, 20, 20, Component.literal("↑"), b -> {
                     if (this.page > 0) {
@@ -60,7 +61,7 @@ public class FoxScrollScreen extends Screen {
             int offsetIn = this.topPos;
             for (int i = this.page * PER_PAGE_COUNT; i < this.page * PER_PAGE_COUNT + PER_PAGE_COUNT; i++) {
                 if (i < scrollData.size()) {
-                    FoxScrollMessage.FoxScrollData info = scrollData.get(i);
+                    FoxScrollPackage.FoxScrollData info = scrollData.get(i);
                     this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.fox_scroll.track"), b -> {
                         NetworkHandler.CHANNEL.sendToServer(new SetScrollData(this.selectDim, info.getPos()));
                     }));
@@ -102,13 +103,13 @@ public class FoxScrollScreen extends Screen {
 
     private void renderMain(GuiGraphics graphics) {
         if (StringUtils.isNotBlank(this.selectDim) && this.data.containsKey(this.selectDim)) {
-            List<FoxScrollMessage.FoxScrollData> scrollData = this.data.get(this.selectDim);
+            List<FoxScrollPackage.FoxScrollData> scrollData = this.data.get(this.selectDim);
             boolean inSameDim = this.selectDim.equals(this.getPlayerDimension());
             BlockPos playerPos = this.getPlayerPos();
             int offsetIn = this.topPos;
             for (int i = this.page * PER_PAGE_COUNT; i < this.page * PER_PAGE_COUNT + PER_PAGE_COUNT; i++) {
                 if (i < scrollData.size()) {
-                    FoxScrollMessage.FoxScrollData info = scrollData.get(i);
+                    FoxScrollPackage.FoxScrollData info = scrollData.get(i);
                     BlockPos pos = info.getPos();
                     Component distanceText;
                     if (inSameDim) {

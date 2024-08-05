@@ -63,7 +63,7 @@ public final class MaidGomokuAI {
     /**
      * 获取棋局状态
      */
-    public static Statue getStatue(int[][] chessData, Point point) {
+    public static Statue getStatue(byte[][] chessData, Point point) {
         int rows = chessData[0].length;
         int cols = chessData.length;
         int x = point.x;

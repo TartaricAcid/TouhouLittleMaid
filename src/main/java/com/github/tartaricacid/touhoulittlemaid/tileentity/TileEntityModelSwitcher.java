@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.google.common.collect.Lists;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +10,8 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -126,6 +129,15 @@ public class TileEntityModelSwitcher extends BlockEntity {
     }
 
     public static class ModeInfo {
+        public static final StreamCodec<ByteBuf, ModeInfo> MODE_INFO_STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC,
+                ModeInfo::getModelId,
+                ByteBufCodecs.STRING_UTF8,
+                ModeInfo::getText,
+                Direction.STREAM_CODEC,
+                ModeInfo::getDirection,
+                ModeInfo::new
+        );
         private ResourceLocation modelId;
         private String text;
         private Direction direction;

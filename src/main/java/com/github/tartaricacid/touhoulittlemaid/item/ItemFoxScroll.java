@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.FoxScrollPackage;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
@@ -63,7 +63,7 @@ public class ItemFoxScroll extends Item {
             if (maidWorldData == null) {
                 return super.use(level, player, hand);
             }
-            Map<String, List<FoxScrollMessage.FoxScrollData>> data = Maps.newHashMap();
+            Map<String, List<FoxScrollPackage.FoxScrollData>> data = Maps.newHashMap();
             List<MaidInfo> maidInfos = null;
             if (item.getItem() == InitItems.RED_FOX_SCROLL.get()) {
                 maidInfos = maidWorldData.getPlayerMaidInfos(player);
@@ -74,8 +74,8 @@ public class ItemFoxScroll extends Item {
                 maidInfos = Collections.emptyList();
             }
             maidInfos.forEach(info -> {
-                List<FoxScrollMessage.FoxScrollData> scrollData = data.computeIfAbsent(info.getDimension(), dim -> Lists.newArrayList());
-                scrollData.add(new FoxScrollMessage.FoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
+                List<FoxScrollPackage.FoxScrollData> scrollData = data.computeIfAbsent(info.getDimension(), dim -> Lists.newArrayList());
+                scrollData.add(new FoxScrollPackage.FoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
             });
             NetworkHandler.sendToClientPlayer(new FoxScrollMessage(data), player);
             return InteractionResultHolder.success(item);

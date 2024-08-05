@@ -18,6 +18,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessag
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.RequestEffectMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -129,10 +130,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (taskListOpen) {
             return;
         }
-        List<SendEffectMessage.EffectData> effects = maid.getEffects();
+        List<SendEffectPackage.EffectData> effects = maid.getEffects();
         if (!effects.isEmpty()) {
             int yOffset = 5;
-            for (SendEffectMessage.EffectData effect : effects) {
+            for (SendEffectPackage.EffectData effect : effects) {
                 MutableComponent text = Component.translatable(effect.descriptionId);
                 if (effect.amplifier >= 1 && effect.amplifier <= 9) {
                     MutableComponent levelText = Component.translatable("enchantment.level." + (effect.amplifier + 1));

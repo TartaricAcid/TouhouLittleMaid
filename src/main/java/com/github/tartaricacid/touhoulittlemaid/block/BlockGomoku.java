@@ -252,7 +252,7 @@ public class BlockGomoku extends BlockJoy {
             if (!gomoku.isPlayerTurn()) {
                 return InteractionResult.FAIL;
             }
-            int[][] chessData = gomoku.getChessData();
+            byte[][] chessData = gomoku.getChessData();
             int[] clickPos = getChessPos(location.x, location.z, part);
             if (clickPos == null) {
                 return InteractionResult.FAIL;

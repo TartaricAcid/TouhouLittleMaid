@@ -41,6 +41,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
@@ -185,7 +186,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final SchedulePos schedulePos;
     public boolean guiOpening = false;
 
-    private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
+    private List<SendEffectPackage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
     private IMaidBackpack backpack = BackpackManager.getEmptyBackpack();
     private int playerHurtSoundCount = 120;
@@ -1614,11 +1615,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(GAME_SKILL, gameSkill, true);
     }
 
-    public List<SendEffectMessage.EffectData> getEffects() {
+    public List<SendEffectPackage.EffectData> getEffects() {
         return effects;
     }
 
-    public void setEffects(List<SendEffectMessage.EffectData> effects) {
+    public void setEffects(List<SendEffectPackage.EffectData> effects) {
         this.effects = effects;
     }
 

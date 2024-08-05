@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -21,6 +23,14 @@ public final class SchedulePos {
     private BlockPos sleepPos;
     private ResourceLocation dimension;
     private boolean configured = false;
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, SchedulePos> SCHEDULE_POS_STREAM_CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC,SchedulePos::getWorkPos,
+            BlockPos.STREAM_CODEC,SchedulePos::getIdlePos,
+            BlockPos.STREAM_CODEC,SchedulePos::getSleepPos,
+            ResourceLocation.STREAM_CODEC,SchedulePos::getDimension,
+            SchedulePos::new
+    );
 
     public SchedulePos(BlockPos workPos, BlockPos idlePos, BlockPos sleepPos, ResourceLocation dimension) {
         this.workPos = workPos;

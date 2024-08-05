@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager
 import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
+import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
 import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
 import net.neoforged.bus.api.IEventBus;
@@ -51,6 +52,8 @@ public final class TouhouLittleMaid {
         InitPoi.POI_TYPES.register(eventBus);
         InitTrigger.TRIGGERS.register(eventBus);
         InitDataAttachment.ATTACHMENT_TYPES.register(eventBus);
+
+        eventBus.addListener(NewNetwork::registerPacket);
         /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表
         驯养革新 Domestication Innovation
         更多箱子 Iron Chests

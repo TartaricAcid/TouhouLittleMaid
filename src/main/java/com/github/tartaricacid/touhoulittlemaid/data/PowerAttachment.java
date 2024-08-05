@@ -8,6 +8,10 @@ public class PowerAttachment {
     private float power = 0.0f;
     private boolean dirty;
 
+    public PowerAttachment(float power) {
+        this.power = power;
+    }
+
     public void add(float points) {
         if (points + this.power <= MAX_POWER) {
             this.power += points;

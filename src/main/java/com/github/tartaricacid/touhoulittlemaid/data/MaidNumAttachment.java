@@ -8,6 +8,10 @@ public class MaidNumAttachment {
     private int num = 0;
     private boolean dirty;
 
+    public MaidNumAttachment(int num) {
+        this.num = num;
+    }
+
     public boolean canAdd() {
         return this.num + 1 <= getMaxNum();
     }

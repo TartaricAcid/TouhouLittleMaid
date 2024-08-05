@@ -3,10 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -19,7 +16,7 @@ public class TileEntityGomoku extends TileEntityJoy {
     private static final String CHESS_COUNTER = "ChessCounter";
     private static final String LATEST_CHESS_POINT = "LatestChessPoint";
 
-    private int[][] chessData = new int[15][15];
+    private byte[][] chessData = new byte[15][15];
     private boolean inProgress = true;
     private boolean playerTurn = true;
     private int chessCounter = 0;
@@ -32,8 +29,8 @@ public class TileEntityGomoku extends TileEntityJoy {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         ListTag listTag = new ListTag();
-        for (int[] chessRow : chessData) {
-            listTag.add(new IntArrayTag(chessRow));
+        for (byte[] chessRow : chessData) {
+            listTag.add(new ByteArrayTag(chessRow));
         }
         getPersistentData().put(CHESS_DATA, listTag);
         getPersistentData().putBoolean(IN_PROGRESS, this.inProgress);
@@ -49,7 +46,11 @@ public class TileEntityGomoku extends TileEntityJoy {
         ListTag listTag = getPersistentData().getList(CHESS_DATA, Tag.TAG_INT_ARRAY);
         for (int i = 0; i < listTag.size(); i++) {
             int[] intArray = listTag.getIntArray(i);
-            this.chessData[i] = intArray;
+            byte[] byteArray = new byte[intArray.length];
+            for (int j = 0; j < intArray.length; j++) {
+                byteArray[j] = (byte) intArray[j];
+            }
+            this.chessData[i] = byteArray;
         }
         this.inProgress = getPersistentData().getBoolean(IN_PROGRESS);
         this.playerTurn = getPersistentData().getBoolean(PLAYER_TURN);
@@ -58,19 +59,19 @@ public class TileEntityGomoku extends TileEntityJoy {
     }
 
     public void reset() {
-        this.chessData = new int[15][15];
+        this.chessData = new byte[15][15];
         this.inProgress = true;
         this.playerTurn = true;
         this.chessCounter = 0;
         this.latestChessPoint = Point.NULL;
     }
 
-    public int[][] getChessData() {
+    public byte[][] getChessData() {
         return chessData;
     }
 
     public void setChessData(int x, int y, int type) {
-        this.chessData[x][y] = type;
+        this.chessData[x][y] = (byte) type;
         this.latestChessPoint = new Point(x, y, type);
         this.chessCounter += 1;
     }

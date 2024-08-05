@@ -6,4 +6,5 @@ public class TODO {
     //TODO Vanishable被移除了，暂时先用instanceof TieredItem
     //TODO DataAttachment需要检查
     //TODO 御币附魔需要检查
+    //TODO SendEffectPackage和 SaveSwitcherDataPackage的数组默认最大开20个
 }

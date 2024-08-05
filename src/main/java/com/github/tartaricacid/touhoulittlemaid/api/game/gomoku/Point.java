@@ -7,7 +7,10 @@
  */
 package com.github.tartaricacid.touhoulittlemaid.api.game.gomoku;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 /**
  * 棋子点位
@@ -20,6 +23,12 @@ public class Point {
     public static final int BLACK = 1;
     public static final int WHITE = 2;
     public static final Point NULL = new Point(-1, -1, 0);
+    public static final StreamCodec<ByteBuf,Point> POINT_STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT,Point::getX,
+            ByteBufCodecs.INT,Point::getY,
+            ByteBufCodecs.INT,Point::getType,
+            Point::new
+    );
     /**
      * 横坐标
      */
@@ -41,6 +50,18 @@ public class Point {
         this.x = x;
         this.y = y;
         this.type = type;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public static CompoundTag toTag(Point point) {
