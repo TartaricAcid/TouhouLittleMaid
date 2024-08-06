@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -157,9 +158,9 @@ public class TileEntityMaidBeacon extends BlockEntity {
         RESISTANCE(MobEffects.DAMAGE_RESISTANCE),
         REGENERATION(MobEffects.REGENERATION);
 
-        private final MobEffect effect;
+        private final Holder<MobEffect> effect;
 
-        BeaconEffect(MobEffect effect) {
+        BeaconEffect(Holder<MobEffect> effect) {
             this.effect = effect;
         }
 
@@ -167,7 +168,7 @@ public class TileEntityMaidBeacon extends BlockEntity {
             return values()[Mth.clamp(0, index, values().length - 1)];
         }
 
-        public MobEffect getEffect() {
+        public Holder<MobEffect> getEffect() {
             return effect;
         }
     }

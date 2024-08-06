@@ -17,6 +17,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ExperienceOrb;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> {
     private static final ResourceLocation POINT_ITEM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/point_item.png");
@@ -31,7 +32,8 @@ public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> 
     }
 
     private static void vertex(VertexConsumer pConsumer, Matrix4f pMatrix, Matrix3f pMatrixNormal, float pX, float pY, int pRed, int pGreen, int pBlue, float pTexU, float pTexV, int pPackedLight) {
-        pConsumer.vertex(pMatrix, pX, pY, 0.0F).color(pRed, pGreen, pBlue, 128).uv(pTexU, pTexV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(pMatrixNormal, 0.0F, 1.0F, 0.0F).endVertex();
+        Vector3f vector3f = pMatrixNormal.transform(new Vector3f(0.0F, 1.0F, 0.0F));
+        pConsumer.addVertex(pMatrix, pX, pY, 0.0F).setColor(pRed, pGreen, pBlue, 128).setUv(pTexU, pTexV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(pPackedLight).setNormal(vector3f.x(), vector3f.y(), vector3f.z());
     }
 
     protected int getBlockLightLevel(ExperienceOrb pEntity, BlockPos pPos) {

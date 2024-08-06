@@ -14,7 +14,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -55,6 +55,6 @@ public class TaskHoney implements IMaidTask {
     }
 
     private boolean hasShears(EntityMaid maid) {
-        return maid.getMainHandItem().canPerformAction(ToolActions.SHEARS_HARVEST);
+        return maid.getMainHandItem().canPerformAction(ItemAbilities.SHEARS_HARVEST);
     }
 }
