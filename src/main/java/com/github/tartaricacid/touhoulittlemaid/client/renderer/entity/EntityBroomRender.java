@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class EntityBroomRender extends LivingEntityRenderer<EntityBroom, BroomModel> {
-    private static final ResourceLocation BROOM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/broom.png");
+    private static final ResourceLocation BROOM_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/broom.png");
 
     public EntityBroomRender(EntityRendererProvider.Context context) {
         super(context, new BroomModel(context.bakeLayer(BroomModel.LAYER)), 0.5f);

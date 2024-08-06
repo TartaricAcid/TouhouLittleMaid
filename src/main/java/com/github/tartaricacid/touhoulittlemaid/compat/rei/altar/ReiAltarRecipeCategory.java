@@ -22,8 +22,8 @@ import java.util.List;
 
 public class ReiAltarRecipeCategory implements DisplayCategory<ReiAltarRecipeDisplay> {
     private static final MutableComponent TITLE = Component.translatable("jei.touhou_little_maid.altar_craft.title");
-    private static final ResourceLocation ALTAR_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/altar_icon.png");
-    private static final ResourceLocation POWER_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
+    private static final ResourceLocation ALTAR_ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/altar_icon.png");
+    private static final ResourceLocation POWER_ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
     private final Renderer icon;
 
     public ReiAltarRecipeCategory() {

@@ -51,7 +51,7 @@ public class ConditionalHold {
         }
         String substring = name.substring(preSize);
         if (name.startsWith(idPre) && isValidResourceLocation(substring)) {
-            idTest.add(new ResourceLocation(substring));
+            idTest.add(ResourceLocation.parse(substring));
         }
         if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
             tagTest.add(TagKey.create(

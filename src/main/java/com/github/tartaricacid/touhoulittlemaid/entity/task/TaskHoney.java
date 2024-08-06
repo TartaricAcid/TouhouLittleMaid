@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TaskHoney implements IMaidTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "honey");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "honey");
 
     @Override
     public ResourceLocation getUid() {

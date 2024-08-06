@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TaskDanmakuAttack implements IRangedAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "danmaku_attack");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "danmaku_attack");
     private static final int MAX_STOP_ATTACK_DISTANCE = 16;
 
     @Override

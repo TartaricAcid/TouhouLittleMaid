@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TaskTorch implements IMaidTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "torch");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "torch");
 
     @Override
     public ResourceLocation getUid() {

@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Consumer;
 
 public class ModelDetailsButton extends TouhouStateSwitchButton {
-    private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
+    private static final ResourceLocation BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
     private final Consumer<Boolean> onClick;
     private final MutableComponent name;
 

@@ -25,7 +25,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 
 public class EnderChestBackpack extends IMaidBackpack {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "ender_chest_backpack");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "ender_chest_backpack");
 
     @Override
     public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
@@ -70,7 +70,7 @@ public class EnderChestBackpack extends IMaidBackpack {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/ender_chest_backpack.png");
+        return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/ender_chest_backpack.png");
     }
 
     @OnlyIn(Dist.CLIENT)

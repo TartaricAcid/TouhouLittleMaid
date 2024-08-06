@@ -47,10 +47,10 @@ import java.util.function.Predicate;
 import static com.github.tartaricacid.touhoulittlemaid.util.GuiTools.NO_ACTION;
 
 public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> extends AbstractContainerScreen<T> {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_main.png");
-    private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
-    private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
-    private static final ResourceLocation TASK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_main.png");
+    private static final ResourceLocation SIDE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
+    private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
+    private static final ResourceLocation TASK = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;

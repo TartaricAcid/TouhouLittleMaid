@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TaskGunAttack implements IAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "gun_attack");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "gun_attack");
 
     @Override
     public ResourceLocation getUid() {
@@ -36,7 +36,7 @@ public class TaskGunAttack implements IAttackTask {
 
     @Override
     public ItemStack getIcon() {
-        return GunItemBuilder.create().setId(new ResourceLocation(GunMod.MOD_ID, "glock_17")).build();
+        return GunItemBuilder.create().setId(ResourceLocation.fromNamespaceAndPath(GunMod.MOD_ID, "glock_17")).build();
     }
 
     @Nullable

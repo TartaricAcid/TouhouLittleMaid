@@ -194,7 +194,7 @@ public class TileEntityModelSwitcher extends BlockEntity {
         }
 
         public void deserialize(CompoundTag nbt) {
-            this.modelId = new ResourceLocation(nbt.getString("model_id"));
+            this.modelId = ResourceLocation.parse(nbt.getString("model_id"));
             this.text = nbt.getString("text");
             this.direction = Direction.from2DDataValue(nbt.getInt("direction"));
         }

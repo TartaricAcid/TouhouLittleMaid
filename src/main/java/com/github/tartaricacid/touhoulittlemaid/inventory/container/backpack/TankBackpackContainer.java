@@ -22,8 +22,8 @@ import static net.minecraft.world.inventory.InventoryMenu.BLOCK_ATLAS;
 
 public class TankBackpackContainer extends MaidMainContainer {
     public static final MenuType<TankBackpackContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new TankBackpackContainer(windowId, inv, data.readInt()));
-    private static final ResourceLocation INPUT_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/tank_input_slot");
-    private static final ResourceLocation OUTPUT_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/tank_output_slot");
+    private static final ResourceLocation INPUT_SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "slot/tank_input_slot");
+    private static final ResourceLocation OUTPUT_SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "slot/tank_output_slot");
     private final ContainerData data;
 
     public TankBackpackContainer(int id, Inventory inventory, int entityId) {

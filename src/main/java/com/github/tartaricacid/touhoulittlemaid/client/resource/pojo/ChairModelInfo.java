@@ -149,10 +149,10 @@ public class ChairModelInfo implements IModelInfo {
         }
         // 如果 model 或 texture 为空，自动生成默认位置的模型
         if (model == null) {
-            model = new ResourceLocation(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
+            model = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
         }
         if (texture == null) {
-            texture = new ResourceLocation(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
+            texture = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
         }
         // 如果名称为空，自动生成本地化名称
         if (name == null) {

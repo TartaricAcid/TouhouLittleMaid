@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.MagmaCube;
 
 public class EntityMarisaYukkuriSlimeRender extends MobRenderer<MagmaCube, EntityMarisaYukkuriModel> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/marisa_yukkuri.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/marisa_yukkuri.png");
     private final MagmaCubeRenderer vanillaRender;
 
     public EntityMarisaYukkuriSlimeRender(EntityRendererProvider.Context context) {

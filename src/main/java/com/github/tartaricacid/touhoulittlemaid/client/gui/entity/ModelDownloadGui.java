@@ -35,7 +35,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
 public class ModelDownloadGui extends Screen {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
     private static final String PACK_FILE_SUFFIX = ".zip";
     private final Map<Long, String> crc32Infos = Maps.newHashMap();
     private final List<DownloadInfo> showInfos = Lists.newArrayList();

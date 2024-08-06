@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.Optional;
 
 public class GivePatchouliBookConfigTrigger extends SimpleCriterionTrigger<GivePatchouliBookConfigTrigger.Instance> {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "give_patchouli_book_config");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "give_patchouli_book_config");
     public void trigger(ServerPlayer serverPlayer) {
         super.trigger(serverPlayer, instance -> MiscConfig.GIVE_PATCHOULI_BOOK.get());
     }

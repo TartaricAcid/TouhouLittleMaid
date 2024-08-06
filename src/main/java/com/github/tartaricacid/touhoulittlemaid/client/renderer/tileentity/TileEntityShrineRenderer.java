@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class TileEntityShrineRenderer implements BlockEntityRenderer<TileEntityShrine> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/shrine.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/shrine.png");
     private final ShrineModel model;
 
     public TileEntityShrineRenderer(BlockEntityRendererProvider.Context context) {

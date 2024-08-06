@@ -16,8 +16,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class EasterEggModel extends BedrockModel<Mob> {
-    private static final ResourceLocation MODEL = new ResourceLocation(TouhouLittleMaid.MOD_ID, "models/entity/easter_egg_model.json");
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/easter_egg_model.png");
+    private static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "models/entity/easter_egg_model.json");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/easter_egg_model.png");
     private static EasterEggModel INSTANCE;
     private static MaidModelInfo INFO;
 

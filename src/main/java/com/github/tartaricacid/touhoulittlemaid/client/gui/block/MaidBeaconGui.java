@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.text.DecimalFormat;
 
 public class MaidBeaconGui extends Screen {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_beacon.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_beacon.png");
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
     private final TileEntityMaidBeacon beacon;
 

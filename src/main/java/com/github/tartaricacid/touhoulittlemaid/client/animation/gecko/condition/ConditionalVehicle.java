@@ -31,14 +31,14 @@ public class ConditionalVehicle {
         }
         String substring = name.substring(preSize);
         if (name.startsWith(idPre) && isValidResourceLocation(substring)) {
-            idTest.add(new ResourceLocation(substring));
+            idTest.add(ResourceLocation.parse(substring));
         }
         if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
             ITagManager<EntityType<?>> tags = BuiltInRegistries.ENTITY_TYPE.getTags();
             if (tags == null) {
                 return;
             }
-            TagKey<EntityType<?>> tagKey = tags.createTagKey(new ResourceLocation(substring));
+            TagKey<EntityType<?>> tagKey = tags.createTagKey(ResourceLocation.parse(substring));
             tagTest.add(tagKey);
         }
     }

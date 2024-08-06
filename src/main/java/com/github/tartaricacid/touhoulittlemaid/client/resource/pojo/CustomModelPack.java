@@ -108,7 +108,7 @@ public class CustomModelPack<T extends IModelInfo> {
             author = Collections.EMPTY_LIST;
         }
         if (icon == null) {
-            icon = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/empty_model_pack_icon.png");
+            icon = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/empty_model_pack_icon.png");
         }
         if (iconDelay <= 0) {
             iconDelay = 1;
@@ -125,7 +125,7 @@ public class CustomModelPack<T extends IModelInfo> {
             if (extraTextures != null && !extraTextures.isEmpty()) {
                 extraTextures.forEach(r -> {
                     String suffix = Md5Utils.md5Hex(r.getPath()).toLowerCase(Locale.US);
-                    ResourceLocation newModelId = new ResourceLocation(modelId.getNamespace(), modelId.getPath() + "_" + suffix);
+                    ResourceLocation newModelId = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(), modelId.getPath() + "_" + suffix);
                     newModelList.add(item.extra(newModelId, r));
                 });
             }

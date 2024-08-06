@@ -21,7 +21,7 @@ import net.minecraft.world.entity.player.Inventory;
 //@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
 //TODO IPN兼容
 public class FurnaceBackpackContainerScreen extends AbstractMaidContainerGui<FurnaceBackpackContainer> implements IBackpackContainerScreen {
-    private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_furnace.png");
+    private static final ResourceLocation BACKPACK = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_furnace.png");
 
     public FurnaceBackpackContainerScreen(FurnaceBackpackContainer container, Inventory inv, Component titleIn) {
         super(container, inv, titleIn);

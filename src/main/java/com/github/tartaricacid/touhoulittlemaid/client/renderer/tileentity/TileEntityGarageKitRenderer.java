@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class TileEntityGarageKitRenderer implements BlockEntityRenderer<TileEntityGarageKit> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
     private final StatueBaseModel BASE_MODEL;
 
     public TileEntityGarageKitRenderer(BlockEntityRendererProvider.Context context) {

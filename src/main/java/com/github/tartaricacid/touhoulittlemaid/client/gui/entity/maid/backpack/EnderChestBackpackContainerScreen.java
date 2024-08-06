@@ -22,7 +22,7 @@ import net.minecraft.world.entity.player.Inventory;
 //@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
 //TODO IPN兼容
 public class EnderChestBackpackContainerScreen extends AbstractMaidContainerGui<EnderChestBackpackContainer> implements IBackpackContainerScreen {
-    private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_ender_chest.png");
+    private static final ResourceLocation BACKPACK = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_ender_chest.png");
     private final EntityMaid maid;
 
     public EnderChestBackpackContainerScreen(EnderChestBackpackContainer container, Inventory inv, Component titleIn) {

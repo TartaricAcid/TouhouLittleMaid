@@ -58,7 +58,7 @@ public class ItemEntityPlaceholder extends Item {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag();
             if (tag.contains(RECIPES_ID_TAG, Tag.TAG_STRING)) {
-                return new ResourceLocation(tag.getString(RECIPES_ID_TAG));
+                return ResourceLocation.parse(tag.getString(RECIPES_ID_TAG));
             }
         }
         return null;

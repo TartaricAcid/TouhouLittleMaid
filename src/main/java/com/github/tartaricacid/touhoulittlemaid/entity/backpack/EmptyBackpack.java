@@ -24,7 +24,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 
 public class EmptyBackpack extends IMaidBackpack {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "empty");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "empty");
 
     @Override
     public ResourceLocation getId() {

@@ -22,8 +22,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SlashBladeRender {
-    private static final ResourceLocation RESOURCE_DEFAULT_MODEL = new ResourceLocation("slashblade", "model/blade.obj");
-    private static final ResourceLocation RESOURCE_DEFAULT_TEXTURE = new ResourceLocation("slashblade", "model/blade.png");
+    private static final ResourceLocation RESOURCE_DEFAULT_MODEL = ResourceLocation.fromNamespaceAndPath("slashblade", "model/blade.obj");
+    private static final ResourceLocation RESOURCE_DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath("slashblade", "model/blade.png");
 
     public static void renderSlashBlade(PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.isEmpty()) {

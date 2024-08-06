@@ -21,7 +21,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 //
 //@IPNIgnore
 public class WirelessIOContainerGui extends AbstractContainerScreen<WirelessIOContainer> {
-    private static final ResourceLocation MAIN = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io.png");
+    private static final ResourceLocation MAIN = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io.png");
     private boolean isMaidToChest;
     private boolean isBlacklist;
 

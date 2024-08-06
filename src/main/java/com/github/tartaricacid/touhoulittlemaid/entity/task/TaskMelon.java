@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TaskMelon implements IFarmTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "melon");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "melon");
 
     @Override
     public ResourceLocation getUid() {

@@ -17,7 +17,7 @@ public enum TombstoneProvider implements IServerExtensionProvider<Object, ItemSt
 
     INSTANCE;
 
-    private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "tombstone");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "tombstone");
 
     @Override
     public List<ClientViewGroup<ItemView>> getClientGroups(Accessor<?> accessor, List<ViewGroup<ItemStack>> list) {

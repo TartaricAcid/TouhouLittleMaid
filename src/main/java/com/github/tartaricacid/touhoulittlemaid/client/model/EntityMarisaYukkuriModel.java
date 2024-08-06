@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.MagmaCube;
 
 public class EntityMarisaYukkuriModel extends AbstractModel<MagmaCube> {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "marisa_yukkuri");
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "marisa_yukkuri");
     private final ModelPart bone;
 
     public EntityMarisaYukkuriModel(ModelPart root) {

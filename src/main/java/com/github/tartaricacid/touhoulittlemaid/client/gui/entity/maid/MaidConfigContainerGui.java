@@ -20,7 +20,7 @@ import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMa
 //@IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
 //TODO IPN兼容
 public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigContainer> {
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_config.png");
+    private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_config.png");
     private int left;
     private int top;
 

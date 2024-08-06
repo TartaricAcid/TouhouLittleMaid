@@ -29,7 +29,7 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
+    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private final GeckoEntityMaidRenderer geckoEntityMaidRenderer;
     private MaidModelInfo mainInfo;

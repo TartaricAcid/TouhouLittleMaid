@@ -17,7 +17,7 @@ public enum AltarProvider implements IServerExtensionProvider<Object, ItemStack>
 
     INSTANCE;
 
-    private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar");
 
     @Override
     public List<ClientViewGroup<ItemView>> getClientGroups(Accessor<?> accessor, List<ViewGroup<ItemStack>> list) {

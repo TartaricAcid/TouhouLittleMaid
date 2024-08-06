@@ -19,8 +19,8 @@ import java.util.Map;
 @EventBusSubscriber
 public class EnchantmentRefuse {
     private static final String DOMESTICATION_INNOVATION = "domesticationinnovation";
-    private static final ResourceLocation COLLAR_TAG_ID = new ResourceLocation(DOMESTICATION_INNOVATION, "collar_tag");
-    private static final ResourceLocation UNDEAD_CURSE_ENCHANTMENT_ID = new ResourceLocation(DOMESTICATION_INNOVATION, "undead_curse");
+    private static final ResourceLocation COLLAR_TAG_ID = ResourceLocation.fromNamespaceAndPath(DOMESTICATION_INNOVATION, "collar_tag");
+    private static final ResourceLocation UNDEAD_CURSE_ENCHANTMENT_ID = ResourceLocation.fromNamespaceAndPath(DOMESTICATION_INNOVATION, "undead_curse");
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteractMaid(PlayerInteractEvent.EntityInteract event) {

@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, BedrockModel<EntityChair>> {
-    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
+    public static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
     public static boolean renderHitBox = true;
     private ChairModelInfo chairInfo;

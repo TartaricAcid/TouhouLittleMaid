@@ -16,7 +16,7 @@ import java.util.List;
 public enum PicnicMatProvider implements IServerExtensionProvider<Object, ItemStack>, IClientExtensionProvider<ItemStack, ItemView> {
     INSTANCE;
 
-    private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "picnic_mat");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "picnic_mat");
 
     @Override
     public List<ClientViewGroup<ItemView>> getClientGroups(Accessor<?> accessor, List<ViewGroup<ItemStack>> list) {

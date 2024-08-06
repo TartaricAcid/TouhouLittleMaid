@@ -19,7 +19,7 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> {
-    private static final ResourceLocation POINT_ITEM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/point_item.png");
+    private static final ResourceLocation POINT_ITEM_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/point_item.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(POINT_ITEM_TEXTURE);
     private final ExperienceOrbRenderer vanillaRender;
 

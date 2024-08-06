@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class TileEntityAltarRenderer implements BlockEntityRenderer<TileEntityAltar> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/altar.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/altar.png");
     private final AltarModel MODEL;
 
     public TileEntityAltarRenderer(BlockEntityRendererProvider.Context render) {

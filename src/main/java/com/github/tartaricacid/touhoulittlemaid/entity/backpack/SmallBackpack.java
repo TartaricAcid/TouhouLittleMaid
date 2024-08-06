@@ -25,7 +25,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 
 public class SmallBackpack extends IMaidBackpack {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "small_backpack");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "small_backpack");
 
     @Override
     public void onPutOn(ItemStack stack, Player player, EntityMaid maid) {
@@ -75,7 +75,7 @@ public class SmallBackpack extends IMaidBackpack {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
+        return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
     }
 
     @OnlyIn(Dist.CLIENT)

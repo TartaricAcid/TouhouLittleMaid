@@ -226,14 +226,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (config.startsWith(MaidConfig.TAG_PREFIX)) {
             ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
             if (tags != null) {
-                ResourceLocation key = new ResourceLocation(config.substring(1));
+                ResourceLocation key = ResourceLocation.parse(config.substring(1));
                 TagKey<Item> tagKey = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), key);
                 if (tags.isKnownTagName(tagKey)) {
                     return Ingredient.of(tagKey);
                 }
             }
         } else {
-            ResourceLocation key = new ResourceLocation(config);
+            ResourceLocation key = ResourceLocation.parse(config);
             if (ForgeRegistries.ITEMS.containsKey(key)) {
                 return Ingredient.of(ForgeRegistries.ITEMS.getValue(key));
             }
@@ -997,7 +997,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             setSchedule(MaidSchedule.valueOf(compound.getString(SCHEDULE_MODE_TAG)));
         }
         if (compound.contains(TASK_TAG, Tag.TAG_STRING)) {
-            ResourceLocation uid = new ResourceLocation(compound.getString(TASK_TAG));
+            ResourceLocation uid = ResourceLocation.parse(compound.getString(TASK_TAG));
             IMaidTask task = TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
             setTask(task);
         }
@@ -1055,7 +1055,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             compound.remove(RESTRICT_CENTER_TAG);
         }
         if (compound.contains(MAID_BACKPACK_TYPE, Tag.TAG_STRING)) {
-            ResourceLocation id = new ResourceLocation(compound.getString(MAID_BACKPACK_TYPE));
+            ResourceLocation id = ResourceLocation.parse(compound.getString(MAID_BACKPACK_TYPE));
             IMaidBackpack backpack = BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
             setMaidBackpackType(backpack);
             if (this.backpackData != null && compound.contains(BACKPACK_DATA_TAG, Tag.TAG_COMPOUND)) {
@@ -1531,7 +1531,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public IMaidBackpack getMaidBackpackType() {
-        ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
+        ResourceLocation id = ResourceLocation.parse(entityData.get(BACKPACK_TYPE));
         return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
     }
 
