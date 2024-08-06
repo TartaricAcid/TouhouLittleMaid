@@ -12,6 +12,8 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -24,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -47,7 +50,14 @@ import java.util.Optional;
 
 public class BlockGarageKit extends Block implements EntityBlock {
     public static final VoxelShape BLOCK_AABB = Block.box(4, 0, 4, 12, 16, 12);
-    private static final String ENTITY_INFO = "EntityInfo";
+    private static final DataComponentType<CustomData> ENTITY_INFO_TAG = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            "EntityInfo",
+            DataComponentType.<CustomData>builder()
+                    .persistent(CustomData.CODEC_WITH_ID)
+                    .networkSynchronized(CustomData.STREAM_CODEC)
+                    .build()
+    );
 
     public BlockGarageKit() {
         super(BlockBehaviour.Properties.of().sound(SoundType.MUD).strength(1, 2).noOcclusion());
@@ -107,9 +117,16 @@ public class BlockGarageKit extends Block implements EntityBlock {
     public static void fillItemCategory(CreativeModeTab.Output items) {
         for (String modelId : CustomPackLoader.MAID_MODELS.getModelIdSet()) {
             ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
-            CompoundTag data = stack.getOrCreateTagElement(ENTITY_INFO);
+            CustomData customData = stack.get(ENTITY_INFO_TAG);
+            CompoundTag data;
+            if (customData == null) {
+                data = new CompoundTag();
+            } else {
+                data = customData.copyTag();
+            }
             data.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
             data.putString(EntityMaid.MODEL_ID_TAG, modelId);
+            stack.set(ENTITY_INFO_TAG, CustomData.of(data));
             items.accept(stack);
         }
     }
@@ -153,7 +170,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
             return InteractionResult.PASS;
         }
         TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
-        EntityType<?> type = ((SpawnEggItem) stack.getItem()).getType(stack.getTag());
+        EntityType<?> type = ((SpawnEggItem) stack.getItem()).getType(stack);
         ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(type);
         if (key == null) {
             return InteractionResult.PASS;
@@ -167,6 +184,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
         if (entity instanceof Mob) {
             Mob mobEntity = (Mob) entity;
             mobEntity.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(pos), MobSpawnType.SPAWN_EGG, null);
+            CustomData.of(data).loadInto(mobEntity);
             mobEntity.addAdditionalSaveData(data);
         }
 
@@ -176,7 +194,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
 
     private ItemStack getGarageKitFromWorld(BlockGetter world, BlockPos pos) {
         ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
-        getGarageKit(world, pos).ifPresent(te -> stack.getOrCreateTag().put(ENTITY_INFO, te.getExtraData()));
+        getGarageKit(world, pos).ifPresent(te -> stack.set(ENTITY_INFO_TAG, CustomData.of(te.getExtraData())));
         return stack;
     }
 
