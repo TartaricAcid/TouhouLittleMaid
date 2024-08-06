@@ -1147,7 +1147,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         int modelSize = ServerCustomPackLoader.SERVER_MAID_MODELS.getModelSize();
         // 这里居然可能为 0
         if (modelSize > 0) {

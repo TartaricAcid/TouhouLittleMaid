@@ -166,7 +166,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
         Entity entity = type.create(worldIn);
         if (entity instanceof Mob) {
             Mob mobEntity = (Mob) entity;
-            mobEntity.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(pos), MobSpawnType.SPAWN_EGG, null, data);
+            mobEntity.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(pos), MobSpawnType.SPAWN_EGG, null);
             mobEntity.addAdditionalSaveData(data);
         }
 

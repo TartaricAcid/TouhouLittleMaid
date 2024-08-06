@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
