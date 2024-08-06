@@ -86,7 +86,7 @@ public class ConditionalUse {
             return EMPTY;
         }
 		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
-        ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(itemInHand.getItem());
+        ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(itemInHand.getItem());
         if (registryName == null) {
             return EMPTY;
         }
