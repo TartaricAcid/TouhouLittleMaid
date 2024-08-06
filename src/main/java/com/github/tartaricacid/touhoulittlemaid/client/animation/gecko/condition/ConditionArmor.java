@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -56,11 +57,10 @@ public class ConditionArmor {
             if (!isValidResourceLocation(id)) {
                 return;
             }
-            ITagManager<Item> tags = BuiltInRegistries.ITEM.getTags();
-            if (tags == null) {
-                return;
-            }
-            TagKey<Item> tagKey = tags.createTagKey(ResourceLocation.withDefaultNamespace(id));
+            TagKey<Item> tagKey = TagKey.create(
+                    Registries.ITEM,
+                    ResourceLocation.withDefaultNamespace(id)
+            );
             if (tagTest.containsKey(type)) {
                 tagTest.get(type).add(tagKey);
             } else {

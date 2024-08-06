@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item.enchantment;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitEnchantments;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class SpeedyEnchantment extends Enchantment {
