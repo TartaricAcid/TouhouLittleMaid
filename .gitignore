@@ -22,7 +22,7 @@ build
 
 # other
 eclipse
-run
+runs
 src/test
 
 # Files from Forge MDK

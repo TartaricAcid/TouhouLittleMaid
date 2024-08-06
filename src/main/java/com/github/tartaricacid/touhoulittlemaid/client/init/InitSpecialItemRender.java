@@ -8,11 +8,12 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.google.common.collect.Lists;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -68,7 +69,7 @@ public final class InitSpecialItemRender {
     }
 
     public static void addInHandModel(Item item) {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(item);
+        ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
             ModelResourceLocation rawName = new ModelResourceLocation(res, "inventory");
             ModelResourceLocation inHandName = new ModelResourceLocation(res.getNamespace(), res.getPath() + "_in_hand", "inventory");
@@ -77,7 +78,7 @@ public final class InitSpecialItemRender {
     }
 
     public static void addReplaceableModel(Item item, ResourceLocation replacedModel, Supplier<Boolean> isReplace) {
-        ResourceLocation res = ForgeRegistries.ITEMS.getKey(item);
+        ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
             ModelResourceLocation rawModelResourceLocation = new ModelResourceLocation(res, "inventory");
             ModelResourceLocation replacedModelResourceLocation = new ModelResourceLocation(replacedModel, "inventory");
