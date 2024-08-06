@@ -40,7 +40,7 @@ public final class ShowPowerEvent {
             }
             graphics.renderItem(POWER_POINT, 5, 5);
             PowerAttachment cap = player.getData(InitDataAttachment.POWER_NUM);
-            graphics.drawString(font, String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff)
+            graphics.drawString(font, String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff);
             RenderSystem.enableBlend();
         }
     }

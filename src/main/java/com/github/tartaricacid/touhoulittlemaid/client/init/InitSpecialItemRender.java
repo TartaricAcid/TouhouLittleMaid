@@ -14,10 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.registries.RegisterEvent;
+import net.minecraft.core.registries.Registries;
+import net.minecraftforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class InitSpecialItemRender {
     private static final List<Pair<ModelResourceLocation, ModelResourceLocation>> PERSPECTIVE_MODEL_LIST = Lists.newArrayList();
     private static final List<Triple<ModelResourceLocation, ModelResourceLocation, Supplier<Boolean>>> REPLACEABLE_MODEL_LIST = Lists.newArrayList();
@@ -49,7 +50,7 @@ public final class InitSpecialItemRender {
 
     @SubscribeEvent
     public static void onBakedModel(ModelEvent.BakingCompleted event) {
-        Map<ModelResourceLocation, BakedModel> registry = event.getModelBakery().getBakedTopLevelModels();
+        Map<ResourceLocation, BakedModel> registry = event.getModelBakery().getBakedTopLevelModels();
         for (Pair<ModelResourceLocation, ModelResourceLocation> pair : PERSPECTIVE_MODEL_LIST) {
             PerspectiveBakedModel model = new PerspectiveBakedModel(registry.get(pair.getLeft()), registry.get(pair.getRight()));
             registry.put(pair.getLeft(), model);
@@ -71,7 +72,7 @@ public final class InitSpecialItemRender {
         ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
             ModelResourceLocation rawName = new ModelResourceLocation(res, "inventory");
-            ModelResourceLocation inHandName = new ModelResourceLocation(new ResourceLocation(res.getNamespace(), res.getPath() + "_in_hand"), "inventory");
+            ModelResourceLocation inHandName = new ModelResourceLocation(res.getNamespace(), res.getPath() + "_in_hand", "inventory");
             PERSPECTIVE_MODEL_LIST.add(Pair.of(rawName, inHandName));
         }
     }
