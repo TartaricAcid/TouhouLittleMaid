@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.conditio
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.google.common.collect.Lists;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -53,12 +54,10 @@ public class ConditionalHold {
             idTest.add(new ResourceLocation(substring));
         }
         if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
-            ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-            if (tags == null) {
-                return;
-            }
-            TagKey<Item> tagKey = tags.createTagKey(new ResourceLocation(substring));
-            tagTest.add(tagKey);
+            tagTest.add(TagKey.create(
+                    Registries.ITEM,
+                    ResourceLocation.parse(substring)
+            ));
         }
         if (name.startsWith(extraPre)) {
             if (substring.equals(UseAnim.NONE.name().toLowerCase(Locale.US))) {

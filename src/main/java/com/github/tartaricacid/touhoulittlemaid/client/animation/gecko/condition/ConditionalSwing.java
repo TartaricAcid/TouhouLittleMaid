@@ -53,12 +53,10 @@ public class ConditionalSwing {
             idTest.add(new ResourceLocation(substring));
         }
         if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
-            ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-            if (tags == null) {
-                return;
-            }
-            TagKey<Item> tagKey = tags.createTagKey(new ResourceLocation(substring));
-            tagTest.add(tagKey);
+            tagTest.add(TagKey.create(
+                    Registries.ITEM,
+                    ResourceLocation.parse(substring)
+            ));
         }
         if (name.startsWith(extraPre)) {
             if (substring.equals(UseAnim.NONE.name().toLowerCase(Locale.US))) {
