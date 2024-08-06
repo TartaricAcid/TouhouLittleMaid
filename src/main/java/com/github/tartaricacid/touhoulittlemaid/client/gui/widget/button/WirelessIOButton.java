@@ -1,13 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.function.BiConsumer;
 
-public class WirelessIOButton extends StateSwitchingButton {
+public class WirelessIOButton extends TouhouStateSwitchButton {
     protected final WirelessIOButton.ITooltip onTooltip;
     private final BiConsumer<Double, Double> onClick;
 

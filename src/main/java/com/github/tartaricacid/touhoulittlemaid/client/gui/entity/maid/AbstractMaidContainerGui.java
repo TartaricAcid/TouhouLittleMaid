@@ -24,7 +24,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.resources.language.I18n;
@@ -57,9 +56,9 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static int TASK_PAGE = 0;
     @Nullable
     private final EntityMaid maid;
-    private StateSwitchingButton home;
-    private StateSwitchingButton pick;
-    private StateSwitchingButton ride;
+    private TouhouStateSwitchButton home;
+    private TouhouStateSwitchButton pick;
+    private TouhouStateSwitchButton ride;
     private TouhouImageButton info;
     private TouhouImageButton skin;
     private TouhouImageButton sound;
@@ -271,7 +270,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
         List<Component> desc = ParseI18n.keysToTrans(maidTask.getDescription(maid), ChatFormatting.GRAY);
         if (!desc.isEmpty()) {
-            desc.add(0, Component.translatable("task.touhou_little_maid.desc.title").withStyle(ChatFormatting.GOLD));
+            desc.addFirst(Component.translatable("task.touhou_little_maid.desc.title").withStyle(ChatFormatting.GOLD));
         }
         if (!maidTask.isEnable(maid)) {
             List<Pair<String, Predicate<EntityMaid>>> enableConditionDesc = maidTask.getEnableConditionDesc(maid);
@@ -293,11 +292,11 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         }
         List<Pair<String, Predicate<EntityMaid>>> conditions = maidTask.getConditionDescription(maid);
         if (!conditions.isEmpty()) {
-            desc.add(Component.literal("\u0020"));
+            desc.add(Component.literal(" "));
             desc.add(Component.translatable("task.touhou_little_maid.desc.condition").withStyle(ChatFormatting.GOLD));
         }
         for (Pair<String, Predicate<EntityMaid>> line : conditions) {
-            MutableComponent prefix = Component.literal("-\u0020");
+            MutableComponent prefix = Component.literal("- ");
             String key = String.format("task.%s.%s.condition.%s", maidTask.getUid().getNamespace(), maidTask.getUid().getPath(), line.getFirst());
             MutableComponent condition = Component.translatable(key);
             if (line.getSecond().test(maid)) {
@@ -336,7 +335,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addRideButton() {
-        ride = new StateSwitchingButton(leftPos + 51, topPos + 206, 20, 20, maid.isRideable()) {
+        ride = new TouhouStateSwitchButton(leftPos + 51, topPos + 206, 20, 20, maid.isRideable()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -348,7 +347,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addPickButton() {
-        pick = new StateSwitchingButton(leftPos + 30, topPos + 206, 20, 20, maid.isPickup()) {
+        pick = new TouhouStateSwitchButton(leftPos + 30, topPos + 206, 20, 20, maid.isPickup()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -360,7 +359,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addHomeButton() {
-        home = new StateSwitchingButton(leftPos + 9, topPos + 206, 20, 20, maid.isHomeModeEnable()) {
+        home = new TouhouStateSwitchButton(leftPos + 9, topPos + 206, 20, 20, maid.isHomeModeEnable()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -388,7 +387,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         graphics.renderItem(task.getIcon(), leftPos + 6, topPos + 161);
         List<FormattedCharSequence> splitTexts = font.split(task.getName(), 42);
         if (!splitTexts.isEmpty()) {
-            graphics.drawString(font, splitTexts.get(0), leftPos + 28, topPos + 165, 0x333333, false);
+            graphics.drawString(font, splitTexts.getFirst(), leftPos + 28, topPos + 165, 0x333333, false);
         }
     }
 
@@ -541,7 +540,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         }
     }
 
-    private void renderTransTooltip(StateSwitchingButton button, GuiGraphics graphics, int x, int y, String key) {
+    private void renderTransTooltip(TouhouStateSwitchButton button, GuiGraphics graphics, int x, int y, String key) {
         if (button.isHovered()) {
             graphics.renderComponentTooltip(font, Lists.newArrayList(
                     Component.translatable(key + "." + button.isStateTriggered()),

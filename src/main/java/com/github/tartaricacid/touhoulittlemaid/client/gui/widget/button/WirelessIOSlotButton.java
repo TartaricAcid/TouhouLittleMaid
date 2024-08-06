@@ -1,8 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
-import net.minecraft.client.gui.components.StateSwitchingButton;
-
-public class WirelessIOSlotButton extends StateSwitchingButton {
+public class WirelessIOSlotButton extends TouhouStateSwitchButton {
     private final int index;
     private final boolean[] config;
 

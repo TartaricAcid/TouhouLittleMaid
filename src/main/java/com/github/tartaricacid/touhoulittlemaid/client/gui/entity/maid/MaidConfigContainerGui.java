@@ -2,16 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidSoundFreqButton;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TouhouStateSwitchButton;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-//import org.anti_ad.mc.ipn.api.IPNButton;
-//import org.anti_ad.mc.ipn.api.IPNGuiHint;
-//import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig.INSTANCE;
 
@@ -38,7 +35,7 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         left = leftPos + 81;
         top = topPos + 28;
 
-        StateSwitchingButton showChatBubble = new StateSwitchingButton(left + 10, top + 10, 22, 22, INSTANCE.isShowChatBubble()) {
+        TouhouStateSwitchButton showChatBubble = new TouhouStateSwitchButton(left + 10, top + 10, 22, 22, INSTANCE.isShowChatBubble()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -48,7 +45,7 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         };
         showChatBubble.initTextureValues(22, 0, -22, 0, ICON);
 
-        StateSwitchingButton showBackpack = new StateSwitchingButton(left + 10, top + 10 + 24, 22, 22, INSTANCE.isShowBackpack()) {
+        TouhouStateSwitchButton showBackpack = new TouhouStateSwitchButton(left + 10, top + 10 + 24, 22, 22, INSTANCE.isShowBackpack()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
@@ -58,7 +55,7 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
         };
         showBackpack.initTextureValues(22, 0, -22, 0, ICON);
 
-        StateSwitchingButton showBackItem = new StateSwitchingButton(left + 10, top + 10 + 24 * 2, 22, 22, INSTANCE.isShowBackItem()) {
+        TouhouStateSwitchButton showBackItem = new TouhouStateSwitchButton(left + 10, top + 10 + 24 * 2, 22, 22, INSTANCE.isShowBackItem()) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;

@@ -3,8 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.WirelessIOSlotButton;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.WirelessIOSlotConfigPackage;
 import net.neoforged.neoforge.network.PacketDistributor;
-import com.github.tartaricacid.touhoulittlemaid.network.message.WirelessIOSlotConfigMessage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -76,9 +76,9 @@ public class WirelessIOConfigSlotGui extends Screen {
             index++;
         }
 
-        Button confirm = Button.builder(Component.translatable("gui.done"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigMessage(booleans2Bytes(this.configData))))
+        Button confirm = Button.builder(Component.translatable("gui.done"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigPackage(booleans2Bytes(this.configData))))
                 .pos(leftPos, topPos + 140).size(60, 20).build();
-        Button cancel = Button.builder(Component.translatable("gui.cancel"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigMessage()))
+        Button cancel = Button.builder(Component.translatable("gui.cancel"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigPackage()))
                 .pos(leftPos + 62, topPos + 140).size(60, 20).build();
         addRenderableWidget(confirm);
         addRenderableWidget(cancel);
@@ -86,12 +86,12 @@ public class WirelessIOConfigSlotGui extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBg(graphics);
+        this.renderBg(graphics,mouseX,mouseY,partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
-    private void renderBg(GuiGraphics guiGraphics) {
-        this.renderBackground(guiGraphics);
+    private void renderBg(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(guiGraphics,mouseX,mouseY,partialTicks);
         guiGraphics.blit(SLOT, leftPos, topPos, 0, 0, imageWidth, imageHeight);
     }
 }

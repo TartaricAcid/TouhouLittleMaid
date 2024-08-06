@@ -20,6 +20,11 @@ public record WirelessIOSlotConfigPackage(byte[] configData) implements CustomPa
             WirelessIOSlotConfigPackage::configData,
             WirelessIOSlotConfigPackage::new
     );
+    private static final byte[] EMPTY = new byte[]{};
+
+    public WirelessIOSlotConfigPackage() {
+        this(EMPTY);
+    }
 
     public static void handle(WirelessIOSlotConfigPackage message, IPayloadContext context) {
         context.enqueueWork(() -> {

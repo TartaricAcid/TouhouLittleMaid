@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.pack.SetBeaconPotionPack
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -15,7 +14,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.Consumer;
 
-public class BeaconEffectButton extends StateSwitchingButton {
+public class BeaconEffectButton extends TouhouStateSwitchButton {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_beacon.png");
     private final TextureAtlasSprite sprite;
     private final Component tooltips;
