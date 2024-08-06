@@ -67,12 +67,12 @@ public class EntityChair extends AbstractEntityFromItem {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MODEL_ID, DEFAULT_MODEL_ID);
-        this.entityData.define(MOUNTED_HEIGHT, 0f);
-        this.entityData.define(TAMEABLE_CAN_RIDE, true);
-        this.entityData.define(OWNER_UUID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(MODEL_ID, DEFAULT_MODEL_ID);
+        builder.define(MOUNTED_HEIGHT, 0f);
+        builder.define(TAMEABLE_CAN_RIDE, true);
+        builder.define(OWNER_UUID, Optional.empty());
     }
 
     @Override

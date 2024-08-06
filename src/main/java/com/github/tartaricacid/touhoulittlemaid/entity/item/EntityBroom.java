@@ -71,9 +71,9 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_ID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(OWNER_ID, Optional.empty());
     }
 
     @Override

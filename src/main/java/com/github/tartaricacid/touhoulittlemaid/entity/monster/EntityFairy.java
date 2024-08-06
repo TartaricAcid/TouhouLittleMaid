@@ -72,9 +72,9 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FAIRY_TYPE, FairyType.BLACK.ordinal());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(FAIRY_TYPE, FairyType.BLACK.ordinal());
     }
 
     @Override

@@ -71,9 +71,9 @@ public class EntityBox extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(OPEN_STAGE, FIRST_STAGE);
-        this.entityData.define(TEXTURE_INDEX, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(OPEN_STAGE, FIRST_STAGE);
+        builder.define(TEXTURE_INDEX, 0);
     }
 
     @Override

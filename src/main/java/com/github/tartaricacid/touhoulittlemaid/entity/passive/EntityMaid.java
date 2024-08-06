@@ -242,30 +242,30 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
-        this.entityData.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
-        this.entityData.define(DATA_TASK, TaskIdle.UID.toString());
-        this.entityData.define(DATA_BEGGING, false);
-        this.entityData.define(DATA_PICKUP, true);
-        this.entityData.define(DATA_HOME_MODE, false);
-        this.entityData.define(DATA_RIDEABLE, true);
-        this.entityData.define(DATA_INVULNERABLE, false);
-        this.entityData.define(DATA_HUNGER, 0);
-        this.entityData.define(DATA_FAVORABILITY, 0);
-        this.entityData.define(DATA_EXPERIENCE, 0);
-        this.entityData.define(DATA_STRUCK_BY_LIGHTNING, false);
-        this.entityData.define(DATA_IS_CHARGING_CROSSBOW, false);
-        this.entityData.define(DATA_ARM_RISE, false);
-        this.entityData.define(SCHEDULE_MODE, MaidSchedule.DAY);
-        this.entityData.define(RESTRICT_CENTER, BlockPos.ZERO);
-        this.entityData.define(RESTRICT_RADIUS, MaidConfig.MAID_NON_HOME_RANGE.get().floatValue());
-        this.entityData.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
-        this.entityData.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
-        this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
-        this.entityData.define(BACKPACK_FLUID, StringUtils.EMPTY);
-        this.entityData.define(GAME_SKILL, new CompoundTag());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
+        builder.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
+        builder.define(DATA_TASK, TaskIdle.UID.toString());
+        builder.define(DATA_BEGGING, false);
+        builder.define(DATA_PICKUP, true);
+        builder.define(DATA_HOME_MODE, false);
+        builder.define(DATA_RIDEABLE, true);
+        builder.define(DATA_INVULNERABLE, false);
+        builder.define(DATA_HUNGER, 0);
+        builder.define(DATA_FAVORABILITY, 0);
+        builder.define(DATA_EXPERIENCE, 0);
+        builder.define(DATA_STRUCK_BY_LIGHTNING, false);
+        builder.define(DATA_IS_CHARGING_CROSSBOW, false);
+        builder.define(DATA_ARM_RISE, false);
+        builder.define(SCHEDULE_MODE, MaidSchedule.DAY);
+        builder.define(RESTRICT_CENTER, BlockPos.ZERO);
+        builder.define(RESTRICT_RADIUS, MaidConfig.MAID_NON_HOME_RANGE.get().floatValue());
+        builder.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
+        builder.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
+        builder.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
+        builder.define(BACKPACK_FLUID, StringUtils.EMPTY);
+        builder.define(GAME_SKILL, new CompoundTag());
     }
 
     @Override
