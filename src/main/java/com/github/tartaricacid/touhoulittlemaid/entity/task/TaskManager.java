@@ -33,7 +33,7 @@ public final class TaskManager {
         manager.add(new TaskCrossBowAttack());
         manager.add(new TaskDanmakuAttack());
 
-        // TacZ 兼容
+        // TODO TacZ 兼容
         // TacCompat.initAndAddGunTask(manager);
 
         manager.add(new TaskNormalFarm());

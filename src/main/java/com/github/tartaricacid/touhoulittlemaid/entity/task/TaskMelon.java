@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -58,7 +59,7 @@ public class TaskMelon implements IFarmTask {
         ItemStack mainHandItem = maid.getMainHandItem();
         if (cropState.is(Blocks.MELON) && EnchantmentHelper.hasSilkTouch(mainHandItem)) {
             if (maid.destroyBlock(cropPos, false)) {
-                mainHandItem.hurtAndBreak(1, maid, (e) -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                mainHandItem.hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
                 Block.popResource(maid.level, cropPos, Items.MELON.getDefaultInstance());
             }
         } else {

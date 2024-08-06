@@ -17,7 +17,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class WirelessIOContainer extends AbstractContainerMenu {
-    public static final MenuType<WirelessIOContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new WirelessIOContainer(windowId, inv, data.readItem()));
+    public static final MenuType<WirelessIOContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new WirelessIOContainer(windowId, inv, ItemStack.OPTIONAL_STREAM_CODEC.decode(data)));
     private final ItemStack wirelessIO;
     private final ItemStackHandler filterListInv;
 

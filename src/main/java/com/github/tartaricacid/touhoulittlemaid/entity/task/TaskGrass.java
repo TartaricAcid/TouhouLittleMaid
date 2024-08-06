@@ -23,7 +23,7 @@ public class TaskGrass implements IFarmTask {
 
     @Override
     public ItemStack getIcon() {
-        return Items.GRASS.getDefaultInstance();
+        return Items.SHORT_GRASS.getDefaultInstance();
     }
 
     @Override

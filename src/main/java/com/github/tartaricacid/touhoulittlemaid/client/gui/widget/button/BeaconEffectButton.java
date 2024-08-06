@@ -26,7 +26,7 @@ public class BeaconEffectButton extends TouhouStateSwitchButton {
         super(xIn, yIn, 22, 22, potionIndex == effect.ordinal());
         this.initTextureValues(0, 111, 22, 22, BG);
         this.sprite = Minecraft.getInstance().getMobEffectTextures().get(effect.getEffect());
-        this.tooltips = effect.getEffect().getDisplayName();
+        this.tooltips = effect.getEffect().value().getDisplayName();
         this.potionIndex = effect.ordinal();
         this.pos = beacon.getBlockPos();
         this.onClick = onClick;
