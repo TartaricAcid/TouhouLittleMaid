@@ -4,16 +4,15 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.view.*;
 
 import java.util.List;
 
-public enum PicnicMatProvider implements IServerExtensionProvider<Object, ItemStack>, IClientExtensionProvider<ItemStack, ItemView> {
+public enum PicnicMatProvider implements IServerExtensionProvider<ItemStack>, IClientExtensionProvider<ItemStack, ItemView> {
     INSTANCE;
 
     private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "picnic_mat");
@@ -24,9 +23,9 @@ public enum PicnicMatProvider implements IServerExtensionProvider<Object, ItemSt
     }
 
     @Override
-    public @Nullable List<ViewGroup<ItemStack>> getGroups(ServerPlayer player, ServerLevel world, Object target, boolean showDetails) {
-        if (target instanceof TileEntityPicnicMat picnicMat) {
-            if (world.getBlockEntity(picnicMat.getCenterPos()) instanceof TileEntityPicnicMat picnicMatCenter) {
+    public @Nullable List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
+        if (accessor.getTarget() instanceof TileEntityPicnicMat picnicMat) {
+            if (accessor.getLevel().getBlockEntity(picnicMat.getCenterPos()) instanceof TileEntityPicnicMat picnicMatCenter) {
                 ItemStackHandler handler = picnicMatCenter.getHandler();
                 List<ItemStack> list = Lists.newArrayList();
                 for (int i = 0; i < handler.getSlots(); i++) {
