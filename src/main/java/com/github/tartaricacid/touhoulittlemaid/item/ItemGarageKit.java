@@ -9,11 +9,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class ItemGarageKit extends BlockItem {
     private static final String ENTITY_INFO = "EntityInfo";
