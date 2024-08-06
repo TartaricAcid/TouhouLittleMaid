@@ -109,10 +109,10 @@ public class ConditionArmor {
         }
         List<TagKey<Item>> tagListTest = tagTest.get(slot);
 		ItemStack item = maid.asEntity().getItemBySlot(slot);
-        ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        if (tags == null) {
-            return EMPTY;
-        }
+        // ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
+        // if (tags == null) {
+        //     return EMPTY;
+        // }
         return tagListTest.stream().filter(item::is).findFirst().map(itemTagKey -> slot.getName() + "#" + itemTagKey.location()).orElse(EMPTY);
     }
 

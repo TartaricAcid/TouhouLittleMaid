@@ -102,10 +102,10 @@ public class ConditionalSwing {
             return EMPTY;
         }
 		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
-        ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        if (tags == null) {
-            return EMPTY;
-        }
+        // ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
+        // if (tags == null) {
+        //     return EMPTY;
+        // }
         return tagTest.stream().filter(itemInHand::is).findFirst().map(itemTagKey -> tagPre + itemTagKey.location()).orElse(EMPTY);
     }
 
