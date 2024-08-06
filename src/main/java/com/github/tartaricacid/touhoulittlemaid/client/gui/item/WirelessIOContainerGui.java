@@ -4,7 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.WirelessIOButton;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.network.message.WirelessIOGuiMessage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -38,14 +38,14 @@ public class WirelessIOContainerGui extends AbstractContainerScreen<WirelessIOCo
         WirelessIOButton ioModeToggle = new WirelessIOButton(leftPos + 23, topPos + 34, 18, 18, isMaidToChest,
                 (x, y) -> {
                     isMaidToChest = !isMaidToChest;
-                    NetworkHandler.CHANNEL.sendToServer(new WirelessIOGuiMessage(isMaidToChest, isBlacklist));
+                    PacketDistributor.sendToServer(new WirelessIOGuiMessage(isMaidToChest, isBlacklist));
                 }, (m, x, y) -> m.renderTooltip(font, Component.translatable("gui.touhou_little_maid.wireless_io.io_mode"), x, y));
 
         ioModeToggle.initTextureValues(194, 32, -18, 18, MAIN);
         WirelessIOButton filterModeToggle = new WirelessIOButton(leftPos + 136, topPos + 26, 16, 16, isBlacklist,
                 (x, y) -> {
                     isBlacklist = !isBlacklist;
-                    NetworkHandler.CHANNEL.sendToServer(new WirelessIOGuiMessage(isMaidToChest, isBlacklist));
+                    PacketDistributor.sendToServer(new WirelessIOGuiMessage(isMaidToChest, isBlacklist));
                 }, (m, x, y) -> m.renderTooltip(font, Component.translatable("gui.touhou_little_maid.wireless_io.filter_mode"), x, y));
         filterModeToggle.initTextureValues(176, 0, 16, 16, MAIN);
 

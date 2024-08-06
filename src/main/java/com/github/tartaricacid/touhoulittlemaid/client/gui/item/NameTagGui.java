@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SendNameTagMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SendNameTagPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -82,7 +82,7 @@ public class NameTagGui extends Screen {
 
     private void sendDoneMessage(Button button) {
         if (StringUtils.isNotBlank(textField.getValue())) {
-            NetworkHandler.CHANNEL.sendToServer(new SendNameTagMessage(maid.getId(), textField.getValue(), alwaysShow));
+            PacketDistributor.sendToServer(new SendNameTagPackage(maid.getId(), textField.getValue(), alwaysShow));
         }
         this.onClose();
     }

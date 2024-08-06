@@ -2,13 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemModelSwitcher;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.OpenSwitcherGuiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.OpenSwitcherGuiPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -135,8 +136,8 @@ public class BlockModelSwitcher extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (worldIn.getBlockEntity(pos) instanceof TileEntityModelSwitcher) {
-            if (!worldIn.isClientSide) {
-                NetworkHandler.sendToClientPlayer(new OpenSwitcherGuiMessage(pos), player);
+            if (!worldIn.isClientSide && player instanceof ServerPlayer serverPlayer) {
+                PacketDistributor.sendToPlayer(serverPlayer,new OpenSwitcherGuiPackage(pos));
             }
             return InteractionResult.sidedSuccess(worldIn.isClientSide);
         }

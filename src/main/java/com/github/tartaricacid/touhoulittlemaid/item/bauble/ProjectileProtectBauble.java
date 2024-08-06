@@ -3,7 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDamageEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SpawnParticlePackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.tags.DamageTypeTags;
@@ -30,7 +32,7 @@ public class ProjectileProtectBauble implements IMaidBauble {
                 ItemStack stack = maid.getMaidBauble().getStackInSlot(slot);
                 stack.hurtAndBreak(1, maid, EquipmentSlot.BODY);
                 maid.getMaidBauble().setStackInSlot(slot, stack);
-                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.EXPLOSION));
+                NewNetwork.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.EXPLOSION));
             }
         }
     }

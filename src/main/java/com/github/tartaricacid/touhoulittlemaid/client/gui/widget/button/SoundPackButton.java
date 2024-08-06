@@ -99,7 +99,7 @@ public class SoundPackButton extends FlatColorButton {
     }
 
     private void checkIconAnimation(SoundPackInfo info, ResourceLocation icon) {
-        AbstractTexture iconText = Minecraft.getInstance().textureManager.getTexture(icon);
+        AbstractTexture iconText = Minecraft.getInstance().getTextureManager().getTexture(icon);
         if (iconText instanceof SizeTexture) {
             int width = ((SizeTexture) iconText).getWidth();
             int height = ((SizeTexture) iconText).getHeight();

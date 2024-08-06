@@ -7,8 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TouhouI
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SaveSwitcherDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SaveSwitcherDataPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import net.minecraft.client.Minecraft;
@@ -84,7 +84,7 @@ public class ModelSwitcherGui extends Screen {
                 b -> info.setDirection(((DirectButton) b).getDirection())));
 
         this.addRenderableWidget(Button.builder(Component.translatable("selectWorld.edit.save"), b -> {
-            NetworkHandler.CHANNEL.sendToServer(new SaveSwitcherDataMessage(pos, this.infoList));
+            PacketDistributor.sendToServer(new SaveSwitcherDataPackage(pos, this.infoList));
         }).pos(leftPos + 12, topPos + 135).size(121, 20).build());
 
         this.description = new EditBox(getMinecraft().font, leftPos + 12, topPos + 65, 119, 20,
@@ -221,7 +221,7 @@ public class ModelSwitcherGui extends Screen {
 
     @Override
     public void onClose() {
-        NetworkHandler.CHANNEL.sendToServer(new SaveSwitcherDataMessage(pos, this.infoList));
+        PacketDistributor.sendToServer(new SaveSwitcherDataPackage(pos, this.infoList));
         super.onClose();
     }
 }

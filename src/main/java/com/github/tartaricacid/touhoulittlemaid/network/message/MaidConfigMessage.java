@@ -4,7 +4,7 @@
 //import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 //import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 //import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-//import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+//import net.neoforged.neoforge.network.PacketDistributor;
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.network.FriendlyByteBuf;
 //import net.minecraft.network.chat.Component;

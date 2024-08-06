@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.neoforged.neoforge.client.ClientHooks;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;

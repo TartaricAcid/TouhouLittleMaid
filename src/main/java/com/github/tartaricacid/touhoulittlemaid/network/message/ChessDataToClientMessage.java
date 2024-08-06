@@ -2,7 +2,7 @@
 //
 //import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 //import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
-//import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+//import net.neoforged.neoforge.network.PacketDistributor;
 //import net.minecraft.Util;
 //import net.minecraft.client.Minecraft;
 //import net.minecraft.core.BlockPos;
@@ -68,6 +68,6 @@
 //        } catch (InterruptedException e) {
 //            throw new RuntimeException(e);
 //        }
-//        Minecraft.getInstance().submitAsync(() -> NetworkHandler.CHANNEL.sendToServer(new ChessDataToServerMessage(message.pos, aiPoint)));
+//        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataToServerMessage(message.pos, aiPoint)));
 //    }
 //}

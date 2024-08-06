@@ -10,9 +10,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ChessDataToClientMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.ChessDataClientPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SpawnParticlePackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import net.minecraft.core.BlockPos;
@@ -20,6 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -48,6 +48,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 
@@ -269,14 +270,15 @@ public class BlockGomoku extends BlockJoy {
                     int rankAfter = MaidGomokuAI.getRank(maid);
                     // 女仆升段啦
                     if (rankBefore < rankAfter) {
-                        NetworkHandler.sendToClientPlayer(new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.RANK_UP), player);
+                        if (player instanceof ServerPlayer serverPlayer)
+                        PacketDistributor.sendToPlayer(serverPlayer,new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.RANK_UP));
                     }
                 }
                 gomoku.setInProgress(statue == Statue.IN_PROGRESS);
                 level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
-                if (gomoku.isInProgress()) {
+                if (gomoku.isInProgress() && player instanceof ServerPlayer serverPlayer) {
                     gomoku.setPlayerTurn(false);
-                    NetworkHandler.sendToClientPlayer(new ChessDataToClientMessage(centerPos, chessData, playerPoint, MaidGomokuAI.getMaidCount(maid)), player);
+                    PacketDistributor.sendToPlayer(serverPlayer,new ChessDataClientPackage(centerPos, chessData, playerPoint, MaidGomokuAI.getMaidCount(maid)));
                 }
                 gomoku.refresh();
                 return InteractionResult.SUCCESS;

@@ -12,12 +12,16 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
 
 public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point point, int count) implements CustomPacketPayload {
+    public ChessDataClientPackage(BlockPos pos, byte[][] chessData, Point point, int count) {
+        this(pos, Arrays.stream(chessData).toList(), point, count);
+    }
     public static final CustomPacketPayload.Type<ChessDataClientPackage> TYPE = new CustomPacketPayload.Type<>(getResourceLocation("chess_data_to_client"));
     public static final StreamCodec<ByteBuf , List<byte[]>> BYTE_BUF_LIST_STREAM_CODEC = ByteBufCodecs.collection(
                 ArrayList::new,
@@ -54,7 +58,7 @@ public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point
             throw new RuntimeException(e);
         }
         //TODO 这可能是一个双向网络包
-//        Minecraft.getInstance().submitAsync(() -> NetworkHandler.CHANNEL.sendToServer(new ChessDataToServerMessage(message.pos, aiPoint)));
+//        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataToServerMessage(message.pos, aiPoint)));
     }
 
     @Override

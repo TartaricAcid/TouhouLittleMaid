@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetBeaconPotionMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SetBeaconPotionPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.Consumer;
 
@@ -36,7 +36,7 @@ public class BeaconEffectButton extends StateSwitchingButton {
     @Override
     public void onClick(double mouseX, double mouseY) {
         this.isStateTriggered = !this.isStateTriggered;
-        NetworkHandler.CHANNEL.sendToServer(new SetBeaconPotionMessage(pos, isStateTriggered ? potionIndex : -1));
+        PacketDistributor.sendToServer(new SetBeaconPotionPackage(pos, isStateTriggered ? potionIndex : -1));
         this.onClick.accept(this.isStateTriggered);
     }
 

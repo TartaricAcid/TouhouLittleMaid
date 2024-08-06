@@ -9,8 +9,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInsta
 import com.github.tartaricacid.touhoulittlemaid.client.sound.pojo.SoundPackInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SetMaidSoundIdPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -114,7 +114,7 @@ public class MaidSoundPackGui extends Screen {
         this.addRenderableWidget(new FlatColorButton(startX + 245, startY + 19, 110, 18, Component.translatable("gui.touhou_little_maid.custom_sound.pack.apply"), (b) -> {
             if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
                 this.maid.setSoundPackId(this.selectSoundId);
-                NetworkHandler.CHANNEL.sendToServer(new SetMaidSoundIdMessage(this.maid.getId(), this.selectSoundId));
+                PacketDistributor.sendToServer(new SetMaidSoundIdPackage(this.maid.getId(), this.selectSoundId));
                 this.init();
             }
         }));

@@ -4,14 +4,14 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.ChairMo
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.ChairModelPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -66,7 +66,7 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
 
     @Override
     protected void notifyModelChange(EntityChair entity, ChairModelInfo modelInfo) {
-        NetworkHandler.CHANNEL.sendToServer(new ChairModelMessage(entity.getId(), modelInfo.getModelId(), modelInfo.getMountedYOffset(),
+        PacketDistributor.sendToServer(new ChairModelPackage(entity.getId(), modelInfo.getModelId(), modelInfo.getMountedYOffset(),
                 modelInfo.isTameableCanRide(), modelInfo.isNoGravity()));
     }
 

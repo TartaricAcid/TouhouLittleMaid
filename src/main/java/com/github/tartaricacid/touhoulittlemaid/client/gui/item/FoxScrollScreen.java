@@ -1,9 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetScrollData;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SetScrollPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.FoxScrollPackage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -63,7 +62,7 @@ public class FoxScrollScreen extends Screen {
                 if (i < scrollData.size()) {
                     FoxScrollPackage.FoxScrollData info = scrollData.get(i);
                     this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.fox_scroll.track"), b -> {
-                        NetworkHandler.CHANNEL.sendToServer(new SetScrollData(this.selectDim, info.getPos()));
+                        PacketDistributor.sendToServer(new SetScrollPackage(this.selectDim, info.getPos()));
                     }));
                     offsetIn = offsetIn + 42;
                 }

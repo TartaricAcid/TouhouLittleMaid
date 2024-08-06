@@ -4,9 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.MaidMod
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidModelPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SetMaidSoundIdPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -83,10 +83,10 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     @Override
     protected void notifyModelChange(EntityMaid maid, MaidModelInfo info) {
         if (info.getEasterEgg() == null) {
-            NetworkHandler.CHANNEL.sendToServer(new MaidModelMessage(maid.getId(), info.getModelId()));
+            PacketDistributor.sendToServer(new MaidModelPackage(maid.getId(), info.getModelId()));
             String useSoundPackId = info.getUseSoundPackId();
             if (StringUtils.isNotBlank(useSoundPackId)) {
-                NetworkHandler.CHANNEL.sendToServer(new SetMaidSoundIdMessage(maid.getId(), useSoundPackId));
+                PacketDistributor.sendToServer(new SetMaidSoundIdPackage(maid.getId(), useSoundPackId));
             }
             // 切换模型时，重置手部动作
             maid.handItemsForAnimation[0] = ItemStack.EMPTY;

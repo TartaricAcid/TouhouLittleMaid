@@ -20,6 +20,9 @@ import java.util.function.IntFunction;
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
 
 public record SpawnParticlePackage(int entityId, Type particleType, int delayTicks) implements CustomPacketPayload {
+    public SpawnParticlePackage(int entityId, Type particleType) {
+        this(entityId, particleType, 0);
+    }
     public static final CustomPacketPayload.Type<SpawnParticlePackage> TYPE = new CustomPacketPayload.Type<>(getResourceLocation("spawn_particle"));
     public static final StreamCodec<ByteBuf, SpawnParticlePackage> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,

@@ -4,10 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidConfigPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -39,7 +38,7 @@ public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
         int index = mode.ordinal() + 1;
         int length = MaidSchedule.values().length;
         this.mode = MaidSchedule.values()[index % length];
-        NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), maid.isPickup(), maid.isRideable(), this.mode));
+        PacketDistributor.sendToServer(new MaidConfigPackage(maid.getId(), maid.isHomeModeEnable(), maid.isPickup(), maid.isRideable(), this.mode));
     }
 
     @Override

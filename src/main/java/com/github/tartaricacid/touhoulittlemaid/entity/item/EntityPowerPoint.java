@@ -1,9 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.BeaconAbsorbPackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -25,9 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
 
@@ -111,7 +107,7 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
         if (level.isClientSide) {
             spawnExplosionParticle(level, x, y, z, random);
         } else {
-            NetworkHandler.sendToNearby(level, blockPosition(), new BeaconAbsorbMessage(x, y, z));
+            NewNetwork.sendToNearby(this, new BeaconAbsorbPackage(x, y, z));
         }
     }
 

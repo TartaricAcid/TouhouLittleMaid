@@ -2,12 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.BeaconEffectButton;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetBeaconOverflowMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.StorageAndTakePowerMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SetBeaconOverflowPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.StorageAndTakePowerPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon.BeaconEffect;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -54,18 +53,18 @@ public class MaidBeaconGui extends Screen {
         this.addStorageAndTakeButton();
         this.addRenderableWidget(Button.builder(getOverflowDeleteButtonText(this.overflowDelete), b -> {
             this.overflowDelete = !this.overflowDelete;
-            NetworkHandler.CHANNEL.sendToServer(new SetBeaconOverflowMessage(beacon.getBlockPos(), this.overflowDelete));
+            PacketDistributor.sendToServer(new SetBeaconOverflowPackage(beacon.getBlockPos(), this.overflowDelete));
             this.init();
         }).pos(leftPos + 118, topPos + 94).size(154, 20).build());
     }
 
     private void addStorageAndTakeButton() {
         this.addRenderableWidget(Button.builder(Component.translatable("gui.touhou_little_maid.maid_beacon.add_one"), b -> {
-            NetworkHandler.CHANNEL.sendToServer(new StorageAndTakePowerMessage(beacon.getBlockPos(), 1, true));
+            PacketDistributor.sendToServer(new StorageAndTakePowerPackage(beacon.getBlockPos(), 1, true));
         }).pos(leftPos + 118, topPos + 72).size(76, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("gui.touhou_little_maid.maid_beacon.min_one"), b -> {
-            NetworkHandler.CHANNEL.sendToServer(new StorageAndTakePowerMessage(beacon.getBlockPos(), 1, false));
+            PacketDistributor.sendToServer(new StorageAndTakePowerPackage(beacon.getBlockPos(), 1, false));
         }).pos(leftPos + 196, topPos + 72).size(76, 20).build());
     }
 

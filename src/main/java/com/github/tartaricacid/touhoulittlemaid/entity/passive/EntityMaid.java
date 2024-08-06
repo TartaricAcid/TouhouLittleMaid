@@ -7,14 +7,12 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
-import com.github.tartaricacid.touhoulittlemaid.capability.Capabilities;
-import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
-import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
@@ -37,10 +35,9 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHa
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.ItemBreakPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.PlayMaidSoundPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -859,7 +856,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public void sendItemBreakMessage(ItemStack stack) {
         if (!this.level.isClientSide) {
-            NetworkHandler.sendToNearby(this, new ItemBreakMessage(this.getId(), stack));
+            NewNetwork.sendToNearby(this, new ItemBreakPackage(this.getId(), stack));
         }
     }
 
@@ -1172,7 +1169,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
         if (soundEvent.getLocation().getPath().startsWith("maid") && !level.isClientSide) {
-            NetworkHandler.sendToNearby(this, new PlayMaidSoundMessage(soundEvent.getLocation(), this.getSoundPackId(), this.getId()), 16);
+            NewNetwork.sendToNearby(this, new PlayMaidSoundPackage(soundEvent.getLocation(), this.getSoundPackId(), this.getId()), 16);
         } else {
             super.playSound(soundEvent, volume, pitch);
         }
@@ -1209,7 +1206,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     protected SoundEvent getDeathSound() {
-        if (NeoForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+        if (NeoForge.EVENT_BUS.post(new MaidPlaySoundEvent(this)).isCanceled()) {
             return null;
         }
         return InitSounds.MAID_DEATH.get();

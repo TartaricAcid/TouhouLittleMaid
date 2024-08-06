@@ -4,8 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.TabIndex;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ToggleTabMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.ToggleTabPackage;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class MaidTabs<T extends AbstractMaidContainer> {
     private final int entityId;
@@ -20,13 +20,13 @@ public class MaidTabs<T extends AbstractMaidContainer> {
 
     public MaidTabButton[] getTabs(AbstractMaidContainerGui<T> screen) {
         MaidTabButton main = new MaidTabButton(leftPos + 94, topPos + 5, 107, (b) ->
-                NetworkHandler.CHANNEL.sendToServer(new ToggleTabMessage(entityId, TabIndex.MAIN)));
+                PacketDistributor.sendToServer(new ToggleTabPackage(entityId, TabIndex.MAIN)));
         if (screen instanceof IBackpackContainerScreen) {
             main.active = false;
         }
 
         MaidTabButton config = new MaidTabButton(leftPos + 219, topPos + 5, 232, (b) ->
-                NetworkHandler.CHANNEL.sendToServer(new ToggleTabMessage(entityId, TabIndex.CONFIG)));
+                PacketDistributor.sendToServer(new ToggleTabPackage(entityId, TabIndex.CONFIG)));
         if (screen instanceof MaidConfigContainerGui) {
             config.active = false;
         }

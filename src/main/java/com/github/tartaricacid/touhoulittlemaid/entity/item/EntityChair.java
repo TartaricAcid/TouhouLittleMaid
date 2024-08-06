@@ -5,8 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.OpenChairGuiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.OpenChairGuiPackage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.util.thread.EffectiveSide;
+import net.neoforged.fml.util.thread.EffectiveSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -104,7 +104,7 @@ public class EntityChair extends AbstractEntityFromItem {
                 return InteractionResult.SUCCESS;
             }
             if (!level.isClientSide) {
-                NetworkHandler.sendToClientPlayer(new OpenChairGuiMessage(getId()), player);
+                NewNetwork.sendToNearby(new OpenChairGuiPackage(getId()), player);
             }
         } else {
             if (!level.isClientSide && getPassengers().isEmpty() && !player.isPassenger()) {

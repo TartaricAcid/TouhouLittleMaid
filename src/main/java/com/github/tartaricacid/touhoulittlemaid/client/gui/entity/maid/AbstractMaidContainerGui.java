@@ -13,11 +13,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Favorability
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.RequestEffectMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidConfigPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidTaskPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.RequestEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
@@ -39,6 +37,7 @@ import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
@@ -264,7 +263,9 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     // 用于开放切换任务时对当前 GUI 的操作
     protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
-        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+        if (maid != null) {
+            PacketDistributor.sendToServer(new MaidTaskPackage(maid.getId(), maidTask.getUid()));
+        }
     }
 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
@@ -339,7 +340,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
-                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), maid.isPickup(), isStateTriggered, maid.getSchedule()));
+                PacketDistributor.sendToServer(new MaidConfigPackage(maid.getId(), maid.isHomeModeEnable(), maid.isPickup(), isStateTriggered, maid.getSchedule()));
             }
         };
         ride.initTextureValues(84, 0, 21, 21, BUTTON);
@@ -351,7 +352,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
-                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), maid.isHomeModeEnable(), isStateTriggered, maid.isRideable(), maid.getSchedule()));
+                PacketDistributor.sendToServer(new MaidConfigPackage(maid.getId(), maid.isHomeModeEnable(), isStateTriggered, maid.isRideable(), maid.getSchedule()));
             }
         };
         pick.initTextureValues(42, 0, 21, 21, BUTTON);
@@ -363,7 +364,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             @Override
             public void onClick(double mouseX, double mouseY) {
                 this.isStateTriggered = !this.isStateTriggered;
-                NetworkHandler.CHANNEL.sendToServer(new MaidConfigMessage(maid.getId(), isStateTriggered, maid.isPickup(), maid.isRideable(), maid.getSchedule()));
+                PacketDistributor.sendToServer(new MaidConfigPackage(maid.getId(), isStateTriggered, maid.isPickup(), maid.isRideable(), maid.getSchedule()));
             }
         };
         home.initTextureValues(0, 0, 21, 21, BUTTON);
@@ -394,12 +395,12 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private void renderMaidInfo(GuiGraphics graphics, int mouseX, int mouseY) {
         if (info.isHovered()) {
             List<Component> list = Lists.newArrayList();
-            String prefix = "§a█\u0020";
+            String prefix = "§a█ ";
 
             MutableComponent title = Component.literal("")
                     .append(Component.translatable("tooltips.touhou_little_maid.info.title")
                             .withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE))
-                    .append(Component.literal("§r\u0020"));
+                    .append(Component.literal("§r "));
             if (maid.isStruckByLightning()) {
                 title.append(Component.literal("❀").withStyle(ChatFormatting.DARK_RED));
             }
@@ -518,7 +519,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     protected void containerTick() {
         counterTime += 1;
         if (counterTime % 20 == 0 && maid != null) {
-            NetworkHandler.CHANNEL.sendToServer(new RequestEffectMessage(maid.getId()));
+            PacketDistributor.sendToServer(new RequestEffectPackage(maid.getId()));
         }
     }
 

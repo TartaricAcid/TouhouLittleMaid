@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.WirelessIOSlotButton;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.network.message.WirelessIOSlotConfigMessage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -76,9 +76,9 @@ public class WirelessIOConfigSlotGui extends Screen {
             index++;
         }
 
-        Button confirm = Button.builder(Component.translatable("gui.done"), b -> NetworkHandler.CHANNEL.sendToServer(new WirelessIOSlotConfigMessage(booleans2Bytes(this.configData))))
+        Button confirm = Button.builder(Component.translatable("gui.done"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigMessage(booleans2Bytes(this.configData))))
                 .pos(leftPos, topPos + 140).size(60, 20).build();
-        Button cancel = Button.builder(Component.translatable("gui.cancel"), b -> NetworkHandler.CHANNEL.sendToServer(new WirelessIOSlotConfigMessage()))
+        Button cancel = Button.builder(Component.translatable("gui.cancel"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigMessage()))
                 .pos(leftPos + 62, topPos + 140).size(60, 20).build();
         addRenderableWidget(confirm);
         addRenderableWidget(cancel);
