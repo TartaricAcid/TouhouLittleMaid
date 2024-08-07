@@ -2,11 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
@@ -84,9 +84,9 @@ public class InitCreativeTabs {
                 if (FMLEnvironment.dist == Dist.CLIENT) {
                     ItemEntityPlaceholder.fillItemCategory(output);
                 }
-                output.accept(getEnchantmentBook(InitEnchantments.IMPEDING));
-                output.accept(getEnchantmentBook(InitEnchantments.SPEEDY));
-                output.accept(getEnchantmentBook(InitEnchantments.ENDERS_ENDER));
+//                output.accept(getEnchantmentBook(EnchantmentKeys.IMPEDING));
+//                output.accept(getEnchantmentBook(EnchantmentKeys.SPEEDY));
+//                output.accept(getEnchantmentBook(EnchantmentKeys.ENDERS_ENDER));
             }).build());
 
     public static DeferredHolder<CreativeModeTab, CreativeModeTab> GARAGE_KIT_TAB = TABS.register("chair", () -> CreativeModeTab.builder()
@@ -107,9 +107,9 @@ public class InitCreativeTabs {
                 }
             }).build());
 
-    private static ItemStack getEnchantmentBook(DeferredHolder<Enchantment,Enchantment> registryObject) {
-        Enchantment enchantment = registryObject.get();
-        EnchantmentInstance instance = new EnchantmentInstance(enchantment, enchantment.getMaxLevel());
-        return EnchantedBookItem.createForEnchantment(instance);
-    }
+//    private static ItemStack getEnchantmentBook(DeferredHolder<Enchantment,Enchantment> registryObject) {
+//        Enchantment enchantment = registryObject.get();
+//        EnchantmentInstance instance = new EnchantmentInstance(enchantment, enchantment.getMaxLevel());
+//        return EnchantedBookItem.createForEnchantment(instance);
+//    }
 }

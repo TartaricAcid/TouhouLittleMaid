@@ -7,12 +7,13 @@ import com.google.common.base.Predicates;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
 
 public class TaskMelon implements IFarmTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "melon");
@@ -57,7 +60,8 @@ public class TaskMelon implements IFarmTask {
     @Override
     public void harvest(EntityMaid maid, BlockPos cropPos, BlockState cropState) {
         ItemStack mainHandItem = maid.getMainHandItem();
-        if (cropState.is(Blocks.MELON) && EnchantmentHelper.hasSilkTouch(mainHandItem)) {
+        RegistryAccess access = maid.level.registryAccess();
+        if (cropState.is(Blocks.MELON) && getEnchantmentLevel(access, Enchantments.SILK_TOUCH,mainHandItem) > 0) {
             if (maid.destroyBlock(cropPos, false)) {
                 mainHandItem.hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
                 Block.popResource(maid.level, cropPos, Items.MELON.getDefaultInstance());

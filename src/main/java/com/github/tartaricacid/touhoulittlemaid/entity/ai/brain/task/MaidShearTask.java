@@ -15,8 +15,6 @@ import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.neoforge.common.IShearable;
 
 import java.util.List;
@@ -47,7 +45,7 @@ public class MaidShearTask extends MaidCheckRateTask {
                 .filter(Entity::isAlive)
                 .filter(e -> e instanceof IShearable)
                 //ShearsDispenseItemBehavior也传入了null，应该吧。
-                .filter(e -> ((IShearable) e).isShearable(null,mainHandItem, maid.level(), e.blockPosition()))
+                .filter(e -> ((IShearable) e).isShearable(null, mainHandItem, maid.level(), e.blockPosition()))
                 .filter(maid::canPathReach)
                 .findFirst()
                 .ifPresent(e -> {

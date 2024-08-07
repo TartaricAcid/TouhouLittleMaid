@@ -9,10 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
-import net.minecraft.core.registries.Registries;
 
 public class TankBackpackData extends SimpleContainer implements IBackpackData {
     public static final int CAPACITY = 10 * FluidType.BUCKET_VOLUME;

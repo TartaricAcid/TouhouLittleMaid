@@ -42,7 +42,6 @@ public final class TouhouLittleMaid {
         InitBlocks.BLOCKS.register(eventBus);
         InitBlocks.TILE_ENTITIES.register(eventBus);
         InitItems.ITEMS.register(eventBus);
-        InitEnchantments.ENCHANTMENTS.register(eventBus);
         InitCreativeTabs.TABS.register(eventBus);
         InitContainer.CONTAINER_TYPE.register(eventBus);
         InitSounds.SOUNDS.register(eventBus);

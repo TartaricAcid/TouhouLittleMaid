@@ -48,6 +48,7 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -123,6 +124,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.MAID_NUM;
 
 public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
@@ -542,10 +544,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private ItemStack getRandomItemWithMendingEnchantments() {
         List<ItemStack> stacks = Lists.newArrayList();
+        RegistryAccess access = this.level.registryAccess();
         this.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(cap -> {
             for (int i = 0; i < cap.getSlots(); i++) {
                 ItemStack itemstack = cap.getStackInSlot(i);
-                if (!itemstack.isEmpty() && itemstack.getEnchantmentLevel(Enchantments.MENDING) > 0 && itemstack.isDamaged()) {
+                if (!itemstack.isEmpty() && getEnchantmentLevel(access,Enchantments.MENDING,itemstack) > 0 && itemstack.isDamaged()) {
                     stacks.add(itemstack);
                 }
             }
