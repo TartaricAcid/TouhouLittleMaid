@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -130,14 +131,20 @@ public class BlockMaidBed extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public boolean isBed(BlockState state, BlockGetter world, BlockPos pos, @Nullable Entity entity) {
+    public boolean isBed(BlockState state, BlockGetter world, BlockPos pos, @Nullable LivingEntity entity) {
         if (entity instanceof EntityMaid) {
             return true;
         }
+        assert entity != null;
         return super.isBed(state, world, pos, entity);
     }
 
     private Direction getNeighbourDirection(BedPart part, Direction direction) {
         return part == BedPart.FOOT ? direction : direction.getOpposite();
+    }
+
+    @Override
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return simpleCodec((properties) -> new BlockMaidBed());
     }
 }

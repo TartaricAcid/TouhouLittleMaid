@@ -1,9 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.Capabilities;
-import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -21,7 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,10 +52,6 @@ import static com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble.RA
 
 
 public class BlockAltar extends Block implements EntityBlock {
-    public BlockAltar() {
-        super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
-    }
-
     public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
@@ -116,6 +110,10 @@ public class BlockAltar extends Block implements EntityBlock {
         }
     };
 
+    public BlockAltar() {
+        super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -123,7 +121,7 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         return this.getAltar(worldIn, pos).filter(altar -> handIn == InteractionHand.MAIN_HAND).map(altar -> {
             if (player.isShiftKeyDown() || player.getMainHandItem().isEmpty()) {
                 takeOutItem(worldIn, altar, player);
@@ -131,8 +129,8 @@ public class BlockAltar extends Block implements EntityBlock {
                 takeInOrCraft(worldIn, altar, player);
             }
             altar.refresh();
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
-        }).orElse(super.use(state, worldIn, pos, player, handIn, hit));
+            return ItemInteractionResult.sidedSuccess(worldIn.isClientSide);
+        }).orElse(super.useItemOn(itemStack, state, worldIn, pos, player, handIn, hit));
     }
 
     @Override
@@ -216,7 +214,7 @@ public class BlockAltar extends Block implements EntityBlock {
 
     private void takeInOrCraft(Level world, TileEntityAltar altar, Player playerIn) {
         if (altar.isCanPlaceItem() && altar.handler.getStackInSlot(0).isEmpty()) {
-            altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(playerIn.getMainHandItem(), 1));
+            altar.handler.setStackInSlot(0, playerIn.getMainHandItem().getItem().getDefaultInstance());
             if (!playerIn.isCreative()) {
                 playerIn.getMainHandItem().shrink(1);
             }

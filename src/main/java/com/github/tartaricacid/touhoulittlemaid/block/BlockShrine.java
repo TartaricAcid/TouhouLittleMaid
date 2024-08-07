@@ -2,11 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityShrine;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -47,40 +49,40 @@ public class BlockShrine extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack,BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
         if (hand == InteractionHand.MAIN_HAND && worldIn.getBlockEntity(pos) instanceof TileEntityShrine shrine) {
             if (playerIn.isShiftKeyDown()) {
                 if (!shrine.isEmpty()) {
                     ItemStack storageItem = shrine.extractStorageItem();
                     ItemHandlerHelper.giveItemToPlayer(playerIn, storageItem);
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
-                return InteractionResult.PASS;
+                return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
             }
             if (shrine.isEmpty()) {
                 if (shrine.canInsert(playerIn.getMainHandItem())) {
-                    shrine.insertStorageItem(ItemHandlerHelper.copyStackWithSize(playerIn.getMainHandItem(), 1));
+                    shrine.insertStorageItem(playerIn.getMainHandItem().getItem().getDefaultInstance());
                     playerIn.getMainHandItem().shrink(1);
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
                 if (!worldIn.isClientSide) {
                     playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.shrine.not_film"));
                 }
-                return InteractionResult.PASS;
+                return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
             }
             if (playerIn.getMainHandItem().isEmpty()) {
                 if (playerIn.getHealth() < (playerIn.getMaxHealth() / 2) + 1) {
                     if (!worldIn.isClientSide) {
                         playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.shrine.health_low"));
                     }
-                    return InteractionResult.FAIL;
+                    return ItemInteractionResult.FAIL;
                 }
                 playerIn.setHealth(0.25f);
                 ItemStack film = shrine.getStorageItem();
                 ItemFilm.filmToMaid(film, worldIn, pos.above(), playerIn);
             }
         }
-        return super.use(state, worldIn, pos, playerIn, hand, hit);
+        return super.useItemOn(itemStack,state, worldIn, pos, playerIn, hand, hit);
     }
 
     @Override
@@ -98,6 +100,11 @@ public class BlockShrine extends BaseEntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec((properties) -> new BlockShrine());
     }
 
     @Override

@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -143,20 +144,20 @@ public class BlockGarageKit extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack,BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = playerIn.getItemInHand(hand);
         if (!(worldIn instanceof ServerLevel) || !(stack.getItem() instanceof SpawnEggItem)) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
         BlockEntity tile = worldIn.getBlockEntity(pos);
         if (!(tile instanceof TileEntityGarageKit)) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
         TileEntityGarageKit garageKit = (TileEntityGarageKit) tile;
         EntityType<?> type = ((SpawnEggItem) stack.getItem()).getType(stack.getTag());
         ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(type);
         if (key == null) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
 
         String id = key.toString();
@@ -171,7 +172,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
         }
 
         garageKit.setData(garageKit.getFacing(), data);
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
     private ItemStack getGarageKitFromWorld(BlockGetter world, BlockPos pos) {

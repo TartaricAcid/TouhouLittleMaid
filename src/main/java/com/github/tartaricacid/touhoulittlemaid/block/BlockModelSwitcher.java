@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemModelSwitcher;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.OpenSwitcherGuiPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -11,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -134,14 +136,14 @@ public class BlockModelSwitcher extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack stack , BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (worldIn.getBlockEntity(pos) instanceof TileEntityModelSwitcher) {
             if (!worldIn.isClientSide && player instanceof ServerPlayer serverPlayer) {
                 PacketDistributor.sendToPlayer(serverPlayer,new OpenSwitcherGuiPackage(pos));
             }
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+            return ItemInteractionResult.sidedSuccess(worldIn.isClientSide);
         }
-        return super.use(state, worldIn, pos, player, handIn, hit);
+        return super.useItemOn(stack,state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
@@ -161,6 +163,11 @@ public class BlockModelSwitcher extends BaseEntityBlock {
             popResource(worldIn, pos, ItemModelSwitcher.tileEntityToItemStack((TileEntityModelSwitcher) te));
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec((properties) -> new BlockModelSwitcher());
     }
 
     @Override

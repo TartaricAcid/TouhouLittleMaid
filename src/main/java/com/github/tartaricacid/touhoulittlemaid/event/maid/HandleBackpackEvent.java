@@ -6,11 +6,12 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.Tags;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 @EventBusSubscriber
@@ -21,14 +22,14 @@ public class HandleBackpackEvent {
         Player player = event.getPlayer();
         EntityMaid maid = event.getMaid();
         IMaidBackpack maidBackpack = maid.getMaidBackpackType();
-        if (stack.is(Tags.Items.SHEARS)) {
+        if (stack.is(Tags.Items.TOOLS_SHEAR)) {
             if (maid.isOwnedBy(player) && !maid.backpackHasDelay() && maidBackpack != BackpackManager.getEmptyBackpack()) {
                 maid.setBackpackDelay();
                 player.getCooldowns().addCooldown(stack.getItem(), 20);
                 ItemHandlerHelper.giveItemToPlayer(player, maidBackpack.getTakeOffItemStack(stack, player, maid));
                 maidBackpack.onTakeOff(stack, player, maid);
                 maid.setMaidBackpackType(BackpackManager.getEmptyBackpack());
-                stack.hurtAndBreak(1, player, m -> m.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                 maid.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
                 event.setCanceled(true);
             }

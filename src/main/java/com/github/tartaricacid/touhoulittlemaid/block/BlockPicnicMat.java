@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -103,19 +104,19 @@ public class BlockPicnicMat extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
         if (worldIn.isClientSide) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
         if (hand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
         if (!(worldIn.getBlockEntity(pos) instanceof TileEntityPicnicMat picnicMat)) {
-            return InteractionResult.FAIL;
+            return ItemInteractionResult.FAIL;
         }
         BlockPos centerPos = picnicMat.getCenterPos();
         if (!(worldIn.getBlockEntity(centerPos) instanceof TileEntityPicnicMat picnicMatCenter)) {
-            return InteractionResult.FAIL;
+            return ItemInteractionResult.FAIL;
         }
         ItemStack itemInHand = playerIn.getItemInHand(hand);
         if (itemInHand.isEdible()) {
@@ -124,23 +125,23 @@ public class BlockPicnicMat extends Block implements EntityBlock {
         if (itemInHand.isEmpty() && playerIn.isDiscrete()) {
             return takeFood(playerIn, picnicMatCenter);
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
     }
 
 
-    private static InteractionResult placeFood(ItemStack food, Player playerIn, TileEntityPicnicMat picnicMatCenter) {
+    private static ItemInteractionResult placeFood(ItemStack food, Player playerIn, TileEntityPicnicMat picnicMatCenter) {
         int count = food.getCount();
         ItemStack resultStack = ItemHandlerHelper.insertItemStacked(picnicMatCenter.getHandler(), food.copy(), false);
         picnicMatCenter.refresh();
         int shrinkCount = count - resultStack.getCount();
         if (shrinkCount <= 0) {
-            return InteractionResult.FAIL;
+            return ItemInteractionResult.FAIL;
         }
         food.shrink(shrinkCount);
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
-    private static InteractionResult takeFood(Player playerIn, TileEntityPicnicMat picnicMatCenter) {
+    private static ItemInteractionResult takeFood(Player playerIn, TileEntityPicnicMat picnicMatCenter) {
         ItemStackHandler handler = picnicMatCenter.getHandler();
         int size = handler.getSlots() - 1;
         for (int i = size; i >= 0; i--) {
@@ -149,10 +150,10 @@ public class BlockPicnicMat extends Block implements EntityBlock {
                 ItemStack outputStack = handler.extractItem(i, handler.getSlotLimit(i), false);
                 picnicMatCenter.refresh();
                 ItemHandlerHelper.giveItemToPlayer(playerIn, outputStack);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.FAIL;
+        return ItemInteractionResult.FAIL;
     }
 
     @Override

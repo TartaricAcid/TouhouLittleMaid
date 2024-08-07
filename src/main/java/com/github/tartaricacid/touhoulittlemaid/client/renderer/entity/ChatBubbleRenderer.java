@@ -258,7 +258,7 @@ public class ChatBubbleRenderer {
     }
 
     private static void vertex(Matrix4f matrix4f, VertexConsumer builder, float x, float y, float z, float u, float v) {
-        builder.vertex(matrix4f, x, y, z).uv(u, v).endVertex();
+        builder.addVertex(matrix4f, x, y, z).setUv(u, v);
     }
 
     private static RenderType chatBubbleRender(ResourceLocation locationIn) {

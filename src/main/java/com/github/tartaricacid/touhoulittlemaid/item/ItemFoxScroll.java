@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.FoxScrollPackage;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
@@ -77,7 +78,7 @@ public class ItemFoxScroll extends Item {
                 List<FoxScrollPackage.FoxScrollData> scrollData = data.computeIfAbsent(info.getDimension(), dim -> Lists.newArrayList());
                 scrollData.add(new FoxScrollPackage.FoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
             });
-            NetworkHandler.sendToClientPlayer(new FoxScrollMessage(data), player);
+            PacketDistributor.sendToPlayer((ServerPlayer) player,new FoxScrollPackage(data));
             return InteractionResultHolder.success(item);
         }
         return super.use(level, player, hand);
