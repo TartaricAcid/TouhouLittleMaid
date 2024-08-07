@@ -119,7 +119,7 @@ public class BlockPicnicMat extends Block implements EntityBlock {
             return ItemInteractionResult.FAIL;
         }
         ItemStack itemInHand = playerIn.getItemInHand(hand);
-        if (itemInHand.isEdible()) {
+        if (itemInHand.getFoodProperties(null) != null) {
             return placeFood(itemInHand, playerIn, picnicMatCenter);
         }
         if (itemInHand.isEmpty() && playerIn.isDiscrete()) {

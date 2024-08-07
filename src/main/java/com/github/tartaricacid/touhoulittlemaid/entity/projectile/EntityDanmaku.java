@@ -2,12 +2,15 @@ package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -17,8 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.core.registries.Registries;
 
 public class EntityDanmaku extends ThrowableProjectile {
     public static final EntityType<EntityDanmaku> TYPE = EntityType.Builder.<EntityDanmaku>of(EntityDanmaku::new, MobCategory.MISC)
@@ -53,11 +54,11 @@ public class EntityDanmaku extends ThrowableProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(DANMAKU_TYPE, DanmakuType.PELLET.ordinal());
-        this.entityData.define(COLOR, DanmakuColor.RED.ordinal());
-        this.entityData.define(DAMAGE, 1.0f);
-        this.entityData.define(GRAVITY, 0.01f);
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        pBuilder.define(DANMAKU_TYPE, DanmakuType.PELLET.ordinal());
+        pBuilder.define(COLOR, DanmakuColor.RED.ordinal());
+        pBuilder.define(DAMAGE, 1.0f);
+        pBuilder.define(GRAVITY, 0.01f);
     }
 
     @Override
@@ -121,7 +122,7 @@ public class EntityDanmaku extends ThrowableProjectile {
     }
 
     @Override
-    protected float getGravity() {
+    public double getGravity() {
         return this.entityData.get(GRAVITY);
     }
 
@@ -168,7 +169,7 @@ public class EntityDanmaku extends ThrowableProjectile {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
+        return new ClientboundAddEntityPacket(this, pEntity);
     }
 }

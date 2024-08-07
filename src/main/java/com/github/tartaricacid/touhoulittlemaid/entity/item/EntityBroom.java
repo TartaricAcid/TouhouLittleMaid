@@ -31,7 +31,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity {
-    public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build("broom");
+    public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC)
+            .sized(1.375F, 0.5625F)
+            .clientTrackingRange(10)
+            .ridingOffset(0)
+            .build("broom");
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_ID = SynchedEntityData.defineId(EntityBroom.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final String OWNER_UUID_TAG = "OwnerUUID";
@@ -71,9 +75,9 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_ID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        super.defineSynchedData(pBuilder);
+        pBuilder.define(OWNER_ID, Optional.empty());
     }
 
     @Override
@@ -209,11 +213,6 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     @Override
     protected boolean canAddPassenger(Entity entity) {
         return this.getPassengers().size() < 2;
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-        return 0;
     }
 
     @Override

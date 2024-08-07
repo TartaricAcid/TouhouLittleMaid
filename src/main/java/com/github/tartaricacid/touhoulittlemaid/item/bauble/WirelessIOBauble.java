@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
@@ -113,7 +112,7 @@ public class WirelessIOBauble implements IMaidBauble {
                 if (openCount > 0) {
                     return;
                 }
-                te.getCapabiliti(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(chestInv -> {
+                te.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(chestInv -> {
                     IItemHandler maidInv = maid.getAvailableInv(false);
                     boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
                     boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);

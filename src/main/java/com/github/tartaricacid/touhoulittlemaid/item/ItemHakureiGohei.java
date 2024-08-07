@@ -52,7 +52,7 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity pEntity) {
         return 500;
     }
 

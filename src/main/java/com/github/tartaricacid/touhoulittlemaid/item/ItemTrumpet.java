@@ -53,7 +53,7 @@ public class ItemTrumpet extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity pEntity) {
         return 100;
     }
 

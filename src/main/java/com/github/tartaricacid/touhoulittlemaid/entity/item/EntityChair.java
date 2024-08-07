@@ -25,6 +25,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.util.thread.EffectiveSide;
@@ -38,7 +39,9 @@ import java.util.UUID;
 
 public class EntityChair extends AbstractEntityFromItem {
     public static final EntityType<EntityChair> TYPE = EntityType.Builder.<EntityChair>of(EntityChair::new, MobCategory.MISC)
-            .sized(0.875f, 0.5f).clientTrackingRange(10).build("chair");
+            .sized(0.875f, 0.5f)
+            .clientTrackingRange(10)
+            .build("chair");
 
     private static final EntityDataAccessor<String> MODEL_ID = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> MOUNTED_HEIGHT = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.FLOAT);
@@ -67,12 +70,12 @@ public class EntityChair extends AbstractEntityFromItem {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MODEL_ID, DEFAULT_MODEL_ID);
-        this.entityData.define(MOUNTED_HEIGHT, 0f);
-        this.entityData.define(TAMEABLE_CAN_RIDE, true);
-        this.entityData.define(OWNER_UUID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        super.defineSynchedData(pBuilder);
+        pBuilder.define(MODEL_ID, DEFAULT_MODEL_ID);
+        pBuilder.define(MOUNTED_HEIGHT, 0f);
+        pBuilder.define(TAMEABLE_CAN_RIDE, true);
+        pBuilder.define(OWNER_UUID, Optional.empty());
     }
 
     @Override
@@ -104,7 +107,7 @@ public class EntityChair extends AbstractEntityFromItem {
                 return InteractionResult.SUCCESS;
             }
             if (!level.isClientSide) {
-                NewNetwork.sendToNearby(new OpenChairGuiPackage(getId()), player);
+                NewNetwork.sendToNearby(player,new OpenChairGuiPackage(getId()));
             }
         } else {
             if (!level.isClientSide && getPassengers().isEmpty() && !player.isPassenger()) {
@@ -126,8 +129,8 @@ public class EntityChair extends AbstractEntityFromItem {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return getMountedHeight();
+    public Vec3 getVehicleAttachmentPoint(Entity pEntity) {
+        return new Vec3(0,getMountedHeight(),0);
     }
 
     @Override

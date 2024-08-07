@@ -4,9 +4,11 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,7 +26,7 @@ public class EntityBox extends Entity {
     public static final int MAX_TEXTURE_SIZE = 8;
     private static final EntityDataAccessor<Integer> OPEN_STAGE = SynchedEntityData.defineId(EntityBox.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TEXTURE_INDEX = SynchedEntityData.defineId(EntityBox.class, EntityDataSerializers.INT);
-    public static final EntityType<EntityBox> TYPE = EntityType.Builder.<EntityBox>of(EntityBox::new, MobCategory.MISC)
+    public static final EntityType<EntityBox> TYPE = EntityType.Builder.<EntityBox>of(EntityBox::new, MobCategory.MISC).ridingOffset(0)
             .sized(2.0f, 2.0f).clientTrackingRange(10).build("box");
     private static final String STAGE_TAG = "OpenStage";
     private static final String TEXTURE_TAG = "TextureIndex";
@@ -71,9 +73,9 @@ public class EntityBox extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(OPEN_STAGE, FIRST_STAGE);
-        this.entityData.define(TEXTURE_INDEX, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        pBuilder.define(OPEN_STAGE, FIRST_STAGE);
+        pBuilder.define(TEXTURE_INDEX, 0);
     }
 
     @Override
@@ -93,13 +95,8 @@ public class EntityBox extends Entity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-        return 0;
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
+        return new ClientboundAddEntityPacket(this, pEntity);
     }
 
     @Override
