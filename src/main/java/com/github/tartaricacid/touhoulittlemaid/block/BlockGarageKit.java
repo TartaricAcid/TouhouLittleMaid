@@ -47,6 +47,8 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
+
 public class BlockGarageKit extends Block implements EntityBlock {
     public static final VoxelShape BLOCK_AABB = Block.box(4, 0, 4, 12, 16, 12);
     public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
@@ -115,7 +117,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
                 data = customData.copyTag();
             }
             data.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
-            data.putString(EntityMaid.MODEL_ID_TAG, modelId);
+            data.putString(MODEL_ID_TAG_NAME, modelId);
             stack.set(InitDataComponent.ENTITY_INFO_TAG, CustomData.of(data));
             items.accept(stack);
         }

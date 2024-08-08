@@ -29,6 +29,7 @@ import net.minecraft.world.level.Level;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLevelRenderer {
@@ -77,8 +78,8 @@ public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLeve
         if (entity instanceof EntityMaid) {
             EntityMaid maid = (EntityMaid) entity;
             clearMaidDataResidue(maid, true);
-            if (data.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-                String modelId = data.getString(EntityMaid.MODEL_ID_TAG);
+            if (data.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
+                String modelId = data.getString(MODEL_ID_TAG_NAME);
                 renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(modelId);
             }
         }

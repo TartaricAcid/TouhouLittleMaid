@@ -808,28 +808,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     protected void hurtArmor(DamageSource damageSource, float damage) {
-        // 依据原版玩家护甲耐久掉落机制书写而成
-        // net.minecraft.entity.player.PlayerInventory#hurtArmor
-        if (damage <= 0.0F) {
-            return;
-        }
-
-        damage = damage / 4.0F;
-
-        // 最小伤害必须为 1.0
-        if (damage < 1.0F) {
-            damage = 1.0F;
-        }
-
-        for (int i = 0; i < this.armorInvWrapper.getSlots(); ++i) {
-            ItemStack stack = this.armorInvWrapper.getStackInSlot(i);
-            boolean fireResistant = damageSource.is(DamageTypeTags.IS_FIRE) && stack.getItem().isFireResistant();
-            if (!fireResistant && stack.getItem() instanceof ArmorItem) {
-                final int index = i;
-                stack.hurtAndBreak((int) damage, this,
-                        (maid) -> maid.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, index)));
-            }
-        }
+        this.doHurtEquipment(damageSource, damage, EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD);
     }
 
     @Override
