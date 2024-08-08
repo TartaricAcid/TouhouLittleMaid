@@ -15,7 +15,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,7 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
-public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityGomoku> {
+public class TileEntityGomokuRenderer extends TileEntityJoyRenderer<TileEntityGomoku> {
     private static final ResourceLocation CHECKER_BOARD_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/gomoku.png");
     private static final ResourceLocation BLACK_PIECE_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/black_piece.png");
     private static final ResourceLocation WHITE_PIECE_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/white_piece.png");
@@ -84,8 +83,8 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
             poseStack.translate(0.5, 1.5, 0.5);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
             poseStack.translate(0.92, -0.1, -1.055);
-            int[][] chessData = gomoku.getChessData();
-            for (int[] row : chessData) {
+            byte[][] chessData = gomoku.getChessData();
+            for (byte[] row : chessData) {
                 for (int j = 0; j < chessData[0].length; j++) {
                     poseStack.translate(0, 0, 0.1316);
                     if (row[j] == Point.BLACK) {

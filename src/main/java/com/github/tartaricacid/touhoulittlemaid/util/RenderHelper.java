@@ -6,6 +6,8 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -39,14 +41,14 @@ public final class RenderHelper {
     public static void renderLine(PoseStack poseStack, VertexConsumer consumer, Vec3 start, Vec3 end, float red, float green, float blue) {
         Matrix4f matrix4f = poseStack.last().pose();
         Matrix3f matrix3f = poseStack.last().normal();
-        addVertex(consumer, matrix4f, (float) start.x, (float) start.y, (float) start.z, red, green, blue, 1.0F, matrix3f,1.0F, 0.0F, 0.0F);
-        addVertex(consumer, matrix4f, (float) end.x, (float) end.y, (float) end.z, red, green, blue, 1.0F, matrix3f,1.0F, 0.0F, 0.0F);
+        addVertex(consumer, matrix4f, (float) start.x, (float) start.y, (float) start.z, red, green, blue, 1.0F, matrix3f, 1.0F, 0.0F, 0.0F);
+        addVertex(consumer, matrix4f, (float) end.x, (float) end.y, (float) end.z, red, green, blue, 1.0F, matrix3f, 1.0F, 0.0F, 0.0F);
 
-        addVertex(consumer, matrix4f, (float) start.x, (float) start.y, (float) start.z, red, green, blue, 1.0F, matrix3f,0.0F, 1.0F, 0.0F);
-        addVertex(consumer, matrix4f, (float) end.x, (float) end.y, (float) end.z, red, green, blue, 1.0F, matrix3f,0.0F, 1.0F, 0.0F);
+        addVertex(consumer, matrix4f, (float) start.x, (float) start.y, (float) start.z, red, green, blue, 1.0F, matrix3f, 0.0F, 1.0F, 0.0F);
+        addVertex(consumer, matrix4f, (float) end.x, (float) end.y, (float) end.z, red, green, blue, 1.0F, matrix3f, 0.0F, 1.0F, 0.0F);
 
-        addVertex(consumer, matrix4f, (float) start.x, (float) start.y, (float) start.z, red, green, blue, 1.0F, matrix3f,0.0F, 0.0F, 1.0F);
-        addVertex(consumer, matrix4f, (float) end.x, (float) end.y, (float) end.z, red, green, blue, 1.0F, matrix3f,0.0F, 0.0F, 1.0F);
+        addVertex(consumer, matrix4f, (float) start.x, (float) start.y, (float) start.z, red, green, blue, 1.0F, matrix3f, 0.0F, 0.0F, 1.0F);
+        addVertex(consumer, matrix4f, (float) end.x, (float) end.y, (float) end.z, red, green, blue, 1.0F, matrix3f, 0.0F, 0.0F, 1.0F);
     }
 
     public static void renderCylinder(PoseStack poseStack, VertexConsumer consumer, Vec3 centerPos, double radius, int precision, float red, float green, float blue) {
@@ -59,19 +61,23 @@ public final class RenderHelper {
             double y = centerPos.y;
             double z1 = centerPos.z + radius * Math.sin(i * precisionAngle);
             double z2 = centerPos.z + radius * Math.sin((i - 1) * precisionAngle);
-            addVertex(consumer,matrix4f, (float) x1, (float) y, (float) z1, red, green, blue, 1.0F, matrix3f,1.0F, 0.0F, 0.0F);
-            addVertex(consumer,matrix4f, (float) x2, (float) y, (float) z2, red, green, blue, 1.0F, matrix3f,1.0F, 0.0F, 0.0F);
+            addVertex(consumer, matrix4f, (float) x1, (float) y, (float) z1, red, green, blue, 1.0F, matrix3f, 1.0F, 0.0F, 0.0F);
+            addVertex(consumer, matrix4f, (float) x2, (float) y, (float) z2, red, green, blue, 1.0F, matrix3f, 1.0F, 0.0F, 0.0F);
 
-            addVertex(consumer,matrix4f, (float) x1, (float) y, (float) z1, red, green, blue, 1.0F, matrix3f,0.0F, 1.0F, 0.0F);
-            addVertex(consumer,matrix4f, (float) x2, (float) y, (float) z2, red, green, blue, 1.0F, matrix3f,0.0F, 1.0F, 0.0F);
+            addVertex(consumer, matrix4f, (float) x1, (float) y, (float) z1, red, green, blue, 1.0F, matrix3f, 0.0F, 1.0F, 0.0F);
+            addVertex(consumer, matrix4f, (float) x2, (float) y, (float) z2, red, green, blue, 1.0F, matrix3f, 0.0F, 1.0F, 0.0F);
 
-            addVertex(consumer,matrix4f, (float) x1, (float) y, (float) z1, red, green, blue, 1.0F, matrix3f,0.0F, 0.0F, 1.0F);
-            addVertex(consumer,matrix4f, (float) x2, (float) y, (float) z2, red, green, blue, 1.0F, matrix3f,0.0F, 0.0F, 1.0F);
+            addVertex(consumer, matrix4f, (float) x1, (float) y, (float) z1, red, green, blue, 1.0F, matrix3f, 0.0F, 0.0F, 1.0F);
+            addVertex(consumer, matrix4f, (float) x2, (float) y, (float) z2, red, green, blue, 1.0F, matrix3f, 0.0F, 0.0F, 1.0F);
         }
     }
 
-    public static void addVertex(VertexConsumer consumer ,Matrix4f matrix4f, float x, float y, float z, float red, float green, float blue, float alpha, Matrix3f matrix3f, float normalX, float normalY, float normalZ) {
-        Vector3f vector3f = matrix3f.transform(new Vector3f(normalX,normalY,normalZ));
+    public static void addVertex(VertexConsumer consumer, Matrix4f matrix4f, float x, float y, float z, float red, float green, float blue, float alpha, Matrix3f matrix3f, float normalX, float normalY, float normalZ) {
+        Vector3f vector3f = matrix3f.transform(new Vector3f(normalX, normalY, normalZ));
         consumer.addVertex(matrix4f, x, y, z).setColor(red, green, blue, alpha).setNormal(vector3f.x(), vector3f.y(), vector3f.z());
+    }
+
+    public static AABB getAABB(BlockPos pStart, BlockPos pEnd) {
+        return new AABB(pStart.getX(), pStart.getY(), pStart.getZ(), pEnd.getX(), pEnd.getY(), pEnd.getZ());
     }
 }

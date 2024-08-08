@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -38,8 +39,8 @@ public abstract class TileEntityJoy extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        return this.saveWithoutMetadata(pRegistries);
     }
 
     @Nullable
@@ -56,10 +57,8 @@ public abstract class TileEntityJoy extends BlockEntity {
         }
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition.offset(-2, 0, -2), worldPosition.offset(2, 1, 2));
+    public BlockPos getWorldPosition() {
+        return this.worldPosition;
     }
 
     public void setSitId(UUID sitId) {
