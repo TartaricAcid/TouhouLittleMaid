@@ -41,7 +41,7 @@ import java.util.function.Predicate;
 import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
 
 public class TaskBowAttack implements IRangedAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "ranged_attack");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "ranged_attack");
     private static final int MAX_STOP_ATTACK_DISTANCE = 16;
 
     @Override

@@ -27,6 +27,6 @@ public class ResourceLoactionUtil {
     }
 
     public static ResourceLocation getResourceLocation(String pLocation) {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, pLocation);
+        return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, pLocation);
     }
 }

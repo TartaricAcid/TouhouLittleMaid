@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
 
 public class TaskMelon implements IFarmTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "melon");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "melon");
 
     @Override
     public ResourceLocation getUid() {

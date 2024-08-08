@@ -5,8 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDamageEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.SpawnParticlePackage;
-import net.neoforged.neoforge.network.PacketDistributor;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;

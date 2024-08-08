@@ -17,7 +17,7 @@ import net.minecraft.world.entity.Entity;
 import java.util.List;
 
 public class BroomTipsOverlay implements IGuiOverlay {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
 
     @Override
     public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {

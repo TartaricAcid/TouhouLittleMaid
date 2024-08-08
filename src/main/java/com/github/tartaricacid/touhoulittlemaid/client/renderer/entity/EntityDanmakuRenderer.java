@@ -18,7 +18,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class EntityDanmakuRenderer extends EntityRenderer<EntityDanmaku> {
-    private static final ResourceLocation DANMAKU_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/danmaku.png");
+    private static final ResourceLocation DANMAKU_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/danmaku.png");
     private static final RenderType RENDER_TYPE = RenderType.itemEntityTranslucentCull(DANMAKU_TEXTURE);
 
     public EntityDanmakuRenderer(EntityRendererProvider.Context renderManager) {

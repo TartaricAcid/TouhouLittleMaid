@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class EntitySitRenderer extends EntityRenderer<EntitySit> {
-    private static final ResourceLocation EMPTY = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
+    private static final ResourceLocation EMPTY = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
 
     public EntitySitRenderer(EntityRendererProvider.Context context) {
         super(context);

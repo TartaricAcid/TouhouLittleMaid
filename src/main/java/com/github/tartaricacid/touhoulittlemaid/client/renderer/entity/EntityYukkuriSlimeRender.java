@@ -13,7 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.Slime;
 
 public class EntityYukkuriSlimeRender extends MobRenderer<Slime, EntityYukkuriModel> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/yukkuri.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/yukkuri.png");
     private final SlimeRenderer vanillaRender;
 
     public EntityYukkuriSlimeRender(EntityRendererProvider.Context context) {

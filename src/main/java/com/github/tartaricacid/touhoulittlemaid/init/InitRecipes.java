@@ -20,5 +20,5 @@ public final class InitRecipes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, TouhouLittleMaid.MOD_ID);
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AltarRecipe>> ALTAR_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("altar_crafting_serializers", AltarRecipeSerializer::new);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<AltarRecipe>> ALTAR_CRAFTING = RECIPE_TYPES.register("altar_crafting", () -> RecipeType.simple(new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_crafting")));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<AltarRecipe>> ALTAR_CRAFTING = RECIPE_TYPES.register("altar_crafting", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_crafting")));
 }

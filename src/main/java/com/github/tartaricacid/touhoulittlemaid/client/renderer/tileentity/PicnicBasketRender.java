@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class PicnicBasketRender extends BlockEntityWithoutLevelRenderer {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_basket.png");
-    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/item/picnic_basket.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_basket.png");
+    private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/item/picnic_basket.png");
     private static final EntityPlaceholderModel GUI_MODEL = new EntityPlaceholderModel();
     private final PicnicBasketModel model;
 

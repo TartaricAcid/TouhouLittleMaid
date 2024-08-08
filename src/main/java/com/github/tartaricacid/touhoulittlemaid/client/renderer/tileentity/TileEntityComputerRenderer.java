@@ -15,7 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 public class TileEntityComputerRenderer implements BlockEntityRenderer<TileEntityComputer> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/computer.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/computer.png");
     private final ComputerModel model;
 
     public TileEntityComputerRenderer(BlockEntityRendererProvider.Context context) {

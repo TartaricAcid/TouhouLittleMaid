@@ -27,8 +27,8 @@ import org.joml.Quaternionf;
 import javax.annotation.Nullable;
 
 public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends IModelInfo> extends Screen {
-    private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
-    private static final ResourceLocation FLOOR_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/debug_floor.png");
+    private static final ResourceLocation BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
+    private static final ResourceLocation FLOOR_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/debug_floor.png");
 
     private static final int LEFT_MOUSE_BUTTON = 0;
     private static final int RIGHT_MOUSE_BUTTON = 1;

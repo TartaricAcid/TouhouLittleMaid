@@ -63,7 +63,7 @@ public class ItemKappaCompass extends Item {
     public static ResourceLocation getDimension(ItemStack compass) {
         CompoundTag tag = compass.getTagElement("KappaCompassData");
         if (tag != null) {
-            return new ResourceLocation(tag.getString("Dimension"));
+            return ResourceLocation.parse(tag.getString("Dimension"));
         }
         return null;
     }

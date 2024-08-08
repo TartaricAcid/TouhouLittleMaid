@@ -18,11 +18,11 @@ import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
 
 public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone.png");
-    private static final ResourceLocation THE_NETHER_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_nether.png");
-    private static final ResourceLocation THE_END_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_end.png");
-    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_twilight_forest.png");
-    private static final ResourceLocation TWILIGHT_FOREST_NAME = new ResourceLocation("twilightforest", "twilight_forest");
+    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone.png");
+    private static final ResourceLocation THE_NETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_nether.png");
+    private static final ResourceLocation THE_END_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_end.png");
+    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_twilight_forest.png");
+    private static final ResourceLocation TWILIGHT_FOREST_NAME = ResourceLocation.fromNamespaceAndPath("twilightforest", "twilight_forest");
     private static final int NAME_SHOW_DISTANCE = 64;
     private final TombstoneModel tombstoneModel;
 

@@ -13,7 +13,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum ShrineLampProvider implements IBlockComponentProvider {
     INSTANCE;
 
-    private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "shrine_lamp");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "shrine_lamp");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {

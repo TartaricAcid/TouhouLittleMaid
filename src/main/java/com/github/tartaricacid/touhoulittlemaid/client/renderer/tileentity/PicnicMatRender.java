@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_mat.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_mat.png");
     private final PicnicMatModel model;
     private final BlockEntityRendererProvider.Context context;
 

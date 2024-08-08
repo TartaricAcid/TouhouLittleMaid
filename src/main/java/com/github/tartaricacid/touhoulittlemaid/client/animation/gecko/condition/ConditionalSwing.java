@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.core.registries.Registries;
-import net.minecraftforge.registries.tags.ITagManager;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -50,15 +49,13 @@ public class ConditionalSwing {
         }
         String substring = name.substring(preSize);
         if (name.startsWith(idPre) && isValidResourceLocation(substring)) {
-            idTest.add(new ResourceLocation(substring));
+            idTest.add(ResourceLocation.parse(substring));
         }
         if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
-            ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-            if (tags == null) {
-                return;
-            }
-            TagKey<Item> tagKey = tags.createTagKey(new ResourceLocation(substring));
-            tagTest.add(tagKey);
+            tagTest.add(TagKey.create(
+                    Registries.ITEM,
+                    ResourceLocation.parse(substring)
+            ));
         }
         if (name.startsWith(extraPre)) {
             if (substring.equals(UseAnim.NONE.name().toLowerCase(Locale.US))) {
@@ -104,10 +101,10 @@ public class ConditionalSwing {
             return EMPTY;
         }
 		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
-        ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        if (tags == null) {
-            return EMPTY;
-        }
+        // ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
+        // if (tags == null) {
+        //     return EMPTY;
+        // }
         return tagTest.stream().filter(itemInHand::is).findFirst().map(itemTagKey -> tagPre + itemTagKey.location()).orElse(EMPTY);
     }
 

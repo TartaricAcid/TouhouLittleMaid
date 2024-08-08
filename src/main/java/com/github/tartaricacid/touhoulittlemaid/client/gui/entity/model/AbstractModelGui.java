@@ -35,9 +35,9 @@ import static com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.Maid
 public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelInfo> extends Screen {
     public static final Button.OnPress NO_PRESS = (b) -> {
     };
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
-    private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select_side.png");
-    private static final ResourceLocation EMPTY_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/empty_model_pack_icon.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
+    private static final ResourceLocation SIDE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select_side.png");
+    private static final ResourceLocation EMPTY_ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/empty_model_pack_icon.png");
     private static final SimpleTexture EMPTY_ICON_TEXTURE = new SimpleTexture(EMPTY_ICON);
     protected final T entity;
     private final SkinGuiNumber<E> guiNumber;

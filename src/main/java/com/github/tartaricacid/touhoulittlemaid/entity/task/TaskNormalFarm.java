@@ -18,7 +18,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 public class TaskNormalFarm implements IFarmTask {
-    private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "farm");
+    private static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "farm");
 
     @Override
     public ResourceLocation getUid() {

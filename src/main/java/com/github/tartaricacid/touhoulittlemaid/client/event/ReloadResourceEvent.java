@@ -7,7 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.PlayerMaidModels;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import org.apache.commons.lang3.time.StopWatch;
@@ -15,12 +15,12 @@ import org.apache.commons.lang3.time.StopWatch;
 import java.util.concurrent.TimeUnit;
 
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public final class ReloadResourceEvent {
-    public static final ResourceLocation BLOCK_ATLAS_TEXTURE = new ResourceLocation("textures/atlas/blocks.png");
+    public static final ResourceLocation BLOCK_ATLAS_TEXTURE = ResourceLocation.parse("textures/atlas/blocks.png");
 
     @SubscribeEvent
-    public static void onTextureStitchEventPost(TextureStitchEvent.Post event) {
+    public static void onTextureStitchEventPost(TextureAtlasStitchedEvent event) {
         if (BLOCK_ATLAS_TEXTURE.equals(event.getAtlas().location())) {
             reloadAllPack();
         }

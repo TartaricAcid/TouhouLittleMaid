@@ -104,7 +104,7 @@ public class EntityExtinguishingAgent extends Entity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override

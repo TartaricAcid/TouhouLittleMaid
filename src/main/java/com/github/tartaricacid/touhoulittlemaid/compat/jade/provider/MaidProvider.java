@@ -17,7 +17,7 @@ public enum MaidProvider implements IEntityComponentProvider {
 
     INSTANCE;
 
-    private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "maid");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {

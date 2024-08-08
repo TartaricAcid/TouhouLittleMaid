@@ -17,8 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class GeckoMaidModel extends AnimatedGeoModel {
-    private static final ResourceLocation GECKO_DEFAULT_ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "fox_miko");
-    private static final ResourceLocation GECKO_DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
+    private static final ResourceLocation GECKO_DEFAULT_ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "fox_miko");
+    private static final ResourceLocation GECKO_DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
 
     @Override
     public ResourceLocation getModelLocation(Object object) {

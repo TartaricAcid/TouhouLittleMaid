@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.Optional;
 
 public class GiveSmartSlabConfigTrigger extends SimpleCriterionTrigger<GiveSmartSlabConfigTrigger.Instance> {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "give_smart_slab_config");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "give_smart_slab_config");
     public void trigger(ServerPlayer serverPlayer) {
         super.trigger(serverPlayer, instance -> MiscConfig.GIVE_SMART_SLAB.get());
     }

@@ -15,7 +15,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.function.Consumer;
 
 public class BeaconEffectButton extends TouhouStateSwitchButton {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_beacon.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_beacon.png");
     private final TextureAtlasSprite sprite;
     private final Component tooltips;
     private final int potionIndex;

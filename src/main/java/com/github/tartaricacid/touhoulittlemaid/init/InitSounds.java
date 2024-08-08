@@ -54,6 +54,6 @@ public final class InitSounds {
     public static final DeferredHolder<SoundEvent,SoundEvent> FAIRY_HURT = registerSound("entity.fairy.hurt");
 
     private static DeferredHolder<SoundEvent,SoundEvent> registerSound(String name) {
-        return SOUNDS.register(name, () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(TouhouLittleMaid.MOD_ID, name), 16.0F));
+        return SOUNDS.register(name, () -> SoundEvent.createFixedRangeEvent(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, name), 16.0F));
     }
 }

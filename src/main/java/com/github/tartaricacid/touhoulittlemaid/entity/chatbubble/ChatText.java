@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
 
 public final class ChatText {
-    public static final ResourceLocation EMPTY_ICON_PATH = new ResourceLocation(TouhouLittleMaid.MOD_ID, "empty");
+    public static final ResourceLocation EMPTY_ICON_PATH = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "empty");
     public static final ChatText EMPTY_CHAT_TEXT = new ChatText(ChatTextType.EMPTY, EMPTY_ICON_PATH, StringUtils.EMPTY);
     private static final String ICON_IDENTIFIER_CHAR = "%";
 

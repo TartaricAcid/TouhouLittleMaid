@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 
 public class TaskCocoa implements IFarmTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "cocoa");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "cocoa");
 
     @Override
     public ResourceLocation getUid() {

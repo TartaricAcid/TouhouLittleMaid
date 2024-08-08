@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 
 
 public class BigBackpackModel extends AbstractModel<EntityMaid> {
-    public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "backpack_big");
+    public static ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "backpack_big");
     private final ModelPart bone;
 
     public BigBackpackModel(ModelPart root) {

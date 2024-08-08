@@ -18,10 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public class MultiBlockAltar implements IMultiBlock {
-    private static final ResourceLocation ALTAR_SOUTH = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_south");
-    private static final ResourceLocation ALTAR_NORTH = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_north");
-    private static final ResourceLocation ALTAR_EAST = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_east");
-    private static final ResourceLocation ALTAR_WEST = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_west");
+    private static final ResourceLocation ALTAR_SOUTH = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_south");
+    private static final ResourceLocation ALTAR_NORTH = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_north");
+    private static final ResourceLocation ALTAR_EAST = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_east");
+    private static final ResourceLocation ALTAR_WEST = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_west");
     private static final BlockPos SOUTH_POS = new BlockPos(-4, -3, 0);
     private static final BlockPos NORTH_POS = new BlockPos(-3, -3, -7);
     private static final BlockPos EAST_POS = new BlockPos(0, -3, -3);

@@ -15,7 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 public class TileEntityKeyboardRenderer implements BlockEntityRenderer<TileEntityKeyboard> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/keyboard.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/keyboard.png");
     private final KeyboardModel model;
 
     public TileEntityKeyboardRenderer(BlockEntityRendererProvider.Context context) {

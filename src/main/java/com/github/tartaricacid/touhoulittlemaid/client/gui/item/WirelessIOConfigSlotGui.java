@@ -16,7 +16,7 @@ import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert
 import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.bytes2Booleans;
 
 public class WirelessIOConfigSlotGui extends Screen {
-    private static final ResourceLocation SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io_slot_config.png");
+    private static final ResourceLocation SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io_slot_config.png");
     private static final int SLOT_NUM = 38;
     private final boolean[] configData;
     protected int imageWidth = 155;

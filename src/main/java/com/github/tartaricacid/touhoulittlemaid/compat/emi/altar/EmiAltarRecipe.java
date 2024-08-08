@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class EmiAltarRecipe implements EmiRecipe {
-    private static final EmiTexture POWER_ICON = new EmiTexture(new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png"), 32, 0, 16, 16, 16, 16, 64, 64);
+    private static final EmiTexture POWER_ICON = new EmiTexture(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png"), 32, 0, 16, 16, 16, 16, 64, 64);
     private final ResourceLocation id;
     private final List<EmiStack> outputs;
     private final List<EmiIngredient> inputs;

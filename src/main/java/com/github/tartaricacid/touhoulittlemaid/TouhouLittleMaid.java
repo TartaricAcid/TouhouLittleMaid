@@ -51,6 +51,7 @@ public final class TouhouLittleMaid {
         InitPoi.POI_TYPES.register(eventBus);
         InitTrigger.TRIGGERS.register(eventBus);
         InitDataAttachment.ATTACHMENT_TYPES.register(eventBus);
+        InitDataComponent.DATA_COMPONENTS.register(eventBus);
 
         eventBus.addListener(NewNetwork::registerPacket);
         /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表

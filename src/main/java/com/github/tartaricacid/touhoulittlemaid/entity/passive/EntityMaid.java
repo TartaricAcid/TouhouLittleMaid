@@ -226,48 +226,43 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private static Ingredient getConfigIngredient(String config, Item defaultItem) {
         if (config.startsWith(MaidConfig.TAG_PREFIX)) {
-            ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-            if (tags != null) {
-                ResourceLocation key = new ResourceLocation(config.substring(1));
-                TagKey<Item> tagKey = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), key);
-                if (tags.isKnownTagName(tagKey)) {
-                    return Ingredient.of(tagKey);
-                }
-            }
+            ResourceLocation key = ResourceLocation.parse(config.substring(1));
+            TagKey<Item> tagKey = TagKey.create(BuiltInRegistries.ITEM.key(), key);
+            return Ingredient.of(tagKey);
         } else {
-            ResourceLocation key = new ResourceLocation(config);
-            if (ForgeRegistries.ITEMS.containsKey(key)) {
-                return Ingredient.of(ForgeRegistries.ITEMS.getValue(key));
+            ResourceLocation key = ResourceLocation.parse(config);
+            if (BuiltInRegistries.ITEM.containsKey(key)) {
+                return Ingredient.of(BuiltInRegistries.ITEM.get(key));
             }
         }
         return Ingredient.of(defaultItem);
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
-        super.defineSynchedData(pBuilder);
-        pBuilder.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
-        pBuilder.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
-        pBuilder.define(DATA_TASK, TaskIdle.UID.toString());
-        pBuilder.define(DATA_BEGGING, false);
-        pBuilder.define(DATA_PICKUP, true);
-        pBuilder.define(DATA_HOME_MODE, false);
-        pBuilder.define(DATA_RIDEABLE, true);
-        pBuilder.define(DATA_INVULNERABLE, false);
-        pBuilder.define(DATA_HUNGER, 0);
-        pBuilder.define(DATA_FAVORABILITY, 0);
-        pBuilder.define(DATA_EXPERIENCE, 0);
-        pBuilder.define(DATA_STRUCK_BY_LIGHTNING, false);
-        pBuilder.define(DATA_IS_CHARGING_CROSSBOW, false);
-        pBuilder.define(DATA_ARM_RISE, false);
-        pBuilder.define(SCHEDULE_MODE, MaidSchedule.DAY);
-        pBuilder.define(RESTRICT_CENTER, BlockPos.ZERO);
-        pBuilder.define(RESTRICT_RADIUS, MaidConfig.MAID_NON_HOME_RANGE.get().floatValue());
-        pBuilder.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
-        pBuilder.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
-        pBuilder.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
-        pBuilder.define(BACKPACK_FLUID, StringUtils.EMPTY);
-        pBuilder.define(GAME_SKILL, new CompoundTag());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
+        builder.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
+        builder.define(DATA_TASK, TaskIdle.UID.toString());
+        builder.define(DATA_BEGGING, false);
+        builder.define(DATA_PICKUP, true);
+        builder.define(DATA_HOME_MODE, false);
+        builder.define(DATA_RIDEABLE, true);
+        builder.define(DATA_INVULNERABLE, false);
+        builder.define(DATA_HUNGER, 0);
+        builder.define(DATA_FAVORABILITY, 0);
+        builder.define(DATA_EXPERIENCE, 0);
+        builder.define(DATA_STRUCK_BY_LIGHTNING, false);
+        builder.define(DATA_IS_CHARGING_CROSSBOW, false);
+        builder.define(DATA_ARM_RISE, false);
+        builder.define(SCHEDULE_MODE, MaidSchedule.DAY);
+        builder.define(RESTRICT_CENTER, BlockPos.ZERO);
+        builder.define(RESTRICT_RADIUS, MaidConfig.MAID_NON_HOME_RANGE.get().floatValue());
+        builder.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
+        builder.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
+        builder.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
+        builder.define(BACKPACK_FLUID, StringUtils.EMPTY);
+        builder.define(GAME_SKILL, new CompoundTag());
     }
 
     @Override
@@ -1000,7 +995,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             setSchedule(MaidSchedule.valueOf(compound.getString(SCHEDULE_MODE_TAG)));
         }
         if (compound.contains(TASK_TAG, Tag.TAG_STRING)) {
-            ResourceLocation uid = new ResourceLocation(compound.getString(TASK_TAG));
+            ResourceLocation uid = ResourceLocation.parse(compound.getString(TASK_TAG));
             IMaidTask task = TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
             setTask(task);
         }
@@ -1058,7 +1053,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             compound.remove(RESTRICT_CENTER_TAG);
         }
         if (compound.contains(MAID_BACKPACK_TYPE, Tag.TAG_STRING)) {
-            ResourceLocation id = new ResourceLocation(compound.getString(MAID_BACKPACK_TYPE));
+            ResourceLocation id = ResourceLocation.parse(compound.getString(MAID_BACKPACK_TYPE));
             IMaidBackpack backpack = BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
             setMaidBackpackType(backpack);
             if (this.backpackData != null && compound.contains(BACKPACK_DATA_TAG, Tag.TAG_COMPOUND)) {
@@ -1155,7 +1150,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         int modelSize = ServerCustomPackLoader.SERVER_MAID_MODELS.getModelSize();
         // 这里居然可能为 0
         if (modelSize > 0) {
@@ -1534,7 +1529,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public IMaidBackpack getMaidBackpackType() {
-        ResourceLocation id = new ResourceLocation(entityData.get(BACKPACK_TYPE));
+        ResourceLocation id = ResourceLocation.parse(entityData.get(BACKPACK_TYPE));
         return BackpackManager.findBackpack(id).orElse(BackpackManager.getEmptyBackpack());
     }
 

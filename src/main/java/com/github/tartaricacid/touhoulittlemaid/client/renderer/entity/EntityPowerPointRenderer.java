@@ -16,7 +16,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class EntityPowerPointRenderer extends EntityRenderer<EntityPowerPoint> {
-    private static final ResourceLocation POWER_POINT_TEXTURES = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
+    private static final ResourceLocation POWER_POINT_TEXTURES = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
     private static final RenderType RENDER_TYPE = RenderType.itemEntityTranslucentCull(POWER_POINT_TEXTURES);
 
     public EntityPowerPointRenderer(EntityRendererProvider.Context renderManager) {

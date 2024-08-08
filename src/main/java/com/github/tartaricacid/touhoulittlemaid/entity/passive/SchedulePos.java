@@ -98,7 +98,7 @@ public final class SchedulePos {
             this.workPos = NbtUtils.readBlockPos(data.getCompound("Work"));
             this.idlePos = NbtUtils.readBlockPos(data.getCompound("Idle"));
             this.sleepPos = NbtUtils.readBlockPos(data.getCompound("Sleep"));
-            this.dimension = new ResourceLocation(data.getString("Dimension"));
+            this.dimension = ResourceLocation.parse(data.getString("Dimension"));
             this.configured = data.getBoolean("Configured");
             this.restrictTo(maid);
         }

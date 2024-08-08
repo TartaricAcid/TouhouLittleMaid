@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MaidSoundPackGui extends Screen {
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_custom_sound.png");
+    private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_custom_sound.png");
     private final int packPerSize = 4;
     private final int soundPerSize = 13;
     private final EntityMaid maid;

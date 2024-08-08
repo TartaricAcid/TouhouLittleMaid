@@ -46,8 +46,8 @@ public class EntitySit extends Entity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
-        pBuilder.define(SIT_TYPE, "");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(SIT_TYPE, "");
     }
 
     @Override

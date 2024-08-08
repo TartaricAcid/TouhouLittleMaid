@@ -31,7 +31,7 @@ import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import javax.annotation.Nullable;
 
 public class TankBackpack extends IMaidBackpack {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "tank");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "tank");
 
     @Override
     public ResourceLocation getId() {
@@ -133,7 +133,7 @@ public class TankBackpack extends IMaidBackpack {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tank_backpack.png");
+        return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tank_backpack.png");
     }
 
     @OnlyIn(Dist.CLIENT)

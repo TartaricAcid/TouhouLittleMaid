@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TaskShears implements IMaidTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "shears");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "shears");
 
     @Override
     public ResourceLocation getUid() {

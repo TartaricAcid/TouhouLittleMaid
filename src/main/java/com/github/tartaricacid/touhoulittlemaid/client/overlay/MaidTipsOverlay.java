@@ -16,12 +16,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.List;
 import java.util.Map;
 
 public class MaidTipsOverlay implements IGuiOverlay {
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_tips_icon.png");
+    private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_tips_icon.png");
     private static final Map<Item, MutableComponent> TIPS = Maps.newHashMap();
 
     public static void init() {

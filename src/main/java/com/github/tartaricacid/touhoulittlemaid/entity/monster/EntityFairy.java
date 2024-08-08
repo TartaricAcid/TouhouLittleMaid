@@ -72,9 +72,9 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
-        super.defineSynchedData(pBuilder);
-        pBuilder.define(FAIRY_TYPE, FairyType.BLACK.ordinal());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(FAIRY_TYPE, FairyType.BLACK.ordinal());
     }
 
     @Override
@@ -128,9 +128,9 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setFairyTypeOrdinal(random.nextInt(FairyType.values().length));
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
     @Override

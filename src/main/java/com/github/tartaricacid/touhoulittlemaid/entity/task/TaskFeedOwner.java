@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TaskFeedOwner implements IFeedTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "feed");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "feed");
 
     @Override
     public ResourceLocation getUid() {

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ModelSwitcherGui extends Screen {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/model_switcher.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/model_switcher.png");
     private static final ResourceLocation DEFAULT_MODEL_ID = ResourceLocation.parse("touhou_little_maid:hakurei_reimu");
     private final List<TileEntityModelSwitcher.ModeInfo> infoList;
     private final BlockPos pos;

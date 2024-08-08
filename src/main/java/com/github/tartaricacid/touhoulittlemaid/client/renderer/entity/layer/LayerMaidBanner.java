@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import java.util.List;
 
 public class LayerMaidBanner extends RenderLayer<Mob, BedrockModel<Mob>> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_banner.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_banner.png");
     private final EntityMaidRenderer renderer;
     private final MaidBannerModel bannerModel;
 

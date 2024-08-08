@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class ScheduleButton<T extends AbstractMaidContainer> extends Button {
-    private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
+    private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
     private final EntityMaid maid;
     private MaidSchedule mode;

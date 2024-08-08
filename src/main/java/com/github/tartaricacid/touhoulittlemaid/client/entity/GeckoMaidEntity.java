@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 
 public class GeckoMaidEntity implements IAnimatable {
-    private static final ResourceLocation GECKO_DEFAULT_ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "fox_miko");
+    private static final ResourceLocation GECKO_DEFAULT_ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "fox_miko");
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this, true);
     private IMaid maid = null;
     private MaidModelInfo mainInfo;

@@ -54,11 +54,11 @@ public class EntityDanmaku extends ThrowableProjectile {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
-        pBuilder.define(DANMAKU_TYPE, DanmakuType.PELLET.ordinal());
-        pBuilder.define(COLOR, DanmakuColor.RED.ordinal());
-        pBuilder.define(DAMAGE, 1.0f);
-        pBuilder.define(GRAVITY, 0.01f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DANMAKU_TYPE, DanmakuType.PELLET.ordinal());
+        builder.define(COLOR, DanmakuColor.RED.ordinal());
+        builder.define(DAMAGE, 1.0f);
+        builder.define(GRAVITY, 0.01f);
     }
 
     @Override

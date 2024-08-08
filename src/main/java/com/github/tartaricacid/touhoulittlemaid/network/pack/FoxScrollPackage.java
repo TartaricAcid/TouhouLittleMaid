@@ -57,8 +57,7 @@ public record FoxScrollPackage(Map<String, List<FoxScrollData>> data) implements
     public static class FoxScrollData {
         //TODO : component的CODEC
         public static final StreamCodec<RegistryFriendlyByteBuf, FoxScrollData> FOX_SCROLL_DATA_STREAM_CODEC = StreamCodec.composite(
-                BlockPos.STREAM_CODEC, FoxScrollData::getPos,
-                );
+                BlockPos.STREAM_CODEC, FoxScrollData::getPos);
         private final BlockPos pos;
         private final Component name;
         private final long timestamp;

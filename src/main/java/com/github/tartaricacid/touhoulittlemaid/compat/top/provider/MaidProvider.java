@@ -14,7 +14,7 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 
 public class MaidProvider implements IProbeInfoEntityProvider {
-    private static final String ID = (new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid")).toString();
+    private static final String ID = (ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "maid")).toString();
 
     @Override
     public void addProbeEntityInfo(ProbeMode probeMode, IProbeInfo probeInfo, Player playerEntity, Level world, Entity entity, IProbeHitEntityData iProbeHitEntityData) {

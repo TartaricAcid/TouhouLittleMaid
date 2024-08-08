@@ -24,8 +24,8 @@ import java.util.List;
 
 public class AltarRecipeCategory implements IRecipeCategory<AltarRecipeWrapper> {
     public static final RecipeType<AltarRecipeWrapper> ALTAR = RecipeType.create(TouhouLittleMaid.MOD_ID, "altar", AltarRecipeWrapper.class);
-    private static final ResourceLocation ALTAR_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/altar_icon.png");
-    private static final ResourceLocation POWER_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
+    private static final ResourceLocation ALTAR_ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/altar_icon.png");
+    private static final ResourceLocation POWER_ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
     private static final MutableComponent TITLE = Component.translatable("jei.touhou_little_maid.altar_craft.title");
     private final IDrawableStatic bgDraw;
     private final IDrawable slotDraw;

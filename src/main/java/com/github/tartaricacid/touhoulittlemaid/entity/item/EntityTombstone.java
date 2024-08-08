@@ -79,8 +79,8 @@ public class EntityTombstone extends Entity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
-        pBuilder.define(MAID_NAME, Component.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(MAID_NAME, Component.empty());
     }
 
     @Override

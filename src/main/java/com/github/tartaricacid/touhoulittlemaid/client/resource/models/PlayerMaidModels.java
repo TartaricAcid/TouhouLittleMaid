@@ -34,12 +34,12 @@ public final class PlayerMaidModels {
     private static final PlayerMaidModel PLAYER_MAID_MODEL_SLIM = new PlayerMaidModel(true);
     private static final String SLIM_NAME = "slim";
     private static final List<ResourceLocation> PLAYER_MAID_ANIMATION_RES = Lists.newArrayList(
-            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
-            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
-            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/leg/default.js"),
-            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/player/arm/default.js"),
-            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/swing.js"),
-            new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/player/sit/default.js")
+            ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
+            ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
+            ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/leg/default.js"),
+            ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/player/arm/default.js"),
+            ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/swing.js"),
+            ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/player/sit/default.js")
     );
     private static final ResourceLocation TEXTURE_ALEX = ResourceLocation.withDefaultNamespace("textures/entity/alex.png");
     private static final List<Object> PLAYER_MAID_ANIMATIONS = Lists.newArrayList();

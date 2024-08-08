@@ -9,8 +9,8 @@ import net.minecraft.resources.ResourceLocation;
  * 用来渲染祭坛图标
  */
 public class EmiAltarRecipeCategory extends EmiRecipeCategory {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar");
-    private static final ResourceLocation ALTAR_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/altar_icon.png");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar");
+    private static final ResourceLocation ALTAR_ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/altar_icon.png");
 
     public EmiAltarRecipeCategory() {
         super(ID, (draw, x, y, delta) -> {

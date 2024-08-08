@@ -4,14 +4,19 @@ import com.github.tartaricacid.touhoulittlemaid.api.bauble.IChestType;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,8 +40,22 @@ import java.util.Objects;
 public class ItemWirelessIO extends Item implements MenuProvider {
     private static final int FILTER_LIST_SIZE = 9;
     private static final String FILTER_LIST_TAG = "ItemFilterList";
-    private static final String FILTER_MODE_TAG = "ItemFilterMode";
-    private static final String IO_MODE_TAG = "ItemIOMode";
+    private static final DataComponentType<Boolean> FILTER_MODE_TAG = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            "ItemFilterMode",
+            DataComponentType.<Boolean>builder()
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL)
+                    .build()
+    );
+    private static final DataComponentType<Boolean> IO_MODE_TAG = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            "ItemIOMode",
+            DataComponentType.<Boolean>builder()
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL)
+                    .build()
+    );
     private static final String BINDING_POS = "BindingPos";
     private static final String SLOT_CONFIG_TAG = "SlotConfigData";
     private static final String TOOLTIPS_PREFIX = "§a▍ §7";
@@ -47,7 +66,7 @@ public class ItemWirelessIO extends Item implements MenuProvider {
 
     public static void setMode(ItemStack stack, boolean maidToChest) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.getOrCreateTag().putBoolean(IO_MODE_TAG, maidToChest);
+            stack.set(IO_MODE_TAG, maidToChest);
         }
     }
 
@@ -63,7 +82,7 @@ public class ItemWirelessIO extends Item implements MenuProvider {
 
     public static void setFilterMode(ItemStack stack, boolean isBlacklist) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.getOrCreateTag().putBoolean(FILTER_MODE_TAG, isBlacklist);
+            stack.set(FILTER_MODE_TAG, isBlacklist);
         }
     }
 

@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Slime;
 
 public class EntityYukkuriModel extends AbstractModel<Slime> {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "yukkuri");
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "yukkuri");
     private final ModelPart bone;
 
     public EntityYukkuriModel(ModelPart root) {

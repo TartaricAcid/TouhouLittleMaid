@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
 public class GeckoChairEntity implements IAnimatable {
-    private static final ResourceLocation GECKO_DEFAULT_ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "fox_miko");
+    private static final ResourceLocation GECKO_DEFAULT_ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "fox_miko");
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this, true);
     private EntityChair chair = null;
     private ChairModelInfo chairInfo;

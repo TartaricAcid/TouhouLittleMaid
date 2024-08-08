@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class TaskFeedAnimal implements IAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "feed_animal");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "feed_animal");
     private static final int MAX_STOP_ATTACK_DISTANCE = 8;
 
     @Override

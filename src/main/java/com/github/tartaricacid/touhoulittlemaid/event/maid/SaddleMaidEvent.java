@@ -10,8 +10,8 @@ import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLLoader;
 
 @EventBusSubscriber
 public class SaddleMaidEvent {
@@ -23,8 +23,8 @@ public class SaddleMaidEvent {
         if (stack.is(Items.SADDLE)) {
             if (player.getPassengers().isEmpty() && maid.getPassengers().isEmpty()) {
                 boolean success = maid.startRiding(player);
-                if (success) {
-                    DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> SaddleMaidEvent::showTips);
+                if (success && FMLLoader.getDist() == Dist.CLIENT) {
+                    SaddleMaidEvent.showTips();
                 }
                 event.setCanceled(true);
                 return;

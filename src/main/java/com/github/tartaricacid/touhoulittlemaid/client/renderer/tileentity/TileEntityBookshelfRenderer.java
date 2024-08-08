@@ -16,7 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 public class TileEntityBookshelfRenderer implements BlockEntityRenderer<TileEntityBookshelf> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/bookshelf.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/bookshelf.png");
     private final BookshelfModel model;
 
     public TileEntityBookshelfRenderer(BlockEntityRendererProvider.Context context) {
