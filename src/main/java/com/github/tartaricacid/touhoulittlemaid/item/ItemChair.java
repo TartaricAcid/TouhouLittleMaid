@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -35,9 +33,11 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.*;
 
 public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
@@ -55,14 +55,14 @@ public class ItemChair extends Item {
 
     public static Data getData(ItemStack stack) {
         if (stack.getItem() == InitItems.CHAIR.get()) {
-            return Data.deserialization(stack.getOrCreateTag());
+            return Data.deserialization(stack);
         }
         return new Data(DEFAULT_MODEL_ID, 0f, true, false);
     }
 
     public static ItemStack setData(ItemStack stack, Data data) {
         if (stack.getItem() == InitItems.CHAIR.get()) {
-            Data.serialization(stack.getOrCreateTag(), data);
+            Data.serialization(stack, data);
         }
         return stack;
     }
@@ -106,10 +106,10 @@ public class ItemChair extends Item {
     }
 
     private void addExtraData(UseOnContext context, ItemStack stack, EntityChair chair) {
-        Data data = Data.deserialization(stack.getOrCreateTag());
-        chair.setModelId(data.getModelId());
-        chair.setMountedHeight(data.getHeight());
-        chair.setTameableCanRide(data.isCanRide());
+        Data data = Data.deserialization(stack);
+        chair.setModelId(data.modelId());
+        chair.setMountedHeight(data.height());
+        chair.setTameableCanRide(data.canRide());
         chair.setNoGravity(data.isNoGravity());
         chair.setOwner(context.getPlayer());
         float yaw = (float) Mth.floor((Mth.wrapDegrees(context.getRotation() - 180) + 22.5F) / 45.0F) * 45.0F;
@@ -123,8 +123,8 @@ public class ItemChair extends Item {
     public Component getName(ItemStack stack) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             ItemChair.Data data = getData(stack);
-            if (CustomPackLoader.CHAIR_MODELS.getInfo(data.getModelId()).isPresent()) {
-                String name = CustomPackLoader.CHAIR_MODELS.getInfo(data.getModelId()).get().getName();
+            if (CustomPackLoader.CHAIR_MODELS.getInfo(data.modelId()).isPresent()) {
+                String name = CustomPackLoader.CHAIR_MODELS.getInfo(data.modelId()).get().getName();
                 return ParseI18n.parse(name);
             }
         }
@@ -139,78 +139,28 @@ public class ItemChair extends Item {
         tooltip.add(Component.translatable("tooltips.touhou_little_maid.chair.gui.desc").withStyle(ChatFormatting.GRAY));
         // 调试模式，不加国际化
         if (flagIn.isAdvanced() && Screen.hasShiftDown()) {
-            Data data = Data.deserialization(stack.getOrCreateTag());
-            tooltip.add(Component.literal("Model Id: " + data.getModelId()).withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Mounted Height: " + data.getHeight()).withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Tameable Can Ride: " + data.isCanRide()).withStyle(ChatFormatting.GRAY));
+            Data data = Data.deserialization(stack);
+            tooltip.add(Component.literal("Model Id: " + data.modelId()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal("Mounted Height: " + data.height()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal("Tameable Can Ride: " + data.canRide()).withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal("Is No Gravity: " + data.isNoGravity()).withStyle(ChatFormatting.GRAY));
         }
     }
 
-    public static class Data {
-        private static final String MODEL_ID_TAG = "ModelId";
-        private static final String MOUNTED_HEIGHT_TAG = "MountedHeight";
-        private static final String TAMEABLE_CAN_RIDE_TAG = "TameableCanRide";
-        private static final String IS_NO_GRAVITY_TAG = "IsNoGravity";
-
-        private final String modelId;
-        private final float height;
-        private final boolean canRide;
-        private final boolean isNoGravity;
-
-        public Data(String modelId, float height, boolean canRide, boolean isNoGravity) {
-            this.modelId = modelId;
-            this.height = height;
-            this.canRide = canRide;
-            this.isNoGravity = isNoGravity;
+    public record Data(String modelId, float height, boolean canRide, boolean isNoGravity) {
+        public static void serialization(ItemStack stack, Data data) {
+            stack.set(MODEL_ID_TAG, data.modelId());
+            stack.set(MOUNTED_HEIGHT_TAG, data.height());
+            stack.set(TAMEABLE_CAN_RIDE_TAG, data.canRide());
+            stack.set(IS_NO_GRAVITY_TAG, data.isNoGravity());
         }
 
-        public static void serialization(@Nonnull CompoundTag nbt, Data data) {
-            nbt.putString(MODEL_ID_TAG, data.getModelId());
-            nbt.putFloat(MOUNTED_HEIGHT_TAG, data.getHeight());
-            nbt.putBoolean(TAMEABLE_CAN_RIDE_TAG, data.isCanRide());
-            nbt.putBoolean(IS_NO_GRAVITY_TAG, data.isNoGravity());
-        }
-
-        public static Data deserialization(@Nonnull CompoundTag nbt) {
-            String modelId = DEFAULT_MODEL_ID;
-            float height = 0f;
-            boolean canRide = true;
-            boolean isNoGravity = false;
-
-            if (nbt.contains(MODEL_ID_TAG, Tag.TAG_STRING)) {
-                modelId = nbt.getString(MODEL_ID_TAG);
-            }
-
-            if (nbt.contains(MOUNTED_HEIGHT_TAG, Tag.TAG_FLOAT)) {
-                height = nbt.getFloat(MOUNTED_HEIGHT_TAG);
-            }
-
-            if (nbt.contains(TAMEABLE_CAN_RIDE_TAG, Tag.TAG_BYTE)) {
-                canRide = nbt.getBoolean(TAMEABLE_CAN_RIDE_TAG);
-            }
-
-            if (nbt.contains(IS_NO_GRAVITY_TAG, Tag.TAG_BYTE)) {
-                isNoGravity = nbt.getBoolean(IS_NO_GRAVITY_TAG);
-            }
-
+        public static Data deserialization(ItemStack stack) {
+            String modelId = Objects.requireNonNullElse(stack.get(MODEL_ID_TAG), DEFAULT_MODEL_ID);
+            float height = Objects.requireNonNullElse(stack.get(MOUNTED_HEIGHT_TAG), 0f);
+            boolean canRide = Objects.requireNonNullElse(stack.get(TAMEABLE_CAN_RIDE_TAG), true);
+            boolean isNoGravity = Objects.requireNonNullElse(stack.get(IS_NO_GRAVITY_TAG), false);
             return new Data(modelId, height, canRide, isNoGravity);
-        }
-
-        public String getModelId() {
-            return modelId;
-        }
-
-        public float getHeight() {
-            return height;
-        }
-
-        public boolean isCanRide() {
-            return canRide;
-        }
-
-        public boolean isNoGravity() {
-            return isNoGravity;
         }
     }
 }

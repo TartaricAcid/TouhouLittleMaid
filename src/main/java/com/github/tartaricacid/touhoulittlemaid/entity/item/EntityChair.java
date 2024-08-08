@@ -37,6 +37,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.*;
+
 public class EntityChair extends AbstractEntityFromItem {
     public static final EntityType<EntityChair> TYPE = EntityType.Builder.<EntityChair>of(EntityChair::new, MobCategory.MISC)
             .sized(0.875f, 0.5f)
@@ -47,11 +49,6 @@ public class EntityChair extends AbstractEntityFromItem {
     private static final EntityDataAccessor<Float> MOUNTED_HEIGHT = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> TAMEABLE_CAN_RIDE = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.OPTIONAL_UUID);
-
-    private static final String MODEL_ID_TAG = "ModelId";
-    private static final String MOUNTED_HEIGHT_TAG = "MountedHeight";
-    private static final String TAMEABLE_CAN_RIDE_TAG = "TameableCanRide";
-    private static final String OWNER_UUID_TAG = "OwnerUUID";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
@@ -154,27 +151,27 @@ public class EntityChair extends AbstractEntityFromItem {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains(MODEL_ID_TAG, Tag.TAG_STRING)) {
-            setModelId(compound.getString(MODEL_ID_TAG));
+        if (compound.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
+            setModelId(compound.getString(MODEL_ID_TAG_NAME));
         }
-        if (compound.contains(MOUNTED_HEIGHT_TAG, Tag.TAG_FLOAT)) {
-            setMountedHeight(compound.getFloat(MOUNTED_HEIGHT_TAG));
+        if (compound.contains(MOUNTED_HEIGHT_TAG_NAME, Tag.TAG_FLOAT)) {
+            setMountedHeight(compound.getFloat(MOUNTED_HEIGHT_TAG_NAME));
         }
-        if (compound.contains(TAMEABLE_CAN_RIDE_TAG, Tag.TAG_BYTE)) {
-            setTameableCanRide(compound.getBoolean(TAMEABLE_CAN_RIDE_TAG));
+        if (compound.contains(TAMEABLE_CAN_RIDE_TAG_NAME, Tag.TAG_BYTE)) {
+            setTameableCanRide(compound.getBoolean(TAMEABLE_CAN_RIDE_TAG_NAME));
         }
-        if (compound.contains(OWNER_UUID_TAG)) {
-            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG))));
+        if (compound.contains(OWNER_UUID_TAG_NAME)) {
+            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG_NAME))));
         }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString(MODEL_ID_TAG, getModelId());
-        compound.putFloat(MOUNTED_HEIGHT_TAG, getMountedHeight());
-        compound.putBoolean(TAMEABLE_CAN_RIDE_TAG, isTameableCanRide());
-        this.getOwnerUUID().ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG, uuid));
+        compound.putString(MODEL_ID_TAG_NAME, getModelId());
+        compound.putFloat(MOUNTED_HEIGHT_TAG_NAME, getMountedHeight());
+        compound.putBoolean(TAMEABLE_CAN_RIDE_TAG_NAME, isTameableCanRide());
+        this.getOwnerUUID().ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG_NAME, uuid));
     }
 
     @Nullable

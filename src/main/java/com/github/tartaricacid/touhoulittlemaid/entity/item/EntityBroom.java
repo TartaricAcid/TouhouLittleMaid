@@ -30,6 +30,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.OWNER_UUID_TAG_NAME;
+
 public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity {
     public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC)
             .sized(1.375F, 0.5625F)
@@ -38,7 +40,6 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
             .build("broom");
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_ID = SynchedEntityData.defineId(EntityBroom.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final String OWNER_UUID_TAG = "OwnerUUID";
 
     private boolean keyForward = false;
     private boolean keyBack = false;
@@ -83,15 +84,15 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains(OWNER_UUID_TAG)) {
-            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG))));
+        if (compound.contains(OWNER_UUID_TAG_NAME)) {
+            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG_NAME))));
         }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        this.entityData.get(OWNER_ID).ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG, uuid));
+        this.entityData.get(OWNER_ID).ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG_NAME, uuid));
     }
 
     @Override

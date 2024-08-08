@@ -126,11 +126,11 @@ import java.util.Optional;
 
 import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.MAID_NUM;
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
 
 public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
-    public static final String MODEL_ID_TAG = "ModelId";
     public static final String SOUND_PACK_ID_TAG = "SoundPackId";
     public static final String MAID_BACKPACK_TYPE = "MaidBackpackType";
     public static final String MAID_INVENTORY_TAG = "MaidInventory";
@@ -954,7 +954,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString(MODEL_ID_TAG, getModelId());
+        compound.putString(MODEL_ID_TAG_NAME, getModelId());
         compound.putString(SOUND_PACK_ID_TAG, getSoundPackId());
         compound.putString(TASK_TAG, getTask().getUid().toString());
         compound.putBoolean(PICKUP_TAG, isPickup());
@@ -985,8 +985,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains(MODEL_ID_TAG, Tag.TAG_STRING)) {
-            setModelId(compound.getString(MODEL_ID_TAG));
+        if (compound.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
+            setModelId(compound.getString(MODEL_ID_TAG_NAME));
         }
         if (compound.contains(SOUND_PACK_ID_TAG, Tag.TAG_STRING)) {
             setSoundPackId(compound.getString(SOUND_PACK_ID_TAG));

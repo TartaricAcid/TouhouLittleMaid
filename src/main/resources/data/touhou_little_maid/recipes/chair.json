@@ -10,19 +10,18 @@
       "tag": "minecraft:wool"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "neoforge:ingots/iron"
     },
     "P": {
       "tag": "minecraft:planks"
     }
   },
   "result": {
-    "type": "minecraft:item_nbt",
-    "item": "touhou_little_maid:chair",
-    "nbt": {
-      "ModelId": "touhou_little_maid:cushion",
-      "MountedHeight": 0.0,
-      "TameableCanRide": true
+    "id": "touhou_little_maid:chair",
+    "components": {
+      "model_id": "touhou_little_maid:cushion",
+      "mounted_height": 0.0,
+      "tameable_can_ride": true
     }
   }
 }
