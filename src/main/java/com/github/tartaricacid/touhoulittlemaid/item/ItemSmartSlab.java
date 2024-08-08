@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
@@ -43,7 +45,10 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
     }
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
-        maid.saveWithoutId(stack.getOrCreateTagElement(MAID_INFO));
+        CompoundData compoundData = stack.get(InitDataComponent.MAID_INFO);
+        if (compoundData != null) {
+            maid.saveWithoutId(compoundData.nbt());
+        }
     }
 
     @Override
@@ -81,13 +86,14 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
 
     private InteractionResult spawnFromStore(UseOnContext context, Player player, Level worldIn, EntityMaid maid) {
         ItemStack stack = context.getItemInHand();
-        if (hasMaidData(stack)) {
-            CompoundTag maidData = getMaidData(stack);
-            UUID ownerUid = maidData.getUUID(MAID_OWNER);
+        CompoundData compoundData = stack.get(InitDataComponent.MAID_INFO);
+        if (compoundData != null) {
+            CompoundTag maidCompound = compoundData.nbt();
+            UUID ownerUid = maidCompound.getUUID(MAID_OWNER);
             if (!player.getUUID().equals(ownerUid)) {
                 return InteractionResult.FAIL;
             }
-            maid.load(maidData);
+            maid.load(maidCompound);
             maid.moveTo(context.getClickedPos().above(), 0, 0);
             if (worldIn instanceof ServerLevel) {
                 worldIn.addFreshEntity(maid);

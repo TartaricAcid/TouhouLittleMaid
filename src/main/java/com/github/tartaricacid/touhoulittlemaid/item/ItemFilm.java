@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -39,12 +41,16 @@ public class ItemFilm extends AbstractStoreMaidItem {
         removeMaidSomeData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
         filmTag.put(MAID_INFO, maidTag);
-        film.setTag(filmTag);
+        film.set(InitDataComponent.MAID_INFO,new CompoundData(filmTag));
         return film;
     }
 
     public static void filmToMaid(ItemStack film, Level worldIn, BlockPos pos, Player player) {
-        Optional<Entity> entityOptional = EntityType.create(getMaidData(film), worldIn);
+        CompoundData compoundData = film.get(InitDataComponent.MAID_INFO);
+        if (compoundData == null) {
+            return;
+        }
+        Optional<Entity> entityOptional = EntityType.create(compoundData.nbt(), worldIn);
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid maid) {
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             // 实体生成必须在服务端应用
@@ -89,7 +95,7 @@ public class ItemFilm extends AbstractStoreMaidItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        if (!hasMaidData(stack)) {
+        if (stack.get(InitDataComponent.MAID_INFO) == null) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.film.no_data.desc").withStyle(ChatFormatting.DARK_RED));
         }
     }

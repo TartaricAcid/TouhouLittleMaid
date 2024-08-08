@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -34,6 +36,7 @@ public class ItemPhoto extends AbstractStoreMaidItem {
         Player player = context.getPlayer();
         ItemStack photo = context.getItemInHand();
         Vec3 clickLocation = context.getClickLocation();
+        CompoundData compoundData = photo.get(InitDataComponent.MAID_INFO);
 
         if (player == null) {
             return super.useOn(context);
@@ -48,7 +51,7 @@ public class ItemPhoto extends AbstractStoreMaidItem {
         }
 
         // 检查照片的 NBT 数据
-        if (!hasMaidData(photo)) {
+        if (compoundData == null) {
             if (worldIn.isClientSide) {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.photo.have_no_nbt_data"));
             }
@@ -56,7 +59,7 @@ public class ItemPhoto extends AbstractStoreMaidItem {
         }
 
         // 最后才应用生成实体的逻辑
-        Optional<Entity> entityOptional = EntityType.create(getMaidData(photo), worldIn);
+        Optional<Entity> entityOptional = EntityType.create(compoundData.nbt(), worldIn);
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid maid) {
             maid.setPos(clickLocation.x, clickLocation.y, clickLocation.z);
             // 实体生成必须在服务端应用
@@ -78,7 +81,7 @@ public class ItemPhoto extends AbstractStoreMaidItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        if (!hasMaidData(stack)) {
+        if (stack.get(InitDataComponent.MAID_INFO) == null) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.photo.no_data.desc").withStyle(ChatFormatting.DARK_RED));
         }
     }

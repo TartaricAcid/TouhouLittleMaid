@@ -5,7 +5,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -15,8 +18,18 @@ import java.lang.reflect.Type;
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
 
 public final class ChatText {
+
     public static final ResourceLocation EMPTY_ICON_PATH = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "empty");
     public static final ChatText EMPTY_CHAT_TEXT = new ChatText(ChatTextType.EMPTY, EMPTY_ICON_PATH, StringUtils.EMPTY);
+    public static final StreamCodec<ByteBuf, ChatText> STREAM_CODEC = StreamCodec.composite(
+            ChatTextType.STREAM_CODEC,
+            ChatText::getType,
+            ResourceLocation.STREAM_CODEC,
+            ChatText::getIconPath,
+            ByteBufCodecs.STRING_UTF8,
+            ChatText::getText,
+            ChatText::new
+    );
     private static final String ICON_IDENTIFIER_CHAR = "%";
 
     private final ChatTextType type;
@@ -56,6 +69,10 @@ public final class ChatText {
 
     public String getText() {
         return text;
+    }
+
+    public ChatTextType getType() {
+        return type;
     }
 
     @Override

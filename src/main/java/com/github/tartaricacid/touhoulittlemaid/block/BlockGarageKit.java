@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
@@ -12,15 +13,12 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -51,19 +49,6 @@ import java.util.Optional;
 
 public class BlockGarageKit extends Block implements EntityBlock {
     public static final VoxelShape BLOCK_AABB = Block.box(4, 0, 4, 12, 16, 12);
-    private static final DataComponentType<CustomData> ENTITY_INFO_TAG = Registry.register(
-            BuiltInRegistries.DATA_COMPONENT_TYPE,
-            "EntityInfo",
-            DataComponentType.<CustomData>builder()
-                    .persistent(CustomData.CODEC_WITH_ID)
-                    .networkSynchronized(CustomData.STREAM_CODEC)
-                    .build()
-    );
-
-    public BlockGarageKit() {
-        super(BlockBehaviour.Properties.of().sound(SoundType.MUD).strength(1, 2).noOcclusion());
-    }
-
     public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
@@ -114,11 +99,15 @@ public class BlockGarageKit extends Block implements EntityBlock {
         }
     };
 
+    public BlockGarageKit() {
+        super(BlockBehaviour.Properties.of().sound(SoundType.MUD).strength(1, 2).noOcclusion());
+    }
+
     @OnlyIn(Dist.CLIENT)
     public static void fillItemCategory(CreativeModeTab.Output items) {
         for (String modelId : CustomPackLoader.MAID_MODELS.getModelIdSet()) {
             ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
-            CustomData customData = stack.get(ENTITY_INFO_TAG);
+            CustomData customData = stack.get(InitDataComponent.ENTITY_INFO_TAG);
             CompoundTag data;
             if (customData == null) {
                 data = new CompoundTag();
@@ -127,7 +116,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
             }
             data.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
             data.putString(EntityMaid.MODEL_ID_TAG, modelId);
-            stack.set(ENTITY_INFO_TAG, CustomData.of(data));
+            stack.set(InitDataComponent.ENTITY_INFO_TAG, CustomData.of(data));
             items.accept(stack);
         }
     }
@@ -161,7 +150,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack itemStack,BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = playerIn.getItemInHand(hand);
         if (!(worldIn instanceof ServerLevel) || !(stack.getItem() instanceof SpawnEggItem)) {
             return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
@@ -195,7 +184,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
 
     private ItemStack getGarageKitFromWorld(BlockGetter world, BlockPos pos) {
         ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
-        getGarageKit(world, pos).ifPresent(te -> stack.set(ENTITY_INFO_TAG, CustomData.of(te.getExtraData())));
+        getGarageKit(world, pos).ifPresent(te -> stack.set(InitDataComponent.ENTITY_INFO_TAG, CustomData.of(te.getExtraData())));
         return stack;
     }
 

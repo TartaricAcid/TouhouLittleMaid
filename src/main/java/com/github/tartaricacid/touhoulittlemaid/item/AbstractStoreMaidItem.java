@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemMaidTooltip;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -10,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public abstract class AbstractStoreMaidItem extends Item {
@@ -19,17 +20,6 @@ public abstract class AbstractStoreMaidItem extends Item {
 
     public AbstractStoreMaidItem(Properties properties) {
         super(properties);
-    }
-
-    public static boolean hasMaidData(ItemStack stack) {
-        return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO).isEmpty();
-    }
-
-    public static CompoundTag getMaidData(ItemStack stack) {
-        if (hasMaidData(stack)) {
-            return Objects.requireNonNull(stack.getTag()).getCompound(MAID_INFO);
-        }
-        return new CompoundTag();
     }
 
     @Override
@@ -51,14 +41,17 @@ public abstract class AbstractStoreMaidItem extends Item {
     }
 
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        CompoundTag maidData = getMaidData(stack);
-        if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-            String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
-            String customName = "";
-            if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
-                customName = maidData.getString(CUSTOM_NAME);
+        CompoundData compoundDataComponent = stack.get(InitDataComponent.MAID_INFO);
+        if (compoundDataComponent != null) {
+            CompoundTag maidData = compoundDataComponent.nbt();
+            if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
+                String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
+                String customName = "";
+                if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
+                    customName = maidData.getString(CUSTOM_NAME);
+                }
+                return Optional.of(new ItemMaidTooltip(modelId, customName));
             }
-            return Optional.of(new ItemMaidTooltip(modelId, customName));
         }
         return Optional.empty();
     }

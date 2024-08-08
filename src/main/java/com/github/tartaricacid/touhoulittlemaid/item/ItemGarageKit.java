@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackGarageKitRenderer;
+import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -28,13 +30,10 @@ public class ItemGarageKit extends BlockItem {
         super(InitBlocks.GARAGE_KIT.get(), (new Item.Properties()).stacksTo(1));
     }
 
-    private static boolean hasMaidData(ItemStack stack) {
-        return stack.hasTag() && !Objects.requireNonNull(stack.getTag()).getCompound(ENTITY_INFO).isEmpty();
-    }
-
     public static CompoundTag getMaidData(ItemStack stack) {
-        if (hasMaidData(stack)) {
-            return Objects.requireNonNull(stack.getTag()).getCompound(ENTITY_INFO);
+        CompoundData compoundData = stack.get(InitDataComponent.MAID_INFO);
+        if (compoundData != null) {
+            return compoundData.nbt();
         }
         return DEFAULT_DATA;
     }

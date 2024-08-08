@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -23,10 +25,7 @@ import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ItemFoxScroll extends Item {
     private static final String TRACK_INFO = "TrackInfo";
@@ -35,23 +34,26 @@ public class ItemFoxScroll extends Item {
         super((new Properties()).stacksTo(1));
     }
 
-    public static boolean hasTrackInfo(ItemStack scroll) {
-        return scroll.hasTag() && !Objects.requireNonNull(scroll.getTag()).getCompound(TRACK_INFO).isEmpty();
-    }
-
     public static void setTrackInfo(ItemStack scroll, String dimension, BlockPos pos) {
-        CompoundTag tag = scroll.getOrCreateTagElement(TRACK_INFO);
-        tag.putString("Dimension", dimension);
-        tag.put("Position", NbtUtils.writeBlockPos(pos));
+        CompoundData compoundData = scroll.get(InitDataComponent.MAID_INFO);
+        if (compoundData != null) {
+            CompoundTag tag = compoundData.nbt();
+            tag.putString("Dimension", dimension);
+            tag.put("Position", NbtUtils.writeBlockPos(pos));
+        }
     }
 
     @Nullable
     public static Pair<String, BlockPos> getTrackInfo(ItemStack scroll) {
-        if (hasTrackInfo(scroll)) {
-            CompoundTag tag = Objects.requireNonNull(scroll.getTag()).getCompound(TRACK_INFO);
+        CompoundData compoundData = scroll.get(InitDataComponent.MAID_INFO);
+        if (compoundData != null) {
+            CompoundTag tag = compoundData.nbt();
             String dimension = tag.getString("Dimension");
-            BlockPos position = NbtUtils.readBlockPos(tag.getCompound("Position"));
-            return Pair.of(dimension, position);
+            Optional<BlockPos> position = NbtUtils.readBlockPos(tag,"Position");
+            if (position.isPresent()) {
+                BlockPos pos = position.get();
+                return Pair.of(dimension, pos);
+            }
         }
         return null;
     }

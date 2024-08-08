@@ -71,7 +71,7 @@ public class MaidBedTask extends MaidCheckRateTask {
         BlockPos blockPos = maid.getBrainSearchPos();
         PoiManager poiManager = world.getPoiManager();
         int range = (int) maid.getRestrictRadius();
-        return poiManager.getInRange(type -> type.get().equals(InitPoi.MAID_BED.get()), blockPos, range, PoiManager.Occupancy.ANY)
+        return poiManager.getInRange(type -> type.value().equals(InitPoi.MAID_BED.get()), blockPos, range, PoiManager.Occupancy.ANY)
                 .map(PoiRecord::getPos).min(Comparator.comparingDouble(pos -> pos.distSqr(maid.blockPosition()))).orElse(null);
     }
 }

@@ -180,9 +180,9 @@ public class ChatBubbleRenderer {
 
     private static void getTmpChatBubbles(EntityMaid maid) {
         MaidChatBubbles chatBubble = maid.getChatBubble();
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
         TMP_CHAT_BUBBLES.clear();
         if (bubble1 != MaidChatBubbles.EMPTY) {
             TMP_CHAT_BUBBLES.add(bubble1);

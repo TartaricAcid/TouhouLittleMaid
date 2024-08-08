@@ -77,9 +77,9 @@ public class ChatBubbleManger {
         MaidChatBubbles chatBubble = maid.getChatBubble();
         long minEndTime = -1;
         int index = 1;
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
 
         if (bubble1.getLeft() <= minEndTime) {
             minEndTime = bubble1.getLeft();
@@ -112,9 +112,9 @@ public class ChatBubbleManger {
     public static int getChatBubbleCount(EntityMaid maid) {
         int count = 0;
         MaidChatBubbles chatBubble = maid.getChatBubble();
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
         if (bubble1 != EMPTY) {
             count = count + 1;
         }
@@ -155,9 +155,9 @@ public class ChatBubbleManger {
 
     private static void checkTimeoutChatBubble(EntityMaid maid) {
         MaidChatBubbles chatBubble = maid.getChatBubble();
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
         long currentTimeMillis = System.currentTimeMillis();
         if (bubble1 != EMPTY && currentTimeMillis > bubble1.getLeft()) {
             bubble1 = EMPTY;

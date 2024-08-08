@@ -93,7 +93,7 @@ public class MaidBeaconGui extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics,mouseX,mouseY,partialTicks);
         graphics.blit(BG, leftPos, topPos + 2, 0, 0, 142, 111);
         graphics.blit(BG, leftPos + 118, topPos + 1, 44, 111, 154, 15);
 

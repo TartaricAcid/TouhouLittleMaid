@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -23,14 +24,10 @@ public enum MaidSchedule {
     public static final StreamCodec<ByteBuf, MaidSchedule> STREAM_CODEC = ByteBufCodecs.idMapper(MaidSchedule.BY_ID, MaidSchedule::ordinal);
 
     public static final EntityDataSerializer<MaidSchedule> DATA = new EntityDataSerializer<>() {
-        @Override
-        public void write(FriendlyByteBuf buf, MaidSchedule value) {
-            buf.writeEnum(value);
-        }
 
         @Override
-        public MaidSchedule read(FriendlyByteBuf buf) {
-            return buf.readEnum(MaidSchedule.class);
+        public StreamCodec<? super RegistryFriendlyByteBuf, MaidSchedule> codec() {
+            return STREAM_CODEC;
         }
 
         @Override

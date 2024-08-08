@@ -26,16 +26,15 @@ public final class TaskManager {
     }
 
     public static void init() {
+        // TODO TacZ 兼容
+        // TacCompat.initAndAddGunTask(manager);
+
         TaskManager manager = new TaskManager();
         manager.add(IDLE_TASK);
         manager.add(new TaskAttack());
         manager.add(new TaskBowAttack());
         manager.add(new TaskCrossBowAttack());
         manager.add(new TaskDanmakuAttack());
-
-        // TODO TacZ 兼容
-        // TacCompat.initAndAddGunTask(manager);
-
         manager.add(new TaskNormalFarm());
         manager.add(new TaskSugarCane());
         manager.add(new TaskMelon());

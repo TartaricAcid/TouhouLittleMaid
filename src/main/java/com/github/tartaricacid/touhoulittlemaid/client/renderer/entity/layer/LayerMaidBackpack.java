@@ -14,6 +14,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.Mob;
 
+import java.awt.*;
+
 public class LayerMaidBackpack extends RenderLayer<Mob, BedrockModel<Mob>> {
     private final EntityMaidRenderer renderer;
 
@@ -42,6 +44,6 @@ public class LayerMaidBackpack extends RenderLayer<Mob, BedrockModel<Mob>> {
             poseStack.translate(0, -0.5, 0.25);
         }
         IMaidBackpack type = InGameMaidConfig.INSTANCE.isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
-        BackpackManager.findBackpackModel(type.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
+        BackpackManager.findBackpackModel(type.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, new Color(1.0f, 1.0f, 1.0f).getRGB()));
     }
 }

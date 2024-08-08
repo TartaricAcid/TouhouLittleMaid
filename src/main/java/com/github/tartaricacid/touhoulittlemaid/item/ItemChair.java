@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -84,11 +85,10 @@ public class ItemChair extends Item {
             AABB boundingBox = EntityChair.TYPE.getDimensions().makeBoundingBox(Vec3.atBottomCenterOf(clickedPos));
             if (world.noCollision(boundingBox) && world.getEntities(null, boundingBox).isEmpty()) {
                 ItemStack stack = context.getItemInHand();
-                if (world instanceof ServerLevel) {
-                    ServerLevel serverWorld = (ServerLevel) world;
-                    EntityChair chair = EntityChair.TYPE.create(serverWorld, stack.getTag(), (e) -> {
-                        if (stack.hasCustomHoverName()) {
-                            e.setCustomName(stack.getDisplayName());
+                if (world instanceof ServerLevel serverWorld) {
+                    EntityChair chair = EntityChair.TYPE.create(serverWorld, (e) -> {
+                        if (stack.get(DataComponents.CUSTOM_NAME) != null) {
+                            e.setCustomName(stack.get(DataComponents.CUSTOM_NAME));
                         }
                     }, context.getClickedPos(), MobSpawnType.SPAWN_EGG, true, true);
                     if (chair == null) {

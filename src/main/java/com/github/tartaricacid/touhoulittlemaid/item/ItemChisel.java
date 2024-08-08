@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockStatue;
+import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import com.google.common.collect.Lists;
@@ -13,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
@@ -55,35 +58,38 @@ public class ItemChisel extends Item {
     }
 
     private void genStatueBlocks(@Nonnull Player player, @Nonnull Level worldIn, @Nonnull BlockPos pos, @Nonnull Direction facing) {
-        CompoundTag data = ItemPhoto.getMaidData(player.getOffhandItem());
-        TileEntityStatue.Size[] sizes = TileEntityStatue.Size.values();
-        for (int i = sizes.length - 1; i >= 0; i--) {
-            TileEntityStatue.Size size = sizes[i];
-            Vec3i dimension = size.getDimension();
-            BlockPos[] posList = checkBlocks(worldIn, pos, dimension, facing);
-            if (posList != null) {
-                boolean isTiny = false;
-                if (posList.length == 1) {
-                    isTiny = true;
-                }
-                for (BlockPos posIn : posList) {
-                    worldIn.setBlock(posIn, InitBlocks.STATUE.get().defaultBlockState().setValue(BlockStatue.IS_TINY, isTiny), Block.UPDATE_ALL);
-                    BlockEntity te = worldIn.getBlockEntity(posIn);
-                    if (te instanceof TileEntityStatue) {
-                        TileEntityStatue statue = (TileEntityStatue) te;
-                        if (posIn.equals(pos)) {
-                            statue.setForgeData(size, true, pos, facing,
-                                    Lists.newArrayList(posList), data);
-                        } else {
-                            statue.setForgeData(size, false, pos, facing,
-                                    Lists.newArrayList(posList), null);
+        CompoundData compoundData = player.getOffhandItem().get(InitDataComponent.MAID_INFO);
+        if (compoundData != null) {
+            CompoundTag data = compoundData.nbt();
+            TileEntityStatue.Size[] sizes = TileEntityStatue.Size.values();
+            for (int i = sizes.length - 1; i >= 0; i--) {
+                TileEntityStatue.Size size = sizes[i];
+                Vec3i dimension = size.getDimension();
+                BlockPos[] posList = checkBlocks(worldIn, pos, dimension, facing);
+                if (posList != null) {
+                    boolean isTiny = false;
+                    if (posList.length == 1) {
+                        isTiny = true;
+                    }
+                    for (BlockPos posIn : posList) {
+                        worldIn.setBlock(posIn, InitBlocks.STATUE.get().defaultBlockState().setValue(BlockStatue.IS_TINY, isTiny), Block.UPDATE_ALL);
+                        BlockEntity te = worldIn.getBlockEntity(posIn);
+                        if (te instanceof TileEntityStatue) {
+                            TileEntityStatue statue = (TileEntityStatue) te;
+                            if (posIn.equals(pos)) {
+                                statue.setForgeData(size, true, pos, facing,
+                                        Lists.newArrayList(posList), data);
+                            } else {
+                                statue.setForgeData(size, false, pos, facing,
+                                        Lists.newArrayList(posList), null);
+                            }
                         }
                     }
-                }
 
-                player.getMainHandItem().hurtAndBreak(size.ordinal() + 1, player, (e) -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-                player.playSound(SoundEvents.ANVIL_LAND, 0.5f, 1.5f);
-                return;
+                    player.getMainHandItem().hurtAndBreak(size.ordinal() + 1, player, EquipmentSlot.MAINHAND);
+                    player.playSound(SoundEvents.ANVIL_LAND, 0.5f, 1.5f);
+                    return;
+                }
             }
         }
     }
