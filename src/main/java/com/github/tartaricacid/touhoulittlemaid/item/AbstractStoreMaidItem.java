@@ -14,6 +14,8 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
+
 public abstract class AbstractStoreMaidItem extends Item {
     static final String MAID_INFO = "MaidInfo";
     static final String CUSTOM_NAME = "CustomName";
@@ -44,8 +46,8 @@ public abstract class AbstractStoreMaidItem extends Item {
         CompoundData compoundDataComponent = stack.get(InitDataComponent.MAID_INFO);
         if (compoundDataComponent != null) {
             CompoundTag maidData = compoundDataComponent.nbt();
-            if (maidData.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-                String modelId = maidData.getString(EntityMaid.MODEL_ID_TAG);
+            if (maidData.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
+                String modelId = maidData.getString(MODEL_ID_TAG_NAME);
                 String customName = "";
                 if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
                     customName = maidData.getString(CUSTOM_NAME);

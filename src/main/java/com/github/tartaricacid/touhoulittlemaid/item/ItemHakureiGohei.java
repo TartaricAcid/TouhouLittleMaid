@@ -88,7 +88,7 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.hurtAndBreak(2, attacker, EquipmentSlot.MAINHAND);
+        stack.hurtAndBreak(2, attacker, attacker.getEquipmentSlotForItem(stack));
         return true;
     }
 

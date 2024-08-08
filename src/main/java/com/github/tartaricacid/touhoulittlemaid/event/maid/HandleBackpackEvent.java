@@ -29,7 +29,7 @@ public class HandleBackpackEvent {
                 ItemHandlerHelper.giveItemToPlayer(player, maidBackpack.getTakeOffItemStack(stack, player, maid));
                 maidBackpack.onTakeOff(stack, player, maid);
                 maid.setMaidBackpackType(BackpackManager.getEmptyBackpack());
-                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+                stack.hurtAndBreak(1, player, event.getPlayer().getEquipmentSlotForItem(stack));
                 maid.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
                 event.setCanceled(true);
             }

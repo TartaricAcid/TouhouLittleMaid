@@ -49,8 +49,8 @@ public class TaskFeedOwner implements IFeedTask {
         if (stack.getItem().getFoodProperties(stack, owner) != null) {
             FoodProperties food = stack.getItem().getFoodProperties(stack, owner);
             if (food != null) {
-                return food.getEffects().isEmpty() ||
-                        food.getEffects().stream().noneMatch(pair -> isHarmfulEffect(pair.getFirst()));
+                return food.effects().isEmpty() ||
+                        food.effects().stream().noneMatch(effect -> isHarmfulEffect(effect.effect()));
             }
         }
         return false;
@@ -74,7 +74,7 @@ public class TaskFeedOwner implements IFeedTask {
             FoodProperties food = stack.getItem().getFoodProperties(stack, owner);
             int heal = 0;
             if (food != null) {
-                heal = food.getNutrition();
+                heal = food.nutrition();
             }
             int hunger = 20 - owner.getFoodData().getFoodLevel();
             if (heal == hunger) {

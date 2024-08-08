@@ -36,11 +36,9 @@ public class TaskNormalFarm implements IFarmTask {
         if (item == Items.NETHER_WART) {
             return true;
         }
-        if (item instanceof ItemNameBlockItem) {
-            ItemNameBlockItem blockNamedItem = (ItemNameBlockItem) item;
+        if (item instanceof ItemNameBlockItem blockNamedItem) {
             Block block = blockNamedItem.getBlock();
-            if (block instanceof IPlantable) {
-                IPlantable plantable = (IPlantable) block;
+            if (block instanceof IPlantable plantable) {
                 return plantable.getPlantType(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == PlantType.CROP
                         && plantable.getPlant(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).getBlock() != Blocks.AIR;
             }
@@ -66,8 +64,7 @@ public class TaskNormalFarm implements IFarmTask {
             Block cropBlock = cropState.getBlock();
             maid.level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, cropPos, Block.getId(cropState));
 
-            if (cropBlock instanceof CropBlock) {
-                CropBlock crop = (CropBlock) cropBlock;
+            if (cropBlock instanceof CropBlock crop) {
                 BlockEntity blockEntity = cropState.hasBlockEntity() ? maid.level.getBlockEntity(cropPos) : null;
                 maid.dropResourcesToMaidInv(cropState, maid.level, cropPos, blockEntity, maid, maid.getMainHandItem());
                 maid.level.setBlock(cropPos, crop.defaultBlockState(), Block.UPDATE_ALL);
@@ -93,11 +90,9 @@ public class TaskNormalFarm implements IFarmTask {
         if (!aboveState.canBeReplaced() || aboveState.liquid()) {
             return false;
         }
-        if (seed.getItem() instanceof ItemNameBlockItem) {
-            ItemNameBlockItem blockNamedItem = (ItemNameBlockItem) seed.getItem();
+        if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
             Block block = blockNamedItem.getBlock();
-            if (block instanceof IPlantable) {
-                IPlantable plantable = (IPlantable) block;
+            if (block instanceof IPlantable plantable) {
                 return baseState.canSustainPlant(maid.level, basePos, Direction.UP, plantable);
             }
         }
@@ -106,8 +101,7 @@ public class TaskNormalFarm implements IFarmTask {
 
     @Override
     public ItemStack plant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
-        if (seed.getItem() instanceof ItemNameBlockItem) {
-            ItemNameBlockItem blockNamedItem = (ItemNameBlockItem) seed.getItem();
+        if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
             Block block = blockNamedItem.getBlock();
             if (block instanceof IPlantable) {
                 maid.placeItemBlock(basePos.above(), seed);

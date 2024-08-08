@@ -24,7 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -89,19 +88,19 @@ public class EntityTombstone extends Entity {
             this.ownerId = tag.getUUID(OWNER_ID_TAG);
         }
         if (tag.contains(TOMBSTONE_ITEMS_TAG)) {
-            items.deserializeNBT(tag.getCompound(TOMBSTONE_ITEMS_TAG));
+            items.deserializeNBT(this.registryAccess(), tag.getCompound(TOMBSTONE_ITEMS_TAG));
         }
         if (tag.contains(MAID_NAME_TAG)) {
             String nameJson = tag.getString(MAID_NAME_TAG);
-            setMaidName(Component.Serializer.fromJson(nameJson));
+            setMaidName(Component.Serializer.fromJson(nameJson, this.registryAccess()));
         }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.putUUID(OWNER_ID_TAG, this.ownerId);
-        tag.put(TOMBSTONE_ITEMS_TAG, this.items.serializeNBT());
-        tag.putString(MAID_NAME_TAG, Component.Serializer.toJson(this.getMaidName()));
+        tag.put(TOMBSTONE_ITEMS_TAG, this.items.serializeNBT(this.registryAccess()));
+        tag.putString(MAID_NAME_TAG, Component.Serializer.toJson(this.getMaidName(), this.registryAccess()));
     }
 
     @Override

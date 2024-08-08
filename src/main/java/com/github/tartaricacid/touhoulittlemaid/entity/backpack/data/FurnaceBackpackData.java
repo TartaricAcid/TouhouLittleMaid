@@ -69,7 +69,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         this.cookingProgress = tag.getInt("CookTime");
         this.cookingTotalTime = tag.getInt("CookTimeTotal");
         this.litDuration = this.getBurnDuration(this.getItem(FUEL_INDEX));
-        this.fromTag(tag.getList("Items", Tag.TAG_COMPOUND));
+        this.fromTag(tag.getList("Items", Tag.TAG_COMPOUND), this.level.registryAccess());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         tag.putInt("BurnTime", this.litTime);
         tag.putInt("CookTime", this.cookingProgress);
         tag.putInt("CookTimeTotal", this.cookingTotalTime);
-        tag.put("Items", this.createTag());
+        tag.put("Items", this.createTag(this.level.registryAccess()));
     }
 
     @Override

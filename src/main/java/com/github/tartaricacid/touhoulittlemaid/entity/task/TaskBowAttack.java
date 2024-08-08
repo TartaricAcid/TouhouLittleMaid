@@ -129,10 +129,11 @@ public class TaskBowAttack implements IRangedAttackTask {
         ItemStack arrowStack = handler.getStackInSlot(slot);
         ItemStack mainHandItem = maid.getMainHandItem();
         RegistryAccess access = maid.level.registryAccess();
-        AbstractArrow arrowEntity = ProjectileUtil.getMobArrow(maid, arrowStack, chargeTime);
+        // TODO: 不确定是不是要这样改
+        AbstractArrow arrowEntity = ProjectileUtil.getMobArrow(maid, arrowStack, chargeTime, mainHandItem);
 
         if (mainHandItem.getItem() instanceof BowItem) {
-            arrowEntity = ((BowItem) mainHandItem.getItem()).customArrow(arrowEntity);
+            arrowEntity = ((BowItem) mainHandItem.getItem()).customArrow(arrowEntity, arrowStack, mainHandItem);
         }
         // 无限附魔不存在或者小于 0 时
         if (getEnchantmentLevel(access,Enchantments.INFINITY,mainHandItem)  <= 0) {

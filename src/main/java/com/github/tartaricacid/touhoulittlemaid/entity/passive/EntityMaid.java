@@ -105,6 +105,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -680,7 +681,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Nullable
     @Override
-    public Entity changeDimension(ServerLevel serverLevel, ITeleporter teleporter) {
+    public Entity changeDimension(DimensionTransition pTransition) {
         if (this.level instanceof ServerLevel && !this.isRemoved()) {
             final int MAX_RETRY = 16;
             for (int i = 0; i < MAX_RETRY; ++i) {
@@ -693,8 +694,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public void onAddedToWorld() {
-        super.onAddedToWorld();
+    public void onAddedToLevel() {
+        super.onAddedToLevel();
         if (this.getOwnerUUID() != null) {
             MaidWorldData data = MaidWorldData.get(this.level);
             if (data != null) {
@@ -704,8 +705,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public void onRemovedFromWorld() {
-        super.onRemovedFromWorld();
+    public void onRemovedFromLevel() {
+        super.onRemovedFromLevel();
         if (!this.level.isClientSide && this.isAlive() && this.getOwnerUUID() != null) {
             MaidWorldData data = MaidWorldData.get(this.level);
             if (data != null) {

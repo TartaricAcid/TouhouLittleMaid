@@ -73,7 +73,7 @@ public class TaskAttack implements IAttackTask {
         List<EntityExtinguishingAgent> extinguishingAgents = world.getEntitiesOfClass(EntityExtinguishingAgent.class, aabb, Entity::isAlive);
         if (extinguishingAgents.isEmpty()) {
             world.addFreshEntity(new EntityExtinguishingAgent(world, target.position()));
-            maid.getOffhandItem().hurtAndBreak(1, maid, (m) -> m.broadcastBreakEvent(InteractionHand.OFF_HAND));
+            maid.getOffhandItem().hurtAndBreak(1, maid, EquipmentSlot.OFFHAND);
             return true;
         }
         return false;

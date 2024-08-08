@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityItemStackGarageKitRenderer;
 import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import net.minecraft.client.Minecraft;
@@ -13,7 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
-import java.util.Objects;
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
 
 public class ItemGarageKit extends BlockItem {
     private static final String ENTITY_INFO = "EntityInfo";
@@ -41,7 +40,7 @@ public class ItemGarageKit extends BlockItem {
     private static CompoundTag getDefaultData() {
         CompoundTag data = new CompoundTag();
         data.putString("id", "touhou_little_maid:maid");
-        data.putString(EntityMaid.MODEL_ID_TAG, "touhou_little_maid:hakurei_reimu");
+        data.putString(MODEL_ID_TAG_NAME, "touhou_little_maid:hakurei_reimu");
         return data;
     }
 }
