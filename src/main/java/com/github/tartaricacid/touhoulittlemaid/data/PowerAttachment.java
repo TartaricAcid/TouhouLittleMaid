@@ -1,13 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.util.Mth;
 
 public class PowerAttachment {
     public static final float MAX_POWER = 5.0f;
-    private float power = 0.0f;
-    private boolean dirty;
-
+    private float power;
+    public static final Codec<PowerAttachment> CODEC = RecordCodecBuilder.create(ins -> ins.group(
+            Codec.FLOAT.fieldOf("power").forGetter(o -> o.power))
+            .apply(ins, PowerAttachment::new));
     public PowerAttachment(float power) {
         this.power = power;
     }
@@ -18,7 +21,6 @@ public class PowerAttachment {
         } else {
             this.power = MAX_POWER;
         }
-        markDirty();
     }
 
     public void min(float points) {
@@ -27,35 +29,13 @@ public class PowerAttachment {
         } else {
             this.power = 0.0f;
         }
-        markDirty();
     }
 
     public void set(float points) {
         this.power = Mth.clamp(points, 0, MAX_POWER);
-        markDirty();
     }
 
     public float get() {
         return this.power;
-    }
-
-    public void markDirty() {
-        dirty = true;
-    }
-
-    public boolean isDirty() {
-        return dirty;
-    }
-
-    public void setDirty(boolean dirty) {
-        this.dirty = dirty;
-    }
-
-    public FloatTag serializeNBT() {
-        return FloatTag.valueOf(this.power);
-    }
-
-    public void deserializeNBT(FloatTag nbt) {
-        this.power = nbt.getAsFloat();
     }
 }

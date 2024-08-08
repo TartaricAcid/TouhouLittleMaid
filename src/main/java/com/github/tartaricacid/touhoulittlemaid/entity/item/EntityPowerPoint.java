@@ -30,7 +30,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
 
-public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnData {
+//TODO IEntityAdditionalSpawnData已被移除，等待观察
+public class EntityPowerPoint extends Entity {
     public static final EntityType<EntityPowerPoint> TYPE = EntityType.Builder.<EntityPowerPoint>of(EntityPowerPoint::new, MobCategory.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(6).updateInterval(20).build("power_point");
     private static final int MAX_AGE = 6000;
@@ -305,15 +306,5 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
         return new ClientboundAddEntityPacket(this, pEntity);
-    }
-
-    @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
-        buffer.writeInt(value);
-    }
-
-    @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
-        this.value = additionalData.readInt();
     }
 }

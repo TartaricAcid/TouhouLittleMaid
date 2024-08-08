@@ -1,12 +1,20 @@
 package com.github.tartaricacid.touhoulittlemaid.data;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.util.Mth;
+import net.neoforged.neoforge.attachment.AttachmentHolder;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
-public class MaidNumAttachment {
-    private int num = 0;
-    private boolean dirty;
+public class MaidNumAttachment{
+
+    public static final Codec<MaidNumAttachment> CODEC = RecordCodecBuilder.create(ins -> ins.group(
+            Codec.INT.fieldOf("num").forGetter(o -> o.num))
+            .apply(ins, MaidNumAttachment::new));
+    private int num;
 
     public MaidNumAttachment(int num) {
         this.num = num;
@@ -26,7 +34,6 @@ public class MaidNumAttachment {
         } else {
             this.num = getMaxNum();
         }
-        markDirty();
     }
 
     public void min(int num) {
@@ -35,12 +42,10 @@ public class MaidNumAttachment {
         } else {
             this.num = 0;
         }
-        markDirty();
     }
 
     public void set(int num) {
         this.num = Mth.clamp(num, 0, getMaxNum());
-        markDirty();
     }
 
     public int getMaxNum() {
@@ -49,18 +54,6 @@ public class MaidNumAttachment {
 
     public int get() {
         return this.num;
-    }
-
-    public void markDirty() {
-        dirty = true;
-    }
-
-    public boolean isDirty() {
-        return dirty;
-    }
-
-    public void setDirty(boolean dirty) {
-        this.dirty = dirty;
     }
 
     public IntTag serializeNBT() {

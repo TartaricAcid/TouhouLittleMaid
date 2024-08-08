@@ -11,10 +11,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
@@ -28,7 +25,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     private int litDuration;
     private int cookingProgress;
     private int cookingTotalTime;
-    private final RecipeManager.CachedCheck<Container, SmeltingRecipe> quickCheck;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> quickCheck;
     private final Level level;
     private final ContainerData dataAccess = new ContainerData() {
         public int get(int index) {
@@ -176,7 +173,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         if (fuel.isEmpty()) {
             return 0;
         } else {
-            return ForgeHooks.getBurnTime(fuel, RecipeType.SMELTING);
+            return fuel.getBurnTime(RecipeType.SMELTING);
         }
     }
 

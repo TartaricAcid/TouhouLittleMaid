@@ -12,6 +12,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 
+import static net.neoforged.neoforge.client.gui.VanillaGuiLayers.CROSSHAIR;
+
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT, modid = TouhouLittleMaid.MOD_ID)
 public class ClientSetupEvent {
     @SubscribeEvent
