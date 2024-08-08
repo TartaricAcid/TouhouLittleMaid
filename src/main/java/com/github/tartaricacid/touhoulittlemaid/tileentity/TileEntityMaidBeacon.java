@@ -44,7 +44,7 @@ public class TileEntityMaidBeacon extends BlockEntity {
         if (beacon.level != null && !level.isClientSide && level.getGameTime() % 80L == 0L) {
             if (beacon.potionIndex != -1 && beacon.storagePower >= beacon.getEffectCost()) {
                 beacon.storagePower = beacon.storagePower - beacon.getEffectCost();
-                beacon.updateBeaconEffect(level, BeaconEffect.getEffectByIndex(beacon.potionIndex).getEffect());
+                beacon.updateBeaconEffect(level, BeaconEffect.getEffectByIndex(beacon.potionIndex).getEffect().value());
             }
             beacon.updateAbsorbPower(level);
         }
@@ -76,16 +76,16 @@ public class TileEntityMaidBeacon extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    public void saveAdditional(CompoundTag compound, HolderLookup.Provider pRegistries) {
         getPersistentData().putInt(POTION_INDEX_TAG, potionIndex);
         getPersistentData().putFloat(STORAGE_POWER_TAG, storagePower);
         getPersistentData().putBoolean(OVERFLOW_DELETE_TAG, overflowDelete);
-        super.saveAdditional(compound);
+        super.saveAdditional(compound, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         potionIndex = getPersistentData().getInt(POTION_INDEX_TAG);
         storagePower = getPersistentData().getFloat(STORAGE_POWER_TAG);
         overflowDelete = getPersistentData().getBoolean(OVERFLOW_DELETE_TAG);

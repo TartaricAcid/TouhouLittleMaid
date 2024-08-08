@@ -940,8 +940,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         compound.putBoolean(PICKUP_TAG, isPickup());
         compound.putBoolean(HOME_TAG, isHomeModeEnable());
         compound.putBoolean(RIDEABLE_TAG, isRideable());
-        compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT());
-        compound.put(MAID_BAUBLE_INVENTORY_TAG, maidBauble.serializeNBT());
+        compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT(this.registryAccess()));
+        compound.put(MAID_BAUBLE_INVENTORY_TAG, maidBauble.serializeNBT(this.registryAccess()));
         compound.putBoolean(STRUCK_BY_LIGHTNING_TAG, isStruckByLightning());
         compound.putBoolean(INVULNERABLE_TAG, getIsInvulnerable());
         compound.putInt(HUNGER_TAG, getHunger());
@@ -1003,10 +1003,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             compound.remove(BACKPACK_LEVEL_TAG);
         }
         if (compound.contains(MAID_INVENTORY_TAG, Tag.TAG_COMPOUND)) {
-            maidInv.deserializeNBT(compound.getCompound(MAID_INVENTORY_TAG));
+            maidInv.deserializeNBT(this.registryAccess(), compound.getCompound(MAID_INVENTORY_TAG));
         }
         if (compound.contains(MAID_BAUBLE_INVENTORY_TAG, Tag.TAG_COMPOUND)) {
-            maidBauble.deserializeNBT(compound.getCompound(MAID_BAUBLE_INVENTORY_TAG));
+            maidBauble.deserializeNBT(this.registryAccess(), compound.getCompound(MAID_BAUBLE_INVENTORY_TAG));
         }
         if (compound.contains(STRUCK_BY_LIGHTNING_TAG, Tag.TAG_BYTE)) {
             setStruckByLightning(compound.getBoolean(STRUCK_BY_LIGHTNING_TAG));

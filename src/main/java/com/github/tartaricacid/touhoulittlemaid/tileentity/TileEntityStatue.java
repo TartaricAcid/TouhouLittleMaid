@@ -55,7 +55,7 @@ public class TileEntityStatue extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    public void saveAdditional(CompoundTag compound, HolderLookup.Provider pRegistries) {
         getPersistentData().putInt(STATUE_SIZE_TAG, size.ordinal());
         getPersistentData().putBoolean(CORE_BLOCK_TAG, isCoreBlock);
         getPersistentData().put(CORE_BLOCK_POS_TAG, NbtUtils.writeBlockPos(coreBlockPos));
@@ -68,12 +68,12 @@ public class TileEntityStatue extends BlockEntity {
         if (extraMaidData != null) {
             getPersistentData().put(EXTRA_MAID_DATA, extraMaidData);
         }
-        super.saveAdditional(compound);
+        super.saveAdditional(compound, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         size = Size.getSizeByIndex(getPersistentData().getInt(STATUE_SIZE_TAG));
         isCoreBlock = getPersistentData().getBoolean(CORE_BLOCK_TAG);
         coreBlockPos = NbtUtils.readBlockPos(getPersistentData().getCompound(CORE_BLOCK_POS_TAG));

@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -84,7 +86,7 @@ public class MaidWorldData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
         CompoundTag infosTag = new CompoundTag();
         infos.forEach((id, data) -> {
             ListTag listTag = new ListTag();
@@ -95,7 +97,7 @@ public class MaidWorldData extends SavedData {
                 infoTag.putUUID("OwnerId", info.getOwnerId());
                 infoTag.putUUID("MaidId", info.getEntityId());
                 infoTag.putLong("Timestamp", info.getTimestamp());
-                infoTag.putString("Name", Component.Serializer.toJson(info.getName()));
+                infoTag.putString("Name", Component.Serializer.toJson(info.getName(), provider));
                 listTag.add(infoTag);
             });
             infosTag.put(id.toString(), listTag);
@@ -111,7 +113,7 @@ public class MaidWorldData extends SavedData {
                 infoTag.putUUID("OwnerId", info.getOwnerId());
                 infoTag.putUUID("TombstoneId", info.getEntityId());
                 infoTag.putLong("Timestamp", info.getTimestamp());
-                infoTag.putString("Name", Component.Serializer.toJson(info.getName()));
+                infoTag.putString("Name", Component.Serializer.toJson(info.getName(), provider));
                 listTag.add(infoTag);
             });
             tombstonesTag.put(id.toString(), listTag);
