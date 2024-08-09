@@ -39,7 +39,6 @@ public class TaskNormalFarm implements IFarmTask {
                 return plantable.getPlantType(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == PlantType.CROP
                         && plantable.getPlant(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).getBlock() != Blocks.AIR;
             }
-        }
         return false;
     }
 
