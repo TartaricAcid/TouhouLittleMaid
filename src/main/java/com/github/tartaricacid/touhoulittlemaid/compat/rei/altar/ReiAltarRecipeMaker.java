@@ -6,14 +6,15 @@ import com.github.tartaricacid.touhoulittlemaid.util.JERIUtil;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryStacks;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.Arrays;
 import java.util.List;
 
 public final class ReiAltarRecipeMaker {
     public static void registerAltarRecipes(DisplayRegistry registry) {
-        List<AltarRecipe> allRecipesFor = registry.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING);
-        JERIUtil.recipeWarp(allRecipesFor, ((recipeId, inputs, output, powerCost, langKey) -> {
+        List<RecipeHolder<AltarRecipe>> allRecipesFor = registry.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING.get());
+        JERIUtil.recipeWarpHolder(allRecipesFor, ((recipeId, inputs, output, powerCost, langKey) -> {
             List<EntryIngredient> inputs1 = inputs.stream()
                     .filter(it -> !it.isEmpty())
                     .map(ingredient -> {

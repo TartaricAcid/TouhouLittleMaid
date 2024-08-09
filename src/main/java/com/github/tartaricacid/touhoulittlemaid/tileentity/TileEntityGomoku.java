@@ -28,7 +28,7 @@ public class TileEntityGomoku extends TileEntityJoy {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider pRegistries) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         ListTag listTag = new ListTag();
         for (byte[] chessRow : chessData) {
             listTag.add(new ByteArrayTag(chessRow));
@@ -38,12 +38,12 @@ public class TileEntityGomoku extends TileEntityJoy {
         getPersistentData().putBoolean(PLAYER_TURN, this.playerTurn);
         getPersistentData().putInt(CHESS_COUNTER, this.chessCounter);
         getPersistentData().put(LATEST_CHESS_POINT, Point.toTag(this.latestChessPoint));
-        super.saveAdditional(tag, pRegistries);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override
     public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
-        super.loadAdditional(pTag, pRegistries);
+        super.loadAdditional(pTag,pRegistries);
         ListTag listTag = getPersistentData().getList(CHESS_DATA, Tag.TAG_INT_ARRAY);
         for (int i = 0; i < listTag.size(); i++) {
             int[] intArray = listTag.getIntArray(i);

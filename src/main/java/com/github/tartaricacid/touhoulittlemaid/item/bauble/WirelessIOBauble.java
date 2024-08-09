@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
@@ -76,17 +77,17 @@ public class WirelessIOBauble implements IMaidBauble {
         return stack;
     }
 
-    public static boolean canItemStacksStackRelaxed(@Nonnull ItemStack a, @Nonnull ItemStack b) {
-        if (a.isEmpty() || b.isEmpty() || a.getItem() != b.getItem()) {
+    public static boolean canItemStacksStackRelaxed(@Nonnull ItemStack slot, @Nonnull ItemStack itemStack) {
+        if (slot.isEmpty() || itemStack.isEmpty() || slot.getItem() != itemStack.getItem()) {
             return false;
         }
-        if (!a.isStackable()) {
+        if (!slot.isStackable()) {
             return false;
         }
-        if (a.hasTag() != b.hasTag()) {
+        if (slot.hasTag() != itemStack.hasTag()) {
             return false;
         }
-        return (!a.hasTag() || Objects.equals(a.getTag(), Objects.requireNonNull(b.getTag()))) && a.areCapsCompatible(b);
+        return (!slot.hasTag() || Objects.equals(slot.getTag(), Objects.requireNonNull(itemStack.getTag()))) && slot.areCapsCompatible(itemStack);
     }
 
     @Override
@@ -112,7 +113,7 @@ public class WirelessIOBauble implements IMaidBauble {
                 if (openCount > 0) {
                     return;
                 }
-                te.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(chestInv -> {
+                te.ca(Capabilities.ItemHandler.ENTITY, null).ifPresent(chestInv -> {
                     IItemHandler maidInv = maid.getAvailableInv(false);
                     boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
                     boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);

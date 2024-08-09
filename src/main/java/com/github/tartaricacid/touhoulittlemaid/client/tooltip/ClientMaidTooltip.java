@@ -12,6 +12,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
@@ -57,9 +58,11 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
             return;
         }
 
+        RegistryAccess access = Minecraft.getInstance().level.registryAccess();
+
         MutableComponent customNameComponent = null;
         if (StringUtils.isNotBlank(customName)) {
-            customNameComponent = Component.Serializer.fromJson(customName);
+            customNameComponent = Component.Serializer.fromJson(customName,access);
             if (customNameComponent != null) {
                 guiGraphics.drawString(font, customNameComponent.withStyle(ChatFormatting.GRAY), pX, pY + 2, 0xFFFFFF);
             }

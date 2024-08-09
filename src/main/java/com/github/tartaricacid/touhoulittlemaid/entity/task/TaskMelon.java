@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -61,7 +60,7 @@ public class TaskMelon implements IFarmTask {
     public void harvest(EntityMaid maid, BlockPos cropPos, BlockState cropState) {
         ItemStack mainHandItem = maid.getMainHandItem();
         RegistryAccess access = maid.level.registryAccess();
-        if (cropState.is(Blocks.MELON) && getEnchantmentLevel(access, Enchantments.SILK_TOUCH,mainHandItem) > 0) {
+        if (cropState.is(Blocks.MELON) && getEnchantmentLevel(access, Enchantments.SILK_TOUCH, mainHandItem) > 0) {
             if (maid.destroyBlock(cropPos, false)) {
                 mainHandItem.hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
                 Block.popResource(maid.level, cropPos, Items.MELON.getDefaultInstance());

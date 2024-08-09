@@ -38,15 +38,15 @@ public class TileEntityShrine extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider pRegistries) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().put(STORAGE_ITEM, handler.serializeNBT(pRegistries));
-        super.saveAdditional(tag, pRegistries);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override
     public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
-        super.loadAdditional(pTag, pRegistries);
-        handler.deserializeNBT(pRegistries, getPersistentData().getCompound(STORAGE_ITEM));
+        super.loadAdditional(pTag,pRegistries);
+        handler.deserializeNBT(pRegistries,getPersistentData().getCompound(STORAGE_ITEM));
     }
 
     @Override

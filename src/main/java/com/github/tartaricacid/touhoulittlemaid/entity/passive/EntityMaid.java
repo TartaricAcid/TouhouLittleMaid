@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
@@ -49,6 +50,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -111,7 +114,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
@@ -177,6 +182,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     public final ItemStack[] handItemsForAnimation = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
+    public final EquipmentSlot[] equipmentSlots = EquipmentSlot.values();
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
@@ -541,14 +547,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private ItemStack getRandomItemWithMendingEnchantments() {
         List<ItemStack> stacks = Lists.newArrayList();
         RegistryAccess access = this.level.registryAccess();
-        this.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(cap -> {
-            for (int i = 0; i < cap.getSlots(); i++) {
-                ItemStack itemstack = cap.getStackInSlot(i);
+        IItemHandler itemHandler = this.getCapability(Capabilities.ItemHandler.ENTITY, null);
+        if (itemHandler != null) {
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                ItemStack itemstack = itemHandler.getStackInSlot(i);
                 if (!itemstack.isEmpty() && getEnchantmentLevel(access,Enchantments.MENDING,itemstack) > 0 && itemstack.isDamaged()) {
                     stacks.add(itemstack);
                 }
             }
-        });
+        }
         return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get(this.getRandom().nextInt(stacks.size()));
     }
 
@@ -593,11 +600,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public double getMeleeAttackRangeSqr(LivingEntity entity) {
-        int attackDistance = this.favorabilityManager.getAttackDistanceByPoint(this.getFavorability());
-        return attackDistance * attackDistance;
-    }
+
+    //TODO 这个方法已被删除，需要override isWithinMeleeAttackRange
+
+//    @Override
+//    public double getMeleeAttackRangeSqr(LivingEntity entity) {
+//        int attackDistance = this.favorabilityManager.getAttackDistanceByPoint(this.getFavorability());
+//        return attackDistance * attackDistance;
+//    }
 
     @Override
     public boolean doHurtTarget(Entity target) {
@@ -656,7 +666,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (!this.isInvulnerableTo(damageSrc)) {
             MaidHurtEvent maidHurtEvent = new MaidHurtEvent(this, damageSrc, damageAmount);
             damageAmount = NeoForge.EVENT_BUS.post(maidHurtEvent).isCanceled() ? 0 : maidHurtEvent.getAmount();
-            damageAmount = ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
+            damageAmount = net.neoforged.neoforge.common.CommonHooks.onLivingDamagePre(this, this.damageContainers.peek());
             if (damageAmount > 0) {
                 damageAmount = this.getDamageAfterArmorAbsorb(damageSrc, damageAmount);
                 damageAmount = this.getDamageAfterMagicAbsorb(damageSrc, damageAmount);
@@ -668,7 +678,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 }
                 MaidDamageEvent maidDamageEvent = new MaidDamageEvent(this, damageSrc, damageAfterAbsorption);
                 damageAfterAbsorption = NeoForge.EVENT_BUS.post(maidDamageEvent).isCanceled() ? 0 : maidDamageEvent.getAmount();
-                damageAfterAbsorption = ForgeHooks.onLivingDamage(this, damageSrc, damageAfterAbsorption);
+                net.neoforged.neoforge.common.CommonHooks.onLivingDamagePost(this, this.damageContainers.peek());
                 if (damageAfterAbsorption != 0) {
                     float health = this.getHealth();
                     this.getCombatTracker().recordDamage(damageSrc, damageAfterAbsorption);
@@ -750,21 +760,22 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_IS_CHARGING_CROSSBOW, isCharging);
     }
 
-    @Override
-    public void shootCrossbowProjectile(LivingEntity target, ItemStack crossbow, Projectile projectileEntity, float projectileAngle) {
-        // 弩箭伤害也和好感度挂钩
-        // 但是烟花火箭的伤害是很特殊的，就不应用了
-        if (projectileEntity instanceof AbstractArrow arrow) {
-            AttributeInstance attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE);
-            double attackValue = 2.0;
-            if (attackDamage != null) {
-                attackValue = attackDamage.getBaseValue();
-            }
-            float multiplier = (float) (attackValue / 2.0f);
-            arrow.setBaseDamage(arrow.getBaseDamage() * multiplier);
-        }
-        this.shootCrossbowProjectile(this, target, projectileEntity, projectileAngle, 1.6F);
-    }
+    //TODO 处理逻辑已经挪到ProjectileWeaponItem的shootProjectile方法里，与好感度挂钩设计需要重写
+//    @Override
+//    public void shootCrossbowProjectile(LivingEntity target, ItemStack crossbow, Projectile projectileEntity, float projectileAngle) {
+//        // 弩箭伤害也和好感度挂钩
+//        // 但是烟花火箭的伤害是很特殊的，就不应用了
+//        if (projectileEntity instanceof AbstractArrow arrow) {
+//            AttributeInstance attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE);
+//            double attackValue = 2.0;
+//            if (attackDamage != null) {
+//                attackValue = attackDamage.getBaseValue();
+//            }
+//            float multiplier = (float) (attackValue / 2.0f);
+//            arrow.setBaseDamage(arrow.getBaseDamage() * multiplier);
+//        }
+//        this.shootCrossbowProjectile(this, target, projectileEntity, projectileAngle, 1.6F);
+//    }
 
     @Override
     public void onCrossbowAttackPerformed() {
@@ -863,7 +874,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 double yRandom = this.random.nextGaussian() * 0.02D;
                 double zRandom = this.random.nextGaussian() * 0.02D;
 
-                this.level.addParticle(ParticleTypes.ENTITY_EFFECT,
+                //TODO 这里的颜色需要查看
+                this.level.addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0F, 0F, 0F),
                         this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - xRandom * 10.0D,
                         this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()) - yRandom * 10.0D,
                         this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - zRandom * 10.0D,
@@ -1028,8 +1040,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         }
         if (compound.contains(RESTRICT_CENTER_TAG, Tag.TAG_COMPOUND)) {
             // 存档迁移
-            BlockPos blockPos = NbtUtils.readBlockPos(compound.getCompound(RESTRICT_CENTER_TAG));
-            this.schedulePos.setHomeModeEnable(this, blockPos);
+            var blockPosOptional = NbtUtils.readBlockPos(compound,RESTRICT_CENTER_TAG);
+            blockPosOptional.ifPresent(blockPos ->  this.schedulePos.setHomeModeEnable(this, blockPos));
             compound.remove(RESTRICT_CENTER_TAG);
         }
         if (compound.contains(MAID_BACKPACK_TYPE, Tag.TAG_STRING)) {

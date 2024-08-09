@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.PlantType;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
@@ -37,12 +35,10 @@ public class TaskNormalFarm implements IFarmTask {
             return true;
         }
         if (item instanceof ItemNameBlockItem blockNamedItem) {
-            Block block = blockNamedItem.getBlock();
-            if (block instanceof IPlantable plantable) {
+            Block plantable = blockNamedItem.getBlock();
                 return plantable.getPlantType(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == PlantType.CROP
                         && plantable.getPlant(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).getBlock() != Blocks.AIR;
             }
-        }
         return false;
     }
 
@@ -91,10 +87,7 @@ public class TaskNormalFarm implements IFarmTask {
             return false;
         }
         if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
-            Block block = blockNamedItem.getBlock();
-            if (block instanceof IPlantable plantable) {
-                return baseState.canSustainPlant(maid.level, basePos, Direction.UP, plantable);
-            }
+            return baseState.canSustainPlant(maid.level, basePos, Direction.UP, blockNamedItem.getBlock().defaultBlockState()).isTrue();
         }
         return false;
     }

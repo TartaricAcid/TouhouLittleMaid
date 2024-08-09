@@ -50,7 +50,7 @@ public class TileEntityMaidBeacon extends BlockEntity {
         }
     }
 
-    private void updateBeaconEffect(Level world, MobEffect potion) {
+    private void updateBeaconEffect(Level world, Holder<MobEffect> potion) {
         List<EntityMaid> list = world.getEntitiesOfClass(EntityMaid.class, new AABB(getBlockPos()).inflate(8, 8, 8), LivingEntity::isAlive);
         for (EntityMaid maid : list) {
             maid.addEffect(new MobEffectInstance(potion, 100, 1, true, true));
@@ -76,16 +76,16 @@ public class TileEntityMaidBeacon extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound, HolderLookup.Provider pRegistries) {
+    public void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().putInt(POTION_INDEX_TAG, potionIndex);
         getPersistentData().putFloat(STORAGE_POWER_TAG, storagePower);
         getPersistentData().putBoolean(OVERFLOW_DELETE_TAG, overflowDelete);
-        super.saveAdditional(compound, pRegistries);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override
     public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
-        super.loadAdditional(pTag, pRegistries);
+        super.loadAdditional(pTag,pRegistries);
         potionIndex = getPersistentData().getInt(POTION_INDEX_TAG);
         storagePower = getPersistentData().getFloat(STORAGE_POWER_TAG);
         overflowDelete = getPersistentData().getBoolean(OVERFLOW_DELETE_TAG);
