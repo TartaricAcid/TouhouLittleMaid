@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.slashblade;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -100,11 +99,11 @@ public class SlashBladeRender {
         }
     }
 
-    public static void renderMaidMainhandSlashBlade(LivingEntity maid, GeoModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
+    public static void renderMaidMainhandSlashBlade(LivingEntity maid, AnimatedGeoModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
         if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 主手的刀渲染在左边
-            if (!model.leftWaistBones.isEmpty()) {
+            if (!model.leftWaistBones().isEmpty()) {
                 translateToWaist(HumanoidArm.LEFT, matrixStack, model);
             } else {
                 matrixStack.translate(-0.25, 1.25, 0);
@@ -142,7 +141,7 @@ public class SlashBladeRender {
         }
     }
 
-    public static void renderMaidOffhandSlashBlade(BedrockModel<Mob> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
+    public static void renderMaidOffhandSlashBlade(BedrockModel<?> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 副手的刀渲染在右边
@@ -160,11 +159,11 @@ public class SlashBladeRender {
         }
     }
 
-    public static void renderMaidOffhandSlashBlade(GeoModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
+    public static void renderMaidOffhandSlashBlade(AnimatedGeoModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 副手的刀渲染在右边
-            if (!model.rightWaistBones.isEmpty()) {
+            if (!model.rightWaistBones().isEmpty()) {
                 translateToWaist(HumanoidArm.RIGHT, matrixStack, model);
             } else {
                 matrixStack.translate(0.25, 1.25, 0);
@@ -179,27 +178,11 @@ public class SlashBladeRender {
         }
     }
 
-    private static void translateToWaist(HumanoidArm arm, PoseStack poseStack, GeoModel geoModel) {
+    private static void translateToWaist(HumanoidArm arm, PoseStack poseStack, AnimatedGeoModel geoModel) {
         if (arm == HumanoidArm.LEFT) {
-            int size = geoModel.leftWaistBones.size();
-            for (int i = 0; i < size - 1; i++) {
-                RenderUtils.prepMatrixForBone(poseStack, geoModel.leftWaistBones.get(i));
-            }
-            GeoBone lastBone = geoModel.leftWaistBones.get(size - 1);
-            RenderUtils.translateMatrixToBone(poseStack, lastBone);
-            RenderUtils.translateToPivotPoint(poseStack, lastBone);
-            RenderUtils.rotateMatrixAroundBone(poseStack, lastBone);
-            RenderUtils.scaleMatrixForBone(poseStack, lastBone);
+            RenderUtils.prepMatrixForLocator(poseStack, geoModel.leftWaistBones());
         } else {
-            int size = geoModel.rightWaistBones.size();
-            for (int i = 0; i < size - 1; i++) {
-                RenderUtils.prepMatrixForBone(poseStack, geoModel.rightWaistBones.get(i));
-            }
-            GeoBone lastBone = geoModel.rightWaistBones.get(size - 1);
-            RenderUtils.translateMatrixToBone(poseStack, lastBone);
-            RenderUtils.translateToPivotPoint(poseStack, lastBone);
-            RenderUtils.rotateMatrixAroundBone(poseStack, lastBone);
-            RenderUtils.scaleMatrixForBone(poseStack, lastBone);
+            RenderUtils.prepMatrixForLocator(poseStack, geoModel.rightWaistBones());
         }
     }
 }

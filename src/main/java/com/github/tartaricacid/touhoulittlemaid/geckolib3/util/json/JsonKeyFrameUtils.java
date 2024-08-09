@@ -18,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectLists;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
@@ -34,9 +35,9 @@ public class JsonKeyFrameUtils {
         IValue previousYValue = null;
         IValue previousZValue = null;
 
-        List<KeyFrame<IValue>> xKeyFrames = new ObjectArrayList();
-        List<KeyFrame<IValue>> yKeyFrames = new ObjectArrayList();
-        List<KeyFrame<IValue>> zKeyFrames = new ObjectArrayList();
+        var xKeyFrames = new ObjectArrayList<KeyFrame<IValue>>();
+        var yKeyFrames = new ObjectArrayList<KeyFrame<IValue>>();
+        var zKeyFrames = new ObjectArrayList<KeyFrame<IValue>>();
 
         for (int i = 0; i < element.size(); i++) {
             Map.Entry<String, JsonElement> keyframe = element.get(i);
@@ -89,7 +90,10 @@ public class JsonKeyFrameUtils {
             zKeyFrames.add(zKeyFrame);
         }
 
-        return new VectorKeyFrameList<>(xKeyFrames, yKeyFrames, zKeyFrames);
+        return new VectorKeyFrameList<>(
+                ObjectLists.unmodifiable(xKeyFrames),
+                ObjectLists.unmodifiable(yKeyFrames),
+                ObjectLists.unmodifiable(zKeyFrames));
     }
 
     private static JsonArray getKeyFrameVector(JsonElement element) {
