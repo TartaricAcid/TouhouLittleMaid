@@ -17,26 +17,36 @@ import java.util.Locale;
 
 public final class JERIUtil {
 
-    public static void recipeWarp(List<RecipeHolder<AltarRecipe>> altarRecipes, AltarRecipeMaker maker) {
+    public static void recipeWarpHolder(List<RecipeHolder<AltarRecipe>> altarRecipes, AltarRecipeMaker maker) {
         for (RecipeHolder<AltarRecipe> altarRecipeHolder : altarRecipes) {
             AltarRecipe altarRecipe = altarRecipeHolder.value();
-            ResourceLocation recipeId = altarRecipe.getId();
-            ItemStack output = altarRecipe.getResultItem(Minecraft.getInstance().level.registryAccess());
-            if (!altarRecipe.isItemCraft()) {
-                output = InitItems.ENTITY_PLACEHOLDER.get().getDefaultInstance();
-                ItemEntityPlaceholder.setRecipeId(output, altarRecipe.getId());
-            }
-            String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
-            String langKey;
-            if (altarRecipe.isItemCraft()) {
-                langKey = String.format("jei.%s.altar_craft.%s.result", namespace, "item_craft");
-            } else {
-                Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
-                langKey = String.format("jei.%s.altar_craft.%s.result", namespace, path.getFileName());
-            }
-
-            maker.accept(recipeId, altarRecipe.getIngredients(), output, altarRecipe.getPowerCost(), langKey);
+            recipeMaker(maker, altarRecipe);
         }
+    }
+
+    public static void recipeWarp(List<AltarRecipe> altarRecipes, AltarRecipeMaker maker) {
+        for (AltarRecipe altarRecipeHolder : altarRecipes) {
+            recipeMaker(maker, altarRecipeHolder);
+        }
+    }
+
+    private static void recipeMaker(AltarRecipeMaker maker, AltarRecipe altarRecipeHolder) {
+        ResourceLocation recipeId = altarRecipeHolder.getId();
+        ItemStack output = altarRecipeHolder.getResultItem(Minecraft.getInstance().level.registryAccess());
+        if (!altarRecipeHolder.isItemCraft()) {
+            output = InitItems.ENTITY_PLACEHOLDER.get().getDefaultInstance();
+            ItemEntityPlaceholder.setRecipeId(output, altarRecipeHolder.getId());
+        }
+        String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
+        String langKey;
+        if (altarRecipeHolder.isItemCraft()) {
+            langKey = String.format("jei.%s.altar_craft.%s.result", namespace, "item_craft");
+        } else {
+            Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
+            langKey = String.format("jei.%s.altar_craft.%s.result", namespace, path.getFileName());
+        }
+
+        maker.accept(recipeId, altarRecipeHolder.getIngredients(), output, altarRecipeHolder.getPowerCost(), langKey);
     }
 
     public interface AltarRecipeMaker {

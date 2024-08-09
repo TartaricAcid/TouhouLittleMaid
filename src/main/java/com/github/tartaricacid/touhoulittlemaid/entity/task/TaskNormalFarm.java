@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.PlantType;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
@@ -36,11 +34,8 @@ public class TaskNormalFarm implements IFarmTask {
         if (item == Items.NETHER_WART) {
             return true;
         }
-        if (item instanceof ItemNameBlockItem) {
-            ItemNameBlockItem blockNamedItem = (ItemNameBlockItem) item;
-            Block block = blockNamedItem.getBlock();
-            if (block instanceof IPlantable) {
-                IPlantable plantable = (IPlantable) block;
+        if (item instanceof ItemNameBlockItem blockNamedItem) {
+            Block plantable = blockNamedItem.getBlock();
                 return plantable.getPlantType(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == PlantType.CROP
                         && plantable.getPlant(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).getBlock() != Blocks.AIR;
             }
@@ -93,21 +88,15 @@ public class TaskNormalFarm implements IFarmTask {
         if (!aboveState.canBeReplaced() || aboveState.liquid()) {
             return false;
         }
-        if (seed.getItem() instanceof ItemNameBlockItem) {
-            ItemNameBlockItem blockNamedItem = (ItemNameBlockItem) seed.getItem();
-            Block block = blockNamedItem.getBlock();
-            if (block instanceof IPlantable) {
-                IPlantable plantable = (IPlantable) block;
-                return baseState.canSustainPlant(maid.level, basePos, Direction.UP, plantable);
-            }
+        if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
+            return baseState.canSustainPlant(maid.level, basePos, Direction.UP, blockNamedItem.getBlock().defaultBlockState()).isTrue();
         }
         return false;
     }
 
     @Override
     public ItemStack plant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
-        if (seed.getItem() instanceof ItemNameBlockItem) {
-            ItemNameBlockItem blockNamedItem = (ItemNameBlockItem) seed.getItem();
+        if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
             Block block = blockNamedItem.getBlock();
             if (block instanceof IPlantable) {
                 maid.placeItemBlock(basePos.above(), seed);

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,7 +28,7 @@ public class TileEntityGomoku extends TileEntityJoy {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         ListTag listTag = new ListTag();
         for (byte[] chessRow : chessData) {
             listTag.add(new ByteArrayTag(chessRow));
@@ -37,12 +38,12 @@ public class TileEntityGomoku extends TileEntityJoy {
         getPersistentData().putBoolean(PLAYER_TURN, this.playerTurn);
         getPersistentData().putInt(CHESS_COUNTER, this.chessCounter);
         getPersistentData().put(LATEST_CHESS_POINT, Point.toTag(this.latestChessPoint));
-        super.saveAdditional(tag);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag,pRegistries);
         ListTag listTag = getPersistentData().getList(CHESS_DATA, Tag.TAG_INT_ARRAY);
         for (int i = 0; i < listTag.size(); i++) {
             int[] intArray = listTag.getIntArray(i);

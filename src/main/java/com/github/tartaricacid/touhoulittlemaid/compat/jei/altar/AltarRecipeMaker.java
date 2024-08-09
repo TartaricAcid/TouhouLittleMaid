@@ -29,7 +29,7 @@ public final class AltarRecipeMaker {
         List<RecipeHolder<AltarRecipe>> altarRecipesMap = recipeManager.getAllRecipesFor(InitRecipes.ALTAR_CRAFTING.get());
 
         List<AltarRecipeWrapper> recipes = Lists.newArrayList();
-        JERIUtil.recipeWarp(altarRecipesMap, (recipeId, inputs, output, powerCost, langKey) -> {
+        JERIUtil.recipeWarpHolder(altarRecipesMap, (recipeId, inputs, output, powerCost, langKey) -> {
             List<List<ItemStack>> inputs1 = inputs.stream()
                     .filter(ingredient -> !ingredient.isEmpty())
                     .map(ingredient -> List.of(ingredient.getItems()))

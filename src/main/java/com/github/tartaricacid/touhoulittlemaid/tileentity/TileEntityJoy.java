@@ -11,9 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -27,14 +24,14 @@ public abstract class TileEntityJoy extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().putUUID(SIT_ID, this.sitId);
-        super.saveAdditional(tag);
+        super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag,pRegistries);
         this.sitId = getPersistentData().getUUID(SIT_ID);
     }
 
@@ -61,11 +58,11 @@ public abstract class TileEntityJoy extends BlockEntity {
         return this.worldPosition;
     }
 
-    public void setSitId(UUID sitId) {
-        this.sitId = sitId;
-    }
-
     public UUID getSitId() {
         return this.sitId;
+    }
+
+    public void setSitId(UUID sitId) {
+        this.sitId = sitId;
     }
 }

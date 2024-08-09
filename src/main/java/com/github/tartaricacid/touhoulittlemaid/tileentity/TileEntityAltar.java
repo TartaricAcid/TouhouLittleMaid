@@ -57,24 +57,24 @@ public class TileEntityAltar extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    public void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().putBoolean(IS_RENDER, isRender);
         getPersistentData().putBoolean(CAN_PLACE_ITEM, canPlaceItem);
         getPersistentData().putInt(STORAGE_STATE_ID, Block.getId(storageState));
-        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT());
+        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT(pRegistries));
         getPersistentData().putString(DIRECTION, direction.getSerializedName());
         getPersistentData().put(STORAGE_BLOCK_LIST, blockPosList.serialize());
         getPersistentData().put(CAN_PLACE_ITEM_POS_LIST, canPlaceItemPosList.serialize());
-        super.saveAdditional(compound);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag,pRegistries);
         isRender = getPersistentData().getBoolean(IS_RENDER);
         canPlaceItem = getPersistentData().getBoolean(CAN_PLACE_ITEM);
         storageState = Block.stateById(getPersistentData().getInt(STORAGE_STATE_ID));
-        handler.deserializeNBT(getPersistentData().getCompound(STORAGE_ITEM));
+        handler.deserializeNBT(pRegistries,getPersistentData().getCompound(STORAGE_ITEM));
         direction = Direction.byName(getPersistentData().getString(DIRECTION));
         blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_COMPOUND));
         canPlaceItemPosList.deserialize(getPersistentData().getList(CAN_PLACE_ITEM_POS_LIST, Tag.TAG_COMPOUND));

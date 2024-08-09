@@ -6,7 +6,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -148,7 +147,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack slotItem = this.getItem(index);
-        boolean isSameItem = !stack.isEmpty() && ItemStack.isSameItemSameTags(slotItem, stack);
+        boolean isSameItem = !stack.isEmpty() && ItemStack.isSameItemSameComponents(slotItem, stack);
         super.setItem(index, stack);
         if (index == 0 && !isSameItem) {
             this.cookingTotalTime = getTotalCookTime(this.level);

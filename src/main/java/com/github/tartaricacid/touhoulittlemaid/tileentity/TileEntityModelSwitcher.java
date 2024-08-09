@@ -41,7 +41,7 @@ public class TileEntityModelSwitcher extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         ListTag listTag = new ListTag();
         for (ModeInfo info : infoList) {
             listTag.add(info.serialize());
@@ -51,7 +51,7 @@ public class TileEntityModelSwitcher extends BlockEntity {
             getPersistentData().put(ENTITY_UUID, NbtUtils.createUUID(this.uuid));
         }
         getPersistentData().putInt(LIST_INDEX, this.index);
-        super.saveAdditional(pTag);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override

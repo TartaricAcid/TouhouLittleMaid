@@ -27,15 +27,15 @@ public class TileEntityGarageKit extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    public void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().putString(FACING_TAG, facing.getSerializedName());
         getPersistentData().put(EXTRA_DATA, extraData);
-        super.saveAdditional(compound);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag,pRegistries);
         facing = Direction.byName(getPersistentData().getString(FACING_TAG));
         extraData = getPersistentData().getCompound(EXTRA_DATA);
     }

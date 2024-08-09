@@ -21,8 +21,9 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
 
 public class EntitySit extends Entity {
     public static final EntityType<EntitySit> TYPE = EntityType.Builder.<EntitySit>of(EntitySit::new, MobCategory.MISC)
@@ -56,7 +57,8 @@ public class EntitySit extends Entity {
             this.setJoyType(tag.getString("SitJoyType"));
         }
         if (tag.contains("AssociatedBlockPos", Tag.TAG_COMPOUND)) {
-            this.associatedBlockPos = NbtUtils.readBlockPos(tag.getCompound("AssociatedBlockPos"));
+            Optional<BlockPos> blockPosOptional = NbtUtils.readBlockPos(tag,"AssociatedBlockPos");
+            blockPosOptional.ifPresent(blockPos -> this.associatedBlockPos = blockPos);
         }
     }
 

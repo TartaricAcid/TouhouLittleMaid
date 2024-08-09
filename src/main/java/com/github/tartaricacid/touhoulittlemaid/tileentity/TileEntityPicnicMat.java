@@ -88,22 +88,23 @@ public class TileEntityPicnicMat extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().put(CENTER_POS_NAME, NbtUtils.writeBlockPos(centerPos));
-        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT());
+        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT(pRegistries));
         ListTag listTag = new ListTag();
         for (UUID uuid : sitIds) {
             listTag.add(NbtUtils.createUUID(uuid));
         }
         getPersistentData().put(SIT_IDS, listTag);
-        super.saveAdditional(tag);
+        super.saveAdditional(pTag,pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        this.centerPos = NbtUtils.readBlockPos(getPersistentData().getCompound(CENTER_POS_NAME));
-        this.handler.deserializeNBT(getPersistentData().getCompound(STORAGE_ITEM));
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag,pRegistries);
+        var blockPos = NbtUtils.readBlockPos(getPersistentData(),CENTER_POS_NAME);
+        blockPos.ifPresent(blockPos1 -> centerPos = blockPos1);
+        this.handler.deserializeNBT(pRegistries,getPersistentData().getCompound(STORAGE_ITEM));
         ListTag sitIdsTag = getPersistentData().getList(SIT_IDS, Tag.TAG_INT_ARRAY);
         int i = 0;
         for (Tag tag : sitIdsTag) {
