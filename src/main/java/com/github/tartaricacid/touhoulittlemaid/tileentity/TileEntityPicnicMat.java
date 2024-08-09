@@ -96,15 +96,15 @@ public class TileEntityPicnicMat extends BlockEntity {
             listTag.add(NbtUtils.createUUID(uuid));
         }
         getPersistentData().put(SIT_IDS, listTag);
-        super.saveAdditional(pTag,pRegistries);
+        super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
     public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
-        super.loadAdditional(pTag,pRegistries);
+        super.loadAdditional(pTag, pRegistries);
         var blockPos = NbtUtils.readBlockPos(getPersistentData(),CENTER_POS_NAME);
         blockPos.ifPresent(blockPos1 -> centerPos = blockPos1);
-        this.handler.deserializeNBT(pRegistries,getPersistentData().getCompound(STORAGE_ITEM));
+        this.handler.deserializeNBT(pRegistries, getPersistentData().getCompound(STORAGE_ITEM));
         ListTag sitIdsTag = getPersistentData().getList(SIT_IDS, Tag.TAG_INT_ARRAY);
         int i = 0;
         for (Tag tag : sitIdsTag) {

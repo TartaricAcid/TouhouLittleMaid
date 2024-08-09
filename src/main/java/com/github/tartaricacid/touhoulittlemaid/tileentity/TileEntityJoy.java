@@ -31,7 +31,7 @@ public abstract class TileEntityJoy extends BlockEntity {
 
     @Override
     public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
-        super.loadAdditional(pTag,pRegistries);
+        super.loadAdditional(pTag, pRegistries);
         this.sitId = getPersistentData().getUUID(SIT_ID);
     }
 
