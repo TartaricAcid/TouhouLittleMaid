@@ -17,6 +17,7 @@ import java.util.Map;
 
 public class InitDataComponent {
     public static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(TouhouLittleMaid.MOD_ID);
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> RECIPES_ID_TAG = DATA_COMPONENTS
             .register("recipe_id", () -> DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
 

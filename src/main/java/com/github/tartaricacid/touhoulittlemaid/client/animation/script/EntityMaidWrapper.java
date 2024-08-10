@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.biome.Biome;
 
 public final class EntityMaidWrapper implements IMaidData {
     private final WorldWrapper world = new WorldWrapper();
@@ -210,14 +211,19 @@ public final class EntityMaidWrapper implements IMaidData {
         return Math.abs(maid.asEntity().getUUID().getLeastSignificantBits());
     }
 
+    //TODO 既然Biome有codec了，直接用应该也可以吧
     @Override
-    public String getAtBiome() {
-        ResourceLocation res = BuiltInRegistries.BIOME_SOURCE.getKey(BiomeCacheUtil.getCacheBiome(maid.asEntity()));
-        if (res != null) {
-            return res.getPath();
-        }
-        return "";
+    public Biome getAtBiome() {
+        return  BiomeCacheUtil.getCacheBiome(maid.asEntity());
     }
+
+//    public String getAtBiome() {
+//        ResourceLocation res = BuiltInRegistries.BIOME_SOURCE.getKey(BiomeCacheUtil.getCacheBiome(maid.asEntity()));
+//        if (res != null) {
+//            return res.getPath();
+//        }
+//        return "";
+//    }
 
     @Override
     public boolean isOnGround() {

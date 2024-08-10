@@ -4,11 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import net.neoforged.neoforge.network.PacketDistributor;
-import com.github.tartaricacid.touhoulittlemaid.network.message.CheckSchedulePosMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -16,12 +13,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
 
-public record MaidConfigPackage(int id, boolean home, boolean pick, boolean ride, MaidSchedule schedule) implements CustomPacketPayload {
+public record MaidConfigPackage(int id, boolean home, boolean pick, boolean ride,
+                                MaidSchedule schedule) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MaidConfigPackage> TYPE = new CustomPacketPayload.Type<>(getResourceLocation("maid_config"));
     public static final StreamCodec<ByteBuf, MaidConfigPackage> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
@@ -36,11 +35,6 @@ public record MaidConfigPackage(int id, boolean home, boolean pick, boolean ride
             MaidConfigPackage::schedule,
             MaidConfigPackage::new
     );
-
-    @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
-        return TYPE;
-    }
 
     public static void handle(MaidConfigPackage message, IPayloadContext context) {
         ServerPlayer sender = (ServerPlayer) context.player();
@@ -72,14 +66,14 @@ public record MaidConfigPackage(int id, boolean home, boolean pick, boolean ride
         if (message.home) {
             ResourceLocation dimension = maid.getSchedulePos().getDimension();
             if (!dimension.equals(maid.level.dimension().location())) {
-                CheckSchedulePosMessage tips = new CheckSchedulePosMessage(Component.translatable("message.touhou_little_maid.check_schedule_pos.dimension"));
-                NetworkHandler.sendToClientPlayer(tips, sender);
+                CheckSchedulePosPacket tips = new CheckSchedulePosPacket("message.touhou_little_maid.check_schedule_pos.dimension");
+                PacketDistributor.sendToPlayer(sender, tips);
                 return;
             }
             BlockPos nearestPos = maid.getSchedulePos().getNearestPos(maid);
             if (nearestPos != null && nearestPos.distSqr(maid.blockPosition()) > 32 * 32) {
-                CheckSchedulePosMessage tips = new CheckSchedulePosMessage(Component.translatable("message.touhou_little_maid.check_schedule_pos.too_far"));
-                NetworkHandler.sendToClientPlayer(tips, sender);
+                CheckSchedulePosPacket tips = new CheckSchedulePosPacket("message.touhou_little_maid.check_schedule_pos.too_far");
+                PacketDistributor.sendToPlayer(sender, tips);
                 return;
             }
             maid.getSchedulePos().setHomeModeEnable(maid, maid.blockPosition());
@@ -87,6 +81,11 @@ public record MaidConfigPackage(int id, boolean home, boolean pick, boolean ride
             maid.restrictTo(BlockPos.ZERO, MaidConfig.MAID_NON_HOME_RANGE.get());
         }
         maid.setHomeModeEnable(message.home);
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
 

@@ -173,7 +173,8 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
         if (this.hasPassenger(passenger)) {
             double xOffset = passenger instanceof EntityMaid ? -0.5 : 0;
-            double yOffset = this.isRemoved() ? 0.01 : this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
+            //TODO 骑乘位置可能有问题
+            double yOffset = this.isRemoved() ? 0.01 : this.getPassengerRidingPosition(passenger).y;
             if (this.getPassengers().size() > 1) {
                 int passengerIndex = this.getPassengers().indexOf(passenger);
                 if (passengerIndex == 0) {

@@ -41,6 +41,7 @@ public class NewNetwork {
         registrar.playToServer(ChessDataServerPackage.TYPE, ChessDataServerPackage.STREAM_CODEC, ChessDataServerPackage::handle);
         registrar.playToClient(FoxScrollPackage.TYPE, FoxScrollPackage.STREAM_CODEC, FoxScrollPackage::handle);
         registrar.playToServer(SetScrollPackage.TYPE, SetScrollPackage.STREAM_CODEC, SetScrollPackage::handle);
+        registrar.playToClient(CheckSchedulePosPacket.TYPE, CheckSchedulePosPacket.STREAM_CODEC, CheckSchedulePosPacket::handle);
         registrar.playToClient(SyncMaidAreaPackage.TYPE, SyncMaidAreaPackage.STREAM_CODEC, SyncMaidAreaPackage::handle);
         //TODO CheckSchedulePosMessage还没写，component的CODEC
     }

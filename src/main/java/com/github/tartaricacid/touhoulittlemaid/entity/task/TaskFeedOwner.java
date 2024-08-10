@@ -40,7 +40,8 @@ public class TaskFeedOwner implements IFeedTask {
     public boolean isFood(ItemStack stack, Player owner) {
         if (stack.getItem() == Items.MILK_BUCKET) {
             for (MobEffectInstance effect : owner.getActiveEffects()) {
-                if (isHarmfulEffect(effect) && effect.getDuration() > 60 && effect.isCurativeItem(stack)) {
+                //TODO neoforge好像把这个“对症下药”删掉了？
+                if (isHarmfulEffect(effect) && effect.getDuration() > 60) {
                     return true;
                 }
             }
@@ -110,6 +111,6 @@ public class TaskFeedOwner implements IFeedTask {
     }
 
     private boolean isHarmfulEffect(MobEffectInstance effect) {
-        return effect.getEffect().getCategory() == MobEffectCategory.HARMFUL;
+        return effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL;
     }
 }

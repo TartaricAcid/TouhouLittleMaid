@@ -6,8 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,12 +34,8 @@ public class TaskNormalFarm implements IFarmTask {
         if (item == Items.NETHER_WART) {
             return true;
         }
-        if (item instanceof ItemNameBlockItem blockNamedItem) {
-            Block plantable = blockNamedItem.getBlock();
-                return plantable.getPlantType(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == PlantType.CROP
-                        && plantable.getPlant(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).getBlock() != Blocks.AIR;
-            }
-        return false;
+        //TODO 由于麻将删除了IPlantable，先借用村民的列表
+        return stack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS);
     }
 
     @Override
@@ -96,7 +92,8 @@ public class TaskNormalFarm implements IFarmTask {
     public ItemStack plant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
         if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
             Block block = blockNamedItem.getBlock();
-            if (block instanceof IPlantable) {
+            //TODO 由于麻将删除了IPlantable，先借用村民的列表
+            if (block.builtInRegistryHolder().is(net.neoforged.neoforge.common.Tags.Blocks.VILLAGER_FARMLANDS)) {
                 maid.placeItemBlock(basePos.above(), seed);
             }
         }

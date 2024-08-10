@@ -16,6 +16,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT)
@@ -23,25 +24,23 @@ public final class ShowPowerEvent {
     private static ItemStack POWER_POINT;
 
     @SubscribeEvent
-    public static void onRenderOverlay(RenderGuiOverlayEvent.Pre event) {
-        if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player == null) {
-                return;
-            }
-            ItemStack stack = player.getMainHandItem();
-            if (!ItemHakureiGohei.isGohei(stack)) {
-                return;
-            }
-            GuiGraphics graphics = event.getGuiGraphics();
-            Font font = Minecraft.getInstance().font;
-            if (POWER_POINT == null) {
-                POWER_POINT = InitItems.POWER_POINT.get().getDefaultInstance();
-            }
-            graphics.renderItem(POWER_POINT, 5, 5);
-            PowerAttachment cap = player.getData(InitDataAttachment.POWER_NUM);
-            graphics.drawString(font, String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff);
-            RenderSystem.enableBlend();
+    public static void onRenderOverlay(CustomizeGuiOverlayEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
         }
+        ItemStack stack = player.getMainHandItem();
+        if (!ItemHakureiGohei.isGohei(stack)) {
+            return;
+        }
+        GuiGraphics graphics = event.getGuiGraphics();
+        Font font = Minecraft.getInstance().font;
+        if (POWER_POINT == null) {
+            POWER_POINT = InitItems.POWER_POINT.get().getDefaultInstance();
+        }
+        graphics.renderItem(POWER_POINT, 5, 5);
+        PowerAttachment cap = player.getData(InitDataAttachment.POWER_NUM);
+        graphics.drawString(font, String.format("%s×%.2f", ChatFormatting.BOLD, cap.get()), 20, 10, 0xffffff);
+        RenderSystem.enableBlend();
     }
 }

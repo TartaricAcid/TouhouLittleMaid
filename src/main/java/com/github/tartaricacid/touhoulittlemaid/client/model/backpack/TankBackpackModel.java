@@ -141,6 +141,6 @@ public class TankBackpackModel extends EntityModel<EntityMaid> {
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        main.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 }
