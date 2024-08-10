@@ -19,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -28,6 +29,7 @@ import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
+import java.util.Optional;
 
 public class ItemEntityPlaceholder extends Item {
     public static final IClientItemExtensions itemExtensions = new IClientItemExtensions() {
@@ -76,8 +78,8 @@ public class ItemEntityPlaceholder extends Item {
             ResourceLocation id = getRecipeId(context.getItemInHand());
             Level world = context.getLevel();
             if (id != null && world instanceof ServerLevel) {
-                Recipe<AltarRecipeInventory> recipe = context.getLevel().getRecipeManager().byType(InitRecipes.ALTAR_CRAFTING).get(id);
-                if (recipe instanceof AltarRecipe altarRecipe) {
+                Optional<RecipeHolder<?>> recipe = context.getLevel().getRecipeManager().byKey(id);
+                if (recipe.isPresent() && recipe.get().value() instanceof AltarRecipe altarRecipe) {
                     altarRecipe.spawnOutputEntity((ServerLevel) world, context.getClickedPos().above(), null);
                     context.getItemInHand().shrink(1);
                 }

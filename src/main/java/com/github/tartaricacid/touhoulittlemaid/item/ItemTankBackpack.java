@@ -16,16 +16,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.TANK_BACKPACK_TAG;
+
 public class ItemTankBackpack extends ItemMaidBackpack {
     public static ItemStack getTankBackpack(TankBackpackData data) {
         ItemStack backpack = InitItems.TANK_BACKPACK.get().getDefaultInstance();
-        CompoundTag tags = backpack.getOrCreateTagElement("Tanks");
+        CompoundTag tags = backpack.get(TANK_BACKPACK_TAG);
         data.getTank().writeToNBT(tags);
         return backpack;
     }
 
     public static void setTankBackpack(EntityMaid maid, TankBackpackData data, ItemStack backpack) {
-        CompoundTag tags = backpack.getTagElement("Tanks");
+        CompoundTag tags = backpack.get(TANK_BACKPACK_TAG);
         if (tags != null) {
             data.loadTank(tags, maid);
         }
@@ -33,17 +35,17 @@ public class ItemTankBackpack extends ItemMaidBackpack {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        CompoundTag nbt = stack.getTagElement("Tanks");
+        CompoundTag nbt = stack.get(TANK_BACKPACK_TAG);
         if (nbt != null) {
             MutableComponent fluidInfo;
-            FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(nbt);
+            FluidStack fluidStack = FluidStack.parseOptional(worldIn.registries(), nbt);
             if (fluidStack.getFluid() == Fluids.EMPTY || fluidStack.getAmount() == 0) {
                 fluidInfo = Component.translatable("tooltips.touhou_little_maid.tank_backpack.empty_fluid").withStyle(ChatFormatting.GRAY);
             } else {
                 fluidInfo = Component.translatable("tooltips.touhou_little_maid.tank_backpack.fluid",
                         fluidStack.getFluid().getFluidType().getDescription(), fluidStack.getAmount()).withStyle(ChatFormatting.GRAY);
             }
-            components.add(fluidInfo);
+            tooltip.add(fluidInfo);
         }
     }
 }

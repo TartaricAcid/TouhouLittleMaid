@@ -62,7 +62,7 @@ public class MaidWorldData extends SavedData {
                 for (int i = 0; i < listTag.size(); i++) {
                     CompoundTag infoTag = listTag.getCompound(i);
                     String dimension = infoTag.getString("Dimension");
-                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag.getCompound("ChunkPos"));
+                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag, "ChunkPos").get();
                     UUID ownerId = infoTag.getUUID("OwnerId");
                     UUID maidId = infoTag.getUUID("MaidId");
                     long timestamp = infoTag.getLong("Timestamp");
@@ -79,7 +79,7 @@ public class MaidWorldData extends SavedData {
                 for (int i = 0; i < listTag.size(); i++) {
                     CompoundTag infoTag = listTag.getCompound(i);
                     String dimension = infoTag.getString("Dimension");
-                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag.getCompound("ChunkPos"));
+                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag, "ChunkPos").get();
                     UUID ownerId = infoTag.getUUID("OwnerId");
                     UUID tombstoneId = infoTag.getUUID("TombstoneId");
                     long timestamp = infoTag.getLong("Timestamp");

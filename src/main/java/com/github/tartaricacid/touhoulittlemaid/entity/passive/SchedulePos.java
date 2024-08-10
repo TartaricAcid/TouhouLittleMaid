@@ -95,9 +95,9 @@ public final class SchedulePos {
     public void load(CompoundTag compound, EntityMaid maid) {
         if (compound.contains("MaidSchedulePos", Tag.TAG_COMPOUND)) {
             CompoundTag data = compound.getCompound("MaidSchedulePos");
-            this.workPos = NbtUtils.readBlockPos(data.getCompound("Work"));
-            this.idlePos = NbtUtils.readBlockPos(data.getCompound("Idle"));
-            this.sleepPos = NbtUtils.readBlockPos(data.getCompound("Sleep"));
+            this.workPos = NbtUtils.readBlockPos(data, "Work").get();
+            this.idlePos = NbtUtils.readBlockPos(data, "Idle").get();
+            this.sleepPos = NbtUtils.readBlockPos(data, "Sleep").get();
             this.dimension = ResourceLocation.parse(data.getString("Dimension"));
             this.configured = data.getBoolean("Configured");
             this.restrictTo(maid);

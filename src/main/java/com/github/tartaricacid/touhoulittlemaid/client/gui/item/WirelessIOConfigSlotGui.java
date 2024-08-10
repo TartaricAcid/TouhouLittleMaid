@@ -12,13 +12,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.booleans2Bytes;
-import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.bytes2Booleans;
+import java.util.List;
 
 public class WirelessIOConfigSlotGui extends Screen {
     private static final ResourceLocation SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io_slot_config.png");
     private static final int SLOT_NUM = 38;
-    private final boolean[] configData;
+    private final List<Boolean> configData;
     protected int imageWidth = 155;
     protected int imageHeight = 160;
     protected int leftPos;
@@ -26,7 +25,7 @@ public class WirelessIOConfigSlotGui extends Screen {
 
     protected WirelessIOConfigSlotGui(ItemStack wirelessIO) {
         super(Component.literal("Wireless IO Config Slot GUI"));
-        configData = bytes2Booleans(ItemWirelessIO.getSlotConfig(wirelessIO), SLOT_NUM);
+        configData = ItemWirelessIO.getSlotConfig(wirelessIO);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class WirelessIOConfigSlotGui extends Screen {
             index++;
         }
 
-        Button confirm = Button.builder(Component.translatable("gui.done"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigPackage(booleans2Bytes(this.configData))))
+        Button confirm = Button.builder(Component.translatable("gui.done"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigPackage(this.configData)))
                 .pos(leftPos, topPos + 140).size(60, 20).build();
         Button cancel = Button.builder(Component.translatable("gui.cancel"), b -> PacketDistributor.sendToServer(new WirelessIOSlotConfigPackage()))
                 .pos(leftPos + 62, topPos + 140).size(60, 20).build();

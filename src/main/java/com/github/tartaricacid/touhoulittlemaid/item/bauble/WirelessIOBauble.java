@@ -14,16 +14,13 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Objects;
-
-import static com.github.tartaricacid.touhoulittlemaid.util.BytesBooleansConvert.bytes2Booleans;
+import java.util.*;
 
 public class WirelessIOBauble implements IMaidBauble {
     private static final int SLOT_NUM = 38;
 
     @Nonnull
-    public static ItemStack insertItemStacked(IItemHandler inventory, @Nonnull ItemStack stack, boolean simulate, @Nullable boolean[] slotConfig) {
+    public static ItemStack insertItemStacked(IItemHandler inventory, @Nonnull ItemStack stack, boolean simulate, @Nullable List<Boolean> slotConfig) {
         if (stack.isEmpty()) {
             return stack;
         }
@@ -33,7 +30,7 @@ public class WirelessIOBauble implements IMaidBauble {
         int sizeInventory = inventory.getSlots();
         for (int i = 0; i < sizeInventory; i++) {
             ItemStack slot = inventory.getStackInSlot(i);
-            if (slotConfig != null && i < slotConfig.length && slotConfig[i]) {
+            if (slotConfig != null && i < slotConfig.size() && slotConfig.get(i)) {
                 continue;
             }
             if (canItemStacksStackRelaxed(slot, stack)) {
@@ -46,7 +43,7 @@ public class WirelessIOBauble implements IMaidBauble {
 
         if (!stack.isEmpty()) {
             for (int i = 0; i < sizeInventory; i++) {
-                if (slotConfig != null && i < slotConfig.length && slotConfig[i]) {
+                if (slotConfig != null && i < slotConfig.size() && slotConfig.get(i)) {
                     continue;
                 }
                 if (inventory.getStackInSlot(i).isEmpty()) {
@@ -61,12 +58,12 @@ public class WirelessIOBauble implements IMaidBauble {
         return stack;
     }
 
-    public static ItemStack insertItem(IItemHandler dest, @Nonnull ItemStack stack, boolean simulate, @Nullable boolean[] slotConfig) {
+    public static ItemStack insertItem(IItemHandler dest, @Nonnull ItemStack stack, boolean simulate, @Nullable List<Boolean> slotConfig) {
         if (stack.isEmpty()) {
             return stack;
         }
         for (int i = 0; i < dest.getSlots(); i++) {
-            if (slotConfig != null && i < slotConfig.length && slotConfig[i]) {
+            if (slotConfig != null && i < slotConfig.size() && slotConfig.get(i)) {
                 continue;
             }
             stack = dest.insertItem(i, stack, simulate);
@@ -117,14 +114,15 @@ public class WirelessIOBauble implements IMaidBauble {
                     IItemHandler maidInv = maid.getAvailableInv(false);
                     boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
                     boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);
-                    byte[] slotConfig = ItemWirelessIO.getSlotConfig(baubleItem);
-                    byte[] slotConfigTmp = null;
+                    List<Boolean> slotConfig = ItemWirelessIO.getSlotConfig(baubleItem);
+                    List<Boolean> slotConfigData;
                     if (slotConfig != null) {
-                        slotConfigTmp = Arrays.copyOf(slotConfig, slotConfig.length);
-                        slotConfigTmp[maidInv.getSlots() - 2] = slotConfigTmp[SLOT_NUM - 2];
-                        slotConfigTmp[maidInv.getSlots() - 1] = slotConfigTmp[SLOT_NUM - 1];
+                        slotConfigData = new ArrayList<>(slotConfig);
+                        slotConfigData.set(maidInv.getSlots() - 2, slotConfig.get(SLOT_NUM - 2));
+                        slotConfigData.set(maidInv.getSlots() - 1, slotConfig.get(SLOT_NUM - 1));
+                    } else {
+                        slotConfigData = new ArrayList<>(Collections.nCopies(SLOT_NUM, false));
                     }
-                    boolean[] slotConfigData = bytes2Booleans(slotConfigTmp, SLOT_NUM);
                     IItemHandler filterList = ItemWirelessIO.getFilterList(baubleItem);
 
                     if (isMaidToChest) {
@@ -138,9 +136,9 @@ public class WirelessIOBauble implements IMaidBauble {
         }
     }
 
-    private void maidToChest(IItemHandler maid, IItemHandler chest, boolean isBlacklist, IItemHandler filterList, boolean[] slotConfig) {
+    private void maidToChest(IItemHandler maid, IItemHandler chest, boolean isBlacklist, IItemHandler filterList, List<Boolean> slotConfig) {
         for (int i = 0; i < maid.getSlots(); i++) {
-            if (i < slotConfig.length && slotConfig[i]) {
+            if (i < slotConfig.size() && slotConfig.get(i)) {
                 continue;
             }
             ItemStack maidInvItem = maid.getStackInSlot(i);
@@ -165,7 +163,7 @@ public class WirelessIOBauble implements IMaidBauble {
         }
     }
 
-    private void chestToMaid(IItemHandler chest, IItemHandler maid, boolean isBlacklist, IItemHandler filterList, boolean[] slotConfig) {
+    private void chestToMaid(IItemHandler chest, IItemHandler maid, boolean isBlacklist, IItemHandler filterList, List<Boolean> slotConfig) {
         for (int i = 0; i < chest.getSlots(); i++) {
             ItemStack chestInvStack = chest.getStackInSlot(i);
             boolean allowMove = isBlacklist;

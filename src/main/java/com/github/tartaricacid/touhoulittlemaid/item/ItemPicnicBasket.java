@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemContainerT
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -27,6 +26,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.PICNIC_BASKET_TAG;
+
 public class ItemPicnicBasket extends BlockItem implements MenuProvider {
     public static final IClientItemExtensions itemExtensions = new IClientItemExtensions() {
         @Override
@@ -36,7 +37,6 @@ public class ItemPicnicBasket extends BlockItem implements MenuProvider {
         }
     };
     private static final int PICNIC_BASKET_SIZE = 9;
-    private static final String PICNIC_BASKET_TAG = "PicnicBasketContainer";
 
     public ItemPicnicBasket(Block block) {
         super(block, (new Properties()).stacksTo(1));
@@ -45,9 +45,9 @@ public class ItemPicnicBasket extends BlockItem implements MenuProvider {
     public static ItemStackHandler getContainer(ItemStack stack) {
         ItemStackHandler handler = new ItemStackHandler(PICNIC_BASKET_SIZE);
         if (stack.getItem() == InitItems.PICNIC_BASKET.get()) {
-            CompoundTag tag = stack.getTag();
-            if (tag != null && tag.contains(PICNIC_BASKET_TAG, Tag.TAG_COMPOUND)) {
-                handler.deserializeNBT(tag.getCompound(PICNIC_BASKET_TAG));
+            CompoundTag tag = stack.get(PICNIC_BASKET_TAG);
+            if (tag != null) {
+                handler.deserializeNBT(tag);
             }
         }
         return handler;
@@ -55,7 +55,7 @@ public class ItemPicnicBasket extends BlockItem implements MenuProvider {
 
     public static void setContainer(ItemStack stack, ItemStackHandler itemStackHandler) {
         if (stack.getItem() == InitItems.PICNIC_BASKET.get()) {
-            stack.getOrCreateTag().put(PICNIC_BASKET_TAG, itemStackHandler.serializeNBT());
+            stack.set(PICNIC_BASKET_TAG, itemStackHandler.serializeNBT());
         }
     }
 

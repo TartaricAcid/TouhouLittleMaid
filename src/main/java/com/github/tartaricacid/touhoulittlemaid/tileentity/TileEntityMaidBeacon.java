@@ -44,7 +44,7 @@ public class TileEntityMaidBeacon extends BlockEntity {
         if (beacon.level != null && !level.isClientSide && level.getGameTime() % 80L == 0L) {
             if (beacon.potionIndex != -1 && beacon.storagePower >= beacon.getEffectCost()) {
                 beacon.storagePower = beacon.storagePower - beacon.getEffectCost();
-                beacon.updateBeaconEffect(level, BeaconEffect.getEffectByIndex(beacon.potionIndex).getEffect().value());
+                beacon.updateBeaconEffect(level, BeaconEffect.getEffectByIndex(beacon.potionIndex).getEffect());
             }
             beacon.updateAbsorbPower(level);
         }

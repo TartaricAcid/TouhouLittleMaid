@@ -22,9 +22,10 @@ import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.STORAGE_DATA_TAG;
+
 public class ItemMaidBeacon extends DoubleHighBlockItem {
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
-    private static final String STORAGE_DATA_TAG = "StorageData";
     private static final String FORGE_DATA_TAG = "ForgeData";
 
     public ItemMaidBeacon() {
@@ -38,15 +39,14 @@ public class ItemMaidBeacon extends DoubleHighBlockItem {
 
     public static ItemStack tileEntityToItemStack(TileEntityMaidBeacon beacon) {
         ItemStack stack = InitItems.MAID_BEACON.get().getDefaultInstance();
-        CompoundTag stackTag = stack.getOrCreateTag();
-        stackTag.put(STORAGE_DATA_TAG, beacon.saveWithoutMetadata());
+        stack.set(STORAGE_DATA_TAG, beacon.saveWithoutMetadata());
         return stack;
     }
 
     public static void itemStackToTileEntity(ItemStack stack, TileEntityMaidBeacon beacon) {
-        CompoundTag tag = stack.getOrCreateTagElement(STORAGE_DATA_TAG);
-        if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-            beacon.loadData(tag.getCompound(FORGE_DATA_TAG));
+        CompoundTag tag = stack.get(STORAGE_DATA_TAG);
+        if (tag != null) {
+            beacon.loadData(tag);
         }
     }
 
@@ -54,8 +54,8 @@ public class ItemMaidBeacon extends DoubleHighBlockItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         float numPower = 0f;
-        CompoundTag tag = stack.getOrCreateTagElement(STORAGE_DATA_TAG);
-        if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+        CompoundTag tag = stack.get(STORAGE_DATA_TAG);
+        if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
             CompoundTag forgeTag = tag.getCompound(FORGE_DATA_TAG);
             if (forgeTag.contains(TileEntityMaidBeacon.STORAGE_POWER_TAG, Tag.TAG_FLOAT)) {
                 numPower = forgeTag.getFloat(TileEntityMaidBeacon.STORAGE_POWER_TAG);

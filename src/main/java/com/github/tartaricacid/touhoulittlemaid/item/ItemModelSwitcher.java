@@ -21,9 +21,11 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.STORAGE_DATA_TAG;
 
 public class ItemModelSwitcher extends BlockItem {
-    private static final String STORAGE_DATA_TAG = "StorageData";
     private static final String FORGE_DATA_TAG = "ForgeData";
 
     public ItemModelSwitcher() {
@@ -31,26 +33,22 @@ public class ItemModelSwitcher extends BlockItem {
     }
 
     public static ItemStack tileEntityToItemStack(TileEntityModelSwitcher switcher) {
-        ItemStack stack = InitItems.MODEL_SWITCHER.get().getDefaultInstance();
-        CompoundTag stackTag = stack.getOrCreateTag();
-        stackTag.put(STORAGE_DATA_TAG, switcher.saveWithoutMetadata());
-        return stack;
+        return Objects.requireNonNull(InitItems.MODEL_SWITCHER.get().getDefaultInstance().set(STORAGE_DATA_TAG, switcher.saveWithoutMetadata()));
     }
 
     public static void itemStackToTileEntity(ItemStack stack, TileEntityModelSwitcher switcher) {
-        CompoundTag tag = stack.getOrCreateTagElement(STORAGE_DATA_TAG);
-        if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-            switcher.load(tag);
+        CompoundTag tag = stack.get(STORAGE_DATA_TAG);
+        if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            switcher.loadAdditional(tag);
         }
     }
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
-        if (pInteractionTarget instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) pInteractionTarget;
-            CompoundTag tag = pStack.getOrCreateTagElement(STORAGE_DATA_TAG);
+        if (pInteractionTarget instanceof EntityMaid maid) {
+            CompoundTag tag = pStack.get(STORAGE_DATA_TAG);
             CompoundTag forgeData;
-            if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
                 forgeData = tag.getCompound(FORGE_DATA_TAG);
             } else {
                 forgeData = new CompoundTag();
@@ -63,7 +61,7 @@ public class ItemModelSwitcher extends BlockItem {
     }
 
     private boolean hasMaidInfo(ItemStack stack) {
-        CompoundTag tag = stack.getTagElement(STORAGE_DATA_TAG);
+        CompoundTag tag = stack.get(STORAGE_DATA_TAG);
         if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
             CompoundTag forgeTag = tag.getCompound(FORGE_DATA_TAG);
             return forgeTag.contains(TileEntityModelSwitcher.ENTITY_UUID, Tag.TAG_INT_ARRAY);
