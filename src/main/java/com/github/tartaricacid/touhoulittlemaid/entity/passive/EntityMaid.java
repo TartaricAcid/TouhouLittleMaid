@@ -1208,8 +1208,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height * (isMaidInSittingPose() ? 0.65F : 0.85F);
+    public float getEyeHeight(Pose pPose) {
+        return this.getDimensions(pPose).height() * (isMaidInSittingPose() ? 0.65F : 0.85F);
     }
 
     @Override
@@ -1227,10 +1227,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return false;
     }
 
-    @Override
-    public boolean canBeLeashed(Player player) {
-        return this.isOwnedBy(player) && super.canBeLeashed(player);
-    }
+    //TODO 这里逻辑好像改了，由canBeLeashed变为了canHaveALeashAttachedToIt，不再传入交互实体，需要修改
+//    @Override
+//    public boolean canBeLeashed(Player player) {
+//        return this.isOwnedBy(player) && super.canBeLeashed(player);
+//    }
 
     public boolean canPathReach(BlockPos pos) {
         Path path = this.getNavigation().createPath(pos, 0);

@@ -13,8 +13,10 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.neoforged.api.distmarker.Dist;
@@ -25,6 +27,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
+import static net.minecraft.core.UUIDUtil.createOfflinePlayerUUID;
+
 @OnlyIn(Dist.CLIENT)
 public final class PlayerMaidModels {
     private static final Cache<String, GameProfile> GAME_PROFILE_CACHE = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
@@ -32,7 +36,6 @@ public final class PlayerMaidModels {
     private static final GameProfile EMPTY_GAME_PROFILE = new GameProfile(null, "EMPTY");
     private static final PlayerMaidModel PLAYER_MAID_MODEL = new PlayerMaidModel(false);
     private static final PlayerMaidModel PLAYER_MAID_MODEL_SLIM = new PlayerMaidModel(true);
-    private static final String SLIM_NAME = "slim";
     private static final List<ResourceLocation> PLAYER_MAID_ANIMATION_RES = Lists.newArrayList(
             ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
             ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
@@ -67,11 +70,14 @@ public final class PlayerMaidModels {
             newProfile = GAME_PROFILE_CACHE.get(name, () -> {
                 THREAD_POOL.submit(() -> {
                     GameProfile profile = new GameProfile(null, name);
-                    SkullBlockEntity.updateGameprofile(profile, profileNew -> {
-                        if (profileNew != null) {
-                            GAME_PROFILE_CACHE.put(name, profileNew);
+                    if (profile.getProperties().containsKey("textures")) {
+                        try {
+                            profile = SkullBlockEntity.fetchGameProfile(profile.getName()).get().get();
+                            GAME_PROFILE_CACHE.put(name, profile);
+                        } catch (InterruptedException | ExecutionException e) {
+                            throw new RuntimeException(e);
                         }
-                    });
+                    }
                 });
                 return EMPTY_GAME_PROFILE;
             });
@@ -79,20 +85,17 @@ public final class PlayerMaidModels {
         }
 
         if (newProfile != null) {
-            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(newProfile);
-            if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
-                String skinModel = map.get(MinecraftProfileTexture.Type.SKIN).getMetadata("model");
-                if (SLIM_NAME.equals(skinModel)) {
-                    return PLAYER_MAID_MODEL_SLIM;
-                }
+            PlayerSkin skin = minecraft.getSkinManager().getInsecureSkin(newProfile);
+            if (skin.model() == PlayerSkin.Model.SLIM) {
+                return PLAYER_MAID_MODEL_SLIM;
+            }
             } else {
-                UUID uuid = UUIDUtil.getOrCreatePlayerUUID(newProfile);
-                String skinModel = DefaultPlayerSkin.getSkinModelName(uuid);
-                if (SLIM_NAME.equals(skinModel)) {
+                UUID uuid = getOrCreatePlayerUUID(newProfile);
+                PlayerSkin skinModel = DefaultPlayerSkin.get(uuid);
+                if (skinModel.model() == PlayerSkin.Model.SLIM) {
                     return PLAYER_MAID_MODEL_SLIM;
                 }
             }
-        }
         return PLAYER_MAID_MODEL;
     }
 
@@ -113,11 +116,14 @@ public final class PlayerMaidModels {
             newProfile = GAME_PROFILE_CACHE.get(name, () -> {
                 THREAD_POOL.submit(() -> {
                     GameProfile profile = new GameProfile(null, name);
-                    SkullBlockEntity.updateGameprofile(profile, profileNew -> {
-                        if (profileNew != null) {
-                            GAME_PROFILE_CACHE.put(name, profileNew);
+                    if (profile.getProperties().containsKey("textures")) {
+                        try {
+                            profile = SkullBlockEntity.fetchGameProfile(profile.getName()).get().get();
+                            GAME_PROFILE_CACHE.put(name, profile);
+                        } catch (InterruptedException | ExecutionException e) {
+                            throw new RuntimeException(e);
                         }
-                    });
+                    }
                 });
                 return EMPTY_GAME_PROFILE;
             });
@@ -125,15 +131,28 @@ public final class PlayerMaidModels {
         }
 
         if (newProfile != null) {
-            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(newProfile);
-            if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
-                return minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+            PlayerSkin skin = minecraft.getSkinManager().getInsecureSkin(newProfile);
+            if (skin.model() == PlayerSkin.Model.SLIM) {
+                try {
+                    return minecraft.getSkinManager().getOrLoad(newProfile).get().texture();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
-                UUID uuid = UUIDUtil.getOrCreatePlayerUUID(newProfile);
-                return DefaultPlayerSkin.getDefaultSkin(uuid);
+                UUID uuid = getOrCreatePlayerUUID(newProfile);
+                return DefaultPlayerSkin.get(uuid).texture();
             }
         }
 
         return TEXTURE_ALEX;
+    }
+
+    public static UUID getOrCreatePlayerUUID(GameProfile pProfile) {
+        UUID uuid = pProfile.getId();
+        if (uuid == null) {
+            uuid = createOfflinePlayerUUID(pProfile.getName());
+        }
+
+        return uuid;
     }
 }
