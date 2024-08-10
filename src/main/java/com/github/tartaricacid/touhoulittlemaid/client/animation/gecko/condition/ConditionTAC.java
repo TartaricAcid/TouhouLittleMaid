@@ -29,20 +29,20 @@ public class ConditionTAC {
         }
     }
 
-    public String doTest(ItemStack itemInHand, String prefix) {
-        if (itemInHand.isEmpty()) {
-            return EMPTY;
-        }
-        ResourceLocation gunId = TacCompat.getGunId(itemInHand);
-        if (gunId == null) {
-            return EMPTY;
-        }
-        if (idTest.contains(gunId)) {
-            String animationName = prefix.substring(0, prefix.length() - 1) + "$" + gunId;
-            if (nameTest.contains(animationName)) {
-                return animationName;
-            }
-        }
-        return EMPTY;
-    }
+//    public String doTest(ItemStack itemInHand, String prefix) {
+//        if (itemInHand.isEmpty()) {
+//            return EMPTY;
+//        }
+//        ResourceLocation gunId = TacCompat.getGunId(itemInHand);
+//        if (gunId == null) {
+//            return EMPTY;
+//        }
+//        if (idTest.contains(gunId)) {
+//            String animationName = prefix.substring(0, prefix.length() - 1) + "$" + gunId;
+//            if (nameTest.contains(animationName)) {
+//                return animationName;
+//            }
+//        }
+//        return EMPTY;
+//    }
 }

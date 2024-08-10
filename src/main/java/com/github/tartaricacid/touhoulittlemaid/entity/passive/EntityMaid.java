@@ -11,7 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
+// import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
@@ -1082,7 +1082,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     protected void dropEquipment() {
-        if (this.getOwnerUUID() != null && !level.isClientSide && !PetBedDrop.hasPetBedPos(this)) {
+        if (this.getOwnerUUID() != null && !level.isClientSide /* && !PetBedDrop.hasPetBedPos(this) */) {
             // 掉出世界的判断
             Vec3 position = Vec3.atBottomCenterOf(blockPosition());
             // 防止卡在基岩里？
