@@ -229,7 +229,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         manager.setRenderShadow(false);
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         RenderSystem.runAsFancy(() -> {
-            manager.render(guiEntity, 0, 0, 0, 0, 1, poseStack, buffer, 0xf000f0);
+            manager.render(guiEntity, 0, 0, 0, 0, Minecraft.getInstance().getPartialTick(), poseStack, buffer, 0xf000f0);
             poseStack.translate(0, 0.5, 0);
             if (showFloor) {
                 this.floorModel.renderToBuffer(poseStack, buffer.getBuffer(this.floorModel.renderType(FLOOR_TEXTURE)), 0xf000f0, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

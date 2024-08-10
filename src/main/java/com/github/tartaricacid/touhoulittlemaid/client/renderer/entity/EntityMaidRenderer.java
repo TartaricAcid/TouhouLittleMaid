@@ -28,6 +28,7 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
+@SuppressWarnings("rawtypes,unchecked")
 public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
@@ -42,12 +43,12 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         this.addLayer(new LayerMaidBackpack(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackItem(this));
         this.addLayer(new LayerMaidBanner(this, manager.getModelSet()));
-        this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer(manager);
+        this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer<>(manager);
     }
 
     @Override
     public void render(Mob entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
-        IMaid maid = IMaid.convert(entity);
+        var maid = IMaid.convertToMaidMob(entity);
         if (maid == null) {
             return;
         }
@@ -80,8 +81,8 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
         // GeckoLib 接管渲染
         if (this.mainInfo.isGeckoModel()) {
-            this.geckoEntityMaidRenderer.setMainInfo(this.mainInfo);
-            this.geckoEntityMaidRenderer.render(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
+            this.geckoEntityMaidRenderer.getAnimatableEntity(maid).setMaidInfo(this.mainInfo);
+            this.geckoEntityMaidRenderer.render(maid, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;
         }
         // 模型动画设置

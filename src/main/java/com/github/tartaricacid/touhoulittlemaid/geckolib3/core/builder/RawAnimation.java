@@ -9,8 +9,8 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder;
 import java.util.Objects;
 
 public class RawAnimation {
-    public String animationName;
-    public ILoopType loopType;
+    public final String animationName;
+    public final ILoopType loopType;
 
     /**
      * 仅存储名称和播放循环类型的类

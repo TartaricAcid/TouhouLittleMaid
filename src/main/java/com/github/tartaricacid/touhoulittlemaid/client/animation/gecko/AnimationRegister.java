@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
@@ -137,7 +136,7 @@ public class AnimationRegister {
         parser.register(new LazyVariable("tlm.has_backpack", MolangUtils.FALSE));
     }
 
-    public static void setParserValue(AnimationEvent<GeckoMaidEntity> animationEvent, MolangParser parser, EntityModelData data, IMaid maid) {
+    public static void setParserValue(AnimationEvent<?> animationEvent, MolangParser parser, EntityModelData data, IMaid maid) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {
             return;
@@ -217,12 +216,12 @@ public class AnimationRegister {
         parser.setValue("tlm.has_backpack", () -> MolangUtils.booleanToFloat(maid.hasBackpack()));
     }
 
-    private static void register(String animationName, ILoopType loopType, int priority, BiPredicate<IMaid, AnimationEvent<GeckoMaidEntity>> predicate) {
+    private static void register(String animationName, ILoopType loopType, int priority, BiPredicate<IMaid, AnimationEvent<?>> predicate) {
         AnimationManager manager = AnimationManager.getInstance();
         manager.register(new AnimationState(animationName, loopType, priority, predicate));
     }
 
-    private static void register(String animationName, int priority, BiPredicate<IMaid, AnimationEvent<GeckoMaidEntity>> predicate) {
+    private static void register(String animationName, int priority, BiPredicate<IMaid, AnimationEvent<?>> predicate) {
         register(animationName, ILoopType.EDefaultLoopTypes.LOOP, priority, predicate);
     }
 
@@ -245,7 +244,7 @@ public class AnimationRegister {
         }
     }
 
-    private static float getYawSpeed(AnimationEvent<GeckoMaidEntity> animationEvent, Mob maid) {
+    private static float getYawSpeed(AnimationEvent<?> animationEvent, Mob maid) {
         double seekTime = animationEvent.getAnimationTick();
         return maid.getViewYRot((float) seekTime - maid.getViewYRot((float) seekTime - 0.1f));
     }
@@ -259,7 +258,7 @@ public class AnimationRegister {
         return 20 * (float) (maid.position().y - maid.yo);
     }
 
-    private static double getEyeCloseState(AnimationEvent<GeckoMaidEntity> animationEvent, Mob maid) {
+    private static double getEyeCloseState(AnimationEvent<?> animationEvent, Mob maid) {
         double remainder = (animationEvent.getAnimationTick() + Math.abs(maid.getUUID().getLeastSignificantBits()) % 10) % 90;
         boolean isBlinkTime = 85 < remainder && remainder < 90;
         return MolangUtils.booleanToFloat(maid.isSleeping() || isBlinkTime);
