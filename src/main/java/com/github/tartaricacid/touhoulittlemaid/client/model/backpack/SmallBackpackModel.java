@@ -173,6 +173,6 @@ public class SmallBackpackModel extends EntityModel<EntityMaid> {
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        all.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        all.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 }

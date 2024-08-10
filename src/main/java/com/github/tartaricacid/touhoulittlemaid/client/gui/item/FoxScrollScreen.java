@@ -61,9 +61,8 @@ public class FoxScrollScreen extends Screen {
             for (int i = this.page * PER_PAGE_COUNT; i < this.page * PER_PAGE_COUNT + PER_PAGE_COUNT; i++) {
                 if (i < scrollData.size()) {
                     FoxScrollPackage.FoxScrollData info = scrollData.get(i);
-                    this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.fox_scroll.track"), b -> {
-                        PacketDistributor.sendToServer(new SetScrollPackage(this.selectDim, info.getPos()));
-                    }));
+                    this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.fox_scroll.track"),
+                            b -> PacketDistributor.sendToServer(new SetScrollPackage(this.selectDim, info.pos()))));
                     offsetIn = offsetIn + 42;
                 }
             }
@@ -109,7 +108,7 @@ public class FoxScrollScreen extends Screen {
             for (int i = this.page * PER_PAGE_COUNT; i < this.page * PER_PAGE_COUNT + PER_PAGE_COUNT; i++) {
                 if (i < scrollData.size()) {
                     FoxScrollPackage.FoxScrollData info = scrollData.get(i);
-                    BlockPos pos = info.getPos();
+                    BlockPos pos = info.pos();
                     Component distanceText;
                     if (inSameDim) {
                         int distance = (int) Math.sqrt(playerPos.distSqr(pos));
@@ -119,7 +118,7 @@ public class FoxScrollScreen extends Screen {
                     }
                     Component posText = Component.translatable("gui.touhou_little_maid.fox_scroll.position", pos.toShortString());
                     graphics.fill(leftPos + 152, offsetIn, leftPos + 400 - 22, offsetIn + 40, 0xef58626b);
-                    graphics.drawString(font, info.getName(), leftPos + 160, offsetIn + 4, ChatFormatting.GOLD.getColor());
+                    graphics.drawString(font, info.name(), leftPos + 160, offsetIn + 4, ChatFormatting.GOLD.getColor());
                     graphics.drawString(font, posText, leftPos + 160, offsetIn + 16, ChatFormatting.GRAY.getColor(), false);
                     graphics.drawString(font, distanceText, leftPos + 160, offsetIn + 28, ChatFormatting.GRAY.getColor(), false);
                     offsetIn = offsetIn + 42;

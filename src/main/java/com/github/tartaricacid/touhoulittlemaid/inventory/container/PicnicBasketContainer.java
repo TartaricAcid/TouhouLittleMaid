@@ -15,7 +15,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class PicnicBasketContainer extends AbstractContainerMenu {
-    public static final MenuType<PicnicBasketContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new PicnicBasketContainer(windowId, inv, data.readItem()));
+    public static final MenuType<PicnicBasketContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new PicnicBasketContainer(windowId, inv, ItemStack.STREAM_CODEC.decode(data)));
     private final ItemStack picnicBasket;
     private final ItemStackHandler container;
 

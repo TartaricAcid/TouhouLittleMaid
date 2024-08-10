@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -85,7 +84,9 @@ public class TaskAttack implements IAttackTask {
     }
 
     private boolean hasAssaultWeapon(EntityMaid maid) {
-        return maid.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE);
+        return maid.getMainHandItem().getAttributeModifiers().modifiers()
+                .stream()
+                .anyMatch(modifier -> modifier.attribute().value() == Attributes.ATTACK_DAMAGE);
     }
 
     private boolean hasExtinguisher(EntityMaid maid) {

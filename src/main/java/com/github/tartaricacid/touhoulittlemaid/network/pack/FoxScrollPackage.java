@@ -3,9 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.network.pack;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.FoxScrollScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -54,40 +54,11 @@ public record FoxScrollPackage(Map<String, List<FoxScrollData>> data) implements
         return TYPE;
     }
 
-    public static class FoxScrollData {
-        //TODO : component的CODEC
+    public record FoxScrollData(BlockPos pos, Component name, long timestamp) {
         public static final StreamCodec<RegistryFriendlyByteBuf, FoxScrollData> FOX_SCROLL_DATA_STREAM_CODEC = StreamCodec.composite(
-                BlockPos.STREAM_CODEC, FoxScrollData::getPos);
-        private final BlockPos pos;
-        private final Component name;
-        private final long timestamp;
-
-        public FoxScrollData(BlockPos pos, Component name, long timestamp) {
-            this.pos = pos;
-            this.name = name;
-            this.timestamp = timestamp;
-        }
-
-        public static void encode(FoxScrollData data, FriendlyByteBuf buf) {
-            buf.writeBlockPos(data.pos);
-            buf.writeComponent(data.name);
-            buf.writeLong(data.timestamp);
-        }
-
-        public static FoxScrollData decode(FriendlyByteBuf buf) {
-            return new FoxScrollData(buf.readBlockPos(), buf.readComponent(), buf.readLong());
-        }
-
-        public BlockPos getPos() {
-            return pos;
-        }
-
-        public Component getName() {
-            return name;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
-        }
+                BlockPos.STREAM_CODEC, FoxScrollData::pos,
+                ComponentSerialization.STREAM_CODEC, FoxScrollData::name,
+                ByteBufCodecs.VAR_LONG, FoxScrollData::timestamp,
+                FoxScrollData::new);
     }
 }
