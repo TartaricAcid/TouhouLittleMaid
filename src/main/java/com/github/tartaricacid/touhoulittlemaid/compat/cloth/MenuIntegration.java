@@ -254,5 +254,4 @@ public class MenuIntegration {
 //        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
 //                new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> getConfigBuilder().setParentScreen(parent).build()));
 //    }
-    //TODO : 不知道怎么修，好像是配置文件
 }

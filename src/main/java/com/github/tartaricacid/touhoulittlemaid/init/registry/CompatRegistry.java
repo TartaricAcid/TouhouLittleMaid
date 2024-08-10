@@ -24,13 +24,14 @@ public final class CompatRegistry {
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
         event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
-//        event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
         //TODO 帕秋莉手册
-        event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> {
-            if (FMLEnvironment.dist == Dist.CLIENT) {
-                MenuIntegration.registerModsPage();
-            }
-        }));
+//        event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
+        //TODO ModLoadingContext已被移除，nf有新的配置界面，需要重写
+//        event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> {
+//            if (FMLEnvironment.dist == Dist.CLIENT) {
+//                MenuIntegration.registerModsPage();
+//            }
+//        }));
         event.enqueueWork(() -> {
             if (FMLEnvironment.dist == Dist.CLIENT) {
                 ClothConfigScreen.registerNoClothConfigPage();

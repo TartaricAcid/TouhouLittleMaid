@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api.animation;
 
+import net.minecraft.world.level.biome.Biome;
+
 public interface IMaidData extends IEntityData {
     /**
      * Get maid's work task register name
@@ -153,7 +155,7 @@ public interface IMaidData extends IEntityData {
      *
      * @return String
      */
-    String getAtBiome();
+    Biome getAtBiome();
 
     /**
      * Whether the maid is swinging left arms

@@ -5,17 +5,19 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.function.Predicate;
 
 public class MaidTemptGoal extends Goal {
     private static final TargetingConditions TEMP_TARGETING = TargetingConditions.forNonCombat().range(10).ignoreLineOfSight();
     protected final PathfinderMob mob;
     private final TargetingConditions targetingConditions;
     private final double speedModifier;
-    private final Ingredient items;
+    private final Predicate<ItemStack> items;
     private final boolean canScare;
     @Nullable
     protected EntityMaid maid;
@@ -25,7 +27,7 @@ public class MaidTemptGoal extends Goal {
     private int calmDown;
     private boolean isRunning;
 
-    public MaidTemptGoal(PathfinderMob mob, double speedModifier, Ingredient items, boolean canScare) {
+    public MaidTemptGoal(PathfinderMob mob, double speedModifier, Predicate<ItemStack> items, boolean canScare) {
         this.mob = mob;
         this.speedModifier = speedModifier;
         this.items = items;

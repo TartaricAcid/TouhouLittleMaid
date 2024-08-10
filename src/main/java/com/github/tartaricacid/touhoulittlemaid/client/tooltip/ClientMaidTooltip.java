@@ -19,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
 import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -98,7 +99,7 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
         }
 
         guiGraphics.enableScissor(pX, posY - 50, pX + width, posY);
-        InventoryScreen.renderEntityInInventory(guiGraphics, posX, posY, (int) (25 * info.getRenderItemScale()), pose, null, maid);
+        InventoryScreen.renderEntityInInventory(guiGraphics, posX, posY, (int) (25 * info.getRenderItemScale()), new Vector3f(), pose,null, maid);
         guiGraphics.disableScissor();
     }
 }
