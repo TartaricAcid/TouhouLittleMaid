@@ -5,8 +5,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -18,10 +16,10 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
 
-public class ModTagItem extends ItemTagsProvider {
+public class TagItem extends ItemTagsProvider {
     public static final TagKey<Item> GOHEI_ENCHANTABLE = TagKey.create(Registries.ITEM, getResourceLocation("gohei_enchantable"));
 
-    public ModTagItem(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagLookup<Block>> pBlockTags, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+    public TagItem(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagLookup<Block>> pBlockTags, String modId, @Nullable ExistingFileHelper existingFileHelper) {
         super(pOutput, pLookupProvider, pBlockTags, modId, existingFileHelper);
     }
 

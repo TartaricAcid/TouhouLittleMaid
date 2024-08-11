@@ -27,10 +27,14 @@ public class DataGenerator {
         DatapackBuiltinEntriesProvider datapackProvider = new RegistryDataGenerator(pack, event.getLookupProvider());
         generator.addProvider(event.includeServer(), datapackProvider);
 
+        //LootTable
+        vanillaPack.addProvider(
+                packOutput -> new LootModifierGenerator(packOutput, registries, TouhouLittleMaid.MOD_ID));
+
         //Tags
         var blockTagsProvider = vanillaPack
-                .addProvider(packOutput -> new ModTagBlock(packOutput, registries,TouhouLittleMaid.MOD_ID , existingFileHelper));
+                .addProvider(packOutput -> new TagBlock(packOutput, registries, TouhouLittleMaid.MOD_ID, existingFileHelper));
         vanillaPack.addProvider(
-                packOutput -> new ModTagItem(packOutput, registries, blockTagsProvider.contentsGetter(),TouhouLittleMaid.MOD_ID , existingFileHelper));
+                packOutput -> new TagItem(packOutput, registries, blockTagsProvider.contentsGetter(), TouhouLittleMaid.MOD_ID, existingFileHelper));
     }
 }

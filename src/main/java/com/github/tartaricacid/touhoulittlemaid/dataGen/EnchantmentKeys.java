@@ -35,7 +35,7 @@ public class EnchantmentKeys {
         //TODO 附魔的参数可能会需要调
         register(context,IMPEDING, new Enchantment.Builder(
                 Enchantment.definition(
-                    items.getOrThrow(ModTagItem.GOHEI_ENCHANTABLE),
+                    items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
                         4,
                         4,
                         Enchantment.dynamicCost(10,8),
@@ -47,7 +47,7 @@ public class EnchantmentKeys {
 
         register(context,SPEEDY, new Enchantment.Builder(
                 Enchantment.definition(
-                        items.getOrThrow(ModTagItem.GOHEI_ENCHANTABLE),
+                        items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
                         2,
                         2,
                         Enchantment.dynamicCost(15,10),
@@ -59,7 +59,7 @@ public class EnchantmentKeys {
 
         register(context,ENDERS_ENDER, new Enchantment.Builder(
                 Enchantment.definition(
-                        items.getOrThrow(ModTagItem.GOHEI_ENCHANTABLE),
+                        items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
                         1,
                         1,
                         Enchantment.constantCost(20),
