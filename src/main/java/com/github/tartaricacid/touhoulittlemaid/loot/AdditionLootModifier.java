@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.loot;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -19,8 +18,8 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class AdditionLootModifier extends LootModifier {
-    public static final Supplier<Codec<AdditionLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(inst -> codecStart(inst)
+    public static final Supplier<MapCodec<AdditionLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
                     .and(inst.group(
                             ResourceLocation.CODEC.fieldOf("parameter_set_name").forGetter((m) -> m.parameterSet),
                             ResourceLocation.CODEC.fieldOf("addition_loot_table").forGetter((m) -> m.parameterSet)
