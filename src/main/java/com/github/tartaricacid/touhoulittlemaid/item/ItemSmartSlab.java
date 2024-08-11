@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
@@ -23,6 +22,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -45,9 +45,9 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
     }
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
-        CompoundData compoundData = stack.get(InitDataComponent.MAID_INFO);
+        CustomData compoundData = stack.get(InitDataComponent.MAID_INFO);
         if (compoundData != null) {
-            maid.saveWithoutId(compoundData.nbt());
+            maid.saveWithoutId(compoundData.copyTag());
         }
     }
 
@@ -86,9 +86,9 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
 
     private InteractionResult spawnFromStore(UseOnContext context, Player player, Level worldIn, EntityMaid maid) {
         ItemStack stack = context.getItemInHand();
-        CompoundData compoundData = stack.get(InitDataComponent.MAID_INFO);
+        CustomData compoundData = stack.get(InitDataComponent.MAID_INFO);
         if (compoundData != null) {
-            CompoundTag maidCompound = compoundData.nbt();
+            CompoundTag maidCompound = compoundData.copyTag();
             UUID ownerUid = maidCompound.getUUID(MAID_OWNER);
             if (!player.getUUID().equals(ownerUid)) {
                 return InteractionResult.FAIL;

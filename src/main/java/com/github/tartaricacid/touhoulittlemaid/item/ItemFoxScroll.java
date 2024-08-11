@@ -1,10 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
+import com.github.tartaricacid.touhoulittlemaid.data.TrackInfo;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.FoxScrollPackage;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
@@ -12,8 +12,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -28,32 +26,19 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ItemFoxScroll extends Item {
-    private static final String TRACK_INFO = "TrackInfo";
-
     public ItemFoxScroll() {
         super((new Properties()).stacksTo(1));
     }
 
     public static void setTrackInfo(ItemStack scroll, String dimension, BlockPos pos) {
-        CompoundData compoundData = scroll.get(InitDataComponent.MAID_INFO);
-        if (compoundData != null) {
-            CompoundTag tag = compoundData.nbt();
-            tag.putString("Dimension", dimension);
-            tag.put("Position", NbtUtils.writeBlockPos(pos));
-        }
+        scroll.set(InitDataComponent.TRACK_INFO, new TrackInfo(dimension, pos));
     }
 
     @Nullable
     public static Pair<String, BlockPos> getTrackInfo(ItemStack scroll) {
-        CompoundData compoundData = scroll.get(InitDataComponent.MAID_INFO);
-        if (compoundData != null) {
-            CompoundTag tag = compoundData.nbt();
-            String dimension = tag.getString("Dimension");
-            Optional<BlockPos> position = NbtUtils.readBlockPos(tag,"Position");
-            if (position.isPresent()) {
-                BlockPos pos = position.get();
-                return Pair.of(dimension, pos);
-            }
+        TrackInfo trackInfo = scroll.get(InitDataComponent.TRACK_INFO);
+        if (trackInfo != null) {
+            return Pair.of(trackInfo.dimension(), trackInfo.position());
         }
         return null;
     }

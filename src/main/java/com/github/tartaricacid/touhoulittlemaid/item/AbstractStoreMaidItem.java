@@ -1,15 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemMaidTooltip;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import com.mojang.serialization.Codec;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
@@ -17,7 +15,6 @@ import java.util.Optional;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
 
 public abstract class AbstractStoreMaidItem extends Item {
-    static final String MAID_INFO = "MaidInfo";
     static final String CUSTOM_NAME = "CustomName";
 
     public AbstractStoreMaidItem(Properties properties) {
@@ -43,18 +40,17 @@ public abstract class AbstractStoreMaidItem extends Item {
     }
 
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        CompoundData compoundDataComponent = stack.get(InitDataComponent.MAID_INFO);
-        if (compoundDataComponent != null) {
-            CompoundTag maidData = compoundDataComponent.nbt();
-            if (maidData.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
-                String modelId = maidData.getString(MODEL_ID_TAG_NAME);
-                String customName = "";
-                if (maidData.contains(CUSTOM_NAME, Tag.TAG_STRING)) {
-                    customName = maidData.getString(CUSTOM_NAME);
-                }
-                return Optional.of(new ItemMaidTooltip(modelId, customName));
-            }
+        CustomData maidInfo = stack.get(InitDataComponent.MAID_INFO);
+        if (maidInfo == null) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        Optional<String> modelId = maidInfo.read(Codec.STRING.fieldOf(MODEL_ID_TAG_NAME)).result();
+        if (modelId.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<String> customName = maidInfo.read(Codec.STRING.fieldOf(CUSTOM_NAME)).result();
+        return customName
+                .map(s -> (TooltipComponent) new ItemMaidTooltip(modelId.get(), s))
+                .or(() -> Optional.of(new ItemMaidTooltip(modelId.get(), "")));
     }
 }

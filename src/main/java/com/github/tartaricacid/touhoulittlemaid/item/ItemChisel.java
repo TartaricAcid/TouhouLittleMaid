@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockStatue;
-import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -18,6 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -58,9 +58,8 @@ public class ItemChisel extends Item {
     }
 
     private void genStatueBlocks(@Nonnull Player player, @Nonnull Level worldIn, @Nonnull BlockPos pos, @Nonnull Direction facing) {
-        CompoundData compoundData = player.getOffhandItem().get(InitDataComponent.MAID_INFO);
+        CustomData compoundData = player.getOffhandItem().get(InitDataComponent.MAID_INFO);
         if (compoundData != null) {
-            CompoundTag data = compoundData.nbt();
             TileEntityStatue.Size[] sizes = TileEntityStatue.Size.values();
             for (int i = sizes.length - 1; i >= 0; i--) {
                 TileEntityStatue.Size size = sizes[i];
@@ -78,7 +77,7 @@ public class ItemChisel extends Item {
                             TileEntityStatue statue = (TileEntityStatue) te;
                             if (posIn.equals(pos)) {
                                 statue.setForgeData(size, true, pos, facing,
-                                        Lists.newArrayList(posList), data);
+                                        Lists.newArrayList(posList), compoundData.copyTag());
                             } else {
                                 statue.setForgeData(size, false, pos, facing,
                                         Lists.newArrayList(posList), null);

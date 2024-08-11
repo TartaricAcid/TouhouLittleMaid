@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
@@ -15,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -36,7 +36,7 @@ public class ItemPhoto extends AbstractStoreMaidItem {
         Player player = context.getPlayer();
         ItemStack photo = context.getItemInHand();
         Vec3 clickLocation = context.getClickLocation();
-        CompoundData compoundData = photo.get(InitDataComponent.MAID_INFO);
+        CustomData compoundData = photo.get(InitDataComponent.MAID_INFO);
 
         if (player == null) {
             return super.useOn(context);
@@ -59,7 +59,7 @@ public class ItemPhoto extends AbstractStoreMaidItem {
         }
 
         // 最后才应用生成实体的逻辑
-        Optional<Entity> entityOptional = EntityType.create(compoundData.nbt(), worldIn);
+        Optional<Entity> entityOptional = EntityType.create(compoundData.copyTag(), worldIn);
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid maid) {
             maid.setPos(clickLocation.x, clickLocation.y, clickLocation.z);
             // 实体生成必须在服务端应用
