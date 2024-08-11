@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FurnaceBackpackData extends SimpleContainer implements IBackpackData {
     private static final int INPUT_INDEX = 0;
@@ -95,7 +96,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
             // 从缓存中获取配方
             SmeltingRecipe recipe;
             if (inputNotEmpty) {
-                recipe = this.quickCheck.getRecipeFor(this, level).orElse(null);
+                recipe = this.quickCheck.getRecipeFor(getInput(), level).orElse(null).value();
             } else {
                 recipe = null;
             }
@@ -180,7 +181,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         // 先检查输入物品和配方
         if (!container.getItem(INPUT_INDEX).isEmpty() && recipe != null) {
             // 先检查配方结果
-            ItemStack result = recipe.assemble(this, access);
+            ItemStack result = recipe.assemble(getInput(), access);
             // 没结果，不能燃烧
             if (result.isEmpty()) {
                 return false;
@@ -209,7 +210,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     private boolean burn(RegistryAccess access, @Nullable SmeltingRecipe recipe, SimpleContainer container, int maxStackSize) {
         if (recipe != null && this.canBurn(access, recipe, container, maxStackSize)) {
             ItemStack input = container.getItem(INPUT_INDEX);
-            ItemStack result = recipe.assemble(this, access);
+            ItemStack result = recipe.assemble(getInput(), access);
             ItemStack output = container.getItem(OUTPUT_INDEX);
             // 如果输出栏为空
             if (output.isEmpty()) {
@@ -231,6 +232,13 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     }
 
     private int getTotalCookTime(Level level) {
-        return quickCheck.getRecipeFor(this, level).map(AbstractCookingRecipe::getCookingTime).orElse(200);
+        return quickCheck.getRecipeFor(getInput(), level)
+                .map(smeltingRecipeRecipeHolder -> smeltingRecipeRecipeHolder.value().getCookingTime())
+                .orElse(200);
+    }
+
+
+    private SingleRecipeInput getInput() {
+        return new SingleRecipeInput(this.getItem(INPUT_INDEX));
     }
 }

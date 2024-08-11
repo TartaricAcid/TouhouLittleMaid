@@ -71,7 +71,7 @@ public final class InitSpecialItemRender {
         ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
             ModelResourceLocation rawName = new ModelResourceLocation(res, "inventory");
-            ModelResourceLocation inHandName = new ModelResourceLocation(res.getNamespace(), res.getPath() + "_in_hand", "inventory");
+            ModelResourceLocation inHandName = new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(res.getNamespace(), res.getPath() + "_in_hand"), "inventory");
             PERSPECTIVE_MODEL_LIST.add(Pair.of(rawName, inHandName));
         }
     }
