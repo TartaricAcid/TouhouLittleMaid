@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -37,9 +38,9 @@ public class ItemMaidBeacon extends DoubleHighBlockItem {
                         .build()));
     }
 
-    public static ItemStack tileEntityToItemStack(TileEntityMaidBeacon beacon) {
+    public static ItemStack tileEntityToItemStack(HolderLookup.Provider provider, TileEntityMaidBeacon beacon) {
         ItemStack stack = InitItems.MAID_BEACON.get().getDefaultInstance();
-        stack.set(STORAGE_DATA_TAG, beacon.saveWithoutMetadata());
+        stack.set(STORAGE_DATA_TAG, beacon.saveWithoutMetadata(provider));
         return stack;
     }
 

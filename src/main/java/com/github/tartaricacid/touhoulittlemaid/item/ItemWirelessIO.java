@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOCo
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -65,20 +66,20 @@ public class ItemWirelessIO extends Item implements MenuProvider {
         return false;
     }
 
-    public static ItemStackHandler getFilterList(ItemStack stack) {
+    public static ItemStackHandler getFilterList(HolderLookup.Provider provider, ItemStack stack) {
         WirelessIOHandler handler = new WirelessIOHandler(FILTER_LIST_SIZE);
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
             CompoundTag tag = stack.get(FILTER_LIST_TAG);
             if (tag != null) {
-                handler.deserializeNBT(tag);
+                handler.deserializeNBT(provider, tag);
             }
         }
         return handler;
     }
 
-    public static void setFilterList(ItemStack stack, ItemStackHandler itemStackHandler) {
+    public static void setFilterList(HolderLookup.Provider provider, ItemStack stack, ItemStackHandler itemStackHandler) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.set(FILTER_LIST_TAG, itemStackHandler.serializeNBT());
+            stack.set(FILTER_LIST_TAG, itemStackHandler.serializeNBT(provider));
         }
     }
 

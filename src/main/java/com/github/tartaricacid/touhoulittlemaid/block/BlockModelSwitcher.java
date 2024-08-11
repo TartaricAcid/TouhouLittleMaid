@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -77,8 +76,7 @@ public class BlockModelSwitcher extends BaseEntityBlock {
         boolean rightSignal = pLevel.getSignal(pPos.offset(direction.getClockWise().getNormal()), direction.getClockWise()) > 0;
         boolean hasSignal = leftSignal || rightSignal;
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-        if (blockEntity instanceof TileEntityModelSwitcher && pLevel instanceof ServerLevel) {
-            TileEntityModelSwitcher switcher = (TileEntityModelSwitcher) blockEntity;
+        if (blockEntity instanceof TileEntityModelSwitcher switcher && pLevel instanceof ServerLevel) {
             if (switcher.isPowered() != hasSignal) {
                 switcher.setPowered(!switcher.isPowered());
                 if (!switcher.isPowered()) {
@@ -149,9 +147,8 @@ public class BlockModelSwitcher extends BaseEntityBlock {
     @Override
     public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         BlockEntity te = pLevel.getBlockEntity(pPos);
-        if (te instanceof TileEntityModelSwitcher) {
-            TileEntityModelSwitcher tileEntityModelSwitcher = (TileEntityModelSwitcher) te;
-            ItemModelSwitcher.itemStackToTileEntity(pStack, tileEntityModelSwitcher);
+        if (te instanceof TileEntityModelSwitcher tileEntityModelSwitcher) {
+            ItemModelSwitcher.itemStackToTileEntity(pLevel.registryAccess(), pStack, tileEntityModelSwitcher);
             tileEntityModelSwitcher.refresh();
         }
     }
@@ -160,7 +157,7 @@ public class BlockModelSwitcher extends BaseEntityBlock {
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof TileEntityModelSwitcher) {
-            popResource(worldIn, pos, ItemModelSwitcher.tileEntityToItemStack((TileEntityModelSwitcher) te));
+            popResource(worldIn, pos, ItemModelSwitcher.tileEntityToItemStack(worldIn.registryAccess(), (TileEntityModelSwitcher) te));
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }

@@ -24,7 +24,7 @@ public class WirelessIOContainer extends AbstractContainerMenu {
     public WirelessIOContainer(int id, Inventory inventory, ItemStack wirelessIO) {
         super(TYPE, id);
         this.wirelessIO = wirelessIO;
-        this.filterListInv = ItemWirelessIO.getFilterList(wirelessIO);
+        this.filterListInv = ItemWirelessIO.getFilterList(inventory.player.registryAccess(), wirelessIO);
         this.addPlayerSlots(inventory);
         this.addWirelessIOSlots();
     }
@@ -44,7 +44,7 @@ public class WirelessIOContainer extends AbstractContainerMenu {
             return;
         }
         super.clicked(slotId, button, clickTypeIn, player);
-        ItemWirelessIO.setFilterList(wirelessIO, filterListInv);
+        ItemWirelessIO.setFilterList(player.registryAccess(), wirelessIO, filterListInv);
     }
 
     private void addWirelessIOSlots() {

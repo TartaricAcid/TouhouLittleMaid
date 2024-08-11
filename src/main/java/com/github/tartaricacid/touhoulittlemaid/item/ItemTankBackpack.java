@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.TankBackpac
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -19,10 +20,10 @@ import java.util.List;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.TANK_BACKPACK_TAG;
 
 public class ItemTankBackpack extends ItemMaidBackpack {
-    public static ItemStack getTankBackpack(TankBackpackData data) {
+    public static ItemStack getTankBackpack(HolderLookup.Provider provider, TankBackpackData data) {
         ItemStack backpack = InitItems.TANK_BACKPACK.get().getDefaultInstance();
         CompoundTag tags = backpack.get(TANK_BACKPACK_TAG);
-        data.getTank().writeToNBT(tags);
+        data.getTank().writeToNBT(provider, tags);
         return backpack;
     }
 

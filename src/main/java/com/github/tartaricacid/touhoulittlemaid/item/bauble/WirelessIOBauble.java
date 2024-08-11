@@ -124,7 +124,7 @@ public class WirelessIOBauble implements IMaidBauble {
                     } else {
                         slotConfigData = new ArrayList<>(Collections.nCopies(SLOT_NUM, false));
                     }
-                    IItemHandler filterList = ItemWirelessIO.getFilterList(baubleItem);
+                    IItemHandler filterList = ItemWirelessIO.getFilterList(maid.registryAccess(), baubleItem);
 
                     if (isMaidToChest) {
                         maidToChest(maidInv, chestInv, isBlacklist, filterList, slotConfigData);

@@ -74,7 +74,7 @@ public class TankBackpack extends IMaidBackpack {
     public ItemStack getTakeOffItemStack(ItemStack stack, @Nullable Player player, EntityMaid maid) {
         IBackpackData backpackData = maid.getBackpackData();
         if (backpackData instanceof TankBackpackData tankBackpackData) {
-            return ItemTankBackpack.getTankBackpack(tankBackpackData);
+            return ItemTankBackpack.getTankBackpack(maid.registryAccess(), tankBackpackData);
         }
         return super.getTakeOffItemStack(stack, player, maid);
     }

@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -32,14 +33,16 @@ public class ItemModelSwitcher extends BlockItem {
         super(InitBlocks.MODEL_SWITCHER.get(), (new Item.Properties()).stacksTo(1));
     }
 
-    public static ItemStack tileEntityToItemStack(TileEntityModelSwitcher switcher) {
-        return Objects.requireNonNull(InitItems.MODEL_SWITCHER.get().getDefaultInstance().set(STORAGE_DATA_TAG, switcher.saveWithoutMetadata()));
+    public static ItemStack tileEntityToItemStack(HolderLookup.Provider provider, TileEntityModelSwitcher switcher) {
+        ItemStack itemStack = Objects.requireNonNull(InitItems.MODEL_SWITCHER.get().getDefaultInstance());
+        itemStack.set(STORAGE_DATA_TAG, switcher.saveWithoutMetadata(provider));
+        return itemStack;
     }
 
-    public static void itemStackToTileEntity(ItemStack stack, TileEntityModelSwitcher switcher) {
+    public static void itemStackToTileEntity(HolderLookup.Provider provider, ItemStack stack, TileEntityModelSwitcher switcher) {
         CompoundTag tag = stack.get(STORAGE_DATA_TAG);
         if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-            switcher.loadAdditional(tag);
+            switcher.loadAdditional(tag, provider);
         }
     }
 
