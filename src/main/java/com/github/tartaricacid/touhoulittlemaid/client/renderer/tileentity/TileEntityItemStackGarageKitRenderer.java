@@ -10,6 +10,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
 import java.util.Objects;
@@ -51,15 +53,15 @@ public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLeve
         BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
 
-        CompoundTag data = ItemGarageKit.getMaidData(stack);
+        CustomData data = ItemGarageKit.getMaidData(stack);
         Level world = Minecraft.getInstance().level;
         if (data.isEmpty() || world == null) {
             return;
         }
 
-        EntityType.byString(data.getString("id")).ifPresent(type -> {
+        EntityType.byString(data.read(Codec.STRING.fieldOf("id")).getOrThrow()).ifPresent(type -> {
                     try {
-                        renderEntity(poseStack, bufferIn, combinedLightIn, data, world, type);
+                        renderEntity(poseStack, bufferIn, combinedLightIn, data.copyTag(), world, type);
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }

@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.data.CompoundData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -20,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -40,17 +40,16 @@ public class ItemFilm extends AbstractStoreMaidItem {
         maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
-        filmTag.put(MAID_INFO, maidTag);
-        film.set(InitDataComponent.MAID_INFO,new CompoundData(filmTag));
+        film.set(InitDataComponent.MAID_INFO, CustomData.of(filmTag));
         return film;
     }
 
     public static void filmToMaid(ItemStack film, Level worldIn, BlockPos pos, Player player) {
-        CompoundData compoundData = film.get(InitDataComponent.MAID_INFO);
+        CustomData compoundData = film.get(InitDataComponent.MAID_INFO);
         if (compoundData == null) {
             return;
         }
-        Optional<Entity> entityOptional = EntityType.create(compoundData.nbt(), worldIn);
+        Optional<Entity> entityOptional = EntityType.create(compoundData.copyTag(), worldIn);
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid maid) {
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             // 实体生成必须在服务端应用

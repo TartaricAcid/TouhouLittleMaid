@@ -142,7 +142,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
             if (placer != null) {
                 facing = placer.getDirection().getOpposite();
             }
-            te.setData(facing, ItemGarageKit.getMaidData(stack));
+            te.setData(facing, ItemGarageKit.getMaidData(stack).copyTag());
         });
     }
 

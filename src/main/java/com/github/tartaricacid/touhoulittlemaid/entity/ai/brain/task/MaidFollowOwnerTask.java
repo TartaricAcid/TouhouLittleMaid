@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 import javax.annotation.Nullable;
@@ -74,9 +74,9 @@ public class MaidFollowOwnerTask extends Behavior<EntityMaid> {
     }
 
     private boolean canTeleportTo(EntityMaid maid, BlockPos pos) {
-        BlockPathTypes pathNodeType = WalkNodeEvaluator.getBlockPathTypeStatic(maid.level(), pos.mutable());
+        PathType pathNodeType = WalkNodeEvaluator.getPathTypeStatic(maid, pos);
         // Fixme: 水面也可以传送
-        if (pathNodeType == BlockPathTypes.WALKABLE) {
+        if (pathNodeType == PathType.WALKABLE) {
             BlockPos blockPos = pos.subtract(maid.blockPosition());
             return maid.level().noCollision(maid, maid.getBoundingBox().move(blockPos));
         }
