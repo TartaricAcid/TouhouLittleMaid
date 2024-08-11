@@ -1,13 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -16,35 +14,35 @@ import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 
-public class GeckoLayerMaidHeld<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
+public class GeckoLayerMaidHeld<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
     private final ItemInHandRenderer itemInHandRenderer;
 
-    public GeckoLayerMaidHeld(IGeoRenderer<T> entityRendererIn) {
+    public GeckoLayerMaidHeld(GeckoEntityMaidRenderer<T> entityRendererIn) {
         super(entityRendererIn);
         this.itemInHandRenderer = Minecraft.getInstance().getItemInHandRenderer();
     }
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entityRenderer.getGeoModel() == null) {
-            return;
-        }
         ItemStack offhandItem = entityLivingBaseIn.getOffhandItem();
         ItemStack mainHandItem = entityLivingBaseIn.getMainHandItem();
-        GeoModel geoModel = entityRenderer.getGeoModel();
+        AnimatedGeoModel geoModel = this.entityRenderer.getAnimatableEntity(entityLivingBaseIn).getCurrentModel();
+        if (geoModel == null) {
+            return;
+        }
         if (!offhandItem.isEmpty() || !mainHandItem.isEmpty()) {
             poseStack.pushPose();
-            if (!geoModel.rightHandBones.isEmpty() && !RenderFixer.isCarryOnRender(mainHandItem, bufferIn)) {
+            if (!geoModel.rightHandBones().isEmpty() && !RenderFixer.isCarryOnRender(mainHandItem, bufferIn)) {
                 if (SlashBladeCompat.isSlashBladeItem(mainHandItem)) {
                     SlashBladeRender.renderMaidMainhandSlashBlade(entityLivingBaseIn, geoModel, poseStack, bufferIn, packedLightIn, mainHandItem, partialTicks);
                 } else {
                     this.renderArmWithItem(entityLivingBaseIn, mainHandItem, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, bufferIn, packedLightIn);
                 }
             }
-            if (!geoModel.leftHandBones.isEmpty() && !RenderFixer.isCarryOnRender(offhandItem, bufferIn)) {
+            if (!geoModel.leftHandBones().isEmpty() && !RenderFixer.isCarryOnRender(offhandItem, bufferIn)) {
                 if (SlashBladeCompat.isSlashBladeItem(offhandItem)) {
                     SlashBladeRender.renderMaidOffhandSlashBlade(geoModel, poseStack, bufferIn, packedLightIn, offhandItem);
                 } else {
@@ -55,10 +53,11 @@ public class GeckoLayerMaidHeld<T extends LivingEntity & IAnimatable> extends Ge
         }
     }
 
-    protected void renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType displayContext, HumanoidArm arm, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
-        if (!itemStack.isEmpty() && this.entityRenderer.getGeoModel() != null) {
+    protected void renderArmWithItem(T livingEntity, ItemStack itemStack, ItemTransforms.TransformType displayContext, HumanoidArm arm, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
+        AnimatedGeoModel geoModel = this.entityRenderer.getAnimatableEntity(livingEntity).getCurrentModel();
+        if (!itemStack.isEmpty() && geoModel != null) {
             poseStack.pushPose();
-            translateToHand(arm, poseStack, this.entityRenderer.getGeoModel());
+            translateToHand(arm, poseStack, geoModel);
             poseStack.translate(0, -0.0625, -0.1);
             poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
             boolean isLeftHand = arm == HumanoidArm.LEFT;
@@ -67,27 +66,11 @@ public class GeckoLayerMaidHeld<T extends LivingEntity & IAnimatable> extends Ge
         }
     }
 
-    protected void translateToHand(HumanoidArm arm, PoseStack poseStack, GeoModel geoModel) {
+    protected void translateToHand(HumanoidArm arm, PoseStack poseStack, AnimatedGeoModel geoModel) {
         if (arm == HumanoidArm.LEFT) {
-            int size = geoModel.leftHandBones.size();
-            for (int i = 0; i < size - 1; i++) {
-                RenderUtils.prepMatrixForBone(poseStack, geoModel.leftHandBones.get(i));
-            }
-            GeoBone lastBone = geoModel.leftHandBones.get(size - 1);
-            RenderUtils.translateMatrixToBone(poseStack, lastBone);
-            RenderUtils.translateToPivotPoint(poseStack, lastBone);
-            RenderUtils.rotateMatrixAroundBone(poseStack, lastBone);
-            RenderUtils.scaleMatrixForBone(poseStack, lastBone);
+            RenderUtils.prepMatrixForLocator(poseStack, geoModel.leftHandBones());
         } else {
-            int size = geoModel.rightHandBones.size();
-            for (int i = 0; i < size - 1; i++) {
-                RenderUtils.prepMatrixForBone(poseStack, geoModel.rightHandBones.get(i));
-            }
-            GeoBone lastBone = geoModel.rightHandBones.get(size - 1);
-            RenderUtils.translateMatrixToBone(poseStack, lastBone);
-            RenderUtils.translateToPivotPoint(poseStack, lastBone);
-            RenderUtils.rotateMatrixAroundBone(poseStack, lastBone);
-            RenderUtils.scaleMatrixForBone(poseStack, lastBone);
+            RenderUtils.prepMatrixForLocator(poseStack, geoModel.rightHandBones());
         }
     }
 }

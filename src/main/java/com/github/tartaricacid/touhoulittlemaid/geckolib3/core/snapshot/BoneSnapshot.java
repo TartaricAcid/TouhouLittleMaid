@@ -5,11 +5,8 @@
 
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.snapshot;
 
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBone;
-
-
 public class BoneSnapshot {
-    public String name;
+    public final String name;
     public float scaleValueX;
     public float scaleValueY;
     public float scaleValueZ;
@@ -19,84 +16,49 @@ public class BoneSnapshot {
     public float rotationValueX;
     public float rotationValueY;
     public float rotationValueZ;
-    public float mostRecentResetRotationTick = 0;
-    public float mostRecentResetPositionTick = 0;
-    public float mostRecentResetScaleTick = 0;
-    public boolean isCurrentlyRunningRotationAnimation = true;
-    public boolean isCurrentlyRunningPositionAnimation = true;
-    public boolean isCurrentlyRunningScaleAnimation = true;
-    private IBone modelRenderer;
 
-    public BoneSnapshot(IBone modelRenderer) {
-        rotationValueX = modelRenderer.getRotationX();
-        rotationValueY = modelRenderer.getRotationY();
-        rotationValueZ = modelRenderer.getRotationZ();
+    public boolean hidden;
+    public boolean childrenHidden;
 
-        positionOffsetX = modelRenderer.getPositionX();
-        positionOffsetY = modelRenderer.getPositionY();
-        positionOffsetZ = modelRenderer.getPositionZ();
-
-        scaleValueX = modelRenderer.getScaleX();
-        scaleValueY = modelRenderer.getScaleY();
-        scaleValueZ = modelRenderer.getScaleZ();
-
-        this.modelRenderer = modelRenderer;
-        this.name = modelRenderer.getName();
-    }
-
-    public BoneSnapshot(IBone modelRenderer, boolean dontSaveRotations) {
-        if (dontSaveRotations) {
-            rotationValueX = 0;
-            rotationValueY = 0;
-            rotationValueZ = 0;
-        }
-
-        rotationValueX = modelRenderer.getRotationX();
-        rotationValueY = modelRenderer.getRotationY();
-        rotationValueZ = modelRenderer.getRotationZ();
-
-        positionOffsetX = modelRenderer.getPositionX();
-        positionOffsetY = modelRenderer.getPositionY();
-        positionOffsetZ = modelRenderer.getPositionZ();
-
-        scaleValueX = modelRenderer.getScaleX();
-        scaleValueY = modelRenderer.getScaleY();
-        scaleValueZ = modelRenderer.getScaleZ();
-
-        this.modelRenderer = modelRenderer;
-        this.name = modelRenderer.getName();
+    protected BoneSnapshot(String name) {
+        this.name = name;
     }
 
     public BoneSnapshot(BoneSnapshot snapshot) {
-        scaleValueX = snapshot.scaleValueX;
-        scaleValueY = snapshot.scaleValueY;
-        scaleValueZ = snapshot.scaleValueZ;
-
-        positionOffsetX = snapshot.positionOffsetX;
-        positionOffsetY = snapshot.positionOffsetY;
-        positionOffsetZ = snapshot.positionOffsetZ;
-
-        rotationValueX = snapshot.rotationValueX;
-        rotationValueY = snapshot.rotationValueY;
-        rotationValueZ = snapshot.rotationValueZ;
-        this.modelRenderer = snapshot.modelRenderer;
+        copyFrom(snapshot);
         this.name = snapshot.name;
     }
 
+    public void copyFrom(BoneSnapshot snapshot) {
+        this.scaleValueX = snapshot.scaleValueX;
+        this.scaleValueY = snapshot.scaleValueY;
+        this.scaleValueZ = snapshot.scaleValueZ;
+
+        this.positionOffsetX = snapshot.positionOffsetX;
+        this.positionOffsetY = snapshot.positionOffsetY;
+        this.positionOffsetZ = snapshot.positionOffsetZ;
+
+        this.rotationValueX = snapshot.rotationValueX;
+        this.rotationValueY = snapshot.rotationValueY;
+        this.rotationValueZ = snapshot.rotationValueZ;
+
+        this.hidden = snapshot.hidden;
+        this.childrenHidden = snapshot.childrenHidden;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
+        if (other instanceof BoneSnapshot that) {
+            return this.name.equals(that.name);
         }
-        BoneSnapshot that = (BoneSnapshot) o;
-        return name.equals(that.name);
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return this.name.hashCode();
     }
 }

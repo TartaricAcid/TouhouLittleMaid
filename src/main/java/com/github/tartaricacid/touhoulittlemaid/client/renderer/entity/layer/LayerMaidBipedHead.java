@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.compat.simplehats.SimpleHatsCompat;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nullable;
@@ -44,8 +46,14 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        boolean allowRenderHead = maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead();
+        if (!allowRenderHead) {
+            return;
+        }
+
+        // 渲染头盔栏的
         ItemStack head = mob.getItemBySlot(EquipmentSlot.HEAD);
-        if (!head.isEmpty() && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
+        if (!head.isEmpty()) {
             Item item = head.getItem();
             poseStack.pushPose();
             this.getParentModel().getHead().translateAndRotate(poseStack);
@@ -60,12 +68,15 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
             }
             poseStack.popPose();
         }
+
         IMaid maid = IMaid.convert(mob);
         if (maid == null) {
             return;
         }
+
+        // 渲染女仆背部的
         ItemStack stack = maid.getBackpackShowItem();
-        if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && getParentModel().hasHead()) {
+        if (stack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
                 BlockState plant = ((IPlantable) block).getPlant(mob.level, mob.blockPosition());
@@ -73,9 +84,11 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
                 this.getParentModel().getHead().translateAndRotate(poseStack);
                 poseStack.scale(0.8F, -0.8F, -0.8F);
                 poseStack.translate(-0.5, 0.625, -0.5);
-                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
                 poseStack.popPose();
             }
+        } else {
+            SimpleHatsCompat.renderHat(poseStack, bufferIn, packedLightIn, mob, stack, this.getParentModel());
         }
     }
 

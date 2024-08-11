@@ -2,10 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolay
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
+import com.github.tartaricacid.touhoulittlemaid.compat.simplehats.SimpleHatsCompat;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -34,26 +33,31 @@ import net.minecraftforge.common.IPlantable;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLayerRenderer<T> {
+public class GeckoLayerMaidBipedHead<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
     private static final String SKULL_OWNER_TAG = "SkullOwner";
-    private final GeckoEntityMaidRenderer maidRenderer;
     private final Map<SkullBlock.Type, SkullModelBase> skullModels;
 
-    public GeckoLayerMaidBipedHead(GeckoEntityMaidRenderer entityRendererIn, EntityModelSet modelSet) {
+    public GeckoLayerMaidBipedHead(GeckoEntityMaidRenderer<T> entityRendererIn, EntityModelSet modelSet) {
         super(entityRendererIn);
-        this.maidRenderer = entityRendererIn;
         this.skullModels = SkullBlockRenderer.createSkullRenderers(modelSet);
     }
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (this.maidRenderer.getGeoModel() != null) {
+        var animatableEntity = this.entityRenderer.getAnimatableEntity(entity);
+        if (animatableEntity.getCurrentModel() != null) {
             ItemStack head = entity.getItemBySlot(EquipmentSlot.HEAD);
-            GeoModel geoModel = this.maidRenderer.getGeoModel();
-            if (!head.isEmpty() && maidRenderer.getMainInfo().isShowCustomHead() && !geoModel.headBones.isEmpty()) {
+            AnimatedGeoModel geoModel = animatableEntity.getCurrentModel();
+            boolean allowRenderHead = animatableEntity.getMaidInfo().isShowCustomHead() && !geoModel.headBones().isEmpty();
+            if (!allowRenderHead) {
+                return;
+            }
+
+            // 渲染头盔栏的
+            if (!head.isEmpty()) {
                 Item item = head.getItem();
                 poseStack.pushPose();
-                this.translateToHead(poseStack, geoModel);
+                RenderUtils.prepMatrixForLocator(poseStack, geoModel.headBones());
                 if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof AbstractSkullBlock) {
                     AbstractSkullBlock skullBlock = (AbstractSkullBlock) ((BlockItem) item).getBlock();
                     poseStack.scale(-1.1875F, 1.1875F, -1.1875F);
@@ -66,22 +70,27 @@ public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLay
                 }
                 poseStack.popPose();
             }
+
             IMaid maid = IMaid.convert(entity);
             if (maid == null) {
                 return;
             }
+
+            // 渲染女仆背部的
             ItemStack stack = maid.getBackpackShowItem();
-            if (stack.getItem() instanceof BlockItem && maidRenderer.getMainInfo().isShowCustomHead() && !geoModel.headBones.isEmpty()) {
+            if (stack.getItem() instanceof BlockItem) {
                 Block block = ((BlockItem) stack.getItem()).getBlock();
                 if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
                     BlockState plant = ((IPlantable) block).getPlant(entity.level, entity.blockPosition());
                     poseStack.pushPose();
-                    this.translateToHead(poseStack, geoModel);
+                    RenderUtils.prepMatrixForLocator(poseStack, geoModel.headBones());
                     poseStack.scale(-0.8F, 0.8F, -0.8F);
                     poseStack.translate(-0.5, 0.625, -0.5);
                     Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
                     poseStack.popPose();
                 }
+            } else {
+                SimpleHatsCompat.renderGeckoHat(poseStack, bufferIn, packedLightIn, entity, stack, geoModel.headBones());
             }
         }
     }
@@ -95,17 +104,5 @@ public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLay
             }
         }
         return null;
-    }
-
-    protected void translateToHead(PoseStack poseStack, GeoModel geoModel) {
-        int size = geoModel.headBones.size();
-        for (int i = 0; i < size - 1; i++) {
-            RenderUtils.prepMatrixForBone(poseStack, geoModel.headBones.get(i));
-        }
-        GeoBone lastBone = geoModel.headBones.get(size - 1);
-        RenderUtils.translateMatrixToBone(poseStack, lastBone);
-        RenderUtils.translateToPivotPoint(poseStack, lastBone);
-        RenderUtils.rotateMatrixAroundBone(poseStack, lastBone);
-        RenderUtils.scaleMatrixForBone(poseStack, lastBone);
     }
 }

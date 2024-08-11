@@ -12,7 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
@@ -79,7 +79,7 @@ public class TacCompat {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void renderBackGun(ItemStack offhandItem, GeoModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource bufferIn, int packedLight) {
+    public static void renderBackGun(ItemStack offhandItem, AnimatedGeoModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource bufferIn, int packedLight) {
         if (INSTALLED && isGun(offhandItem)) {
             poseStack.pushPose();
             GunMaidRender.renderBackGun(offhandItem, geoModel, maid, poseStack, bufferIn, packedLight);
@@ -89,7 +89,7 @@ public class TacCompat {
 
     @OnlyIn(Dist.CLIENT)
     @Nullable
-    public static PlayState playGunMainAnimation(IMaid maid, AnimationEvent<GeckoMaidEntity> event, String animationName, ILoopType loopType) {
+    public static PlayState playGunMainAnimation(IMaid maid, AnimationEvent<GeckoMaidEntity<?>> event, String animationName, ILoopType loopType) {
         if (INSTALLED && isGun(maid.asEntity().getMainHandItem())) {
             return GunGeckoAnimation.playGunMainAnimation(event, animationName, loopType);
         }
@@ -98,7 +98,7 @@ public class TacCompat {
 
     @OnlyIn(Dist.CLIENT)
     @Nullable
-    public static PlayState playGunHoldAnimation(ItemStack mainHandItem, AnimationEvent<GeckoMaidEntity> event) {
+    public static PlayState playGunHoldAnimation(ItemStack mainHandItem, AnimationEvent<GeckoMaidEntity<?>> event) {
         if (INSTALLED && isGun(mainHandItem)) {
             return GunGeckoAnimation.playGunHoldAnimation(event, mainHandItem);
         }

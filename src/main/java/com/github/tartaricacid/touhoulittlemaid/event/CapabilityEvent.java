@@ -1,15 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapability;
-import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
+import com.github.tartaricacid.touhoulittlemaid.capability.*;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SyncCapabilityMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -24,6 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class CapabilityEvent {
     private static final ResourceLocation POWER_CAP = new ResourceLocation(TouhouLittleMaid.MOD_ID, "power");
     private static final ResourceLocation MAID_NUM_CAP = new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid_num");
+    private static final ResourceLocation GECKO_MAID_CAP = new ResourceLocation(TouhouLittleMaid.MOD_ID, "gecko_maid");
 
     @SubscribeEvent
     public static void onAttachCapabilityEvent(AttachCapabilitiesEvent<Entity> event) {
@@ -31,6 +31,11 @@ public final class CapabilityEvent {
         if (entity instanceof Player) {
             event.addCapability(POWER_CAP, new PowerCapabilityProvider());
             event.addCapability(MAID_NUM_CAP, new MaidNumCapabilityProvider());
+        } else if (entity.level.isClientSide() && entity instanceof Mob mob) {
+            var maid = IMaid.convert(mob);
+            if (maid != null) {
+                event.addCapability(GECKO_MAID_CAP, new GeckoMaidEntityCapabilityProvider<>(mob, maid));
+            }
         }
     }
 

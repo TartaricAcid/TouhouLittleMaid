@@ -4,20 +4,28 @@
  */
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder;
 
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.BoneAnimation;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.EventKeyFrame;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.ParticleEventKeyFrame;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.List;
 
 public class Animation {
-    public String animationName;
-    public double animationLength = -1;
-    public ILoopType loop = EDefaultLoopTypes.LOOP;
-    public List<BoneAnimation> boneAnimations;
-    public List<EventKeyFrame<String>> soundKeyFrames = new ObjectArrayList<>();
-    public List<ParticleEventKeyFrame> particleKeyFrames = new ObjectArrayList<>();
-    public List<EventKeyFrame<String>> customInstructionKeyframes = new ObjectArrayList<>();
+    public final String animationName;
+    public final double animationLength;
+    public final ILoopType loop;
+    public final List<BoneAnimation> boneAnimations;
+    public final List<EventKeyFrame<String>> soundKeyFrames;
+    public final List<ParticleEventKeyFrame> particleKeyFrames;
+    public final List<EventKeyFrame<String>> customInstructionKeyframes;
+
+    public Animation(String animationName, double animationLength, ILoopType loop, List<BoneAnimation> boneAnimations, List<EventKeyFrame<String>> soundKeyFrames, List<ParticleEventKeyFrame> particleKeyFrames, List<EventKeyFrame<String>> customInstructionKeyframes) {
+        this.animationName = animationName;
+        this.animationLength = animationLength;
+        this.loop = loop;
+        this.boneAnimations = boneAnimations;
+        this.soundKeyFrames = soundKeyFrames;
+        this.particleKeyFrames = particleKeyFrames;
+        this.customInstructionKeyframes = customInstructionKeyframes;
+    }
 }

@@ -44,7 +44,7 @@ public class GeckoModelLoader {
         RawGeoModel rawModel = Converter.fromInputStream(inputStream);
         if (rawModel.getFormatVersion() == FormatVersion.VERSION_1_12_0) {
             RawGeometryTree rawGeometryTree = RawGeometryTree.parseHierarchy(rawModel);
-            GeoModel geoModel = GeoBuilder.getGeoBuilder(id.getNamespace()).constructGeoModel(rawGeometryTree);
+            GeoModel geoModel = GeoBuilder.getGeoBuilder().constructGeoModel(rawGeometryTree);
             geoModels.put(id, geoModel);
         }
     }

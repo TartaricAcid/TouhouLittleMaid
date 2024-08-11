@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoChairEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
@@ -52,8 +53,14 @@ public class EntityChair extends AbstractEntityFromItem {
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
+    @OnlyIn(Dist.CLIENT)
+    private GeckoChairEntity animatable;
+
     protected EntityChair(EntityType<EntityChair> type, Level worldIn) {
         super(type, worldIn);
+        if (worldIn.isClientSide()) {
+            this.animatable = new GeckoChairEntity(this);
+        }
     }
 
     public EntityChair(Level worldIn) {
@@ -264,5 +271,10 @@ public class EntityChair extends AbstractEntityFromItem {
     protected ItemStack getKilledStack() {
         return ItemChair.setData(InitItems.CHAIR.get().getDefaultInstance(),
                 new ItemChair.Data(getModelId(), getMountedHeight(), isTameableCanRide(), isNoGravity()));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public GeckoChairEntity getAnimatableEntity() {
+        return animatable;
     }
 }

@@ -4,8 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -57,7 +56,7 @@ public class GunMaidRender {
         matrixStack.popPose();
     }
 
-    public static void renderBackGun(ItemStack heldItem, GeoModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public static void renderBackGun(ItemStack heldItem, AnimatedGeoModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         IGun gun = IGun.getIGunOrNull(heldItem);
         if (gun == null) {
             return;
@@ -73,16 +72,8 @@ public class GunMaidRender {
         TimelessAPI.getCommonGunIndex(gun.getGunId(heldItem)).ifPresent(index -> {
             String weaponType = index.getType();
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-            if (isPistol(weaponType) && !geoModel.tacPistolBones.isEmpty()) {
-                int size = geoModel.tacPistolBones.size();
-                for (int i = 0; i < size - 1; i++) {
-                    RenderUtils.prepMatrixForBone(poseStack, geoModel.tacPistolBones.get(i));
-                }
-                GeoBone lastBone = geoModel.tacPistolBones.get(size - 1);
-                RenderUtils.translateMatrixToBone(poseStack, lastBone);
-                RenderUtils.translateToPivotPoint(poseStack, lastBone);
-                RenderUtils.rotateMatrixAroundBone(poseStack, lastBone);
-                RenderUtils.scaleMatrixForBone(poseStack, lastBone);
+            if (isPistol(weaponType) && !geoModel.tacPistolBones().isEmpty()) {
+                RenderUtils.prepMatrixForLocator(poseStack, geoModel.tacPistolBones());
 
                 poseStack.translate(0, -0.125, 0);
                 poseStack.scale(0.65f, 0.65f, 0.65f);
@@ -90,16 +81,8 @@ public class GunMaidRender {
                 poseStack.mulPose(Vector3f.ZP.rotationDegrees(90.0F));
                 renderer.renderStatic(heldItem, ItemTransforms.TransformType.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.getId());
             }
-            if (!isPistol(weaponType) && !geoModel.tacRifleBones.isEmpty()) {
-                int size = geoModel.tacRifleBones.size();
-                for (int i = 0; i < size - 1; i++) {
-                    RenderUtils.prepMatrixForBone(poseStack, geoModel.tacRifleBones.get(i));
-                }
-                GeoBone lastBone = geoModel.tacRifleBones.get(size - 1);
-                RenderUtils.translateMatrixToBone(poseStack, lastBone);
-                RenderUtils.translateToPivotPoint(poseStack, lastBone);
-                RenderUtils.rotateMatrixAroundBone(poseStack, lastBone);
-                RenderUtils.scaleMatrixForBone(poseStack, lastBone);
+            if (!isPistol(weaponType) && !geoModel.tacRifleBones().isEmpty()) {
+                RenderUtils.prepMatrixForLocator(poseStack, geoModel.tacRifleBones());
 
                 poseStack.scale(0.65f, 0.65f, 0.65f);
                 poseStack.mulPose(Vector3f.YP.rotationDegrees(-180.0F));

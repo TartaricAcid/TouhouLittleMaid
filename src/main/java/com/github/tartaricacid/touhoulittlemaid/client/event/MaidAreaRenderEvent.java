@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class MaidAreaRenderEvent {
     private static final Cache<Integer, SchedulePos> CACHE = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.SECONDS).build();
 
+    @SuppressWarnings("removal")
     @SubscribeEvent
     public static void onRender(RenderLevelLastEvent event) {
         Minecraft mc = Minecraft.getInstance();

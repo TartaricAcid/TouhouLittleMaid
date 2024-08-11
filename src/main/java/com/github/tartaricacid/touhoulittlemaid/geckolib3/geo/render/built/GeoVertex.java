@@ -6,19 +6,23 @@ import org.apache.commons.lang3.Validate;
 
 public class GeoVertex {
     public final Vector3f position;
-    public float textureU;
-    public float textureV;
+    public final float textureU;
+    public final float textureV;
 
     public GeoVertex(float x, float y, float z) {
         this.position = new Vector3f(x, y, z);
+        this.textureU = 0;
+        this.textureV = 0;
     }
 
     public GeoVertex(double x, double y, double z) {
         this.position = new Vector3f((float) x, (float) y, (float) z);
+        this.textureU = 0;
+        this.textureV = 0;
     }
 
     public GeoVertex(Vector3f posIn, float texU, float texV) {
-        this.position = posIn;
+        this.position = new Vector3f(posIn.x(), posIn.y(), posIn.z());
         this.textureU = texU;
         this.textureV = texV;
     }

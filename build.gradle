@@ -19,6 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
+apply plugin: 'idea'
 
 version = mod_version
 group = 'com.github.tartaricacid'
@@ -125,6 +126,9 @@ repositories {
     maven {
         url "https://maven.shedaniel.me/"
     }
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
 }
 
 dependencies {
@@ -165,7 +169,10 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
     runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
 
-    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:${tacz_id}")
+    implementation fg.deobf('curse.maven:timeless-and-classics-zero-1028108:5529108-sources-5529188')
+
+    implementation fg.deobf("maven.modrinth:simple-hats:1.18.2-0.3.2-forge")
+    implementation fg.deobf("maven.modrinth:curios:1.18.2-5.0.9.2-forge")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
@@ -181,4 +188,14 @@ jar {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+
+// 让 idea 主动下载前置库的源码和 Javadoc
+// 新版本 idea 默认不会下载这两个，这虽然加快了构建速度，但是不方便调试
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

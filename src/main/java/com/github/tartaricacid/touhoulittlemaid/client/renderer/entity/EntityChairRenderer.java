@@ -29,7 +29,7 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
     public static boolean renderHitBox = true;
     private ChairModelInfo chairInfo;
     private List<Object> chairAnimations;
-    private GeckoEntityChairRenderer geckoEntityChairRenderer;
+    private final GeckoEntityChairRenderer geckoEntityChairRenderer;
 
     public EntityChairRenderer(EntityRendererProvider.Context rendererManager) {
         super(rendererManager, new BedrockModel<>(), 0);

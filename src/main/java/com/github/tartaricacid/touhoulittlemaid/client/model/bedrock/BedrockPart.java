@@ -67,7 +67,6 @@ public class BedrockPart {
         if (this.xRot != 0.0F) {
             poseStack.mulPose(Vector3f.XP.rotation(this.xRot));
         }
-
     }
 
     private void compile(PoseStack.Pose pose, VertexConsumer consumer, int texU, int texV, float red, float green, float blue, float alpha) {

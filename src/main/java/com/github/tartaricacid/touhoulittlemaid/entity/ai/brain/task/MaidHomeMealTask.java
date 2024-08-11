@@ -15,8 +15,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -53,71 +54,65 @@ public class MaidHomeMealTask extends MaidCheckRateTask {
         if (tmpPicnicMat == null) {
             return;
         }
-        int handConditionCount = 0;
+
         List<IMaidMeal> maidMeals = MaidMealManager.getMaidMeals(MaidMealType.HOME_MEAL);
+
+        // 对手部进行处理：如果没有空的手部，那就取副手
+        InteractionHand eanHand = InteractionHand.OFF_HAND;
         for (InteractionHand hand : InteractionHand.values()) {
-            ItemStack itemInHand = maid.getItemInHand(hand);
-            if (!itemInHand.isEmpty()) {
-                boolean switchItem = false;
-                if (hand == InteractionHand.OFF_HAND) {
-                    // 尝试把副手物品放背包
-                    RangedWrapper backpackInv = maid.getAvailableBackpackInv();
-                    for (int i = 0; i < backpackInv.getSlots(); i++) {
-                        ItemStack stack = backpackInv.getStackInSlot(i);
-                        if (stack.isEmpty()) {
-                            backpackInv.setStackInSlot(i, itemInHand.copy());
-                            maid.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
-                            switchItem = true;
-                            break;
-                        }
-                    }
-                }
-                if (!switchItem) {
-                    handConditionCount = handConditionCount + 1;
-                    continue;
-                }
+            if (maid.getItemInHand(hand).isEmpty()) {
+                eanHand = hand;
+                break;
             }
-            // 先搜索所有的格子，检查一下能否吃，并记录 slot
-            ItemStackHandler handler = this.tmpPicnicMat.getHandler();
-            IntList candidateFood = new IntArrayList();
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack stack = handler.getStackInSlot(i);
-                if (stack.isEmpty()) {
-                    continue;
-                }
-                for (IMaidMeal maidMeal : maidMeals) {
-                    if (maidMeal.canMaidEat(maid, stack, hand)) {
-                        candidateFood.add(i);
-                    }
-                }
-            }
-            // 如果没搜索到，不执行后续吃的逻辑
-            int size = candidateFood.size();
-            if (size == 0) {
-                ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty");
-                continue;
-            }
-            // 随机选择格子
-            int skipCount = maid.getRandom().nextInt(size);
-            candidateFood.intStream().skip(skipCount).findFirst().ifPresent(slotIndex -> {
-                ItemStack outputStack = handler.extractItem(slotIndex, 1, false);
-                this.tmpPicnicMat.refresh();
-                maid.setItemInHand(hand, outputStack);
-                ItemStack refreshItemInHand = maid.getItemInHand(hand);
-                for (IMaidMeal maidMeal : maidMeals) {
-                    if (maidMeal.canMaidEat(maid, refreshItemInHand, hand)) {
-                        maidMeal.onMaidEat(maid, refreshItemInHand, hand);
-                        return;
-                    }
-                }
-            });
+        }
+
+        // 先对把手上的物品放入背包做预处理：如果放入背包后，手上还有剩余，那就不执行后续吃的逻辑并添加气泡提示
+        ItemStack itemInHand = maid.getItemInHand(eanHand);
+        IItemHandlerModifiable availableInv = maid.getAvailableBackpackInv();
+        ItemStack leftoverStack = ItemHandlerHelper.insertItemStacked(availableInv, itemInHand.copy(), true);
+        if (!leftoverStack.isEmpty()) {
+            ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full");
             return;
         }
 
-        // 双手都是满的，聊天气泡提示
-        if (handConditionCount >= 2) {
-            ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full");
+        // 先搜索所有的格子，检查一下能否吃，并记录 slot
+        ItemStackHandler handler = this.tmpPicnicMat.getHandler();
+        IntList candidateFood = new IntArrayList();
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stack = handler.getStackInSlot(i);
+            if (stack.isEmpty()) {
+                continue;
+            }
+            for (IMaidMeal maidMeal : maidMeals) {
+                if (maidMeal.canMaidEat(maid, stack, eanHand)) {
+                    candidateFood.add(i);
+                }
+            }
         }
+
+        // 如果没搜索到，不执行后续吃的逻辑
+        int size = candidateFood.size();
+        if (size == 0) {
+            ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty");
+            return;
+        }
+
+        // 随机选择格子
+        int skipCount = maid.getRandom().nextInt(size);
+        InteractionHand hand = eanHand;
+        candidateFood.intStream().skip(skipCount).findFirst().ifPresent(slotIndex -> {
+            ItemStack outputStack = handler.extractItem(slotIndex, 1, false);
+            this.tmpPicnicMat.refresh();
+            ItemHandlerHelper.insertItemStacked(availableInv, itemInHand.copy(), false);
+            maid.setItemInHand(hand, outputStack);
+            ItemStack refreshItemInHand = maid.getItemInHand(hand);
+            for (IMaidMeal maidMeal : maidMeals) {
+                if (maidMeal.canMaidEat(maid, refreshItemInHand, hand)) {
+                    maidMeal.onMaidEat(maid, refreshItemInHand, hand);
+                    return;
+                }
+            }
+        });
     }
 
     @Override

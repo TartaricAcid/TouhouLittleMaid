@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
+import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -14,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class TaskButton extends Button {
+public class TaskButton extends Button implements ITooltipButton {
     private final IMaidTask task;
     private final boolean enable;
     private final ResourceLocation resourceLocation;
@@ -88,8 +89,15 @@ public class TaskButton extends Button {
         itemRenderer.blitOffset = blitOffset;
 
         minecraft.font.draw(poseStack, task.getName(), this.x + 23, this.y + 6, 0x333333);
-        if (this.isHoveredOrFocused()) {
-            this.renderToolTip(poseStack, mouseX, mouseY);
-        }
+    }
+
+    @Override
+    public boolean isTooltipHovered() {
+        return this.isHoveredOrFocused();
+    }
+
+    @Override
+    public void renderTooltip(PoseStack poseStack, Minecraft mc, int mouseX, int mouseY) {
+        this.renderToolTip(poseStack, mouseX, mouseY);
     }
 }
