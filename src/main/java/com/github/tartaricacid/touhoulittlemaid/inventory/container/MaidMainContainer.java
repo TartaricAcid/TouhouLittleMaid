@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -42,26 +43,29 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
     }
 
     private void addMaidHandInv() {
-        LazyOptional<IItemHandler> hand = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN);
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 77) {
+        IItemHandler handler = maid.getCapability(Capabilities.ItemHandler.ENTITY_AUTOMATION, Direction.DOWN);
+        if (handler == null) {
+            return;
+        }
+        addSlot(new SlotItemHandler(handler, 0, 87, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(BLOCK_ATLAS, EMPTY_MAINHAND_SLOT);
             }
-        }));
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 1, 121, 77) {
+        });
+        addSlot(new SlotItemHandler(handler, 1, 121, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(BLOCK_ATLAS, EMPTY_ARMOR_SLOT_SHIELD);
             }
-        }));
+        });
     }
 
     private void addMaidArmorInv() {
-        LazyOptional<IItemHandler> armor = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.EAST);
-        armor.ifPresent((handler -> {
+        IItemHandler handler = maid.getCapability(Capabilities.ItemHandler.ENTITY_AUTOMATION, Direction.EAST);
+        if (handler != null) {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; j++) {
                     final EquipmentSlot EquipmentSlot = SLOT_IDS[2 * i + j];
@@ -91,7 +95,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
                     });
                 }
             }
-        }));
+        }
     }
 
     private void addMainDefaultInv() {
