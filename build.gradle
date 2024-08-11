@@ -3,6 +3,10 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven {
+            // 阿里云镜像，方便国内开发
+            url = uri("https://maven.aliyun.com/repository/public/")
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -95,20 +99,9 @@ mixin {
 }
 
 repositories {
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
-    }
-    maven {
-        // location of the maven that hosts JEI files since January 2023
-        // Patchouli
-        name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
+    // 优先本地 libs 文件夹
+    flatDir {
+        dir 'libs'
     }
     maven {
         name = "Curse Maven"
@@ -118,11 +111,7 @@ repositories {
         }
     }
     maven {
-        url "https://maven.shedaniel.me/"
-    }
-    maven {
-        // Add jitpack to repositories
-        url 'https://jitpack.io'
+        url = "https://api.modrinth.com/maven"
     }
 }
 
@@ -130,29 +119,27 @@ dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    compileOnly(fg.deobf("libs:jei-1.20.1-common-api:${jei_version}"))
+    compileOnly(fg.deobf("libs:jei-1.20.1-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    runtimeOnly(fg.deobf("libs:jei-1.20.1-forge:${jei_version}"))
 
     // rei
     compileOnly fg.deobf("curse.maven:architectury-api-419699:${architectury_api_id}")
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    compileOnly fg.deobf("libs:RoughlyEnoughItems-forge:${rei_version}")
 
     // emi
     // Forge (see below block as well if you use Forge Gradle)
-    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
-    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+    compileOnly fg.deobf("libs:emi-forge:${emi_version}:api")
+    compileOnly fg.deobf("libs:emi-forge:${emi_version}")
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
-
-    runtimeOnly fg.deobf("teamtwilight:twilightforest:${twilight_forest_version}:universal")
+    compileOnly fg.deobf("libs:Patchouli:${patchouli_version}")
+    runtimeOnly fg.deobf("libs:Patchouli:${patchouli_version}")
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
 
-    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
+    implementation fg.deobf("libs:cloth-config-forge:${cloth_config_forge}")
 
     runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
     implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
@@ -172,12 +159,10 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
     runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
 
-    // Apache Commons Math, Need by TACZ
-    minecraftLibrary 'org.apache.commons:commons-math3:3.6.1'
+    implementation fg.deobf('curse.maven:timeless-and-classics-zero-1028108:5529117-sources-5529578')
 
-    // Add implementation
-    // tacz_version: copy from https://jitpack.io/#MCModderAnchor/TACZ
-    implementation "com.github.MCModderAnchor:TACZ:${tacz_version}"
+    implementation fg.deobf("maven.modrinth:simple-hats:1.20.1-0.3.2-forge")
+    implementation fg.deobf("maven.modrinth:curios:5.9.1+1.20.1-forge")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
