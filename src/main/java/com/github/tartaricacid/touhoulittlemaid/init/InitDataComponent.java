@@ -8,6 +8,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -86,4 +87,8 @@ public class InitDataComponent {
     public static final String TANK_BACKPACK_TAG_NAME = "tanks";
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompoundTag>> TANK_BACKPACK_TAG = DATA_COMPONENTS
             .register(TANK_BACKPACK_TAG_NAME, () -> DataComponentType.<CompoundTag>builder().persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG).build());
+
+    public static final String INGREDIENT_TAG_NAME = "ingredient";
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Ingredient>> INGREDIENT_TAG = DATA_COMPONENTS
+            .register(INGREDIENT_TAG_NAME, () -> DataComponentType.<Ingredient>builder().persistent(Ingredient.CODEC).networkSynchronized(Ingredient.CONTENTS_STREAM_CODEC).build());
 }
