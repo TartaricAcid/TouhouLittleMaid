@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolay
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.compat.simplehats.SimpleHatsCompat;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nullable;
@@ -47,7 +49,13 @@ public class GeckoLayerMaidBipedHead<T extends Mob> extends GeoLayerRenderer<T, 
         if (animatableEntity.getCurrentModel() != null) {
             ItemStack head = entity.getItemBySlot(EquipmentSlot.HEAD);
             AnimatedGeoModel geoModel = animatableEntity.getCurrentModel();
-            if (!head.isEmpty() && animatableEntity.getMaidInfo().isShowCustomHead() && !geoModel.headBones().isEmpty()) {
+            boolean allowRenderHead = animatableEntity.getMaidInfo().isShowCustomHead() && !geoModel.headBones().isEmpty();
+            if (!allowRenderHead) {
+                return;
+            }
+
+            // 渲染头盔栏的
+            if (!head.isEmpty()) {
                 Item item = head.getItem();
                 poseStack.pushPose();
                 RenderUtils.prepMatrixForLocator(poseStack, geoModel.headBones());
@@ -63,12 +71,15 @@ public class GeckoLayerMaidBipedHead<T extends Mob> extends GeoLayerRenderer<T, 
                 }
                 poseStack.popPose();
             }
+
             IMaid maid = IMaid.convert(entity);
             if (maid == null) {
                 return;
             }
+
+            // 渲染女仆背部的
             ItemStack stack = maid.getBackpackShowItem();
-            if (stack.getItem() instanceof BlockItem && animatableEntity.getMaidInfo().isShowCustomHead() && !geoModel.headBones().isEmpty()) {
+            if (stack.getItem() instanceof BlockItem) {
                 Block block = ((BlockItem) stack.getItem()).getBlock();
                 if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
                     BlockState plant = ((IPlantable) block).getPlant(entity.level(), entity.blockPosition());
@@ -79,6 +90,8 @@ public class GeckoLayerMaidBipedHead<T extends Mob> extends GeoLayerRenderer<T, 
                     Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
                     poseStack.popPose();
                 }
+            } else {
+                SimpleHatsCompat.renderGeckoHat(poseStack, bufferIn, packedLightIn, entity, stack, geoModel.headBones());
             }
         }
     }
