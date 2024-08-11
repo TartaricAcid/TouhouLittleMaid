@@ -34,19 +34,19 @@ public final class InitSpecialItemRender {
     private static final ResourceLocation POINT_ITEM = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "point_item");
 //TODO 这里引起了二次加载，要换成其他注册
 
-//    @SubscribeEvent
-//    public static void register(RegisterEvent event) {
-//        if (event.getRegistryKey().equals(Registries.ITEM)) {
-//            addInHandModel(InitItems.HAKUREI_GOHEI.get());
-//            addInHandModel(InitItems.SANAE_GOHEI.get());
-//            addInHandModel(InitItems.EXTINGUISHER.get());
-//            addInHandModel(InitItems.CAMERA.get());
-//            addInHandModel(InitItems.MAID_BEACON.get());
-//
-//            addReplaceableModel(Items.TOTEM_OF_UNDYING, LIFE_POINT, () -> VanillaConfig.REPLACE_TOTEM_TEXTURE.get());
-//            addReplaceableModel(Items.EXPERIENCE_BOTTLE, POINT_ITEM, () -> VanillaConfig.REPLACE_XP_BOTTLE_TEXTURE.get());
-//        }
-//    }
+    @SubscribeEvent
+    public static void register(RegisterEvent event) {
+        if (event.getRegistryKey().equals(Registries.ITEM)) {
+            addInHandModel(InitItems.HAKUREI_GOHEI.get());
+            addInHandModel(InitItems.SANAE_GOHEI.get());
+            addInHandModel(InitItems.EXTINGUISHER.get());
+            addInHandModel(InitItems.CAMERA.get());
+            addInHandModel(InitItems.MAID_BEACON.get());
+
+            addReplaceableModel(Items.TOTEM_OF_UNDYING, LIFE_POINT, () -> VanillaConfig.REPLACE_TOTEM_TEXTURE.get());
+            addReplaceableModel(Items.EXPERIENCE_BOTTLE, POINT_ITEM, () -> VanillaConfig.REPLACE_XP_BOTTLE_TEXTURE.get());
+        }
+    }
 
     @SubscribeEvent
     public static void onBakedModel(ModelEvent.BakingCompleted event) {
@@ -71,8 +71,8 @@ public final class InitSpecialItemRender {
     public static void addInHandModel(Item item) {
         ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
-            ModelResourceLocation rawName = new ModelResourceLocation(res, "inventory");
-            ModelResourceLocation inHandName = new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(res.getNamespace(), res.getPath() + "_in_hand"), "inventory");
+            ModelResourceLocation rawName = ModelResourceLocation.standalone(res);
+            ModelResourceLocation inHandName = ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(res.getNamespace(), res.getPath() + "_in_hand"));
             PERSPECTIVE_MODEL_LIST.add(Pair.of(rawName, inHandName));
         }
     }
@@ -80,8 +80,8 @@ public final class InitSpecialItemRender {
     public static void addReplaceableModel(Item item, ResourceLocation replacedModel, Supplier<Boolean> isReplace) {
         ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
-            ModelResourceLocation rawModelResourceLocation = new ModelResourceLocation(res, "inventory");
-            ModelResourceLocation replacedModelResourceLocation = new ModelResourceLocation(replacedModel, "standalone");
+            ModelResourceLocation rawModelResourceLocation = ModelResourceLocation.standalone(res);
+            ModelResourceLocation replacedModelResourceLocation = ModelResourceLocation.standalone(replacedModel);
             REPLACEABLE_MODEL_LIST.add(Triple.of(rawModelResourceLocation, replacedModelResourceLocation, isReplace));
         }
     }

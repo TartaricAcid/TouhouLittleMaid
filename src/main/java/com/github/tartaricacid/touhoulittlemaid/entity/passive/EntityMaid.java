@@ -1575,7 +1575,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public IMaidTask getTask() {
-        ResourceLocation uid = ResourceLocation.withDefaultNamespace(entityData.get(DATA_TASK));
+        ResourceLocation uid = ResourceLocation.parse(entityData.get(DATA_TASK));
         return TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
     }
 

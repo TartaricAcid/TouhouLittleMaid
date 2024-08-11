@@ -81,9 +81,9 @@ public class InitCreativeTabs {
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());
                 output.accept(BROOM.get());
-                if (FMLEnvironment.dist == Dist.CLIENT) {
-                    ItemEntityPlaceholder.fillItemCategory(output);
-                }
+//                if (FMLEnvironment.dist == Dist.CLIENT) {
+//                    ItemEntityPlaceholder.fillItemCategory(output);
+//                }
 //                output.accept(getEnchantmentBook(EnchantmentKeys.IMPEDING));
 //                output.accept(getEnchantmentBook(EnchantmentKeys.SPEEDY));
 //                output.accept(getEnchantmentBook(EnchantmentKeys.ENDERS_ENDER));
