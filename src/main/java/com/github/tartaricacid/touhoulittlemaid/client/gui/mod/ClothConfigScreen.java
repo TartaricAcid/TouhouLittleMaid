@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
 import org.apache.commons.lang3.StringUtils;
 
 public class ClothConfigScreen extends Screen {
@@ -50,10 +51,10 @@ public class ClothConfigScreen extends Screen {
         }
     }
 
-    public static void registerNoClothConfigPage() {
-        if (!ModList.get().isLoaded(CompatRegistry.CLOTH_CONFIG)) {
-            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-                    new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> new ClothConfigScreen(parent)));
-        }
-    }
+//    public static void registerNoClothConfigPage() {
+//        if (!ModList.get().isLoaded(CompatRegistry.CLOTH_CONFIG)) {
+//            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
+//                    new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> new ClothConfigScreen(parent)));
+//        }
+//    }
 }

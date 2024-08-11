@@ -32,11 +32,12 @@ public final class CompatRegistry {
 //                MenuIntegration.registerModsPage();
 //            }
 //        }));
-        event.enqueueWork(() -> {
-            if (FMLEnvironment.dist == Dist.CLIENT) {
-                ClothConfigScreen.registerNoClothConfigPage();
-            }
-        });
+        //TODO ConfigScreenHandler已被移除
+//        event.enqueueWork(() -> {
+//            if (FMLEnvironment.dist == Dist.CLIENT) {
+//                ClothConfigScreen.registerNoClothConfigPage();
+//            }
+//        });
         event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
     }
 
