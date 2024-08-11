@@ -93,11 +93,9 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         // 要么正在燃烧，要么具备燃烧条件
         if (this.isLit() || readyForLit) {
             // 从缓存中获取配方
-            SmeltingRecipe recipe;
+            SmeltingRecipe recipe = null;
             if (inputNotEmpty) {
-                recipe = this.quickCheck.getRecipeFor(this, level).orElse(null);
-            } else {
-                recipe = null;
+                recipe = this.quickCheck.getRecipeFor(new SingleRecipeInput(this.getItem(INPUT_INDEX)), level).map(RecipeHolder::value).orElse(null);
             }
 
             int maxStackSize = this.getMaxStackSize();
@@ -180,7 +178,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         // 先检查输入物品和配方
         if (!container.getItem(INPUT_INDEX).isEmpty() && recipe != null) {
             // 先检查配方结果
-            ItemStack result = recipe.assemble(this, access);
+            ItemStack result = recipe.assemble(new SingleRecipeInput(this.getItem(INPUT_INDEX)), access);
             // 没结果，不能燃烧
             if (result.isEmpty()) {
                 return false;
@@ -209,7 +207,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     private boolean burn(RegistryAccess access, @Nullable SmeltingRecipe recipe, SimpleContainer container, int maxStackSize) {
         if (recipe != null && this.canBurn(access, recipe, container, maxStackSize)) {
             ItemStack input = container.getItem(INPUT_INDEX);
-            ItemStack result = recipe.assemble(this, access);
+            ItemStack result = recipe.assemble(new SingleRecipeInput(this.getItem(INPUT_INDEX)), access);
             ItemStack output = container.getItem(OUTPUT_INDEX);
             // 如果输出栏为空
             if (output.isEmpty()) {
@@ -231,6 +229,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     }
 
     private int getTotalCookTime(Level level) {
-        return quickCheck.getRecipeFor(this, level).map(AbstractCookingRecipe::getCookingTime).orElse(200);
+        return quickCheck.getRecipeFor(new SingleRecipeInput(this.getItem(INPUT_INDEX)), level).map(recipeHolder ->
+                recipeHolder.value().getCookingTime()).orElse(200);
     }
 }
