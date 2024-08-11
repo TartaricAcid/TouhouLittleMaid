@@ -1065,7 +1065,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public boolean openMaidGui(Player player, int tabIndex) {
         if (player instanceof ServerPlayer && !this.isSleeping()) {
             this.navigation.stop();
-            NetworkHooks.openScreen((ServerPlayer) player, getGuiProvider(tabIndex), (buffer) -> buffer.writeInt(getId()));
+            player.openMenu(getGuiProvider(tabIndex), (buffer) -> buffer.writeInt(getId()));
         }
         return true;
     }

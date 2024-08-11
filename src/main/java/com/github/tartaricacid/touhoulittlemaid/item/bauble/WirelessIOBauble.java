@@ -110,7 +110,8 @@ public class WirelessIOBauble implements IMaidBauble {
                 if (openCount > 0) {
                     return;
                 }
-                te.capabilities(Capabilities.ItemHandler.ENTITY, null).ifPresent(chestInv -> {
+                IItemHandler chestInv = maid.level.getCapability(Capabilities.ItemHandler.BLOCK, te.getBlockPos(), null);
+                if (chestInv != null) {
                     IItemHandler maidInv = maid.getAvailableInv(false);
                     boolean isMaidToChest = ItemWirelessIO.isMaidToChest(baubleItem);
                     boolean isBlacklist = ItemWirelessIO.isBlacklist(baubleItem);
@@ -130,7 +131,7 @@ public class WirelessIOBauble implements IMaidBauble {
                     } else {
                         chestToMaid(chestInv, maidInv, isBlacklist, filterList, slotConfigData);
                     }
-                });
+                }
                 return;
             }
         }

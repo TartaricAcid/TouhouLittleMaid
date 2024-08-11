@@ -141,7 +141,7 @@ public class ItemWirelessIO extends Item implements MenuProvider {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (handIn == InteractionHand.MAIN_HAND && playerIn instanceof ServerPlayer) {
-            NetworkHooks.openScreen((ServerPlayer) playerIn, this, (buffer) -> buffer.writeItem(playerIn.getMainHandItem()));
+            playerIn.openMenu(this, (buffer) -> buffer.writeItem(playerIn.getMainHandItem()));
             return InteractionResultHolder.success(playerIn.getMainHandItem());
         }
         return super.use(worldIn, playerIn, handIn);

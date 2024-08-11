@@ -49,7 +49,7 @@ public final class InitSpecialItemRender {
 
     @SubscribeEvent
     public static void onBakedModel(ModelEvent.BakingCompleted event) {
-        Map<ResourceLocation, BakedModel> registry = event.getModelBakery().getBakedTopLevelModels();
+        Map<ModelResourceLocation, BakedModel> registry = event.getModelBakery().getBakedTopLevelModels();
         for (Pair<ModelResourceLocation, ModelResourceLocation> pair : PERSPECTIVE_MODEL_LIST) {
             PerspectiveBakedModel model = new PerspectiveBakedModel(registry.get(pair.getLeft()), registry.get(pair.getRight()));
             registry.put(pair.getLeft(), model);
