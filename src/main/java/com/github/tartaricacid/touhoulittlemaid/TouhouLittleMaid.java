@@ -51,6 +51,7 @@ public final class TouhouLittleMaid {
         InitContainer.CONTAINER_TYPE.register(eventBus);
         InitSounds.SOUNDS.register(eventBus);
         InitRecipes.RECIPE_SERIALIZERS.register(eventBus);
+        InitRecipes.RECIPE_TYPES.register(eventBus);
         InitLootModifier.GLOBAL_LOOT_MODIFIER_SERIALIZER.register(eventBus);
         InitCommand.ARGUMENT_TYPE.register(eventBus);
         InitPoi.POI_TYPES.register(eventBus);
