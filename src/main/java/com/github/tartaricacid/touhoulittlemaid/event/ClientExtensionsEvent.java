@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockAltar;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockStatue;
@@ -13,7 +14,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ClientExtensionsEvent {
     @SubscribeEvent
     public static void RegisterClientExtensions(RegisterClientExtensionsEvent event) {

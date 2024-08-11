@@ -101,8 +101,9 @@ public final class InitEntities {
         event.put(EntityFairy.TYPE, EntityFairy.createFairyAttributes().build());
     }
 
-    @SubscribeEvent
-    public static void addEntitySpawnPlacement(FMLCommonSetupEvent event) {
-        SpawnPlacements.register(InitEntities.FAIRY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-    }
+    //TODO 这里需要重新写，怎么重复注册了InitEntities.FAIRY
+//    @SubscribeEvent
+//    public static void addEntitySpawnPlacement(FMLCommonSetupEvent event) {
+//        SpawnPlacements.register(InitEntities.FAIRY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+//    }
 }
