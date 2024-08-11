@@ -5,25 +5,20 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.InnerAnim
 import com.github.tartaricacid.touhoulittlemaid.client.model.PlayerMaidModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
@@ -89,13 +84,13 @@ public final class PlayerMaidModels {
             if (skin.model() == PlayerSkin.Model.SLIM) {
                 return PLAYER_MAID_MODEL_SLIM;
             }
-            } else {
-                UUID uuid = getOrCreatePlayerUUID(newProfile);
-                PlayerSkin skinModel = DefaultPlayerSkin.get(uuid);
-                if (skinModel.model() == PlayerSkin.Model.SLIM) {
-                    return PLAYER_MAID_MODEL_SLIM;
-                }
+        } else {
+            UUID uuid = getOrCreatePlayerUUID(newProfile);
+            PlayerSkin skinModel = DefaultPlayerSkin.get(uuid);
+            if (skinModel.model() == PlayerSkin.Model.SLIM) {
+                return PLAYER_MAID_MODEL_SLIM;
             }
+        }
         return PLAYER_MAID_MODEL;
     }
 
