@@ -78,7 +78,7 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
                 posX - 10,
-                posY - 12,
+                posY - 32,
                 posX + 10,
                 posY + 12,
                 (int) (12 * modelItem.getRenderItemScale()),

@@ -117,7 +117,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         this.fillGradient(graphics, SIDE_MENU_SIZE, 0xfe21252b);
         this.fillGradient(graphics, TOP_STATUS_BAR_SIZE, 0xfe282c34);
         graphics.drawString(font, getTitle(), 6, 4, 0xffaaaaaa);
-        super.render(graphics, mouseX, mouseY, partialTicks);
+//        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     private void renderViewBg(GuiGraphics graphics) {
@@ -132,7 +132,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
 
     private void renderBottomStatueBar(GuiGraphics graphics) {
         this.fillGradient(graphics, BOTTOM_STATUS_BAR_SIZE, 0xfe282c34);
-        String name = String.format("%s %s", "\u2714", I18n.get(ParseI18n.getI18nKey(modelInfo.getName())));
+        String name = String.format("%s %s", "✔", I18n.get(ParseI18n.getI18nKey(modelInfo.getName())));
         String info = String.format("%d FPS %.2f%%", Minecraft.fps, scale * 100 / 80);
         graphics.drawString(font, name, 136, this.height - 12, 0xcacad4, false);
         graphics.drawString(font, info, this.width - font.width(info) - 4, this.height - 12, 0xcacad4, false);
@@ -212,7 +212,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         RenderSystem.applyModelViewMatrix();
 
         PoseStack poseStack = new PoseStack();
-        poseStack.translate(0.0D, 0.0D, 1000.0D);
+        poseStack.translate(300.0D, 180.0D, 1000.0D);
         poseStack.scale(scale, scale, scale);
 
         Quaternionf zp = Axis.ZP.rotationDegrees(-180.0F);

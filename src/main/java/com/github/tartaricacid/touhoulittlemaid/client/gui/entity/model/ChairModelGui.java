@@ -69,7 +69,7 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
                 posX - 18,
-                posY - 18,
+                posY - 30,
                 posX + 18,
                 posY + 18,
                 (int) (12 * modelItem.getRenderItemScale()),

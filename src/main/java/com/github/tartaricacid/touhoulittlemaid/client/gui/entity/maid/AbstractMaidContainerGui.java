@@ -165,12 +165,11 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
         graphics.pose().translate(0, 0, -100);
-        renderBackground(graphics, x, y, partialTicks);
-        graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         SortButtonScreen.renderBackground(graphics, leftPos + 249, topPos + 166);
-        this.drawMaidCharacter(graphics, x, y);
         this.drawBaseInfoGui(graphics);
+        graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         this.drawTaskListBg(graphics);
+        this.drawMaidCharacter(graphics, x, y);
     }
 
     @Override
@@ -458,9 +457,9 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
                 leftPos + 8,
-                topPos + 60,
+                topPos + 20,
                 leftPos + 72,
-                topPos + 140,
+                topPos + 100,
                 40,
                 0.1F,
                 x,
@@ -528,7 +527,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     protected void containerTick() {
         counterTime += 1;
         if (counterTime % 20 == 0 && maid != null) {
-            PacketDistributor.sendToServer(new RequestEffectPackage(maid.getId()));
+//            PacketDistributor.sendToServer(new RequestEffectPackage(maid.getId()));
         }
     }
 

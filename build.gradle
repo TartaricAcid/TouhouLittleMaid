@@ -166,9 +166,9 @@ configurations {
 }
 
 dependencies {
-    implementation "maven.modrinth:jei:nff9nRuD"
+    compileOnly "maven.modrinth:jei:nff9nRuD"
+    compileOnly "maven.modrinth:rei:16.0.744+neoforge"
     implementation "maven.modrinth:emi:1.1.10+1.21+neoforge"
-    implementation "maven.modrinth:rei:16.0.744+neoforge"
     implementation "curse.maven:jade-324717:5444008"
     implementation "maven.modrinth:carry-on:2LfOJ5LW"
     implementation "maven.modrinth:cloth-config:15.0.128+neoforge"
