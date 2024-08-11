@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.capability;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,15 +13,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class GeckoMaidEntityCapabilityProvider<E extends Mob & IMaid> implements ICapabilityProvider {
+public class GeckoMaidEntityCapabilityProvider<E extends Mob> implements ICapabilityProvider {
     public static Capability<GeckoMaidEntity<?>> CAP = CapabilityManager.get(new CapabilityToken<>() {
     });
     private GeckoMaidEntity<E> instance = null;
     private E entity;
+    private IMaid maid;
 
-    @SuppressWarnings("unchecked")
-    public GeckoMaidEntityCapabilityProvider(Entity entity) {
-        this.entity = (E) entity;
+    public GeckoMaidEntityCapabilityProvider(E mob, IMaid maid) {
+        this.entity = mob;
+        this.maid = maid;
     }
 
     @Nonnull
@@ -34,8 +34,9 @@ public class GeckoMaidEntityCapabilityProvider<E extends Mob & IMaid> implements
     @Nonnull
     private GeckoMaidEntity<E> createCapability() {
         if (this.instance == null) {
-            this.instance = new GeckoMaidEntity<>(entity);
+            this.instance = new GeckoMaidEntity<>(this.entity, this.maid);
             this.entity = null;
+            this.maid = null;
         }
         return this.instance;
     }

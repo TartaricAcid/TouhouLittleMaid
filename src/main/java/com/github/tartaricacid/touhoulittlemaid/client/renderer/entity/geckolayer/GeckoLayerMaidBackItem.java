@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Vanishable;
 
-public class GeckoLayerMaidBackItem<T extends Mob & IMaid> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
+public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
     public GeckoLayerMaidBackItem(GeckoEntityMaidRenderer<T> entityRendererIn) {
         super(entityRendererIn);
     }

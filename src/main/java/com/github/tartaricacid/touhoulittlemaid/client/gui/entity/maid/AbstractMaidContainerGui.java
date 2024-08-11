@@ -448,7 +448,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private void renderTaskButtonInfo(GuiGraphics graphics, int x, int y) {
         this.renderables.stream().filter(b -> b instanceof ITooltipButton).forEach(b -> {
             ITooltipButton tooltipButton = (ITooltipButton) b;
-            if (tooltipButton.isHovered()) {
+            if (tooltipButton.isTooltipHovered()) {
                 tooltipButton.renderTooltip(graphics, getMinecraft(), x, y);
             }
         });

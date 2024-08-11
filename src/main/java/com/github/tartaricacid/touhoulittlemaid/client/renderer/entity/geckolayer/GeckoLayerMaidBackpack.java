@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 
-public class GeckoLayerMaidBackpack<T extends Mob & IMaid> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
+public class GeckoLayerMaidBackpack<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
     public GeckoLayerMaidBackpack(GeckoEntityMaidRenderer<T> entityRendererIn, EntityModelSet modelSet) {
         super(entityRendererIn);
     }

@@ -32,7 +32,7 @@ import net.minecraftforge.common.IPlantable;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class GeckoLayerMaidBipedHead<T extends Mob & IMaid> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
+public class GeckoLayerMaidBipedHead<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
     private static final String SKULL_OWNER_TAG = "SkullOwner";
     private final Map<SkullBlock.Type, SkullModelBase> skullModels;
 

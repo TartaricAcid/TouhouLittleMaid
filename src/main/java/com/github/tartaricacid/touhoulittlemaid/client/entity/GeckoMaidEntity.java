@@ -21,11 +21,12 @@ import org.joml.Vector2f;
 
 import java.util.List;
 
-public class GeckoMaidEntity<T extends Mob & IMaid> extends AnimatableEntity<T> {
+public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
     private static final ResourceLocation GECKO_DEFAULT_ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "fox_miko");
     private static final ResourceLocation GECKO_DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final int FPS = 60;
 
+    private final IMaid maid;
     private MaidModelInfo maidInfo;
     private final Vector2f headRot = new Vector2f();
 
@@ -33,9 +34,10 @@ public class GeckoMaidEntity<T extends Mob & IMaid> extends AnimatableEntity<T> 
     private boolean modelDirty = false;
     private final MaidState<T> state;
 
-    public GeckoMaidEntity(T maid) {
-        super(maid, FPS);
-        state = new MaidState<>(maid);
+    public GeckoMaidEntity(T mob, IMaid maid) {
+        super(mob, FPS);
+        this.maid = maid;
+        this.state = new MaidState<>(mob);
         registerControllers();
     }
 
@@ -72,7 +74,7 @@ public class GeckoMaidEntity<T extends Mob & IMaid> extends AnimatableEntity<T> 
         List extraData = animationEvent.getExtraData();
         MolangParser parser = GeckoLibCache.getInstance().parser;
         if (!Minecraft.getInstance().isPaused() && extraData.size() == 1 && extraData.get(0) instanceof EntityModelData data) {
-            AnimationRegister.setParserValue(animationEvent, parser, data, this.entity);
+            AnimationRegister.setParserValue(animationEvent, parser, data, this.maid);
             var update = super.setCustomAnimations(animationEvent);
             IBone head = getCurrentModel().head();
             if (head != null) {
@@ -127,7 +129,7 @@ public class GeckoMaidEntity<T extends Mob & IMaid> extends AnimatableEntity<T> 
     }
 
     public IMaid getMaid() {
-        return entity;
+        return maid;
     }
 
     public MaidModelInfo getMaidInfo() {
@@ -141,7 +143,7 @@ public class GeckoMaidEntity<T extends Mob & IMaid> extends AnimatableEntity<T> 
         }
     }
 
-    private static class MaidState<T extends Mob & IMaid> {
+    private static class MaidState<T extends Mob> {
         private final T maid;
 
         private float yHeadRot = 0;

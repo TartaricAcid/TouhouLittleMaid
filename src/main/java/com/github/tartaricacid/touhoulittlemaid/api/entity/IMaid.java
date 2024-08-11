@@ -41,26 +41,6 @@ public interface IMaid {
     }
 
     /**
-     * 转换为实现接口的 Mob 实体，同时发送转换事件
-     *
-     * @param mob 需要转换的实体对象
-     * @return 转换的 Maid 对象
-     */
-    @Nullable
-    @SuppressWarnings("unchecked")
-    static <E extends Mob & IMaid> E convertToMaidMob(Mob mob) {
-        // 如果是继承了这个接口的，可以直接转换
-        if (mob instanceof IMaid maid) {
-            return (E) maid;
-        }
-        // 如果不是，那么发送事件进行检查
-        // 这样就可以兼容其他模组
-        var event = new ConvertMaidEvent(mob);
-        MinecraftForge.EVENT_BUS.post(event);
-        return (E) event.getMaid();
-    }
-
-    /**
      * 将 Mob 转换成 Maid 对象，转换不成功返回 Null
      */
     @Nullable

@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 
 import java.util.List;
 
-public class GeckoLayerMaidBanner<T extends Mob & IMaid> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
+public class GeckoLayerMaidBanner<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_banner.png");
     private final MaidBannerModel bannerModel;
 
