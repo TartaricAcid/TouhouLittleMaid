@@ -5,10 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.PicnicBasketContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.WirelessIOContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.init.InitContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.PicnicBasketContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

@@ -2,11 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
+import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
+import com.github.tartaricacid.touhoulittlemaid.init.registry.CommandRegistry;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
@@ -15,6 +17,8 @@ import com.google.common.collect.Lists;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +34,7 @@ public final class TouhouLittleMaid {
         initRegister(modEventBus);
         ChatBubbleManger.initDefaultChat();
         modApiInit();
+        modContainer.registerConfig(ModConfig.Type.COMMON, GeneralConfig.getConfigSpec());
     }
 
     private static void initRegister(IEventBus eventBus) {
@@ -54,6 +59,7 @@ public final class TouhouLittleMaid {
         InitDataComponent.DATA_COMPONENTS.register(eventBus);
 
         eventBus.addListener(NewNetwork::registerPacket);
+        NeoForge.EVENT_BUS.addListener(CommandRegistry::onServerStaring);
         /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表
         驯养革新 Domestication Innovation
         更多箱子 Iron Chests

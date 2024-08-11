@@ -28,7 +28,7 @@ import static net.minecraft.core.UUIDUtil.createOfflinePlayerUUID;
 public final class PlayerMaidModels {
     private static final Cache<String, GameProfile> GAME_PROFILE_CACHE = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
     private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1, TimeUnit.MINUTES, new LinkedBlockingQueue());
-    private static final GameProfile EMPTY_GAME_PROFILE = new GameProfile(null, "EMPTY");
+    private static final GameProfile EMPTY_GAME_PROFILE = new GameProfile(UUID.randomUUID(), "EMPTY");
     private static final PlayerMaidModel PLAYER_MAID_MODEL = new PlayerMaidModel(false);
     private static final PlayerMaidModel PLAYER_MAID_MODEL_SLIM = new PlayerMaidModel(true);
     private static final List<ResourceLocation> PLAYER_MAID_ANIMATION_RES = Lists.newArrayList(
