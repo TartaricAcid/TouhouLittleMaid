@@ -54,10 +54,13 @@ public class EntityChair extends AbstractEntityFromItem {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
     @OnlyIn(Dist.CLIENT)
-    private final GeckoChairEntity animatable = new GeckoChairEntity(this);
+    private GeckoChairEntity animatable;
 
     protected EntityChair(EntityType<EntityChair> type, Level worldIn) {
         super(type, worldIn);
+        if (worldIn.isClientSide()) {
+            this.animatable = new GeckoChairEntity(this);
+        }
     }
 
     public EntityChair(Level worldIn) {
