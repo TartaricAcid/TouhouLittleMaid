@@ -10,7 +10,7 @@ public interface ITooltipButton {
     /**
      * 鼠标是否悬浮其上
      */
-    boolean isHovered();
+    boolean isTooltipHovered();
 
     /**
      * 渲染文本提示
