@@ -33,7 +33,7 @@ public class WirelessIOBauble implements IMaidBauble {
             if (slotConfig != null && i < slotConfig.size() && slotConfig.get(i)) {
                 continue;
             }
-            if (canItemStacksStackRelaxed(slot, stack)) {
+            if (ItemStack.isSameItemSameComponents(slot, stack) && !slot.isEmpty() && slot.isStackable()) {
                 stack = inventory.insertItem(i, stack, simulate);
                 if (stack.isEmpty()) {
                     break;
@@ -72,19 +72,6 @@ public class WirelessIOBauble implements IMaidBauble {
             }
         }
         return stack;
-    }
-
-    public static boolean canItemStacksStackRelaxed(@Nonnull ItemStack slot, @Nonnull ItemStack itemStack) {
-        if (slot.isEmpty() || itemStack.isEmpty() || slot.getItem() != itemStack.getItem()) {
-            return false;
-        }
-        if (!slot.isStackable()) {
-            return false;
-        }
-        if (slot.hasTag() != itemStack.hasTag()) {
-            return false;
-        }
-        return (!slot.hasTag() || Objects.equals(slot.getTag(), Objects.requireNonNull(itemStack.getTag()))) && slot.areCapsCompatible(itemStack);
     }
 
     @Override
