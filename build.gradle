@@ -120,6 +120,9 @@ repositories {
     maven {
         url "https://maven.shedaniel.me/"
     }
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
 }
 
 dependencies {
@@ -165,7 +168,10 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:catalogue-459701:${catalogue_id}")
 
-    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:${tacz_id}")
+    implementation fg.deobf('curse.maven:timeless-and-classics-zero-1028108:5529111-sources-5529576')
+
+    implementation fg.deobf("maven.modrinth:simple-hats:1.19.2-0.3.2-forge")
+    implementation fg.deobf("maven.modrinth:curios:1.19.2-5.1.6.3-forge")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

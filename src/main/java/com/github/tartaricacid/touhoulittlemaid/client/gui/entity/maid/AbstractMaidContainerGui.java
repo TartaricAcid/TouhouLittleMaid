@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
@@ -258,12 +259,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 (b) -> {
                     if (enable) {
-                        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+                        taskButtonPressed(maidTask, true);
                     }
                 },
                 (b, m, x, y) -> renderComponentTooltip(m, getTaskTooltips(maidTask), x, y), Component.empty());
         this.addRenderableWidget(button);
         button.visible = taskListOpen;
+    }
+
+    // 用于开放切换任务时对当前 GUI 的操作
+    protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
+        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
     }
 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
@@ -440,18 +446,19 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         }
     }
 
-    private void renderTaskButtonInfo(PoseStack poseStack, int x, int y) {
-        this.renderables.stream().filter(b -> b instanceof TaskButton).forEach(b -> {
-            if (((TaskButton) b).isHoveredOrFocused()) {
-                ((TaskButton) b).renderToolTip(poseStack, x, y);
-            }
-        });
-    }
-
     private void renderScheduleInfo(PoseStack poseStack, int mouseX, int mouseY) {
         if (scheduleButton.isHoveredOrFocused()) {
             renderComponentTooltip(poseStack, scheduleButton.getTooltips(), mouseX, mouseY);
         }
+    }
+
+    private void renderTaskButtonInfo(PoseStack graphics, int x, int y) {
+        this.renderables.stream().filter(b -> b instanceof ITooltipButton).forEach(b -> {
+            ITooltipButton tooltipButton = (ITooltipButton) b;
+            if (tooltipButton.isTooltipHovered()) {
+                tooltipButton.renderTooltip(graphics, getMinecraft(), x, y);
+            }
+        });
     }
 
     private void drawMaidCharacter(int x, int y) {

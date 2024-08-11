@@ -31,7 +31,7 @@ import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class GunGeckoAnimation {
-    public static PlayState playGrenadeAnimation(AnimationEvent<GeckoMaidEntity> event, InteractionHand hand) {
+    public static PlayState playGrenadeAnimation(AnimationEvent<GeckoMaidEntity<?>> event, InteractionHand hand) {
         // TODO 手雷还没有
         if (hand == InteractionHand.MAIN_HAND) {
             return playLoopAnimation(event, "tac:mainhand:grenade");
@@ -44,10 +44,10 @@ public class GunGeckoAnimation {
      * tac:run
      * tac:walk
      */
-    public static PlayState playGunMainAnimation(AnimationEvent<GeckoMaidEntity> event, String animationName, ILoopType loopType) {
+    public static PlayState playGunMainAnimation(AnimationEvent<GeckoMaidEntity<?>> event, String animationName, ILoopType loopType) {
         String tacName = "tac:" + animationName;
-        GeckoMaidEntity animatable = event.getAnimatable();
-        ResourceLocation animation = animatable.getAnimation();
+        var animatable = event.getAnimatableEntity();
+        ResourceLocation animation = animatable.getAnimationFileLocation();
         AnimationFile animationFile = GeckoLibCache.getInstance().getAnimations().get(animation);
         if (!isMaidCarrying(animatable.getMaid()) && animationFile.animations().containsKey(tacName)) {
             return playAnimation(event, tacName, loopType);
@@ -63,7 +63,7 @@ public class GunGeckoAnimation {
      * tac:hold_shoot:pistol
      * tac:run:pistol
      */
-    public static PlayState playGunHoldAnimation(AnimationEvent<GeckoMaidEntity> event, ItemStack heldItem) {
+    public static PlayState playGunHoldAnimation(AnimationEvent<GeckoMaidEntity<?>> event, ItemStack heldItem) {
         IGun gun = IGun.getIGunOrNull(heldItem);
         if (gun == null) {
             return PlayState.STOP;
@@ -74,7 +74,7 @@ public class GunGeckoAnimation {
         }
         CommonGunIndex gunIndex = indexOptional.get();
         String weaponType = gunIndex.getType();
-        IMaid maid = event.getAnimatable().getMaid();
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -123,9 +123,9 @@ public class GunGeckoAnimation {
     }
 
     @NotNull
-    private static PlayState getGunTypeAnimation(AnimationEvent<GeckoMaidEntity> event, String weaponType, String prefix) {
-        ResourceLocation modelId = event.getAnimatable().getAnimation();
-        IMaid maid = event.getAnimatable().getMaid();
+    private static PlayState getGunTypeAnimation(AnimationEvent<GeckoMaidEntity<?>> event, String weaponType, String prefix) {
+        ResourceLocation modelId = event.getAnimatableEntity().getAnimationFileLocation();
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }

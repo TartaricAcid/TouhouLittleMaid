@@ -9,11 +9,14 @@ import com.github.tartaricacid.touhoulittlemaid.mclib.math.IValue;
 
 public class BoneAnimation {
     public final String boneName;
-    public VectorKeyFrameList<KeyFrame<IValue>> rotationKeyFrames;
-    public VectorKeyFrameList<KeyFrame<IValue>> positionKeyFrames;
-    public VectorKeyFrameList<KeyFrame<IValue>> scaleKeyFrames;
+    public final VectorKeyFrameList<KeyFrame<IValue>> rotationKeyFrames;
+    public final VectorKeyFrameList<KeyFrame<IValue>> positionKeyFrames;
+    public final VectorKeyFrameList<KeyFrame<IValue>> scaleKeyFrames;
 
-    public BoneAnimation(String boneName) {
+    public BoneAnimation(String boneName, VectorKeyFrameList<KeyFrame<IValue>> rotationKeyFrames, VectorKeyFrameList<KeyFrame<IValue>> positionKeyFrames, VectorKeyFrameList<KeyFrame<IValue>> scaleKeyFrames) {
         this.boneName = boneName;
+        this.rotationKeyFrames = rotationKeyFrames;
+        this.positionKeyFrames = positionKeyFrames;
+        this.scaleKeyFrames = scaleKeyFrames;
     }
 }

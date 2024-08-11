@@ -42,15 +42,9 @@ public interface IBone {
 
     float getPivotX();
 
-    void setPivotX(float value);
-
     float getPivotY();
 
-    void setPivotY(float value);
-
     float getPivotZ();
-
-    void setPivotZ(float value);
 
     boolean isHidden();
 
@@ -64,15 +58,7 @@ public interface IBone {
 
     void setHidden(boolean selfHidden, boolean skipChildRendering);
 
-    void setModelRendererName(String modelRendererName);
-
-    void saveInitialSnapshot();
-
     BoneSnapshot getInitialSnapshot();
-
-    default BoneSnapshot saveSnapshot() {
-        return new BoneSnapshot(this);
-    }
 
     String getName();
 }

@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRend
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -20,12 +19,9 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Vanishable;
 
-public class GeckoLayerMaidBackItem<T extends Mob & IAnimatable> extends GeoLayerRenderer<T> {
-    private final GeckoEntityMaidRenderer renderer;
-
-    public GeckoLayerMaidBackItem(GeckoEntityMaidRenderer entityRendererIn) {
+public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
+    public GeckoLayerMaidBackItem(GeckoEntityMaidRenderer<T> entityRendererIn) {
         super(entityRendererIn);
-        this.renderer = entityRendererIn;
     }
 
     @Override
@@ -34,11 +30,12 @@ public class GeckoLayerMaidBackItem<T extends Mob & IAnimatable> extends GeoLaye
         if (maid == null) {
             return;
         }
-        if (entityRenderer.getGeoModel() == null) {
+        var model = this.entityRenderer.getAnimatableEntity(entity).getCurrentModel();
+        if (model == null) {
             return;
         }
         ItemStack stack = maid.getBackpackShowItem();
-        if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || entity.isSleeping() || entity.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+        if (!this.entityRenderer.getAnimatableEntity(entity).getMaidInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || entity.isSleeping() || entity.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
             return;
         }
         if (stack.getItem() instanceof Vanishable) {
@@ -61,6 +58,6 @@ public class GeckoLayerMaidBackItem<T extends Mob & IAnimatable> extends GeoLaye
         }
 
         // TACZ 背部枪械渲染
-        TacCompat.renderBackGun(stack, entityRenderer.getGeoModel(), maid, matrixStack, bufferIn, packedLightIn);
+        TacCompat.renderBackGun(stack, model, maid, matrixStack, bufferIn, packedLightIn);
     }
 }
