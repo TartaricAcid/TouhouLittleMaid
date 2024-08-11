@@ -46,11 +46,11 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
         this.id = id;
         this.entityType = entityType;
         this.isItemCraft = (entityType == EntityType.ITEM);
-        if (this.isItemCraft && extraData != null) {
-            this.resultItem = ItemStack.of(extraData.getCompound("Item"));
-        } else {
+//        if (this.isItemCraft && extraData != null) {
+//            this.resultItem = ItemStack.of(extraData.getCompound("Item"));
+//        } else {
             this.resultItem = ItemStack.EMPTY;
-        }
+//        }
         this.copyInput = copyInput;
         this.copyTag = copyTag;
         this.extraData = extraData;
@@ -153,25 +153,25 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
     }
 
     private void copyIngredientTag(@Nullable AltarRecipeInventory inventory, Entity resultEntity) {
-        if (inventory != null && this.copyInput != Ingredient.EMPTY) {
-            ItemStack matchStack = inventory.getMatchIngredient(this.copyInput);
-            if (!matchStack.isEmpty()) {
-                CompoundTag data;
-                if (StringUtils.isEmpty(this.copyTag)) {
-                    data = matchStack.getTag();
-                } else {
-                    data = matchStack.getTagElement(this.copyTag);
-                }
-                if (data != null && !data.isEmpty()) {
-                    if (resultEntity instanceof LivingEntity) {
-                        ((LivingEntity) resultEntity).readAdditionalSaveData(data);
-                    }
-                    if (resultEntity instanceof ItemEntity) {
-                        ((ItemEntity) resultEntity).readAdditionalSaveData(data);
-                    }
-                }
-            }
-        }
+//        if (inventory != null && this.copyInput != Ingredient.EMPTY) {
+//            ItemStack matchStack = inventory.getMatchIngredient(this.copyInput);
+//            if (!matchStack.isEmpty()) {
+//                CompoundTag data;
+//                if (StringUtils.isEmpty(this.copyTag)) {
+//                    data = matchStack.getTag();
+//                } else {
+//                    data = matchStack.getTagElement(this.copyTag);
+//                }
+//                if (data != null && !data.isEmpty()) {
+//                    if (resultEntity instanceof LivingEntity) {
+//                        ((LivingEntity) resultEntity).readAdditionalSaveData(data);
+//                    }
+//                    if (resultEntity instanceof ItemEntity) {
+//                        ((ItemEntity) resultEntity).readAdditionalSaveData(data);
+//                    }
+//                }
+//            }
+//        }
     }
 
     public boolean isItemCraft() {
