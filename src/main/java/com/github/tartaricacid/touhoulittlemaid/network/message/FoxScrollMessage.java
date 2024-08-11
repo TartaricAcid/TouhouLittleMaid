@@ -66,7 +66,6 @@
 //        private final Component name;
 //        private final long timestamp;
 //
-//        //TODO : component的CODEC
 //        public static final StreamCodec<RegistryFriendlyByteBuf, FoxScrollData> FOX_SCROLL_DATA_STREAM_CODEC = StreamCodec.composite(
 //                BlockPos.STREAM_CODEC, FoxScrollData::getPos,
 //        );

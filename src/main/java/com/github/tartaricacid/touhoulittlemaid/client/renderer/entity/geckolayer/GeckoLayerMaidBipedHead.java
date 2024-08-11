@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.AbstractSkullBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
@@ -34,7 +36,6 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLayerRenderer<T> {
-    private static final String SKULL_OWNER_TAG = "SkullOwner";
     private final GeckoEntityMaidRenderer maidRenderer;
     private final Map<SkullBlock.Type, SkullModelBase> skullModels;
 
@@ -53,14 +54,13 @@ public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLay
                 Item item = head.getItem();
                 poseStack.pushPose();
                 this.translateToHead(poseStack, geoModel);
-                if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof AbstractSkullBlock) {
-                    AbstractSkullBlock skullBlock = (AbstractSkullBlock) ((BlockItem) item).getBlock();
+                if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof AbstractSkullBlock skullBlock) {
                     poseStack.scale(-1.1875F, 1.1875F, -1.1875F);
-                    GameProfile gameprofile = getSkullGameProfile(head);
+                    ResolvableProfile resolvableProfile = head.get(DataComponents.PROFILE);
                     poseStack.translate(-0.5D, 0.0D, -0.5D);
                     SkullBlock.Type type = skullBlock.getType();
                     SkullModelBase modelBase = this.skullModels.get(type);
-                    RenderType rendertype = SkullBlockRenderer.getRenderType(type, gameprofile);
+                    RenderType rendertype = SkullBlockRenderer.getRenderType(type, resolvableProfile);
                     SkullBlockRenderer.renderSkull(null, 180.0F, 0.0F, poseStack, bufferIn, packedLightIn, modelBase, rendertype);
                 }
                 poseStack.popPose();
@@ -83,17 +83,6 @@ public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLay
                 }
             }
         }
-    }
-
-    @Nullable
-    private GameProfile getSkullGameProfile(ItemStack head) {
-        if (head.hasTag()) {
-            CompoundTag nbt = head.getTag();
-            if (nbt != null && nbt.contains(SKULL_OWNER_TAG, Tag.TAG_COMPOUND)) {
-                return NbtUtils.readGameProfile(nbt.getCompound(SKULL_OWNER_TAG));
-            }
-        }
-        return null;
     }
 
     protected void translateToHead(PoseStack poseStack, GeoModel geoModel) {

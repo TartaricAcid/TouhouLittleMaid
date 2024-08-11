@@ -1614,7 +1614,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public boolean canDestroyBlock(BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        return state.getBlock().canEntityDestroy(state, level, pos, this) && ForgeEventFactory.onEntityDestroyBlock(this, pos, state);
+        return state.getBlock().canEntityDestroy(state, level, pos, this) && net.neoforged.neoforge.event.EventHooks.onEntityDestroyBlock(this, pos, state);
     }
 
     public boolean canPlaceBlock(BlockPos pos) {
