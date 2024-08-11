@@ -98,7 +98,7 @@ public final class ChatText {
             if (text.startsWith(ICON_IDENTIFIER_CHAR) && text.endsWith(ICON_IDENTIFIER_CHAR)) {
                 String substring = text.substring(1, text.length() - 1);
                 if (isValidResourceLocation(substring)) {
-                    return new ChatText(ChatTextType.ICON, ResourceLocation.withDefaultNamespace(substring), StringUtils.EMPTY);
+                    return new ChatText(ChatTextType.ICON, ResourceLocation.parse(substring), StringUtils.EMPTY);
                 }
                 return EMPTY_CHAT_TEXT;
             }
