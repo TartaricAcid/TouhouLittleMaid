@@ -48,7 +48,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
     @Override
     public void render(Mob entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
-        var maid = IMaid.convertToMaidMob(entity);
+        var maid = IMaid.convertToMaid(entity);
         if (maid == null) {
             return;
         }

@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
-import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.capability.GeckoMaidEntityCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.*;
@@ -10,7 +9,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Mob;
 
-public class GeckoEntityMaidRenderer<T extends Mob & IMaid> extends GeoReplacedEntityRenderer<T, GeckoMaidEntity<T>> {
+public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRenderer<T, GeckoMaidEntity<T>> {
     public GeckoEntityMaidRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager);
         addLayer(new GeckoLayerMaidHeld<>(this, renderManager.getItemInHandRenderer()));
@@ -22,8 +21,7 @@ public class GeckoEntityMaidRenderer<T extends Mob & IMaid> extends GeoReplacedE
 
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        IMaid maid = IMaid.convert(entity);
-        if (maid == null) {
+        if (!entity.getCapability(GeckoMaidEntityCapabilityProvider.CAP).isPresent()) {
             return;
         }
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);

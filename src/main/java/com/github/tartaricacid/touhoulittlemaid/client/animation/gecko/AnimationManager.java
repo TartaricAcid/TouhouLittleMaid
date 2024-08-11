@@ -240,7 +240,7 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
-    public <T extends Mob & IMaid> PlayState predicateArmor(AnimationEvent<GeckoMaidEntity<T>> event, EquipmentSlot slot) {
+    public <T extends Mob> PlayState predicateArmor(AnimationEvent<GeckoMaidEntity<T>> event, EquipmentSlot slot) {
         IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;

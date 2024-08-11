@@ -33,8 +33,11 @@ public final class CapabilityEvent {
         if (entity instanceof Player) {
             event.addCapability(POWER_CAP, new PowerCapabilityProvider());
             event.addCapability(MAID_NUM_CAP, new MaidNumCapabilityProvider());
-        } else if (FMLEnvironment.dist == Dist.CLIENT && entity instanceof Mob && entity instanceof IMaid) {
-            event.addCapability(GECKO_MAID_CAP, new GeckoMaidEntityCapabilityProvider<>(entity));
+        } else if (FMLEnvironment.dist == Dist.CLIENT && entity instanceof Mob mob) {
+            var maid = IMaid.convert(mob);
+            if (maid != null) {
+                event.addCapability(GECKO_MAID_CAP, new GeckoMaidEntityCapabilityProvider<>(mob, maid));
+            }
         }
     }
 

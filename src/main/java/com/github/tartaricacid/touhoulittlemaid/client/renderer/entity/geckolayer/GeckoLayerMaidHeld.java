@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
-import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
@@ -17,7 +16,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-public class GeckoLayerMaidHeld<T extends Mob & IMaid> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
+public class GeckoLayerMaidHeld<T extends Mob> extends GeoLayerRenderer<T, GeckoEntityMaidRenderer<T>> {
     private final ItemInHandRenderer itemInHandRenderer;
 
     public GeckoLayerMaidHeld(GeckoEntityMaidRenderer<T> entityRendererIn, ItemInHandRenderer itemInHandRenderer) {
