@@ -196,7 +196,7 @@ public class MaidSoundPackGui extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
         graphics.fill(startX, startY, startX + 240, startY + 220, 0xFF2A2A2A);
         graphics.fill(startX + 242, startY, startX + 400, startY + 220, 0xFF2A2A2A);
         graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.custom_sound.pack.title"), startX + 120, startY + 6, 0xFFFFFF);
