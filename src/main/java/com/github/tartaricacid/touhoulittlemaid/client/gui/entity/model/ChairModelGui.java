@@ -28,7 +28,19 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     @Override
     protected void drawLeftEntity(GuiGraphics graphics, int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(entity.getModelId());
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, (middleX - 256 / 2) / 2, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
+        int centerX = (middleX - 256 / 2) / 2;
+        int centerY = middleY + 80;
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                centerX - 68,
+                centerY - 68,
+                centerX + 68,
+                centerY + 68,
+                (int) (45 * renderItemScale),
+                0F,
+                centerX - 25,
+                centerY - 20,
+                entity);
     }
 
     @Override
@@ -54,7 +66,17 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
         }
 
         chair.setModelId(modelItem.getModelId().toString());
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, chair);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                posX - 18,
+                posY - 18,
+                posX + 18,
+                posY + 18,
+                (int) (12 * modelItem.getRenderItemScale()),
+                0F,
+                posX - 25,
+                posY - 20,
+                chair);
     }
 
     @Override

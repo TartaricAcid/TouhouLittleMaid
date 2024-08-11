@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHand
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -83,7 +84,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
                         @Override
                         public boolean mayPickup(Player playerIn) {
                             ItemStack itemstack = this.getItem();
-                            boolean curseEnchant = !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack);
+                            boolean curseEnchant = !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasTag(itemstack, EnchantmentTags.CURSE);
                             return !curseEnchant && super.mayPickup(playerIn);
                         }
 

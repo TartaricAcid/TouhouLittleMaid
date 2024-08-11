@@ -44,7 +44,7 @@ public class MaidTipsOverlay implements IGuiOverlay {
         if (!maid.isOwnedBy(player) && EntityMaid.getNtrItem().test(mainhandItem)) {
             return Component.translatable("overlay.touhou_little_maid.ntr_item.tips");
         }
-        if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.is(Tags.Items.SHEARS)) {
+        if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.is(Tags.Items.TOOLS_SHEAR)) {
             return Component.translatable("overlay.touhou_little_maid.remove_backpack.tips");
         }
         return null;

@@ -455,7 +455,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         double scale = getMinecraft().getWindow().getGuiScale();
         RenderSystem.enableScissor((int) ((leftPos + 6) * scale), (int) ((topPos + 107 + 42) * scale),
                 (int) (67 * scale), (int) (95 * scale));
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, leftPos + 40, topPos + 100, 40, (leftPos + 40) - x, (topPos + 70 - 20) - y, maid);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                leftPos + 8,
+                topPos + 60,
+                leftPos + 72,
+                topPos + 140,
+                40,
+                0.1F,
+                x,
+                y,
+                maid);
         RenderSystem.disableScissor();
     }
 

@@ -170,7 +170,17 @@ public class ModelSwitcherGui extends Screen {
         }
         graphics.drawCenteredString(font, String.format("%d/%d", page + 1, (infoList.size() - 1) / maxRow + 1), leftPos + 193, topPos + 12, 0xffffff);
         if (this.description != null) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, leftPos + 30, topPos + 60, 25, leftPos - 150, topPos - 50, maid);
+            InventoryScreen.renderEntityInInventoryFollowsMouse(
+                    graphics,
+                    leftPos + 10,
+                    topPos + 35,
+                    leftPos + 50,
+                    topPos + 85,
+                    25,
+                    0.1F,
+                    -180,
+                    -110,
+                    maid);
             this.description.render(graphics, pMouseX, pMouseY, pPartialTick);
         }
         super.render(graphics, pMouseX, pMouseY, pPartialTick);

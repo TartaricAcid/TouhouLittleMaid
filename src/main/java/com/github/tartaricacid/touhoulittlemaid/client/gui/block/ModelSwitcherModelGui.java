@@ -38,7 +38,19 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
     @Override
     protected void drawLeftEntity(GuiGraphics graphics, int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(entity.getModelId());
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, (middleX - 256 / 2) / 2, middleY + 90, (int) (45 * renderItemScale), (middleX - 256 / 2f) / 2 - mouseX, middleY + 80 - 40 - mouseY, entity);
+        int centerX = (middleX - 256 / 2) / 2;
+        int centerY = middleY + 90;
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                centerX - 36,
+                centerY - 45,
+                centerX + 36,
+                centerY + 45,
+                (int) (45 * renderItemScale),
+                0.1F,
+                mouseX,
+                mouseY,
+                entity);
     }
 
     @Override
@@ -65,7 +77,17 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
         } else {
             maid.setModelId(modelItem.getModelId().toString());
         }
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                posX - 10,
+                posY - 12,
+                posX + 10,
+                posY + 12,
+                (int) (12 * modelItem.getRenderItemScale()),
+                0.1F,
+                posX - 25,
+                posY - 20,
+                maid);
     }
 
     private float[] getRgbFromHash(int hashCode) {
