@@ -76,10 +76,6 @@ public class InitDataComponent {
             .register(SLOT_CONFIG_TAG_NAME, () -> DataComponentType.<List<Boolean>>builder().persistent(Codec.BOOL.listOf())
                     .networkSynchronized(ByteBufCodecs.BOOL.apply(ByteBufCodecs.list())).build());
 
-    public static final String PICNIC_BASKET_TAG_NAME = "picnic_basket_container";
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompoundTag>> PICNIC_BASKET_TAG = DATA_COMPONENTS
-            .register(PICNIC_BASKET_TAG_NAME, () -> DataComponentType.<CompoundTag>builder().persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG).build());
-
     public static final String STORAGE_DATA_TAG_NAME = "storage_data";
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompoundTag>> STORAGE_DATA_TAG = DATA_COMPONENTS
             .register(STORAGE_DATA_TAG_NAME, () -> DataComponentType.<CompoundTag>builder().persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG).build());
