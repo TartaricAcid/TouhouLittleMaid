@@ -21,12 +21,15 @@ import net.minecraft.client.renderer.blockentity.BannerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.AbstractBannerBlock;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 
 import java.util.List;
 
@@ -60,8 +63,11 @@ public class GeckoLayerMaidBanner<T extends Mob & IAnimatable> extends GeoLayerR
                 matrixStack.mulPose(Axis.XN.rotationDegrees(5));
                 VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
                 bannerModel.renderToBuffer(matrixStack, buffer, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(bannerItem.getColor(), BannerBlockEntity.getItemPatterns(maid.getBackpackShowItem()));
-                BannerRenderer.renderPatterns(matrixStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, bannerModel.getBanner(), ModelBakery.BANNER_BASE, true, list);
+                BannerPatternLayers bannerpatternlayers = maid.getBackpackShowItem().get(DataComponents.BANNER_PATTERNS);
+                DyeColor baseColor = ((AbstractBannerBlock)bannerItem.getBlock()).getColor();
+                if (bannerpatternlayers != null) {
+                    BannerRenderer.renderPatterns(matrixStack,bufferIn,packedLightIn,OverlayTexture.NO_OVERLAY,bannerModel.getBanner(),ModelBakery.BANNER_BASE,true,baseColor,bannerpatternlayers);
+                }
                 matrixStack.popPose();
             }
         }

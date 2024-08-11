@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Optional;
+
+import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
 
 public class MaidShootTargetTask extends Behavior<EntityMaid> {
     private final int attackCooldown;
@@ -74,7 +77,7 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
                     // 否则开始进行远程攻击
                     int ticksUsingItem = owner.getTicksUsingItem();
                     // 拿到快速射击附魔的等级
-                    int level = owner.getMainHandItem().getEnchantmentLevel(Enchantments.QUICK_CHARGE);
+                    int level = getEnchantmentLevel(owner.level.registryAccess(), Enchantments.QUICK_CHARGE, owner.getMainHandItem());
 
                     // 物品最大使用计数大于 20 才可以
                     // 这里大致解释下计数的意思，也就是蓄力，蓄力越长自然射的越远
