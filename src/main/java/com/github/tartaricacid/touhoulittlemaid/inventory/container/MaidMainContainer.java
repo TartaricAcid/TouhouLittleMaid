@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitCapabilities;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
@@ -35,16 +36,16 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
     public MaidMainContainer(MenuType<?> type, int id, Inventory inventory, int entityId) {
         super(type, id, inventory, entityId);
         if (maid != null) {
+            this.addMaidHandInv();
             this.addMaidArmorInv();
             this.addMaidBauble();
-            this.addMaidHandInv();
             this.addMainDefaultInv();
             this.addBackpackInv(inventory);
         }
     }
 
     private void addMaidHandInv() {
-        IItemHandler handler = maid.getCapability(Capabilities.ItemHandler.ENTITY_AUTOMATION, Direction.DOWN);
+        IItemHandler handler = maid.getCapability(InitCapabilities.HAND_ITEM, Direction.DOWN);
         if (handler == null) {
             return;
         }
@@ -65,7 +66,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
     }
 
     private void addMaidArmorInv() {
-        IItemHandler handler = maid.getCapability(Capabilities.ItemHandler.ENTITY_AUTOMATION, Direction.EAST);
+        IItemHandler handler = maid.getCapability(InitCapabilities.ARMOR_ITEM, Direction.DOWN);
         if (handler != null) {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; j++) {
