@@ -46,8 +46,10 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
         CustomData compoundData = stack.get(InitDataComponent.MAID_INFO);
-        if (compoundData != null) {
-            maid.saveWithoutId(compoundData.copyTag());
+        if (compoundData == null) {
+            CompoundTag tag = new CompoundTag();
+            maid.saveWithoutId(tag);
+            stack.set(InitDataComponent.MAID_INFO,CustomData.of(tag));
         }
     }
 

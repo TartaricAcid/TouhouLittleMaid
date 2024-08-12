@@ -106,8 +106,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (this.maid == null) {
             return;
         }
-        drawModInfo(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
+        drawModInfo(graphics);
         this.drawEffectInfo(graphics);
         this.drawCurrentTaskText(graphics);
         this.renderTooltip(graphics, mouseX, mouseY);
@@ -166,8 +166,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         graphics.pose().translate(0, 0, -100);
         SortButtonScreen.renderBackground(graphics, leftPos + 249, topPos + 166);
         this.drawBaseInfoGui(graphics);
-        graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         this.drawTaskListBg(graphics);
+        graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         this.drawMaidCharacter(graphics, x, y);
     }
 
