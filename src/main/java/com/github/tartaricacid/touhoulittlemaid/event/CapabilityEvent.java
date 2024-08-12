@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -19,7 +18,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 @Mod.EventBusSubscriber
 public final class CapabilityEvent {
@@ -33,7 +31,7 @@ public final class CapabilityEvent {
         if (entity instanceof Player) {
             event.addCapability(POWER_CAP, new PowerCapabilityProvider());
             event.addCapability(MAID_NUM_CAP, new MaidNumCapabilityProvider());
-        } else if (FMLEnvironment.dist == Dist.CLIENT && entity instanceof Mob mob) {
+        } else if (entity.level.isClientSide() && entity instanceof Mob mob) {
             var maid = IMaid.convert(mob);
             if (maid != null) {
                 event.addCapability(GECKO_MAID_CAP, new GeckoMaidEntityCapabilityProvider<>(mob, maid));
