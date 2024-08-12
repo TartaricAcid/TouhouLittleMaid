@@ -11,7 +11,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-// import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
@@ -69,7 +68,10 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.*;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -544,7 +546,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (itemHandler != null) {
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack itemstack = itemHandler.getStackInSlot(i);
-                if (!itemstack.isEmpty() && getEnchantmentLevel(access,Enchantments.MENDING,itemstack) > 0 && itemstack.isDamaged()) {
+                if (!itemstack.isEmpty() && getEnchantmentLevel(access, Enchantments.MENDING, itemstack) > 0 && itemstack.isDamaged()) {
                     stacks.add(itemstack);
                 }
             }
@@ -1033,8 +1035,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         }
         if (compound.contains(RESTRICT_CENTER_TAG, Tag.TAG_COMPOUND)) {
             // 存档迁移
-            var blockPosOptional = NbtUtils.readBlockPos(compound,RESTRICT_CENTER_TAG);
-            blockPosOptional.ifPresent(blockPos ->  this.schedulePos.setHomeModeEnable(this, blockPos));
+            var blockPosOptional = NbtUtils.readBlockPos(compound, RESTRICT_CENTER_TAG);
+            blockPosOptional.ifPresent(blockPos -> this.schedulePos.setHomeModeEnable(this, blockPos));
             compound.remove(RESTRICT_CENTER_TAG);
         }
         if (compound.contains(MAID_BACKPACK_TYPE, Tag.TAG_STRING)) {
@@ -1064,13 +1066,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     private MenuProvider getGuiProvider(int tabIndex) {
-        switch (tabIndex) {
-            case TabIndex.CONFIG:
-                return MaidConfigContainer.create(getId());
-            case TabIndex.MAIN:
-            default:
-                return this.getMaidBackpackType().getGuiProvider(getId());
-        }
+        return switch (tabIndex) {
+            case TabIndex.CONFIG -> MaidConfigContainer.create(getId());
+            default -> this.getMaidBackpackType().getGuiProvider(getId());
+        };
     }
 
     @Override

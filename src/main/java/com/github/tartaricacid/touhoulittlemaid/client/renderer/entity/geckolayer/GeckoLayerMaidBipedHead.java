@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
-import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.SkullModelBase;
@@ -17,9 +16,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -27,10 +23,12 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.AbstractSkullBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLayerRenderer<T> {
@@ -72,7 +70,7 @@ public class GeckoLayerMaidBipedHead<T extends Mob & IAnimatable> extends GeoLay
                 Block block = ((BlockItem) stack.getItem()).getBlock();
                 BlockState blockState = block.defaultBlockState();
                 //TODO 由于麻将删除了IPlantable，先借用Tags
-                if (blockState.is(BlockTags.SMALL_FLOWERS) && blockState.is(Blocks.SHORT_GRASS)) {
+                if (blockState.is(BlockTags.SMALL_FLOWERS) || blockState.is(Blocks.SHORT_GRASS)) {
                     poseStack.pushPose();
                     this.translateToHead(poseStack, geoModel);
                     poseStack.scale(-0.8F, 0.8F, -0.8F);
