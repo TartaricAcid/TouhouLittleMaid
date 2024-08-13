@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -32,7 +32,6 @@ public final class InitSpecialItemRender {
 
     private static final ResourceLocation LIFE_POINT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "life_point");
     private static final ResourceLocation POINT_ITEM = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "point_item");
-//TODO 这里引起了二次加载，要换成其他注册
 
     @SubscribeEvent
     public static void register(RegisterEvent event) {
@@ -71,8 +70,8 @@ public final class InitSpecialItemRender {
     public static void addInHandModel(Item item) {
         ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
-            ModelResourceLocation rawName = ModelResourceLocation.standalone(res);
-            ModelResourceLocation inHandName = ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(res.getNamespace(), res.getPath() + "_in_hand"));
+            ModelResourceLocation rawName = ModelResourceLocation.inventory(res);
+            ModelResourceLocation inHandName = ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(res.getNamespace(), "item/" + res.getPath() + "_in_hand"));
             PERSPECTIVE_MODEL_LIST.add(Pair.of(rawName, inHandName));
         }
     }
@@ -80,7 +79,7 @@ public final class InitSpecialItemRender {
     public static void addReplaceableModel(Item item, ResourceLocation replacedModel, Supplier<Boolean> isReplace) {
         ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
-            ModelResourceLocation rawModelResourceLocation = ModelResourceLocation.standalone(res);
+            ModelResourceLocation rawModelResourceLocation = ModelResourceLocation.inventory(res);
             ModelResourceLocation replacedModelResourceLocation = ModelResourceLocation.standalone(replacedModel);
             REPLACEABLE_MODEL_LIST.add(Triple.of(rawModelResourceLocation, replacedModelResourceLocation, isReplace));
         }
