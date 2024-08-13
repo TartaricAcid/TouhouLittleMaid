@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.*;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
@@ -45,18 +44,18 @@ public final class AnimationManager {
     }
 
     @Nonnull
-    public static <P extends IAnimatable> PlayState playLoopAnimation(AnimationEvent<P> event, String animationName) {
+    public static PlayState playLoopAnimation(AnimationEvent<?> event, String animationName) {
         return playAnimation(event, animationName, ILoopType.EDefaultLoopTypes.LOOP);
     }
 
     @Nonnull
-    private static <P extends IAnimatable> PlayState playAnimation(AnimationEvent<P> event, String animationName, ILoopType loopType) {
+    private static PlayState playAnimation(AnimationEvent<?> event, String animationName, ILoopType loopType) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation(animationName, loopType));
         return PlayState.CONTINUE;
     }
 
     @Nonnull
-    private static <P extends IAnimatable> PlayState playAnimation(AnimationEvent<P> event, String animationName) {
+    private static PlayState playAnimation(AnimationEvent<?> event, String animationName) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation(animationName));
         return PlayState.CONTINUE;
     }
@@ -65,7 +64,7 @@ public final class AnimationManager {
         data[state.getPriority()].add(state);
     }
 
-    public PlayState predicateParallel(AnimationEvent<GeckoMaidEntity> event, String animationName) {
+    public PlayState predicateParallel(AnimationEvent<?> event, String animationName) {
         if (Minecraft.getInstance().isPaused()) {
             return PlayState.STOP;
         }
@@ -73,8 +72,8 @@ public final class AnimationManager {
     }
 
     @NotNull
-    public PlayState predicateMain(AnimationEvent<GeckoMaidEntity> event) {
-        IMaid maid = event.getAnimatable().getMaid();
+    public PlayState predicateMain(AnimationEvent<GeckoMaidEntity<?>> event) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -99,8 +98,8 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
-    public PlayState predicateOffhandHold(AnimationEvent<GeckoMaidEntity> event) {
-        IMaid maid = event.getAnimatable().getMaid();
+    public PlayState predicateOffhandHold(AnimationEvent<GeckoMaidEntity<?>> event) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -117,7 +116,7 @@ public final class AnimationManager {
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.LOOP);
             }
 
-            ResourceLocation id = event.getAnimatable().getAnimation();
+            ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
             ConditionalHold conditionalHold = ConditionManager.getHoldOffhand(id);
             if (conditionalHold != null) {
                 String name = conditionalHold.doTest(maid, InteractionHand.OFF_HAND);
@@ -129,8 +128,8 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
-    public PlayState predicateMainhandHold(AnimationEvent<GeckoMaidEntity> event) {
-        IMaid maid = event.getAnimatable().getMaid();
+    public PlayState predicateMainhandHold(AnimationEvent<GeckoMaidEntity<?>> event) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -153,7 +152,7 @@ public final class AnimationManager {
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.LOOP);
             }
 
-            ResourceLocation id = event.getAnimatable().getAnimation();
+            ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
             ConditionalHold conditionalHold = ConditionManager.getHoldMainhand(id);
             if (conditionalHold != null) {
                 String name = conditionalHold.doTest(maid, InteractionHand.MAIN_HAND);
@@ -173,8 +172,8 @@ public final class AnimationManager {
         return ItemStack.matches(maidItem, preItem);
     }
 
-    public PlayState predicateSwing(AnimationEvent<GeckoMaidEntity> event) {
-        IMaid maid = event.getAnimatable().getMaid();
+    public PlayState predicateSwing(AnimationEvent<GeckoMaidEntity<?>> event) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -183,7 +182,7 @@ public final class AnimationManager {
                 // 空动画用于重置 PLAY_ONCE 动画
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
             }
-            ResourceLocation id = event.getAnimatable().getAnimation();
+            ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
             ConditionalSwing conditionalSwing = (maid.asEntity().swingingArm == InteractionHand.MAIN_HAND) ? ConditionManager.getSwingMainhand(id) : ConditionManager.getSwingOffhand(id);
             if (conditionalSwing != null) {
                 String name = conditionalSwing.doTest(maid, maid.asEntity().swingingArm);
@@ -197,8 +196,8 @@ public final class AnimationManager {
         return PlayState.CONTINUE;
     }
 
-    public PlayState predicateUse(AnimationEvent<GeckoMaidEntity> event) {
-        IMaid maid = event.getAnimatable().getMaid();
+    public PlayState predicateUse(AnimationEvent<GeckoMaidEntity<?>> event) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -207,7 +206,7 @@ public final class AnimationManager {
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
             }
             if (maid.asEntity().getUsedItemHand() == InteractionHand.MAIN_HAND) {
-                ResourceLocation id = event.getAnimatable().getAnimation();
+                ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
                 ConditionalUse conditionalUse = ConditionManager.getUseMainhand(id);
                 if (conditionalUse != null) {
                     String name = conditionalUse.doTest(maid, InteractionHand.MAIN_HAND);
@@ -217,7 +216,7 @@ public final class AnimationManager {
                 }
                 return playAnimation(event, "use_mainhand", ILoopType.EDefaultLoopTypes.LOOP);
             } else {
-                ResourceLocation id = event.getAnimatable().getAnimation();
+                ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
                 ConditionalUse conditionalUse = ConditionManager.getUseOffhand(id);
                 if (conditionalUse != null) {
                     String name = conditionalUse.doTest(maid, InteractionHand.OFF_HAND);
@@ -231,8 +230,8 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
-    public PlayState predicateBeg(AnimationEvent<GeckoMaidEntity> event) {
-        IMaid maid = event.getAnimatable().getMaid();
+    public PlayState predicateBeg(AnimationEvent<GeckoMaidEntity<?>> event) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -242,8 +241,8 @@ public final class AnimationManager {
         return PlayState.STOP;
     }
 
-    public PlayState predicateArmor(AnimationEvent<GeckoMaidEntity> event, EquipmentSlot slot) {
-        IMaid maid = event.getAnimatable().getMaid();
+    public <T extends Mob> PlayState predicateArmor(AnimationEvent<GeckoMaidEntity<T>> event, EquipmentSlot slot) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
         if (maid == null) {
             return PlayState.STOP;
         }
@@ -252,7 +251,7 @@ public final class AnimationManager {
             return PlayState.STOP;
         }
 
-        ResourceLocation id = event.getAnimatable().getAnimation();
+        ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
         ConditionArmor conditionArmor = ConditionManager.getArmor(id);
         if (conditionArmor != null) {
             String name = conditionArmor.doTest(maid, slot);
@@ -261,7 +260,7 @@ public final class AnimationManager {
             }
         }
 
-        ResourceLocation animation = event.getAnimatable().getAnimation();
+        ResourceLocation animation = event.getAnimatableEntity().getAnimationFileLocation();
         String defaultName = slot.getName() + ":default";
         if (GeckoLibCache.getInstance().getAnimations().get(animation).animations().containsKey(defaultName)) {
             return playAnimation(event, defaultName, ILoopType.EDefaultLoopTypes.LOOP);
@@ -270,8 +269,8 @@ public final class AnimationManager {
     }
 
     @Nullable
-    public PlayState getVehicleAnimation(AnimationEvent<GeckoMaidEntity> event) {
-        Mob mob = event.getAnimatable().getMaid().asEntity();
+    public PlayState getVehicleAnimation(AnimationEvent<GeckoMaidEntity<?>> event) {
+        Mob mob = event.getAnimatableEntity().getMaid().asEntity();
         if (mob == null) {
             return null;
         }
@@ -279,7 +278,7 @@ public final class AnimationManager {
         if (vehicle == null || !vehicle.isAlive()) {
             return null;
         }
-        ResourceLocation id = event.getAnimatable().getAnimation();
+        ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
         ConditionalVehicle vehicleCondition = ConditionManager.getVehicle(id);
         if (vehicleCondition != null) {
             String name = vehicleCondition.doTest(mob);
@@ -290,8 +289,8 @@ public final class AnimationManager {
         return null;
     }
 
-    public PlayState predicatePassengerAnimation(AnimationEvent<GeckoMaidEntity> event) {
-        Mob mob = event.getAnimatable().getMaid().asEntity();
+    public PlayState predicatePassengerAnimation(AnimationEvent<GeckoMaidEntity<?>> event) {
+        Mob mob = event.getAnimatableEntity().getMaid().asEntity();
         if (mob == null) {
             return PlayState.STOP;
         }
@@ -300,7 +299,7 @@ public final class AnimationManager {
             return PlayState.STOP;
         }
 
-        ResourceLocation id = event.getAnimatable().getAnimation();
+        ResourceLocation id = event.getAnimatableEntity().getAnimationFileLocation();
         ConditionalPassenger conditionalPassenger = ConditionManager.getPassenger(id);
         if (conditionalPassenger != null) {
             String name = conditionalPassenger.doTest(mob);

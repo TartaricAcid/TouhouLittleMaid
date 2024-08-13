@@ -7,10 +7,7 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.util.json;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.BoneAnimation;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.EventKeyFrame;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.ParticleEventKeyFrame;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.VectorKeyFrameList;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe.*;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangParser;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.AnimationUtils;
 import com.github.tartaricacid.touhoulittlemaid.mclib.math.IValue;
@@ -18,6 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectLists;
 import net.minecraft.server.ChainedJsonException;
 
 import java.util.*;
@@ -152,20 +150,23 @@ public class JsonAnimationUtils {
 
     public static Animation deserializeJsonToAnimation(Map.Entry<String, JsonElement> element, MolangParser parser)
             throws ClassCastException, IllegalStateException {
-        Animation animation = new Animation();
         JsonObject animationJsonObject = element.getValue().getAsJsonObject();
 
         // 设置有关动画的一些 metadata
-        animation.animationName = element.getKey();
+        var animationName = element.getKey();
         JsonElement animationLength = animationJsonObject.get("animation_length");
-        animation.animationLength = animationLength == null ? -1
+        var animationLengthTicks = animationLength == null ? -1
                 : AnimationUtils.convertSecondsToTicks(animationLength.getAsDouble());
-        animation.boneAnimations = new ObjectArrayList<>();
-        animation.loop = ILoopType.fromJson(animationJsonObject.get("loop"));
+
+        var loop = ILoopType.fromJson(animationJsonObject.get("loop"));
+        var boneAnimations = new ObjectArrayList<BoneAnimation>();
+        var soundKeyFrames = new ObjectArrayList<EventKeyFrame<String>>();
+        var particleKeyFrames = new ObjectArrayList<ParticleEventKeyFrame>();
+        var customInstructionKeyframes = new ObjectArrayList<EventKeyFrame<String>>();
 
         // 处理声音关键帧
         for (Map.Entry<String, JsonElement> keyFrame : getSoundEffectFrames(animationJsonObject)) {
-            animation.soundKeyFrames.add(new EventKeyFrame<>(Double.parseDouble(keyFrame.getKey()) * 20,
+            soundKeyFrames.add(new EventKeyFrame<>(Double.parseDouble(keyFrame.getKey()) * 20,
                     keyFrame.getValue().getAsJsonObject().get("effect").getAsString()));
         }
 
@@ -175,14 +176,14 @@ public class JsonAnimationUtils {
             JsonElement effect = object.get("effect");
             JsonElement locator = object.get("locator");
             JsonElement preEffectScript = object.get("pre_effect_script");
-            animation.particleKeyFrames.add(new ParticleEventKeyFrame(Double.parseDouble(keyFrame.getKey()) * 20,
+            particleKeyFrames.add(new ParticleEventKeyFrame(Double.parseDouble(keyFrame.getKey()) * 20,
                     effect == null ? "" : effect.getAsString(), locator == null ? "" : locator.getAsString(),
                     preEffectScript == null ? "" : preEffectScript.getAsString()));
         }
 
         // 处理自定义指令关键帧
         for (Map.Entry<String, JsonElement> keyFrame : getCustomInstructionKeyFrames(animationJsonObject)) {
-            animation.customInstructionKeyframes.add(new EventKeyFrame(Double.parseDouble(keyFrame.getKey()) * 20,
+            customInstructionKeyframes.add(new EventKeyFrame(Double.parseDouble(keyFrame.getKey()) * 20,
                     keyFrame.getValue() instanceof JsonArray
                             ? convertJsonArrayToList(keyFrame.getValue().getAsJsonArray()).toString()
                             : keyFrame.getValue().getAsString()));
@@ -190,35 +191,41 @@ public class JsonAnimationUtils {
 
         // 此动画中使用的所有骨骼的列表
         for (Map.Entry<String, JsonElement> bone : getBones(animationJsonObject)) {
-            BoneAnimation boneAnimation = new BoneAnimation(bone.getKey());
+            VectorKeyFrameList<KeyFrame<IValue>> rotationKeyFrames;
+            VectorKeyFrameList<KeyFrame<IValue>> positionKeyFrames;
+            VectorKeyFrameList<KeyFrame<IValue>> scaleKeyFrames;
             JsonObject boneJsonObj = bone.getValue().getAsJsonObject();
             try {
-                boneAnimation.scaleKeyFrames = JsonKeyFrameUtils.convertJsonToKeyFrames(new ObjectArrayList<>(getScaleKeyFrames(boneJsonObj)), parser);
+                scaleKeyFrames = JsonKeyFrameUtils.convertJsonToKeyFrames(new ObjectArrayList<>(getScaleKeyFrames(boneJsonObj)), parser);
             } catch (Exception e) {
                 // 没有缩放关键帧
-                boneAnimation.scaleKeyFrames = new VectorKeyFrameList<>();
+                scaleKeyFrames = new VectorKeyFrameList<>();
             }
 
             try {
-                boneAnimation.positionKeyFrames = JsonKeyFrameUtils.convertJsonToKeyFrames(new ObjectArrayList<>(getPositionKeyFrames(boneJsonObj)), parser);
+                positionKeyFrames = JsonKeyFrameUtils.convertJsonToKeyFrames(new ObjectArrayList<>(getPositionKeyFrames(boneJsonObj)), parser);
             } catch (Exception e) {
                 // 没有位置关键帧
-                boneAnimation.positionKeyFrames = new VectorKeyFrameList<>();
+                positionKeyFrames = new VectorKeyFrameList<>();
             }
 
             try {
-                boneAnimation.rotationKeyFrames = JsonKeyFrameUtils.convertJsonToRotationKeyFrames(new ObjectArrayList<>(getRotationKeyFrames(boneJsonObj)), parser);
+                rotationKeyFrames = JsonKeyFrameUtils.convertJsonToRotationKeyFrames(new ObjectArrayList<>(getRotationKeyFrames(boneJsonObj)), parser);
             } catch (Exception e) {
                 // 没有旋转关键帧
-                boneAnimation.rotationKeyFrames = new VectorKeyFrameList<>();
+                rotationKeyFrames = new VectorKeyFrameList<>();
             }
 
-            animation.boneAnimations.add(boneAnimation);
+            boneAnimations.add(new BoneAnimation(bone.getKey(), rotationKeyFrames, positionKeyFrames, scaleKeyFrames));
         }
-        if (animation.animationLength == -1) {
-            animation.animationLength = calculateLength(animation.boneAnimations);
+        if (animationLengthTicks == -1) {
+            animationLengthTicks = calculateLength(boneAnimations);
         }
-        return animation;
+        return new Animation(animationName, animationLengthTicks, loop,
+                ObjectLists.unmodifiable(boneAnimations),
+                ObjectLists.unmodifiable(soundKeyFrames),
+                ObjectLists.unmodifiable(particleKeyFrames),
+                ObjectLists.unmodifiable(customInstructionKeyframes));
     }
 
     private static double calculateLength(List<BoneAnimation> boneAnimations) {

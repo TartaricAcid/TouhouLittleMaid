@@ -2,17 +2,19 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.raw.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.VectorUtils;
+import com.mojang.blaze3d.vertex.PoseStack;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
+
+import java.util.List;
 
 public class GeoCube {
-    public GeoQuad[] quads = new GeoQuad[6];
-    public Vector3f pivot;
-    public Vector3f rotation;
-    public Vector3f size = new Vector3f();
-    public double inflate;
-    public Boolean mirror;
+    public final List<GeoQuad> quads = new ObjectArrayList<>(6);
+    public final Vector3f size = new Vector3f();
 
     private GeoCube(double[] size) {
         if (size.length >= 3) {
@@ -26,8 +28,7 @@ public class GeoCube {
         UvUnion uvUnion = cubeIn.getUv();
         UvFaces faces = uvUnion.faceUV;
         boolean isBoxUV = uvUnion.isBoxUV;
-        cube.mirror = cubeIn.getMirror();
-        cube.inflate = cubeIn.getInflate() == null ? (boneInflate == null ? 0 : boneInflate) : cubeIn.getInflate() / 16;
+        double inflate = cubeIn.getInflate() == null ? (boneInflate == null ? 0 : boneInflate) : cubeIn.getInflate() / 16;
 
         float textureHeight = properties.getTextureHeight().floatValue();
         float textureWidth = properties.getTextureWidth().floatValue();
@@ -46,24 +47,21 @@ public class GeoCube {
         Vector3f pivot = VectorUtils.convertDoubleToFloat(VectorUtils.fromArray(cubeIn.getPivot()));
         pivot.mul(-1, 1, 1);
 
-        cube.pivot = pivot;
-        cube.rotation = rotation;
-
-        GeoVertex P1 = new GeoVertex(origin.x - cube.inflate, origin.y - cube.inflate, origin.z - cube.inflate);
-        GeoVertex P2 = new GeoVertex(origin.x - cube.inflate, origin.y - cube.inflate,
-                origin.z + size.z + cube.inflate);
-        GeoVertex P3 = new GeoVertex(origin.x - cube.inflate, origin.y + size.y + cube.inflate,
-                origin.z - cube.inflate);
-        GeoVertex P4 = new GeoVertex(origin.x - cube.inflate, origin.y + size.y + cube.inflate,
-                origin.z + size.z + cube.inflate);
-        GeoVertex P5 = new GeoVertex(origin.x + size.x + cube.inflate, origin.y - cube.inflate,
-                origin.z - cube.inflate);
-        GeoVertex P6 = new GeoVertex(origin.x + size.x + cube.inflate, origin.y - cube.inflate,
-                origin.z + size.z + cube.inflate);
-        GeoVertex P7 = new GeoVertex(origin.x + size.x + cube.inflate, origin.y + size.y + cube.inflate,
-                origin.z - cube.inflate);
-        GeoVertex P8 = new GeoVertex(origin.x + size.x + cube.inflate, origin.y + size.y + cube.inflate,
-                origin.z + size.z + cube.inflate);
+        GeoVertex P1 = new GeoVertex(origin.x - inflate, origin.y - inflate, origin.z - inflate);
+        GeoVertex P2 = new GeoVertex(origin.x - inflate, origin.y - inflate,
+                origin.z + size.z + inflate);
+        GeoVertex P3 = new GeoVertex(origin.x - inflate, origin.y + size.y + inflate,
+                origin.z - inflate);
+        GeoVertex P4 = new GeoVertex(origin.x - inflate, origin.y + size.y + inflate,
+                origin.z + size.z + inflate);
+        GeoVertex P5 = new GeoVertex(origin.x + size.x + inflate, origin.y - inflate,
+                origin.z - inflate);
+        GeoVertex P6 = new GeoVertex(origin.x + size.x + inflate, origin.y - inflate,
+                origin.z + size.z + inflate);
+        GeoVertex P7 = new GeoVertex(origin.x + size.x + inflate, origin.y + size.y + inflate,
+                origin.z - inflate);
+        GeoVertex P8 = new GeoVertex(origin.x + size.x + inflate, origin.y + size.y + inflate,
+                origin.z + size.z + inflate);
 
         GeoQuad quadWest;
         GeoQuad quadEast;
@@ -168,12 +166,37 @@ public class GeoCube {
             }
         }
 
-        cube.quads[0] = quadWest;
-        cube.quads[1] = quadEast;
-        cube.quads[2] = quadNorth;
-        cube.quads[3] = quadSouth;
-        cube.quads[4] = quadUp;
-        cube.quads[5] = quadDown;
+        if (quadWest != null) {
+            cube.quads.add(quadWest);
+        }
+        if (quadEast != null) {
+            cube.quads.add(quadEast);
+        }
+        if (quadNorth != null) {
+            cube.quads.add(quadNorth);
+        }
+        if (quadSouth != null) {
+            cube.quads.add(quadSouth);
+        }
+        if (quadUp != null) {
+            cube.quads.add(quadUp);
+        }
+        if (quadDown != null) {
+            cube.quads.add(quadDown);
+        }
+
+        PoseStack poseStack = new PoseStack();
+        poseStack.rotateAround(new Quaternionf().rotateZYX(rotation.z(), rotation.y(), rotation.x()), pivot.x() / 16f, pivot.y() / 16f, pivot.z() / 16f);
+
+        for (var quad : cube.quads) {
+            quad.normal.mul(poseStack.last().normal());
+            for (var vertex : quad.vertices) {
+                var vec4 = new Vector4f(vertex.position.x, vertex.position.y, vertex.position.z, 1);
+                vec4.mul(poseStack.last().pose());
+                vertex.position.set(vec4.x, vec4.y, vec4.z);
+            }
+        }
+
         return cube;
     }
 }

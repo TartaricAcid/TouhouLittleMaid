@@ -1,20 +1,21 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.easing;
 
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.Memoizer;
 import it.unimi.dsi.fastutil.doubles.Double2DoubleFunction;
 
 import java.util.List;
-import java.util.function.Function;
 
 public class EasingManager {
-    private static final Function<EasingFunctionArgs, Double2DoubleFunction> GET_EASING_FUNCTION = Memoizer
-            .memoize(EasingManager::getEasingFuncImpl);
-
     public static double ease(double number, EasingType easingType, List<Double> easingArgs) {
-        Double firstArg = easingArgs == null || easingArgs.size() < 1 ? null : easingArgs.get(0);
-        return GET_EASING_FUNCTION.apply(new EasingFunctionArgs(easingType, firstArg)).apply(number);
+        Double firstArg = easingArgs == null || easingArgs.isEmpty() ? null : easingArgs.get(0);
+        return ease(number, easingType, firstArg);
     }
 
+    private static double ease(double number, EasingType easingType, Double arg0) {
+        return switch (easingType) {
+            default -> number;
+            case STEP -> step(arg0).apply(number);
+        };
+    }
 
     private static Double2DoubleFunction getEasingFuncImpl(EasingFunctionArgs args) {
         return switch (args.easingType()) {

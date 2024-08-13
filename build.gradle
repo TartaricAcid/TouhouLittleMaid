@@ -2,7 +2,6 @@ plugins {
     id 'java-library'
     id 'eclipse'
     id 'idea'
-    id 'maven-publish'
     id 'net.neoforged.moddev' version '0.1.99'
 }
 
@@ -69,14 +68,11 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = mod_id + '-' + minecraft_version + '-release'
 }
 
 // Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-//minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
-//minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
 
 // Default run configurations.
 // These can be tweaked, removed, or duplicated as needed.
@@ -93,7 +89,7 @@ neoForge {
         client {
             client()
             programArguments = [
-                    "--username", "Crystal1921"
+                    "--username", "tartaric_acid"
             ]
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
@@ -174,6 +170,7 @@ dependencies {
     implementation "maven.modrinth:cloth-config:15.0.128+neoforge"
     implementation "maven.modrinth:the-one-probe:1.21_neo-12.0.3"
     implementation "maven.modrinth:architectury-api:13.0.6+neoforge"
+    // TODO: ipn和iron chests已经有1.21版本了
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -201,17 +198,12 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
-// Example configuration to allow publishing using the maven-publish plugin
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/repo"
-        }
+jar {
+    manifest {
+        attributes([
+                "Implementation-Title"  : project.name,
+                "Implementation-Version": "${version}"
+        ])
     }
 }
 

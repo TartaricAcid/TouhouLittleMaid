@@ -25,6 +25,8 @@ public class MaidModelDetailsGui extends AbstractModelDetailsGui<EntityMaid, Mai
         super(sourceEntity, InitEntities.MAID.get().create(sourceEntity.level()), modelInfo);
         this.guiEntity.setModelId(modelInfo.getModelId().toString());
         this.guiEntity.setOnGround(true);
+        this.guiEntity.yHeadRot = 0;
+        this.guiEntity.yHeadRotO = 0;
         this.initChair();
     }
 
