@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -109,7 +108,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
     public static void fillItemCategory(CreativeModeTab.Output items) {
         for (String modelId : CustomPackLoader.MAID_MODELS.getModelIdSet()) {
             ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
-            CustomData customData = stack.get(InitDataComponent.ENTITY_INFO_TAG);
+            CustomData customData = stack.get(InitDataComponent.MAID_INFO);
             CompoundTag data;
             if (customData == null) {
                 data = new CompoundTag();
@@ -118,7 +117,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
             }
             data.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
             data.putString(MODEL_ID_TAG_NAME, modelId);
-            stack.set(InitDataComponent.ENTITY_INFO_TAG, CustomData.of(data));
+            stack.set(InitDataComponent.MAID_INFO, CustomData.of(data));
             items.accept(stack);
         }
     }
@@ -186,7 +185,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
 
     private ItemStack getGarageKitFromWorld(BlockGetter world, BlockPos pos) {
         ItemStack stack = new ItemStack(InitBlocks.GARAGE_KIT.get());
-        getGarageKit(world, pos).ifPresent(te -> stack.set(InitDataComponent.ENTITY_INFO_TAG, CustomData.of(te.getExtraData())));
+        getGarageKit(world, pos).ifPresent(te -> stack.set(InitDataComponent.MAID_INFO, CustomData.of(te.getExtraData())));
         return stack;
     }
 
