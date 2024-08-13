@@ -163,11 +163,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
-        graphics.pose().translate(0, 0, -100);
         SortButtonScreen.renderBackground(graphics, leftPos + 249, topPos + 166);
+        graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         this.drawBaseInfoGui(graphics);
         this.drawTaskListBg(graphics);
-        graphics.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         this.drawMaidCharacter(graphics, x, y);
     }
 
