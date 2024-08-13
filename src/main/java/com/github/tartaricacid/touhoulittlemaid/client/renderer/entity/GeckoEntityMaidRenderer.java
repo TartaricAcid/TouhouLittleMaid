@@ -22,9 +22,8 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         if (entity.hasData(InitDataAttachment.GECKO_MAID)) {
-            return;
+            super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         }
-        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 
     @Override
