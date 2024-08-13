@@ -1,8 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.BeaconAbsorbPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SyncDataPackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -14,6 +17,7 @@ import net.minecraft.network.protocol.game.ClientboundTakeItemEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -27,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
 
@@ -246,7 +251,8 @@ public class EntityPowerPoint extends Entity {
         }
 
         if (this.throwTime == 0 && player.takeXpDelay == 0) {
-            PowerAttachment power = this.getData(POWER_NUM);
+            PowerAttachment power = player.getData(POWER_NUM);
+            MaidNumAttachment maidNum = player.getData(InitDataAttachment.MAID_NUM);
             player.takeXpDelay = 2;
             this.take(player, 1);
             if (this.value > 0) {
@@ -255,10 +261,13 @@ public class EntityPowerPoint extends Entity {
                     int residualValue = value - (int) (PowerAttachment.MAX_POWER * 100) + (int) (power.get() * 100);
                     // 和原版设计不同，该数值过大，故缩小一些
                     player.giveExperiencePoints(transPowerValueToXpValue(residualValue));
+                    player.setData(POWER_NUM,new PowerAttachment(power.get()));
                 } else {
                     power.add(value / 100.0f);
+                    player.setData(POWER_NUM,new PowerAttachment(power.get()));
                 }
             }
+            PacketDistributor.sendToPlayer((ServerPlayer) player,new SyncDataPackage(power.get(),maidNum.get()));
             this.discard();
         }
     }
