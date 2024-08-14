@@ -2,9 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
-import com.github.tartaricacid.touhoulittlemaid.data.TrackInfo;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.FoxScrollPackage;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
@@ -85,5 +89,18 @@ public class ItemFoxScroll extends Item {
             components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.white").withStyle(ChatFormatting.GRAY));
         }
         super.appendHoverText(stack, worldIn, components, flagIn);
+    }
+
+    public record TrackInfo(String dimension, BlockPos position) {
+        public static final Codec<TrackInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.STRING.fieldOf("dimension").forGetter(TrackInfo::dimension),
+                BlockPos.CODEC.fieldOf("position").forGetter(TrackInfo::position)
+        ).apply(instance, TrackInfo::new));
+
+        public static final StreamCodec<ByteBuf, TrackInfo> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.STRING_UTF8, TrackInfo::dimension,
+                BlockPos.STREAM_CODEC, TrackInfo::position,
+                TrackInfo::new
+        );
     }
 }

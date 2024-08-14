@@ -16,10 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-//TODO : IPN
-//import org.anti_ad.mc.ipn.api.IPNIgnore;
-//
-//@IPNIgnore
+import org.anti_ad.mc.ipn.api.IPNIgnore;
+
+@IPNIgnore
 public class WirelessIOContainerGui extends AbstractContainerScreen<WirelessIOContainer> {
     private static final ResourceLocation MAIN = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io.png");
     private boolean isMaidToChest;

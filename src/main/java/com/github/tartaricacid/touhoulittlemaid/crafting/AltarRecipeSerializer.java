@@ -16,6 +16,7 @@ public class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
         return null;
     }
 
+    // TODO 祭坛配方
 //    public AltarRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 //        Optional<EntityType<?>> typeOptional = EntityType.byString(buffer.readUtf());
 //        if (typeOptional.isPresent()) {

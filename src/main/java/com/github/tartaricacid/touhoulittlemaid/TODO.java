@@ -11,5 +11,4 @@ public class TODO {
     //TODO readBlockPos返回的optional全部使用get获取值了
     //TODO 玩家模型获取需要检查，麻将又改改改
     //TODO renderEntityInInventoryFollowsMouse的参数数值需调整确认
-    //TODO CompoundData应替换为CustomData
 }

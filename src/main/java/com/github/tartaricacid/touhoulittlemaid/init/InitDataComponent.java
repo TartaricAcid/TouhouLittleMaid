@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.data.TrackInfo;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll.TrackInfo;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
