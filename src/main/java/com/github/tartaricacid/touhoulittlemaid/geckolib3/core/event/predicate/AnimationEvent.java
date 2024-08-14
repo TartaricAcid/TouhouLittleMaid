@@ -1,13 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate;
 
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.IAnimatable;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimatableEntity;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.AnimationController;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.List;
 
-public class AnimationEvent<T extends IAnimatable> {
-    private final T animatable;
+public class AnimationEvent<T extends AnimatableEntity<?>> {
+    private final T animatableEntity;
     private final float limbSwing;
     private final float limbSwingAmount;
     private final float partialTick;
@@ -16,9 +16,9 @@ public class AnimationEvent<T extends IAnimatable> {
     public double animationTick;
     protected AnimationController<T> controller;
 
-    public AnimationEvent(T animatable, float limbSwing, float limbSwingAmount, float partialTick, boolean isMoving,
+    public AnimationEvent(T animatableEntity, float limbSwing, float limbSwingAmount, float partialTick, boolean isMoving,
                           List<Object> extraData) {
-        this.animatable = animatable;
+        this.animatableEntity = animatableEntity;
         this.limbSwing = limbSwing;
         this.limbSwingAmount = limbSwingAmount;
         this.partialTick = partialTick;
@@ -33,8 +33,8 @@ public class AnimationEvent<T extends IAnimatable> {
         return animationTick;
     }
 
-    public T getAnimatable() {
-        return animatable;
+    public T getAnimatableEntity() {
+        return animatableEntity;
     }
 
     public float getLimbSwing() {

@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.Color;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.*;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.GeoModelProvider;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.EModelRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.IRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
@@ -15,30 +16,19 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
 public interface IGeoRenderer<T> {
-    String GLOW_PREFIX = "ysmGlow";
-
     MultiBufferSource getCurrentRTB();
 
     default void setCurrentRTB(MultiBufferSource bufferSource) {
     }
 
-    GeoModelProvider getGeoModelProvider();
-
     ResourceLocation getTextureLocation(T animatable);
 
-    @Nullable
-    default GeoModel getGeoModel() {
-        return null;
-    }
-
-    default void render(GeoModel model, T animatable, float partialTick, RenderType type, PoseStack poseStack,
+    default void render(AnimatedGeoModel model, T animatable, float partialTick, RenderType type, PoseStack poseStack,
                         @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight,
                         int packedOverlay, float red, float green, float blue, float alpha) {
         setCurrentRTB(bufferSource);
@@ -50,7 +40,7 @@ public interface IGeoRenderer<T> {
         renderLate(animatable, poseStack, partialTick, bufferSource, buffer, packedLight,
                 packedOverlay, red, green, blue, alpha);
         // 渲染所有根骨骼
-        for (GeoBone group : model.topLevelBones) {
+        for (AnimatedGeoBone group : model.topLevelBones()) {
             renderRecursively(group, poseStack, buffer, packedLight, packedOverlay, red, green, blue,
                     alpha);
         }
@@ -58,12 +48,11 @@ public interface IGeoRenderer<T> {
         setCurrentModelRenderCycle(EModelRenderCycle.REPEATED);
     }
 
-
-    default void renderRecursively(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
+    default void renderRecursively(AnimatedGeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
                                    int packedOverlay, float red, float green, float blue, float alpha) {
-        int cubePackedLight = packedLight;
-        if (bone.getName().startsWith(GLOW_PREFIX)) {
-            cubePackedLight = LightTexture.pack(15, 15);
+        int cubePackedLight = bone.geoBone().glow() ? LightTexture.pack(15, 15) : packedLight;
+        if ((bone.getScaleX() == 0 ? 0 : 1) + (bone.getScaleY() == 0 ? 0 : 1) + (bone.getScaleZ() == 0 ? 0 : 1) < 2) {
+            return;
         }
         poseStack.pushPose();
         RenderUtils.prepMatrixForBone(poseStack, bone);
@@ -72,38 +61,30 @@ public interface IGeoRenderer<T> {
         poseStack.popPose();
     }
 
-
-    default void renderCubesOfBone(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
+    default void renderCubesOfBone(AnimatedGeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
                                    int packedOverlay, float red, float green, float blue, float alpha) {
         if (bone.isHidden()) {
             return;
         }
-        for (GeoCube cube : bone.childCubes) {
-            if (!bone.cubesAreHidden()) {
-                poseStack.pushPose();
+        if (!bone.cubesAreHidden()) {
+            for (GeoCube cube : bone.geoBone().cubes()) {
                 renderCube(cube, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-                poseStack.popPose();
             }
         }
     }
 
-
-    default void renderChildBones(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
+    default void renderChildBones(AnimatedGeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
                                   int packedOverlay, float red, float green, float blue, float alpha) {
         if (bone.childBonesAreHiddenToo()) {
             return;
         }
-        for (GeoBone childBone : bone.childBones) {
+        for (AnimatedGeoBone childBone : bone.children()) {
             renderRecursively(childBone, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         }
     }
 
-
     default void renderCube(GeoCube cube, PoseStack poseStack, VertexConsumer buffer, int packedLight,
                             int packedOverlay, float red, float green, float blue, float alpha) {
-        RenderUtils.translateToPivotPoint(poseStack, cube);
-        RenderUtils.rotateMatrixAroundCube(poseStack, cube);
-        RenderUtils.translateAwayFromPivotPoint(poseStack, cube);
         Matrix3f normalisedPoseState = poseStack.last().normal();
         Matrix4f poseState = poseStack.last().pose();
         for (GeoQuad quad : cube.quads) {
@@ -124,17 +105,15 @@ public interface IGeoRenderer<T> {
         }
     }
 
-
     default void createVerticesOfQuad(GeoQuad quad, Matrix4f poseState, Vector3f normal, VertexConsumer buffer,
                                       int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        var position = new Vector3f();
         for (GeoVertex vertex : quad.vertices) {
-            Vector3f position = vertex.position;
-            Vector4f vector4f = poseState.transform(new Vector4f(position.x(), position.y(), position.z(), 1.0f));
-            buffer.addVertex(vector4f.x(), vector4f.y(), vector4f.z()).setColor(red, green, blue, alpha).setUv(vertex.textureU, vertex.textureV)
+            vertex.position.mulPosition(poseState, position);
+            buffer.addVertex(position.x(), position.y(), position.z()).setColor(red, green, blue, alpha).setUv(vertex.textureU, vertex.textureV)
                     .setOverlay(packedOverlay).setLight(packedLight).setNormal(normal.x(), normal.y(), normal.z());
         }
     }
-
 
     default void renderEarly(T animatable, PoseStack poseStack, float partialTick,
                              @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight,
@@ -146,12 +125,10 @@ public interface IGeoRenderer<T> {
         }
     }
 
-
     default void renderLate(T animatable, PoseStack poseStack, float partialTick, MultiBufferSource bufferSource,
                             VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue,
                             float alpha) {
     }
-
 
     default RenderType getRenderType(T animatable, float partialTick, PoseStack poseStack,
                                      @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight,
@@ -159,32 +136,22 @@ public interface IGeoRenderer<T> {
         return RenderType.entityTranslucent(texture);
     }
 
-
     default Color getRenderColor(T animatable, float partialTick, PoseStack poseStack,
                                  @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight) {
         return Color.WHITE;
     }
 
-
-    default int getInstanceId(T animatable) {
-        return animatable.hashCode();
-    }
-
     @Nonnull
-
     default IRenderCycle getCurrentModelRenderCycle() {
         return EModelRenderCycle.INITIAL;
     }
 
-
     default void setCurrentModelRenderCycle(IRenderCycle cycle) {
     }
-
 
     default float getWidthScale(T animatable) {
         return 1F;
     }
-
 
     default float getHeightScale(T entity) {
         return 1F;

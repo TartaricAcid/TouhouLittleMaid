@@ -1,9 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
 import com.google.common.collect.Lists;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
@@ -13,7 +11,6 @@ import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil
 public final class MiscConfig {
     public static ModConfigSpec.DoubleValue MAID_FAIRY_POWER_POINT;
     public static ModConfigSpec.IntValue MAID_FAIRY_SPAWN_PROBABILITY;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_FAIRY_BLACKLIST_BIOME;
     public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_FAIRY_BLACKLIST_DIMENSION;
     public static ModConfigSpec.DoubleValue PLAYER_DEATH_LOSS_POWER_POINT;
     public static ModConfigSpec.BooleanValue GIVE_SMART_SLAB;
@@ -31,11 +28,6 @@ public final class MiscConfig {
 
         builder.comment("Maid fairy's spawn probability (zombie is 100, enderman is 10)");
         MAID_FAIRY_SPAWN_PROBABILITY = builder.defineInRange("MaidFairySpawnProbability", 70, 0, Integer.MAX_VALUE);
-
-        builder.comment("The following biome do not spawn maid fairy");
-        MAID_FAIRY_BLACKLIST_BIOME = builder.defineList("MaidFairyBlacklistBiome",
-                Lists.newArrayList(Biomes.THE_VOID.location().toString(),
-                        Biomes.MUSHROOM_FIELDS.location().toString()), MiscConfig::checkId);
 
         builder.comment("The following dimension do not spawn maid fairy");
         MAID_FAIRY_BLACKLIST_DIMENSION = builder.defineList("MaidFairyBlacklistDimension",

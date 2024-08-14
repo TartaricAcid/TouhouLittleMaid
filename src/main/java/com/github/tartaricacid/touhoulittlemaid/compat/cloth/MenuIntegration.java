@@ -187,11 +187,6 @@ public class MenuIntegration {
                 .setTooltip(Component.translatable("config.touhou_little_maid.misc.maid_fairy_spawn_probability.desc"))
                 .setSaveConsumer(d -> MiscConfig.MAID_FAIRY_SPAWN_PROBABILITY.set(d)).build());
 
-        misc.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.name"), (List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.get())
-                .setDefaultValue((List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.getDefault())
-                .setTooltip(Component.translatable("config.touhou_little_maid.misc.maid_fairy_blacklist_biome.desc"))
-                .setSaveConsumer(l -> MiscConfig.MAID_FAIRY_BLACKLIST_BIOME.set(l)).build());
-
         misc.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.misc.maid_fairy_blacklist_dimension.name"), (List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_DIMENSION.get())
                 .setDefaultValue((List<String>) MiscConfig.MAID_FAIRY_BLACKLIST_DIMENSION.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.misc.maid_fairy_blacklist_dimension.desc"))

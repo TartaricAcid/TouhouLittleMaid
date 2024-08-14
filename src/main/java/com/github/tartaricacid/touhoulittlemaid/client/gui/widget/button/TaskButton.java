@@ -85,6 +85,11 @@ public class TaskButton extends Button implements ITooltipButton {
     }
 
     @Override
+    public boolean isTooltipHovered() {
+        return this.isHovered();
+    }
+
+    @Override
     public void renderTooltip(GuiGraphics graphics, Minecraft mc, int mouseX, int mouseY) {
         if (!this.tooltips.isEmpty()) {
             graphics.renderComponentTooltip(mc.font, this.tooltips, mouseX, mouseY);
