@@ -5,21 +5,18 @@
   "group": "alter_recipe",
   "key": {
     "a": {
-      "tag": "minecraft:planks"
+      "item": "minecraft:gray_wool"
     },
     "b": {
-      "item": "minecraft:book"
-    },
-    "c": {
       "tag": "c:gems/diamond"
     }
   },
   "pattern": [
-    "aaaabc"
+    "aaaaba"
   ],
-  "power": 0.1,
+  "power": 0.3,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "touhou_little_maid:maid_backpack_big"
   }
 }

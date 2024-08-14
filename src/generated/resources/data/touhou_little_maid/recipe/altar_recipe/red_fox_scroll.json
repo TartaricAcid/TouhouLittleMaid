@@ -5,10 +5,10 @@
   "group": "alter_recipe",
   "key": {
     "a": {
-      "tag": "minecraft:planks"
+      "item": "minecraft:paper"
     },
     "b": {
-      "item": "minecraft:book"
+      "tag": "c:dyes/red"
     },
     "c": {
       "tag": "c:gems/diamond"
@@ -20,6 +20,6 @@
   "power": 0.1,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "touhou_little_maid:red_fox_scroll"
   }
 }

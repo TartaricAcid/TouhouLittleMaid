@@ -8,18 +8,21 @@
       "tag": "minecraft:planks"
     },
     "b": {
-      "item": "minecraft:book"
+      "tag": "c:dyes/black"
     },
     "c": {
+      "tag": "c:dyes/white"
+    },
+    "d": {
       "tag": "c:gems/diamond"
     }
   },
   "pattern": [
-    "aaaabc"
+    "aaabcd"
   ],
   "power": 0.1,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "touhou_little_maid:gomoku"
   }
 }

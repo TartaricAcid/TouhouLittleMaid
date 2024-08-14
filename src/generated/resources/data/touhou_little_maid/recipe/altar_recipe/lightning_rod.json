@@ -1,25 +1,22 @@
 {
   "type": "touhou_little_maid:altar_recipe_serializers",
   "category": "misc",
-  "entity": "minecraft:item",
+  "entity": "minecraft:lightning_bolt",
   "group": "alter_recipe",
   "key": {
     "a": {
-      "tag": "minecraft:planks"
+      "tag": "c:gunpowders"
     },
     "b": {
-      "item": "minecraft:book"
-    },
-    "c": {
-      "tag": "c:gems/diamond"
+      "item": "minecraft:blaze_powder"
     }
   },
   "pattern": [
-    "aaaabc"
+    "aaabbb"
   ],
-  "power": 0.1,
+  "power": 0.2,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "minecraft:lightning_rod"
   }
 }

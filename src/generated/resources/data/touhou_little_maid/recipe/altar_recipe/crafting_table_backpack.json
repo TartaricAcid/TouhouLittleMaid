@@ -5,21 +5,18 @@
   "group": "alter_recipe",
   "key": {
     "a": {
-      "tag": "minecraft:planks"
+      "item": "touhou_little_maid:maid_backpack_middle"
     },
     "b": {
-      "item": "minecraft:book"
-    },
-    "c": {
-      "tag": "c:gems/diamond"
+      "tag": "c:player_workstations/crafting_tables"
     }
   },
   "pattern": [
-    "aaaabc"
+    "ab"
   ],
-  "power": 0.1,
+  "power": 0.2,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "touhou_little_maid:crafting_table_backpack"
   }
 }

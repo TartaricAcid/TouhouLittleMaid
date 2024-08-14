@@ -8,18 +8,21 @@
       "tag": "minecraft:planks"
     },
     "b": {
-      "item": "minecraft:book"
+      "tag": "c:dyes/red"
     },
     "c": {
+      "tag": "c:obsidians"
+    },
+    "d": {
       "tag": "c:gems/diamond"
     }
   },
   "pattern": [
-    "aaaabc"
+    "abacdc"
   ],
-  "power": 0.1,
+  "power": 0.2,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "touhou_little_maid:maid_beacon"
   }
 }

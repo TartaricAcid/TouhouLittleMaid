@@ -8,7 +8,7 @@
       "tag": "minecraft:planks"
     },
     "b": {
-      "item": "minecraft:book"
+      "item": "minecraft:note_block"
     },
     "c": {
       "tag": "c:gems/diamond"
@@ -20,6 +20,6 @@
   "power": 0.1,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "touhou_little_maid:keyboard"
   }
 }

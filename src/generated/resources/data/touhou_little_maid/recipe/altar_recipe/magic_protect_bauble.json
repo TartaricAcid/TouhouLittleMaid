@@ -5,21 +5,21 @@
   "group": "alter_recipe",
   "key": {
     "a": {
-      "tag": "minecraft:planks"
+      "tag": "c:crops/nether_wart"
     },
     "b": {
-      "item": "minecraft:book"
+      "tag": "c:dyes/cyan"
     },
     "c": {
-      "tag": "c:gems/diamond"
+      "item": "minecraft:sugar"
     }
   },
   "pattern": [
-    "aaaabc"
+    "abcccc"
   ],
-  "power": 0.1,
+  "power": 0.2,
   "result": {
     "count": 1,
-    "id": "touhou_little_maid:bookshelf"
+    "id": "touhou_little_maid:magic_protect_bauble"
   }
 }
