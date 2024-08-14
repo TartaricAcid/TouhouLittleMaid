@@ -80,7 +80,7 @@ public final class InitSpecialItemRender {
         ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
         if (res != null) {
             ModelResourceLocation rawModelResourceLocation = ModelResourceLocation.inventory(res);
-            ModelResourceLocation replacedModelResourceLocation = ModelResourceLocation.standalone(replacedModel);
+            ModelResourceLocation replacedModelResourceLocation = ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(replacedModel.getNamespace(), "item/" + replacedModel.getPath()));
             REPLACEABLE_MODEL_LIST.add(Triple.of(rawModelResourceLocation, replacedModelResourceLocation, isReplace));
         }
     }
