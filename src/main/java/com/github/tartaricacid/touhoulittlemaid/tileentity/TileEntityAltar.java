@@ -76,8 +76,8 @@ public class TileEntityAltar extends BlockEntity {
         storageState = Block.stateById(getPersistentData().getInt(STORAGE_STATE_ID));
         handler.deserializeNBT(pRegistries, getPersistentData().getCompound(STORAGE_ITEM));
         direction = Direction.byName(getPersistentData().getString(DIRECTION));
-        blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_COMPOUND));
-        canPlaceItemPosList.deserialize(getPersistentData().getList(CAN_PLACE_ITEM_POS_LIST, Tag.TAG_COMPOUND));
+        blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_INT_ARRAY));
+        canPlaceItemPosList.deserialize(getPersistentData().getList(CAN_PLACE_ITEM_POS_LIST, Tag.TAG_INT_ARRAY));
     }
 
     public BlockPos getWorldPosition() {

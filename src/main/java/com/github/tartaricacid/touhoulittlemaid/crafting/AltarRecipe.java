@@ -17,9 +17,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Function;
 
 public class AltarRecipe extends ShapedRecipe {
     String group;
@@ -27,7 +30,12 @@ public class AltarRecipe extends ShapedRecipe {
     float power;
     ItemStack result;
     ResourceLocation entityType;
-    public AltarRecipe(String pGroup, CraftingBookCategory pCategory, float power, ShapedRecipePattern pPattern, ItemStack pResult, ResourceLocation pEntityType) {
+    public AltarRecipe(String pGroup,
+                       CraftingBookCategory pCategory,
+                       float power,
+                       ShapedRecipePattern pPattern,
+                       ItemStack pResult,
+                       ResourceLocation pEntityType) {
         super(pGroup, pCategory, pPattern, pResult);
         this.group = pGroup;
         this.category = pCategory;
@@ -48,8 +56,12 @@ public class AltarRecipe extends ShapedRecipe {
         return entityType.equals(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.ITEM));
     }
 
-    public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable AltarRecipeInventory inventory) {
+    public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable List<ItemStack> list) {
 
+    }
+
+    public boolean matches(CraftingInput pInput, Level pLevel) {
+        return this.pattern.matches(pInput);
     }
 
     @Override

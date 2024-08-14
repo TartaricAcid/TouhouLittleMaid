@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -22,6 +22,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.level.BlockGetter;
@@ -46,6 +47,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,10 +55,6 @@ import static com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble.RA
 
 
 public class BlockAltar extends Block implements EntityBlock {
-    public BlockAltar() {
-        super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
-    }
-
     public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
@@ -114,6 +112,10 @@ public class BlockAltar extends Block implements EntityBlock {
             }
         }
     };
+
+    public BlockAltar() {
+        super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
+    }
 
     @Nullable
     @Override
@@ -224,21 +226,22 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     private void altarCraft(Level world, TileEntityAltar altar, Player playerIn) {
-        final AltarRecipeInventory inv = new AltarRecipeInventory();
+        List<ItemStack> arrayList = new ArrayList<>();
         List<BlockPos> posList = altar.getCanPlaceItemPosList().getData();
         for (int i = 0; i < posList.size(); i++) {
             BlockEntity te = world.getBlockEntity(posList.get(i));
             if (te instanceof TileEntityAltar) {
-                inv.setItem(i, ((TileEntityAltar) te).getStorageItem());
+                arrayList.add(i, ((TileEntityAltar) te).getStorageItem());
             }
         }
-        if (inv.isEmpty()) {
+        if (arrayList.isEmpty()) {
             return;
         }
+        CraftingInput craftingInput = CraftingInput.of(6,1,arrayList);
         PowerAttachment powerAttachment = playerIn.getData(InitDataAttachment.POWER_NUM);
         //TODO 配方生成实体
-//        world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), CraftingInput.Positioned.EMPTY.input(), world)
-//                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), inv, altar));
+        world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), craftingInput, world)
+                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), arrayList, altar));
     }
 
     private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
@@ -250,7 +253,7 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     private void spawnResultEntity(Level world, Player playerIn, PowerAttachment power,
-                                   AltarRecipe altarRecipe, AltarRecipeInventory inventory, TileEntityAltar altar) {
+                                   AltarRecipe altarRecipe, List<ItemStack> inventory, TileEntityAltar altar) {
         if (power.get() >= altarRecipe.getPowerCost()) {
             power.min(altarRecipe.getPowerCost());
             playerIn.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(power.get()));
