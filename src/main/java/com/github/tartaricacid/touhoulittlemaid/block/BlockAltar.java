@@ -42,6 +42,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +56,7 @@ import static com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble.RA
 
 
 public class BlockAltar extends Block implements EntityBlock {
-    public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
+    public static final IClientBlockExtensions iClientBlockExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
             if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientLevel) {
@@ -111,7 +112,7 @@ public class BlockAltar extends Block implements EntityBlock {
                 Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
             }
         }
-    };
+    }: null;
 
     public BlockAltar() {
         super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());

@@ -28,6 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 
 import javax.annotation.Nonnull;
@@ -37,7 +38,7 @@ import java.util.Optional;
 
 public class BlockStatue extends Block implements EntityBlock {
     public static final BooleanProperty IS_TINY = BooleanProperty.create("is_tiny");
-    public static final IClientBlockExtensions iClientBlockExtensions = new IClientBlockExtensions() {
+    public static final IClientBlockExtensions iClientBlockExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
             if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientWorld) {
@@ -85,7 +86,7 @@ public class BlockStatue extends Block implements EntityBlock {
                 Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
             }
         }
-    };
+    }: null;
 
     public BlockStatue() {
         super(BlockBehaviour.Properties.of().sound(SoundType.MUD).strength(1, 2).noOcclusion());

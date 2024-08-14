@@ -22,6 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -29,13 +31,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class ItemPicnicBasket extends BlockItem implements MenuProvider {
-    public static final IClientItemExtensions itemExtensions = new IClientItemExtensions() {
+    public static final IClientItemExtensions itemExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
         @Override
         public BlockEntityWithoutLevelRenderer getCustomRenderer() {
             Minecraft minecraft = Minecraft.getInstance();
             return new PicnicBasketRender(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
         }
-    };
+    }: null;
     private static final int PICNIC_BASKET_SIZE = 9;
 
     public ItemPicnicBasket(Block block) {

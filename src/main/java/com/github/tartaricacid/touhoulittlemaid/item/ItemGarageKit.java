@@ -10,6 +10,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.Objects;
@@ -18,13 +20,13 @@ import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MO
 
 public class ItemGarageKit extends BlockItem {
     private static final CustomData DEFAULT_DATA = getDefaultData();
-    public static final IClientItemExtensions itemExtensions = new IClientItemExtensions() {
+    public static final IClientItemExtensions itemExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
         @Override
         public BlockEntityWithoutLevelRenderer getCustomRenderer() {
             Minecraft minecraft = Minecraft.getInstance();
             return new TileEntityItemStackGarageKitRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
         }
-    };
+    }: null;
 
     public ItemGarageKit() {
         super(InitBlocks.GARAGE_KIT.get(), (new Item.Properties()).stacksTo(1));
