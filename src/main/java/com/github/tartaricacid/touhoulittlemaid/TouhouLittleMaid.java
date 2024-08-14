@@ -14,6 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
 import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -62,6 +63,7 @@ public final class TouhouLittleMaid {
         eventBus.addListener(NewNetwork::registerPacket);
         eventBus.addListener(InitCapabilities::registerGenericItemHandlers);
         NeoForge.EVENT_BUS.addListener(CommandRegistry::onServerStaring);
+        ShapedRecipePattern.setCraftingSize(6,1);
         /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表
         驯养革新 Domestication Innovation
         更多箱子 Iron Chests

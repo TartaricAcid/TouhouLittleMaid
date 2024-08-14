@@ -23,6 +23,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -235,8 +236,9 @@ public class BlockAltar extends Block implements EntityBlock {
             return;
         }
         PowerAttachment powerAttachment = playerIn.getData(InitDataAttachment.POWER_NUM);
-        world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), inv, world)
-                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), inv, altar));
+        //TODO 配方生成实体
+//        world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), CraftingInput.Positioned.EMPTY.input(), world)
+//                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), inv, altar));
     }
 
     private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {

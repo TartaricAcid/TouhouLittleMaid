@@ -1,0 +1,25 @@
+{
+  "type": "touhou_little_maid:altar_recipe_serializers",
+  "category": "misc",
+  "entity": "minecraft:item",
+  "group": "alter_recipe",
+  "key": {
+    "a": {
+      "tag": "minecraft:planks"
+    },
+    "b": {
+      "item": "minecraft:book"
+    },
+    "c": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "pattern": [
+    "aaaabc"
+  ],
+  "power": 0.1,
+  "result": {
+    "count": 1,
+    "id": "touhou_little_maid:bookshelf"
+  }
+}

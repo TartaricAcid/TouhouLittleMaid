@@ -30,23 +30,23 @@ public final class JERIUtil {
         }
     }
 
-    private static void recipeMaker(AltarRecipeMaker maker, AltarRecipe altarRecipeHolder) {
-        ResourceLocation recipeId = altarRecipeHolder.getId();
-        ItemStack output = altarRecipeHolder.getResultItem(Minecraft.getInstance().level.registryAccess());
-        if (!altarRecipeHolder.isItemCraft()) {
+    private static void recipeMaker(AltarRecipeMaker maker, AltarRecipe altarRecipe) {
+        ResourceLocation recipeId = altarRecipe.getId();
+        ItemStack output = altarRecipe.getResultItem(Minecraft.getInstance().level.registryAccess());
+        if (!altarRecipe.isItemCraft()) {
             output = InitItems.ENTITY_PLACEHOLDER.get().getDefaultInstance();
-            ItemEntityPlaceholder.setRecipeId(output, altarRecipeHolder.getId());
+            ItemEntityPlaceholder.setRecipeId(output, altarRecipe.getId());
         }
         String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
         String langKey;
-        if (altarRecipeHolder.isItemCraft()) {
+        if (altarRecipe.isItemCraft()) {
             langKey = String.format("jei.%s.altar_craft.%s.result", namespace, "item_craft");
         } else {
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
             langKey = String.format("jei.%s.altar_craft.%s.result", namespace, path.getFileName());
         }
 
-        maker.accept(recipeId, altarRecipeHolder.getIngredients(), output, altarRecipeHolder.getPowerCost(), langKey);
+        maker.accept(recipeId, altarRecipe.getIngredients(), output, altarRecipe.getPowerCost(), langKey);
     }
 
     public interface AltarRecipeMaker {

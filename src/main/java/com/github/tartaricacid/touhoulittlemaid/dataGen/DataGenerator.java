@@ -31,6 +31,10 @@ public class DataGenerator {
         vanillaPack.addProvider(
                 packOutput -> new LootModifierGenerator(packOutput, registries, TouhouLittleMaid.MOD_ID));
 
+        //recipe
+        vanillaPack.addProvider(
+                packOutput -> new RecipeGenerator(packOutput,registries));
+
         //Tags
         var blockTagsProvider = vanillaPack
                 .addProvider(packOutput -> new TagBlock(packOutput, registries, TouhouLittleMaid.MOD_ID, existingFileHelper));

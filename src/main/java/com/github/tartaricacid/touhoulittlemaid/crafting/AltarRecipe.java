@@ -1,94 +1,60 @@
 package com.github.tartaricacid.touhoulittlemaid.crafting;
 
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
-import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.RecipeMatcher;
-import org.apache.commons.lang3.StringUtils;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.*;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
-import static com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory.RECIPES_SIZE;
-
-public class AltarRecipe implements Recipe<AltarRecipeInventory> {
-    private final ResourceLocation id;
-    private final EntityType<?> entityType;
-    @Nullable
-    private final CompoundTag extraData;
-    private final float powerCost;
-    private final NonNullList<Ingredient> inputs;
-    private final boolean isItemCraft;
-    private final ItemStack resultItem;
-    private final Ingredient copyInput;
-    @Nullable
-    private final String copyTag;
-
-    public AltarRecipe(ResourceLocation id, EntityType<?> entityType, @Nullable CompoundTag extraData, float powerCost, Ingredient copyInput, @Nullable String copyTag, Ingredient... inputs) {
-        Preconditions.checkArgument(0 < inputs.length && inputs.length <= RECIPES_SIZE, "Ingredients count is illegal!");
-        this.id = id;
-        this.entityType = entityType;
-        this.isItemCraft = (entityType == EntityType.ITEM);
-//        if (this.isItemCraft && extraData != null) {
-//            this.resultItem = ItemStack.of(extraData.getCompound("Item"));
-//        } else {
-            this.resultItem = ItemStack.EMPTY;
-//        }
-        this.copyInput = copyInput;
-        this.copyTag = copyTag;
-        this.extraData = extraData;
-        this.powerCost = powerCost;
-        this.inputs = NonNullList.of(Ingredient.EMPTY, fillInputs(inputs));
+public class AltarRecipe extends ShapedRecipe {
+    String group;
+    CraftingBookCategory category;
+    float power;
+    ItemStack result;
+    ResourceLocation entityType;
+    public AltarRecipe(String pGroup, CraftingBookCategory pCategory, float power, ShapedRecipePattern pPattern, ItemStack pResult, ResourceLocation pEntityType) {
+        super(pGroup, pCategory, pPattern, pResult);
+        this.group = pGroup;
+        this.category = pCategory;
+        this.power = power;
+        this.result = pResult;
+        this.entityType = pEntityType;
     }
 
-    public AltarRecipe(ResourceLocation id, EntityType<?> entityType, @Nullable CompoundTag extraData, float powerCost, Ingredient... inputs) {
-        this(id, entityType, extraData, powerCost, Ingredient.EMPTY, null, inputs);
-    }
-
-    @Override
-    public boolean matches(AltarRecipeInventory inv, Level worldIn) {
-        return RecipeMatcher.findMatches(inv.getItems(), inputs) != null;
-    }
-
-    @Override
-    public ItemStack assemble(AltarRecipeInventory recipeInventory, HolderLookup.Provider provider) {
-        return getResultItem(provider).copy();
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider p_336125_) {
-        return resultItem;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return inputs;
+    public float getPowerCost() {
+        return power;
     }
 
     public ResourceLocation getId() {
-        return this.id;
+        return InitRecipes.ALTAR_CRAFTING.getId();
+    }
+
+    public boolean isItemCraft() {
+        return entityType.equals(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.ITEM));
+    }
+
+    public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable AltarRecipeInventory inventory) {
+
+    }
+
+    @Override
+    public @NotNull RecipeType<?> getType() {
+        return InitRecipes.ALTAR_CRAFTING.get();
     }
 
     @Override
@@ -96,103 +62,46 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
         return InitRecipes.ALTAR_RECIPE_SERIALIZER.get();
     }
 
-    @Override
-    public RecipeType<?> getType() {
-        return InitRecipes.ALTAR_CRAFTING.get();
-    }
+    public static class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
+        public static final MapCodec<AltarRecipe> CODEC = RecordCodecBuilder.mapCodec(
+                instance -> instance.group(
+                                Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
+                                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(altarRecipe -> altarRecipe.category),
+                                Codec.FLOAT.fieldOf("power").forGetter(altarRecipe -> altarRecipe.power),
+                                ShapedRecipePattern.MAP_CODEC.forGetter(altarRecipe -> altarRecipe.pattern),
+                                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(altarRecipe -> altarRecipe.result),
+                                ResourceLocation.CODEC.fieldOf("entity").forGetter(altarRecipe -> altarRecipe.entityType)
+                        )
+                        .apply(instance, AltarRecipe::new)
+        );
 
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
-
-    @Override
-    public ItemStack getToastSymbol() {
-        return InitItems.HAKUREI_GOHEI.get().getDefaultInstance();
-    }
-
-    public EntityType<?> getEntityType() {
-        return entityType;
-    }
-
-    @Nullable
-    public CompoundTag getExtraData() {
-        return extraData;
-    }
-
-    public float getPowerCost() {
-        return powerCost;
-    }
-
-    public Ingredient getCopyInput() {
-        return copyInput;
-    }
-
-    @Nullable
-    public String getCopyTag() {
-        return copyTag;
-    }
-
-    public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable AltarRecipeInventory inventory) {
-        if (extraData != null) {
-            CompoundTag nbt = this.extraData.copy();
-            nbt.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)).toString());
-            Entity resultEntity = EntityType.loadEntityRecursive(nbt, world, (e) -> {
-                e.moveTo(pos.getX(), pos.getY(), pos.getZ(), e.getYRot(), e.getXRot());
-                this.finalizeSpawn(world, pos, e);
-                return e;
-            });
-            if (resultEntity != null) {
-                this.finalizeSpawn(world, pos, resultEntity);
-                this.copyIngredientTag(inventory, resultEntity);
-                world.tryAddFreshEntityWithPassengers(resultEntity);
-            }
-            return;
+        private AltarRecipe fromNetwork(RegistryFriendlyByteBuf friendlyByteBuf) {
+            String s = friendlyByteBuf.readUtf();
+            CraftingBookCategory craftingbookcategory = friendlyByteBuf.readEnum(CraftingBookCategory.class);
+            float power = friendlyByteBuf.readFloat();
+            ShapedRecipePattern shapedrecipepattern = ShapedRecipePattern.STREAM_CODEC.decode(friendlyByteBuf);
+            ItemStack itemstack = ItemStack.STREAM_CODEC.decode(friendlyByteBuf);
+            ResourceLocation entityType = friendlyByteBuf.readResourceLocation();
+            return new AltarRecipe(s, craftingbookcategory,power, shapedrecipepattern, itemstack, entityType);
         }
-        entityType.spawn(world, null, (Player) null, pos, MobSpawnType.SPAWN_EGG, true, true);
-    }
 
-    private void copyIngredientTag(@Nullable AltarRecipeInventory inventory, Entity resultEntity) {
-//        if (inventory != null && this.copyInput != Ingredient.EMPTY) {
-//            ItemStack matchStack = inventory.getMatchIngredient(this.copyInput);
-//            if (!matchStack.isEmpty()) {
-//                CompoundTag data;
-//                if (StringUtils.isEmpty(this.copyTag)) {
-//                    data = matchStack.getTag();
-//                } else {
-//                    data = matchStack.getTagElement(this.copyTag);
-//                }
-//                if (data != null && !data.isEmpty()) {
-//                    if (resultEntity instanceof LivingEntity) {
-//                        ((LivingEntity) resultEntity).readAdditionalSaveData(data);
-//                    }
-//                    if (resultEntity instanceof ItemEntity) {
-//                        ((ItemEntity) resultEntity).readAdditionalSaveData(data);
-//                    }
-//                }
-//            }
-//        }
-    }
-
-    public boolean isItemCraft() {
-        return isItemCraft;
-    }
-
-    private void finalizeSpawn(ServerLevel world, BlockPos pos, @Nullable Entity entity) {
-        if (entity instanceof Mob) {
-            ((Mob) entity).finalizeSpawn(world, world.getCurrentDifficultyAt(pos), MobSpawnType.SPAWN_EGG, null);
+        private void toNetwork(RegistryFriendlyByteBuf friendlyByteBuf, AltarRecipe altarRecipe) {
+            friendlyByteBuf.writeUtf(altarRecipe.group);
+            friendlyByteBuf.writeEnum(altarRecipe.category);
+            friendlyByteBuf.writeFloat(altarRecipe.power);
+            ShapedRecipePattern.STREAM_CODEC.encode(friendlyByteBuf, altarRecipe.pattern);
+            ItemStack.STREAM_CODEC.encode(friendlyByteBuf, altarRecipe.result);
+            friendlyByteBuf.writeResourceLocation(altarRecipe.entityType);
         }
-    }
 
-    private Ingredient[] fillInputs(Ingredient[] inputs) {
-        Ingredient[] newInputs = new Ingredient[RECIPES_SIZE];
-        for (int i = 0; i < RECIPES_SIZE; i++) {
-            if (i < inputs.length) {
-                newInputs[i] = inputs[i];
-            } else {
-                newInputs[i] = Ingredient.EMPTY;
-            }
+        @Override
+        public MapCodec<AltarRecipe> codec() {
+            return CODEC;
         }
-        return newInputs;
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, AltarRecipe> streamCodec() {
+            return StreamCodec.of(this::toNetwork,this::fromNetwork);
+        }
     }
 }

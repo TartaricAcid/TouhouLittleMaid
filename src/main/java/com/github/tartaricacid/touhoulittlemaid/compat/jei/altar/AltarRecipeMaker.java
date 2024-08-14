@@ -27,7 +27,6 @@ public final class AltarRecipeMaker {
 
     public List<AltarRecipeWrapper> getAltarRecipes() {
         List<RecipeHolder<AltarRecipe>> altarRecipesMap = recipeManager.getAllRecipesFor(InitRecipes.ALTAR_CRAFTING.get());
-
         List<AltarRecipeWrapper> recipes = Lists.newArrayList();
         JERIUtil.recipeWarpHolder(altarRecipesMap, (recipeId, inputs, output, powerCost, langKey) -> {
             List<List<ItemStack>> inputs1 = inputs.stream()
