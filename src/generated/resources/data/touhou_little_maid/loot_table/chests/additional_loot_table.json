@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:power_point"
+        }
+      ],
+      "name": "power_point",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:shrine"
+        }
+      ],
+      "name": "shrine",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "touhou_little_maid:chests/additional_loot_table"
+}
