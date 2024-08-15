@@ -1,9 +1,0 @@
-{
-  "type": "touhou_little_maid:addition",
-  "conditions": [],
-  "items": [
-    "touhou_little_maid:power_point",
-    "touhou_little_maid:shrine"
-  ],
-  "string": "touhou_little_maid"
-}
