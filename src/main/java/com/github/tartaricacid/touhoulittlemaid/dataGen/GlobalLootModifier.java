@@ -1,12 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.dataGen;
 
-import com.github.tartaricacid.touhoulittlemaid.loot.AdditionalLootModifier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.AddTableLootModifier;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -17,9 +18,14 @@ public class GlobalLootModifier extends GlobalLootModifierProvider {
 
     @Override
     public void start() {
-        add("additional", new AdditionalLootModifier(
-                new LootItemCondition[]{LootItemRandomChanceCondition.randomChance(0.05F).build()},
-                LootContextParamSets.CHEST,
-                LootTableGenerator.ADDITIONAL_LOOT_TABLE.location()));
+        BuiltInLootTables.all().stream()
+                        .filter(lootTable -> lootTable.location().getPath().startsWith("chests/"))
+                        .forEach(lootTable -> add("amendments/" + lootTable.location().getPath(), new AddTableLootModifier(
+                                new LootItemCondition[]{
+                                        LootTableIdCondition.builder(lootTable.location()).build(),
+                                        LootItemRandomChanceCondition.randomChance(0.05F).build(),
+                                },
+                                LootTableGenerator.ADDITIONAL_LOOT_TABLE
+                        )));
     }
 }

@@ -30,7 +30,7 @@ public class DataGenerator {
         // loot tables
         generator.addProvider(event.includeServer(), new LootTableProvider(pack,
                 Set.of(LootTableGenerator.ADDITIONAL_LOOT_TABLE),
-                List.of(new LootTableProvider.SubProviderEntry(LootTableGenerator::new, LootContextParamSets.EMPTY)),
+                List.of(new LootTableProvider.SubProviderEntry(LootTableGenerator::new, LootContextParamSets.CHEST)),
                 new RegistryDataGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()).getRegistryProvider()));
 
         // global loot modifier
