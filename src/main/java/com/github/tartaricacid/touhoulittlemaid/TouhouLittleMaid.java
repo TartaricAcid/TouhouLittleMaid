@@ -58,6 +58,7 @@ public final class TouhouLittleMaid {
         InitTrigger.TRIGGERS.register(eventBus);
         InitDataAttachment.ATTACHMENT_TYPES.register(eventBus);
         InitDataComponent.DATA_COMPONENTS.register(eventBus);
+        InitLootModifier.LOOT_MODIFIERS.register(eventBus);
 
         eventBus.addListener(NewNetwork::registerPacket);
         eventBus.addListener(InitCapabilities::registerGenericItemHandlers);

@@ -33,9 +33,11 @@ public class DataGenerator {
                 List.of(new LootTableProvider.SubProviderEntry(LootTableGenerator::new, LootContextParamSets.CHEST)),
                 new RegistryDataGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()).getRegistryProvider()));
 
-        //registry-based stuff
-        DatapackBuiltinEntriesProvider datapackProvider = new RegistryDataGenerator(pack, event.getLookupProvider());
-        generator.addProvider(event.includeServer(), datapackProvider);
+        //global loot table
+        vanillaPack.addProvider(
+                packOutput -> new GlobalLootModifier(packOutput, registries, TouhouLittleMaid.MOD_ID)
+        );
+
 
         //recipe
         vanillaPack.addProvider(
@@ -46,5 +48,9 @@ public class DataGenerator {
                 .addProvider(packOutput -> new TagBlock(packOutput, registries, TouhouLittleMaid.MOD_ID, existingFileHelper));
         vanillaPack.addProvider(
                 packOutput -> new TagItem(packOutput, registries, blockTagsProvider.contentsGetter(), TouhouLittleMaid.MOD_ID, existingFileHelper));
+
+        //registry-based stuff
+        DatapackBuiltinEntriesProvider datapackProvider = new RegistryDataGenerator(pack, event.getLookupProvider());
+        generator.addProvider(event.includeServer(), datapackProvider);
     }
 }
