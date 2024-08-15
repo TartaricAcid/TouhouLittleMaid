@@ -2,10 +2,6 @@
   "type": "neoforge:add_table",
   "conditions": [
     {
-      "chance": 0.05,
-      "condition": "minecraft:random_chance"
-    },
-    {
       "condition": "touhou_little_maid:loot_table_type",
       "loot_table_type": "chests/"
     }

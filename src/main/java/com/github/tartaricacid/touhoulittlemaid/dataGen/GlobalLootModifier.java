@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.loot.LootTableTypeCondition;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.AddTableLootModifier;
 
@@ -18,10 +17,7 @@ public class GlobalLootModifier extends GlobalLootModifierProvider {
     @Override
     public void start() {
         add("additional", new AddTableLootModifier(
-                new LootItemCondition[] {
-                        LootItemRandomChanceCondition.randomChance(0.05F).build(),
-                        new LootTableTypeCondition("chests/")
-                },
+                new LootItemCondition[] {new LootTableTypeCondition("chests/")},
                 LootTableGenerator.ADDITIONAL_LOOT_TABLE));
     }
 }

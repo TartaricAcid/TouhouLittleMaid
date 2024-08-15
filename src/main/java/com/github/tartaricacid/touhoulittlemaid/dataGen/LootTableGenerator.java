@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.function.BiConsumer;
@@ -23,10 +24,12 @@ public record LootTableGenerator(HolderLookup.Provider provider) implements Loot
                 .withPool(LootPool.lootPool()
                         .name("power_point")
                         .setRolls(ConstantValue.exactly(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.05F))
                         .add(LootItem.lootTableItem(InitItems.POWER_POINT)))
                 .withPool(LootPool.lootPool()
                         .name("shrine")
                         .setRolls(ConstantValue.exactly(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.05F))
                         .add(LootItem.lootTableItem(InitItems.SHRINE))));
     }
 }
