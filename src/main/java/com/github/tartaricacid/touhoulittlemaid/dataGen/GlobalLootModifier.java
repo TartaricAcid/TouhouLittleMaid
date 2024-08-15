@@ -24,9 +24,9 @@ public class GlobalLootModifier extends GlobalLootModifierProvider {
                         .filter(lootTable -> lootTable.location().getPath().startsWith("chests/"))
                         .forEach(lootTable -> condBuilder.or(LootTableIdCondition.builder(lootTable.location())));
         add("chests_amendments", new AddTableLootModifier(
-                new LootItemCondition[]{
-                        condBuilder.build(),
+                new LootItemCondition[] {
                         LootItemRandomChanceCondition.randomChance(0.05F).build(),
+                        condBuilder.build(),
                 },
                 LootTableGenerator.ADDITIONAL_LOOT_TABLE
         ));
