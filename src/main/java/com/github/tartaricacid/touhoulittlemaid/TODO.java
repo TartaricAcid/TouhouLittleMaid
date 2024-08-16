@@ -10,5 +10,4 @@ public class TODO {
     //TODO e.broadcastBreakEvent(InteractionHand.MAIN_HAND)都换成了EquipmentSlot.MAINHAND
     //TODO readBlockPos返回的optional全部使用get获取值了
     //TODO 玩家模型获取需要检查，麻将又改改改
-    //TODO renderEntityInInventoryFollowsMouse的参数数值需调整确认
 }

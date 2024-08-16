@@ -7,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
@@ -25,8 +24,7 @@ public class MaidTorchMoveTask extends MaidMoveToBlockTask {
         BlockPos posUp = pos.above();
         if (worldIn.getMaxLocalRawBrightness(posUp) < LOW_BRIGHTNESS && entityIn.canPlaceBlock(posUp)) {
             BlockState stateUp = worldIn.getBlockState(posUp);
-            //TODO : 火把放置逻辑略有变化，需要检测，现在这一段是从BaseTorchBlock.canSurvive抄来
-            return canSupportCenter( worldIn, pos.below(), Direction.UP) && !stateUp.liquid();
+            return canSupportCenter(worldIn, pos, Direction.UP) && !stateUp.liquid();
         }
         return false;
     }

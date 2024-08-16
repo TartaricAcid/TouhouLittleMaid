@@ -238,7 +238,6 @@ public class BlockAltar extends Block implements EntityBlock {
         }
         CraftingInput craftingInput = CraftingInput.of(6, 1, arrayList);
         PowerAttachment powerAttachment = playerIn.getData(InitDataAttachment.POWER_NUM);
-        //TODO 配方生成实体
         world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), craftingInput, world)
                 .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), arrayList, altar));
     }

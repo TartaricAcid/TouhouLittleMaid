@@ -66,7 +66,6 @@ public final class TouhouLittleMaid {
         ShapedRecipePattern.setCraftingSize(6,1);
         /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表
         驯养革新 Domestication Innovation
-        更多箱子 Iron Chests
         拔刀剑2 SlashBlade 2
         帕秋莉手册 Patchouli
         [TaCZ]永恒枪械工坊：零 Timeless and Classics Zero

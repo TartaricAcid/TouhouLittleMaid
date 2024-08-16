@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IChestType;
 //import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestType;
+import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -20,8 +21,7 @@ public class ChestManager {
         ChestManager manager = new ChestManager();
         manager.add(new VanillaChestType());
         manager.add(new BarrelChestType());
-//        IronChestType.register(manager);
-        //TODO IronChest兼容
+        IronChestType.register(manager);
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.addChestType(manager);
         }
