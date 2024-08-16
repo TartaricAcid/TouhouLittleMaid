@@ -1,0 +1,22 @@
+{
+  "type": "touhou_little_maid:altar_recipe_serializers",
+  "category": "misc",
+  "entity": "minecraft:lightning_bolt",
+  "group": "alter_recipe",
+  "key": {
+    "a": {
+      "tag": "c:gunpowders"
+    },
+    "b": {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "pattern": [
+    "aaabbb"
+  ],
+  "power": 0.2,
+  "result": {
+    "count": 1,
+    "id": "minecraft:lightning_rod"
+  }
+}
