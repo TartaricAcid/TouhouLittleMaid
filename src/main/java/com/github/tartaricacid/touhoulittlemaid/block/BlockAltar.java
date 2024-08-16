@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.PosListData;
 import net.minecraft.client.Minecraft;
@@ -22,7 +21,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.level.BlockGetter;
@@ -56,7 +54,7 @@ import static com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble.RA
 
 
 public class BlockAltar extends Block implements EntityBlock {
-    public static final IClientBlockExtensions iClientBlockExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientBlockExtensions() {
+    public static final IClientBlockExtensions iClientBlockExtensions = FMLEnvironment.dist == Dist.CLIENT ? new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
             if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientLevel) {
@@ -112,7 +110,7 @@ public class BlockAltar extends Block implements EntityBlock {
                 Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
             }
         }
-    }: null;
+    } : null;
 
     public BlockAltar() {
         super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
@@ -218,7 +216,7 @@ public class BlockAltar extends Block implements EntityBlock {
 
     private void takeInOrCraft(Level world, TileEntityAltar altar, Player playerIn) {
         if (altar.isCanPlaceItem() && altar.handler.getStackInSlot(0).isEmpty()) {
-            altar.handler.setStackInSlot(0, playerIn.getMainHandItem().getItem().getDefaultInstance());
+            altar.handler.setStackInSlot(0, playerIn.getMainHandItem().copy());
             if (!playerIn.isCreative()) {
                 playerIn.getMainHandItem().shrink(1);
             }
@@ -238,7 +236,7 @@ public class BlockAltar extends Block implements EntityBlock {
         if (arrayList.isEmpty()) {
             return;
         }
-        CraftingInput craftingInput = CraftingInput.of(6,1,arrayList);
+        CraftingInput craftingInput = CraftingInput.of(6, 1, arrayList);
         PowerAttachment powerAttachment = playerIn.getData(InitDataAttachment.POWER_NUM);
         //TODO 配方生成实体
         world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), craftingInput, world)

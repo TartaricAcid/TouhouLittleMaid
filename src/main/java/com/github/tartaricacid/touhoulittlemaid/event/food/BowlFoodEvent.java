@@ -18,6 +18,7 @@ public class BowlFoodEvent {
         EntityMaid maid = event.getMaid();
         FoodProperties foodProperties = foodAfterEat.getItem().getFoodProperties(foodAfterEat.getItem().getDefaultInstance(), maid);
         if (foodProperties != null) {
+            //TODO 这里会抛出java.util.NoSuchElementException: No value present
             ItemStack itemStack = foodProperties.usingConvertsTo().get();
             if (!itemStack.isEmpty() && !foodAfterEat.isEmpty()) {
                 CombinedInvWrapper availableInv = maid.getAvailableInv(false);

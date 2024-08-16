@@ -34,13 +34,12 @@ public class ItemFilm extends AbstractStoreMaidItem {
 
     public static ItemStack maidToFilm(EntityMaid maid) {
         ItemStack film = InitItems.FILM.get().getDefaultInstance();
-        CompoundTag filmTag = new CompoundTag();
         CompoundTag maidTag = new CompoundTag();
         maid.setHomeModeEnable(false);
         maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
         maidTag.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
-        film.set(InitDataComponent.MAID_INFO, CustomData.of(filmTag));
+        film.set(InitDataComponent.MAID_INFO, CustomData.of(maidTag));
         return film;
     }
 

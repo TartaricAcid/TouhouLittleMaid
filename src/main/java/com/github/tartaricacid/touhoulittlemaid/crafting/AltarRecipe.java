@@ -1,27 +1,33 @@
 package com.github.tartaricacid.touhoulittlemaid.crafting;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
+import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class AltarRecipe extends ShapedRecipe {
     String group;
@@ -52,29 +58,86 @@ public class AltarRecipe extends ShapedRecipe {
         return InitRecipes.ALTAR_CRAFTING.getId();
     }
 
+    public String getRecipeString() {
+        String recipeId = this.result.get(InitDataComponent.RECIPES_ID_TAG);
+        if (recipeId != null) {
+            return recipeId;
+        } else return "spawn_box";
+    }
+
     public boolean isItemCraft() {
         return entityType.equals(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.ITEM));
     }
 
     public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable List<ItemStack> list) {
-        EntityType type = BuiltInRegistries.ENTITY_TYPE.get(entityType);
+        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(entityType);
         if (type == EntityType.ITEM) {
-            ItemEntity itemEntity = new ItemEntity(world,pos.getX(),pos.getY(),pos.getZ(), this.result);
+            ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), this.result);
             world.addFreshEntity(itemEntity);
         }
+
+        if (type == InitEntities.BOX.get()) {
+            EntityBox box = new EntityBox(world);
+            world.addFreshEntity(box);
+            EntityMaid maid = new EntityMaid(world);
+            world.addFreshEntity(maid);
+            maid.startRiding(box);
+            box.setPos(pos.getX(), pos.getY(), pos.getZ());
+            return;
+        }
+
+        if (type == InitEntities.MAID.get()) {
+            ItemStack itemFilm = ItemStack.EMPTY;
+            if (list != null) {
+                for (ItemStack itemStack : list) {
+                    if (itemStack.getItem() instanceof ItemFilm) {
+                        itemFilm = itemStack;
+                        break;
+                    }
+                }
+            }
+            EntityMaid maid = InitEntities.MAID.get().create(world);
+            CustomData compoundData = itemFilm.get(InitDataComponent.MAID_INFO);
+            if (compoundData != null && maid != null) {
+                CompoundTag maidCompound = compoundData.copyTag();
+                maid.load(maidCompound);
+                maid.spawnExplosionParticle();
+                maid.setPos(pos.getX(), pos.getY(), pos.getZ());
+                world.addFreshEntity(maid);
+            }
+            return;
+        }
+
+        type.spawn(world, pos, MobSpawnType.STRUCTURE);
     }
 
     public boolean matches(CraftingInput pInput, Level pLevel) {
-        List<Item> list = pInput.items().stream().filter(itemStack -> !itemStack.isEmpty()).map(ItemStack::getItem).toList();
+        // 获取输入项列表，过滤掉空项，并将其映射为Item列表
+        List<ItemStack> inputList = new ArrayList<>(pInput.items().stream()
+                .filter(itemStack -> !itemStack.isEmpty())
+                .toList());
+
         // 如果配方所需的材料数量与输入数量不一致，立即返回 false
-        if (this.getIngredients().size() != list.size()) {
+        if (this.getIngredients().size() != inputList.size()) {
             return false;
         }
 
-        for ( Ingredient ingredient : this.getIngredients()) {
-            if (Arrays.stream(ingredient.getItems()).noneMatch(itemStack -> list.contains(itemStack.getItem()))) return false;
+        // 逐个匹配每个配方成分
+        for (Ingredient ingredient : this.getIngredients()) {
+            boolean matched = false;
+            for (ItemStack itemStack : inputList) {
+                if (ingredient.test(itemStack)) {  // 使用Ingredient的test方法来匹配ItemStack
+                    inputList.remove(itemStack);   // 匹配成功后从输入列表中移除该项
+                    matched = true;
+                    break;  // 跳出内部循环，继续匹配下一个ingredient
+                }
+            }
+            if (!matched) {
+                return false;  // 如果任何配方成分没有找到匹配的输入项，则返回 false
+            }
         }
-        return true;
+
+        return true;  // 如果所有配方成分都匹配成功，返回 true
     }
 
     @Override

@@ -1,11 +1,11 @@
 {
   "type": "touhou_little_maid:altar_recipe_serializers",
   "category": "misc",
-  "entity": "touhou_little_maid:maid",
+  "entity": "touhou_little_maid:box",
   "group": "alter_recipe",
   "key": {
     "a": {
-      "item": "touhou_little_maid:film"
+      "tag": "c:gems/diamond"
     },
     "b": {
       "tag": "c:gems/lapis"
@@ -28,7 +28,10 @@
   ],
   "power": 0.5,
   "result": {
+    "components": {
+      "touhou_little_maid:recipe_id": "spawn_box"
+    },
     "count": 1,
-    "id": "touhou_little_maid:maid_spawn_egg"
+    "id": "touhou_little_maid:entity_placeholder"
   }
 }

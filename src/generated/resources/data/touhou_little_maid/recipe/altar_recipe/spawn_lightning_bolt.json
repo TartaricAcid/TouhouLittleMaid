@@ -16,7 +16,10 @@
   ],
   "power": 0.2,
   "result": {
+    "components": {
+      "touhou_little_maid:recipe_id": "spawn_lightning_bolt"
+    },
     "count": 1,
-    "id": "minecraft:lightning_rod"
+    "id": "touhou_little_maid:entity_placeholder"
   }
 }

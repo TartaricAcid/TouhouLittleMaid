@@ -35,7 +35,7 @@ public final class JERIUtil {
         ItemStack output = altarRecipe.getResultItem(Minecraft.getInstance().level.registryAccess());
         if (!altarRecipe.isItemCraft()) {
             output = InitItems.ENTITY_PLACEHOLDER.get().getDefaultInstance();
-            ItemEntityPlaceholder.setRecipeId(output, altarRecipe.getId());
+            ItemEntityPlaceholder.setRecipeId(output, altarRecipe.getRecipeString());
         }
         String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
         String langKey;

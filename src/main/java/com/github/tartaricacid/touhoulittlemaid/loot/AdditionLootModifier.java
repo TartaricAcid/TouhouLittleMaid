@@ -23,7 +23,7 @@ public class AdditionLootModifier extends LootModifier {
     @SuppressWarnings("deprecation")
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        if (generatedLoot.getFirst().is(Items.CHEST)) {
+        if (!generatedLoot.isEmpty() && generatedLoot.getFirst().is(Items.CHEST)) {
             context.getResolver().get(Registries.LOOT_TABLE, LootTableGenerator.POWER_POINT)
                     .ifPresent(extraTable -> extraTable.value().getRandomItemsRaw(context, LootTable.createStackSplitter(context.getLevel(), generatedLoot::add)));
             context.getResolver().get(Registries.LOOT_TABLE, LootTableGenerator.SHRINE)

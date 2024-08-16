@@ -5,7 +5,7 @@
   "group": "alter_recipe",
   "key": {
     "a": {
-      "tag": "c:gems/diamond"
+      "item": "touhou_little_maid:film"
     },
     "b": {
       "tag": "c:gems/lapis"
@@ -28,7 +28,10 @@
   ],
   "power": 0.5,
   "result": {
+    "components": {
+      "touhou_little_maid:recipe_id": "reborn_maid"
+    },
     "count": 1,
-    "id": "touhou_little_maid:fairy_spawn_egg"
+    "id": "touhou_little_maid:entity_placeholder"
   }
 }

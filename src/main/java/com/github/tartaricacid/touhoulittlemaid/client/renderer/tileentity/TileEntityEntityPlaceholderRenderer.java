@@ -39,7 +39,7 @@ public class TileEntityEntityPlaceholderRenderer extends BlockEntityWithoutLevel
     }
 
     private ResourceLocation getTexture(ItemStack stack) {
-        ResourceLocation recipeId = ItemEntityPlaceholder.getRecipeId(stack);
+        ResourceLocation recipeId = ItemEntityPlaceholder.getId(stack);
         if (recipeId != null) {
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
             String namespace = recipeId.getNamespace().toLowerCase(Locale.US);

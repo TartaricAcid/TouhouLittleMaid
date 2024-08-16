@@ -18,6 +18,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityBox extends Entity {
     public static final int FIRST_STAGE = 64;
@@ -26,7 +27,7 @@ public class EntityBox extends Entity {
     public static final int MAX_TEXTURE_SIZE = 8;
     private static final EntityDataAccessor<Integer> OPEN_STAGE = SynchedEntityData.defineId(EntityBox.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TEXTURE_INDEX = SynchedEntityData.defineId(EntityBox.class, EntityDataSerializers.INT);
-    public static final EntityType<EntityBox> TYPE = EntityType.Builder.<EntityBox>of(EntityBox::new, MobCategory.MISC).ridingOffset(0)
+    public static final EntityType<EntityBox> TYPE = EntityType.Builder.<EntityBox>of(EntityBox::new, MobCategory.MISC)
             .sized(2.0f, 2.0f).clientTrackingRange(10).build("box");
     private static final String STAGE_TAG = "OpenStage";
     private static final String TEXTURE_TAG = "TextureIndex";
@@ -145,5 +146,9 @@ public class EntityBox extends Entity {
         if (stage >= FIRST_STAGE) {
             tameable.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 2, 1, false, false));
         }
+    }
+
+    public Vec3 getPassengerRidingPosition(Entity pEntity) {
+        return this.position().add(this.getPassengerAttachmentPoint(pEntity, this.getDimensions(Pose.STANDING), 1.0F)).subtract(0,2,0);
     }
 }

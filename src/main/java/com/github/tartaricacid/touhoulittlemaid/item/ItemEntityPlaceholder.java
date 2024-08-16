@@ -1,11 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityEntityPlaceholderRenderer;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
-import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -32,21 +32,20 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class ItemEntityPlaceholder extends Item {
-    public static final IClientItemExtensions itemExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
+    public static final IClientItemExtensions itemExtensions = FMLEnvironment.dist == Dist.CLIENT ? new IClientItemExtensions() {
         @Override
         public BlockEntityWithoutLevelRenderer getCustomRenderer() {
             Minecraft minecraft = Minecraft.getInstance();
             return new TileEntityEntityPlaceholderRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
         }
-    }: null;
+    } : null;
 
     public ItemEntityPlaceholder() {
         super(new Item.Properties().stacksTo(1));
     }
 
-    @SuppressWarnings("all")
-    public static ItemStack setRecipeId(ItemStack stack, ResourceLocation id) {
-        stack.set(InitDataComponent.RECIPES_ID_TAG, id.toString());
+    public static ItemStack setRecipeId(ItemStack stack, String id) {
+        stack.set(InitDataComponent.RECIPES_ID_TAG, id);
         return stack;
     }
 
@@ -54,7 +53,16 @@ public class ItemEntityPlaceholder extends Item {
     @Nullable
     public static ResourceLocation getRecipeId(ItemStack stack) {
         if (stack.has(InitDataComponent.RECIPES_ID_TAG)) {
-            return ResourceLocation.parse(stack.get(InitDataComponent.RECIPES_ID_TAG));
+            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, InitRecipes.ALTAR_CRAFTING.getId().getPath() +"/" + stack.get(InitDataComponent.RECIPES_ID_TAG));
+        }
+        return null;
+    }
+
+    @SuppressWarnings("all")
+    @Nullable
+    public static ResourceLocation getId(ItemStack stack) {
+        if (stack.has(InitDataComponent.RECIPES_ID_TAG)) {
+            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID,stack.get(InitDataComponent.RECIPES_ID_TAG));
         }
         return null;
     }
@@ -67,7 +75,7 @@ public class ItemEntityPlaceholder extends Item {
         }
         world.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING.get()).forEach(recipe -> {
             if (!recipe.value().isItemCraft()) {
-                items.accept(setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), recipe.value().getId()));
+                items.accept(setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), recipe.value().getRecipeString()));
             }
         });
     }
@@ -91,11 +99,10 @@ public class ItemEntityPlaceholder extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public Component getName(ItemStack stack) {
-        ResourceLocation recipeId = getRecipeId(stack);
+        ResourceLocation recipeId = getId(stack);
         if (recipeId != null) {
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
-            String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
-            String langKey = String.format("jei.%s.altar_craft.%s.result", namespace, path.getFileName());
+            String langKey = String.format("jei.%s.altar_craft.%s.result", TouhouLittleMaid.MOD_ID, path.getFileName());
             return Component.translatable(langKey);
         }
         return Component.translatable("item.touhou_little_maid.entity_placeholder");

@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -26,11 +25,11 @@ import java.util.Map;
 
 public class AltarRecipeBuilder implements RecipeBuilder {
     private final RecipeCategory category;
-    private float power;
     private final Item result;
     private final List<String> rows;
     private final Map<Character, Ingredient> key;
     private final ItemStack resultStack; // Neo: add stack result support
+    private float power;
     private ResourceLocation entityType;
 
     public AltarRecipeBuilder(RecipeCategory recipeCategory, ItemLike resultStack, int count) {
@@ -47,14 +46,8 @@ public class AltarRecipeBuilder implements RecipeBuilder {
         this.key = Maps.newLinkedHashMap();
     }
 
-    public AltarRecipeBuilder power(float power) {
-        this.power = power;
-        return this;
-    }
-
-    public AltarRecipeBuilder entity(ResourceLocation entityType) {
-        this.entityType = entityType;
-        return this;
+    public static AltarRecipeBuilder shaped(RecipeCategory pCategory, ItemStack pResult) {
+        return new AltarRecipeBuilder(pCategory, pResult);
     }
 
     public static AltarRecipeBuilder shaped(RecipeCategory pCategory, ItemLike pResult) {
@@ -63,6 +56,16 @@ public class AltarRecipeBuilder implements RecipeBuilder {
 
     public static AltarRecipeBuilder shaped(RecipeCategory pCategory, ItemLike pResult, int pCount) {
         return new AltarRecipeBuilder(pCategory, pResult, pCount);
+    }
+
+    public AltarRecipeBuilder power(float power) {
+        this.power = power;
+        return this;
+    }
+
+    public AltarRecipeBuilder entity(ResourceLocation entityType) {
+        this.entityType = entityType;
+        return this;
     }
 
     public AltarRecipeBuilder define(Character pSymbol, TagKey<Item> pTag) {
@@ -85,7 +88,7 @@ public class AltarRecipeBuilder implements RecipeBuilder {
     }
 
     public AltarRecipeBuilder pattern(String pPattern) {
-        if (!this.rows.isEmpty() && pPattern.length() != ((String) this.rows.get(0)).length()) {
+        if (!this.rows.isEmpty() && pPattern.length() != this.rows.getFirst().length()) {
             throw new IllegalArgumentException("Pattern must be the same width on every line!");
         } else {
             this.rows.add(pPattern);
@@ -105,14 +108,17 @@ public class AltarRecipeBuilder implements RecipeBuilder {
         return this.result;
     }
 
-    @Override
     public void save(@NotNull RecipeOutput output) {
-        this.save(output, ResourceLocation.fromNamespaceAndPath (TouhouLittleMaid.MOD_ID,"altar_recipe/" + RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath()));
+        this.save(output, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_recipe/" + RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath()));
+    }
+
+    public void save(@NotNull RecipeOutput output, String recipeId) {
+        this.save(output, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_recipe/" + recipeId));
     }
 
     @Override
     public void save(RecipeOutput recipeOutput, ResourceLocation pId) {
-        ShapedRecipePattern.setCraftingSize(6,1);
+        ShapedRecipePattern.setCraftingSize(6, 1);
         AltarRecipe altarRecipe = new AltarRecipe(
                 "alter_recipe",
                 RecipeBuilder.determineBookCategory(this.category),
