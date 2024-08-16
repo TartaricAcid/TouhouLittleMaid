@@ -16,19 +16,17 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import java.util.function.BiConsumer;
 
 public record LootTableGenerator(HolderLookup.Provider provider) implements LootTableSubProvider {
-    public static final ResourceKey<LootTable> POWER_POINT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "chests/power_point"));
-    public static final ResourceKey<LootTable> SHRINE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "chests/shrine"));
+    public static final ResourceKey<LootTable> ADDITIONAL_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "chests/additional_loot_table"));
 
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        consumer.accept(POWER_POINT,
-                LootTable.lootTable().withPool(LootPool.lootPool()
+        consumer.accept(ADDITIONAL_LOOT_TABLE, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
                         .name("power_point")
                         .setRolls(ConstantValue.exactly(1))
                         .when(LootItemRandomChanceCondition.randomChance(0.05F))
-                        .add(LootItem.lootTableItem(InitItems.POWER_POINT))));
-        consumer.accept(SHRINE,
-                LootTable.lootTable().withPool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(InitItems.POWER_POINT)))
+                .withPool(LootPool.lootPool()
                         .name("shrine")
                         .setRolls(ConstantValue.exactly(1))
                         .when(LootItemRandomChanceCondition.randomChance(0.05F))
