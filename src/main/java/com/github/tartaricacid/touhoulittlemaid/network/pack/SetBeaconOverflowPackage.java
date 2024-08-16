@@ -25,19 +25,18 @@ public record SetBeaconOverflowPackage(BlockPos pos, boolean overflowDelete) imp
     );
 
     public static void handle(SetBeaconOverflowPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Level world = sender.level();
-            if (world.isLoaded(message.pos)) {
-                BlockEntity te = world.getBlockEntity(message.pos);
-                if (te instanceof TileEntityMaidBeacon) {
-                    ((TileEntityMaidBeacon) te).setOverflowDelete(message.overflowDelete);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Level world = sender.level();
+                if (world.isLoaded(message.pos)) {
+                    BlockEntity te = world.getBlockEntity(message.pos);
+                    if (te instanceof TileEntityMaidBeacon) {
+                        ((TileEntityMaidBeacon) te).setOverflowDelete(message.overflowDelete);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

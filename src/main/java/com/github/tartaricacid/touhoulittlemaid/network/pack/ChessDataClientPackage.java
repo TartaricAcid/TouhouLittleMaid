@@ -4,10 +4,14 @@ import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,15 +46,14 @@ public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point
     );
 
     public static void handle(ChessDataClientPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> CompletableFuture.runAsync(() -> onHandle(message), Util.backgroundExecutor()));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> CompletableFuture.runAsync(() -> onHandle(message), Util.backgroundExecutor()));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void onHandle(ChessDataClientPackage message) {
-        byte[][] bytes = new byte[15][15];
-        for (int i = 0; i < message.chessData.size(); i++) {
-            bytes[i] = message.chessData.get(i);
-        }
-        Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(bytes, message.point);
+        Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(message.chessData.toArray(new byte[15][]), message.point);
         int time = (int) (Math.random() * 1250) + 250;
         try {
             Thread.sleep(time);
@@ -58,7 +61,7 @@ public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point
             throw new RuntimeException(e);
         }
         //TODO 这可能是一个双向网络包
-//        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataToServerMessage(message.pos, aiPoint)));
+        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataServerPackage(message.pos, aiPoint)));
     }
 
     @Override

@@ -24,16 +24,15 @@ public record SetScrollPackage(String dimension, BlockPos pos) implements Custom
     );
 
     public static void handle(SetScrollPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            ItemStack item = sender.getMainHandItem();
-            if (item.getItem() instanceof ItemFoxScroll) {
-                ItemFoxScroll.setTrackInfo(item, message.dimension, message.pos);
-            }
-        });
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                ItemStack item = sender.getMainHandItem();
+                if (item.getItem() instanceof ItemFoxScroll) {
+                    ItemFoxScroll.setTrackInfo(item, message.dimension, message.pos);
+                }
+            });
+        }
     }
 
     @Override

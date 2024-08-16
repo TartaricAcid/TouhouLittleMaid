@@ -30,14 +30,18 @@ public record MaidTaskPackage(int id, ResourceLocation uid) implements CustomPac
     }
 
     public static void handle(MaidTaskPackage message, IPayloadContext context) {
-        ServerPlayer sender = (ServerPlayer) context.player();
-        Entity entity = sender.level.getEntity(message.id);
-        if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
-            IMaidTask task = TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask());
-            if (!task.isEnable(maid)) {
-                return;
-            }
-            maid.setTask(task);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.id);
+                if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
+                    IMaidTask task = TaskManager.findTask(message.uid).orElse(TaskManager.getIdleTask());
+                    if (!task.isEnable(maid)) {
+                        return;
+                    }
+                    maid.setTask(task);
+                }
+            });
         }
     }
 }

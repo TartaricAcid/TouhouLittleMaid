@@ -23,16 +23,15 @@ public record ToggleTabPackage(int entityId, int tabId) implements CustomPacketP
     );
 
     public static void handle(ToggleTabPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Entity entity = sender.level.getEntity(message.entityId);
-            if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
-                ((EntityMaid) entity).openMaidGui(sender, message.tabId);
-            }
-        });
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.entityId);
+                if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
+                    ((EntityMaid) entity).openMaidGui(sender, message.tabId);
+                }
+            });
+        }
     }
 
     @Override

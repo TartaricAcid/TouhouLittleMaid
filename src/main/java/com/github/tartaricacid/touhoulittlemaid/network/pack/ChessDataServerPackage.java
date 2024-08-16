@@ -32,32 +32,31 @@ public record ChessDataServerPackage(BlockPos pos, Point point) implements Custo
     );
 
     public static void handle(ChessDataServerPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Level level = sender.level;
-            if (!level.isLoaded(message.pos)) {
-                return;
-            }
-            if (level.getBlockEntity(message.pos) instanceof TileEntityGomoku gomoku) {
-                if (!gomoku.isInProgress() || gomoku.isPlayerTurn() || gomoku.getChessCounter() <= 0) {
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Level level = sender.level;
+                if (!level.isLoaded(message.pos)) {
                     return;
                 }
-                Point aiPoint = message.point;
-                gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
-                if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(gomoku.getSitId()) instanceof EntitySit sit && sit.getFirstPassenger() instanceof EntityMaid maid) {
-                    maid.swing(InteractionHand.MAIN_HAND);
+                if (level.getBlockEntity(message.pos) instanceof TileEntityGomoku gomoku) {
+                    if (!gomoku.isInProgress() || gomoku.isPlayerTurn() || gomoku.getChessCounter() <= 0) {
+                        return;
+                    }
+                    Point aiPoint = message.point;
+                    gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
+                    if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(gomoku.getSitId()) instanceof EntitySit sit && sit.getFirstPassenger() instanceof EntityMaid maid) {
+                        maid.swing(InteractionHand.MAIN_HAND);
+                    }
+                    gomoku.setInProgress(MaidGomokuAI.getStatue(gomoku.getChessData(), aiPoint) == Statue.IN_PROGRESS);
+                    level.playSound(null, message.pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
+                    if (gomoku.isInProgress()) {
+                        gomoku.setPlayerTurn(true);
+                    }
+                    gomoku.refresh();
                 }
-                gomoku.setInProgress(MaidGomokuAI.getStatue(gomoku.getChessData(), aiPoint) == Statue.IN_PROGRESS);
-                level.playSound(null, message.pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
-                if (gomoku.isInProgress()) {
-                    gomoku.setPlayerTurn(true);
-                }
-                gomoku.refresh();
-            }
-        });
+            });
+        }
     }
 
     @Override

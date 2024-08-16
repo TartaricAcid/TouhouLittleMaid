@@ -21,21 +21,20 @@ public record RequestEffectPackage(int id) implements CustomPacketPayload {
     );
 
     public static void handle(RequestEffectPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Entity entity = sender.level.getEntity(message.id);
-            if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
-                SendEffectPackage sendEffectMessage = new SendEffectPackage(message.id, maid.getActiveEffects());
-                PacketDistributor.sendToPlayer(sender,sendEffectMessage);
-            }
-        });
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.id);
+                if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
+                    SendEffectPackage sendEffectMessage = new SendEffectPackage(message.id, maid.getActiveEffects());
+                    PacketDistributor.sendToPlayer(sender, sendEffectMessage);
+                }
+            });
+        }
     }
 
     @Override
     public Type<? extends CustomPacketPayload> type() {
-        return null;
+        return TYPE;
     }
 }

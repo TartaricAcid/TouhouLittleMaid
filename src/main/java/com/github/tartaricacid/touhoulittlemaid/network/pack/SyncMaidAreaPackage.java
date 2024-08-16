@@ -6,6 +6,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,9 +24,12 @@ public record SyncMaidAreaPackage(int id, SchedulePos schedulePos) implements Cu
     );
 
     public static void handle(SyncMaidAreaPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> writePos(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> writePos(message));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void writePos(SyncMaidAreaPackage message) {
         MaidAreaRenderEvent.addSchedulePos(message.id, message.schedulePos);
     }

@@ -8,6 +8,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +29,13 @@ public record OpenChairGuiPackage(int id) implements CustomPacketPayload {
     }
 
     public static void handle(OpenChairGuiPackage message, IPayloadContext context) {
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> handleOpenGui(message));
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleOpenGui(OpenChairGuiPackage message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {
             return;

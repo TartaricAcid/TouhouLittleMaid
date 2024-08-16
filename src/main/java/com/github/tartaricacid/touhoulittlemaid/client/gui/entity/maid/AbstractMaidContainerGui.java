@@ -131,19 +131,19 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (!effects.isEmpty()) {
             int yOffset = 5;
             for (SendEffectPackage.EffectData effect : effects) {
-                MutableComponent text = Component.translatable(effect.descriptionId);
-                if (effect.amplifier >= 1 && effect.amplifier <= 9) {
-                    MutableComponent levelText = Component.translatable("enchantment.level." + (effect.amplifier + 1));
+                MutableComponent text = Component.translatable(effect.descriptionId());
+                if (effect.amplifier() >= 1 && effect.amplifier() <= 9) {
+                    MutableComponent levelText = Component.translatable("enchantment.level." + (effect.amplifier() + 1));
                     text = text.append(CommonComponents.SPACE).append(levelText);
                 }
                 String duration;
-                if (effect.duration == -1) {
+                if (effect.duration() == -1) {
                     duration = I18n.get("effect.duration.infinite");
                 } else {
-                    duration = StringUtil.formatTickDuration(effect.duration, 20);
+                    duration = StringUtil.formatTickDuration(effect.duration(), 20);
                 }
                 text = text.append(CommonComponents.SPACE).append(duration);
-                graphics.drawString(font, text, leftPos - font.width(text) - 3, topPos + yOffset + 5, getPotionColor(effect.category));
+                graphics.drawString(font, text, leftPos - font.width(text) - 3, topPos + yOffset + 5, getPotionColor(effect.category()));
                 yOffset += 10;
             }
         }

@@ -31,16 +31,18 @@ public record MaidModelPackage(int id, ResourceLocation modelId) implements Cust
     }
 
     public static void handle(MaidModelPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            Entity entity = sender.level.getEntity(message.id);
-            if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
-                if (sender.isCreative() || MaidConfig.MAID_CHANGE_MODEL.get()) {
-                    ((EntityMaid) entity).setModelId(message.modelId.toString());
-                } else {
-                    sender.sendSystemMessage(Component.translatable("message.touhou_little_maid.change_model.disabled"));
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.id);
+                if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
+                    if (sender.isCreative() || MaidConfig.MAID_CHANGE_MODEL.get()) {
+                        ((EntityMaid) entity).setModelId(message.modelId.toString());
+                    } else {
+                        sender.sendSystemMessage(Component.translatable("message.touhou_little_maid.change_model.disabled"));
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }

@@ -8,6 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,9 +24,12 @@ public record OpenBeaconGuiPackage(BlockPos pos) implements CustomPacketPayload 
     );
 
     public static void handle(OpenBeaconGuiPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> handleOpenGui(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> handleOpenGui(message));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void handleOpenGui(OpenBeaconGuiPackage message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {

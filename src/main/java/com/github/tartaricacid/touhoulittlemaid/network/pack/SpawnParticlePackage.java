@@ -35,10 +35,12 @@ public record SpawnParticlePackage(int entityId, Type particleType, int delayTic
     );
 
     public static void handle(SpawnParticlePackage message, IPayloadContext context) {
-        if (message.delayTicks <= 0) {
-            context.enqueueWork(() -> handleSpawnParticle(message));
-        } else {
-            context.enqueueWork(() -> CompletableFuture.runAsync(() -> handleSpawnParticleDelay(message, message.delayTicks), Util.backgroundExecutor()));
+        if (context.flow().isClientbound()) {
+            if (message.delayTicks <= 0) {
+                context.enqueueWork(() -> handleSpawnParticle(message));
+            } else {
+                context.enqueueWork(() -> CompletableFuture.runAsync(() -> handleSpawnParticleDelay(message, message.delayTicks), Util.backgroundExecutor()));
+            }
         }
     }
 

@@ -4,10 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.entity.player.Player;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,10 +31,18 @@ public record SyncDataPackage(float power, int maidNum) implements CustomPacketP
     }
 
     public static void handle(SyncDataPackage message, IPayloadContext context) {
-        Player player = context.player();
-        context.enqueueWork(() -> {
-            player.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(message.power));
-            player.setData(InitDataAttachment.MAID_NUM, new MaidNumAttachment(message.maidNum));
-        });
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> handleData(message));
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleData(SyncDataPackage message) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null || mc.player == null) {
+            return;
+        }
+        mc.player.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(message.power));
+        mc.player.setData(InitDataAttachment.MAID_NUM, new MaidNumAttachment(message.maidNum));
     }
 }

@@ -9,6 +9,8 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,9 +44,12 @@ public record FoxScrollPackage(Map<String, List<FoxScrollData>> data) implements
     );
 
     public static void handle(FoxScrollPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> onHandle(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> onHandle(message));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void onHandle(FoxScrollPackage message) {
         Minecraft.getInstance().setScreen(new FoxScrollScreen(message.data));
     }

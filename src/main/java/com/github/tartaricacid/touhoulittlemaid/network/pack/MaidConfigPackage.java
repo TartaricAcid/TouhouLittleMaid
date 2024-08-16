@@ -37,28 +37,32 @@ public record MaidConfigPackage(int id, boolean home, boolean pick, boolean ride
     );
 
     public static void handle(MaidConfigPackage message, IPayloadContext context) {
-        ServerPlayer sender = (ServerPlayer) context.player();
-        Entity entity = sender.level.getEntity(message.id);
-        if (entity instanceof EntityMaid maid && ((EntityMaid) entity).isOwnedBy(sender)) {
-            if (maid.isHomeModeEnable() != message.home) {
-                handleHome(message, sender, maid);
-            }
-            if (maid.isPickup() != message.pick) {
-                maid.setPickup(message.pick);
-            }
-            if (maid.isRideable() != message.ride) {
-                maid.setRideable(message.ride);
-            }
-            if (maid.getVehicle() != null && !(maid.getVehicle() instanceof EntitySit)) {
-                maid.stopRiding();
-            }
-            if (maid.getSchedule() != message.schedule) {
-                maid.setSchedule(message.schedule);
-                maid.getSchedulePos().restrictTo(maid);
-                if (maid.isHomeModeEnable()) {
-                    BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.id);
+                if (entity instanceof EntityMaid maid && ((EntityMaid) entity).isOwnedBy(sender)) {
+                    if (maid.isHomeModeEnable() != message.home) {
+                        handleHome(message, sender, maid);
+                    }
+                    if (maid.isPickup() != message.pick) {
+                        maid.setPickup(message.pick);
+                    }
+                    if (maid.isRideable() != message.ride) {
+                        maid.setRideable(message.ride);
+                    }
+                    if (maid.getVehicle() != null && !(maid.getVehicle() instanceof EntitySit)) {
+                        maid.stopRiding();
+                    }
+                    if (maid.getSchedule() != message.schedule) {
+                        maid.setSchedule(message.schedule);
+                        maid.getSchedulePos().restrictTo(maid);
+                        if (maid.isHomeModeEnable()) {
+                            BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
+                        }
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -87,6 +91,4 @@ public record MaidConfigPackage(int id, boolean home, boolean pick, boolean ride
     public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
-
-
 }

@@ -24,14 +24,16 @@ public record WirelessIOGuiPackage(boolean isMaidToChest, boolean isBlacklist) i
     );
 
     public static void handle(WirelessIOGuiPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            ItemStack handItem = sender.getMainHandItem();
-            if (handItem.getItem() == InitItems.WIRELESS_IO.get()) {
-                ItemWirelessIO.setMode(handItem, message.isMaidToChest);
-                ItemWirelessIO.setFilterMode(handItem, message.isBlacklist);
-            }
-        });
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                ItemStack handItem = sender.getMainHandItem();
+                if (handItem.getItem() == InitItems.WIRELESS_IO.get()) {
+                    ItemWirelessIO.setMode(handItem, message.isMaidToChest);
+                    ItemWirelessIO.setFilterMode(handItem, message.isBlacklist);
+                }
+            });
+        }
     }
 
     @Override

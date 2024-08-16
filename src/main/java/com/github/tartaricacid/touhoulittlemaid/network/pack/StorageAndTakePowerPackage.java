@@ -30,25 +30,23 @@ public record StorageAndTakePowerPackage(BlockPos pos, float powerNum,
     );
 
     public static void handle(StorageAndTakePowerPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Level world = sender.level();
-            if (world.isLoaded(message.pos)) {
-                BlockEntity te = world.getBlockEntity(message.pos);
-                if (te instanceof TileEntityMaidBeacon) {
-                    TileEntityMaidBeacon beacon = (TileEntityMaidBeacon) te;
-                    PowerAttachment power = sender.getData(InitDataAttachment.POWER_NUM);
-                    if (message.isStorage) {
-                        storageLogic(message.powerNum, power, beacon);
-                    } else {
-                        takeLogic(message.powerNum, power, beacon);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Level world = sender.level();
+                if (world.isLoaded(message.pos)) {
+                    BlockEntity te = world.getBlockEntity(message.pos);
+                    if (te instanceof TileEntityMaidBeacon beacon) {
+                        PowerAttachment power = sender.getData(InitDataAttachment.POWER_NUM);
+                        if (message.isStorage) {
+                            storageLogic(message.powerNum, power, beacon);
+                        } else {
+                            takeLogic(message.powerNum, power, beacon);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     private static void storageLogic(float powerNum, PowerAttachment playerPower, TileEntityMaidBeacon beacon) {

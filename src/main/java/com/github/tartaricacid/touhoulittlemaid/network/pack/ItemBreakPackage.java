@@ -8,6 +8,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,9 +26,12 @@ public record ItemBreakPackage(int id, ItemStack item) implements CustomPacketPa
     );
 
     public static void handle(ItemBreakPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> handleBreakItem(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> handleBreakItem(message));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void handleBreakItem(ItemBreakPackage message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {

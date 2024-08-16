@@ -25,19 +25,18 @@ public record SetBeaconPotionPackage(BlockPos pos, int potionIndex) implements C
     );
 
     public static void handle(SetBeaconPotionPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Level world = sender.level();
-            if (world.isLoaded(message.pos)) {
-                BlockEntity te = world.getBlockEntity(message.pos);
-                if (te instanceof TileEntityMaidBeacon) {
-                    ((TileEntityMaidBeacon) te).setPotionIndex(message.potionIndex);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Level world = sender.level();
+                if (world.isLoaded(message.pos)) {
+                    BlockEntity te = world.getBlockEntity(message.pos);
+                    if (te instanceof TileEntityMaidBeacon) {
+                        ((TileEntityMaidBeacon) te).setPotionIndex(message.potionIndex);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

@@ -37,27 +37,29 @@ public record ChairModelPackage(int id, ResourceLocation modelId, float mountedH
     }
 
     public static void handle(ChairModelPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            Entity entity = sender.level.getEntity(message.id);
-            boolean canChangeModel = ChairConfig.CHAIR_CHANGE_MODEL.get() || sender.isCreative();
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.id);
+                boolean canChangeModel = ChairConfig.CHAIR_CHANGE_MODEL.get() || sender.isCreative();
 
-            if (entity instanceof EntityChair) {
-                if (canChangeModel) {
-                    EntityChair chair = (EntityChair) entity;
-                    chair.setModelId(message.modelId.toString());
-                    chair.setMountedHeight(message.mountedHeight);
-                    chair.setTameableCanRide(message.tameableCanRide);
-                    chair.setNoGravity(message.noGravity);
-                    if (!message.tameableCanRide && !chair.getPassengers().isEmpty()) {
-                        chair.ejectPassengers();
-                    }
-                } else {
-                    if (sender.isAlive()) {
-                        sender.sendSystemMessage(Component.translatable("message.touhou_little_maid.change_model.disabled"));
+                if (entity instanceof EntityChair) {
+                    if (canChangeModel) {
+                        EntityChair chair = (EntityChair) entity;
+                        chair.setModelId(message.modelId.toString());
+                        chair.setMountedHeight(message.mountedHeight);
+                        chair.setTameableCanRide(message.tameableCanRide);
+                        chair.setNoGravity(message.noGravity);
+                        if (!message.tameableCanRide && !chair.getPassengers().isEmpty()) {
+                            chair.ejectPassengers();
+                        }
+                    } else {
+                        if (sender.isAlive()) {
+                            sender.sendSystemMessage(Component.translatable("message.touhou_little_maid.change_model.disabled"));
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 }

@@ -8,6 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,9 +24,12 @@ public record CheckSchedulePosPacket(String tips) implements CustomPacketPayload
     );
 
     public static void handle(CheckSchedulePosPacket message, IPayloadContext context) {
-        context.enqueueWork(() -> onHandle(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> onHandle(message));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void onHandle(CheckSchedulePosPacket message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) {

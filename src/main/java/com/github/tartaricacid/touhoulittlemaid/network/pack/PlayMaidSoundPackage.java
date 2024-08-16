@@ -11,6 +11,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,9 +32,12 @@ public record PlayMaidSoundPackage(ResourceLocation soundEvent, String id,
     );
 
     public static void handle(PlayMaidSoundPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> playSound(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> playSound(message));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void playSound(PlayMaidSoundPackage message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null) {

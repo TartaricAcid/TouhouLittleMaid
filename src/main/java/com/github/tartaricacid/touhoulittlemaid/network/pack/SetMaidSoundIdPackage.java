@@ -23,16 +23,15 @@ public record SetMaidSoundIdPackage(int entityId, String soundId) implements Cus
     );
 
     public static void handle(SetMaidSoundIdPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Entity entity = sender.level.getEntity(message.entityId);
-            if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
-                maid.setSoundPackId(message.soundId);
-            }
-        });
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.entityId);
+                if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
+                    maid.setSoundPackId(message.soundId);
+                }
+            });
+        }
     }
 
     @Override

@@ -36,19 +36,18 @@ public record SaveSwitcherDataPackage(BlockPos pos,
     );
 
     public static void handle(SaveSwitcherDataPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            if (sender == null) {
-                return;
-            }
-            Level world = sender.level();
-            if (world.isLoaded(message.pos)) {
-                BlockEntity te = world.getBlockEntity(message.pos);
-                if (te instanceof TileEntityModelSwitcher) {
-                    ((TileEntityModelSwitcher) te).setInfoList(message.modeInfos);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Level world = sender.level();
+                if (world.isLoaded(message.pos)) {
+                    BlockEntity te = world.getBlockEntity(message.pos);
+                    if (te instanceof TileEntityModelSwitcher) {
+                        ((TileEntityModelSwitcher) te).setInfoList(message.modeInfos);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

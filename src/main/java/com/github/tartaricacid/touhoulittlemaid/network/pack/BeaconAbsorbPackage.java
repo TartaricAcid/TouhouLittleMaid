@@ -26,7 +26,9 @@ public record BeaconAbsorbPackage(float x, float y, float z) implements CustomPa
     );
 
     public static void handle(BeaconAbsorbPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> spawnParticle(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> spawnParticle(message));
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

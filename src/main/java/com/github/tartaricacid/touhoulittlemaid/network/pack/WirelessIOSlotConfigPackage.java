@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -31,17 +30,19 @@ public record WirelessIOSlotConfigPackage(List<Boolean> configData) implements C
     }
 
     public static void handle(WirelessIOSlotConfigPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer sender = (ServerPlayer) context.player();
-            ItemStack handItem = sender.getMainHandItem();
-            if (handItem.getItem() == InitItems.WIRELESS_IO.get()) {
-                if (!message.configData.isEmpty()) {
-                    ItemWirelessIO.setSlotConfig(handItem, message.configData);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                ItemStack handItem = sender.getMainHandItem();
+                if (handItem.getItem() == InitItems.WIRELESS_IO.get()) {
+                    if (!message.configData.isEmpty()) {
+                        ItemWirelessIO.setSlotConfig(handItem, message.configData);
+                    }
+                    //TODO : 打开界面
+                    sender.openMenu((ItemWirelessIO) handItem.getItem(), (buffer) -> buffer.writeJsonWithCodec(ItemStack.CODEC, handItem));
                 }
-                //TODO : 打开界面
-                sender.openMenu((ItemWirelessIO) handItem.getItem(), (buffer) -> buffer.writeJsonWithCodec(ItemStack.CODEC, handItem));
-            }
-        });
+            });
+        }
     }
 
     @Override

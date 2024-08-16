@@ -8,6 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
@@ -21,9 +23,12 @@ public record OpenSwitcherGuiPackage(BlockPos pos) implements CustomPacketPayloa
     );
 
     public static void handle(OpenSwitcherGuiPackage message, IPayloadContext context) {
-        context.enqueueWork(() -> handleOpenGui(message));
+        if (context.flow().isClientbound()) {
+            context.enqueueWork(() -> handleOpenGui(message));
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static void handleOpenGui(OpenSwitcherGuiPackage message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {
@@ -37,6 +42,6 @@ public record OpenSwitcherGuiPackage(BlockPos pos) implements CustomPacketPayloa
 
     @Override
     public Type<? extends CustomPacketPayload> type() {
-        return null;
+        return TYPE;
     }
 }

@@ -27,10 +27,14 @@ public record SendNameTagPackage(int id, String name, boolean alwaysShow) implem
     );
 
     public static void handle(SendNameTagPackage message, IPayloadContext context) {
-        ServerPlayer sender = (ServerPlayer) context.player();
-        Entity entity = sender.level.getEntity(message.id);
-        if (entity instanceof EntityMaid) {
-            setMaidNameTag(message, sender, (EntityMaid) entity);
+        if (context.flow().isServerbound()) {
+            context.enqueueWork(() -> {
+                ServerPlayer sender = (ServerPlayer) context.player();
+                Entity entity = sender.level.getEntity(message.id);
+                if (entity instanceof EntityMaid) {
+                    setMaidNameTag(message, sender, (EntityMaid) entity);
+                }
+            });
         }
     }
 
