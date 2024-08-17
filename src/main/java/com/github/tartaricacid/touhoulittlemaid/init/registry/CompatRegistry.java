@@ -27,17 +27,16 @@ public final class CompatRegistry {
         //TODO 帕秋莉手册
 //        event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
         //TODO ModLoadingContext已被移除，nf有新的配置界面，需要重写
-//        event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> {
-//            if (FMLEnvironment.dist == Dist.CLIENT) {
-//                MenuIntegration.registerModsPage();
-//            }
-//        }));
-        //TODO ConfigScreenHandler已被移除
-//        event.enqueueWork(() -> {
-//            if (FMLEnvironment.dist == Dist.CLIENT) {
-//                ClothConfigScreen.registerNoClothConfigPage();
-//            }
-//        });
+        event.enqueueWork(() -> checkModLoad(CLOTH_CONFIG, () -> {
+            if (FMLEnvironment.dist == Dist.CLIENT) {
+                MenuIntegration.registerModsPage();
+            }
+        }));
+        event.enqueueWork(() -> {
+            if (FMLEnvironment.dist == Dist.CLIENT) {
+                ClothConfigScreen.registerNoClothConfigPage();
+            }
+        });
         event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
     }
 

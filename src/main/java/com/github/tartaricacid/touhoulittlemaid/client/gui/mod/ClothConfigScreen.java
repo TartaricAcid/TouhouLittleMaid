@@ -12,6 +12,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.apache.commons.lang3.StringUtils;
 
 public class ClothConfigScreen extends Screen {
@@ -35,9 +36,8 @@ public class ClothConfigScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackground(graphics,pMouseX,pMouseY,pPartialTick);
-        this.message.renderCentered(graphics, this.width / 2, 80);
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        this.message.renderCentered(graphics, this.width / 2, 80);
     }
 
     private void openUrl(String url) {
@@ -51,10 +51,9 @@ public class ClothConfigScreen extends Screen {
         }
     }
 
-//    public static void registerNoClothConfigPage() {
-//        if (!ModList.get().isLoaded(CompatRegistry.CLOTH_CONFIG)) {
-//            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-//                    new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> new ClothConfigScreen(parent)));
-//        }
-//    }
+    public static void registerNoClothConfigPage() {
+        if (!ModList.get().isLoaded(CompatRegistry.CLOTH_CONFIG)) {
+            ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (container, parent) -> new ClothConfigScreen(parent));
+        }
+    }
 }

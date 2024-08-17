@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -245,8 +246,9 @@ public class MenuIntegration {
                 .setSaveConsumer(VanillaConfig.REPLACE_XP_BOTTLE_TEXTURE::set).build());
     }
 
-//    public static void registerModsPage() {
-//        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-//                new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> getConfigBuilder().setParentScreen(parent).build()));
-//    }
+    public static void registerModsPage() {
+        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (container, parent) -> {
+            return getConfigBuilder().setParentScreen(parent).build();
+        });
+    }
 }

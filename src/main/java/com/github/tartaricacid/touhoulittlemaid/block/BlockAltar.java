@@ -216,7 +216,7 @@ public class BlockAltar extends Block implements EntityBlock {
 
     private void takeInOrCraft(Level world, TileEntityAltar altar, Player playerIn) {
         if (altar.isCanPlaceItem() && altar.handler.getStackInSlot(0).isEmpty()) {
-            altar.handler.setStackInSlot(0, playerIn.getMainHandItem().copy());
+            altar.handler.setStackInSlot(0, playerIn.getMainHandItem().copyWithCount(1));
             if (!playerIn.isCreative()) {
                 playerIn.getMainHandItem().shrink(1);
             }
