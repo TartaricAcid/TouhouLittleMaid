@@ -33,13 +33,13 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
                 centerX - 68,
-                centerY - 68,
+                centerY - 100,
                 centerX + 68,
-                centerY + 68,
+                centerY + 80,
                 (int) (45 * renderItemScale),
                 0F,
-                centerX - 25,
-                centerY - 20,
+                centerX + 25,
+                centerY + 5,
                 entity);
     }
 
@@ -74,8 +74,8 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
                 posY + 18,
                 (int) (12 * modelItem.getRenderItemScale()),
                 0F,
-                posX - 25,
-                posY - 20,
+                posX + 25,
+                posY + 5,
                 chair);
     }
 

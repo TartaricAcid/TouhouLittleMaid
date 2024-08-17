@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidModelPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.SetMaidSoundIdPackage;
-import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -37,13 +37,12 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     protected void drawLeftEntity(GuiGraphics graphics, int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(entity.getModelId());
         int centerX = (middleX - 256 / 2) / 2;
-        int centerY = middleY + 90;
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
                 centerX - 36,
-                centerY - 45,
+                middleY,
                 centerX + 36,
-                centerY + 45,
+                middleY + 100,
                 (int) (45 * renderItemScale),
                 0.1F,
                 mouseX,
@@ -83,8 +82,8 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
                 posY + 12,
                 (int) (12 * modelItem.getRenderItemScale()),
                 0.1F,
-                posX - 25,
-                posY - 20,
+                posX + 25,
+                posY + 5,
                 maid);
     }
 
