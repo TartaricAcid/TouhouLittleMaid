@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -41,7 +40,6 @@ public class EntityPowerPointRenderer extends EntityRenderer<EntityPowerPoint> {
         poseStack.pushPose();
         poseStack.translate(0, 0.1, 0);
         poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.scale(0.3F, 0.3F, 0.3F);
 
         VertexConsumer buffer = bufferIn.getBuffer(RENDER_TYPE);

@@ -9,7 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.pack.SyncDataPackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -31,12 +31,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
 
-//TODO IEntityAdditionalSpawnData已被移除，等待观察
-public class EntityPowerPoint extends Entity {
+public class EntityPowerPoint extends Entity implements IEntityWithComplexSpawn {
     public static final EntityType<EntityPowerPoint> TYPE = EntityType.Builder.<EntityPowerPoint>of(EntityPowerPoint::new, MobCategory.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(6).updateInterval(20).build("power_point");
     private static final int MAX_AGE = 6000;
@@ -261,13 +261,13 @@ public class EntityPowerPoint extends Entity {
                     int residualValue = value - (int) (PowerAttachment.MAX_POWER * 100) + (int) (power.get() * 100);
                     // 和原版设计不同，该数值过大，故缩小一些
                     player.giveExperiencePoints(transPowerValueToXpValue(residualValue));
-                    player.setData(POWER_NUM,new PowerAttachment(power.get()));
+                    player.setData(POWER_NUM, new PowerAttachment(power.get()));
                 } else {
                     power.add(value / 100.0f);
-                    player.setData(POWER_NUM,new PowerAttachment(power.get()));
+                    player.setData(POWER_NUM, new PowerAttachment(power.get()));
                 }
             }
-            PacketDistributor.sendToPlayer((ServerPlayer) player,new SyncDataPackage(power.get(),maidNum.get()));
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new SyncDataPackage(power.get(), maidNum.get()));
             this.discard();
         }
     }
@@ -315,5 +315,15 @@ public class EntityPowerPoint extends Entity {
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
         return new ClientboundAddEntityPacket(this, pEntity);
+    }
+
+    @Override
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
+        buffer.writeInt(value);
+    }
+
+    @Override
+    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
+        this.value = additionalData.readInt();
     }
 }

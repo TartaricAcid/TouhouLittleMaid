@@ -72,6 +72,7 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
         // GeckoLib 接管渲染
         if (this.chairInfo.isGeckoModel()) {
             this.geckoEntityChairRenderer.setMainInfo(this.chairInfo);
+            this.geckoEntityChairRenderer.getAnimatableEntity(chair).setChair(this.chairInfo);
             this.geckoEntityChairRenderer.render(chair, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;
         }
