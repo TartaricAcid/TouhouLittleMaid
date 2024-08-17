@@ -15,6 +15,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidConfigPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidTaskPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.RequestEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
@@ -520,8 +521,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     protected void containerTick() {
         counterTime += 1;
         if (counterTime % 20 == 0 && maid != null) {
-            //TODO 不知道为啥网络包发包出错
-//            PacketDistributor.sendToServer(new RequestEffectPackage(maid.getId()));
+            PacketDistributor.sendToServer(new RequestEffectPackage(maid.getId()));
         }
     }
 

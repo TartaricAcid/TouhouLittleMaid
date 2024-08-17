@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.pack;
 
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
@@ -11,6 +12,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,11 +40,14 @@ public record StorageAndTakePowerPackage(BlockPos pos, float powerNum,
                     BlockEntity te = world.getBlockEntity(message.pos);
                     if (te instanceof TileEntityMaidBeacon beacon) {
                         PowerAttachment power = sender.getData(InitDataAttachment.POWER_NUM);
+                        MaidNumAttachment maidNum = sender.getData(InitDataAttachment.MAID_NUM);
                         if (message.isStorage) {
                             storageLogic(message.powerNum, power, beacon);
                         } else {
                             takeLogic(message.powerNum, power, beacon);
                         }
+
+                        PacketDistributor.sendToPlayer((ServerPlayer) sender, new SyncDataPackage(power.get(), maidNum.get()));
                     }
                 }
             });
