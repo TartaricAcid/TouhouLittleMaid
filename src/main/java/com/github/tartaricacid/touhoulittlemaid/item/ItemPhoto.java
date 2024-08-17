@@ -42,11 +42,11 @@ public class ItemPhoto extends AbstractStoreMaidItem {
                 context.getItemInHand().shrink(1);
             });
         } else {
-            if (worldIn.isClientSide) {
+            if (context.getItemInHand().get(InitDataComponent.MAID_INFO) != null && worldIn.isClientSide) {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.photo.not_suitable_for_place_maid"));
             }
         }
-        return InteractionResult.FAIL;
+        return super.useOn(context);
     }
 
     @Override
