@@ -38,8 +38,7 @@ public record WirelessIOSlotConfigPackage(List<Boolean> configData) implements C
                     if (!message.configData.isEmpty()) {
                         ItemWirelessIO.setSlotConfig(handItem, message.configData);
                     }
-                    //TODO : 打开界面
-                    sender.openMenu((ItemWirelessIO) handItem.getItem(), (buffer) -> buffer.writeJsonWithCodec(ItemStack.CODEC, handItem));
+                    sender.openMenu((ItemWirelessIO) handItem.getItem(), buffer -> ItemStack.STREAM_CODEC.encode(buffer, handItem));
                 }
             });
         }

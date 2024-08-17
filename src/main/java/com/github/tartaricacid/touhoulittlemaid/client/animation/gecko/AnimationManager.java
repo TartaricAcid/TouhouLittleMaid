@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public final class AnimationManager {
     private static AnimationManager MANAGER;
@@ -89,9 +88,7 @@ public final class AnimationManager {
                 if (state.getPredicate().test(maid, event)) {
                     String animationName = state.getAnimationName();
                     ILoopType loopType = state.getLoopType();
-                    //TODO : tacz
-//                    PlayState gunMainAnimation = TacCompat.playGunMainAnimation(maid, event, animationName, loopType);
-//                    return Objects.requireNonNullElseGet(gunMainAnimation, () -> playAnimation(event, animationName, loopType));
+                    return playAnimation(event, animationName, loopType);
                 }
             }
         }

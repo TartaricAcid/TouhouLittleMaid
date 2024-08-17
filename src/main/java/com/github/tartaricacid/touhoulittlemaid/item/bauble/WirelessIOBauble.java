@@ -14,7 +14,9 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class WirelessIOBauble implements IMaidBauble {
     private static final int SLOT_NUM = 38;

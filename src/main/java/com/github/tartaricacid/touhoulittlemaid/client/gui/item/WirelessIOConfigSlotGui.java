@@ -12,13 +12,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 
 public class WirelessIOConfigSlotGui extends Screen {
     private static final ResourceLocation SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/wireless_io_slot_config.png");
     private static final int SLOT_NUM = 38;
-    private final List<Boolean> configData;
+    private List<Boolean> configData;
     protected int imageWidth = 155;
     protected int imageHeight = 160;
     protected int leftPos;
@@ -27,6 +28,15 @@ public class WirelessIOConfigSlotGui extends Screen {
     protected WirelessIOConfigSlotGui(ItemStack wirelessIO) {
         super(Component.literal("Wireless IO Config Slot GUI"));
         configData = ItemWirelessIO.getSlotConfig(wirelessIO);
+        if (configData == null) {
+            configData = Lists.newArrayList();
+        }
+        int configDataSize = configData.size();
+        if (configDataSize < SLOT_NUM) {
+            for (int i = configDataSize; i < SLOT_NUM; i++) {
+                configData.add(false);
+            }
+        }
     }
 
     @Override
