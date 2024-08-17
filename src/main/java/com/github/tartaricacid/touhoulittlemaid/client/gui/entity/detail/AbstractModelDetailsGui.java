@@ -112,7 +112,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
             return;
         }
         this.renderViewBg(graphics);
-        this.renderEntity((width + 132) / 2, height / 2 + 50,graphics);
+        this.renderEntity((width + 132) / 2, height / 2 + 50, graphics);
         this.renderViewCrosshair(graphics);
         this.renderBottomStatueBar(graphics);
         this.fillGradient(graphics, SIDE_MENU_SIZE, 0xfe21252b);
@@ -207,16 +207,18 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
     }
 
 
-    private void renderEntity(int middleWidth, int middleHeight,GuiGraphics graphics) {
+    private void renderEntity(int middleWidth, int middleHeight, GuiGraphics graphics) {
+        graphics.enableScissor(132, 15, this.width, this.height - 16);
+
         PoseStack viewStack = graphics.pose();
         viewStack.pushPose();
-        viewStack.translate(posX + middleWidth, posY + middleHeight, 1050.0D);
+        viewStack.translate(0, 0, 1050.0D);
         viewStack.scale(1.0F, 1.0F, -1.0F);
         RenderSystem.applyModelViewMatrix();
 
         PoseStack poseStack = new PoseStack();
-        poseStack.translate(300.0D, 180.0D, 1000.0D);
-        poseStack.scale(scale, scale, scale);
+        poseStack.translate(posX + middleWidth, posY + middleHeight, 1000.0D);
+        poseStack.scale(scale, scale, -scale);
 
         Quaternionf zp = Axis.ZP.rotationDegrees(-180.0F);
         Quaternionf yp = Axis.YP.rotationDegrees(yaw);
@@ -245,6 +247,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         viewStack.popPose();
         RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
+        graphics.disableScissor();
     }
 
     @Override

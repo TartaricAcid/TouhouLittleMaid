@@ -18,7 +18,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.Objects;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.STORAGE_DATA_TAG;
 
 public class ItemModelSwitcher extends BlockItem {
-    private static final String FORGE_DATA_TAG = "ForgeData";
+    private static final String NEO_FORGE_DATA_TAG = "NeoForgeData";
 
     public ItemModelSwitcher() {
         super(InitBlocks.MODEL_SWITCHER.get(), (new Item.Properties()).stacksTo(1));
@@ -41,32 +40,33 @@ public class ItemModelSwitcher extends BlockItem {
 
     public static void itemStackToTileEntity(HolderLookup.Provider provider, ItemStack stack, TileEntityModelSwitcher switcher) {
         CompoundTag tag = stack.get(STORAGE_DATA_TAG);
-        if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+        if (tag != null && tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
             switcher.loadAdditional(tag, provider);
         }
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
+    public InteractionResult interactLivingEntity(ItemStack stack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
         if (pInteractionTarget instanceof EntityMaid maid) {
-            CompoundTag tag = pStack.get(STORAGE_DATA_TAG);
+            CompoundTag tag = stack.getOrDefault(STORAGE_DATA_TAG, new CompoundTag());
             CompoundTag forgeData;
-            if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-                forgeData = tag.getCompound(FORGE_DATA_TAG);
+            if (tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+                forgeData = tag.getCompound(NEO_FORGE_DATA_TAG);
             } else {
                 forgeData = new CompoundTag();
             }
             forgeData.put(TileEntityModelSwitcher.ENTITY_UUID, NbtUtils.createUUID(maid.getUUID()));
-            tag.put(FORGE_DATA_TAG, forgeData);
+            tag.put(NEO_FORGE_DATA_TAG, forgeData);
+            stack.set(STORAGE_DATA_TAG, tag);
             return InteractionResult.SUCCESS;
         }
-        return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
+        return super.interactLivingEntity(stack, pPlayer, pInteractionTarget, pUsedHand);
     }
 
     private boolean hasMaidInfo(ItemStack stack) {
         CompoundTag tag = stack.get(STORAGE_DATA_TAG);
-        if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-            CompoundTag forgeTag = tag.getCompound(FORGE_DATA_TAG);
+        if (tag != null && tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            CompoundTag forgeTag = tag.getCompound(NEO_FORGE_DATA_TAG);
             return forgeTag.contains(TileEntityModelSwitcher.ENTITY_UUID, Tag.TAG_INT_ARRAY);
         }
         return false;

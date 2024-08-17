@@ -173,14 +173,14 @@ public class ModelSwitcherGui extends Screen {
         if (this.description != null) {
             InventoryScreen.renderEntityInInventoryFollowsMouse(
                     graphics,
-                    leftPos + 10,
-                    topPos + 35,
-                    leftPos + 50,
-                    topPos + 85,
-                    25,
+                    leftPos + 9,
+                    topPos + 8,
+                    leftPos + 54,
+                    topPos + 68,
+                    24,
                     0.1F,
-                    -180,
-                    -110,
+                    leftPos + 45,
+                    topPos + 45,
                     maid);
             this.description.render(graphics, pMouseX, pMouseY, pPartialTick);
         }
