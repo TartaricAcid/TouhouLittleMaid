@@ -18,7 +18,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidTaskPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
@@ -449,21 +448,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void drawMaidCharacter(GuiGraphics graphics, int x, int y) {
-        double scale = getMinecraft().getWindow().getGuiScale();
-        RenderSystem.enableScissor((int) ((leftPos + 6) * scale), (int) ((topPos + 107 + 42) * scale),
-                (int) (67 * scale), (int) (95 * scale));
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
-                leftPos + 8,
-                topPos + 20,
-                leftPos + 72,
-                topPos + 100,
+                leftPos + 6,
+                topPos + 12,
+                leftPos + 73,
+                topPos + 124,
                 40,
                 0.1F,
                 x,
                 y,
                 maid);
-        RenderSystem.disableScissor();
     }
 
     private void drawTaskListBg(GuiGraphics graphics) {

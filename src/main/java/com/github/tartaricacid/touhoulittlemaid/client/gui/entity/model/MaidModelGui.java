@@ -37,12 +37,13 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     protected void drawLeftEntity(GuiGraphics graphics, int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(entity.getModelId());
         int centerX = (middleX - 256 / 2) / 2;
+        int yOffset = (int) (45 * (renderItemScale - 1));
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
-                centerX - 36,
-                middleY,
-                centerX + 36,
-                middleY + 100,
+                centerX - 100,
+                middleY - 100,
+                centerX + 100,
+                middleY + 200 - yOffset,
                 (int) (45 * renderItemScale),
                 0.1F,
                 mouseX,

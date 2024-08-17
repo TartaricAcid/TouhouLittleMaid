@@ -13,6 +13,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -117,7 +118,9 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         this.fillGradient(graphics, SIDE_MENU_SIZE, 0xfe21252b);
         this.fillGradient(graphics, TOP_STATUS_BAR_SIZE, 0xfe282c34);
         graphics.drawString(font, getTitle(), 6, 4, 0xffaaaaaa);
-//        super.render(graphics, mouseX, mouseY, partialTicks);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, mouseX, mouseY, partialTicks);
+        }
     }
 
     private void renderViewBg(GuiGraphics graphics) {

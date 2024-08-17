@@ -1,14 +1,15 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SetScrollPackage;
-import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.FoxScrollPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.pack.SetScrollPackage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -88,7 +89,7 @@ public class FoxScrollScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(graphics,pMouseX,pMouseY,pPartialTick);
+        this.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
         if (this.data.isEmpty()) {
             int x = this.width / 2;
             int y = this.height / 2 - 5;
@@ -96,7 +97,9 @@ public class FoxScrollScreen extends Screen {
             return;
         }
         this.renderMain(graphics);
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, pMouseX, pMouseY, pPartialTick);
+        }
     }
 
     private void renderMain(GuiGraphics graphics) {

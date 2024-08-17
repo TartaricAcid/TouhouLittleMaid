@@ -227,6 +227,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.renderBlurredBackground(partialTicks);
+
         graphics.pose().translate(0, 0, -100);
 
         // 中心点
@@ -250,11 +252,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         drawTabIcon(graphics, middleX, middleY);
 
         // 绘制左边示例实体
-        double scale = getMinecraft().getWindow().getGuiScale();
-        RenderSystem.enableScissor(0, 0,
-                (int) ((middleX - 256 / 2) * scale), (int) (height * scale));
         drawLeftEntity(graphics, middleX, middleY, mouseX, mouseY);
-        RenderSystem.disableScissor();
 
         // 绘制实体，绘制完毕后绘制文本提示
         drawEntity(graphics, middleX, middleY);
