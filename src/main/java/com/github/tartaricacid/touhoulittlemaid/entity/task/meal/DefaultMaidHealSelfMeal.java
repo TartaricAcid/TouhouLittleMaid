@@ -9,14 +9,13 @@ import com.github.tartaricacid.touhoulittlemaid.network.pack.SpawnParticlePackag
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 public class DefaultMaidHealSelfMeal implements IMaidMeal {
     private static final int MAX_PROBABILITY = 5;
 
     @Override
     public boolean canMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
-        return stack.getFoodProperties(null) != null && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.get())
+        return stack.getFoodProperties(null) != null && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.getPath())
                 && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.HEAL_MEAL_REGEX);
     }
 

@@ -24,9 +24,9 @@ public class MaidMealRegConfigEvent {
     public static void onEvent(ModConfigEvent.Loading event) {
         String fileName = event.getConfig().getFileName();
         if (CONFIG_NAME.equals(fileName)) {
-            handleConfig(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.get(), HEAL_MEAL_REGEX);
-            handleConfig(MaidConfig.MAID_HOME_MEALS_BLOCK_LIST_REGEX.get(), HOME_MEAL_REGEX);
-            handleConfig(MaidConfig.MAID_WORK_MEALS_BLOCK_LIST_REGEX.get(), WORK_MEAL_REGEX);
+            handleConfig(MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST_REGEX.getPath(), HEAL_MEAL_REGEX);
+            handleConfig(MaidConfig.MAID_HOME_MEALS_BLOCK_LIST_REGEX.getPath(), HOME_MEAL_REGEX);
+            handleConfig(MaidConfig.MAID_WORK_MEALS_BLOCK_LIST_REGEX.getPath(), WORK_MEAL_REGEX);
         }
     }
 
