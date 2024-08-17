@@ -71,7 +71,7 @@ public abstract class AbstractStoreMaidItem extends Item {
         return customName.map(s -> (TooltipComponent) new ItemMaidTooltip(modelId.get(), s)).or(() -> Optional.of(new ItemMaidTooltip(modelId.get(), "")));
     }
 
-    public InteractionResult spawnFromStore(UseOnContext context, Player player, Level worldIn, EntityMaid maid, Succeed successDo) {
+    public InteractionResult spawnFromStore(UseOnContext context, Player player, Level worldIn, EntityMaid maid, Runnable runnable) {
         ItemStack stack = context.getItemInHand();
         CustomData compoundData = stack.get(InitDataComponent.MAID_INFO);
         if (compoundData != null) {
@@ -87,13 +87,9 @@ public abstract class AbstractStoreMaidItem extends Item {
             }
             maid.spawnExplosionParticle();
             maid.playSound(SoundEvents.PLAYER_SPLASH, 1.0F, worldIn.random.nextFloat() * 0.1F + 0.9F);
-            successDo.run();
+            runnable.run();
             return InteractionResult.sidedSuccess(worldIn.isClientSide);
         }
         return super.useOn(context);
-    }
-
-    public interface Succeed {
-        void run();
     }
 }

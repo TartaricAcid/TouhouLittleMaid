@@ -211,7 +211,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 64).add(Attributes.ATTACK_KNOCKBACK).add(Attributes.ATTACK_DAMAGE);
+        return LivingEntity.createLivingAttributes()
+                .add(Attributes.FOLLOW_RANGE, 64)
+                .add(Attributes.ATTACK_KNOCKBACK)
+                .add(Attributes.ATTACK_DAMAGE)
+                //TODO 攻击范围与好感度挂钩待做
+                .add(Attributes.SWEEPING_DAMAGE_RATIO,1.5F);
     }
 
     public static boolean canInsertItem(ItemStack stack) {
