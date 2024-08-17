@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
-
 import org.anti_ad.mc.ipn.api.IPNIgnore;
 
 @IPNIgnore
@@ -66,7 +65,7 @@ public class WirelessIOContainerGui extends AbstractContainerScreen<WirelessIOCo
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
-        this.renderBackground(graphics, x, y, partialTicks);
+        super.renderTransparentBackground(graphics);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, MAIN);
         graphics.blit(MAIN, leftPos, topPos, 0, 0, imageWidth, imageHeight);
