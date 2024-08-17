@@ -1,0 +1,4 @@
+[submodule "libs/patchouli"]
+	path = libs/patchouli
+	url = git@github.com:VazkiiMods/Patchouli.git
+	branch = 1.21.x
