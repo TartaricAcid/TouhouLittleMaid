@@ -22,7 +22,7 @@ public final class UseNameTagEvent {
         Player player = event.getPlayer();
         EntityMaid maid = event.getMaid();
 
-        if (stack.get(DataComponents.CUSTOM_NAME) != null && player.getMainHandItem().getItem() == Items.NAME_TAG && player.equals(maid.getOwner())) {
+        if (stack.get(DataComponents.CUSTOM_NAME) == null && player.getMainHandItem().getItem() == Items.NAME_TAG && player.equals(maid.getOwner())) {
             if (player.level.isClientSide()) {
                 Minecraft.getInstance().setScreen(new NameTagGui(maid));
             }
@@ -37,7 +37,7 @@ public final class UseNameTagEvent {
         Player player = event.getPlayer();
         EntityMaid maid = event.getMaid();
 
-        if (stack.get(DataComponents.CUSTOM_NAME) != null && player.getMainHandItem().getItem() == Items.NAME_TAG && player.equals(maid.getOwner())) {
+        if (stack.get(DataComponents.CUSTOM_NAME) == null && player.getMainHandItem().getItem() == Items.NAME_TAG && player.equals(maid.getOwner())) {
             event.setCanceled(true);
         }
     }

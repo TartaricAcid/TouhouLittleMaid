@@ -14,7 +14,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 public class NameTagGui extends Screen {
-    private static final ResourceLocation TEXTURES = ResourceLocation.withDefaultNamespace("textures/gui/container/beacon.png");
+    final ResourceLocation CONFIRM_SPRITE = ResourceLocation.withDefaultNamespace("container/beacon/confirm");
+    final ResourceLocation CANCEL_SPRITE = ResourceLocation.withDefaultNamespace("container/beacon/cancel");
     private final EntityMaid maid;
     private EditBox textField;
     private Button alwaysShowButton;
@@ -59,7 +60,11 @@ public class NameTagGui extends Screen {
         for (Renderable renderable : this.renderables) {
             renderable.render(graphics, mouseX, mouseY, partialTicks);
         }
-        graphics.blit(TEXTURES, middleX + 80, middleY - 26, alwaysShow ? 88 : 110, 220, 20, 20);
+        if (alwaysShow) {
+            graphics.blitSprite(CANCEL_SPRITE, middleX + 82, middleY - 26,18,18);
+        } else {
+            graphics.blitSprite(CONFIRM_SPRITE, middleX + 82, middleY - 26,18,18);
+        }
         if (alwaysShowButton.isHovered()) {
             graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.tag.always_show"), mouseX, mouseY);
         }
