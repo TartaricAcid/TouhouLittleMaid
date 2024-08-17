@@ -4,25 +4,26 @@ import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class TileEntityGomoku extends TileEntityJoy {
-    public static final BlockEntityType<TileEntityGomoku> TYPE = BlockEntityType.Builder.of(TileEntityGomoku::new, InitBlocks.GOMOKU.get()).build(null);
+import java.util.List;
 
-    private static final String CHESS_DATA = "ChessData";
+public class TileEntityGomoku extends TileEntityJoy {
+    private static final String CHESS_DATA = "ChessData";    public static final BlockEntityType<TileEntityGomoku> TYPE = BlockEntityType.Builder.of(TileEntityGomoku::new, InitBlocks.GOMOKU.get()).build(null);
     private static final String IN_PROGRESS = "InProgress";
     private static final String PLAYER_TURN = "PlayerTurn";
     private static final String CHESS_COUNTER = "ChessCounter";
     private static final String LATEST_CHESS_POINT = "LatestChessPoint";
-
     private byte[][] chessData = new byte[15][15];
     private boolean inProgress = true;
     private boolean playerTurn = true;
     private int chessCounter = 0;
     private Point latestChessPoint = Point.NULL;
-
     public TileEntityGomoku(BlockPos pos, BlockState blockState) {
         super(TYPE, pos, blockState);
     }
@@ -69,6 +70,12 @@ public class TileEntityGomoku extends TileEntityJoy {
 
     public byte[][] getChessData() {
         return chessData;
+    }
+
+    public void setChessData(List<byte[]> arrayList) {
+        for (int i = 0; i < arrayList.size(); i++) {
+            this.chessData[i] = arrayList.get(i);
+        }
     }
 
     public void setChessData(int x, int y, int type) {

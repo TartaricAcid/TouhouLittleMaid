@@ -25,7 +25,7 @@ public class EntityPowerPointRenderer extends EntityRenderer<EntityPowerPoint> {
 
     private static void vertex(VertexConsumer bufferIn, Matrix4f pose, Matrix3f normal, double x, double y, double texU, double texV, int packedLight) {
         Vector3f vector3f = normal.transform(new Vector3f(0.0F, 1.0F, 0.0F));
-        bufferIn.addVertex(pose, (float) x, (float) y, 0.0F).setColor(255, 255, 255, 255).setUv((float) texU, (float) texV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(vector3f.x(), vector3f.y(), vector3f.z());
+        bufferIn.addVertex(pose, (float) x, (float) y, 0.0F).setColor(255, 255, 255, 128).setUv((float) texU, (float) texV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(vector3f.x(), vector3f.y(), vector3f.z());
     }
 
     @Override

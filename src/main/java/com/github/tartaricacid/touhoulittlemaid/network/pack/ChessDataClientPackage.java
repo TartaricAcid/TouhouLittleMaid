@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.network.pack;
 
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -9,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -53,15 +55,21 @@ public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point
 
     @OnlyIn(Dist.CLIENT)
     private static void onHandle(ChessDataClientPackage message) {
-        Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(message.chessData.toArray(new byte[15][]), message.point);
-        int time = (int) (Math.random() * 1250) + 250;
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (Minecraft.getInstance().level != null) {
+            BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(message.pos);
+            if (blockEntity instanceof TileEntityGomoku gomoku) {
+                gomoku.setChessData(message.chessData);
+                Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(message.chessData.toArray(new byte[15][]), message.point);
+                int time = (int) (Math.random() * 1250) + 250;
+                try {
+                    Thread.sleep(time);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                gomoku.setChessData(aiPoint.x,aiPoint.y, aiPoint.type);
+                Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataServerPackage(message.pos, aiPoint)));
+            }
         }
-        //TODO 这可能是一个双向网络包
-        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataServerPackage(message.pos, aiPoint)));
     }
 
     @Override
