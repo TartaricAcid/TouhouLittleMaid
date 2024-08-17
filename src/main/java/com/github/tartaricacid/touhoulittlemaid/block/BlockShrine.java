@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +48,7 @@ public class BlockShrine extends BaseEntityBlock {
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack itemStack,BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
         if (hand == InteractionHand.MAIN_HAND && worldIn.getBlockEntity(pos) instanceof TileEntityShrine shrine) {
             if (playerIn.isShiftKeyDown()) {
                 if (!shrine.isEmpty()) {
@@ -61,7 +60,7 @@ public class BlockShrine extends BaseEntityBlock {
             }
             if (shrine.isEmpty()) {
                 if (shrine.canInsert(playerIn.getMainHandItem())) {
-                    shrine.insertStorageItem(playerIn.getMainHandItem().getItem().getDefaultInstance());
+                    shrine.insertStorageItem(playerIn.getMainHandItem().copyWithCount(1));
                     playerIn.getMainHandItem().shrink(1);
                     return ItemInteractionResult.SUCCESS;
                 }
@@ -82,7 +81,7 @@ public class BlockShrine extends BaseEntityBlock {
                 ItemFilm.filmToMaid(film, worldIn, pos.above(), playerIn);
             }
         }
-        return super.useItemOn(itemStack,state, worldIn, pos, playerIn, hand, hit);
+        return super.useItemOn(itemStack, state, worldIn, pos, playerIn, hand, hit);
     }
 
     @Override
