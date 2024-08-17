@@ -5,8 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -41,8 +39,8 @@ public class HandleBackpackEvent {
                     ItemHandlerHelper.giveItemToPlayer(player, maidBackpack.getTakeOffItemStack(stack, player, maid));
                     maidBackpack.onTakeOff(stack, player, maid);
                     maid.setMaidBackpackType(backpack);
-                    stack.shrink(1);
                     backpack.onPutOn(stack, player, maid);
+                    stack.shrink(1);
                     maid.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
                     event.setCanceled(true);
                 }

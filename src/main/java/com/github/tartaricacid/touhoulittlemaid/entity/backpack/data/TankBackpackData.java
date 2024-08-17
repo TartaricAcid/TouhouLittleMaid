@@ -80,8 +80,8 @@ public class TankBackpackData extends SimpleContainer implements IBackpackData {
 
     @Override
     public void save(CompoundTag tag, EntityMaid maid) {
-        tag.put("Tanks", new CompoundTag());
-        tag.put("Items", this.createTag(this.maid.registryAccess()));
+        tag.put("Tanks", tank.writeToNBT(maid.registryAccess(), new CompoundTag()));
+        tag.put("Items", this.createTag(maid.registryAccess()));
     }
 
     @Override
