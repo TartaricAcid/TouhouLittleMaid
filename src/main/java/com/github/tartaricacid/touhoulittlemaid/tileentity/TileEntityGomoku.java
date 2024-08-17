@@ -11,6 +11,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityGomoku extends TileEntityJoy {
@@ -45,14 +46,10 @@ public class TileEntityGomoku extends TileEntityJoy {
     @Override
     public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         super.loadAdditional(pTag, pRegistries);
-        ListTag listTag = getPersistentData().getList(CHESS_DATA, Tag.TAG_INT_ARRAY);
+        ListTag listTag = getPersistentData().getList(CHESS_DATA, Tag.TAG_BYTE_ARRAY);
         for (int i = 0; i < listTag.size(); i++) {
-            int[] intArray = listTag.getIntArray(i);
-            byte[] byteArray = new byte[intArray.length];
-            for (int j = 0; j < intArray.length; j++) {
-                byteArray[j] = (byte) intArray[j];
-            }
-            this.chessData[i] = byteArray;
+            ByteArrayTag byteArray = (ByteArrayTag) listTag.get(i);
+            this.chessData[i] = byteArray.getAsByteArray();
         }
         this.inProgress = getPersistentData().getBoolean(IN_PROGRESS);
         this.playerTurn = getPersistentData().getBoolean(PLAYER_TURN);

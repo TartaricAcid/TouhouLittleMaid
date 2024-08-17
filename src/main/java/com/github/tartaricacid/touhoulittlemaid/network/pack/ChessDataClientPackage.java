@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.network.pack;
 
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -10,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -24,17 +22,14 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
 
-public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point point, int count) implements CustomPacketPayload {
-    public ChessDataClientPackage(BlockPos pos, byte[][] chessData, Point point, int count) {
-        this(pos, Arrays.stream(chessData).toList(), point, count);
-    }
+public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point point,
+                                     int count) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ChessDataClientPackage> TYPE = new CustomPacketPayload.Type<>(getResourceLocation("chess_data_to_client"));
-    public static final StreamCodec<ByteBuf , List<byte[]>> BYTE_BUF_LIST_STREAM_CODEC = ByteBufCodecs.collection(
-                ArrayList::new,
-                ByteBufCodecs.BYTE_ARRAY,
-                20
-            );
-
+    public static final StreamCodec<ByteBuf, List<byte[]>> BYTE_BUF_LIST_STREAM_CODEC = ByteBufCodecs.collection(
+            ArrayList::new,
+            ByteBufCodecs.BYTE_ARRAY,
+            20
+    );
     public static final StreamCodec<ByteBuf, ChessDataClientPackage> STREAM_CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC,
             ChessDataClientPackage::pos,
@@ -47,6 +42,10 @@ public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point
             ChessDataClientPackage::new
     );
 
+    public ChessDataClientPackage(BlockPos pos, byte[][] chessData, Point point, int count) {
+        this(pos, Arrays.stream(chessData).toList(), point, count);
+    }
+
     public static void handle(ChessDataClientPackage message, IPayloadContext context) {
         if (context.flow().isClientbound()) {
             context.enqueueWork(() -> CompletableFuture.runAsync(() -> onHandle(message), Util.backgroundExecutor()));
@@ -55,21 +54,14 @@ public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point
 
     @OnlyIn(Dist.CLIENT)
     private static void onHandle(ChessDataClientPackage message) {
-        if (Minecraft.getInstance().level != null) {
-            BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(message.pos);
-            if (blockEntity instanceof TileEntityGomoku gomoku) {
-                gomoku.setChessData(message.chessData);
-                Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(message.chessData.toArray(new byte[15][]), message.point);
-                int time = (int) (Math.random() * 1250) + 250;
-                try {
-                    Thread.sleep(time);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                gomoku.setChessData(aiPoint.x,aiPoint.y, aiPoint.type);
-                Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataServerPackage(message.pos, aiPoint)));
-            }
+        Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(message.chessData.toArray(new byte[15][]), message.point);
+        int time = (int) (Math.random() * 1250) + 250;
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new ChessDataServerPackage(message.pos, aiPoint)));
     }
 
     @Override
