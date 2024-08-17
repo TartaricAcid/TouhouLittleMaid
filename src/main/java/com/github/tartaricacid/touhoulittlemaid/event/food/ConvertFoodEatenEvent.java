@@ -10,22 +10,23 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
+import java.util.Optional;
+
 @EventBusSubscriber
-public class BowlFoodEvent {
+public class ConvertFoodEatenEvent {
     @SubscribeEvent
     public static void onAfterMaidEat(MaidAfterEatEvent event) {
         ItemStack foodAfterEat = event.getFoodAfterEat();
         EntityMaid maid = event.getMaid();
-        FoodProperties foodProperties = foodAfterEat.getItem().getFoodProperties(foodAfterEat.getItem().getDefaultInstance(), maid);
-        if (foodProperties != null) {
-            //TODO 这里会抛出java.util.NoSuchElementException: No value present
-            ItemStack itemStack = foodProperties.usingConvertsTo().get();
-            if (!itemStack.isEmpty() && !foodAfterEat.isEmpty()) {
+        FoodProperties foodProperties = foodAfterEat.getFoodProperties(maid);
+        if (!foodAfterEat.isEmpty() && foodProperties != null) {
+            Optional<ItemStack> convertedStack = foodProperties.usingConvertsTo();
+            if (convertedStack.isPresent() && !convertedStack.get().isEmpty()) {
                 CombinedInvWrapper availableInv = maid.getAvailableInv(false);
-                ItemStack result = ItemHandlerHelper.insertItemStacked(availableInv, itemStack, false);
+                ItemStack result = ItemHandlerHelper.insertItemStacked(availableInv, convertedStack.get(), false);
                 // 如果女仆背包满了，掉落在地上
                 if (!result.isEmpty()) {
-                    ItemEntity itemEntity = new ItemEntity(maid.level, maid.getX(), maid.getY(), maid.getZ(), itemStack);
+                    ItemEntity itemEntity = new ItemEntity(maid.level, maid.getX(), maid.getY(), maid.getZ(), convertedStack.get());
                     maid.level.addFreshEntity(itemEntity);
                 }
             }

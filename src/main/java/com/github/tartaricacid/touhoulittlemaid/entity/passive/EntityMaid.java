@@ -86,6 +86,7 @@ import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -1111,9 +1112,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public ItemStack eat(Level level, ItemStack food) {
-        ItemStack foodAfterEat = super.eat(level, food);
-        NeoForge.EVENT_BUS.post(new MaidAfterEatEvent(this, foodAfterEat));
+    public ItemStack eat(Level level, ItemStack food, FoodProperties pFoodProperties) {
+        ItemStack copy = food.copy();
+        ItemStack foodAfterEat = super.eat(level, food, pFoodProperties);
+        Optional<ItemStack> converts = pFoodProperties.usingConvertsTo();
+        NeoForge.EVENT_BUS.post(new MaidAfterEatEvent(this, foodAfterEat.isEmpty() && converts.isPresent() ? copy : foodAfterEat));
         return foodAfterEat;
     }
 
