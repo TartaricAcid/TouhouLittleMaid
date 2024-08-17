@@ -18,6 +18,9 @@ version = mod_version
 group = mod_group_id
 
 repositories {
+    flatDir {
+        dir "libs"
+    }
     mavenLocal()
     mavenCentral()
     maven {
@@ -186,7 +189,7 @@ dependencies {
     runtimeOnly "maven.modrinth:libipn:neoforge-1.21-6.0.2"
     implementation "maven.modrinth:inventory-profiles-next:neoforge-1.21-2.0.4"
 
-    implementation "vazkii.patchouli:NeoForge:1.21-87-NEOFORGE-SNAPSHOT"
+    implementation "libs:Patchouli:1.21-87-NEOFORGE-SNAPSHOT"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
