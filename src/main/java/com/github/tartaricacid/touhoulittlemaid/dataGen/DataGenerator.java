@@ -29,8 +29,16 @@ public class DataGenerator {
 
         // loot tables
         generator.addProvider(event.includeServer(), new LootTableProvider(pack,
-                Set.of(LootTableGenerator.ADDITIONAL_LOOT_TABLE),
-                List.of(new LootTableProvider.SubProviderEntry(LootTableGenerator::new, LootContextParamSets.CHEST)),
+                Set.of(
+                        LootTableGenerator.ADDITIONAL_LOOT_TABLE,
+                        LootTableGenerator.GIVE_SMART_SLAB,
+                        LootTableGenerator.GRANT_PATCHOULI_BOOK
+                ),
+                List.of(
+                        new LootTableProvider.SubProviderEntry(LootTableGenerator.ChestLootTables::new, LootContextParamSets.CHEST),
+                        new LootTableProvider.SubProviderEntry(LootTableGenerator.AdvancementLootTables::new, LootContextParamSets.ADVANCEMENT_REWARD),
+                        new LootTableProvider.SubProviderEntry(LootTableGenerator.BlockLootTables::new, LootContextParamSets.BLOCK)
+                ),
                 new RegistryDataGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()).getRegistryProvider()));
 
         // global loot modifier
