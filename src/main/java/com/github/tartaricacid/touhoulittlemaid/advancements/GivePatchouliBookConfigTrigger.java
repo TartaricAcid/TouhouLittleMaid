@@ -1,20 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.advancements;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
 public class GivePatchouliBookConfigTrigger extends SimpleCriterionTrigger<GivePatchouliBookConfigTrigger.Instance> {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "give_patchouli_book_config");
     public void trigger(ServerPlayer serverPlayer) {
         super.trigger(serverPlayer, instance -> MiscConfig.GIVE_PATCHOULI_BOOK.get());
     }

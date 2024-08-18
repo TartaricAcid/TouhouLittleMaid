@@ -10,6 +10,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class InitTrigger {
     public static final DeferredRegister<CriterionTrigger<?>> TRIGGERS = DeferredRegister.create(Registries.TRIGGER_TYPE, TouhouLittleMaid.MOD_ID);
-    public static final DeferredHolder<CriterionTrigger<?>, GivePatchouliBookConfigTrigger> MADE_TF_PORTAL = TRIGGERS.register("give_patchouli_book", GivePatchouliBookConfigTrigger::new);
-    public static final DeferredHolder<CriterionTrigger<?>, GiveSmartSlabConfigTrigger> CONSUME_HYDRA_CHOP = TRIGGERS.register("give_smart_slab", GiveSmartSlabConfigTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, GiveSmartSlabConfigTrigger> GIVE_SMART_SLAB_CONFIG = TRIGGERS.register("give_smart_slab_config", GiveSmartSlabConfigTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, GivePatchouliBookConfigTrigger> GIVE_PATCHOULI_BOOK_CONFIG = TRIGGERS.register("give_patchouli_book_config", GivePatchouliBookConfigTrigger::new);
 }

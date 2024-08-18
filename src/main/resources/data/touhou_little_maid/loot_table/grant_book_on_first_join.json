@@ -9,8 +9,10 @@
           "name": "patchouli:guide_book",
           "functions": [
             {
-              "function": "set_nbt",
-              "tag": "{'patchouli:book': 'touhou_little_maid:memorizable_gensokyo'}"
+              "function": "set_components",
+              "components": {
+                "patchouli:book": "touhou_little_maid:memorizable_gensokyo"
+              }
             }
           ]
         }

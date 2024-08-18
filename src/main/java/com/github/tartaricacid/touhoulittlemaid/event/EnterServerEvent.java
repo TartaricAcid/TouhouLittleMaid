@@ -12,8 +12,8 @@ public final class EnterServerEvent {
     @SubscribeEvent
     public static void onAttachCapabilityEvent(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer) {
-            InitTrigger.MADE_TF_PORTAL.get().trigger((ServerPlayer) event.getEntity());
-            InitTrigger.CONSUME_HYDRA_CHOP.get().trigger((ServerPlayer) event.getEntity());
+            InitTrigger.GIVE_SMART_SLAB_CONFIG.get().trigger((ServerPlayer) event.getEntity());
+            InitTrigger.GIVE_PATCHOULI_BOOK_CONFIG.get().trigger((ServerPlayer) event.getEntity());
         }
     }
 }
