@@ -56,7 +56,7 @@ public final class MaidConfig {
 
         builder.comment("The max range of maid work mode")
                 .translation(translateKey("maid_work_range"));
-        MAID_WORK_RANGE = builder.defineInRange("maid_work_range", 12, 3, 64);
+        MAID_WORK_RANGE = builder.defineInRange("MaidWorkRange", 12, 3, 64);
 
         builder.comment("The max range of maid idle mode")
                 .translation(translateKey("maid_idle_range"));
