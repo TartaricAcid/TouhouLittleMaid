@@ -15,7 +15,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.raid.Raids;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -32,6 +31,7 @@ public class MaidWorldData extends SavedData {
     private static final String MAID_TOMBSTONES_TAG = "MaidTombstones";
     private final Map<UUID, List<MaidInfo>> infos = Maps.newHashMap();
     private final Map<UUID, List<MaidInfo>> tombstones = Maps.newHashMap();
+
     //TODO 可能是ENTITY_CHUNK吧
     public static SavedData.Factory<MaidWorldData> factory() {
         return new SavedData.Factory<>(MaidWorldData::new, MaidWorldData::load, DataFixTypes.ENTITY_CHUNK);
@@ -62,11 +62,11 @@ public class MaidWorldData extends SavedData {
                 for (int i = 0; i < listTag.size(); i++) {
                     CompoundTag infoTag = listTag.getCompound(i);
                     String dimension = infoTag.getString("Dimension");
-                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag, "ChunkPos").get();
+                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag, "ChunkPos").orElse(null);
                     UUID ownerId = infoTag.getUUID("OwnerId");
                     UUID maidId = infoTag.getUUID("MaidId");
                     long timestamp = infoTag.getLong("Timestamp");
-                    MutableComponent name = Component.Serializer.fromJson(infoTag.getString("Name"),provider);
+                    MutableComponent name = Component.Serializer.fromJson(infoTag.getString("Name"), provider);
                     List<MaidInfo> maidInfos = data.infos.computeIfAbsent(ownerId, uuid -> Lists.newArrayList());
                     maidInfos.add(new MaidInfo(dimension, chunkPos, ownerId, maidId, timestamp, name));
                 }
@@ -79,11 +79,11 @@ public class MaidWorldData extends SavedData {
                 for (int i = 0; i < listTag.size(); i++) {
                     CompoundTag infoTag = listTag.getCompound(i);
                     String dimension = infoTag.getString("Dimension");
-                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag, "ChunkPos").get();
+                    BlockPos chunkPos = NbtUtils.readBlockPos(infoTag, "ChunkPos").orElse(null);
                     UUID ownerId = infoTag.getUUID("OwnerId");
                     UUID tombstoneId = infoTag.getUUID("TombstoneId");
                     long timestamp = infoTag.getLong("Timestamp");
-                    MutableComponent name = Component.Serializer.fromJson(infoTag.getString("Name"),provider);
+                    MutableComponent name = Component.Serializer.fromJson(infoTag.getString("Name"), provider);
                     List<MaidInfo> tombstoneInfos = data.tombstones.computeIfAbsent(ownerId, uuid -> Lists.newArrayList());
                     tombstoneInfos.add(new MaidInfo(dimension, chunkPos, ownerId, tombstoneId, timestamp, name));
                 }

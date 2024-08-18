@@ -25,10 +25,10 @@ public final class SchedulePos {
     private boolean configured = false;
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SchedulePos> SCHEDULE_POS_STREAM_CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC,SchedulePos::getWorkPos,
-            BlockPos.STREAM_CODEC,SchedulePos::getIdlePos,
-            BlockPos.STREAM_CODEC,SchedulePos::getSleepPos,
-            ResourceLocation.STREAM_CODEC,SchedulePos::getDimension,
+            BlockPos.STREAM_CODEC, SchedulePos::getWorkPos,
+            BlockPos.STREAM_CODEC, SchedulePos::getIdlePos,
+            BlockPos.STREAM_CODEC, SchedulePos::getSleepPos,
+            ResourceLocation.STREAM_CODEC, SchedulePos::getDimension,
             SchedulePos::new
     );
 
@@ -95,9 +95,9 @@ public final class SchedulePos {
     public void load(CompoundTag compound, EntityMaid maid) {
         if (compound.contains("MaidSchedulePos", Tag.TAG_COMPOUND)) {
             CompoundTag data = compound.getCompound("MaidSchedulePos");
-            this.workPos = NbtUtils.readBlockPos(data, "Work").get();
-            this.idlePos = NbtUtils.readBlockPos(data, "Idle").get();
-            this.sleepPos = NbtUtils.readBlockPos(data, "Sleep").get();
+            this.workPos = NbtUtils.readBlockPos(data, "Work").orElse(null);
+            this.idlePos = NbtUtils.readBlockPos(data, "Idle").orElse(null);
+            this.sleepPos = NbtUtils.readBlockPos(data, "Sleep").orElse(null);
             this.dimension = ResourceLocation.parse(data.getString("Dimension"));
             this.configured = data.getBoolean("Configured");
             this.restrictTo(maid);
