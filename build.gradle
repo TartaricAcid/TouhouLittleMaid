@@ -91,6 +91,7 @@ neoForge {
     runs {
         client {
             client()
+            gameDirectory = project.file('run/client')
             programArguments = [
                     "--username", "tartaric_acid"
             ]
@@ -100,6 +101,7 @@ neoForge {
 
         server {
             server()
+            gameDirectory = project.file('run/server')
             programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
@@ -109,6 +111,7 @@ neoForge {
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             type = "gameTestServer"
+            gameDirectory = project.file('run/gameTestServer')
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -116,7 +119,7 @@ neoForge {
             data()
 
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-            // gameDirectory = project.file('run-data')
+            gameDirectory = project.file('run/data')
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()

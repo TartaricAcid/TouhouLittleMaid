@@ -47,7 +47,8 @@ public class EntityDanmakuRenderer extends EntityRenderer<EntityDanmaku> {
         poseStack.pushPose();
         poseStack.translate(0, 0.1, 0);
         poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        // TODO: 不知道为什么，但是注释掉这一行就好了
+        // poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
         VertexConsumer buffer = bufferIn.getBuffer(RENDER_TYPE);
         PoseStack.Pose poseStackLast = poseStack.last();
