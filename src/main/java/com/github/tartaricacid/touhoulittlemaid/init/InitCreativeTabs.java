@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
 import net.neoforged.api.distmarker.Dist;
@@ -27,7 +26,7 @@ public class InitCreativeTabs {
             .icon(() -> InitItems.HAKUREI_GOHEI.get().getDefaultInstance())
             .displayItems((par, output) -> {
                 if (ModList.get().isLoaded("patchouli")) {
-                    output.accept(ItemModBook.forBook(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "memorizable_gensokyo")));
+                    output.accept(ItemModBook.forBook(MEMORIZABLE_GENSOKYO_LOCATION));
                 }
                 output.accept(MAID_SPAWN_EGG.get());
                 output.accept(FAIRY_SPAWN_EGG.get());

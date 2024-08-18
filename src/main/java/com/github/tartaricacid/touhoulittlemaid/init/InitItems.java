@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -67,4 +68,6 @@ public final class InitItems {
 
     public static DeferredItem<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new DeferredSpawnEggItem(() -> EntityMaid.TYPE, 0x4a6195, 0xffffff, new Item.Properties()));
     public static DeferredItem<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new DeferredSpawnEggItem(() -> EntityFairy.TYPE, 0x171c20, 0xffffff, new Item.Properties()));
+
+    public static final ResourceLocation MEMORIZABLE_GENSOKYO_LOCATION = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "memorizable_gensokyo");
 }

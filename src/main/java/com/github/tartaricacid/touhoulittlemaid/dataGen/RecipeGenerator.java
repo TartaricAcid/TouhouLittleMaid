@@ -6,15 +6,15 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
+import vazkii.patchouli.common.item.PatchouliDataComponents;
+import vazkii.patchouli.common.item.PatchouliItems;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -296,9 +296,9 @@ public class RecipeGenerator extends RecipeProvider {
                 .define('c', Items.HOPPER)
                 .save(recipeOutput);
 
-        ItemStack itemStack = new ItemStack(InitItems.ENTITY_PLACEHOLDER.asItem());
-        itemStack.set(InitDataComponent.RECIPES_ID_TAG, "reborn_maid");
-        AltarRecipeBuilder.shaped(RecipeCategory.MISC, itemStack)
+        ItemStack entityPlaceholder = new ItemStack(InitItems.ENTITY_PLACEHOLDER.asItem());
+        entityPlaceholder.set(InitDataComponent.RECIPES_ID_TAG, "reborn_maid");
+        AltarRecipeBuilder.shaped(RecipeCategory.MISC, entityPlaceholder)
                 .power(0.5F)
                 .pattern("abcdef")
                 .define('a', InitItems.FILM)
@@ -310,8 +310,8 @@ public class RecipeGenerator extends RecipeProvider {
                 .entity(EntityType.getKey(InitEntities.MAID.get()))
                 .save(recipeOutput, "reborn_maid");
 
-        itemStack.set(InitDataComponent.RECIPES_ID_TAG, "spawn_box");
-        AltarRecipeBuilder.shaped(RecipeCategory.MISC, itemStack)
+        entityPlaceholder.set(InitDataComponent.RECIPES_ID_TAG, "spawn_box");
+        AltarRecipeBuilder.shaped(RecipeCategory.MISC, entityPlaceholder)
                 .power(0.5F)
                 .pattern("abcdef")
                 .define('a', Tags.Items.GEMS_DIAMOND)
@@ -323,13 +323,63 @@ public class RecipeGenerator extends RecipeProvider {
                 .entity(EntityType.getKey(InitEntities.BOX.get()))
                 .save(recipeOutput, "spawn_box");
 
-        itemStack.set(InitDataComponent.RECIPES_ID_TAG, "spawn_lightning_bolt");
-        AltarRecipeBuilder.shaped(RecipeCategory.MISC, itemStack)
+        entityPlaceholder.set(InitDataComponent.RECIPES_ID_TAG, "spawn_lightning_bolt");
+        AltarRecipeBuilder.shaped(RecipeCategory.MISC, entityPlaceholder)
                 .power(0.2F)
                 .pattern("aaabbb")
                 .define('a', Tags.Items.GUNPOWDERS)
                 .define('b', Items.BLAZE_POWDER)
                 .entity(EntityType.getKey(EntityType.LIGHTNING_BOLT))
                 .save(recipeOutput, "spawn_lightning_bolt");
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, InitItems.HAKUREI_GOHEI)
+                .pattern("  D")
+                .pattern(" SP")
+                .pattern("S P")
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .define('P', Items.PAPER)
+                .unlockedBy(getHasName(Items.DIAMOND), has(Tags.Items.GEMS_DIAMOND))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, InitItems.SANAE_GOHEI)
+                .pattern(" PD")
+                .pattern(" SP")
+                .pattern("S  ")
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .define('P', Items.PAPER)
+                .unlockedBy(getHasName(Items.DIAMOND), has(Tags.Items.GEMS_DIAMOND))
+                .save(recipeOutput);
+
+        ItemStack patchouliBook = new ItemStack(PatchouliItems.BOOK);
+        patchouliBook.set(PatchouliDataComponents.BOOK, InitItems.MEMORIZABLE_GENSOKYO_LOCATION);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, patchouliBook)
+                .requires(Tags.Items.DYES_WHITE)
+                .requires(Tags.Items.DYES_RED)
+                .requires(Items.BOOK)
+                .unlockedBy(getHasName(Items.BOOK), has(Items.BOOK))
+                .save(recipeOutput, InitItems.MEMORIZABLE_GENSOKYO_LOCATION);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, InitItems.CHAIR)
+                .pattern("   ")
+                .pattern("WWW")
+                .pattern("IPI")
+                .define('W', ItemTags.WOOL)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('P', ItemTags.PLANKS)
+                .unlockedBy("has_wool", has(ItemTags.WOOL))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, InitItems.CHAIR_SHOW)
+                .pattern(" R ")
+                .pattern("WWW")
+                .pattern("IPI")
+                .define('W', ItemTags.WOOL)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('P', ItemTags.PLANKS)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .unlockedBy(getHasName(Items.REDSTONE), has(Tags.Items.DUSTS_REDSTONE))
+                .save(recipeOutput);
     }
 }

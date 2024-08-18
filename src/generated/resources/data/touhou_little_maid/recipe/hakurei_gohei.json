@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "c:gems/diamond"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "S": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  D",
+    " SP",
+    "S P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "touhou_little_maid:hakurei_gohei"
+  }
+}
