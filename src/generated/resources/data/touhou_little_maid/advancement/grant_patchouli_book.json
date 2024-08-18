@@ -1,0 +1,18 @@
+{
+  "criteria": {
+    "tick": {
+      "trigger": "touhou_little_maid:give_patchouli_book_config"
+    }
+  },
+  "requirements": [
+    [
+      "tick"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "touhou_little_maid:grant_patchouli_book"
+    ]
+  },
+  "sends_telemetry_event": true
+}

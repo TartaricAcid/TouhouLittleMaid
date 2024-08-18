@@ -19,7 +19,6 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.common.item.PatchouliDataComponents;
 import vazkii.patchouli.common.item.PatchouliItems;
 
@@ -90,7 +89,7 @@ public class LootTableGenerator {
         }
 
         @Override
-        public @NotNull Iterable<Block> getKnownBlocks() {
+        public Iterable<Block> getKnownBlocks() {
             return this.knownBlocks;
         }
     }

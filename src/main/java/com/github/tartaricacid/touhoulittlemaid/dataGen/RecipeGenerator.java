@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
-import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.common.item.PatchouliDataComponents;
 import vazkii.patchouli.common.item.PatchouliItems;
 
@@ -25,7 +24,7 @@ public class RecipeGenerator extends RecipeProvider {
 
     @SuppressWarnings("all")
     @Override
-    protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
+    protected void buildRecipes(RecipeOutput recipeOutput) {
         AltarRecipeBuilder.shaped(RecipeCategory.MISC, InitItems.BOOKSHELF)
                 .power(0.1F)
                 .pattern("aaaabc")

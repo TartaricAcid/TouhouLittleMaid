@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -108,11 +107,11 @@ public class AltarRecipeBuilder implements RecipeBuilder {
         return this.result;
     }
 
-    public void save(@NotNull RecipeOutput output) {
+    public void save(RecipeOutput output) {
         this.save(output, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_recipe/" + RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath()));
     }
 
-    public void save(@NotNull RecipeOutput output, String recipeId) {
+    public void save(RecipeOutput output, String recipeId) {
         this.save(output, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_recipe/" + recipeId));
     }
 
