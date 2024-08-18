@@ -130,7 +130,6 @@ public final class ItemsUtil {
     public static ItemStack getItemStack(String itemId) {
         ResourceLocation resourceLocation = ResourceLocation.parse(itemId);
         Item value = BuiltInRegistries.ITEM.get(resourceLocation);
-        Preconditions.checkNotNull(value);
         return new ItemStack(value);
     }
 }
