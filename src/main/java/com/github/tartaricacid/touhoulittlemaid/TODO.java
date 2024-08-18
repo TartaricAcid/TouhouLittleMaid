@@ -9,5 +9,4 @@ public class TODO {
     //TODO SendEffectPackage和 SaveSwitcherDataPackage的数组默认最大开20个
     //TODO e.broadcastBreakEvent(InteractionHand.MAIN_HAND)都换成了EquipmentSlot.MAINHAND
     //TODO readBlockPos返回的optional全部使用get获取值了
-    //TODO 玩家模型获取需要检查，麻将又改改改
 }
