@@ -216,7 +216,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 .add(Attributes.ATTACK_KNOCKBACK)
                 .add(Attributes.ATTACK_DAMAGE)
                 //TODO 攻击范围与好感度挂钩待做
-                .add(Attributes.SWEEPING_DAMAGE_RATIO,1.5F);
+                .add(Attributes.SWEEPING_DAMAGE_RATIO, 1.5F);
     }
 
     public static boolean canInsertItem(ItemStack stack) {
@@ -386,8 +386,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
             if (NeoForge.EVENT_BUS.post(event).isCanceled()
-                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                    || openMaidGui(playerIn)) {
+                || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
+                || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;
             }
         } else {
@@ -1041,8 +1041,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         }
         if (compound.contains(RESTRICT_CENTER_TAG, Tag.TAG_COMPOUND)) {
             // 存档迁移
-            var blockPosOptional = NbtUtils.readBlockPos(compound, RESTRICT_CENTER_TAG);
-            blockPosOptional.ifPresent(blockPos -> this.schedulePos.setHomeModeEnable(this, blockPos));
+            NbtUtils.readBlockPos(compound, RESTRICT_CENTER_TAG).ifPresent(blockPos -> this.schedulePos.setHomeModeEnable(this, blockPos));
             compound.remove(RESTRICT_CENTER_TAG);
         }
         if (compound.contains(MAID_BACKPACK_TYPE, Tag.TAG_STRING)) {

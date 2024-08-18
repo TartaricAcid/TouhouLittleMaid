@@ -16,9 +16,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -102,8 +99,7 @@ public class TileEntityPicnicMat extends BlockEntity {
     @Override
     public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         super.loadAdditional(pTag, pRegistries);
-        var blockPos = NbtUtils.readBlockPos(getPersistentData(),CENTER_POS_NAME);
-        blockPos.ifPresent(blockPos1 -> centerPos = blockPos1);
+        NbtUtils.readBlockPos(getPersistentData(), CENTER_POS_NAME).ifPresent(pos -> centerPos = pos);
         this.handler.deserializeNBT(pRegistries, getPersistentData().getCompound(STORAGE_ITEM));
         ListTag sitIdsTag = getPersistentData().getList(SIT_IDS, Tag.TAG_INT_ARRAY);
         int i = 0;
