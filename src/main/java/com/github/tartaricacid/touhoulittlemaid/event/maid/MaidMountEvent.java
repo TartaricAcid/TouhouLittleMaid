@@ -10,8 +10,7 @@ import net.neoforged.neoforge.event.entity.EntityMountEvent;
 public final class MaidMountEvent {
     @SubscribeEvent
     public static void onMaidMount(EntityMountEvent event) {
-        if (event.isMounting() && event.getEntityMounting() instanceof EntityMaid && !(event.getEntityBeingMounted() instanceof EntitySit)) {
-            EntityMaid maid = (EntityMaid) event.getEntityMounting();
+        if (event.isMounting() && event.getEntityMounting() instanceof EntityMaid maid && !(event.getEntityBeingMounted() instanceof EntitySit)) {
             if (!maid.isRideable()) {
                 event.setCanceled(true);
             }

@@ -77,8 +77,7 @@ public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLeve
 
         float renderItemScale = 1;
         entity.load(data);
-        if (entity instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) entity;
+        if (entity instanceof EntityMaid maid) {
             clearMaidDataResidue(maid, true);
             if (data.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
                 String modelId = data.getString(MODEL_ID_TAG_NAME);

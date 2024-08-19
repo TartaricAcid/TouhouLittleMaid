@@ -68,8 +68,7 @@ public class TaskIdle implements IMaidTask {
         if (maid.isOwnedBy(entity)) {
             return true;
         }
-        if (entity instanceof EntityMaid && maid.getOwner() != null) {
-            EntityMaid maidOther = (EntityMaid) entity;
+        if (entity instanceof EntityMaid maidOther && maid.getOwner() != null) {
             return maid.getOwner().equals(maidOther.getOwner());
         }
         return false;

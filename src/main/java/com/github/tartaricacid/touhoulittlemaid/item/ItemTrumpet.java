@@ -29,8 +29,7 @@ public class ItemTrumpet extends Item {
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
-        if (entityLiving instanceof Player && timeLeft >= MIN_USE_DURATION) {
-            Player player = (Player) entityLiving;
+        if (entityLiving instanceof Player player && timeLeft >= MIN_USE_DURATION) {
             if (worldIn instanceof ServerLevel) {
                 ((ServerLevel) worldIn).getEntities(EntityMaid.TYPE, Entity::isAlive).stream()
                         .filter(maid -> maid.isOwnedBy(player))

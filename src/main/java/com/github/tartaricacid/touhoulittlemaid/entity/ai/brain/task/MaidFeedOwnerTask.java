@@ -47,8 +47,7 @@ public class MaidFeedOwnerTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         LivingEntity owner = maid.getOwner();
-        if (owner instanceof Player && owner.isAlive()) {
-            Player player = (Player) owner;
+        if (owner instanceof Player player && owner.isAlive()) {
             boolean dying = player.getHealth() / player.getMaxHealth() < 0.5f;
             IntList lowestFoods = new IntArrayList();
             IntList lowFoods = new IntArrayList();

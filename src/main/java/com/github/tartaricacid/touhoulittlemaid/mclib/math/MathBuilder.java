@@ -326,8 +326,7 @@ public class MathBuilder {
      */
     @SuppressWarnings("unchecked")
     public IValue valueFromObject(Object object) throws Exception {
-        if (object instanceof String) {
-            String symbol = (String) object;
+        if (object instanceof String symbol) {
             // 取非
             if (symbol.startsWith("!")) {
                 return new Negate(this.valueFromObject(symbol.substring(1)));

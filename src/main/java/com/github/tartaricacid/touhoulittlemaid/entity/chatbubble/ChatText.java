@@ -79,10 +79,9 @@ public final class ChatText {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (!(obj instanceof ChatText)) {
+        } else if (!(obj instanceof ChatText chatText)) {
             return false;
         } else {
-            ChatText chatText = (ChatText) obj;
             return type.equals(chatText.type) && iconPath.equals(chatText.iconPath) && text.equals(chatText.text);
         }
     }

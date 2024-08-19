@@ -47,7 +47,7 @@ public record StorageAndTakePowerPackage(BlockPos pos, float powerNum,
                             takeLogic(message.powerNum, power, beacon);
                         }
 
-                        PacketDistributor.sendToPlayer((ServerPlayer) sender, new SyncDataPackage(power.get(), maidNum.get()));
+                        PacketDistributor.sendToPlayer(sender, new SyncDataPackage(power.get(), maidNum.get()));
                     }
                 }
             });

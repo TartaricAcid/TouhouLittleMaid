@@ -54,7 +54,6 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
 //            } else {
                 Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, mob.level(), packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
             matrixStack.popPose();
-            return;
         }
 
         // TODO : TAC 兼容

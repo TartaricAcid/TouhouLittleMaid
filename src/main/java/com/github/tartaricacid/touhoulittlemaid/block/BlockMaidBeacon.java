@@ -167,8 +167,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
         }
         worldIn.setBlock(pos.above(), stateUp, Block.UPDATE_ALL);
         BlockEntity te = worldIn.getBlockEntity(pos.above());
-        if (te instanceof TileEntityMaidBeacon) {
-            TileEntityMaidBeacon tileEntityMaidBeacon = (TileEntityMaidBeacon) te;
+        if (te instanceof TileEntityMaidBeacon tileEntityMaidBeacon) {
             ItemMaidBeacon.itemStackToTileEntity(stack, tileEntityMaidBeacon);
             tileEntityMaidBeacon.refresh();
         }

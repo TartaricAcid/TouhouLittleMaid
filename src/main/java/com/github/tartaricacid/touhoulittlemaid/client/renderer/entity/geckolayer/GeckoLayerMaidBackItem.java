@@ -52,7 +52,6 @@ public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, G
                 Minecraft.getInstance().getItemRenderer().renderStatic(entity, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, entity.level(), packedLightIn, OverlayTexture.NO_OVERLAY, entity.getId());
 //            }
             matrixStack.popPose();
-            return;
         }
 
         //TODO : tacz兼容

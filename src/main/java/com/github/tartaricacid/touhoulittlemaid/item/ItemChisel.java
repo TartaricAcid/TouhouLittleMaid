@@ -65,15 +65,11 @@ public class ItemChisel extends Item {
                 Vec3i dimension = size.getDimension();
                 BlockPos[] posList = checkBlocks(worldIn, pos, dimension, facing);
                 if (posList != null) {
-                    boolean isTiny = false;
-                    if (posList.length == 1) {
-                        isTiny = true;
-                    }
+                    boolean isTiny = posList.length == 1;
                     for (BlockPos posIn : posList) {
                         worldIn.setBlock(posIn, InitBlocks.STATUE.get().defaultBlockState().setValue(BlockStatue.IS_TINY, isTiny), Block.UPDATE_ALL);
                         BlockEntity te = worldIn.getBlockEntity(posIn);
-                        if (te instanceof TileEntityStatue) {
-                            TileEntityStatue statue = (TileEntityStatue) te;
+                        if (te instanceof TileEntityStatue statue) {
                             if (posIn.equals(pos)) {
                                 statue.setForgeData(size, true, pos, facing,
                                         Lists.newArrayList(posList), compoundData.copyTag());
