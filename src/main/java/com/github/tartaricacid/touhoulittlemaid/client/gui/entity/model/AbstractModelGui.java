@@ -380,7 +380,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
             List<FormattedText> split = font.getSplitter().splitLines(str, (middleX - 256 / 2) - 20, Style.EMPTY);
             for (FormattedText properties : split) {
                 offsetY += 10;
-                graphics.drawCenteredString(font, properties.getString(), sideMiddleX, middleY + offsetY, ChatFormatting.DARK_GRAY.getColor());
+                graphics.drawCenteredString(font, properties.getString(), sideMiddleX, middleY + offsetY, 0x777777);
             }
         }
 
