@@ -3,19 +3,16 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "c:ender_pearls"
     },
-    "b": {
+    {
       "tag": "c:chests/wooden"
     },
-    "c": {
+    {
       "item": "minecraft:hopper"
     }
-  },
-  "pattern": [
-    "abc"
   ],
   "power": 0.2,
   "result": {

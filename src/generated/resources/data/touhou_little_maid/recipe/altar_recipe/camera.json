@@ -3,16 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "item": "minecraft:quartz_block"
     },
-    "b": {
+    {
+      "item": "minecraft:quartz_block"
+    },
+    {
+      "item": "minecraft:quartz_block"
+    },
+    {
+      "item": "minecraft:quartz_block"
+    },
+    {
+      "tag": "c:obsidians"
+    },
+    {
       "tag": "c:obsidians"
     }
-  },
-  "pattern": [
-    "aaaabb"
   ],
   "power": 0.2,
   "result": {

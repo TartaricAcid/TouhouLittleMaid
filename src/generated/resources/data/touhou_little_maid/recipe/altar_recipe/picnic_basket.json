@@ -3,19 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "c:chests/wooden"
     },
-    "b": {
+    {
       "item": "minecraft:bamboo"
     },
-    "c": {
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
       "tag": "minecraft:wool_carpets"
     }
-  },
-  "pattern": [
-    "abbbbc"
   ],
   "power": 0.2,
   "result": {

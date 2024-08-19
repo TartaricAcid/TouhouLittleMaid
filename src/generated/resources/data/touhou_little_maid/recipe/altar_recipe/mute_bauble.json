@@ -3,16 +3,13 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "minecraft:wool"
     },
-    "b": {
+    {
       "item": "minecraft:clay_ball"
     }
-  },
-  "pattern": [
-    "ab"
   ],
   "power": 0.2,
   "result": {

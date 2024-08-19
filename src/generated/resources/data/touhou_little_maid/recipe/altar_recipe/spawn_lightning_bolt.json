@@ -3,16 +3,25 @@
   "category": "misc",
   "entity": "minecraft:lightning_bolt",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "c:gunpowders"
     },
-    "b": {
+    {
+      "tag": "c:gunpowders"
+    },
+    {
+      "tag": "c:gunpowders"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
       "item": "minecraft:blaze_powder"
     }
-  },
-  "pattern": [
-    "aaabbb"
   ],
   "power": 0.2,
   "result": {

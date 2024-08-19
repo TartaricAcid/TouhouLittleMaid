@@ -3,19 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "c:obsidians"
     },
-    "b": {
+    {
+      "tag": "c:obsidians"
+    },
+    {
+      "tag": "c:obsidians"
+    },
+    {
       "tag": "c:dyes/cyan"
     },
-    "c": {
+    {
+      "tag": "c:dusts/redstone"
+    },
+    {
       "tag": "c:dusts/redstone"
     }
-  },
-  "pattern": [
-    "aaabcc"
   ],
   "power": 0.1,
   "result": {

@@ -3,19 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "c:ingots/gold"
     },
-    "b": {
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
       "tag": "c:ingots/iron"
     },
-    "c": {
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
       "item": "minecraft:note_block"
     }
-  },
-  "pattern": [
-    "aabbbc"
   ],
   "power": 0.2,
   "result": {

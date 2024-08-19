@@ -7,9 +7,11 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -22,14 +24,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class AltarRecipe extends ShapedRecipe {
+public class AltarRecipe extends ShapelessRecipe {
     String group;
     CraftingBookCategory category;
     float power;
@@ -38,11 +38,11 @@ public class AltarRecipe extends ShapedRecipe {
 
     public AltarRecipe(String pGroup,
                        CraftingBookCategory pCategory,
+                       NonNullList<Ingredient> Ingredients,
                        float power,
-                       ShapedRecipePattern pPattern,
                        ItemStack pResult,
                        ResourceLocation pEntityType) {
-        super(pGroup, pCategory, pPattern, pResult);
+        super(pGroup, pCategory, pResult, Ingredients);
         this.group = pGroup;
         this.category = pCategory;
         this.power = power;
@@ -111,35 +111,6 @@ public class AltarRecipe extends ShapedRecipe {
         type.spawn(world, pos, MobSpawnType.STRUCTURE);
     }
 
-    public boolean matches(CraftingInput pInput, Level pLevel) {
-        // 获取输入项列表，过滤掉空项，并将其映射为Item列表
-        List<ItemStack> inputList = new ArrayList<>(pInput.items().stream()
-                .filter(itemStack -> !itemStack.isEmpty())
-                .toList());
-
-        // 如果配方所需的材料数量与输入数量不一致，立即返回 false
-        if (this.getIngredients().size() != inputList.size()) {
-            return false;
-        }
-
-        // 逐个匹配每个配方成分
-        for (Ingredient ingredient : this.getIngredients()) {
-            boolean matched = false;
-            for (ItemStack itemStack : inputList) {
-                if (ingredient.test(itemStack)) {  // 使用Ingredient的test方法来匹配ItemStack
-                    inputList.remove(itemStack);   // 匹配成功后从输入列表中移除该项
-                    matched = true;
-                    break;  // 跳出内部循环，继续匹配下一个ingredient
-                }
-            }
-            if (!matched) {
-                return false;  // 如果任何配方成分没有找到匹配的输入项，则返回 false
-            }
-        }
-
-        return true;  // 如果所有配方成分都匹配成功，返回 true
-    }
-
     @Override
     public @NotNull RecipeType<?> getType() {
         return InitRecipes.ALTAR_CRAFTING.get();
@@ -155,8 +126,15 @@ public class AltarRecipe extends ShapedRecipe {
                 instance -> instance.group(
                                 Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
                                 CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(altarRecipe -> altarRecipe.category),
+                                Ingredient.CODEC.listOf().fieldOf("ingredients").flatXmap((ingredientList) -> {
+                                    Ingredient[] aingredient = ingredientList.toArray(Ingredient[]::new);
+                                    if (aingredient.length == 0) {
+                                        return DataResult.error(() -> "No ingredients for shapeless recipe");
+                                    } else {
+                                        return aingredient.length > 7 ? DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: 7") : DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
+                                    }
+                                }, DataResult::success).forGetter(ShapelessRecipe::getIngredients),
                                 Codec.FLOAT.fieldOf("power").forGetter(altarRecipe -> altarRecipe.power),
-                                ShapedRecipePattern.MAP_CODEC.forGetter(altarRecipe -> altarRecipe.pattern),
                                 ItemStack.STRICT_CODEC.fieldOf("result").forGetter(altarRecipe -> altarRecipe.result),
                                 ResourceLocation.CODEC.fieldOf("entity").forGetter(altarRecipe -> altarRecipe.entityType)
                         )
@@ -166,18 +144,23 @@ public class AltarRecipe extends ShapedRecipe {
         private AltarRecipe fromNetwork(RegistryFriendlyByteBuf friendlyByteBuf) {
             String s = friendlyByteBuf.readUtf();
             CraftingBookCategory craftingbookcategory = friendlyByteBuf.readEnum(CraftingBookCategory.class);
+            int i = friendlyByteBuf.readVarInt();
+            NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
+            nonnulllist.replaceAll((ingredient) -> Ingredient.CONTENTS_STREAM_CODEC.decode(friendlyByteBuf));
             float power = friendlyByteBuf.readFloat();
-            ShapedRecipePattern shapedrecipepattern = ShapedRecipePattern.STREAM_CODEC.decode(friendlyByteBuf);
             ItemStack itemstack = ItemStack.STREAM_CODEC.decode(friendlyByteBuf);
             ResourceLocation entityType = friendlyByteBuf.readResourceLocation();
-            return new AltarRecipe(s, craftingbookcategory, power, shapedrecipepattern, itemstack, entityType);
+            return new AltarRecipe(s, craftingbookcategory, nonnulllist, power, itemstack, entityType);
         }
 
         private void toNetwork(RegistryFriendlyByteBuf friendlyByteBuf, AltarRecipe altarRecipe) {
             friendlyByteBuf.writeUtf(altarRecipe.group);
             friendlyByteBuf.writeEnum(altarRecipe.category);
+            friendlyByteBuf.writeVarInt(altarRecipe.getIngredients().size());
+            for (Ingredient ingredient : altarRecipe.getIngredients()) {
+                Ingredient.CONTENTS_STREAM_CODEC.encode(friendlyByteBuf, ingredient);
+            }
             friendlyByteBuf.writeFloat(altarRecipe.power);
-            ShapedRecipePattern.STREAM_CODEC.encode(friendlyByteBuf, altarRecipe.pattern);
             ItemStack.STREAM_CODEC.encode(friendlyByteBuf, altarRecipe.result);
             friendlyByteBuf.writeResourceLocation(altarRecipe.entityType);
         }

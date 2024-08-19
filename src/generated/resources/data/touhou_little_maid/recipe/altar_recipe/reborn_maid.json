@@ -3,28 +3,25 @@
   "category": "misc",
   "entity": "touhou_little_maid:maid",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "item": "touhou_little_maid:film"
     },
-    "b": {
+    {
       "tag": "c:gems/lapis"
     },
-    "c": {
+    {
       "tag": "c:ingots/gold"
     },
-    "d": {
+    {
       "tag": "c:dusts/redstone"
     },
-    "e": {
+    {
       "tag": "c:ingots/iron"
     },
-    "f": {
+    {
       "item": "minecraft:coal"
     }
-  },
-  "pattern": [
-    "abcdef"
   ],
   "power": 0.5,
   "result": {

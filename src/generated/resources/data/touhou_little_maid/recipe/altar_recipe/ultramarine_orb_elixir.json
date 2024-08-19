@@ -3,19 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "c:gems/emerald"
     },
-    "b": {
+    {
       "tag": "c:ender_pearls"
     },
-    "c": {
+    {
+      "tag": "c:dyes/cyan"
+    },
+    {
+      "tag": "c:dyes/cyan"
+    },
+    {
+      "tag": "c:dyes/cyan"
+    },
+    {
       "tag": "c:dyes/cyan"
     }
-  },
-  "pattern": [
-    "abcccc"
   ],
   "power": 0.3,
   "result": {

@@ -3,16 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "item": "minecraft:pink_wool"
     },
-    "b": {
+    {
+      "item": "minecraft:pink_wool"
+    },
+    {
+      "item": "minecraft:pink_wool"
+    },
+    {
+      "item": "minecraft:pink_wool"
+    },
+    {
       "tag": "c:ingots/gold"
+    },
+    {
+      "item": "minecraft:pink_wool"
     }
-  },
-  "pattern": [
-    "aaaaba"
   ],
   "power": 0.2,
   "result": {

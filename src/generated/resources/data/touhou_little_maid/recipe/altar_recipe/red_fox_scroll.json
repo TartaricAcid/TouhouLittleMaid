@@ -3,19 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "item": "minecraft:paper"
     },
-    "b": {
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:paper"
+    },
+    {
       "tag": "c:dyes/red"
     },
-    "c": {
+    {
       "tag": "c:gems/diamond"
     }
-  },
-  "pattern": [
-    "aaaabc"
   ],
   "power": 0.1,
   "result": {

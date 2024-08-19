@@ -3,19 +3,25 @@
   "category": "misc",
   "entity": "minecraft:item",
   "group": "alter_recipe",
-  "key": {
-    "a": {
+  "ingredients": [
+    {
       "tag": "c:crops/nether_wart"
     },
-    "b": {
+    {
       "tag": "c:dyes/blue"
     },
-    "c": {
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "item": "minecraft:shield"
+    },
+    {
       "item": "minecraft:shield"
     }
-  },
-  "pattern": [
-    "abcccc"
   ],
   "power": 0.2,
   "result": {
