@@ -77,7 +77,7 @@ repositories {
 
 // 打包成 jar 时的名称
 base {
-    archivesName = mod_id + '-' + minecraft_version + '-release'
+    archivesName = 'touhoulittlemaid-' + minecraft_version + '-release'
 }
 
 // 需要 Java 21 版本
