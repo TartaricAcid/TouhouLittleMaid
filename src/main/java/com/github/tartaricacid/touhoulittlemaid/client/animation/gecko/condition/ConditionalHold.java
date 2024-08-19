@@ -68,8 +68,8 @@ public class ConditionalHold {
         }
     }
 
-	public String doTest(IMaid maid, InteractionHand hand) {
-		if (maid.asEntity().getItemInHand(hand).isEmpty()) {
+    public String doTest(IMaid maid, InteractionHand hand) {
+        if (maid.asEntity().getItemInHand(hand).isEmpty()) {
             return hand == InteractionHand.MAIN_HAND ? EMPTY_MAINHAND : EMPTY_OFFHAND;
         }
         String result = doIdTest(maid, hand);
@@ -83,11 +83,11 @@ public class ConditionalHold {
         return result;
     }
 
-	private String doIdTest(IMaid maid, InteractionHand hand) {
+    private String doIdTest(IMaid maid, InteractionHand hand) {
         if (idTest.isEmpty()) {
             return EMPTY;
         }
-		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
+        ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
         ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(itemInHand.getItem());
         if (registryName == null) {
             return EMPTY;
@@ -98,19 +98,15 @@ public class ConditionalHold {
         return EMPTY;
     }
 
-	private String doTagTest(IMaid maid, InteractionHand hand) {
+    private String doTagTest(IMaid maid, InteractionHand hand) {
         if (tagTest.isEmpty()) {
             return EMPTY;
         }
-		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
-        // ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        // if (tags == null) {
-        //     return EMPTY;
-        // }
+        ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
         return tagTest.stream().filter(itemInHand::is).findFirst().map(itemTagKey -> tagPre + itemTagKey.location()).orElse(EMPTY);
     }
 
-	private String doExtraTest(IMaid maid, InteractionHand hand) {
+    private String doExtraTest(IMaid maid, InteractionHand hand) {
         if (extraTest.isEmpty() && innerTest.isEmpty()) {
             return EMPTY;
         }
@@ -118,7 +114,7 @@ public class ConditionalHold {
         if (StringUtils.isNotBlank(innerName) && this.innerTest.contains(innerName)) {
             return innerName;
         }
-		UseAnim anim = maid.asEntity().getItemInHand(hand).getUseAnimation();
+        UseAnim anim = maid.asEntity().getItemInHand(hand).getUseAnimation();
         if (this.extraTest.contains(anim)) {
             return extraPre + anim.name().toLowerCase(Locale.US);
         }

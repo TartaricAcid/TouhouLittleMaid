@@ -134,14 +134,14 @@ public class BlockModelSwitcher extends BaseEntityBlock {
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack , BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (worldIn.getBlockEntity(pos) instanceof TileEntityModelSwitcher) {
             if (!worldIn.isClientSide && player instanceof ServerPlayer serverPlayer) {
-                PacketDistributor.sendToPlayer(serverPlayer,new OpenSwitcherGuiPackage(pos));
+                PacketDistributor.sendToPlayer(serverPlayer, new OpenSwitcherGuiPackage(pos));
             }
             return ItemInteractionResult.sidedSuccess(worldIn.isClientSide);
         }
-        return super.useItemOn(stack,state, worldIn, pos, player, handIn, hit);
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override

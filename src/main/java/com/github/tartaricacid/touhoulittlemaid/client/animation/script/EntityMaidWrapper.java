@@ -210,19 +210,11 @@ public final class EntityMaidWrapper implements IMaidData {
         return Math.abs(maid.asEntity().getUUID().getLeastSignificantBits());
     }
 
-    //TODO 既然Biome有codec了，直接用应该也可以吧
+    // TODO 既然Biome有codec了，直接用应该也可以吧
     @Override
     public Biome getAtBiome() {
-        return  BiomeCacheUtil.getCacheBiome(maid.asEntity());
+        return BiomeCacheUtil.getCacheBiome(maid.asEntity());
     }
-
-//    public String getAtBiome() {
-//        ResourceLocation res = BuiltInRegistries.BIOME_SOURCE.getKey(BiomeCacheUtil.getCacheBiome(maid.asEntity()));
-//        if (res != null) {
-//            return res.getPath();
-//        }
-//        return "";
-//    }
 
     @Override
     public boolean isOnGround() {

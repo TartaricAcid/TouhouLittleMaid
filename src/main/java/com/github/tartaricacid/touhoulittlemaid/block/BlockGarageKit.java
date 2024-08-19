@@ -51,7 +51,7 @@ import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MO
 
 public class BlockGarageKit extends Block implements EntityBlock {
     public static final VoxelShape BLOCK_AABB = Block.box(4, 0, 4, 12, 16, 12);
-    public static final IClientBlockExtensions CLIENT_BLOCK_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT? new IClientBlockExtensions() {
+    public static final IClientBlockExtensions CLIENT_BLOCK_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT ? new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
             if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientWorld) {
@@ -99,7 +99,7 @@ public class BlockGarageKit extends Block implements EntityBlock {
                 Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
             }
         }
-    }: null;
+    } : null;
 
     public BlockGarageKit() {
         super(BlockBehaviour.Properties.of().sound(SoundType.MUD).strength(1, 2).noOcclusion());

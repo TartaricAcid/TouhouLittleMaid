@@ -1,6 +1,7 @@
 name: Gradle Package 1.21 In-dev
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "1.21-neoforge-test"

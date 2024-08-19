@@ -72,10 +72,6 @@ public class ConditionalVehicle {
         if (tagTest.isEmpty()) {
             return EMPTY;
         }
-        // ITagManager<EntityType<?>> tags = BuiltInRegistries.ENTITY_TYPE.getTags();
-        // if (tags == null) {
-        //     return EMPTY;
-        // }
         return tagTest.stream().filter(tag -> vehicle.getType().is(tag)).findFirst().map(itemTagKey -> tagPre + itemTagKey.location()).orElse(EMPTY);
     }
 }

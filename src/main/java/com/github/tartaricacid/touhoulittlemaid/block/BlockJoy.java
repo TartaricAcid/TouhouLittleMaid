@@ -56,7 +56,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
         if (worldIn instanceof ServerLevel serverLevel && playerIn.getItemInHand(hand).isEmpty() && worldIn.getBlockEntity(pos) instanceof TileEntityJoy joy) {
             Entity oldSitEntity = serverLevel.getEntity(joy.getSitId());
             if (oldSitEntity != null && oldSitEntity.isAlive()) {
-                return super.useItemOn(itemStack,state, worldIn, pos, playerIn, hand, hit);
+                return super.useItemOn(itemStack, state, worldIn, pos, playerIn, hand, hit);
             }
             EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, this.sitPosition().x, this.sitPosition().y, this.sitPosition().z), this.getTypeName(), pos);
             newSitEntity.setYRot(state.getValue(FACING).getOpposite().toYRot() + this.sitYRot());
@@ -66,7 +66,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
             playerIn.startRiding(newSitEntity);
             return ItemInteractionResult.SUCCESS;
         }
-        return super.useItemOn(itemStack,state, worldIn, pos, playerIn, hand, hit);
+        return super.useItemOn(itemStack, state, worldIn, pos, playerIn, hand, hit);
     }
 
     public void startMaidSit(EntityMaid maid, BlockState state, Level worldIn, BlockPos pos) {

@@ -8,8 +8,8 @@ import net.minecraft.world.item.*;
 public class InnerClassify {
     private static final String EMPTY = "";
 
-	public static String doClassifyTest(String extraPre, IMaid maid, InteractionHand hand) {
-		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
+    public static String doClassifyTest(String extraPre, IMaid maid, InteractionHand hand) {
+        ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
         Item item = itemInHand.getItem();
         return switch (item) {
             case ItemHakureiGohei ignored -> extraPre + "gohei";

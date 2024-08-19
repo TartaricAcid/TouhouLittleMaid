@@ -23,10 +23,10 @@ public class Point {
     public static final int BLACK = 1;
     public static final int WHITE = 2;
     public static final Point NULL = new Point(-1, -1, 0);
-    public static final StreamCodec<ByteBuf,Point> POINT_STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT,Point::getX,
-            ByteBufCodecs.INT,Point::getY,
-            ByteBufCodecs.INT,Point::getType,
+    public static final StreamCodec<ByteBuf, Point> POINT_STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT, Point::getX,
+            ByteBufCodecs.INT, Point::getY,
+            ByteBufCodecs.INT, Point::getType,
             Point::new
     );
     /**

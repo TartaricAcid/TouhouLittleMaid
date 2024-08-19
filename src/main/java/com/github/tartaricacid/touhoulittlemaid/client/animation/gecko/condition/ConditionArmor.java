@@ -69,8 +69,8 @@ public class ConditionArmor {
         }
     }
 
-	public String doTest(IMaid maid, EquipmentSlot slot) {
-		ItemStack item = maid.asEntity().getItemBySlot(slot);
+    public String doTest(IMaid maid, EquipmentSlot slot) {
+        ItemStack item = maid.asEntity().getItemBySlot(slot);
         if (item.isEmpty()) {
             return EMPTY;
         }
@@ -81,7 +81,7 @@ public class ConditionArmor {
         return result;
     }
 
-	private String doIdTest(IMaid maid, EquipmentSlot slot) {
+    private String doIdTest(IMaid maid, EquipmentSlot slot) {
         if (idTest.isEmpty()) {
             return EMPTY;
         }
@@ -89,7 +89,7 @@ public class ConditionArmor {
             return EMPTY;
         }
         List<ResourceLocation> idListTest = idTest.get(slot);
-		ItemStack item = maid.asEntity().getItemBySlot(slot);
+        ItemStack item = maid.asEntity().getItemBySlot(slot);
         ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(item.getItem());
         if (registryName == null) {
             return EMPTY;
@@ -100,7 +100,7 @@ public class ConditionArmor {
         return EMPTY;
     }
 
-	private String doTagTest(IMaid maid, EquipmentSlot slot) {
+    private String doTagTest(IMaid maid, EquipmentSlot slot) {
         if (tagTest.isEmpty()) {
             return EMPTY;
         }
@@ -108,11 +108,7 @@ public class ConditionArmor {
             return EMPTY;
         }
         List<TagKey<Item>> tagListTest = tagTest.get(slot);
-		ItemStack item = maid.asEntity().getItemBySlot(slot);
-        // ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        // if (tags == null) {
-        //     return EMPTY;
-        // }
+        ItemStack item = maid.asEntity().getItemBySlot(slot);
         return tagListTest.stream().filter(item::is).findFirst().map(itemTagKey -> slot.getName() + "#" + itemTagKey.location()).orElse(EMPTY);
     }
 
