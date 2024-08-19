@@ -1,0 +1,43 @@
+name: Gradle Package 1.21 In-dev
+
+on:
+  push:
+    branches:
+      - "1.21-neoforge-test"
+    paths:
+      - "src/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: "1.21-neoforge-test"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Create timestamp
+        id: create_timestamp
+        run: echo "::set-output name=timestamp::$(date '+%Y%m%d-%H%M%S')"
+        shell: bash
+
+      - name: Send file to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: InDev-${{ steps.create_timestamp.outputs.timestamp }}
+          body: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: true
+          files: ./build/libs/*.jar
