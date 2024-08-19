@@ -29,10 +29,12 @@ public class MaidSoundInstance extends AbstractTickableSoundInstance {
         this.z = this.maid.getZ();
     }
 
+    @Override
     public boolean canPlaySound() {
         return !this.maid.isSilent();
     }
 
+    @Override
     public void tick() {
         if (this.maid.isRemoved()) {
             this.stop();

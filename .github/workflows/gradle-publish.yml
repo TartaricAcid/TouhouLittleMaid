@@ -1,4 +1,4 @@
-name: Gradle Package 1.21 In-dev
+name: Gradle Package 1.20
 
 on:
   workflow_dispatch:
@@ -6,11 +6,12 @@ on:
     branches:
       - "1.21-neoforge-test"
     paths:
-      - "src/**"
+      - 'src/main/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -22,23 +23,40 @@ jobs:
         with:
           distribution: 'microsoft'
           java-version: '21'
+          server-id: github
+          settings-path: ${{ github.workspace }}
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build
 
       - name: Create timestamp
         id: create_timestamp
-        run: echo "::set-output name=timestamp::$(date '+%Y%m%d-%H%M%S')"
+        run: echo "::set-output name=timestamp::$(date '+%Y%m%d%H%M%s')"
         shell: bash
 
       - name: Send file to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: InDev-${{ steps.create_timestamp.outputs.timestamp }}
+          tag_name: snapshot-${{ steps.create_timestamp.outputs.timestamp }}
           body: ${{ github.event.head_commit.message }}
           draft: false
           prerelease: true
-          files: ./build/libs/*.jar
+          files: |
+            ./build/libs/*.jar
+
+      - name: Cleanup Gradle Cache
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties

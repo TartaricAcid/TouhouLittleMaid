@@ -45,6 +45,6 @@ public class PicnicBasketModel extends AbstractModel<Entity> {
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        all.render(poseStack, vertexConsumer, packedLight, packedOverlay,color);
+        all.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }

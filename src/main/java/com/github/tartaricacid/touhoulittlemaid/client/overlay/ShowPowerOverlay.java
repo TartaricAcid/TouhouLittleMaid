@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class ShowPowerOverlay implements LayeredDraw.Layer {
     private static ItemStack POWER_POINT;
+
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();

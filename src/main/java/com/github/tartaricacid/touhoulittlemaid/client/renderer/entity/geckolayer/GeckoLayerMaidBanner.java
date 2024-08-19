@@ -54,9 +54,9 @@ public class GeckoLayerMaidBanner<T extends Mob> extends GeoLayerRenderer<T, Gec
                 VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
                 this.bannerModel.renderToBuffer(matrixStack, buffer, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 BannerPatternLayers bannerpatternlayers = maid.getBackpackShowItem().get(DataComponents.BANNER_PATTERNS);
-                DyeColor baseColor = ((AbstractBannerBlock)bannerItem.getBlock()).getColor();
+                DyeColor baseColor = ((AbstractBannerBlock) bannerItem.getBlock()).getColor();
                 if (bannerpatternlayers != null) {
-                    BannerRenderer.renderPatterns(matrixStack,bufferIn,packedLightIn,OverlayTexture.NO_OVERLAY,this.bannerModel.getBanner(),ModelBakery.BANNER_BASE,true,baseColor,bannerpatternlayers);
+                    BannerRenderer.renderPatterns(matrixStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, this.bannerModel.getBanner(), ModelBakery.BANNER_BASE, true, baseColor, bannerpatternlayers);
                 }
                 matrixStack.popPose();
             }

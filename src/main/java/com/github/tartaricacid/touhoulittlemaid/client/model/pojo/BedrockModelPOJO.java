@@ -31,6 +31,6 @@ public class BedrockModelPOJO {
         if (geometryModelNew == null) {
             return null;
         }
-        return geometryModelNew.get(0);
+        return geometryModelNew.getFirst();
     }
 }

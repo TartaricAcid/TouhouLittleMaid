@@ -61,9 +61,9 @@ public class NameTagGui extends Screen {
             renderable.render(graphics, mouseX, mouseY, partialTicks);
         }
         if (alwaysShow) {
-            graphics.blitSprite(CANCEL_SPRITE, middleX + 82, middleY - 26,18,18);
+            graphics.blitSprite(CANCEL_SPRITE, middleX + 82, middleY - 26, 18, 18);
         } else {
-            graphics.blitSprite(CONFIRM_SPRITE, middleX + 82, middleY - 26,18,18);
+            graphics.blitSprite(CONFIRM_SPRITE, middleX + 82, middleY - 26, 18, 18);
         }
         if (alwaysShowButton.isHovered()) {
             graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.tag.always_show"), mouseX, mouseY);

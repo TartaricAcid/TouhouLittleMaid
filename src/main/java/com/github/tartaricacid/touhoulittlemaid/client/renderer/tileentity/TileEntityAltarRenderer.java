@@ -32,7 +32,7 @@ public class TileEntityAltarRenderer implements BlockEntityRenderer<TileEntityAl
             this.setTranslateAndPose(te, poseStack);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
             VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
-            MODEL.renderToBuffer(poseStack, buffer, combinedLightIn,combinedOverlayIn);
+            MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn);
             poseStack.popPose();
         }
 

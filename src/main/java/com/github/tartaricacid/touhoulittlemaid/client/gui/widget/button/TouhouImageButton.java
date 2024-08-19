@@ -50,6 +50,6 @@ public class TouhouImageButton extends Button {
         }
 
         RenderSystem.enableDepthTest();
-        pGuiGraphics.blit(pTexture, pX, pY, (float)pUOffset, (float)i, pWidth, pHeight, pTextureWidth, pTextureHeight);
+        pGuiGraphics.blit(pTexture, pX, pY, (float) pUOffset, (float) i, pWidth, pHeight, pTextureWidth, pTextureHeight);
     }
 }

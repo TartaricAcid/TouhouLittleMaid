@@ -63,7 +63,7 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
 
         MutableComponent customNameComponent = null;
         if (StringUtils.isNotBlank(customName)) {
-            customNameComponent = Component.Serializer.fromJson(customName,access);
+            customNameComponent = Component.Serializer.fromJson(customName, access);
             if (customNameComponent != null) {
                 guiGraphics.drawString(font, customNameComponent.withStyle(ChatFormatting.GRAY), pX, pY + 2, 0xFFFFFF);
             }
@@ -99,7 +99,7 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
         }
 
         guiGraphics.enableScissor(pX, posY - 50, pX + width, posY);
-        InventoryScreen.renderEntityInInventory(guiGraphics, posX, posY, (int) (25 * info.getRenderItemScale()), new Vector3f(), pose,null, maid);
+        InventoryScreen.renderEntityInInventory(guiGraphics, posX, posY, (int) (25 * info.getRenderItemScale()), new Vector3f(), pose, null, maid);
         guiGraphics.disableScissor();
     }
 }

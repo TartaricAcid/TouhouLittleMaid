@@ -52,9 +52,9 @@ public class LayerMaidBanner extends RenderLayer<Mob, BedrockModel<Mob>> {
             VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
             bannerModel.renderToBuffer(matrixStack, buffer, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             var layers = stack.get(DataComponents.BANNER_PATTERNS);
-            var color = ((AbstractBannerBlock)bannerItem.getBlock()).getColor();
+            var color = ((AbstractBannerBlock) bannerItem.getBlock()).getColor();
             if (layers != null) {
-                BannerRenderer.renderPatterns(matrixStack,bufferIn,packedLightIn,OverlayTexture.NO_OVERLAY,bannerModel.getBanner(), ModelBakery.BANNER_BASE, true,color,layers);
+                BannerRenderer.renderPatterns(matrixStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, bannerModel.getBanner(), ModelBakery.BANNER_BASE, true, color, layers);
             }
             matrixStack.popPose();
         }

@@ -26,9 +26,6 @@ public class ClientSetupEvent {
         event.enqueueWork(InGameMaidConfig::read);
         event.enqueueWork(MaidTipsOverlay::init);
         event.enqueueWork(ShowOptifineScreen::checkOptifineIsLoaded);
-
-        // 客户端兼容
-//        SimpleHatsCompat.init();
     }
 
     @SubscribeEvent
