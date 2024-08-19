@@ -7,9 +7,9 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.PlayerMaidModels;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.concurrent.TimeUnit;

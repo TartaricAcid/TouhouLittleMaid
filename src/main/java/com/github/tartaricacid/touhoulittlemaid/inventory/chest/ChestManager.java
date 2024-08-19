@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.inventory.chest;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IChestType;
-//import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestType;
 import com.github.tartaricacid.touhoulittlemaid.compat.ironchest.IronChestType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;

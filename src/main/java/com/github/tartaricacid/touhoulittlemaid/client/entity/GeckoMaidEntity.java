@@ -154,10 +154,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
         }
 
         public boolean compareState() {
-            if (this.yHeadRot != this.maid.yHeadRot || this.yBodyRot != this.maid.yBodyRot) {
-                return false;
-            }
-            return true;
+            return this.yHeadRot == this.maid.yHeadRot && this.yBodyRot == this.maid.yBodyRot;
         }
 
         public void updateState() {

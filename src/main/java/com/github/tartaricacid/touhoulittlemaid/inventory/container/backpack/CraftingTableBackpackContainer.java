@@ -16,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 import java.util.Optional;
 

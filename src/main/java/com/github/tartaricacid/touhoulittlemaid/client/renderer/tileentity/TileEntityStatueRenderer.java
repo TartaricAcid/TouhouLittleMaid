@@ -21,8 +21,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -72,8 +70,7 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         });
 
         entity.load(data);
-        if (entity instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) entity;
+        if (entity instanceof EntityMaid maid) {
             clearMaidDataResidue(maid, true);
         }
 

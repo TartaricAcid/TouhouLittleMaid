@@ -6,7 +6,10 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.*;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimatableEntity;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.ConstantValue;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;

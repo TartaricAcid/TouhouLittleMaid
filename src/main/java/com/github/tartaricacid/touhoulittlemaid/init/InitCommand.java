@@ -8,8 +8,6 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class InitCommand {
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPE = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, TouhouLittleMaid.MOD_ID);

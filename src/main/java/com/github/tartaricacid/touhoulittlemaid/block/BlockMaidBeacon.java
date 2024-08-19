@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -168,8 +167,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
         }
         worldIn.setBlock(pos.above(), stateUp, Block.UPDATE_ALL);
         BlockEntity te = worldIn.getBlockEntity(pos.above());
-        if (te instanceof TileEntityMaidBeacon) {
-            TileEntityMaidBeacon tileEntityMaidBeacon = (TileEntityMaidBeacon) te;
+        if (te instanceof TileEntityMaidBeacon tileEntityMaidBeacon) {
             ItemMaidBeacon.itemStackToTileEntity(stack, tileEntityMaidBeacon);
             tileEntityMaidBeacon.refresh();
         }

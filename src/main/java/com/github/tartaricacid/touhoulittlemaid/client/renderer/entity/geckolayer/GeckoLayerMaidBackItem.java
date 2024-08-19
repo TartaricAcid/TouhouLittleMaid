@@ -3,9 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolay
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
-//import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
-//import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
-//import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
@@ -55,7 +52,6 @@ public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, G
                 Minecraft.getInstance().getItemRenderer().renderStatic(entity, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, entity.level(), packedLightIn, OverlayTexture.NO_OVERLAY, entity.getId());
 //            }
             matrixStack.popPose();
-            return;
         }
 
         //TODO : tacz兼容

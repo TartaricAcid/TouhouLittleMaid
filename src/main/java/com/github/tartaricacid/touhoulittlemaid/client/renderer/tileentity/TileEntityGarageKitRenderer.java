@@ -66,8 +66,7 @@ public class TileEntityGarageKitRenderer implements BlockEntityRenderer<TileEnti
         });
 
         entity.load(data);
-        if (entity instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) entity;
+        if (entity instanceof EntityMaid maid) {
             clearMaidDataResidue(maid, true);
         }
 

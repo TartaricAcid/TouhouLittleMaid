@@ -3,10 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
-//import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
-//import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
-//import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
-//import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
@@ -58,7 +54,6 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
 //            } else {
                 Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, mob.level(), packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
             matrixStack.popPose();
-            return;
         }
 
         // TODO : TAC 兼容
