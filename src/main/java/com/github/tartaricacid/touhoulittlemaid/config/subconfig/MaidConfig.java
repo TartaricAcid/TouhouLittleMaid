@@ -11,7 +11,7 @@ import java.util.List;
 import static com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil.getItemId;
 
 public final class MaidConfig {
-    private static final String translateKey = "config.touhou_little_maid.maid";
+    private static final String TRANSLATE_KEY = "config.touhou_little_maid.maid";
     public static final String TAG_PREFIX = "#";
     public static ModConfigSpec.ConfigValue<String> MAID_TAMED_ITEM;
     public static ModConfigSpec.ConfigValue<String> MAID_TEMPTATION_ITEM;
@@ -26,21 +26,21 @@ public final class MaidConfig {
     public static ModConfigSpec.IntValue OWNER_MAX_MAID_NUM;
     public static ModConfigSpec.DoubleValue REPLACE_ALLAY_PERCENT;
 
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_BACKPACK_BLACKLIST;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_ATTACK_IGNORE;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_RANGED_ATTACK_IGNORE;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_BACKPACK_BLACKLIST;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_ATTACK_IGNORE;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_RANGED_ATTACK_IGNORE;
 
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_WORK_MEALS_BLOCK_LIST;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_HOME_MEALS_BLOCK_LIST;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_HEAL_MEALS_BLOCK_LIST;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_WORK_MEALS_BLOCK_LIST;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST;
 
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_WORK_MEALS_BLOCK_LIST_REGEX;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_HOME_MEALS_BLOCK_LIST_REGEX;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_HEAL_MEALS_BLOCK_LIST_REGEX;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_EATEN_RETURN_CONTAINER_LIST;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_WORK_MEALS_BLOCK_LIST_REGEX;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_HOME_MEALS_BLOCK_LIST_REGEX;
+    public static ModConfigSpec.ConfigValue<List<String>> MAID_HEAL_MEALS_BLOCK_LIST_REGEX;
+    public static ModConfigSpec.ConfigValue<List<List<String>>> MAID_EATEN_RETURN_CONTAINER_LIST;
 
     public static void init(ModConfigSpec.Builder builder) {
-        builder.translation(translateKey).push("maid");
+        builder.translation(TRANSLATE_KEY).push("maid");
 
         builder.comment("The item that can tamed maid", "Use the registered name of the item directly or write tag name with # as prefix")
                 .translation(translateKey("maid_tamed_item"));
@@ -88,15 +88,15 @@ public final class MaidConfig {
 
         builder.comment("These items cannot be placed in the maid backpack")
                 .translation(translateKey("maid_backpack_blacklist"));
-        MAID_BACKPACK_BLACKLIST = builder.defineListAllowEmpty("MaidBackpackBlackList", Lists.newArrayList(), () -> "", MaidConfig::checkItemId);
+        MAID_BACKPACK_BLACKLIST = builder.define("MaidBackpackBlackList", Lists.newArrayList(), MaidConfig::checkItemId);
 
         builder.comment("The entity that the maid will not recognize as targets for attack")
                 .translation(translateKey("maid_attack_ignore"));
-        MAID_ATTACK_IGNORE = builder.defineListAllowEmpty("MaidAttackIgnore", Lists.newArrayList(), () -> "", (obj) -> true);
+        MAID_ATTACK_IGNORE = builder.define("MaidAttackIgnore", Lists.newArrayList());
 
         builder.comment("The entity that the maid will not hurt when in ranged attack")
                 .translation(translateKey("maid_ranged_attack_ignore"));
-        MAID_RANGED_ATTACK_IGNORE = builder.defineListAllowEmpty("MaidRangedAttackIgnore", Lists.newArrayList(), () -> "", (obj) -> true);
+        MAID_RANGED_ATTACK_IGNORE = builder.define("MaidRangedAttackIgnore", Lists.newArrayList());
 
         builder.comment("Percentage chance of replace Allays spawn in pillager outposts with Maids")
                 .translation(translateKey("replace_allay_percent"));
@@ -104,48 +104,37 @@ public final class MaidConfig {
 
         builder.comment("These items cannot be used as a maid's work meals")
                 .translation(translateKey("maid_work_meals_block_list"));
-        MAID_WORK_MEALS_BLOCK_LIST = builder.defineListAllowEmpty("MaidWorkMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), () -> "", MaidConfig::checkItemId);
+        MAID_WORK_MEALS_BLOCK_LIST = builder.define("MaidWorkMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), MaidConfig::checkItemId);
 
         builder.comment("These items cannot be used as a maid's home meals")
                 .translation(translateKey("maid_home_meals_block_list"));
-        MAID_HOME_MEALS_BLOCK_LIST = builder.defineListAllowEmpty("MaidHomeMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), () -> "", MaidConfig::checkItemId);
+        MAID_HOME_MEALS_BLOCK_LIST = builder.define("MaidHomeMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), MaidConfig::checkItemId);
 
         builder.comment("These items cannot be used as a maid's heal meals")
                 .translation(translateKey("maid_heal_meals_block_list"));
-        MAID_HEAL_MEALS_BLOCK_LIST = builder.defineListAllowEmpty("MaidHealMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE)), () -> "", MaidConfig::checkItemId);
+        MAID_HEAL_MEALS_BLOCK_LIST = builder.define("MaidHealMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE)), MaidConfig::checkItemId);
 
         builder.comment("These items cannot be used as a maid's work meals which match the regex")
                 .translation(translateKey("maid_work_meals_block_list_regex"));
-        MAID_WORK_MEALS_BLOCK_LIST_REGEX = builder.defineListAllowEmpty("MaidWorkMealsBlockListRegEx", Lists.newArrayList(), () -> "", obj -> true);
+        MAID_WORK_MEALS_BLOCK_LIST_REGEX = builder.define("MaidWorkMealsBlockListRegEx", Lists.newArrayList());
 
         builder.comment("These items cannot be used as a maid's home meals which match the regex")
                 .translation(translateKey("maid_home_meals_block_list_regex"));
-        MAID_HOME_MEALS_BLOCK_LIST_REGEX = builder.defineListAllowEmpty("MaidHomeMealsBlockListRegEx", Lists.newArrayList(), () -> "", obj -> true);
+        MAID_HOME_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHomeMealsBlockListRegEx", Lists.newArrayList());
 
         builder.comment("These items cannot be used as a maid's heal meals which match the regex")
                 .translation(translateKey("maid_heal_meals_block_list_regex"));
-        MAID_HEAL_MEALS_BLOCK_LIST_REGEX = builder.defineListAllowEmpty("MaidHealMealsBlockListRegEx", Lists.newArrayList(), () -> "", obj -> true);
+        MAID_HEAL_MEALS_BLOCK_LIST_REGEX = builder.define("MaidHealMealsBlockListRegEx", Lists.newArrayList());
 
         builder.comment("These entries configure the container returned after a maid has eaten", "Eg: [\"minecraft:beetroot_soup\", \"minecraft:bowl\"]")
                 .translation(translateKey("maid_eaten_return_container_list"));
-        MAID_EATEN_RETURN_CONTAINER_LIST = builder.defineListAllowEmpty("MaidEatenReturnContainerList", Lists.newArrayList(), () -> "", obj -> {
-            if (obj instanceof String string) {
-                String[] split = string.split(",");
-                if (split.length != 2) {
-                    return false;
-                }
-
-                return checkItemId(split[0]) && checkItemId(split[1]);
-            }
-
-            return false;
-        });
+        MAID_EATEN_RETURN_CONTAINER_LIST = builder.define("MaidEatenReturnContainerList", Lists.newArrayList());
 
         builder.pop();
     }
 
     private static String translateKey(String key) {
-        return translateKey + "." + key;
+        return TRANSLATE_KEY + "." + key;
     }
 
     public static boolean checkItemAndTag(Object obj) {

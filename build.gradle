@@ -161,28 +161,22 @@ configurations {
 
 dependencies {
     // JEI
-    implementation "maven.modrinth:jei:nff9nRuD"
-
+    implementation "maven.modrinth:jei:${jei_version}"
     // REI
-    compileOnly "maven.modrinth:architectury-api:13.0.6+neoforge"
-    compileOnly "maven.modrinth:rei:16.0.744+neoforge"
-
+    compileOnly "maven.modrinth:architectury-api:${architectury_api_version}"
+    compileOnly "maven.modrinth:rei:${rei_version}"
     // EMI
-    compileOnly "maven.modrinth:emi:1.1.10+1.21+neoforge"
-
-    implementation "curse.maven:jade-324717:5444008"
-    implementation "maven.modrinth:the-one-probe:1.21_neo-12.0.3"
-
-    implementation "maven.modrinth:cloth-config:15.0.128+neoforge"
-
-    implementation "maven.modrinth:iron-chests:1.21-neoforge-16.0.7"
-
-    implementation "maven.modrinth:carry-on:2LfOJ5LW"
-
+    compileOnly "maven.modrinth:emi:${emi_version}"
+    implementation "maven.modrinth:jade:${jade_version}"
+    implementation "maven.modrinth:the-one-probe:${top_version}"
+    implementation "maven.modrinth:cloth-config:${cloth_config_version}"
+    implementation "maven.modrinth:iron-chests:${iron_chests_version}"
+    implementation "maven.modrinth:carry-on:${carry_on_version}"
+    // IPN
     runtimeOnly "maven.modrinth:kotlin-for-forge:5.4.0"
     runtimeOnly "maven.modrinth:libipn:neoforge-1.21-6.0.2"
     implementation "maven.modrinth:inventory-profiles-next:neoforge-1.21-2.0.4"
-
+    // Patchouli
     implementation "libs:Patchouli:1.21-87-NEOFORGE-SNAPSHOT"
 }
 

@@ -13,6 +13,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
+import java.util.List;
+
 import static com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST;
 
 @EventBusSubscriber
@@ -25,10 +27,9 @@ public class RemainFoodEatenEvent {
 
             if (craftingRemainingItem.isEmpty()) {
                 String itemId = ItemsUtil.getItemId(foodAfterEat.getItem());
-                for (String strings : MAID_EATEN_RETURN_CONTAINER_LIST.get()) {
-                    String[] split = strings.split(",");
-                    if (split[0].equals(itemId)) {
-                        craftingRemainingItem = getItemStack(split[1]);
+                for (List<String> strings : MAID_EATEN_RETURN_CONTAINER_LIST.get()) {
+                    if (strings.get(0).equals(itemId)) {
+                        craftingRemainingItem = getItemStack(strings.get(1));
                         break;
                     }
                 }

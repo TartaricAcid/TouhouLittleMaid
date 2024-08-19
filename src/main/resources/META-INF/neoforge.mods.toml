@@ -20,6 +20,9 @@ issueTrackerURL = "https://github.com/TartaricAcid/TouhouLittleMaid/issues"
 [[accessTransformers]]
     file = "META-INF/accesstransformer.cfg"
 
+[modproperties.touhou_little_maid]
+    catalogueItemIcon = "touhou_little_maid:hakurei_gohei"
+
 [[dependencies.${mod_id}]]
     modId = "neoforge"
     type = "required"

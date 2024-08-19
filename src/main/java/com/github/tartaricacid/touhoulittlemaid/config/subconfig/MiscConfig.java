@@ -9,7 +9,7 @@ import java.util.List;
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
 
 public final class MiscConfig {
-    private static final String translateKey = "config.touhou_little_maid.misc";
+    private static final String TRANSLATE_KEY = "config.touhou_little_maid.misc";
     public static ModConfigSpec.DoubleValue MAID_FAIRY_POWER_POINT;
     public static ModConfigSpec.IntValue MAID_FAIRY_SPAWN_PROBABILITY;
     public static ModConfigSpec.ConfigValue<List<? extends String>> MAID_FAIRY_BLACKLIST_DIMENSION;
@@ -22,7 +22,7 @@ public final class MiscConfig {
     public static ModConfigSpec.BooleanValue CLOSE_OPTIFINE_WARNING;
 
     public static void init(ModConfigSpec.Builder builder) {
-        builder.translation(translateKey).push("misc");
+        builder.translation(TRANSLATE_KEY).push("misc");
 
         builder.comment("Maid fairy's power point")
                 .translation(translateKey("maid_fairy_power_point"));
@@ -70,7 +70,7 @@ public final class MiscConfig {
     }
 
     private static String translateKey(String key) {
-        return translateKey + "." + key;
+        return TRANSLATE_KEY + "." + key;
     }
 
     private static boolean checkId(Object o) {

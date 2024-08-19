@@ -3,14 +3,14 @@ package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class VanillaConfig {
-    private static final String translateKey = "config.touhou_little_maid.vanilla";
+    private static final String TRANSLATE_KEY = "config.touhou_little_maid.vanilla";
     public static ModConfigSpec.BooleanValue REPLACE_SLIME_MODEL;
     public static ModConfigSpec.BooleanValue REPLACE_XP_TEXTURE;
     public static ModConfigSpec.BooleanValue REPLACE_TOTEM_TEXTURE;
     public static ModConfigSpec.BooleanValue REPLACE_XP_BOTTLE_TEXTURE;
 
     public static void init(ModConfigSpec.Builder builder) {
-        builder.translation(translateKey).push("vanilla");
+        builder.translation(TRANSLATE_KEY).push("vanilla");
 
         builder.comment("Whether to replace the vanilla slime model with the yukkuri.")
                 .translation(translateKey("replace_slime_model"));
@@ -32,6 +32,6 @@ public class VanillaConfig {
     }
 
     private static String translateKey(String key) {
-        return translateKey + "." + key;
+        return TRANSLATE_KEY + "." + key;
     }
 }
