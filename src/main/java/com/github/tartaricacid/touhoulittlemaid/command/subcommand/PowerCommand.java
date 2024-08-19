@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.command.subcommand;
 
+import com.github.tartaricacid.touhoulittlemaid.command.arguments.HandleTypeArgument;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
-import com.github.tartaricacid.touhoulittlemaid.command.arguments.HandleTypeArgument;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.network.pack.SyncDataPackage;
 import com.mojang.brigadier.Command;

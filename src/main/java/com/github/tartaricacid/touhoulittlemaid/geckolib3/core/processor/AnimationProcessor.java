@@ -12,7 +12,8 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.snapshot.BoneTopL
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.MathUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class AnimationProcessor<T extends AnimatableEntity> {

@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.FaceUVsItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.Entity;
 
 public class EntityPlaceholderModel extends AbstractModel<Entity> {

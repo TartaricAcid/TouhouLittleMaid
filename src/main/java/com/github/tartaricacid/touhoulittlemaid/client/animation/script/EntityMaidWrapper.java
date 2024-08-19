@@ -9,7 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
 
 public final class EntityMaidWrapper implements IMaidData {

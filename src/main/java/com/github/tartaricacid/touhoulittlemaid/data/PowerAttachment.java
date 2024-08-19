@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.FloatTag;
 import net.minecraft.util.Mth;
 
 public class PowerAttachment {
