@@ -33,19 +33,10 @@ public class GeckoLayerMaidHeld<T extends Mob> extends GeoLayerRenderer<T, Gecko
         if (!offhandItem.isEmpty() || !mainHandItem.isEmpty()) {
             poseStack.pushPose();
             if (!geoModel.rightHandBones().isEmpty() && !RenderFixer.isCarryOnRender(mainHandItem, bufferIn)) {
-                //TODO 拔刀剑兼容
-//                if (SlashBladeCompat.isSlashBladeItem(mainHandItem)) {
-//                    SlashBladeRender.renderMaidMainhandSlashBlade(entityLivingBaseIn, geoModel, poseStack, bufferIn, packedLightIn, mainHandItem, partialTicks);
-//                } else {
-                    this.renderArmWithItem(entityLivingBaseIn, mainHandItem, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, bufferIn, packedLightIn);
-//                }
+                this.renderArmWithItem(entityLivingBaseIn, mainHandItem, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, bufferIn, packedLightIn);
             }
             if (!geoModel.leftHandBones().isEmpty() && !RenderFixer.isCarryOnRender(offhandItem, bufferIn)) {
-//                if (SlashBladeCompat.isSlashBladeItem(offhandItem)) {
-//                    SlashBladeRender.renderMaidOffhandSlashBlade(geoModel, poseStack, bufferIn, packedLightIn, offhandItem);
-//                } else {
-                    this.renderArmWithItem(entityLivingBaseIn, offhandItem, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, poseStack, bufferIn, packedLightIn);
-//                }
+                this.renderArmWithItem(entityLivingBaseIn, offhandItem, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, poseStack, bufferIn, packedLightIn);
             }
             poseStack.popPose();
         }

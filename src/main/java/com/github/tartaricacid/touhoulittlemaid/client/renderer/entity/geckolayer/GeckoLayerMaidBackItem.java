@@ -45,17 +45,8 @@ public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, G
             } else {
                 BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);
             }
-            //TODO 拔刀剑兼容
-//            if (SlashBladeCompat.isSlashBladeItem(stack)) {
-//                SlashBladeRender.renderGeckoMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
-//            } else {
-                Minecraft.getInstance().getItemRenderer().renderStatic(entity, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, entity.level(), packedLightIn, OverlayTexture.NO_OVERLAY, entity.getId());
-//            }
+            Minecraft.getInstance().getItemRenderer().renderStatic(entity, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, entity.level(), packedLightIn, OverlayTexture.NO_OVERLAY, entity.getId());
             matrixStack.popPose();
         }
-
-        //TODO : tacz兼容
-        // TACZ 背部枪械渲染
-//        TacCompat.renderBackGun(stack, model, maid, matrixStack, bufferIn, packedLightIn);
     }
 }

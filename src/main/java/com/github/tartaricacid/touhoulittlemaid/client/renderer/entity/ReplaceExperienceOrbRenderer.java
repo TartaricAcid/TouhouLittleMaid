@@ -58,7 +58,6 @@ public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> 
         float texV1 = (float) (icon / 4 * 16 + 16) / 64.0F;
         poseStack.translate(0.0F, 0.1F, 0.0F);
         poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.scale(0.3F, 0.3F, 0.3F);
         VertexConsumer consumer = buffer.getBuffer(RENDER_TYPE);
         PoseStack.Pose lasted = poseStack.last();

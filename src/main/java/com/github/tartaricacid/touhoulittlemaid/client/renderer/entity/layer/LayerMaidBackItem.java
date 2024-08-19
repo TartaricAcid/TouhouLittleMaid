@@ -18,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
 
 public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
-    //TODO : 拔刀剑兼容
     private final EntityMaidRenderer renderer;
 
     public LayerMaidBackItem(EntityMaidRenderer renderer) {
@@ -38,7 +37,6 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
             return;
         }
 
-        //TODO : net.minecraft.world.item.Vanishable已被移除，可能是这么写
         if (stack.getItem() instanceof TieredItem) {
             matrixStack.pushPose();
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
@@ -49,14 +47,8 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
             } else {
                 BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);
             }
-//            if (SlashBladeCompat.isSlashBladeItem(stack)) {
-//                SlashBladeRender.renderMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
-//            } else {
-                Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, mob.level(), packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
+            Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, mob.level(), packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
             matrixStack.popPose();
         }
-
-        // TODO : TAC 兼容
-        //TacCompat.renderBackGun(matrixStack, bufferIn, packedLightIn, stack, maid);
     }
 }

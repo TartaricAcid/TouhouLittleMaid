@@ -80,7 +80,7 @@ public class EmiAltarRecipe implements EmiRecipe {
         widgets.addSlot(getInput(inputs, 3), 80, 15);
         widgets.addSlot(getInput(inputs, 4), 100, 35);
         widgets.addSlot(getInput(inputs, 5), 100, 55);
-        widgets.addSlot(outputs.get(0), 140, 5);
+        widgets.addSlot(outputs.getFirst(), 140, 5);
 
         widgets.addTexture(POWER_ICON, 72, 38);
         widgets.addText(Component.literal(result), (int) ((widgets.getWidth() - font.width(result)) / 2.0f), 85, darkGray, false);

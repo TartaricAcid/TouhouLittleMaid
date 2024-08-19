@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.AbstractSkullBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -74,8 +74,8 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
         if (stack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             BlockState blockState = block.defaultBlockState();
-            //TODO 由于麻将删除了IPlantable，先借用Tags
-            if (blockState.is(BlockTags.SMALL_FLOWERS) || blockState.is(Blocks.SHORT_GRASS)) {
+            // 由于 1.21 删除了 IPlantable，使用 Tags 识别花朵，还有识别 BushBlock
+            if (blockState.is(BlockTags.FLOWERS) || blockState.getBlock() instanceof BushBlock) {
                 poseStack.pushPose();
                 this.getParentModel().getHead().translateAndRotate(poseStack);
                 poseStack.scale(0.8F, -0.8F, -0.8F);
@@ -83,8 +83,6 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
                 Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, null);
                 poseStack.popPose();
             }
-        } // else {
-//            SimpleHatsCompat.renderHat(poseStack, bufferIn, packedLightIn, mob, stack, this.getParentModel());
-//        }
+        }
     }
 }

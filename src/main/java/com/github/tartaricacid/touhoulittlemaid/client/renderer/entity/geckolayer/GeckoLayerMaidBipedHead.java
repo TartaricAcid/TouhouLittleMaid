@@ -23,9 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.AbstractSkullBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import java.util.Map;
 
@@ -75,18 +76,16 @@ public class GeckoLayerMaidBipedHead<T extends Mob> extends GeoLayerRenderer<T, 
             if (stack.getItem() instanceof BlockItem) {
                 Block block = ((BlockItem) stack.getItem()).getBlock();
                 BlockState blockState = block.defaultBlockState();
-                //TODO 由于麻将删除了IPlantable，先借用Tags
-                if (blockState.is(BlockTags.SMALL_FLOWERS) || blockState.is(Blocks.SHORT_GRASS)) {
+                // 由于 1.21 删除了 IPlantable，使用 Tags 识别花朵，还有识别 BushBlock
+                if (blockState.is(BlockTags.FLOWERS) || blockState.getBlock() instanceof BushBlock) {
                     poseStack.pushPose();
                     RenderUtils.prepMatrixForLocator(poseStack, geoModel.headBones());
                     poseStack.scale(-0.8F, 0.8F, -0.8F);
                     poseStack.translate(-0.5, 0.625, -0.5);
-                    Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
+                    Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, null);
                     poseStack.popPose();
                 }
-            } // else {
-//                SimpleHatsCompat.renderGeckoHat(poseStack, bufferIn, packedLightIn, entity, stack, geoModel.headBones());
-//            }
+            }
         }
     }
 }
