@@ -1,4 +1,4 @@
-name: Gradle Package 1.20
+name: Gradle Package 1.21
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches:
       - "1.21-neoforge-test"
     paths:
-      - 'src/main/**'
+      - 'src/**'
 
 jobs:
   build:
@@ -43,11 +43,11 @@ jobs:
 
       - name: Create timestamp
         id: create_timestamp
-        run: echo "::set-output name=timestamp::$(date '+%Y%m%d%H%M%s')"
+        run: echo "::set-output name=timestamp::$(date '+%Y%m%d-%H%M%S')"
         shell: bash
 
       - name: Send file to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: snapshot-${{ steps.create_timestamp.outputs.timestamp }}
           body: ${{ github.event.head_commit.message }}
