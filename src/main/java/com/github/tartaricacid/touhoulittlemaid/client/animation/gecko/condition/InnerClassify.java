@@ -11,30 +11,16 @@ public class InnerClassify {
 	public static String doClassifyTest(String extraPre, IMaid maid, InteractionHand hand) {
 		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
         Item item = itemInHand.getItem();
-        if (item instanceof ItemHakureiGohei) {
-            return extraPre + "gohei";
-        }
-        if (item instanceof SwordItem) {
-            return extraPre + "sword";
-        }
-        if (item instanceof AxeItem) {
-            return extraPre + "axe";
-        }
-        if (item instanceof PickaxeItem) {
-            return extraPre + "pickaxe";
-        }
-        if (item instanceof ShovelItem) {
-            return extraPre + "shovel";
-        }
-        if (item instanceof HoeItem) {
-            return extraPre + "hoe";
-        }
-        if (item instanceof ShieldItem) {
-            return extraPre + "shield";
-        }
-        if (item instanceof ThrowablePotionItem) {
-            return extraPre + "throwable_potion";
-        }
-        return EMPTY;
+        return switch (item) {
+            case ItemHakureiGohei ignored -> extraPre + "gohei";
+            case SwordItem ignored -> extraPre + "sword";
+            case AxeItem ignored -> extraPre + "axe";
+            case PickaxeItem ignored -> extraPre + "pickaxe";
+            case ShovelItem ignored -> extraPre + "shovel";
+            case HoeItem ignored -> extraPre + "hoe";
+            case ShieldItem ignored -> extraPre + "shield";
+            case ThrowablePotionItem ignored -> extraPre + "throwable_potion";
+            default -> EMPTY;
+        };
     }
 }

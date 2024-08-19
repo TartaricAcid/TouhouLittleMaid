@@ -64,13 +64,6 @@ public final class TouhouLittleMaid {
         eventBus.addListener(InitCapabilities::registerGenericItemHandlers);
         NeoForge.EVENT_BUS.addListener(CommandRegistry::onServerStaring);
         ShapedRecipePattern.setCraftingSize(6, 1);
-        /*TODO : 曾经兼容，但是现在还没迁移到1.21neoforge的列表
-        驯养革新 Domestication Innovation
-        拔刀剑2 SlashBlade 2
-        帕秋莉手册 Patchouli
-        [TaCZ]永恒枪械工坊：零 Timeless and Classics Zero
-        [IPN]一键背包整理NextInventory Profiles Next
-         */
     }
 
     private static void registerConfiguration(ModContainer modContainer) {

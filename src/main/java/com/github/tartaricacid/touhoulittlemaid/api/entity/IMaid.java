@@ -196,5 +196,4 @@ public interface IMaid {
         }
         return 0;
     }
-
 }

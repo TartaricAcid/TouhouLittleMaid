@@ -34,6 +34,7 @@ public enum GomokuPart implements StringRepresentable {
         return posY;
     }
 
+    @Override
     public String toString() {
         return String.format("%s[%d, %d]", this.getSerializedName(), this.posX, this.posY);
     }

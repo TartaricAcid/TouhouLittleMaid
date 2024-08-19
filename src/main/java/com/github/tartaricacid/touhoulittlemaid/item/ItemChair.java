@@ -41,7 +41,7 @@ import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.*;
 
 public class ItemChair extends Item {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
-    public static final IClientItemExtensions itemExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
+    public static final IClientItemExtensions ITEM_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
         @Override
         public BlockEntityWithoutLevelRenderer getCustomRenderer() {
             Minecraft minecraft = Minecraft.getInstance();

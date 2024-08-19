@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class ItemPicnicBasket extends BlockItem implements MenuProvider {
-    public static final IClientItemExtensions itemExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
+    public static final IClientItemExtensions ITEM_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
         @Override
         public BlockEntityWithoutLevelRenderer getCustomRenderer() {
             Minecraft minecraft = Minecraft.getInstance();

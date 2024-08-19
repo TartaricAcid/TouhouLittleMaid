@@ -54,7 +54,7 @@ import static com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble.RA
 
 
 public class BlockAltar extends Block implements EntityBlock {
-    public static final IClientBlockExtensions iClientBlockExtensions = FMLEnvironment.dist == Dist.CLIENT ? new IClientBlockExtensions() {
+    public static final IClientBlockExtensions CLIENT_BLOCK_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT ? new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
             if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientLevel) {

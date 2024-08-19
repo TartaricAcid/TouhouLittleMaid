@@ -30,7 +30,7 @@ public final class RenderHelper {
             poseStack.pushPose();
             poseStack.translate((float) (x - viewX), (float) (y - viewY) + 0.07F, (float) (z - viewZ));
             poseStack.mulPose((new Matrix4f()).rotation(camera.rotation()));
-            poseStack.scale(-scale, -scale, scale);
+            poseStack.scale(scale, -scale, scale);
             float fontX = center ? (float) (-font.width(text)) / 2.0F : 0.0F;
             font.drawInBatch(text, fontX, yOffset, color, false, poseStack.last().pose(), buffer, seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL, 0, 0xf000f0);
             poseStack.popPose();

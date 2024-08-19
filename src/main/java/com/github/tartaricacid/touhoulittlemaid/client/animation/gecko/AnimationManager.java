@@ -132,11 +132,6 @@ public final class AnimationManager {
         }
         if (!maid.asEntity().swinging && !maid.asEntity().isUsingItem()) {
             ItemStack mainHandItem = maid.asEntity().getItemInHand(InteractionHand.MAIN_HAND);
-            //TODO : tacz
-//            PlayState gunHoldAnimation = TacCompat.playGunHoldAnimation(mainHandItem, event);
-//            if (gunHoldAnimation != null) {
-//                return gunHoldAnimation;
-//            }
             if (mainHandItem.is(Items.CROSSBOW) && CrossbowItem.isCharged(mainHandItem)) {
                 return playAnimation(event, "hold_mainhand:charged_crossbow", ILoopType.EDefaultLoopTypes.LOOP);
             }

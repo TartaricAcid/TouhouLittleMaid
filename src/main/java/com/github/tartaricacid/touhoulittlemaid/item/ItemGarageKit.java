@@ -20,7 +20,7 @@ import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MO
 
 public class ItemGarageKit extends BlockItem {
     private static final CustomData DEFAULT_DATA = getDefaultData();
-    public static final IClientItemExtensions itemExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
+    public static final IClientItemExtensions ITEM_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT? new IClientItemExtensions() {
         @Override
         public BlockEntityWithoutLevelRenderer getCustomRenderer() {
             Minecraft minecraft = Minecraft.getInstance();

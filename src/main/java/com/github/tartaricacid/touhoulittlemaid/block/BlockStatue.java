@@ -38,7 +38,7 @@ import java.util.Optional;
 
 public class BlockStatue extends Block implements EntityBlock {
     public static final BooleanProperty IS_TINY = BooleanProperty.create("is_tiny");
-    public static final IClientBlockExtensions iClientBlockExtensions = FMLEnvironment.dist == Dist.CLIENT? new IClientBlockExtensions() {
+    public static final IClientBlockExtensions CLIENT_BLOCK_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT? new IClientBlockExtensions() {
         @Override
         public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
             if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientWorld) {
