@@ -38,8 +38,8 @@ public record ItemBreakPackage(int id, ItemStack item) implements CustomPacketPa
             return;
         }
         Entity e = mc.level.getEntity(message.id);
-        if (e instanceof LivingEntity && e.isAlive()) {
-            ((LivingEntity) e).breakItem(message.item);
+        if (e instanceof LivingEntity livingEntity && livingEntity.isAlive()) {
+            livingEntity.breakItem(message.item);
         }
     }
 

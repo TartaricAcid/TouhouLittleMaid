@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,7 +28,7 @@ public class NimbleFabricBauble implements IMaidBauble {
             if (slot >= 0) {
                 event.setCanceled(true);
                 ItemStack stack = maid.getMaidBauble().getStackInSlot(slot);
-                stack.hurtAndBreak(1, maid, EquipmentSlot.BODY);
+                maid.hurtAndBreak(stack, 1);
                 maid.getMaidBauble().setStackInSlot(slot, stack);
                 for (int i = 0; i < MAX_RETRY; ++i) {
                     if (TeleportHelper.teleport(maid)) {

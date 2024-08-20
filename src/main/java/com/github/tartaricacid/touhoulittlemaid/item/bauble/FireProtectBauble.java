@@ -9,7 +9,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,7 +28,7 @@ public class FireProtectBauble implements IMaidBauble {
             if (slot >= 0) {
                 event.setCanceled(true);
                 ItemStack stack = maid.getMaidBauble().getStackInSlot(slot);
-                stack.hurtAndBreak(1, maid, EquipmentSlot.BODY);
+                maid.hurtAndBreak(stack, 1);
                 maid.getMaidBauble().setStackInSlot(slot, stack);
                 maid.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300));
                 if (!maid.level.isClientSide) {

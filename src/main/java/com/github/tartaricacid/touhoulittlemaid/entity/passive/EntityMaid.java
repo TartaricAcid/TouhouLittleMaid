@@ -773,23 +773,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_IS_CHARGING_CROSSBOW, isCharging);
     }
 
-    //TODO 处理逻辑已经挪到ProjectileWeaponItem的shootProjectile方法里，与好感度挂钩设计需要重写
-//    @Override
-//    public void shootCrossbowProjectile(LivingEntity target, ItemStack crossbow, Projectile projectileEntity, float projectileAngle) {
-//        // 弩箭伤害也和好感度挂钩
-//        // 但是烟花火箭的伤害是很特殊的，就不应用了
-//        if (projectileEntity instanceof AbstractArrow arrow) {
-//            AttributeInstance attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE);
-//            double attackValue = 2.0;
-//            if (attackDamage != null) {
-//                attackValue = attackDamage.getBaseValue();
-//            }
-//            float multiplier = (float) (attackValue / 2.0f);
-//            arrow.setBaseDamage(arrow.getBaseDamage() * multiplier);
-//        }
-//        this.shootCrossbowProjectile(this, target, projectileEntity, projectileAngle, 1.6F);
-//    }
-
     @Override
     public void onCrossbowAttackPerformed() {
         this.noActionTime = 0;
@@ -838,8 +821,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         IMaidTask maidTask = this.getTask();
-        if (maidTask instanceof IRangedAttackTask) {
-            ((IRangedAttackTask) maidTask).performRangedAttack(this, target, distanceFactor);
+        if (maidTask instanceof IRangedAttackTask rangedAttackTask) {
+            rangedAttackTask.performRangedAttack(this, target, distanceFactor);
         }
     }
 
@@ -856,9 +839,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return super.canAttack(target);
     }
 
-    public void sendItemBreakMessage(ItemStack stack) {
-        if (!this.level.isClientSide) {
-            NewNetwork.sendToNearby(this, new ItemBreakPackage(this.getId(), stack));
+    /**
+     * 用于物品的耐久损失
+     */
+    public void hurtAndBreak(ItemStack stack, int amount) {
+        if (this.level instanceof ServerLevel serverLevel) {
+            stack.hurtAndBreak(amount, serverLevel, this, stackIn -> NewNetwork.sendToNearby(this, new ItemBreakPackage(this.getId(), stackIn.getDefaultInstance())));
         }
     }
 
@@ -887,7 +873,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 double yRandom = this.random.nextGaussian() * 0.02D;
                 double zRandom = this.random.nextGaussian() * 0.02D;
 
-                //TODO 这里的颜色需要查看
+                // TODO 这里的颜色需要查看
                 this.level.addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0F, 0F, 0F),
                         this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - xRandom * 10.0D,
                         this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()) - yRandom * 10.0D,
@@ -1238,11 +1224,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return false;
     }
 
-    //TODO 这里逻辑好像改了，由canBeLeashed变为了canHaveALeashAttachedToIt，不再传入交互实体，需要修改
-//    @Override
-//    public boolean canBeLeashed(Player player) {
-//        return this.isOwnedBy(player) && super.canBeLeashed(player);
-//    }
+    /**
+     * 女仆不能被栓绳拴住
+     */
+    @Override
+    public boolean canHaveALeashAttachedToIt() {
+        return false;
+    }
 
     public boolean canPathReach(BlockPos pos) {
         Path path = this.getNavigation().createPath(pos, 0);
