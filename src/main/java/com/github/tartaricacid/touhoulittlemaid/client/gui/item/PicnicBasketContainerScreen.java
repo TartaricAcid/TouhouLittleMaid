@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.PicnicBasketContainer;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,10 +18,7 @@ public class PicnicBasketContainerScreen extends AbstractContainerScreen<PicnicB
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        for (Renderable renderable : this.renderables) {
-            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
-        }
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
