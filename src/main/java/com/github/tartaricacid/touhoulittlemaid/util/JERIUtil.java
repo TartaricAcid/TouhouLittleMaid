@@ -46,7 +46,7 @@ public final class JERIUtil {
             langKey = String.format("jei.%s.altar_craft.%s.result", namespace, path.getFileName());
         }
 
-        maker.accept(recipeId, altarRecipe.getIngredients(), output, altarRecipe.getPowerCost(), langKey);
+        maker.accept(recipeId, altarRecipe.getIngredients(), output, altarRecipe.getPower(), langKey);
     }
 
     public interface AltarRecipeMaker {

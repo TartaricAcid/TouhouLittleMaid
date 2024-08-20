@@ -2,7 +2,7 @@
   "type": "touhou_little_maid:altar_recipe_serializers",
   "category": "misc",
   "entity": "touhou_little_maid:maid",
-  "group": "alter_recipe",
+  "group": "altar_recipe",
   "ingredients": [
     {
       "item": "touhou_little_maid:film"

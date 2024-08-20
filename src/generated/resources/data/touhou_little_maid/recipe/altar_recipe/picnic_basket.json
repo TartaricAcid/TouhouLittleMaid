@@ -2,7 +2,7 @@
   "type": "touhou_little_maid:altar_recipe_serializers",
   "category": "misc",
   "entity": "minecraft:item",
-  "group": "alter_recipe",
+  "group": "altar_recipe",
   "ingredients": [
     {
       "tag": "c:chests/wooden"

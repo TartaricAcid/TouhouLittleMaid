@@ -281,12 +281,12 @@ public class RecipeGenerator extends RecipeProvider {
         entityPlaceholder.set(InitDataComponent.RECIPES_ID_TAG, "spawn_box");
         AltarRecipeBuilder.shapeless(RecipeCategory.MISC, entityPlaceholder)
                 .power(0.5F)
-                .requires('a', Tags.Items.GEMS_DIAMOND)
-                .requires('b', Tags.Items.GEMS_LAPIS)
-                .requires('c', Tags.Items.INGOTS_GOLD)
-                .requires('d', Tags.Items.DUSTS_REDSTONE)
-                .requires('e', Tags.Items.INGOTS_IRON)
-                .requires('f', Items.COAL)
+                .requires(Tags.Items.GEMS_DIAMOND)
+                .requires(Tags.Items.GEMS_LAPIS)
+                .requires(Tags.Items.INGOTS_GOLD)
+                .requires(Tags.Items.DUSTS_REDSTONE)
+                .requires(Tags.Items.INGOTS_IRON)
+                .requires(Items.COAL)
                 .entity(EntityType.getKey(InitEntities.BOX.get()))
                 .save(recipeOutput, "spawn_box");
 

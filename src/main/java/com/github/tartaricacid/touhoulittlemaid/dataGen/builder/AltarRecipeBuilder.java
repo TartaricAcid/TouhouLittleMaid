@@ -13,16 +13,18 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 
 public class AltarRecipeBuilder implements RecipeBuilder {
+    private static final String NAME = "altar_recipe";
     private final RecipeCategory category;
     private final Item result;
     private final NonNullList<Ingredient> ingredients;
-    private final ItemStack resultStack; // Neo: add stack result support
+    private final ItemStack resultStack;
     private float power;
     private ResourceLocation entityType;
 
@@ -39,50 +41,47 @@ public class AltarRecipeBuilder implements RecipeBuilder {
         this.ingredients = NonNullList.create();
     }
 
-    public static AltarRecipeBuilder shapeless(RecipeCategory pCategory, ItemStack pResult) {
-        return new AltarRecipeBuilder(pCategory, pResult);
+    public static AltarRecipeBuilder shapeless(RecipeCategory category, ItemStack result) {
+        return new AltarRecipeBuilder(category, result);
     }
 
-    public static AltarRecipeBuilder shapeless(RecipeCategory pCategory, ItemLike pResult) {
-        return shapeless(pCategory, pResult, 1);
+    public static AltarRecipeBuilder shapeless(RecipeCategory category, ItemLike result) {
+        return shapeless(category, result, 1);
     }
 
-    public static AltarRecipeBuilder shapeless(RecipeCategory pCategory, ItemLike pResult, int pCount) {
-        return new AltarRecipeBuilder(pCategory, pResult, pCount);
+    public static AltarRecipeBuilder shapeless(RecipeCategory category, ItemLike result, int count) {
+        return new AltarRecipeBuilder(category, result, count);
     }
 
-    public AltarRecipeBuilder requires(TagKey<Item> pTag) {
-        return this.requires(Ingredient.of(pTag));
+    public AltarRecipeBuilder requires(TagKey<Item> tag) {
+        return this.requires(Ingredient.of(tag));
     }
 
-    public AltarRecipeBuilder requires(int pCount, TagKey<Item> pTag) {
-        return this.requires(Ingredient.of(pTag), pCount);
+    public AltarRecipeBuilder requires(int count, TagKey<Item> tag) {
+        return this.requires(Ingredient.of(tag), count);
     }
 
-    public AltarRecipeBuilder requires(ItemLike pItem) {
-        return this.requires(1, pItem);
+    public AltarRecipeBuilder requires(ItemLike item) {
+        return this.requires(1, item);
     }
 
-    public AltarRecipeBuilder requires(int pQuantity, ItemLike pItem) {
-        for (int i = 0; i < pQuantity; ++i) {
-            this.requires(Ingredient.of(pItem));
+    public AltarRecipeBuilder requires(int quantity, ItemLike item) {
+        for (int i = 0; i < quantity; ++i) {
+            this.requires(Ingredient.of(item));
         }
-
         return this;
     }
 
-    public AltarRecipeBuilder requires(Ingredient pIngredient) {
-        return this.requires(pIngredient, 1);
+    public AltarRecipeBuilder requires(Ingredient ingredient) {
+        return this.requires(ingredient, 1);
     }
 
-    public AltarRecipeBuilder requires(Ingredient pIngredient, int pQuantity) {
-        for (int i = 0; i < pQuantity; ++i) {
-            this.ingredients.add(pIngredient);
+    public AltarRecipeBuilder requires(Ingredient ingredient, int quantity) {
+        for (int i = 0; i < quantity; ++i) {
+            this.ingredients.add(ingredient);
         }
-
         return this;
     }
-
 
     public AltarRecipeBuilder power(float power) {
         this.power = power;
@@ -94,36 +93,38 @@ public class AltarRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
-    public AltarRecipeBuilder unlockedBy(String pName, Criterion<?> pCriterion) {
+    @Override
+    public AltarRecipeBuilder unlockedBy(String name, Criterion<?> criterion) {
         return this;
     }
 
-    public AltarRecipeBuilder group(@Nullable String pGroupName) {
+    @Override
+    public AltarRecipeBuilder group(@Nullable String groupName) {
         return this;
     }
 
+    @Override
     public Item getResult() {
         return this.result;
     }
 
+    @Override
     public void save(RecipeOutput output) {
-        this.save(output, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_recipe/" + RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath()));
-    }
-
-    public void save(RecipeOutput output, String recipeId) {
-        this.save(output, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_recipe/" + recipeId));
+        String path = RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath();
+        ResourceLocation filePath = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, NAME + "/" + path);
+        this.save(output, filePath);
     }
 
     @Override
-    public void save(RecipeOutput recipeOutput, ResourceLocation pId) {
-        AltarRecipe altarRecipe = new AltarRecipe(
-                "alter_recipe",
-                RecipeBuilder.determineBookCategory(this.category),
-                this.ingredients,
-                this.power,
-                this.resultStack,
-                this.entityType
-        );
-        recipeOutput.accept(pId, altarRecipe, null);
+    public void save(RecipeOutput output, String recipeId) {
+        ResourceLocation filePath = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, NAME + "/" + recipeId);
+        this.save(output, filePath);
+    }
+
+    @Override
+    public void save(RecipeOutput recipeOutput, ResourceLocation id) {
+        CraftingBookCategory bookCategory = RecipeBuilder.determineBookCategory(this.category);
+        AltarRecipe altarRecipe = new AltarRecipe(NAME, bookCategory, this.ingredients, this.power, this.resultStack, this.entityType);
+        recipeOutput.accept(id, altarRecipe, null);
     }
 }

@@ -6,16 +6,10 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -28,30 +22,22 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public class AltarRecipe extends ShapelessRecipe {
-    String group;
-    CraftingBookCategory category;
-    float power;
-    ItemStack result;
-    ResourceLocation entityType;
+    private final String group;
+    private final CraftingBookCategory category;
+    private final float power;
+    private final ItemStack result;
+    private final ResourceLocation entityType;
 
-    public AltarRecipe(String pGroup,
-                       CraftingBookCategory pCategory,
-                       NonNullList<Ingredient> Ingredients,
-                       float power,
-                       ItemStack pResult,
-                       ResourceLocation pEntityType) {
-        super(pGroup, pCategory, pResult, Ingredients);
-        this.group = pGroup;
-        this.category = pCategory;
+    public AltarRecipe(String group, CraftingBookCategory category, NonNullList<Ingredient> ingredients, float power, ItemStack result, ResourceLocation entityType) {
+        super(group, category, result, ingredients);
+        this.group = group;
+        this.category = category;
         this.power = power;
-        this.result = pResult;
-        this.entityType = pEntityType;
-    }
-
-    public float getPowerCost() {
-        return power;
+        this.result = result;
+        this.entityType = entityType;
     }
 
     public ResourceLocation getId() {
@@ -60,9 +46,7 @@ public class AltarRecipe extends ShapelessRecipe {
 
     public String getRecipeString() {
         String recipeId = this.result.get(InitDataComponent.RECIPES_ID_TAG);
-        if (recipeId != null) {
-            return recipeId;
-        } else return "spawn_box";
+        return Objects.requireNonNullElse(recipeId, "spawn_box");
     }
 
     public boolean isItemCraft() {
@@ -71,44 +55,54 @@ public class AltarRecipe extends ShapelessRecipe {
 
     public void spawnOutputEntity(ServerLevel world, BlockPos pos, @Nullable List<ItemStack> list) {
         EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(entityType);
+
         if (type == EntityType.ITEM) {
-            ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), this.result);
-            world.addFreshEntity(itemEntity);
+            this.spawnItem(world, pos);
+            return;
         }
 
         if (type == InitEntities.BOX.get()) {
-            EntityBox box = new EntityBox(world);
-            world.addFreshEntity(box);
-            EntityMaid maid = new EntityMaid(world);
-            world.addFreshEntity(maid);
-            maid.startRiding(box);
-            box.setPos(pos.getX(), pos.getY(), pos.getZ());
+            this.spawnBoxMaid(world, pos);
             return;
         }
 
         if (type == InitEntities.MAID.get()) {
-            ItemStack itemFilm = ItemStack.EMPTY;
-            if (list != null) {
-                for (ItemStack itemStack : list) {
-                    if (itemStack.getItem() instanceof ItemFilm) {
-                        itemFilm = itemStack;
-                        break;
-                    }
-                }
-            }
-            EntityMaid maid = InitEntities.MAID.get().create(world);
-            CustomData compoundData = itemFilm.get(InitDataComponent.MAID_INFO);
-            if (compoundData != null && maid != null) {
-                CompoundTag maidCompound = compoundData.copyTag();
-                maid.load(maidCompound);
-                maid.spawnExplosionParticle();
-                maid.setPos(pos.getX(), pos.getY(), pos.getZ());
-                world.addFreshEntity(maid);
-            }
+            this.rebornMaid(world, pos, list);
             return;
         }
 
         type.spawn(world, pos, MobSpawnType.STRUCTURE);
+    }
+
+    private void rebornMaid(ServerLevel world, BlockPos pos, @Nullable List<ItemStack> list) {
+        ItemStack itemFilm = ItemStack.EMPTY;
+        if (list != null) {
+            itemFilm = list.stream().filter(stack -> stack.getItem() instanceof ItemFilm).findFirst().orElse(ItemStack.EMPTY);
+        }
+        EntityMaid maid = InitEntities.MAID.get().create(world);
+        CustomData compoundData = itemFilm.get(InitDataComponent.MAID_INFO);
+        if (compoundData != null && maid != null) {
+            CompoundTag maidCompound = compoundData.copyTag();
+            maid.load(maidCompound);
+            maid.spawnExplosionParticle();
+            maid.setPos(pos.getX(), pos.getY(), pos.getZ());
+            world.addFreshEntity(maid);
+        }
+    }
+
+    private void spawnBoxMaid(ServerLevel world, BlockPos pos) {
+        EntityBox box = new EntityBox(world);
+        world.addFreshEntity(box);
+        EntityMaid maid = new EntityMaid(world);
+        maid.finalizeSpawn(world, world.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null);
+        world.addFreshEntity(maid);
+        maid.startRiding(box);
+        box.setPos(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    private void spawnItem(ServerLevel world, BlockPos pos) {
+        ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), this.result.copy());
+        world.addFreshEntity(itemEntity);
     }
 
     @Override
@@ -121,58 +115,24 @@ public class AltarRecipe extends ShapelessRecipe {
         return InitRecipes.ALTAR_RECIPE_SERIALIZER.get();
     }
 
-    public static class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
-        public static final MapCodec<AltarRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                instance -> instance.group(
-                                Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
-                                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(altarRecipe -> altarRecipe.category),
-                                Ingredient.CODEC.listOf().fieldOf("ingredients").flatXmap((ingredientList) -> {
-                                    Ingredient[] aingredient = ingredientList.toArray(Ingredient[]::new);
-                                    if (aingredient.length == 0) {
-                                        return DataResult.error(() -> "No ingredients for shapeless recipe");
-                                    } else {
-                                        return aingredient.length > 7 ? DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: 7") : DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
-                                    }
-                                }, DataResult::success).forGetter(ShapelessRecipe::getIngredients),
-                                Codec.FLOAT.fieldOf("power").forGetter(altarRecipe -> altarRecipe.power),
-                                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(altarRecipe -> altarRecipe.result),
-                                ResourceLocation.CODEC.fieldOf("entity").forGetter(altarRecipe -> altarRecipe.entityType)
-                        )
-                        .apply(instance, AltarRecipe::new)
-        );
+    public float getPower() {
+        return power;
+    }
 
-        private AltarRecipe fromNetwork(RegistryFriendlyByteBuf friendlyByteBuf) {
-            String s = friendlyByteBuf.readUtf();
-            CraftingBookCategory craftingbookcategory = friendlyByteBuf.readEnum(CraftingBookCategory.class);
-            int i = friendlyByteBuf.readVarInt();
-            NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
-            nonnulllist.replaceAll((ingredient) -> Ingredient.CONTENTS_STREAM_CODEC.decode(friendlyByteBuf));
-            float power = friendlyByteBuf.readFloat();
-            ItemStack itemstack = ItemStack.STREAM_CODEC.decode(friendlyByteBuf);
-            ResourceLocation entityType = friendlyByteBuf.readResourceLocation();
-            return new AltarRecipe(s, craftingbookcategory, nonnulllist, power, itemstack, entityType);
-        }
+    @Override
+    public String getGroup() {
+        return group;
+    }
 
-        private void toNetwork(RegistryFriendlyByteBuf friendlyByteBuf, AltarRecipe altarRecipe) {
-            friendlyByteBuf.writeUtf(altarRecipe.group);
-            friendlyByteBuf.writeEnum(altarRecipe.category);
-            friendlyByteBuf.writeVarInt(altarRecipe.getIngredients().size());
-            for (Ingredient ingredient : altarRecipe.getIngredients()) {
-                Ingredient.CONTENTS_STREAM_CODEC.encode(friendlyByteBuf, ingredient);
-            }
-            friendlyByteBuf.writeFloat(altarRecipe.power);
-            ItemStack.STREAM_CODEC.encode(friendlyByteBuf, altarRecipe.result);
-            friendlyByteBuf.writeResourceLocation(altarRecipe.entityType);
-        }
+    public CraftingBookCategory getCategory() {
+        return category;
+    }
 
-        @Override
-        public MapCodec<AltarRecipe> codec() {
-            return CODEC;
-        }
+    public ItemStack getResult() {
+        return result;
+    }
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, AltarRecipe> streamCodec() {
-            return StreamCodec.of(this::toNetwork, this::fromNetwork);
-        }
+    public ResourceLocation getEntityType() {
+        return entityType;
     }
 }

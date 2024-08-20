@@ -252,8 +252,8 @@ public class BlockAltar extends Block implements EntityBlock {
 
     private void spawnResultEntity(Level world, Player playerIn, PowerAttachment power,
                                    AltarRecipe altarRecipe, List<ItemStack> inventory, TileEntityAltar altar) {
-        if (power.get() >= altarRecipe.getPowerCost()) {
-            power.min(altarRecipe.getPowerCost());
+        if (power.get() >= altarRecipe.getPower()) {
+            power.min(altarRecipe.getPower());
             playerIn.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(power.get()));
             BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getBlockPos());
             if (world instanceof ServerLevel) {
