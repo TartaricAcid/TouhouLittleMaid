@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.*;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoReplacedEntityRenderer;
-import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -21,7 +20,7 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
 
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        if (entity.hasData(InitDataAttachment.GECKO_MAID)) {
+        if (entity.hasData(GeckoMaidEntity.TYPE)) {
             super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         }
     }
@@ -29,7 +28,7 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
     @Override
     @SuppressWarnings("unchecked")
     public GeckoMaidEntity<T> getAnimatableEntity(T entity) {
-        return entity.getData(InitDataAttachment.GECKO_MAID);
+        return entity.getData(GeckoMaidEntity.TYPE);
     }
 
     @Override

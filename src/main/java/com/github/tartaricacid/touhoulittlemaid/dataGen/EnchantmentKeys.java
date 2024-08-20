@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Block;
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
 
 public class EnchantmentKeys {
-
     public static final ResourceKey<Enchantment> IMPEDING = registerKey("impeding");
     public static final ResourceKey<Enchantment> SPEEDY = registerKey("speedy");
     public static final ResourceKey<Enchantment> ENDERS_ENDER = registerKey("enders_ender");
@@ -32,32 +31,32 @@ public class EnchantmentKeys {
         HolderGetter<Item> items = context.lookup(Registries.ITEM);
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
 
-        //TODO 附魔的参数可能会需要调
-        register(context,IMPEDING, new Enchantment.Builder(
+        // TODO 附魔的参数可能会需要调
+        register(context, IMPEDING, new Enchantment.Builder(
                 Enchantment.definition(
-                    items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
+                        items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
                         4,
                         4,
-                        Enchantment.dynamicCost(10,8),
-                        Enchantment.dynamicCost(15,8),
+                        Enchantment.dynamicCost(10, 8),
+                        Enchantment.dynamicCost(15, 8),
                         1,
                         EquipmentSlotGroup.MAINHAND
                 )
         ));
 
-        register(context,SPEEDY, new Enchantment.Builder(
+        register(context, SPEEDY, new Enchantment.Builder(
                 Enchantment.definition(
                         items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
                         2,
                         2,
-                        Enchantment.dynamicCost(15,10),
-                        Enchantment.dynamicCost(20,10),
+                        Enchantment.dynamicCost(15, 10),
+                        Enchantment.dynamicCost(20, 10),
                         2,
                         EquipmentSlotGroup.MAINHAND
                 )
         ));
 
-        register(context,ENDERS_ENDER, new Enchantment.Builder(
+        register(context, ENDERS_ENDER, new Enchantment.Builder(
                 Enchantment.definition(
                         items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
                         1,
@@ -74,8 +73,8 @@ public class EnchantmentKeys {
         context.register(key, builder.build(key.location()));
     }
 
-    public static int getEnchantmentLevel(RegistryAccess access, ResourceKey<Enchantment> enchantmentResourceKey, ItemStack mainHandItem){
-        return EnchantmentHelper.getTagEnchantmentLevel(getEnchantmentHolder(access,enchantmentResourceKey), mainHandItem);
+    public static int getEnchantmentLevel(RegistryAccess access, ResourceKey<Enchantment> enchantmentResourceKey, ItemStack mainHandItem) {
+        return EnchantmentHelper.getTagEnchantmentLevel(getEnchantmentHolder(access, enchantmentResourceKey), mainHandItem);
     }
 
     public static Holder<Enchantment> getEnchantmentHolder(RegistryAccess access, ResourceKey<Enchantment> enchantmentResourceKey) {

@@ -17,7 +17,7 @@ public class GlobalLootModifier extends GlobalLootModifierProvider {
     @Override
     public void start() {
         add("additional", new AddTableLootModifier(
-                new LootItemCondition[] {new LootTableTypeCondition("chests/")},
+                new LootItemCondition[]{new LootTableTypeCondition("chests/")},
                 LootTableGenerator.ADDITIONAL_LOOT_TABLE));
     }
 }

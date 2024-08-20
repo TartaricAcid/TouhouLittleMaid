@@ -25,5 +25,6 @@ public class TagItem extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
         this.tag(GOHEI_ENCHANTABLE).add(InitItems.HAKUREI_GOHEI.asItem());
+        this.tag(GOHEI_ENCHANTABLE).add(InitItems.SANAE_GOHEI.asItem());
     }
 }

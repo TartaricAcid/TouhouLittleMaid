@@ -15,6 +15,5 @@ public class TagBlock extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
-
     }
 }

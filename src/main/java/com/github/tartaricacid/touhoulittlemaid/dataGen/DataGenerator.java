@@ -22,10 +22,10 @@ public class DataGenerator {
         var existingFileHelper = event.getExistingFileHelper();
         var pack = generator.getPackOutput();
 
-        // advancements
+        // Advancements
         generator.addProvider(event.includeServer(), new AdvancementDataGen(pack, registries, existingFileHelper));
 
-        // loot tables
+        // Loot Tables
         generator.addProvider(event.includeServer(), new LootTableProvider(pack,
                 Set.of(
                         LootTableGenerator.ADDITIONAL_LOOT_TABLE,
@@ -39,20 +39,20 @@ public class DataGenerator {
                 ),
                 new RegistryDataGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()).getRegistryProvider()));
 
-        // global loot modifier
+        // Global Loot Modifier
         vanillaPack.addProvider(packOutput -> new GlobalLootModifier(packOutput, registries, TouhouLittleMaid.MOD_ID));
 
-        //recipe
+        // Recipe
         vanillaPack.addProvider(
-                packOutput -> new RecipeGenerator(packOutput,registries));
+                packOutput -> new RecipeGenerator(packOutput, registries));
 
-        //Tags
+        // Tags
         var blockTagsProvider = vanillaPack
                 .addProvider(packOutput -> new TagBlock(packOutput, registries, TouhouLittleMaid.MOD_ID, existingFileHelper));
         vanillaPack.addProvider(
                 packOutput -> new TagItem(packOutput, registries, blockTagsProvider.contentsGetter(), TouhouLittleMaid.MOD_ID, existingFileHelper));
 
-        //registry-based stuff
+        // Registry Based Stuff
         DatapackBuiltinEntriesProvider datapackProvider = new RegistryDataGenerator(pack, event.getLookupProvider());
         generator.addProvider(event.includeServer(), datapackProvider);
     }

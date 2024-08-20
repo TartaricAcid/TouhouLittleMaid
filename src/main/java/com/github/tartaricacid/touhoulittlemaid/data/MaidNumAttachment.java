@@ -3,14 +3,13 @@ package com.github.tartaricacid.touhoulittlemaid.data;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.util.Mth;
+import net.neoforged.neoforge.attachment.AttachmentType;
 
-public class MaidNumAttachment{
-
-    public static final Codec<MaidNumAttachment> CODEC = RecordCodecBuilder.create(ins -> ins.group(
-            Codec.INT.fieldOf("num").forGetter(o -> o.num))
-            .apply(ins, MaidNumAttachment::new));
+public class MaidNumAttachment {
+    public static final AttachmentType<MaidNumAttachment> TYPE = AttachmentType.builder(() -> new MaidNumAttachment(0))
+            .serialize(RecordCodecBuilder.create(ins -> ins.group(Codec.INT.fieldOf("num")
+                    .forGetter(o -> o.num)).apply(ins, MaidNumAttachment::new))).build();
     private int num;
 
     public MaidNumAttachment(int num) {
@@ -51,13 +50,5 @@ public class MaidNumAttachment{
 
     public int get() {
         return this.num;
-    }
-
-    public IntTag serializeNBT() {
-        return IntTag.valueOf(this.num);
-    }
-
-    public void deserializeNBT(IntTag nbt) {
-        this.num = nbt.getAsInt();
     }
 }
