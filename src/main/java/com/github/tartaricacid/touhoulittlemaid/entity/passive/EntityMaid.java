@@ -112,7 +112,9 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -130,6 +132,8 @@ import java.util.Optional;
 import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.MAID_NUM;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
+import static net.neoforged.neoforge.common.CommonHooks.onLivingDamagePost;
+import static net.neoforged.neoforge.common.CommonHooks.onLivingDamagePre;
 
 public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
@@ -215,8 +219,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 .add(Attributes.FOLLOW_RANGE, 64)
                 .add(Attributes.ATTACK_KNOCKBACK)
                 .add(Attributes.ATTACK_DAMAGE)
-                //TODO 攻击范围与好感度挂钩待做
-                .add(Attributes.SWEEPING_DAMAGE_RATIO, 1.5F);
+                .add(Attributes.SWEEPING_DAMAGE_RATIO);
     }
 
     public static boolean canInsertItem(ItemStack stack) {
@@ -531,12 +534,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
             ItemStack itemstack = this.getRandomItemWithMendingEnchantments();
             int xpValue = EntityPowerPoint.transPowerValueToXpValue(powerPoint.getValue());
-            if (!itemstack.isEmpty()) {
-                if (!itemstack.isEmpty() && itemstack.isDamaged()) {
-                    int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
-                    xpValue -= (i / 2);
-                    itemstack.setDamageValue(itemstack.getDamageValue() - i);
-                }
+            if (!itemstack.isEmpty() && itemstack.isDamaged()) {
+                int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
+                xpValue -= (i / 2);
+                itemstack.setDamageValue(itemstack.getDamageValue() - i);
             }
             if (xpValue > 0) {
                 this.setExperience(getExperience() + xpValue);
@@ -601,14 +602,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return ItemStack.EMPTY;
     }
 
-
-    //TODO 这个方法已被删除，需要override isWithinMeleeAttackRange
-
-//    @Override
-//    public double getMeleeAttackRangeSqr(LivingEntity entity) {
-//        int attackDistance = this.favorabilityManager.getAttackDistanceByPoint(this.getFavorability());
-//        return attackDistance * attackDistance;
-//    }
+    @Override
+    public boolean isWithinMeleeAttackRange(LivingEntity target) {
+        int attackDistance = this.favorabilityManager.getAttackDistanceByPoint(this.getFavorability());
+        return this.distanceTo(target) < attackDistance;
+    }
 
     @Override
     public boolean doHurtTarget(Entity target) {
@@ -626,9 +624,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private void doSweepHurt(Entity target) {
         ItemStack mainhandItem = this.getItemInHand(InteractionHand.MAIN_HAND);
-        boolean canSweep = mainhandItem.canPerformAction(net.neoforged.neoforge.common.ItemAbilities.SWORD_SWEEP);
+        boolean canSweep = mainhandItem.canPerformAction(ItemAbilities.SWORD_SWEEP);
         float sweepingDamageRatio = (float) this.getAttributes().getValue(Attributes.SWEEPING_DAMAGE_RATIO);
-        //TODO : 需要设置横扫范围
         if (canSweep && sweepingDamageRatio > 0) {
             float baseDamage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
             float sweepDamage = 1.0f + sweepingDamageRatio * baseDamage;
@@ -663,30 +660,49 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      * 重新复写父类方法，添加上自己的 Event
      */
     @Override
+    @SuppressWarnings("UnstableApiUsage")
     protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        if (!this.isInvulnerableTo(damageSrc)) {
-            MaidHurtEvent maidHurtEvent = new MaidHurtEvent(this, damageSrc, damageAmount);
+        if (!this.isInvulnerableTo(damageSrc) && this.damageContainers != null) {
+            DamageContainer peek = this.damageContainers.peek();
+
+            // 获取盔甲减伤后的数值
+            float armorAbsorb = this.getDamageAfterArmorAbsorb(damageSrc, peek.getNewDamage());
+            peek.setReduction(DamageContainer.Reduction.ARMOR, peek.getNewDamage() - armorAbsorb);
+
+            // 获取抗性提升减伤后的数值
+            this.getDamageAfterMagicAbsorb(damageSrc, peek.getNewDamage());
+
+            // 获取事件减伤效果
+            MaidHurtEvent maidHurtEvent = new MaidHurtEvent(this, damageSrc, peek.getNewDamage());
             damageAmount = NeoForge.EVENT_BUS.post(maidHurtEvent).isCanceled() ? 0 : maidHurtEvent.getAmount();
-            damageAmount = net.neoforged.neoforge.common.CommonHooks.onLivingDamagePre(this, this.damageContainers.peek());
-            if (damageAmount > 0) {
-                damageAmount = this.getDamageAfterArmorAbsorb(damageSrc, damageAmount);
-                damageAmount = this.getDamageAfterMagicAbsorb(damageSrc, damageAmount);
-                float damageAfterAbsorption = Math.max(damageAmount - this.getAbsorptionAmount(), 0);
-                this.setAbsorptionAmount(this.getAbsorptionAmount() - (damageAmount - damageAfterAbsorption));
-                float damageDealtAbsorbed = damageAmount - damageAfterAbsorption;
-                if (0 < damageDealtAbsorbed && damageDealtAbsorbed < (Float.MAX_VALUE / 10) && damageSrc.getEntity() instanceof ServerPlayer) {
-                    ((ServerPlayer) damageSrc.getEntity()).awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(damageDealtAbsorbed * 10));
-                }
-                MaidDamageEvent maidDamageEvent = new MaidDamageEvent(this, damageSrc, damageAfterAbsorption);
-                damageAfterAbsorption = NeoForge.EVENT_BUS.post(maidDamageEvent).isCanceled() ? 0 : maidDamageEvent.getAmount();
-                net.neoforged.neoforge.common.CommonHooks.onLivingDamagePost(this, this.damageContainers.peek());
-                if (damageAfterAbsorption != 0) {
-                    float health = this.getHealth();
-                    this.getCombatTracker().recordDamage(damageSrc, damageAfterAbsorption);
-                    this.setHealth(health - damageAfterAbsorption);
-                    this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAfterAbsorption);
-                }
+            peek.setReduction(DamageContainer.Reduction.ABSORPTION, peek.getNewDamage() - damageAmount);
+
+            // NeoForge 事件也来一套
+            float damage = onLivingDamagePre(this, peek);
+            peek.setReduction(DamageContainer.Reduction.ABSORPTION, Math.min(this.getAbsorptionAmount(), damage));
+
+            // 总减伤效果，用于玩家信息统计
+            float damageDealtAbsorbed = Math.min(damage, peek.getReduction(DamageContainer.Reduction.ABSORPTION));
+            this.setAbsorptionAmount(Math.max(0, this.getAbsorptionAmount() - damageDealtAbsorbed));
+            if (0 < damageDealtAbsorbed && damageDealtAbsorbed < 3.5 && damageSrc.getEntity() instanceof ServerPlayer player) {
+                player.awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(damageDealtAbsorbed * 10));
             }
+
+            // 再来一次事件
+            float damageAfterAbsorption = peek.getNewDamage();
+            MaidDamageEvent maidDamageEvent = new MaidDamageEvent(this, damageSrc, damageAfterAbsorption);
+            damageAfterAbsorption = NeoForge.EVENT_BUS.post(maidDamageEvent).isCanceled() ? 0 : maidDamageEvent.getAmount();
+
+            // 最终运用实际伤害
+            if (damageAfterAbsorption != 0) {
+                this.getCombatTracker().recordDamage(damageSrc, damageAfterAbsorption);
+                this.setHealth(this.getHealth() - damageAfterAbsorption);
+                this.gameEvent(GameEvent.ENTITY_DAMAGE);
+                this.onDamageTaken(peek);
+            }
+
+            // NeoForge 事件也来一套
+            onLivingDamagePost(this, peek);
         }
     }
 
@@ -738,16 +754,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             if (checkInWater && pickupEntity.isInWater()) {
                 return false;
             }
-            if (pickupEntity instanceof ItemEntity) {
-                return pickupItem((ItemEntity) pickupEntity, true);
-            }
-            if (pickupEntity instanceof AbstractArrow) {
-                return pickupArrow((AbstractArrow) pickupEntity, true);
-            }
-            if (pickupEntity instanceof ExperienceOrb) {
-                return true;
-            }
-            return pickupEntity instanceof EntityPowerPoint;
+            return switch (pickupEntity) {
+                case ItemEntity itemEntity -> pickupItem(itemEntity, true);
+                case AbstractArrow abstractArrow -> pickupArrow(abstractArrow, true);
+                case ExperienceOrb ignored -> true;
+                default -> pickupEntity instanceof EntityPowerPoint;
+            };
         }
         return false;
     }
@@ -1274,13 +1286,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public void swing(InteractionHand pHand) {
-        //TODO 拔刀剑兼容
-//        SlashBladeCompat.swingSlashBlade(this, getItemInHand(pHand));
-        super.swing(pHand);
-    }
-
-    @Override
     public boolean shouldRenderAtSqrDistance(double distance) {
         // 修正睡觉时渲染问题，默认 64 格内渲染
         double range = 64.0 * getViewScale();
@@ -1576,6 +1581,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_INVULNERABLE, isInvulnerable);
     }
 
+    @Override
     public IMaidTask getTask() {
         ResourceLocation uid = ResourceLocation.parse(entityData.get(DATA_TASK));
         return TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
