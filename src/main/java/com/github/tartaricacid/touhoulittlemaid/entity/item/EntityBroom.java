@@ -169,28 +169,9 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
         super.tickRidden(player, pTravelVector);
     }
 
-//    @Override
-//    protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
-//        if (this.hasPassenger(passenger)) {
-//            double xOffset = passenger instanceof EntityMaid ? -0.5 : 0;
-//            //TODO 骑乘位置可能有问题
-//            double yOffset = this.isRemoved() ? 0.01 : this.getPassengerRidingPosition(passenger).y;
-//            if (this.getPassengers().size() > 1) {
-//                int passengerIndex = this.getPassengers().indexOf(passenger);
-//                if (passengerIndex == 0) {
-//                    xOffset = 0.35;
-//                } else {
-//                    xOffset = -0.35;
-//                }
-//            }
-//            Vec3 offset = new Vec3(xOffset, yOffset, 0).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
-//            moveFunction.accept(passenger, this.getX() + offset.x, this.getY() + offset.y, this.getZ() + offset.z);
-//        }
-//    }
-
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimension, float partialTick) {
-        double xOffset = passenger instanceof EntityMaid? -0.5: 0;
+        double xOffset = passenger instanceof EntityMaid ? -0.5 : 0;
         if (this.getPassengers().size() > 1) {
             if (this.getPassengers().indexOf(passenger) == 0) {
                 xOffset = 0.35;
@@ -198,7 +179,7 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
                 xOffset = -0.35;
             }
         }
-        Vec3 hOffset = new Vec3(xOffset, 0, 0).yRot((float) (-(this.getYRot() + 90) * Math.PI / 180));
+        Vec3 hOffset = new Vec3(xOffset, -0.3125, 0).yRot((float) (-(this.getYRot() + 90) * Math.PI / 180));
         return super.getPassengerAttachmentPoint(passenger, dimension, partialTick).add(hOffset);
     }
 

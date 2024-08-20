@@ -81,7 +81,7 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
         if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             ItemStack itemstack = getKilledStack();
             if (this.hasCustomName()) {
-                itemstack.set(DataComponents.CUSTOM_NAME,this.getCustomName());
+                itemstack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
             }
             this.spawnAtLocation(itemstack, 0.0F);
             this.dropExtraItems();

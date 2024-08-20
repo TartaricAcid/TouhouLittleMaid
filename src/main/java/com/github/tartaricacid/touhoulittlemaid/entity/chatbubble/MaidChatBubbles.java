@@ -9,7 +9,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public record MaidChatBubbles(Pair<Long, ChatText> bubble1, Pair<Long, ChatText> bubble2,
                               Pair<Long, ChatText> bubble3) {
-
     public static final Pair<Long, ChatText> EMPTY = Pair.of(-1L, ChatText.EMPTY_CHAT_TEXT);
     public static final MaidChatBubbles DEFAULT = new MaidChatBubbles(EMPTY, EMPTY, EMPTY);
     public static final EntityDataSerializer<MaidChatBubbles> DATA = new EntityDataSerializer<>() {
@@ -24,7 +23,7 @@ public record MaidChatBubbles(Pair<Long, ChatText> bubble1, Pair<Long, ChatText>
         }
     };
 
-    private static final StreamCodec<ByteBuf,Pair<Long, ChatText>> PAIR_STREAM_CODEC = StreamCodec.composite(
+    private static final StreamCodec<ByteBuf, Pair<Long, ChatText>> PAIR_STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_LONG, Pair::getLeft,
             ChatText.STREAM_CODEC, Pair::getRight,
             Pair::of

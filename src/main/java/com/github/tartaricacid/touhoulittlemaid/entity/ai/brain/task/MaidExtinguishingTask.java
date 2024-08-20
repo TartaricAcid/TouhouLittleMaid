@@ -42,7 +42,7 @@ public class MaidExtinguishingTask extends MaidCheckRateTask {
         Brain<EntityMaid> brain = maid.getBrain();
 
         if (owner instanceof Player && owner.isAlive() && owner.isOnFire() && isExtinguisher(mainhandItem)
-                && maid.isWithinRestriction(owner.blockPosition())) {
+            && maid.isWithinRestriction(owner.blockPosition())) {
             if (maid.closerThan(owner, 2)) {
                 brain.eraseMemory(MemoryModuleType.PATH);
                 brain.eraseMemory(MemoryModuleType.WALK_TARGET);

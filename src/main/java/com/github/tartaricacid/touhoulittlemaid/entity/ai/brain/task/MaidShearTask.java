@@ -44,7 +44,6 @@ public class MaidShearTask extends MaidCheckRateTask {
                 .find(e -> maid.isWithinRestriction(e.blockPosition()))
                 .filter(Entity::isAlive)
                 .filter(e -> e instanceof IShearable)
-                //ShearsDispenseItemBehavior也传入了null，应该吧。
                 .filter(e -> ((IShearable) e).isShearable(null, mainHandItem, maid.level(), e.blockPosition()))
                 .filter(maid::canPathReach)
                 .findFirst()

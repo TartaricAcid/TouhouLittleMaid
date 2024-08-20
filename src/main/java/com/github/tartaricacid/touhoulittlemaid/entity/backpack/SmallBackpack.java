@@ -78,6 +78,7 @@ public class SmallBackpack extends IMaidBackpack {
         return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void offsetBackpackItem(PoseStack poseStack) {
         poseStack.translate(0, 0.625, -0.05);

@@ -2,13 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -96,11 +92,6 @@ public class EntityBox extends Entity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
-        return new ClientboundAddEntityPacket(this, pEntity);
-    }
-
-    @Override
     public boolean canBeCollidedWith() {
         return this.isAlive();
     }
@@ -148,7 +139,8 @@ public class EntityBox extends Entity {
         }
     }
 
+    @Override
     public Vec3 getPassengerRidingPosition(Entity pEntity) {
-        return this.position().add(this.getPassengerAttachmentPoint(pEntity, this.getDimensions(Pose.STANDING), 1.0F)).subtract(0,2,0);
+        return this.position().add(this.getPassengerAttachmentPoint(pEntity, this.getDimensions(Pose.STANDING), 1.0F)).subtract(0, 2, 0);
     }
 }

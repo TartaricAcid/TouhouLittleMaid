@@ -92,19 +92,11 @@ public class ChatBubbleManger {
             index = 3;
         }
 
-        MaidChatBubbles newChatBubble;
-        switch (index) {
-            default:
-            case 1:
-                newChatBubble = new MaidChatBubbles(bubbleItem, bubble2, bubble3);
-                break;
-            case 2:
-                newChatBubble = new MaidChatBubbles(bubble1, bubbleItem, bubble3);
-                break;
-            case 3:
-                newChatBubble = new MaidChatBubbles(bubble1, bubble2, bubbleItem);
-                break;
-        }
+        MaidChatBubbles newChatBubble = switch (index) {
+            default -> new MaidChatBubbles(bubbleItem, bubble2, bubble3);
+            case 2 -> new MaidChatBubbles(bubble1, bubbleItem, bubble3);
+            case 3 -> new MaidChatBubbles(bubble1, bubble2, bubbleItem);
+        };
 
         maid.setChatBubble(newChatBubble);
     }

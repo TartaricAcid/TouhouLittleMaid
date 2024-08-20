@@ -15,6 +15,7 @@ public class MaidUpdateActivityFromSchedule extends Behavior<EntityMaid> {
         super(ImmutableMap.of());
     }
 
+    @Override
     protected void start(ServerLevel level, EntityMaid maid, long gameTime) {
         Brain<EntityMaid> brain = maid.getBrain();
         long dayTime = level.getDayTime();

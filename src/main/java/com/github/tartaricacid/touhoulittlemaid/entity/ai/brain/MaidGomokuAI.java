@@ -13,6 +13,7 @@ public final class MaidGomokuAI {
     public static final AIService NORMAL = new ZhiZhangAIService(new AIService.AIConfig(4, 10, false, 0, 6));
     public static final AIService HARD = new ZhiZhangAIService(new AIService.AIConfig(6, 10, false, 1, 8));
     public static final AIService HELL = new ZhiZhangAIService(new AIService.AIConfig(8, 10, false, 1, 10));
+    public static final String GOMOKU = "Gomoku";
     public static final int EASY_COUNT = 2;
     public static final int NORMAL_COUNT = 8;
     public static final int HARD_COUNT = 24;
@@ -44,18 +45,18 @@ public final class MaidGomokuAI {
 
     public static int getMaidCount(EntityMaid maid) {
         CompoundTag gameSkill = maid.getGameSkill();
-        if (gameSkill.contains("Gomoku", Tag.TAG_INT)) {
-            return gameSkill.getInt("Gomoku");
+        if (gameSkill.contains(GOMOKU, Tag.TAG_INT)) {
+            return gameSkill.getInt(GOMOKU);
         }
         return 0;
     }
 
     public static void addMaidCount(EntityMaid maid) {
         CompoundTag gameSkill = maid.getGameSkill();
-        if (gameSkill.contains("Gomoku", Tag.TAG_INT)) {
-            gameSkill.putInt("Gomoku", gameSkill.getInt("Gomoku") + 1);
+        if (gameSkill.contains(GOMOKU, Tag.TAG_INT)) {
+            gameSkill.putInt(GOMOKU, gameSkill.getInt(GOMOKU) + 1);
         } else {
-            gameSkill.putInt("Gomoku", 1);
+            gameSkill.putInt(GOMOKU, 1);
         }
         maid.setGameSkill(gameSkill);
     }

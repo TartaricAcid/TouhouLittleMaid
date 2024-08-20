@@ -35,6 +35,7 @@ public class MaidTemptGoal extends Goal {
         this.targetingConditions = TEMP_TARGETING.copy().selector(this::shouldFollow);
     }
 
+    @Override
     public boolean canUse() {
         if (this.calmDown > 0) {
             --this.calmDown;
@@ -49,6 +50,7 @@ public class MaidTemptGoal extends Goal {
         return this.items.test(livingEntity.getMainHandItem()) || this.items.test(livingEntity.getOffhandItem());
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.canScare()) {
             if (this.mob.distanceToSqr(this.maid) < 36) {
@@ -68,6 +70,7 @@ public class MaidTemptGoal extends Goal {
         return this.canScare;
     }
 
+    @Override
     public void start() {
         this.px = this.maid.getX();
         this.py = this.maid.getY();
@@ -75,6 +78,7 @@ public class MaidTemptGoal extends Goal {
         this.isRunning = true;
     }
 
+    @Override
     public void stop() {
         this.maid = null;
         this.mob.getNavigation().stop();
@@ -82,7 +86,7 @@ public class MaidTemptGoal extends Goal {
         this.isRunning = false;
     }
 
-
+    @Override
     public void tick() {
         this.mob.getLookControl().setLookAt(this.maid, this.mob.getMaxHeadYRot() + 20, this.mob.getMaxHeadXRot());
         if (this.mob.distanceToSqr(this.maid) < 6.25) {

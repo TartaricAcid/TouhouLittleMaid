@@ -40,6 +40,7 @@ public class MaidHostilesSensor extends Sensor<LivingEntity> {
         return Mth.floor(target1.distanceToSqr(livingEntity) - target2.distanceToSqr(livingEntity));
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private boolean isClose(LivingEntity livingEntity, LivingEntity target) {
         float distance = ACCEPTABLE_DISTANCE_FROM_HOSTILES.get(target.getType());
         return target.closerThan(livingEntity, distance);

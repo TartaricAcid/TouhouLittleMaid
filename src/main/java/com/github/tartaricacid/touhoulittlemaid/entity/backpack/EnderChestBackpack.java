@@ -73,6 +73,7 @@ public class EnderChestBackpack extends IMaidBackpack {
         return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/ender_chest_backpack.png");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void offsetBackpackItem(PoseStack poseStack) {
         poseStack.translate(0, 0.625, 0.25);

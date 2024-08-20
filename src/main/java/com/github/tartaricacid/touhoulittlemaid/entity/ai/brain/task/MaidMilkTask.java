@@ -35,7 +35,7 @@ public class MaidMilkTask extends MaidCheckRateTask {
         if (super.checkExtraStartConditions(worldIn, owner)) {
             CombinedInvWrapper availableInv = owner.getAvailableInv(true);
             return ItemsUtil.isStackIn(availableInv, stack -> stack.getItem() == Items.BUCKET) &&
-                    ItemsUtil.isStackIn(availableInv, stack -> stack == ItemStack.EMPTY);
+                   ItemsUtil.isStackIn(availableInv, stack -> stack == ItemStack.EMPTY);
         }
         return false;
     }

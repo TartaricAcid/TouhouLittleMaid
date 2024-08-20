@@ -14,6 +14,7 @@ public enum ChatTextType {
     TEXT,
     // 空
     EMPTY;
+
     public static final IntFunction<ChatTextType> BY_ID =
             ByIdMap.continuous(
                     ChatTextType::ordinal,

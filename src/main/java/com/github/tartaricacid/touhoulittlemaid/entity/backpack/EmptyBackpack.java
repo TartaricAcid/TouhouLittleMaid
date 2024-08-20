@@ -63,7 +63,6 @@ public class EmptyBackpack extends IMaidBackpack {
         };
     }
 
-
     @Override
     public int getAvailableMaxContainerIndex() {
         return BackpackLevel.EMPTY_CAPACITY;
@@ -84,6 +83,7 @@ public class EmptyBackpack extends IMaidBackpack {
     }
 
     @OnlyIn(Dist.CLIENT)
+    @Override
     public void offsetBackpackItem(PoseStack poseStack) {
         poseStack.translate(0, 0.625, 0.2);
     }

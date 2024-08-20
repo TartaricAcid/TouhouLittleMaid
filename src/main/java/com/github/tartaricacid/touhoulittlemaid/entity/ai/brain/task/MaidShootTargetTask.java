@@ -34,8 +34,8 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
         if (memory.isPresent()) {
             LivingEntity target = memory.get();
             return owner.isHolding(item -> item.getItem() instanceof ProjectileWeaponItem)
-                    && BehaviorUtils.canSee(owner, target)
-                    && BehaviorUtils.isWithinAttackRange(owner, target, 0);
+                   && BehaviorUtils.canSee(owner, target)
+                   && BehaviorUtils.isWithinAttackRange(owner, target, 0);
         }
         return false;
     }

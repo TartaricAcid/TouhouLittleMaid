@@ -78,7 +78,7 @@ public class MaidFeedOwnerTask extends MaidCheckRateTask {
             }
 
             IntList map = !highFoods.isEmpty() ? highFoods : !lowFoods.isEmpty() ? lowFoods : lowestFoods;
-            map.stream().skip(maid.getRandom().nextInt(map.size())).findFirst().ifPresent(slot -> {
+            map.intStream().skip(maid.getRandom().nextInt(map.size())).findFirst().ifPresent(slot -> {
                 inv.setStackInSlot(slot, task.feed(inv.getStackInSlot(slot), player));
                 maid.swing(InteractionHand.MAIN_HAND);
                 this.setNextCheckTickCount(5);

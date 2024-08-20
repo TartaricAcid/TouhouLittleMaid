@@ -27,6 +27,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> quickCheck;
     private final Level level;
     private final ContainerData dataAccess = new ContainerData() {
+        @Override
         public int get(int index) {
             return switch (index) {
                 case 0 -> FurnaceBackpackData.this.litTime;
@@ -37,6 +38,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
             };
         }
 
+        @Override
         public void set(int index, int value) {
             switch (index) {
                 case 0 -> FurnaceBackpackData.this.litTime = value;
@@ -46,6 +48,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
             }
         }
 
+        @Override
         public int getCount() {
             return 4;
         }

@@ -5,13 +5,9 @@ import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -164,11 +160,6 @@ public class EntityTombstone extends Entity {
     @Override
     public boolean isPickable() {
         return this.isAlive();
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
-        return new ClientboundAddEntityPacket(this, pEntity);
     }
 
     public UUID getOwnerId() {

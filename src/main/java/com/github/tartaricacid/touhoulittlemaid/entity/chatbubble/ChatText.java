@@ -6,7 +6,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -40,19 +39,6 @@ public final class ChatText {
         this.type = type;
         this.iconPath = iconPath;
         this.text = text;
-    }
-
-    public static void toBuff(ChatText chatText, FriendlyByteBuf buf) {
-        buf.writeEnum(chatText.type);
-        buf.writeResourceLocation(chatText.iconPath);
-        buf.writeUtf(chatText.text);
-    }
-
-    public static ChatText fromBuff(FriendlyByteBuf buf) {
-        ChatTextType type = buf.readEnum(ChatTextType.class);
-        ResourceLocation iconPath = buf.readResourceLocation();
-        String text = buf.readUtf();
-        return new ChatText(type, iconPath, text);
     }
 
     public boolean isText() {

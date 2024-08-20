@@ -111,7 +111,7 @@ public class EntityChair extends AbstractEntityFromItem {
                 return InteractionResult.SUCCESS;
             }
             if (!level.isClientSide) {
-                NewNetwork.sendToNearby(player,new OpenChairGuiPackage(getId()));
+                NewNetwork.sendToNearby(player, new OpenChairGuiPackage(getId()));
             }
         } else {
             if (!level.isClientSide && getPassengers().isEmpty() && !player.isPassenger()) {
@@ -134,7 +134,7 @@ public class EntityChair extends AbstractEntityFromItem {
 
     @Override
     public Vec3 getVehicleAttachmentPoint(Entity pEntity) {
-        return new Vec3(0,getMountedHeight(),0);
+        return new Vec3(0, getMountedHeight(), 0);
     }
 
     @Override
@@ -236,7 +236,7 @@ public class EntityChair extends AbstractEntityFromItem {
 
     public float getPassengerYaw() {
         if (!getPassengers().isEmpty()) {
-            return getPassengers().get(0).getYRot();
+            return getPassengers().getFirst().getYRot();
         }
         return 0;
     }
@@ -247,7 +247,7 @@ public class EntityChair extends AbstractEntityFromItem {
 
     public float getPassengerPitch() {
         if (!getPassengers().isEmpty()) {
-            return getPassengers().get(0).getXRot();
+            return getPassengers().getFirst().getXRot();
         }
         return 0;
     }

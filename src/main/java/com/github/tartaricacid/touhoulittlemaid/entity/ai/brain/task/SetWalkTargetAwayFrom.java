@@ -46,6 +46,7 @@ public class SetWalkTargetAwayFrom<T> extends Behavior<PathfinderMob> {
         }
     }
 
+    @Override
     public boolean checkExtraStartConditions(ServerLevel pLevel, PathfinderMob pOwner) {
         int radius = (int) pOwner.getRestrictRadius();
         return !this.alreadyWalkingAwayFromPosWithSameSpeed(pOwner) && pOwner.position().closerThan(this.getPosToAvoid(pOwner), radius);
@@ -70,6 +71,7 @@ public class SetWalkTargetAwayFrom<T> extends Behavior<PathfinderMob> {
         }
     }
 
+    @Override
     protected void start(ServerLevel pLevel, PathfinderMob pEntity, long pGameTime) {
         moveAwayFrom(pEntity, this.getPosToAvoid(pEntity), this.speedModifier);
     }
