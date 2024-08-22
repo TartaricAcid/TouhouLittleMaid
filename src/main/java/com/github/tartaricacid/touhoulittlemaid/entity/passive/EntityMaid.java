@@ -389,8 +389,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
             if (NeoForge.EVENT_BUS.post(event).isCanceled()
-                || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                || openMaidGui(playerIn)) {
+                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
+                    || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;
             }
         } else {
@@ -1661,8 +1661,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public boolean placeItemBlock(InteractionHand hand, BlockPos placePos, Direction direction, ItemStack stack) {
-        if (stack.getItem() instanceof BlockItem) {
-            return ((BlockItem) stack.getItem()).place(new BlockPlaceContext(level, null, hand, stack,
+        if (stack.getItem() instanceof BlockItem blockItem) {
+            return blockItem.place(new BlockPlaceContext(level, null, hand, stack,
                     getBlockRayTraceResult(placePos, direction))).consumesAction();
         }
         return false;

@@ -19,6 +19,8 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
+import net.neoforged.neoforge.common.EffectCure;
+import net.neoforged.neoforge.common.EffectCures;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -40,8 +42,7 @@ public class TaskFeedOwner implements IFeedTask {
     public boolean isFood(ItemStack stack, Player owner) {
         if (stack.getItem() == Items.MILK_BUCKET) {
             for (MobEffectInstance effect : owner.getActiveEffects()) {
-                //TODO neoforge好像把这个“对症下药”删掉了？
-                if (isHarmfulEffect(effect) && effect.getDuration() > 60) {
+                if (isHarmfulEffect(effect) && effect.getDuration() > 60 && effect.getCures().contains(EffectCures.MILK)) {
                     return true;
                 }
             }

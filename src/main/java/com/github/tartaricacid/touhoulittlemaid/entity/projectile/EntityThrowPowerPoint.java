@@ -57,9 +57,4 @@ public class EntityThrowPowerPoint extends ThrowableItemProjectile {
             this.discard();
         }
     }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
-        return new ClientboundAddEntityPacket(this, pEntity);
-    }
 }

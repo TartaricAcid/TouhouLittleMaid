@@ -12,5 +12,5 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class InitCommand {
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPE = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, TouhouLittleMaid.MOD_ID);
 
-    public static final DeferredHolder<ArgumentTypeInfo<?, ?>,ArgumentTypeInfo<?, ?>> MAID_HANDLE_TYPES = ARGUMENT_TYPE.register("handle_types", () -> ArgumentTypeInfos.registerByClass(HandleTypeArgument.class, SingletonArgumentInfo.contextFree(HandleTypeArgument::type)));
+    public static final DeferredHolder<ArgumentTypeInfo<?, ?>, ArgumentTypeInfo<?, ?>> MAID_HANDLE_TYPES = ARGUMENT_TYPE.register("handle_types", () -> ArgumentTypeInfos.registerByClass(HandleTypeArgument.class, SingletonArgumentInfo.contextFree(HandleTypeArgument::type)));
 }

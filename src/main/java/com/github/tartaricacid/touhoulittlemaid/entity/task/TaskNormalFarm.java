@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IFarmTask;
+import com.github.tartaricacid.touhoulittlemaid.dataGen.TagBlock;
+import com.github.tartaricacid.touhoulittlemaid.dataGen.TagItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,18 +32,14 @@ public class TaskNormalFarm implements IFarmTask {
 
     @Override
     public boolean isSeed(ItemStack stack) {
-        Item item = stack.getItem();
-        if (item == Items.NETHER_WART) {
-            return true;
-        }
-        //TODO 由于麻将删除了IPlantable，先借用村民的列表
-        return stack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS);
+        // 自己新建一个 tag 用了存储可种的种子
+        return stack.is(TagItem.MAID_PLANTABLE_SEEDS) && stack.getItem() instanceof ItemNameBlockItem;
     }
 
     @Override
     public boolean canHarvest(EntityMaid maid, BlockPos cropPos, BlockState cropState) {
         Block block = cropState.getBlock();
-        if (block instanceof CropBlock && ((CropBlock) block).isMaxAge(cropState)) {
+        if (block instanceof CropBlock cropBlock && cropBlock.isMaxAge(cropState)) {
             return true;
         }
         return block == Blocks.NETHER_WART && cropState.getValue(NetherWartBlock.AGE) >= 3;
@@ -78,25 +76,21 @@ public class TaskNormalFarm implements IFarmTask {
 
     @Override
     public boolean canPlant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
-        BlockState aboveState = maid.level.getBlockState(basePos.above());
+        BlockPos abovePos = basePos.above();
+        BlockState aboveState = maid.level.getBlockState(abovePos);
         if (!aboveState.canBeReplaced() || aboveState.liquid()) {
             return false;
         }
         if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
-            return baseState.canSustainPlant(maid.level, basePos, Direction.UP, blockNamedItem.getBlock().defaultBlockState()).isTrue();
+            BlockState plantBlockState = blockNamedItem.getBlock().defaultBlockState();
+            return plantBlockState.canSurvive(maid.level, abovePos);
         }
         return false;
     }
 
     @Override
     public ItemStack plant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
-        if (seed.getItem() instanceof ItemNameBlockItem blockNamedItem) {
-            Block block = blockNamedItem.getBlock();
-            //TODO 由于麻将删除了IPlantable，先借用村民的列表
-            if (block.builtInRegistryHolder().is(net.neoforged.neoforge.common.Tags.Blocks.VILLAGER_FARMLANDS)) {
-                maid.placeItemBlock(basePos.above(), seed);
-            }
-        }
+        maid.placeItemBlock(basePos.above(), seed);
         return seed;
     }
 }

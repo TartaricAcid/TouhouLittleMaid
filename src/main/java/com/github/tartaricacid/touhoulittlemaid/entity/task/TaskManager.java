@@ -25,9 +25,6 @@ public final class TaskManager {
     }
 
     public static void init() {
-        // TODO TacZ 兼容
-        // TacCompat.initAndAddGunTask(manager);
-
         TaskManager manager = new TaskManager();
         manager.add(IDLE_TASK);
         manager.add(new TaskAttack());

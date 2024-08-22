@@ -166,9 +166,4 @@ public class EntityDanmaku extends ThrowableProjectile {
         this.hurtEnderman = hurtEnderman;
         return this;
     }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity pEntity) {
-        return new ClientboundAddEntityPacket(this, pEntity);
-    }
 }

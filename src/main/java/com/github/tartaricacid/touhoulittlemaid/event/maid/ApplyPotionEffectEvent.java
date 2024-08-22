@@ -10,6 +10,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 @EventBusSubscriber
@@ -32,7 +33,7 @@ public final class ApplyPotionEffectEvent {
         }
 
         if (player.isDiscrete() && stack.getItem() == Items.MILK_BUCKET) {
-            maid.removeEffectsCuredBy(net.neoforged.neoforge.common.EffectCures.MILK);
+            maid.removeEffectsCuredBy(EffectCures.MILK);
             if (!player.isCreative()) {
                 stack.shrink(1);
                 ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.BUCKET));

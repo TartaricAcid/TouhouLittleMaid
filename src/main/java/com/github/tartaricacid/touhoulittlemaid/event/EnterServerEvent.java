@@ -11,9 +11,9 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 public final class EnterServerEvent {
     @SubscribeEvent
     public static void onAttachCapabilityEvent(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer) {
-            InitTrigger.GIVE_SMART_SLAB_CONFIG.get().trigger((ServerPlayer) event.getEntity());
-            InitTrigger.GIVE_PATCHOULI_BOOK_CONFIG.get().trigger((ServerPlayer) event.getEntity());
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            InitTrigger.GIVE_SMART_SLAB_CONFIG.get().trigger(serverPlayer);
+            InitTrigger.GIVE_PATCHOULI_BOOK_CONFIG.get().trigger(serverPlayer);
         }
     }
 }

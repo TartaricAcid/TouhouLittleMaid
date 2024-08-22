@@ -2,17 +2,24 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGarageKit;
+import com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import vazkii.patchouli.common.item.ItemModBook;
+
+import java.util.Optional;
 
 import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.*;
 
@@ -78,6 +85,11 @@ public class InitCreativeTabs {
                 if (FMLEnvironment.dist == Dist.CLIENT) {
                     ItemEntityPlaceholder.fillItemCategory(output);
                 }
+                par.holders().lookup(Registries.ENCHANTMENT).ifPresent(reg -> {
+                    addEnchantmentBook(reg.get(EnchantmentKeys.IMPEDING), output);
+                    addEnchantmentBook(reg.get(EnchantmentKeys.SPEEDY), output);
+                    addEnchantmentBook(reg.get(EnchantmentKeys.ENDERS_ENDER), output);
+                });
             }).build());
 
     public static DeferredHolder<CreativeModeTab, CreativeModeTab> GARAGE_KIT_TAB = TABS.register("chair", () -> CreativeModeTab.builder()
@@ -97,4 +109,11 @@ public class InitCreativeTabs {
                     BlockGarageKit.fillItemCategory(output);
                 }
             }).build());
+
+    private static void addEnchantmentBook(Optional<Holder.Reference<Enchantment>> holder, CreativeModeTab.Output output) {
+        holder.ifPresent(ref -> {
+            EnchantmentInstance instance = new EnchantmentInstance(ref, ref.value().getMaxLevel());
+            output.accept(EnchantedBookItem.createForEnchantment(instance));
+        });
+    }
 }

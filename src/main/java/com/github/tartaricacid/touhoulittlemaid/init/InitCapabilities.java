@@ -11,6 +11,7 @@ import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil
 public class InitCapabilities {
     public static final EntityCapability<IItemHandler, @Nullable Direction> HAND_ITEM = EntityCapability.createSided(getResourceLocation("hand_item"), IItemHandler.class);
     public static final EntityCapability<IItemHandler, @Nullable Direction> ARMOR_ITEM = EntityCapability.createSided(getResourceLocation("armor_item"), IItemHandler.class);
+
     public static void registerGenericItemHandlers(RegisterCapabilitiesEvent event) {
         event.registerEntity(HAND_ITEM, InitEntities.MAID.get(), (o, direction) -> o.getHandsInvWrapper());
         event.registerEntity(ARMOR_ITEM, InitEntities.MAID.get(), (o, direction) -> o.getArmorInvWrapper());
