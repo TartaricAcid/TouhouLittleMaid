@@ -268,8 +268,9 @@ public class BlockGomoku extends BlockJoy {
                     int rankAfter = MaidGomokuAI.getRank(maid);
                     // 女仆升段啦
                     if (rankBefore < rankAfter) {
-                        if (player instanceof ServerPlayer serverPlayer)
+                        if (player instanceof ServerPlayer serverPlayer) {
                             PacketDistributor.sendToPlayer(serverPlayer, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.RANK_UP));
+                        }
                     }
                 }
                 gomoku.setInProgress(statue == Statue.IN_PROGRESS);

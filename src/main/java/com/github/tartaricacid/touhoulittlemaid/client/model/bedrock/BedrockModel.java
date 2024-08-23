@@ -256,8 +256,9 @@ public class BedrockModel<T extends LivingEntity> extends AbstractModel<T> {
             Invocable invocable = (Invocable) CustomJsAnimationManger.NASHORN;
             if (entityIn instanceof Mob mob) {
                 IMaid maid = IMaid.convert(mob);
-                if (maid != null)
+                if (maid != null) {
                     setupMaidAnim(maid, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, invocable);
+                }
                 return;
             }
             if (entityIn instanceof EntityChair) {

@@ -132,8 +132,9 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
 
         setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
 
-        if (NeoForge.EVENT_BUS.post(new RenderLivingEvent.Pre<>(entity, this, partialTick, poseStack, bufferSource, packedLight)).isCanceled())
+        if (NeoForge.EVENT_BUS.post(new RenderLivingEvent.Pre<>(entity, this, partialTick, poseStack, bufferSource, packedLight)).isCanceled()) {
             return;
+        }
 
         poseStack.pushPose();
         if (entity instanceof Mob mob) {

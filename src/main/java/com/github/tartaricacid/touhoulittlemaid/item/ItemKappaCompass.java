@@ -71,9 +71,9 @@ public class ItemKappaCompass extends Item {
     }
 
     public static int getRecordCount(ItemStack compass) {
-        Map<String, BlockPos> activity_pos = compass.get(KAPPA_COMPASS_ACTIVITY_POS);
-        if (activity_pos != null) {
-            return activity_pos.size();
+        Map<String, BlockPos> activityPos = compass.get(KAPPA_COMPASS_ACTIVITY_POS);
+        if (activityPos != null) {
+            return activityPos.size();
         }
         return 0;
     }
@@ -127,39 +127,40 @@ public class ItemKappaCompass extends Item {
         Player player = context.getPlayer();
         ItemStack compass = context.getItemInHand();
         BlockPos clickedPos = context.getClickedPos();
-        if (player == null || context.getLevel().isClientSide) {
+        if (player == null) {
             return super.useOn(context);
         }
         if (player.isDiscrete()) {
             compass.remove(KAPPA_COMPASS_ACTIVITY_POS);
             compass.remove(KAPPA_COMPASS_DIMENSION);
-            player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.clear"));
+            sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.clear"));
         } else {
             int recordCount = getRecordCount(compass);
             if (recordCount >= 3) {
-                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.full"));
+                sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.full"));
             } else if (recordCount == 2) {
                 BlockPos idlePos = getPoint(Activity.IDLE, compass);
                 if (idlePos != null && idlePos.distSqr(clickedPos) > 64 * 64) {
-                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.far_away"));
+                    sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.far_away"));
                     return super.useOn(context);
                 }
                 addPoint(Activity.REST, clickedPos, compass);
-                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.sleep", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
+                sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.sleep", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
             } else if (recordCount == 1) {
                 BlockPos workPos = getPoint(Activity.WORK, compass);
                 if (workPos != null && workPos.distSqr(clickedPos) > 64 * 64) {
-                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.far_away"));
+                    sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.far_away"));
                     return super.useOn(context);
                 }
                 addPoint(Activity.IDLE, clickedPos, compass);
-                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.idle", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
+                sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.idle", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
             } else {
                 addPoint(Activity.WORK, clickedPos, compass);
-                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.work", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
+                sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.work", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
             }
             addDimension(player.level.dimension().location(), compass);
         }
+
         player.level.playSound(null, player.blockPosition(), InitSounds.COMPASS_POINT.get(), SoundSource.PLAYERS, 0.8f, 1.5f);
         return InteractionResult.SUCCESS;
     }
@@ -189,5 +190,11 @@ public class ItemKappaCompass extends Item {
         components.add(Component.translatable("message.touhou_little_maid.kappa_compass.usage.clear_pos"));
         components.add(Component.translatable("message.touhou_little_maid.kappa_compass.usage.write_pos_to_maid"));
         components.add(Component.translatable("message.touhou_little_maid.kappa_compass.usage.clear_maid_pos"));
+    }
+
+    private void sendMessage(Player player, Component component) {
+        if (!player.level.isClientSide) {
+            player.sendSystemMessage(component);
+        }
     }
 }
