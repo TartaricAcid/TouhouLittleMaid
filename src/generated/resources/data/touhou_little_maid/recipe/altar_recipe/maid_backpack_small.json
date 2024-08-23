@@ -23,6 +23,7 @@
       "item": "minecraft:red_wool"
     }
   ],
+  "lang": "jei.touhou_little_maid.altar_craft.item_craft.result",
   "power": 0.1,
   "result": {
     "count": 1,

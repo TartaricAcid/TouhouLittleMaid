@@ -23,6 +23,7 @@
       "item": "minecraft:blaze_powder"
     }
   ],
+  "lang": "jei.touhou_little_maid.altar_craft.spawn_lightning_bolt.result",
   "power": 0.2,
   "result": {
     "components": {

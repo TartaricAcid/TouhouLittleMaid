@@ -30,14 +30,16 @@ public class AltarRecipe extends ShapelessRecipe {
     private final float power;
     private final ItemStack result;
     private final ResourceLocation entityType;
+    private final String langKey;
 
-    public AltarRecipe(String group, CraftingBookCategory category, NonNullList<Ingredient> ingredients, float power, ItemStack result, ResourceLocation entityType) {
+    public AltarRecipe(String group, CraftingBookCategory category, NonNullList<Ingredient> ingredients, float power, ItemStack result, ResourceLocation entityType, String langKey) {
         super(group, category, result, ingredients);
         this.group = group;
         this.category = category;
         this.power = power;
         this.result = result;
         this.entityType = entityType;
+        this.langKey = langKey;
     }
 
     public ResourceLocation getId() {
@@ -134,5 +136,9 @@ public class AltarRecipe extends ShapelessRecipe {
 
     public ResourceLocation getEntityType() {
         return entityType;
+    }
+
+    public String getLangKey() {
+        return langKey;
     }
 }

@@ -23,6 +23,7 @@
       "tag": "c:ingots/iron"
     }
   ],
+  "lang": "jei.touhou_little_maid.altar_craft.item_craft.result",
   "power": 0.2,
   "result": {
     "count": 1,

@@ -23,6 +23,7 @@
       "item": "minecraft:coal"
     }
   ],
+  "lang": "jei.touhou_little_maid.altar_craft.spawn_box.result",
   "power": 0.5,
   "result": {
     "components": {

@@ -27,6 +27,7 @@ public class AltarRecipeBuilder implements RecipeBuilder {
     private final ItemStack resultStack;
     private float power;
     private ResourceLocation entityType;
+    private String langKey;
 
     public AltarRecipeBuilder(RecipeCategory recipeCategory, ItemLike resultStack, int count) {
         this(recipeCategory, new ItemStack(resultStack, count));
@@ -39,6 +40,7 @@ public class AltarRecipeBuilder implements RecipeBuilder {
         this.resultStack = result;
         this.entityType = BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.ITEM);
         this.ingredients = NonNullList.create();
+        this.langKey = "jei.touhou_little_maid.altar_craft.item_craft.result";
     }
 
     public static AltarRecipeBuilder shapeless(RecipeCategory category, ItemStack result) {
@@ -93,6 +95,11 @@ public class AltarRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
+    public AltarRecipeBuilder langKey(String langKey) {
+        this.langKey = langKey;
+        return this;
+    }
+
     @Override
     public AltarRecipeBuilder unlockedBy(String name, Criterion<?> criterion) {
         return this;
@@ -124,7 +131,7 @@ public class AltarRecipeBuilder implements RecipeBuilder {
     @Override
     public void save(RecipeOutput recipeOutput, ResourceLocation id) {
         CraftingBookCategory bookCategory = RecipeBuilder.determineBookCategory(this.category);
-        AltarRecipe altarRecipe = new AltarRecipe(NAME, bookCategory, this.ingredients, this.power, this.resultStack, this.entityType);
+        AltarRecipe altarRecipe = new AltarRecipe(NAME, bookCategory, this.ingredients, this.power, this.resultStack, this.entityType, this.langKey);
         recipeOutput.accept(id, altarRecipe, null);
     }
 }

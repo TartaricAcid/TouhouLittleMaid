@@ -276,6 +276,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .requires(Tags.Items.INGOTS_IRON)
                 .requires(Items.COAL)
                 .entity(EntityType.getKey(InitEntities.MAID.get()))
+                .langKey("jei.touhou_little_maid.altar_craft.reborn_maid.result")
                 .save(recipeOutput, "reborn_maid");
 
         entityPlaceholder.set(InitDataComponent.RECIPES_ID_TAG, "spawn_box");
@@ -288,6 +289,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .requires(Tags.Items.INGOTS_IRON)
                 .requires(Items.COAL)
                 .entity(EntityType.getKey(InitEntities.BOX.get()))
+                .langKey("jei.touhou_little_maid.altar_craft.spawn_box.result")
                 .save(recipeOutput, "spawn_box");
 
         entityPlaceholder.set(InitDataComponent.RECIPES_ID_TAG, "spawn_lightning_bolt");
@@ -296,6 +298,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .requires(3, Tags.Items.GUNPOWDERS)
                 .requires(3, Items.BLAZE_POWDER)
                 .entity(EntityType.getKey(EntityType.LIGHTNING_BOLT))
+                .langKey("jei.touhou_little_maid.altar_craft.spawn_lightning_bolt.result")
                 .save(recipeOutput, "spawn_lightning_bolt");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, InitItems.HAKUREI_GOHEI)

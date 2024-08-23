@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,12 +20,13 @@ import java.util.List;
 public class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
     public static final MapCodec<AltarRecipe> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    Codec.STRING.optionalFieldOf("group", "").forGetter(AltarRecipe::getGroup),
+                    Codec.STRING.optionalFieldOf("group", StringUtils.EMPTY).forGetter(AltarRecipe::getGroup),
                     CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(AltarRecipe::getCategory),
                     Ingredient.CODEC.listOf().fieldOf("ingredients").flatXmap(AltarRecipeSerializer::checkIngredients, DataResult::success).forGetter(AltarRecipe::getIngredients),
                     Codec.FLOAT.fieldOf("power").forGetter(AltarRecipe::getPower),
                     ItemStack.STRICT_CODEC.fieldOf("result").forGetter(AltarRecipe::getResult),
-                    ResourceLocation.CODEC.fieldOf("entity").forGetter(AltarRecipe::getEntityType)
+                    ResourceLocation.CODEC.fieldOf("entity").forGetter(AltarRecipe::getEntityType),
+                    Codec.STRING.optionalFieldOf("lang", StringUtils.EMPTY).forGetter(AltarRecipe::getLangKey)
             ).apply(instance, AltarRecipe::new)
     );
 
@@ -49,7 +51,8 @@ public class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
         float power = byteBuf.readFloat();
         ItemStack result = ItemStack.STREAM_CODEC.decode(byteBuf);
         ResourceLocation entityType = byteBuf.readResourceLocation();
-        return new AltarRecipe(group, category, ingredients, power, result, entityType);
+        String langKey = byteBuf.readUtf();
+        return new AltarRecipe(group, category, ingredients, power, result, entityType, langKey);
     }
 
     private void toNetwork(RegistryFriendlyByteBuf friendlyByteBuf, AltarRecipe altarRecipe) {
@@ -62,6 +65,7 @@ public class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
         friendlyByteBuf.writeFloat(altarRecipe.getPower());
         ItemStack.STREAM_CODEC.encode(friendlyByteBuf, altarRecipe.getResult());
         friendlyByteBuf.writeResourceLocation(altarRecipe.getEntityType());
+        friendlyByteBuf.writeUtf(altarRecipe.getLangKey());
     }
 
     @Override
