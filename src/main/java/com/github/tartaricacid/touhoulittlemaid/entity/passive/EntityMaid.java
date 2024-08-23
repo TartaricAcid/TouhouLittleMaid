@@ -873,12 +873,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 double yRandom = this.random.nextGaussian() * 0.02D;
                 double zRandom = this.random.nextGaussian() * 0.02D;
 
-                // TODO 这里的颜色需要查看
-                this.level.addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0F, 0F, 0F),
+                this.level.addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0.9f, 0.1f, 0.1f),
                         this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - xRandom * 10.0D,
                         this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()) - yRandom * 10.0D,
                         this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth() - zRandom * 10.0D,
-                        0.9, 0.1, 0.1);
+                        0, 0, 0);
             }
         }
     }

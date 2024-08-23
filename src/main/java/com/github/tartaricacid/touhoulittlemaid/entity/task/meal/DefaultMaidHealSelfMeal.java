@@ -25,8 +25,9 @@ public class DefaultMaidHealSelfMeal implements IMaidMeal {
         if (foodProperties != null) {
             maid.startUsingItem(hand);
             int nutrition = foodProperties.nutrition();
-            float saturationModifier = foodProperties.saturation();
-            float total = nutrition + nutrition * saturationModifier * 2;
+            float saturation = foodProperties.saturation();
+            // 1.21 修改了营养值数值大小和相关计算，删去了 saturationModifier，改为直接加和
+            float total = nutrition + saturation;
             // 原版的熟牛肉之类的一般在 20 左右（除了迷之炖菜为 34.2）
             if (maid.getRandom().nextInt(MAX_PROBABILITY) < total) {
                 float healCount = Math.max(total / MAX_PROBABILITY, 1);

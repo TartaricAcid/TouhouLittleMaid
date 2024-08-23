@@ -208,7 +208,7 @@ public class ChatBubbleRenderer {
         data.matrixStack.pushPose();
         data.matrixStack.translate(0, height, 0);
         data.matrixStack.mulPose(data.renderer.getDispatcher().cameraOrientation());
-        data.matrixStack.scale(-0.025F, -0.025F, 0.025F);
+        data.matrixStack.scale(0.025F, -0.025F, -0.025F);
 
         VertexConsumer vertexBuilder = data.buffer.getBuffer(chatBubbleRender(bg));
         drawBg(data.matrixStack, vertexBuilder, leftStartX, startY, 0.2f, 0, 0);

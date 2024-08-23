@@ -96,7 +96,7 @@ public class MenuIntegration {
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.replace_allay_percent.tooltip"))
                 .setSaveConsumer(i -> MaidConfig.REPLACE_ALLAY_PERCENT.set(i)).build());
 
-        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist"), MaidConfig.MAID_BACKPACK_BLACKLIST.getPath())
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist"), MaidConfig.MAID_BACKPACK_BLACKLIST.get())
                 .setDefaultValue(MaidConfig.MAID_BACKPACK_BLACKLIST.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist.tooltip"))
                 .setSaveConsumer(l -> MaidConfig.MAID_BACKPACK_BLACKLIST.set(l)).build());
@@ -111,7 +111,7 @@ public class MenuIntegration {
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_ranged_attack_ignore.tooltip"))
                 .setSaveConsumer(l -> MaidConfig.MAID_RANGED_ATTACK_IGNORE.set(l)).build());
 
-        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_work_meals_block_list"), MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.getPath())
+        maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_work_meals_block_list"), MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get())
                 .setDefaultValue(MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_work_meals_block_list.tooltip"))
                 .setSaveConsumer(l -> MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.set(l)).build());
