@@ -117,6 +117,11 @@ public class EntitySit extends Entity {
     }
 
     @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
+        return new Vec3(0, -0.125, 0);
+    }
+
+    @Override
     public boolean skipAttackInteraction(Entity pEntity) {
         return true;
     }

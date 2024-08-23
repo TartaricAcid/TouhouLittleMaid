@@ -133,8 +133,8 @@ public class EntityChair extends AbstractEntityFromItem {
     }
 
     @Override
-    public Vec3 getVehicleAttachmentPoint(Entity pEntity) {
-        return new Vec3(0, getMountedHeight(), 0);
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
+        return new Vec3(0, getMountedHeight() + 0.125, 0);
     }
 
     @Override
