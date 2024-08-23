@@ -4,7 +4,12 @@
   "package": "com.github.tartaricacid.touhoulittlemaid.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "touhou_little_maid.refmap.json",
-  "mixins": ["EntityMixin", "MixinArrowEntity", "MixinCrossbowItem", "MixinStructureTemplate"],
+  "mixins": [
+    "EntityMixin",
+    "MixinArrowEntity",
+    "MixinCrossbowItem",
+    "MixinStructureTemplate"
+  ],
   "client": [
     "client.HumanoidModelMixin",
     "client.LanguageMixin",

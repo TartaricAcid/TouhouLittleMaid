@@ -10,7 +10,6 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
@@ -113,7 +112,6 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         }
         this.renderViewBg(graphics);
         this.renderEntity((width + 132) / 2, height / 2 + 50, graphics);
-        this.renderViewCrosshair(graphics);
         this.renderBottomStatueBar(graphics);
         this.fillGradient(graphics, SIDE_MENU_SIZE, 0xfe21252b);
         this.fillGradient(graphics, TOP_STATUS_BAR_SIZE, 0xfe282c34);
@@ -139,22 +137,6 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         String info = String.format("%d FPS %.2f%%", Minecraft.fps, scale * 100 / 80);
         graphics.drawString(font, name, 136, this.height - 12, 0xcacad4, false);
         graphics.drawString(font, info, this.width - font.width(info) - 4, this.height - 12, 0xcacad4, false);
-    }
-
-    private void renderViewCrosshair(GuiGraphics graphics) {
-        if (minecraft != null) {
-            Camera camera = minecraft.gameRenderer.getMainCamera();
-            PoseStack posestack = graphics.pose();
-            posestack.pushPose();
-            posestack.translate(width - 16, height - 32, -20);
-            posestack.mulPose(Axis.XN.rotationDegrees(camera.getXRot()));
-            posestack.mulPose(Axis.YP.rotationDegrees(camera.getYRot()));
-            posestack.scale(-1.0F, -1.0F, -1.0F);
-            RenderSystem.applyModelViewMatrix();
-            RenderSystem.renderCrosshair(10);
-            posestack.popPose();
-            RenderSystem.applyModelViewMatrix();
-        }
     }
 
     @Override
