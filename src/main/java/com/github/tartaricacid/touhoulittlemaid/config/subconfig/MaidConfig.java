@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.config.subconfig;
 
-import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -88,7 +87,7 @@ public final class MaidConfig {
 
         builder.comment("These items cannot be placed in the maid backpack")
                 .translation(translateKey("maid_backpack_blacklist"));
-        MAID_BACKPACK_BLACKLIST = builder.define("MaidBackpackBlackList", Lists.newArrayList(), MaidConfig::checkItemId);
+        MAID_BACKPACK_BLACKLIST = builder.define("MaidBackpackBlackList", Lists.newArrayList(), MaidConfig::checkItemIds);
 
         builder.comment("The entity that the maid will not recognize as targets for attack")
                 .translation(translateKey("maid_attack_ignore"));
@@ -104,15 +103,15 @@ public final class MaidConfig {
 
         builder.comment("These items cannot be used as a maid's work meals")
                 .translation(translateKey("maid_work_meals_block_list"));
-        MAID_WORK_MEALS_BLOCK_LIST = builder.define("MaidWorkMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), MaidConfig::checkItemId);
+        MAID_WORK_MEALS_BLOCK_LIST = builder.define("MaidWorkMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), MaidConfig::checkItemIds);
 
         builder.comment("These items cannot be used as a maid's home meals")
                 .translation(translateKey("maid_home_meals_block_list"));
-        MAID_HOME_MEALS_BLOCK_LIST = builder.define("MaidHomeMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), MaidConfig::checkItemId);
+        MAID_HOME_MEALS_BLOCK_LIST = builder.define("MaidHomeMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE), getItemId(Items.CHORUS_FRUIT)), MaidConfig::checkItemIds);
 
         builder.comment("These items cannot be used as a maid's heal meals")
                 .translation(translateKey("maid_heal_meals_block_list"));
-        MAID_HEAL_MEALS_BLOCK_LIST = builder.define("MaidHealMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE)), MaidConfig::checkItemId);
+        MAID_HEAL_MEALS_BLOCK_LIST = builder.define("MaidHealMealsBlockList", Lists.newArrayList(getItemId(Items.PUFFERFISH), getItemId(Items.POISONOUS_POTATO), getItemId(Items.ROTTEN_FLESH), getItemId(Items.SPIDER_EYE)), MaidConfig::checkItemIds);
 
         builder.comment("These items cannot be used as a maid's work meals which match the regex")
                 .translation(translateKey("maid_work_meals_block_list_regex"));
@@ -137,19 +136,29 @@ public final class MaidConfig {
         return TRANSLATE_KEY + "." + key;
     }
 
-    public static boolean checkItemAndTag(Object obj) {
-        return obj instanceof String string && checkItemAndTag(string);
+    private static boolean checkItemIds(Object obj) {
+        if (obj instanceof List<?> list) {
+            return list.stream().allMatch(MaidConfig::checkItemId);
+        }
+        return false;
     }
 
-    public static boolean checkItemAndTag(String string) {
-        return string.startsWith("#") || checkItemId(string);
+    private static boolean checkItemAndTag(Object obj) {
+        if (obj instanceof String text) {
+            if (text.startsWith("#")) {
+                text = text.substring(1);
+                return ResourceLocation.tryParse(text) != null;
+            } else {
+                return checkItemId(text);
+            }
+        }
+        return false;
     }
 
-    public static boolean checkItemId(Object obj) {
-        return obj instanceof String string && checkItemId(string);
-    }
-
-    public static boolean checkItemId(String string) {
-        return ResourceLocation.isValidNamespace(string.replace(":", "")) && !ItemsUtil.getItemStack(string).isEmpty();
+    private static boolean checkItemId(Object obj) {
+        if (obj instanceof String text) {
+            return ResourceLocation.tryParse(text) != null;
+        }
+        return false;
     }
 }
