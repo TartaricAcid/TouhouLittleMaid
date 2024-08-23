@@ -32,9 +32,9 @@ public class ItemKappaCompass extends Item {
     }
 
     public static void addPoint(Activity activity, BlockPos pos, ItemStack compass) {
-        Map<String, BlockPos> activity_pos = Objects.requireNonNullElse(compass.get(KAPPA_COMPASS_ACTIVITY_POS), new HashMap<>());
-        activity_pos.put(activity.getName(), pos);
-        compass.set(KAPPA_COMPASS_ACTIVITY_POS, activity_pos);
+        Map<String, BlockPos> activityPos = Objects.requireNonNullElse(compass.get(KAPPA_COMPASS_ACTIVITY_POS), new HashMap<>());
+        activityPos.put(activity.getName(), pos);
+        compass.set(KAPPA_COMPASS_ACTIVITY_POS, activityPos);
     }
 
     public static void addDimension(ResourceLocation dimension, ItemStack compass) {
@@ -43,19 +43,19 @@ public class ItemKappaCompass extends Item {
 
     @Nullable
     public static BlockPos getPoint(Activity activity, ItemStack compass) {
-        Map<String, BlockPos> activity_pos = compass.get(KAPPA_COMPASS_ACTIVITY_POS);
-        if (activity_pos != null) {
+        Map<String, BlockPos> activityPos = compass.get(KAPPA_COMPASS_ACTIVITY_POS);
+        if (activityPos != null) {
             String name = activity.getName();
-            if (activity_pos.containsKey(name)) {
-                return activity_pos.get(name);
+            if (activityPos.containsKey(name)) {
+                return activityPos.get(name);
             }
             name = Activity.IDLE.getName();
-            if (activity_pos.containsKey(name)) {
-                return activity_pos.get(name);
+            if (activityPos.containsKey(name)) {
+                return activityPos.get(name);
             }
             name = Activity.WORK.getName();
-            if (activity_pos.containsKey(name)) {
-                return activity_pos.get(name);
+            if (activityPos.containsKey(name)) {
+                return activityPos.get(name);
             }
         }
         return null;

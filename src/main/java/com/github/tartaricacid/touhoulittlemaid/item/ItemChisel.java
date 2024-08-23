@@ -96,24 +96,12 @@ public class ItemChisel extends Item {
         for (int x = 0; x < dimension.getX(); x++) {
             for (int y = 0; y < dimension.getY(); y++) {
                 for (int z = 0; z < dimension.getZ(); z++) {
-                    BlockPos pos;
-                    switch (facing) {
-                        case WEST:
-                            pos = origin.offset(new Vec3i(x, y, z));
-                            break;
-                        case SOUTH:
-                            pos = origin.offset(new Vec3i(x, y, -z));
-                            break;
-                        default:
-                        case UP:
-                        case DOWN:
-                        case NORTH:
-                            pos = origin.offset(new Vec3i(-x, y, z));
-                            break;
-                        case EAST:
-                            pos = origin.offset(new Vec3i(-x, y, -z));
-                            break;
-                    }
+                    BlockPos pos = switch (facing) {
+                        case WEST -> origin.offset(new Vec3i(x, y, z));
+                        case SOUTH -> origin.offset(new Vec3i(x, y, -z));
+                        default -> origin.offset(new Vec3i(-x, y, z));
+                        case EAST -> origin.offset(new Vec3i(-x, y, -z));
+                    };
                     posList[index] = pos;
                     index++;
                     if (worldIn.getBlockState(pos).getBlock() != Blocks.CLAY) {

@@ -111,7 +111,7 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
         if (!level.isClientSide && level.getServer() != null) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
             ItemStack stack1 = ItemStack.EMPTY;
-            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftSlots.asCraftInput(), level);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container.asCraftInput(), level);
             if (optional.isPresent()) {
                 RecipeHolder<CraftingRecipe> recipe = optional.get();
                 if (result.setRecipeUsed(level, serverPlayer, recipe)) {

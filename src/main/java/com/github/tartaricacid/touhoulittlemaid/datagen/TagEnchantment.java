@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.dataGen;
+package com.github.tartaricacid.touhoulittlemaid.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;

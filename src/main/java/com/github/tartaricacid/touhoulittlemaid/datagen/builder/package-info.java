@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package com.github.tartaricacid.touhoulittlemaid.dataGen.builder;
+package com.github.tartaricacid.touhoulittlemaid.datagen.builder;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

@@ -1,6 +1,6 @@
-package com.github.tartaricacid.touhoulittlemaid.dataGen;
+package com.github.tartaricacid.touhoulittlemaid.datagen;
 
-import com.github.tartaricacid.touhoulittlemaid.dataGen.builder.AltarRecipeBuilder;
+import com.github.tartaricacid.touhoulittlemaid.datagen.builder.AltarRecipeBuilder;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;

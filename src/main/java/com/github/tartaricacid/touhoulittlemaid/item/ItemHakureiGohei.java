@@ -21,8 +21,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -51,10 +51,9 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
         return 15;
     }
 
-    //TODO 御币应该是不能发射弹幕的，所以该方法为空体
     @Override
-    protected void shootProjectile(LivingEntity livingEntity, Projectile projectile, int i, float v, float v1, float v2, @Nullable LivingEntity livingEntity1) {
-
+    protected void shootProjectile(LivingEntity pShooter, Projectile pProjectile, int pIndex, float pVelocity, float pInaccuracy, float pAngle, @Nullable LivingEntity pTarget) {
+        // 御币不能发射弹幕的，所以该方法为空体
     }
 
     @Override
@@ -98,11 +97,8 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
         return true;
     }
 
-    //TODO 这个方法应该是没有用了
-//    @Override
-//    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-//        return enchantment == Enchantments.QUICK_CHARGE
-//                || enchantment == Enchantments.MULTISHOT
-//                || super.canApplyAtEnchantingTable(stack, enchantment);
-//    }
+    @Override
+    public boolean isEnchantable(ItemStack pStack) {
+        return super.isEnchantable(pStack);
+    }
 }

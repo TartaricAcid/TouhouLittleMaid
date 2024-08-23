@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.dataGen;
+package com.github.tartaricacid.touhoulittlemaid.datagen;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.core.HolderLookup;

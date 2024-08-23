@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.dataGen.builder;
+package com.github.tartaricacid.touhoulittlemaid.datagen.builder;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;

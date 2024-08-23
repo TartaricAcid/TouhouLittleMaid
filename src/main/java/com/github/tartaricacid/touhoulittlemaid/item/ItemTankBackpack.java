@@ -47,12 +47,16 @@ public class ItemTankBackpack extends ItemMaidBackpack {
         CompoundTag nbt = stack.get(TANK_BACKPACK_TAG);
         if (nbt != null) {
             CompoundTag compound = nbt.getCompound("Fluid");
-            if (compound.isEmpty()) {
+            if (compound.isEmpty() || worldIn == null) {
+                return;
+            }
+            HolderLookup.Provider registries = worldIn.registries();
+            if (registries == null) {
                 return;
             }
 
             MutableComponent fluidInfo;
-            Optional<FluidStack> fluid = FluidStack.parse(worldIn.registries(), compound);
+            Optional<FluidStack> fluid = FluidStack.parse(registries, compound);
             if (fluid.isEmpty()) {
                 return;
             }

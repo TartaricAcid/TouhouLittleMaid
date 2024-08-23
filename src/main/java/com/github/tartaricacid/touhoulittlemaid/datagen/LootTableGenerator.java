@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.dataGen;
+package com.github.tartaricacid.touhoulittlemaid.datagen;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBed;

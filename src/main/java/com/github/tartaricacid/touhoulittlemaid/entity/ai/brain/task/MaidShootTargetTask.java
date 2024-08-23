@@ -15,7 +15,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Optional;
 
-import static com.github.tartaricacid.touhoulittlemaid.dataGen.EnchantmentKeys.getEnchantmentLevel;
+import static com.github.tartaricacid.touhoulittlemaid.datagen.EnchantmentKeys.getEnchantmentLevel;
 
 public class MaidShootTargetTask extends Behavior<EntityMaid> {
     private final int attackCooldown;
