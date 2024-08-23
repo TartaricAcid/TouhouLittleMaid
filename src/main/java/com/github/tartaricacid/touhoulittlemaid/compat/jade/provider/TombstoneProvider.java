@@ -30,6 +30,9 @@ public enum TombstoneProvider implements IServerExtensionProvider<ItemStack>, IC
             ItemStackHandler items = tombstone.getItems();
             for (int i = 0; i < items.getSlots(); i++) {
                 ItemStack stack = items.getStackInSlot(i);
+                if (stack.isEmpty()) {
+                    continue;
+                }
                 list.add(stack.copy());
             }
             return List.of(new ViewGroup<>(list));
