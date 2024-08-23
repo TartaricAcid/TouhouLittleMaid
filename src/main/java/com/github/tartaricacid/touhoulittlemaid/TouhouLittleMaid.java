@@ -11,7 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.init.registry.CommandRegistry;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
-import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
 import net.neoforged.bus.api.IEventBus;
@@ -59,7 +59,7 @@ public final class TouhouLittleMaid {
         InitDataComponent.DATA_COMPONENTS.register(eventBus);
         InitLootCondition.LOOT_CONDITION_TYPES.register(eventBus);
 
-        eventBus.addListener(NewNetwork::registerPacket);
+        eventBus.addListener(NetworkHandler::registerPacket);
         eventBus.addListener(InitCapabilities::registerGenericItemHandlers);
         NeoForge.EVENT_BUS.addListener(CommandRegistry::onServerStaring);
     }

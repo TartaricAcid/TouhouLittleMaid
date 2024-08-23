@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemModelSwitcher;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.OpenSwitcherGuiPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenSwitcherGuiPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;

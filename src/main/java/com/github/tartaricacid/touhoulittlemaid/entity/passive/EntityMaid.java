@@ -35,10 +35,10 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHa
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
-import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.ItemBreakPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.PlayMaidSoundPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
@@ -844,7 +844,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      */
     public void hurtAndBreak(ItemStack stack, int amount) {
         if (this.level instanceof ServerLevel serverLevel) {
-            stack.hurtAndBreak(amount, serverLevel, this, stackIn -> NewNetwork.sendToNearby(this, new ItemBreakPackage(this.getId(), stackIn.getDefaultInstance())));
+            stack.hurtAndBreak(amount, serverLevel, this, stackIn -> NetworkHandler.sendToNearby(this, new ItemBreakPackage(this.getId(), stackIn.getDefaultInstance())));
         }
     }
 
@@ -1156,7 +1156,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
         if (soundEvent.getLocation().getPath().startsWith("maid") && !level.isClientSide) {
-            NewNetwork.sendToNearby(this, new PlayMaidSoundPackage(soundEvent.getLocation(), this.getSoundPackId(), this.getId()), 16);
+            NetworkHandler.sendToNearby(this, new PlayMaidSoundPackage(soundEvent.getLocation(), this.getSoundPackId(), this.getId()), 16);
         } else {
             super.playSound(soundEvent, volume, pitch);
         }

@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.favorability;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SpawnParticlePackage;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticlePackage;
 import com.google.common.collect.Maps;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -244,7 +244,7 @@ public class FavorabilityManager {
             }
             maid.playSound(SoundEvents.PLAYER_LEVELUP, 0.5F, maid.getRandom().nextFloat() * 0.1F + 0.9F);
         }
-        NewNetwork.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.HEART));
+        NetworkHandler.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.HEART));
     }
 
     public void reduce(int reducePoint) {

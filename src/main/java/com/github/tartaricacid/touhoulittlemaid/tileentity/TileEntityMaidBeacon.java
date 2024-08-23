@@ -28,8 +28,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileEntityMaidBeacon extends BlockEntity {
-    public static final String POTION_INDEX_TAG = "PotionIndex";
     public static final BlockEntityType<TileEntityMaidBeacon> TYPE = BlockEntityType.Builder.of(TileEntityMaidBeacon::new, InitBlocks.MAID_BEACON.get()).build(null);
+    public static final String POTION_INDEX_TAG = "PotionIndex";
     public static final String STORAGE_POWER_TAG = "StoragePower";
     public static final String OVERFLOW_DELETE_TAG = "OverflowDelete";
     private int potionIndex = -1;

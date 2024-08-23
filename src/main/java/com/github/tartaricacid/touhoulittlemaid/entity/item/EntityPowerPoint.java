@@ -3,9 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
-import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.BeaconAbsorbPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SyncDataPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SyncDataPackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -112,7 +112,7 @@ public class EntityPowerPoint extends Entity implements IEntityWithComplexSpawn 
         if (level.isClientSide) {
             spawnExplosionParticle(level, x, y, z, random);
         } else {
-            NewNetwork.sendToNearby(this, new BeaconAbsorbPackage(x, y, z));
+            NetworkHandler.sendToNearby(this, new BeaconAbsorbPackage(x, y, z));
         }
     }
 

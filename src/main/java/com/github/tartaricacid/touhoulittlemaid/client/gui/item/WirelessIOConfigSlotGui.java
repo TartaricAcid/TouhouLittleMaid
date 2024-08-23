@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.WirelessIOSlotButton;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.WirelessIOSlotConfigPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.WirelessIOSlotConfigPackage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;

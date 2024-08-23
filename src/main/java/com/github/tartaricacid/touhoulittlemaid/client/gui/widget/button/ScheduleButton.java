@@ -5,7 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractM
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidConfigPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigPackage;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;

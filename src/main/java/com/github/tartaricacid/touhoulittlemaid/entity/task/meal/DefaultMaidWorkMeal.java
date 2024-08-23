@@ -5,8 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
-import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SpawnParticlePackage;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticlePackage;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,7 @@ public class DefaultMaidWorkMeal implements IMaidMeal {
             int point = maid.getRandom().nextInt(MAX_PROBABILITY) < total ? 0 : 1;
             maid.getFavorabilityManager().apply(Type.WORK_MEAL, point);
             if (point == 1) {
-                NewNetwork.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.HEART, stack.getUseDuration(maid)));
+                NetworkHandler.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.HEART, stack.getUseDuration(maid)));
             }
         }
     }

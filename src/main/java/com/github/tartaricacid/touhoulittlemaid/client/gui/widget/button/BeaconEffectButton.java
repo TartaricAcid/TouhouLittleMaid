@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SetBeaconPotionPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SetBeaconPotionPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

@@ -6,8 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
-import com.github.tartaricacid.touhoulittlemaid.network.NewNetwork;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.OpenChairGuiPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenChairGuiPackage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -111,7 +111,7 @@ public class EntityChair extends AbstractEntityFromItem {
                 return InteractionResult.SUCCESS;
             }
             if (!level.isClientSide) {
-                NewNetwork.sendToNearby(player, new OpenChairGuiPackage(getId()));
+                NetworkHandler.sendToNearby(player, new OpenChairGuiPackage(getId()));
             }
         } else {
             if (!level.isClientSide && getPassengers().isEmpty() && !player.isPassenger()) {

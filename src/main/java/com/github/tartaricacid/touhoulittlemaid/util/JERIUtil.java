@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Locale;
 
 public final class JERIUtil {
-
     public static void recipeWarpHolder(List<RecipeHolder<AltarRecipe>> altarRecipes, AltarRecipeMaker maker) {
         for (RecipeHolder<AltarRecipe> altarRecipeHolder : altarRecipes) {
             AltarRecipe altarRecipe = altarRecipeHolder.value();
@@ -51,7 +50,5 @@ public final class JERIUtil {
 
     public interface AltarRecipeMaker {
         void accept(ResourceLocation recipeId, NonNullList<Ingredient> inputs, ItemStack output, float powerCost, String langKey);
-
     }
-
 }

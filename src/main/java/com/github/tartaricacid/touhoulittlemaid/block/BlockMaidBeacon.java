@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBeacon;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.OpenBeaconGuiPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenBeaconGuiPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;

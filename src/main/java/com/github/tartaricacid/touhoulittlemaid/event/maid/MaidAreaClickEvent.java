@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.event.maid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.SchedulePos;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SyncMaidAreaPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SyncMaidAreaPackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

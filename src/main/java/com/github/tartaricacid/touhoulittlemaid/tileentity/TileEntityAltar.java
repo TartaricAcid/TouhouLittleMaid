@@ -130,6 +130,4 @@ public class TileEntityAltar extends BlockEntity {
     public Direction getDirection() {
         return direction;
     }
-
-
 }

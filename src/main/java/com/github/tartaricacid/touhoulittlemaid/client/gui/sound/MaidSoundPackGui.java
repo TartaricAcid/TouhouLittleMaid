@@ -9,7 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInsta
 import com.github.tartaricacid.touhoulittlemaid.client.sound.pojo.SoundPackInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SetMaidSoundIdPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import com.mojang.blaze3d.systems.RenderSystem;

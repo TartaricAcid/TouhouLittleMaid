@@ -4,7 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.command.arguments.HandleTypeArgu
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SyncDataPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SyncDataPackage;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

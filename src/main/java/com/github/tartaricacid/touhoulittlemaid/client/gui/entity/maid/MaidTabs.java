@@ -4,7 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.TabIndex;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.ToggleTabPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ToggleTabPackage;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class MaidTabs<T extends AbstractMaidContainer> {

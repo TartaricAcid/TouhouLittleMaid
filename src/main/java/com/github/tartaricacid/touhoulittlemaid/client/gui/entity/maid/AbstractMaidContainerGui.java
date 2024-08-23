@@ -13,10 +13,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Favorability
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidConfigPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.MaidTaskPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.RequestEffectPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.pack.SendEffectPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.RequestEffectPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;

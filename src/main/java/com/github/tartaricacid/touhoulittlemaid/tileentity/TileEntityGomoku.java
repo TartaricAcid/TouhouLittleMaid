@@ -14,7 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 
 public class TileEntityGomoku extends TileEntityJoy {
-    private static final String CHESS_DATA = "ChessData";    public static final BlockEntityType<TileEntityGomoku> TYPE = BlockEntityType.Builder.of(TileEntityGomoku::new, InitBlocks.GOMOKU.get()).build(null);
+    public static final BlockEntityType<TileEntityGomoku> TYPE = BlockEntityType.Builder.of(TileEntityGomoku::new, InitBlocks.GOMOKU.get()).build(null);
+    private static final String CHESS_DATA = "ChessData";
     private static final String IN_PROGRESS = "InProgress";
     private static final String PLAYER_TURN = "PlayerTurn";
     private static final String CHESS_COUNTER = "ChessCounter";
@@ -24,6 +25,7 @@ public class TileEntityGomoku extends TileEntityJoy {
     private boolean playerTurn = true;
     private int chessCounter = 0;
     private Point latestChessPoint = Point.NULL;
+
     public TileEntityGomoku(BlockPos pos, BlockState blockState) {
         super(TYPE, pos, blockState);
     }
