@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -26,22 +27,22 @@ public class TileEntityGarageKit extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    public void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().putString(FACING_TAG, facing.getSerializedName());
         getPersistentData().put(EXTRA_DATA, extraData);
-        super.saveAdditional(compound);
+        super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         facing = Direction.byName(getPersistentData().getString(FACING_TAG));
         extraData = getPersistentData().getCompound(EXTRA_DATA);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        return this.saveWithoutMetadata(pRegistries);
     }
 
     @Nullable

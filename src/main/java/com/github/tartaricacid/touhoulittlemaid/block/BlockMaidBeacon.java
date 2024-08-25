@@ -2,14 +2,15 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemMaidBeacon;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.OpenBeaconGuiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenBeaconGuiPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -30,6 +32,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
@@ -43,6 +47,11 @@ public class BlockMaidBeacon extends BaseEntityBlock {
         super(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(2, 2).noOcclusion()
                 .lightLevel(s -> s.getValue(POSITION) == Position.DOWN ? 0 : 15));
         this.registerDefaultState(this.stateDefinition.any().setValue(POSITION, Position.DOWN));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec((properties) -> new BlockMaidBeacon());
     }
 
     @Override
@@ -66,14 +75,14 @@ public class BlockMaidBeacon extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (worldIn.getBlockEntity(pos) instanceof TileEntityMaidBeacon) {
-            if (!worldIn.isClientSide) {
-                NetworkHandler.sendToClientPlayer(new OpenBeaconGuiMessage(pos), player);
+            if (!worldIn.isClientSide && player instanceof ServerPlayer serverPlayer) {
+                PacketDistributor.sendToPlayer(serverPlayer, new OpenBeaconGuiPackage(pos));
             }
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+            return ItemInteractionResult.sidedSuccess(worldIn.isClientSide);
         }
-        return super.use(state, worldIn, pos, player, handIn, hit);
+        return super.useItemOn(itemStack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
@@ -101,7 +110,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide && player.isCreative()) {
             Position position = state.getValue(POSITION);
             if (position != Position.DOWN) {
@@ -113,14 +122,14 @@ public class BlockMaidBeacon extends BaseEntityBlock {
                 }
             }
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof TileEntityMaidBeacon) {
-            popResource(worldIn, pos, ItemMaidBeacon.tileEntityToItemStack((TileEntityMaidBeacon) te));
+            popResource(worldIn, pos, ItemMaidBeacon.tileEntityToItemStack(worldIn.registryAccess(), (TileEntityMaidBeacon) te));
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }
@@ -131,7 +140,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(@NotNull BlockState state, @NotNull HitResult target, @NotNull LevelReader world, @NotNull BlockPos pos, @NotNull Player player) {
         return new ItemStack(InitItems.MAID_BEACON.get());
     }
 
@@ -158,8 +167,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
         }
         worldIn.setBlock(pos.above(), stateUp, Block.UPDATE_ALL);
         BlockEntity te = worldIn.getBlockEntity(pos.above());
-        if (te instanceof TileEntityMaidBeacon) {
-            TileEntityMaidBeacon tileEntityMaidBeacon = (TileEntityMaidBeacon) te;
+        if (te instanceof TileEntityMaidBeacon tileEntityMaidBeacon) {
             ItemMaidBeacon.itemStackToTileEntity(stack, tileEntityMaidBeacon);
             tileEntityMaidBeacon.refresh();
         }

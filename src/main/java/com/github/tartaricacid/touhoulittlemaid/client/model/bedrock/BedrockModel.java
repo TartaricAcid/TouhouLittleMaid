@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.IAnimatio
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityChairWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.EntityMaidWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
+import com.github.tartaricacid.touhoulittlemaid.client.model.AbstractModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
@@ -13,14 +14,13 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -30,7 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
+public class BedrockModel<T extends LivingEntity> extends AbstractModel<T> {
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -256,8 +256,9 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
             Invocable invocable = (Invocable) CustomJsAnimationManger.NASHORN;
             if (entityIn instanceof Mob mob) {
                 IMaid maid = IMaid.convert(mob);
-                if (maid != null)
+                if (maid != null) {
                     setupMaidAnim(maid, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, invocable);
+                }
                 return;
             }
             if (entityIn instanceof EntityChair) {
@@ -268,7 +269,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         for (BedrockPart model : shouldRender) {
             model.render(poseStack, buffer, packedLight, packedOverlay);
         }

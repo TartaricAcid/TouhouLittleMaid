@@ -1,29 +1,26 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
-import com.github.tartaricacid.touhoulittlemaid.api.event.MaidHurtEvent;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public final class EntityHurtEvent {
     @SubscribeEvent
     public static void onArrowImpact(ProjectileImpactEvent event) {
         Entity attacker = event.getProjectile().getOwner();
         HitResult ray = event.getRayTraceResult();
-        if (attacker instanceof TamableAnimal && ray instanceof EntityHitResult) {
-            TamableAnimal thrower = (TamableAnimal) attacker;
+        if (attacker instanceof TamableAnimal thrower && ray instanceof EntityHitResult) {
             Entity victim = ((EntityHitResult) ray).getEntity();
-            if (victim instanceof TamableAnimal) {
-                TamableAnimal tameable = (TamableAnimal) victim;
+            if (victim instanceof TamableAnimal tameable) {
                 if (tameable.getOwnerUUID() != null && tameable.getOwnerUUID().equals(thrower.getOwnerUUID())) {
                     event.setCanceled(true);
                 }
@@ -33,8 +30,8 @@ public final class EntityHurtEvent {
                     event.setCanceled(true);
                 }
             }
-            ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(victim.getType());
-            if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
+            ResourceLocation registryName = BuiltInRegistries.ENTITY_TYPE.getKey(victim.getType());
+            if (MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
                 event.setCanceled(true);
             }
         }

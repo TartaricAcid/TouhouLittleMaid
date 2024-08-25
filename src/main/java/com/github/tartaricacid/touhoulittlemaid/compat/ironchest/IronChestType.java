@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public final class IronChestType implements IChestType {
     private static final String IRON_CHEST_ID = "ironchest";

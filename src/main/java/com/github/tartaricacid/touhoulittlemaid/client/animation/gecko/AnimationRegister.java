@@ -240,7 +240,7 @@ public class AnimationRegister {
         if (useItem.isEmpty()) {
             return 0.0;
         } else {
-            return useItem.getUseDuration();
+            return useItem.getUseDuration(maid);
         }
     }
 

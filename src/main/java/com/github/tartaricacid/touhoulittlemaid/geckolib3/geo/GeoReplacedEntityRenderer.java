@@ -32,8 +32,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
@@ -84,8 +84,8 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
         float y = yDif > 0.0f ? yDif * piecePosPercent * piecePosPercent : yDif - yDif * (1.0f - piecePosPercent) * (1.0f - piecePosPercent);
         float z = zDif * piecePosPercent;
 
-        buffer.vertex(positionMatrix, x - xOffset, y + yOffset, z + zOffset).color(red, green, blue, 1).uv2(packedLight).endVertex();
-        buffer.vertex(positionMatrix, x + xOffset, y + width - yOffset, z - zOffset).color(red, green, blue, 1).uv2(packedLight).endVertex();
+        buffer.addVertex(positionMatrix, x - xOffset, y + yOffset, z + zOffset).setColor(red, green, blue, 1).setLight(packedLight);
+        buffer.addVertex(positionMatrix, x + xOffset, y + width - yOffset, z - zOffset).setColor(red, green, blue, 1).setLight(packedLight);
     }
 
     @Override
@@ -132,8 +132,9 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
 
         setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
 
-        if (MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<>(entity, this, partialTick, poseStack, bufferSource, packedLight)))
+        if (NeoForge.EVENT_BUS.post(new RenderLivingEvent.Pre<>(entity, this, partialTick, poseStack, bufferSource, packedLight)).isCanceled()) {
             return;
+        }
 
         poseStack.pushPose();
         if (entity instanceof Mob mob) {
@@ -174,7 +175,7 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
         float limbSwingAmount = 0;
         float limbSwing = 0;
 
-        setupRotations(entity, poseStack, lerpedAge, lerpBodyRot, partialTick);
+        setupRotations(entity, poseStack, lerpedAge, lerpBodyRot, partialTick, entity.getScale());
         preRenderCallback(entity, poseStack, partialTick);
         if (!shouldSit && entity.isAlive()) {
             limbSwingAmount = entity.walkAnimation.speed(partialTick);
@@ -217,7 +218,7 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
         poseStack.popPose();
 
         ((LivingEntityRendererAccessor) this).tlm$renderNameTag(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
-        MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Post<>(entity, this, partialTick, poseStack, bufferSource, packedLight));
+        NeoForge.EVENT_BUS.post(new RenderLivingEvent.Post<>(entity, this, partialTick, poseStack, bufferSource, packedLight));
     }
 
     protected float getOverlayProgress(LivingEntity entity, float partialTicks) {
@@ -234,8 +235,8 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
     }
 
     @Override
-    protected void setupRotations(T pEntityLiving, PoseStack pPoseStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks) {
-        super.setupRotations(pEntityLiving, pPoseStack, pAgeInTicks, pRotationYaw, pPartialTicks);
+    protected void setupRotations(T pEntityLiving, PoseStack pPoseStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks, float pScale) {
+        super.setupRotations(pEntityLiving, pPoseStack, pAgeInTicks, pRotationYaw, pPartialTicks, pScale);
         if (pEntityLiving.deathTime <= 0 && pEntityLiving.isAutoSpinAttack()) {
             pPoseStack.mulPose(Axis.YP.rotationDegrees(((float) pEntityLiving.tickCount + pPartialTicks) * 75.0F));
             pPoseStack.mulPose(Axis.XP.rotationDegrees(90.0F + pEntityLiving.getXRot()));

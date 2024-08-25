@@ -19,12 +19,14 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
+import net.neoforged.neoforge.common.EffectCure;
+import net.neoforged.neoforge.common.EffectCures;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class TaskFeedOwner implements IFeedTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "feed");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "feed");
 
     @Override
     public ResourceLocation getUid() {
@@ -40,7 +42,7 @@ public class TaskFeedOwner implements IFeedTask {
     public boolean isFood(ItemStack stack, Player owner) {
         if (stack.getItem() == Items.MILK_BUCKET) {
             for (MobEffectInstance effect : owner.getActiveEffects()) {
-                if (isHarmfulEffect(effect) && effect.getDuration() > 60 && effect.isCurativeItem(stack)) {
+                if (isHarmfulEffect(effect) && effect.getDuration() > 60 && effect.getCures().contains(EffectCures.MILK)) {
                     return true;
                 }
             }
@@ -49,8 +51,8 @@ public class TaskFeedOwner implements IFeedTask {
         if (stack.getItem().getFoodProperties(stack, owner) != null) {
             FoodProperties food = stack.getItem().getFoodProperties(stack, owner);
             if (food != null) {
-                return food.getEffects().isEmpty() ||
-                        food.getEffects().stream().noneMatch(pair -> isHarmfulEffect(pair.getFirst()));
+                return food.effects().isEmpty() ||
+                        food.effects().stream().noneMatch(effect -> isHarmfulEffect(effect.effect()));
             }
         }
         return false;
@@ -74,7 +76,7 @@ public class TaskFeedOwner implements IFeedTask {
             FoodProperties food = stack.getItem().getFoodProperties(stack, owner);
             int heal = 0;
             if (food != null) {
-                heal = food.getNutrition();
+                heal = food.nutrition();
             }
             int hunger = 20 - owner.getFoodData().getFoodLevel();
             if (heal == hunger) {
@@ -110,6 +112,6 @@ public class TaskFeedOwner implements IFeedTask {
     }
 
     private boolean isHarmfulEffect(MobEffectInstance effect) {
-        return effect.getEffect().getCategory() == MobEffectCategory.HARMFUL;
+        return effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL;
     }
 }

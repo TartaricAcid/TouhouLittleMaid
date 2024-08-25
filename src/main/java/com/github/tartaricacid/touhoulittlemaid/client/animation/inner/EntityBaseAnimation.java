@@ -15,22 +15,22 @@ import static com.github.tartaricacid.touhoulittlemaid.client.animation.inner.In
 
 public final class EntityBaseAnimation {
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/dimension/default.js"), getBaseDimDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/float/default.js"), getBaseFloatDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/time/day_night_hidden.js"), getBaseTimeDayNight());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/time/game_rotation.js"), getBaseTimeGameRotation());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/time/system_rotation.js"), getBaseTimeSysRotation());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/reciprocate.js"), getBaseRotationReciprocate());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/x_high_speed.js"), getBaseRotationXH());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/x_normal_speed.js"), getBaseRotationXN());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/x_low_speed.js"), getBaseRotationXL());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/y_high_speed.js"), getBaseRotationYH());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/y_normal_speed.js"), getBaseRotationYN());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/y_low_speed.js"), getBaseRotationYL());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/z_high_speed.js"), getBaseRotationZH());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/z_normal_speed.js"), getBaseRotationZN());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/rotation/z_low_speed.js"), getBaseRotationZL());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/base/random/select.js"), getRandomSelect());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/dimension/default.js"), getBaseDimDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/float/default.js"), getBaseFloatDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/time/day_night_hidden.js"), getBaseTimeDayNight());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/time/game_rotation.js"), getBaseTimeGameRotation());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/time/system_rotation.js"), getBaseTimeSysRotation());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/reciprocate.js"), getBaseRotationReciprocate());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/x_high_speed.js"), getBaseRotationXH());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/x_normal_speed.js"), getBaseRotationXN());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/x_low_speed.js"), getBaseRotationXL());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/y_high_speed.js"), getBaseRotationYH());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/y_normal_speed.js"), getBaseRotationYN());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/y_low_speed.js"), getBaseRotationYL());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/z_high_speed.js"), getBaseRotationZH());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/z_normal_speed.js"), getBaseRotationZN());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/rotation/z_low_speed.js"), getBaseRotationZL());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/base/random/select.js"), getRandomSelect());
     }
 
     public static IAnimation<LivingEntity> getBaseDimDefault() {

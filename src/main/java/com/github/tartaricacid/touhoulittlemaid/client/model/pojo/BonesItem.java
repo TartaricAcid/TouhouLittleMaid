@@ -54,11 +54,11 @@ public class BonesItem {
     public String toString() {
         return
                 "BonesItem{" +
-                        "cubes = '" + cubes + '\'' +
-                        ",name = '" + name + '\'' +
-                        ",pivot = '" + pivot + '\'' +
-                        ",rotation = '" + rotation + '\'' +
-                        ",parent = '" + parent + '\'' +
-                        "}";
+                "cubes = '" + cubes + '\'' +
+                ",name = '" + name + '\'' +
+                ",pivot = '" + pivot + '\'' +
+                ",rotation = '" + rotation + '\'' +
+                ",parent = '" + parent + '\'' +
+                "}";
     }
 }

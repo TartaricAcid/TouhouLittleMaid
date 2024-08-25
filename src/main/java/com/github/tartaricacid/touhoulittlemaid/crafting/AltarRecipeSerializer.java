@@ -1,75 +1,80 @@
 package com.github.tartaricacid.touhoulittlemaid.crafting;
 
-import com.github.tartaricacid.touhoulittlemaid.util.EntityCraftingHelper;
-import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 public class AltarRecipeSerializer implements RecipeSerializer<AltarRecipe> {
-    @Override
-    public AltarRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-        EntityCraftingHelper.Output output = EntityCraftingHelper.getEntityData(GsonHelper.getAsJsonObject(json, "output"));
-        float powerCost = GsonHelper.getAsFloat(json, "power");
-        JsonArray ingredients = GsonHelper.getAsJsonArray(json, "ingredients");
-        List<Ingredient> inputs = Lists.newArrayList();
-        for (JsonElement e : ingredients) {
-            inputs.add(Ingredient.fromJson(e));
-        }
-        return new AltarRecipe(recipeId, output.getType(), output.getData(), powerCost, output.getCopyInput(), output.getCopyTag(), inputs.toArray(new Ingredient[0]));
-    }
+    public static final MapCodec<AltarRecipe> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                    Codec.STRING.optionalFieldOf("group", StringUtils.EMPTY).forGetter(AltarRecipe::getGroup),
+                    CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(AltarRecipe::getCategory),
+                    Ingredient.CODEC.listOf().fieldOf("ingredients").flatXmap(AltarRecipeSerializer::checkIngredients, DataResult::success).forGetter(AltarRecipe::getIngredients),
+                    Codec.FLOAT.fieldOf("power").forGetter(AltarRecipe::getPower),
+                    ItemStack.STRICT_CODEC.fieldOf("result").forGetter(AltarRecipe::getResult),
+                    ResourceLocation.CODEC.fieldOf("entity").forGetter(AltarRecipe::getEntityType),
+                    Codec.STRING.optionalFieldOf("lang", StringUtils.EMPTY).forGetter(AltarRecipe::getLangKey)
+            ).apply(instance, AltarRecipe::new)
+    );
 
-    @Nullable
-    @Override
-    public AltarRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-        Optional<EntityType<?>> typeOptional = EntityType.byString(buffer.readUtf());
-        if (typeOptional.isPresent()) {
-            EntityType<?> entityType = typeOptional.get();
-            CompoundTag extraData = buffer.readNbt();
-            float powerCost = buffer.readFloat();
-            Ingredient copyInput = Ingredient.fromNetwork(buffer);
-            String copyTag = buffer.readUtf();
-            Ingredient[] inputs = new Ingredient[buffer.readVarInt()];
-            for (int i = 0; i < inputs.length; i++) {
-                inputs[i] = Ingredient.fromNetwork(buffer);
-            }
-            return new AltarRecipe(recipeId, entityType, extraData, powerCost, copyInput, copyTag, inputs);
-        }
-        throw new JsonParseException("Entity Type Tag Not Found");
-    }
-
-    @Override
-    public void toNetwork(FriendlyByteBuf buffer, AltarRecipe recipe) {
-        ResourceLocation name = ForgeRegistries.ENTITY_TYPES.getKey(recipe.getEntityType());
-        if (name == null) {
-            throw new JsonParseException("Entity Type Tag Not Found");
-        }
-        buffer.writeUtf(name.toString());
-        buffer.writeNbt(recipe.getExtraData());
-        buffer.writeFloat(recipe.getPowerCost());
-        recipe.getCopyInput().toNetwork(buffer);
-        if (StringUtils.isEmpty(recipe.getCopyTag())) {
-            buffer.writeUtf("");
+    @NotNull
+    private static DataResult<NonNullList<Ingredient>> checkIngredients(List<Ingredient> ingredientList) {
+        Ingredient[] aingredient = ingredientList.toArray(Ingredient[]::new);
+        if (aingredient.length == 0) {
+            return DataResult.error(() -> "No ingredients for shapeless recipe");
         } else {
-            buffer.writeUtf(recipe.getCopyTag());
+            if (aingredient.length > 6) {
+                return DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: 6");
+            }
+            return DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
         }
-        buffer.writeVarInt(recipe.getIngredients().size());
-        for (Ingredient input : recipe.getIngredients()) {
-            input.toNetwork(buffer);
+    }
+
+    private AltarRecipe fromNetwork(RegistryFriendlyByteBuf byteBuf) {
+        String group = byteBuf.readUtf();
+        CraftingBookCategory category = byteBuf.readEnum(CraftingBookCategory.class);
+        NonNullList<Ingredient> ingredients = NonNullList.withSize(byteBuf.readVarInt(), Ingredient.EMPTY);
+        ingredients.replaceAll((ingredient) -> Ingredient.CONTENTS_STREAM_CODEC.decode(byteBuf));
+        float power = byteBuf.readFloat();
+        ItemStack result = ItemStack.STREAM_CODEC.decode(byteBuf);
+        ResourceLocation entityType = byteBuf.readResourceLocation();
+        String langKey = byteBuf.readUtf();
+        return new AltarRecipe(group, category, ingredients, power, result, entityType, langKey);
+    }
+
+    private void toNetwork(RegistryFriendlyByteBuf friendlyByteBuf, AltarRecipe altarRecipe) {
+        friendlyByteBuf.writeUtf(altarRecipe.getGroup());
+        friendlyByteBuf.writeEnum(altarRecipe.getCategory());
+        friendlyByteBuf.writeVarInt(altarRecipe.getIngredients().size());
+        for (Ingredient ingredient : altarRecipe.getIngredients()) {
+            Ingredient.CONTENTS_STREAM_CODEC.encode(friendlyByteBuf, ingredient);
         }
+        friendlyByteBuf.writeFloat(altarRecipe.getPower());
+        ItemStack.STREAM_CODEC.encode(friendlyByteBuf, altarRecipe.getResult());
+        friendlyByteBuf.writeResourceLocation(altarRecipe.getEntityType());
+        friendlyByteBuf.writeUtf(altarRecipe.getLangKey());
+    }
+
+    @Override
+    public MapCodec<AltarRecipe> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, AltarRecipe> streamCodec() {
+        return StreamCodec.of(this::toNetwork, this::fromNetwork);
     }
 }

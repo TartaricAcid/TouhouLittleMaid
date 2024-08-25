@@ -15,8 +15,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class PlayerMaidModel extends BedrockModel<Mob> {
-    private static final ResourceLocation STEVE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "models/entity/player_maid.json");
-    private static final ResourceLocation ALEX = new ResourceLocation(TouhouLittleMaid.MOD_ID, "models/entity/player_maid_slim.json");
+    private static final ResourceLocation STEVE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "models/entity/player_maid.json");
+    private static final ResourceLocation ALEX = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "models/entity/player_maid_slim.json");
 
     public PlayerMaidModel(boolean smallArms) {
         ResourceManager manager = Minecraft.getInstance().getResourceManager();

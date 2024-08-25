@@ -5,8 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -20,9 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -77,8 +74,8 @@ public class EntityTombstone extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(MAID_NAME, Component.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(MAID_NAME, Component.empty());
     }
 
     @Override
@@ -87,19 +84,19 @@ public class EntityTombstone extends Entity {
             this.ownerId = tag.getUUID(OWNER_ID_TAG);
         }
         if (tag.contains(TOMBSTONE_ITEMS_TAG)) {
-            items.deserializeNBT(tag.getCompound(TOMBSTONE_ITEMS_TAG));
+            items.deserializeNBT(this.registryAccess(), tag.getCompound(TOMBSTONE_ITEMS_TAG));
         }
         if (tag.contains(MAID_NAME_TAG)) {
             String nameJson = tag.getString(MAID_NAME_TAG);
-            setMaidName(Component.Serializer.fromJson(nameJson));
+            setMaidName(Component.Serializer.fromJson(nameJson, this.registryAccess()));
         }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.putUUID(OWNER_ID_TAG, this.ownerId);
-        tag.put(TOMBSTONE_ITEMS_TAG, this.items.serializeNBT());
-        tag.putString(MAID_NAME_TAG, Component.Serializer.toJson(this.getMaidName()));
+        tag.put(TOMBSTONE_ITEMS_TAG, this.items.serializeNBT(this.registryAccess()));
+        tag.putString(MAID_NAME_TAG, Component.Serializer.toJson(this.getMaidName(), this.registryAccess()));
     }
 
     @Override
@@ -163,11 +160,6 @@ public class EntityTombstone extends Entity {
     @Override
     public boolean isPickable() {
         return this.isAlive();
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public UUID getOwnerId() {

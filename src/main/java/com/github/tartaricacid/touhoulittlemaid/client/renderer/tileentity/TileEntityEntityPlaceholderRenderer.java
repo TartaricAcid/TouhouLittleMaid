@@ -22,7 +22,7 @@ import java.util.Locale;
 
 public class TileEntityEntityPlaceholderRenderer extends BlockEntityWithoutLevelRenderer {
     private static final EntityPlaceholderModel BASE_MODEL = new EntityPlaceholderModel();
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/item/entity_placeholder.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/item/entity_placeholder.png");
 
     public TileEntityEntityPlaceholderRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
         super(dispatcher, modelSet);
@@ -39,11 +39,11 @@ public class TileEntityEntityPlaceholderRenderer extends BlockEntityWithoutLevel
     }
 
     private ResourceLocation getTexture(ItemStack stack) {
-        ResourceLocation recipeId = ItemEntityPlaceholder.getRecipeId(stack);
+        ResourceLocation recipeId = ItemEntityPlaceholder.getId(stack);
         if (recipeId != null) {
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
             String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
-            ResourceLocation texture = new ResourceLocation(namespace, String.format("textures/item/%s.png", path.getFileName().toString()));
+            ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(namespace, String.format("textures/item/%s.png", path.getFileName().toString()));
             if (Minecraft.getInstance().getResourceManager().getResource(texture).isPresent()) {
                 return texture;
             }

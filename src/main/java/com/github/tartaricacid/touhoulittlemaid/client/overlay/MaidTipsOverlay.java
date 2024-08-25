@@ -3,9 +3,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.overlay;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Maps;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -16,15 +18,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public class MaidTipsOverlay implements IGuiOverlay {
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_tips_icon.png");
+public class MaidTipsOverlay implements LayeredDraw.Layer {
+    private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_tips_icon.png");
     private static final Map<Item, MutableComponent> TIPS = Maps.newHashMap();
 
     public static void init() {
@@ -44,16 +45,23 @@ public class MaidTipsOverlay implements IGuiOverlay {
         if (!maid.isOwnedBy(player) && EntityMaid.getNtrItem().test(mainhandItem)) {
             return Component.translatable("overlay.touhou_little_maid.ntr_item.tips");
         }
-        if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.is(Tags.Items.SHEARS)) {
+        if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.is(Tags.Items.TOOLS_SHEAR)) {
             return Component.translatable("overlay.touhou_little_maid.remove_backpack.tips");
         }
         return null;
     }
 
+    private static void addTips(String key, Item... items) {
+        for (Item item : items) {
+            TIPS.put(item, Component.translatable(key));
+        }
+    }
+
     @Override
-    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
-        Minecraft minecraft = gui.getMinecraft();
+    public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
+        Minecraft minecraft = Minecraft.getInstance();
         Options options = minecraft.options;
+        LocalPlayer player = minecraft.player;
         if (!options.getCameraType().isFirstPerson()) {
             return;
         }
@@ -66,7 +74,6 @@ public class MaidTipsOverlay implements IGuiOverlay {
         if (!(result.getEntity() instanceof EntityMaid maid)) {
             return;
         }
-        LocalPlayer player = minecraft.player;
         if (player == null) {
             return;
         }
@@ -81,7 +88,8 @@ public class MaidTipsOverlay implements IGuiOverlay {
             tip = checkSpecialTips(player.getMainHandItem(), maid, player);
         }
         if (tip != null) {
-            gui.setupOverlayRenderState(true, false);
+            int screenHeight = guiGraphics.guiHeight();
+            int screenWidth = guiGraphics.guiWidth();
             List<FormattedCharSequence> split = minecraft.font.split(tip, 150);
             int offset = (screenHeight / 2 - 5) - split.size() * 10;
             guiGraphics.renderItem(player.getMainHandItem(), screenWidth / 2 - 8, offset);
@@ -92,12 +100,6 @@ public class MaidTipsOverlay implements IGuiOverlay {
                 guiGraphics.drawString(minecraft.font, sequence, (screenWidth - width) / 2, offset, 0xFFFFFF);
                 offset += 10;
             }
-        }
-    }
-
-    private static void addTips(String key, Item... items) {
-        for (Item item : items) {
-            TIPS.put(item, Component.translatable(key));
         }
     }
 }

@@ -1,17 +1,19 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SyncDataPackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundTakeItemEntityPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -23,13 +25,14 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
-public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnData {
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
+
+public class EntityPowerPoint extends Entity implements IEntityWithComplexSpawn {
     public static final EntityType<EntityPowerPoint> TYPE = EntityType.Builder.<EntityPowerPoint>of(EntityPowerPoint::new, MobCategory.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(6).updateInterval(20).build("power_point");
     private static final int MAX_AGE = 6000;
@@ -109,7 +112,7 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
         if (level.isClientSide) {
             spawnExplosionParticle(level, x, y, z, random);
         } else {
-            NetworkHandler.sendToNearby(level, blockPosition(), new BeaconAbsorbMessage(x, y, z));
+            NetworkHandler.sendToNearby(this, new BeaconAbsorbPackage(x, y, z));
         }
     }
 
@@ -119,7 +122,7 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
@@ -244,22 +247,24 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
         }
 
         if (this.throwTime == 0 && player.takeXpDelay == 0) {
-            LazyOptional<PowerCapability> powerCap = player.getCapability(PowerCapabilityProvider.POWER_CAP, null);
-            powerCap.ifPresent((power) -> {
-                player.takeXpDelay = 2;
-                this.take(player, 1);
-                if (this.value > 0) {
-                    if (power.get() + value / 100.0f > PowerCapability.MAX_POWER) {
-                        power.add(PowerCapability.MAX_POWER - power.get());
-                        int residualValue = value - (int) (PowerCapability.MAX_POWER * 100) + (int) (power.get() * 100);
-                        // 和原版设计不同，该数值过大，故缩小一些
-                        player.giveExperiencePoints(transPowerValueToXpValue(residualValue));
-                    } else {
-                        power.add(value / 100.0f);
-                    }
+            PowerAttachment power = player.getData(POWER_NUM);
+            MaidNumAttachment maidNum = player.getData(InitDataAttachment.MAID_NUM);
+            player.takeXpDelay = 2;
+            this.take(player, 1);
+            if (this.value > 0) {
+                if (power.get() + value / 100.0f > PowerAttachment.MAX_POWER) {
+                    power.add(PowerAttachment.MAX_POWER - power.get());
+                    int residualValue = value - (int) (PowerAttachment.MAX_POWER * 100) + (int) (power.get() * 100);
+                    // 和原版设计不同，该数值过大，故缩小一些
+                    player.giveExperiencePoints(transPowerValueToXpValue(residualValue));
+                    player.setData(POWER_NUM, new PowerAttachment(power.get()));
+                } else {
+                    power.add(value / 100.0f);
+                    player.setData(POWER_NUM, new PowerAttachment(power.get()));
                 }
-                this.discard();
-            });
+            }
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new SyncDataPackage(power.get(), maidNum.get()));
+            this.discard();
         }
     }
 
@@ -304,17 +309,12 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
-    @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(value);
     }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
+    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
         this.value = additionalData.readInt();
     }
 }

@@ -1,0 +1,35 @@
+{
+  "type": "touhou_little_maid:altar_recipe_serializers",
+  "category": "misc",
+  "entity": "minecraft:lightning_bolt",
+  "group": "altar_recipe",
+  "ingredients": [
+    {
+      "tag": "c:gunpowders"
+    },
+    {
+      "tag": "c:gunpowders"
+    },
+    {
+      "tag": "c:gunpowders"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    }
+  ],
+  "lang": "jei.touhou_little_maid.altar_craft.spawn_lightning_bolt.result",
+  "power": 0.2,
+  "result": {
+    "components": {
+      "touhou_little_maid:recipe_id": "spawn_lightning_bolt"
+    },
+    "count": 1,
+    "id": "touhou_little_maid:entity_placeholder"
+  }
+}

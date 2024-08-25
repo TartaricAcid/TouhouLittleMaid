@@ -22,7 +22,9 @@ build
 
 # other
 eclipse
+runs
 run
+src/generated/resources/.cache
 src/test
 
 # Files from Forge MDK

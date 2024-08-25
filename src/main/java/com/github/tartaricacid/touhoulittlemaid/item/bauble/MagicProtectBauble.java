@@ -4,18 +4,18 @@ import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDamageEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticlePackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class MagicProtectBauble implements IMaidBauble {
     public MagicProtectBauble() {
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -27,10 +27,10 @@ public class MagicProtectBauble implements IMaidBauble {
             if (slot >= 0) {
                 event.setCanceled(true);
                 ItemStack stack = maid.getMaidBauble().getStackInSlot(slot);
-                stack.hurtAndBreak(1, maid, m -> maid.sendItemBreakMessage(stack));
+                maid.hurtAndBreak(stack, 1);
                 maid.getMaidBauble().setStackInSlot(slot, stack);
                 maid.removeAllEffects();
-                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.EXPLOSION));
+                NetworkHandler.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.EXPLOSION));
             }
         }
     }

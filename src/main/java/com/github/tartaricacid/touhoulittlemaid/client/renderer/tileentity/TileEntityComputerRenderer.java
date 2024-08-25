@@ -9,13 +9,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
-public class TileEntityComputerRenderer implements BlockEntityRenderer<TileEntityComputer> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/computer.png");
+public class TileEntityComputerRenderer extends TileEntityJoyRenderer<TileEntityComputer> {
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/computer.png");
     private final ComputerModel model;
 
     public TileEntityComputerRenderer(BlockEntityRendererProvider.Context context) {

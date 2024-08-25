@@ -7,6 +7,7 @@
   "mixins": [
     "EntityMixin",
     "MixinArrowEntity",
+    "MixinCrossbowItem",
     "MixinStructureTemplate"
   ],
   "client": [

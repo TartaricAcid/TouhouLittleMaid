@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.Brain;
@@ -41,12 +42,12 @@ public class MaidExtinguishingTask extends MaidCheckRateTask {
         Brain<EntityMaid> brain = maid.getBrain();
 
         if (owner instanceof Player && owner.isAlive() && owner.isOnFire() && isExtinguisher(mainhandItem)
-                && maid.isWithinRestriction(owner.blockPosition())) {
+            && maid.isWithinRestriction(owner.blockPosition())) {
             if (maid.closerThan(owner, 2)) {
                 brain.eraseMemory(MemoryModuleType.PATH);
                 brain.eraseMemory(MemoryModuleType.WALK_TARGET);
                 world.addFreshEntity(new EntityExtinguishingAgent(worldIn, owner.position()));
-                mainhandItem.hurtAndBreak(1, maid, (m) -> m.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                mainhandItem.hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
                 maid.swing(InteractionHand.MAIN_HAND);
             } else {
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, owner, speed, 2);
@@ -55,14 +56,14 @@ public class MaidExtinguishingTask extends MaidCheckRateTask {
 
         if (maid.isOnFire() && isExtinguisher(mainhandItem)) {
             world.addFreshEntity(new EntityExtinguishingAgent(worldIn, maid.position()));
-            mainhandItem.hurtAndBreak(1, maid, (m) -> m.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            mainhandItem.hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
             maid.swing(InteractionHand.MAIN_HAND);
         }
 
         List<TamableAnimal> tameableEntities = world.getEntitiesOfClass(TamableAnimal.class, maid.getBoundingBox().inflate(2, 1, 2), Entity::isOnFire);
         if (!tameableEntities.isEmpty() && isExtinguisher(mainhandItem)) {
             world.addFreshEntity(new EntityExtinguishingAgent(worldIn, maid.position()));
-            mainhandItem.hurtAndBreak(1, maid, (m) -> m.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            mainhandItem.hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
             maid.swing(InteractionHand.MAIN_HAND);
         }
     }

@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 public class EntityPlaceholderSubtype implements IIngredientSubtypeInterpreter<ItemStack> {
     @Override
     public String apply(ItemStack itemStack, UidContext context) {
-        ResourceLocation recipeId = ItemEntityPlaceholder.getRecipeId(itemStack);
+        ResourceLocation recipeId = ItemEntityPlaceholder.getId(itemStack);
         if (recipeId == null) {
             return IIngredientSubtypeInterpreter.NONE;
         }

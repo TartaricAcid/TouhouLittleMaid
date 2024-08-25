@@ -4,7 +4,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.model;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -12,8 +11,8 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class DebugFloorModel extends EntityModel<Entity> {
-    public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "debug_floor");
+public class DebugFloorModel extends AbstractModel<Entity> {
+    public static ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "debug_floor");
     private final ModelPart floor;
 
     public DebugFloorModel(ModelPart root) {
@@ -35,7 +34,7 @@ public class DebugFloorModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         floor.render(poseStack, buffer, packedLight, packedOverlay);
     }
 }

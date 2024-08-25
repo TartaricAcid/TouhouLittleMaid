@@ -11,10 +11,11 @@ import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -28,16 +29,17 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.github.tartaricacid.touhoulittlemaid.datagen.EnchantmentKeys.getEnchantmentLevel;
+
 public class TaskBowAttack implements IRangedAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "ranged_attack");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "ranged_attack");
     private static final int MAX_STOP_ATTACK_DISTANCE = 16;
 
     @Override
@@ -85,7 +87,7 @@ public class TaskBowAttack implements IRangedAttackTask {
                 double z = target.getZ() - shooter.getZ();
                 double pitch = Math.sqrt(x * x + z * z) * 0.15D;
                 entityArrow.shoot(x, y + pitch, z, 1.6F, 1);
-                mainHandItem.hurtAndBreak(1, shooter, (maid) -> maid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                mainHandItem.hurtAndBreak(1, shooter, EquipmentSlot.MAINHAND);
                 shooter.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (shooter.getRandom().nextFloat() * 0.4F + 0.8F));
                 shooter.level.addFreshEntity(entityArrow);
             }
@@ -124,13 +126,14 @@ public class TaskBowAttack implements IRangedAttackTask {
         CombinedInvWrapper handler = maid.getAvailableInv(true);
         ItemStack arrowStack = handler.getStackInSlot(slot);
         ItemStack mainHandItem = maid.getMainHandItem();
-        AbstractArrow arrowEntity = ProjectileUtil.getMobArrow(maid, arrowStack, chargeTime);
+        RegistryAccess access = maid.level.registryAccess();
+        AbstractArrow arrowEntity = ProjectileUtil.getMobArrow(maid, arrowStack, chargeTime, mainHandItem);
 
-        if (mainHandItem.getItem() instanceof BowItem) {
-            arrowEntity = ((BowItem) mainHandItem.getItem()).customArrow(arrowEntity);
+        if (mainHandItem.getItem() instanceof BowItem bowItem) {
+            arrowEntity = bowItem.customArrow(arrowEntity, arrowStack, mainHandItem);
         }
         // 无限附魔不存在或者小于 0 时
-        if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.INFINITY_ARROWS, mainHandItem) <= 0) {
+        if (getEnchantmentLevel(access, Enchantments.INFINITY, mainHandItem) <= 0) {
             arrowStack.shrink(1);
             handler.setStackInSlot(slot, arrowStack);
             // 记得把箭设置为可以拾起状态

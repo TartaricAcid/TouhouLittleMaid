@@ -8,8 +8,8 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLLoader;
 
 public final class PackCommand {
     private static final String PACK_NAME = "pack";
@@ -23,7 +23,9 @@ public final class PackCommand {
     }
 
     private static int reloadAllPack(CommandContext<CommandSourceStack> context) {
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ReloadResourceEvent::reloadAllPack);
+        if (FMLLoader.getDist() == Dist.CLIENT) {
+            ReloadResourceEvent.reloadAllPack();
+        }
         // DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> PackCommand::sendPackToClient);
         ServerCustomPackLoader.reloadPacks();
         // TODO：打印加载的时间到客户端聊天栏

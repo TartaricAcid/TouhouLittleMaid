@@ -1,10 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitCapabilities;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,13 +14,11 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -27,43 +27,46 @@ import static net.minecraft.world.inventory.InventoryMenu.*;
 
 public abstract class MaidMainContainer extends AbstractMaidContainer {
     protected static final int PLAYER_INVENTORY_SIZE = 36;
-    private static final ResourceLocation EMPTY_MAINHAND_SLOT = new ResourceLocation("item/empty_slot_sword");
-    private static final ResourceLocation EMPTY_BACK_SHOW_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_back_show_slot");
+    private static final ResourceLocation EMPTY_MAINHAND_SLOT = ResourceLocation.parse("item/empty_slot_sword");
+    private static final ResourceLocation EMPTY_BACK_SHOW_SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "slot/empty_back_show_slot");
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     public MaidMainContainer(MenuType<?> type, int id, Inventory inventory, int entityId) {
         super(type, id, inventory, entityId);
         if (maid != null) {
+            this.addMaidHandInv();
             this.addMaidArmorInv();
             this.addMaidBauble();
-            this.addMaidHandInv();
             this.addMainDefaultInv();
             this.addBackpackInv(inventory);
         }
     }
 
     private void addMaidHandInv() {
-        LazyOptional<IItemHandler> hand = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN);
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 77) {
+        IItemHandler handler = maid.getCapability(InitCapabilities.HAND_ITEM, Direction.DOWN);
+        if (handler == null) {
+            return;
+        }
+        addSlot(new SlotItemHandler(handler, 0, 87, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(BLOCK_ATLAS, EMPTY_MAINHAND_SLOT);
             }
-        }));
-        hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 1, 121, 77) {
+        });
+        addSlot(new SlotItemHandler(handler, 1, 121, 77) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(BLOCK_ATLAS, EMPTY_ARMOR_SLOT_SHIELD);
             }
-        }));
+        });
     }
 
     private void addMaidArmorInv() {
-        LazyOptional<IItemHandler> armor = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.EAST);
-        armor.ifPresent((handler -> {
+        IItemHandler handler = maid.getCapability(InitCapabilities.ARMOR_ITEM, Direction.DOWN);
+        if (handler != null) {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; j++) {
                     final EquipmentSlot EquipmentSlot = SLOT_IDS[2 * i + j];
@@ -81,7 +84,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
                         @Override
                         public boolean mayPickup(Player playerIn) {
                             ItemStack itemstack = this.getItem();
-                            boolean curseEnchant = !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack);
+                            boolean curseEnchant = !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasTag(itemstack, EnchantmentTags.CURSE);
                             return !curseEnchant && super.mayPickup(playerIn);
                         }
 
@@ -93,7 +96,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
                     });
                 }
             }
-        }));
+        }
     }
 
     private void addMainDefaultInv() {

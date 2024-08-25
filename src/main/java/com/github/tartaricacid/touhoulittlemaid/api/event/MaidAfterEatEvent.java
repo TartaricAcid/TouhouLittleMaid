@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.api.event;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public class MaidAfterEatEvent extends Event {
     private final EntityMaid maid;

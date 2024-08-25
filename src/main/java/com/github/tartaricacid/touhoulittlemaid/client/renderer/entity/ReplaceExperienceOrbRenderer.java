@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.VanillaConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -17,9 +16,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ExperienceOrb;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> {
-    private static final ResourceLocation POINT_ITEM_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/point_item.png");
+    private static final ResourceLocation POINT_ITEM_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/point_item.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(POINT_ITEM_TEXTURE);
     private final ExperienceOrbRenderer vanillaRender;
 
@@ -31,7 +31,8 @@ public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> 
     }
 
     private static void vertex(VertexConsumer pConsumer, Matrix4f pMatrix, Matrix3f pMatrixNormal, float pX, float pY, int pRed, int pGreen, int pBlue, float pTexU, float pTexV, int pPackedLight) {
-        pConsumer.vertex(pMatrix, pX, pY, 0.0F).color(pRed, pGreen, pBlue, 128).uv(pTexU, pTexV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(pMatrixNormal, 0.0F, 1.0F, 0.0F).endVertex();
+        Vector3f vector3f = pMatrixNormal.transform(new Vector3f(0.0F, 1.0F, 0.0F));
+        pConsumer.addVertex(pMatrix, pX, pY, 0.0F).setColor(pRed, pGreen, pBlue, 128).setUv(pTexU, pTexV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(pPackedLight).setNormal(vector3f.x(), vector3f.y(), vector3f.z());
     }
 
     protected int getBlockLightLevel(ExperienceOrb pEntity, BlockPos pPos) {
@@ -56,7 +57,6 @@ public class ReplaceExperienceOrbRenderer extends EntityRenderer<ExperienceOrb> 
         float texV1 = (float) (icon / 4 * 16 + 16) / 64.0F;
         poseStack.translate(0.0F, 0.1F, 0.0F);
         poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.scale(0.3F, 0.3F, 0.3F);
         VertexConsumer consumer = buffer.getBuffer(RENDER_TYPE);
         PoseStack.Pose lasted = poseStack.last();

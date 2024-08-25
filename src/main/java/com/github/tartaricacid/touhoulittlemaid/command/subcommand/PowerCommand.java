@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.command.subcommand;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.command.arguments.HandleTypeArgument;
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SyncDataPackage;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -16,6 +18,7 @@ import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Collection;
 
@@ -29,7 +32,7 @@ public final class PowerCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> get() {
         LiteralArgumentBuilder<CommandSourceStack> pack = Commands.literal(POWER_NAME);
         RequiredArgumentBuilder<CommandSourceStack, EntitySelector> targets = Commands.argument(TARGETS_NAME, EntityArgument.players());
-        RequiredArgumentBuilder<CommandSourceStack, Float> count = Commands.argument(COUNT_NAME, FloatArgumentType.floatArg(0, PowerCapability.MAX_POWER));
+        RequiredArgumentBuilder<CommandSourceStack, Float> count = Commands.argument(COUNT_NAME, FloatArgumentType.floatArg(0, PowerAttachment.MAX_POWER));
         RequiredArgumentBuilder<CommandSourceStack, String> handleType = Commands.argument(HANDLE_NAME, HandleTypeArgument.type());
 
         pack.then(Commands.literal(GET_NAME).then(targets.executes(PowerCommand::getPower)));
@@ -41,19 +44,23 @@ public final class PowerCommand {
         Collection<ServerPlayer> players = EntityArgument.getPlayers(context, TARGETS_NAME);
         float count = FloatArgumentType.getFloat(context, COUNT_NAME);
         String type = HandleTypeArgument.getType(context, HANDLE_NAME);
-        for (Player player : players) {
+        for (ServerPlayer player : players) {
+            PowerAttachment powerAttachment = player.getData(InitDataAttachment.POWER_NUM);
+            MaidNumAttachment maidNumAttachment = player.getData(InitDataAttachment.MAID_NUM);
             switch (type) {
                 case "set":
-                    player.getCapability(PowerCapabilityProvider.POWER_CAP, null).ifPresent(power -> power.set(count));
+                    powerAttachment.set(count);
                     break;
                 case "add":
-                    player.getCapability(PowerCapabilityProvider.POWER_CAP, null).ifPresent(power -> power.add(count));
+                    powerAttachment.add(count);
                     break;
                 case "min":
-                    player.getCapability(PowerCapabilityProvider.POWER_CAP, null).ifPresent(power -> power.min(count));
+                    powerAttachment.min(count);
                     break;
                 default:
             }
+            player.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(powerAttachment.get()));
+            PacketDistributor.sendToPlayer(player,new SyncDataPackage(powerAttachment.get(),maidNumAttachment.get()));
         }
         context.getSource().sendSuccess(() -> Component.translatable("commands.touhou_little_maid.power.handle.info", players.size()), true);
         return Command.SINGLE_SUCCESS;
@@ -61,9 +68,9 @@ public final class PowerCommand {
 
     private static int getPower(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         for (Player player : EntityArgument.getPlayers(context, TARGETS_NAME)) {
-            player.getCapability(PowerCapabilityProvider.POWER_CAP, null).ifPresent(power ->
-                    context.getSource().sendSuccess(() -> Component.translatable("commands.touhou_little_maid.power.get.info",
-                            player.getScoreboardName(), power.get()), false));
+            PowerAttachment power = player.getData(InitDataAttachment.POWER_NUM);
+            context.getSource().sendSuccess(() -> Component.translatable("commands.touhou_little_maid.power.get.info",
+                    player.getScoreboardName(), power.get()), false);
         }
         return Command.SINGLE_SUCCESS;
     }

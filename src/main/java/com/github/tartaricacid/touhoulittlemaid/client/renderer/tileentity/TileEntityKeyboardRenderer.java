@@ -9,13 +9,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
-public class TileEntityKeyboardRenderer implements BlockEntityRenderer<TileEntityKeyboard> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/keyboard.png");
+public class TileEntityKeyboardRenderer extends TileEntityJoyRenderer<TileEntityKeyboard> {
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/keyboard.png");
     private final KeyboardModel model;
 
     public TileEntityKeyboardRenderer(BlockEntityRendererProvider.Context context) {

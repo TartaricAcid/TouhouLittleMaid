@@ -11,19 +11,19 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import static net.minecraft.world.inventory.InventoryMenu.BLOCK_ATLAS;
 
 public class TankBackpackContainer extends MaidMainContainer {
-    public static final MenuType<TankBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new TankBackpackContainer(windowId, inv, data.readInt()));
-    private static final ResourceLocation INPUT_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/tank_input_slot");
-    private static final ResourceLocation OUTPUT_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/tank_output_slot");
+    public static final MenuType<TankBackpackContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new TankBackpackContainer(windowId, inv, data.readInt()));
+    private static final ResourceLocation INPUT_SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "slot/tank_input_slot");
+    private static final ResourceLocation OUTPUT_SLOT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "slot/tank_output_slot");
     private final ContainerData data;
 
     public TankBackpackContainer(int id, Inventory inventory, int entityId) {

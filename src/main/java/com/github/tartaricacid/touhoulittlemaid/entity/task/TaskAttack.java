@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TaskAttack implements IAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "attack");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "attack");
     private static final int MAX_STOP_ATTACK_DISTANCE = 8;
 
     @Override
@@ -73,7 +72,7 @@ public class TaskAttack implements IAttackTask {
         List<EntityExtinguishingAgent> extinguishingAgents = world.getEntitiesOfClass(EntityExtinguishingAgent.class, aabb, Entity::isAlive);
         if (extinguishingAgents.isEmpty()) {
             world.addFreshEntity(new EntityExtinguishingAgent(world, target.position()));
-            maid.getOffhandItem().hurtAndBreak(1, maid, (m) -> m.broadcastBreakEvent(InteractionHand.OFF_HAND));
+            maid.getOffhandItem().hurtAndBreak(1, maid, EquipmentSlot.OFFHAND);
             return true;
         }
         return false;
@@ -85,7 +84,9 @@ public class TaskAttack implements IAttackTask {
     }
 
     private boolean hasAssaultWeapon(EntityMaid maid) {
-        return maid.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE);
+        return maid.getMainHandItem().getAttributeModifiers().modifiers()
+                .stream()
+                .anyMatch(modifier -> modifier.attribute().is(Attributes.ATTACK_DAMAGE));
     }
 
     private boolean hasExtinguisher(EntityMaid maid) {

@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.StatueBaseModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -19,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -26,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityStatue> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
     private final StatueBaseModel BASE_MODEL;
 
     public TileEntityStatueRenderer(BlockEntityRendererProvider.Context context) {
@@ -68,8 +70,7 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         });
 
         entity.load(data);
-        if (entity instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) entity;
+        if (entity instanceof EntityMaid maid) {
             clearMaidDataResidue(maid, true);
         }
 
@@ -135,5 +136,10 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         }
         poseStack.scale(size, size, size);
         poseStack.translate(0.5 / size, 0.5, 0.5 / size);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(TileEntityStatue te) {
+        return RenderHelper.getAABB(te.getWorldPosition().offset(-5, -1, -5), te.getWorldPosition().offset(5, 10, 5));
     }
 }

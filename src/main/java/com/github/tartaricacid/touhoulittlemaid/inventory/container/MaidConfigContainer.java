@@ -8,10 +8,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 
 public class MaidConfigContainer extends AbstractMaidContainer {
-    public static final MenuType<MaidConfigContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new MaidConfigContainer(windowId, inv, data.readInt()));
+    public static final MenuType<MaidConfigContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new MaidConfigContainer(windowId, inv, data.readInt()));
     private static final int PLAYER_INVENTORY_SIZE = 27;
 
     public MaidConfigContainer(int id, Inventory inventory, int entityId) {

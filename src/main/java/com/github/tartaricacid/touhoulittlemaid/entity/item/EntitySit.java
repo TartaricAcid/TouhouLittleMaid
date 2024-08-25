@@ -8,8 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -19,12 +17,16 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
 
 public class EntitySit extends Entity {
     public static final EntityType<EntitySit> TYPE = EntityType.Builder.<EntitySit>of(EntitySit::new, MobCategory.MISC)
-            .sized(0.5f, 0.1f).clientTrackingRange(10).build("sit");
+            .sized(0.5f, 0.1f)
+            .clientTrackingRange(10)
+            .ridingOffset(-0.25F)
+            .build("sit");
     private static final EntityDataAccessor<String> SIT_TYPE = SynchedEntityData.defineId(EntitySit.class, EntityDataSerializers.STRING);
     private int passengerTick = 0;
     private BlockPos associatedBlockPos = BlockPos.ZERO;
@@ -41,13 +43,8 @@ public class EntitySit extends Entity {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return -0.25;
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        this.entityData.define(SIT_TYPE, "");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(SIT_TYPE, "");
     }
 
     @Override
@@ -56,7 +53,8 @@ public class EntitySit extends Entity {
             this.setJoyType(tag.getString("SitJoyType"));
         }
         if (tag.contains("AssociatedBlockPos", Tag.TAG_COMPOUND)) {
-            this.associatedBlockPos = NbtUtils.readBlockPos(tag.getCompound("AssociatedBlockPos"));
+            Optional<BlockPos> blockPosOptional = NbtUtils.readBlockPos(tag, "AssociatedBlockPos");
+            blockPosOptional.ifPresent(blockPos -> this.associatedBlockPos = blockPos);
         }
     }
 
@@ -119,6 +117,11 @@ public class EntitySit extends Entity {
     }
 
     @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
+        return new Vec3(0, -0.125, 0);
+    }
+
+    @Override
     public boolean skipAttackInteraction(Entity pEntity) {
         return true;
     }
@@ -156,11 +159,6 @@ public class EntitySit extends Entity {
     @Override
     public boolean canCollideWith(Entity entity) {
         return false;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public String getJoyType() {

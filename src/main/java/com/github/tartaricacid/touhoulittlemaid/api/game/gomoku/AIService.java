@@ -18,7 +18,7 @@ public interface AIService {
      * @param chessData 已下棋子数据
      * @param point     对手棋位
      */
-    Point getPoint(int[][] chessData, Point point);
+    Point getPoint(byte[][] chessData, Point point);
 
     /**
      * 获取棋局状态

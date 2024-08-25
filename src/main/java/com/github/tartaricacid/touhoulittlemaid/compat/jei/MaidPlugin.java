@@ -25,7 +25,7 @@ import java.util.List;
 
 @JeiPlugin
 public class MaidPlugin implements IModPlugin {
-    private static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "jei");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "jei");
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {

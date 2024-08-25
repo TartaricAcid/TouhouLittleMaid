@@ -5,12 +5,12 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.mod.OptifineScreen;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TouhouLittleMaid.MOD_ID)
+@EventBusSubscriber(value = Dist.CLIENT, modid = TouhouLittleMaid.MOD_ID)
 public final class ShowOptifineScreen {
     private static boolean optifinePresent = false;
     private static boolean firstTitleScreenShown = false;

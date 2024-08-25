@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.command.subcommand;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.command.arguments.HandleTypeArgument;
+import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -17,6 +17,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Collection;
+
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.MAID_NUM;
 
 public final class MaidNumCommand {
     private static final String MAID_NUM_NAME = "maid_num";
@@ -43,13 +45,13 @@ public final class MaidNumCommand {
         for (Player player : players) {
             switch (type) {
                 case "set":
-                    player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP, null).ifPresent(power -> power.set(count));
+                    player.getData(MAID_NUM).set(count);
                     break;
                 case "add":
-                    player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP, null).ifPresent(power -> power.add(count));
+                    player.getData(MAID_NUM).add(count);
                     break;
                 case "min":
-                    player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP, null).ifPresent(power -> power.min(count));
+                    player.getData(MAID_NUM).min(count);
                     break;
                 default:
             }
@@ -60,9 +62,9 @@ public final class MaidNumCommand {
 
     private static int getMaidNum(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         for (Player player : EntityArgument.getPlayers(context, TARGETS_NAME)) {
-            player.getCapability(MaidNumCapabilityProvider.MAID_NUM_CAP, null).ifPresent(maidNum ->
-                    context.getSource().sendSuccess(() -> Component.translatable("commands.touhou_little_maid.maid_num.get.info",
-                            player.getScoreboardName(), maidNum.get()), false));
+            MaidNumAttachment numAttachment = player.getData(MAID_NUM);
+            context.getSource().sendSuccess(() -> Component.translatable("commands.touhou_little_maid.maid_num.get.info",
+                    player.getScoreboardName(), numAttachment.get()), false);
         }
         return Command.SINGLE_SUCCESS;
     }

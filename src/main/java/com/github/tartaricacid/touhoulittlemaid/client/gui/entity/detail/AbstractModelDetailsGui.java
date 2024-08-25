@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TouhouImageButton;
 import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -9,10 +10,9 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -27,8 +27,8 @@ import org.joml.Quaternionf;
 import javax.annotation.Nullable;
 
 public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends IModelInfo> extends Screen {
-    private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
-    private static final ResourceLocation FLOOR_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/debug_floor.png");
+    private static final ResourceLocation BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/skin_detail.png");
+    private static final ResourceLocation FLOOR_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/debug_floor.png");
 
     private static final int LEFT_MOUSE_BUTTON = 0;
     private static final int RIGHT_MOUSE_BUTTON = 1;
@@ -92,11 +92,11 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         SIDE_MENU_SIZE = new Rectangle(0, 0, 132, height);
         TOP_STATUS_BAR_SIZE = new Rectangle(0, 0, width, 15);
 
-        ImageButton closeButton = new ImageButton(width - 15, 0, 15, 15,
+        TouhouImageButton closeButton = new TouhouImageButton(width - 15, 0, 15, 15,
                 0, 24, 15, BUTTON_TEXTURE, b -> Minecraft.getInstance().setScreen(null));
-        ImageButton floorButton = new ImageButton(width - 30, 0, 15, 15,
+        TouhouImageButton floorButton = new TouhouImageButton(width - 30, 0, 15, 15,
                 30, 24, 15, BUTTON_TEXTURE, b -> showFloor = !showFloor);
-        ImageButton returnButton = new ImageButton(width - 45, 0, 15, 15,
+        TouhouImageButton returnButton = new TouhouImageButton(width - 45, 0, 15, 15,
                 15, 24, 15, BUTTON_TEXTURE, b -> applyReturnButtonLogic());
         addRenderableWidget(closeButton);
         addRenderableWidget(floorButton);
@@ -111,13 +111,14 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
             return;
         }
         this.renderViewBg(graphics);
-        this.renderEntity((width + 132) / 2, height / 2 + 50);
-        this.renderViewCrosshair();
+        this.renderEntity((width + 132) / 2, height / 2 + 50, graphics);
         this.renderBottomStatueBar(graphics);
         this.fillGradient(graphics, SIDE_MENU_SIZE, 0xfe21252b);
         this.fillGradient(graphics, TOP_STATUS_BAR_SIZE, 0xfe282c34);
         graphics.drawString(font, getTitle(), 6, 4, 0xffaaaaaa);
-        super.render(graphics, mouseX, mouseY, partialTicks);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, mouseX, mouseY, partialTicks);
+        }
     }
 
     private void renderViewBg(GuiGraphics graphics) {
@@ -132,26 +133,10 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
 
     private void renderBottomStatueBar(GuiGraphics graphics) {
         this.fillGradient(graphics, BOTTOM_STATUS_BAR_SIZE, 0xfe282c34);
-        String name = String.format("%s %s", "\u2714", I18n.get(ParseI18n.getI18nKey(modelInfo.getName())));
+        String name = String.format("%s %s", "✔", I18n.get(ParseI18n.getI18nKey(modelInfo.getName())));
         String info = String.format("%d FPS %.2f%%", Minecraft.fps, scale * 100 / 80);
         graphics.drawString(font, name, 136, this.height - 12, 0xcacad4, false);
         graphics.drawString(font, info, this.width - font.width(info) - 4, this.height - 12, 0xcacad4, false);
-    }
-
-    private void renderViewCrosshair() {
-        if (minecraft != null) {
-            Camera camera = minecraft.gameRenderer.getMainCamera();
-            PoseStack posestack = RenderSystem.getModelViewStack();
-            posestack.pushPose();
-            posestack.translate(width - 16, height - 32, -20);
-            posestack.mulPose(Axis.XN.rotationDegrees(camera.getXRot()));
-            posestack.mulPose(Axis.YP.rotationDegrees(camera.getYRot()));
-            posestack.scale(-1.0F, -1.0F, -1.0F);
-            RenderSystem.applyModelViewMatrix();
-            RenderSystem.renderCrosshair(10);
-            posestack.popPose();
-            RenderSystem.applyModelViewMatrix();
-        }
     }
 
     @Override
@@ -174,18 +159,18 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
         boolean isInWidthRange = 132 < mouseX && mouseX < width - 1;
         boolean isInHeightRange = 15 < mouseY && mouseY < height - 16;
         boolean isInRange = isInWidthRange && isInHeightRange;
         if (minecraft == null || !isInRange) {
             return false;
         }
-        if (delta != 0) {
-            changeScaleValue((float) delta * 0.07f);
+        if (deltaY != 0) {
+            changeScaleValue((float) deltaY * 0.07f);
             return true;
         }
-        return super.mouseScrolled(mouseX, mouseY, delta);
+        return super.mouseScrolled(mouseX, mouseY, deltaX, deltaY);
     }
 
     private void changePitchValue(float amount) {
@@ -204,16 +189,18 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
     }
 
 
-    private void renderEntity(int middleWidth, int middleHeight) {
-        PoseStack viewStack = RenderSystem.getModelViewStack();
+    private void renderEntity(int middleWidth, int middleHeight, GuiGraphics graphics) {
+        graphics.enableScissor(132, 15, this.width, this.height - 16);
+
+        PoseStack viewStack = graphics.pose();
         viewStack.pushPose();
-        viewStack.translate(posX + middleWidth, posY + middleHeight, 1050.0D);
+        viewStack.translate(0, 0, 1050.0D);
         viewStack.scale(1.0F, 1.0F, -1.0F);
         RenderSystem.applyModelViewMatrix();
 
         PoseStack poseStack = new PoseStack();
-        poseStack.translate(0.0D, 0.0D, 1000.0D);
-        poseStack.scale(scale, scale, scale);
+        poseStack.translate(posX + middleWidth, posY + middleHeight, 1000.0D);
+        poseStack.scale(scale, scale, -scale);
 
         Quaternionf zp = Axis.ZP.rotationDegrees(-180.0F);
         Quaternionf yp = Axis.YP.rotationDegrees(yaw);
@@ -229,7 +216,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         manager.setRenderShadow(false);
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         RenderSystem.runAsFancy(() -> {
-            manager.render(guiEntity, 0, 0, 0, 0, Minecraft.getInstance().getPartialTick(), poseStack, buffer, 0xf000f0);
+            manager.render(guiEntity, 0, 0, 0, 0, Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false), poseStack, buffer, 0xf000f0);
             poseStack.translate(0, 0.5, 0);
             if (showFloor) {
                 this.floorModel.renderToBuffer(poseStack, buffer.getBuffer(this.floorModel.renderType(FLOOR_TEXTURE)), 0xf000f0, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
@@ -242,6 +229,7 @@ public abstract class AbstractModelDetailsGui<T extends LivingEntity, E extends 
         viewStack.popPose();
         RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
+        graphics.disableScissor();
     }
 
     @Override

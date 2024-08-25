@@ -2,14 +2,16 @@ package com.github.tartaricacid.touhoulittlemaid.entity.chatbubble;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.network.Filterable;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.WritableBookContent;
+import net.minecraft.world.item.component.WrittenBookContent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -17,73 +19,31 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MaidScriptBookManager {
-    private static final Gson GSON = new Gson();
     private static final String STORE_TAG = "MaidScriptBook";
-    private static final String PAGES_TAG = "pages";
     private static final String SEPARATOR = "\n\n";
 
     private final Map<String, List<ChatText>> scripts;
-    private ListTag scriptsTags;
 
     public MaidScriptBookManager() {
         this.scripts = Maps.newHashMap();
-        this.scriptsTags = new ListTag();
     }
 
-    public boolean installScript(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(PAGES_TAG, Tag.TAG_LIST)) {
-            return false;
-        }
-        ListTag pagesTag = tag.getList(PAGES_TAG, Tag.TAG_STRING);
-        if (pagesTag.isEmpty()) {
-            return false;
-        }
-        if (stack.getItem() == Items.WRITTEN_BOOK) {
-            ListTag list = pagesTag.copy();
-            this.scriptsTags = new ListTag();
-            for (int i = 0; i < list.size(); i++) {
-                BookText bookText = GSON.fromJson(list.getString(i), BookText.class);
-                this.scriptsTags.add(StringTag.valueOf(bookText.text));
-            }
-        } else {
-            this.scriptsTags = pagesTag.copy();
-        }
-        loadFromTag(this.scriptsTags);
-        return true;
+    private static List<String> readBookPages(WrittenBookContent bookContent) {
+        return bookContent.getPages(false).stream().map(Component::getString).toList();
     }
 
-    public void removeScript() {
-        this.scripts.clear();
-        this.scriptsTags = new ListTag();
+    private static List<String> readBookPages(WritableBookContent bookContent) {
+        return bookContent.getPages(false).toList();
     }
 
-    public boolean copyScript(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(PAGES_TAG, Tag.TAG_LIST) || tag.getList(PAGES_TAG, Tag.TAG_STRING).isEmpty()) {
-            CompoundTag stackTag = stack.getOrCreateTag();
-            stackTag.put(PAGES_TAG, this.scriptsTags.copy());
-            return true;
-        }
-        return false;
+    private static WritableBookContent replaceBookContentWithPages(final List<String> pages, final WritableBookContent book) {
+        return book.withReplacedPages(pages.stream().map(Filterable::passThrough).toList());
     }
 
-    public void addAdditionalSaveData(CompoundTag compound) {
-        compound.put(STORE_TAG, this.scriptsTags);
-    }
-
-    public void readAdditionalSaveData(CompoundTag compound) {
-        if (compound.contains(STORE_TAG, Tag.TAG_LIST)) {
-            this.scriptsTags = compound.getList(STORE_TAG, Tag.TAG_STRING);
-            loadFromTag(this.scriptsTags);
-        }
-    }
-
-    private void loadFromTag(ListTag pages) {
+    private static void readScriptsFromPages(final List<String> pages, Map<String, List<ChatText>> scripts) {
         scripts.clear();
-        for (int i = 0; i < pages.size(); i++) {
-            String pageText = pages.getString(i);
-            String[] split = StringUtils.split(pageText, SEPARATOR);
+        for (var page : pages) {
+            String[] split = StringUtils.split(page, SEPARATOR);
             if (split.length < 2) {
                 continue;
             }
@@ -102,12 +62,81 @@ public class MaidScriptBookManager {
         }
     }
 
-    public List<ChatText> getScripts(String type) {
-        return this.scripts.getOrDefault(type, Lists.newArrayList());
+    private static void writeScriptsToPages(final Map<String, List<ChatText>> scripts, List<String> pages) {
+        pages.clear();
+        for (Map.Entry<String, List<ChatText>> entry : scripts.entrySet()) {
+            String type = entry.getKey();
+            List<ChatText> scriptList = entry.getValue();
+            if (scriptList.isEmpty()) {
+                continue;
+            }
+            StringBuilder builder = new StringBuilder();
+            builder.append(type).append(SEPARATOR);
+            for (ChatText chatText : scriptList) {
+                builder.append(chatText.getText()).append(SEPARATOR);
+            }
+            pages.add(builder.toString());
+        }
     }
 
-    private static class BookText {
-        @SerializedName("text")
-        private String text;
+    public boolean installScript(ItemStack stack) {
+        WrittenBookContent writtenBookContent = stack.get(DataComponents.WRITTEN_BOOK_CONTENT);
+        if (writtenBookContent != null && !writtenBookContent.getPages(false).isEmpty()) {
+            var pages = readBookPages(writtenBookContent);
+            readScriptsFromPages(pages, this.scripts);
+            return true;
+        }
+
+        WritableBookContent writableBookContent = stack.get(DataComponents.WRITABLE_BOOK_CONTENT);
+        if (writableBookContent != null && writableBookContent.getPages(false).findAny().isPresent()) {
+            var pages = readBookPages(writableBookContent);
+            readScriptsFromPages(pages, this.scripts);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void removeScript() {
+        this.scripts.clear();
+    }
+
+    public boolean copyScript(ItemStack stack) {
+        // 拷贝只能拷贝书与笔，成书不能拷贝
+        var book = stack.get(DataComponents.WRITABLE_BOOK_CONTENT);
+        if (book == null || !book.pages().isEmpty()) {
+            return false;
+        }
+        List<String> pages = Lists.newArrayList();
+        writeScriptsToPages(this.scripts, pages);
+        var newBook = replaceBookContentWithPages(pages, book);
+        stack.set(DataComponents.WRITABLE_BOOK_CONTENT, newBook);
+        return true;
+    }
+
+    public void addAdditionalSaveData(CompoundTag compound) {
+        ListTag scriptsTags = new ListTag();
+        List<String> pages = Lists.newArrayList();
+        writeScriptsToPages(this.scripts, pages);
+        for (String page : pages) {
+            scriptsTags.add(StringTag.valueOf(page));
+        }
+        compound.put(STORE_TAG, scriptsTags);
+    }
+
+    public void readAdditionalSaveData(CompoundTag compound) {
+        if (!compound.contains(STORE_TAG, Tag.TAG_LIST)) {
+            return;
+        }
+        ListTag scriptsTags = compound.getList(STORE_TAG, Tag.TAG_STRING);
+        List<String> pages = Lists.newArrayList();
+        for (Tag tag : scriptsTags) {
+            pages.add(tag.getAsString());
+        }
+        readScriptsFromPages(pages, this.scripts);
+    }
+
+    public List<ChatText> getScripts(String type) {
+        return this.scripts.getOrDefault(type, Lists.newArrayList());
     }
 }

@@ -4,7 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -13,9 +12,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class EntityPowerPointRenderer extends EntityRenderer<EntityPowerPoint> {
-    private static final ResourceLocation POWER_POINT_TEXTURES = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
+    private static final ResourceLocation POWER_POINT_TEXTURES = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/power_point.png");
     private static final RenderType RENDER_TYPE = RenderType.itemEntityTranslucentCull(POWER_POINT_TEXTURES);
 
     public EntityPowerPointRenderer(EntityRendererProvider.Context renderManager) {
@@ -23,7 +23,8 @@ public class EntityPowerPointRenderer extends EntityRenderer<EntityPowerPoint> {
     }
 
     private static void vertex(VertexConsumer bufferIn, Matrix4f pose, Matrix3f normal, double x, double y, double texU, double texV, int packedLight) {
-        bufferIn.vertex(pose, (float) x, (float) y, 0.0F).color(255, 255, 255, 255).uv((float) texU, (float) texV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+        Vector3f vector3f = normal.transform(new Vector3f(0.0F, 1.0F, 0.0F));
+        bufferIn.addVertex(pose, (float) x, (float) y, 0.0F).setColor(255, 255, 255, 128).setUv((float) texU, (float) texV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(vector3f.x(), vector3f.y(), vector3f.z());
     }
 
     @Override
@@ -39,7 +40,6 @@ public class EntityPowerPointRenderer extends EntityRenderer<EntityPowerPoint> {
         poseStack.pushPose();
         poseStack.translate(0, 0.1, 0);
         poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.scale(0.3F, 0.3F, 0.3F);
 
         VertexConsumer buffer = bufferIn.getBuffer(RENDER_TYPE);

@@ -17,6 +17,7 @@ import java.util.Set;
 public class MaidNearestLivingEntitySensor extends Sensor<EntityMaid> {
     private static final int VERTICAL_SEARCH_RANGE = 4;
 
+    @Override
     protected void doTick(ServerLevel world, EntityMaid maid) {
         float radius = maid.getRestrictRadius();
         AABB aabb;
@@ -32,6 +33,7 @@ public class MaidNearestLivingEntitySensor extends Sensor<EntityMaid> {
         brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, new NearestVisibleLivingEntities(maid, list));
     }
 
+    @Override
     public Set<MemoryModuleType<?>> requires() {
         return ImmutableSet.of(MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES);
     }

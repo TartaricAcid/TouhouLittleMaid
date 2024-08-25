@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -25,8 +26,8 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -55,7 +56,7 @@ public class BlockMaidBed extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide && player.isCreative()) {
             BedPart bedpart = state.getValue(PART);
             if (bedpart == BedPart.FOOT) {
@@ -67,7 +68,7 @@ public class BlockMaidBed extends HorizontalDirectionalBlock {
                 }
             }
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override
@@ -125,19 +126,25 @@ public class BlockMaidBed extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
     }
 
     @Override
-    public boolean isBed(BlockState state, BlockGetter world, BlockPos pos, @Nullable Entity entity) {
+    public boolean isBed(BlockState state, BlockGetter world, BlockPos pos, @Nullable LivingEntity entity) {
         if (entity instanceof EntityMaid) {
             return true;
         }
+        assert entity != null;
         return super.isBed(state, world, pos, entity);
     }
 
     private Direction getNeighbourDirection(BedPart part, Direction direction) {
         return part == BedPart.FOOT ? direction : direction.getOpposite();
+    }
+
+    @Override
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return simpleCodec((properties) -> new BlockMaidBed());
     }
 }

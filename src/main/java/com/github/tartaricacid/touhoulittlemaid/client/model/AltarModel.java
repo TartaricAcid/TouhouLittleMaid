@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class AltarModel extends EntityModel<Entity> {
-    public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "altar");
+    public static ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "altar");
     private final ModelPart pillar;
     private final ModelPart pillar2;
     private final ModelPart pillar3;
@@ -318,7 +318,7 @@ public class AltarModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         pillar.render(poseStack, buffer, packedLight, packedOverlay);
         pillar2.render(poseStack, buffer, packedLight, packedOverlay);
         pillar3.render(poseStack, buffer, packedLight, packedOverlay);

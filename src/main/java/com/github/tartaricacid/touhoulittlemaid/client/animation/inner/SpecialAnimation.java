@@ -11,8 +11,8 @@ import static com.github.tartaricacid.touhoulittlemaid.client.animation.inner.In
 
 public final class SpecialAnimation {
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/special/hecatia_dimension.js"), getSpecialHecatia());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/special/wakasagihime_sit.js"), getSpecialWakasagihime());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/special/hecatia_dimension.js"), getSpecialHecatia());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/special/wakasagihime_sit.js"), getSpecialWakasagihime());
     }
 
     public static IAnimation<Mob> getSpecialHecatia() {

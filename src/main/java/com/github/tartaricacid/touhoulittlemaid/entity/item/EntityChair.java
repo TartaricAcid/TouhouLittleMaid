@@ -7,7 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.OpenChairGuiMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenChairGuiPackage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -26,9 +26,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.util.thread.EffectiveSide;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.util.thread.EffectiveSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,19 +38,18 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.*;
+
 public class EntityChair extends AbstractEntityFromItem {
     public static final EntityType<EntityChair> TYPE = EntityType.Builder.<EntityChair>of(EntityChair::new, MobCategory.MISC)
-            .sized(0.875f, 0.5f).clientTrackingRange(10).build("chair");
+            .sized(0.875f, 0.5f)
+            .clientTrackingRange(10)
+            .build("chair");
 
     private static final EntityDataAccessor<String> MODEL_ID = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> MOUNTED_HEIGHT = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> TAMEABLE_CAN_RIDE = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(EntityChair.class, EntityDataSerializers.OPTIONAL_UUID);
-
-    private static final String MODEL_ID_TAG = "ModelId";
-    private static final String MOUNTED_HEIGHT_TAG = "MountedHeight";
-    private static final String TAMEABLE_CAN_RIDE_TAG = "TameableCanRide";
-    private static final String OWNER_UUID_TAG = "OwnerUUID";
 
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:cushion";
 
@@ -74,12 +74,12 @@ public class EntityChair extends AbstractEntityFromItem {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MODEL_ID, DEFAULT_MODEL_ID);
-        this.entityData.define(MOUNTED_HEIGHT, 0f);
-        this.entityData.define(TAMEABLE_CAN_RIDE, true);
-        this.entityData.define(OWNER_UUID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(MODEL_ID, DEFAULT_MODEL_ID);
+        builder.define(MOUNTED_HEIGHT, 0f);
+        builder.define(TAMEABLE_CAN_RIDE, true);
+        builder.define(OWNER_UUID, Optional.empty());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class EntityChair extends AbstractEntityFromItem {
                 return InteractionResult.SUCCESS;
             }
             if (!level.isClientSide) {
-                NetworkHandler.sendToClientPlayer(new OpenChairGuiMessage(getId()), player);
+                NetworkHandler.sendToNearby(player, new OpenChairGuiPackage(getId()));
             }
         } else {
             if (!level.isClientSide && getPassengers().isEmpty() && !player.isPassenger()) {
@@ -133,8 +133,8 @@ public class EntityChair extends AbstractEntityFromItem {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return getMountedHeight();
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
+        return new Vec3(0, getMountedHeight() + 0.125, 0);
     }
 
     @Override
@@ -158,27 +158,27 @@ public class EntityChair extends AbstractEntityFromItem {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains(MODEL_ID_TAG, Tag.TAG_STRING)) {
-            setModelId(compound.getString(MODEL_ID_TAG));
+        if (compound.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
+            setModelId(compound.getString(MODEL_ID_TAG_NAME));
         }
-        if (compound.contains(MOUNTED_HEIGHT_TAG, Tag.TAG_FLOAT)) {
-            setMountedHeight(compound.getFloat(MOUNTED_HEIGHT_TAG));
+        if (compound.contains(MOUNTED_HEIGHT_TAG_NAME, Tag.TAG_FLOAT)) {
+            setMountedHeight(compound.getFloat(MOUNTED_HEIGHT_TAG_NAME));
         }
-        if (compound.contains(TAMEABLE_CAN_RIDE_TAG, Tag.TAG_BYTE)) {
-            setTameableCanRide(compound.getBoolean(TAMEABLE_CAN_RIDE_TAG));
+        if (compound.contains(TAMEABLE_CAN_RIDE_TAG_NAME, Tag.TAG_BYTE)) {
+            setTameableCanRide(compound.getBoolean(TAMEABLE_CAN_RIDE_TAG_NAME));
         }
-        if (compound.contains(OWNER_UUID_TAG)) {
-            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG))));
+        if (compound.contains(OWNER_UUID_TAG_NAME)) {
+            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG_NAME))));
         }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString(MODEL_ID_TAG, getModelId());
-        compound.putFloat(MOUNTED_HEIGHT_TAG, getMountedHeight());
-        compound.putBoolean(TAMEABLE_CAN_RIDE_TAG, isTameableCanRide());
-        this.getOwnerUUID().ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG, uuid));
+        compound.putString(MODEL_ID_TAG_NAME, getModelId());
+        compound.putFloat(MOUNTED_HEIGHT_TAG_NAME, getMountedHeight());
+        compound.putBoolean(TAMEABLE_CAN_RIDE_TAG_NAME, isTameableCanRide());
+        this.getOwnerUUID().ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG_NAME, uuid));
     }
 
     @Nullable
@@ -236,7 +236,7 @@ public class EntityChair extends AbstractEntityFromItem {
 
     public float getPassengerYaw() {
         if (!getPassengers().isEmpty()) {
-            return getPassengers().get(0).getYRot();
+            return getPassengers().getFirst().getYRot();
         }
         return 0;
     }
@@ -247,7 +247,7 @@ public class EntityChair extends AbstractEntityFromItem {
 
     public float getPassengerPitch() {
         if (!getPassengers().isEmpty()) {
-            return getPassengers().get(0).getXRot();
+            return getPassengers().getFirst().getXRot();
         }
         return 0;
     }

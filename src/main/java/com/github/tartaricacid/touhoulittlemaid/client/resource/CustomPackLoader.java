@@ -17,7 +17,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.client.sound.CustomSoundLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
@@ -29,8 +28,8 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -763,7 +762,7 @@ public class CustomPackLoader {
         if (!TMP_REGISTER_TEXTURE.contains(texturePath)) {
             FilePackTexture filePackTexture = new FilePackTexture(rootPath, texturePath);
             if (filePackTexture.isExist()) {
-                Minecraft.getInstance().textureManager.register(texturePath, filePackTexture);
+                Minecraft.getInstance().getTextureManager().register(texturePath, filePackTexture);
                 TMP_REGISTER_TEXTURE.add(texturePath);
             }
         }
@@ -773,7 +772,7 @@ public class CustomPackLoader {
         if (!TMP_REGISTER_TEXTURE.contains(texturePath)) {
             ZipPackTexture zipPackTexture = new ZipPackTexture(zipFilePath, texturePath);
             if (zipPackTexture.isExist()) {
-                Minecraft.getInstance().textureManager.register(texturePath, zipPackTexture);
+                Minecraft.getInstance().getTextureManager().register(texturePath, zipPackTexture);
                 TMP_REGISTER_TEXTURE.add(texturePath);
             }
         }

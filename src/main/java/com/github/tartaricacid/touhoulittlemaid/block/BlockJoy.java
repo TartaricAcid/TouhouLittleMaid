@@ -7,11 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -52,11 +52,11 @@ public abstract class BlockJoy extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
         if (worldIn instanceof ServerLevel serverLevel && playerIn.getItemInHand(hand).isEmpty() && worldIn.getBlockEntity(pos) instanceof TileEntityJoy joy) {
             Entity oldSitEntity = serverLevel.getEntity(joy.getSitId());
             if (oldSitEntity != null && oldSitEntity.isAlive()) {
-                return super.use(state, worldIn, pos, playerIn, hand, hit);
+                return super.useItemOn(itemStack, state, worldIn, pos, playerIn, hand, hit);
             }
             EntitySit newSitEntity = new EntitySit(worldIn, Vec3.atLowerCornerWithOffset(pos, this.sitPosition().x, this.sitPosition().y, this.sitPosition().z), this.getTypeName(), pos);
             newSitEntity.setYRot(state.getValue(FACING).getOpposite().toYRot() + this.sitYRot());
@@ -64,9 +64,9 @@ public abstract class BlockJoy extends BaseEntityBlock {
             joy.setSitId(newSitEntity.getUUID());
             joy.setChanged();
             playerIn.startRiding(newSitEntity);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, worldIn, pos, playerIn, hand, hit);
+        return super.useItemOn(itemStack, state, worldIn, pos, playerIn, hand, hit);
     }
 
     public void startMaidSit(EntityMaid maid, BlockState state, Level worldIn, BlockPos pos) {
@@ -102,7 +102,7 @@ public abstract class BlockJoy extends BaseEntityBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, PathComputationType type) {
         return true;
     }
 

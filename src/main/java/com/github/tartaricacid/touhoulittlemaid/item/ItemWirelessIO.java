@@ -7,10 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOCo
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -26,20 +24,16 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.*;
+
 public class ItemWirelessIO extends Item implements MenuProvider {
     private static final int FILTER_LIST_SIZE = 9;
-    private static final String FILTER_LIST_TAG = "ItemFilterList";
-    private static final String FILTER_MODE_TAG = "ItemFilterMode";
-    private static final String IO_MODE_TAG = "ItemIOMode";
-    private static final String BINDING_POS = "BindingPos";
-    private static final String SLOT_CONFIG_TAG = "SlotConfigData";
     private static final String TOOLTIPS_PREFIX = "§a▍ §7";
 
     public ItemWirelessIO() {
@@ -48,83 +42,71 @@ public class ItemWirelessIO extends Item implements MenuProvider {
 
     public static void setMode(ItemStack stack, boolean maidToChest) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.getOrCreateTag().putBoolean(IO_MODE_TAG, maidToChest);
+            stack.set(IO_MODE, maidToChest);
         }
     }
 
     public static boolean isMaidToChest(ItemStack stack) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            if (stack.hasTag()) {
-                CompoundTag nbt = stack.getTag();
-                return Objects.requireNonNull(nbt).getBoolean(IO_MODE_TAG);
-            }
+            return Objects.requireNonNullElse(stack.get(IO_MODE), false);
         }
         return false;
     }
 
     public static void setFilterMode(ItemStack stack, boolean isBlacklist) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.getOrCreateTag().putBoolean(FILTER_MODE_TAG, isBlacklist);
+            stack.set(FILTER_MODE, isBlacklist);
         }
     }
 
     public static boolean isBlacklist(ItemStack stack) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            if (stack.hasTag()) {
-                CompoundTag nbt = stack.getTag();
-                return Objects.requireNonNull(nbt).getBoolean(FILTER_MODE_TAG);
-            }
+            return Objects.requireNonNullElse(stack.get(FILTER_MODE), false);
         }
         return false;
     }
 
-    public static ItemStackHandler getFilterList(ItemStack stack) {
+    public static ItemStackHandler getFilterList(HolderLookup.Provider provider, ItemStack stack) {
         WirelessIOHandler handler = new WirelessIOHandler(FILTER_LIST_SIZE);
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            CompoundTag tag = stack.getTag();
-            if (tag != null && tag.contains(FILTER_LIST_TAG, Tag.TAG_COMPOUND)) {
-                handler.deserializeNBT(tag.getCompound(FILTER_LIST_TAG));
+            CompoundTag tag = stack.get(FILTER_LIST_TAG);
+            if (tag != null) {
+                handler.deserializeNBT(provider, tag);
             }
         }
         return handler;
     }
 
-    public static void setFilterList(ItemStack stack, ItemStackHandler itemStackHandler) {
+    public static void setFilterList(HolderLookup.Provider provider, ItemStack stack, ItemStackHandler itemStackHandler) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.getOrCreateTag().put(FILTER_LIST_TAG, itemStackHandler.serializeNBT());
+            stack.set(FILTER_LIST_TAG, itemStackHandler.serializeNBT(provider));
         }
     }
 
     @Nullable
     public static BlockPos getBindingPos(ItemStack stack) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            CompoundTag tag = stack.getTag();
-            if (tag != null && tag.contains(BINDING_POS, Tag.TAG_COMPOUND)) {
-                return NbtUtils.readBlockPos(tag.getCompound(BINDING_POS));
-            }
+            return stack.get(BINDING_POS);
         }
         return null;
     }
 
     public static void setBindingPos(ItemStack stack, BlockPos pos) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.getOrCreateTag().put(BINDING_POS, NbtUtils.writeBlockPos(pos));
+            stack.set(BINDING_POS, pos);
         }
     }
 
-    public static void setSlotConfig(ItemStack stack, byte[] config) {
+    public static void setSlotConfig(ItemStack stack, List<Boolean> config) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            stack.getOrCreateTag().put(SLOT_CONFIG_TAG, new ByteArrayTag(config));
+            stack.set(SLOT_CONFIG_TAG, config);
         }
     }
 
     @Nullable
-    public static byte[] getSlotConfig(ItemStack stack) {
+    public static List<Boolean> getSlotConfig(ItemStack stack) {
         if (stack.getItem() == InitItems.WIRELESS_IO.get()) {
-            CompoundTag tag = stack.getTag();
-            if (tag != null && tag.contains(SLOT_CONFIG_TAG, Tag.TAG_BYTE_ARRAY)) {
-                return tag.getByteArray(SLOT_CONFIG_TAG);
-            }
+            return stack.get(SLOT_CONFIG_TAG);
         }
         return null;
     }
@@ -160,14 +142,14 @@ public class ItemWirelessIO extends Item implements MenuProvider {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (handIn == InteractionHand.MAIN_HAND && playerIn instanceof ServerPlayer) {
-            NetworkHooks.openScreen((ServerPlayer) playerIn, this, (buffer) -> buffer.writeItem(playerIn.getMainHandItem()));
+            playerIn.openMenu(this, buffer -> ItemStack.STREAM_CODEC.encode(buffer, playerIn.getMainHandItem()));
             return InteractionResultHolder.success(playerIn.getMainHandItem());
         }
         return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         boolean maidToChest = isMaidToChest(stack);
         boolean isBlacklist = isBlacklist(stack);
         BlockPos pos = getBindingPos(stack);

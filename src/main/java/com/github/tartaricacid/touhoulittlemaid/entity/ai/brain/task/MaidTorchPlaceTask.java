@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ public class MaidTorchPlaceTask extends Behavior<EntityMaid> {
             Vec3 targetV3d = targetPos.currentPosition();
             if (owner.distanceToSqr(targetV3d) > Math.pow(closeEnoughDist, 2)) {
                 Optional<WalkTarget> walkTarget = brain.getMemory(MemoryModuleType.WALK_TARGET);
-                if (!walkTarget.isPresent() || !walkTarget.get().getTarget().currentPosition().equals(targetV3d)) {
+                if (walkTarget.isEmpty() || !walkTarget.get().getTarget().currentPosition().equals(targetV3d)) {
                     brain.eraseMemory(InitEntities.TARGET_POS.get());
                 }
                 return false;

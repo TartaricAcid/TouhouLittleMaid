@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class PicnicBasketContainerScreen extends AbstractContainerScreen<PicnicBasketContainer> {
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("textures/gui/container/generic_54.png");
+    private static final ResourceLocation CONTAINER_BACKGROUND = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
 
     public PicnicBasketContainerScreen(PicnicBasketContainer container, Inventory inv, Component titleIn) {
         super(container, inv, titleIn);
@@ -18,7 +18,6 @@ public class PicnicBasketContainerScreen extends AbstractContainerScreen<PicnicB
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }

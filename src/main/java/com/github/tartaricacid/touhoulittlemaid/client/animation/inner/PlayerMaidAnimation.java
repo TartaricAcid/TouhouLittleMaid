@@ -15,8 +15,8 @@ public final class PlayerMaidAnimation {
     private static final float[] FIXED_HAND_ROTATION = new float[]{0, 0, 0};
 
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/player/arm/default.js"), getPlayerArmDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/player/sit/default.js"), getPlayerSitDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/player/arm/default.js"), getPlayerArmDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/player/sit/default.js"), getPlayerSitDefault());
     }
 
     public static IAnimation<Mob> getPlayerArmDefault() {

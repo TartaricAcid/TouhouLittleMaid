@@ -5,6 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -26,8 +28,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileEntityMaidBeacon extends BlockEntity {
-    public static final String POTION_INDEX_TAG = "PotionIndex";
     public static final BlockEntityType<TileEntityMaidBeacon> TYPE = BlockEntityType.Builder.of(TileEntityMaidBeacon::new, InitBlocks.MAID_BEACON.get()).build(null);
+    public static final String POTION_INDEX_TAG = "PotionIndex";
     public static final String STORAGE_POWER_TAG = "StoragePower";
     public static final String OVERFLOW_DELETE_TAG = "OverflowDelete";
     private int potionIndex = -1;
@@ -48,7 +50,7 @@ public class TileEntityMaidBeacon extends BlockEntity {
         }
     }
 
-    private void updateBeaconEffect(Level world, MobEffect potion) {
+    private void updateBeaconEffect(Level world, Holder<MobEffect> potion) {
         List<EntityMaid> list = world.getEntitiesOfClass(EntityMaid.class, new AABB(getBlockPos()).inflate(8, 8, 8), LivingEntity::isAlive);
         for (EntityMaid maid : list) {
             maid.addEffect(new MobEffectInstance(potion, 100, 1, true, true));
@@ -74,16 +76,16 @@ public class TileEntityMaidBeacon extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    public void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().putInt(POTION_INDEX_TAG, potionIndex);
         getPersistentData().putFloat(STORAGE_POWER_TAG, storagePower);
         getPersistentData().putBoolean(OVERFLOW_DELETE_TAG, overflowDelete);
-        super.saveAdditional(compound);
+        super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         potionIndex = getPersistentData().getInt(POTION_INDEX_TAG);
         storagePower = getPersistentData().getFloat(STORAGE_POWER_TAG);
         overflowDelete = getPersistentData().getBoolean(OVERFLOW_DELETE_TAG);
@@ -96,8 +98,8 @@ public class TileEntityMaidBeacon extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        return this.saveWithoutMetadata(pRegistries);
     }
 
     @Nullable
@@ -157,9 +159,9 @@ public class TileEntityMaidBeacon extends BlockEntity {
         RESISTANCE(MobEffects.DAMAGE_RESISTANCE),
         REGENERATION(MobEffects.REGENERATION);
 
-        private final MobEffect effect;
+        private final Holder<MobEffect> effect;
 
-        BeaconEffect(MobEffect effect) {
+        BeaconEffect(Holder<MobEffect> effect) {
             this.effect = effect;
         }
 
@@ -167,7 +169,7 @@ public class TileEntityMaidBeacon extends BlockEntity {
             return values()[Mth.clamp(0, index, values().length - 1)];
         }
 
-        public MobEffect getEffect() {
+        public Holder<MobEffect> getEffect() {
             return effect;
         }
     }

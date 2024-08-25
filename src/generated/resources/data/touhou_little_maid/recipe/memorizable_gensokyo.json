@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:dyes/white"
+    },
+    {
+      "tag": "c:dyes/red"
+    },
+    {
+      "item": "minecraft:book"
+    }
+  ],
+  "result": {
+    "components": {
+      "patchouli:book": "touhou_little_maid:memorizable_gensokyo"
+    },
+    "count": 1,
+    "id": "patchouli:guide_book"
+  }
+}

@@ -34,7 +34,7 @@ public class TileEntityItemStackChairRenderer extends BlockEntityWithoutLevelRen
         }
         EntityChair entityChair;
         ItemChair.Data data = ItemChair.getData(itemStackIn);
-        float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(data.getModelId());
+        float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(data.modelId());
         try {
             entityChair = (EntityChair) EntityCacheUtil.ENTITY_CACHE.get(EntityChair.TYPE, () -> {
                 Entity e = EntityChair.TYPE.create(world);
@@ -44,7 +44,7 @@ public class TileEntityItemStackChairRenderer extends BlockEntityWithoutLevelRen
             e.printStackTrace();
             return;
         }
-        entityChair.setModelId(data.getModelId());
+        entityChair.setModelId(data.modelId());
         poseStack.pushPose();
         poseStack.scale(renderItemScale, renderItemScale, renderItemScale);
         EntityRenderDispatcher render = Minecraft.getInstance().getEntityRenderDispatcher();

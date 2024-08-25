@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.ConfirmScreen;
@@ -35,7 +36,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
 public class ModelDownloadGui extends Screen {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
     private static final String PACK_FILE_SUFFIX = ".zip";
     private final Map<Long, String> crc32Infos = Maps.newHashMap();
     private final List<DownloadInfo> showInfos = Lists.newArrayList();
@@ -73,7 +74,7 @@ public class ModelDownloadGui extends Screen {
         textField.setTextColor(0xF3EFE0);
         textField.setFocused(focus);
         textField.setValue(textCache);
-        textField.moveCursorToEnd();
+        textField.moveCursorToEnd(Screen.hasShiftDown());
         this.addWidget(this.textField);
     }
 
@@ -173,10 +174,13 @@ public class ModelDownloadGui extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+        super.renderBlurredBackground(pPartialTick);
         this.renderBase(graphics);
         this.renderSearchBox(graphics, mouseX, mouseY, pPartialTick);
         this.renderPageNumber(graphics);
-        super.render(graphics, mouseX, mouseY, pPartialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, mouseX, mouseY, pPartialTick);
+        }
         this.renderBaseButtons(graphics);
         this.renderPackHandleButtons(graphics);
         this.renderNoDataTips(graphics);
@@ -234,11 +238,6 @@ public class ModelDownloadGui extends Screen {
         String value = this.textField.getValue();
         super.resize(minecraft, width, height);
         this.textField.setValue(value);
-    }
-
-    @Override
-    public void tick() {
-        this.textField.tick();
     }
 
     @Override

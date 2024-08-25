@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBroom;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -36,9 +36,9 @@ public class ItemBroom extends Item {
             if (world.noCollision(boundingBox) && world.getEntities(null, boundingBox).isEmpty()) {
                 ItemStack stack = context.getItemInHand();
                 if (world instanceof ServerLevel serverWorld) {
-                    EntityBroom broom = EntityBroom.TYPE.create(serverWorld, stack.getTag(), (e) -> {
-                        if (stack.hasCustomHoverName()) {
-                            e.setCustomName(stack.getDisplayName());
+                    EntityBroom broom = EntityBroom.TYPE.create(serverWorld, (e) -> {
+                        if (stack.get(DataComponents.CUSTOM_NAME) != null) {
+                            e.setCustomName(stack.get(DataComponents.CUSTOM_NAME));
                         }
                     }, context.getClickedPos(), MobSpawnType.SPAWN_EGG, true, true);
                     if (broom == null) {
@@ -58,7 +58,7 @@ public class ItemBroom extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("tooltips.touhou_little_maid.broom.desc").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.broom.desc").withStyle(ChatFormatting.GRAY));
     }
 }

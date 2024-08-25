@@ -4,9 +4,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
-import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,7 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.item.TieredItem;
 
 public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
     private final EntityMaidRenderer renderer;
@@ -40,7 +37,7 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
             return;
         }
 
-        if (stack.getItem() instanceof Vanishable) {
+        if (stack.getItem() instanceof TieredItem) {
             matrixStack.pushPose();
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
@@ -50,16 +47,8 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
             } else {
                 BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);
             }
-            if (SlashBladeCompat.isSlashBladeItem(stack)) {
-                SlashBladeRender.renderMaidBackSlashBlade(matrixStack, bufferIn, packedLightIn, stack);
-            } else {
-                Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, mob.level(), packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
-            }
+            Minecraft.getInstance().getItemRenderer().renderStatic(mob, stack, ItemDisplayContext.FIXED, false, matrixStack, bufferIn, mob.level(), packedLightIn, OverlayTexture.NO_OVERLAY, mob.getId());
             matrixStack.popPose();
-            return;
         }
-
-        // TAC 兼容
-        TacCompat.renderBackGun(matrixStack, bufferIn, packedLightIn, stack, maid);
     }
 }

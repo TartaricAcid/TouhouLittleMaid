@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.model;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -11,8 +10,8 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class PicnicMatModel extends EntityModel<Entity> {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "picnic_mat");
+public class PicnicMatModel extends AbstractModel<Entity> {
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "picnic_mat");
     private final ModelPart all;
     private final ModelPart hide;
 
@@ -517,9 +516,9 @@ public class PicnicMatModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        all.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        hide.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        all.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        hide.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 
     public ModelPart getHideModel() {

@@ -3,12 +3,14 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
+
+import static net.minecraft.world.level.block.Block.canSupportCenter;
 
 public class MaidTorchMoveTask extends MaidMoveToBlockTask {
     private static final int LOW_BRIGHTNESS = 9;
@@ -22,7 +24,7 @@ public class MaidTorchMoveTask extends MaidMoveToBlockTask {
         BlockPos posUp = pos.above();
         if (worldIn.getMaxLocalRawBrightness(posUp) < LOW_BRIGHTNESS && entityIn.canPlaceBlock(posUp)) {
             BlockState stateUp = worldIn.getBlockState(posUp);
-            return Blocks.TORCH.canSurvive(stateUp, worldIn, posUp) && !stateUp.liquid();
+            return canSupportCenter(worldIn, pos, Direction.UP) && !stateUp.liquid();
         }
         return false;
     }

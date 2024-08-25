@@ -1,33 +1,33 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.MaidRayTraceHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class ItemCamera extends Item {
-    private static final String MAID_INFO = "MaidInfo";
-
     public ItemCamera() {
         super((new Properties()).stacksTo(1).durability(50));
     }
@@ -44,7 +44,7 @@ public class ItemCamera extends Item {
                     spawnMaidPhoto(worldIn, maid, playerIn);
                     maid.discard();
                     playerIn.getCooldowns().addCooldown(this, 20);
-                    camera.hurtAndBreak(1, playerIn, (e) -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                    camera.hurtAndBreak(1, playerIn, EquipmentSlot.MAINHAND);
                 }
                 maid.spawnExplosionParticle();
                 playerIn.playSound(InitSounds.CAMERA_USE.get(), 1.0f, 1.0f);
@@ -56,13 +56,11 @@ public class ItemCamera extends Item {
 
     private void spawnMaidPhoto(Level worldIn, EntityMaid maid, Player playerIn) {
         ItemStack photo = InitItems.PHOTO.get().getDefaultInstance();
-        CompoundTag photoTag = new CompoundTag();
         CompoundTag maidTag = new CompoundTag();
         maid.setHomeModeEnable(false);
         maid.saveWithoutId(maidTag);
-        maidTag.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
-        photoTag.put(MAID_INFO, maidTag);
-        photo.setTag(photoTag);
+        maidTag.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
+        photo.set(InitDataComponent.MAID_INFO, CustomData.of(maidTag));
         Containers.dropItemStack(worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), photo);
     }
 
@@ -77,7 +75,7 @@ public class ItemCamera extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         tooltip.add(Component.translatable("tooltips.touhou_little_maid.camera.desc").withStyle(ChatFormatting.DARK_GREEN));
     }
 }

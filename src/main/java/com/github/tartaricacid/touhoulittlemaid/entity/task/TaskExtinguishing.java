@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TaskExtinguishing implements IAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "extinguishing");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "extinguishing");
 
     @Override
     public ResourceLocation getUid() {

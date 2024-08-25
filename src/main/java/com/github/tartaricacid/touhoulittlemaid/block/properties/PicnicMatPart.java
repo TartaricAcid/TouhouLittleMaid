@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.block.properties;
 
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -9,7 +10,7 @@ public enum PicnicMatPart implements StringRepresentable {
     SIDE;
 
     @Override
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return this.name().toLowerCase(Locale.US);
     }
 

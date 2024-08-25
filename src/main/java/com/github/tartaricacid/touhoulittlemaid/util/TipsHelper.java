@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 import java.util.List;
 
 public final class TipsHelper {
-    private static final ResourceLocation BUTTON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
+    private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
 
     public static void renderTips(GuiGraphics graphics, Button button, Component text) {
         graphics.pose().pushPose();

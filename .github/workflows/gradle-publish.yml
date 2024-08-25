@@ -1,12 +1,12 @@
-name: Gradle Package 1.20
+name: Gradle Package 1.21
 
 on:
-  workflow_dispatch:    
+  workflow_dispatch:
   push:
     branches:
-      - "1.20"
+      - "1.21-neoforge-test"
     paths:
-      - 'src/main/**'
+      - 'src/**'
 
 jobs:
   build:
@@ -16,13 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: "1.20"
+          ref: "1.21-neoforge-test"
 
-      - name: Set up JDK 8
-        uses: actions/setup-java@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          java-version: '8'
-          distribution: 'adopt'
+          distribution: 'microsoft'
+          java-version: '21'
           server-id: github
           settings-path: ${{ github.workspace }}
 
@@ -43,11 +43,11 @@ jobs:
 
       - name: Create timestamp
         id: create_timestamp
-        run: echo "::set-output name=timestamp::$(date '+%Y%m%d%H%M%s')"
+        run: echo "::set-output name=timestamp::$(date '+%Y%m%d-%H%M%S')"
         shell: bash
 
       - name: Send file to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: snapshot-${{ steps.create_timestamp.outputs.timestamp }}
           body: ${{ github.event.head_commit.message }}

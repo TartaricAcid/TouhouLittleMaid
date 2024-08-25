@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class EntityFairyModel extends EntityModel<EntityFairy> {
-    public static ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "fairy");
+    public static ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "fairy");
     private final ModelPart head;
     private final ModelPart armRight;
     private final ModelPart armLeft;
@@ -210,14 +210,14 @@ public class EntityFairyModel extends EntityModel<EntityFairy> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        armRight.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        armLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        legLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        legRight.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        wingLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        wingRight.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        head.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        armRight.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        armLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        body.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        legLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        legRight.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        wingLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        wingRight.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 }

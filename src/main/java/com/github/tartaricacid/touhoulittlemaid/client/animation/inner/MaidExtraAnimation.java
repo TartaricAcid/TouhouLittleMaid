@@ -14,16 +14,16 @@ public final class MaidExtraAnimation {
     private static final float[] FIXED_HAND_ROTATION = new float[]{0, 0, 0};
 
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/arm/extra.js"), getArmExtra());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/arm/vertical.js"), getArmVertical());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/extra.js"), getHeadExtra());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hurt.js"), getHeadHurt());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/reverse_blink.js"), getHeadReverseBlink());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/extra.js"), getLegExtra());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/vertical.js"), getLegVertical());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/health/less_show.js"), getHealthLessShow());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/health/more_show.js"), getHealthMoreShow());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/health/rotation.js"), getHealthRotation());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/arm/extra.js"), getArmExtra());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/arm/vertical.js"), getArmVertical());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/extra.js"), getHeadExtra());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/hurt.js"), getHeadHurt());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/reverse_blink.js"), getHeadReverseBlink());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/leg/extra.js"), getLegExtra());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/leg/vertical.js"), getLegVertical());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/health/less_show.js"), getHealthLessShow());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/health/more_show.js"), getHealthMoreShow());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/health/rotation.js"), getHealthRotation());
     }
 
     public static IAnimation<Mob> getArmExtra() {

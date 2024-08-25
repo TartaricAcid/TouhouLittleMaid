@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -17,62 +18,62 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.STORAGE_DATA_TAG;
 
 public class ItemModelSwitcher extends BlockItem {
-    private static final String STORAGE_DATA_TAG = "StorageData";
-    private static final String FORGE_DATA_TAG = "ForgeData";
+    private static final String NEO_FORGE_DATA_TAG = "NeoForgeData";
 
     public ItemModelSwitcher() {
         super(InitBlocks.MODEL_SWITCHER.get(), (new Item.Properties()).stacksTo(1));
     }
 
-    public static ItemStack tileEntityToItemStack(TileEntityModelSwitcher switcher) {
-        ItemStack stack = InitItems.MODEL_SWITCHER.get().getDefaultInstance();
-        CompoundTag stackTag = stack.getOrCreateTag();
-        stackTag.put(STORAGE_DATA_TAG, switcher.saveWithoutMetadata());
-        return stack;
+    public static ItemStack tileEntityToItemStack(HolderLookup.Provider provider, TileEntityModelSwitcher switcher) {
+        ItemStack itemStack = Objects.requireNonNull(InitItems.MODEL_SWITCHER.get().getDefaultInstance());
+        itemStack.set(STORAGE_DATA_TAG, switcher.saveWithoutMetadata(provider));
+        return itemStack;
     }
 
-    public static void itemStackToTileEntity(ItemStack stack, TileEntityModelSwitcher switcher) {
-        CompoundTag tag = stack.getOrCreateTagElement(STORAGE_DATA_TAG);
-        if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-            switcher.load(tag);
+    public static void itemStackToTileEntity(HolderLookup.Provider provider, ItemStack stack, TileEntityModelSwitcher switcher) {
+        CompoundTag tag = stack.get(STORAGE_DATA_TAG);
+        if (tag != null && tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            switcher.loadAdditional(tag, provider);
         }
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
-        if (pInteractionTarget instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) pInteractionTarget;
-            CompoundTag tag = pStack.getOrCreateTagElement(STORAGE_DATA_TAG);
+    public InteractionResult interactLivingEntity(ItemStack stack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
+        if (pInteractionTarget instanceof EntityMaid maid) {
+            CompoundTag tag = stack.getOrDefault(STORAGE_DATA_TAG, new CompoundTag());
             CompoundTag forgeData;
-            if (tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-                forgeData = tag.getCompound(FORGE_DATA_TAG);
+            if (tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+                forgeData = tag.getCompound(NEO_FORGE_DATA_TAG);
             } else {
                 forgeData = new CompoundTag();
             }
             forgeData.put(TileEntityModelSwitcher.ENTITY_UUID, NbtUtils.createUUID(maid.getUUID()));
-            tag.put(FORGE_DATA_TAG, forgeData);
+            tag.put(NEO_FORGE_DATA_TAG, forgeData);
+            stack.set(STORAGE_DATA_TAG, tag);
             return InteractionResult.SUCCESS;
         }
-        return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
+        return super.interactLivingEntity(stack, pPlayer, pInteractionTarget, pUsedHand);
     }
 
     private boolean hasMaidInfo(ItemStack stack) {
-        CompoundTag tag = stack.getTagElement(STORAGE_DATA_TAG);
-        if (tag != null && tag.contains(FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-            CompoundTag forgeTag = tag.getCompound(FORGE_DATA_TAG);
+        CompoundTag tag = stack.get(STORAGE_DATA_TAG);
+        if (tag != null && tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            CompoundTag forgeTag = tag.getCompound(NEO_FORGE_DATA_TAG);
             return forgeTag.contains(TileEntityModelSwitcher.ENTITY_UUID, Tag.TAG_INT_ARRAY);
         }
         return false;
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
+    public void appendHoverText(ItemStack pStack, @Nullable Item.TooltipContext pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
         if (hasMaidInfo(pStack)) {
             pTooltip.add(Component.translatable("tooltips.touhou_little_maid.model_switcher.bounded").withStyle(ChatFormatting.GRAY));
         } else {

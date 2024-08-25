@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 public class SoundPackButton extends FlatColorButton {
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_custom_sound.png");
+    private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_custom_sound.png");
     private final SoundPackInfo info;
     private boolean isUse = false;
 
@@ -99,7 +99,7 @@ public class SoundPackButton extends FlatColorButton {
     }
 
     private void checkIconAnimation(SoundPackInfo info, ResourceLocation icon) {
-        AbstractTexture iconText = Minecraft.getInstance().textureManager.getTexture(icon);
+        AbstractTexture iconText = Minecraft.getInstance().getTextureManager().getTexture(icon);
         if (iconText instanceof SizeTexture) {
             int width = ((SizeTexture) iconText).getWidth();
             int height = ((SizeTexture) iconText).getHeight();

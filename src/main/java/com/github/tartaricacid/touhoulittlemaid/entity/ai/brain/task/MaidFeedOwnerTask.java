@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 public class MaidFeedOwnerTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 20;
@@ -47,8 +47,7 @@ public class MaidFeedOwnerTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         LivingEntity owner = maid.getOwner();
-        if (owner instanceof Player && owner.isAlive()) {
-            Player player = (Player) owner;
+        if (owner instanceof Player player && owner.isAlive()) {
             boolean dying = player.getHealth() / player.getMaxHealth() < 0.5f;
             IntList lowestFoods = new IntArrayList();
             IntList lowFoods = new IntArrayList();
@@ -79,7 +78,7 @@ public class MaidFeedOwnerTask extends MaidCheckRateTask {
             }
 
             IntList map = !highFoods.isEmpty() ? highFoods : !lowFoods.isEmpty() ? lowFoods : lowestFoods;
-            map.stream().skip(maid.getRandom().nextInt(map.size())).findFirst().ifPresent(slot -> {
+            map.intStream().skip(maid.getRandom().nextInt(map.size())).findFirst().ifPresent(slot -> {
                 inv.setStackInSlot(slot, task.feed(inv.getStackInSlot(slot), player));
                 maid.swing(InteractionHand.MAIN_HAND);
                 this.setNextCheckTickCount(5);

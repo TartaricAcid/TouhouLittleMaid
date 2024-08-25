@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -80,7 +81,7 @@ public abstract class AbstractEntityFromItem extends LivingEntity {
         if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             ItemStack itemstack = getKilledStack();
             if (this.hasCustomName()) {
-                itemstack.setHoverName(this.getCustomName());
+                itemstack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
             }
             this.spawnAtLocation(itemstack, 0.0F);
             this.dropExtraItems();

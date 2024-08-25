@@ -18,13 +18,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
 public class EmptyBackpack extends IMaidBackpack {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "empty");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "empty");
 
     @Override
     public ResourceLocation getId() {
@@ -63,7 +63,6 @@ public class EmptyBackpack extends IMaidBackpack {
         };
     }
 
-
     @Override
     public int getAvailableMaxContainerIndex() {
         return BackpackLevel.EMPTY_CAPACITY;
@@ -84,6 +83,7 @@ public class EmptyBackpack extends IMaidBackpack {
     }
 
     @OnlyIn(Dist.CLIENT)
+    @Override
     public void offsetBackpackItem(PoseStack poseStack) {
         poseStack.translate(0, 0.625, 0.2);
     }

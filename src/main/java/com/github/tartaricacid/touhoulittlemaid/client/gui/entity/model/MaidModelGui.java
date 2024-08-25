@@ -4,9 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.MaidMod
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -36,7 +36,19 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     @Override
     protected void drawLeftEntity(GuiGraphics graphics, int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(entity.getModelId());
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, (middleX - 256 / 2) / 2, middleY + 90, (int) (45 * renderItemScale), (middleX - 256 / 2f) / 2 - mouseX, middleY + 80 - 40 - mouseY, entity);
+        int centerX = (middleX - 256 / 2) / 2;
+        int yOffset = (int) (45 * (renderItemScale - 1));
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                centerX - 100,
+                middleY - 100,
+                centerX + 100,
+                middleY + 200 - yOffset,
+                (int) (45 * renderItemScale),
+                0.1F,
+                mouseX,
+                mouseY,
+                entity);
     }
 
     @Override
@@ -63,7 +75,17 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         } else {
             maid.setModelId(modelItem.getModelId().toString());
         }
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                posX - 10,
+                posY - 32,
+                posX + 10,
+                posY + 12,
+                (int) (12 * modelItem.getRenderItemScale()),
+                0.1F,
+                posX + 25,
+                posY + 5,
+                maid);
     }
 
     private float[] getRgbFromHash(int hashCode) {
@@ -83,10 +105,10 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     @Override
     protected void notifyModelChange(EntityMaid maid, MaidModelInfo info) {
         if (info.getEasterEgg() == null) {
-            NetworkHandler.CHANNEL.sendToServer(new MaidModelMessage(maid.getId(), info.getModelId()));
+            PacketDistributor.sendToServer(new MaidModelPackage(maid.getId(), info.getModelId()));
             String useSoundPackId = info.getUseSoundPackId();
             if (StringUtils.isNotBlank(useSoundPackId)) {
-                NetworkHandler.CHANNEL.sendToServer(new SetMaidSoundIdMessage(maid.getId(), useSoundPackId));
+                PacketDistributor.sendToServer(new SetMaidSoundIdPackage(maid.getId(), useSoundPackId));
             }
             // 切换模型时，重置手部动作
             maid.handItemsForAnimation[0] = ItemStack.EMPTY;

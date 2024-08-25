@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -14,9 +15,7 @@ import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.common.IForgeShearable;
+import net.neoforged.neoforge.common.IShearable;
 
 import java.util.List;
 
@@ -44,8 +43,8 @@ public class MaidShearTask extends MaidCheckRateTask {
         this.getEntities(maid)
                 .find(e -> maid.isWithinRestriction(e.blockPosition()))
                 .filter(Entity::isAlive)
-                .filter(e -> e instanceof IForgeShearable)
-                .filter(e -> ((IForgeShearable) e).isShearable(mainHandItem, maid.level(), e.blockPosition()))
+                .filter(e -> e instanceof IShearable)
+                .filter(e -> ((IShearable) e).isShearable(null, mainHandItem, maid.level(), e.blockPosition()))
                 .filter(maid::canPathReach)
                 .findFirst()
                 .ifPresent(e -> {
@@ -55,9 +54,8 @@ public class MaidShearTask extends MaidCheckRateTask {
 
         if (shearableEntity != null && shearableEntity.closerThan(maid, 2)) {
             RandomSource rand = maid.getRandom();
-            int level = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.BLOCK_FORTUNE, mainHandItem);
-            List<ItemStack> drops = ((IForgeShearable) shearableEntity).onSheared(null, mainHandItem,
-                    maid.level(), shearableEntity.blockPosition(), level);
+            List<ItemStack> drops = ((IShearable) shearableEntity).onSheared(null, mainHandItem,
+                    maid.level(), shearableEntity.blockPosition());
             drops.forEach(stack -> {
                 ItemEntity itemEntity = shearableEntity.spawnAtLocation(stack, 1.0F);
                 if (itemEntity != null) {
@@ -68,7 +66,7 @@ public class MaidShearTask extends MaidCheckRateTask {
                 }
             });
             maid.swing(InteractionHand.MAIN_HAND);
-            mainHandItem.hurtAndBreak(1, maid, (entityMaid) -> entityMaid.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            mainHandItem.hurtAndBreak(1, maid, EquipmentSlot.MAINHAND);
             shearableEntity = null;
         }
     }

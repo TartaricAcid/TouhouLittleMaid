@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -10,9 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -26,20 +24,20 @@ public abstract class TileEntityJoy extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().putUUID(SIT_ID, this.sitId);
-        super.saveAdditional(tag);
+        super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         this.sitId = getPersistentData().getUUID(SIT_ID);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        return this.saveWithoutMetadata(pRegistries);
     }
 
     @Nullable
@@ -56,17 +54,15 @@ public abstract class TileEntityJoy extends BlockEntity {
         }
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition.offset(-2, 0, -2), worldPosition.offset(2, 1, 2));
-    }
-
-    public void setSitId(UUID sitId) {
-        this.sitId = sitId;
+    public BlockPos getWorldPosition() {
+        return this.worldPosition;
     }
 
     public UUID getSitId() {
         return this.sitId;
+    }
+
+    public void setSitId(UUID sitId) {
+        this.sitId = sitId;
     }
 }

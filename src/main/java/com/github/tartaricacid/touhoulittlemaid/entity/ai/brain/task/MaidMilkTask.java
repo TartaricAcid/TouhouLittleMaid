@@ -15,8 +15,8 @@ import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 public class MaidMilkTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 40;
@@ -35,7 +35,7 @@ public class MaidMilkTask extends MaidCheckRateTask {
         if (super.checkExtraStartConditions(worldIn, owner)) {
             CombinedInvWrapper availableInv = owner.getAvailableInv(true);
             return ItemsUtil.isStackIn(availableInv, stack -> stack.getItem() == Items.BUCKET) &&
-                    ItemsUtil.isStackIn(availableInv, stack -> stack == ItemStack.EMPTY);
+                   ItemsUtil.isStackIn(availableInv, stack -> stack == ItemStack.EMPTY);
         }
         return false;
     }

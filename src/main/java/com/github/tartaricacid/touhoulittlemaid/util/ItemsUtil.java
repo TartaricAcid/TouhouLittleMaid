@@ -6,12 +6,12 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHand
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -117,7 +117,7 @@ public final class ItemsUtil {
      * 获取物品Id
      */
     public static String getItemId(Item item) {
-        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+        ResourceLocation key = BuiltInRegistries.ITEM.getKey(item);
         Preconditions.checkNotNull(key);
         return key.toString();
     }
@@ -127,9 +127,8 @@ public final class ItemsUtil {
      * 获取物品
      */
     public static ItemStack getItemStack(String itemId) {
-        ResourceLocation resourceLocation = new ResourceLocation(itemId);
-        Item value = ForgeRegistries.ITEMS.getValue(resourceLocation);
-        Preconditions.checkNotNull(value);
+        ResourceLocation resourceLocation = ResourceLocation.parse(itemId);
+        Item value = BuiltInRegistries.ITEM.get(resourceLocation);
         return new ItemStack(value);
     }
 }

@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.model;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -11,8 +10,8 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class GomokuModel extends EntityModel<Entity> {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(TouhouLittleMaid.MOD_ID, "main"), "gomoku");
+public class GomokuModel extends AbstractModel<Entity> {
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "gomoku");
     private final ModelPart main;
     private final ModelPart blackBox;
     private final ModelPart whiteBox;
@@ -60,9 +59,9 @@ public class GomokuModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        blackBox.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        whiteBox.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        main.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        blackBox.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        whiteBox.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 }

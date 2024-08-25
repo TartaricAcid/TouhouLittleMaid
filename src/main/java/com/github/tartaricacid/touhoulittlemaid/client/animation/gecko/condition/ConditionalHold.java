@@ -2,19 +2,21 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.conditio
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.google.common.collect.Lists;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
 
 public class ConditionalHold {
     private static final String EMPTY_MAINHAND = "hold_mainhand:empty";
@@ -48,16 +50,14 @@ public class ConditionalHold {
             return;
         }
         String substring = name.substring(preSize);
-        if (name.startsWith(idPre) && ResourceLocation.isValidResourceLocation(substring)) {
-            idTest.add(new ResourceLocation(substring));
+        if (name.startsWith(idPre) && isValidResourceLocation(substring)) {
+            idTest.add(ResourceLocation.parse(substring));
         }
-        if (name.startsWith(tagPre) && ResourceLocation.isValidResourceLocation(substring)) {
-            ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-            if (tags == null) {
-                return;
-            }
-            TagKey<Item> tagKey = tags.createTagKey(new ResourceLocation(substring));
-            tagTest.add(tagKey);
+        if (name.startsWith(tagPre) && isValidResourceLocation(substring)) {
+            tagTest.add(TagKey.create(
+                    Registries.ITEM,
+                    ResourceLocation.parse(substring)
+            ));
         }
         if (name.startsWith(extraPre)) {
             if (substring.equals(UseAnim.NONE.name().toLowerCase(Locale.US))) {
@@ -68,8 +68,8 @@ public class ConditionalHold {
         }
     }
 
-	public String doTest(IMaid maid, InteractionHand hand) {
-		if (maid.asEntity().getItemInHand(hand).isEmpty()) {
+    public String doTest(IMaid maid, InteractionHand hand) {
+        if (maid.asEntity().getItemInHand(hand).isEmpty()) {
             return hand == InteractionHand.MAIN_HAND ? EMPTY_MAINHAND : EMPTY_OFFHAND;
         }
         String result = doIdTest(maid, hand);
@@ -83,12 +83,12 @@ public class ConditionalHold {
         return result;
     }
 
-	private String doIdTest(IMaid maid, InteractionHand hand) {
+    private String doIdTest(IMaid maid, InteractionHand hand) {
         if (idTest.isEmpty()) {
             return EMPTY;
         }
-		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
-        ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(itemInHand.getItem());
+        ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
+        ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(itemInHand.getItem());
         if (registryName == null) {
             return EMPTY;
         }
@@ -98,19 +98,15 @@ public class ConditionalHold {
         return EMPTY;
     }
 
-	private String doTagTest(IMaid maid, InteractionHand hand) {
+    private String doTagTest(IMaid maid, InteractionHand hand) {
         if (tagTest.isEmpty()) {
             return EMPTY;
         }
-		ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
-        ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
-        if (tags == null) {
-            return EMPTY;
-        }
+        ItemStack itemInHand = maid.asEntity().getItemInHand(hand);
         return tagTest.stream().filter(itemInHand::is).findFirst().map(itemTagKey -> tagPre + itemTagKey.location()).orElse(EMPTY);
     }
 
-	private String doExtraTest(IMaid maid, InteractionHand hand) {
+    private String doExtraTest(IMaid maid, InteractionHand hand) {
         if (extraTest.isEmpty() && innerTest.isEmpty()) {
             return EMPTY;
         }
@@ -118,7 +114,7 @@ public class ConditionalHold {
         if (StringUtils.isNotBlank(innerName) && this.innerTest.contains(innerName)) {
             return innerName;
         }
-		UseAnim anim = maid.asEntity().getItemInHand(hand).getUseAnimation();
+        UseAnim anim = maid.asEntity().getItemInHand(hand).getUseAnimation();
         if (this.extraTest.contains(anim)) {
             return extraPre + anim.name().toLowerCase(Locale.US);
         }

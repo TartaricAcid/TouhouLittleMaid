@@ -14,9 +14,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -34,7 +34,7 @@ import static com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomP
 import static com.github.tartaricacid.touhoulittlemaid.util.SoundUtil.isRainBiome;
 import static com.github.tartaricacid.touhoulittlemaid.util.SoundUtil.isSnowyBiome;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class ChatBubbleManger {
     private static final Cache<Integer, ChatText> INNER_CHAT_TEXT_CACHE = CacheBuilder.newBuilder().expireAfterWrite(25, TimeUnit.SECONDS).build();
     private static final String DEFAULT_CHAT_BUBBLE_PATH = String.format("/assets/%s/tlm_custom_pack/default_chat_bubble.json", TouhouLittleMaid.MOD_ID);
@@ -77,9 +77,9 @@ public class ChatBubbleManger {
         MaidChatBubbles chatBubble = maid.getChatBubble();
         long minEndTime = -1;
         int index = 1;
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
 
         if (bubble1.getLeft() <= minEndTime) {
             minEndTime = bubble1.getLeft();
@@ -92,19 +92,11 @@ public class ChatBubbleManger {
             index = 3;
         }
 
-        MaidChatBubbles newChatBubble;
-        switch (index) {
-            default:
-            case 1:
-                newChatBubble = new MaidChatBubbles(bubbleItem, bubble2, bubble3);
-                break;
-            case 2:
-                newChatBubble = new MaidChatBubbles(bubble1, bubbleItem, bubble3);
-                break;
-            case 3:
-                newChatBubble = new MaidChatBubbles(bubble1, bubble2, bubbleItem);
-                break;
-        }
+        MaidChatBubbles newChatBubble = switch (index) {
+            default -> new MaidChatBubbles(bubbleItem, bubble2, bubble3);
+            case 2 -> new MaidChatBubbles(bubble1, bubbleItem, bubble3);
+            case 3 -> new MaidChatBubbles(bubble1, bubble2, bubbleItem);
+        };
 
         maid.setChatBubble(newChatBubble);
     }
@@ -112,9 +104,9 @@ public class ChatBubbleManger {
     public static int getChatBubbleCount(EntityMaid maid) {
         int count = 0;
         MaidChatBubbles chatBubble = maid.getChatBubble();
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
         if (bubble1 != EMPTY) {
             count = count + 1;
         }
@@ -155,9 +147,9 @@ public class ChatBubbleManger {
 
     private static void checkTimeoutChatBubble(EntityMaid maid) {
         MaidChatBubbles chatBubble = maid.getChatBubble();
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
         long currentTimeMillis = System.currentTimeMillis();
         if (bubble1 != EMPTY && currentTimeMillis > bubble1.getLeft()) {
             bubble1 = EMPTY;

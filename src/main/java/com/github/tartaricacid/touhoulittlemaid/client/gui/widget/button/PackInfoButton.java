@@ -17,7 +17,7 @@ import net.minecraft.util.Mth;
 import java.util.List;
 
 public class PackInfoButton extends FlatColorButton {
-    private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/download_background.png");
     private final DownloadInfo info;
 
     public PackInfoButton(int pX, int pY, DownloadInfo info, OnPress onPress) {

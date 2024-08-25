@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TaskBoardGames implements IMaidTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "board_games");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "board_games");
 
     @Override
     public ResourceLocation getUid() {

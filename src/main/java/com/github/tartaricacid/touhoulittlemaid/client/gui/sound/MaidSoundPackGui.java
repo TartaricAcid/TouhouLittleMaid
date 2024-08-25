@@ -9,21 +9,22 @@ import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInsta
 import com.github.tartaricacid.touhoulittlemaid.client.sound.pojo.SoundPackInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MaidSoundPackGui extends Screen {
-    private static final ResourceLocation ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_custom_sound.png");
+    private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_custom_sound.png");
     private final int packPerSize = 4;
     private final int soundPerSize = 13;
     private final EntityMaid maid;
@@ -99,7 +100,7 @@ public class MaidSoundPackGui extends Screen {
             ResourceLocation soundEvent = soundIds.get(i);
             this.addRenderableWidget(new SoundElementButton(startX + 245, startY + yOffset, 152, 12, soundEvent, buffers.get(soundEvent), otherColor, (b) -> {
                 SoundElementButton soundButton = (SoundElementButton) b;
-                SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(soundButton.getSoundEvent());
+                SoundEvent event = BuiltInRegistries.SOUND_EVENT.get(soundButton.getSoundEvent());
                 if (minecraft != null && event != null) {
                     minecraft.getSoundManager().play(new MaidSoundInstance(event, this.selectSoundId, this.maid, true));
                 }
@@ -113,7 +114,7 @@ public class MaidSoundPackGui extends Screen {
         this.addRenderableWidget(new FlatColorButton(startX + 245, startY + 19, 110, 18, Component.translatable("gui.touhou_little_maid.custom_sound.pack.apply"), (b) -> {
             if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
                 this.maid.setSoundPackId(this.selectSoundId);
-                NetworkHandler.CHANNEL.sendToServer(new SetMaidSoundIdMessage(this.maid.getId(), this.selectSoundId));
+                PacketDistributor.sendToServer(new SetMaidSoundIdPackage(this.maid.getId(), this.selectSoundId));
                 this.init();
             }
         }));
@@ -195,13 +196,15 @@ public class MaidSoundPackGui extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
         graphics.fill(startX, startY, startX + 240, startY + 220, 0xFF2A2A2A);
         graphics.fill(startX + 242, startY, startX + 400, startY + 220, 0xFF2A2A2A);
         graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.custom_sound.pack.title"), startX + 120, startY + 6, 0xFFFFFF);
         graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.custom_sound.sounds.preview"), startX + 321, startY + 6, 0xFFFFFF);
         graphics.drawCenteredString(font, String.format("%d/%d", packPage + 1, packMaxPage + 1), startX + 120, startY + 206, 0xBBBBBB);
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, pMouseX, pMouseY, pPartialTick);
+        }
         if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
             graphics.drawCenteredString(font, String.format("%d/%d", soundPage + 1, soundMaxPage + 1), startX + 321, startY + 206, 0xBBBBBB);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);

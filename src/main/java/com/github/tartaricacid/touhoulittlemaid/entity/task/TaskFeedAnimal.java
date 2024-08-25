@@ -14,7 +14,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,7 +30,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class TaskFeedAnimal implements IAttackTask {
-    public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "feed_animal");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "feed_animal");
     private static final int MAX_STOP_ATTACK_DISTANCE = 8;
 
     @Override
@@ -103,7 +102,9 @@ public class TaskFeedAnimal implements IAttackTask {
     }
 
     private boolean hasAssaultWeapon(EntityMaid maid) {
-        return maid.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE);
+        return maid.getMainHandItem().getAttributeModifiers().modifiers()
+                .stream()
+                .anyMatch(modifier -> modifier.attribute().is(Attributes.ATTACK_DAMAGE));
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {

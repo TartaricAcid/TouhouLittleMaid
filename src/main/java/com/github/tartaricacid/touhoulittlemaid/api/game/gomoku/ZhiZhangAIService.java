@@ -395,7 +395,7 @@ public class ZhiZhangAIService implements AIService {
     }
 
     @Override
-    public Point getPoint(int[][] chessData, Point point) {
+    public Point getPoint(byte[][] chessData, Point point) {
         initChessData(chessData);
         this.statistics = new Statistics();
         this.ai = 3 - point.type;
@@ -596,7 +596,7 @@ public class ZhiZhangAIService implements AIService {
      *
      * @param chessData 当前棋盘数据
      */
-    private void initChessData(int[][] chessData) {
+    private void initChessData(byte[][] chessData) {
         this.rows = chessData.length;
         this.cols = chessData[0].length;
         this.chessData = new int[this.cols][this.rows];

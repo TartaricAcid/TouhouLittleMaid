@@ -1,0 +1,32 @@
+{
+  "type": "touhou_little_maid:altar_recipe_serializers",
+  "category": "misc",
+  "entity": "minecraft:item",
+  "group": "altar_recipe",
+  "ingredients": [
+    {
+      "tag": "c:rods/wooden"
+    },
+    {
+      "tag": "c:rods/wooden"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:dyes/yellow"
+    },
+    {
+      "tag": "c:dyes/red"
+    }
+  ],
+  "lang": "jei.touhou_little_maid.altar_craft.item_craft.result",
+  "power": 0.2,
+  "result": {
+    "count": 1,
+    "id": "touhou_little_maid:chisel"
+  }
+}

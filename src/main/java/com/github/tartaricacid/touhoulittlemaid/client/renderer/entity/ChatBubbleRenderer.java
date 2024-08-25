@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
+import net.neoforged.neoforge.client.ClientHooks;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 
@@ -37,7 +37,7 @@ public class ChatBubbleRenderer {
 
     public static void renderChatBubble(EntityMaidRenderer renderer, EntityMaid maid, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         double distance = renderer.getDispatcher().distanceToSqr(maid);
-        if (ForgeHooksClient.isNameplateInRenderDistance(maid, distance)) {
+        if (ClientHooks.isNameplateInRenderDistance(maid, distance)) {
             getTmpChatBubbles(maid);
             Font font = renderer.getFont();
 
@@ -154,9 +154,8 @@ public class ChatBubbleRenderer {
 
     private static void renderIcon(int startX, int startY, ResourceLocation iconPath, RenderData data) {
         VertexConsumer iconVertexBuilder = data.buffer.getBuffer(chatBubbleRender(iconPath));
-        AbstractTexture texture = Minecraft.getInstance().textureManager.getTexture(iconPath);
-        if (texture instanceof SizeTexture) {
-            SizeTexture sizeTexture = (SizeTexture) texture;
+        AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(iconPath);
+        if (texture instanceof SizeTexture sizeTexture) {
             int textureHeight = sizeTexture.getHeight();
             int textureWidth = sizeTexture.getWidth();
             int count = textureHeight / (textureWidth / 3);
@@ -181,9 +180,9 @@ public class ChatBubbleRenderer {
 
     private static void getTmpChatBubbles(EntityMaid maid) {
         MaidChatBubbles chatBubble = maid.getChatBubble();
-        Pair<Long, ChatText> bubble1 = chatBubble.getBubble1();
-        Pair<Long, ChatText> bubble2 = chatBubble.getBubble2();
-        Pair<Long, ChatText> bubble3 = chatBubble.getBubble3();
+        Pair<Long, ChatText> bubble1 = chatBubble.bubble1();
+        Pair<Long, ChatText> bubble2 = chatBubble.bubble2();
+        Pair<Long, ChatText> bubble3 = chatBubble.bubble3();
         TMP_CHAT_BUBBLES.clear();
         if (bubble1 != MaidChatBubbles.EMPTY) {
             TMP_CHAT_BUBBLES.add(bubble1);
@@ -209,7 +208,7 @@ public class ChatBubbleRenderer {
         data.matrixStack.pushPose();
         data.matrixStack.translate(0, height, 0);
         data.matrixStack.mulPose(data.renderer.getDispatcher().cameraOrientation());
-        data.matrixStack.scale(-0.025F, -0.025F, 0.025F);
+        data.matrixStack.scale(0.025F, -0.025F, -0.025F);
 
         VertexConsumer vertexBuilder = data.buffer.getBuffer(chatBubbleRender(bg));
         drawBg(data.matrixStack, vertexBuilder, leftStartX, startY, 0.2f, 0, 0);
@@ -259,7 +258,7 @@ public class ChatBubbleRenderer {
     }
 
     private static void vertex(Matrix4f matrix4f, VertexConsumer builder, float x, float y, float z, float u, float v) {
-        builder.vertex(matrix4f, x, y, z).uv(u, v).endVertex();
+        builder.addVertex(matrix4f, x, y, z).setUv(u, v);
     }
 
     private static RenderType chatBubbleRender(ResourceLocation locationIn) {

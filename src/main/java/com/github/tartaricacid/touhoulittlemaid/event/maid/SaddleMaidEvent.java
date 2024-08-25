@@ -7,13 +7,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLLoader;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class SaddleMaidEvent {
     @SubscribeEvent
     public static void onInteract(InteractMaidEvent event) {
@@ -23,8 +23,8 @@ public class SaddleMaidEvent {
         if (stack.is(Items.SADDLE)) {
             if (player.getPassengers().isEmpty() && maid.getPassengers().isEmpty()) {
                 boolean success = maid.startRiding(player);
-                if (success) {
-                    DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> SaddleMaidEvent::showTips);
+                if (success && FMLLoader.getDist() == Dist.CLIENT) {
+                    SaddleMaidEvent.showTips();
                 }
                 event.setCanceled(true);
                 return;

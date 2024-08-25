@@ -2,12 +2,15 @@ package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -17,8 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class EntityDanmaku extends ThrowableProjectile {
     public static final EntityType<EntityDanmaku> TYPE = EntityType.Builder.<EntityDanmaku>of(EntityDanmaku::new, MobCategory.MISC)
@@ -53,11 +54,11 @@ public class EntityDanmaku extends ThrowableProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(DANMAKU_TYPE, DanmakuType.PELLET.ordinal());
-        this.entityData.define(COLOR, DanmakuColor.RED.ordinal());
-        this.entityData.define(DAMAGE, 1.0f);
-        this.entityData.define(GRAVITY, 0.01f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DANMAKU_TYPE, DanmakuType.PELLET.ordinal());
+        builder.define(COLOR, DanmakuColor.RED.ordinal());
+        builder.define(DAMAGE, 1.0f);
+        builder.define(GRAVITY, 0.01f);
     }
 
     @Override
@@ -74,8 +75,7 @@ public class EntityDanmaku extends ThrowableProjectile {
     protected void onHitEntity(EntityHitResult result) {
         Entity thrower = getOwner();
         Entity hit = result.getEntity();
-        if (thrower instanceof TamableAnimal) {
-            TamableAnimal tameable = (TamableAnimal) thrower;
+        if (thrower instanceof TamableAnimal tameable) {
             if (hit instanceof TamableAnimal && hasSameOwner(tameable, (TamableAnimal) hit)) {
                 this.discard();
                 return;
@@ -84,7 +84,7 @@ public class EntityDanmaku extends ThrowableProjectile {
                 this.discard();
                 return;
             }
-            ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(hit.getType());
+            ResourceLocation registryName = BuiltInRegistries.ENTITY_TYPE.getKey(hit.getType());
             if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
                 this.discard();
                 return;
@@ -121,7 +121,7 @@ public class EntityDanmaku extends ThrowableProjectile {
     }
 
     @Override
-    protected float getGravity() {
+    public double getGravity() {
         return this.entityData.get(GRAVITY);
     }
 
@@ -165,10 +165,5 @@ public class EntityDanmaku extends ThrowableProjectile {
     public EntityDanmaku setHurtEnderman(boolean hurtEnderman) {
         this.hurtEnderman = hurtEnderman;
         return this;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

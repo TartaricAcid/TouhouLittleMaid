@@ -21,16 +21,16 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("rawtypes,unchecked")
 public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
+    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private final GeckoEntityMaidRenderer geckoEntityMaidRenderer;
     private MaidModelInfo mainInfo;
@@ -58,7 +58,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         CustomPackLoader.MAID_MODELS.getAnimation(DEFAULT_MODEL_ID).ifPresent(animations -> this.mainAnimations = animations);
 
         MaidModels.ModelData eventModelData = new MaidModels.ModelData(model, mainInfo, mainAnimations);
-        if (MinecraftForge.EVENT_BUS.post(new RenderMaidEvent(maid, eventModelData))) {
+        if (NeoForge.EVENT_BUS.post(new RenderMaidEvent(maid, eventModelData)).isCanceled()) {
             BedrockModel<Mob> bedrockModel = eventModelData.getModel();
             if (bedrockModel != null) {
                 this.model = bedrockModel;
@@ -100,8 +100,8 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     }
 
     @Override
-    protected void setupRotations(Mob mob, PoseStack poseStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks) {
-        super.setupRotations(mob, poseStack, pAgeInTicks, pRotationYaw, pPartialTicks);
+    protected void setupRotations(Mob mob, PoseStack poseStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks, float pScale) {
+        super.setupRotations(mob, poseStack, pAgeInTicks, pRotationYaw, pPartialTicks, pScale);
         if (mob.getVehicle() instanceof Player && !this.mainInfo.isGeckoModel()) {
             poseStack.translate(-0.375, 0.8325, 0.375);
             poseStack.mulPose(Axis.ZN.rotationDegrees(65));

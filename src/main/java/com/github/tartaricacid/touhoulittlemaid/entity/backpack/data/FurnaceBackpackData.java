@@ -6,18 +6,13 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
 
@@ -29,9 +24,10 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     private int litDuration;
     private int cookingProgress;
     private int cookingTotalTime;
-    private final RecipeManager.CachedCheck<Container, SmeltingRecipe> quickCheck;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> quickCheck;
     private final Level level;
     private final ContainerData dataAccess = new ContainerData() {
+        @Override
         public int get(int index) {
             return switch (index) {
                 case 0 -> FurnaceBackpackData.this.litTime;
@@ -42,6 +38,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
             };
         }
 
+        @Override
         public void set(int index, int value) {
             switch (index) {
                 case 0 -> FurnaceBackpackData.this.litTime = value;
@@ -51,6 +48,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
             }
         }
 
+        @Override
         public int getCount() {
             return 4;
         }
@@ -73,7 +71,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         this.cookingProgress = tag.getInt("CookTime");
         this.cookingTotalTime = tag.getInt("CookTimeTotal");
         this.litDuration = this.getBurnDuration(this.getItem(FUEL_INDEX));
-        this.fromTag(tag.getList("Items", Tag.TAG_COMPOUND));
+        this.fromTag(tag.getList("Items", Tag.TAG_COMPOUND), this.level.registryAccess());
     }
 
     @Override
@@ -81,7 +79,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         tag.putInt("BurnTime", this.litTime);
         tag.putInt("CookTime", this.cookingProgress);
         tag.putInt("CookTimeTotal", this.cookingTotalTime);
-        tag.put("Items", this.createTag());
+        tag.put("Items", this.createTag(this.level.registryAccess()));
     }
 
     @Override
@@ -98,11 +96,9 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         // 要么正在燃烧，要么具备燃烧条件
         if (this.isLit() || readyForLit) {
             // 从缓存中获取配方
-            SmeltingRecipe recipe;
+            SmeltingRecipe recipe = null;
             if (inputNotEmpty) {
-                recipe = this.quickCheck.getRecipeFor(this, level).orElse(null);
-            } else {
-                recipe = null;
+                recipe = this.quickCheck.getRecipeFor(new SingleRecipeInput(this.getItem(INPUT_INDEX)), level).map(RecipeHolder::value).orElse(null);
             }
 
             int maxStackSize = this.getMaxStackSize();
@@ -152,7 +148,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack slotItem = this.getItem(index);
-        boolean isSameItem = !stack.isEmpty() && ItemStack.isSameItemSameTags(slotItem, stack);
+        boolean isSameItem = !stack.isEmpty() && ItemStack.isSameItemSameComponents(slotItem, stack);
         super.setItem(index, stack);
         if (index == 0 && !isSameItem) {
             this.cookingTotalTime = getTotalCookTime(this.level);
@@ -177,7 +173,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         if (fuel.isEmpty()) {
             return 0;
         } else {
-            return ForgeHooks.getBurnTime(fuel, RecipeType.SMELTING);
+            return fuel.getBurnTime(RecipeType.SMELTING);
         }
     }
 
@@ -185,7 +181,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
         // 先检查输入物品和配方
         if (!container.getItem(INPUT_INDEX).isEmpty() && recipe != null) {
             // 先检查配方结果
-            ItemStack result = recipe.assemble(this, access);
+            ItemStack result = recipe.assemble(new SingleRecipeInput(this.getItem(INPUT_INDEX)), access);
             // 没结果，不能燃烧
             if (result.isEmpty()) {
                 return false;
@@ -214,7 +210,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     private boolean burn(RegistryAccess access, @Nullable SmeltingRecipe recipe, SimpleContainer container, int maxStackSize) {
         if (recipe != null && this.canBurn(access, recipe, container, maxStackSize)) {
             ItemStack input = container.getItem(INPUT_INDEX);
-            ItemStack result = recipe.assemble(this, access);
+            ItemStack result = recipe.assemble(new SingleRecipeInput(this.getItem(INPUT_INDEX)), access);
             ItemStack output = container.getItem(OUTPUT_INDEX);
             // 如果输出栏为空
             if (output.isEmpty()) {
@@ -236,6 +232,7 @@ public class FurnaceBackpackData extends SimpleContainer implements IBackpackDat
     }
 
     private int getTotalCookTime(Level level) {
-        return quickCheck.getRecipeFor(this, level).map(AbstractCookingRecipe::getCookingTime).orElse(200);
+        return quickCheck.getRecipeFor(new SingleRecipeInput(this.getItem(INPUT_INDEX)), level).map(recipeHolder ->
+                recipeHolder.value().getCookingTime()).orElse(200);
     }
 }

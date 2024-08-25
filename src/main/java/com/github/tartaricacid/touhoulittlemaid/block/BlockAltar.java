@@ -1,11 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
-import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.PosListData;
 import net.minecraft.client.Minecraft;
@@ -19,10 +18,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -38,20 +38,80 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble.RANDOM;
 
 
 public class BlockAltar extends Block implements EntityBlock {
+    public static final IClientBlockExtensions CLIENT_BLOCK_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT ? new IClientBlockExtensions() {
+        @Override
+        public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
+            if (target instanceof BlockHitResult blockTarget && world instanceof ClientLevel clientLevel) {
+                BlockPos pos = blockTarget.getBlockPos();
+                this.getAltar(world, pos).ifPresent(altar -> this.crack(clientLevel, pos, altar.getStorageState(), blockTarget.getDirection()));
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addDestroyEffects(BlockState state, Level world, BlockPos pos, ParticleEngine manager) {
+            this.getAltar(world, pos).ifPresent(altar -> Minecraft.getInstance().particleEngine.destroy(pos, altar.getStorageState()));
+            return true;
+        }
+
+        private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
+            BlockEntity te = world.getBlockEntity(pos);
+            if (te instanceof TileEntityAltar) {
+                return Optional.of((TileEntityAltar) te);
+            }
+            return Optional.empty();
+        }
+
+        @OnlyIn(Dist.CLIENT)
+        private void crack(ClientLevel world, BlockPos pos, BlockState state, Direction side) {
+            if (state.getRenderShape() != RenderShape.INVISIBLE) {
+                int posX = pos.getX();
+                int posY = pos.getY();
+                int posZ = pos.getZ();
+                AABB aabb = state.getShape(world, pos).bounds();
+                double x = posX + world.random.nextDouble() * (aabb.maxX - aabb.minX - 0.2) + 0.1 + aabb.minX;
+                double y = posY + world.random.nextDouble() * (aabb.maxY - aabb.minY - 0.2) + 0.1 + aabb.minY;
+                double z = posZ + world.random.nextDouble() * (aabb.maxZ - aabb.minZ - 0.2) + 0.1 + aabb.minZ;
+                if (side == Direction.DOWN) {
+                    y = posY + aabb.minY - 0.1;
+                }
+                if (side == Direction.UP) {
+                    y = posY + aabb.maxY + 0.1;
+                }
+                if (side == Direction.NORTH) {
+                    z = posZ + aabb.minZ - 0.1;
+                }
+                if (side == Direction.SOUTH) {
+                    z = posZ + aabb.maxZ + 0.1;
+                }
+                if (side == Direction.WEST) {
+                    x = posX + aabb.minX - 0.1;
+                }
+                if (side == Direction.EAST) {
+                    x = posX + aabb.maxX + 0.1;
+                }
+                TerrainParticle diggingParticle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
+                Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
+            }
+        }
+    } : null;
+
     public BlockAltar() {
         super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
     }
@@ -63,7 +123,7 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         return this.getAltar(worldIn, pos).filter(altar -> handIn == InteractionHand.MAIN_HAND).map(altar -> {
             if (player.isShiftKeyDown() || player.getMainHandItem().isEmpty()) {
                 takeOutItem(worldIn, altar, player);
@@ -71,8 +131,8 @@ public class BlockAltar extends Block implements EntityBlock {
                 takeInOrCraft(worldIn, altar, player);
             }
             altar.refresh();
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
-        }).orElse(super.use(state, worldIn, pos, player, handIn, hit));
+            return ItemInteractionResult.sidedSuccess(worldIn.isClientSide);
+        }).orElse(super.useItemOn(itemStack, state, worldIn, pos, player, handIn, hit));
     }
 
     @Override
@@ -97,7 +157,7 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide) {
             this.getAltar(worldIn, pos).ifPresent(altar -> {
                 this.restoreStorageBlock(worldIn, pos, altar.getBlockPosList());
@@ -107,77 +167,14 @@ public class BlockAltar extends Block implements EntityBlock {
                 }
             });
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(@NotNull BlockState state, @NotNull HitResult target, @NotNull LevelReader world, @NotNull BlockPos pos, @NotNull Player player) {
         return this.getAltar(world, pos)
                 .map(altar -> new ItemStack(altar.getStorageState().getBlock()))
                 .orElse(super.getCloneItemStack(state, target, world, pos, player));
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
-        consumer.accept(new IClientBlockExtensions() {
-            @Override
-            public boolean addHitEffects(BlockState state, Level world, HitResult target, ParticleEngine manager) {
-                if (target instanceof BlockHitResult && world instanceof ClientLevel) {
-                    BlockHitResult blockTarget = (BlockHitResult) target;
-                    BlockPos pos = blockTarget.getBlockPos();
-                    ClientLevel clientLevel = (ClientLevel) world;
-                    this.getAltar(world, pos).ifPresent(altar -> this.crack(clientLevel, pos, altar.getStorageState(), blockTarget.getDirection()));
-                }
-                return true;
-            }
-
-            @Override
-            public boolean addDestroyEffects(BlockState state, Level world, BlockPos pos, ParticleEngine manager) {
-                this.getAltar(world, pos).ifPresent(altar -> Minecraft.getInstance().particleEngine.destroy(pos, altar.getStorageState()));
-                return true;
-            }
-
-            private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
-                BlockEntity te = world.getBlockEntity(pos);
-                if (te instanceof TileEntityAltar) {
-                    return Optional.of((TileEntityAltar) te);
-                }
-                return Optional.empty();
-            }
-
-            @OnlyIn(Dist.CLIENT)
-            private void crack(ClientLevel world, BlockPos pos, BlockState state, Direction side) {
-                if (state.getRenderShape() != RenderShape.INVISIBLE) {
-                    int posX = pos.getX();
-                    int posY = pos.getY();
-                    int posZ = pos.getZ();
-                    AABB aabb = state.getShape(world, pos).bounds();
-                    double x = posX + world.random.nextDouble() * (aabb.maxX - aabb.minX - 0.2) + 0.1 + aabb.minX;
-                    double y = posY + world.random.nextDouble() * (aabb.maxY - aabb.minY - 0.2) + 0.1 + aabb.minY;
-                    double z = posZ + world.random.nextDouble() * (aabb.maxZ - aabb.minZ - 0.2) + 0.1 + aabb.minZ;
-                    if (side == Direction.DOWN) {
-                        y = posY + aabb.minY - 0.1;
-                    }
-                    if (side == Direction.UP) {
-                        y = posY + aabb.maxY + 0.1;
-                    }
-                    if (side == Direction.NORTH) {
-                        z = posZ + aabb.minZ - 0.1;
-                    }
-                    if (side == Direction.SOUTH) {
-                        z = posZ + aabb.maxZ + 0.1;
-                    }
-                    if (side == Direction.WEST) {
-                        x = posX + aabb.minX - 0.1;
-                    }
-                    if (side == Direction.EAST) {
-                        x = posX + aabb.maxX + 0.1;
-                    }
-                    TerrainParticle diggingParticle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
-                    Minecraft.getInstance().particleEngine.add(diggingParticle.updateSprite(state, pos).setPower(0.2f).scale(0.6f));
-                }
-            }
-        });
     }
 
     @Override
@@ -194,7 +191,7 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
     }
 
@@ -219,7 +216,7 @@ public class BlockAltar extends Block implements EntityBlock {
 
     private void takeInOrCraft(Level world, TileEntityAltar altar, Player playerIn) {
         if (altar.isCanPlaceItem() && altar.handler.getStackInSlot(0).isEmpty()) {
-            altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(playerIn.getMainHandItem(), 1));
+            altar.handler.setStackInSlot(0, playerIn.getMainHandItem().copyWithCount(1));
             if (!playerIn.isCreative()) {
                 playerIn.getMainHandItem().shrink(1);
             }
@@ -228,20 +225,21 @@ public class BlockAltar extends Block implements EntityBlock {
     }
 
     private void altarCraft(Level world, TileEntityAltar altar, Player playerIn) {
-        final AltarRecipeInventory inv = new AltarRecipeInventory();
+        List<ItemStack> arrayList = new ArrayList<>();
         List<BlockPos> posList = altar.getCanPlaceItemPosList().getData();
         for (int i = 0; i < posList.size(); i++) {
             BlockEntity te = world.getBlockEntity(posList.get(i));
             if (te instanceof TileEntityAltar) {
-                inv.setItem(i, ((TileEntityAltar) te).getStorageItem());
+                arrayList.add(i, ((TileEntityAltar) te).getStorageItem());
             }
         }
-        if (inv.isEmpty()) {
+        if (arrayList.isEmpty()) {
             return;
         }
-        playerIn.getCapability(PowerCapabilityProvider.POWER_CAP, null)
-                .ifPresent(power -> world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING, inv, world)
-                        .ifPresent(recipe -> spawnResultEntity(world, playerIn, power, recipe, inv, altar)));
+        CraftingInput craftingInput = CraftingInput.of(6, 1, arrayList);
+        PowerAttachment powerAttachment = playerIn.getData(InitDataAttachment.POWER_NUM);
+        world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), craftingInput, world)
+                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), arrayList, altar));
     }
 
     private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
@@ -252,10 +250,11 @@ public class BlockAltar extends Block implements EntityBlock {
         return Optional.empty();
     }
 
-    private void spawnResultEntity(Level world, Player playerIn, PowerCapability power,
-                                   AltarRecipe altarRecipe, AltarRecipeInventory inventory, TileEntityAltar altar) {
-        if (power.get() >= altarRecipe.getPowerCost()) {
-            power.min(altarRecipe.getPowerCost());
+    private void spawnResultEntity(Level world, Player playerIn, PowerAttachment power,
+                                   AltarRecipe altarRecipe, List<ItemStack> inventory, TileEntityAltar altar) {
+        if (power.get() >= altarRecipe.getPower()) {
+            power.min(altarRecipe.getPower());
+            playerIn.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(power.get()));
             BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getBlockPos());
             if (world instanceof ServerLevel) {
                 altarRecipe.spawnOutputEntity((ServerLevel) world, centrePos.above(2), inventory);

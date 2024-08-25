@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, BedrockModel<EntityChair>> {
-    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
+    public static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_CHAIR_ID = "touhou_little_maid:cushion";
     public static boolean renderHitBox = true;
     private ChairModelInfo chairInfo;
@@ -72,6 +72,7 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
         // GeckoLib 接管渲染
         if (this.chairInfo.isGeckoModel()) {
             this.geckoEntityChairRenderer.setMainInfo(this.chairInfo);
+            this.geckoEntityChairRenderer.getAnimatableEntity(chair).setChair(this.chairInfo);
             this.geckoEntityChairRenderer.render(chair, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;
         }
@@ -99,7 +100,7 @@ public class EntityChairRenderer extends LivingEntityRenderer<EntityChair, Bedro
     }
 
     @Override
-    protected void setupRotations(EntityChair chair, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {
+    protected void setupRotations(EntityChair chair, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, float pScale) {
         poseStack.mulPose(Axis.YP.rotationDegrees(180 - rotationYaw));
     }
 

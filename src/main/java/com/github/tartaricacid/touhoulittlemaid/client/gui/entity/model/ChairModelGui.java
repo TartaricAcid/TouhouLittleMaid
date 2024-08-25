@@ -4,14 +4,14 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.ChairMo
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -28,7 +28,19 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     @Override
     protected void drawLeftEntity(GuiGraphics graphics, int middleX, int middleY, float mouseX, float mouseY) {
         float renderItemScale = CustomPackLoader.CHAIR_MODELS.getModelRenderItemScale(entity.getModelId());
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, (middleX - 256 / 2) / 2, middleY + 80, (int) (45 * renderItemScale), -25, -20, entity);
+        int centerX = (middleX - 256 / 2) / 2;
+        int centerY = middleY + 80;
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                centerX - 68,
+                centerY - 100,
+                centerX + 68,
+                centerY + 80,
+                (int) (45 * renderItemScale),
+                0F,
+                centerX + 25,
+                centerY + 5,
+                entity);
     }
 
     @Override
@@ -54,7 +66,17 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
         }
 
         chair.setModelId(modelItem.getModelId().toString());
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, chair);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                posX - 18,
+                posY - 30,
+                posX + 18,
+                posY + 18,
+                (int) (12 * modelItem.getRenderItemScale()),
+                0F,
+                posX + 25,
+                posY + 5,
+                chair);
     }
 
     @Override
@@ -66,7 +88,7 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
 
     @Override
     protected void notifyModelChange(EntityChair entity, ChairModelInfo modelInfo) {
-        NetworkHandler.CHANNEL.sendToServer(new ChairModelMessage(entity.getId(), modelInfo.getModelId(), modelInfo.getMountedYOffset(),
+        PacketDistributor.sendToServer(new ChairModelPackage(entity.getId(), modelInfo.getModelId(), modelInfo.getMountedYOffset(),
                 modelInfo.isTameableCanRide(), modelInfo.isNoGravity()));
     }
 

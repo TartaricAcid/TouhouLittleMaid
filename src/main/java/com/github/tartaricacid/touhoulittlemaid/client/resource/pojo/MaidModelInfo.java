@@ -207,10 +207,10 @@ public class MaidModelInfo implements IModelInfo {
         }
         // 如果 model 或 texture 为空，自动生成默认位置的模型
         if (model == null) {
-            model = new ResourceLocation(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
+            model = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(), "models/entity/" + modelId.getPath() + ".json");
         }
         if (texture == null) {
-            texture = new ResourceLocation(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
+            texture = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(), "textures/entity/" + modelId.getPath() + ".png");
         }
         // 彩蛋
         if (easterEgg != null) {
@@ -233,21 +233,21 @@ public class MaidModelInfo implements IModelInfo {
         } else {
             if (animation == null || animation.isEmpty()) {
                 animation = Lists.newArrayList(
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/blink.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/music_shake.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/leg/default.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/default.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/swing.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/vertical.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/sit/default.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/armor/default.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/armor/reverse.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/wing/default.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/tail/default.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid/default/sit/skirt_rotation.js"),
-                        new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/base/float/default.js")
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/default.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/blink.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/beg.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/head/music_shake.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/leg/default.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/default.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/swing.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/arm/vertical.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/sit/default.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/armor/default.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/armor/reverse.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/wing/default.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/tail/default.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid/default/sit/skirt_rotation.js"),
+                        ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/base/float/default.js")
                 );
             }
         }

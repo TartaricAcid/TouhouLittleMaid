@@ -3,7 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.Color;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.*;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoCube;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoQuad;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoVertex;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.EModelRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.IRenderCycle;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
@@ -110,8 +112,8 @@ public interface IGeoRenderer<T> {
         var position = new Vector3f();
         for (GeoVertex vertex : quad.vertices) {
             vertex.position.mulPosition(poseState, position);
-            buffer.vertex(position.x(), position.y(), position.z(), red, green, blue, alpha, vertex.textureU,
-                    vertex.textureV, packedOverlay, packedLight, normal.x(), normal.y(), normal.z());
+            buffer.addVertex(position.x(), position.y(), position.z()).setColor(red, green, blue, alpha).setUv(vertex.textureU, vertex.textureV)
+                    .setOverlay(packedOverlay).setLight(packedLight).setNormal(normal.x(), normal.y(), normal.z());
         }
     }
 

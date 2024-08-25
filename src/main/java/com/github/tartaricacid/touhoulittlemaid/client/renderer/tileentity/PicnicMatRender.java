@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockPicnicMat;
 import com.github.tartaricacid.touhoulittlemaid.client.model.PicnicMatModel;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -16,9 +17,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_mat.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_mat.png");
     private final PicnicMatModel model;
     private final BlockEntityRendererProvider.Context context;
 
@@ -80,5 +82,10 @@ public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat>
     @Override
     public boolean shouldRenderOffScreen(TileEntityPicnicMat te) {
         return true;
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(TileEntityPicnicMat te) {
+        return RenderHelper.getAABB(te.getWorldPosition().offset(-3, 0, -3), te.getWorldPosition().offset(3, 1, 3));
     }
 }

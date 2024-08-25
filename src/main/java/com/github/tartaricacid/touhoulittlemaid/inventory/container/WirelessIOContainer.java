@@ -10,21 +10,21 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class WirelessIOContainer extends AbstractContainerMenu {
-    public static final MenuType<WirelessIOContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new WirelessIOContainer(windowId, inv, data.readItem()));
+    public static final MenuType<WirelessIOContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new WirelessIOContainer(windowId, inv, ItemStack.STREAM_CODEC.decode(data)));
     private final ItemStack wirelessIO;
     private final ItemStackHandler filterListInv;
 
     public WirelessIOContainer(int id, Inventory inventory, ItemStack wirelessIO) {
         super(TYPE, id);
         this.wirelessIO = wirelessIO;
-        this.filterListInv = ItemWirelessIO.getFilterList(wirelessIO);
+        this.filterListInv = ItemWirelessIO.getFilterList(inventory.player.registryAccess(), wirelessIO);
         this.addPlayerSlots(inventory);
         this.addWirelessIOSlots();
     }
@@ -44,7 +44,7 @@ public class WirelessIOContainer extends AbstractContainerMenu {
             return;
         }
         super.clicked(slotId, button, clickTypeIn, player);
-        ItemWirelessIO.setFilterList(wirelessIO, filterListInv);
+        ItemWirelessIO.setFilterList(player.registryAccess(), wirelessIO, filterListInv);
     }
 
     private void addWirelessIOSlots() {

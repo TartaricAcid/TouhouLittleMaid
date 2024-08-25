@@ -1,14 +1,15 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SetScrollData;
+import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SetScrollPackage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -17,13 +18,13 @@ import java.util.Map;
 
 public class FoxScrollScreen extends Screen {
     private static final int PER_PAGE_COUNT = 5;
-    private final Map<String, List<FoxScrollMessage.FoxScrollData>> data;
+    private final Map<String, List<FoxScrollPackage.FoxScrollData>> data;
     private int leftPos;
     private int topPos;
     private String selectDim;
     private int page = 0;
 
-    public FoxScrollScreen(Map<String, List<FoxScrollMessage.FoxScrollData>> data) {
+    public FoxScrollScreen(Map<String, List<FoxScrollPackage.FoxScrollData>> data) {
         super(Component.literal("Red Fox Scroll"));
         this.data = data;
         if (!this.data.isEmpty()) {
@@ -42,7 +43,7 @@ public class FoxScrollScreen extends Screen {
 
     private void addPointButtons() {
         if (StringUtils.isNotBlank(this.selectDim) && this.data.containsKey(this.selectDim)) {
-            List<FoxScrollMessage.FoxScrollData> scrollData = this.data.get(this.selectDim);
+            List<FoxScrollPackage.FoxScrollData> scrollData = this.data.get(this.selectDim);
             if (scrollData.size() > PER_PAGE_COUNT) {
                 addRenderableWidget(new FlatColorButton(leftPos + 400 - 20, topPos, 20, 20, Component.literal("↑"), b -> {
                     if (this.page > 0) {
@@ -60,10 +61,9 @@ public class FoxScrollScreen extends Screen {
             int offsetIn = this.topPos;
             for (int i = this.page * PER_PAGE_COUNT; i < this.page * PER_PAGE_COUNT + PER_PAGE_COUNT; i++) {
                 if (i < scrollData.size()) {
-                    FoxScrollMessage.FoxScrollData info = scrollData.get(i);
-                    this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.fox_scroll.track"), b -> {
-                        NetworkHandler.CHANNEL.sendToServer(new SetScrollData(this.selectDim, info.getPos()));
-                    }));
+                    FoxScrollPackage.FoxScrollData info = scrollData.get(i);
+                    this.addRenderableWidget(new FlatColorButton(leftPos + 400 - 90, offsetIn + 11, 60, 20, Component.translatable("gui.touhou_little_maid.fox_scroll.track"),
+                            b -> PacketDistributor.sendToServer(new SetScrollPackage(this.selectDim, info.pos()))));
                     offsetIn = offsetIn + 42;
                 }
             }
@@ -89,7 +89,7 @@ public class FoxScrollScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
         if (this.data.isEmpty()) {
             int x = this.width / 2;
             int y = this.height / 2 - 5;
@@ -97,19 +97,21 @@ public class FoxScrollScreen extends Screen {
             return;
         }
         this.renderMain(graphics);
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, pMouseX, pMouseY, pPartialTick);
+        }
     }
 
     private void renderMain(GuiGraphics graphics) {
         if (StringUtils.isNotBlank(this.selectDim) && this.data.containsKey(this.selectDim)) {
-            List<FoxScrollMessage.FoxScrollData> scrollData = this.data.get(this.selectDim);
+            List<FoxScrollPackage.FoxScrollData> scrollData = this.data.get(this.selectDim);
             boolean inSameDim = this.selectDim.equals(this.getPlayerDimension());
             BlockPos playerPos = this.getPlayerPos();
             int offsetIn = this.topPos;
             for (int i = this.page * PER_PAGE_COUNT; i < this.page * PER_PAGE_COUNT + PER_PAGE_COUNT; i++) {
                 if (i < scrollData.size()) {
-                    FoxScrollMessage.FoxScrollData info = scrollData.get(i);
-                    BlockPos pos = info.getPos();
+                    FoxScrollPackage.FoxScrollData info = scrollData.get(i);
+                    BlockPos pos = info.pos();
                     Component distanceText;
                     if (inSameDim) {
                         int distance = (int) Math.sqrt(playerPos.distSqr(pos));
@@ -119,7 +121,7 @@ public class FoxScrollScreen extends Screen {
                     }
                     Component posText = Component.translatable("gui.touhou_little_maid.fox_scroll.position", pos.toShortString());
                     graphics.fill(leftPos + 152, offsetIn, leftPos + 400 - 22, offsetIn + 40, 0xef58626b);
-                    graphics.drawString(font, info.getName(), leftPos + 160, offsetIn + 4, ChatFormatting.GOLD.getColor());
+                    graphics.drawString(font, info.name(), leftPos + 160, offsetIn + 4, ChatFormatting.GOLD.getColor());
                     graphics.drawString(font, posText, leftPos + 160, offsetIn + 16, ChatFormatting.GRAY.getColor(), false);
                     graphics.drawString(font, distanceText, leftPos + 160, offsetIn + 28, ChatFormatting.GRAY.getColor(), false);
                     offsetIn = offsetIn + 42;

@@ -4,17 +4,18 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.network.NetworkHooks;
 
 public class EntityThrowPowerPoint extends ThrowableItemProjectile {
     public static final EntityType<EntityThrowPowerPoint> TYPE = EntityType.Builder.<EntityThrowPowerPoint>of(EntityThrowPowerPoint::new, MobCategory.MISC)
@@ -38,7 +39,7 @@ public class EntityThrowPowerPoint extends ThrowableItemProjectile {
     }
 
     @Override
-    protected float getGravity() {
+    public double getGravity() {
         return 0.07F;
     }
 
@@ -46,7 +47,7 @@ public class EntityThrowPowerPoint extends ThrowableItemProjectile {
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level.isClientSide) {
-            this.level.levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, this.blockPosition(), PotionUtils.getColor(Potions.HEALING));
+            this.level.levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, this.blockPosition(), PotionContents.getColor(Potions.HEALING));
             int count = 30 + this.level.random.nextInt(30) + this.level.random.nextInt(30);
             while (count > 0) {
                 int value = EntityPowerPoint.getPowerValue(count);
@@ -55,10 +56,5 @@ public class EntityThrowPowerPoint extends ThrowableItemProjectile {
             }
             this.discard();
         }
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

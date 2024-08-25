@@ -16,14 +16,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import java.util.List;
 
 public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
-    private static final ResourceLocation GECKO_DEFAULT_ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "fox_miko");
-    private static final ResourceLocation GECKO_DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static final AttachmentType<GeckoMaidEntity> TYPE = AttachmentType.builder(holder -> {
+        if (holder instanceof Mob mob) {
+            IMaid maid = IMaid.convert((Mob) holder);
+            if (maid != null) {
+                return new GeckoMaidEntity(mob, maid);
+            }
+        }
+        throw new IllegalArgumentException();
+    }).build();
+
+    private static final ResourceLocation GECKO_DEFAULT_ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "fox_miko");
+    private static final ResourceLocation GECKO_DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final int FPS = 60;
 
     private final IMaid maid;
@@ -61,7 +73,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
             addAnimationController(new AnimationController<>(this, controllerName, 0, e -> manager.predicateParallel(e, animationName)));
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+            if (slot.getType() == EquipmentSlot.Type.ANIMAL_ARMOR) {
                 String controllerName = String.format("%s_controller", slot.getName());
                 addAnimationController(new AnimationController<>(this, controllerName, 0, e -> manager.predicateArmor(e, slot)));
             }
@@ -154,10 +166,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
         }
 
         public boolean compareState() {
-            if (this.yHeadRot != this.maid.yHeadRot || this.yBodyRot != this.maid.yBodyRot) {
-                return false;
-            }
-            return true;
+            return this.yHeadRot == this.maid.yHeadRot && this.yBodyRot == this.maid.yBodyRot;
         }
 
         public void updateState() {

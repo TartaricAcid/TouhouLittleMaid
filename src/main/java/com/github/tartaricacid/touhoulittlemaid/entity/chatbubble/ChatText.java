@@ -5,16 +5,30 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Type;
 
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.isValidResourceLocation;
+
 public final class ChatText {
-    public static final ResourceLocation EMPTY_ICON_PATH = new ResourceLocation(TouhouLittleMaid.MOD_ID, "empty");
+
+    public static final ResourceLocation EMPTY_ICON_PATH = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "empty");
     public static final ChatText EMPTY_CHAT_TEXT = new ChatText(ChatTextType.EMPTY, EMPTY_ICON_PATH, StringUtils.EMPTY);
+    public static final StreamCodec<ByteBuf, ChatText> STREAM_CODEC = StreamCodec.composite(
+            ChatTextType.STREAM_CODEC,
+            ChatText::getType,
+            ResourceLocation.STREAM_CODEC,
+            ChatText::getIconPath,
+            ByteBufCodecs.STRING_UTF8,
+            ChatText::getText,
+            ChatText::new
+    );
     private static final String ICON_IDENTIFIER_CHAR = "%";
 
     private final ChatTextType type;
@@ -25,19 +39,6 @@ public final class ChatText {
         this.type = type;
         this.iconPath = iconPath;
         this.text = text;
-    }
-
-    public static void toBuff(ChatText chatText, FriendlyByteBuf buf) {
-        buf.writeEnum(chatText.type);
-        buf.writeResourceLocation(chatText.iconPath);
-        buf.writeUtf(chatText.text);
-    }
-
-    public static ChatText fromBuff(FriendlyByteBuf buf) {
-        ChatTextType type = buf.readEnum(ChatTextType.class);
-        ResourceLocation iconPath = buf.readResourceLocation();
-        String text = buf.readUtf();
-        return new ChatText(type, iconPath, text);
     }
 
     public boolean isText() {
@@ -56,14 +57,17 @@ public final class ChatText {
         return text;
     }
 
+    public ChatTextType getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (!(obj instanceof ChatText)) {
+        } else if (!(obj instanceof ChatText chatText)) {
             return false;
         } else {
-            ChatText chatText = (ChatText) obj;
             return type.equals(chatText.type) && iconPath.equals(chatText.iconPath) && text.equals(chatText.text);
         }
     }
@@ -78,8 +82,8 @@ public final class ChatText {
 
             if (text.startsWith(ICON_IDENTIFIER_CHAR) && text.endsWith(ICON_IDENTIFIER_CHAR)) {
                 String substring = text.substring(1, text.length() - 1);
-                if (ResourceLocation.isValidResourceLocation(substring)) {
-                    return new ChatText(ChatTextType.ICON, new ResourceLocation(substring), StringUtils.EMPTY);
+                if (isValidResourceLocation(substring)) {
+                    return new ChatText(ChatTextType.ICON, ResourceLocation.parse(substring), StringUtils.EMPTY);
                 }
                 return EMPTY_CHAT_TEXT;
             }

@@ -77,11 +77,11 @@ public class MaidEmiPlugin implements EmiPlugin {
         }));
     }
 
-    private void registerInfoRecipe(EmiRegistry registry){
+    private void registerInfoRecipe(EmiRegistry registry) {
         registry.addRecipe(getInfoRecipe(InitItems.GARAGE_KIT.get(), Component.translatable("jei.touhou_little_maid.garage_kit.info")));
     }
 
-    private EmiInfoRecipe getInfoRecipe(Item item, Component component){
+    private EmiInfoRecipe getInfoRecipe(Item item, Component component) {
         return new EmiInfoRecipe(List.of(EmiStack.of(item)), List.of(component), null);
     }
 

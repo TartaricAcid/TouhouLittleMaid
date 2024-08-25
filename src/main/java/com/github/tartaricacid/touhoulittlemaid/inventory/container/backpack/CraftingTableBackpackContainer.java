@@ -8,17 +8,19 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import java.util.Optional;
 
 public class CraftingTableBackpackContainer extends MaidMainContainer {
-    public static final MenuType<CraftingTableBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new CraftingTableBackpackContainer(windowId, inv, data.readInt()));
+    public static final MenuType<CraftingTableBackpackContainer> TYPE = IMenuTypeExtension.create((windowId, inv, data) -> new CraftingTableBackpackContainer(windowId, inv, data.readInt()));
     private final CraftingContainer craftSlots = new TransientCraftingContainer(this, 3, 3);
     private final ResultContainer resultSlots = new ResultContainer();
     private final ContainerLevelAccess access;
@@ -109,11 +111,11 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
         if (!level.isClientSide && level.getServer() != null) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
             ItemStack stack1 = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container, level);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container.asCraftInput(), level);
             if (optional.isPresent()) {
-                CraftingRecipe recipe = optional.get();
+                RecipeHolder<CraftingRecipe> recipe = optional.get();
                 if (result.setRecipeUsed(level, serverPlayer, recipe)) {
-                    ItemStack stack2 = recipe.assemble(container, level.registryAccess());
+                    ItemStack stack2 = recipe.value().assemble(CraftingInput.of(3, 3, this.getItems()), level.registryAccess());
                     if (stack2.isItemEnabled(level.enabledFeatures())) {
                         stack1 = stack2;
                     }

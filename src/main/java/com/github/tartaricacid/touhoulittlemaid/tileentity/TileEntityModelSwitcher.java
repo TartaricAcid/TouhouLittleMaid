@@ -2,13 +2,17 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.google.common.collect.Lists;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -23,8 +27,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class TileEntityModelSwitcher extends BlockEntity {
-    public static final String INFO_LIST = "info_list";
     public static final BlockEntityType<TileEntityModelSwitcher> TYPE = BlockEntityType.Builder.of(TileEntityModelSwitcher::new, InitBlocks.MODEL_SWITCHER.get()).build(null);
+    public static final String INFO_LIST = "info_list";
     public static final String ENTITY_UUID = "entity_uuid";
     public static final String LIST_INDEX = "list_index";
     private List<ModeInfo> infoList = Lists.newArrayList();
@@ -37,7 +41,7 @@ public class TileEntityModelSwitcher extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         ListTag listTag = new ListTag();
         for (ModeInfo info : infoList) {
             listTag.add(info.serialize());
@@ -47,12 +51,12 @@ public class TileEntityModelSwitcher extends BlockEntity {
             getPersistentData().put(ENTITY_UUID, NbtUtils.createUUID(this.uuid));
         }
         getPersistentData().putInt(LIST_INDEX, this.index);
-        super.saveAdditional(pTag);
+        super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         infoList.clear();
         ListTag listTag = getPersistentData().getList(INFO_LIST, Tag.TAG_COMPOUND);
         for (int i = 0; i < listTag.size(); i++) {
@@ -68,8 +72,8 @@ public class TileEntityModelSwitcher extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        return this.saveWithoutMetadata(pRegistries);
     }
 
     @Nullable
@@ -126,6 +130,15 @@ public class TileEntityModelSwitcher extends BlockEntity {
     }
 
     public static class ModeInfo {
+        public static final StreamCodec<ByteBuf, ModeInfo> MODE_INFO_STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC,
+                ModeInfo::getModelId,
+                ByteBufCodecs.STRING_UTF8,
+                ModeInfo::getText,
+                Direction.STREAM_CODEC,
+                ModeInfo::getDirection,
+                ModeInfo::new
+        );
         private ResourceLocation modelId;
         private String text;
         private Direction direction;
@@ -182,7 +195,7 @@ public class TileEntityModelSwitcher extends BlockEntity {
         }
 
         public void deserialize(CompoundTag nbt) {
-            this.modelId = new ResourceLocation(nbt.getString("model_id"));
+            this.modelId = ResourceLocation.parse(nbt.getString("model_id"));
             this.text = nbt.getString("text");
             this.direction = Direction.from2DDataValue(nbt.getInt("direction"));
         }

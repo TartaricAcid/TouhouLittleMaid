@@ -1,39 +1,36 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.joml.Matrix4f;
 
 import java.util.Optional;
 
 
 /**
- * From JEI: https://github.com/mezz/JustEnoughItems/blob/1.20/Forge/src/main/java/mezz/jei/forge/platform/FluidHelper.java
+ * From JEI: <a href="https://github.com/mezz/JustEnoughItems/blob/1.20/Forge/src/main/java/mezz/jei/forge/platform/FluidHelper.java">...</a>
  */
 @OnlyIn(Dist.CLIENT)
 public final class MaidFluidRender {
     private static final int TEXTURE_SIZE = 16;
 
     public static Component getFluidName(String fluidId, int amount) {
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidId));
+        Fluid fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(fluidId));
         if (amount <= 0 || fluid == null || fluid.isSame(Fluids.EMPTY)) {
             return Component.translatable("tooltips.touhou_little_maid.tank_backpack.empty_fluid");
         }
@@ -41,7 +38,7 @@ public final class MaidFluidRender {
     }
 
     public static void drawFluid(GuiGraphics graphics, int x, int y, int width, int height, String fluidId, int amount, int capacity) {
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidId));
+        Fluid fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(fluidId));
         if (amount <= 0 || fluid == null || fluid.isSame(Fluids.EMPTY)) {
             return;
         }
@@ -63,18 +60,22 @@ public final class MaidFluidRender {
         });
     }
 
-    private static Optional<TextureAtlasSprite> getStillFluidSprite(FluidStack fluidStack) {
+    public static int getColorTint(FluidStack ingredient) {
+        Fluid fluid = ingredient.getFluid();
+        IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid);
+        return renderProperties.getTintColor(ingredient);
+    }
+
+    public static Optional<TextureAtlasSprite> getStillFluidSprite(FluidStack fluidStack) {
         Fluid fluid = fluidStack.getFluid();
         IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid);
         ResourceLocation fluidStill = renderProperties.getStillTexture(fluidStack);
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
-        return Optional.of(sprite).filter(s -> s.atlasLocation() != MissingTextureAtlasSprite.getLocation());
-    }
-
-    private static int getColorTint(FluidStack fluidStack) {
-        Fluid fluid = fluidStack.getFluid();
-        IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid);
-        return renderProperties.getTintColor(fluidStack);
+        return Optional.of(fluidStill)
+                .map(f -> Minecraft.getInstance()
+                        .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                        .apply(f)
+                )
+                .filter(s -> s.atlasLocation() != MissingTextureAtlasSprite.getLocation());
     }
 
     private static void drawTiledSprite(GuiGraphics guiGraphics, final int tiledWidth, final int tiledHeight, int color, long scaledAmount, TextureAtlasSprite sprite) {
@@ -122,12 +123,11 @@ public final class MaidFluidRender {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
         Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferBuilder = tesselator.getBuilder();
-        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferBuilder.vertex(matrix, xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
-        bufferBuilder.vertex(matrix, xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
-        bufferBuilder.vertex(matrix, xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();
-        bufferBuilder.vertex(matrix, xCoord, yCoord + maskTop, zLevel).uv(uMin, vMin).endVertex();
-        tesselator.end();
+        BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferBuilder.addVertex(matrix, xCoord, yCoord + 16, zLevel).setUv(uMin, vMax);
+        bufferBuilder.addVertex(matrix, xCoord + 16 - maskRight, yCoord + 16, zLevel).setUv(uMax, vMax);
+        bufferBuilder.addVertex(matrix, xCoord + 16 - maskRight, yCoord + maskTop, zLevel).setUv(uMax, vMin);
+        bufferBuilder.addVertex(matrix, xCoord, yCoord + maskTop, zLevel).setUv(uMin, vMin);
+        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
     }
 }

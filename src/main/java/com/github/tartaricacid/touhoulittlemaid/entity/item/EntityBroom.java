@@ -21,8 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,11 +30,16 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.OWNER_UUID_TAG_NAME;
+
 public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity {
-    public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build("broom");
+    public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC)
+            .sized(1.375F, 0.5625F)
+            .clientTrackingRange(10)
+            .ridingOffset(0)
+            .build("broom");
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_ID = SynchedEntityData.defineId(EntityBroom.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final String OWNER_UUID_TAG = "OwnerUUID";
 
     private boolean keyForward = false;
     private boolean keyBack = false;
@@ -71,23 +76,23 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_ID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(OWNER_ID, Optional.empty());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains(OWNER_UUID_TAG)) {
-            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG))));
+        if (compound.contains(OWNER_UUID_TAG_NAME)) {
+            setOwnerUUID(NbtUtils.loadUUID(Objects.requireNonNull(compound.get(OWNER_UUID_TAG_NAME))));
         }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        this.entityData.get(OWNER_ID).ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG, uuid));
+        this.entityData.get(OWNER_ID).ifPresent(uuid -> compound.putUUID(OWNER_UUID_TAG_NAME, uuid));
     }
 
     @Override
@@ -165,21 +170,17 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     }
 
     @Override
-    protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
-        if (this.hasPassenger(passenger)) {
-            double xOffset = passenger instanceof EntityMaid ? -0.5 : 0;
-            double yOffset = this.isRemoved() ? 0.01 : this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
-            if (this.getPassengers().size() > 1) {
-                int passengerIndex = this.getPassengers().indexOf(passenger);
-                if (passengerIndex == 0) {
-                    xOffset = 0.35;
-                } else {
-                    xOffset = -0.35;
-                }
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimension, float partialTick) {
+        double xOffset = passenger instanceof EntityMaid ? -0.5 : 0;
+        if (this.getPassengers().size() > 1) {
+            if (this.getPassengers().indexOf(passenger) == 0) {
+                xOffset = 0.35;
+            } else {
+                xOffset = -0.35;
             }
-            Vec3 offset = new Vec3(xOffset, yOffset, 0).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
-            moveFunction.accept(passenger, this.getX() + offset.x, this.getY() + offset.y, this.getZ() + offset.z);
         }
+        Vec3 hOffset = new Vec3(xOffset, -0.3125, 0).yRot((float) (-(this.getYRot() + 90) * Math.PI / 180));
+        return super.getPassengerAttachmentPoint(passenger, dimension, partialTick).add(hOffset);
     }
 
     @Override
@@ -209,11 +210,6 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     @Override
     protected boolean canAddPassenger(Entity entity) {
         return this.getPassengers().size() < 2;
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-        return 0;
     }
 
     @Override

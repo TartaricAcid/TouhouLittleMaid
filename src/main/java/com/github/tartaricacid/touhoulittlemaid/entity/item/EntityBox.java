@@ -2,8 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,7 +14,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityBox extends Entity {
     public static final int FIRST_STAGE = 64;
@@ -72,9 +70,9 @@ public class EntityBox extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(OPEN_STAGE, FIRST_STAGE);
-        this.entityData.define(TEXTURE_INDEX, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(OPEN_STAGE, FIRST_STAGE);
+        builder.define(TEXTURE_INDEX, 0);
     }
 
     @Override
@@ -91,16 +89,6 @@ public class EntityBox extends Entity {
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt(STAGE_TAG, getOpenStage());
         compound.putInt(TEXTURE_TAG, getTextureIndex());
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-        return 0;
     }
 
     @Override
@@ -149,5 +137,10 @@ public class EntityBox extends Entity {
         if (stage >= FIRST_STAGE) {
             tameable.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 2, 1, false, false));
         }
+    }
+
+    @Override
+    public Vec3 getPassengerRidingPosition(Entity pEntity) {
+        return this.position().add(this.getPassengerAttachmentPoint(pEntity, this.getDimensions(Pose.STANDING), 1.0F)).subtract(0, 2, 0);
     }
 }

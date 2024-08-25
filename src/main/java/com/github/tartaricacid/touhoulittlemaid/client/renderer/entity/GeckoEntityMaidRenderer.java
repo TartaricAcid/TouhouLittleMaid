@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
-import com.github.tartaricacid.touhoulittlemaid.capability.GeckoMaidEntityCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.*;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoReplacedEntityRenderer;
@@ -21,16 +20,15 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
 
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        if (!entity.getCapability(GeckoMaidEntityCapabilityProvider.CAP).isPresent()) {
-            return;
+        if (entity.hasData(GeckoMaidEntity.TYPE)) {
+            super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         }
-        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public GeckoMaidEntity<T> getAnimatableEntity(T entity) {
-        return entity.getCapability(GeckoMaidEntityCapabilityProvider.CAP).map(e -> (GeckoMaidEntity<T>) e).orElseThrow();
+        return entity.getData(GeckoMaidEntity.TYPE);
     }
 
     @Override

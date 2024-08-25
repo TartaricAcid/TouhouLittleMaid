@@ -5,17 +5,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.function.Predicate;
 
 public class MaidTemptGoal extends Goal {
     private static final TargetingConditions TEMP_TARGETING = TargetingConditions.forNonCombat().range(10).ignoreLineOfSight();
     protected final PathfinderMob mob;
     private final TargetingConditions targetingConditions;
     private final double speedModifier;
-    private final Ingredient items;
+    private final Predicate<ItemStack> items;
     private final boolean canScare;
     @Nullable
     protected EntityMaid maid;
@@ -25,7 +26,7 @@ public class MaidTemptGoal extends Goal {
     private int calmDown;
     private boolean isRunning;
 
-    public MaidTemptGoal(PathfinderMob mob, double speedModifier, Ingredient items, boolean canScare) {
+    public MaidTemptGoal(PathfinderMob mob, double speedModifier, Predicate<ItemStack> items, boolean canScare) {
         this.mob = mob;
         this.speedModifier = speedModifier;
         this.items = items;
@@ -34,6 +35,7 @@ public class MaidTemptGoal extends Goal {
         this.targetingConditions = TEMP_TARGETING.copy().selector(this::shouldFollow);
     }
 
+    @Override
     public boolean canUse() {
         if (this.calmDown > 0) {
             --this.calmDown;
@@ -48,6 +50,7 @@ public class MaidTemptGoal extends Goal {
         return this.items.test(livingEntity.getMainHandItem()) || this.items.test(livingEntity.getOffhandItem());
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.canScare()) {
             if (this.mob.distanceToSqr(this.maid) < 36) {
@@ -67,6 +70,7 @@ public class MaidTemptGoal extends Goal {
         return this.canScare;
     }
 
+    @Override
     public void start() {
         this.px = this.maid.getX();
         this.py = this.maid.getY();
@@ -74,6 +78,7 @@ public class MaidTemptGoal extends Goal {
         this.isRunning = true;
     }
 
+    @Override
     public void stop() {
         this.maid = null;
         this.mob.getNavigation().stop();
@@ -81,7 +86,7 @@ public class MaidTemptGoal extends Goal {
         this.isRunning = false;
     }
 
-
+    @Override
     public void tick() {
         this.mob.getLookControl().setLookAt(this.maid, this.mob.getMaxHeadYRot() + 20, this.mob.getMaxHeadXRot());
         if (this.mob.distanceToSqr(this.maid) < 6.25) {

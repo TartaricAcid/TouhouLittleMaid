@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -15,10 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -32,7 +30,7 @@ public class TileEntityPicnicMat extends BlockEntity {
     private final ItemStackHandler handler = new ItemStackHandler(9) {
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return stack.getItem().isEdible();
+            return stack.getFoodProperties(null) != null;
         }
     };
     private final UUID[] sitIds = new UUID[]{Util.NIL_UUID, Util.NIL_UUID, Util.NIL_UUID, Util.NIL_UUID};
@@ -87,22 +85,22 @@ public class TileEntityPicnicMat extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         getPersistentData().put(CENTER_POS_NAME, NbtUtils.writeBlockPos(centerPos));
-        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT());
+        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT(pRegistries));
         ListTag listTag = new ListTag();
         for (UUID uuid : sitIds) {
             listTag.add(NbtUtils.createUUID(uuid));
         }
         getPersistentData().put(SIT_IDS, listTag);
-        super.saveAdditional(tag);
+        super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        this.centerPos = NbtUtils.readBlockPos(getPersistentData().getCompound(CENTER_POS_NAME));
-        this.handler.deserializeNBT(getPersistentData().getCompound(STORAGE_ITEM));
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
+        NbtUtils.readBlockPos(getPersistentData(), CENTER_POS_NAME).ifPresent(pos -> centerPos = pos);
+        this.handler.deserializeNBT(pRegistries, getPersistentData().getCompound(STORAGE_ITEM));
         ListTag sitIdsTag = getPersistentData().getList(SIT_IDS, Tag.TAG_INT_ARRAY);
         int i = 0;
         for (Tag tag : sitIdsTag) {
@@ -123,8 +121,8 @@ public class TileEntityPicnicMat extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        return this.saveWithoutMetadata(pRegistries);
     }
 
     @Nullable
@@ -133,9 +131,7 @@ public class TileEntityPicnicMat extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition.offset(-3, 0, -3), worldPosition.offset(3, 1, 3));
+    public BlockPos getWorldPosition() {
+        return this.worldPosition;
     }
 }

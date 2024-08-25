@@ -1,13 +1,15 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticlePackage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -17,8 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,25 +34,27 @@ public class ItemFilm extends AbstractStoreMaidItem {
 
     public static ItemStack maidToFilm(EntityMaid maid) {
         ItemStack film = InitItems.FILM.get().getDefaultInstance();
-        CompoundTag filmTag = new CompoundTag();
         CompoundTag maidTag = new CompoundTag();
         maid.setHomeModeEnable(false);
         maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
-        maidTag.putString("id", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
-        filmTag.put(MAID_INFO, maidTag);
-        film.setTag(filmTag);
+        maidTag.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
+        film.set(InitDataComponent.MAID_INFO, CustomData.of(maidTag));
         return film;
     }
 
     public static void filmToMaid(ItemStack film, Level worldIn, BlockPos pos, Player player) {
-        Optional<Entity> entityOptional = EntityType.create(getMaidData(film), worldIn);
+        CustomData compoundData = film.get(InitDataComponent.MAID_INFO);
+        if (compoundData == null) {
+            return;
+        }
+        Optional<Entity> entityOptional = EntityType.create(compoundData.copyTag(), worldIn);
         if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid maid) {
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             // 实体生成必须在服务端应用
             if (!worldIn.isClientSide) {
                 worldIn.addFreshEntity(maid);
-                NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.EXPLOSION));
+                NetworkHandler.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.EXPLOSION));
                 worldIn.playSound(null, pos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
             }
             film.shrink(1);
@@ -88,8 +92,8 @@ public class ItemFilm extends AbstractStoreMaidItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        if (!hasMaidData(stack)) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        if (stack.get(InitDataComponent.MAID_INFO) == null) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.film.no_data.desc").withStyle(ChatFormatting.DARK_RED));
         }
     }

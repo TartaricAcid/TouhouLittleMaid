@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.inner;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
@@ -20,30 +19,30 @@ public final class MaidBaseAnimation {
     private static final float[] FIXED_HAND_ROTATION = new float[]{0, 0, 0};
 
     public static void init() {
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/arm/default.js"), getArmDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/arm/swing.js"), getArmSwing());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/beg.js"), getHeadBeg());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/blink.js"), getHeadBlink());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/default.js"), getHeadDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/music_shake.js"), getHeadMusicShake());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/ear_shake.js"), getEarShake());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/ear_beg_shake.js"), getEarBegShake());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_swing.js"), getHairSwing());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/head/hair_ponytail_swing.js"), getHairPonytailSwing());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/leg/default.js"), getLegDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/default.js"), getSitDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/no_leg.js"), getSitNoLeg());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_hidden.js"), getSitSkirtHidden());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"), getSitSkirtRotation());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sit/skirt_rotation_swing.js"), getSitSkirtRotationSwing());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/backpack.js"), getStatusBackpack());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/backpack_level.js"), getStatusBackpackLevel());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/status/sasimono.js"), getStatusSasimono());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/tail/default.js"), getTailDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/wing/default.js"), getWingDefault());
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid/default/sleep/default.js"), getSleepDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/arm/default.js"), getArmDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/arm/swing.js"), getArmSwing());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/beg.js"), getHeadBeg());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/blink.js"), getHeadBlink());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/default.js"), getHeadDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/music_shake.js"), getHeadMusicShake());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/ear_shake.js"), getEarShake());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/ear_beg_shake.js"), getEarBegShake());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/hair_swing.js"), getHairSwing());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/head/hair_ponytail_swing.js"), getHairPonytailSwing());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/leg/default.js"), getLegDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/sit/default.js"), getSitDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/sit/no_leg.js"), getSitNoLeg());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/sit/skirt_hidden.js"), getSitSkirtHidden());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"), getSitSkirtRotation());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/sit/skirt_rotation_swing.js"), getSitSkirtRotationSwing());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/status/backpack.js"), getStatusBackpack());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/status/backpack_level.js"), getStatusBackpackLevel());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/status/sasimono.js"), getStatusSasimono());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/tail/default.js"), getTailDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/wing/default.js"), getWingDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid/default/sleep/default.js"), getSleepDefault());
 
-        INNER_ANIMATION.put(new ResourceLocation("touhou_little_maid:animation/maid.default.js"), getMaidDefault());
+        INNER_ANIMATION.put(ResourceLocation.parse("touhou_little_maid:animation/maid.default.js"), getMaidDefault());
     }
 
     public static IAnimation<Mob> getHeadDefault() {
@@ -360,7 +359,9 @@ public final class MaidBaseAnimation {
                 ModelRendererWrapper armLeft = modelMap.get("armLeft");
                 ModelRendererWrapper armRight = modelMap.get("armRight");
 
-                if (maid.isSwingingArms() && !TacCompat.onSwingGun(maid, armLeft, armRight)) {
+                //(maid.isSwingingArms() && !TacCompat.onSwingGun(maid, armLeft, armRight))
+                //TODO tacz兼容
+                if (maid.isSwingingArms()) {
                     if (armLeft != null) {
                         armLeft.setRotateAngleX(-1.396f);
                         armLeft.setRotateAngleY(0.785f);

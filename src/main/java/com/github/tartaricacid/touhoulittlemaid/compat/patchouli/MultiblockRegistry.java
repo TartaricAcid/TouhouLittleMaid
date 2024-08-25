@@ -8,7 +8,7 @@ import vazkii.patchouli.api.IStateMatcher;
 import vazkii.patchouli.api.PatchouliAPI;
 
 public final class MultiblockRegistry {
-    private static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar");
+    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar");
     private static final String[][] TEMPLATE = new String[][]{
             {"        ", "       R", "       R", "       R", "       R", "       R", "       R", "        ",},
             {"        ", "        ", "       R", "        ", "        ", "       R", "        ", "        ",},

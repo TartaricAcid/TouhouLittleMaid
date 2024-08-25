@@ -27,9 +27,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class GeckoModelLoader {
-    public static final ResourceLocation DEFAULT_MAID_ANIMATION = new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/maid.animation.json");
-    public static final ResourceLocation DEFAULT_TAC_ANIMATION = new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/tac.animation.json");
-    public static final ResourceLocation DEFAULT_CHAIR_ANIMATION = new ResourceLocation(TouhouLittleMaid.MOD_ID, "animation/chair.animation.json");
+    public static final ResourceLocation DEFAULT_MAID_ANIMATION = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/maid.animation.json");
+    public static final ResourceLocation DEFAULT_TAC_ANIMATION = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/tac.animation.json");
+    public static final ResourceLocation DEFAULT_CHAIR_ANIMATION = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "animation/chair.animation.json");
     public static AnimationFile DEFAULT_MAID_ANIMATION_FILE = new AnimationFile();
     public static AnimationFile DEFAULT_CHAIR_ANIMATION_FILE = new AnimationFile();
     public static AnimationFile DEFAULT_TAC_ANIMATION_FILE = new AnimationFile();

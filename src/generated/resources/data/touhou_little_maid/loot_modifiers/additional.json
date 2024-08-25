@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "touhou_little_maid:loot_table_type",
+      "loot_table_type": "chests/"
+    }
+  ],
+  "table": "touhou_little_maid:chests/additional_loot_table"
+}

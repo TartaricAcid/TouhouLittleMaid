@@ -5,17 +5,19 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.Animation
 import com.github.tartaricacid.touhoulittlemaid.client.event.ShowOptifineScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.BroomTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
-import com.github.tartaricacid.touhoulittlemaid.compat.simplehats.SimpleHatsCompat;
+import com.github.tartaricacid.touhoulittlemaid.client.overlay.ShowPowerOverlay;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
-import static net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.CROSSHAIR;
+import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLoactionUtil.getResourceLocation;
+import static net.neoforged.neoforge.client.gui.VanillaGuiLayers.CROSSHAIR;
+import static net.neoforged.neoforge.client.gui.VanillaGuiLayers.HOTBAR;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT, modid = TouhouLittleMaid.MOD_ID)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT, modid = TouhouLittleMaid.MOD_ID)
 public class ClientSetupEvent {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
@@ -24,14 +26,12 @@ public class ClientSetupEvent {
         event.enqueueWork(InGameMaidConfig::read);
         event.enqueueWork(MaidTipsOverlay::init);
         event.enqueueWork(ShowOptifineScreen::checkOptifineIsLoaded);
-
-        // 客户端兼容
-        SimpleHatsCompat.init();
     }
 
     @SubscribeEvent
-    public static void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
-        event.registerAbove(CROSSHAIR.id(), "tlm_maid_tips", new MaidTipsOverlay());
-        event.registerAbove(CROSSHAIR.id(), "tlm_broom_tips", new BroomTipsOverlay());
+    public static void RegisterGuiLayers(RegisterGuiLayersEvent event) {
+        event.registerAbove(CROSSHAIR, getResourceLocation("tlm_maid_tips"), new MaidTipsOverlay());
+        event.registerAbove(CROSSHAIR, getResourceLocation("tlm_broom_tips"), new BroomTipsOverlay());
+        event.registerAbove(HOTBAR, getResourceLocation("tlm_show_power"), new ShowPowerOverlay());
     }
 }

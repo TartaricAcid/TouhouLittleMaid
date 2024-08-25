@@ -24,14 +24,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
 public class TankBackpack extends IMaidBackpack {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "tank");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "tank");
 
     @Override
     public ResourceLocation getId() {
@@ -74,7 +74,7 @@ public class TankBackpack extends IMaidBackpack {
     public ItemStack getTakeOffItemStack(ItemStack stack, @Nullable Player player, EntityMaid maid) {
         IBackpackData backpackData = maid.getBackpackData();
         if (backpackData instanceof TankBackpackData tankBackpackData) {
-            return ItemTankBackpack.getTankBackpack(tankBackpackData);
+            return ItemTankBackpack.getTankBackpack(maid.registryAccess(), tankBackpackData);
         }
         return super.getTakeOffItemStack(stack, player, maid);
     }
@@ -133,9 +133,10 @@ public class TankBackpack extends IMaidBackpack {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tank_backpack.png");
+        return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tank_backpack.png");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void offsetBackpackItem(PoseStack poseStack) {
         poseStack.mulPose(Axis.XP.rotationDegrees(-7.5F));

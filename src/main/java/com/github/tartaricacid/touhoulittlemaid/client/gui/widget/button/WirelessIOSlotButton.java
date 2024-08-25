@@ -1,13 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
-import net.minecraft.client.gui.components.StateSwitchingButton;
+import java.util.List;
 
-public class WirelessIOSlotButton extends StateSwitchingButton {
+public class WirelessIOSlotButton extends TouhouStateSwitchButton {
     private final int index;
-    private final boolean[] config;
+    private final List<Boolean> config;
 
-    public WirelessIOSlotButton(int index, int xIn, int yIn, int widthIn, int heightIn, boolean[] config) {
-        super(xIn, yIn, widthIn, heightIn, config[index]);
+    public WirelessIOSlotButton(int index, int xIn, int yIn, int widthIn, int heightIn, List<Boolean> config) {
+        super(xIn, yIn, widthIn, heightIn, config.get(index));
         this.index = index;
         this.config = config;
     }
@@ -15,6 +15,6 @@ public class WirelessIOSlotButton extends StateSwitchingButton {
     @Override
     public void onClick(double mouseX, double mouseY) {
         this.isStateTriggered = !this.isStateTriggered;
-        this.config[this.index] = this.isStateTriggered;
+        this.config.set(this.index, this.isStateTriggered);
     }
 }

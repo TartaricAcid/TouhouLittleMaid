@@ -1,16 +1,15 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.TileEntityEntityPlaceholderRenderer;
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
-import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -19,39 +18,51 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
-import java.util.function.Consumer;
+import java.util.Optional;
 
 public class ItemEntityPlaceholder extends Item {
-    private static final String RECIPES_ID_TAG = "RecipeId";
+    public static final IClientItemExtensions ITEM_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT ? new IClientItemExtensions() {
+        @Override
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            Minecraft minecraft = Minecraft.getInstance();
+            return new TileEntityEntityPlaceholderRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+        }
+    } : null;
 
     public ItemEntityPlaceholder() {
         super(new Item.Properties().stacksTo(1));
     }
 
-    @SuppressWarnings("all")
-    public static ItemStack setRecipeId(ItemStack stack, ResourceLocation id) {
-        stack.getOrCreateTag().putString(RECIPES_ID_TAG, id.toString());
+    public static ItemStack setRecipeId(ItemStack stack, String id) {
+        stack.set(InitDataComponent.RECIPES_ID_TAG, id);
         return stack;
     }
 
     @SuppressWarnings("all")
     @Nullable
     public static ResourceLocation getRecipeId(ItemStack stack) {
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag();
-            if (tag.contains(RECIPES_ID_TAG, Tag.TAG_STRING)) {
-                return new ResourceLocation(tag.getString(RECIPES_ID_TAG));
-            }
+        if (stack.has(InitDataComponent.RECIPES_ID_TAG)) {
+            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, InitRecipes.ALTAR_CRAFTING.getId().getPath() +"/" + stack.get(InitDataComponent.RECIPES_ID_TAG));
+        }
+        return null;
+    }
+
+    @SuppressWarnings("all")
+    @Nullable
+    public static ResourceLocation getId(ItemStack stack) {
+        if (stack.has(InitDataComponent.RECIPES_ID_TAG)) {
+            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID,stack.get(InitDataComponent.RECIPES_ID_TAG));
         }
         return null;
     }
@@ -62,20 +73,9 @@ public class ItemEntityPlaceholder extends Item {
         if (world == null) {
             return;
         }
-        world.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING).forEach(recipe -> {
-            if (!recipe.isItemCraft()) {
-                items.accept(setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), recipe.getId()));
-            }
-        });
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                Minecraft minecraft = Minecraft.getInstance();
-                return new TileEntityEntityPlaceholderRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+        world.getRecipeManager().getAllRecipesFor(InitRecipes.ALTAR_CRAFTING.get()).forEach(recipe -> {
+            if (!recipe.value().isItemCraft()) {
+                items.accept(setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), recipe.value().getRecipeString()));
             }
         });
     }
@@ -86,9 +86,8 @@ public class ItemEntityPlaceholder extends Item {
             ResourceLocation id = getRecipeId(context.getItemInHand());
             Level world = context.getLevel();
             if (id != null && world instanceof ServerLevel) {
-                Recipe<AltarRecipeInventory> recipe = context.getLevel().getRecipeManager().byType(InitRecipes.ALTAR_CRAFTING).get(id);
-                if (recipe instanceof AltarRecipe) {
-                    AltarRecipe altarRecipe = (AltarRecipe) recipe;
+                Optional<RecipeHolder<?>> recipe = context.getLevel().getRecipeManager().byKey(id);
+                if (recipe.isPresent() && recipe.get().value() instanceof AltarRecipe altarRecipe) {
                     altarRecipe.spawnOutputEntity((ServerLevel) world, context.getClickedPos().above(), null);
                     context.getItemInHand().shrink(1);
                 }
@@ -100,11 +99,10 @@ public class ItemEntityPlaceholder extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public Component getName(ItemStack stack) {
-        ResourceLocation recipeId = getRecipeId(stack);
+        ResourceLocation recipeId = getId(stack);
         if (recipeId != null) {
             Path path = Paths.get(recipeId.getPath().toLowerCase(Locale.US));
-            String namespace = recipeId.getNamespace().toLowerCase(Locale.US);
-            String langKey = String.format("jei.%s.altar_craft.%s.result", namespace, path.getFileName());
+            String langKey = String.format("jei.%s.altar_craft.%s.result", TouhouLittleMaid.MOD_ID, path.getFileName());
             return Component.translatable(langKey);
         }
         return Component.translatable("item.touhou_little_maid.entity_placeholder");

@@ -75,7 +75,7 @@ public class MaidInteractWithDoor {
             GlobalPos globalPos = doorPosIterator.next();
             BlockPos blockPos = globalPos.pos();
             if ((previous == null || !previous.asBlockPos().equals(blockPos) || (next != null && entity.blockPosition().equals(next.asBlockPos())))
-                    && (next == null || !next.asBlockPos().equals(blockPos))) {
+                && (next == null || !next.asBlockPos().equals(blockPos))) {
                 if (isDoorTooFarAway(serverLevel, entity, globalPos)) {
                     doorPosIterator.remove();
                 } else {

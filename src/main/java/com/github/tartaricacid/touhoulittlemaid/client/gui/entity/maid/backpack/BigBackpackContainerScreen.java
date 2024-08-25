@@ -21,7 +21,7 @@ import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
 @IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = -5)
 @IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
 public class BigBackpackContainerScreen extends AbstractMaidContainerGui<BigBackpackContainer> implements IBackpackContainerScreen {
-    private static final ResourceLocation BACKPACK = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_backpack.png");
+    private static final ResourceLocation BACKPACK = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_backpack.png");
     private final EntityMaid maid;
 
     public BigBackpackContainerScreen(BigBackpackContainer container, Inventory inv, Component titleIn) {

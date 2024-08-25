@@ -10,6 +10,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -24,15 +25,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLevelRenderer {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
     private static StatueBaseModel BASE_MODEL;
 
     public TileEntityItemStackGarageKitRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
@@ -50,15 +53,15 @@ public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLeve
         BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
 
-        CompoundTag data = ItemGarageKit.getMaidData(stack);
+        CustomData data = ItemGarageKit.getMaidData(stack);
         Level world = Minecraft.getInstance().level;
         if (data.isEmpty() || world == null) {
             return;
         }
 
-        EntityType.byString(data.getString("id")).ifPresent(type -> {
+        EntityType.byString(data.read(Codec.STRING.fieldOf("id")).getOrThrow()).ifPresent(type -> {
                     try {
-                        renderEntity(poseStack, bufferIn, combinedLightIn, data, world, type);
+                        renderEntity(poseStack, bufferIn, combinedLightIn, data.copyTag(), world, type);
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
@@ -74,11 +77,10 @@ public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLeve
 
         float renderItemScale = 1;
         entity.load(data);
-        if (entity instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) entity;
+        if (entity instanceof EntityMaid maid) {
             clearMaidDataResidue(maid, true);
-            if (data.contains(EntityMaid.MODEL_ID_TAG, Tag.TAG_STRING)) {
-                String modelId = data.getString(EntityMaid.MODEL_ID_TAG);
+            if (data.contains(MODEL_ID_TAG_NAME, Tag.TAG_STRING)) {
+                String modelId = data.getString(MODEL_ID_TAG_NAME);
                 renderItemScale = CustomPackLoader.MAID_MODELS.getModelRenderItemScale(modelId);
             }
         }

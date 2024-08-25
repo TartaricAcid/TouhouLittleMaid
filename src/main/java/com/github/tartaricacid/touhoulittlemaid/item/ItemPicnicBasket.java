@@ -6,8 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.PicnicBasket
 import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemContainerTooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -19,19 +19,26 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class ItemPicnicBasket extends BlockItem implements MenuProvider {
+    public static final IClientItemExtensions ITEM_EXTENSIONS = FMLEnvironment.dist == Dist.CLIENT ? new IClientItemExtensions() {
+        @Override
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            Minecraft minecraft = Minecraft.getInstance();
+            return new PicnicBasketRender(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+        }
+    } : null;
     private static final int PICNIC_BASKET_SIZE = 9;
-    private static final String PICNIC_BASKET_TAG = "PicnicBasketContainer";
 
     public ItemPicnicBasket(Block block) {
         super(block, (new Properties()).stacksTo(1));
@@ -40,9 +47,12 @@ public class ItemPicnicBasket extends BlockItem implements MenuProvider {
     public static ItemStackHandler getContainer(ItemStack stack) {
         ItemStackHandler handler = new ItemStackHandler(PICNIC_BASKET_SIZE);
         if (stack.getItem() == InitItems.PICNIC_BASKET.get()) {
-            CompoundTag tag = stack.getTag();
-            if (tag != null && tag.contains(PICNIC_BASKET_TAG, Tag.TAG_COMPOUND)) {
-                handler.deserializeNBT(tag.getCompound(PICNIC_BASKET_TAG));
+            ItemContainerContents container = stack.get(DataComponents.CONTAINER);
+            if (container != null) {
+                assert container.getSlots() <= PICNIC_BASKET_SIZE;
+                for (int i = 0; i < container.getSlots(); i++) {
+                    handler.setStackInSlot(i, container.getStackInSlot(i));
+                }
             }
         }
         return handler;
@@ -50,14 +60,19 @@ public class ItemPicnicBasket extends BlockItem implements MenuProvider {
 
     public static void setContainer(ItemStack stack, ItemStackHandler itemStackHandler) {
         if (stack.getItem() == InitItems.PICNIC_BASKET.get()) {
-            stack.getOrCreateTag().put(PICNIC_BASKET_TAG, itemStackHandler.serializeNBT());
+            NonNullList<ItemStack> items = NonNullList.withSize(PICNIC_BASKET_SIZE, ItemStack.EMPTY);
+            for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+                items.set(i, itemStackHandler.getStackInSlot(i));
+            }
+            ItemContainerContents container = ItemContainerContents.fromItems(items);
+            stack.set(DataComponents.CONTAINER, container);
         }
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        if (handIn == InteractionHand.MAIN_HAND && playerIn instanceof ServerPlayer) {
-            NetworkHooks.openScreen((ServerPlayer) playerIn, this, (buffer) -> buffer.writeItem(playerIn.getMainHandItem()));
+        if (handIn == InteractionHand.MAIN_HAND && playerIn instanceof ServerPlayer serverPlayer) {
+            serverPlayer.openMenu(this, data -> ItemStack.STREAM_CODEC.encode(data, serverPlayer.getMainHandItem()));
             return InteractionResultHolder.success(playerIn.getMainHandItem());
         }
         return super.use(worldIn, playerIn, handIn);
@@ -67,17 +82,6 @@ public class ItemPicnicBasket extends BlockItem implements MenuProvider {
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         ItemStackHandler container = getContainer(stack);
         return Optional.of(new ItemContainerTooltip(container));
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                Minecraft minecraft = Minecraft.getInstance();
-                return new PicnicBasketRender(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
-            }
-        });
     }
 
     @Override

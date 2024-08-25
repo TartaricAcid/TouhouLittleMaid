@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
@@ -31,13 +32,15 @@ public class CheckSchedulePosGui extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(graphics);
+        renderBackground(graphics, mouseX, mouseY, partialTicks);
         List<FormattedCharSequence> split = font.split(tips, 300);
         int startY = middleY - 10 - split.size() * (font.lineHeight + 3);
         for (FormattedCharSequence text : split) {
             graphics.drawCenteredString(font, text, middleX, startY, 0xFFFFFF);
             startY += font.lineHeight + 3;
         }
-        super.render(graphics, mouseX, mouseY, partialTicks);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, mouseX, mouseY, partialTicks);
+        }
     }
 }
