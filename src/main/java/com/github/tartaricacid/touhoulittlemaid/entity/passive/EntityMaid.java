@@ -1559,6 +1559,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return maidBauble;
     }
 
+    public CombinedInvWrapper getAllInv() {
+        return new CombinedInvWrapper(this.getArmorInvWrapper(), this.getHandsInvWrapper(), this.getMaidInv(), this.getMaidBauble());
+    }
+
     public boolean getIsInvulnerable() {
         return this.entityData.get(DATA_INVULNERABLE);
     }
