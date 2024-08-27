@@ -19,7 +19,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
-import net.neoforged.neoforge.common.EffectCure;
 import net.neoforged.neoforge.common.EffectCures;
 
 import javax.annotation.Nullable;
@@ -60,11 +59,16 @@ public class TaskFeedOwner implements IFeedTask {
 
     @Override
     public Priority getPriority(ItemStack stack, Player owner) {
-        if (stack.getItem() == Items.MILK_BUCKET) {
+        if (stack.is(Items.MILK_BUCKET)) {
             return Priority.HIGH;
         }
 
-        if (stack.getItem() == Items.GOLDEN_APPLE) {
+        // 蜂蜜瓶可以清除中毒效果，所以当玩家拥有中毒效果时，应当优先使用
+        if (stack.is(Items.HONEY_BOTTLE) && owner.getActiveEffects().stream().anyMatch(effect -> effect.getCures().contains(EffectCures.HONEY))) {
+            return Priority.HIGH;
+        }
+
+        if (stack.is(Items.GOLDEN_APPLE)) {
             if (owner.getHealth() * 2 < owner.getMaxHealth()) {
                 return Priority.HIGH;
             } else {
