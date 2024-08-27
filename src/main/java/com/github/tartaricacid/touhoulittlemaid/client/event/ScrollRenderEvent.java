@@ -18,6 +18,7 @@ import org.apache.commons.lang3.tuple.Pair;
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT)
 public class ScrollRenderEvent {
+    @SuppressWarnings("removal")
     @SubscribeEvent
     public static void onRenderWorldLastEvent(RenderLevelLastEvent event) {
         Minecraft mc = Minecraft.getInstance();
