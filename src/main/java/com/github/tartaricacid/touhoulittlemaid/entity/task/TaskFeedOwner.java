@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -58,11 +59,16 @@ public class TaskFeedOwner implements IFeedTask {
 
     @Override
     public Priority getPriority(ItemStack stack, Player owner) {
-        if (stack.getItem() == Items.MILK_BUCKET) {
+        if (stack.is(Items.MILK_BUCKET)) {
             return Priority.HIGH;
         }
 
-        if (stack.getItem() == Items.GOLDEN_APPLE) {
+        // 蜂蜜瓶可以清除中毒效果，所以当玩家拥有中毒效果时，应当优先使用
+        if (stack.is(Items.HONEY_BOTTLE) && owner.hasEffect(MobEffects.POISON)) {
+            return Priority.HIGH;
+        }
+
+        if (stack.is(Items.GOLDEN_APPLE)) {
             if (owner.getHealth() * 2 < owner.getMaxHealth()) {
                 return Priority.HIGH;
             } else {
