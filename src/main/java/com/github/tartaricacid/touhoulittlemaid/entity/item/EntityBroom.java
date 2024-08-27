@@ -9,7 +9,6 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity, HasCustomInventoryScreen {
+public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity {
     public static final EntityType<EntityBroom> TYPE = EntityType.Builder.<EntityBroom>of(EntityBroom::new, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build("broom");
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_ID = SynchedEntityData.defineId(EntityBroom.class, EntityDataSerializers.OPTIONAL_UUID);
@@ -215,28 +214,6 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
             return player;
         }
         return null;
-    }
-
-    @Override
-    public void openCustomInventoryScreen(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-        List<Entity> passengers = this.getPassengers();
-        boolean hasPlayer = false;
-        EntityMaid maidOpen = null;
-        for (int i = 0; i < Math.max(passengers.size(), 2); i++) {
-            Entity entity = passengers.get(i);
-            if (entity.equals(player)) {
-                hasPlayer = true;
-            }
-            if (entity instanceof EntityMaid maid && maid.isOwnedBy(player)) {
-                maidOpen = maid;
-            }
-        }
-        if (hasPlayer && maidOpen != null) {
-            maidOpen.openMaidGui(serverPlayer);
-        }
     }
 
     @Override
