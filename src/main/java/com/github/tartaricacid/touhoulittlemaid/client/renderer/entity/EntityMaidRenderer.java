@@ -48,7 +48,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
     @Override
     public void render(Mob entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
-        var maid = IMaid.convertToMaid(entity);
+        var maid = IMaid.convert(entity);
         if (maid == null) {
             return;
         }
@@ -81,8 +81,8 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
         // GeckoLib 接管渲染
         if (this.mainInfo.isGeckoModel()) {
-            this.geckoEntityMaidRenderer.getAnimatableEntity(maid).setMaidInfo(this.mainInfo);
-            this.geckoEntityMaidRenderer.render(maid, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
+            this.geckoEntityMaidRenderer.getAnimatableEntity(entity).setMaidInfo(this.mainInfo);
+            this.geckoEntityMaidRenderer.render(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;
         }
         // 模型动画设置
