@@ -23,6 +23,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
+apply plugin: 'idea'
 
 version = mod_version
 group = 'com.github.tartaricacid'
@@ -178,4 +179,13 @@ jar {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+// 让 idea 主动下载前置库的源码和 Javadoc
+// 新版本 idea 默认不会下载这两个，这虽然加快了构建速度，但是不方便调试
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }
