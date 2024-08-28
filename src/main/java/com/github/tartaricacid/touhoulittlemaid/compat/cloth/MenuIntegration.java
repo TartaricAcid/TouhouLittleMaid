@@ -225,6 +225,11 @@ public class MenuIntegration {
         misc.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.misc.close_optifine_warning.name"), MiscConfig.CLOSE_OPTIFINE_WARNING.get())
                 .setDefaultValue(false).setTooltip(Component.translatable("config.touhou_little_maid.misc.close_optifine_warning.desc"))
                 .setSaveConsumer(MiscConfig.CLOSE_OPTIFINE_WARNING::set).build());
+
+        misc.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.misc.scarecrow_range.name"), MiscConfig.SCARECROW_RANGE.get())
+                .setDefaultValue(16 * 3).setMin(0).setMax(Integer.MAX_VALUE)
+                .setTooltip(Component.translatable("config.touhou_little_maid.misc.scarecrow_range.desc"))
+                .setSaveConsumer(d -> MiscConfig.SCARECROW_RANGE.set(d)).build());
     }
 
     private static void vanillaConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {

@@ -108,7 +108,7 @@ public class BlockMaidBeacon extends BaseEntityBlock {
                 BlockPos belowPos = pos.below();
                 BlockState belowState = worldIn.getBlockState(belowPos);
                 if (belowState.is(this) && belowState.getValue(POSITION) == Position.DOWN) {
-                    worldIn.setBlock(belowPos, Blocks.AIR.defaultBlockState(), 35);
+                    worldIn.setBlock(belowPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
                     worldIn.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, belowPos, Block.getId(belowState));
                 }
             }
