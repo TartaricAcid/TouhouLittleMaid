@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class EntityFairyRenderer extends MobRenderer<EntityFairy, EntityFairyModel> {
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy.png");
+    private static final ResourceLocation TEXTURE_0 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_0.png");
     private static final ResourceLocation TEXTURE_1 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_1.png");
     private static final ResourceLocation TEXTURE_2 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_2.png");
     private static final ResourceLocation TEXTURE_3 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_3.png");
@@ -26,14 +26,16 @@ public class EntityFairyRenderer extends MobRenderer<EntityFairy, EntityFairyMod
     private static final ResourceLocation TEXTURE_13 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_13.png");
     private static final ResourceLocation TEXTURE_14 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_14.png");
     private static final ResourceLocation TEXTURE_15 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_15.png");
+    private static final ResourceLocation TEXTURE_16 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_16.png");
+    private static final ResourceLocation TEXTURE_17 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_17.png");
 
     public EntityFairyRenderer(EntityRendererProvider.Context context) {
         super(context, new EntityFairyModel(context.bakeLayer(EntityFairyModel.LAYER)), 0.5f);
     }
 
     @Override
-    protected void setupRotations(EntityFairy fairy, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, float pScale) {
-        super.setupRotations(fairy, poseStack, ageInTicks, rotationYaw, partialTicks, pScale);
+    protected void setupRotations(EntityFairy fairy, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
+        super.setupRotations(fairy, poseStack, ageInTicks, rotationYaw, partialTicks, scale);
         if (!fairy.onGround()) {
             poseStack.mulPose(Axis.XN.rotation(8 * (float) Math.PI / 180.0f));
         }
@@ -57,6 +59,8 @@ public class EntityFairyRenderer extends MobRenderer<EntityFairy, EntityFairyMod
             case 13 -> TEXTURE_13;
             case 14 -> TEXTURE_14;
             case 15 -> TEXTURE_15;
+            case 16 -> TEXTURE_16;
+            case 17 -> TEXTURE_17;
             default -> TEXTURE_0;
         };
     }
