@@ -597,7 +597,7 @@ public class CustomPackLoader {
         try (InputStream stream = Files.newInputStream(file.toPath())) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -609,7 +609,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);
@@ -640,7 +640,7 @@ public class CustomPackLoader {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -652,7 +652,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);
@@ -682,7 +682,7 @@ public class CustomPackLoader {
         try (InputStream stream = Files.newInputStream(file.toPath())) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -694,7 +694,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);
@@ -725,7 +725,7 @@ public class CustomPackLoader {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -737,7 +737,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);

@@ -12,15 +12,7 @@ public class RawGeoModel {
         return formatVersion;
     }
 
-    public void setFormatVersion(FormatVersion value) {
-        this.formatVersion = value;
-    }
-
     public MinecraftGeometry[] getMinecraftGeometry() {
         return minecraftGeometry;
-    }
-
-    public void setMinecraftGeometry(MinecraftGeometry[] value) {
-        this.minecraftGeometry = value;
     }
 }
