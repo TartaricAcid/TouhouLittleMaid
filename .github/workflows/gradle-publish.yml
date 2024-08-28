@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "1.21-neoforge-test"
+      - "1.21"
     paths:
       - 'src/**'
 
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: "1.21-neoforge-test"
+          ref: "1.21"
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
