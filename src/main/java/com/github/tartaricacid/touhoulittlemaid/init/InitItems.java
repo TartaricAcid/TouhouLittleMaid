@@ -67,6 +67,7 @@ public final class InitItems {
     public static RegistryObject<Item> KAPPA_COMPASS = ITEMS.register("kappa_compass", ItemKappaCompass::new);
     public static RegistryObject<Item> BROOM = ITEMS.register("broom", ItemBroom::new);
     public static RegistryObject<Item> PICNIC_BASKET = ITEMS.register("picnic_basket", () -> new ItemPicnicBasket(InitBlocks.PICNIC_MAT.get()));
+    public static RegistryObject<Item> SCARECROW = ITEMS.register("scarecrow", () -> new BlockItem(InitBlocks.SCARECROW.get(), new Item.Properties().tab(MAIN_TAB)));
 
     public static RegistryObject<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityMaid.TYPE, 0x4a6195, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));
     public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityFairy.TYPE, 0x171c20, 0xffffff, (new Item.Properties()).tab(MAIN_TAB)));
