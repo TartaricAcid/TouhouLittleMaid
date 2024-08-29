@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -66,6 +67,7 @@ public final class TouhouLittleMaid {
 
     private static void registerConfiguration(ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.COMMON, GeneralConfig.getConfigSpec());
+        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.init());
     }
 
     private static void modApiInit() {
