@@ -85,7 +85,7 @@ public class InfoGetManager {
 
     public static Statue STATUE = Statue.FIRST;
 
-    private static Map<String, String> getDownloadHeaders() {
+    public static Map<String, String> getDownloadHeaders() {
         Map<String, String> map = Maps.newHashMap();
         User user = Minecraft.getInstance().getUser();
         WorldVersion currentVersion = SharedConstants.getCurrentVersion();
@@ -121,7 +121,7 @@ public class InfoGetManager {
         }
     }
 
-    private static String getFileMd5(File file) {
+    public static String getFileMd5(File file) {
         String md5 = StringUtils.EMPTY;
         // 文件不存在，返回空字符串
         if (!file.isFile()) {
@@ -269,7 +269,7 @@ public class InfoGetManager {
         }
     }
 
-    private static void sendDownloadMessage(MutableComponent component) {
+    public static void sendDownloadMessage(MutableComponent component) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             player.sendMessage(component, Util.NIL_UUID);
@@ -282,6 +282,14 @@ public class InfoGetManager {
             case SOUND -> DOWNLOAD_INFO_LIST_SOUND;
             default -> DOWNLOAD_INFO_LIST_MAID;
         };
+    }
+
+    public static int getPackMaxFileSize() {
+        return PACK_MAX_FILE_SIZE;
+    }
+
+    public static Path getPackFolder() {
+        return PACK_FOLDER;
     }
 
     public enum Statue {
