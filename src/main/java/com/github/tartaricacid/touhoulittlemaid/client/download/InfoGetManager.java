@@ -235,7 +235,7 @@ public class InfoGetManager {
         // 开始计时
         StopWatch stopWatch = StopWatch.createStarted();
         // 异步下载
-        CompletableFuture downloader = HttpUtil.downloadTo(fileInCache, String.valueOf(url), getDownloadHeaders(), PACK_MAX_FILE_SIZE, null, proxy);
+        CompletableFuture downloader = HttpUtil.downloadTo(fileInCache, String.valueOf(url), getDownloadHeaders(), PACK_MAX_FILE_SIZE, info, proxy);
         downloader.thenRun(() -> {
             // 如果正常下载完成，停止计时，发送提示，并进行加载
             stopWatch.stop();
