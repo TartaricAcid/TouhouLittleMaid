@@ -29,20 +29,34 @@ public class PackInfoButton extends FlatColorButton {
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         Minecraft minecraft = Minecraft.getInstance();
+        // 背景色
         if (isSelect) {
             graphics.fillGradient(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xff_1E90FF, 0xff_1E90FF);
         } else if (info.getStatus() != DownloadStatus.DOWNLOADED) {
             graphics.fillGradient(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xff_434242, 0xff_434242);
         }
+
+        // 如果是下载状态，绘制下载进度条
+        int downloadProgress = info.getDownloadProgress();
+        if (info.getStatus() == DownloadStatus.DOWNLOADING && downloadProgress >= 0) {
+            int widthProgress = this.width * downloadProgress / 100;
+            graphics.fillGradient(this.getX(), this.getY(), this.getX() + widthProgress, this.getY() + this.height, 0xff_ff5733, 0xff_ff5733);
+        }
+
+        // 绘制需要更新的提示
         if (info.getStatus() == DownloadStatus.NEED_UPDATE) {
             graphics.blit(BG, this.getX() + 240, this.getY() + 15, 48, 16, 16, 16);
         }
+
+        // 悬浮或者选中时，显示为蓝色
         if (this.isHoveredOrFocused()) {
             graphics.fillGradient(this.getX(), this.getY() + 1, this.getX() + 1, this.getY() + this.height - 1, 0xff_F3EFE0, 0xff_F3EFE0);
             graphics.fillGradient(this.getX(), this.getY(), this.getX() + this.width, this.getY() + 1, 0xff_F3EFE0, 0xff_F3EFE0);
             graphics.fillGradient(this.getX() + this.width - 1, this.getY() + 1, this.getX() + this.width, this.getY() + this.height - 1, 0xff_F3EFE0, 0xff_F3EFE0);
             graphics.fillGradient(this.getX(), this.getY() + this.height - 1, this.getX() + this.width, this.getY() + this.height, 0xff_F3EFE0, 0xff_F3EFE0);
         }
+
+        // 显示成女仆、坐垫或者声音图标
         int count = info.getTypeCount();
         if (count == 3) {
             graphics.blit(BG, this.getX() + 7, this.getY() + 7, 0, 96, 32, 32);
@@ -63,8 +77,12 @@ public class PackInfoButton extends FlatColorButton {
                 graphics.blit(BG, this.getX() + 7, this.getY() + 7, 64, 32, 32, 32);
             }
         }
+
+        // 渲染文本
         int i = getFGColor();
         this.renderString(graphics, minecraft.font, i | Mth.ceil(this.alpha * 255.0F) << 24);
+
+        // 下载完成，灰色遮罩
         if (info.getStatus() == DownloadStatus.DOWNLOADED) {
             graphics.fillGradient(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x7f_232222, 0x7f_232222);
         }

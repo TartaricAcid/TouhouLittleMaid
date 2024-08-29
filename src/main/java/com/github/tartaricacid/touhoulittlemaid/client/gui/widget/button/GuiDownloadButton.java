@@ -24,10 +24,10 @@ public class GuiDownloadButton extends Button {
             return Component.translatable("selectWorld.futureworld.error.title");
         }
         switch (info.getStatus()) {
-            default -> text = Component.translatable("gui.touhou_little_maid.resources_download.not_download");
             case DOWNLOADED -> text = Component.translatable("gui.touhou_little_maid.resources_download.downloaded");
             case DOWNLOADING -> text = Component.translatable("gui.touhou_little_maid.resources_download.downloading");
             case NEED_UPDATE -> text = Component.translatable("gui.touhou_little_maid.resources_download.need_update");
+            default -> text = Component.translatable("gui.touhou_little_maid.resources_download.not_download");
         }
         return text;
     }
