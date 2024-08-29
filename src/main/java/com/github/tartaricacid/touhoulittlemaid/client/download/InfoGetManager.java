@@ -81,7 +81,7 @@ public class InfoGetManager {
 
     public static Statue STATUE = Statue.FIRST;
 
-    private static Map<String, String> getDownloadHeaders() {
+    public static Map<String, String> getDownloadHeaders() {
         Map<String, String> map = Maps.newHashMap();
         User user = Minecraft.getInstance().getUser();
         WorldVersion currentVersion = SharedConstants.getCurrentVersion();
@@ -249,7 +249,7 @@ public class InfoGetManager {
         }
     }
 
-    private static void sendDownloadMessage(MutableComponent component) {
+    public static void sendDownloadMessage(MutableComponent component) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             player.sendSystemMessage(component);
@@ -262,6 +262,14 @@ public class InfoGetManager {
             case SOUND -> DOWNLOAD_INFO_LIST_SOUND;
             default -> DOWNLOAD_INFO_LIST_MAID;
         };
+    }
+
+    public static int getPackMaxFileSize() {
+        return PACK_MAX_FILE_SIZE;
+    }
+
+    public static Path getPackFolder() {
+        return PACK_FOLDER;
     }
 
     public enum Statue {
