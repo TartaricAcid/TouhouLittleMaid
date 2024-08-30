@@ -37,9 +37,9 @@ public class PackInfoButton extends FlatColorButton {
         }
 
         // 如果是下载状态，绘制下载进度条
-        int downloadProgress = info.getDownloadProgress();
+        double downloadProgress = info.getDownloadProgress();
         if (info.getStatus() == DownloadStatus.DOWNLOADING && downloadProgress >= 0) {
-            int widthProgress = this.width * downloadProgress / 100;
+            int widthProgress = (int) (this.width * downloadProgress);
             graphics.fillGradient(this.getX(), this.getY(), this.getX() + widthProgress, this.getY() + this.height, 0xff_ff5733, 0xff_ff5733);
         }
 
