@@ -18,11 +18,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone.png");
-    private static final ResourceLocation THE_NETHER_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_nether.png");
-    private static final ResourceLocation THE_END_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_end.png");
-    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_twilight_forest.png");
-    private static final ResourceLocation TWILIGHT_FOREST_NAME = new ResourceLocation("twilightforest", "twilight_forest");
+    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone.png");
+    private static final ResourceLocation THE_NETHER_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_the_nether.png");
+    private static final ResourceLocation THE_END_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_the_end.png");
+    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_twilight_forest.png");
+    private static final ResourceLocation AETHER_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_aether.png");
+
+    private static final ResourceLocation TWILIGHT_FOREST_LEVEL_ID = new ResourceLocation("twilightforest", "twilight_forest");
+    private final static ResourceLocation AETHER_LEVEL_ID = new ResourceLocation("aether", "the_aether");
+
     private static final int NAME_SHOW_DISTANCE = 64;
     private final TombstoneModel tombstoneModel;
 
@@ -61,8 +65,11 @@ public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
         if (dimension.equals(Level.END.location())) {
             return THE_END_TEXTURE;
         }
-        if (dimension.equals(TWILIGHT_FOREST_NAME)) {
+        if (dimension.equals(TWILIGHT_FOREST_LEVEL_ID)) {
             return TWILIGHT_FOREST_TEXTURE;
+        }
+        if (dimension.equals(AETHER_LEVEL_ID)) {
+            return AETHER_TEXTURE;
         }
         return DEFAULT_TEXTURE;
     }
