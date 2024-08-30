@@ -19,6 +19,7 @@ public final class MiscConfig {
     public static ForgeConfigSpec.IntValue SHRINE_LAMP_MAX_RANGE;
     public static ForgeConfigSpec.BooleanValue CLOSE_OPTIFINE_WARNING;
     public static ForgeConfigSpec.IntValue SCARECROW_RANGE;
+    public static ForgeConfigSpec.BooleanValue USE_NEW_MAID_FAIRY_MODEL;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("misc");
@@ -57,6 +58,9 @@ public final class MiscConfig {
 
         builder.comment("The range of the scarecrow to prevent the fairy maid from spawning");
         SCARECROW_RANGE = builder.defineInRange("ScarecrowRange", 16 * 3, 0, Integer.MAX_VALUE);
+
+        builder.comment("Whether to use the new version of the Fairy Maid model");
+        USE_NEW_MAID_FAIRY_MODEL = builder.define("UseNewMaidFairyModel", true);
 
         builder.pop();
     }

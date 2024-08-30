@@ -230,6 +230,10 @@ public class MenuIntegration {
                 .setDefaultValue(16 * 3).setMin(0).setMax(Integer.MAX_VALUE)
                 .setTooltip(Component.translatable("config.touhou_little_maid.misc.scarecrow_range.desc"))
                 .setSaveConsumer(d -> MiscConfig.SCARECROW_RANGE.set(d)).build());
+
+        misc.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.misc.use_new_maid_fairy_model.name"), MiscConfig.USE_NEW_MAID_FAIRY_MODEL.get())
+                .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.misc.use_new_maid_fairy_model.desc"))
+                .setSaveConsumer(MiscConfig.USE_NEW_MAID_FAIRY_MODEL::set).build());
     }
 
     private static void vanillaConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
