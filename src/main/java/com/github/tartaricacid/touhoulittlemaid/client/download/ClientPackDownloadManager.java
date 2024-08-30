@@ -27,8 +27,27 @@ import java.util.concurrent.TimeUnit;
  */
 @OnlyIn(Dist.CLIENT)
 public class ClientPackDownloadManager {
+    /**
+     * 缓存的配置文件哈希值，用于判断客户端是否需要更新
+     */
+    private static int CACHE_CONFIG_HASH = 0;
+
     public static void downloadClientPack() {
         List<String> downloadList = ServerConfig.CLIENT_PACK_DOWNLOAD_URLS.get();
+        // 先计算哈希值
+        int hashCurrent = hashDownloadList(downloadList);
+        // 对比前后哈希值，判断是否需要更新
+        if (CACHE_CONFIG_HASH != hashCurrent) {
+            // 先清理，把服务端文件从内存中全清干净
+            CustomPackLoader.reloadPacks();
+            // 然后尝试加载服务端需要下载的文件
+            downloadAllPack(downloadList);
+            // 更新缓存的哈希值
+            CACHE_CONFIG_HASH = hashCurrent;
+        }
+    }
+
+    private static void downloadAllPack(List<String> downloadList) {
         downloadList.forEach(urlText -> {
             if (StringUtils.isBlank(urlText)) {
                 return;
@@ -84,5 +103,11 @@ public class ClientPackDownloadManager {
         } else {
             TouhouLittleMaid.LOGGER.error("{} file is corrupt and cannot be loaded.", fileName);
         }
+    }
+
+    private static int hashDownloadList(List<String> downloadList) {
+        int[] hash = new int[]{0};
+        downloadList.stream().filter(StringUtils::isNoneBlank).forEach(entry -> hash[0] += entry.hashCode());
+        return hash[0];
     }
 }
