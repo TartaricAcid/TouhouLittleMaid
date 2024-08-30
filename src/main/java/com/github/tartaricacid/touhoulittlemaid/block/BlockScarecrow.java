@@ -1,11 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.mojang.serialization.MapCodec;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
+import com.github.tartaricacid.touhoulittlemaid.util.VoxelShapeUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -23,18 +28,20 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockScarecrow extends HorizontalDirectionalBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     protected static final VoxelShape LOWER_AABB = Shapes.or(
-            Block.box(3, 0, 3, 13, 2, 13),
-            Block.box(4.5, 2, 4.5, 11.5, 16, 11.5)
+            Block.box(1, 0, 1, 15, 4, 15),
+            Block.box(2, 4, 2, 14, 8, 14),
+            Block.box(4.5, 8, 4.5, 11.5, 16, 11.5)
     );
-    protected static final VoxelShape UPPER_AABB = Shapes.or(
-            Block.box(4.5, 0, 4.5, 11.5, 2, 11.5),
-            Block.box(4, 2, 4, 12, 10, 12),
-            Block.box(3.5, 7.5, 3.5, 12.5, 10.5, 12.5)
-    );
+    protected static final VoxelShape UPPER_AABB_NORTH = Block.box(4, 0, 7.5, 12, 6.5, 13.5);
+    protected static final VoxelShape UPPER_AABB_SOUTH = VoxelShapeUtils.rotateHorizontal(UPPER_AABB_NORTH, Direction.SOUTH);
+    protected static final VoxelShape UPPER_AABB_EAST = VoxelShapeUtils.rotateHorizontal(UPPER_AABB_NORTH, Direction.EAST);
+    protected static final VoxelShape UPPER_AABB_WEST = VoxelShapeUtils.rotateHorizontal(UPPER_AABB_NORTH, Direction.WEST);
+
 
     public BlockScarecrow() {
         super(BlockBehaviour.Properties.of().sound(SoundType.GRASS).sound(SoundType.GRASS).strength(0.2F).noOcclusion());
@@ -107,6 +114,26 @@ public class BlockScarecrow extends HorizontalDirectionalBlock {
         if (blockHalf == DoubleBlockHalf.LOWER) {
             return LOWER_AABB;
         }
-        return UPPER_AABB;
+        Direction direction = state.getValue(FACING);
+        switch (direction) {
+            case SOUTH -> {
+                return UPPER_AABB_SOUTH;
+            }
+            case EAST -> {
+                return UPPER_AABB_EAST;
+            }
+            case WEST -> {
+                return UPPER_AABB_WEST;
+            }
+            default -> {
+                return UPPER_AABB_NORTH;
+            }
+        }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        int range = MiscConfig.SCARECROW_RANGE.get();
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.scarecrow.desc", range, range).withStyle(ChatFormatting.GRAY));
     }
 }
