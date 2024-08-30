@@ -2,9 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.EntityFairyModel;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -29,8 +31,20 @@ public class EntityFairyRenderer extends MobRenderer<EntityFairy, EntityFairyMod
     private static final ResourceLocation TEXTURE_16 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_16.png");
     private static final ResourceLocation TEXTURE_17 = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/maid_fairy/maid_fairy_17.png");
 
+    private final NewEntityFairyRenderer newEntityFairyRenderer;
+
     public EntityFairyRenderer(EntityRendererProvider.Context context) {
         super(context, new EntityFairyModel(context.bakeLayer(EntityFairyModel.LAYER)), 0.5f);
+        this.newEntityFairyRenderer = new NewEntityFairyRenderer(context);
+    }
+
+    @Override
+    public void render(EntityFairy fairy, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        if (MiscConfig.USE_NEW_MAID_FAIRY_MODEL.get()) {
+            newEntityFairyRenderer.render(fairy, entityYaw, partialTicks, poseStack, buffer, packedLight);
+        } else {
+            super.render(fairy, entityYaw, partialTicks, poseStack, buffer, packedLight);
+        }
     }
 
     @Override

@@ -384,6 +384,8 @@
   "config.touhou_little_maid.misc.close_optifine_warning.tooltip": "Whether to turn off the Optifine warning",
   "config.touhou_little_maid.misc.scarecrow_range": "Scarecrow Range",
   "config.touhou_little_maid.misc.scarecrow_range.tooltip": "The range of the scarecrow to prevent the fairy maid from spawning",
+  "config.touhou_little_maid.misc.use_new_maid_fairy_model": "Use New Maid Fairy Model",
+  "config.touhou_little_maid.misc.use_new_maid_fairy_model.tooltip": "Whether to use the new version of the Fairy Maid model",
   "config.touhou_little_maid.vanilla": "Vanilla",
   "config.touhou_little_maid.vanilla.replace_slime_model": "Replace Slime Model",
   "config.touhou_little_maid.vanilla.replace_slime_model.tooltip": "Whether to replace the vanilla slime model with the yukkuri",
