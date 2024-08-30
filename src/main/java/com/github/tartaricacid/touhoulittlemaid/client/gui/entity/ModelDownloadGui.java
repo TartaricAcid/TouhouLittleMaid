@@ -86,7 +86,7 @@ public class ModelDownloadGui extends Screen {
             this.addRenderableWidget(new GuiDownloadButton(x + 294, y + 50, 102, 20, info, b -> {
                 if (info.getStatus() == DownloadStatus.NOT_DOWNLOAD) {
                     info.setStatus(DownloadStatus.DOWNLOADING);
-                    InfoGetManager.downloadResourcesPack(info);
+                    InfoGetManager.downloadPack(info);
                     this.init();
                 } else if (info.getStatus() == DownloadStatus.NEED_UPDATE) {
                     this.updatePack(info);
@@ -379,7 +379,7 @@ public class ModelDownloadGui extends Screen {
         Set<String> deleteFiles = this.getDeleteFiles(info);
         this.deleteFiles(deleteFiles);
         info.setStatus(DownloadStatus.DOWNLOADING);
-        InfoGetManager.downloadResourcesPack(info);
+        InfoGetManager.downloadPack(info);
         this.needReload = true;
         this.getCrc32Infos();
         this.checkDownloadInfo();
