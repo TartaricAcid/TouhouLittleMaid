@@ -5,11 +5,10 @@ import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadInf
 import com.github.tartaricacid.touhoulittlemaid.client.download.pojo.DownloadStatus;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.util.HttpUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.util.UndashedUuid;
 import net.minecraft.SharedConstants;
@@ -26,10 +25,15 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -39,13 +43,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author TartaricAcid
  * @date 2020/1/12 15:32
  **/
-@SuppressWarnings("deprecation")
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class InfoGetManager {
@@ -117,6 +121,21 @@ public class InfoGetManager {
         }
     }
 
+    public static String getFileMd5(File file) {
+        String md5 = StringUtils.EMPTY;
+        // 文件不存在，返回空字符串
+        if (!file.isFile()) {
+            return md5;
+        }
+        try (FileInputStream stream = new FileInputStream(file)) {
+            md5 = DigestUtils.md5Hex(stream);
+        } catch (IOException e) {
+            e.fillInStackTrace();
+        }
+        return md5;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private static void downloadInfoJson(File infoJsonFile) throws IOException {
         Proxy proxy = Minecraft.getInstance().getProxy();
         // 线路 1
@@ -125,26 +144,24 @@ public class InfoGetManager {
         URL infoJsonUrlBackup = new URL(INFO_JSON_URL_BACKUP);
 
         // 先计算一次 info 文件 MD5，用于检查是否更新过
-        HashCode md5Previous = infoJsonFile.exists()? PackDownloader.hashFile(infoJsonFile.toPath(), Hashing.md5()): null;
+        String md5Previous = getFileMd5(infoJsonFile);
 
-        try {
-            try {
-                // 开始异步下载文件
-                // HttpUtil 自带文件比对功能，所以不需要再次验证 MD5 了
-                PackDownloader.downloadFile(infoJsonFile.toPath(), infoJsonUrl, getDownloadHeaders(), Hashing.md5(), INFO_MAX_FILE_SIZE, proxy, null);
-            } catch (Exception e) {
-                // 如果线路 1 出现异常，尝试线路 2 下载
-                TouhouLittleMaid.LOGGER.warn("Line 1 is inaccessible, try to use line 2");
-                USE_BACKUP_URL = true;
-                PackDownloader.downloadFile(infoJsonFile.toPath(), infoJsonUrlBackup, getDownloadHeaders(), Hashing.md5(), INFO_MAX_FILE_SIZE, proxy, null);
-            }
+        // 开始异步下载文件
+        // HttpUtil 自带文件比对功能，所以不需要再次验证 MD5 了
+        CompletableFuture downloader = HttpUtil.downloadTo(infoJsonFile, infoJsonUrl, getDownloadHeaders(), INFO_MAX_FILE_SIZE, null, proxy);
+        downloader.exceptionallyCompose(error -> {
+            // 如果线路 1 出现异常，尝试线路 2 下载
+            TouhouLittleMaid.LOGGER.warn("Line 1 is inaccessible, try to use line 2");
+            USE_BACKUP_URL = true;
+            return HttpUtil.downloadTo(infoJsonFile, infoJsonUrlBackup, getDownloadHeaders(), INFO_MAX_FILE_SIZE, null, proxy);
+        }).thenRun(() -> {
             // 如果成功，那么加载 info 文件
             loadInfoJson(infoJsonFile);
             TouhouLittleMaid.LOGGER.info("The download info file was successfully updated and loaded");
             // 再次计算 info 文件 MD5
-            HashCode md5Current = PackDownloader.hashFile(infoJsonFile.toPath(), Hashing.md5());
+            String md5Current = getFileMd5(infoJsonFile);
             // 比对前后 MD5 大小，用来判断是否更新过，用于游戏内提示
-            if (md5Previous == null) {
+            if (StringUtils.isBlank(md5Previous) || StringUtils.isBlank(md5Current)) {
                 return;
             }
             if (md5Previous.equals(md5Current)) {
@@ -152,10 +169,11 @@ public class InfoGetManager {
             } else {
                 STATUE = Statue.UPDATE;
             }
-        } catch (Exception e) {
+        }).exceptionally(error -> {
             // 异常，那么打印错误报告
             TouhouLittleMaid.LOGGER.warn("Failed to download info file, possibly due to network issues");
-        }
+            return null;
+        });
     }
 
     private static void loadInfoJson(File infoJsonFile) {
@@ -210,14 +228,15 @@ public class InfoGetManager {
         }
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private static void downloadPack(DownloadInfo info, File fileInCache, URL url, Proxy proxy, File fileInTlmModel) {
         // 向游戏内玩家发送我们正在下载的提示
         sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloading", info.getFileName()));
         // 开始计时
         StopWatch stopWatch = StopWatch.createStarted();
-        try {
-            // 异步下载
-            PackDownloader.downloadFile(fileInCache.toPath(), url, getDownloadHeaders(), Hashing.md5(), PACK_MAX_FILE_SIZE, proxy, info);
+        // 异步下载
+        CompletableFuture downloader = HttpUtil.downloadTo(fileInCache, url, getDownloadHeaders(), PACK_MAX_FILE_SIZE, info, proxy);
+        downloader.thenRun(() -> {
             // 如果正常下载完成，停止计时，发送提示，并进行加载
             stopWatch.stop();
             sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloaded", info.getFileName(), stopWatch.getTime(TimeUnit.MILLISECONDS) / 1000.0));
@@ -226,12 +245,13 @@ public class InfoGetManager {
             } catch (IOException e) {
                 e.fillInStackTrace();
             }
-        } catch (Exception e) {
+        }).exceptionally(error -> {
             // 异常？那么清理相关内容，并打印提示
             stopWatch.stop();
             info.setStatus(DownloadStatus.NOT_DOWNLOAD);
             TouhouLittleMaid.LOGGER.warn("Failed to download pack file, possibly due to network issues");
-        }
+            return null;
+        });
     }
 
     private static void reloadPack(DownloadInfo info, File fileInCache, File fileInTlmModel) throws IOException {

@@ -4,15 +4,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import net.minecraft.util.HttpUtil;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.util.ProgressListener;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
-public class DownloadInfo implements HttpUtil.DownloadProgressListener {
+public class DownloadInfo implements ProgressListener {
     private static final String[] UNITS = new String[]{"B", "kB", "MB", "GB", "TB"};
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private volatile DownloadStatus status = DownloadStatus.NOT_DOWNLOAD;
@@ -72,10 +76,7 @@ public class DownloadInfo implements HttpUtil.DownloadProgressListener {
     private String formatData;
 
     @Expose(deserialize = false)
-    private long totalBytes = -1;
-
-    @Expose(deserialize = false)
-    private long downloadedBytes = -1;
+    private int downloadProgress = -1;
 
     /**
      * 来自 https://stackoverflow.com/a/5599842
@@ -173,32 +174,30 @@ public class DownloadInfo implements HttpUtil.DownloadProgressListener {
         return type.size();
     }
 
-    public double getDownloadProgress() {
-        if (totalBytes == -1 || downloadedBytes == -1) {
-            return 0;
-        }
-        return (double) downloadedBytes / totalBytes;
+    public int getDownloadProgress() {
+        return downloadProgress;
     }
 
     @Override
-    public void requestStart() {
+    public void progressStartNoAbort(Component component) {
     }
 
     @Override
-    public void downloadStart(OptionalLong totalBytes) {
-        totalBytes.ifPresent(bytes -> this.totalBytes = bytes);
+    public void progressStart(Component header) {
     }
 
     @Override
-    public void downloadedBytes(long downloadedBytes) {
-        this.downloadedBytes = downloadedBytes;
+    public void progressStage(Component stage) {
     }
 
     @Override
-    public void requestFinished(boolean isSuccess) {
-        if (!isSuccess) {
-            downloadedBytes = -1;
-        }
+    public void progressStagePercentage(int progress) {
+        downloadProgress = progress;
+    }
+
+    @Override
+    public void stop() {
+        downloadProgress = -1;
     }
 
     public enum TypeEnum {
