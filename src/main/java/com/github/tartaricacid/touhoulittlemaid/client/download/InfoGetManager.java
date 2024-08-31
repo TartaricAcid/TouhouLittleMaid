@@ -72,18 +72,19 @@ public class InfoGetManager {
      */
     private static final int PACK_MAX_FILE_SIZE = 25 * 1024 * 1024;
 
-    private static final Path ROOT_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve("config").resolve(TouhouLittleMaid.MOD_ID);
+    private static final Path ROOT_FOLDER =
+            ((Minecraft.getInstance() != null && Minecraft.getInstance().gameDirectory != null) ?
+                    Paths.get(Minecraft.getInstance().gameDirectory.toURI()) :
+                    Paths.get("./"))
+                    .resolve("config").resolve(TouhouLittleMaid.MOD_ID);
     private static final Path INFO_JSON_FILE = ROOT_FOLDER.resolve("info.json");
     private static final Path PACK_FOLDER = ROOT_FOLDER.resolve("file");
-
-    private static boolean USE_BACKUP_URL = false;
-
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_ALL = Lists.newArrayList();
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_MAID = Lists.newArrayList();
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_CHAIR = Lists.newArrayList();
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_SOUND = Lists.newArrayList();
-
     public static Statue STATUE = Statue.FIRST;
+    private static boolean USE_BACKUP_URL = false;
 
     public static Map<String, String> getDownloadHeaders() {
         Map<String, String> map = Maps.newHashMap();

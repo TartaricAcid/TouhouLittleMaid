@@ -231,6 +231,12 @@ public class RecipeGenerator extends RecipeProvider {
                 .requires(2, Items.PAPER)
                 .save(recipeOutput);
 
+        AltarRecipeBuilder.shapeless(RecipeCategory.MISC, InitItems.SCARECROW)
+                .power(0.2F)
+                .requires(4, Items.HAY_BLOCK)
+                .requires(2, Tags.Items.DUSTS_REDSTONE)
+                .save(recipeOutput);
+
         AltarRecipeBuilder.shapeless(RecipeCategory.MISC, InitItems.TANK_BACKPACK)
                 .power(0.2F)
                 .requires(InitItems.MAID_BACKPACK_MIDDLE)
