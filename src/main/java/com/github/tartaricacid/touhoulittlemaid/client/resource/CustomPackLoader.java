@@ -80,6 +80,12 @@ public class CustomPackLoader {
 
         // 读取
         initPacks();
+
+        // 对读取的列表进行排序，把默认模型包排在最前面
+        // 其他模型包按照 namespace 字典排序
+        MAID_MODELS.sortPackList();
+        CHAIR_MODELS.sortPackList();
+        CustomSoundLoader.sortSoundPack();
     }
 
     private static void initPacks() {
@@ -178,7 +184,7 @@ public class CustomPackLoader {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerFilePackTexture(rootPath, pack.getIcon());
@@ -323,7 +329,7 @@ public class CustomPackLoader {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerZipPackTexture(zipFile.getName(), pack.getIcon());
@@ -492,7 +498,7 @@ public class CustomPackLoader {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerFilePackTexture(rootPath, pack.getIcon());
@@ -546,7 +552,7 @@ public class CustomPackLoader {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerZipPackTexture(zipFile.getName(), pack.getIcon());
