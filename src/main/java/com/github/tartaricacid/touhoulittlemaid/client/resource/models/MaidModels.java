@@ -10,10 +10,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public final class MaidModels {
@@ -120,6 +117,24 @@ public final class MaidModels {
 
     public void putEasterEggEncryptTagModel(String tag, ModelData data) {
         this.easterEggEncryptTagModelMap.put(tag, data);
+    }
+
+    public void sortPackList() {
+        List<CustomModelPack<MaidModelInfo>> defaultPackList = Lists.newArrayList();
+        List<CustomModelPack<MaidModelInfo>> sortPackList = Lists.newArrayList();
+
+        // 先把默认模型查到，按顺序放进去
+        for (String id : DefaultPackConstant.MAID_SORT) {
+            this.packList.stream().filter(info -> info.getId().equals(id)).findFirst().ifPresent(defaultPackList::add);
+        }
+        // 剩余模型放进另一个里，进行字典排序
+        this.packList.stream().filter(info -> !DefaultPackConstant.MAID_SORT.contains(info.getId())).forEach(sortPackList::add);
+        sortPackList.sort(Comparator.comparing(CustomModelPack::getId));
+
+        // 最后顺次放入
+        this.packList.clear();
+        this.packList.addAll(defaultPackList);
+        this.packList.addAll(sortPackList);
     }
 
     public static class ModelData {
