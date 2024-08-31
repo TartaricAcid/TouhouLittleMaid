@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -14,6 +15,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class CustomModelPack<T extends IModelInfo> {
+    @Expose(serialize = false, deserialize = false)
+    private String id = "";
+
     @SerializedName("date")
     private String date;
 
@@ -40,6 +44,10 @@ public class CustomModelPack<T extends IModelInfo> {
     private AnimationState iconAnimation = AnimationState.UNCHECK;
     @Expose(deserialize = false)
     private int iconAspectRatio = 1;
+
+    public String getId() {
+        return id;
+    }
 
     @Nullable
     public String getDate() {
@@ -93,7 +101,13 @@ public class CustomModelPack<T extends IModelInfo> {
     }
 
     @SuppressWarnings("unchecked")
-    public CustomModelPack<T> decorate() {
+    public CustomModelPack<T> decorate(String id) {
+        // 必须传入 ID
+        if (StringUtils.isBlank(id)) {
+            throw new RuntimeException("pack id must not be empty");
+        }
+        this.id = id;
+
         // 包名和 model list 不能为空
         if (packName == null) {
             throw new JsonSyntaxException("Expected \"pack_name\" in pack");
