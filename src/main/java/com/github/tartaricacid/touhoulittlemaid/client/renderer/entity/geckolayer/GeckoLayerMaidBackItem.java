@@ -41,8 +41,6 @@ public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, G
         }
         if (stack.getItem() instanceof Vanishable) {
             matrixStack.pushPose();
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
 
             if (!model.backpackBones().isEmpty()) {
                 RenderUtils.prepMatrixForLocator(matrixStack, model.backpackBones());

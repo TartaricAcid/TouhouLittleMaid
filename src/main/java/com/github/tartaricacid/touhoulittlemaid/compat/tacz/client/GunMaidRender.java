@@ -69,7 +69,7 @@ public class GunMaidRender {
             if (!geoModel.backpackBones().isEmpty()) {
                 RenderUtils.prepMatrixForLocator(poseStack, geoModel.backpackBones());
             }
-            poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees(180));
             poseStack.translate(0, -1, 0.25);
             renderBackGun(poseStack, buffer, packedLight, heldItem, maid);
             return;
