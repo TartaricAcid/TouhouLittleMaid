@@ -233,7 +233,8 @@ public class RecipeGenerator extends RecipeProvider {
 
         AltarRecipeBuilder.shapeless(RecipeCategory.MISC, InitItems.SCARECROW)
                 .power(0.2F)
-                .requires(4, Items.HAY_BLOCK)
+                .requires(2, Items.HAY_BLOCK)
+                .requires(2, Items.GRANITE)
                 .requires(2, Tags.Items.DUSTS_REDSTONE)
                 .save(recipeOutput);
 
