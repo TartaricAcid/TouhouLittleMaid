@@ -37,7 +37,7 @@ public class BlockScarecrow extends HorizontalDirectionalBlock {
             Block.box(2, 4, 2, 14, 8, 14),
             Block.box(4.5, 8, 4.5, 11.5, 16, 11.5)
     );
-    protected static final VoxelShape UPPER_AABB_NORTH = Block.box(4, 0, 7.5, 12, 6.5, 13.5);
+    protected static final VoxelShape UPPER_AABB_NORTH = Block.box(4, 0, 7.5, 12, 7.5, 13.5);
     protected static final VoxelShape UPPER_AABB_SOUTH = VoxelShapeUtils.rotateHorizontal(UPPER_AABB_NORTH, Direction.SOUTH);
     protected static final VoxelShape UPPER_AABB_EAST = VoxelShapeUtils.rotateHorizontal(UPPER_AABB_NORTH, Direction.EAST);
     protected static final VoxelShape UPPER_AABB_WEST = VoxelShapeUtils.rotateHorizontal(UPPER_AABB_NORTH, Direction.WEST);
