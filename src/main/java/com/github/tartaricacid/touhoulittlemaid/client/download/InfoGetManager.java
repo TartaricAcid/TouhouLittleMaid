@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -72,7 +73,7 @@ public class InfoGetManager {
      */
     private static final int PACK_MAX_FILE_SIZE = 25 * 1024 * 1024;
 
-    private static final Path ROOT_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve("config").resolve(TouhouLittleMaid.MOD_ID);
+    private static final Path ROOT_FOLDER = getRootPath();
     private static final Path INFO_JSON_FILE = ROOT_FOLDER.resolve("info.json");
     private static final Path PACK_FOLDER = ROOT_FOLDER.resolve("file");
 
@@ -133,6 +134,19 @@ public class InfoGetManager {
             e.fillInStackTrace();
         }
         return md5;
+    }
+
+    @SuppressWarnings("all")
+    private static Path getRootPath() {
+        Path configPath = null;
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft != null && minecraft.gameDirectory != null) {
+            URI gameUri = minecraft.gameDirectory.toURI();
+            configPath = Paths.get(gameUri).resolve("config");
+        } else {
+            configPath = Paths.get("./").resolve("config");
+        }
+        return configPath.resolve(TouhouLittleMaid.MOD_ID);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
