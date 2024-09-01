@@ -5,7 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
 import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.HttpUtil;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,15 +73,15 @@ public class ClientPackDownloadManager {
     private static void downloadPack(URL url, File packFile, Proxy proxy) {
         String fileName = packFile.getName();
         // 向游戏内玩家发送我们正在下载的提示
-        InfoGetManager.sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloading", fileName));
+        InfoGetManager.sendDownloadMessage(new TranslatableComponent("gui.touhou_little_maid.resources_download.state.downloading", fileName));
         // 开始计时
         StopWatch stopWatch = StopWatch.createStarted();
         // 异步下载
-        CompletableFuture downloader = HttpUtil.downloadTo(packFile, url, InfoGetManager.getDownloadHeaders(), InfoGetManager.getPackMaxFileSize(), null, proxy);
+        CompletableFuture downloader = HttpUtil.downloadTo(packFile, String.valueOf(url), InfoGetManager.getDownloadHeaders(), InfoGetManager.getPackMaxFileSize(), null, proxy);
         downloader.thenRun(() -> {
             // 如果正常下载完成，停止计时，发送提示，并进行加载
             stopWatch.stop();
-            InfoGetManager.sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloaded", fileName, stopWatch.getTime(TimeUnit.MILLISECONDS) / 1000.0));
+            InfoGetManager.sendDownloadMessage(new TranslatableComponent("gui.touhou_little_maid.resources_download.state.downloaded", fileName, stopWatch.getTime(TimeUnit.MILLISECONDS) / 1000.0));
             try {
                 reloadPack(packFile);
             } catch (IOException e) {
