@@ -225,13 +225,13 @@ public class MenuIntegration {
                 .setDefaultValue(false).setTooltip(Component.translatable("config.touhou_little_maid.misc.close_optifine_warning.tooltip"))
                 .setSaveConsumer(MiscConfig.CLOSE_OPTIFINE_WARNING::set).build());
 
-        misc.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.misc.scarecrow_range.name"), MiscConfig.SCARECROW_RANGE.get())
+        misc.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.misc.scarecrow_range"), MiscConfig.SCARECROW_RANGE.get())
                 .setDefaultValue(16 * 3).setMin(0).setMax(Integer.MAX_VALUE)
-                .setTooltip(Component.translatable("config.touhou_little_maid.misc.scarecrow_range.desc"))
+                .setTooltip(Component.translatable("config.touhou_little_maid.misc.scarecrow_range.tooltip"))
                 .setSaveConsumer(d -> MiscConfig.SCARECROW_RANGE.set(d)).build());
 
-        misc.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.misc.use_new_maid_fairy_model.name"), MiscConfig.USE_NEW_MAID_FAIRY_MODEL.get())
-                .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.misc.use_new_maid_fairy_model.desc"))
+        misc.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.misc.use_new_maid_fairy_model"), MiscConfig.USE_NEW_MAID_FAIRY_MODEL.get())
+                .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.misc.use_new_maid_fairy_model.tooltip"))
                 .setSaveConsumer(MiscConfig.USE_NEW_MAID_FAIRY_MODEL::set).build());
     }
 

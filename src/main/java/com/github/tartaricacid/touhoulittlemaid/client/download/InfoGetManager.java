@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -72,11 +73,7 @@ public class InfoGetManager {
      */
     private static final int PACK_MAX_FILE_SIZE = 25 * 1024 * 1024;
 
-    private static final Path ROOT_FOLDER =
-            ((Minecraft.getInstance() != null && Minecraft.getInstance().gameDirectory != null) ?
-                    Paths.get(Minecraft.getInstance().gameDirectory.toURI()) :
-                    Paths.get("./"))
-                    .resolve("config").resolve(TouhouLittleMaid.MOD_ID);
+    private static final Path ROOT_FOLDER = getRootPath();
     private static final Path INFO_JSON_FILE = ROOT_FOLDER.resolve("info.json");
     private static final Path PACK_FOLDER = ROOT_FOLDER.resolve("file");
     public static List<DownloadInfo> DOWNLOAD_INFO_LIST_ALL = Lists.newArrayList();
@@ -136,13 +133,26 @@ public class InfoGetManager {
         return md5;
     }
 
+    @SuppressWarnings("all")
+    private static Path getRootPath() {
+        Path configPath = null;
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft != null && minecraft.gameDirectory != null) {
+            URI gameUri = minecraft.gameDirectory.toURI();
+            configPath = Paths.get(gameUri).resolve("config");
+        } else {
+            configPath = Paths.get("./").resolve("config");
+        }
+        return configPath.resolve(TouhouLittleMaid.MOD_ID);
+    }
+
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static void downloadInfoJson(File infoJsonFile) throws IOException {
         Proxy proxy = Minecraft.getInstance().getProxy();
         // 线路 1
-        URL infoJsonUrl = new URL(INFO_JSON_URL);
+        URL infoJsonUrl = URI.create(INFO_JSON_URL).toURL();
         // 线路 2
-        URL infoJsonUrlBackup = new URL(INFO_JSON_URL_BACKUP);
+        URL infoJsonUrlBackup = URI.create(INFO_JSON_URL_BACKUP).toURL();
 
         // 先计算一次 info 文件 MD5，用于检查是否更新过
         String md5Previous = getFileMd5(infoJsonFile);
@@ -212,7 +222,7 @@ public class InfoGetManager {
             info.setStatus(DownloadStatus.DOWNLOADING);
             // 依据先前情况，选择线路
             String rootUrl = USE_BACKUP_URL ? ROOT_URL_BACKUP : ROOT_URL;
-            URL url = new URL(new URL(rootUrl), info.getUrl());
+            URL url = URI.create(rootUrl).resolve(info.getUrl()).toURL();
             // 文件先下载到缓存文件夹，然后才复制到模型文件夹中
             File fileInTlmModel = CustomPackLoader.PACK_FOLDER.resolve(info.getFileName()).toFile();
             File fileInCache = PACK_FOLDER.resolve(info.getFileName()).toFile();

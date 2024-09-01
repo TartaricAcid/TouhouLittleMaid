@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -60,7 +61,7 @@ public class ClientPackDownloadManager {
     private static void download(String urlText) {
         Proxy proxy = Minecraft.getInstance().getProxy();
         try {
-            URL url = new URL(urlText);
+            URL url = URI.create(urlText).toURL();
             String fileName = FilenameUtils.getName(url.getPath());
             File packFile = InfoGetManager.getPackFolder().resolve(fileName).toFile();
             downloadPack(url, packFile, proxy);
