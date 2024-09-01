@@ -66,6 +66,11 @@ public class GunMaidRender {
         // 如果女仆穿戴了背包，且配置文件允许显示背包
         // 直接调用背包渲染
         if (InGameMaidConfig.INSTANCE.isShowBackpack() && maidBackpackType != BackpackManager.getEmptyBackpack()) {
+            if (!geoModel.backpackBones().isEmpty()) {
+                RenderUtils.prepMatrixForLocator(poseStack, geoModel.backpackBones());
+            }
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+            poseStack.translate(0, -1, 0.25);
             renderBackGun(poseStack, buffer, packedLight, heldItem, maid);
             return;
         }

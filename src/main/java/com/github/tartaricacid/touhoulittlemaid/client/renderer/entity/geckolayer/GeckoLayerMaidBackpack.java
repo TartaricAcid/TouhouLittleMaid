@@ -42,11 +42,13 @@ public class GeckoLayerMaidBackpack<T extends Mob> extends GeoLayerRenderer<T, G
                 return;
             }
             if (!model.backpackBones().isEmpty()) {
+                poseStack.pushPose();
                 RenderUtils.prepMatrixForLocator(poseStack, model.backpackBones());
                 poseStack.translate(0, 1, 0.25);
                 poseStack.mulPose(Axis.ZP.rotationDegrees(180));
                 IMaidBackpack backpack = InGameMaidConfig.INSTANCE.isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
                 BackpackManager.findBackpackModel(backpack.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
+                poseStack.popPose();
             }
         }
     }
