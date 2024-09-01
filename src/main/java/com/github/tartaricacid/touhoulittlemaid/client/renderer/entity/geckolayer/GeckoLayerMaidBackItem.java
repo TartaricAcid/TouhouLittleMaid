@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,12 @@ public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, G
         }
         if (stack.getItem() instanceof TieredItem) {
             matrixStack.pushPose();
-            matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+
+            if (!model.backpackBones().isEmpty()) {
+                RenderUtils.prepMatrixForLocator(matrixStack, model.backpackBones());
+            }
+            matrixStack.translate(0, 1, 0.25);
+
             matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             matrixStack.translate(0, 0.5, -0.25);
             if (InGameMaidConfig.INSTANCE.isShowBackpack()) {
