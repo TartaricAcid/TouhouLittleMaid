@@ -82,6 +82,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(28, SyncMaidAreaMessage.class, SyncMaidAreaMessage::encode, SyncMaidAreaMessage::decode, SyncMaidAreaMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(29, ServantBellSetMessage.class, ServantBellSetMessage::encode, ServantBellSetMessage::decode, ServantBellSetMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

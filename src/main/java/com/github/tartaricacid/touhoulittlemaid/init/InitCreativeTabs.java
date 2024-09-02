@@ -60,6 +60,7 @@ public class InitCreativeTabs {
                 output.accept(TRUMPET.get());
                 output.accept(RED_FOX_SCROLL.get());
                 output.accept(WHITE_FOX_SCROLL.get());
+                output.accept(SERVANT_BELL.get());
                 output.accept(KAPPA_COMPASS.get());
                 output.accept(EXTINGUISHER.get());
                 output.accept(GOMOKU.get());
