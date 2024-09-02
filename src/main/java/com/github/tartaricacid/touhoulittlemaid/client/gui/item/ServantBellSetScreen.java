@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ServantBellSetMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ServantBellSetPackage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,6 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
@@ -85,7 +85,7 @@ public class ServantBellSetScreen extends Screen {
 
     private void sendDoneMessage(Button button) {
         if (StringUtils.isNotBlank(textField.getValue())) {
-            NetworkHandler.CHANNEL.sendToServer(new ServantBellSetMessage(this.maidId, textField.getValue()));
+            PacketDistributor.sendToServer(new ServantBellSetPackage(this.maidId, textField.getValue()));
         }
         this.onClose();
     }
