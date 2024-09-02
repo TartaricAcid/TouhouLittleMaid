@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
@@ -24,7 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -81,8 +81,8 @@ public class ItemFoxScroll extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> components, TooltipFlag flagIn) {
         Pair<String, BlockPos> info = getTrackInfo(stack);
         if (info != null) {
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", info.getLeft()).withStyle(ChatFormatting.GOLD));
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.position", info.getRight().toShortString()).withStyle(ChatFormatting.RED));
+            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", info.getFirst()).withStyle(ChatFormatting.GOLD));
+            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.position", info.getSecond().toShortString()).withStyle(ChatFormatting.RED));
             components.add(Component.empty());
         }
         if (stack.getItem() == InitItems.RED_FOX_SCROLL.get()) {

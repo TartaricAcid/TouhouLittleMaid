@@ -51,18 +51,13 @@ public class ServantBellSetScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         int middleX = this.width / 2;
         int middleY = this.height / 2;
-        renderBackground(graphics);
+        renderBackground(graphics, mouseX, mouseY, partialTicks);
         textField.render(graphics, mouseX, mouseY, partialTicks);
         if (textField.getValue().isEmpty()) {
             graphics.drawString(font, Component.translatable("gui.touhou_little_maid.servant_bell.edit_box").withStyle(ChatFormatting.ITALIC), middleX - 94, middleY - 20, ChatFormatting.DARK_GRAY.getColor(), false);
         }
         graphics.drawCenteredString(font, Component.translatable("tooltips.touhou_little_maid.servant_bell.desc", this.maidUuid.toString()), middleX, middleY - 50, 0xFFFFFF);
         super.render(graphics, mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    public void tick() {
-        this.textField.tick();
     }
 
     @Override

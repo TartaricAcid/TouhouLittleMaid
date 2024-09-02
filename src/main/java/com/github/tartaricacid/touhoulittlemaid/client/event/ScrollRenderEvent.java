@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemServantBell;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +17,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Optional;
 
@@ -33,8 +33,8 @@ public class ScrollRenderEvent {
                 return;
             }
             Pair<String, BlockPos> info = trackInfo.get();
-            String dimension = info.getLeft();
-            Vec3 trackVec = new Vec3(info.getRight().getX(), info.getRight().getY(), info.getRight().getZ());
+            String dimension = info.getFirst();
+            Vec3 trackVec = new Vec3(info.getSecond().getX(), info.getSecond().getY(), info.getSecond().getZ());
             if (!dimension.equals(player.level.dimension().location().toString())) {
                 return;
             }
