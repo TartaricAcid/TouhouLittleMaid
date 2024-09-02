@@ -5,10 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -46,7 +44,7 @@ public class ItemServantBell extends Item {
     }
 
     @Nullable
-    public static Pair<String, BlockPos> getMaidShow(ItemStack stack) {
+    public static ItemFoxScroll.TrackInfo getMaidShow(ItemStack stack) {
         return stack.get(SAKUYA_BELL_SHOW_TAG);
     }
 
@@ -123,7 +121,7 @@ public class ItemServantBell extends Item {
         infos.stream().filter(info -> info.getEntityId().equals(searchUuid)).findFirst().ifPresentOrElse(info -> {
             String dimension = info.getDimension();
             String playerDimension = player.level.dimension().location().toString();
-            stack.set(SAKUYA_BELL_SHOW_TAG, Pair.of(dimension, info.getChunkPos()));
+            stack.set(SAKUYA_BELL_SHOW_TAG, new ItemFoxScroll.TrackInfo(dimension, info.getChunkPos()));
             if (dimension.equals(playerDimension)) {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.servant_bell.show_pos"));
             } else {

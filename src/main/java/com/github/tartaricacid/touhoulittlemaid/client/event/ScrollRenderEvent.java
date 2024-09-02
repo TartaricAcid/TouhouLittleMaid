@@ -6,9 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemServantBell;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -28,13 +26,13 @@ public class ScrollRenderEvent {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (RenderLevelStageEvent.Stage.AFTER_PARTICLES.equals(event.getStage()) && player != null) {
-            Optional<Pair<String, BlockPos>> trackInfo = getInfo(player, player.getMainHandItem());
+            Optional<ItemFoxScroll.TrackInfo> trackInfo = getInfo(player, player.getMainHandItem());
             if (trackInfo.isEmpty()) {
                 return;
             }
-            Pair<String, BlockPos> info = trackInfo.get();
-            String dimension = info.getFirst();
-            Vec3 trackVec = new Vec3(info.getSecond().getX(), info.getSecond().getY(), info.getSecond().getZ());
+            ItemFoxScroll.TrackInfo info = trackInfo.get();
+            String dimension = info.dimension();
+            Vec3 trackVec = new Vec3(info.position().getX(), info.position().getY(), info.position().getZ());
             if (!dimension.equals(player.level.dimension().location().toString())) {
                 return;
             }
@@ -58,7 +56,7 @@ public class ScrollRenderEvent {
         }
     }
 
-    private static Optional<Pair<String, BlockPos>> getInfo(Player player, ItemStack stack) {
+    private static Optional<ItemFoxScroll.TrackInfo> getInfo(Player player, ItemStack stack) {
         if (stack.getItem() instanceof ItemFoxScroll) {
             var trackInfo = ItemFoxScroll.getTrackInfo(player.getMainHandItem());
             return Optional.ofNullable(trackInfo);
