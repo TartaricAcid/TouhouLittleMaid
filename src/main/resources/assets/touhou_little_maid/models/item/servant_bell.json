@@ -1,6 +1,39 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "touhou_little_maid:item/servant_bell"
-  }
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "touhou_little_maid:item/servant_bell"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [90, -45, -45],
+			"translation": [0, -2, -3.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [90, 45, 45],
+			"translation": [0, -2, -3.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [100, 45, -45],
+			"translation": [1.25, -2, -8],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"firstperson_lefthand": {
+			"rotation": [100, 45, 45],
+			"translation": [1.25, -2, -8],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"ground": {
+			"translation": [0, 0.5, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"gui": {
+			"rotation": [0, 180, 0]
+		},
+		"head": {
+			"translation": [0, 15, 0]
+		}
+	}
 }
