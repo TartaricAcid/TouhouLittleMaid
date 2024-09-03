@@ -55,7 +55,7 @@ public class ServantBellSetScreen extends Screen {
         if (textField.getValue().isEmpty()) {
             drawString(poseStack, font, new TranslatableComponent("gui.touhou_little_maid.servant_bell.edit_box").withStyle(ChatFormatting.ITALIC), middleX - 94, middleY - 20, ChatFormatting.DARK_GRAY.getColor());
         }
-        drawCenteredString(poseStack, font, new TranslatableComponent("tooltips.touhou_little_maid.servant_bell.desc", this.maidUuid.toString()), middleX, middleY - 50, 0xFFFFFF);
+        drawCenteredString(poseStack, font, new TranslatableComponent("tooltips.touhou_little_maid.servant_bell.uuid", this.maidUuid.toString()), middleX, middleY - 50, 0xFFFFFF);
         super.render(poseStack, mouseX, mouseY, partialTicks);
     }
 
