@@ -42,7 +42,7 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         poseStack.pushPose();
         this.setTranslateAndPose(te, poseStack);
         poseStack.mulPose(Vector3f.ZN.rotationDegrees(180));
-        VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
+        VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
         BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
 
