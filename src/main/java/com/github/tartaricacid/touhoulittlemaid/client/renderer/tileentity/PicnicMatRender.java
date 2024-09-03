@@ -50,7 +50,7 @@ public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat>
                 renderFood(picnicMat, 7, 0.375f, 1.575f, 1.4125f, poseStack, bufferIn, combinedLightIn, combinedOverlayIn);
                 renderFood(picnicMat, 8, -0.05f, 1.2f, 1.25f, poseStack, bufferIn, combinedLightIn, combinedOverlayIn);
             }
-            VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
+            VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
             model.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
             poseStack.popPose();
         }

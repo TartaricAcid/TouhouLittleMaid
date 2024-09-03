@@ -52,12 +52,12 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
     private List<Object> animations = Lists.newArrayList();
 
     public BedrockModel() {
-        super(RenderType::entityTranslucent);
+        super(RenderType::entityCutoutNoCull);
         renderBoundingBox = new AABB(-1, 0, -1, 1, 2, 1);
     }
 
     public BedrockModel(BedrockModelPOJO pojo, BedrockVersion version) {
-        super(RenderType::entityTranslucent);
+        super(RenderType::entityCutoutNoCull);
         if (version == BedrockVersion.LEGACY) {
             loadLegacyModel(pojo);
         }

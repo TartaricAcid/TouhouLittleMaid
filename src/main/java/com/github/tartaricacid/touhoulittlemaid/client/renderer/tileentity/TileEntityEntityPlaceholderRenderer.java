@@ -33,7 +33,7 @@ public class TileEntityEntityPlaceholderRenderer extends BlockEntityWithoutLevel
         poseStack.pushPose();
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(getTexture(stack)));
+        VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(getTexture(stack)));
         BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
     }
