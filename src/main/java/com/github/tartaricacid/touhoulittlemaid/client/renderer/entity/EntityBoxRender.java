@@ -33,7 +33,7 @@ public class EntityBoxRender extends EntityRenderer<EntityBox> {
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.translate(0.0, -1.501, 0.0);
         boxModel.setupAnim(entityBox, 0, 0, -0.1f, 0, 0);
-        RenderType renderType = RenderType.entityTranslucent(getTextureLocation(entityBox));
+        RenderType renderType = RenderType.entityCutoutNoCull(getTextureLocation(entityBox));
         VertexConsumer buffer = bufferIn.getBuffer(renderType);
         boxModel.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
