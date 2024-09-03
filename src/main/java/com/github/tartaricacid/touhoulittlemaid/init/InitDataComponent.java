@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll.TrackInfo;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -14,6 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class InitDataComponent {
     public static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(TouhouLittleMaid.MOD_ID);
@@ -81,4 +83,16 @@ public class InitDataComponent {
     public static final String TANK_BACKPACK_TAG_NAME = "tanks";
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompoundTag>> TANK_BACKPACK_TAG = DATA_COMPONENTS
             .register(TANK_BACKPACK_TAG_NAME, () -> DataComponentType.<CompoundTag>builder().persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG).build());
+
+    public static final String SAKUYA_BELL_UUID_TAG_NAME = "sakuya_bell_uuid";
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> SAKUYA_BELL_UUID_TAG = DATA_COMPONENTS
+            .register(SAKUYA_BELL_UUID_TAG_NAME, () -> DataComponentType.<UUID>builder().persistent(UUIDUtil.CODEC).networkSynchronized(UUIDUtil.STREAM_CODEC).build());
+
+    public static final String SAKUYA_BELL_TIP_TAG_NAME = "sakuya_bell_tip";
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> SAKUYA_BELL_TIP_TAG = DATA_COMPONENTS
+            .register(SAKUYA_BELL_TIP_TAG_NAME, () -> DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
+
+    public static final String SAKUYA_BELL_SHOW_TAG_NAME = "sakuya_bell_show";
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<TrackInfo>> SAKUYA_BELL_SHOW_TAG = DATA_COMPONENTS
+            .register(SAKUYA_BELL_SHOW_TAG_NAME, () -> DataComponentType.<TrackInfo>builder().persistent(TrackInfo.CODEC).networkSynchronized(TrackInfo.STREAM_CODEC).build());
 }
