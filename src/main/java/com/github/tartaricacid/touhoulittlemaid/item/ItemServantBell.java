@@ -7,11 +7,14 @@ import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -103,6 +106,7 @@ public class ItemServantBell extends Item {
     private void teleportMaid(Player player, List<? extends EntityMaid> maids) {
         maids.forEach(maid -> {
             maid.setHomeModeEnable(false);
+            maid.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 1, true, false));
             maid.teleportTo(player.getX() + player.getRandom().nextInt(3) - 1, player.getY(), player.getZ() + player.getRandom().nextInt(3) - 1);
         });
     }
@@ -148,7 +152,7 @@ public class ItemServantBell extends Item {
 
     @Override
     public UseAnim getUseAnimation(ItemStack pStack) {
-        return UseAnim.SPEAR;
+        return UseAnim.BLOCK;
     }
 
     @Override
@@ -164,7 +168,10 @@ public class ItemServantBell extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         UUID uuid = getMaidUuid(stack);
         if (uuid != null) {
-            tooltip.add(Component.translatable("tooltips.touhou_little_maid.servant_bell.desc", uuid.toString()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltips.touhou_little_maid.servant_bell.uuid", uuid.toString()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(CommonComponents.space());
         }
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.servant_bell.desc.1").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.servant_bell.desc.2").withStyle(ChatFormatting.GRAY));
     }
 }
