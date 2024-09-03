@@ -272,6 +272,13 @@ public class RecipeGenerator extends RecipeProvider {
                 .requires(Items.HOPPER)
                 .save(recipeOutput);
 
+        AltarRecipeBuilder.shapeless(RecipeCategory.MISC, InitItems.SERVANT_BELL)
+                .power(0.2F)
+                .requires(2, Tags.Items.INGOTS_GOLD)
+                .requires(2, Tags.Items.NUGGETS_GOLD)
+                .requires(2, Tags.Items.RODS_WOODEN)
+                .save(recipeOutput);
+
         ItemStack entityPlaceholder = new ItemStack(InitItems.ENTITY_PLACEHOLDER.asItem());
         entityPlaceholder.set(InitDataComponent.RECIPES_ID_TAG, "reborn_maid");
         AltarRecipeBuilder.shapeless(RecipeCategory.MISC, entityPlaceholder)
