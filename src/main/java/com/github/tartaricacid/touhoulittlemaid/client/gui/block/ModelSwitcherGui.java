@@ -80,10 +80,6 @@ public class ModelSwitcherGui extends Screen {
         maid.setModelId(info.getModelId().toString());
 
         this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20,new TranslatableComponent("gui.touhou_little_maid.button.skin"), b -> CacheIconManager.openModelSwitcherModelGui(maid, info, this)));
-        this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20, new TranslatableComponent("gui.touhou_little_maid.button.skin"), b -> {
-            ModelSwitcherModelGui modelGui = new ModelSwitcherModelGui(this.maid, info, this);
-            getMinecraft().setScreen(modelGui);
-        }));
         this.addRenderableWidget(new DirectButton(leftPos + 55, topPos + 38, 76, 20, info.getDirection(),
                 b -> info.setDirection(((DirectButton) b).getDirection())));
         this.addRenderableWidget(new Button(leftPos + 12, topPos + 135, 121, 20, new TranslatableComponent("selectWorld.edit.save"),
