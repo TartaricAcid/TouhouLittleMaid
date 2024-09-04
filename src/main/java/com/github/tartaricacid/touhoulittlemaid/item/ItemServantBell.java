@@ -196,7 +196,7 @@ public class ItemServantBell extends Item {
         UUID uuid = getMaidUuid(stack);
         if (uuid != null) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.servant_bell.uuid", uuid.toString()).withStyle(ChatFormatting.GRAY));
-            tooltip.add(CommonComponents.space());
+            tooltip.add(Component.literal(" "));
         }
         tooltip.add(Component.translatable("tooltips.touhou_little_maid.servant_bell.desc.1").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("tooltips.touhou_little_maid.servant_bell.desc.2").withStyle(ChatFormatting.GRAY));

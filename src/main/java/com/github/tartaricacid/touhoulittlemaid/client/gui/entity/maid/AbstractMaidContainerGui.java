@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidDownloadButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
@@ -205,7 +205,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void addStateButton() {
-        skin = new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidModelGui(maid)));
+        skin = new ImageButton(leftPos + 62, topPos + 14, 9, 9, 72, 43, 10, BUTTON, (b) -> CacheIconManager.openMaidModelGui(maid));
         sound = new ImageButton(leftPos + 52, topPos + 14, 9, 9, 144, 43, 10, BUTTON, (b) -> getMinecraft().setScreen(new MaidSoundPackGui(maid)));
         info = new ImageButton(leftPos + 8, topPos + 14, 9, 9, 72, 65, 10, BUTTON, NO_ACTION);
         this.addRenderableWidget(skin);

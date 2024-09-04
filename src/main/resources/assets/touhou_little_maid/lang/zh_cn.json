@@ -255,6 +255,8 @@
   "gui.touhou_little_maid.cloth_config_warning.tips": "您需要安装 Cloth Config API 模组才能使用游戏内配置功能",
   "gui.touhou_little_maid.cloth_config_warning.download": "下载 Cloth Config API 模组",
   "gui.touhou_little_maid.servant_bell.edit_box": "请输入提示文本",
+  "gui.touhou_little_maid.cache_screen.desc": "缓存模型图标中，请等待……",
+  "gui.touhou_little_maid.cache_screen.progress": "进度：%d/%d",
   "chat_bubble.touhou_little_maid.inner.feed_animal.max_number": "动物太多了……我不再喂养它们了！",
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "我的双手根本空不出来……我没法吃饭了！",
   "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty": "快上菜、快上菜，我都没东西吃了！",

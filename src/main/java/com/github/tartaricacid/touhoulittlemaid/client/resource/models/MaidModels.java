@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.models;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
@@ -63,6 +64,7 @@ public final class MaidModels {
 
     public void addPack(CustomModelPack<MaidModelInfo> pack) {
         this.packList.add(pack);
+        CacheIconManager.addMaidPack(pack);
     }
 
     public void putModel(String modelId, BedrockModel<Mob> modelJson) {
