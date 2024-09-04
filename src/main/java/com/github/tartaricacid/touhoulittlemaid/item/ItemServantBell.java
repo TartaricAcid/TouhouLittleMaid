@@ -15,6 +15,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -198,7 +199,7 @@ public class ItemServantBell extends Item {
         UUID uuid = getMaidUuid(stack);
         if (uuid != null) {
             tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.servant_bell.uuid", uuid.toString()).withStyle(ChatFormatting.GRAY));
-            tooltip.add(CommonComponents.NARRATION_SEPARATOR);
+            tooltip.add(new TextComponent(" "));
         }
         tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.servant_bell.desc.1").withStyle(ChatFormatting.GRAY));
         tooltip.add(new TranslatableComponent("tooltips.touhou_little_maid.servant_bell.desc.2").withStyle(ChatFormatting.GRAY));

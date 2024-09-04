@@ -255,6 +255,8 @@
   "gui.touhou_little_maid.cloth_config_warning.tips": "You'll need to install the Cloth Config API mod to use the ingame configuration feature",
   "gui.touhou_little_maid.cloth_config_warning.download": "Download Cloth Config API",
   "gui.touhou_little_maid.servant_bell.edit_box": "Please enter some tips",
+  "gui.touhou_little_maid.cache_screen.desc": "Caching model icon, please wait...",
+  "gui.touhou_little_maid.cache_screen.progress": "Progress: %d/%d",
   "chat_bubble.touhou_little_maid.inner.feed_animal.max_number": "So many animals... I don't feed them anymore!",
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "My hands were full of items... I couldn't eat!",
   "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty": "Hurry up, Hurry up, I don't have anything to eat!",

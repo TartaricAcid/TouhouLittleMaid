@@ -67,7 +67,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * @param posY      实体所在的 y 坐标
      * @param modelItem 该实体应该对应的模型数据
      */
-    protected abstract void drawRightEntity(int posX, int posY, E modelItem);
+    protected abstract void drawRightEntity(PoseStack poseStack, int posX, int posY, E modelItem);
 
     /**
      * 打开详情界面
@@ -354,7 +354,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 开始绘制实体图案，并往上添加对应模型和材质
         for (E modelItem : pack.getModelList().subList(fromIndex, toIndex)) {
-            drawRightEntity(middleX + offsetX, middleY + offsetY, modelItem);
+            drawRightEntity(poseStack, middleX + offsetX, middleY + offsetY, modelItem);
             // 往右绘制
             offsetX = offsetX + 20;
             // 如果超出一定限制，换行
