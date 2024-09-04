@@ -17,5 +17,7 @@ public enum FairyType {
     GRAY,
     LIGHT_GRAY,
     LIGHT_BLUE,
-    MAGENTA
+    MAGENTA,
+    LIGHT_PURPLE,
+    GOLD
 }

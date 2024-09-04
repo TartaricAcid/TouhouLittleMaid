@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.sound;
 
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.models.DefaultPackConstant;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.data.SoundCache;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.pojo.SoundPackInfo;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -34,7 +35,7 @@ import java.util.zip.ZipFile;
 import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 
 public class CustomSoundLoader {
-    public static final Map<String, SoundCache> CACHE = Maps.newHashMap();
+    public static final Map<String, SoundCache> CACHE = Maps.newLinkedHashMap();
     private static final Pattern FILENAME_REG = Pattern.compile("^\\d*\\.ogg$");
     private static final Marker MARKER = MarkerManager.getMarker("CustomSoundLoader");
     private static final String JSON_FILE_NAME = "maid_sound.json";
@@ -45,6 +46,26 @@ public class CustomSoundLoader {
 
     public static SoundCache getSoundCache(String id) {
         return CACHE.get(id);
+    }
+
+    public static void sortSoundPack() {
+        Map<String, SoundCache> sortPacks = Maps.newLinkedHashMap();
+
+        // 先把默认模型查到，按顺序放进去
+        for (String id : DefaultPackConstant.SOUND_SORT) {
+            if (CACHE.containsKey(id)) {
+                sortPacks.put(id, CACHE.get(id));
+            }
+        }
+        // 剩余模型放进另一个里，进行字典排序
+        CACHE.keySet().stream()
+                .filter(id -> !DefaultPackConstant.SOUND_SORT.contains(id))
+                .sorted(String::compareTo)
+                .forEach(key -> sortPacks.put(key, CACHE.get(key)));
+
+        // 最后顺次放入
+        CACHE.clear();
+        CACHE.putAll(sortPacks);
     }
 
     public static void loadSoundPack(Path rootPath, String id) {

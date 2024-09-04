@@ -7,9 +7,14 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
@@ -41,30 +46,18 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
     }
 
     @Override
-    protected void drawRightEntity(int posX, int posY, MaidModelInfo modelItem) {
-        Level world = getMinecraft().level;
-        if (world == null) {
-            return;
-        }
-
-        EntityMaid maid;
-        try {
-            maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(EntityMaid.TYPE, () -> {
-                Entity e = EntityMaid.TYPE.create(world);
-                return Objects.requireNonNullElseGet(e, () -> new EntityMaid(world));
-            });
-        } catch (ExecutionException | ClassCastException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        clearMaidDataResidue(maid, false);
-        if (modelItem.getEasterEgg() != null) {
-            maid.setModelId(EASTER_EGG_MODEL);
+    protected void drawRightEntity(PoseStack pPoseStack, int posX, int posY, MaidModelInfo modelItem) {
+        ResourceLocation cacheIconId = modelItem.getCacheIconId();
+        var allTextures = Minecraft.getInstance().textureManager.byPath;
+        if (allTextures.containsKey(cacheIconId)) {
+            int textureSize = 24;
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, cacheIconId);
+            RenderSystem.disableDepthTest();
+            blit(pPoseStack, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
-            maid.setModelId(modelItem.getModelId().toString());
+            drawEntity(pPoseStack, posX, posY, modelItem);
         }
-        InventoryScreen.renderEntityInInventory(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
     }
 
     private float[] getRgbFromHash(int hashCode) {
@@ -127,5 +120,31 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
     @Override
     protected void setRowIndex(int rowIndex) {
         ROW_INDEX = rowIndex;
+    }
+
+    private void drawEntity(PoseStack pPoseStack, int posX, int posY, MaidModelInfo modelItem) {
+        Level world = getMinecraft().level;
+        if (world == null) {
+            return;
+        }
+
+        EntityMaid maid;
+        try {
+            maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(EntityMaid.TYPE, () -> {
+                Entity e = EntityMaid.TYPE.create(world);
+                return Objects.requireNonNullElseGet(e, () -> new EntityMaid(world));
+            });
+        } catch (ExecutionException | ClassCastException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        clearMaidDataResidue(maid, false);
+        if (modelItem.getEasterEgg() != null) {
+            maid.setModelId(EASTER_EGG_MODEL);
+        } else {
+            maid.setModelId(modelItem.getModelId().toString());
+        }
+        InventoryScreen.renderEntityInInventory(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
     }
 }

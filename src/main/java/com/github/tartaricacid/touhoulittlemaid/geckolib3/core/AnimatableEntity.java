@@ -112,6 +112,7 @@ public abstract class AnimatableEntity<E extends Entity> {
         return true;
     }
 
+    @Nullable
     public AnimatedGeoModel getCurrentModel() {
         return currentModel;
     }
