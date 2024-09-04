@@ -6,9 +6,11 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelI
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -45,38 +47,14 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
 
     @Override
     protected void drawRightEntity(GuiGraphics graphics, int posX, int posY, ChairModelInfo modelItem) {
-        Level world = getMinecraft().level;
-        if (world == null) {
-            return;
+        ResourceLocation cacheIconId = modelItem.getCacheIconId();
+        var allTextures = Minecraft.getInstance().getTextureManager().byPath;
+        if (allTextures.containsKey(cacheIconId)) {
+            int textureSize = 24;
+            graphics.blit(cacheIconId, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
+        } else {
+            drawEntity(graphics, posX, posY, modelItem);
         }
-
-        EntityChair chair;
-        try {
-            chair = (EntityChair) EntityCacheUtil.ENTITY_CACHE.get(EntityChair.TYPE, () -> {
-                Entity e = EntityChair.TYPE.create(world);
-                if (e == null) {
-                    return new EntityChair(world);
-                } else {
-                    return e;
-                }
-            });
-        } catch (ExecutionException | ClassCastException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        chair.setModelId(modelItem.getModelId().toString());
-        InventoryScreen.renderEntityInInventoryFollowsMouse(
-                graphics,
-                posX - 18,
-                posY - 30,
-                posX + 18,
-                posY + 18,
-                (int) (12 * modelItem.getRenderItemScale()),
-                0F,
-                posX + 25,
-                posY + 5,
-                chair);
     }
 
     @Override
@@ -124,5 +102,40 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
     @Override
     protected void setRowIndex(int rowIndex) {
         ROW_INDEX = rowIndex;
+    }
+
+    private void drawEntity(GuiGraphics graphics, int posX, int posY, ChairModelInfo modelItem) {
+        Level world = getMinecraft().level;
+        if (world == null) {
+            return;
+        }
+
+        EntityChair chair;
+        try {
+            chair = (EntityChair) EntityCacheUtil.ENTITY_CACHE.get(EntityChair.TYPE, () -> {
+                Entity e = EntityChair.TYPE.create(world);
+                if (e == null) {
+                    return new EntityChair(world);
+                } else {
+                    return e;
+                }
+            });
+        } catch (ExecutionException | ClassCastException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        chair.setModelId(modelItem.getModelId().toString());
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                posX - 18,
+                posY - 30,
+                posX + 18,
+                posY + 18,
+                (int) (12 * modelItem.getRenderItemScale()),
+                0F,
+                posX + 25,
+                posY + 5,
+                chair);
     }
 }

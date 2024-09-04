@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
@@ -77,6 +78,7 @@ public class CustomPackLoader {
         TMP_REGISTER_TEXTURE.clear();
         LanguageLoader.clear();
         CustomSoundLoader.clear();
+        CacheIconManager.clearCache();
 
         // 读取
         initPacks();
