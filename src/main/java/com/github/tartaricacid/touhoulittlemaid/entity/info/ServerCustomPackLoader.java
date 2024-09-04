@@ -148,7 +148,7 @@ public final class ServerCustomPackLoader {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             for (MaidModelInfo maidModelInfo : pack.getModelList()) {
                 if (maidModelInfo.getEasterEgg() == null) {
                     String id = maidModelInfo.getModelId().toString();
@@ -175,7 +175,7 @@ public final class ServerCustomPackLoader {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             for (MaidModelInfo maidModelInfo : pack.getModelList()) {
                 if (maidModelInfo.getEasterEgg() == null) {
                     String id = maidModelInfo.getModelId().toString();
@@ -202,7 +202,7 @@ public final class ServerCustomPackLoader {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             for (ChairModelInfo chairModelInfo : pack.getModelList()) {
                 String id = chairModelInfo.getModelId().toString();
                 SERVER_CHAIR_MODELS.putInfo(id, chairModelInfo);
@@ -227,7 +227,7 @@ public final class ServerCustomPackLoader {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             for (ChairModelInfo chairModelInfo : pack.getModelList()) {
                 String id = chairModelInfo.getModelId().toString();
                 SERVER_CHAIR_MODELS.putInfo(id, chairModelInfo);

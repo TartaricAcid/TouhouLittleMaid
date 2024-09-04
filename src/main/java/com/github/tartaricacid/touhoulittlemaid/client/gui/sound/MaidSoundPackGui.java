@@ -162,9 +162,6 @@ public class MaidSoundPackGui extends Screen {
     private void addSoundPackButtons() {
         int yOffset = 19;
         List<String> soundPackIds = new ArrayList<>(CustomSoundLoader.CACHE.keySet());
-        if (soundPackIds.contains(TouhouLittleMaid.MOD_ID)) {
-            Collections.swap(soundPackIds, soundPackIds.indexOf(TouhouLittleMaid.MOD_ID), 0);
-        }
         int startPackIndex = packPage * packPerSize;
         if (startPackIndex >= soundPackIds.size()) {
             this.packPage = 0;

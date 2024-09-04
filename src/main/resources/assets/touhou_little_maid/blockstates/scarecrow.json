@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=south,half=lower": {
+      "model": "touhou_little_maid:block/scarecrow_lower"
+    },
+    "facing=north,half=lower": {
+      "model": "touhou_little_maid:block/scarecrow_lower",
+      "y": 180
+    },
+    "facing=east,half=lower": {
+      "model": "touhou_little_maid:block/scarecrow_lower",
+      "y": 270
+    },
+    "facing=west,half=lower": {
+      "model": "touhou_little_maid:block/scarecrow_lower",
+      "y": 90
+    },
+    "facing=south,half=upper": {
+      "model": "touhou_little_maid:block/scarecrow_upper"
+    },
+    "facing=north,half=upper": {
+      "model": "touhou_little_maid:block/scarecrow_upper",
+      "y": 180
+    },
+    "facing=east,half=upper": {
+      "model": "touhou_little_maid:block/scarecrow_upper",
+      "y": 270
+    },
+    "facing=west,half=upper": {
+      "model": "touhou_little_maid:block/scarecrow_upper",
+      "y": 90
+    }
+  }
+}

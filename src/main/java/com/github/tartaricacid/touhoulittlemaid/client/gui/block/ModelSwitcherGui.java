@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.DirectButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ImageButtonWithId;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
@@ -78,10 +79,7 @@ public class ModelSwitcherGui extends Screen {
         TileEntityModelSwitcher.ModeInfo info = this.infoList.get(selectedIndex);
         maid.setModelId(info.getModelId().toString());
 
-        this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20, new TranslatableComponent("gui.touhou_little_maid.button.skin"), b -> {
-            ModelSwitcherModelGui modelGui = new ModelSwitcherModelGui(this.maid, info, this);
-            getMinecraft().setScreen(modelGui);
-        }));
+        this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20,new TranslatableComponent("gui.touhou_little_maid.button.skin"), b -> CacheIconManager.openModelSwitcherModelGui(maid, info, this)));
         this.addRenderableWidget(new DirectButton(leftPos + 55, topPos + 38, 76, 20, info.getDirection(),
                 b -> info.setDirection(((DirectButton) b).getDirection())));
         this.addRenderableWidget(new Button(leftPos + 12, topPos + 135, 121, 20, new TranslatableComponent("selectWorld.edit.save"),

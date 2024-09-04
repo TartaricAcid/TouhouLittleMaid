@@ -10,6 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.Animat
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangParser;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBone;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.data.EntityModelData;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
 import com.mojang.math.Vector3f;
@@ -76,8 +77,9 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
         if (!Minecraft.getInstance().isPaused() && extraData.size() == 1 && extraData.get(0) instanceof EntityModelData data) {
             AnimationRegister.setParserValue(animationEvent, parser, data, this.maid);
             var update = super.setCustomAnimations(animationEvent);
-            IBone head = getCurrentModel().head();
-            if (head != null) {
+            AnimatedGeoModel currentModel = this.getCurrentModel();
+            if (currentModel != null && currentModel.head() != null) {
+                IBone head = currentModel.head();
                 if (update) {
                     this.headRot.set(head.getRotationX(), head.getRotationY(), 0);
                 }

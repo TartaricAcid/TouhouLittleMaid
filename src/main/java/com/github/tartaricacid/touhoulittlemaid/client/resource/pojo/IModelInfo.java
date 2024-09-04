@@ -7,7 +7,15 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IModelInfo {
+    static ResourceLocation createCacheIconId(ResourceLocation modelId) {
+        String namespace = modelId.getNamespace();
+        String path = modelId.getPath();
+        return new ResourceLocation(namespace, path + "/cache");
+    }
+
     ResourceLocation getModelId();
+
+    ResourceLocation getCacheIconId();
 
     String getName();
 

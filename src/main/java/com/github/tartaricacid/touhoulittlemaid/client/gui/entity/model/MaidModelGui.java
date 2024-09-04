@@ -8,10 +8,15 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -40,37 +45,18 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     }
 
     @Override
-    protected void drawRightEntity(int posX, int posY, MaidModelInfo modelItem) {
-        Level world = getMinecraft().level;
-        if (world == null) {
-            return;
-        }
-
-        EntityMaid maid;
-        try {
-            maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(EntityMaid.TYPE, () -> {
-                Entity e = EntityMaid.TYPE.create(world);
-                return Objects.requireNonNullElseGet(e, () -> new EntityMaid(world));
-            });
-        } catch (ExecutionException | ClassCastException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        clearMaidDataResidue(maid, false);
-        if (modelItem.getEasterEgg() != null) {
-            maid.setModelId(EASTER_EGG_MODEL);
+    protected void drawRightEntity(PoseStack poseStack, int posX, int posY, MaidModelInfo modelItem) {
+        ResourceLocation cacheIconId = modelItem.getCacheIconId();
+        var allTextures = Minecraft.getInstance().textureManager.byPath;
+        if (allTextures.containsKey(cacheIconId)) {
+            int textureSize = 24;
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, cacheIconId);
+            RenderSystem.disableDepthTest();
+            blit(poseStack, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
-            maid.setModelId(modelItem.getModelId().toString());
+            drawEntity(poseStack, posX, posY, modelItem);
         }
-        InventoryScreen.renderEntityInInventory(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
-    }
-
-    private float[] getRgbFromHash(int hashCode) {
-        float r = (float) (hashCode >> 16 & 255) / 255.0F;
-        float g = (float) (hashCode >> 8 & 255) / 255.0F;
-        float b = (float) (hashCode & 255) / 255.0F;
-        return new float[]{r, g, b};
     }
 
     @Override
@@ -98,8 +84,7 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     protected void addModelCustomTips(MaidModelInfo modelItem, List<Component> tooltips) {
         String useSoundPackId = modelItem.getUseSoundPackId();
         if (StringUtils.isNotBlank(useSoundPackId)) {
-            tooltips.add(new TranslatableComponent("gui.touhou_little_maid.skin.tooltips.maid_use_sound_pack_id", useSoundPackId)
-                    .withStyle(ChatFormatting.GOLD));
+            tooltips.add(new TranslatableComponent("gui.touhou_little_maid.skin.tooltips.maid_use_sound_pack_id", useSoundPackId).withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -131,5 +116,31 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     @Override
     protected void setRowIndex(int rowIndex) {
         ROW_INDEX = rowIndex;
+    }
+
+    private void drawEntity(PoseStack poseStack, int posX, int posY, MaidModelInfo modelItem) {
+        Level world = getMinecraft().level;
+        if (world == null) {
+            return;
+        }
+
+        EntityMaid maid;
+        try {
+            maid = (EntityMaid) EntityCacheUtil.ENTITY_CACHE.get(EntityMaid.TYPE, () -> {
+                Entity e = EntityMaid.TYPE.create(world);
+                return Objects.requireNonNullElseGet(e, () -> new EntityMaid(world));
+            });
+        } catch (ExecutionException | ClassCastException e) {
+            e.fillInStackTrace();
+            return;
+        }
+
+        clearMaidDataResidue(maid, false);
+        if (modelItem.getEasterEgg() != null) {
+            maid.setModelId(EASTER_EGG_MODEL);
+        } else {
+            maid.setModelId(modelItem.getModelId().toString());
+        }
+        InventoryScreen.renderEntityInInventory(posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
     }
 }

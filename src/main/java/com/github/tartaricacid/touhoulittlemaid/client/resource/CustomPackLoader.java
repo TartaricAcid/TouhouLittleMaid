@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
@@ -77,9 +78,16 @@ public class CustomPackLoader {
         TMP_REGISTER_TEXTURE.clear();
         LanguageLoader.clear();
         CustomSoundLoader.clear();
+        CacheIconManager.clearCache();
 
         // 读取
         initPacks();
+
+        // 对读取的列表进行排序，把默认模型包排在最前面
+        // 其他模型包按照 namespace 字典排序
+        MAID_MODELS.sortPackList();
+        CHAIR_MODELS.sortPackList();
+        CustomSoundLoader.sortSoundPack();
     }
 
     private static void initPacks() {
@@ -178,7 +186,7 @@ public class CustomPackLoader {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerFilePackTexture(rootPath, pack.getIcon());
@@ -323,7 +331,7 @@ public class CustomPackLoader {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerZipPackTexture(zipFile.getName(), pack.getIcon());
@@ -492,7 +500,7 @@ public class CustomPackLoader {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerFilePackTexture(rootPath, pack.getIcon());
@@ -546,7 +554,7 @@ public class CustomPackLoader {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
-            pack.decorate();
+            pack.decorate(domain);
             // 加载图标贴图
             if (pack.getIcon() != null) {
                 registerZipPackTexture(zipFile.getName(), pack.getIcon());
@@ -597,7 +605,7 @@ public class CustomPackLoader {
         try (InputStream stream = Files.newInputStream(file.toPath())) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -609,7 +617,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);
@@ -640,7 +648,7 @@ public class CustomPackLoader {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -652,7 +660,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);
@@ -682,7 +690,7 @@ public class CustomPackLoader {
         try (InputStream stream = Files.newInputStream(file.toPath())) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -694,7 +702,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);
@@ -725,7 +733,7 @@ public class CustomPackLoader {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
             // 先判断是不是 1.10.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+            if (BedrockVersion.isLegacyVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.LEGACY);
@@ -737,7 +745,7 @@ public class CustomPackLoader {
             }
 
             // 判定是不是 1.12.0 版本基岩版模型文件
-            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+            if (BedrockVersion.isNewVersion(pojo)) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
                     return new BedrockModel<>(pojo, BedrockVersion.NEW);
