@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.models;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
@@ -55,6 +56,7 @@ public final class ChairModels {
 
     public void addPack(CustomModelPack<ChairModelInfo> pack) {
         this.packList.add(pack);
+        CacheIconManager.addChairPack(pack);
     }
 
     public void putModel(String modelId, BedrockModel<EntityChair> modelJson) {
