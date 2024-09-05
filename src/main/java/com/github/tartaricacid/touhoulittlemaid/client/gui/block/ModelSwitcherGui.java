@@ -149,7 +149,7 @@ public class ModelSwitcherGui extends Screen {
         if (this.description != null) {
             value = this.description.getValue();
         }
-        super.resize(pMinecraft, width, height);
+        super.resize(pMinecraft, pWidth, pHeight);
         if (this.description != null) {
             this.description.setValue(value);
         }
@@ -169,7 +169,7 @@ public class ModelSwitcherGui extends Screen {
         }
         graphics.drawCenteredString(font, String.format("%d/%d", page + 1, (infoList.size() - 1) / maxRow + 1), leftPos + 193, topPos + 12, 0xffffff);
         if (this.description != null) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, leftPos + 30, topPos + 60, 25, leftPos - 150, topPos - 50, maid);
+            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, leftPos + 30, topPos + 60, 25, -25, -20, maid);
             this.description.render(graphics, pMouseX, pMouseY, pPartialTick);
         }
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
