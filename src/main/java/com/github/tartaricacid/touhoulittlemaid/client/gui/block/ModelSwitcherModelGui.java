@@ -53,18 +53,10 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
             int textureSize = 24;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, cacheIconId);
-            RenderSystem.disableDepthTest();
             blit(pPoseStack, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
             drawEntity(pPoseStack, posX, posY, modelItem);
         }
-    }
-
-    private float[] getRgbFromHash(int hashCode) {
-        float r = (float) (hashCode >> 16 & 255) / 255.0F;
-        float g = (float) (hashCode >> 8 & 255) / 255.0F;
-        float b = (float) (hashCode & 255) / 255.0F;
-        return new float[]{r, g, b};
     }
 
     @Override

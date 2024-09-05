@@ -51,7 +51,6 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
             int textureSize = 24;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, cacheIconId);
-            RenderSystem.disableDepthTest();
             blit(pPoseStack, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
             drawEntity(pPoseStack, posX, posY, modelItem);
@@ -124,7 +123,7 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         ROW_INDEX = rowIndex;
     }
 
-    private void drawEntity(PoseStack pPoseStack,  int posX, int posY, MaidModelInfo modelItem) {
+    private void drawEntity(PoseStack pPoseStack, int posX, int posY, MaidModelInfo modelItem) {
         Level world = getMinecraft().level;
         if (world == null) {
             return;
