@@ -12,9 +12,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,9 +24,10 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class ItemFilm extends AbstractStoreMaidItem {
+    private static final String ID_TAG = "id";
+
     public ItemFilm() {
         super((new Item.Properties()).stacksTo(1));
     }
@@ -48,8 +48,13 @@ public class ItemFilm extends AbstractStoreMaidItem {
         if (compoundData == null) {
             return;
         }
-        Optional<Entity> entityOptional = EntityType.create(compoundData.copyTag(), worldIn);
-        if (entityOptional.isPresent() && entityOptional.get() instanceof EntityMaid maid) {
+        CompoundTag data = compoundData.copyTag();
+        ResourceLocation entityId = ResourceLocation.tryParse(data.getString(ID_TAG));
+        ResourceLocation maidId = BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get());
+
+        if (entityId != null && entityId.equals(maidId)) {
+            EntityMaid maid = new EntityMaid(worldIn);
+            maid.readAdditionalSaveData(data);
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             // 实体生成必须在服务端应用
             if (!worldIn.isClientSide) {
@@ -58,7 +63,9 @@ public class ItemFilm extends AbstractStoreMaidItem {
                 worldIn.playSound(null, pos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
             }
             film.shrink(1);
+            return;
         }
+
         if (!worldIn.isClientSide) {
             player.sendSystemMessage(Component.translatable("tooltips.touhou_little_maid.film.no_data.desc"));
         }
