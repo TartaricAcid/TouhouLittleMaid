@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitItems.*;
 
 public class MaidGroup extends CreativeModeTab {
-    public static CreativeModeTab MAIN_TAB = new MaidGroup("main", HAKUREI_GOHEI);
+    public static CreativeModeTab MAIN_TAB = new MaidGroup("main", HAKUREI_GOHEI).setEnchantmentCategories(InitEnchantments.GOHEI);
     public static CreativeModeTab GARAGE_KIT_TAB = new MaidGroup("garage_kit", GARAGE_KIT);
     public static CreativeModeTab CHAIR_TAB = new MaidGroup("chair", CHAIR);
 
@@ -24,7 +24,6 @@ public class MaidGroup extends CreativeModeTab {
         super(String.format("touhou_little_maid.%s", label));
         this.displayName = new TranslatableComponent(String.format("item_group.%s.%s", TouhouLittleMaid.MOD_ID, label));
         this.iconItem = iconItem;
-        this.setEnchantmentCategories(InitEnchantments.GOHEI);
     }
 
     @Override

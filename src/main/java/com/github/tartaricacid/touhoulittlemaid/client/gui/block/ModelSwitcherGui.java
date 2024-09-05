@@ -79,7 +79,7 @@ public class ModelSwitcherGui extends Screen {
         TileEntityModelSwitcher.ModeInfo info = this.infoList.get(selectedIndex);
         maid.setModelId(info.getModelId().toString());
 
-        this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20,new TranslatableComponent("gui.touhou_little_maid.button.skin"), b -> CacheIconManager.openModelSwitcherModelGui(maid, info, this)));
+        this.addRenderableWidget(new Button(leftPos + 55, topPos + 15, 76, 20, new TranslatableComponent("gui.touhou_little_maid.button.skin"), b -> CacheIconManager.openModelSwitcherModelGui(maid, info, this)));
         this.addRenderableWidget(new DirectButton(leftPos + 55, topPos + 38, 76, 20, info.getDirection(),
                 b -> info.setDirection(((DirectButton) b).getDirection())));
         this.addRenderableWidget(new Button(leftPos + 12, topPos + 135, 121, 20, new TranslatableComponent("selectWorld.edit.save"),
@@ -147,7 +147,7 @@ public class ModelSwitcherGui extends Screen {
         if (this.description != null) {
             value = this.description.getValue();
         }
-        super.resize(pMinecraft, width, height);
+        super.resize(pMinecraft, pWidth, pHeight);
         if (this.description != null) {
             this.description.setValue(value);
         }
@@ -169,7 +169,7 @@ public class ModelSwitcherGui extends Screen {
         }
         drawCenteredString(pPoseStack, font, String.format("%d/%d", page + 1, (infoList.size() - 1) / maxRow + 1), leftPos + 193, topPos + 12, 0xffffff);
         if (this.description != null) {
-            InventoryScreen.renderEntityInInventory(leftPos + 30, topPos + 60, 25, leftPos - 150, topPos - 50, maid);
+            InventoryScreen.renderEntityInInventory(leftPos + 30, topPos + 60, 25, -25 , -20, maid);
             this.description.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
         }
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);

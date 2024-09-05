@@ -26,6 +26,9 @@ public class CacheIconTexture extends AbstractTexture {
     }
 
     private void doLoad() {
+        if (imageIn == null) {
+            return;
+        }
         int width = imageIn.getWidth();
         int height = imageIn.getHeight();
         TextureUtil.prepareImage(this.getId(), 0, width, height);

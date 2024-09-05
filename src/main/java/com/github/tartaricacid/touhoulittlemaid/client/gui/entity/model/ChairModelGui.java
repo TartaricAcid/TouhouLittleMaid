@@ -7,9 +7,11 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ChairModelMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -40,6 +42,8 @@ public class ChairModelGui extends AbstractModelGui<EntityChair, ChairModelInfo>
         var allTextures = Minecraft.getInstance().textureManager.byPath;
         if (allTextures.containsKey(cacheIconId)) {
             int textureSize = 24;
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, cacheIconId);
             blit(poseStack, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
             drawEntity(poseStack, posX, posY, modelItem);
