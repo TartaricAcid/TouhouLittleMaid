@@ -164,11 +164,11 @@ public class AltarRecipe implements Recipe<AltarRecipeInventory> {
                     data = matchStack.getTagElement(this.copyTag);
                 }
                 if (data != null && !data.isEmpty()) {
-                    if (resultEntity instanceof LivingEntity) {
-                        ((LivingEntity) resultEntity).readAdditionalSaveData(data);
+                    if (resultEntity instanceof LivingEntity livingEntity) {
+                        livingEntity.readAdditionalSaveData(data);
                     }
-                    if (resultEntity instanceof ItemEntity) {
-                        ((ItemEntity) resultEntity).readAdditionalSaveData(data);
+                    if (resultEntity instanceof ItemEntity itemEntity) {
+                        itemEntity.readAdditionalSaveData(data);
                     }
                 }
             }
