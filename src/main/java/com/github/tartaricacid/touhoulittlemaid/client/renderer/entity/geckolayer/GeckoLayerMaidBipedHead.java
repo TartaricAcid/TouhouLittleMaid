@@ -79,17 +79,21 @@ public class GeckoLayerMaidBipedHead<T extends Mob> extends GeoLayerRenderer<T, 
 
             // 渲染女仆背部的
             ItemStack stack = maid.getBackpackShowItem();
-            if (stack.getItem() instanceof BlockItem) {
-                Block block = ((BlockItem) stack.getItem()).getBlock();
-                if (block instanceof IPlantable && !(block instanceof DoublePlantBlock)) {
-                    BlockState plant = ((IPlantable) block).getPlant(entity.level(), entity.blockPosition());
-                    poseStack.pushPose();
-                    RenderUtils.prepMatrixForLocator(poseStack, geoModel.headBones());
-                    poseStack.scale(-0.8F, 0.8F, -0.8F);
-                    poseStack.translate(-0.5, 0.625, -0.5);
-                    Minecraft.getInstance().getBlockRenderer().renderSingleBlock(plant, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
-                    poseStack.popPose();
+            // 不做限制，任意方块都可以显示
+            if (stack.getItem() instanceof BlockItem blockItem) {
+                Block block = blockItem.getBlock();
+                BlockState blockState;
+                if (block instanceof IPlantable iPlantable && !(block instanceof DoublePlantBlock)) {
+                    blockState = iPlantable.getPlant(entity.level(), entity.blockPosition());
+                } else {
+                    blockState = block.defaultBlockState();
                 }
+                poseStack.pushPose();
+                RenderUtils.prepMatrixForLocator(poseStack, geoModel.headBones());
+                poseStack.scale(-0.8F, 0.8F, -0.8F);
+                poseStack.translate(-0.5, 0.625, -0.5);
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, null);
+                poseStack.popPose();
             } else {
                 SimpleHatsCompat.renderGeckoHat(poseStack, bufferIn, packedLightIn, entity, stack, geoModel.headBones());
             }
