@@ -150,7 +150,7 @@ public class ModelSwitcherGui extends Screen {
         if (this.description != null) {
             value = this.description.getValue();
         }
-        super.resize(pMinecraft, width, height);
+        super.resize(pMinecraft, pWidth, pHeight);
         if (this.description != null) {
             this.description.setValue(value);
         }
