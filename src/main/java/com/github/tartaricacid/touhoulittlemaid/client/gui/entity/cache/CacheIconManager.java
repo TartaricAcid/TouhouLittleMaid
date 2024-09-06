@@ -12,8 +12,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -71,7 +71,7 @@ public final class CacheIconManager {
     }
 
     private static CacheScreen<EntityMaid, MaidModelInfo> getMaidCacheScreen(AbstractModelGui<EntityMaid, MaidModelInfo> maidModelGui) {
-        return new CacheScreen<>(maidModelGui, InitEntities.MAID.get(), MAID_CACHE_QUEUE, (graphics, posX, posY, modelInfo, scaleModified, maid) -> {
+        return new CacheScreen<>(maidModelGui, InitEntities.MAID.get(), MAID_CACHE_QUEUE, (graphics, posX, posY, posZ, modelInfo, scaleModified, maid) -> {
             clearMaidDataResidue(maid, false);
             if (modelInfo.getEasterEgg() != null) {
                 maid.setModelId(EASTER_EGG_MODEL);
@@ -79,21 +79,23 @@ public final class CacheIconManager {
                 maid.setModelId(modelInfo.getModelId().toString());
             }
             int scale = scaleModified / 2;
-            InventoryScreen.renderEntityInInventory(
+            RenderHelper.renderEntityInInventory(
                     posX + scale,
                     posY + scaleModified - 5,
+                    posZ,
                     (int) (scale * modelInfo.getRenderItemScale() * 0.9),
                     -25, -20, maid);
         });
     }
 
     private static CacheScreen<EntityChair, ChairModelInfo> getChairCacheScreen(ChairModelGui chairModelGui) {
-        return new CacheScreen<>(chairModelGui, InitEntities.CHAIR.get(), CHAIR_CACHE_QUEUE, (graphics, posX, posY, modelInfo, scaleModified, chair) -> {
+        return new CacheScreen<>(chairModelGui, InitEntities.CHAIR.get(), CHAIR_CACHE_QUEUE, (graphics, posX, posY, posZ, modelInfo, scaleModified, chair) -> {
             chair.setModelId(modelInfo.getModelId().toString());
             int scale = scaleModified / 2;
-            InventoryScreen.renderEntityInInventory(
+            RenderHelper.renderEntityInInventory(
                     posX + scale,
                     posY + scaleModified - 5,
+                    posZ,
                     (int) (scale * modelInfo.getRenderItemScale() * 0.9),
                     -25, -20, chair);
         });
