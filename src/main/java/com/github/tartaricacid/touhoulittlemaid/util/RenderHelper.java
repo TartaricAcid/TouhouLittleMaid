@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -152,6 +153,62 @@ public final class RenderHelper {
         RenderSystem.enableDepthTest();
         entityrenderdispatcher.setRenderShadow(true);
         poseStack.popPose();
+        Lighting.setupFor3DItems();
+    }
+
+    /**
+     * 修改自原版的 net.minecraft.client.gui.screens.inventory.InventoryScreen#renderEntityInInventoryRaw(int, int, int, float, float, net.minecraft.world.entity.LivingEntity)
+     * 主要添加了 posZ 的偏移
+     */
+    public static void renderEntityInInventory(int posX, int posY, int posZ, int scale, float mouseX, float mouseY, LivingEntity entity) {
+        float angleX = (float) Math.atan(mouseX / 40.0F);
+        float angleY = (float) Math.atan(mouseY / 40.0F);
+
+        PoseStack viewStack = RenderSystem.getModelViewStack();
+        viewStack.pushPose();
+        viewStack.translate(posX, posY, posZ + 1050);
+        viewStack.scale(1.0F, 1.0F, -1.0F);
+        RenderSystem.applyModelViewMatrix();
+
+        PoseStack poseStack = new PoseStack();
+        poseStack.translate(0, 0, 1000);
+        poseStack.scale((float) scale, (float) scale, (float) scale);
+        Quaternion zDeg = Vector3f.ZP.rotationDegrees(180.0F);
+        Quaternion xDeg = Vector3f.XP.rotationDegrees(angleY * 20.0F);
+        zDeg.mul(xDeg);
+        poseStack.mulPose(zDeg);
+
+        float yBodyRot = entity.yBodyRot;
+        float yRot = entity.getYRot();
+        float xRot = entity.getXRot();
+        float yHeadRotO = entity.yHeadRotO;
+        float yHeadRot = entity.yHeadRot;
+
+        entity.yBodyRot = 180.0F + angleX * 20.0F;
+        entity.setYRot(180.0F + angleX * 40.0F);
+        entity.setXRot(-angleY * 20.0F);
+        entity.yHeadRot = entity.getYRot();
+        entity.yHeadRotO = entity.getYRot();
+
+        Lighting.setupForEntityInInventory();
+        EntityRenderDispatcher renderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        xDeg.conj();
+        renderDispatcher.overrideCameraOrientation(xDeg);
+        renderDispatcher.setRenderShadow(false);
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        RenderSystem.runAsFancy(() -> renderDispatcher.render(entity, 0, 0, 0, 0.0F, 1.0F, poseStack, bufferSource, 0xF000F0));
+        bufferSource.endBatch();
+        renderDispatcher.setRenderShadow(true);
+
+        entity.yBodyRot = yBodyRot;
+        entity.setYRot(yRot);
+        entity.setXRot(xRot);
+        entity.yHeadRotO = yHeadRotO;
+        entity.yHeadRot = yHeadRot;
+
+        viewStack.popPose();
+
+        RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
     }
 }
