@@ -257,6 +257,7 @@
   "gui.touhou_little_maid.cloth_config_warning.tips": "You'll need to install the Cloth Config API mod to use the ingame configuration feature",
   "gui.touhou_little_maid.cloth_config_warning.download": "Download Cloth Config API",
   "gui.touhou_little_maid.servant_bell.edit_box": "Please enter some tips",
+  "gui.touhou_little_maid.cache_screen.progress": "Progress: %d/%d",
   "gui.touhou_little_maid.cache_screen.desc": "Caching model icon, please wait...",
   "gui.touhou_little_maid.monster_type.friendly": "§a[Friendly]",
   "gui.touhou_little_maid.monster_type.neutral": "§7[Neutral]",
