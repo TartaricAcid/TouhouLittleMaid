@@ -6,6 +6,7 @@
   "refmap": "touhou_little_maid.refmap.json",
   "mixins": [
     "EntityMixin",
+    "FenceGateBlockAccessor",
     "MixinArrowEntity",
     "MixinStructureTemplate"
   ],

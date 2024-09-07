@@ -17,6 +17,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeComp
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.goal.OpenGateGoal;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
@@ -81,7 +83,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -102,7 +104,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -204,9 +205,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
-        ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
-        this.getNavigation().setCanFloat(true);
-        this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.favorabilityManager = new FavorabilityManager(this);
         this.scriptBookManager = new MaidScriptBookManager();
         this.schedulePos = new SchedulePos(BlockPos.ZERO, world.dimension().location());
@@ -264,6 +262,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     protected Brain.Provider<EntityMaid> brainProvider() {
         return Brain.provider(MaidBrain.getMemoryTypes(), MaidBrain.getSensorTypes());
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new OpenGateGoal(this, true));
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level levelIn) {
+        return new MaidPathNavigation(this, levelIn);
     }
 
     @Override
