@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.goal;
 
-import com.github.tartaricacid.touhoulittlemaid.mixin.FenceGateBlockAccessor;
+import com.github.tartaricacid.touhoulittlemaid.util.FenceGateBlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -9,7 +9,6 @@ import net.minecraft.world.entity.ai.util.GoalUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -49,12 +48,8 @@ public abstract class GateInteractGoal extends Goal {
     protected void setOpen(boolean pOpen) {
         if (this.hasGate) {
             BlockState blockstate = this.mob.level.getBlockState(this.gatePos);
-            if (blockstate.getBlock() instanceof FenceGateBlock fenceGateBlock) {
-                if (blockstate.getValue(OPEN) != pOpen) {
-                    this.mob.level.setBlock(this.gatePos, blockstate.setValue(OPEN, pOpen), 10);
-                    this.mob.playSound(pOpen ? ((FenceGateBlockAccessor)fenceGateBlock).tlmOpenSound() : ((FenceGateBlockAccessor)fenceGateBlock).tlmCloseSound(),  1.0f, 1.0f);
-                    this.mob.level.gameEvent(this.mob, pOpen ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, this.gatePos);
-                }
+            if (blockstate.getBlock() instanceof FenceGateBlock) {
+                FenceGateBlockUtil.setOpen(this.mob, this.mob.level, blockstate, this.gatePos, pOpen);
             }
         }
     }
@@ -63,8 +58,7 @@ public abstract class GateInteractGoal extends Goal {
     public boolean canUse() {
         if (!GoalUtils.hasGroundPathNavigation(this.mob)) {
             return false;
-        }
-        else if (!this.mob.horizontalCollision) {
+        } else if (!this.mob.horizontalCollision) {
             return false;
         } else {
             GroundPathNavigation groundpathnavigation = (GroundPathNavigation) this.mob.getNavigation();
@@ -91,7 +85,7 @@ public abstract class GateInteractGoal extends Goal {
     }
 
     public static boolean isFenceGate(Level pLevel, BlockPos pPos) {
-        return pLevel.getBlockState(pPos).getBlock() instanceof FenceGateBlock ;
+        return pLevel.getBlockState(pPos).getBlock() instanceof FenceGateBlock;
     }
 
     public boolean canContinueToUse() {
