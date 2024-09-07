@@ -257,6 +257,7 @@
   "gui.touhou_little_maid.cloth_config_warning.tips": "您需要安装 Cloth Config API 模组才能使用游戏内配置功能",
   "gui.touhou_little_maid.cloth_config_warning.download": "下载 Cloth Config API 模组",
   "gui.touhou_little_maid.servant_bell.edit_box": "请输入提示文本",
+  "gui.touhou_little_maid.cache_screen.progress": "进度：%d/%d",
   "gui.touhou_little_maid.cache_screen.desc": "缓存模型图标中，请等待……",
   "gui.touhou_little_maid.monster_type.friendly": "§a[友好]",
   "gui.touhou_little_maid.monster_type.neutral": "§7[中立]",
