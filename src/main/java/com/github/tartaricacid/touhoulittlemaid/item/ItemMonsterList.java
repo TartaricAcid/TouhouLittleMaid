@@ -2,42 +2,41 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.MonsterListScreen;
 import com.github.tartaricacid.touhoulittlemaid.entity.misc.MonsterType;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
+
 public class ItemMonsterList extends Item {
-    public static ListTag getMonsterList(ItemStack stack, MonsterType type) {
+    private static final String TAG_NAME = "MonsterList";
+
+    public static CompoundTag getMonsterList(ItemStack stack) {
         CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(type.getTagName(), Tag.TAG_LIST)) {
-            return tag.getList(type.getTagName(), Tag.TAG_STRING);
+        if (tag != null && tag.contains(TAG_NAME, Tag.TAG_COMPOUND)) {
+            return tag.getCompound(TAG_NAME);
         }
-        return new ListTag();
+        return new CompoundTag();
     }
 
-    public static void addMonster(ItemStack stack, MonsterType type, ResourceLocation entityId) {
-        CompoundTag tag = stack.getOrCreateTag();
-        ListTag tagList;
-        if (tag.contains(type.getTagName(), Tag.TAG_LIST)) {
-            tagList = tag.getList(type.getTagName(), Tag.TAG_STRING);
-        } else {
-            tagList = new ListTag();
-            tag.put(type.getTagName(), tagList);
-        }
-        StringTag tagId = StringTag.valueOf(entityId.toString());
-        tagList.add(tagId);
+    public static void addMonster(ItemStack stack, Map<ResourceLocation, MonsterType> monsterList) {
+        CompoundTag tag = stack.getOrCreateTagElement(TAG_NAME);
+        monsterList.forEach((key, value) -> tag.putInt(key.toString(), value.ordinal()));
     }
 
     public ItemMonsterList() {
@@ -59,5 +58,10 @@ public class ItemMonsterList extends Item {
         if (playerIn.level.isClientSide) {
             Minecraft.getInstance().setScreen(new MonsterListScreen(stack));
         }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.monster_list.desc").withStyle(ChatFormatting.GRAY));
     }
 }
