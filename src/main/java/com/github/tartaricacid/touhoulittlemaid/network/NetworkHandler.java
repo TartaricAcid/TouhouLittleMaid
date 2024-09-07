@@ -45,6 +45,7 @@ public class NetworkHandler {
         registrar.playToClient(CheckSchedulePosPacket.TYPE, CheckSchedulePosPacket.STREAM_CODEC, CheckSchedulePosPacket::handle);
         registrar.playToClient(SyncMaidAreaPackage.TYPE, SyncMaidAreaPackage.STREAM_CODEC, SyncMaidAreaPackage::handle);
         registrar.playToServer(ServantBellSetPackage.TYPE, ServantBellSetPackage.STREAM_CODEC, ServantBellSetPackage::handle);
+        registrar.playToServer(SetMonsterListMessage.TYPE, SetMonsterListMessage.STREAM_CODEC, SetMonsterListMessage::handle);
     }
 
     public static void sendToNearby(Entity entity, CustomPacketPayload toSend) {
