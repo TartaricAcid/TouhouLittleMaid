@@ -27,14 +27,14 @@ public record FoxScrollPackage(Map<String, List<FoxScrollData>> data) implements
     public static final StreamCodec<RegistryFriendlyByteBuf, List<FoxScrollData>> LIST_STREAM_CODEC = ByteBufCodecs.collection(
             ArrayList::new,
             FoxScrollData.FOX_SCROLL_DATA_STREAM_CODEC,
-            20
+            1024
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Map<String, List<FoxScrollData>>> BYTE_BUF_MAP_STREAM_CODEC = ByteBufCodecs.map(
             HashMap::new,
             ByteBufCodecs.STRING_UTF8,
             LIST_STREAM_CODEC,
-            20
+            1024
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, FoxScrollPackage> STREAM_CODEC = StreamCodec.composite(
