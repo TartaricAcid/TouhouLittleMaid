@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 
-@Mixin(ClientLanguage.class)
+@Mixin(value = ClientLanguage.class, priority = 943)
 public class LanguageMixin {
     @Inject(method = "getOrDefault(Ljava/lang/String;)Ljava/lang/String;", at = @At(value = "HEAD"), cancellable = true)
     public void getCustomLanguage(String key, CallbackInfoReturnable<String> call) {
