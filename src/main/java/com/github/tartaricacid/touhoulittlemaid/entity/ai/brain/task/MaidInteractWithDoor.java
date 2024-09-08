@@ -6,13 +6,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -57,43 +63,55 @@ public class MaidInteractWithDoor extends Behavior<LivingEntity> {
         this.lastCheckedNode = path.getNextNode();
         Node previousNode = path.getPreviousNode();
         Node nextNode = path.getNextNode();
-        BlockPos blockpos = previousNode.asBlockPos();
-        BlockState blockstate = serverWorld.getBlockState(blockpos);
-        if (blockstate.is(BlockTags.WOODEN_DOORS)) {
-            DoorBlock doorblock = (DoorBlock) blockstate.getBlock();
-            if (!doorblock.isOpen(blockstate)) {
-                doorblock.setOpen(entity, serverWorld, blockstate, blockpos, true);
+
+        BlockPos previousPos = previousNode.asBlockPos();
+        BlockState previousBlockState = serverWorld.getBlockState(previousPos);
+        if (previousBlockState.is(BlockTags.WOODEN_DOORS, (stateBase) -> stateBase.getBlock() instanceof DoorBlock)) {
+            DoorBlock doorblock = (DoorBlock) previousBlockState.getBlock();
+            if (!doorblock.isOpen(previousBlockState)) {
+                doorblock.setOpen(entity, serverWorld, previousBlockState, previousPos, true);
             }
-            this.rememberDoorToClose(serverWorld, entity, blockpos);
+            this.rememberDoorToClose(serverWorld, entity, previousPos);
+        } else if (previousBlockState.is(BlockTags.FENCE_GATES, (stateBase) -> stateBase.getBlock() instanceof FenceGateBlock)) {
+            if (!previousBlockState.getValue(FenceGateBlock.OPEN)) {
+                setFenceGate(entity, serverWorld, previousBlockState, previousPos, true);
+            }
+            this.rememberDoorToClose(serverWorld, entity, previousPos);
         }
-        BlockPos blockPos = nextNode.asBlockPos();
-        BlockState blockState = serverWorld.getBlockState(blockPos);
-        if (blockState.is(BlockTags.WOODEN_DOORS)) {
-            DoorBlock doorBlock = (DoorBlock) blockState.getBlock();
-            if (!doorBlock.isOpen(blockState)) {
-                doorBlock.setOpen(entity, serverWorld, blockState, blockPos, true);
-                this.rememberDoorToClose(serverWorld, entity, blockPos);
+
+
+        BlockPos nextPos = nextNode.asBlockPos();
+        BlockState nextBlockState = serverWorld.getBlockState(nextPos);
+        if (nextBlockState.is(BlockTags.WOODEN_DOORS, (stateBase) -> stateBase.getBlock() instanceof DoorBlock)) {
+            DoorBlock doorBlock = (DoorBlock) nextBlockState.getBlock();
+            if (!doorBlock.isOpen(nextBlockState)) {
+                doorBlock.setOpen(entity, serverWorld, nextBlockState, nextPos, true);
+                this.rememberDoorToClose(serverWorld, entity, nextPos);
+            }
+        } else if (nextBlockState.is(BlockTags.FENCE_GATES, (stateBase) -> stateBase.getBlock() instanceof FenceGateBlock)) {
+            if (!nextBlockState.getValue(FenceGateBlock.OPEN)) {
+                setFenceGate(entity, serverWorld, nextBlockState, nextPos, true);
+                this.rememberDoorToClose(serverWorld, entity, nextPos);
             }
         }
+
         closeDoorsThatIHaveOpenedOrPassedThrough(serverWorld, entity, previousNode, nextNode);
     }
 
-    public static void closeDoorsThatIHaveOpenedOrPassedThrough(ServerLevel serverWorld, LivingEntity entity, @Nullable Node pathPoint, @Nullable Node pathPoint1) {
+    public static void closeDoorsThatIHaveOpenedOrPassedThrough(ServerLevel serverWorld, LivingEntity entity, @Nullable Node previousNode, @Nullable Node nextNode) {
         Brain<?> brain = entity.getBrain();
         if (brain.hasMemoryValue(MemoryModuleType.DOORS_TO_CLOSE)) {
             Iterator<GlobalPos> iterator = brain.getMemory(MemoryModuleType.DOORS_TO_CLOSE).get().iterator();
             while (iterator.hasNext()) {
                 GlobalPos globalpos = iterator.next();
                 BlockPos blockpos = globalpos.pos();
-                if ((pathPoint == null || !pathPoint.asBlockPos().equals(blockpos) || (pathPoint1 != null && entity.blockPosition().equals(pathPoint1.asBlockPos())))
-                        && (pathPoint1 == null || !pathPoint1.asBlockPos().equals(blockpos))) {
+                if ((previousNode == null || !previousNode.asBlockPos().equals(blockpos) || (nextNode != null && entity.blockPosition().equals(nextNode.asBlockPos())))
+                    && (nextNode == null || !nextNode.asBlockPos().equals(blockpos))) {
                     if (isDoorTooFarAway(serverWorld, entity, globalpos)) {
                         iterator.remove();
                     } else {
                         BlockState blockstate = serverWorld.getBlockState(blockpos);
-                        if (!blockstate.is(BlockTags.WOODEN_DOORS)) {
-                            iterator.remove();
-                        } else {
+                        if (blockstate.is(BlockTags.WOODEN_DOORS, (stateBase) -> stateBase.getBlock() instanceof DoorBlock)) {
                             DoorBlock doorblock = (DoorBlock) blockstate.getBlock();
                             if (!doorblock.isOpen(blockstate)) {
                                 iterator.remove();
@@ -103,6 +121,16 @@ public class MaidInteractWithDoor extends Behavior<LivingEntity> {
                                 doorblock.setOpen(entity, serverWorld, blockstate, blockpos, false);
                                 iterator.remove();
                             }
+                        } else if ((blockstate.is(BlockTags.FENCE_GATES, (stateBase) -> stateBase.getBlock() instanceof FenceGateBlock))) {
+                            if (!blockstate.getValue(FenceGateBlock.OPEN)) {
+                                iterator.remove();
+                            } else if (areOtherMobsComingThroughDoor(serverWorld, entity, blockpos)) {
+                                iterator.remove();
+                            } else {
+                                setFenceGate(entity, serverWorld, blockstate, blockpos, false);
+                            }
+                        } else {
+                            iterator.remove();
                         }
                     }
                 }
@@ -126,12 +154,12 @@ public class MaidInteractWithDoor extends Behavior<LivingEntity> {
             if (path.isDone()) {
                 return false;
             } else {
-                Node pathpoint = path.getPreviousNode();
-                if (pathpoint == null) {
+                Node previousNode = path.getPreviousNode();
+                if (previousNode == null) {
                     return false;
                 } else {
                     Node nextNode = path.getNextNode();
-                    return blockPos.equals(pathpoint.asBlockPos()) || blockPos.equals(nextNode.asBlockPos());
+                    return blockPos.equals(previousNode.asBlockPos()) || blockPos.equals(nextNode.asBlockPos());
                 }
             }
         }
@@ -149,5 +177,11 @@ public class MaidInteractWithDoor extends Behavior<LivingEntity> {
         } else {
             brain.setMemory(MemoryModuleType.DOORS_TO_CLOSE, Sets.newHashSet(globalpos));
         }
+    }
+
+    private static void setFenceGate(@Nullable Entity entity, Level serverLevel, BlockState blockstate, BlockPos blockPos, boolean isOpen) {
+        serverLevel.setBlock(blockPos, blockstate.setValue(FenceGateBlock.OPEN, isOpen), Block.UPDATE_CLIENTS | Block.UPDATE_IMMEDIATE);
+        serverLevel.levelEvent(null, isOpen ? LevelEvent.SOUND_OPEN_FENCE_GATE : LevelEvent.SOUND_CLOSE_FENCE_GATE, blockPos, 0);
+        serverLevel.gameEvent(entity, isOpen ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
     }
 }
