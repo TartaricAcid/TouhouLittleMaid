@@ -702,5 +702,11 @@
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.2.text": "但是每页的第一行必须要有类型名称，它指明了该台本在什么情况下显示。$(br2)可用的类型名称有这些：$(br)日程相关：$(li)work：任意工作日程时显示$(li)idle：休息或空闲状态时显示$(li)sleep：睡觉时显示",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.3.text": "其他情况：$(li)morning：早上时显示$(li)night：傍晚时显示$(li)rain：下雨时显示$(li)snow：下雪时显示$(li)cold：处于寒冷的群系时显示$(li)hot：处于炎热的群系时显示$(li)hurt：受伤时显示$(li)beg：祈求状态时显示",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.4.text": "工作模式：$(li)会在特定的工作模式时显示，比如 attack，farm 等。$(br2)当你写好了台本，只需要对着女仆右击即可写入台本。$(br)如果你是在按下 Shift 键时，手持书与笔（或者成书）右击女仆，那么就可以清除女仆的台本。$(br)如果你是拿着空白的书与笔右击已经有台本的女仆，可以将女仆的台本复制到书上。",
-  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.5.text": "当开启了高级文本提示功能时（F3+H），你可以在工作模式切换界面的文本提示上看到这些名称。"
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.5.text": "当开启了高级文本提示功能时（F3+H），你可以在工作模式切换界面的文本提示上看到这些名称。",
+  "patchouli.touhou_little_maid.book.entries.maid.servant_bell.name": "仆人铃",
+  "patchouli.touhou_little_maid.book.entries.maid.servant_bell.pages.0.text": "仆人铃可以一对一的召唤回女仆，如果女仆在卸载区块上，它也能提示你女仆所处的位置。$(br2)手持此物品右击女仆即可进行绑定！",
+  "patchouli.touhou_little_maid.book.entries.maid.monster_list.name": "妖怪名单",
+  "patchouli.touhou_little_maid.book.entries.maid.monster_list.pages.0.text": "妖怪名单用于女仆的攻击模式，可以设置女仆应当攻击什么样的生物，只需要在她的副手放上这个物品即可。$(br2)注意：女仆不会攻击任何玩家！或者是有主人的宠物！",
+  "patchouli.touhou_little_maid.book.entries.other.granite_inari_fox.name": "麻石狐像",
+  "patchouli.touhou_little_maid.book.entries.other.granite_inari_fox.pages.0.text": "麻石狐像可以阻止一定范围内妖精女仆的生成，不会影响其他生物的生成$(br2)限制范围是一个矩形范围，Y 方向则是从最低点到最高点全部覆盖！"
 }
