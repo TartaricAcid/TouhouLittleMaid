@@ -177,7 +177,7 @@ dependencies {
     runtimeOnly "maven.modrinth:libipn:neoforge-1.21-6.0.2"
     implementation "maven.modrinth:inventory-profiles-next:neoforge-1.21-2.0.4"
     // Patchouli
-    implementation "libs:Patchouli:1.21-87-NEOFORGE-SNAPSHOT"
+    implementation "maven.modrinth:patchouli:1.21-87-neoforge"
 }
 
 // 用于 neoforge.mods 里替换那一堆 ${xxxx}

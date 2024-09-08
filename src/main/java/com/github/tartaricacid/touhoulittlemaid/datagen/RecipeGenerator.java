@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.datagen.builder.AltarRecipeBuild
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.init.registry.CompatRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import vazkii.patchouli.common.item.PatchouliDataComponents;
 import vazkii.patchouli.common.item.PatchouliItems;
 
@@ -335,6 +337,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .unlockedBy(getHasName(Items.DIAMOND), has(Tags.Items.GEMS_DIAMOND))
                 .save(recipeOutput);
 
+        ModLoadedCondition modLoadedCondition = new ModLoadedCondition(CompatRegistry.PATCHOULI);
         ItemStack patchouliBook = new ItemStack(PatchouliItems.BOOK);
         patchouliBook.set(PatchouliDataComponents.BOOK, InitItems.MEMORIZABLE_GENSOKYO_LOCATION);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, patchouliBook)
@@ -342,7 +345,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .requires(Tags.Items.DYES_RED)
                 .requires(Items.BOOK)
                 .unlockedBy(getHasName(Items.BOOK), has(Items.BOOK))
-                .save(recipeOutput, InitItems.MEMORIZABLE_GENSOKYO_LOCATION);
+                .save(recipeOutput.withConditions(modLoadedCondition), InitItems.MEMORIZABLE_GENSOKYO_LOCATION);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, InitItems.CHAIR)
                 .pattern("   ")
