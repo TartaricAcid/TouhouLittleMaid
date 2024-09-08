@@ -1,4 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
+
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.level.Level;
@@ -11,6 +12,7 @@ public class MaidPathNavigation extends GroundPathNavigation {
         this.mob.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
     }
 
+    @Override
     protected PathFinder createPathFinder(int range) {
         this.nodeEvaluator = new MaidNodeEvaluator();
         this.nodeEvaluator.setCanOpenDoors(true);

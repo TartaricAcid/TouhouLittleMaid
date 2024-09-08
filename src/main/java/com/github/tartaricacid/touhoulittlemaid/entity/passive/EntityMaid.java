@@ -17,7 +17,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeComp
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.goal.OpenGateGoal;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
@@ -254,6 +253,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
+    protected PathNavigation createNavigation(Level levelIn) {
+        return new MaidPathNavigation(this, levelIn);
+    }
+
+    @Override
     @SuppressWarnings("all")
     public Brain<EntityMaid> getBrain() {
         return (Brain<EntityMaid>) super.getBrain();
@@ -262,16 +266,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     protected Brain.Provider<EntityMaid> brainProvider() {
         return Brain.provider(MaidBrain.getMemoryTypes(), MaidBrain.getSensorTypes());
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new OpenGateGoal(this, true));
-    }
-
-    @Override
-    protected PathNavigation createNavigation(Level levelIn) {
-        return new MaidPathNavigation(this, levelIn);
     }
 
     @Override
@@ -1599,7 +1593,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_INVULNERABLE, isInvulnerable);
     }
 
-
+    @Override
     public IMaidTask getTask() {
         ResourceLocation uid = new ResourceLocation(entityData.get(DATA_TASK));
         return TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
