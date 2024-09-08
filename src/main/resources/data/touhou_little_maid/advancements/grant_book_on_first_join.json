@@ -1,12 +1,25 @@
 {
-  "criteria": {
-    "tick": {
-      "trigger": "touhou_little_maid:give_patchouli_book_config"
+  "type": "forge:conditional",
+  "advancements": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "patchouli"
+        }
+      ],
+      "advancement": {
+        "criteria": {
+          "tick": {
+            "trigger": "touhou_little_maid:give_patchouli_book_config"
+          }
+        },
+        "rewards": {
+          "loot": [
+            "touhou_little_maid:grant_book_on_first_join"
+          ]
+        }
+      }
     }
-  },
-  "rewards": {
-    "loot": [
-      "touhou_little_maid:grant_book_on_first_join"
-    ]
-  }
+  ]
 }
