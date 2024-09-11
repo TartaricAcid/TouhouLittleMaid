@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidGomokuTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -43,7 +44,7 @@ public class TaskBoardGames implements IMaidTask {
     }
 
     @Override
-    public boolean canSeat() {
-        return true;
+    public boolean canSitInJoy(EntityMaid maid, String joyType) {
+        return Type.GOMOKU.getTypeName().equals(joyType);
     }
 }

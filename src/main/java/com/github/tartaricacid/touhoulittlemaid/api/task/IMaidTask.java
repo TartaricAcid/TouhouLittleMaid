@@ -70,11 +70,13 @@ public interface IMaidTask {
     }
 
     /**
-     * 女仆是否可以坐下
+     * 处于该工作模式时，女仆是否允许坐在娱乐方块上？
      *
-     * @return 该任务中，女仆是否可以坐下
+     * @param maid    女仆
+     * @param joyType 娱乐方块类型
+     * @return 处于该工作模式时，女仆是否允许坐在娱乐方块上？
      */
-    default boolean canSeat() {
+    default boolean canSitInJoy(EntityMaid maid, String joyType) {
         return false;
     }
 
