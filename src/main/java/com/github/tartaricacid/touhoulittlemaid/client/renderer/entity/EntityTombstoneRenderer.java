@@ -18,11 +18,15 @@ import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
 
 public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
-    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone.png");
-    private static final ResourceLocation THE_NETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_nether.png");
-    private static final ResourceLocation THE_END_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_the_end.png");
-    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone_twilight_forest.png");
-    private static final ResourceLocation TWILIGHT_FOREST_NAME = ResourceLocation.fromNamespaceAndPath("twilightforest", "twilight_forest");
+    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone.png");
+    private static final ResourceLocation THE_NETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_the_nether.png");
+    private static final ResourceLocation THE_END_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_the_end.png");
+    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_twilight_forest.png");
+    private static final ResourceLocation AETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_aether.png");
+
+    private static final ResourceLocation TWILIGHT_FOREST_LEVEL_ID = ResourceLocation.fromNamespaceAndPath("twilightforest", "twilight_forest");
+    private final static ResourceLocation AETHER_LEVEL_ID = ResourceLocation.fromNamespaceAndPath("aether", "the_aether");
+
     private static final int NAME_SHOW_DISTANCE = 64;
     private final TombstoneModel tombstoneModel;
 
@@ -37,7 +41,7 @@ public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.translate(0.0, -1.501, 0.0);
         tombstoneModel.setupAnim(tombstone, 0, 0, -0.1f, 0, 0);
-        RenderType renderType = RenderType.entityTranslucent(getTextureLocation(tombstone));
+        RenderType renderType = RenderType.entityCutoutNoCull(getTextureLocation(tombstone));
         VertexConsumer buffer = bufferIn.getBuffer(renderType);
         tombstoneModel.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
@@ -61,8 +65,11 @@ public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
         if (dimension.equals(Level.END.location())) {
             return THE_END_TEXTURE;
         }
-        if (dimension.equals(TWILIGHT_FOREST_NAME)) {
+        if (dimension.equals(TWILIGHT_FOREST_LEVEL_ID)) {
             return TWILIGHT_FOREST_TEXTURE;
+        }
+        if (dimension.equals(AETHER_LEVEL_ID)) {
+            return AETHER_TEXTURE;
         }
         return DEFAULT_TEXTURE;
     }

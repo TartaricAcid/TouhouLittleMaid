@@ -24,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -41,12 +40,8 @@ public class ItemFoxScroll extends Item {
     }
 
     @Nullable
-    public static Pair<String, BlockPos> getTrackInfo(ItemStack scroll) {
-        TrackInfo trackInfo = scroll.get(InitDataComponent.TRACK_INFO);
-        if (trackInfo != null) {
-            return Pair.of(trackInfo.dimension(), trackInfo.position());
-        }
-        return null;
+    public static TrackInfo getTrackInfo(ItemStack scroll) {
+        return scroll.get(InitDataComponent.TRACK_INFO);
     }
 
     @Override
@@ -78,11 +73,11 @@ public class ItemFoxScroll extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> components, TooltipFlag flagIn) {
-        Pair<String, BlockPos> info = getTrackInfo(stack);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> components, TooltipFlag flagIn) {
+        TrackInfo info = getTrackInfo(stack);
         if (info != null) {
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", info.getLeft()).withStyle(ChatFormatting.GOLD));
-            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.position", info.getRight().toShortString()).withStyle(ChatFormatting.RED));
+            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.dimension", info.dimension).withStyle(ChatFormatting.GOLD));
+            components.add(Component.translatable("tooltips.touhou_little_maid.fox_scroll.position", info.position.toShortString()).withStyle(ChatFormatting.RED));
             components.add(Component.empty());
         }
         if (stack.getItem() == InitItems.RED_FOX_SCROLL.get()) {

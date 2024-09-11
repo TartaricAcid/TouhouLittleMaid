@@ -202,7 +202,7 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
                     getTextureLocation(entity));
 
             if (Minecraft.getInstance().player != null && !entity.isInvisibleTo(Minecraft.getInstance().player)) {
-                VertexConsumer translucentBuffer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(entity)));
+                VertexConsumer translucentBuffer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(entity)));
                 render(model, entity, partialTick, renderType, poseStack, bufferSource, translucentBuffer,
                         packedLight, getPackedOverlay(entity, getOverlayProgress(entity, partialTick)),
                         renderColor.getRed() / 255f, renderColor.getGreen() / 255f,

@@ -25,7 +25,7 @@ public record SendEffectPackage(int id, Collection<MobEffectInstance> effects) i
             ByteBufCodecs.collection(
                     ArrayList::new,
                     MobEffectInstance.STREAM_CODEC,
-                    20);
+                    256);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SendEffectPackage> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,

@@ -1,19 +1,27 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.mixin.FenceGateBlockAccessor;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.kinds.OptionalBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.behavior.declarative.MemoryAccessor;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -34,24 +42,33 @@ public class MaidInteractWithDoor {
                 instance.registered(MemoryModuleType.NEAREST_LIVING_ENTITIES)).apply(instance, (pathMemory, doorToCloseMemory, livingEntityMemory) -> (serverLevel, entity, time) -> {
             Path path = instance.get(pathMemory);
             Optional<Set<GlobalPos>> doorToClosePos = instance.tryGet(doorToCloseMemory);
+
             if (!path.notStarted() && !path.isDone()) {
                 if (Objects.equals(mutableObject.getValue(), path.getNextNode())) {
                     mutableInt.setValue(COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE);
                 } else if (mutableInt.decrementAndGet() > 0) {
                     return false;
                 }
+
                 mutableObject.setValue(path.getNextNode());
                 Node previousNode = path.getPreviousNode();
                 Node nextNode = path.getNextNode();
                 BlockPos previousNodeBlockPos = previousNode.asBlockPos();
                 BlockState previousNodeBlockState = serverLevel.getBlockState(previousNodeBlockPos);
+
                 if (previousNodeBlockState.is(BlockTags.WOODEN_DOORS, (stateBase) -> stateBase.getBlock() instanceof DoorBlock)) {
                     DoorBlock doorBlock = (DoorBlock) previousNodeBlockState.getBlock();
                     if (!doorBlock.isOpen(previousNodeBlockState)) {
                         doorBlock.setOpen(entity, serverLevel, previousNodeBlockState, previousNodeBlockPos, true);
                     }
                     doorToClosePos = rememberDoorToClose(doorToCloseMemory, doorToClosePos, serverLevel, previousNodeBlockPos);
+                } else if (previousNodeBlockState.is(BlockTags.FENCE_GATES, (stateBase) -> stateBase.getBlock() instanceof FenceGateBlock)) {
+                    if (!previousNodeBlockState.getValue(FenceGateBlock.OPEN)) {
+                        setFenceGate(entity, serverLevel, previousNodeBlockState, previousNodeBlockPos, true);
+                    }
+                    doorToClosePos = rememberDoorToClose(doorToCloseMemory, doorToClosePos, serverLevel, previousNodeBlockPos);
                 }
+
                 BlockPos nextNodeBlockPos = nextNode.asBlockPos();
                 BlockState nextNodeBlockState = serverLevel.getBlockState(nextNodeBlockPos);
                 if (nextNodeBlockState.is(BlockTags.WOODEN_DOORS, (stateBase) -> stateBase.getBlock() instanceof DoorBlock)) {
@@ -60,7 +77,13 @@ public class MaidInteractWithDoor {
                         doorBlock.setOpen(entity, serverLevel, nextNodeBlockState, nextNodeBlockPos, true);
                         doorToClosePos = rememberDoorToClose(doorToCloseMemory, doorToClosePos, serverLevel, nextNodeBlockPos);
                     }
+                } else if (nextNodeBlockState.is(BlockTags.FENCE_GATES, (stateBase) -> stateBase.getBlock() instanceof FenceGateBlock)) {
+                    if (!nextNodeBlockState.getValue(FenceGateBlock.OPEN)) {
+                        setFenceGate(entity, serverLevel, nextNodeBlockState, nextNodeBlockPos, true);
+                        doorToClosePos = rememberDoorToClose(doorToCloseMemory, doorToClosePos, serverLevel, nextNodeBlockPos);
+                    }
                 }
+
                 doorToClosePos.ifPresent((doorPos) -> closeDoorsThatIHaveOpenedOrPassedThrough(serverLevel, entity, previousNode, nextNode, doorPos, instance.tryGet(livingEntityMemory)));
                 return true;
             } else {
@@ -80,9 +103,8 @@ public class MaidInteractWithDoor {
                     doorPosIterator.remove();
                 } else {
                     BlockState blockstate = serverLevel.getBlockState(blockPos);
-                    if (!blockstate.is(BlockTags.WOODEN_DOORS, (stateBase) -> stateBase.getBlock() instanceof DoorBlock)) {
-                        doorPosIterator.remove();
-                    } else {
+
+                    if (blockstate.is(BlockTags.WOODEN_DOORS, (stateBase) -> stateBase.getBlock() instanceof DoorBlock)) {
                         DoorBlock doorblock = (DoorBlock) blockstate.getBlock();
                         if (!doorblock.isOpen(blockstate)) {
                             doorPosIterator.remove();
@@ -92,6 +114,16 @@ public class MaidInteractWithDoor {
                             doorblock.setOpen(entity, serverLevel, blockstate, blockPos, false);
                             doorPosIterator.remove();
                         }
+                    } else if ((blockstate.is(BlockTags.FENCE_GATES, (stateBase) -> stateBase.getBlock() instanceof FenceGateBlock))) {
+                        if (!blockstate.getValue(FenceGateBlock.OPEN)) {
+                            doorPosIterator.remove();
+                        } else if (areOtherMobsComingThroughDoor(entity, blockPos, nearestLivingEntities)) {
+                            doorPosIterator.remove();
+                        } else {
+                            setFenceGate(entity, serverLevel, blockstate, blockPos, false);
+                        }
+                    } else {
+                        doorPosIterator.remove();
                     }
                 }
             }
@@ -139,5 +171,15 @@ public class MaidInteractWithDoor {
             doorsToClose.set(posSet);
             return posSet;
         }));
+    }
+
+    private static void setFenceGate(@Nullable Entity entity, Level serverLevel, BlockState blockstate, BlockPos blockPos, boolean isOpen) {
+        serverLevel.setBlock(blockPos, blockstate.setValue(FenceGateBlock.OPEN, isOpen), Block.UPDATE_CLIENTS | Block.UPDATE_IMMEDIATE);
+        if (blockstate.getBlock() instanceof FenceGateBlockAccessor fenceGateBlock) {
+            SoundEvent openSound = fenceGateBlock.tlmOpenSound();
+            SoundEvent closeSound = fenceGateBlock.tlmCloseSound();
+            serverLevel.playSound(entity, blockPos, isOpen ? openSound : closeSound, SoundSource.BLOCKS, 1.0F, serverLevel.getRandom().nextFloat() * 0.1F + 0.9F);
+        }
+        serverLevel.gameEvent(entity, isOpen ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
     }
 }

@@ -29,8 +29,7 @@ public class DataGenerator {
         generator.addProvider(event.includeServer(), new LootTableProvider(pack,
                 Set.of(
                         LootTableGenerator.ADDITIONAL_LOOT_TABLE,
-                        LootTableGenerator.GIVE_SMART_SLAB,
-                        LootTableGenerator.GRANT_PATCHOULI_BOOK
+                        LootTableGenerator.GIVE_SMART_SLAB
                 ),
                 List.of(
                         new LootTableProvider.SubProviderEntry(LootTableGenerator.ChestLootTables::new, LootContextParamSets.CHEST),

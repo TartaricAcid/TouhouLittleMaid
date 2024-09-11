@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
@@ -21,8 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.AbstractSkullBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -71,18 +68,15 @@ public class LayerMaidBipedHead extends RenderLayer<Mob, BedrockModel<Mob>> {
 
         // 渲染女仆背部的
         ItemStack stack = maid.getBackpackShowItem();
-        if (stack.getItem() instanceof BlockItem) {
-            Block block = ((BlockItem) stack.getItem()).getBlock();
-            BlockState blockState = block.defaultBlockState();
-            // 由于 1.21 删除了 IPlantable，使用 Tags 识别花朵，还有识别 BushBlock
-            if (blockState.is(BlockTags.FLOWERS) || blockState.getBlock() instanceof BushBlock) {
-                poseStack.pushPose();
-                this.getParentModel().getHead().translateAndRotate(poseStack);
-                poseStack.scale(0.8F, -0.8F, -0.8F);
-                poseStack.translate(-0.5, 0.625, -0.5);
-                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, null);
-                poseStack.popPose();
-            }
+        // 不做限制，任意方块都可以显示
+        if (stack.getItem() instanceof BlockItem blockItem) {
+            BlockState blockState = blockItem.getBlock().defaultBlockState();
+            poseStack.pushPose();
+            this.getParentModel().getHead().translateAndRotate(poseStack);
+            poseStack.scale(0.8F, -0.8F, -0.8F);
+            poseStack.translate(-0.5, 0.625, -0.5);
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, null);
+            poseStack.popPose();
         }
     }
 }

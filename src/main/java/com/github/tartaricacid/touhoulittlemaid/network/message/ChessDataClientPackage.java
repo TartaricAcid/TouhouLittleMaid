@@ -28,7 +28,7 @@ public record ChessDataClientPackage(BlockPos pos, List<byte[]> chessData, Point
     public static final StreamCodec<ByteBuf, List<byte[]>> BYTE_BUF_LIST_STREAM_CODEC = ByteBufCodecs.collection(
             ArrayList::new,
             ByteBufCodecs.BYTE_ARRAY,
-            20
+            15
     );
     public static final StreamCodec<ByteBuf, ChessDataClientPackage> STREAM_CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC,

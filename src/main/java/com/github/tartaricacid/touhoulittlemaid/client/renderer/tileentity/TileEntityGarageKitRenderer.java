@@ -39,7 +39,7 @@ public class TileEntityGarageKitRenderer implements BlockEntityRenderer<TileEnti
         poseStack.scale(0.5f, 0.5f, 0.5f);
         poseStack.translate(1, 0.5, 1);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
+        VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
         BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
 

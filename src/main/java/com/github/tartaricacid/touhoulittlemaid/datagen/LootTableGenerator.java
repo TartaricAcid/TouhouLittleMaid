@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.datagen;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBed;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockScarecrow;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.core.HolderLookup;
@@ -13,14 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import vazkii.patchouli.common.item.PatchouliDataComponents;
-import vazkii.patchouli.common.item.PatchouliItems;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +28,6 @@ import java.util.function.BiConsumer;
 public class LootTableGenerator {
     public static final ResourceKey<LootTable> ADDITIONAL_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "chests/additional_loot_table"));
     public static final ResourceKey<LootTable> GIVE_SMART_SLAB = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "give_smart_slab"));
-    public static final ResourceKey<LootTable> GRANT_PATCHOULI_BOOK = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "grant_patchouli_book"));
 
     public record ChestLootTables(HolderLookup.Provider provider) implements LootTableSubProvider {
         @Override
@@ -55,12 +53,6 @@ public class LootTableGenerator {
                     .withPool(LootPool.lootPool()
                             .setRolls(ConstantValue.exactly(1))
                             .add(LootItem.lootTableItem(InitItems.SMART_SLAB_INIT))));
-
-            consumer.accept(GRANT_PATCHOULI_BOOK, LootTable.lootTable()
-                    .withPool(LootPool.lootPool()
-                            .setRolls(ConstantValue.exactly(1))
-                            .add(LootItem.lootTableItem(PatchouliItems.BOOK)
-                                    .apply(SetComponentsFunction.setComponent(PatchouliDataComponents.BOOK, InitItems.MEMORIZABLE_GENSOKYO_LOCATION)))));
         }
     }
 
@@ -74,6 +66,7 @@ public class LootTableGenerator {
         @Override
         public void generate() {
             add(InitBlocks.MAID_BED.get(), block -> createSinglePropConditionTable(block, BlockMaidBed.PART, BedPart.HEAD));
+            add(InitBlocks.SCARECROW.get(), block -> createSinglePropConditionTable(block, BlockScarecrow.HALF, DoubleBlockHalf.LOWER));
 
             dropSelf(InitBlocks.MODEL_SWITCHER.get());
             dropSelf(InitBlocks.KEYBOARD.get());

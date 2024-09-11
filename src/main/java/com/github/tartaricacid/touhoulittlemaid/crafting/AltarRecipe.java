@@ -85,7 +85,7 @@ public class AltarRecipe extends ShapelessRecipe {
         CustomData compoundData = itemFilm.get(InitDataComponent.MAID_INFO);
         if (compoundData != null && maid != null) {
             CompoundTag maidCompound = compoundData.copyTag();
-            maid.load(maidCompound);
+            maid.readAdditionalSaveData(maidCompound);
             maid.spawnExplosionParticle();
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             world.addFreshEntity(maid);

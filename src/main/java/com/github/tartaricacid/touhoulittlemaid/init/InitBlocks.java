@@ -27,6 +27,7 @@ public final class InitBlocks {
     public static DeferredBlock<Block> BOOKSHELF = BLOCKS.register("bookshelf", BlockBookshelf::new);
     public static DeferredBlock<Block> COMPUTER = BLOCKS.register("computer", BlockComputer::new);
     public static DeferredBlock<Block> SHRINE = BLOCKS.register("shrine", BlockShrine::new);
+    public static DeferredBlock<Block> SCARECROW = BLOCKS.register("scarecrow", BlockScarecrow::new);
 
     public static Supplier<BlockEntityType<TileEntityAltar>> ALTAR_TE = TILE_ENTITIES.register("altar", () -> TileEntityAltar.TYPE);
     public static Supplier<BlockEntityType<TileEntityStatue>> STATUE_TE = TILE_ENTITIES.register("statue", () -> TileEntityStatue.TYPE);

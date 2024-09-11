@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "patchouli"
+    }
+  ],
   "type": "minecraft:advancement_reward",
   "pools": [
     {

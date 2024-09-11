@@ -1,16 +1,21 @@
 package com.github.tartaricacid.touhoulittlemaid.api.task;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.misc.DefaultMonsterType;
+import com.github.tartaricacid.touhoulittlemaid.entity.misc.MonsterType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemMonsterList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface IAttackTask extends IMaidTask {
@@ -25,18 +30,6 @@ public interface IAttackTask extends IMaidTask {
                 mobs -> mobs.findClosest((e) -> maid.canAttack(e) && maid.isWithinRestriction(e.blockPosition())));
     }
 
-    private static boolean checkCanAttackEntity(LivingEntity target) {
-        // 不能攻击玩家
-        if (target instanceof Player) {
-            return false;
-        }
-        // 有主的宠物也不攻击
-        if (target instanceof TamableAnimal tamableAnimal) {
-            return tamableAnimal.getOwnerUUID() == null;
-        }
-        return true;
-    }
-
     /**
      * 能否攻击该对象
      *
@@ -45,25 +38,36 @@ public interface IAttackTask extends IMaidTask {
      * @return 能否攻击？
      */
     default boolean canAttack(EntityMaid maid, LivingEntity target) {
-        if (maid.getOwner() instanceof Player player) {
-            LivingEntity lastHurtByMob = player.getLastHurtByMob();
-            if (target.equals(lastHurtByMob) && checkCanAttackEntity(lastHurtByMob)) {
-                return true;
-            }
-            LivingEntity lastHurtMob = player.getLastHurtMob();
-            if (target.equals(lastHurtMob) && checkCanAttackEntity(lastHurtMob)) {
-                return true;
-            }
-        }
-        LivingEntity maidLastHurtByMob = maid.getLastHurtByMob();
-        if (target.equals(maidLastHurtByMob) && checkCanAttackEntity(maidLastHurtByMob)) {
-            return true;
-        }
-        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
-        if (key != null && MaidConfig.MAID_ATTACK_IGNORE.get().contains(key.toString())) {
+        // 获取实体 ID
+        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
+
+        // 模组自身强制指定的
+        if (target instanceof Player) {
             return false;
         }
-        return target instanceof Enemy;
+        if (target instanceof TamableAnimal tamableAnimal) {
+            // 有主的宠物也不攻击
+            return tamableAnimal.getOwnerUUID() == null;
+        }
+
+        // 判断配置文件的
+        if (MaidConfig.MAID_ATTACK_IGNORE.get().contains(id.toString())) {
+            return false;
+        }
+
+        // 获取女仆副手是否有妖怪名单
+        ItemStack offhandItem = maid.getOffhandItem();
+        if (offhandItem.is(InitItems.MONSTER_LIST.get())) {
+            Map<ResourceLocation, MonsterType> monsterList = ItemMonsterList.getMonsterList(offhandItem);
+            if (monsterList.containsKey(id)) {
+                MonsterType monsterType = monsterList.get(id);
+                return DefaultMonsterType.canAttack(maid, target, monsterType);
+            }
+        }
+
+        // 那如果没有呢？走默认配置
+        MonsterType monsterType = DefaultMonsterType.getMonsterType(target.getType());
+        return DefaultMonsterType.canAttack(maid, target, monsterType);
     }
 
     default boolean hasExtraAttack(EntityMaid maid, Entity target) {

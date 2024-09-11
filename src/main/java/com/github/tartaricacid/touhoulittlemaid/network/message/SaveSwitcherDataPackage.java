@@ -25,7 +25,7 @@ public record SaveSwitcherDataPackage(BlockPos pos,
             ByteBufCodecs.collection(
                     ArrayList::new,
                     TileEntityModelSwitcher.ModeInfo.MODE_INFO_STREAM_CODEC,
-                    20);
+                    1024);
 
     public static final StreamCodec<ByteBuf, SaveSwitcherDataPackage> STREAM_CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC,

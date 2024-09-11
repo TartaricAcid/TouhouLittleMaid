@@ -15,6 +15,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
@@ -80,7 +81,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -202,9 +203,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
-        ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
-        this.getNavigation().setCanFloat(true);
-        this.setPathfindingMalus(PathType.COCOA, -1.0F);
         this.favorabilityManager = new FavorabilityManager(this);
         this.scriptBookManager = new MaidScriptBookManager();
         this.schedulePos = new SchedulePos(BlockPos.ZERO, world.dimension().location());
@@ -274,6 +272,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         builder.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
         builder.define(BACKPACK_FLUID, StringUtils.EMPTY);
         builder.define(GAME_SKILL, new CompoundTag());
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level levelIn) {
+        return new MaidPathNavigation(this, levelIn);
     }
 
     @Override

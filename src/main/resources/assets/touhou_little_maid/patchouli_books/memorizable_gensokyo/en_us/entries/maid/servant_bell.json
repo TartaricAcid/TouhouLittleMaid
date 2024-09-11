@@ -1,0 +1,13 @@
+{
+  "sortnum": 10,
+  "name": "patchouli.touhou_little_maid.book.entries.maid.servant_bell.name",
+  "icon": "touhou_little_maid:servant_bell",
+  "category": "touhou_little_maid:maid",
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "touhou_little_maid:servant_bell",
+      "text": "patchouli.touhou_little_maid.book.entries.maid.servant_bell.pages.0.text"
+    }
+  ]
+}

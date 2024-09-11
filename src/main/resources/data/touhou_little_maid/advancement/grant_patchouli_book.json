@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "patchouli"
+    }
+  ],
   "criteria": {
     "tick": {
       "trigger": "touhou_little_maid:give_patchouli_book_config"

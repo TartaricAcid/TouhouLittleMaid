@@ -62,6 +62,8 @@ public class InitCreativeTabs {
                 output.accept(TRUMPET.get());
                 output.accept(RED_FOX_SCROLL.get());
                 output.accept(WHITE_FOX_SCROLL.get());
+                output.accept(SERVANT_BELL.get());
+                output.accept(MONSTER_LIST.get());
                 output.accept(KAPPA_COMPASS.get());
                 output.accept(EXTINGUISHER.get());
                 output.accept(GOMOKU.get());
@@ -82,6 +84,7 @@ public class InitCreativeTabs {
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());
                 output.accept(BROOM.get());
+                output.accept(SCARECROW.get());
                 if (FMLEnvironment.dist == Dist.CLIENT) {
                     ItemEntityPlaceholder.fillItemCategory(output);
                 }

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource.models;
 
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
@@ -9,10 +10,7 @@ import com.google.common.collect.Maps;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public final class ChairModels {
@@ -58,6 +56,7 @@ public final class ChairModels {
 
     public void addPack(CustomModelPack<ChairModelInfo> pack) {
         this.packList.add(pack);
+        CacheIconManager.addChairPack(pack);
     }
 
     public void putModel(String modelId, BedrockModel<EntityChair> modelJson) {
@@ -70,6 +69,24 @@ public final class ChairModels {
 
     public void putAnimation(String modelId, List<Object> animationJs) {
         this.idAnimationMap.put(modelId, animationJs);
+    }
+
+    public void sortPackList() {
+        List<CustomModelPack<ChairModelInfo>> defaultPackList = Lists.newArrayList();
+        List<CustomModelPack<ChairModelInfo>> sortPackList = Lists.newArrayList();
+
+        // 先把默认模型查到，按顺序放进去
+        for (String id : DefaultPackConstant.CHAIR_SORT) {
+            this.packList.stream().filter(info -> info.getId().equals(id)).findFirst().ifPresent(defaultPackList::add);
+        }
+        // 剩余模型放进另一个里，进行字典排序
+        this.packList.stream().filter(info -> !DefaultPackConstant.CHAIR_SORT.contains(info.getId())).forEach(sortPackList::add);
+        sortPackList.sort(Comparator.comparing(CustomModelPack::getId));
+
+        // 最后顺次放入
+        this.packList.clear();
+        this.packList.addAll(defaultPackList);
+        this.packList.addAll(sortPackList);
     }
 
     public Optional<BedrockModel<EntityChair>> getModel(String modelId) {

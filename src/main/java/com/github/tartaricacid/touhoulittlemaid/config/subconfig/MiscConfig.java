@@ -20,6 +20,8 @@ public final class MiscConfig {
     public static ModConfigSpec.DoubleValue SHRINE_LAMP_MAX_STORAGE;
     public static ModConfigSpec.IntValue SHRINE_LAMP_MAX_RANGE;
     public static ModConfigSpec.BooleanValue CLOSE_OPTIFINE_WARNING;
+    public static ModConfigSpec.IntValue SCARECROW_RANGE;
+    public static ModConfigSpec.BooleanValue USE_NEW_MAID_FAIRY_MODEL;
 
     public static void init(ModConfigSpec.Builder builder) {
         builder.translation(TRANSLATE_KEY).push("misc");
@@ -65,6 +67,14 @@ public final class MiscConfig {
         builder.comment("Whether to turn off the Optifine warning")
                 .translation(translateKey("close_optifine_warning"));
         CLOSE_OPTIFINE_WARNING = builder.define("CloseOptifineWarning", false);
+
+        builder.comment("The range of the scarecrow to prevent the fairy maid from spawning")
+                .translation(translateKey("scarecrow_range"));
+        SCARECROW_RANGE = builder.defineInRange("ScarecrowRange", 16 * 3, 0, Integer.MAX_VALUE);
+
+        builder.comment("Whether to use the new version of the Fairy Maid model")
+                .translation(translateKey("use_new_maid_fairy_model"));
+        USE_NEW_MAID_FAIRY_MODEL = builder.define("UseNewMaidFairyModel", true);
 
         builder.pop();
     }

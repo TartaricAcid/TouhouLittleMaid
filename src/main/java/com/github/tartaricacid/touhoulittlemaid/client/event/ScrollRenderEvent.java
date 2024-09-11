@@ -1,19 +1,22 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFoxScroll;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemServantBell;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID, value = Dist.CLIENT)
@@ -22,13 +25,14 @@ public class ScrollRenderEvent {
     public static void onRenderWorldLastEvent(RenderLevelStageEvent event) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if (RenderLevelStageEvent.Stage.AFTER_PARTICLES.equals(event.getStage()) && player != null && player.getMainHandItem().getItem() instanceof ItemFoxScroll) {
-            Pair<String, BlockPos> info = ItemFoxScroll.getTrackInfo(player.getMainHandItem());
-            if (info == null) {
+        if (RenderLevelStageEvent.Stage.AFTER_PARTICLES.equals(event.getStage()) && player != null) {
+            Optional<ItemFoxScroll.TrackInfo> trackInfo = getInfo(player, player.getMainHandItem());
+            if (trackInfo.isEmpty()) {
                 return;
             }
-            String dimension = info.getLeft();
-            Vec3 trackVec = new Vec3(info.getRight().getX(), info.getRight().getY(), info.getRight().getZ());
+            ItemFoxScroll.TrackInfo info = trackInfo.get();
+            String dimension = info.dimension();
+            Vec3 trackVec = new Vec3(info.position().getX(), info.position().getY(), info.position().getZ());
             if (!dimension.equals(player.level.dimension().location().toString())) {
                 return;
             }
@@ -50,5 +54,17 @@ public class ScrollRenderEvent {
             RenderHelper.renderFloatingText(event.getPoseStack(), Math.round(actualDistance) + " m", trackVec, 0xff8800, scale, -17);
             RenderHelper.renderFloatingText(event.getPoseStack(), "▼", trackVec, 0xff0000, scale * 1.2f, -5);
         }
+    }
+
+    private static Optional<ItemFoxScroll.TrackInfo> getInfo(Player player, ItemStack stack) {
+        if (stack.getItem() instanceof ItemFoxScroll) {
+            var trackInfo = ItemFoxScroll.getTrackInfo(player.getMainHandItem());
+            return Optional.ofNullable(trackInfo);
+        }
+        if (stack.is(InitItems.SERVANT_BELL.get())) {
+            var maidShow = ItemServantBell.getMaidShow(stack);
+            return Optional.ofNullable(maidShow);
+        }
+        return Optional.empty();
     }
 }

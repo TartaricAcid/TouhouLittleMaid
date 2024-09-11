@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.ChairModelGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -41,8 +41,8 @@ public record OpenChairGuiPackage(int id) implements CustomPacketPayload {
             return;
         }
         Entity e = mc.level.getEntity(message.id);
-        if (mc.player != null && mc.player.isAlive() && e instanceof EntityChair && e.isAlive()) {
-            mc.setScreen(new ChairModelGui((EntityChair) e));
+        if (mc.player != null && mc.player.isAlive() && e instanceof EntityChair chair && e.isAlive()) {
+            CacheIconManager.openChairModelGui(chair);
         }
     }
 }
