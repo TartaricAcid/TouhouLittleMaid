@@ -41,4 +41,9 @@ public class TaskBoardGames implements IMaidTask {
         Pair<Integer, BehaviorControl<? super EntityMaid>> gomoku = Pair.of(5, new MaidGomokuTask(0.6f, 2));
         return Lists.newArrayList(gomoku);
     }
+
+    @Override
+    public boolean canSeat() {
+        return true;
+    }
 }

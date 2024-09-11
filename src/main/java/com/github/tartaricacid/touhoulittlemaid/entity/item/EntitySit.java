@@ -83,7 +83,7 @@ public class EntitySit extends Entity {
         if (tickCount % 20 == 0) {
             FavorabilityManager manager = maid.getFavorabilityManager();
             manager.apply(this.getJoyType());
-            if (!this.isIdleSchedule(maid) && !isGomokuTask(maid)) {
+            if (!this.isIdleSchedule(maid) && !maid.getTask().canSeat()) {
                 maid.stopRiding();
             }
         }

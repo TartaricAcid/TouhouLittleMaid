@@ -70,6 +70,15 @@ public interface IMaidTask {
     }
 
     /**
+     * 女仆是否可以坐下
+     *
+     * @return 该任务中，女仆是否可以坐下
+     */
+    default boolean canSeat() {
+        return false;
+    }
+
+    /**
      * 获取任务启用的条件提示文本
      *
      * @param maid 女仆对象

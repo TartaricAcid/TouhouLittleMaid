@@ -81,4 +81,6 @@ public class MaidGomokuTask extends MaidCheckRateTask {
         }
         return true;
     }
+
+
 }
