@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -82,10 +83,21 @@ public class EntitySit extends Entity {
         maid.setYHeadRot(this.getYRot());
         if (tickCount % 20 == 0) {
             FavorabilityManager manager = maid.getFavorabilityManager();
-            manager.apply(this.getJoyType());
-            if (!this.isIdleSchedule(maid) && !isGomokuTask(maid)) {
-                maid.stopRiding();
+            String joyType = this.getJoyType();
+            IMaidTask task = maid.getTask();
+
+            // 给予好感度提升
+            manager.apply(joyType);
+            // 如果是空闲状态，那么娱乐方块可以随便坐
+            if (this.isIdleSchedule(maid)) {
+                return;
             }
+            // 如果是工作状态，看看这个工作是否允许你坐在上面
+            if (this.isWorkSchedule(maid) && task.canSitInJoy(maid, joyType)) {
+                return;
+            }
+            // 否则，不允许在上面待着
+            maid.stopRiding();
         }
     }
 
