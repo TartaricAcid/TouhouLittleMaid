@@ -50,9 +50,9 @@ public interface IAttackTask extends IMaidTask {
         if (target instanceof Player) {
             return false;
         }
-        if (target instanceof TamableAnimal tamableAnimal) {
-            // 有主的宠物也不攻击
-            return tamableAnimal.getOwnerUUID() == null;
+        // 有主的宠物也不攻击
+        if (target instanceof TamableAnimal tamableAnimal && tamableAnimal.getOwnerUUID() != null) {
+            return false;
         }
 
         // 判断配置文件的
