@@ -32,7 +32,15 @@ public final class DefaultMonsterType {
         }
 
         ForgeRegistries.ENTITY_TYPES.getValues().forEach(type -> {
-            Entity entity = type.create(level);
+            Entity entity = null;
+
+            // 因为某些模组方法 create 实体会失败
+            try {
+                entity = type.create(level);
+            } catch (Exception e) {
+                e.fillInStackTrace();
+            }
+
             if (!(entity instanceof LivingEntity livingEntity)) {
                 return;
             }
@@ -83,7 +91,7 @@ public final class DefaultMonsterType {
     public static boolean canAttack(EntityMaid maid, LivingEntity target, MonsterType monsterType) {
         // 友好生物，无论什么情况不攻击
         if (monsterType == MonsterType.FRIENDLY) {
-            return true;
+            return false;
         }
 
         // 中立生物，只有玩家攻击的，或者攻击过玩家的才会攻击
