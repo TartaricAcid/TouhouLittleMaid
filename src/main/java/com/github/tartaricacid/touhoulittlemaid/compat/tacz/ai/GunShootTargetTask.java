@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunBehaviorUtils;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import com.tacz.guns.api.TimelessAPI;
@@ -35,7 +36,7 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
         Optional<LivingEntity> memory = owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         if (memory.isPresent()) {
             LivingEntity target = memory.get();
-            return IGun.mainhandHoldGun(owner) && BehaviorUtils.canSee(owner, target);
+            return IGun.mainhandHoldGun(owner) && GunBehaviorUtils.canSee(owner, target);
         }
         return false;
     }
@@ -53,9 +54,9 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
     @Override
     protected void tick(ServerLevel worldIn, EntityMaid owner, long gameTime) {
         owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> {
-            BehaviorUtils.lookAtEntity(owner, target);
-
-            boolean canSee = BehaviorUtils.canSee(owner, target);
+            //实际上按照原版mc判定是看不见的，强行看见并朝向（没关就是开了？）
+            owner.getLookControl().setLookAt(target.getX(), target.getY(), target.getZ());
+            boolean canSee = GunBehaviorUtils.canSee(owner, target);
             boolean seeTimeMoreThanZero = this.seeTime > 0;
 
             // 如果两者不一致，重置看见时间
