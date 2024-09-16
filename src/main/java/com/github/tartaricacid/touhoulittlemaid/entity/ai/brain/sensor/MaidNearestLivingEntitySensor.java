@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.sensor;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.server.level.ServerLevel;
@@ -18,6 +19,13 @@ public class MaidNearestLivingEntitySensor extends Sensor<EntityMaid> {
     private static final int VERTICAL_SEARCH_RANGE = 4;
 
     protected void doTick(ServerLevel world, EntityMaid maid) {
+        // 兼容 tac
+        if (TacCompat.isGunTask(maid)) {
+            TacCompat.doGunTick(world, maid);
+            return;
+        }
+
+        // 正常搜索
         float radius = maid.getRestrictRadius();
         AABB aabb;
         if (maid.hasRestriction()) {

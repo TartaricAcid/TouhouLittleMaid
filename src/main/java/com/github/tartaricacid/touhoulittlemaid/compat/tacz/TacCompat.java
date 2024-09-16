@@ -8,6 +8,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunGeckoAnima
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.event.GunHurtMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.task.TaskGunAttack;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunNearestLivingEntitySensor;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
@@ -16,6 +18,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedG
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,6 +49,19 @@ public class TacCompat {
     public static boolean isGrenade(ItemStack itemStack) {
         // TODO 手雷还没有
         return false;
+    }
+
+    public static boolean isGunTask(EntityMaid maid) {
+        if (INSTALLED) {
+            return GunNearestLivingEntitySensor.isGunTask(maid);
+        }
+        return false;
+    }
+
+    public static void doGunTick(ServerLevel world, EntityMaid maid) {
+        if (INSTALLED) {
+            GunNearestLivingEntitySensor.doGunTick(world, maid);
+        }
     }
 
     @Nullable

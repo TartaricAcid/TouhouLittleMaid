@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunAttackStrafing
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunWalkToTarget;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunBehaviorUtils;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunNearestLivingEntitySensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
@@ -78,6 +79,6 @@ public class TaskGunAttack implements IAttackTask {
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {
-        return maid.distanceTo(target) > maid.getRestrictRadius();
+        return maid.distanceTo(target) > GunNearestLivingEntitySensor.getRadiusSearchRange();
     }
 }
