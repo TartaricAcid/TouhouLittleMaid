@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunBehaviorUtils;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunNearestLivingEntitySensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.datafixers.kinds.IdF;
 import com.mojang.datafixers.kinds.OptionalBox;
@@ -15,7 +17,6 @@ import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 public class GunWalkToTarget {
@@ -42,8 +43,7 @@ public class GunWalkToTarget {
                                                  MemoryAccessor<OptionalBox.Mu, NearestVisibleLivingEntities> livingEntitiesMemory) {
         return (level, maid, gameTime) -> {
             LivingEntity target = maidInstance.get(entityMemory);
-            Optional<NearestVisibleLivingEntities> optional = maidInstance.tryGet(livingEntitiesMemory);
-            if (optional.isPresent() && optional.get().contains(target) && isWithinRestriction(maid, target)) {
+            if (GunBehaviorUtils.canSee(maid, target) && isWithinRestriction(maid, target)) {
                 walkTargetMemory.erase();
             } else {
                 positionMemory.set(new EntityTracker(target, true));
