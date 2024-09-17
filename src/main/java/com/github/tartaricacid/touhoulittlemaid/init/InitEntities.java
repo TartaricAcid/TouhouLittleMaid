@@ -99,6 +99,6 @@ public final class InitEntities {
 
     @SubscribeEvent
     public static void addEntitySpawnPlacement(FMLCommonSetupEvent event) {
-        SpawnPlacements.register(InitEntities.FAIRY.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        SpawnPlacements.register(InitEntities.FAIRY.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, EntityFairy::checkFairySpawnRules);
     }
 }
