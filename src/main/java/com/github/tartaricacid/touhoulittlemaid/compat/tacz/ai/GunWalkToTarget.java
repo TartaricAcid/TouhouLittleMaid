@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunBehaviorUtils;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunNearestLivingEntitySensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -29,7 +31,7 @@ public class GunWalkToTarget extends Behavior<EntityMaid> {
     @Override
     protected void start(ServerLevel level, EntityMaid maid, long pGameTime) {
         LivingEntity livingentity = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get();
-        if (BehaviorUtils.canSee(maid, livingentity) && isWithinRestriction(maid, livingentity)) {
+        if (GunBehaviorUtils.canSee(maid, livingentity) && isWithinRestriction(maid, livingentity)) {
             this.clearWalkTarget(maid);
         } else {
             this.setWalkAndLookTarget(maid, livingentity);
