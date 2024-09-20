@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils;
 
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.item.GunTabType;
@@ -18,9 +19,9 @@ import java.util.Optional;
 public class GunBehaviorUtils {
     // 可见性校验工具，来自于 Sensor
     // 依据枪械种类，可以区分为远、中、近三类
-    private static final TargetingConditions LONG_DISTANCE_TARGET_CONDITIONS = TargetingConditions.forNonCombat().range(128);
-    private static final TargetingConditions MEDIUM_DISTANCE_TARGET_CONDITIONS = TargetingConditions.forNonCombat().range(96);
-    private static final TargetingConditions NEAR_DISTANCE_TARGET_CONDITIONS = TargetingConditions.forNonCombat().range(64);
+    private static final TargetingConditions LONG_DISTANCE_TARGET_CONDITIONS = TargetingConditions.forNonCombat().range(MaidConfig.MAID_GUN_LONG_DISTANCE.get());
+    private static final TargetingConditions MEDIUM_DISTANCE_TARGET_CONDITIONS = TargetingConditions.forNonCombat().range(MaidConfig.MAID_GUN_MEDIUM_DISTANCE.get());
+    private static final TargetingConditions NEAR_DISTANCE_TARGET_CONDITIONS = TargetingConditions.forNonCombat().range(MaidConfig.MAID_GUN_NEAR_DISTANCE.get());
 
     //可见性方法，来自于Sensor类
     public static boolean canSee(EntityMaid maid, LivingEntity target) {

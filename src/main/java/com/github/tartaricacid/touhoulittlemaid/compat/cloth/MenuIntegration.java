@@ -163,6 +163,21 @@ public class MenuIntegration {
                     }
                     MaidConfig.MAID_EATEN_RETURN_CONTAINER_LIST.set(maidMealContainerList);
                 }).build());
+
+        maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.maid_gun_long_distance"), MaidConfig.MAID_GUN_LONG_DISTANCE.get())
+                .setDefaultValue(64).setMin(0).setMax(512).requireRestart()
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_gun_long_distance.tooltip"))
+                .setSaveConsumer(i -> MaidConfig.MAID_GUN_LONG_DISTANCE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.maid_gun_medium_distance"), MaidConfig.MAID_GUN_MEDIUM_DISTANCE.get())
+                .setDefaultValue(48).setMin(0).setMax(512).requireRestart()
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_gun_medium_distance.tooltip"))
+                .setSaveConsumer(i -> MaidConfig.MAID_GUN_MEDIUM_DISTANCE.set(i)).build());
+
+        maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.maid_gun_near_distance"), MaidConfig.MAID_GUN_NEAR_DISTANCE.get())
+                .setDefaultValue(32).setMin(0).setMax(512).requireRestart()
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_gun_near_distance.tooltip"))
+                .setSaveConsumer(i -> MaidConfig.MAID_GUN_NEAR_DISTANCE.set(i)).build());
     }
 
     private static void chairConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
