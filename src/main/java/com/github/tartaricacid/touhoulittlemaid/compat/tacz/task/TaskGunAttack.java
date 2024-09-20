@@ -5,6 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunAttackStrafingTask;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunWalkToTarget;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunBehaviorUtils;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
@@ -54,7 +56,7 @@ public class TaskGunAttack implements IAttackTask {
     @Override
     public List<Pair<Integer, Behavior<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         RunIf<EntityMaid> supplementedTask = new RunIf<>(this::mainhandHoldGun,
-                new StartAttacking<>(IAttackTask::findFirstValidAttackTarget));
+                new StartAttacking<>(GunBehaviorUtils::findFirstValidAttackTarget));
         StopAttackingIfTargetInvalid<EntityMaid> findTargetTask = new StopAttackingIfTargetInvalid<>(
                 (target) -> !mainhandHoldGun(maid) || farAway(target, maid));
         Behavior<EntityMaid> gunWalkTargetTask = new GunWalkToTarget(0.6f);
@@ -80,6 +82,6 @@ public class TaskGunAttack implements IAttackTask {
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {
-        return maid.distanceTo(target) > maid.getRestrictRadius();
+        return maid.distanceTo(target) > MaidConfig.MAID_GUN_LONG_DISTANCE.get();
     }
 }

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunBehaviorUtils;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import com.tacz.guns.api.TimelessAPI;
@@ -14,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +35,7 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
         Optional<LivingEntity> memory = owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         if (memory.isPresent()) {
             LivingEntity target = memory.get();
-            return IGun.mainhandHoldGun(owner) && BehaviorUtils.canSee(owner, target);
+            return IGun.mainhandHoldGun(owner) && GunBehaviorUtils.canSee(owner, target);
         }
         return false;
     }
@@ -53,9 +53,9 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
     @Override
     protected void tick(ServerLevel worldIn, EntityMaid owner, long gameTime) {
         owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> {
-            BehaviorUtils.lookAtEntity(owner, target);
-
-            boolean canSee = BehaviorUtils.canSee(owner, target);
+            //实际上按照原版mc判定是看不见的，强行看见并朝向（没关就是开了？）
+            owner.getLookControl().setLookAt(target.getX(), target.getY(), target.getZ());
+            boolean canSee = GunBehaviorUtils.canSee(owner, target);
             boolean seeTimeMoreThanZero = this.seeTime > 0;
 
             // 如果两者不一致，重置看见时间
@@ -93,6 +93,8 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
         float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         float pitch = (float) -Math.toDegrees(Math.atan2(y, Math.sqrt(x * x + z * z)));
 
+        float radius = shooter.getRestrictRadius();
+
         IGunOperator gunOperator = IGunOperator.fromLivingEntity(shooter);
         ShootResult result = gunOperator.shoot(() -> pitch, () -> yaw);
 
@@ -110,12 +112,21 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
             return;
         }
 
-        // 如果是非狙击枪，就不要瞄准了，不然太超模了
-        if (!gunIndex.getType().equals(sniper) && gunOperator.getSynIsAiming()) {
-            gunOperator.aim(false);
-            // 多加 2 tick，用来平衡延迟
-            this.attackCooldown = Math.round(gunData.getAimTime() * 20) + 2;
-            return;
+        // 如果是非狙击枪，超出 radius 范围，那么也瞄准
+        if (!gunIndex.getType().equals(sniper)) {
+            float distance = shooter.distanceTo(target);
+            if (distance <= radius && gunOperator.getSynIsAiming()) {
+                gunOperator.aim(false);
+                // 多加 2 tick，用来平衡延迟
+                this.attackCooldown = Math.round(gunData.getAimTime() * 20) + 2;
+                return;
+            }
+            if (distance > radius && !gunOperator.getSynIsAiming()) {
+                gunOperator.aim(true);
+                // 多加 2 tick，用来平衡延迟
+                this.attackCooldown = Math.round(gunData.getAimTime() * 20) + 2;
+                return;
+            }
         }
 
         if (result == ShootResult.NOT_DRAW) {
