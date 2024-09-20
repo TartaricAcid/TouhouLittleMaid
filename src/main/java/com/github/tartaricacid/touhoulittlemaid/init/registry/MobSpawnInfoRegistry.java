@@ -31,7 +31,7 @@ public final class MobSpawnInfoRegistry {
             if (event.getMobCategory() == MobCategory.MONSTER && dimensionIsOkay(dimension)) {
                 List<MobSpawnSettings.SpawnerData> spawnerData = event.getSpawnerDataList();
                 boolean canZombieSpawn = spawnerData.stream().anyMatch(data -> data.type.equals(EntityType.ZOMBIE));
-                if (SPAWNER_DATA == null) {
+                if (SPAWNER_DATA == null || SPAWNER_DATA.getWeight().asInt() != spawnProbability) {
                     SPAWNER_DATA = new MobSpawnSettings.SpawnerData(InitEntities.FAIRY.get(), spawnProbability, 2, 4);
                 }
                 if (canZombieSpawn) {
