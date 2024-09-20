@@ -6,12 +6,12 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.SoundEl
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.SoundPackButton;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.CustomSoundLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInstance;
+import com.github.tartaricacid.touhoulittlemaid.client.sound.data.SoundData;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.pojo.SoundPackInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
-import com.mojang.blaze3d.audio.SoundBuffer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
@@ -87,7 +87,7 @@ public class MaidSoundPackGui extends Screen {
     private void addSoundElementButtons() {
         int yOffset = 41;
         boolean otherColor = false;
-        Map<ResourceLocation, List<SoundBuffer>> buffers = CustomSoundLoader.getSoundCache(selectSoundId).getBuffers();
+        Map<ResourceLocation, List<SoundData>> buffers = CustomSoundLoader.getSoundCache(selectSoundId).buffers();
         List<ResourceLocation> soundIds = List.copyOf(buffers.keySet());
         this.soundMaxPage = (buffers.size() - 1) / soundPerSize;
         int startSoundIndex = soundPage * soundPerSize;
@@ -121,7 +121,7 @@ public class MaidSoundPackGui extends Screen {
 
         this.addRenderableWidget(new FlatColorButton(startX + 358, startY + 19, 18, 18, Component.empty(), (b) -> {
             if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
-                String url = CustomSoundLoader.getSoundCache(selectSoundId).getInfo().getUrl();
+                String url = CustomSoundLoader.getSoundCache(selectSoundId).info().getUrl();
                 if (StringUtils.isNotBlank(url) && minecraft != null) {
                     minecraft.setScreen(new ConfirmLinkScreen(yes -> {
                         if (yes) {
@@ -150,7 +150,7 @@ public class MaidSoundPackGui extends Screen {
 
         this.addRenderableWidget(new FlatColorButton(startX + 381, startY + 201, 16, 16, Component.literal(">"), (b) -> {
             if (StringUtils.isNotBlank(selectSoundId) && CustomSoundLoader.CACHE.containsKey(selectSoundId)) {
-                Map<ResourceLocation, List<SoundBuffer>> buffersIn = CustomSoundLoader.getSoundCache(selectSoundId).getBuffers();
+                Map<ResourceLocation, List<SoundData>> buffersIn = CustomSoundLoader.getSoundCache(selectSoundId).buffers();
                 if ((soundPage + 1) * soundPerSize < buffersIn.size()) {
                     soundPage++;
                     this.init();
@@ -170,7 +170,7 @@ public class MaidSoundPackGui extends Screen {
         int endPackIndex = Math.min(soundPackIds.size(), startPackIndex + packPerSize);
         for (int i = startPackIndex; i < endPackIndex; i++) {
             String soundId = soundPackIds.get(i);
-            SoundPackInfo info = CustomSoundLoader.getSoundCache(soundId).getInfo();
+            SoundPackInfo info = CustomSoundLoader.getSoundCache(soundId).info();
             SoundPackButton button = new SoundPackButton(startX + 5, startY + yOffset, info, b -> {
                 this.selectSoundId = soundId;
                 this.soundPage = 0;

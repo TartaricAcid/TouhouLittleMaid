@@ -3,13 +3,13 @@ package com.github.tartaricacid.touhoulittlemaid.client.sound;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.DefaultPackConstant;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.data.SoundCache;
+import com.github.tartaricacid.touhoulittlemaid.client.sound.data.SoundData;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.pojo.SoundPackInfo;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.mojang.blaze3d.audio.SoundBuffer;
 import net.minecraft.client.sounds.JOrbisAudioStream;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -94,8 +94,8 @@ public class CustomSoundLoader {
         LOGGER.debug(MARKER, "Loaded {} sound pack.", id);
     }
 
-    private static Map<ResourceLocation, List<SoundBuffer>> loadSoundEvent(Path rootPath) {
-        Map<ResourceLocation, List<SoundBuffer>> buffers = Maps.newLinkedHashMap();
+    private static Map<ResourceLocation, List<SoundData>> loadSoundEvent(Path rootPath) {
+        Map<ResourceLocation, List<SoundData>> buffers = Maps.newLinkedHashMap();
 
         buffers.put(InitSounds.MAID_IDLE.get().getLocation(), loadSounds(rootPath.resolve("mode"), "idle"));
         buffers.put(InitSounds.MAID_ATTACK.get().getLocation(), loadSounds(rootPath.resolve("mode"), "attack"));
@@ -149,8 +149,8 @@ public class CustomSoundLoader {
         return buffers;
     }
 
-    private static List<SoundBuffer> loadSounds(Path rootPath, String fileName) {
-        List<SoundBuffer> sounds = Lists.newArrayList();
+    private static List<SoundData> loadSounds(Path rootPath, String fileName) {
+        List<SoundData> sounds = Lists.newArrayList();
         File[] files = rootPath.toFile().listFiles((dir, name) -> checkFileName(fileName, name));
         if (files == null) {
             return sounds;
@@ -159,7 +159,7 @@ public class CustomSoundLoader {
             if (file.isFile()) {
                 try (InputStream stream = Files.newInputStream(file.toPath()); JOrbisAudioStream audioStream = new JOrbisAudioStream(stream)) {
                     ByteBuffer bytebuffer = audioStream.readAll();
-                    sounds.add(new SoundBuffer(bytebuffer, audioStream.getFormat()));
+                    sounds.add(new SoundData(bytebuffer, audioStream.getFormat()));
                     LOGGER.debug(MARKER, "sound: {}", file.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -169,8 +169,8 @@ public class CustomSoundLoader {
         return sounds;
     }
 
-    private static void reuseSounds(Map<ResourceLocation, List<SoundBuffer>> buffers, SoundEvent from, SoundEvent to) {
-        List<SoundBuffer> fromBuffers = buffers.get(from.getLocation());
+    private static void reuseSounds(Map<ResourceLocation, List<SoundData>> buffers, SoundEvent from, SoundEvent to) {
+        List<SoundData> fromBuffers = buffers.get(from.getLocation());
         buffers.get(to.getLocation()).addAll(fromBuffers);
     }
 
@@ -209,8 +209,8 @@ public class CustomSoundLoader {
     }
 
     @NotNull
-    private static Map<ResourceLocation, List<SoundBuffer>> loadSoundEvent(ZipFile zipFile, String id) {
-        Map<ResourceLocation, List<SoundBuffer>> buffers = Maps.newLinkedHashMap();
+    private static Map<ResourceLocation, List<SoundData>> loadSoundEvent(ZipFile zipFile, String id) {
+        Map<ResourceLocation, List<SoundData>> buffers = Maps.newLinkedHashMap();
         Pattern pattern = Pattern.compile(String.format("assets/%s/sounds/maid/(.*?)/(.*?\\.ogg)", id));
         zipFile.stream().forEach(zipEntry -> {
             if (!zipEntry.isDirectory()) {
@@ -274,12 +274,12 @@ public class CustomSoundLoader {
         return buffers;
     }
 
-    private static void loadSounds(ZipFile zipFile, Map<ResourceLocation, List<SoundBuffer>> buffers, ZipEntry zipEntry, String subDir, String fileName, SoundEvent soundEvent, String checkSubDir, String checkFileName) {
-        List<SoundBuffer> sounds = buffers.computeIfAbsent(soundEvent.getLocation(), res -> Lists.newArrayList());
+    private static void loadSounds(ZipFile zipFile, Map<ResourceLocation, List<SoundData>> buffers, ZipEntry zipEntry, String subDir, String fileName, SoundEvent soundEvent, String checkSubDir, String checkFileName) {
+        List<SoundData> sounds = buffers.computeIfAbsent(soundEvent.getLocation(), res -> Lists.newArrayList());
         if (checkSubDir.equals(subDir) && checkFileName(checkFileName, fileName)) {
             try (InputStream zipEntryStream = zipFile.getInputStream(zipEntry); JOrbisAudioStream audioStream = new JOrbisAudioStream(zipEntryStream)) {
                 ByteBuffer bytebuffer = audioStream.readAll();
-                sounds.add(new SoundBuffer(bytebuffer, audioStream.getFormat()));
+                sounds.add(new SoundData(bytebuffer, audioStream.getFormat()));
                 LOGGER.debug(MARKER, "sound: {}", fileName);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
