@@ -1,14 +1,21 @@
 package com.github.tartaricacid.touhoulittlemaid.api.task;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.DefaultMaidTaskConfigContainer;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -107,5 +114,52 @@ public interface IMaidTask {
     default List<String> getDescription(EntityMaid maid) {
         String key = String.format("task.%s.%s.desc", getUid().getNamespace(), getUid().getPath());
         return Lists.newArrayList(key);
+    }
+
+    /**
+     * 获取女仆当前任务配置的界面
+     *
+     * @param maid 女仆对象
+     * @param entityId 女仆ID
+     * @param taskListOpen 当前Gui的任务列表是否打开（如果当前Gui是任务配置页面）
+     * @param taskPage 当前Gui的任务页数索引（如果当前Gui是任务配置页面）
+     * @return MenuProvider
+     */
+    default MenuProvider getTaskConfigGuiProvider(EntityMaid maid, int entityId, boolean taskListOpen, int taskPage) {
+        return new MenuProvider() {
+            @Override
+            public Component getDisplayName() {
+                return Component.literal("Maid Task Config Container");
+            }
+
+            @Override
+            public AbstractMaidContainer createMenu(int index, Inventory playerInventory, Player player) {
+                return new DefaultMaidTaskConfigContainer(index, playerInventory, entityId);
+            }
+        };
+    }
+
+    /**
+     * 获取女仆当前任务信息的界面
+     *
+     * @param maid 女仆对象
+     * @param entityId 女仆ID
+     * @param taskListOpen 当前Gui的任务列表是否打开（如果当前Gui是任务信息页面）
+     * @param taskPage 当前Gui的任务页数索引（如果当前Gui是任务信息页面）
+     * @return MenuProvider
+     */
+    default MenuProvider getTaskInfoGuiProvider(EntityMaid maid, int entityId, boolean taskListOpen, int taskPage) {
+        return maid.getMaidBackpackType().getGuiProvider(entityId);
+    }
+
+    /**
+     * 用于侧边栏帕秋莉按钮打开记忆中的幻想乡手册
+     * <br>默认打开手册上一回所停留的页面
+     * <br>可自定义打开手册任意页面
+     * <br>详见{#PatchouliAPI}
+     */
+    default void openPatchouliBook() {
+        PatchouliAPI.IPatchouliAPI iPatchouliAPI = PatchouliAPI.get();
+        iPatchouliAPI.openBookGUI(new ResourceLocation(TouhouLittleMaid.MOD_ID, "memorizable_gensokyo"));
     }
 }
