@@ -165,7 +165,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
-    // 开辟空间给任务存储使用,也便于附属模组存储数据
+    /**
+     * 开辟空间给任务存储使用,也便于附属模组存储数据
+     */
     private static final EntityDataAccessor<CompoundTag> TASK_DATA_INFO = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
     private static final String TASK_DATA_TAG = "TaskData";
     private static final String TASK_TAG = "MaidTask";
@@ -1094,21 +1096,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         }
     }
 
-    public boolean openMaidGuiFromSideTab(Player player, int tabIndex, boolean taskListOpen, int taskPage) {
+    public boolean openMaidGuiFromSideTab(Player player, int tabIndex) {
         if (player instanceof ServerPlayer && !this.isSleeping()) {
             this.navigation.stop();
-            NetworkHooks.openScreen((ServerPlayer) player, getGuiProviderFromSideTab(tabIndex, taskListOpen, taskPage), (buffer) -> {
-                buffer.writeInt(getId());
-            });
+            NetworkHooks.openScreen((ServerPlayer) player, getGuiProviderFromSideTab(tabIndex), (buffer) -> buffer.writeInt(getId()));
         }
         return true;
     }
 
-    public MenuProvider getGuiProviderFromSideTab(int tabIndex, boolean taskListOpen, int taskPage) {
+    public MenuProvider getGuiProviderFromSideTab(int tabIndex) {
         if (tabIndex == SideTab.TASK_CONFIG.getIndex()) {
-            return task.getTaskConfigGuiProvider(this, getId(), taskListOpen, taskPage);
+            return task.getTaskConfigGuiProvider(this);
         } else if (tabIndex == SideTab.TASK_INFO.getIndex()) {
-            return task.getTaskInfoGuiProvider(this, getId(), taskListOpen, taskPage);
+            return task.getTaskInfoGuiProvider(this);
         } else {
             return this.getMaidBackpackType().getGuiProvider(getId());
         }
@@ -1657,7 +1657,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public void setTaskData(CompoundTag compoundTag) {
-        this.entityData.set(TASK_DATA_INFO, compoundTag);
+        this.entityData.set(TASK_DATA_INFO, compoundTag, true);
     }
 
     public List<SendEffectMessage.EffectData> getEffects() {

@@ -49,7 +49,7 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
 
     private void addAdditionGeckoEntityMaidRenderer(EntityRendererProvider.Context renderManager) {
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
-            littleMaid.addGeckoEntityMaidRenderer(this, renderManager);
+            littleMaid.addAdditionGeckoMaidLayer(this, renderManager);
         }
     }
 }

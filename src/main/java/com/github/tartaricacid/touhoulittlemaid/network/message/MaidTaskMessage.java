@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,8 +44,6 @@ public class MaidTaskMessage {
                         return;
                     }
                     maid.setTask(task);
-                    // 客户端也同步一次,便于任务配置界面的一些信息获取
-                    NetworkHandler.sendToClientPlayer(new ClientMaidTaskMessage(message.id, message.uid), sender);
                 }
             });
         }

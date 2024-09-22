@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 public abstract class MaidTaskConfigGui<T extends TaskConfigContainer> extends AbstractMaidContainerGui<T> {
-
     public MaidTaskConfigGui(T screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
@@ -19,13 +18,17 @@ public abstract class MaidTaskConfigGui<T extends TaskConfigContainer> extends A
     @Override
     protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
         super.taskButtonPressed(maidTask, enable);
-        NetworkHandler.CHANNEL.sendToServer(new ToggleSideTabMessage(this.getMenu().containerId, this.maid.getId(), SideTab.TASK_CONFIG.getIndex(), maidTask.getUid(), this.isTaskListOpen(), this.getTaskPage()));
+        if (this.maid != null) {
+            NetworkHandler.CHANNEL.sendToServer(new ToggleSideTabMessage(this.maid.getId(), SideTab.TASK_CONFIG.getIndex(), maidTask.getUid()));
+        }
     }
 
     @Override
     public void onClose() {
+        // 重置女仆 Brain，让女仆重新读取任务相关数据
+        if (this.maid != null) {
+            NetworkHandler.CHANNEL.sendToServer(new RefreshMaidBrainMessage(maid.getId()));
+        }
         super.onClose();
-        // 重置女仆Brain,让女仆重新读取任务相关数据
-        NetworkHandler.CHANNEL.sendToServer(new RefreshMaidBrainMessage(maid.getId()));
     }
 }

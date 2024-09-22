@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class TaskConfigContainer extends AbstractMaidContainer {
     private static final int PLAYER_INVENTORY_SIZE = 27;
+
     public TaskConfigContainer(@Nullable MenuType<?> type, int id, Inventory inventory, int entityId) {
         super(type, id, inventory, entityId);
     }

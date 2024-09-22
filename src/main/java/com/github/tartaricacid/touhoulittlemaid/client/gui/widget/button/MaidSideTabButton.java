@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.SideTab;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,19 +11,19 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
-// 女仆界面侧边栏按钮
+/**
+ * 女仆界面侧边栏按钮
+ */
 public class MaidSideTabButton extends Button implements ITooltipButton {
     private static final ResourceLocation SIDE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
+    private static final int V_OFFSET = 107;
     private final List<Component> tooltips;
-    private final int vOffset = 107;
     private final int top;
-    public final SideTab sideTab;
 
-    public MaidSideTabButton(SideTab sideTab, int x, int y, int top, OnPress onPressIn, List<Component> tooltips) {
+    public MaidSideTabButton(int x, int y, int top, OnPress onPressIn, List<Component> tooltips) {
         super(Button.builder(Component.empty(), onPressIn).pos(x, y).size(26, 24));
-        this.top = vOffset + top;
+        this.top = V_OFFSET + top;
         this.tooltips = tooltips;
-        this.sideTab = sideTab;
     }
 
     @Override

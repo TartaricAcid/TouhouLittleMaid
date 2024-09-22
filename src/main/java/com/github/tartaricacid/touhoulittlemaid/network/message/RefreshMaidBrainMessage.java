@@ -10,7 +10,6 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public record RefreshMaidBrainMessage(int entityId) {
-
     public static void encode(RefreshMaidBrainMessage message, FriendlyByteBuf buf) {
         buf.writeInt(message.entityId);
     }

@@ -11,19 +11,15 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public record ToggleSideTabMessage(int containerId, int entityId, int tabId, ResourceLocation taskUid, boolean taskListOpen, int taskPage) {
-
+public record ToggleSideTabMessage(int entityId, int tabId, ResourceLocation taskUid) {
     public static void encode(ToggleSideTabMessage message, FriendlyByteBuf buf) {
-        buf.writeInt(message.containerId);
-        buf.writeInt(message.entityId);
-        buf.writeInt(message.tabId);
+        buf.writeVarInt(message.entityId);
+        buf.writeVarInt(message.tabId);
         buf.writeResourceLocation(message.taskUid);
-        buf.writeBoolean(message.taskListOpen);
-        buf.writeInt(message.taskPage);
     }
 
     public static ToggleSideTabMessage decode(FriendlyByteBuf buf) {
-        return new ToggleSideTabMessage(buf.readInt(), buf.readInt(), buf.readInt(), buf.readResourceLocation(), buf.readBoolean(), buf.readInt());
+        return new ToggleSideTabMessage(buf.readVarInt(), buf.readVarInt(), buf.readResourceLocation());
     }
 
     public static void handle(ToggleSideTabMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -40,7 +36,7 @@ public record ToggleSideTabMessage(int containerId, int entityId, int tabId, Res
                     if (!task.isEnable(maid)) {
                         return;
                     }
-                    maid.openMaidGuiFromSideTab(sender, message.tabId, message.taskListOpen, message.taskPage);
+                    maid.openMaidGuiFromSideTab(sender, message.tabId);
                 }
             });
         }

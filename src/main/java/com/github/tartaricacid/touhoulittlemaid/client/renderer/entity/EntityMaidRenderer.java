@@ -44,7 +44,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         this.addLayer(new LayerMaidBackpack(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackItem(this));
         this.addLayer(new LayerMaidBanner(this, manager.getModelSet()));
-        this.addAdditionEntityMaidRenderer(manager);
+        this.addAdditionMaidLayer(manager);
         this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer<>(manager);
     }
 
@@ -127,9 +127,9 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         return this.entityRenderDispatcher;
     }
 
-    private void addAdditionEntityMaidRenderer(EntityRendererProvider.Context renderManager) {
+    private void addAdditionMaidLayer(EntityRendererProvider.Context renderManager) {
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
-            littleMaid.addEntityMaidRenderer(this, renderManager);
+            littleMaid.addAdditionMaidLayer(this, renderManager);
         }
     }
 }

@@ -58,6 +58,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
+    private static boolean TASK_LIST_OPEN = false;
     @Nullable
     protected final EntityMaid maid;
     protected final IMaidTask task;
@@ -73,7 +74,6 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private ImageButton taskSwitch;
     private MaidDownloadButton modelDownload;
     private ScheduleButton<T> scheduleButton;
-    private boolean taskListOpen;
     private int counterTime = 0;
 
     public AbstractMaidContainerGui(T screenContainer, Inventory inv, Component titleIn) {
@@ -92,22 +92,21 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (this.maid == null) {
             return;
         }
-        // 清楚当前Gui的各种Widget
+        // 清除当前 Gui 的各种 Widgets
         this.clearWidgets();
-        // 初始化基础Data
+        // 初始化基础 Data
         this.initBaseData();
-        // 初始化额外Data
+        // 初始化额外 Data
         this.initAdditionData();
-        // 初始化各种widget
+        // 初始化各种 Widgets
         this.initBaseWidgets();
-        // 初始化额外Widgets
+        // 初始化额外 Widgets
         this.initAdditionWidgets();
     }
 
     protected void initBaseData() {
     }
 
-    // 初始化额外数据
     protected void initAdditionData() {
     }
 
@@ -136,12 +135,12 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (this.maid == null) {
             return;
         }
-        drawModInfo(graphics);
+        this.drawModInfo(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.drawEffectInfo(graphics);
         this.drawCurrentTaskText(graphics);
         this.renderAddition(graphics, mouseX, mouseY, partialTicks);
-        // 确保Tooltip是最后渲染的
+        // 确保 Tooltip 是最后渲染的
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
@@ -160,7 +159,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     @SuppressWarnings("all")
     private void drawEffectInfo(GuiGraphics graphics) {
-        if (taskListOpen) {
+        if (TASK_LIST_OPEN) {
             return;
         }
         List<SendEffectMessage.EffectData> effects = maid.getEffects();
@@ -229,7 +228,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         modelDownload.renderExtraTips(graphics);
     }
 
-    // 渲染额外的Tooltip
+    // 渲染额外的 Tooltip
     protected void renderAdditionTransTooltip(GuiGraphics graphics, int x, int y) {
     }
 
@@ -262,15 +261,15 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             }
         });
         pageClose = new ImageButton(leftPos - 19, topPos + 9, 13, 13, 127, 0, 14, TASK, (b) -> {
-            taskListOpen = false;
+            TASK_LIST_OPEN = false;
             init();
         });
         this.addRenderableWidget(pageUp);
         this.addRenderableWidget(pageDown);
         this.addRenderableWidget(pageClose);
-        pageUp.visible = taskListOpen;
-        pageDown.visible = taskListOpen;
-        pageClose.visible = taskListOpen;
+        pageUp.visible = TASK_LIST_OPEN;
+        pageDown.visible = TASK_LIST_OPEN;
+        pageClose.visible = TASK_LIST_OPEN;
     }
 
     private void addTaskListButton() {
@@ -298,12 +297,15 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 },
                 getTaskTooltips(maidTask), Component.empty());
         this.addRenderableWidget(button);
-        button.visible = taskListOpen;
+        button.visible = TASK_LIST_OPEN;
     }
 
     // 用于开放切换任务时对当前 GUI 的操作
     protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
-        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+        if (maid != null) {
+            maid.setTask(maidTask);
+            NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+        }
     }
 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
@@ -367,7 +369,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void addTaskSwitchButton() {
         taskSwitch = new ImageButton(leftPos + 4, topPos + 159, 71, 21, 0, 42, 22, BUTTON, (b) -> {
-            taskListOpen = !taskListOpen;
+            TASK_LIST_OPEN = !TASK_LIST_OPEN;
             init();
         });
         this.addRenderableWidget(taskSwitch);
@@ -415,7 +417,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void drawTaskPageCount(GuiGraphics graphics) {
-        if (taskListOpen) {
+        if (TASK_LIST_OPEN) {
             String text = String.format("%d/%d", TASK_PAGE + 1, (TaskManager.getTaskIndex().size() - 1) / TASK_COUNT_PER_PAGE + 1);
             graphics.drawString(font, text, -48, 12, 0x333333, false);
         }
@@ -499,7 +501,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void drawTaskListBg(GuiGraphics graphics) {
-        if (taskListOpen) {
+        if (TASK_LIST_OPEN) {
             graphics.blit(TASK, leftPos - 93, topPos + 5, 0, 0, 92, 251);
         }
     }
@@ -562,11 +564,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     public boolean isTaskListOpen() {
-        return taskListOpen;
-    }
-
-    protected void setTaskListOpen(boolean taskListOpen) {
-        this.taskListOpen = taskListOpen;
+        return TASK_LIST_OPEN;
     }
 
     // 获取女仆界面JERI屏蔽区域
@@ -613,13 +611,5 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     // 绘制侧边栏底部贴图
     private void drawSideTabGui(GuiGraphics graphics, float partialTicks, int x, int y) {
         graphics.blit(SIDE, leftPos + 251 + 5, topPos + 28 + 9, 235, 107, 21, 99);
-    }
-
-    protected int getTaskPage() {
-        return TASK_PAGE;
-    }
-
-    protected void setTaskPage(int taskPage) {
-        TASK_PAGE = taskPage;
     }
 }

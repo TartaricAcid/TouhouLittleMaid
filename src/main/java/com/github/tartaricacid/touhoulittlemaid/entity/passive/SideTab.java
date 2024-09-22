@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 public enum SideTab {
-
     TASK_CONFIG(0),
     TASK_BOOK(1),
     TASK_INFO(2),
@@ -16,5 +15,4 @@ public enum SideTab {
     public int getIndex() {
         return index;
     }
-
 }
