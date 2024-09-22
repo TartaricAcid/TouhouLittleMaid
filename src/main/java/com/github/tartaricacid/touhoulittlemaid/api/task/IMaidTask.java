@@ -1,13 +1,18 @@
 package com.github.tartaricacid.touhoulittlemaid.api.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.DefaultMaidTaskConfigContainer;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -118,5 +123,36 @@ public interface IMaidTask {
     default List<String> getDescription(EntityMaid maid) {
         String key = String.format("task.%s.%s.desc", getUid().getNamespace(), getUid().getPath());
         return Lists.newArrayList(key);
+    }
+
+    /**
+     * 获取女仆当前任务配置的界面
+     *
+     * @param maid 女仆对象
+     * @return MenuProvider
+     */
+    default MenuProvider getTaskConfigGuiProvider(EntityMaid maid) {
+        final int entityId = maid.getId();
+        return new MenuProvider() {
+            @Override
+            public Component getDisplayName() {
+                return Component.literal("Maid Task Config Container");
+            }
+
+            @Override
+            public AbstractMaidContainer createMenu(int index, Inventory playerInventory, Player player) {
+                return new DefaultMaidTaskConfigContainer(index, playerInventory, entityId);
+            }
+        };
+    }
+
+    /**
+     * 获取女仆当前任务信息的界面
+     *
+     * @param maid 女仆对象
+     * @return MenuProvider
+     */
+    default MenuProvider getTaskInfoGuiProvider(EntityMaid maid) {
+        return maid.getMaidBackpackType().getGuiProvider(maid.getId());
     }
 }

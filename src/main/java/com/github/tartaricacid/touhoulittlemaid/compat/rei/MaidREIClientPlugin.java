@@ -26,13 +26,13 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.forge.REIPluginClient;
 import me.shedaniel.rei.plugin.common.BuiltinPlugin;
 import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @REIPluginClient
@@ -79,11 +79,11 @@ public class MaidREIClientPlugin implements REIClientPlugin {
     @Override
     public void registerExclusionZones(ExclusionZones zones) {
         zones.register(AbstractMaidContainerGui.class, (ExclusionZonesProvider<AbstractMaidContainerGui<?>>) screen -> {
-            if (screen.isTaskListOpen()) {
-                int[] taskListAreas = screen.getTaskListAreas();
-                return Collections.singletonList(new Rectangle(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
+            List<Rectangle> rectangles = new ArrayList<>();
+            for (Rect2i rect2i : screen.getExclusionArea()) {
+                rectangles.add(new Rectangle(rect2i.getX(), rect2i.getY(), rect2i.getWidth(), rect2i.getHeight()));
             }
-            return Collections.emptyList();
+            return rectangles;
         });
     }
 

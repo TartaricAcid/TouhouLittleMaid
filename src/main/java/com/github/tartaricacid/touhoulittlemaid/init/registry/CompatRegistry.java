@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.BlackList;
-import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.MultiblockRegistry;
+import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.PatchouliCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.InterModComms;
@@ -19,7 +19,7 @@ public final class CompatRegistry {
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
         event.enqueueWork(() -> checkModLoad(TOP, () -> InterModComms.sendTo(TOP, "getTheOneProbe", TheOneProbeInfo::new)));
-        event.enqueueWork(() -> checkModLoad(PATCHOULI, MultiblockRegistry::init));
+        event.enqueueWork(() -> checkModLoad(PATCHOULI, PatchouliCompat::init));
         event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
     }
 

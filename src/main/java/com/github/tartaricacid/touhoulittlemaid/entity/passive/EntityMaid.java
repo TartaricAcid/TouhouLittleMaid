@@ -105,7 +105,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -166,6 +165,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
+    /**
+     * 开辟空间给任务存储使用,也便于附属模组存储数据
+     */
+    private static final EntityDataAccessor<CompoundTag> TASK_DATA_INFO = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final String TASK_DATA_TAG = "TaskData";
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -272,6 +276,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         builder.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
         builder.define(BACKPACK_FLUID, StringUtils.EMPTY);
         builder.define(GAME_SKILL, new CompoundTag());
+        builder.define(TASK_DATA_INFO, new CompoundTag());
     }
 
     @Override
@@ -392,8 +397,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
             if (NeoForge.EVENT_BUS.post(event).isCanceled()
-                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                    || openMaidGui(playerIn)) {
+                || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
+                || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;
             }
         } else {
@@ -963,6 +968,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
         compound.put(GAME_SKILL_TAG, getGameSkill());
+        compound.put(TASK_DATA_TAG, getTaskData());
         this.favorabilityManager.addAdditionalSaveData(compound);
         this.scriptBookManager.addAdditionalSaveData(compound);
         this.schedulePos.save(compound);
@@ -1052,6 +1058,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.backpackData.load(compound.getCompound(BACKPACK_DATA_TAG), this);
             }
         }
+        if (compound.contains(TASK_DATA_TAG, Tag.TAG_COMPOUND)) {
+            setTaskData(compound.getCompound(TASK_DATA_TAG));
+        }
         this.favorabilityManager.readAdditionalSaveData(compound);
         this.scriptBookManager.readAdditionalSaveData(compound);
         this.schedulePos.load(compound, this);
@@ -1075,6 +1084,24 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             case TabIndex.CONFIG -> MaidConfigContainer.create(getId());
             default -> this.getMaidBackpackType().getGuiProvider(getId());
         };
+    }
+
+    public boolean openMaidGuiFromSideTab(Player player, int tabIndex) {
+        if (player instanceof ServerPlayer && !this.isSleeping()) {
+            this.navigation.stop();
+            player.openMenu(getGuiProviderFromSideTab(tabIndex), (buffer) -> buffer.writeInt(getId()));
+        }
+        return true;
+    }
+
+    public MenuProvider getGuiProviderFromSideTab(int tabIndex) {
+        if (tabIndex == SideTab.TASK_CONFIG.getIndex()) {
+            return task.getTaskConfigGuiProvider(this);
+        } else if (tabIndex == SideTab.TASK_INFO.getIndex()) {
+            return task.getTaskInfoGuiProvider(this);
+        } else {
+            return this.getMaidBackpackType().getGuiProvider(getId());
+        }
     }
 
     @Override
@@ -1604,6 +1631,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public void setGameSkill(CompoundTag gameSkill) {
         this.entityData.set(GAME_SKILL, gameSkill, true);
+    }
+
+    public CompoundTag getTaskData() {
+        return this.entityData.get(TASK_DATA_INFO);
+    }
+
+    public void setTaskData(CompoundTag compoundTag) {
+        this.entityData.set(TASK_DATA_INFO, compoundTag, true);
     }
 
     public List<SendEffectPackage.EffectData> getEffects() {
