@@ -165,6 +165,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
+    /**
+     * 开辟空间给任务存储使用,也便于附属模组存储数据
+     */
+    private static final EntityDataAccessor<CompoundTag> TASK_DATA_INFO = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final String TASK_DATA_TAG = "TaskData";
     private static final String TASK_TAG = "MaidTask";
     private static final String PICKUP_TAG = "MaidIsPickup";
     private static final String HOME_TAG = "MaidIsHome";
@@ -250,6 +255,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
         this.entityData.define(BACKPACK_FLUID, StringUtils.EMPTY);
         this.entityData.define(GAME_SKILL, new CompoundTag());
+        this.entityData.define(TASK_DATA_INFO, new CompoundTag());
     }
 
     @Override
@@ -968,6 +974,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
         compound.put(GAME_SKILL_TAG, getGameSkill());
+        compound.put(TASK_DATA_TAG, getTaskData());
         this.favorabilityManager.addAdditionalSaveData(compound);
         this.scriptBookManager.addAdditionalSaveData(compound);
         this.schedulePos.save(compound);
@@ -1058,6 +1065,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.backpackData.load(compound.getCompound(BACKPACK_DATA_TAG), this);
             }
         }
+        if (compound.contains(TASK_DATA_TAG, Tag.TAG_COMPOUND)) {
+            setTaskData(compound.getCompound(TASK_DATA_TAG));
+        }
         this.favorabilityManager.readAdditionalSaveData(compound);
         this.scriptBookManager.readAdditionalSaveData(compound);
         this.schedulePos.load(compound, this);
@@ -1083,6 +1093,24 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             case TabIndex.MAIN:
             default:
                 return this.getMaidBackpackType().getGuiProvider(getId());
+        }
+    }
+
+    public boolean openMaidGuiFromSideTab(Player player, int tabIndex) {
+        if (player instanceof ServerPlayer && !this.isSleeping()) {
+            this.navigation.stop();
+            NetworkHooks.openScreen((ServerPlayer) player, getGuiProviderFromSideTab(tabIndex), (buffer) -> buffer.writeInt(getId()));
+        }
+        return true;
+    }
+
+    public MenuProvider getGuiProviderFromSideTab(int tabIndex) {
+        if (tabIndex == SideTab.TASK_CONFIG.getIndex()) {
+            return task.getTaskConfigGuiProvider(this);
+        } else if (tabIndex == SideTab.TASK_INFO.getIndex()) {
+            return task.getTaskInfoGuiProvider(this);
+        } else {
+            return this.getMaidBackpackType().getGuiProvider(getId());
         }
     }
 
@@ -1622,6 +1650,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public void setGameSkill(CompoundTag gameSkill) {
         this.entityData.set(GAME_SKILL, gameSkill, true);
+    }
+
+    public CompoundTag getTaskData() {
+        return this.entityData.get(TASK_DATA_INFO);
+    }
+
+    public void setTaskData(CompoundTag compoundTag) {
+        this.entityData.set(TASK_DATA_INFO, compoundTag, true);
     }
 
     public List<SendEffectMessage.EffectData> getEffects() {

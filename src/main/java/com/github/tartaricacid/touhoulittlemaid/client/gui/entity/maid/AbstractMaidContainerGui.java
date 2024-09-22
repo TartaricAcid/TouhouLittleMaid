@@ -5,10 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.sound.MaidSoundPackGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidDownloadButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ScheduleButton;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TaskButton;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.compat.ipn.SortButtonScreen;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI;
@@ -32,6 +29,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -45,6 +43,7 @@ import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -59,8 +58,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
+    private static boolean TASK_LIST_OPEN = false;
     @Nullable
-    private final EntityMaid maid;
+    protected final EntityMaid maid;
+    protected final IMaidTask task;
     private StateSwitchingButton home;
     private StateSwitchingButton pick;
     private StateSwitchingButton ride;
@@ -73,7 +74,6 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private ImageButton taskSwitch;
     private MaidDownloadButton modelDownload;
     private ScheduleButton<T> scheduleButton;
-    private boolean taskListOpen;
     private int counterTime = 0;
 
     public AbstractMaidContainerGui(T screenContainer, Inventory inv, Component titleIn) {
@@ -81,6 +81,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         this.imageHeight = 256;
         this.imageWidth = 256;
         this.maid = menu.getMaid();
+        this.task = menu.getMaid().getTask();
     }
 
     @Override
@@ -91,7 +92,25 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (this.maid == null) {
             return;
         }
+        // 清除当前 Gui 的各种 Widgets
         this.clearWidgets();
+        // 初始化基础 Data
+        this.initBaseData();
+        // 初始化额外 Data
+        this.initAdditionData();
+        // 初始化各种 Widgets
+        this.initBaseWidgets();
+        // 初始化额外 Widgets
+        this.initAdditionWidgets();
+    }
+
+    protected void initBaseData() {
+    }
+
+    protected void initAdditionData() {
+    }
+
+    protected void initBaseWidgets() {
         this.addHomeButton();
         this.addPickButton();
         this.addRideButton();
@@ -102,6 +121,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         this.addTaskListButton();
         this.addScheduleButton();
         this.addTabsButton();
+        this.addSideTabsButton();
+    }
+
+    protected void initAdditionWidgets() {
     }
 
     @Override
@@ -112,11 +135,17 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         if (this.maid == null) {
             return;
         }
-        drawModInfo(graphics);
+        this.drawModInfo(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.drawEffectInfo(graphics);
         this.drawCurrentTaskText(graphics);
+        this.renderAddition(graphics, mouseX, mouseY, partialTicks);
+        // 确保 Tooltip 是最后渲染的
         this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    // 其他的渲染
+    protected void renderAddition(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
     }
 
     // 增加一些额外信息，通过截图就能方便作者检查错误
@@ -130,7 +159,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     @SuppressWarnings("all")
     private void drawEffectInfo(GuiGraphics graphics) {
-        if (taskListOpen) {
+        if (TASK_LIST_OPEN) {
             return;
         }
         List<SendEffectMessage.EffectData> effects = maid.getEffects();
@@ -176,6 +205,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         this.drawMaidCharacter(graphics, x, y);
         this.drawBaseInfoGui(graphics);
         this.drawTaskListBg(graphics);
+        this.drawSideTabGui(graphics, partialTicks, x, y);
     }
 
     @Override
@@ -191,10 +221,15 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(pageDown, graphics, x, y, "gui.touhou_little_maid.task.next_page");
         renderTransTooltip(pageClose, graphics, x, y, "gui.touhou_little_maid.task.close");
         renderTransTooltip(taskSwitch, graphics, x, y, "gui.touhou_little_maid.task.switch");
+        renderAdditionTransTooltip(graphics, x, y);
         renderMaidInfo(graphics, x, y);
         renderScheduleInfo(graphics, x, y);
         renderTaskButtonInfo(graphics, x, y);
         modelDownload.renderExtraTips(graphics);
+    }
+
+    // 渲染额外的 Tooltip
+    protected void renderAdditionTransTooltip(GuiGraphics graphics, int x, int y) {
     }
 
     @Override
@@ -226,15 +261,15 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             }
         });
         pageClose = new ImageButton(leftPos - 19, topPos + 9, 13, 13, 127, 0, 14, TASK, (b) -> {
-            taskListOpen = false;
+            TASK_LIST_OPEN = false;
             init();
         });
         this.addRenderableWidget(pageUp);
         this.addRenderableWidget(pageDown);
         this.addRenderableWidget(pageClose);
-        pageUp.visible = taskListOpen;
-        pageDown.visible = taskListOpen;
-        pageClose.visible = taskListOpen;
+        pageUp.visible = TASK_LIST_OPEN;
+        pageDown.visible = TASK_LIST_OPEN;
+        pageClose.visible = TASK_LIST_OPEN;
     }
 
     private void addTaskListButton() {
@@ -262,12 +297,15 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                 },
                 getTaskTooltips(maidTask), Component.empty());
         this.addRenderableWidget(button);
-        button.visible = taskListOpen;
+        button.visible = TASK_LIST_OPEN;
     }
 
     // 用于开放切换任务时对当前 GUI 的操作
     protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
-        NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+        if (maid != null) {
+            maid.setTask(maidTask);
+            NetworkHandler.CHANNEL.sendToServer(new MaidTaskMessage(maid.getId(), maidTask.getUid()));
+        }
     }
 
     private List<Component> getTaskTooltips(IMaidTask maidTask) {
@@ -331,7 +369,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void addTaskSwitchButton() {
         taskSwitch = new ImageButton(leftPos + 4, topPos + 159, 71, 21, 0, 42, 22, BUTTON, (b) -> {
-            taskListOpen = !taskListOpen;
+            TASK_LIST_OPEN = !TASK_LIST_OPEN;
             init();
         });
         this.addRenderableWidget(taskSwitch);
@@ -379,7 +417,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void drawTaskPageCount(GuiGraphics graphics) {
-        if (taskListOpen) {
+        if (TASK_LIST_OPEN) {
             String text = String.format("%d/%d", TASK_PAGE + 1, (TaskManager.getTaskIndex().size() - 1) / TASK_COUNT_PER_PAGE + 1);
             graphics.drawString(font, text, -48, 12, 0x333333, false);
         }
@@ -463,7 +501,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void drawTaskListBg(GuiGraphics graphics) {
-        if (taskListOpen) {
+        if (TASK_LIST_OPEN) {
             graphics.blit(TASK, leftPos - 93, topPos + 5, 0, 0, 92, 251);
         }
     }
@@ -526,11 +564,19 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     public boolean isTaskListOpen() {
-        return taskListOpen;
+        return TASK_LIST_OPEN;
     }
 
-    public int[] getTaskListAreas() {
-        return new int[]{leftPos - 93, topPos + 5, 92, 251};
+    // 获取女仆界面JERI屏蔽区域
+    public List<Rect2i> getExclusionArea() {
+        List<Rect2i> zones = new ArrayList<>();
+        // 侧边栏
+        zones.add(new Rect2i(leftPos + 251, topPos + 28 + 9, 21, 99));
+        // 任务列表
+        if (isTaskListOpen()) {
+            zones.add(new Rect2i(leftPos - 93, topPos + 5, 92, 251));
+        }
+        return zones;
     }
 
     public EntityMaid getMaid() {
@@ -550,5 +596,20 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
                     Component.translatable(key + ".desc")
             ), x, y);
         }
+    }
+
+    // 添加侧边栏按钮
+    @SuppressWarnings("unchecked")
+    private void addSideTabsButton() {
+        MaidSideTabs<T> maidTabs = new MaidSideTabs<>(maid.getId(), leftPos + 251, topPos + 28 + 9);
+        MaidSideTabButton[] tabs = maidTabs.getTabs(this);
+        for (MaidSideTabButton button : tabs) {
+            this.addRenderableWidget(button);
+        }
+    }
+
+    // 绘制侧边栏底部贴图
+    private void drawSideTabGui(GuiGraphics graphics, float partialTicks, int x, int y) {
+        graphics.blit(SIDE, leftPos + 251 + 5, topPos + 28 + 9, 235, 107, 21, 99);
     }
 }

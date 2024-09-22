@@ -15,6 +15,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -70,18 +71,17 @@ public class MaidEmiPlugin implements EmiPlugin {
             if (!(screen instanceof AbstractMaidContainerGui<?> maidContainerGui)) {
                 return;
             }
-            if (maidContainerGui.isTaskListOpen()) {
-                int[] taskListAreas = maidContainerGui.getTaskListAreas();
-                consumer.accept(new Bounds(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
+            for (Rect2i rect2i : maidContainerGui.getExclusionArea()) {
+                consumer.accept(new Bounds(rect2i.getX(), rect2i.getY(), rect2i.getWidth(), rect2i.getHeight()));
             }
         }));
     }
 
-    private void registerInfoRecipe(EmiRegistry registry){
+    private void registerInfoRecipe(EmiRegistry registry) {
         registry.addRecipe(getInfoRecipe(InitItems.GARAGE_KIT.get(), Component.translatable("jei.touhou_little_maid.garage_kit.info")));
     }
 
-    private EmiInfoRecipe getInfoRecipe(Item item, Component component){
+    private EmiInfoRecipe getInfoRecipe(Item item, Component component) {
         return new EmiInfoRecipe(List.of(EmiStack.of(item)), List.of(component), null);
     }
 

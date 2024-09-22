@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.Collections;
 import java.util.List;
 
 @JeiPlugin
@@ -65,12 +64,8 @@ public class MaidPlugin implements IModPlugin {
     private void registerTaskListArea(IGuiHandlerRegistration registration) {
         registration.addGenericGuiContainerHandler(AbstractMaidContainerGui.class, new IGuiContainerHandler<AbstractMaidContainerGui<?>>() {
             @Override
-            public List<Rect2i> getGuiExtraAreas(AbstractMaidContainerGui containerScreen) {
-                if (containerScreen.isTaskListOpen()) {
-                    int[] taskListAreas = containerScreen.getTaskListAreas();
-                    return Collections.singletonList(new Rect2i(taskListAreas[0], taskListAreas[1], taskListAreas[2], taskListAreas[3]));
-                }
-                return Collections.emptyList();
+            public List<Rect2i> getGuiExtraAreas(AbstractMaidContainerGui<?> containerScreen) {
+                return containerScreen.getExclusionArea();
             }
         });
     }

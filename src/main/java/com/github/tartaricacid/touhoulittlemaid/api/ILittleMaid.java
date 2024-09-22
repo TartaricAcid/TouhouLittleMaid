@@ -1,11 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.entity.Mob;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ILittleMaid {
     /**
@@ -54,5 +60,19 @@ public interface ILittleMaid {
      * @param manager 注册器
      */
     default void addMaidMeal(MaidMealManager manager) {
+    }
+
+    /**
+     * 添加默认模型风格的实体 layer 渲染
+     */
+    @OnlyIn(Dist.CLIENT)
+    default void addAdditionMaidLayer(EntityMaidRenderer renderer, EntityRendererProvider.Context context) {
+    }
+
+    /**
+     * 添加 Gecko 风格的实体 layer 渲染
+     */
+    @OnlyIn(Dist.CLIENT)
+    default void addAdditionGeckoMaidLayer(GeckoEntityMaidRenderer<? extends Mob> renderer, EntityRendererProvider.Context context) {
     }
 }

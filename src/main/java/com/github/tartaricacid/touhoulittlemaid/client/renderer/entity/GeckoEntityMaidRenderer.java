@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.capability.GeckoMaidEntityCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
@@ -18,6 +20,7 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
         addLayer(new GeckoLayerMaidBackpack<>(this, renderManager.getModelSet()));
         addLayer(new GeckoLayerMaidBackItem<>(this));
         addLayer(new GeckoLayerMaidBanner<>(this, renderManager.getModelSet()));
+        addAdditionGeckoEntityMaidRenderer(renderManager);
     }
 
     @Override
@@ -42,5 +45,11 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
     @Override
     public float getWidthScale(T entity) {
         return getAnimatableEntity(entity).getMaidInfo().getRenderEntityScale();
+    }
+
+    private void addAdditionGeckoEntityMaidRenderer(EntityRendererProvider.Context renderManager) {
+        for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
+            littleMaid.addAdditionGeckoMaidLayer(this, renderManager);
+        }
     }
 }
