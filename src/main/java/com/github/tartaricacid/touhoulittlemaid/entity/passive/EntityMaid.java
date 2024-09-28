@@ -1183,6 +1183,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
+    public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
+        super.setItemSlot(slot, stack);
+        if (!this.level.isClientSide) {
+            NeoForge.EVENT_BUS.post(new MaidEquipEvent(this, slot, stack));
+        }
+    }
+
+    @Override
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
         if (soundEvent.getLocation().getPath().startsWith("maid") && !level.isClientSide) {
             NetworkHandler.sendToNearby(this, new PlayMaidSoundPackage(soundEvent.getLocation(), this.getSoundPackId(), this.getId()), 16);
