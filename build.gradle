@@ -160,7 +160,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
     runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
 
-    implementation fg.deobf('curse.maven:timeless-and-classics-zero-1028108:5529117-sources-5529578')
+    implementation fg.deobf('curse.maven:timeless-and-classics-zero-1028108:5722050-sources-5724527')
 
     implementation fg.deobf("maven.modrinth:simple-hats:1.20.1-0.3.2-forge")
     implementation fg.deobf("maven.modrinth:curios:5.9.1+1.20.1-forge")

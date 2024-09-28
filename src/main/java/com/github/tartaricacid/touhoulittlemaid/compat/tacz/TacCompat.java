@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunBaseAnimat
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunGeckoAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.client.GunMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.event.GunHurtMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.tacz.event.MaidGunEquipEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.task.TaskGunAttack;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunNearestLivingEntitySensor;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -34,6 +35,7 @@ public class TacCompat {
     public static void initAndAddGunTask(TaskManager manager) {
         if (ModList.get().isLoaded(TACZ_ID)) {
             MinecraftForge.EVENT_BUS.register(new GunHurtMaidEvent());
+            MinecraftForge.EVENT_BUS.register(new MaidGunEquipEvent());
             manager.add(new TaskGunAttack());
             INSTALLED = true;
         }
