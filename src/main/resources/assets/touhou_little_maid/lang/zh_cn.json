@@ -161,6 +161,7 @@
   "gui.touhou_little_maid.skin.button.close": "关闭",
   "gui.touhou_little_maid.skin.tooltips.show_details": "Shift 点击打开详情界面",
   "gui.touhou_little_maid.skin.tooltips.maid_use_sound_pack_id": "使用声音包：%s",
+  "gui.touhou_little_maid.skin.enable_cache": "图标缓存",
   "gui.touhou_little_maid.button.home.true": "Home 模式已开启（不跟随玩家）",
   "gui.touhou_little_maid.button.home.false": "Home 模式已关闭（跟随玩家）",
   "gui.touhou_little_maid.button.home.desc": "§7点击此按钮可以设置女仆是否跟随玩家",
