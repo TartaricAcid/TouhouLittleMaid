@@ -161,6 +161,7 @@
   "gui.touhou_little_maid.skin.button.close": "Close",
   "gui.touhou_little_maid.skin.tooltips.show_details": "Shift Click To Open The Details GUI",
   "gui.touhou_little_maid.skin.tooltips.maid_use_sound_pack_id": "Use Sound Pack: %s",
+  "gui.touhou_little_maid.skin.enable_cache": "Icon Cache",
   "gui.touhou_little_maid.button.home.true": "Home Mode Is Enable",
   "gui.touhou_little_maid.button.home.false": "Home Mode Is Disable",
   "gui.touhou_little_maid.button.home.desc": "§7Click this button to set whether the maid will follow the player.",

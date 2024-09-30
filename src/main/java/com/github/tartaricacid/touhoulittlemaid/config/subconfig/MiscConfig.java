@@ -20,6 +20,7 @@ public final class MiscConfig {
     public static ForgeConfigSpec.BooleanValue CLOSE_OPTIFINE_WARNING;
     public static ForgeConfigSpec.IntValue SCARECROW_RANGE;
     public static ForgeConfigSpec.BooleanValue USE_NEW_MAID_FAIRY_MODEL;
+    public static ForgeConfigSpec.BooleanValue MODEL_ICON_CACHE;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("misc");
@@ -61,6 +62,9 @@ public final class MiscConfig {
 
         builder.comment("Whether to use the new version of the Fairy Maid model");
         USE_NEW_MAID_FAIRY_MODEL = builder.define("UseNewMaidFairyModel", true);
+
+        builder.comment("Whether to enable model icon caching");
+        MODEL_ICON_CACHE = builder.define("ModelIconCache", true);
 
         builder.pop();
     }

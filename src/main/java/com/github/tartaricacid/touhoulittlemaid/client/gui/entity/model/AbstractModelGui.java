@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.ImageBu
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.SizeTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -12,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
@@ -127,6 +129,18 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 模型包翻页
         addScrollButton(startX, startY);
+
+        // 添加开启、关闭模型包图标缓存的按钮
+        MutableComponent enableCache = Component.translatable("gui.touhou_little_maid.skin.enable_cache");
+        int checkBoxWidth = font.width(enableCache) + 20;
+        int xOffset = (startX - 256 / 2) / 2 - checkBoxWidth / 2;
+        this.addRenderableWidget(new Checkbox(xOffset, startY - 101, 20, 20, enableCache, MiscConfig.MODEL_ICON_CACHE.get()) {
+            @Override
+            public void onPress() {
+                super.onPress();
+                MiscConfig.MODEL_ICON_CACHE.set(this.selected());
+            }
+        });
     }
 
     private void addModelButton(int startX, int startY) {
