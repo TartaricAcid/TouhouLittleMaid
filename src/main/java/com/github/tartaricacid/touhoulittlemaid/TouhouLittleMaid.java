@@ -45,6 +45,7 @@ public final class TouhouLittleMaid {
         InitEntities.SENSOR_TYPES.register(eventBus);
         InitEntities.SCHEDULES.register(eventBus);
         InitEntities.DATA_SERIALIZERS.register(eventBus);
+        InitEntities.ACTIVITIES.register(eventBus);
         InitBlocks.BLOCKS.register(eventBus);
         InitBlocks.TILE_ENTITIES.register(eventBus);
         InitItems.ITEMS.register(eventBus);
