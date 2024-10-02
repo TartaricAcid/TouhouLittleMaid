@@ -53,7 +53,7 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
     @Override
     protected void tick(ServerLevel worldIn, EntityMaid owner, long gameTime) {
         owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> {
-            //实际上按照原版mc判定是看不见的，强行看见并朝向（没关就是开了？）
+            // 实际上按照原版mc判定是看不见的，强行看见并朝向（没关就是开了？）
             owner.getLookControl().setLookAt(target.getX(), target.getY(), target.getZ());
             boolean canSee = GunBehaviorUtils.canSee(owner, target);
             boolean seeTimeMoreThanZero = this.seeTime > 0;

@@ -32,8 +32,8 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
         if (memory.isPresent()) {
             LivingEntity target = memory.get();
             return owner.isHolding(item -> item.getItem() instanceof ProjectileWeaponItem)
-                    && BehaviorUtils.canSee(owner, target)
-                    && BehaviorUtils.isWithinAttackRange(owner, target, 0);
+                   && BehaviorUtils.canSee(owner, target)
+                   && BehaviorUtils.isWithinAttackRange(owner, target, 0);
         }
         return false;
     }
@@ -51,6 +51,8 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
     @Override
     protected void tick(ServerLevel worldIn, EntityMaid owner, long gameTime) {
         owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> {
+            // 强行看见并朝向
+            owner.getLookControl().setLookAt(target.getX(), target.getY(), target.getZ());
             boolean canSee = BehaviorUtils.canSee(owner, target);
             boolean seeTimeMoreThanZero = this.seeTime > 0;
 
