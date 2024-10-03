@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.schedule.Activity;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -29,7 +29,7 @@ public enum MaidProvider implements IEntityComponentProvider {
                 iTooltip.add(Component.translatable("top.touhou_little_maid.entity_maid.task").append(task.getName()));
 
                 // 添加于 Mode 之下，用于给 Mode 添加额外的信息
-                MinecraftForge.EVENT_BUS.post(new AddJadeInfoEvent(maid, iTooltip, iPluginConfig));
+                NeoForge.EVENT_BUS.post(new AddJadeInfoEvent(maid, iTooltip, iPluginConfig));
 
                 iTooltip.add(Component.translatable("top.touhou_little_maid.entity_maid.schedule").append(getActivityTransText(maid)));
                 iTooltip.add(Component.translatable("top.touhou_little_maid.entity_maid.favorability", maid.getFavorabilityManager().getLevel()));

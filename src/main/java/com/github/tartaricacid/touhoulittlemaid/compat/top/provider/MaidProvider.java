@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class MaidProvider implements IProbeInfoEntityProvider {
     private static final String ID = (ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "maid")).toString();
@@ -27,7 +27,7 @@ public class MaidProvider implements IProbeInfoEntityProvider {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(taskTitle);
 
                 // 添加于 Mode 之下，用于给 Mode 添加额外的信息
-                MinecraftForge.EVENT_BUS.post(new AddTopInfoEvent(maid, probeMode, probeInfo, iProbeHitEntityData));
+                NeoForge.EVENT_BUS.post(new AddTopInfoEvent(maid, probeMode, probeInfo, iProbeHitEntityData));
 
                 MutableComponent scheduleTitle = Component.translatable("top.touhou_little_maid.entity_maid.schedule").append(getActivityTransText(maid));
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(scheduleTitle);
