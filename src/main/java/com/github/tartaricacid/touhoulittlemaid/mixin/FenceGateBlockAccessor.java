@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(FenceGateBlock.class)
 public interface FenceGateBlockAccessor {
     @Final
-    @Accessor("openSound")
+    @Accessor(value = "openSound", remap = false)
     SoundEvent tlmOpenSound();
 
     @Final
-    @Accessor("closeSound")
+    @Accessor(value = "closeSound", remap = false)
     SoundEvent tlmCloseSound();
 }

@@ -1,19 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
-import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.init.registry.CommandRegistry;
-import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
-import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -35,7 +28,6 @@ public final class TouhouLittleMaid {
         initRegister(modEventBus);
         ChatBubbleManger.initDefaultChat();
         registerConfiguration(modContainer);
-        modApiInit();
     }
 
     private static void initRegister(IEventBus eventBus) {
@@ -69,15 +61,5 @@ public final class TouhouLittleMaid {
     private static void registerConfiguration(ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.COMMON, GeneralConfig.getConfigSpec());
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.init());
-    }
-
-    private static void modApiInit() {
-        EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
-        TaskManager.init();
-        BackpackManager.init();
-        BaubleManager.init();
-        MultiBlockManager.init();
-        ChestManager.init();
-        MaidMealManager.init();
     }
 }
