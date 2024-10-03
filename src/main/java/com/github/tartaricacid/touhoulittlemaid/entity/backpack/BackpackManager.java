@@ -29,6 +29,7 @@ public class BackpackManager {
     private BackpackManager() {
         EMPTY_BACKPACK = new EmptyBackpack();
         BACKPACK_ID_MAP = Maps.newHashMap();
+        BACKPACK_ITEM_MAP = Maps.newHashMap();
     }
 
     public static void init() {
@@ -45,10 +46,7 @@ public class BackpackManager {
             littleMaid.addMaidBackpack(manager);
         }
         BACKPACK_ID_MAP = ImmutableMap.copyOf(BACKPACK_ID_MAP);
-    }
-
-    public static void initItemIndex() {
-        BACKPACK_ITEM_MAP = Maps.newHashMap();
+        // 将物品和背包绑定
         BACKPACK_ID_MAP.forEach((id, backpack) -> BACKPACK_ITEM_MAP.put(backpack.getItem(), backpack));
         BACKPACK_ITEM_MAP = ImmutableMap.copyOf(BACKPACK_ITEM_MAP);
     }

@@ -1,17 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
-import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
-import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
-import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
-import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
 import com.google.common.collect.Lists;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -35,7 +28,6 @@ public final class TouhouLittleMaid {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfig.init());
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.init());
         ChatBubbleManger.initDefaultChat();
-        modApiInit();
     }
 
     private static void initRegister(IEventBus eventBus) {
@@ -57,15 +49,5 @@ public final class TouhouLittleMaid {
         InitLootModifier.GLOBAL_LOOT_MODIFIER_SERIALIZER.register(eventBus);
         InitCommand.ARGUMENT_TYPE.register(eventBus);
         InitPoi.POI_TYPES.register(eventBus);
-    }
-
-    private static void modApiInit() {
-        EXTENSIONS = AnnotatedInstanceUtil.getModExtensions();
-        TaskManager.init();
-        BackpackManager.init();
-        BaubleManager.init();
-        MultiBlockManager.init();
-        ChestManager.init();
-        MaidMealManager.init();
     }
 }
