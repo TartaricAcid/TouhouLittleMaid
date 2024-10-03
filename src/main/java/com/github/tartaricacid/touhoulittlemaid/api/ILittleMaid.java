@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
+import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
@@ -60,6 +61,15 @@ public interface ILittleMaid {
      * @param manager 注册器
      */
     default void addMaidMeal(MaidMealManager manager) {
+    }
+
+    /**
+     * 添加女仆相关提示
+     * <p>
+     * 有些物品在指向女仆时，能够在屏幕上显示相关提示文本
+     */
+    @OnlyIn(Dist.CLIENT)
+    default void addMaidTips(MaidTipsOverlay maidTipsOverlay) {
     }
 
     /**
