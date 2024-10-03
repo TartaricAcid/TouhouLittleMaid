@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.api.backpack;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.BackpackLevel;
@@ -59,5 +60,12 @@ public abstract class IMaidBackpack {
 
     protected final void dropAllItems(EntityMaid maid) {
         ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), BackpackLevel.EMPTY_CAPACITY);
+    }
+
+    protected final void dropRelativeItems(ItemStack stack, EntityMaid maid) {
+        BackpackManager.findBackpack(stack).ifPresentOrElse(backpack -> {
+            int startIndex = backpack.getAvailableMaxContainerIndex();
+            ItemsUtil.dropEntityItems(maid, maid.getMaidInv(), startIndex);
+        }, () -> this.dropAllItems(maid));
     }
 }
