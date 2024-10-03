@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.top.provider;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.event.AddTopInfoEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import mcjty.theoneprobe.api.*;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.MinecraftForge;
 
 public class MaidProvider implements IProbeInfoEntityProvider {
     private static final String ID = (ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "maid")).toString();
@@ -23,6 +25,9 @@ public class MaidProvider implements IProbeInfoEntityProvider {
                 IMaidTask task = maid.getTask();
                 MutableComponent taskTitle = Component.translatable("top.touhou_little_maid.entity_maid.task").append(task.getName());
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(taskTitle);
+
+                // 添加于 Mode 之下，用于给 Mode 添加额外的信息
+                MinecraftForge.EVENT_BUS.post(new AddTopInfoEvent(maid, probeMode, probeInfo, iProbeHitEntityData));
 
                 MutableComponent scheduleTitle = Component.translatable("top.touhou_little_maid.entity_maid.schedule").append(getActivityTransText(maid));
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER)).text(scheduleTitle);
