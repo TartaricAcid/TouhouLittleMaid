@@ -53,6 +53,16 @@ public interface IMaidTask {
     List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid);
 
     /**
+     * 骑乘、待命状态下执行的 AI，注意此时女仆不能移动，只能站桩执行相关 AI
+     *
+     * @param maid 女仆对象
+     * @return 如果什么都不做，请返回空集合
+     */
+    default List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createRideBrainTasks(EntityMaid maid) {
+        return Collections.emptyList();
+    }
+
+    /**
      * 当前 Task 是否可使用
      *
      * @param maid 女仆对象

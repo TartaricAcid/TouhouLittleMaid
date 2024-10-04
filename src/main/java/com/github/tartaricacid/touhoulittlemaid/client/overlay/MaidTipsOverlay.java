@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.overlay;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -26,35 +28,44 @@ import java.util.Map;
 
 public class MaidTipsOverlay implements LayeredDraw.Layer {
     private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_tips_icon.png");
-    private static final Map<Item, MutableComponent> TIPS = Maps.newHashMap();
+
+    private static Map<Item, MutableComponent> TIPS = Maps.newHashMap();
+    private static Map<CheckCondition, MutableComponent> SPECIAL_TIPS = Maps.newHashMap();
 
     public static void init() {
-        addTips("overlay.touhou_little_maid.compass.tips", Items.COMPASS);
-        addTips("overlay.touhou_little_maid.golden_apple.tips", Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE);
-        addTips("overlay.touhou_little_maid.potion.tips", Items.POTION);
-        addTips("overlay.touhou_little_maid.milk_bucket.tips", Items.MILK_BUCKET);
-        addTips("overlay.touhou_little_maid.script_book.tips", Items.WRITABLE_BOOK, Items.WRITTEN_BOOK);
-        addTips("overlay.touhou_little_maid.glass_bottle.tips", Items.GLASS_BOTTLE);
-        addTips("overlay.touhou_little_maid.name_tag.tips", Items.NAME_TAG);
-        addTips("overlay.touhou_little_maid.lead.tips", Items.LEAD);
-        addTips("overlay.touhou_little_maid.debug_stick.tips", Items.DEBUG_STICK);
-        addTips("overlay.touhou_little_maid.saddle.tips", Items.SADDLE);
+        MaidTipsOverlay overlay = new MaidTipsOverlay();
+
+        overlay.addTips("overlay.touhou_little_maid.compass.tips", Items.COMPASS);
+        overlay.addTips("overlay.touhou_little_maid.golden_apple.tips", Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE);
+        overlay.addTips("overlay.touhou_little_maid.potion.tips", Items.POTION);
+        overlay.addTips("overlay.touhou_little_maid.milk_bucket.tips", Items.MILK_BUCKET);
+        overlay.addTips("overlay.touhou_little_maid.script_book.tips", Items.WRITABLE_BOOK, Items.WRITTEN_BOOK);
+        overlay.addTips("overlay.touhou_little_maid.glass_bottle.tips", Items.GLASS_BOTTLE);
+        overlay.addTips("overlay.touhou_little_maid.name_tag.tips", Items.NAME_TAG);
+        overlay.addTips("overlay.touhou_little_maid.lead.tips", Items.LEAD);
+        overlay.addTips("overlay.touhou_little_maid.debug_stick.tips", Items.DEBUG_STICK);
+        overlay.addTips("overlay.touhou_little_maid.saddle.tips", Items.SADDLE);
+
+        overlay.addSpecialTips("overlay.touhou_little_maid.ntr_item.tips", (item, maid, player) -> !maid.isOwnedBy(player) && EntityMaid.getNtrItem().test(item));
+        overlay.addSpecialTips("overlay.touhou_little_maid.remove_backpack.tips", (item, maid, player) -> maid.isOwnedBy(player) && maid.hasBackpack() && item.is(Tags.Items.TOOLS_SHEAR));
+
+        for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
+            littleMaid.addMaidTips(overlay);
+        }
+
+        TIPS = ImmutableMap.copyOf(TIPS);
+        SPECIAL_TIPS = ImmutableMap.copyOf(SPECIAL_TIPS);
     }
 
     private static MutableComponent checkSpecialTips(ItemStack mainhandItem, EntityMaid maid, LocalPlayer player) {
-        if (!maid.isOwnedBy(player) && EntityMaid.getNtrItem().test(mainhandItem)) {
-            return Component.translatable("overlay.touhou_little_maid.ntr_item.tips");
-        }
-        if (maid.isOwnedBy(player) && maid.hasBackpack() && mainhandItem.is(Tags.Items.TOOLS_SHEAR)) {
-            return Component.translatable("overlay.touhou_little_maid.remove_backpack.tips");
+        for (Map.Entry<CheckCondition, MutableComponent> entry : SPECIAL_TIPS.entrySet()) {
+            CheckCondition condition = entry.getKey();
+            MutableComponent text = entry.getValue();
+            if (condition.test(mainhandItem, maid, player)) {
+                return text;
+            }
         }
         return null;
-    }
-
-    private static void addTips(String key, Item... items) {
-        for (Item item : items) {
-            TIPS.put(item, Component.translatable(key));
-        }
     }
 
     @Override
@@ -101,5 +112,19 @@ public class MaidTipsOverlay implements LayeredDraw.Layer {
                 offset += 10;
             }
         }
+    }
+
+    public void addTips(String key, Item... items) {
+        for (Item item : items) {
+            TIPS.put(item, Component.translatable(key));
+        }
+    }
+
+    public void addSpecialTips(String key, CheckCondition condition) {
+        SPECIAL_TIPS.put(condition, Component.translatable(key));
+    }
+
+    public interface CheckCondition {
+        boolean test(ItemStack mainhandItem, EntityMaid maid, LocalPlayer player);
     }
 }
