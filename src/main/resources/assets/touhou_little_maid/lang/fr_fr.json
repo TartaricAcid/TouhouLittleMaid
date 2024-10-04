@@ -54,6 +54,8 @@
   "tooltips.touhou_little_maid.bauble.usage": "Doit être placé dans l'inventaire à relique de la maid",
   "tooltips.touhou_little_maid.substitute_jizo.desc": "Faites un clic droit avec sur une maid pour la rendre invulnérable, obtenable uniquement en créatif",
   "tooltips.touhou_little_maid.photo.maid.desc": "Nom de la Maid: %s",
+  "tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist": "Liste noire",
+  "tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist": "Liste blanche",
   "gui.touhou_little_maid.activity.idle": "Inactif",
   "gui.touhou_little_maid.button.skin": "Changer de Skin",
   "gui.touhou_little_maid.task.close": "Fermer",
