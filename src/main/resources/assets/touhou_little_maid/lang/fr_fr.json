@@ -157,5 +157,6 @@
   "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.pages.3.text": "Placer un objet sur le haut d'un pilier du sanctuaire en le tenant et en faisant un clic droit. Vous pouvez le retirer de la même façon si votre main est vide.$(br2)Une fois les objets placé et avec suffisamment de Power Points, le craft s’activera automatiquement. Il sera cependant interrompu si les Power Points sont insuffisant et devras être relancer avec un clic droit.",
   "patchouli.touhou_little_maid.book.entries.overview.power_point.name": "Power Point",
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.text": "Touhou Project est une série de jeux indépendants du genre shoot'em up créés par ZUN, le seul membre de la Team Shanghai Alice.",
+  "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text": "Touhou Wiki",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "Spawn des créatures"
 }
