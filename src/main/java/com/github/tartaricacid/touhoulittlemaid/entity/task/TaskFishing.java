@@ -13,9 +13,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TaskFishing implements IMaidTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "fishing");
@@ -44,5 +47,10 @@ public class TaskFishing implements IMaidTask {
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createRideBrainTasks(EntityMaid maid) {
         return Lists.newArrayList(Pair.of(5, new MaidRideFindWaterTask(6, 3)));
+    }
+
+    @Override
+    public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
+        return Collections.singletonList(Pair.of("has_fishing_rod", e -> e.getMainHandItem().canPerformAction(ToolActions.FISHING_ROD_CAST)));
     }
 }

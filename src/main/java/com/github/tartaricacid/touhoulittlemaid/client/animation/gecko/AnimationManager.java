@@ -142,6 +142,9 @@ public final class AnimationManager {
             if (mainHandItem.is(Items.CROSSBOW) && CrossbowItem.isCharged(mainHandItem)) {
                 return playAnimation(event, "hold_mainhand:charged_crossbow", ILoopType.EDefaultLoopTypes.LOOP);
             }
+            if (maid.hasFishingHook()) {
+                return playAnimation(event, "hold_mainhand:fishing", ILoopType.EDefaultLoopTypes.LOOP);
+            }
         }
 
         if (checkSwingAndUse(maid, InteractionHand.MAIN_HAND)) {

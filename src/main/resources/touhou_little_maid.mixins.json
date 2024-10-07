@@ -6,8 +6,7 @@
   "refmap": "touhou_little_maid.refmap.json",
   "mixins": ["EntityMixin", "FenceGateBlockAccessor", "MixinArrowEntity", "MixinStructureTemplate"],
   "client": [
-    "client.HumanoidModelMixin",
-    "client.LanguageMixin",
+    "client.HumanoidModelMixin", "client.ItemPropertiesMixin", "client.LanguageMixin",
     "client.LivingEntityRendererMixin"
   ],
   "injectors": {

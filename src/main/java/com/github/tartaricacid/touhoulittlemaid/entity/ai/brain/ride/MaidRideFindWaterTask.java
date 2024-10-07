@@ -14,10 +14,10 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ToolActions;
 
 public class MaidRideFindWaterTask extends MaidCheckRateTask {
-    private static final int MAX_DELAY_TIME = 20;
+    private static final int MAX_DELAY_TIME = 100;
 
     private final int verticalSearchRange;
     private final int searchRange;
@@ -52,14 +52,13 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
                 ItemStack mainHandItem = maid.getMainHandItem();
                 Vec3 centerPos = Vec3.atCenterOf(this.waterPos);
 
-                worldIn.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.getRandom().nextFloat() * 0.4F + 0.8F));
                 int lureSpeedBonus = EnchantmentHelper.getFishingSpeedBonus(mainHandItem);
                 int luckBonus = EnchantmentHelper.getFishingLuckBonus(mainHandItem);
-                MaidFishingHook fishingHook = new MaidFishingHook(maid, worldIn, luckBonus, lureSpeedBonus);
-                fishingHook.moveTo(centerPos);
-                worldIn.addFreshEntity(fishingHook);
-                maid.getLookControl().setLookAt(centerPos);
+                worldIn.addFreshEntity(new MaidFishingHook(maid, worldIn, luckBonus, lureSpeedBonus, centerPos));
+
+                worldIn.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.getRandom().nextFloat() * 0.4F + 0.8F));
                 maid.swing(InteractionHand.MAIN_HAND);
+                maid.getLookControl().setLookAt(centerPos);
             } else {
                 waterPos = null;
             }
@@ -70,6 +69,7 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
         BlockPos centrePos = maid.getBrainSearchPos();
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
         for (int y = this.verticalSearchStart; y <= this.verticalSearchRange; y = y > 0 ? -y : 1 - y) {
+            // FIXME: 应该从一片水域的正中央开始
             for (int i = 0; i < searchRange; ++i) {
                 for (int x = 0; x <= i; x = x > 0 ? -x : 1 - x) {
                     for (int z = x < i && x > -i ? i : 0; z <= i; z = z > 0 ? -z : 1 - z) {
@@ -88,7 +88,7 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
 
     private boolean hasFishingRod(EntityMaid entityMaid) {
         ItemStack mainHandItem = entityMaid.getMainHandItem();
-        return mainHandItem.is(Tags.Items.TOOLS_FISHING_RODS);
+        return mainHandItem.canPerformAction(ToolActions.FISHING_ROD_CAST);
     }
 
     private boolean isWater(ServerLevel worldIn, BlockPos basePos) {

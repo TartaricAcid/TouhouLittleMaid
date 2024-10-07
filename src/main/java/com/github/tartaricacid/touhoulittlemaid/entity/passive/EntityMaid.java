@@ -312,16 +312,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     @Override
-    public void rideTick() {
-        super.rideTick();
-        if (this.getVehicle() != null) {
-            Entity vehicle = this.getVehicle();
-            //this.setYHeadRot(vehicle.getYRot());
-            //this.setYBodyRot(vehicle.getYRot());
-        }
-    }
-
-    @Override
     public void baseTick() {
         super.baseTick();
         if (backpackDelay > 0) {
@@ -1672,6 +1662,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public float getLuck() {
         return (float) this.getAttributeValue(Attributes.LUCK);
+    }
+
+    @Override
+    public boolean hasFishingHook() {
+        return this.fishing != null;
     }
 
     public List<SendEffectMessage.EffectData> getEffects() {

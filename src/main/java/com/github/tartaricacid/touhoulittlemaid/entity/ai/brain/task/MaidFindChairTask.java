@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
@@ -35,10 +36,10 @@ public class MaidFindChairTask extends MaidCheckRateTask {
                 .filter(Entity::isAlive)
                 .filter(e -> e instanceof EntityChair chair && chair.getPassengers().isEmpty())
                 .findFirst()
-                .ifPresent(chairEntity -> {
+                .ifPresentOrElse(chairEntity -> {
                     this.chairEntity = (EntityChair) chairEntity;
                     BehaviorUtils.setWalkAndLookTargetMemories(maid, this.chairEntity, this.speedModifier, 0);
-                });
+                }, () -> ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.fishing.no_chair"));
 
         if (chairEntity != null && chairEntity.isAlive() && chairEntity.closerThan(maid, 2)) {
             if (chairEntity.getPassengers().isEmpty()) {

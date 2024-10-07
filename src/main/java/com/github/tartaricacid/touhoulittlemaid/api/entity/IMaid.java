@@ -156,6 +156,10 @@ public interface IMaid {
         return asEntity().hurtTime > 0;
     }
 
+    default boolean hasFishingHook() {
+        return false;
+    }
+
     // 下方为 Deprecated 方法，仅用于适配旧版本模型，无需 Override
 
     @Deprecated

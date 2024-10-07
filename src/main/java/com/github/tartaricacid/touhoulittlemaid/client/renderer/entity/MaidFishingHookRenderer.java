@@ -12,8 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix3f;
@@ -23,98 +22,107 @@ import org.joml.Matrix4f;
 public class MaidFishingHookRenderer extends EntityRenderer<MaidFishingHook> {
     private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation("textures/entity/fishing_hook.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutout(TEXTURE_LOCATION);
-    private static final double VIEW_BOBBING_SCALE = 960.0D;
 
-    public MaidFishingHookRenderer(EntityRendererProvider.Context pContext) {
-        super(pContext);
+    public MaidFishingHookRenderer(EntityRendererProvider.Context context) {
+        super(context);
     }
 
-    public void render(MaidFishingHook pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
-        EntityMaid maid = pEntity.getPlayerOwner();
-        if (maid != null) {
-            pPoseStack.pushPose();
-            pPoseStack.pushPose();
-            pPoseStack.scale(0.5F, 0.5F, 0.5F);
-            pPoseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-            PoseStack.Pose posestack$pose = pPoseStack.last();
-            Matrix4f matrix4f = posestack$pose.pose();
-            Matrix3f matrix3f = posestack$pose.normal();
-            VertexConsumer vertexconsumer = pBuffer.getBuffer(RENDER_TYPE);
-            vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 0.0F, 0, 0, 1);
-            vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 1.0F, 0, 1, 1);
-            vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 1.0F, 1, 1, 0);
-            vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 0.0F, 1, 0, 0);
-            pPoseStack.popPose();
-            int i = maid.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
-            ItemStack itemstack = maid.getMainHandItem();
-            if (!itemstack.canPerformAction(net.minecraftforge.common.ToolActions.FISHING_ROD_CAST)) {
-                i = -i;
-            }
+    @Override
+    public void render(MaidFishingHook fishingHook, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        EntityMaid maid = fishingHook.getMaidOwner();
+        if (maid == null) {
+            return;
+        }
+        poseStack.pushPose();
+        this.renderFishFloat(poseStack, buffer, packedLight);
+        this.renderFishLine(fishingHook, partialTicks, poseStack, buffer, maid);
+        poseStack.popPose();
+        super.render(fishingHook, entityYaw, partialTicks, poseStack, buffer, packedLight);
+    }
 
-            float f = maid.getAttackAnim(pPartialTicks);
-            float f1 = Mth.sin(Mth.sqrt(f) * (float) Math.PI);
-            float f2 = Mth.lerp(pPartialTicks, maid.yBodyRotO, maid.yBodyRot) * ((float) Math.PI / 180F);
-            double d0 = (double) Mth.sin(f2);
-            double d1 = (double) Mth.cos(f2);
-            double d2 = (double) i * 0.35D;
-            double d3 = 0.8D;
-            double d4;
-            double d5;
-            double d6;
-            float f3;
+    private void renderFishLine(MaidFishingHook fishingHook, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, EntityMaid maid) {
+        float lerpBodyRot;
+        if (maid.getVehicle() instanceof LivingEntity vehicle) {
+            lerpBodyRot = Mth.lerp(partialTicks, vehicle.yBodyRotO, vehicle.yBodyRot) * ((float) Math.PI / 180F);
+        } else {
+            lerpBodyRot = Mth.lerp(partialTicks, maid.yBodyRotO, maid.yBodyRot) * ((float) Math.PI / 180F);
+        }
+        double sin = Mth.sin(lerpBodyRot);
+        double cos = Mth.cos(lerpBodyRot);
 
-            {
-                d4 = Mth.lerp((double) pPartialTicks, maid.xo, maid.getX()) - d1 * d2 - d0 * 0.8D;
-                d5 = maid.yo + (double) maid.getEyeHeight() + (maid.getY() - maid.yo) * (double) pPartialTicks - 0.45D;
-                d6 = Mth.lerp((double) pPartialTicks, maid.zo, maid.getZ()) - d0 * d2 + d1 * 0.8D;
-                f3 = -0.1875F;
-            }
+        double x1 = Mth.lerp(partialTicks, maid.xo, maid.getX()) - cos * 0.35D - sin * 0.8D;
+        double y1 = maid.yo + maid.getEyeHeight() + (maid.getY() - maid.yo) * partialTicks - 0.45D;
+        double z1 = Mth.lerp(partialTicks, maid.zo, maid.getZ()) - sin * 0.35D + cos * 0.8D;
 
-            double d9 = Mth.lerp((double) pPartialTicks, pEntity.xo, pEntity.getX());
-            double d10 = Mth.lerp((double) pPartialTicks, pEntity.yo, pEntity.getY()) + 0.25D;
-            double d8 = Mth.lerp((double) pPartialTicks, pEntity.zo, pEntity.getZ());
-            float f4 = (float) (d4 - d9);
-            float f5 = (float) (d5 - d10) + f3;
-            float f6 = (float) (d6 - d8);
-            VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.lineStrip());
-            PoseStack.Pose posestack$pose1 = pPoseStack.last();
-            int j = 16;
+        double x2 = Mth.lerp(partialTicks, fishingHook.xo, fishingHook.getX());
+        double y2 = Mth.lerp(partialTicks, fishingHook.yo, fishingHook.getY()) + 0.25D;
+        double z2 = Mth.lerp(partialTicks, fishingHook.zo, fishingHook.getZ());
 
-            for (int k = 0; k <= 16; ++k) {
-                stringVertex(f4, f5, f6, vertexconsumer1, posestack$pose1, fraction(k, 16), fraction(k + 1, 16));
-            }
+        float x = (float) (x1 - x2);
+        float y = (float) (y1 - y2) - 0.1875F;
+        float z = (float) (z1 - z2);
 
-            pPoseStack.popPose();
-            super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
+        VertexConsumer lineConsumer = buffer.getBuffer(RenderType.lineStrip());
+        PoseStack.Pose lasted = poseStack.last();
+        for (int i = 0; i <= 16; ++i) {
+            stringVertex(x, y, z, lineConsumer, lasted, fraction(i), fraction(i + 1));
         }
     }
 
-    private static float fraction(int pNumerator, int pDenominator) {
-        return (float) pNumerator / (float) pDenominator;
+    private void renderFishFloat(PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        poseStack.pushPose();
+        poseStack.scale(0.5F, 0.5F, 0.5F);
+        poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+
+        PoseStack.Pose lasted = poseStack.last();
+        Matrix4f lastedPose = lasted.pose();
+        Matrix3f lastedNormal = lasted.normal();
+
+        VertexConsumer consumer = buffer.getBuffer(RENDER_TYPE);
+        vertex(consumer, lastedPose, lastedNormal, packedLight, 0.0F, 0, 0, 1);
+        vertex(consumer, lastedPose, lastedNormal, packedLight, 1.0F, 0, 1, 1);
+        vertex(consumer, lastedPose, lastedNormal, packedLight, 1.0F, 1, 1, 0);
+        vertex(consumer, lastedPose, lastedNormal, packedLight, 0.0F, 1, 0, 0);
+
+        poseStack.popPose();
     }
 
-    private static void vertex(VertexConsumer pConsumer, Matrix4f pPose, Matrix3f pNormal, int pLightmapUV, float pX, int pY, int pU, int pV) {
-        pConsumer.vertex(pPose, pX - 0.5F, (float) pY - 0.5F, 0.0F).color(255, 255, 255, 255).uv((float) pU, (float) pV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pLightmapUV).normal(pNormal, 0.0F, 1.0F, 0.0F).endVertex();
+    private float fraction(int numerator) {
+        return (float) numerator / (float) 16;
     }
 
-    private static void stringVertex(float pX, float pY, float pZ, VertexConsumer pConsumer, PoseStack.Pose pPose, float p_174124_, float p_174125_) {
-        float f = pX * p_174124_;
-        float f1 = pY * (p_174124_ * p_174124_ + p_174124_) * 0.5F + 0.25F;
-        float f2 = pZ * p_174124_;
-        float f3 = pX * p_174125_ - f;
-        float f4 = pY * (p_174125_ * p_174125_ + p_174125_) * 0.5F + 0.25F - f1;
-        float f5 = pZ * p_174125_ - f2;
-        float f6 = Mth.sqrt(f3 * f3 + f4 * f4 + f5 * f5);
-        f3 /= f6;
-        f4 /= f6;
-        f5 /= f6;
-        pConsumer.vertex(pPose.pose(), f, f1, f2).color(0, 0, 0, 255).normal(pPose.normal(), f3, f4, f5).endVertex();
+    private void vertex(VertexConsumer consumer, Matrix4f pose, Matrix3f normal, int lightMapUV, float pX, int pY, int pU, int pV) {
+        consumer.vertex(pose, pX - 0.5F, pY - 0.5F, 0.0F)
+                .color(255, 255, 255, 255)
+                .uv((float) pU, (float) pV)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(lightMapUV)
+                .normal(normal, 0.0F, 1.0F, 0.0F)
+                .endVertex();
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
+    private void stringVertex(float pX, float pY, float pZ, VertexConsumer consumer, PoseStack.Pose pose, float fraction1, float fraction2) {
+        float x = pX * fraction1;
+        float y = pY * (fraction1 * fraction1 + fraction1) * 0.5F + 0.25F;
+        float z = pZ * fraction1;
+
+        float nx = pX * fraction2 - x;
+        float ny = pY * (fraction2 * fraction2 + fraction2) * 0.5F + 0.25F - y;
+        float nz = pZ * fraction2 - z;
+        float sqrt = Mth.sqrt(nx * nx + ny * ny + nz * nz);
+
+        nx /= sqrt;
+        ny /= sqrt;
+        nz /= sqrt;
+
+        consumer.vertex(pose.pose(), x, y, z)
+                .color(0, 0, 0, 255)
+                .normal(pose.normal(), nx, ny, nz)
+                .endVertex();
+    }
+
+    @Override
     public ResourceLocation getTextureLocation(MaidFishingHook pEntity) {
         return TEXTURE_LOCATION;
     }

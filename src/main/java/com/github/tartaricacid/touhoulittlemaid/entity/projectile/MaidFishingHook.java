@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidFishedEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskFishing;
 import net.minecraft.core.BlockPos;
@@ -36,6 +37,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -47,20 +49,18 @@ public class MaidFishingHook extends Projectile {
             .noSave().noSummon().sized(0.25F, 0.25F)
             .clientTrackingRange(4).updateInterval(5)
             .build("fishing_hook");
-
     private static final EntityDataAccessor<Boolean> DATA_BITING = SynchedEntityData.defineId(MaidFishingHook.class, EntityDataSerializers.BOOLEAN);
+    private static final int MAX_OUT_OF_WATER_TIME = 10;
     private final RandomSource syncronizedRandom = RandomSource.create();
-    private boolean biting;
     private final int luck;
     private final int lureSpeed;
-    private float fishAngle;
-    private boolean openWater = true;
+    private boolean biting;
     private int nibble;
     private int timeUntilLured;
     private int timeUntilHooked;
     private int outOfWaterTime;
-    private static final int MAX_OUT_OF_WATER_TIME = 10;
     private int life;
+    private float fishAngle;
     private MaidFishingHook.FishHookState currentState = MaidFishingHook.FishHookState.FLYING;
 
     private MaidFishingHook(EntityType<MaidFishingHook> entityType, Level level, int luck, int lureSpeed) {
@@ -74,9 +74,10 @@ public class MaidFishingHook extends Projectile {
         this(entityType, level, 0, 0);
     }
 
-    public MaidFishingHook(EntityMaid maid, Level level, int luck, int lureSpeed) {
+    public MaidFishingHook(EntityMaid maid, Level level, int luck, int lureSpeed, Vec3 pos) {
         this(TYPE, level, luck, lureSpeed);
         this.setOwner(maid);
+        this.moveTo(pos);
     }
 
     @Override
@@ -111,7 +112,7 @@ public class MaidFishingHook extends Projectile {
         // 父类调用
         super.tick();
         // 获取当前钓钩的女仆
-        EntityMaid maid = this.getPlayerOwner();
+        EntityMaid maid = this.getMaidOwner();
         // 女仆为空，那么吊钩也不应当存在
         if (maid == null) {
             this.discard();
@@ -119,10 +120,10 @@ public class MaidFishingHook extends Projectile {
         // 额外检查一下女仆是否满足条件
         else if (this.level.isClientSide || !this.shouldStopFishing(maid)) {
             maid.getLookControl().setLookAt(this);
-            // 如果钓钩在地面，最多存在 1200 tick 就消失
+            // 如果钓钩在地面，最多存在 100 tick 就消失
             if (this.onGround()) {
                 ++this.life;
-                if (this.life >= 1200) {
+                if (this.life >= 100) {
                     this.discard();
                     return;
                 }
@@ -158,13 +159,6 @@ public class MaidFishingHook extends Projectile {
                         bobbingY += Math.signum(bobbingY) * 0.1;
                     }
                     this.setDeltaMovement(movement.x * 0.9, movement.y - bobbingY * (double) this.random.nextFloat() * 0.2, movement.z * 0.9);
-
-                    // 检查是否为开放水域，这会加快钓鱼速度
-                    if (this.nibble <= 0 && this.timeUntilHooked <= 0) {
-                        this.openWater = true;
-                    } else {
-                        this.openWater = this.openWater && this.outOfWaterTime < MAX_OUT_OF_WATER_TIME && this.calculateOpenWater(blockPos);
-                    }
 
                     // 计算咬钩时的运动和其他逻辑
                     if (onWaterSurface) {
@@ -213,9 +207,13 @@ public class MaidFishingHook extends Projectile {
         if (this.nibble > 0) {
             --this.nibble;
             // 咬钩时间到了，收杆
-            EntityMaid maid = getPlayerOwner();
-            if (this.nibble <= 5 && maid != null) {
-                this.retrieve(maid.getMainHandItem());
+            EntityMaid maid = getMaidOwner();
+            int retrieveTime = Mth.nextInt(this.random, 2, 10);
+            // TODO：收杆应该有成功率，应该和好感度挂钩
+            if (this.nibble <= retrieveTime && maid != null) {
+                ItemStack rodItem = maid.getMainHandItem();
+                int rodDamage = this.retrieve(rodItem);
+                rodItem.hurtAndBreak(rodDamage, maid, m -> maid.sendItemBreakMessage(rodItem));
                 maid.swing(InteractionHand.MAIN_HAND);
                 level.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
             }
@@ -291,11 +289,12 @@ public class MaidFishingHook extends Projectile {
     }
 
     public int retrieve(ItemStack stack) {
-        EntityMaid maid = this.getPlayerOwner();
+        EntityMaid maid = this.getMaidOwner();
         if (!this.level.isClientSide && maid != null && !this.shouldStopFishing(maid)) {
-            int rodDamage = 0;
-            // TODO: 添加女仆钓鱼事件
+            MaidFishedEvent event = null;
             MinecraftServer server = this.level.getServer();
+            int rodDamage = 0;
+
             // 如果是咬钩时间
             if (this.nibble > 0 && server != null) {
                 ServerLevel serverLevel = (ServerLevel) this.level;
@@ -308,15 +307,19 @@ public class MaidFishingHook extends Projectile {
                         .create(LootContextParamSets.FISHING);
                 LootTable lootTable = server.getLootData().getLootTable(BuiltInLootTables.FISHING);
                 List<ItemStack> randomItems = lootTable.getRandomItems(lootParams);
+
+                event = new MaidFishedEvent(randomItems, this.onGround() ? 2 : 1, this);
+                MinecraftForge.EVENT_BUS.post(event);
+                if (event.isCanceled()) {
+                    this.discard();
+                    return event.getRodDamage();
+                }
+
                 for (ItemStack result : randomItems) {
-                    ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), result);
-                    double xOffset = maid.getX() - this.getX();
-                    double yOffset = maid.getY() - this.getY();
-                    double zOffset = maid.getZ() - this.getZ();
-                    double sqrt = Math.sqrt(xOffset * xOffset + yOffset * yOffset + zOffset * zOffset);
-                    itemEntity.setDeltaMovement(xOffset * 0.1D, yOffset * 0.1D + Math.sqrt(sqrt) * 0.08D, zOffset * 0.1D);
+                    ItemEntity itemEntity = new ItemEntity(this.level(), maid.getX(), maid.getY() + 0.5, maid.getZ(), result);
+                    itemEntity.setDeltaMovement(0, 0.1, 0);
                     this.level.addFreshEntity(itemEntity);
-                    maid.level.addFreshEntity(new ExperienceOrb(maid.level(), maid.getX(), maid.getY() + 0.5D, maid.getZ() + 0.5D, this.random.nextInt(6) + 1));
+                    this.level.addFreshEntity(new ExperienceOrb(maid.level(), maid.getX(), maid.getY() + 0.5, maid.getZ(), this.random.nextInt(6) + 1));
                 }
                 rodDamage = 1;
             }
@@ -324,7 +327,7 @@ public class MaidFishingHook extends Projectile {
                 rodDamage = 2;
             }
             this.discard();
-            return rodDamage;
+            return event == null ? rodDamage : event.getRodDamage();
         } else {
             return 0;
         }
@@ -352,15 +355,15 @@ public class MaidFishingHook extends Projectile {
         this.updateOwnerInfo(this);
     }
 
-    private void updateOwnerInfo(@Nullable MaidFishingHook pFishingHook) {
-        EntityMaid maid = this.getPlayerOwner();
+    private void updateOwnerInfo(@Nullable MaidFishingHook fishingHook) {
+        EntityMaid maid = this.getMaidOwner();
         if (maid != null) {
-            maid.fishing = pFishingHook;
+            maid.fishing = fishingHook;
         }
     }
 
     @Nullable
-    public EntityMaid getPlayerOwner() {
+    public EntityMaid getMaidOwner() {
         Entity entity = this.getOwner();
         return entity instanceof EntityMaid ? (EntityMaid) entity : null;
     }
@@ -369,7 +372,8 @@ public class MaidFishingHook extends Projectile {
         ItemStack mainHandItem = maid.getMainHandItem();
         boolean hasFishingRod = mainHandItem.canPerformAction(ToolActions.FISHING_ROD_CAST);
         boolean isFishingTask = maid.getTask() instanceof TaskFishing;
-        if (!maid.isRemoved() && maid.isAlive() && isFishingTask && hasFishingRod && this.distanceToSqr(maid) < 512) {
+        boolean hasVehicle = maid.getVehicle() != null;
+        if (!maid.isRemoved() && maid.isAlive() && hasVehicle && isFishingTask && hasFishingRod && this.distanceToSqr(maid) < 256) {
             return false;
         } else {
             this.discard();
@@ -381,45 +385,6 @@ public class MaidFishingHook extends Projectile {
         HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if (hitResult.getType() == HitResult.Type.MISS || !ForgeEventFactory.onProjectileImpact(this, hitResult)) {
             this.onHit(hitResult);
-        }
-    }
-
-    private boolean calculateOpenWater(BlockPos blockPos) {
-        MaidFishingHook.OpenWaterType openWaterType = MaidFishingHook.OpenWaterType.INVALID;
-        for (int y = -1; y <= 2; ++y) {
-            MaidFishingHook.OpenWaterType openWaterTypeForArea = this.getOpenWaterTypeForArea(blockPos.offset(-2, y, -2), blockPos.offset(2, y, 2));
-            switch (openWaterTypeForArea) {
-                case INVALID:
-                    return false;
-                case ABOVE_WATER:
-                    if (openWaterType == MaidFishingHook.OpenWaterType.INVALID) {
-                        return false;
-                    }
-                    break;
-                case INSIDE_WATER:
-                    if (openWaterType == MaidFishingHook.OpenWaterType.ABOVE_WATER) {
-                        return false;
-                    }
-            }
-            openWaterType = openWaterTypeForArea;
-        }
-        return true;
-    }
-
-    private MaidFishingHook.OpenWaterType getOpenWaterTypeForArea(BlockPos firstPos, BlockPos secondPos) {
-        return BlockPos.betweenClosedStream(firstPos, secondPos)
-                .map(this::getOpenWaterTypeForBlock)
-                .reduce((waterType1, waterType2) -> waterType1 == waterType2 ? waterType1 : OpenWaterType.INVALID)
-                .orElse(MaidFishingHook.OpenWaterType.INVALID);
-    }
-
-    private MaidFishingHook.OpenWaterType getOpenWaterTypeForBlock(BlockPos blockPos) {
-        BlockState state = this.level.getBlockState(blockPos);
-        if (!state.isAir() && !state.is(Blocks.LILY_PAD)) {
-            FluidState fluidState = state.getFluidState();
-            return fluidState.is(FluidTags.WATER) && fluidState.isSource() && state.getCollisionShape(this.level(), blockPos).isEmpty() ? MaidFishingHook.OpenWaterType.INSIDE_WATER : MaidFishingHook.OpenWaterType.INVALID;
-        } else {
-            return MaidFishingHook.OpenWaterType.ABOVE_WATER;
         }
     }
 
@@ -445,7 +410,7 @@ public class MaidFishingHook extends Projectile {
     @Override
     public void recreateFromPacket(ClientboundAddEntityPacket packet) {
         super.recreateFromPacket(packet);
-        if (this.getPlayerOwner() == null) {
+        if (this.getMaidOwner() == null) {
             int dataId = packet.getData();
             TouhouLittleMaid.LOGGER.error("Failed to recreate fishing hook on client. {} (id: {}) is not a valid owner.", this.level.getEntity(dataId), dataId);
             this.kill();
@@ -455,11 +420,5 @@ public class MaidFishingHook extends Projectile {
     enum FishHookState {
         FLYING,
         BOBBING;
-    }
-
-    enum OpenWaterType {
-        ABOVE_WATER,
-        INSIDE_WATER,
-        INVALID;
     }
 }
