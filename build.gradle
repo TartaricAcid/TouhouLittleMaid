@@ -165,6 +165,8 @@ dependencies {
     implementation fg.deobf("maven.modrinth:simple-hats:1.20.1-0.3.2-forge")
     implementation fg.deobf("maven.modrinth:curios:5.9.1+1.20.1-forge")
 
+    implementation fg.deobf("maven.modrinth:torohealth-damage-indicators-updated:1.20.1-forge-1")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

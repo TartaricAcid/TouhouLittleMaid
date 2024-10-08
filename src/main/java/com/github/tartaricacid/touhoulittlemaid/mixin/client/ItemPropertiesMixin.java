@@ -12,10 +12,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 
+@SuppressWarnings("all")
 @Mixin(ItemProperties.class)
 public class ItemPropertiesMixin {
     @Inject(method = "lambda$static$18(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/multiplayer/ClientLevel;Lnet/minecraft/world/entity/LivingEntity;I)F", at = @At("HEAD"), cancellable = true)
-    private static void createEntityIgnoreException(ItemStack stack, @Nullable ClientLevel pLevel, @Nullable LivingEntity entity, int pSeed, CallbackInfoReturnable<Float> ci) {
+    private static void onItemRender(ItemStack stack, @Nullable ClientLevel pLevel, @Nullable LivingEntity entity, int pSeed, CallbackInfoReturnable<Float> ci) {
         if (entity instanceof EntityMaid maid && maid.getMainHandItem() == stack) {
             float result = maid.hasFishingHook() ? 1.0F : 0.0F;
             ci.setReturnValue(result);
