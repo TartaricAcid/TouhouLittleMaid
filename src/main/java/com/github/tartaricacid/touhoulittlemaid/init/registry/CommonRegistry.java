@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.data.TaskDataRegister;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
@@ -31,5 +32,6 @@ public final class CommonRegistry {
         MultiBlockManager.init();
         ChestManager.init();
         MaidMealManager.init();
+        TaskDataRegister.init();
     }
 }
