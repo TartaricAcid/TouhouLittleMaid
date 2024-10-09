@@ -167,7 +167,7 @@ dependencies {
 
     implementation fg.deobf("maven.modrinth:torohealth-damage-indicators-updated:1.20.1-forge-1")
 
-    runtimeOnly fg.deobf("curse.maven:aquaculture-60028:5585290")
+    implementation fg.deobf("curse.maven:aquaculture-60028:5585290")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
