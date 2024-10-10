@@ -276,7 +276,7 @@
   "chat_bubble.touhou_little_maid.inner.feed_animal.max_number": "So many animals... I don't feed them anymore!",
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "My hands were full of items... I couldn't eat!",
   "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty": "Hurry up, Hurry up, I don't have anything to eat!",
-  "chat_bubble.touhou_little_maid.inner.fishing.no_chair": "I have to sit on a chair to fish!",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "I have to sit on a chair or boat to fish!",
   "message.touhou_little_maid.missing_patchouli.title": "[TLM]",
   "message.touhou_little_maid.missing_patchouli.click_here": "Click Here To Install Patchouli Mod To Get The Manual",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",

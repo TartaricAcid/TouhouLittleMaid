@@ -10,13 +10,14 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
+import net.minecraft.world.entity.vehicle.Boat;
 
-public class MaidFindChairTask extends MaidCheckRateTask {
+public class MaidFindSitTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
     private final float speedModifier;
-    private EntityChair chairEntity = null;
+    private Entity sitEntity = null;
 
-    public MaidFindChairTask(float speedModifier) {
+    public MaidFindSitTask(float speedModifier) {
         super(ImmutableMap.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
         this.speedModifier = speedModifier;
@@ -30,23 +31,34 @@ public class MaidFindChairTask extends MaidCheckRateTask {
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
-        this.chairEntity = null;
+        this.sitEntity = null;
         this.getEntities(maid)
-                .find(e -> maid.isWithinRestriction(e.blockPosition()))
-                .filter(Entity::isAlive)
-                .filter(e -> e instanceof EntityChair chair && chair.getPassengers().isEmpty())
+                .find(e -> filterEntity(maid, e))
                 .findFirst()
-                .ifPresentOrElse(chairEntity -> {
-                    this.chairEntity = (EntityChair) chairEntity;
-                    BehaviorUtils.setWalkAndLookTargetMemories(maid, this.chairEntity, this.speedModifier, 0);
-                }, () -> ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.fishing.no_chair"));
+                .ifPresentOrElse(entity -> {
+                    this.sitEntity = entity;
+                    BehaviorUtils.setWalkAndLookTargetMemories(maid, this.sitEntity, this.speedModifier, 0);
+                }, () -> ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.fishing.no_sit"));
 
-        if (chairEntity != null && chairEntity.isAlive() && chairEntity.closerThan(maid, 2)) {
-            if (chairEntity.getPassengers().isEmpty()) {
-                maid.startRiding(this.chairEntity);
+        if (sitEntity != null && sitEntity.isAlive() && sitEntity.closerThan(maid, 2)) {
+            if (sitEntity.getPassengers().isEmpty()) {
+                maid.startRiding(this.sitEntity, true);
             }
-            this.chairEntity = null;
+            this.sitEntity = null;
         }
+    }
+
+    private boolean filterEntity(EntityMaid maid, Entity entity) {
+        if (!entity.isAlive()) {
+            return false;
+        }
+        if (!maid.isWithinRestriction(entity.blockPosition())) {
+            return false;
+        }
+        if (!entity.getPassengers().isEmpty()) {
+            return false;
+        }
+        return entity instanceof EntityChair || entity instanceof Boat;
     }
 
     private NearestVisibleLivingEntities getEntities(EntityMaid maid) {

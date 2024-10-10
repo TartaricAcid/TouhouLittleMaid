@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ride.MaidRideFindWaterTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFindChairTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFindSitTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.google.common.collect.Lists;
@@ -41,7 +41,7 @@ public class TaskFishing implements IMaidTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(5, new MaidFindChairTask(0.6f)));
+        return Lists.newArrayList(Pair.of(5, new MaidFindSitTask(0.6f)));
     }
 
     @Override

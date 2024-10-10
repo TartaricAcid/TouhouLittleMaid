@@ -62,6 +62,7 @@ public class MaidFishingHook extends Projectile {
     private int outOfWaterTime;
     private int life;
     private float fishAngle;
+    private boolean openWater = true;
     private MaidFishingHook.FishHookState currentState = MaidFishingHook.FishHookState.FLYING;
 
     protected MaidFishingHook(EntityType<? extends MaidFishingHook> entityType, Level level, int luck, int lureSpeed) {
@@ -160,6 +161,13 @@ public class MaidFishingHook extends Projectile {
                         bobbingY += Math.signum(bobbingY) * 0.1;
                     }
                     this.setDeltaMovement(movement.x * 0.9, movement.y - bobbingY * (double) this.random.nextFloat() * 0.2, movement.z * 0.9);
+
+                    // 开放水域检测，开放水域能够钓到宝藏
+                    if (this.nibble <= 0 && this.timeUntilHooked <= 0) {
+                        this.openWater = true;
+                    } else {
+                        this.openWater = this.openWater && this.outOfWaterTime < 10 && this.calculateOpenWater(blockPos);
+                    }
 
                     // 计算咬钩时的运动和其他逻辑
                     if (onWaterSurface) {
@@ -359,6 +367,50 @@ public class MaidFishingHook extends Projectile {
         rodItem.hurtAndBreak(rodDamage, maid, m -> maid.sendItemBreakMessage(rodItem));
     }
 
+    private boolean calculateOpenWater(BlockPos pos) {
+        MaidFishingHook.OpenWaterType openWaterType = MaidFishingHook.OpenWaterType.INVALID;
+        for (int y = -1; y <= 2; ++y) {
+            MaidFishingHook.OpenWaterType openWaterTypeForArea = this.getOpenWaterTypeForArea(pos.offset(-2, y, -2), pos.offset(2, y, 2));
+            switch (openWaterTypeForArea) {
+                case INVALID:
+                    return false;
+                case ABOVE_WATER:
+                    if (openWaterType == MaidFishingHook.OpenWaterType.INVALID) {
+                        return false;
+                    }
+                    break;
+                case INSIDE_WATER:
+                    if (openWaterType == MaidFishingHook.OpenWaterType.ABOVE_WATER) {
+                        return false;
+                    }
+            }
+            openWaterType = openWaterTypeForArea;
+        }
+        return true;
+    }
+
+    private MaidFishingHook.OpenWaterType getOpenWaterTypeForArea(BlockPos firstPos, BlockPos secondPos) {
+        return BlockPos.betweenClosedStream(firstPos, secondPos)
+                .map(this::getOpenWaterTypeForBlock)
+                .reduce((firstType, secondType) -> firstType == secondType ? firstType : OpenWaterType.INVALID)
+                .orElse(MaidFishingHook.OpenWaterType.INVALID);
+    }
+
+    private MaidFishingHook.OpenWaterType getOpenWaterTypeForBlock(BlockPos blockPos) {
+        BlockState blockState = this.level.getBlockState(blockPos);
+        if (!blockState.isAir() && !blockState.is(Blocks.LILY_PAD)) {
+            FluidState fluidState = blockState.getFluidState();
+            return fluidState.is(FluidTags.WATER) && fluidState.isSource()
+                   && blockState.getCollisionShape(this.level(), blockPos).isEmpty() ? MaidFishingHook.OpenWaterType.INSIDE_WATER : MaidFishingHook.OpenWaterType.INVALID;
+        } else {
+            return MaidFishingHook.OpenWaterType.ABOVE_WATER;
+        }
+    }
+
+    public boolean isOpenWaterFishing() {
+        return this.openWater;
+    }
+
     @Override
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.NONE;
@@ -446,5 +498,11 @@ public class MaidFishingHook extends Projectile {
     enum FishHookState {
         FLYING,
         BOBBING;
+    }
+
+    enum OpenWaterType {
+        ABOVE_WATER,
+        INSIDE_WATER,
+        INVALID;
     }
 }
