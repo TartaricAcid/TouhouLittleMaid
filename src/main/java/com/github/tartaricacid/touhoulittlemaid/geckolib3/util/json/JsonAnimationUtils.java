@@ -25,7 +25,10 @@ public class JsonAnimationUtils {
     private static Gson GSON = null;
 
     public static Set<Map.Entry<String, JsonElement>> getAnimations(JsonObject json) {
-        return json.getAsJsonObject("animations").entrySet();
+        if (json.has("animations")) {
+            return json.getAsJsonObject("animations").entrySet();
+        }
+        return ImmutableSet.of();
     }
 
     public static List<Map.Entry<String, JsonElement>> getBones(JsonObject json) {
