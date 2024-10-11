@@ -135,6 +135,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
         if (this.modelDirty || !this.state.compareState()) {
             this.state.updateState();
             this.modelDirty = false;
+            return true;
         }
         return false;
     }
