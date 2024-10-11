@@ -8,17 +8,30 @@ import com.teammetallurgy.aquaculture.api.fishing.Hook;
 import com.teammetallurgy.aquaculture.api.fishing.Hooks;
 import com.teammetallurgy.aquaculture.item.AquaFishingRodItem;
 import com.teammetallurgy.aquaculture.item.BaitItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 
 public class AquacultureFishingType implements IFishingType {
     @Override
     public boolean isFishingRod(ItemStack itemStack) {
         return itemStack.getItem() instanceof AquaFishingRodItem;
+    }
+
+    @Override
+    public boolean suitableFishingHook(EntityMaid maid, Level worldIn, ItemStack rod, BlockPos blockPos) {
+        FluidState fluidState = worldIn.getFluidState(blockPos);
+        if (fluidState.is(FluidTags.LAVA)) {
+            Hook hook = AquaFishingRodItem.getHookType(rod);
+            return hook.getFluids().contains(FluidTags.LAVA);
+        }
+        return fluidState.is(FluidTags.WATER);
     }
 
     @Override
@@ -41,6 +54,8 @@ public class AquacultureFishingType implements IFishingType {
         if (hook != Hooks.EMPTY && hook.getLuckModifier() > 0) {
             luck += hook.getLuckModifier();
         }
-        return new AquacultureFishingHook(maid, level, luck, lureSpeed, pos, hook, AquaFishingRodItem.getFishingLine(rod), AquaFishingRodItem.getBobber(rod), rod);
+        ItemStack fishingLine = AquaFishingRodItem.getFishingLine(rod);
+        ItemStack bobber = AquaFishingRodItem.getBobber(rod);
+        return new AquacultureFishingHook(maid, level, luck, lureSpeed, pos, hook, fishingLine, bobber, rod);
     }
 }

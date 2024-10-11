@@ -24,7 +24,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -35,11 +34,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -50,20 +47,20 @@ public class MaidFishingHook extends Projectile {
             .noSave().noSummon().sized(0.25F, 0.25F)
             .clientTrackingRange(4).updateInterval(5)
             .build("fishing_hook");
-    private static final EntityDataAccessor<Boolean> DATA_BITING = SynchedEntityData.defineId(MaidFishingHook.class, EntityDataSerializers.BOOLEAN);
-    private static final int MAX_OUT_OF_WATER_TIME = 10;
-    private final RandomSource syncronizedRandom = RandomSource.create();
-    private final int luck;
-    private final int lureSpeed;
-    private boolean biting;
-    private int nibble;
-    private int timeUntilLured;
-    private int timeUntilHooked;
-    private int outOfWaterTime;
-    private int life;
-    private float fishAngle;
-    private boolean openWater = true;
-    private MaidFishingHook.FishHookState currentState = MaidFishingHook.FishHookState.FLYING;
+    protected static final EntityDataAccessor<Boolean> DATA_BITING = SynchedEntityData.defineId(MaidFishingHook.class, EntityDataSerializers.BOOLEAN);
+    protected static final int MAX_OUT_OF_WATER_TIME = 10;
+    protected final RandomSource syncronizedRandom = RandomSource.create();
+    protected final int luck;
+    protected final int lureSpeed;
+    protected boolean biting;
+    protected int nibble;
+    protected int timeUntilLured;
+    protected int timeUntilHooked;
+    protected int outOfWaterTime;
+    protected int life;
+    protected float fishAngle;
+    protected boolean openWater = true;
+    protected MaidFishingHook.FishHookState currentState = MaidFishingHook.FishHookState.FLYING;
 
     protected MaidFishingHook(EntityType<? extends MaidFishingHook> entityType, Level level, int luck, int lureSpeed) {
         super(entityType, level);
@@ -118,90 +115,119 @@ public class MaidFishingHook extends Projectile {
         // 女仆为空，那么吊钩也不应当存在
         if (maid == null) {
             this.discard();
-        }
-        // 额外检查一下女仆是否满足条件
-        else if (this.level.isClientSide || !this.shouldStopFishing(maid)) {
+        } else if (this.level.isClientSide || !this.shouldStopFishing(maid)) {
+            if (this.lifeTick()) {
+                return;
+            }
             maid.getLookControl().setLookAt(this);
-            // 如果钓钩在地面，最多存在 100 tick 就消失
-            if (this.onGround()) {
-                ++this.life;
-                if (this.life >= 100) {
-                    this.discard();
-                    return;
-                }
-            } else {
-                this.life = 0;
-            }
-
-            // 获取水面高度
-            float fluidHeight = 0;
-            BlockPos blockPos = this.blockPosition();
-            FluidState fluidState = this.level.getFluidState(blockPos);
-            if (fluidState.is(FluidTags.WATER)) {
-                fluidHeight = fluidState.getHeight(this.level(), blockPos);
-            }
-
-            boolean onWaterSurface = fluidHeight > 0;
-            if (this.currentState == MaidFishingHook.FishHookState.FLYING) {
-                // 如果在水面，那么上下飘动即可
-                if (onWaterSurface) {
-                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.3D, 0.2D, 0.3D));
-                    this.currentState = MaidFishingHook.FishHookState.BOBBING;
-                    return;
-                }
-                // 否则，检查是否撞到方块
-                this.checkCollision();
-            } else {
-                // 如果已经处于上下飘动状态
-                if (this.currentState == MaidFishingHook.FishHookState.BOBBING) {
-                    // 继续上下飘动
-                    Vec3 movement = this.getDeltaMovement();
-                    double bobbingY = this.getY() + movement.y - (double) blockPos.getY() - (double) fluidHeight;
-                    if (Math.abs(bobbingY) < 0.01D) {
-                        bobbingY += Math.signum(bobbingY) * 0.1;
-                    }
-                    this.setDeltaMovement(movement.x * 0.9, movement.y - bobbingY * (double) this.random.nextFloat() * 0.2, movement.z * 0.9);
-
-                    // 开放水域检测，开放水域能够钓到宝藏
-                    if (this.nibble <= 0 && this.timeUntilHooked <= 0) {
-                        this.openWater = true;
-                    } else {
-                        this.openWater = this.openWater && this.outOfWaterTime < 10 && this.calculateOpenWater(blockPos);
-                    }
-
-                    // 计算咬钩时的运动和其他逻辑
-                    if (onWaterSurface) {
-                        this.outOfWaterTime = Math.max(0, this.outOfWaterTime - 1);
-                        if (this.biting) {
-                            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.1D * (double) this.syncronizedRandom.nextFloat() * (double) this.syncronizedRandom.nextFloat(), 0.0D));
-                        }
-                        // 咬钩！
-                        if (!this.level.isClientSide) {
-                            this.catchingFish(blockPos, (ServerLevel) this.level);
-                        }
-                    } else {
-                        this.outOfWaterTime = Math.min(MAX_OUT_OF_WATER_TIME, this.outOfWaterTime + 1);
-                    }
-                }
-            }
-
-            // 不在水面，那就下坠
-            if (!fluidState.is(FluidTags.WATER)) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.03D, 0.0D));
-            }
-
-            // 运动相关更新
-            this.move(MoverType.SELF, this.getDeltaMovement());
-            this.updateRotation();
-            if (this.currentState == MaidFishingHook.FishHookState.FLYING && (this.onGround() || this.horizontalCollision)) {
-                this.setDeltaMovement(Vec3.ZERO);
-            }
-            this.setDeltaMovement(this.getDeltaMovement().scale(0.92));
-            this.reapplyPosition();
+            this.fishingTick();
         }
     }
 
-    private void catchingFish(BlockPos pos, ServerLevel level) {
+    protected boolean lifeTick() {
+        if (this.onGround()) {
+            // 如果钓钩在地面，最多存在 100 tick 就消失
+            ++this.life;
+            if (this.life >= 100) {
+                this.discard();
+                return true;
+            }
+        } else {
+            this.life = 0;
+        }
+        return false;
+    }
+
+    protected void fishingTick() {
+        // 获取水面高度
+        BlockPos blockPos = this.blockPosition();
+        FluidState fluidState = this.level.getFluidState(blockPos);
+        float fluidHeight = this.getFluidHeight(fluidState, blockPos);
+        boolean onWaterSurface = fluidHeight > 0;
+
+        if (this.currentState == FishHookState.FLYING) {
+            // 如果在水面，那么上下飘动即可
+            if (onWaterSurface) {
+                this.waterSurfaceTick();
+                return;
+            }
+        } else {
+            // 如果已经处于上下飘动状态
+            if (this.currentState == FishHookState.BOBBING) {
+                // 继续上下飘动
+                this.bobbingTick(blockPos, fluidHeight);
+                // 开放水域检测，开放水域能够钓到宝藏
+                this.checkOpenWater(blockPos);
+                // 计算咬钩时的运动和其他逻辑
+                if (onWaterSurface) {
+                    this.bitingTick(blockPos);
+                } else {
+                    this.outOfWaterTime = Math.min(MAX_OUT_OF_WATER_TIME, this.outOfWaterTime + 1);
+                }
+            }
+        }
+
+        // 不在水面，那就下坠
+        this.fallTick(fluidState);
+
+        // 运动相关更新
+        this.move(MoverType.SELF, this.getDeltaMovement());
+        this.updateRotation();
+        if (this.currentState == FishHookState.FLYING && (this.onGround() || this.horizontalCollision)) {
+            this.setDeltaMovement(Vec3.ZERO);
+        }
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.92));
+        this.reapplyPosition();
+    }
+
+    protected void fallTick(FluidState fluidState) {
+        if (!fluidState.is(FluidTags.WATER)) {
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.03D, 0.0D));
+        }
+    }
+
+    protected void bitingTick(BlockPos blockPos) {
+        this.outOfWaterTime = Math.max(0, this.outOfWaterTime - 1);
+        if (this.biting) {
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.1D * (double) this.syncronizedRandom.nextFloat() * (double) this.syncronizedRandom.nextFloat(), 0.0D));
+        }
+        // 咬钩！
+        if (!this.level.isClientSide) {
+            this.catchingFish(blockPos, (ServerLevel) this.level);
+        }
+    }
+
+    protected void checkOpenWater(BlockPos blockPos) {
+        if (this.nibble <= 0 && this.timeUntilHooked <= 0) {
+            this.openWater = true;
+        } else {
+            this.openWater = this.openWater && this.outOfWaterTime < 10 && this.calculateOpenWater(blockPos);
+        }
+    }
+
+    protected float getFluidHeight(FluidState fluidState, BlockPos blockPos) {
+        float fluidHeight = 0;
+        if (fluidState.is(FluidTags.WATER)) {
+            fluidHeight = fluidState.getHeight(this.level(), blockPos);
+        }
+        return fluidHeight;
+    }
+
+    protected void waterSurfaceTick() {
+        this.setDeltaMovement(this.getDeltaMovement().multiply(0.3D, 0.2D, 0.3D));
+        this.currentState = FishHookState.BOBBING;
+    }
+
+    protected void bobbingTick(BlockPos blockPos, float fluidHeight) {
+        Vec3 movement = this.getDeltaMovement();
+        double bobbingY = this.getY() + movement.y - (double) blockPos.getY() - fluidHeight;
+        if (Math.abs(bobbingY) < 0.01D) {
+            bobbingY += Math.signum(bobbingY) * 0.1;
+        }
+        this.setDeltaMovement(movement.x * 0.9, movement.y - bobbingY * (double) this.random.nextFloat() * 0.2, movement.z * 0.9);
+    }
+
+    protected void catchingFish(BlockPos pos, ServerLevel level) {
         int time = 1;
         BlockPos abovePos = pos.above();
         // 如果下雨，随机加快钓鱼等待时间
@@ -215,17 +241,7 @@ public class MaidFishingHook extends Projectile {
         // 咬钩时间
         if (this.nibble > 0) {
             --this.nibble;
-            // 咬钩时间到了，收杆
-            EntityMaid maid = getMaidOwner();
-            int retrieveTime = Mth.nextInt(this.random, 2, 10);
-            // TODO：收杆应该有成功率，应该和好感度挂钩
-            if (this.nibble <= retrieveTime && maid != null) {
-                ItemStack rodItem = maid.getMainHandItem();
-                int rodDamage = this.retrieve(rodItem);
-                this.hurtRod(maid, rodItem, rodDamage);
-                maid.swing(InteractionHand.MAIN_HAND);
-                level.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
-            }
+            this.onNibble(level);
         }
         // 如果等待时间
         else if (this.timeUntilHooked > 0) {
@@ -240,24 +256,12 @@ public class MaidFishingHook extends Projectile {
                 double x = this.getX() + sin * this.timeUntilHooked * 0.1;
                 double y = Mth.floor(this.getY()) + 1.0;
                 double z = this.getZ() + cos * this.timeUntilHooked * 0.1;
-                // 随机给予钓鱼时出现的水花粒子
                 BlockState blockState = level.getBlockState(BlockPos.containing(x, y - 1.0, z));
-                if (blockState.is(Blocks.WATER)) {
-                    if (this.random.nextFloat() < 0.15F) {
-                        level.sendParticles(ParticleTypes.BUBBLE, x, y - 0.1, z, 1, sin, 0.1D, cos, 0.0D);
-                    }
-                    float sinOffset = sin * 0.04F;
-                    float cosOffset = cos * 0.04F;
-                    level.sendParticles(ParticleTypes.FISHING, x, y, z, 0, cosOffset, 0.01D, -sinOffset, 1.0D);
-                    level.sendParticles(ParticleTypes.FISHING, x, y, z, 0, -cosOffset, 0.01D, sinOffset, 1.0D);
-                }
+                // 随机给予钓鱼时出现的水花粒子
+                this.spawnFishingParticle(level, blockState, x, y, z, sin, cos);
             } else {
                 // 给予咬钩时的粒子效果和音效
-                this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
-                double yOffset = this.getY() + 0.5D;
-                float bbWidth = this.getBbWidth();
-                level.sendParticles(ParticleTypes.BUBBLE, this.getX(), yOffset, this.getZ(), (int) (1.0F + bbWidth * 20.0F), bbWidth, 0.0D, bbWidth, 0.2F);
-                level.sendParticles(ParticleTypes.FISHING, this.getX(), yOffset, this.getZ(), (int) (1.0F + bbWidth * 20.0F), bbWidth, 0.0D, bbWidth, 0.2F);
+                this.spawnNibbleParticle(level);
                 // 添加随机的咬钩时间
                 this.nibble = Mth.nextInt(this.random, 20, 40);
                 this.getEntityData().set(DATA_BITING, true);
@@ -282,9 +286,7 @@ public class MaidFishingHook extends Projectile {
                 double y = Mth.floor(this.getY()) + 1.0;
                 double z = this.getZ() + Mth.cos(randomRot) * randomNum * 0.1;
                 BlockState blockState = level.getBlockState(BlockPos.containing(x, y - 1.0, z));
-                if (blockState.is(Blocks.WATER)) {
-                    level.sendParticles(ParticleTypes.SPLASH, x, y, z, 2 + this.random.nextInt(2), 0.1F, 0.0D, 0.1F, 0.0D);
-                }
+                this.spawnSplashParticle(level, blockState, x, y, z);
             }
             // 饵钓时间到，开始随机赋予等待时间
             if (this.timeUntilLured <= 0) {
@@ -294,6 +296,46 @@ public class MaidFishingHook extends Projectile {
         } else {
             this.timeUntilLured = Mth.nextInt(this.random, 100, 600);
             this.timeUntilLured -= this.lureSpeed * 20 * 5;
+        }
+    }
+
+    protected void spawnSplashParticle(ServerLevel level, BlockState blockState, double x, double y, double z) {
+        if (blockState.is(Blocks.WATER)) {
+            level.sendParticles(ParticleTypes.SPLASH, x, y, z, 2 + this.random.nextInt(2), 0.1F, 0.0D, 0.1F, 0.0D);
+        }
+    }
+
+    protected void spawnNibbleParticle(ServerLevel level) {
+        double yOffset = this.getY() + 0.5D;
+        float bbWidth = this.getBbWidth();
+        this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+        level.sendParticles(ParticleTypes.BUBBLE, this.getX(), yOffset, this.getZ(), (int) (1.0F + bbWidth * 20.0F), bbWidth, 0.0D, bbWidth, 0.2F);
+        level.sendParticles(ParticleTypes.FISHING, this.getX(), yOffset, this.getZ(), (int) (1.0F + bbWidth * 20.0F), bbWidth, 0.0D, bbWidth, 0.2F);
+    }
+
+    protected void spawnFishingParticle(ServerLevel level, BlockState blockState, double x, double y, double z, float sin, float cos) {
+        if (blockState.is(Blocks.WATER)) {
+            if (this.random.nextFloat() < 0.15F) {
+                level.sendParticles(ParticleTypes.BUBBLE, x, y - 0.1, z, 1, sin, 0.1D, cos, 0.0D);
+            }
+            float sinOffset = sin * 0.04F;
+            float cosOffset = cos * 0.04F;
+            level.sendParticles(ParticleTypes.FISHING, x, y, z, 0, cosOffset, 0.01D, -sinOffset, 1.0D);
+            level.sendParticles(ParticleTypes.FISHING, x, y, z, 0, -cosOffset, 0.01D, sinOffset, 1.0D);
+        }
+    }
+
+    protected void onNibble(ServerLevel level) {
+        // 咬钩时间到了，收杆
+        EntityMaid maid = getMaidOwner();
+        int retrieveTime = Mth.nextInt(this.random, 2, 10);
+        // TODO：收杆应该有成功率，应该和好感度挂钩
+        if (this.nibble <= retrieveTime && maid != null) {
+            ItemStack rodItem = maid.getMainHandItem();
+            int rodDamage = this.retrieve(rodItem);
+            this.hurtRod(maid, rodItem, rodDamage);
+            maid.swing(InteractionHand.MAIN_HAND);
+            level.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         }
     }
 
@@ -459,13 +501,6 @@ public class MaidFishingHook extends Projectile {
         }
     }
 
-    private void checkCollision() {
-        HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-        if (hitResult.getType() == HitResult.Type.MISS || !ForgeEventFactory.onProjectileImpact(this, hitResult)) {
-            this.onHit(hitResult);
-        }
-    }
-
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
     }
@@ -495,12 +530,12 @@ public class MaidFishingHook extends Projectile {
         }
     }
 
-    enum FishHookState {
+    protected enum FishHookState {
         FLYING,
         BOBBING;
     }
 
-    enum OpenWaterType {
+    protected enum OpenWaterType {
         ABOVE_WATER,
         INSIDE_WATER,
         INVALID;

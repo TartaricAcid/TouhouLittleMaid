@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ride;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.fishing.IFishingType;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidCheckRateTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.fishing.FishingTypeManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -11,10 +12,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ToolActions;
 
 public class MaidRideFindWaterTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 100;
@@ -23,6 +21,7 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
     private final int searchRange;
 
     protected int verticalSearchStart;
+    private IFishingType fishingType = null;
     private BlockPos waterPos = null;
 
     public MaidRideFindWaterTask(int searchRange, int verticalSearchRange) {
@@ -39,20 +38,22 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
-        if (hasFishingRod(maid)) {
+        ItemStack mainHandItem = maid.getMainHandItem();
+        this.fishingType = FishingTypeManager.getFishingType(mainHandItem);
+
+        if (this.fishingType.isFishingRod(mainHandItem)) {
             if (waterPos == null) {
-                this.searchForDestination(worldIn, maid);
+                this.searchForDestination(worldIn, maid, mainHandItem);
                 return;
             }
-            if (!waterPosCheck(maid)) {
+            if (!posCheck(maid)) {
                 waterPos = null;
                 return;
             }
-            if (isWater(worldIn, waterPos)) {
-                ItemStack mainHandItem = maid.getMainHandItem();
+            if (this.fishingType.suitableFishingHook(maid, worldIn, mainHandItem, waterPos)) {
                 Vec3 centerPos = Vec3.atCenterOf(this.waterPos);
 
-                MaidFishingHook fishingHook = FishingTypeManager.getFishingTypes(maid, worldIn, mainHandItem, centerPos);
+                MaidFishingHook fishingHook = this.fishingType.getFishingHook(maid, worldIn, mainHandItem, centerPos);
                 worldIn.addFreshEntity(fishingHook);
 
                 worldIn.playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.getRandom().nextFloat() * 0.4F + 0.8F));
@@ -64,7 +65,7 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
         }
     }
 
-    protected final void searchForDestination(ServerLevel worldIn, EntityMaid maid) {
+    protected final void searchForDestination(ServerLevel worldIn, EntityMaid maid, ItemStack rod) {
         BlockPos centrePos = maid.getBrainSearchPos();
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
         for (int y = this.verticalSearchStart; y <= this.verticalSearchRange; y = y > 0 ? -y : 1 - y) {
@@ -73,7 +74,7 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
                 for (int x = 0; x <= i; x = x > 0 ? -x : 1 - x) {
                     for (int z = x < i && x > -i ? i : 0; z <= i; z = z > 0 ? -z : 1 - z) {
                         mutableBlockPos.setWithOffset(centrePos, x, y - 1, z);
-                        if (maid.isWithinRestriction(mutableBlockPos) && isWater(worldIn, mutableBlockPos)) {
+                        if (maid.isWithinRestriction(mutableBlockPos) && this.fishingType.suitableFishingHook(maid, worldIn, rod, mutableBlockPos)) {
                             maid.getLookControl().setLookAt(mutableBlockPos.getX(), mutableBlockPos.getY(), mutableBlockPos.getZ());
                             this.waterPos = mutableBlockPos;
                             this.setNextCheckTickCount(5);
@@ -85,17 +86,7 @@ public class MaidRideFindWaterTask extends MaidCheckRateTask {
         }
     }
 
-    private boolean hasFishingRod(EntityMaid entityMaid) {
-        ItemStack mainHandItem = entityMaid.getMainHandItem();
-        return mainHandItem.canPerformAction(ToolActions.FISHING_ROD_CAST);
-    }
-
-    private boolean isWater(ServerLevel worldIn, BlockPos basePos) {
-        BlockState blockState = worldIn.getBlockState(basePos);
-        return blockState.is(Blocks.WATER);
-    }
-
-    private boolean waterPosCheck(EntityMaid maid) {
+    private boolean posCheck(EntityMaid maid) {
         int distanceSqr = this.searchRange * this.searchRange;
         Vec3 waterVec = new Vec3(this.waterPos.getX(), this.waterPos.getY(), this.waterPos.getZ());
         return maid.distanceToSqr(waterVec) < distanceSqr && maid.isWithinRestriction(this.waterPos);

@@ -5,13 +5,20 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.MaidFishingHoo
 import com.teammetallurgy.aquaculture.api.fishing.Hook;
 import com.teammetallurgy.aquaculture.api.fishing.Hooks;
 import com.teammetallurgy.aquaculture.init.AquaItems;
+import com.teammetallurgy.aquaculture.init.AquaLootTables;
 import com.teammetallurgy.aquaculture.init.AquaSounds;
 import com.teammetallurgy.aquaculture.item.AquaFishingRodItem;
 import com.teammetallurgy.aquaculture.item.HookItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -19,7 +26,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.items.ItemStackHandler;
@@ -60,6 +71,57 @@ public class AquacultureFishingHook extends MaidFishingHook implements IEntityAd
     }
 
     @Override
+    protected float getFluidHeight(FluidState fluidState, BlockPos blockPos) {
+        if (this.isLavaHook() && fluidState.is(FluidTags.LAVA)) {
+            return fluidState.getHeight(this.level(), blockPos);
+        }
+        return super.getFluidHeight(fluidState, blockPos);
+    }
+
+    @Override
+    protected void fallTick(FluidState fluidState) {
+        if (this.isLavaHook() && !fluidState.is(FluidTags.LAVA)) {
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.03D, 0.0D));
+        } else {
+            super.fallTick(fluidState);
+        }
+    }
+
+    @Override
+    protected void spawnFishingParticle(ServerLevel level, BlockState blockState, double x, double y, double z, float sin, float cos) {
+        if (this.isLavaHook() && blockState.getFluidState().is(FluidTags.LAVA)) {
+            float sinOffset = sin * 0.04F;
+            float cosOffset = cos * 0.04F;
+            if (this.random.nextFloat() < 0.15F) {
+                level.sendParticles(ParticleTypes.LAVA, x, y - 0.1, z, 1, sin, 0.1D, cos, 0.0D);
+            }
+            level.sendParticles(ParticleTypes.SMOKE, x, y, z, 0, cosOffset, 0.01D, -sinOffset, 1.0D);
+            level.sendParticles(ParticleTypes.SMOKE, x, y, z, 0, -cosOffset, 0.01D, sinOffset, 1.0D);
+        } else {
+            super.spawnFishingParticle(level, blockState, x, y, z, sin, cos);
+        }
+        EntityMaid maidOwner = this.getMaidOwner();
+        if (this.hasHook() && this.hook.getCatchSound() != null && maidOwner != null) {
+            this.level.playSound(null, maidOwner.blockPosition(), this.hook.getCatchSound(), this.getSoundSource(), 0.1F, 0.1F);
+        }
+    }
+
+    @Override
+    protected void spawnNibbleParticle(ServerLevel level) {
+        if (level.getFluidState(this.blockPosition()).is(FluidTags.WATER)) {
+            super.spawnNibbleParticle(level);
+        } else if (level.getFluidState(this.blockPosition()).is(FluidTags.LAVA)) {
+            Vec3 motion = this.getDeltaMovement();
+            double boundingBox = this.getBoundingBox().minY + 0.5D;
+            float bbWidth = this.getBbWidth();
+
+            this.setDeltaMovement(motion.x, (-0.4F * Mth.nextFloat(this.random, 0.6F, 1.0F)), motion.z);
+            this.playSound(AquaSounds.BOBBER_LAND_IN_LAVA.get(), 1.00F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+            level.sendParticles(ParticleTypes.LAVA, this.getX(), boundingBox, this.getZ(), (int) (1.0F + bbWidth * 20.0F), bbWidth, 0.0D, bbWidth, 0.2D);
+        }
+    }
+
+    @Override
     protected void addExtraLoot(List<ItemStack> randomItems) {
         // 如果空军，那么添加一些东西
         if (randomItems.isEmpty()) {
@@ -75,17 +137,32 @@ public class AquacultureFishingHook extends MaidFishingHook implements IEntityAd
 
     @Override
     protected @NotNull List<ItemStack> getLoot(MinecraftServer server, LootParams lootParams) {
-        List<ItemStack> loot = super.getLoot(server, lootParams);
+        List<ItemStack> loot = this.getAquaLoot(server, lootParams);
 
         // 如果双倍钓钩
         if (this.hasHook() && this.hook.getDoubleCatchChance() > 0) {
             if (this.random.nextDouble() <= this.hook.getDoubleCatchChance()) {
-                List<ItemStack> doubleLoot = super.getLoot(server, lootParams);
+                List<ItemStack> doubleLoot = this.getAquaLoot(server, lootParams);
                 loot.addAll(doubleLoot);
             }
         }
 
         return loot;
+    }
+
+    private List<ItemStack> getAquaLoot(MinecraftServer server, LootParams lootParams) {
+        ResourceLocation lootTableLocation;
+        if (this.isLavaHook() && this.level.getFluidState(this.blockPosition()).is(FluidTags.LAVA)) {
+            if (this.level.dimensionType().hasCeiling()) {
+                lootTableLocation = AquaLootTables.NETHER_FISHING;
+            } else {
+                lootTableLocation = AquaLootTables.LAVA_FISHING;
+            }
+        } else {
+            lootTableLocation = BuiltInLootTables.FISHING;
+        }
+        LootTable lootTable = server.getLootData().getLootTable(lootTableLocation);
+        return lootTable.getRandomItems(lootParams);
     }
 
     @Override
@@ -116,6 +193,10 @@ public class AquacultureFishingHook extends MaidFishingHook implements IEntityAd
         }
     }
 
+    protected boolean isLavaHook() {
+        return this.hasHook() && this.hook.getFluids().contains(FluidTags.LAVA);
+    }
+
     public boolean hasHook() {
         return this.hook != Hooks.EMPTY;
     }
@@ -136,6 +217,18 @@ public class AquacultureFishingHook extends MaidFishingHook implements IEntityAd
     @Nonnull
     public ItemStack getFishingLine() {
         return this.fishingLine;
+    }
+
+    @Override
+    public void lavaHurt() {
+        if (!this.isLavaHook()) {
+            super.lavaHurt();
+        }
+    }
+
+    @Override
+    public boolean displayFireAnimation() {
+        return (this.hasHook() && !this.hook.getFluids().contains(FluidTags.LAVA)) && super.displayFireAnimation();
     }
 
     @Override
