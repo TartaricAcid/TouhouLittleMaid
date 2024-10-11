@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.compat.aquaculture.AquacultureCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
@@ -28,6 +29,8 @@ public final class TouhouLittleMaid {
         initRegister(modEventBus);
         ChatBubbleManger.initDefaultChat();
         registerConfiguration(modContainer);
+
+        AquacultureCompat.init(modEventBus);
     }
 
     private static void initRegister(IEventBus eventBus) {

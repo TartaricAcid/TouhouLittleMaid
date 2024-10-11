@@ -177,6 +177,7 @@ dependencies {
     runtimeOnly "maven.modrinth:kotlin-for-forge:5.4.0"
     runtimeOnly "maven.modrinth:libipn:neoforge-1.21-6.0.2"
     implementation "maven.modrinth:inventory-profiles-next:neoforge-1.21-2.0.4"
+    implementation "curse.maven:aquaculture-60028:5713551"
 }
 
 // 用于 neoforge.mods 里替换那一堆 ${xxxx}

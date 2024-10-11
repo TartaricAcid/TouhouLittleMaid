@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.data.TaskDataRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
@@ -61,6 +62,14 @@ public interface ILittleMaid {
      * @param manager 注册器
      */
     default void addMaidMeal(MaidMealManager manager) {
+    }
+
+    /**
+     * 注册任务数据，任务数据是一种可以自定义添加到女仆上的数据
+     *
+     * @param register 注册器
+     */
+    default void registerTaskData(TaskDataRegister register) {
     }
 
     /**
