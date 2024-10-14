@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.PicnicBasketContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.PicnicBasketContainer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

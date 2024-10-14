@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.PicnicBasketRender;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.PicnicBasketContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.PicnicBasketContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemContainerTooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;

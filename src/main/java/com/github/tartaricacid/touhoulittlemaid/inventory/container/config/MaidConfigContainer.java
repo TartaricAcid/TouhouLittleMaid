@@ -1,5 +1,6 @@
-package com.github.tartaricacid.touhoulittlemaid.inventory.container;
+package com.github.tartaricacid.touhoulittlemaid.inventory.container.config;
 
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;

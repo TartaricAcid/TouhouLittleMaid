@@ -2,7 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.TabIndex;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.TaskConfigContainer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,6 +46,10 @@ public class MaidTaskMessage {
                         return;
                     }
                     maid.setTask(task);
+                    // 如果此时玩家打开的是配置界面
+                    if (sender.containerMenu instanceof TaskConfigContainer) {
+                        maid.openMaidGui(sender, TabIndex.TASK_CONFIG);
+                    }
                 }
             });
         }

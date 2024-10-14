@@ -1,14 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.MaidConfigContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.*;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.task.DefaultMaidTaskConfigContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.config.MaidConfigContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.task.DefaultMaidTaskConfigGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.PicnicBasketContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.WirelessIOContainerGui;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.PicnicBasketContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.*;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.PicnicBasketContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.DefaultMaidTaskConfigContainer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,6 +33,6 @@ public final class InitContainerGui {
         evt.enqueueWork(() -> MenuScreens.register(WirelessIOContainer.TYPE, WirelessIOContainerGui::new));
         evt.enqueueWork(() -> MenuScreens.register(PicnicBasketContainer.TYPE, PicnicBasketContainerScreen::new));
 
-        evt.enqueueWork(() -> MenuScreens.register(DefaultMaidTaskConfigContainer.TYPE, DefaultMaidTaskConfigContainerGui::new));
+        evt.enqueueWork(() -> MenuScreens.register(DefaultMaidTaskConfigContainer.TYPE, DefaultMaidTaskConfigGui::new));
     }
 }

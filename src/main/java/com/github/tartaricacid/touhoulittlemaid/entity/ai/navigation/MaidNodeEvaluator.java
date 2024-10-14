@@ -1,7 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
@@ -16,7 +19,7 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
         return getMaidBlockPathTypeStatic(level, new BlockPos.MutableBlockPos(pX, pY, pZ));
     }
 
-    private static BlockPathTypes getMaidBlockPathTypeStatic(BlockGetter level, BlockPos.MutableBlockPos pos) {
+    private BlockPathTypes getMaidBlockPathTypeStatic(BlockGetter level, BlockPos.MutableBlockPos pos) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -58,7 +61,7 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
         return type;
     }
 
-    private static BlockPathTypes getMaidBlockPathTypeRaw(BlockGetter level, BlockPos pos) {
+    private BlockPathTypes getMaidBlockPathTypeRaw(BlockGetter level, BlockPos pos) {
         BlockState blockState = level.getBlockState(pos);
         BlockPathTypes pathType = blockState.getBlockPathType(level, pos, null);
         if (pathType != null) {
@@ -66,9 +69,23 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
         } else if (blockState.isAir()) {
             return BlockPathTypes.OPEN;
         } else if (blockState.getBlock() instanceof FenceGateBlock) {
-            return blockState.getValue(FenceGateBlock.OPEN) ? BlockPathTypes.DOOR_OPEN : BlockPathTypes.DOOR_WOOD_CLOSED;
+            pathType = blockState.getValue(FenceGateBlock.OPEN) ? BlockPathTypes.DOOR_OPEN : BlockPathTypes.DOOR_WOOD_CLOSED;
         } else {
-            return WalkNodeEvaluator.getBlockPathTypeRaw(level, pos);
+            pathType = WalkNodeEvaluator.getBlockPathTypeRaw(level, pos);
         }
+        if (pathType == BlockPathTypes.DOOR_WOOD_CLOSED && this.mob instanceof EntityMaid maid && !this.canOpenDoor(blockState.getBlock(), maid)) {
+            pathType = BlockPathTypes.DOOR_IRON_CLOSED;
+        }
+        return pathType;
+    }
+
+    private boolean canOpenDoor(Block block, EntityMaid maid) {
+        if (block instanceof DoorBlock) {
+            return maid.getConfigManager().isOpenDoor();
+        }
+        if (block instanceof FenceGateBlock) {
+            return maid.getConfigManager().isOpenFenceGate();
+        }
+        return true;
     }
 }

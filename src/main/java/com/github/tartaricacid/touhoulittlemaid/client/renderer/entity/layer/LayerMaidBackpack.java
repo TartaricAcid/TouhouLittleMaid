@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -41,7 +40,7 @@ public class LayerMaidBackpack extends RenderLayer<Mob, BedrockModel<Mob>> {
         } else {
             poseStack.translate(0, -0.5, 0.25);
         }
-        IMaidBackpack type = InGameMaidConfig.INSTANCE.isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
+        IMaidBackpack type = maid.getConfigManager().isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
         BackpackManager.findBackpackModel(type.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
     }
 }

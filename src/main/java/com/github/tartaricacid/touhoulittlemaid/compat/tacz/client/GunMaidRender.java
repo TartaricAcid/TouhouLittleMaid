@@ -2,8 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.compat.tacz.client;
 
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -39,7 +39,7 @@ public class GunMaidRender {
         matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         matrixStack.translate(0, 0.5, -0.25);
-        if (InGameMaidConfig.INSTANCE.isShowBackpack()) {
+        if (maid instanceof EntityMaid entityMaid && entityMaid.getConfigManager().isShowBackpack()) {
             maid.getMaidBackpackType().offsetBackpackItem(matrixStack);
         } else {
             BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);
@@ -65,7 +65,7 @@ public class GunMaidRender {
         IMaidBackpack maidBackpackType = maid.getMaidBackpackType();
         // 如果女仆穿戴了背包，且配置文件允许显示背包
         // 直接调用背包渲染
-        if (InGameMaidConfig.INSTANCE.isShowBackpack() && maidBackpackType != BackpackManager.getEmptyBackpack()) {
+        if (entity instanceof EntityMaid entityMaid && entityMaid.getConfigManager().isShowBackpack() && maidBackpackType != BackpackManager.getEmptyBackpack()) {
             if (!geoModel.backpackBones().isEmpty()) {
                 RenderUtils.prepMatrixForLocator(poseStack, geoModel.backpackBones());
             }

@@ -6,8 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -36,7 +36,10 @@ public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, G
             return;
         }
         ItemStack stack = maid.getBackpackShowItem();
-        if (!this.entityRenderer.getAnimatableEntity(entity).getMaidInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || entity.isSleeping() || entity.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+        if (!this.entityRenderer.getAnimatableEntity(entity).getMaidInfo().isShowBackpack() || entity.isSleeping() || entity.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+            return;
+        }
+        if (entity instanceof EntityMaid entityMaid && !entityMaid.getConfigManager().isShowBackItem()) {
             return;
         }
         if (stack.getItem() instanceof Vanishable) {
@@ -49,7 +52,7 @@ public class GeckoLayerMaidBackItem<T extends Mob> extends GeoLayerRenderer<T, G
 
             matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             matrixStack.translate(0, 0.5, -0.25);
-            if (InGameMaidConfig.INSTANCE.isShowBackpack()) {
+            if (entity instanceof EntityMaid entityMaid && entityMaid.getConfigManager().isShowBackpack()) {
                 maid.getMaidBackpackType().offsetBackpackItem(matrixStack);
             } else {
                 BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);

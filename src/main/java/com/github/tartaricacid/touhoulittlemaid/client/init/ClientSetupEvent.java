@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.event.ShowOptifineScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.BroomTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.compat.simplehats.SimpleHatsCompat;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,7 +20,6 @@ public class ClientSetupEvent {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(AnimationRegister::registerAnimationState);
         event.enqueueWork(AnimationRegister::registerVariables);
-        event.enqueueWork(InGameMaidConfig::read);
         event.enqueueWork(MaidTipsOverlay::init);
         event.enqueueWork(ShowOptifineScreen::checkOptifineIsLoaded);
 

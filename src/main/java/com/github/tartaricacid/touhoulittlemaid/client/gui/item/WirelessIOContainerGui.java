@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.item;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.WirelessIOButton;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemWirelessIO;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.WirelessIOGuiMessage;

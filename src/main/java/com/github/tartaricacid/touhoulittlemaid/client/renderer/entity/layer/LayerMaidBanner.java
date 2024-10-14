@@ -5,7 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBannerModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -47,7 +47,10 @@ public class LayerMaidBanner extends RenderLayer<Mob, BedrockModel<Mob>> {
         }
         ItemStack stack = maid.getBackpackShowItem();
         if (stack.getItem() instanceof BannerItem bannerItem) {
-            if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || mob.isSleeping() || mob.isInvisible()) {
+            if (!renderer.getMainInfo().isShowBackpack() || mob.isSleeping() || mob.isInvisible()) {
+                return;
+            }
+            if (maid instanceof EntityMaid entityMaid && !entityMaid.getConfigManager().isShowBackItem()) {
                 return;
             }
             matrixStack.pushPose();

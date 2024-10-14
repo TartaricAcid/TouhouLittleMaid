@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.inventory.container;
+package com.github.tartaricacid.touhoulittlemaid.inventory.container.other;
 
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemPicnicBasket;

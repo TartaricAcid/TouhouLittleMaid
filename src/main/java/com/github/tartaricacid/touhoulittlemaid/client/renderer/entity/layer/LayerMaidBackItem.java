@@ -7,8 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -35,8 +35,11 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
             return;
         }
         ItemStack stack = maid.getBackpackShowItem();
-        if (!renderer.getMainInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem()
-            || mob.isSleeping() || mob.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+        if (!renderer.getMainInfo().isShowBackpack() || mob.isSleeping()
+            || mob.isInvisible() || RenderFixer.isCarryOnRender(stack, bufferIn)) {
+            return;
+        }
+        if (maid instanceof EntityMaid entityMaid && !entityMaid.getConfigManager().isShowBackItem()) {
             return;
         }
 
@@ -45,7 +48,7 @@ public class LayerMaidBackItem extends RenderLayer<Mob, BedrockModel<Mob>> {
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             matrixStack.translate(0, 0.5, -0.25);
-            if (InGameMaidConfig.INSTANCE.isShowBackpack()) {
+            if (maid instanceof EntityMaid entityMaid && entityMaid.getConfigManager().isShowBackpack()) {
                 maid.getMaidBackpackType().offsetBackpackItem(matrixStack);
             } else {
                 BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);

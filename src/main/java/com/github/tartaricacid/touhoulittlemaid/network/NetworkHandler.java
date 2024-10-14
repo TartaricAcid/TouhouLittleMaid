@@ -86,7 +86,7 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(30, SetMonsterListMessage.class, SetMonsterListMessage::encode, SetMonsterListMessage::decode, SetMonsterListMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
-        CHANNEL.registerMessage(31, ToggleSideTabMessage.class, ToggleSideTabMessage::encode, ToggleSideTabMessage::decode, ToggleSideTabMessage::handle,
+        CHANNEL.registerMessage(31, MaidSubConfigMessage.class, MaidSubConfigMessage::encode, MaidSubConfigMessage::decode, MaidSubConfigMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(32, RefreshMaidBrainMessage.class, RefreshMaidBrainMessage::encode, RefreshMaidBrainMessage::decode, RefreshMaidBrainMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));

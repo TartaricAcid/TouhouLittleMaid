@@ -4,7 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.MaidBannerModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
@@ -44,7 +44,10 @@ public class GeckoLayerMaidBanner<T extends Mob> extends GeoLayerRenderer<T, Gec
             return;
         }
         if (maid.getBackpackShowItem().getItem() instanceof BannerItem bannerItem) {
-            if (!this.entityRenderer.getAnimatableEntity(entity).getMaidInfo().isShowBackpack() || !InGameMaidConfig.INSTANCE.isShowBackItem() || entity.isSleeping() || entity.isInvisible()) {
+            if (!this.entityRenderer.getAnimatableEntity(entity).getMaidInfo().isShowBackpack() || entity.isSleeping() || entity.isInvisible()) {
+                return;
+            }
+            if (entity instanceof EntityMaid entityMaid && !entityMaid.getConfigManager().isShowBackItem()) {
                 return;
             }
             AnimatedGeoModel geoModel = this.entityRenderer.getAnimatableEntity(entity).getCurrentModel();

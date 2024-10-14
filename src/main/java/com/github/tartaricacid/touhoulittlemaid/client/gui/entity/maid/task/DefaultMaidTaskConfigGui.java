@@ -13,8 +13,8 @@ import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
 @IPNGuiHint(button = IPNButton.SORT_ROWS, horizontalOffset = -12, bottom = -36)
 @IPNGuiHint(button = IPNButton.SHOW_EDITOR, horizontalOffset = -5)
 @IPNGuiHint(button = IPNButton.SETTINGS, horizontalOffset = -5)
-public class DefaultMaidTaskConfigContainerGui extends MaidTaskConfigGui<TaskConfigContainer> {
-    public DefaultMaidTaskConfigContainerGui(TaskConfigContainer screenContainer, Inventory inv, Component titleIn) {
+public class DefaultMaidTaskConfigGui extends MaidTaskConfigGui<TaskConfigContainer> {
+    public DefaultMaidTaskConfigGui(TaskConfigContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
 }
