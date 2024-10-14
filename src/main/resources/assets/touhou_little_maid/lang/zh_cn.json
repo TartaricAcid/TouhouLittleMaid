@@ -1,6 +1,6 @@
 {
   "entity.touhou_little_maid.chair": "椅子",
-  "entity.touhou_little_maid.maid": "女仆",
+  "entity.touhou_little_maid.maid": "小女仆",
   "entity.touhou_little_maid.fairy": "女仆妖精",
   "entity.touhou_little_maid.danmaku": "弹幕",
   "entity.touhou_little_maid.box": "蛋糕盒",
@@ -444,7 +444,7 @@
   "task.touhou_little_maid.snow": "清雪",
   "task.touhou_little_maid.feed": "喂食",
   "task.touhou_little_maid.shears": "剪刀",
-  "task.touhou_little_maid.milk": "挤奶",
+  "task.touhou_little_maid.milk": "牛奶",
   "task.touhou_little_maid.torch": "火把",
   "task.touhou_little_maid.feed_animal": "繁殖动物",
   "task.touhou_little_maid.extinguishing": "灭火",
