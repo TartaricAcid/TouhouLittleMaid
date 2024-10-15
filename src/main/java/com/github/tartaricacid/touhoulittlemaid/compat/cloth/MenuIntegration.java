@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.cloth;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.client.AddClothConfigEvent;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +33,7 @@ public class MenuIntegration {
         chairConfig(root, entryBuilder);
         miscConfig(root, entryBuilder);
         vanillaConfig(root, entryBuilder);
+        NeoForge.EVENT_BUS.post(new AddClothConfigEvent(root, entryBuilder));
         return root;
     }
 

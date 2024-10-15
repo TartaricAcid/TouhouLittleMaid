@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
@@ -43,6 +44,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         this.addLayer(new LayerMaidBackpack(this, manager.getModelSet()));
         this.addLayer(new LayerMaidBackItem(this));
         this.addLayer(new LayerMaidBanner(this, manager.getModelSet()));
+        this.addAdditionMaidLayer(manager);
         this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer<>(manager);
     }
 
@@ -123,5 +125,11 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
     public EntityRenderDispatcher getDispatcher() {
         return this.entityRenderDispatcher;
+    }
+
+    private void addAdditionMaidLayer(EntityRendererProvider.Context renderManager) {
+        for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
+            littleMaid.addAdditionMaidLayer(this, renderManager);
+        }
     }
 }

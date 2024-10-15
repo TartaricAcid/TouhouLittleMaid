@@ -46,6 +46,8 @@ public class NetworkHandler {
         registrar.playToClient(SyncMaidAreaPackage.TYPE, SyncMaidAreaPackage.STREAM_CODEC, SyncMaidAreaPackage::handle);
         registrar.playToServer(ServantBellSetPackage.TYPE, ServantBellSetPackage.STREAM_CODEC, ServantBellSetPackage::handle);
         registrar.playToServer(SetMonsterListMessage.TYPE, SetMonsterListMessage.STREAM_CODEC, SetMonsterListMessage::handle);
+        registrar.playToServer(ToggleSideTabPackage.TYPE, ToggleSideTabPackage.STREAM_CODEC, ToggleSideTabPackage::handle);
+        registrar.playToServer(RefreshMaidBrainPackage.TYPE, RefreshMaidBrainPackage.STREAM_CODEC, RefreshMaidBrainPackage::handle);
     }
 
     public static void sendToNearby(Entity entity, CustomPacketPayload toSend) {

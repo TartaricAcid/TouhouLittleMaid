@@ -17,7 +17,7 @@ public class MaidClearHurtTask extends Behavior<EntityMaid> {
         if (MaidPanicTask.isAttack(maid) || !hurtOrHostile) {
             maid.getBrain().eraseMemory(MemoryModuleType.HURT_BY);
             maid.getBrain().eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
-            maid.getBrain().updateActivityFromSchedule(worldIn.getDayTime(), worldIn.getGameTime());
+            MaidUpdateActivityFromSchedule.updateActivityFromSchedule(maid);
         }
     }
 }

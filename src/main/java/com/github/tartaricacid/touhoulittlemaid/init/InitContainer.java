@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigCo
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.PicnicBasketContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.*;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.DefaultMaidTaskConfigContainer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -26,4 +27,5 @@ public final class InitContainer {
     public static final Supplier<MenuType<MaidConfigContainer>> MAID_CONFIG_CONTAINER = CONTAINER_TYPE.register("maid_config_container", () -> MaidConfigContainer.TYPE);
     public static final Supplier<MenuType<WirelessIOContainer>> WIRELESS_IO_CONTAINER = CONTAINER_TYPE.register("wireless_io_container", () -> WirelessIOContainer.TYPE);
     public static final Supplier<MenuType<PicnicBasketContainer>> PICNIC_BASKET_CONTAINER = CONTAINER_TYPE.register("picnic_basket_container", () -> PicnicBasketContainer.TYPE);
+    public static final Supplier<MenuType<DefaultMaidTaskConfigContainer>> DEFAULT_MAIK_TASK_CONFIG = CONTAINER_TYPE.register("default_maid_task_config_container", () -> DefaultMaidTaskConfigContainer.TYPE);
 }

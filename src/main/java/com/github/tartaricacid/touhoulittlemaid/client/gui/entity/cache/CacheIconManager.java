@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidMode
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -42,31 +43,31 @@ public final class CacheIconManager {
 
     public static void openMaidModelGui(EntityMaid maid) {
         MaidModelGui maidModelGui = new MaidModelGui(maid);
-        if (MAID_CACHE_QUEUE.isEmpty()) {
-            Minecraft.getInstance().setScreen(maidModelGui);
-        } else {
+        if (MiscConfig.MODEL_ICON_CACHE.get() && !MAID_CACHE_QUEUE.isEmpty()) {
             var maidCacheScreen = getMaidCacheScreen(maidModelGui);
             Minecraft.getInstance().setScreen(maidCacheScreen);
+        } else {
+            Minecraft.getInstance().setScreen(maidModelGui);
         }
     }
 
     public static void openChairModelGui(EntityChair chair) {
         ChairModelGui chairModelGui = new ChairModelGui(chair);
-        if (CHAIR_CACHE_QUEUE.isEmpty()) {
-            Minecraft.getInstance().setScreen(chairModelGui);
-        } else {
+        if (MiscConfig.MODEL_ICON_CACHE.get() && !CHAIR_CACHE_QUEUE.isEmpty()) {
             var chairCacheScreen = getChairCacheScreen(chairModelGui);
             Minecraft.getInstance().setScreen(chairCacheScreen);
+        } else {
+            Minecraft.getInstance().setScreen(chairModelGui);
         }
     }
 
     public static void openModelSwitcherModelGui(EntityMaid maid, TileEntityModelSwitcher.ModeInfo info, ModelSwitcherGui modelSwitcherGui) {
         ModelSwitcherModelGui switcherModelGui = new ModelSwitcherModelGui(maid, info, modelSwitcherGui);
-        if (MAID_CACHE_QUEUE.isEmpty()) {
-            Minecraft.getInstance().setScreen(switcherModelGui);
-        } else {
+        if (MiscConfig.MODEL_ICON_CACHE.get() && !MAID_CACHE_QUEUE.isEmpty()) {
             var maidCacheScreen = getMaidCacheScreen(switcherModelGui);
             Minecraft.getInstance().setScreen(maidCacheScreen);
+        } else {
+            Minecraft.getInstance().setScreen(switcherModelGui);
         }
     }
 
@@ -84,13 +85,13 @@ public final class CacheIconManager {
             InventoryScreen.renderEntityInInventoryFollowsMouse(
                     graphics,
                     posX,
-                    posY,
+                    posY - 3,
                     posX + scaleModified,
-                    posY + yOffset,
-                    (int) (half * modelInfo.getRenderItemScale() * 0.9),
+                    posY + yOffset - 3,
+                    (int) (half * modelInfo.getRenderItemScale()),
                     0.1F,
-                    posX + half + 20,
-                    posY + yOffset / 2f + 5,
+                    posX + half + 25,
+                    posY + yOffset / 2f + 15,
                     maid);
         });
     }

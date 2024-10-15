@@ -22,6 +22,7 @@ public final class MiscConfig {
     public static ModConfigSpec.BooleanValue CLOSE_OPTIFINE_WARNING;
     public static ModConfigSpec.IntValue SCARECROW_RANGE;
     public static ModConfigSpec.BooleanValue USE_NEW_MAID_FAIRY_MODEL;
+    public static ModConfigSpec.BooleanValue MODEL_ICON_CACHE;
 
     public static void init(ModConfigSpec.Builder builder) {
         builder.translation(TRANSLATE_KEY).push("misc");
@@ -75,6 +76,9 @@ public final class MiscConfig {
         builder.comment("Whether to use the new version of the Fairy Maid model")
                 .translation(translateKey("use_new_maid_fairy_model"));
         USE_NEW_MAID_FAIRY_MODEL = builder.define("UseNewMaidFairyModel", true);
+
+        builder.comment("Whether to enable model icon caching");
+        MODEL_ICON_CACHE = builder.define("ModelIconCache", true);
 
         builder.pop();
     }

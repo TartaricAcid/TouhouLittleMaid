@@ -38,7 +38,7 @@ public class ConditionArmor {
             if (!isValidResourceLocation(id)) {
                 return;
             }
-            ResourceLocation res = ResourceLocation.withDefaultNamespace(id);
+            ResourceLocation res = ResourceLocation.parse(id);
             if (idTest.containsKey(type)) {
                 idTest.get(type).add(res);
             } else {
@@ -59,7 +59,7 @@ public class ConditionArmor {
             }
             TagKey<Item> tagKey = TagKey.create(
                     Registries.ITEM,
-                    ResourceLocation.withDefaultNamespace(id)
+                    ResourceLocation.parse(id)
             );
             if (tagTest.containsKey(type)) {
                 tagTest.get(type).add(tagKey);

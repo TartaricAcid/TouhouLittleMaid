@@ -4,11 +4,12 @@
   "package": "com.github.tartaricacid.touhoulittlemaid.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "touhou_little_maid.refmap.json",
-  "mixins": ["EntityMixin", "FenceGateBlockAccessor", "MixinArrowEntity", "MixinStructureTemplate"],
+  "mixins": [
+    "EntityMixin", "FenceGateBlockAccessor", "FishingHookPredicateMixin", "MixinArrowEntity", "MixinStructureTemplate"
+  ],
   "client": [
-    "client.HumanoidModelMixin",
-    "client.LanguageMixin",
-    "client.LivingEntityRendererMixin"
+    "client.HumanoidModelMixin", "client.ItemPropertiesMixin", "client.LanguageMixin",
+    "client.LivingEntityRendererMixin", "client.RenderSystemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

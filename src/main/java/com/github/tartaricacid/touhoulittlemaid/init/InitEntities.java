@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityDanmaku;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.EntityThrowPowerPoint;
+import com.github.tartaricacid.touhoulittlemaid.entity.projectile.MaidFishingHook;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +22,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
 import net.minecraft.world.entity.schedule.ScheduleBuilder;
@@ -45,6 +45,7 @@ public final class InitEntities {
     public static final DeferredRegister<SensorType<?>> SENSOR_TYPES = DeferredRegister.create(Registries.SENSOR_TYPE, TouhouLittleMaid.MOD_ID);
     public static final DeferredRegister<Schedule> SCHEDULES = DeferredRegister.create(Registries.SCHEDULE, TouhouLittleMaid.MOD_ID);
     public static final DeferredRegister<EntityDataSerializer<?>> DATA_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, TouhouLittleMaid.MOD_ID);
+    public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(Registries.ACTIVITY, TouhouLittleMaid.MOD_ID);
 
     public static Supplier<EntityType<EntityMaid>> MAID = ENTITY_TYPES.register("maid", () -> EntityMaid.TYPE);
     public static Supplier<EntityType<EntityChair>> CHAIR = ENTITY_TYPES.register("chair", () -> EntityChair.TYPE);
@@ -57,6 +58,11 @@ public final class InitEntities {
     public static Supplier<EntityType<EntityTombstone>> TOMBSTONE = ENTITY_TYPES.register("tombstone", () -> EntityTombstone.TYPE);
     public static Supplier<EntityType<EntitySit>> SIT = ENTITY_TYPES.register("sit", () -> EntitySit.TYPE);
     public static Supplier<EntityType<EntityBroom>> BROOM = ENTITY_TYPES.register("broom", () -> EntityBroom.TYPE);
+    public static Supplier<EntityType<MaidFishingHook>> FISHING_HOOK = ENTITY_TYPES.register("fishing_hook", () -> MaidFishingHook.TYPE);
+
+    public static Supplier<Activity> RIDE_IDLE = ACTIVITIES.register("ride_idle", () -> new Activity("tlm_ride_idle"));
+    public static Supplier<Activity> RIDE_WORK = ACTIVITIES.register("ride_work", () -> new Activity("tlm_ride_work"));
+    public static Supplier<Activity> RIDE_REST = ACTIVITIES.register("ride_rest", () -> new Activity("tlm_ride_rest"));
 
     public static Supplier<MemoryModuleType<List<Entity>>> VISIBLE_PICKUP_ENTITIES = MEMORY_MODULE_TYPES.register("visible_pickup_entities", () -> new MemoryModuleType<>(Optional.empty()));
     public static Supplier<MemoryModuleType<PositionTracker>> TARGET_POS = MEMORY_MODULE_TYPES.register("target_pos", () -> new MemoryModuleType<>(Optional.empty()));
@@ -100,6 +106,6 @@ public final class InitEntities {
 
     @SubscribeEvent
     public static void addEntitySpawnPlacement(RegisterSpawnPlacementsEvent event) {
-        event.register(InitEntities.FAIRY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(InitEntities.FAIRY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, EntityFairy::checkFairySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 }

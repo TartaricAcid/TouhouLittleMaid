@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
-import com.mojang.blaze3d.audio.SoundBuffer;
+import com.github.tartaricacid.touhoulittlemaid.client.sound.data.SoundData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,7 +15,7 @@ public class SoundElementButton extends FlatColorButton {
     private final int soundCount;
     private final boolean otherColor;
 
-    public SoundElementButton(int pX, int pY, int pWidth, int pHeight, ResourceLocation soundEvent, List<SoundBuffer> sounds, boolean otherColor, OnPress pOnPress) {
+    public SoundElementButton(int pX, int pY, int pWidth, int pHeight, ResourceLocation soundEvent, List<SoundData> sounds, boolean otherColor, OnPress pOnPress) {
         super(pX, pY, pWidth, pHeight, Component.translatable(soundEvent.toLanguageKey("button")), pOnPress);
         this.soundEvent = soundEvent;
         this.soundCount = sounds.size();

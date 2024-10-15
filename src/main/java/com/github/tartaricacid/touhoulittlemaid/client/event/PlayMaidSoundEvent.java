@@ -14,7 +14,7 @@ public class PlayMaidSoundEvent {
         if (event.getSound() instanceof MaidSoundInstance instance) {
             SoundBuffer soundBuffer = instance.getSoundBuffer();
             if (soundBuffer != null) {
-                event.getChannel().attachStaticBuffer(instance.getSoundBuffer());
+                event.getChannel().attachStaticBuffer(soundBuffer);
                 event.getChannel().play();
             }
         }
