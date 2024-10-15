@@ -206,7 +206,7 @@
   "patchouli.touhou_little_maid.book.entries.other.chair.name": "Coussin",
   "patchouli.touhou_little_maid.book.entries.other.command.name": "Commande",
   "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Extincteur",
-  "patchouli.touhou_little_maid.book.entries.other.extinguisher.pages.0.text": "Il n'est utilisé que lorsque la maid est en tâche pompière et ne peut pas être utilisé par le joueur.",
+  "patchouli.touhou_little_maid.book.entries.other.extinguisher.pages.0.text": "Seule une Maid avec la tâche Pompière pourra utiliser cet objet, un joueur en sera incapable.",
   "patchouli.touhou_little_maid.book.entries.other.maid_bed.name": "Lit de Maid",
   "patchouli.touhou_little_maid.book.entries.other.maid_bed.pages.0.text": "Tout comme le joueur, la Maid peu dormir. Quand son heure de coucher est arrivé, la Maid chercheras un lit proche pour se reposer.$(br2)La Maid endormie ne sera pas attaquée par des créatures hostiles, et le menu GUI de la Maid ne pourras pas être ouvert pendant cette période.",
   "patchouli.touhou_little_maid.book.entries.other.maid_bed.pages.1.text": "Une Maid qui dort dans un lit.",
