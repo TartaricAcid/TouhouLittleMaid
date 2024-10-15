@@ -196,7 +196,7 @@
   "patchouli.touhou_little_maid.book.entries.other.power_point.name": "Power Point",
   "patchouli.touhou_little_maid.book.entries.other.power_point.pages.0.text": "Des Power Points peuvent être trouvés dans les coffres de donjon.$(br2)Faite un clic droit pour les lancer et obtenir des Power Points.",
   "patchouli.touhou_little_maid.book.entries.other.broom.name": "Balai",
-  "patchouli.touhou_little_maid.book.entries.other.broom.pages.0.text": "Le balai est un véhicule volant, mais votre Maid doit être assise avec vous pour pouvoir vous envolez.$(br2)Contrôler le balai à l'aide de la souris pour le déplacer vers le haut ou vers le bas, et ZQSD pour avancer, reculer et tourner.",
+  "patchouli.touhou_little_maid.book.entries.other.broom.pages.0.text": "Le balai est un véhicule volant, mais votre Maid doit être assise avec vous pour pouvoir vous envolez.$(br2)Contrôler le balai à l'aide de la souris pour le déplacer vers le haut, vers le bas ou pour tourner et ZQSD pour avancer et reculer.",
   "patchouli.touhou_little_maid.book.entries.overview.gohei_and_danmaku.name": "Gohei et Danmaku",
   "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.name": "Sanctuaire Multi-Blocs",
   "patchouli.touhou_little_maid.book.entries.overview.multiblocks_altar.pages.0.text": "Le sanctuaire est une structure multi-blocs requise pour les différentes fabrications de ce mod.$(br2)Les recettes du sanctuaire peuvent être obtenues en utilisant le JEI, et la fabrication nécessite également des $(l:overview/power_point)Power Points$() du joueur.",
