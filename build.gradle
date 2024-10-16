@@ -27,7 +27,7 @@ apply plugin: 'idea'
 
 version = mod_version
 group = 'com.github.tartaricacid'
-archivesBaseName = 'touhoulittlemaid-1.20.1-release'
+archivesBaseName = 'touhou_little_maid-1.20.1-release'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -44,7 +44,7 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
-                touhoulittlemaid {
+                touhou_little_maid {
                     source sourceSets.main
                 }
             }
@@ -55,7 +55,7 @@ minecraft {
             workingDirectory project.file('run/client_b')
             args '--username', 'tartaric_acid'
             mods {
-                touhoulittlemaid {
+                touhou_little_maid {
                     source sourceSets.main
                 }
             }
@@ -66,11 +66,11 @@ minecraft {
             workingDirectory project.file('run/server')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'touhoulittlemaid'
+            property 'forge.enabledGameTestNamespaces', 'touhou_little_maid'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
-                touhoulittlemaid {
+                touhou_little_maid {
                     source sourceSets.main
                 }
             }
@@ -82,9 +82,9 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args '--mod', 'touhoulittlemaid', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'touhou_little_maid', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                touhoulittlemaid {
+                touhou_little_maid {
                     source sourceSets.main
                 }
             }
@@ -145,7 +145,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
     implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
 
-    implementation fg.deobf("curse.maven:slashblade-241596:${slashblade_id}")
+    implementation fg.deobf("maven.modrinth:slashblade-resharped:1.1.6-1.20.1")
 
     implementation fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
 
@@ -169,6 +169,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:aquaculture-60028:5585290")
     runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
+
+    runtimeOnly fg.deobf("maven.modrinth:better-advancements:0.4.2.10-forge")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

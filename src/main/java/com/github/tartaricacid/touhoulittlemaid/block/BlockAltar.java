@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvid
 import com.github.tartaricacid.touhoulittlemaid.crafting.AltarRecipe;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.inventory.AltarRecipeInventory;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.PosListData;
@@ -17,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -263,6 +265,9 @@ public class BlockAltar extends Block implements EntityBlock {
             removeAllAltarItem(world, altar);
             spawnParticleInCentre(world, centrePos);
             world.playSound(null, centrePos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
+            if (playerIn instanceof ServerPlayer serverPlayer) {
+                InitTrigger.ALTAR_CRAFT.trigger(serverPlayer, altarRecipe.getId());
+            }
         } else {
             if (!world.isClientSide) {
                 playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.altar.not_enough_power"));

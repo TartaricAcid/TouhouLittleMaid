@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.advancements;
+package com.github.tartaricacid.touhoulittlemaid.advancements.rewards;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
@@ -10,12 +10,12 @@ import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class GivePatchouliBookConfigTrigger extends SimpleCriterionTrigger<GivePatchouliBookConfigTrigger.Instance> {
-    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "give_patchouli_book_config");
+public class GiveSmartSlabConfigTrigger extends SimpleCriterionTrigger<GiveSmartSlabConfigTrigger.Instance> {
+    public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "give_smart_slab_config");
 
     @Override
-    protected GivePatchouliBookConfigTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate entityPredicate, DeserializationContext conditionsParser) {
-        return new GivePatchouliBookConfigTrigger.Instance(entityPredicate);
+    protected Instance createInstance(JsonObject json, ContextAwarePredicate entityPredicate, DeserializationContext conditionsParser) {
+        return new Instance(entityPredicate);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class GivePatchouliBookConfigTrigger extends SimpleCriterionTrigger<GiveP
 
 
     public void trigger(ServerPlayer serverPlayer) {
-        super.trigger(serverPlayer, instance -> MiscConfig.GIVE_PATCHOULI_BOOK.get());
+        super.trigger(serverPlayer, instance -> MiscConfig.GIVE_SMART_SLAB.get());
     }
 
     public static class Instance extends AbstractCriterionTriggerInstance {

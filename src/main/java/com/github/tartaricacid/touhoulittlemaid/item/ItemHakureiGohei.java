@@ -2,12 +2,14 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -79,6 +81,7 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
                         StructureTemplate template = multiBlock.getTemplate((ServerLevel) world, direction);
                         if (multiBlock.isMatch(world, posStart, direction, template)) {
                             multiBlock.build(world, posStart, direction, template);
+                            InitTrigger.BUILD_ALTAR.trigger((ServerPlayer) context.getPlayer());
                         }
                     }
                     return InteractionResult.SUCCESS;
@@ -97,8 +100,8 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return enchantment == Enchantments.QUICK_CHARGE
-                || enchantment == Enchantments.MULTISHOT
-                || super.canApplyAtEnchantingTable(stack, enchantment);
+               || enchantment == Enchantments.MULTISHOT
+               || super.canApplyAtEnchantingTable(stack, enchantment);
     }
 
     @Override

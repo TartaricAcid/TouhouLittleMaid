@@ -1,0 +1,38 @@
+{
+  "parent": "touhou_little_maid:altar/kill_maid_fairy",
+  "criteria": {
+    "altar_craft": {
+      "conditions": {
+        "recipe_id": "touhou_little_maid:altar/spawn_box"
+      },
+      "trigger": "touhou_little_maid:altar/altar_craft"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.altar.spawn_maid.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:cake"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.touhou_little_maid.altar.spawn_maid.title"
+    }
+  },
+  "requirements": [
+    [
+      "altar_craft"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "touhou_little_maid:advancement/cake"
+    ]
+  },
+  "sends_telemetry_event": true
+}

@@ -1,10 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityShrine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -78,6 +81,9 @@ public class BlockShrine extends BaseEntityBlock {
                 playerIn.setHealth(0.25f);
                 ItemStack film = shrine.getStorageItem();
                 ItemFilm.filmToMaid(film, worldIn, pos.above(), playerIn);
+                if (playerIn instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.SHRINE_REBORN_MAID);
+                }
             }
         }
         return super.use(state, worldIn, pos, playerIn, hand, hit);
