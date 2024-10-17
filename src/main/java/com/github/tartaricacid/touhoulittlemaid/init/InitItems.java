@@ -53,6 +53,7 @@ public final class InitItems {
     public static RegistryObject<Item> MODEL_SWITCHER = ITEMS.register("model_switcher", ItemModelSwitcher::new);
     public static RegistryObject<Item> CHAIR_SHOW = ITEMS.register("chair_show", ItemChairShow::new);
     public static RegistryObject<Item> GOMOKU = ITEMS.register("gomoku", () -> new BlockItem(InitBlocks.GOMOKU.get(), new Item.Properties()));
+    public static RegistryObject<Item> CCHESS = ITEMS.register("cchess", () -> new BlockItem(InitBlocks.CCHESS.get(), new Item.Properties()));
     public static RegistryObject<Item> RED_FOX_SCROLL = ITEMS.register("red_fox_scroll", ItemFoxScroll::new);
     public static RegistryObject<Item> WHITE_FOX_SCROLL = ITEMS.register("white_fox_scroll", ItemFoxScroll::new);
     public static RegistryObject<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties()));

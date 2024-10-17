@@ -5,6 +5,7 @@ public final class MaidEvent {
     public static final String PHOTO_MAID = "photo_maid";
     public static final String CHISEL_STATUE = "chisel_statue";
     public static final String WIN_GOMOKU = "win_gomoku";
+    public static final String WIN_CCHESS = "win_cchess";
     public static final String LIGHTNING_BOLT = "lightning_bolt";
     public static final String MAID_SLEEP = "maid_sleep";
     public static final String MAID_PICNIC_EAT = "maid_picnic_eat";

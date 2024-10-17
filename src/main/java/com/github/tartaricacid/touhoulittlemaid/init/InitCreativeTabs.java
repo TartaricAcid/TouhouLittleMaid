@@ -65,6 +65,7 @@ public class InitCreativeTabs {
                 output.accept(KAPPA_COMPASS.get());
                 output.accept(EXTINGUISHER.get());
                 output.accept(GOMOKU.get());
+                output.accept(CCHESS.get());
                 output.accept(KEYBOARD.get());
                 output.accept(BOOKSHELF.get());
                 output.accept(COMPUTER.get());
