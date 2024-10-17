@@ -345,6 +345,7 @@
   "message.touhou_little_maid.servant_bell.no_result": "No maids were found",
   "message.touhou_little_maid.servant_bell.data_is_empty": "There is no data recorded on it",
   "message.touhou_little_maid.cchess.check": "Check",
+  "message.touhou_little_maid.cchess.reset": "Right click on the black area on the right side of the board to reset",
   "commands.touhou_little_maid.pack.reload.info": "All model pack have been reloaded!",
   "commands.touhou_little_maid.power.handle.info": "%d players's power point is changed",
   "commands.touhou_little_maid.maid_num.handle.info": "%d players's maid num is changed",

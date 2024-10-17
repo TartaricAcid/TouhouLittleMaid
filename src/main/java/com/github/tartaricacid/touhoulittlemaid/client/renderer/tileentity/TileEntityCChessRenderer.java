@@ -37,8 +37,8 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
 
     public TileEntityCChessRenderer(BlockEntityRendererProvider.Context context) {
         chessModel = new CChessModel(context.bakeLayer(CChessModel.LAYER));
-        chessPiecesModels = CChessPiecesModel.initModel(context);
-        selectedModels = CChessPiecesModel.getSelectedModel(context);
+        chessPiecesModels = CChessPiecesModel.initModel();
+        selectedModels = CChessPiecesModel.getSelectedModel();
         dispatcher = context.getBlockEntityRenderDispatcher();
         font = context.getFont();
     }
@@ -55,7 +55,7 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
         if (chess.isCheckmate() && inRenderDistance(chess, TIPS_RENDER_DISTANCE)) {
             Camera camera = this.dispatcher.camera;
             MutableComponent loseTips;
-            MutableComponent resetTips = Component.translatable("message.touhou_little_maid.gomoku.reset").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.AQUA);
+            MutableComponent resetTips = Component.translatable("message.touhou_little_maid.cchess.reset").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.AQUA);
             MutableComponent roundText = Component.translatable("message.touhou_little_maid.gomoku.round", chess.getChessCounter()).withStyle(ChatFormatting.WHITE);
             MutableComponent preRoundIcon = Component.literal("⏹ ").withStyle(ChatFormatting.GREEN);
             MutableComponent postRoundIcon = Component.literal(" ⏹").withStyle(ChatFormatting.GREEN);

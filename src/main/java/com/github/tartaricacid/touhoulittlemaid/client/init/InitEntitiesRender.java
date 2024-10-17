@@ -69,7 +69,6 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(EntityMarisaYukkuriModel.LAYER, EntityMarisaYukkuriModel::createBodyLayer);
         event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
         event.registerLayerDefinition(CChessModel.LAYER, CChessModel::createBodyLayer);
-        event.registerLayerDefinition(CChessPiecesModel.LAYER, CChessPiecesModel::createBodyLayer);
         event.registerLayerDefinition(PieceModel.LAYER, PieceModel::createBodyLayer);
         event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
         event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
