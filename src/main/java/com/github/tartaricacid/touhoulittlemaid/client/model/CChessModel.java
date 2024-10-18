@@ -23,7 +23,13 @@ public class CChessModel extends EntityModel<Entity> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-32.0F, -10.0F, -32.0F, 64.0F, 18.0F, 64.0F, new CubeDeformation(-8.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-32.0F, -18.0F, -32.0F, 64.0F, 18.0F, 64.0F, new CubeDeformation(-8.0F)), PartPose.offset(0.0F, 32.0F, 0.0F));
+
+        PartDefinition bone = main.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 82).addBox(-28.5F, -16.05F, -16.0F, 32.0F, 32.0F, 32.0F, new CubeDeformation(-14.0F))
+                .texOffs(128, 82).addBox(-23.75F, -16.05F, -16.0F, 32.0F, 32.0F, 32.0F, new CubeDeformation(-14.0F)), PartPose.offset(-2.125F, -8.0F, 0.0F));
+
+        PartDefinition bone2 = main.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(0, 146).mirror().addBox(-3.5F, -16.05F, -16.0F, 32.0F, 32.0F, 32.0F, new CubeDeformation(-14.0F)).mirror(false)
+                .texOffs(128, 146).mirror().addBox(-8.25F, -16.05F, -16.0F, 32.0F, 32.0F, 32.0F, new CubeDeformation(-14.0F)).mirror(false), PartPose.offset(-2.675F, -8.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 256, 256);
     }
