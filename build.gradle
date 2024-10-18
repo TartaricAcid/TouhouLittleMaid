@@ -27,7 +27,7 @@ apply plugin: 'idea'
 
 version = mod_version
 group = 'com.github.tartaricacid'
-archivesBaseName = 'touhou_little_maid-1.20.1-release'
+archivesBaseName = 'touhoulittlemaid-1.20.1-release'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 

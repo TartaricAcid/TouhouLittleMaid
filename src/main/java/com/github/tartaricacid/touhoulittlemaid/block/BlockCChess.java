@@ -87,30 +87,38 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
             Position chessData = chess.getChessData();
             UUID sitId = chess.getSitId();
             // 女仆输，以防作弊，再检查一次
-            if (maidLost && chessData.sdPlayer == 1 && chessData.isMate()) {
+            if (maidLost && CChessUtil.isMaid(chessData) && chessData.isMate()) {
                 chess.setCheckmate(true);
                 chess.refresh();
 
                 if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(sitId) instanceof EntitySit sit
                     && sit.getFirstPassenger() instanceof EntityMaid maid && maid.isOwnedBy(player)) {
+                    // TODO: 暂时不加段位系统
                     maid.getFavorabilityManager().apply(Type.CCHESS_WIN);
-                    // TODO: 暂时没加段位系统
-                    // int rankBefore = MaidGomokuAI.getRank(maid);
-                    // MaidGomokuAI.addMaidCount(maid);
-                    // int rankAfter = MaidGomokuAI.getRank(maid);
-                    // 女仆升段啦
-                    // if (rankBefore < rankAfter) {
-                    //     NetworkHandler.sendToClientPlayer(new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.RANK_UP), player);
-                    // }
-                    InitTrigger.MAID_EVENT.trigger(player, MaidEvent.WIN_GOMOKU);
+                    InitTrigger.MAID_EVENT.trigger(player, MaidEvent.WIN_CCHESS);
                 }
 
                 return;
             }
 
-            chessData.makeMove(move);
+            boolean notChecked = chessData.makeMove(move);
+            // 如果吃子了，那么重置计数器（该计数器用于判断自然限着和长将）
+            if (notChecked && chessData.captured()) {
+                chessData.setIrrev();
+            }
             chess.setSelectChessPoint(Position.DST(move));
             chess.setCheckmate(playerLost);
+
+            // 如果玩家没输，那么检查其他和局情况
+            if (!playerLost) {
+                if (CChessUtil.reachMoveLimit(chessData)) {
+                    // 判断是否六十回自然限着
+                    chess.setMoveNumberLimit(true);
+                } else if (CChessUtil.isRepeat(chessData)) {
+                    // 判断是否长打
+                    chess.setRepeat(true);
+                }
+            }
 
             if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(sitId) instanceof EntitySit sit && sit.getFirstPassenger() instanceof EntityMaid maid) {
                 maid.swing(InteractionHand.MAIN_HAND);
@@ -229,6 +237,16 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
                 return InteractionResult.PASS;
             }
 
+            // 玩家已经输了，不能下棋
+            if (chess.isCheckmate() && chess.isPlayerTurn()) {
+                return InteractionResult.FAIL;
+            }
+
+            // 60 回合自然限着、长将不能下棋
+            if (chess.isMoveNumberLimit() || chess.isRepeat()) {
+                return InteractionResult.FAIL;
+            }
+
             // 处理点击棋子的逻辑
             Position chessData = chess.getChessData();
             byte[] squares = chessData.squares;
@@ -267,6 +285,10 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
             // 没有将军，正常移动
             boolean notChecked = chessData.makeMove(move);
             if (notChecked) {
+                // 如果吃子了，那么重置计数器（该计数器用于判断自然限着和长将）
+                if (chessData.captured()) {
+                    chessData.setIrrev();
+                }
                 chess.addChessCounter();
                 chess.setSelectChessPoint(nowClick);
                 chess.refresh();

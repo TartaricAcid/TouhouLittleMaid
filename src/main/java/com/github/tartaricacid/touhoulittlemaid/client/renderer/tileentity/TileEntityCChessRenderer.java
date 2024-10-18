@@ -52,33 +52,47 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
     }
 
     private void renderTipsText(TileEntityCChess chess, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn) {
-        if (chess.isCheckmate() && inRenderDistance(chess, TIPS_RENDER_DISTANCE)) {
-            Camera camera = this.dispatcher.camera;
-            MutableComponent loseTips;
-            MutableComponent resetTips = Component.translatable("message.touhou_little_maid.cchess.reset").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.AQUA);
-            MutableComponent roundText = Component.translatable("message.touhou_little_maid.gomoku.round", chess.getChessCounter()).withStyle(ChatFormatting.WHITE);
-            MutableComponent preRoundIcon = Component.literal("⏹ ").withStyle(ChatFormatting.GREEN);
-            MutableComponent postRoundIcon = Component.literal(" ⏹").withStyle(ChatFormatting.GREEN);
-            MutableComponent roundTips = preRoundIcon.append(roundText).append(postRoundIcon);
+        boolean showTips = chess.isCheckmate() || chess.isRepeat() || chess.isMoveNumberLimit();
+        if (!showTips || !inRenderDistance(chess, TIPS_RENDER_DISTANCE)) {
+            return;
+        }
+
+        Camera camera = this.dispatcher.camera;
+        MutableComponent loseTips = null;
+        MutableComponent resetTips = Component.translatable("message.touhou_little_maid.cchess.reset").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.AQUA);
+        MutableComponent roundText = Component.translatable("message.touhou_little_maid.gomoku.round", chess.getChessCounter()).withStyle(ChatFormatting.WHITE);
+        MutableComponent preRoundIcon = Component.literal("⏹ ").withStyle(ChatFormatting.GREEN);
+        MutableComponent postRoundIcon = Component.literal(" ⏹").withStyle(ChatFormatting.GREEN);
+        MutableComponent roundTips = preRoundIcon.append(roundText).append(postRoundIcon);
+
+        if (chess.isCheckmate()) {
             if (!chess.isPlayerTurn()) {
                 loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
             } else {
                 loseTips = Component.translatable("message.touhou_little_maid.gomoku.lose").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
             }
-            float loseTipsWidth = (float) (-this.font.width(loseTips) / 2);
-            float resetTipsWidth = (float) (-this.font.width(resetTips) / 2);
-            float roundTipsWidth = (float) (-this.font.width(roundTips) / 2);
-            poseStack.pushPose();
-            poseStack.translate(0.5, 0.75, 0.5);
-            poseStack.mulPose(Axis.YN.rotationDegrees(180 + camera.getYRot()));
-            poseStack.mulPose(Axis.XN.rotationDegrees(camera.getXRot()));
-            poseStack.scale(0.03F, -0.03F, 0.03F);
-            this.font.drawInBatch(loseTips, loseTipsWidth, -10, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
-            poseStack.scale(0.5F, 0.5F, 0.5F);
-            this.font.drawInBatch(roundTips, roundTipsWidth, -30, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
-            this.font.drawInBatch(resetTips, resetTipsWidth, 0, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
-            poseStack.popPose();
+        } else if (chess.isMoveNumberLimit()) {
+            loseTips = Component.translatable("message.touhou_little_maid.cchess.move_limit").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+        } else if (chess.isRepeat()) {
+            loseTips = Component.translatable("message.touhou_little_maid.cchess.repeat").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
         }
+        if (loseTips == null) {
+            return;
+        }
+
+        float loseTipsWidth = (float) (-this.font.width(loseTips) / 2);
+        float resetTipsWidth = (float) (-this.font.width(resetTips) / 2);
+        float roundTipsWidth = (float) (-this.font.width(roundTips) / 2);
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.75, 0.5);
+        poseStack.mulPose(Axis.YN.rotationDegrees(180 + camera.getYRot()));
+        poseStack.mulPose(Axis.XN.rotationDegrees(camera.getXRot()));
+        poseStack.scale(0.03F, -0.03F, 0.03F);
+        this.font.drawInBatch(loseTips, loseTipsWidth, -10, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
+        poseStack.scale(0.5F, 0.5F, 0.5F);
+        this.font.drawInBatch(roundTips, roundTipsWidth, -30, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
+        this.font.drawInBatch(resetTips, resetTipsWidth, 0, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
+        poseStack.popPose();
     }
 
     private void renderPiece(TileEntityCChess cchess, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, Direction facing) {

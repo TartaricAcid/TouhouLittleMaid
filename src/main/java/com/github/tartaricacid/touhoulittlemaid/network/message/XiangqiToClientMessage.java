@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 import com.github.tartaricacid.touhoulittlemaid.api.game.xqwlight.Position;
 import com.github.tartaricacid.touhoulittlemaid.api.game.xqwlight.Search;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.util.CChessUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -42,7 +43,7 @@ public class XiangqiToClientMessage {
 
     @OnlyIn(Dist.CLIENT)
     private static void onHandle(XiangqiToClientMessage message) {
-        int time = (int) (Math.random() * 800) + 800;
+        int levelTime = 1000;
         long timeStart = System.currentTimeMillis();
         int move = 0;
 
@@ -51,17 +52,17 @@ public class XiangqiToClientMessage {
 
         // 先判断玩家是否赢了
         // 是的，我放客户端，减轻服务端压力，理论上你可直接传布尔值判断女仆输掉来作弊
-        boolean maidLost = position.sdPlayer == 1 && position.isMate();
+        boolean maidLost = CChessUtil.isMaid(position) && position.isMate();
         boolean playerLost = false;
         if (!maidLost) {
-            // FIXME: 应该传入女仆的棋技
-            move = new Search(position, 12).searchMain(time);
+            // TODO: 暂时不做女仆的棋技系统
+            move = new Search(position, 12).searchMain(levelTime);
             // 玩家是否输了
-            playerLost = position.makeMove(move) && position.sdPlayer == 0 && position.isMate();
+            playerLost = position.makeMove(move) && CChessUtil.isPlayer(position) && position.isMate();
         }
 
         // 如果时间还有剩余，那么 sleep 一会儿
-        long timeRemain = Math.max(0, time - (int) (System.currentTimeMillis() - timeStart));
+        long timeRemain = Math.max(0, levelTime - (int) (System.currentTimeMillis() - timeStart));
         try {
             if (timeRemain > 0) {
                 Thread.sleep(timeRemain);

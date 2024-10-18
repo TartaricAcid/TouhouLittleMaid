@@ -343,6 +343,8 @@
   "message.touhou_little_maid.servant_bell.no_result": "找不到女仆",
   "message.touhou_little_maid.servant_bell.data_is_empty": "这上面没有任何数据",
   "message.touhou_little_maid.cchess.check": "将军",
+  "message.touhou_little_maid.cchess.repeat": "棋局重复三次，长打判和！",
+  "message.touhou_little_maid.cchess.move_limit": "六十回合自然限着！",
   "message.touhou_little_maid.cchess.reset": "右击棋盘右侧黑色区域重置",
   "commands.touhou_little_maid.pack.reload.info": "所有的模型包已经重载！",
   "commands.touhou_little_maid.power.handle.info": "修改了 %d 位玩家的 P 点",
