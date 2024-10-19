@@ -13,7 +13,6 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.data.EntityModelData;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -117,7 +116,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
     @Override
     protected boolean forceUpdate(AnimationEvent<?> animationEvent) {
         var tick = (float) getCurrentTick(animationEvent);
-        if (tick != this.currentTick && !RenderUtils.isRenderingEntitiesInInventory()) {
+        if (tick != this.currentTick) {
             this.currentTick = tick;
             this.state.updateState();
             this.modelDirty = false;
