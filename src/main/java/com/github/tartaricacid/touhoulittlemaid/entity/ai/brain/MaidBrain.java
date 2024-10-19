@@ -132,9 +132,8 @@ public final class MaidBrain {
     private static void registerPanicGoals(Brain<EntityMaid> brain) {
         Pair<Integer, BehaviorControl<? super EntityMaid>> clearHurt = Pair.of(5, new MaidClearHurtTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> runAway = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.NEAREST_HOSTILE, 0.7f, false));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> runAwayHurt = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.HURT_BY_ENTITY, 0.7f, false));
 
-        brain.addActivity(Activity.PANIC, ImmutableList.of(clearHurt, runAway, runAwayHurt));
+        brain.addActivity(Activity.PANIC, ImmutableList.of(clearHurt, runAway));
     }
 
     private static void registerRideIdleGoals(Brain<EntityMaid> brain) {
