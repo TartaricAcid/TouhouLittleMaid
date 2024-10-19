@@ -57,7 +57,7 @@
   "block.touhou_little_maid.maid_beacon": "Lanterne de Sanctuaire",
   "block.touhou_little_maid.computer": "Ordinateur",
   "block.touhou_little_maid.shrine": "Sanctuaire",
-  "tooltips.touhou_little_maid.chair.place.desc": "Faites un clic droit sur le haut du bloc pour le placer.",
+  "tooltips.touhou_little_maid.chair.place.desc": "Faites un clic droit sur le sommet d'un bloc pour le placer.",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Shift + clic gauche pour le détruire.",
   "tooltips.touhou_little_maid.chair.gui.desc": "Shift + clic droit pour ouvrir l'interface de skin.",
   "tooltips.touhou_little_maid.info.model_name": "Nom du modèle",
