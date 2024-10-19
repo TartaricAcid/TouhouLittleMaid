@@ -28,7 +28,6 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
     private static final ResourceLocation GECKO_DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final int FPS = 60;
 
-    private volatile boolean renderedWithTempChanges = false;
     private final IMaid maid;
     private MaidModelInfo maidInfo;
     private final Vector2f headRot = new Vector2f();
@@ -117,16 +116,8 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
 
     @Override
     protected boolean forceUpdate(AnimationEvent<?> animationEvent) {
-        if (RenderUtils.isRenderingEntitiesInInventory()) {
-            renderedWithTempChanges = true;
-            return true;
-        }
-        if (renderedWithTempChanges) {
-            renderedWithTempChanges = false;
-            return true;
-        }
         var tick = (float) getCurrentTick(animationEvent);
-        if (tick != this.currentTick) {
+        if (tick != this.currentTick && !RenderUtils.isRenderingEntitiesInInventory()) {
             this.currentTick = tick;
             this.state.updateState();
             this.modelDirty = false;

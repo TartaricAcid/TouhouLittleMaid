@@ -172,6 +172,9 @@ dependencies {
 
     runtimeOnly fg.deobf("maven.modrinth:better-advancements:0.4.2.10-forge")
 
+    runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
+    runtimeOnly fg.deobf('maven.modrinth:oculus:1.20.1-1.7.0')
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
