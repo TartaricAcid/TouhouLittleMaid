@@ -60,7 +60,7 @@ public abstract class AnimatableEntity<E extends Entity> {
         }
 
         if (!mc.isPaused() || this.manager.shouldPlayWhilePaused) {
-            this.manager.tick = currentTick;
+            this.manager.tick = Math.max(this.manager.tick, currentTick);
             double gameTick = manager.tick;
             double deltaTicks = gameTick - this.lastGameTickTime;
             this.seekTime += deltaTicks;
@@ -118,7 +118,11 @@ public abstract class AnimatableEntity<E extends Entity> {
     }
 
     public double getCurrentTick(AnimationEvent<?> animationEvent) {
-        return this.entity.tickCount + animationEvent.getPartialTick();
+        float partialTick = animationEvent.getPartialTick();
+        if (partialTick == 1.0f && partialTick != Minecraft.getInstance().getPartialTick()) {
+            partialTick = Minecraft.getInstance().getPartialTick();
+        }
+        return this.entity.tickCount + partialTick;
     }
 
     public void setMolangQueries(double seekTime) {
