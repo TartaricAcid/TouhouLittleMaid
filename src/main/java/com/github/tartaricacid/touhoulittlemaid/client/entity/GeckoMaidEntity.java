@@ -116,7 +116,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
     @Override
     protected boolean forceUpdate(AnimationEvent<?> animationEvent) {
         var tick = (float) getCurrentTick(animationEvent);
-        if (tick != this.currentTick) {
+        if (tick > this.currentTick) {
             this.currentTick = tick;
             this.state.updateState();
             this.modelDirty = false;
