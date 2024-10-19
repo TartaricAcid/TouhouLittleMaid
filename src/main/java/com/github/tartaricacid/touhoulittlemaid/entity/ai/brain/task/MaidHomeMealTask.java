@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.IMaidMeal;
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.MaidMealType;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
@@ -113,7 +113,7 @@ public class MaidHomeMealTask extends MaidCheckRateTask {
                 if (maidMeal.canMaidEat(maid, refreshItemInHand, hand)) {
                     maidMeal.onMaidEat(maid, refreshItemInHand, hand);
                     if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
-                        InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.MAID_PICNIC_EAT);
+                        InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.MAID_PICNIC_EAT);
                     }
                     return;
                 }

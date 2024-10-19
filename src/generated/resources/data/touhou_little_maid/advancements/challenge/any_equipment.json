@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "any_equipment"
+      },
+      "trigger": "touhou_little_maid:maid/tamed_maid"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.challenge.any_equipment.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:iron_helmet",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.touhou_little_maid.challenge.any_equipment.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "rewards": {
+    "experience": 50
+  },
+  "sends_telemetry_event": true
+}

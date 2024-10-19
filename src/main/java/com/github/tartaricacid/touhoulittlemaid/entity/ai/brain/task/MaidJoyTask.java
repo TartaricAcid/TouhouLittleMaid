@@ -1,13 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockJoy;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitPoi;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -57,6 +60,9 @@ public class MaidJoyTask extends MaidCheckRateTask {
             BlockState blockState = worldIn.getBlockState(pos);
             if (blockState.getBlock() instanceof BlockJoy blockJoy) {
                 blockJoy.startMaidSit(maid, blockState, worldIn, pos);
+                if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.MAID_SIT_JOY);
+                }
             }
         });
         maid.getBrain().eraseMemory(InitEntities.TARGET_POS.get());

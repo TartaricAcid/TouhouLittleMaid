@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.favorability;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -246,7 +246,10 @@ public class FavorabilityManager {
                 }
             }
             if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
-                InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.MAID_FAVORABILITY_INCREASED);
+                InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.FAVORABILITY_INCREASED);
+                if (levelAfter == LEVEL_3) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.FAVORABILITY_INCREASED_MAX);
+                }
             }
             maid.playSound(SoundEvents.PLAYER_LEVELUP, 0.5F, maid.getRandom().nextFloat() * 0.1F + 0.9F);
         }

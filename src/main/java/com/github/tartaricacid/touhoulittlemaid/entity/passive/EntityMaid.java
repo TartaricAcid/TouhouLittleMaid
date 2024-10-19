@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
@@ -190,6 +190,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
+    private final MaidKillRecordManager killRecordManager = new MaidKillRecordManager();
     private final MaidTaskDataMaps taskDataMaps = new MaidTaskDataMaps();
     private final FavorabilityManager favorabilityManager;
     private final MaidScriptBookManager scriptBookManager;
@@ -458,7 +459,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                     this.level.broadcastEntityEvent(this, (byte) 7);
                     this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
                     if (player instanceof ServerPlayer serverPlayer) {
-                        InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.TAMED_MAID);
+                        InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.TAMED_MAID);
                     }
                     return InteractionResult.SUCCESS;
                 }
@@ -778,9 +779,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void die(DamageSource cause) {
         if (!MinecraftForge.EVENT_BUS.post(new MaidDeathEvent(this, cause))) {
-            if (this.getOwner() instanceof ServerPlayer serverPlayer) {
-                InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.MAID_DEATH);
-            }
             super.die(cause);
         }
     }
@@ -868,7 +866,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(beforeMaxHealth + 20);
             setStruckByLightning(true);
             if (this.getOwner() instanceof ServerPlayer serverPlayer) {
-                InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.LIGHTNING_BOLT);
+                InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.LIGHTNING_BOLT);
             }
         }
     }
@@ -1047,6 +1045,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             compound.put(BACKPACK_DATA_TAG, new CompoundTag());
         }
         this.taskDataMaps.writeSaveData(compound);
+        this.killRecordManager.addAdditionalSaveData(compound);
     }
 
     @Override
@@ -1125,6 +1124,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.scriptBookManager.readAdditionalSaveData(compound);
         this.schedulePos.load(compound, this);
         this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
+        this.killRecordManager.readAdditionalSaveData(compound);
     }
 
     public boolean openMaidGui(Player player) {
@@ -1383,7 +1383,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.setHealth(this.getMaxHealth());
         this.favorabilityManager.apply(Type.SLEEP);
         if (this.getOwner() instanceof ServerPlayer serverPlayer) {
-            InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.MAID_SLEEP);
+            InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.MAID_SLEEP);
         }
     }
 
@@ -1710,6 +1710,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public float getLuck() {
         return (float) this.getAttributeValue(Attributes.LUCK);
+    }
+
+    public MaidKillRecordManager getKillRecordManager() {
+        return killRecordManager;
     }
 
     @Override

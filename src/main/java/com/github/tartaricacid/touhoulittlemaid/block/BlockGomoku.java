@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameBlock;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
@@ -276,7 +276,7 @@ public class BlockGomoku extends BlockJoy implements IBoardGameBlock {
                         NetworkHandler.sendToClientPlayer(new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.RANK_UP), player);
                     }
                     if (player instanceof ServerPlayer serverPlayer) {
-                        InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.WIN_GOMOKU);
+                        InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.WIN_GOMOKU);
                     }
                 }
                 gomoku.setInProgress(statue == Statue.IN_PROGRESS);

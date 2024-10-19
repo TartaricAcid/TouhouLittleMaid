@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockStatue;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -53,7 +53,7 @@ public class ItemChisel extends Item {
             }
             genStatueBlocks(player, worldIn, pos, context.getClickedFace());
             if (player instanceof ServerPlayer serverPlayer) {
-                InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.CHISEL_STATUE);
+                InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.CHISEL_STATUE);
             }
             return InteractionResult.SUCCESS;
         }

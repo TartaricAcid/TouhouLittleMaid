@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMultiBlock;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
@@ -81,7 +82,9 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
                         StructureTemplate template = multiBlock.getTemplate((ServerLevel) world, direction);
                         if (multiBlock.isMatch(world, posStart, direction, template)) {
                             multiBlock.build(world, posStart, direction, template);
-                            InitTrigger.BUILD_ALTAR.trigger((ServerPlayer) context.getPlayer());
+                            if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
+                                InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.BUILD_ALTAR);
+                            }
                         }
                     }
                     return InteractionResult.SUCCESS;

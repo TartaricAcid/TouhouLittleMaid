@@ -1,0 +1,33 @@
+{
+  "parent": "touhou_little_maid:maid_base/use_protect_bauble",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "use_item_magnet_bauble"
+      },
+      "trigger": "touhou_little_maid:maid/tamed_maid"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.maid_base.use_item_magnet_bauble.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "touhou_little_maid:item_magnet_bauble"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.touhou_little_maid.maid_base.use_item_magnet_bauble.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -49,7 +49,7 @@ public class ItemCamera extends Item {
                     playerIn.getCooldowns().addCooldown(this, 20);
                     camera.hurtAndBreak(1, playerIn, (e) -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
                     if (playerIn instanceof ServerPlayer serverPlayer) {
-                        InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.PHOTO_MAID);
+                        InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.PHOTO_MAID);
                     }
                 }
                 maid.spawnExplosionParticle();

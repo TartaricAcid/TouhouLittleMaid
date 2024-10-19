@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameBlock;
 import com.github.tartaricacid.touhoulittlemaid.api.game.xqwlight.Position;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
@@ -95,7 +95,7 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
                     && sit.getFirstPassenger() instanceof EntityMaid maid && maid.isOwnedBy(player)) {
                     // TODO: 暂时不加段位系统
                     maid.getFavorabilityManager().apply(Type.CCHESS_WIN);
-                    InitTrigger.MAID_EVENT.trigger(player, MaidEvent.WIN_CCHESS);
+                    InitTrigger.MAID_EVENT.trigger(player, TriggerType.WIN_CCHESS);
                 }
 
                 return;

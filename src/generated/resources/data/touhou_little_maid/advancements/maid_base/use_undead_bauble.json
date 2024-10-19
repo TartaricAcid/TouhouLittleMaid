@@ -1,0 +1,34 @@
+{
+  "parent": "touhou_little_maid:maid_base/use_protect_bauble",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "use_undead_bauble"
+      },
+      "trigger": "touhou_little_maid:maid/tamed_maid"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.maid_base.use_undead_bauble.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "touhou_little_maid:ultramarine_orb_elixir",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.touhou_little_maid.maid_base.use_undead_bauble.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
