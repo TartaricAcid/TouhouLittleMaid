@@ -244,6 +244,9 @@ public class FavorabilityManager {
                 if (maid.getHealth() > maid.getMaxHealth()) {
                     maid.setHealth(maid.getMaxHealth());
                 }
+                if (maid.getMaxHealth() >= 100 && maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.MAID_100_HEALTHY);
+                }
             }
             if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
                 InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.FAVORABILITY_INCREASED);

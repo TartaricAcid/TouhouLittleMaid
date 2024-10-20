@@ -35,11 +35,11 @@ public class NimbleFabricBauble implements IMaidBauble {
                 maid.getMaidBauble().setStackInSlot(slot, stack);
                 for (int i = 0; i < MAX_RETRY; ++i) {
                     if (TeleportHelper.teleport(maid)) {
+                        if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                            InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.USE_NIMBLE_FABRIC);
+                        }
                         return;
                     }
-                }
-                if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
-                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.USE_NIMBLE_FABRIC);
                 }
             }
         }

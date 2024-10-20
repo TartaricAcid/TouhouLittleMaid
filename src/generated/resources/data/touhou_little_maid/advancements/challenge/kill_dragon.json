@@ -14,7 +14,7 @@
     "description": {
       "translate": "advancements.touhou_little_maid.challenge.kill_dragon.description"
     },
-    "frame": "task",
+    "frame": "challenge",
     "hidden": false,
     "icon": {
       "item": "minecraft:diamond_sword",

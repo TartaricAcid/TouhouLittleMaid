@@ -14,7 +14,7 @@
     "description": {
       "translate": "advancements.touhou_little_maid.favorability.win_gomoku.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
       "item": "touhou_little_maid:gomoku"

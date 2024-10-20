@@ -4,6 +4,10 @@ public final class TriggerType {
     // 基础部分
     public static final String BUILD_ALTAR = "build_altar";
     public static final String TAMED_MAID = "tamed_maid";
+    public static final String PICKUP_POWER_POINT = "pickup_power_point";
+    public static final String CHANGE_MAID_MODEL = "change_maid_model";
+    public static final String CHANGE_MAID_SOUND = "change_maid_sound";
+    public static final String CHANGE_CHAIR_MODEL = "change_chair_model";
 
     // 女仆基础
     public static final String SWITCH_TASK = "switch_task";
@@ -16,6 +20,8 @@ public final class TriggerType {
     public static final String MAID_FISHING = "maid_fishing";
 
     public static final String PICKUP_MAID = "pickup_maid";
+    public static final String TAKE_MAID_XP = "take_maid_xp";
+    public static final String CLEAR_MAID_EFFECTS = "clear_maid_effects";
 
     public static final String USE_PROTECT_BAUBLE = "use_protect_bauble";
     public static final String USE_NIMBLE_FABRIC = "use_nimble_fabric";
@@ -26,6 +32,11 @@ public final class TriggerType {
     public static final String PHOTO_MAID = "photo_maid";
     public static final String CHISEL_STATUE = "chisel_statue";
     public static final String SHRINE_REBORN_MAID = "shrine_reborn_maid";
+
+    public static final String USE_SERVANT_BELL = "use_servant_bell";
+    public static final String USE_TRUMPET = "use_trumpet";
+    public static final String USE_RED_FOX_SCROLL = "use_red_fox_scroll";
+    public static final String USE_WHITE_FOX_SCROLL = "use_white_fox_scroll";
 
     // 女仆好感度
     public static final String FAVORABILITY_INCREASED = "favorability_increased";
@@ -41,14 +52,12 @@ public final class TriggerType {
     public static final String ANY_EQUIPMENT = "any_equipment";
     public static final String EAT_ENCHANTED_GOLDEN_APPLE = "eat_enchanted_golden_apple";
     public static final String ALL_NETHERITE_EQUIPMENT = "all_netherite_equipment";
-    public static final String ALL_PROTECT_BAUBLE = "all_protect_bauble";
     public static final String LIGHTNING_BOLT = "lightning_bolt";
     public static final String MAID_100_HEALTHY = "maid_100_healthy";
 
     public static final String KILL_100 = "kill_100";
     public static final String KILL_SLIME_300 = "kill_slime_300";
     public static final String MAID_FISHING_ENCHANTED_BOOK = "maid_fishing_enchanted_book";
-    public static final String MAID_IN_DUNGEON = "maid_in_dungeon";
-    public static final String TAMED_MAID_IN_PILLAGER_OUTPOST = "tamed_maid_in_pillager_outpost";
+    public static final String TAMED_MAID_FROM_STRUCTURE = "tamed_maid_from_structure";
     public static final String KILL_DRAGON = "kill_dragon";
 }

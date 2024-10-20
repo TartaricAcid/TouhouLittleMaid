@@ -14,7 +14,7 @@
     "description": {
       "translate": "advancements.touhou_little_maid.maid_base.shrine_reborn_maid.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
       "item": "touhou_little_maid:shrine"

@@ -1,8 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,6 +41,9 @@ public final class ApplyPotionEffectEvent {
                 ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.BUCKET));
             }
             maid.playSound(SoundEvents.GENERIC_DRINK, 0.6f, 0.8F + world.random.nextFloat() * 0.4F);
+            if (player instanceof ServerPlayer serverPlayer) {
+                InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.CLEAR_MAID_EFFECTS);
+            }
             event.setCanceled(true);
         }
     }

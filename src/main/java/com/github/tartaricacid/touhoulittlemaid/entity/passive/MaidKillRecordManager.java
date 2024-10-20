@@ -41,6 +41,9 @@ public final class MaidKillRecordManager {
         LivingEntity owner = maid.getOwner();
         this.totalCount++;
         triggerKill(owner, TriggerType.MAID_KILL_MOB);
+        if (this.totalCount >= 100) {
+            triggerKill(owner, TriggerType.KILL_100);
+        }
         if (target instanceof Slime) {
             this.slimeCount++;
             if (slimeCount >= 300) {

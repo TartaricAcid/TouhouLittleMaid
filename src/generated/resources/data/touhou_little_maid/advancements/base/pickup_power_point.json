@@ -1,9 +1,9 @@
 {
-  "parent": "touhou_little_maid:challenge/eat_enchanted_golden_apple",
+  "parent": "touhou_little_maid:base/build_altar",
   "criteria": {
     "maid_event": {
       "conditions": {
-        "event": "all_protect_bauble"
+        "event": "pickup_power_point"
       },
       "trigger": "touhou_little_maid:maid/tamed_maid"
     }
@@ -12,17 +12,16 @@
     "announce_to_chat": true,
     "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
     "description": {
-      "translate": "advancements.touhou_little_maid.challenge.all_protect_bauble.description"
+      "translate": "advancements.touhou_little_maid.base.pickup_power_point.description"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:ultramarine_orb_elixir",
-      "nbt": "{Damage:0}"
+      "item": "touhou_little_maid:power_point"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.touhou_little_maid.challenge.all_protect_bauble.title"
+      "translate": "advancements.touhou_little_maid.base.pickup_power_point.title"
     }
   },
   "requirements": [

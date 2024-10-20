@@ -1,5 +1,5 @@
 {
-  "parent": "touhou_little_maid:base/craft_gohei",
+  "parent": "touhou_little_maid:base/build_altar",
   "criteria": {
     "killed_entity": {
       "conditions": {

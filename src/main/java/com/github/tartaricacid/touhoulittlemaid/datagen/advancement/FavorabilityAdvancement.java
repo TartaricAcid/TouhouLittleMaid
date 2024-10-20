@@ -33,11 +33,11 @@ public class FavorabilityAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_PICNIC_EAT))
                 .save(saver, id("favorability/maid_picnic_eat"), existingFileHelper);
 
-        make(InitItems.GOMOKU.get(), "win_gomoku").parent(joy)
+        makeGoal(InitItems.GOMOKU.get(), "win_gomoku").parent(joy)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.WIN_GOMOKU))
                 .save(saver, id("favorability/win_gomoku"), existingFileHelper);
 
-        make(InitItems.CCHESS.get(), "win_cchess").parent(joy)
+        makeGoal(InitItems.CCHESS.get(), "win_cchess").parent(joy)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.WIN_CCHESS))
                 .save(saver, id("favorability/win_cchess"), existingFileHelper);
 
@@ -51,7 +51,7 @@ public class FavorabilityAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.FAVORABILITY_INCREASED))
                 .save(saver, id("favorability/favorability_increased"), existingFileHelper);
 
-        make(InitItems.FAVORABILITY_TOOL_FULL.get(), "favorability_increased_max").parent(increased)
+        makeGoal(InitItems.FAVORABILITY_TOOL_FULL.get(), "favorability_increased_max").parent(increased)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.FAVORABILITY_INCREASED_MAX))
                 .save(saver, id("favorability/favorability_increased_max"), existingFileHelper);
     }
@@ -63,6 +63,15 @@ public class FavorabilityAdvancement {
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
                 FrameType.TASK, true, true, false);
+    }
+
+    private static Advancement.Builder makeGoal(ItemLike item, String key) {
+        MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.favorability.%s.title", key));
+        MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.favorability.%s.description", key));
+
+        return Advancement.Builder.advancement().display(item, title, desc,
+                new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
+                FrameType.GOAL, true, true, false);
     }
 
     private static ResourceLocation id(String id) {

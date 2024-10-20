@@ -14,7 +14,7 @@
     "description": {
       "translate": "advancements.touhou_little_maid.maid_base.use_undead_bauble.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
       "item": "touhou_little_maid:ultramarine_orb_elixir",

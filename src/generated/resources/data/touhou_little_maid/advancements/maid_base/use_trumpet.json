@@ -1,9 +1,9 @@
 {
-  "parent": "touhou_little_maid:challenge/kill_100",
+  "parent": "touhou_little_maid:maid_base/use_servant_bell",
   "criteria": {
     "maid_event": {
       "conditions": {
-        "event": "tamed_maid_from_structure"
+        "event": "use_trumpet"
       },
       "trigger": "touhou_little_maid:maid/tamed_maid"
     }
@@ -12,17 +12,16 @@
     "announce_to_chat": true,
     "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
     "description": {
-      "translate": "advancements.touhou_little_maid.challenge.tamed_maid_in_pillager_outpost.description"
+      "translate": "advancements.touhou_little_maid.maid_base.use_trumpet.description"
     },
-    "frame": "goal",
+    "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:diamond_sword",
-      "nbt": "{Damage:0}"
+      "item": "touhou_little_maid:trumpet"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.touhou_little_maid.challenge.tamed_maid_in_pillager_outpost.title"
+      "translate": "advancements.touhou_little_maid.maid_base.use_trumpet.title"
     }
   },
   "requirements": [

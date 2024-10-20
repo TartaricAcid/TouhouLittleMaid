@@ -30,15 +30,47 @@ public class MaidBaseAdvancement {
 
         generateTask(root, saver, existingFileHelper);
 
-        make(Items.SADDLE, "pickup_maid").parent(root)
-                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.PICKUP_MAID))
-                .save(saver, id("maid_base/pickup_maid"), existingFileHelper);
+        generateOther(saver, existingFileHelper, root);
 
         generateBauble(root, saver, existingFileHelper);
 
         generatePhoto(root, saver, existingFileHelper);
 
+        generateFind(saver, existingFileHelper, root);
+
         generateReborn(root, saver, existingFileHelper);
+    }
+
+    private static void generateFind(Consumer<Advancement> saver, ExistingFileHelper existingFileHelper, Advancement root) {
+        Advancement base = make(InitItems.SERVANT_BELL.get(), "use_servant_bell").parent(root)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_SERVANT_BELL))
+                .save(saver, id("maid_base/use_servant_bell"), existingFileHelper);
+
+        make(InitItems.TRUMPET.get(), "use_trumpet").parent(base)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_TRUMPET))
+                .save(saver, id("maid_base/use_trumpet"), existingFileHelper);
+
+        make(InitItems.RED_FOX_SCROLL.get(), "use_red_fox_scroll").parent(base)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_RED_FOX_SCROLL))
+                .save(saver, id("maid_base/use_red_fox_scroll"), existingFileHelper);
+
+        make(InitItems.WHITE_FOX_SCROLL.get(), "use_white_fox_scroll").parent(base)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_WHITE_FOX_SCROLL))
+                .save(saver, id("maid_base/use_white_fox_scroll"), existingFileHelper);
+    }
+
+    private static void generateOther(Consumer<Advancement> saver, ExistingFileHelper existingFileHelper, Advancement root) {
+        Advancement base = make(Items.SADDLE, "pickup_maid").parent(root)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.PICKUP_MAID))
+                .save(saver, id("maid_base/pickup_maid"), existingFileHelper);
+
+        make(Items.EXPERIENCE_BOTTLE, "take_maid_xp").parent(base)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.TAKE_MAID_XP))
+                .save(saver, id("maid_base/take_maid_xp"), existingFileHelper);
+
+        make(Items.MILK_BUCKET, "clear_maid_effects").parent(base)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CLEAR_MAID_EFFECTS))
+                .save(saver, id("maid_base/clear_maid_effects"), existingFileHelper);
     }
 
     private static void generateTask(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
@@ -50,7 +82,7 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_BACKPACK))
                 .save(saver, id("maid_base/maid_backpack"), existingFileHelper);
 
-        make(InitItems.HAKUREI_GOHEI.get(), "maid_farm").parent(taskRoot)
+        makeGoal(InitItems.HAKUREI_GOHEI.get(), "maid_farm").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FARM))
                 .save(saver, id("maid_base/maid_farm"), existingFileHelper);
 
@@ -62,7 +94,7 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FEED_PLAYER))
                 .save(saver, id("maid_base/maid_feed_player"), existingFileHelper);
 
-        make(InitItems.HAKUREI_GOHEI.get(), "maid_kill_mob").parent(taskRoot)
+        makeGoal(InitItems.HAKUREI_GOHEI.get(), "maid_kill_mob").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_KILL_MOB))
                 .save(saver, id("maid_base/maid_kill_mob"), existingFileHelper);
 
@@ -84,7 +116,7 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_ITEM_MAGNET_BAUBLE))
                 .save(saver, id("maid_base/use_item_magnet_bauble"), existingFileHelper);
 
-        make(InitItems.ULTRAMARINE_ORB_ELIXIR.get(), "use_undead_bauble").parent(baubleRoot)
+        makeGoal(InitItems.ULTRAMARINE_ORB_ELIXIR.get(), "use_undead_bauble").parent(baubleRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_UNDEAD_BAUBLE))
                 .save(saver, id("maid_base/use_undead_bauble"), existingFileHelper);
 
@@ -115,7 +147,7 @@ public class MaidBaseAdvancement {
                 .addCriterion("altar_craft", AltarCraftTrigger.Instance.recipe(id("altar/reborn_maid")))
                 .save(saver, id("maid_base/reborn_maid"), existingFileHelper);
 
-        make(InitItems.SHRINE.get(), "shrine_reborn_maid").parent(rebornRoot)
+        makeGoal(InitItems.SHRINE.get(), "shrine_reborn_maid").parent(rebornRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.SHRINE_REBORN_MAID))
                 .save(saver, id("maid_base/shrine_reborn_maid"), existingFileHelper);
     }
@@ -127,6 +159,15 @@ public class MaidBaseAdvancement {
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
                 FrameType.TASK, true, true, false);
+    }
+
+    private static Advancement.Builder makeGoal(ItemLike item, String key) {
+        MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.title", key));
+        MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.description", key));
+
+        return Advancement.Builder.advancement().display(item, title, desc,
+                new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
+                FrameType.GOAL, true, true, false);
     }
 
     private static ResourceLocation id(String id) {

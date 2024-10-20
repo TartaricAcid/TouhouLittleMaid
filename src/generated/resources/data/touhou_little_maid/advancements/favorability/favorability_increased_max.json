@@ -14,7 +14,7 @@
     "description": {
       "translate": "advancements.touhou_little_maid.favorability.favorability_increased_max.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
       "item": "touhou_little_maid:favorability_tool_full"
