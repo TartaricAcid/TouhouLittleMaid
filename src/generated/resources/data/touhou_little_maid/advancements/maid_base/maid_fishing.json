@@ -17,7 +17,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:hakurei_gohei",
+      "item": "minecraft:fishing_rod",
       "nbt": "{Damage:0}"
     },
     "show_toast": true,

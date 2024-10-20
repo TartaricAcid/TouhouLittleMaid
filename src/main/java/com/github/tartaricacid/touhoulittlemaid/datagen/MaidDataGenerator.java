@@ -32,5 +32,7 @@ public class MaidDataGenerator {
                 Set.of(LootTableGenerator.CAKE),
                 List.of(new LootTableProvider.SubProviderEntry(LootTableGenerator.AdvancementLootTables::new, LootContextParamSets.ADVANCEMENT_REWARD))
         ));
+
+        //generator.addProvider(true, new LanguageGenerator(packOutput));
     }
 }

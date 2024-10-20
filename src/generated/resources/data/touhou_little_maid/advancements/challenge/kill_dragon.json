@@ -17,8 +17,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "minecraft:diamond_sword",
-      "nbt": "{Damage:0}"
+      "item": "minecraft:dragon_head"
     },
     "show_toast": true,
     "title": {

@@ -17,7 +17,8 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:cake"
+      "item": "touhou_little_maid:entity_placeholder",
+      "nbt": "{RecipeId:\"touhou_little_maid:altar/spawn_box\"}"
     },
     "show_toast": true,
     "title": {

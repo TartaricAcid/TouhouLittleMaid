@@ -4,9 +4,10 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.advancements.altar.AltarCraftTrigger;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEventTrigger;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
+import com.github.tartaricacid.touhoulittlemaid.datagen.LanguageGenerator;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -14,6 +15,7 @@ import net.minecraft.advancements.critereon.PickedUpItemTrigger;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -25,7 +27,6 @@ public class MaidBaseAdvancement {
     public static void generate(Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
         Advancement root = make(InitItems.HAKUREI_GOHEI.get(), "switch_task")
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.SWITCH_TASK))
-                .rewards(AdvancementRewards.Builder.experience(50))
                 .save(saver, id("maid_base/switch_task"), existingFileHelper);
 
         generateTask(root, saver, existingFileHelper);
@@ -74,31 +75,31 @@ public class MaidBaseAdvancement {
     }
 
     private static void generateTask(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
-        Advancement taskRoot = make(InitItems.HAKUREI_GOHEI.get(), "switch_schedule").parent(root)
+        Advancement taskRoot = make(Items.CLOCK, "switch_schedule").parent(root)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.SWITCH_SCHEDULE))
                 .save(saver, id("maid_base/switch_schedule"), existingFileHelper);
 
-        make(InitItems.HAKUREI_GOHEI.get(), "maid_backpack").parent(taskRoot)
+        make(InitItems.MAID_BACKPACK_BIG.get(), "maid_backpack").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_BACKPACK))
                 .save(saver, id("maid_base/maid_backpack"), existingFileHelper);
 
-        makeGoal(InitItems.HAKUREI_GOHEI.get(), "maid_farm").parent(taskRoot)
+        makeGoal(Items.IRON_HOE, "maid_farm").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FARM))
                 .save(saver, id("maid_base/maid_farm"), existingFileHelper);
 
-        make(InitItems.HAKUREI_GOHEI.get(), "maid_feed_animal").parent(taskRoot)
+        make(Items.WHEAT, "maid_feed_animal").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FEED_ANIMAL))
                 .save(saver, id("maid_base/maid_feed_animal"), existingFileHelper);
 
-        make(InitItems.HAKUREI_GOHEI.get(), "maid_feed_player").parent(taskRoot)
+        make(Items.COOKED_BEEF, "maid_feed_player").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FEED_PLAYER))
                 .save(saver, id("maid_base/maid_feed_player"), existingFileHelper);
 
-        makeGoal(InitItems.HAKUREI_GOHEI.get(), "maid_kill_mob").parent(taskRoot)
+        makeGoal(Items.DIAMOND_SWORD, "maid_kill_mob").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_KILL_MOB))
                 .save(saver, id("maid_base/maid_kill_mob"), existingFileHelper);
 
-        make(InitItems.HAKUREI_GOHEI.get(), "maid_fishing").parent(taskRoot)
+        make(Items.FISHING_ROD, "maid_fishing").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FISHING))
                 .save(saver, id("maid_base/maid_fishing"), existingFileHelper);
     }
@@ -134,7 +135,7 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CHISEL_STATUE))
                 .save(saver, id("maid_base/chisel_statue"), existingFileHelper);
 
-        make(InitItems.CHISEL.get(), "pickup_garage_kit").parent(photoRoot)
+        make(InitItems.GARAGE_KIT.get(), "pickup_garage_kit").parent(photoRoot)
                 .addCriterion("pickup_item", PickedUpItemTrigger.TriggerInstance.thrownItemPickedUpByPlayer(
                         ContextAwarePredicate.ANY,
                         ItemPredicate.Builder.item().of(InitItems.GARAGE_KIT.get()).build(),
@@ -143,7 +144,8 @@ public class MaidBaseAdvancement {
     }
 
     private static void generateReborn(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
-        Advancement rebornRoot = make(InitItems.SHRINE.get(), "reborn_maid").parent(root)
+        ItemStack stack = ItemEntityPlaceholder.setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), id("altar/reborn_maid"));
+        Advancement rebornRoot = make(stack, "reborn_maid").parent(root)
                 .addCriterion("altar_craft", AltarCraftTrigger.Instance.recipe(id("altar/reborn_maid")))
                 .save(saver, id("maid_base/reborn_maid"), existingFileHelper);
 
@@ -156,6 +158,21 @@ public class MaidBaseAdvancement {
         MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.title", key));
         MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.description", key));
 
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
+
+        return Advancement.Builder.advancement().display(item, title, desc,
+                new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
+                FrameType.TASK, true, true, false);
+    }
+
+    private static Advancement.Builder make(ItemStack item, String key) {
+        MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.title", key));
+        MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.description", key));
+
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
+
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
                 FrameType.TASK, true, true, false);
@@ -164,6 +181,9 @@ public class MaidBaseAdvancement {
     private static Advancement.Builder makeGoal(ItemLike item, String key) {
         MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.title", key));
         MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.maid_base.%s.description", key));
+
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
 
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),

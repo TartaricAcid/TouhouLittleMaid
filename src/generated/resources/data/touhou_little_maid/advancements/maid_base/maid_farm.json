@@ -17,7 +17,7 @@
     "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:hakurei_gohei",
+      "item": "minecraft:iron_hoe",
       "nbt": "{Damage:0}"
     },
     "show_toast": true,

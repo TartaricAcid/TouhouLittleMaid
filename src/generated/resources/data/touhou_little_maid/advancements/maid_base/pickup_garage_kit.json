@@ -21,8 +21,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:chisel",
-      "nbt": "{Damage:0}"
+      "item": "touhou_little_maid:garage_kit"
     },
     "show_toast": true,
     "title": {

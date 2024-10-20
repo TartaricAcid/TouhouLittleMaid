@@ -17,8 +17,7 @@
     "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "minecraft:netherite_chestplate",
-      "nbt": "{Damage:0}"
+      "item": "touhou_little_maid:favorability_tool_full"
     },
     "show_toast": true,
     "title": {

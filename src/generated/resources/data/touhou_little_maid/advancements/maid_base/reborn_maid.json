@@ -17,7 +17,8 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:shrine"
+      "item": "touhou_little_maid:entity_placeholder",
+      "nbt": "{RecipeId:\"touhou_little_maid:altar/reborn_maid\"}"
     },
     "show_toast": true,
     "title": {

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.datagen.advancement;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEventTrigger;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
+import com.github.tartaricacid.touhoulittlemaid.datagen.LanguageGenerator;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -60,6 +61,9 @@ public class FavorabilityAdvancement {
         MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.favorability.%s.title", key));
         MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.favorability.%s.description", key));
 
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
+
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
                 FrameType.TASK, true, true, false);
@@ -68,6 +72,9 @@ public class FavorabilityAdvancement {
     private static Advancement.Builder makeGoal(ItemLike item, String key) {
         MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.favorability.%s.title", key));
         MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.favorability.%s.description", key));
+
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
 
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),

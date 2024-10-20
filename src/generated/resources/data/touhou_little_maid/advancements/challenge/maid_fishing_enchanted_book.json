@@ -17,8 +17,7 @@
     "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "minecraft:diamond_sword",
-      "nbt": "{Damage:0}"
+      "item": "minecraft:enchanted_book"
     },
     "show_toast": true,
     "title": {

@@ -17,8 +17,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:hakurei_gohei",
-      "nbt": "{Damage:0}"
+      "item": "minecraft:cooked_beef"
     },
     "show_toast": true,
     "title": {

@@ -4,9 +4,12 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.advancements.altar.AltarCraftTrigger;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEventTrigger;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
+import com.github.tartaricacid.touhoulittlemaid.datagen.LanguageGenerator;
 import com.github.tartaricacid.touhoulittlemaid.datagen.LootTableGenerator;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
@@ -17,6 +20,7 @@ import net.minecraft.advancements.critereon.RecipeCraftedTrigger;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -45,13 +49,15 @@ public class BaseAdvancement {
                 .addCriterion("craft_chair", RecipeCraftedTrigger.TriggerInstance.craftedItem(id("chair")))
                 .save(saver, id("base/craft_chair"), existingFileHelper);
 
-        make(InitItems.CHAIR.get(), "change_chair_model").parent(chair)
+        ItemChair.Data data = new ItemChair.Data("touhou_little_maid:tall_stool", 0, true, false);
+        make(ItemChair.setData(InitItems.CHAIR.get().getDefaultInstance(), data), "change_chair_model").parent(chair)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CHANGE_CHAIR_MODEL))
                 .save(saver, id("base/change_chair_model"), existingFileHelper);
     }
 
     private static void generateMaid(Consumer<Advancement> saver, ExistingFileHelper existingFileHelper, Advancement root) {
-        Advancement spawnMaid = make(Items.CAKE, "spawn_maid").parent(root)
+        ItemStack stack = ItemEntityPlaceholder.setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), id("altar/spawn_box"));
+        Advancement spawnMaid = make(stack, "spawn_maid").parent(root)
                 .addCriterion("altar_craft", AltarCraftTrigger.Instance.recipe(id("altar/spawn_box")))
                 .rewards(AdvancementRewards.Builder.loot(LootTableGenerator.CAKE))
                 .save(saver, id("base/spawn_maid"), existingFileHelper);
@@ -60,11 +66,11 @@ public class BaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.TAMED_MAID))
                 .save(saver, id("base/tamed_maid"), existingFileHelper);
 
-        make(Items.CAKE, "change_maid_model").parent(spawnMaid)
+        make(Items.LEATHER_CHESTPLATE, "change_maid_model").parent(spawnMaid)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CHANGE_MAID_MODEL))
                 .save(saver, id("base/change_maid_model"), existingFileHelper);
 
-        make(Items.CAKE, "change_maid_sound").parent(spawnMaid)
+        make(Items.JUKEBOX, "change_maid_sound").parent(spawnMaid)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CHANGE_MAID_SOUND))
                 .save(saver, id("base/change_maid_sound"), existingFileHelper);
     }
@@ -76,7 +82,7 @@ public class BaseAdvancement {
                 .save(saver, id("base/build_altar"), existingFileHelper);
 
         EntityPredicate.Builder predicate = EntityPredicate.Builder.entity().of(InitEntities.FAIRY.get());
-        make(InitItems.POWER_POINT.get(), "kill_maid_fairy").parent(altar)
+        make(InitItems.FAIRY_SPAWN_EGG.get(), "kill_maid_fairy").parent(altar)
                 .addCriterion("killed_entity", KilledTrigger.TriggerInstance.playerKilledEntity(predicate))
                 .save(saver, id("base/kill_maid_fairy"), existingFileHelper);
 
@@ -89,6 +95,21 @@ public class BaseAdvancement {
         MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.base.%s.title", key));
         MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.base.%s.description", key));
 
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
+
+        return Advancement.Builder.advancement().display(item, title, desc,
+                new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
+                FrameType.TASK, true, true, false);
+    }
+
+    private static Advancement.Builder make(ItemStack item, String key) {
+        MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.base.%s.title", key));
+        MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.base.%s.description", key));
+
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
+
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),
                 FrameType.TASK, true, true, false);
@@ -97,6 +118,9 @@ public class BaseAdvancement {
     private static Advancement.Builder makeGoal(ItemLike item, String key) {
         MutableComponent title = Component.translatable(String.format("advancements.touhou_little_maid.base.%s.title", key));
         MutableComponent desc = Component.translatable(String.format("advancements.touhou_little_maid.base.%s.description", key));
+
+        LanguageGenerator.addLanguage(title);
+        LanguageGenerator.addLanguage(desc);
 
         return Advancement.Builder.advancement().display(item, title, desc,
                 new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/advancements/backgrounds/stone.png"),

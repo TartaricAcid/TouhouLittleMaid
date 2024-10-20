@@ -17,8 +17,8 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:netherite_chestplate",
-      "nbt": "{Damage:0}"
+      "item": "touhou_little_maid:entity_placeholder",
+      "nbt": "{RecipeId:\"touhou_little_maid:altar/spawn_lightning_bolt\"}"
     },
     "show_toast": true,
     "title": {

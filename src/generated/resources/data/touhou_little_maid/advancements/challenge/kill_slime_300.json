@@ -17,7 +17,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "minecraft:diamond_sword",
+      "item": "minecraft:netherite_sword",
       "nbt": "{Damage:0}"
     },
     "show_toast": true,
@@ -30,5 +30,8 @@
       "maid_event"
     ]
   ],
+  "rewards": {
+    "experience": 50
+  },
   "sends_telemetry_event": true
 }

@@ -17,7 +17,8 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:chair"
+      "item": "touhou_little_maid:chair",
+      "nbt": "{IsNoGravity:0b,ModelId:\"touhou_little_maid:tall_stool\",MountedHeight:0.0f,TameableCanRide:1b}"
     },
     "show_toast": true,
     "title": {
