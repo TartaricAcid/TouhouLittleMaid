@@ -1,5 +1,5 @@
 {
-  "parent": "touhou_little_maid:maid_base/photo_maid",
+  "parent": "touhou_little_maid:maid_base/chisel_statue",
   "criteria": {
     "pickup_item": {
       "conditions": {

@@ -17,8 +17,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "minecraft:netherite_sword",
-      "nbt": "{Damage:0}"
+      "item": "touhou_little_maid:kill_slime_300"
     },
     "show_toast": true,
     "title": {

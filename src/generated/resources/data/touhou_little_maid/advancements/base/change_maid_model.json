@@ -17,8 +17,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:leather_chestplate",
-      "nbt": "{Damage:0}"
+      "item": "touhou_little_maid:change_maid_model"
     },
     "show_toast": true,
     "title": {

@@ -1,5 +1,5 @@
 {
-  "parent": "touhou_little_maid:challenge/eat_enchanted_golden_apple",
+  "parent": "touhou_little_maid:challenge/lightning_bolt",
   "criteria": {
     "maid_event": {
       "conditions": {
@@ -17,7 +17,7 @@
     "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "touhou_little_maid:favorability_tool_full"
+      "item": "touhou_little_maid:maid_100_healthy"
     },
     "show_toast": true,
     "title": {

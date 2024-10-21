@@ -59,5 +59,6 @@ public final class TriggerType {
     public static final String KILL_SLIME_300 = "kill_slime_300";
     public static final String MAID_FISHING_ENCHANTED_BOOK = "maid_fishing_enchanted_book";
     public static final String TAMED_MAID_FROM_STRUCTURE = "tamed_maid_from_structure";
+    public static final String KILL_WITHER = "kill_wither";
     public static final String KILL_DRAGON = "kill_dragon";
 }

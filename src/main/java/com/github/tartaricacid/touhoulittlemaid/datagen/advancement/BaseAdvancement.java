@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.datagen.LanguageGenerator;
 import com.github.tartaricacid.touhoulittlemaid.datagen.LootTableGenerator;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemEntityPlaceholder;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -49,8 +48,7 @@ public class BaseAdvancement {
                 .addCriterion("craft_chair", RecipeCraftedTrigger.TriggerInstance.craftedItem(id("chair")))
                 .save(saver, id("base/craft_chair"), existingFileHelper);
 
-        ItemChair.Data data = new ItemChair.Data("touhou_little_maid:tall_stool", 0, true, false);
-        make(ItemChair.setData(InitItems.CHAIR.get().getDefaultInstance(), data), "change_chair_model").parent(chair)
+        make(InitItems.CHANGE_CHAIR_MODEL.get(), "change_chair_model").parent(chair)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CHANGE_CHAIR_MODEL))
                 .save(saver, id("base/change_chair_model"), existingFileHelper);
     }
@@ -66,7 +64,7 @@ public class BaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.TAMED_MAID))
                 .save(saver, id("base/tamed_maid"), existingFileHelper);
 
-        make(Items.LEATHER_CHESTPLATE, "change_maid_model").parent(spawnMaid)
+        make(InitItems.CHANGE_MAID_MODEL.get(), "change_maid_model").parent(spawnMaid)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CHANGE_MAID_MODEL))
                 .save(saver, id("base/change_maid_model"), existingFileHelper);
 

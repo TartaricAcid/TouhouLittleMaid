@@ -28,7 +28,7 @@ public class ChallengeAdvancement {
 
         generateProtect(root, saver, existingFileHelper);
 
-        generateOther(root, saver, existingFileHelper);
+        generateKill(root, saver, existingFileHelper);
     }
 
     private static void generateProtect(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
@@ -36,43 +36,49 @@ public class ChallengeAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.EAT_ENCHANTED_GOLDEN_APPLE))
                 .save(saver, id("challenge/eat_enchanted_golden_apple"), existingFileHelper);
 
-        makeChallenge(Items.NETHERITE_CHESTPLATE, "all_netherite_equipment").parent(protect)
+        makeChallenge(InitItems.ALL_NETHERITE_EQUIPMENT.get(), "all_netherite_equipment").parent(protect)
                 .rewards(AdvancementRewards.Builder.experience(50))
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.ALL_NETHERITE_EQUIPMENT))
                 .save(saver, id("challenge/all_netherite_equipment"), existingFileHelper);
 
         ItemStack stack = ItemEntityPlaceholder.setRecipeId(new ItemStack(InitItems.ENTITY_PLACEHOLDER.get()), id("altar/spawn_lightning_bolt"));
-        make(stack, "lightning_bolt").parent(protect)
+        Advancement lightningBolt = make(stack, "lightning_bolt").parent(protect)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.LIGHTNING_BOLT))
                 .save(saver, id("challenge/lightning_bolt"), existingFileHelper);
 
-        makeGoal(InitItems.FAVORABILITY_TOOL_FULL.get(), "maid_100_healthy").parent(protect)
+        makeGoal(InitItems.MAID_100_HEALTHY.get(), "maid_100_healthy").parent(lightningBolt)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_100_HEALTHY))
                 .save(saver, id("challenge/maid_100_healthy"), existingFileHelper);
     }
 
-    private static void generateOther(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
+    private static void generateKill(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
         Advancement kill = makeGoal(Items.DIAMOND_SWORD, "kill_100").parent(root)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.KILL_100))
                 .rewards(AdvancementRewards.Builder.experience(50))
                 .save(saver, id("challenge/kill_100"), existingFileHelper);
 
-        makeChallenge(Items.NETHERITE_SWORD, "kill_slime_300").parent(kill)
+        makeChallenge(InitItems.KILL_SLIME_300.get(), "kill_slime_300").parent(kill)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.KILL_SLIME_300))
                 .rewards(AdvancementRewards.Builder.experience(50))
                 .save(saver, id("challenge/kill_slime_300"), existingFileHelper);
 
-        makeGoal(Items.ENCHANTED_BOOK, "maid_fishing_enchanted_book").parent(kill)
+        Advancement wither = makeChallenge(InitItems.KILL_WITHER.get(), "kill_wither").parent(kill)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.KILL_WITHER))
+                .save(saver, id("challenge/kill_wither"), existingFileHelper);
+
+        makeChallenge(InitItems.KILL_DRAGON.get(), "kill_dragon").parent(wither)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.KILL_DRAGON))
+                .save(saver, id("challenge/kill_dragon"), existingFileHelper);
+    }
+
+    private static void generateOther(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
+        makeGoal(Items.ENCHANTED_BOOK, "maid_fishing_enchanted_book").parent(root)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FISHING_ENCHANTED_BOOK))
                 .save(saver, id("challenge/maid_fishing_enchanted_book"), existingFileHelper);
 
-        makeGoal(Items.CAKE, "tamed_maid_in_pillager_outpost").parent(kill)
+        makeGoal(Items.CAKE, "tamed_maid_in_pillager_outpost").parent(root)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.TAMED_MAID_FROM_STRUCTURE))
                 .save(saver, id("challenge/tamed_maid_in_pillager_outpost"), existingFileHelper);
-
-        makeChallenge(Items.DRAGON_HEAD, "kill_dragon").parent(kill)
-                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.KILL_DRAGON))
-                .save(saver, id("challenge/kill_dragon"), existingFileHelper);
     }
 
     private static Advancement.Builder make(ItemLike item, String key) {

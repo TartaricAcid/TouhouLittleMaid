@@ -51,11 +51,11 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_TRUMPET))
                 .save(saver, id("maid_base/use_trumpet"), existingFileHelper);
 
-        make(InitItems.RED_FOX_SCROLL.get(), "use_red_fox_scroll").parent(base)
+        Advancement redFoxScroll = make(InitItems.RED_FOX_SCROLL.get(), "use_red_fox_scroll").parent(base)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_RED_FOX_SCROLL))
                 .save(saver, id("maid_base/use_red_fox_scroll"), existingFileHelper);
 
-        make(InitItems.WHITE_FOX_SCROLL.get(), "use_white_fox_scroll").parent(base)
+        make(InitItems.WHITE_FOX_SCROLL.get(), "use_white_fox_scroll").parent(redFoxScroll)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_WHITE_FOX_SCROLL))
                 .save(saver, id("maid_base/use_white_fox_scroll"), existingFileHelper);
     }
@@ -79,29 +79,29 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.SWITCH_SCHEDULE))
                 .save(saver, id("maid_base/switch_schedule"), existingFileHelper);
 
-        make(InitItems.MAID_BACKPACK_BIG.get(), "maid_backpack").parent(taskRoot)
+        Advancement backpack = make(InitItems.MAID_BACKPACK_BIG.get(), "maid_backpack").parent(taskRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_BACKPACK))
                 .save(saver, id("maid_base/maid_backpack"), existingFileHelper);
 
-        makeGoal(Items.IRON_HOE, "maid_farm").parent(taskRoot)
-                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FARM))
-                .save(saver, id("maid_base/maid_farm"), existingFileHelper);
-
-        make(Items.WHEAT, "maid_feed_animal").parent(taskRoot)
-                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FEED_ANIMAL))
-                .save(saver, id("maid_base/maid_feed_animal"), existingFileHelper);
-
-        make(Items.COOKED_BEEF, "maid_feed_player").parent(taskRoot)
-                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FEED_PLAYER))
-                .save(saver, id("maid_base/maid_feed_player"), existingFileHelper);
-
-        makeGoal(Items.DIAMOND_SWORD, "maid_kill_mob").parent(taskRoot)
+        makeGoal(Items.DIAMOND_SWORD, "maid_kill_mob").parent(backpack)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_KILL_MOB))
                 .save(saver, id("maid_base/maid_kill_mob"), existingFileHelper);
 
-        make(Items.FISHING_ROD, "maid_fishing").parent(taskRoot)
+        make(Items.FISHING_ROD, "maid_fishing").parent(backpack)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FISHING))
                 .save(saver, id("maid_base/maid_fishing"), existingFileHelper);
+
+        Advancement farm = makeGoal(Items.IRON_HOE, "maid_farm").parent(taskRoot)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FARM))
+                .save(saver, id("maid_base/maid_farm"), existingFileHelper);
+
+        Advancement feedAnimal = make(Items.WHEAT, "maid_feed_animal").parent(farm)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FEED_ANIMAL))
+                .save(saver, id("maid_base/maid_feed_animal"), existingFileHelper);
+
+        make(Items.COOKED_BEEF, "maid_feed_player").parent(feedAnimal)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_FEED_PLAYER))
+                .save(saver, id("maid_base/maid_feed_player"), existingFileHelper);
     }
 
     private static void generateBauble(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
@@ -109,19 +109,19 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_PROTECT_BAUBLE))
                 .save(saver, id("maid_base/use_protect_bauble"), existingFileHelper);
 
-        make(InitItems.NIMBLE_FABRIC.get(), "use_nimble_fabric").parent(baubleRoot)
+        Advancement fabric = make(InitItems.NIMBLE_FABRIC.get(), "use_nimble_fabric").parent(baubleRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_NIMBLE_FABRIC))
                 .save(saver, id("maid_base/use_nimble_fabric"), existingFileHelper);
 
-        make(InitItems.ITEM_MAGNET_BAUBLE.get(), "use_item_magnet_bauble").parent(baubleRoot)
-                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_ITEM_MAGNET_BAUBLE))
-                .save(saver, id("maid_base/use_item_magnet_bauble"), existingFileHelper);
-
-        makeGoal(InitItems.ULTRAMARINE_ORB_ELIXIR.get(), "use_undead_bauble").parent(baubleRoot)
+        makeGoal(InitItems.ULTRAMARINE_ORB_ELIXIR.get(), "use_undead_bauble").parent(fabric)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_UNDEAD_BAUBLE))
                 .save(saver, id("maid_base/use_undead_bauble"), existingFileHelper);
 
-        make(InitItems.WIRELESS_IO.get(), "use_wireless_io").parent(baubleRoot)
+        Advancement magnet = make(InitItems.ITEM_MAGNET_BAUBLE.get(), "use_item_magnet_bauble").parent(baubleRoot)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_ITEM_MAGNET_BAUBLE))
+                .save(saver, id("maid_base/use_item_magnet_bauble"), existingFileHelper);
+
+        make(InitItems.WIRELESS_IO.get(), "use_wireless_io").parent(magnet)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.USE_WIRELESS_IO))
                 .save(saver, id("maid_base/use_wireless_io"), existingFileHelper);
     }
@@ -131,11 +131,11 @@ public class MaidBaseAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.PHOTO_MAID))
                 .save(saver, id("maid_base/photo_maid"), existingFileHelper);
 
-        make(InitItems.CHISEL.get(), "chisel_statue").parent(photoRoot)
+        Advancement statue = make(InitItems.CHISEL.get(), "chisel_statue").parent(photoRoot)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.CHISEL_STATUE))
                 .save(saver, id("maid_base/chisel_statue"), existingFileHelper);
 
-        make(InitItems.GARAGE_KIT.get(), "pickup_garage_kit").parent(photoRoot)
+        make(InitItems.GARAGE_KIT.get(), "pickup_garage_kit").parent(statue)
                 .addCriterion("pickup_item", PickedUpItemTrigger.TriggerInstance.thrownItemPickedUpByPlayer(
                         ContextAwarePredicate.ANY,
                         ItemPredicate.Builder.item().of(InitItems.GARAGE_KIT.get()).build(),

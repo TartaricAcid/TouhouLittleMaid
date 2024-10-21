@@ -1,5 +1,5 @@
 {
-  "parent": "touhou_little_maid:challenge/kill_100",
+  "parent": "touhou_little_maid:challenge/kill_wither",
   "criteria": {
     "maid_event": {
       "conditions": {
@@ -17,7 +17,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "minecraft:dragon_head"
+      "item": "touhou_little_maid:kill_dragon"
     },
     "show_toast": true,
     "title": {
