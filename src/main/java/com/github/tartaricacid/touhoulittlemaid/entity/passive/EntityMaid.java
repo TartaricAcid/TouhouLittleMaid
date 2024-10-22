@@ -876,6 +876,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             setStruckByLightning(true);
             if (this.getOwner() instanceof ServerPlayer serverPlayer) {
                 InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.LIGHTNING_BOLT);
+                if (this.getMaxHealth() >= 100) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.MAID_100_HEALTHY);
+                }
             }
         }
     }

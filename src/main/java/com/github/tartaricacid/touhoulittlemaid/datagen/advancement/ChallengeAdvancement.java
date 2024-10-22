@@ -52,7 +52,7 @@ public class ChallengeAdvancement {
     }
 
     private static void generateKill(Advancement root, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
-        Advancement kill = makeGoal(Items.DIAMOND_SWORD, "kill_100").parent(root)
+        Advancement kill = makeGoal(InitItems.KILL_100.get(), "kill_100").parent(root)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.KILL_100))
                 .rewards(AdvancementRewards.Builder.experience(50))
                 .save(saver, id("challenge/kill_100"), existingFileHelper);
