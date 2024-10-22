@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "touhou_little_maid:block/gomoku"
+      "model": "touhou_little_maid:block/cchess"
     }
   }
 }

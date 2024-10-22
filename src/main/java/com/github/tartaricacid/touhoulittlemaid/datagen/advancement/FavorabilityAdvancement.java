@@ -34,13 +34,17 @@ public class FavorabilityAdvancement {
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_PICNIC_EAT))
                 .save(saver, id("favorability/maid_picnic_eat"), existingFileHelper);
 
-        makeGoal(InitItems.GOMOKU.get(), "win_gomoku").parent(joy)
+        Advancement gomoku = makeGoal(InitItems.GOMOKU.get(), "win_gomoku").parent(joy)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.WIN_GOMOKU))
                 .save(saver, id("favorability/win_gomoku"), existingFileHelper);
 
-        makeGoal(InitItems.CCHESS.get(), "win_cchess").parent(joy)
+        Advancement cchess = makeGoal(InitItems.CCHESS.get(), "win_cchess").parent(gomoku)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.WIN_CCHESS))
                 .save(saver, id("favorability/win_cchess"), existingFileHelper);
+
+        makeGoal(InitItems.WCHESS.get(), "win_wchess").parent(cchess)
+                .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.WIN_WCHESS))
+                .save(saver, id("favorability/win_wchess"), existingFileHelper);
 
         make(InitItems.MAID_BED.get(), "maid_sleep").parent(joy)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.MAID_SLEEP))

@@ -15,25 +15,25 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class XiangqiToClientMessage {
+public class CChessToClientMessage {
     private final BlockPos pos;
     private final String fenData;
 
-    public XiangqiToClientMessage(BlockPos pos, String fenData) {
+    public CChessToClientMessage(BlockPos pos, String fenData) {
         this.pos = pos;
         this.fenData = fenData;
     }
 
-    public static void encode(XiangqiToClientMessage message, FriendlyByteBuf buf) {
+    public static void encode(CChessToClientMessage message, FriendlyByteBuf buf) {
         buf.writeBlockPos(message.pos);
         buf.writeUtf(message.fenData);
     }
 
-    public static XiangqiToClientMessage decode(FriendlyByteBuf buf) {
-        return new XiangqiToClientMessage(buf.readBlockPos(), buf.readUtf());
+    public static CChessToClientMessage decode(FriendlyByteBuf buf) {
+        return new CChessToClientMessage(buf.readBlockPos(), buf.readUtf());
     }
 
-    public static void handle(XiangqiToClientMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(CChessToClientMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isClient()) {
             context.enqueueWork(() -> CompletableFuture.runAsync(() -> onHandle(message), Util.backgroundExecutor()));
@@ -42,7 +42,7 @@ public class XiangqiToClientMessage {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void onHandle(XiangqiToClientMessage message) {
+    private static void onHandle(CChessToClientMessage message) {
         int levelTime = 1000;
         long timeStart = System.currentTimeMillis();
         int move = 0;
@@ -73,6 +73,6 @@ public class XiangqiToClientMessage {
 
         final int moveFinal = move;
         final boolean playerLostFinal = playerLost;
-        Minecraft.getInstance().submitAsync(() -> NetworkHandler.CHANNEL.sendToServer(new XiangqiToServerMessage(message.pos, moveFinal, maidLost, playerLostFinal)));
+        Minecraft.getInstance().submitAsync(() -> NetworkHandler.CHANNEL.sendToServer(new CChessToServerMessage(message.pos, moveFinal, maidLost, playerLostFinal)));
     }
 }

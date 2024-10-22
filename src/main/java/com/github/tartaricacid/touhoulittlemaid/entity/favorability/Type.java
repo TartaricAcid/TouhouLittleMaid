@@ -8,6 +8,7 @@ public class Type {
     public static final Type SLEEP = new Type("Sleep", 2, 24000);
     public static final Type GOMOKU_WIN = new Type("GomokuWin", 8, 12000);
     public static final Type CCHESS_WIN = new Type("CChessWin", 4, 18000);
+    public static final Type WCHESS_WIN = new Type("CChessWin", 4, 18000);
     public static final Type WORK_MEAL = new Type("WorkMeal", 1, 2 * 60 * 20);
     public static final Type ON_HOME_MEAL = new Type("OnHomeMeal", 1, 24000);
     public static final Type HOME_MEAL = new Type("HomeMeal", 1, 60 * 20);

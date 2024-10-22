@@ -9,31 +9,31 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class XiangqiToServerMessage {
+public class CChessToServerMessage {
     private final BlockPos pos;
     private final int move;
     private final boolean maidLost;
     private final boolean playerLost;
 
-    public XiangqiToServerMessage(BlockPos pos, int move, boolean maidLost, boolean playerLost) {
+    public CChessToServerMessage(BlockPos pos, int move, boolean maidLost, boolean playerLost) {
         this.pos = pos;
         this.move = move;
         this.maidLost = maidLost;
         this.playerLost = playerLost;
     }
 
-    public static void encode(XiangqiToServerMessage message, FriendlyByteBuf buf) {
+    public static void encode(CChessToServerMessage message, FriendlyByteBuf buf) {
         buf.writeBlockPos(message.pos);
         buf.writeVarInt(message.move);
         buf.writeBoolean(message.maidLost);
         buf.writeBoolean(message.playerLost);
     }
 
-    public static XiangqiToServerMessage decode(FriendlyByteBuf buf) {
-        return new XiangqiToServerMessage(buf.readBlockPos(), buf.readVarInt(), buf.readBoolean(), buf.readBoolean());
+    public static CChessToServerMessage decode(FriendlyByteBuf buf) {
+        return new CChessToServerMessage(buf.readBlockPos(), buf.readVarInt(), buf.readBoolean(), buf.readBoolean());
     }
 
-    public static void handle(XiangqiToServerMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(CChessToServerMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isServer()) {
             context.enqueueWork(() -> {

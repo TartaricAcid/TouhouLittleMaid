@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameBlock;
-import com.github.tartaricacid.touhoulittlemaid.api.game.xqwlight.Position;
+import com.github.tartaricacid.touhoulittlemaid.api.game.chess.Position;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
@@ -12,10 +12,10 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.CChessToClientMessage;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityCChess;
+import com.github.tartaricacid.touhoulittlemaid.network.message.WChessToClientMessage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
-import com.github.tartaricacid.touhoulittlemaid.util.CChessUtil;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityWChess;
+import com.github.tartaricacid.touhoulittlemaid.util.WChessUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -53,22 +53,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class BlockCChess extends BlockJoy implements IBoardGameBlock {
+public class BlockWChess extends BlockJoy implements IBoardGameBlock {
     public static final EnumProperty<GomokuPart> PART = EnumProperty.create("part", GomokuPart.class);
     public static final VoxelShape AABB = Block.box(0, 0, 0, 16, 2, 16);
 
-    public BlockCChess() {
+    public BlockWChess() {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, GomokuPart.CENTER).setValue(FACING, Direction.NORTH));
     }
 
-    private static void handleCChessRemove(Level world, BlockPos pos, BlockState state) {
+    private static void handleWChessRemove(Level world, BlockPos pos, BlockState state) {
         if (!world.isClientSide) {
             GomokuPart part = state.getValue(PART);
             BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
             BlockEntity te = world.getBlockEntity(centerPos);
-            popResource(world, centerPos, InitItems.CCHESS.get().getDefaultInstance());
-            if (te instanceof TileEntityCChess) {
+            popResource(world, centerPos, InitItems.WCHESS.get().getDefaultInstance());
+            if (te instanceof TileEntityWChess) {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
                         world.setBlockAndUpdate(centerPos.offset(i, 0, j), Blocks.AIR.defaultBlockState());
@@ -78,8 +78,9 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
         }
     }
 
+
     public static void maidMove(ServerPlayer player, Level level, BlockPos pos, int move, boolean maidLost, boolean playerLost) {
-        if (level.getBlockEntity(pos) instanceof TileEntityCChess chess) {
+        if (level.getBlockEntity(pos) instanceof TileEntityWChess chess) {
             if (chess.isPlayerTurn()) {
                 return;
             }
@@ -87,34 +88,36 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
             Position chessData = chess.getChessData();
             UUID sitId = chess.getSitId();
             // 女仆输，以防作弊，再检查一次
-            if (maidLost && CChessUtil.isMaid(chessData) && chessData.isMate()) {
+            if (maidLost && WChessUtil.isMaid(chessData) && chessData.isMate()) {
                 chess.setCheckmate(true);
                 chess.refresh();
 
                 if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(sitId) instanceof EntitySit sit
                     && sit.getFirstPassenger() instanceof EntityMaid maid && maid.isOwnedBy(player)) {
                     // TODO: 暂时不加段位系统
-                    maid.getFavorabilityManager().apply(Type.CCHESS_WIN);
-                    InitTrigger.MAID_EVENT.trigger(player, TriggerType.WIN_CCHESS);
+                    maid.getFavorabilityManager().apply(Type.WCHESS_WIN);
+                    InitTrigger.MAID_EVENT.trigger(player, TriggerType.WIN_WCHESS);
                 }
 
                 return;
             }
 
-            boolean notChecked = chessData.makeMove(move);
-            // 如果吃子了，那么重置计数器（该计数器用于判断自然限着和长将）
-            if (notChecked && chessData.captured()) {
-                chessData.setIrrev();
+            // 如果吃子/移兵了，那么重置计数器（该计数器用于判断限着和长将）
+            if (chessData.makeMove(move)) {
+                int pcSrc = chessData.squares[Position.SRC(move)];
+                if (chessData.captured() || Position.PIECE_TYPE(pcSrc) == Position.PIECE_PAWN) {
+                    chessData.setIrrev();
+                }
             }
             chess.setSelectChessPoint(Position.DST(move));
             chess.setCheckmate(playerLost);
 
             // 如果玩家没输，那么检查其他和局情况
             if (!playerLost) {
-                if (CChessUtil.reachMoveLimit(chessData)) {
-                    // 判断是否六十回自然限着
+                if (WChessUtil.reachMoveLimit(chessData)) {
+                    // 判断是否 50 回合限制
                     chess.setMoveNumberLimit(true);
-                } else if (CChessUtil.isRepeat(chessData)) {
+                } else if (WChessUtil.isRepeat(chessData)) {
                     // 判断是否长打
                     chess.setRepeat(true);
                 }
@@ -148,13 +151,13 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
 
     @Override
     public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
-        handleCChessRemove(world, pos, state);
+        handleWChessRemove(world, pos, state);
         super.playerWillDestroy(world, pos, state, player);
     }
 
     @Override
     public void onBlockExploded(BlockState state, Level world, BlockPos pos, Explosion explosion) {
-        handleCChessRemove(world, pos, state);
+        handleWChessRemove(world, pos, state);
         super.onBlockExploded(state, world, pos, explosion);
     }
 
@@ -197,7 +200,7 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
             BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
             BlockEntity te = level.getBlockEntity(centerPos);
 
-            if (!(te instanceof TileEntityCChess chess)) {
+            if (!(te instanceof TileEntityWChess chess)) {
                 return InteractionResult.FAIL;
             }
             if (!chess.isPlayerTurn() && !chess.isCheckmate()) {
@@ -224,7 +227,7 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
                     .yRot(facing.toYRot() * Mth.DEG_TO_RAD);
 
             // 重置棋盘
-            boolean clickResetArea = CChessUtil.isClickResetArea(clickPos);
+            boolean clickResetArea = WChessUtil.isClickResetArea(clickPos);
             if (clickResetArea) {
                 chess.reset();
                 chess.refresh();
@@ -232,7 +235,7 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
             }
 
             // 没有点击到棋盘上，返回
-            int nowClick = CChessUtil.getClickPosition(clickPos);
+            int nowClick = WChessUtil.getClickPosition(clickPos);
             if (nowClick < 0 || !Position.IN_BOARD(nowClick)) {
                 return InteractionResult.PASS;
             }
@@ -242,7 +245,7 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
                 return InteractionResult.FAIL;
             }
 
-            // 60 回合自然限着、长将不能下棋
+            // 50 回合自然限着、长将不能下棋
             if (chess.isMoveNumberLimit() || chess.isRepeat()) {
                 return InteractionResult.FAIL;
             }
@@ -258,9 +261,9 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
             byte nowPiece = squares[nowClick];
 
             // 如果前一个选择为空，或者选中的是黑方，说明没有选中棋子
-            if (prePiece <= 0 || CChessUtil.isBlack(prePiece)) {
-                // 当前点击的是红方棋子
-                if (CChessUtil.isRed(nowPiece)) {
+            if (prePiece <= 0 || WChessUtil.isBlack(prePiece)) {
+                // 当前点击的是白方棋子
+                if (WChessUtil.isWhite(nowPiece)) {
                     chess.setSelectChessPoint(nowClick);
                     chess.refresh();
                     level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
@@ -268,8 +271,8 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
                 return InteractionResult.SUCCESS;
             }
 
-            // 如果选的都是红方棋子，重选
-            if (CChessUtil.isRed(prePiece) && CChessUtil.isRed(nowPiece)) {
+            // 如果选的都是白方棋子，重选
+            if (WChessUtil.isWhite(prePiece) && WChessUtil.isWhite(nowPiece)) {
                 chess.setSelectChessPoint(nowClick);
                 chess.refresh();
                 level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
@@ -285,15 +288,16 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
             // 没有将军，正常移动
             boolean notChecked = chessData.makeMove(move);
             if (notChecked) {
-                // 如果吃子了，那么重置计数器（该计数器用于判断自然限着和长将）
-                if (chessData.captured()) {
+                int pcSrc = chessData.squares[Position.SRC(move)];
+                // 如果吃子、动兵了，那么重置计数器（该计数器用于判断自然限着和长将）
+                if (chessData.captured() || Position.PIECE_TYPE(pcSrc) == Position.PIECE_PAWN) {
                     chessData.setIrrev();
                 }
                 chess.addChessCounter();
                 chess.setSelectChessPoint(nowClick);
                 chess.refresh();
                 level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
-                NetworkHandler.sendToClientPlayer(new CChessToClientMessage(centerPos, chessData.toFen()), player);
+                NetworkHandler.sendToClientPlayer(new WChessToClientMessage(centerPos, chessData.toFen()), player);
                 return InteractionResult.SUCCESS;
             }
 
@@ -329,7 +333,7 @@ public class BlockCChess extends BlockJoy implements IBoardGameBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         if (state.getValue(PART).isCenter()) {
-            return new TileEntityCChess(pos, state);
+            return new TileEntityWChess(pos, state);
         }
         return null;
     }

@@ -22,6 +22,7 @@ public final class InitBlocks {
     public static RegistryObject<Block> PICNIC_MAT = BLOCKS.register("picnic_mat", BlockPicnicMat::new);
     public static RegistryObject<Block> GOMOKU = BLOCKS.register("gomoku", BlockGomoku::new);
     public static RegistryObject<Block> CCHESS = BLOCKS.register("cchess", BlockCChess::new);
+    public static RegistryObject<Block> WCHESS = BLOCKS.register("wchess", BlockWChess::new);
     public static RegistryObject<Block> KEYBOARD = BLOCKS.register("keyboard", BlockKeyboard::new);
     public static RegistryObject<Block> BOOKSHELF = BLOCKS.register("bookshelf", BlockBookshelf::new);
     public static RegistryObject<Block> COMPUTER = BLOCKS.register("computer", BlockComputer::new);
@@ -35,6 +36,7 @@ public final class InitBlocks {
     public static RegistryObject<BlockEntityType<TileEntityModelSwitcher>> MODEL_SWITCHER_TE = TILE_ENTITIES.register("model_switcher", () -> TileEntityModelSwitcher.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityGomoku>> GOMOKU_TE = TILE_ENTITIES.register("gomoku", () -> TileEntityGomoku.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityCChess>> CCHESS_TE = TILE_ENTITIES.register("cchess", () -> TileEntityCChess.TYPE);
+    public static RegistryObject<BlockEntityType<TileEntityWChess>> WCHESS_TE = TILE_ENTITIES.register("wchess", () -> TileEntityWChess.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityKeyboard>> KEYBOARD_TE = TILE_ENTITIES.register("keyboard", () -> TileEntityKeyboard.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityBookshelf>> BOOKSHELF_TE = TILE_ENTITIES.register("bookshelf", () -> TileEntityBookshelf.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityComputer>> COMPUTER_TE = TILE_ENTITIES.register("computer", () -> TileEntityComputer.TYPE);

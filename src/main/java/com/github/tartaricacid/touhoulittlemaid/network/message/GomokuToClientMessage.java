@@ -14,20 +14,20 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class ChessDataToClientMessage {
+public class GomokuToClientMessage {
     private final BlockPos pos;
     private final int[][] chessData;
     private final Point point;
     private final int count;
 
-    public ChessDataToClientMessage(BlockPos pos, int[][] chessData, Point point, int count) {
+    public GomokuToClientMessage(BlockPos pos, int[][] chessData, Point point, int count) {
         this.pos = pos;
         this.chessData = chessData;
         this.point = point;
         this.count = count;
     }
 
-    public static void encode(ChessDataToClientMessage message, FriendlyByteBuf buf) {
+    public static void encode(GomokuToClientMessage message, FriendlyByteBuf buf) {
         buf.writeBlockPos(message.pos);
         buf.writeVarInt(message.chessData.length);
         for (int[] row : message.chessData) {
@@ -39,7 +39,7 @@ public class ChessDataToClientMessage {
         buf.writeVarInt(message.count);
     }
 
-    public static ChessDataToClientMessage decode(FriendlyByteBuf buf) {
+    public static GomokuToClientMessage decode(FriendlyByteBuf buf) {
         BlockPos blockPos = buf.readBlockPos();
         int length = buf.readVarInt();
         int[][] chessData = new int[length][length];
@@ -48,10 +48,10 @@ public class ChessDataToClientMessage {
         }
         Point pointIn = new Point(buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
         int count = buf.readVarInt();
-        return new ChessDataToClientMessage(blockPos, chessData, pointIn, count);
+        return new GomokuToClientMessage(blockPos, chessData, pointIn, count);
     }
 
-    public static void handle(ChessDataToClientMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(GomokuToClientMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isClient()) {
             context.enqueueWork(() -> CompletableFuture.runAsync(() -> onHandle(message), Util.backgroundExecutor()));
@@ -60,7 +60,7 @@ public class ChessDataToClientMessage {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void onHandle(ChessDataToClientMessage message) {
+    private static void onHandle(GomokuToClientMessage message) {
         Point aiPoint = MaidGomokuAI.getService(message.count).getPoint(message.chessData, message.point);
         int time = (int) (Math.random() * 1250) + 250;
         try {
@@ -68,6 +68,6 @@ public class ChessDataToClientMessage {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Minecraft.getInstance().submitAsync(() -> NetworkHandler.CHANNEL.sendToServer(new ChessDataToServerMessage(message.pos, aiPoint)));
+        Minecraft.getInstance().submitAsync(() -> NetworkHandler.CHANNEL.sendToServer(new GomokuToServerMessage(message.pos, aiPoint)));
     }
 }

@@ -445,7 +445,7 @@ public class Position {
             }
         }
 
-        InputStream in = rc4.getClass().getResourceAsStream("/assets/touhou_little_maid/book/BOOK.DAT");
+        InputStream in = rc4.getClass().getResourceAsStream("/assets/touhou_little_maid/book/cchess/BOOK.DAT");
         if (in != null) {
             try {
                 while (bookSize < MAX_BOOK_SIZE) {

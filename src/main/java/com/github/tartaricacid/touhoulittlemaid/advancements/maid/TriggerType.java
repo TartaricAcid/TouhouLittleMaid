@@ -46,6 +46,7 @@ public final class TriggerType {
     public static final String MAID_PICNIC_EAT = "maid_picnic_eat";
     public static final String WIN_GOMOKU = "win_gomoku";
     public static final String WIN_CCHESS = "win_cchess";
+    public static final String WIN_WCHESS = "win_wchess";
     public static final String MAID_SLEEP = "maid_sleep";
 
     // 女仆挑战

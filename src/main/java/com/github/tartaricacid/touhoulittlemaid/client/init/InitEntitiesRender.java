@@ -46,6 +46,7 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityGarageKit.TYPE, TileEntityGarageKitRenderer::new);
         BlockEntityRenderers.register(TileEntityGomoku.TYPE, TileEntityGomokuRenderer::new);
         BlockEntityRenderers.register(TileEntityCChess.TYPE, TileEntityCChessRenderer::new);
+        BlockEntityRenderers.register(TileEntityWChess.TYPE, TileEntityWChessRenderer::new);
         BlockEntityRenderers.register(TileEntityKeyboard.TYPE, TileEntityKeyboardRenderer::new);
         BlockEntityRenderers.register(TileEntityBookshelf.TYPE, TileEntityBookshelfRenderer::new);
         BlockEntityRenderers.register(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
@@ -69,7 +70,9 @@ public final class InitEntitiesRender {
         event.registerLayerDefinition(EntityMarisaYukkuriModel.LAYER, EntityMarisaYukkuriModel::createBodyLayer);
         event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
         event.registerLayerDefinition(CChessModel.LAYER, CChessModel::createBodyLayer);
+        event.registerLayerDefinition(WChessModel.LAYER, WChessModel::createBodyLayer);
         event.registerLayerDefinition(PieceModel.LAYER, PieceModel::createBodyLayer);
+        event.registerLayerDefinition(WChessPiecesModel.LAYER, WChessPiecesModel::createBodyLayer);
         event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
         event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
         event.registerLayerDefinition(FurnaceBackpackModel.LAYER, FurnaceBackpackModel::createBodyLayer);

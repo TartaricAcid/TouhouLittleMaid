@@ -18,29 +18,29 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ChessDataToServerMessage {
+public class GomokuToServerMessage {
     private final BlockPos pos;
     private final Point point;
 
-    public ChessDataToServerMessage(BlockPos pos, Point point) {
+    public GomokuToServerMessage(BlockPos pos, Point point) {
         this.pos = pos;
         this.point = point;
     }
 
-    public static void encode(ChessDataToServerMessage message, FriendlyByteBuf buf) {
+    public static void encode(GomokuToServerMessage message, FriendlyByteBuf buf) {
         buf.writeBlockPos(message.pos);
         buf.writeVarInt(message.point.x);
         buf.writeVarInt(message.point.y);
         buf.writeVarInt(message.point.type);
     }
 
-    public static ChessDataToServerMessage decode(FriendlyByteBuf buf) {
+    public static GomokuToServerMessage decode(FriendlyByteBuf buf) {
         BlockPos blockPos = buf.readBlockPos();
         Point pointIn = new Point(buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
-        return new ChessDataToServerMessage(blockPos, pointIn);
+        return new GomokuToServerMessage(blockPos, pointIn);
     }
 
-    public static void handle(ChessDataToServerMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(GomokuToServerMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isServer()) {
             context.enqueueWork(() -> {
