@@ -80,6 +80,7 @@ public final class InitItems {
     public static DeferredItem<Item> CHANGE_CHAIR_MODEL = ITEMS.register("change_chair_model", ItemAdvancementIcon::new);
     public static DeferredItem<Item> CHANGE_MAID_MODEL = ITEMS.register("change_maid_model", ItemAdvancementIcon::new);
     public static DeferredItem<Item> MAID_100_HEALTHY = ITEMS.register("maid_100_healthy", ItemAdvancementIcon::new);
+    public static DeferredItem<Item> KILL_100 = ITEMS.register("kill_100", ItemAdvancementIcon::new);
     public static DeferredItem<Item> KILL_SLIME_300 = ITEMS.register("kill_slime_300", ItemAdvancementIcon::new);
     public static DeferredItem<Item> ALL_NETHERITE_EQUIPMENT = ITEMS.register("all_netherite_equipment", ItemAdvancementIcon::new);
     public static DeferredItem<Item> KILL_WITHER = ITEMS.register("kill_wither", ItemAdvancementIcon::new);

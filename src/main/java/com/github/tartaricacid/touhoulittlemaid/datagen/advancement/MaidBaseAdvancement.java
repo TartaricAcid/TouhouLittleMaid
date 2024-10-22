@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 
 public class MaidBaseAdvancement {
     public static void generate(Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-        AdvancementHolder root = make(InitItems.HAKUREI_GOHEI.get(), "switch_task")
+        AdvancementHolder root = make(Items.FEATHER, "switch_task")
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.SWITCH_TASK))
                 .save(saver, id("maid_base/switch_task"), existingFileHelper);
 
