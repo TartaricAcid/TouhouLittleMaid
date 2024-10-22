@@ -1,11 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.favorability;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticlePackage;
 import com.google.common.collect.Maps;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -240,6 +243,15 @@ public class FavorabilityManager {
                 }
                 if (maid.getHealth() > maid.getMaxHealth()) {
                     maid.setHealth(maid.getMaxHealth());
+                }
+                if (maid.getMaxHealth() >= 100 && maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.MAID_100_HEALTHY);
+                }
+            }
+            if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.FAVORABILITY_INCREASED);
+                if (levelAfter == LEVEL_3) {
+                    InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.FAVORABILITY_INCREASED_MAX);
                 }
             }
             maid.playSound(SoundEvents.PLAYER_LEVELUP, 0.5F, maid.getRandom().nextFloat() * 0.1F + 0.9F);

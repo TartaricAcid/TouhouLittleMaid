@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "any_equipment"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.challenge.any_equipment.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:iron_helmet"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.challenge.any_equipment.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

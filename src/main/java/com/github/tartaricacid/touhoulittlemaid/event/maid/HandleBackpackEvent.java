@@ -1,9 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +45,9 @@ public class HandleBackpackEvent {
                     backpack.onPutOn(stack, player, maid);
                     stack.shrink(1);
                     maid.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
+                    if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                        InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.MAID_BACKPACK);
+                    }
                     event.setCanceled(true);
                 }
             });

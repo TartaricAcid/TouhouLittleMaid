@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
@@ -33,7 +34,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidConfigContainer;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
@@ -60,6 +62,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -150,9 +153,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<String> DATA_SOUND_PACK_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_TASK = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_BEGGING = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> DATA_PICKUP = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> DATA_HOME_MODE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> DATA_RIDEABLE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_INVULNERABLE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_HUNGER = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_FAVORABILITY = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.INT);
@@ -173,9 +173,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      */
     private static final EntityDataAccessor<CompoundTag> TASK_DATA_SYNC = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
     private static final String TASK_TAG = "MaidTask";
-    private static final String PICKUP_TAG = "MaidIsPickup";
-    private static final String HOME_TAG = "MaidIsHome";
-    private static final String RIDEABLE_TAG = "MaidIsRideable";
     private static final String STRUCK_BY_LIGHTNING_TAG = "StruckByLightning";
     private static final String INVULNERABLE_TAG = "Invulnerable";
     private static final String HUNGER_TAG = "MaidHunger";
@@ -183,6 +180,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
     private static final String BACKPACK_DATA_TAG = "MaidBackpackData";
     private static final String GAME_SKILL_TAG = "MaidGameSkillData";
+    private static final String STRUCTURE_SPAWN_TAG = "StructureSpawn";
     @Deprecated
     private static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     @Deprecated
@@ -194,6 +192,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
+    private final MaidKillRecordManager killRecordManager = new MaidKillRecordManager();
     private final MaidTaskDataMaps taskDataMaps = new MaidTaskDataMaps();
     private final FavorabilityManager favorabilityManager;
     private final MaidScriptBookManager scriptBookManager;
@@ -209,6 +208,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private int backpackDelay = 0;
     private IBackpackData backpackData = null;
     private boolean syncTaskDataMaps = false;
+    private MaidConfigManager configManager = new MaidConfigManager(this.entityData);
+
+    /**
+     * 女仆现在可以在前哨站生成，那么会打上这个标签
+     */
+    private boolean structureSpawn = false;
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
@@ -264,9 +269,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         builder.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
         builder.define(DATA_TASK, TaskIdle.UID.toString());
         builder.define(DATA_BEGGING, false);
-        builder.define(DATA_PICKUP, true);
-        builder.define(DATA_HOME_MODE, false);
-        builder.define(DATA_RIDEABLE, true);
         builder.define(DATA_INVULNERABLE, false);
         builder.define(DATA_HUNGER, 0);
         builder.define(DATA_FAVORABILITY, 0);
@@ -283,6 +285,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         builder.define(BACKPACK_FLUID, StringUtils.EMPTY);
         builder.define(GAME_SKILL, new CompoundTag());
         builder.define(TASK_DATA_SYNC, new CompoundTag());
+
+        // 父类构造方法调用此类，就会出现这种初始化混乱的问题
+        if (this.configManager == null) {
+            this.configManager = new MaidConfigManager(this.entityData);
+        }
+        this.configManager.defineSynchedData(builder);
     }
 
     @Override
@@ -389,6 +397,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.syncData();
     }
 
+    @Override
+    public void rideTick() {
+        super.rideTick();
+        // 当玩家抱起女仆时，能够同步朝向
+        if (this.getVehicle() instanceof Player player) {
+            this.setYHeadRot(player.getYRot());
+            this.setYBodyRot(player.getYRot());
+        }
+    }
+
     /**
      * 把数据同步到客户端
      */
@@ -469,7 +487,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
                 this.level.broadcastEntityEvent(this, (byte) 7);
                 this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
+                if (player instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.TAMED_MAID);
+                    if (this.isStructureSpawn()) {
+                        InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.TAMED_MAID_FROM_STRUCTURE);
+                    }
+                }
                 return InteractionResult.SUCCESS;
+            }
+        } else {
+            if (player instanceof ServerPlayer) {
+                MutableComponent msg = Component.translatable("message.touhou_little_maid.owner_maid_num.can_not_add",
+                        cap.get(), cap.getMaxNum());
+                player.sendSystemMessage(msg);
             }
         }
         return InteractionResult.PASS;
@@ -807,12 +837,17 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             if (checkInWater && pickupEntity.isInWater()) {
                 return false;
             }
-            return switch (pickupEntity) {
-                case ItemEntity itemEntity -> pickupItem(itemEntity, true);
-                case AbstractArrow abstractArrow -> pickupArrow(abstractArrow, true);
-                case ExperienceOrb ignored -> true;
-                default -> pickupEntity instanceof EntityPowerPoint;
-            };
+            PickType pickupType = this.configManager.getPickupType();
+            if (pickupType.canPickItem() && pickupEntity instanceof ItemEntity) {
+                return pickupItem((ItemEntity) pickupEntity, true);
+            }
+            if (pickupType.canPickItem() && pickupEntity instanceof AbstractArrow) {
+                return pickupArrow((AbstractArrow) pickupEntity, true);
+            }
+            if (pickupType.canPickXp() && pickupEntity instanceof ExperienceOrb) {
+                return true;
+            }
+            return pickupType.canPickXp() && pickupEntity instanceof EntityPowerPoint;
         }
         return false;
     }
@@ -863,6 +898,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             double beforeMaxHealth = this.getAttributeBaseValue(Attributes.MAX_HEALTH);
             Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(beforeMaxHealth + 20);
             setStruckByLightning(true);
+            if (this.getOwner() instanceof ServerPlayer serverPlayer) {
+                InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.LIGHTNING_BOLT);
+            }
         }
     }
 
@@ -1000,9 +1038,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         compound.putString(MODEL_ID_TAG_NAME, getModelId());
         compound.putString(SOUND_PACK_ID_TAG, getSoundPackId());
         compound.putString(TASK_TAG, getTask().getUid().toString());
-        compound.putBoolean(PICKUP_TAG, isPickup());
-        compound.putBoolean(HOME_TAG, isHomeModeEnable());
-        compound.putBoolean(RIDEABLE_TAG, isRideable());
         compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT(this.registryAccess()));
         compound.put(MAID_BAUBLE_INVENTORY_TAG, maidBauble.serializeNBT(this.registryAccess()));
         compound.putBoolean(STRUCK_BY_LIGHTNING_TAG, isStruckByLightning());
@@ -1013,6 +1048,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
         compound.put(GAME_SKILL_TAG, getGameSkill());
+        compound.putBoolean(STRUCTURE_SPAWN_TAG, this.structureSpawn);
+        this.configManager.addAdditionalSaveData(compound);
         this.favorabilityManager.addAdditionalSaveData(compound);
         this.scriptBookManager.addAdditionalSaveData(compound);
         this.schedulePos.save(compound);
@@ -1024,6 +1061,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             compound.put(BACKPACK_DATA_TAG, new CompoundTag());
         }
         this.taskDataMaps.writeSaveData(compound);
+        this.killRecordManager.addAdditionalSaveData(compound);
     }
 
     @Override
@@ -1044,15 +1082,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             ResourceLocation uid = ResourceLocation.parse(compound.getString(TASK_TAG));
             IMaidTask task = TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
             setTask(task);
-        }
-        if (compound.contains(PICKUP_TAG, Tag.TAG_BYTE)) {
-            setPickup(compound.getBoolean(PICKUP_TAG));
-        }
-        if (compound.contains(HOME_TAG, Tag.TAG_BYTE)) {
-            setHomeModeEnable(compound.getBoolean(HOME_TAG));
-        }
-        if (compound.contains(RIDEABLE_TAG, Tag.TAG_BYTE)) {
-            setRideable(compound.getBoolean(RIDEABLE_TAG));
         }
         if (compound.contains(BACKPACK_LEVEL_TAG, Tag.TAG_INT)) {
             // 存档迁移
@@ -1092,6 +1121,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (compound.contains(GAME_SKILL_TAG, Tag.TAG_COMPOUND)) {
             setGameSkill(compound.getCompound(GAME_SKILL_TAG));
         }
+        if (compound.contains(STRUCTURE_SPAWN_TAG, Tag.TAG_BYTE)) {
+            this.structureSpawn = compound.getBoolean(STRUCTURE_SPAWN_TAG);
+        }
         if (compound.contains(RESTRICT_CENTER_TAG, Tag.TAG_COMPOUND)) {
             // 存档迁移
             NbtUtils.readBlockPos(compound, RESTRICT_CENTER_TAG).ifPresent(blockPos -> this.schedulePos.setHomeModeEnable(this, blockPos));
@@ -1105,10 +1137,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.backpackData.load(compound.getCompound(BACKPACK_DATA_TAG), this);
             }
         }
+        this.configManager.readAdditionalSaveData(compound);
         this.favorabilityManager.readAdditionalSaveData(compound);
         this.scriptBookManager.readAdditionalSaveData(compound);
         this.schedulePos.load(compound, this);
         this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
+        this.killRecordManager.readAdditionalSaveData(compound);
     }
 
     public boolean openMaidGui(Player player) {
@@ -1125,27 +1159,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private MenuProvider getGuiProvider(int tabIndex) {
         return switch (tabIndex) {
-            case TabIndex.CONFIG -> MaidConfigContainer.create(getId());
+            case TabIndex.TASK_CONFIG -> task.getTaskConfigGuiProvider(this);
+            case TabIndex.MAID_CONFIG -> MaidConfigContainer.create(getId());
             default -> this.getMaidBackpackType().getGuiProvider(getId());
         };
-    }
-
-    public boolean openMaidGuiFromSideTab(Player player, int tabIndex) {
-        if (player instanceof ServerPlayer && !this.isSleeping()) {
-            this.navigation.stop();
-            player.openMenu(getGuiProviderFromSideTab(tabIndex), (buffer) -> buffer.writeInt(getId()));
-        }
-        return true;
-    }
-
-    public MenuProvider getGuiProviderFromSideTab(int tabIndex) {
-        if (tabIndex == SideTab.TASK_CONFIG.getIndex()) {
-            return task.getTaskConfigGuiProvider(this);
-        } else if (tabIndex == SideTab.TASK_INFO.getIndex()) {
-            return task.getTaskInfoGuiProvider(this);
-        } else {
-            return this.getMaidBackpackType().getGuiProvider(getId());
-        }
     }
 
     @Override
@@ -1213,6 +1230,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+        // 为结构生成的女仆添加特殊标签
+        if (reason == MobSpawnType.STRUCTURE) {
+            this.structureSpawn = true;
+        }
         int modelSize = ServerCustomPackLoader.SERVER_MAID_MODELS.getModelSize();
         // 这里居然可能为 0
         if (modelSize > 0) {
@@ -1232,6 +1253,44 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (!this.level.isClientSide) {
             NeoForge.EVENT_BUS.post(new MaidEquipEvent(this, slot, stack));
         }
+    }
+
+    @Override
+    public void onEquipItem(EquipmentSlot slot, ItemStack oldItem, ItemStack newItem) {
+        super.onEquipItem(slot, oldItem, newItem);
+        if (newItem.isEmpty() || this.firstTick || !slot.isArmor()) {
+            return;
+        }
+
+        // 触发成就
+        if (this.getOwner() instanceof ServerPlayer serverPlayer) {
+            InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.ANY_EQUIPMENT);
+        }
+
+        // 如果是下界合金
+        if (isNetheriteArmor(newItem)) {
+            // 检查全身装备
+            for (EquipmentSlot slotIn : EquipmentSlot.values()) {
+                if (!slotIn.isArmor() || slotIn == slot || slotIn == EquipmentSlot.BODY) {
+                    continue;
+                }
+                ItemStack itemBySlot = getItemBySlot(slotIn);
+                if (!isNetheriteArmor(itemBySlot)) {
+                    return;
+                }
+            }
+            // 触发事件
+            if (this.getOwner() instanceof ServerPlayer serverPlayer) {
+                InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.ALL_NETHERITE_EQUIPMENT);
+            }
+        }
+    }
+
+    private boolean isNetheriteArmor(ItemStack stack) {
+        if (stack.getItem() instanceof ArmorItem armorItem) {
+            return armorItem.getMaterial() == ArmorMaterials.NETHERITE;
+        }
+        return false;
     }
 
     @Override
@@ -1366,6 +1425,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         super.startSleeping(pPos);
         this.setHealth(this.getMaxHealth());
         this.favorabilityManager.apply(Type.SLEEP);
+        if (this.getOwner() instanceof ServerPlayer serverPlayer) {
+            InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.MAID_SLEEP);
+        }
     }
 
     public void setBackpackDelay() {
@@ -1408,11 +1470,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public boolean isHomeModeEnable() {
-        return this.entityData.get(DATA_HOME_MODE);
+        return this.configManager.isHomeModeEnable();
     }
 
     public void setHomeModeEnable(boolean enable) {
-        this.entityData.set(DATA_HOME_MODE, enable);
+        this.configManager.setHomeModeEnable(enable);
+    }
+
+    public MaidConfigManager getConfigManager() {
+        return configManager;
     }
 
     @Override
@@ -1487,19 +1553,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public boolean isPickup() {
-        return this.entityData.get(DATA_PICKUP);
+        return this.configManager.isPickup();
     }
 
     public void setPickup(boolean isPickup) {
-        this.entityData.set(DATA_PICKUP, isPickup);
+        this.configManager.setPickup(isPickup);
     }
 
     public boolean isRideable() {
-        return this.entityData.get(DATA_RIDEABLE);
+        return this.configManager.isRideable();
     }
 
     public void setRideable(boolean rideable) {
-        this.entityData.set(DATA_RIDEABLE, rideable);
+        this.configManager.setRideable(rideable);
     }
 
     public int getHunger() {
@@ -1697,9 +1763,17 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return (float) this.getAttributeValue(Attributes.LUCK);
     }
 
+    public MaidKillRecordManager getKillRecordManager() {
+        return killRecordManager;
+    }
+
     @Override
     public boolean hasFishingHook() {
         return this.fishing != null;
+    }
+
+    public boolean isStructureSpawn() {
+        return structureSpawn;
     }
 
     public List<SendEffectPackage.EffectData> getEffects() {

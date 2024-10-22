@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -38,6 +40,7 @@ public record MaidModelPackage(int id, ResourceLocation modelId) implements Cust
                 if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
                     if (sender.isCreative() || MaidConfig.MAID_CHANGE_MODEL.get()) {
                         ((EntityMaid) entity).setModelId(message.modelId.toString());
+                        InitTrigger.MAID_EVENT.get().trigger(sender, TriggerType.CHANGE_MAID_MODEL);
                     } else {
                         sender.sendSystemMessage(Component.translatable("message.touhou_little_maid.change_model.disabled"));
                     }

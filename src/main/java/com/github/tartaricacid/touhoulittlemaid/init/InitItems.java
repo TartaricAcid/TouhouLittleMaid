@@ -53,6 +53,8 @@ public final class InitItems {
     public static DeferredItem<Item> MODEL_SWITCHER = ITEMS.register("model_switcher", ItemModelSwitcher::new);
     public static DeferredItem<Item> CHAIR_SHOW = ITEMS.register("chair_show", ItemChairShow::new);
     public static DeferredItem<Item> GOMOKU = ITEMS.register("gomoku", () -> new BlockItem(InitBlocks.GOMOKU.get(), new Item.Properties()));
+    public static DeferredItem<Item> CCHESS = ITEMS.register("cchess", () -> new BlockItem(InitBlocks.CCHESS.get(), new Item.Properties()));
+    public static DeferredItem<Item> WCHESS = ITEMS.register("wchess", () -> new BlockItem(InitBlocks.WCHESS.get(), new Item.Properties()));
     public static DeferredItem<Item> RED_FOX_SCROLL = ITEMS.register("red_fox_scroll", ItemFoxScroll::new);
     public static DeferredItem<Item> WHITE_FOX_SCROLL = ITEMS.register("white_fox_scroll", ItemFoxScroll::new);
     public static DeferredItem<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties()));
@@ -73,4 +75,13 @@ public final class InitItems {
     public static DeferredItem<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new DeferredSpawnEggItem(() -> EntityFairy.TYPE, 0x171c20, 0xffffff, new Item.Properties()));
 
     public static final ResourceLocation MEMORIZABLE_GENSOKYO_LOCATION = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "memorizable_gensokyo");
+
+    // 成就图标
+    public static DeferredItem<Item> CHANGE_CHAIR_MODEL = ITEMS.register("change_chair_model", ItemAdvancementIcon::new);
+    public static DeferredItem<Item> CHANGE_MAID_MODEL = ITEMS.register("change_maid_model", ItemAdvancementIcon::new);
+    public static DeferredItem<Item> MAID_100_HEALTHY = ITEMS.register("maid_100_healthy", ItemAdvancementIcon::new);
+    public static DeferredItem<Item> KILL_SLIME_300 = ITEMS.register("kill_slime_300", ItemAdvancementIcon::new);
+    public static DeferredItem<Item> ALL_NETHERITE_EQUIPMENT = ITEMS.register("all_netherite_equipment", ItemAdvancementIcon::new);
+    public static DeferredItem<Item> KILL_WITHER = ITEMS.register("kill_wither", ItemAdvancementIcon::new);
+    public static DeferredItem<Item> KILL_DRAGON = ITEMS.register("kill_dragon", ItemAdvancementIcon::new);
 }

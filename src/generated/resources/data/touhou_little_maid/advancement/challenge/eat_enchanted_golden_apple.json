@@ -1,0 +1,30 @@
+{
+  "parent": "touhou_little_maid:challenge/any_equipment",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "eat_enchanted_golden_apple"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.challenge.eat_enchanted_golden_apple.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:enchanted_golden_apple"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.challenge.eat_enchanted_golden_apple.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

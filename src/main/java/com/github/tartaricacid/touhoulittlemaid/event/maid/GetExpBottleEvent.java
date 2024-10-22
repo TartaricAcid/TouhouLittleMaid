@@ -1,7 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
@@ -45,6 +48,9 @@ public final class GetExpBottleEvent {
                 Containers.dropItemStack(world, player.getX(), player.getY(), player.getZ(), xpBottles);
             }
             maid.playSound(SoundEvents.ITEM_PICKUP, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            if (player instanceof ServerPlayer serverPlayer) {
+                InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.TAKE_MAID_XP);
+            }
             event.setCanceled(true);
         }
     }

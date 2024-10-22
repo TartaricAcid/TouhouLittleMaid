@@ -23,6 +23,8 @@ public final class InitBlocks {
     public static DeferredBlock<Block> MODEL_SWITCHER = BLOCKS.register("model_switcher", BlockModelSwitcher::new);
     public static DeferredBlock<Block> PICNIC_MAT = BLOCKS.register("picnic_mat", BlockPicnicMat::new);
     public static DeferredBlock<Block> GOMOKU = BLOCKS.register("gomoku", BlockGomoku::new);
+    public static DeferredBlock<Block> CCHESS = BLOCKS.register("cchess", BlockCChess::new);
+    public static DeferredBlock<Block> WCHESS = BLOCKS.register("wchess", BlockWChess::new);
     public static DeferredBlock<Block> KEYBOARD = BLOCKS.register("keyboard", BlockKeyboard::new);
     public static DeferredBlock<Block> BOOKSHELF = BLOCKS.register("bookshelf", BlockBookshelf::new);
     public static DeferredBlock<Block> COMPUTER = BLOCKS.register("computer", BlockComputer::new);
@@ -35,6 +37,8 @@ public final class InitBlocks {
     public static Supplier<BlockEntityType<TileEntityMaidBeacon>> MAID_BEACON_TE = TILE_ENTITIES.register("maid_beacon", () -> TileEntityMaidBeacon.TYPE);
     public static Supplier<BlockEntityType<TileEntityModelSwitcher>> MODEL_SWITCHER_TE = TILE_ENTITIES.register("model_switcher", () -> TileEntityModelSwitcher.TYPE);
     public static Supplier<BlockEntityType<TileEntityGomoku>> GOMOKU_TE = TILE_ENTITIES.register("gomoku", () -> TileEntityGomoku.TYPE);
+    public static Supplier<BlockEntityType<TileEntityCChess>> CCHESS_TE = TILE_ENTITIES.register("cchess", () -> TileEntityCChess.TYPE);
+    public static Supplier<BlockEntityType<TileEntityWChess>> WCHESS_TE = TILE_ENTITIES.register("wchess", () -> TileEntityWChess.TYPE);
     public static Supplier<BlockEntityType<TileEntityKeyboard>> KEYBOARD_TE = TILE_ENTITIES.register("keyboard", () -> TileEntityKeyboard.TYPE);
     public static Supplier<BlockEntityType<TileEntityBookshelf>> BOOKSHELF_TE = TILE_ENTITIES.register("bookshelf", () -> TileEntityBookshelf.TYPE);
     public static Supplier<BlockEntityType<TileEntityComputer>> COMPUTER_TE = TILE_ENTITIES.register("computer", () -> TileEntityComputer.TYPE);

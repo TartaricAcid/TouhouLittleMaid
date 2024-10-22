@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SyncDataPackage;
@@ -265,6 +267,9 @@ public class EntityPowerPoint extends Entity implements IEntityWithComplexSpawn 
             }
             PacketDistributor.sendToPlayer((ServerPlayer) player, new SyncDataPackage(power.get(), maidNum.get()));
             this.discard();
+            if (player instanceof ServerPlayer serverPlayer) {
+                InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.PICKUP_POWER_POINT);
+            }
         }
     }
 

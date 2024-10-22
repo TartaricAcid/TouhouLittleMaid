@@ -1,0 +1,30 @@
+{
+  "parent": "touhou_little_maid:base/spawn_maid",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "change_maid_sound"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.base.change_maid_sound.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:jukebox"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.base.change_maid_sound.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

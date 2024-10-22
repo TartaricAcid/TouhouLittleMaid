@@ -1,0 +1,31 @@
+{
+  "parent": "touhou_little_maid:favorability/favorability_increased",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "favorability_increased_max"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.favorability.favorability_increased_max.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "touhou_little_maid:favorability_tool_full"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.favorability.favorability_increased_max.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

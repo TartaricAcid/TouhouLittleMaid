@@ -1,8 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityPowerPoint;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -45,6 +48,9 @@ public class ItemMagnetBauble implements IMaidBauble {
                     if (entityPickup instanceof AbstractArrow) {
                         maid.pickupArrow((AbstractArrow) entityPickup, false);
                     }
+                }
+                if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.USE_ITEM_MAGNET_BAUBLE);
                 }
             }
         }

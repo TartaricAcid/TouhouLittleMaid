@@ -53,7 +53,7 @@ public class ItemEntityPlaceholder extends Item {
     @Nullable
     public static ResourceLocation getRecipeId(ItemStack stack) {
         if (stack.has(InitDataComponent.RECIPES_ID_TAG)) {
-            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, InitRecipes.ALTAR_CRAFTING.getId().getPath() +"/" + stack.get(InitDataComponent.RECIPES_ID_TAG));
+            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, InitRecipes.ALTAR_CRAFTING.getId().getPath() + "/" + stack.get(InitDataComponent.RECIPES_ID_TAG));
         }
         return null;
     }
@@ -62,7 +62,7 @@ public class ItemEntityPlaceholder extends Item {
     @Nullable
     public static ResourceLocation getId(ItemStack stack) {
         if (stack.has(InitDataComponent.RECIPES_ID_TAG)) {
-            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID,stack.get(InitDataComponent.RECIPES_ID_TAG));
+            return ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, stack.get(InitDataComponent.RECIPES_ID_TAG));
         }
         return null;
     }

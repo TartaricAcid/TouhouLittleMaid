@@ -1,0 +1,32 @@
+{
+  "parent": "touhou_little_maid:maid_base/chisel_statue",
+  "criteria": {
+    "pickup_item": {
+      "conditions": {
+        "item": {
+          "items": "touhou_little_maid:garage_kit"
+        }
+      },
+      "trigger": "minecraft:thrown_item_picked_up_by_player"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.maid_base.pickup_garage_kit.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "touhou_little_maid:garage_kit"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.maid_base.pickup_garage_kit.title"
+    }
+  },
+  "requirements": [
+    [
+      "pickup_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

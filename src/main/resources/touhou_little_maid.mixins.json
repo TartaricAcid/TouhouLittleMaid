@@ -9,7 +9,7 @@
   ],
   "client": [
     "client.HumanoidModelMixin", "client.ItemPropertiesMixin", "client.LanguageMixin",
-    "client.LivingEntityRendererMixin", "client.RenderSystemMixin"
+    "client.LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

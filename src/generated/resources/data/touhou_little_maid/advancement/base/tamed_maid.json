@@ -1,0 +1,31 @@
+{
+  "parent": "touhou_little_maid:base/spawn_maid",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "tamed_maid"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.base.tamed_maid.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.base.tamed_maid.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

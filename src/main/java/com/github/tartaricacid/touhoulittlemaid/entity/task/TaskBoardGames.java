@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidGomokuTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidBoardGameTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -39,8 +39,8 @@ public class TaskBoardGames implements IMaidTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        Pair<Integer, BehaviorControl<? super EntityMaid>> gomoku = Pair.of(5, new MaidGomokuTask(0.6f, 2));
-        return Lists.newArrayList(gomoku);
+        Pair<Integer, BehaviorControl<? super EntityMaid>> boardGame = Pair.of(5, new MaidBoardGameTask(0.6f, 2));
+        return Lists.newArrayList(boardGame);
     }
 
     @Override

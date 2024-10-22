@@ -38,16 +38,20 @@ public class NetworkHandler {
         registrar.playToClient(SendEffectPackage.TYPE, SendEffectPackage.STREAM_CODEC, SendEffectPackage::handle);
         registrar.playToClient(PlayMaidSoundPackage.TYPE, PlayMaidSoundPackage.STREAM_CODEC, PlayMaidSoundPackage::handle);
         registrar.playToServer(SetMaidSoundIdPackage.TYPE, SetMaidSoundIdPackage.STREAM_CODEC, SetMaidSoundIdPackage::handle);
-        registrar.playToClient(ChessDataClientPackage.TYPE, ChessDataClientPackage.STREAM_CODEC, ChessDataClientPackage::handle);
-        registrar.playToServer(ChessDataServerPackage.TYPE, ChessDataServerPackage.STREAM_CODEC, ChessDataServerPackage::handle);
+        registrar.playToClient(GomokuClientPackage.TYPE, GomokuClientPackage.STREAM_CODEC, GomokuClientPackage::handle);
+        registrar.playToServer(GomokuServerPackage.TYPE, GomokuServerPackage.STREAM_CODEC, GomokuServerPackage::handle);
         registrar.playToClient(FoxScrollPackage.TYPE, FoxScrollPackage.STREAM_CODEC, FoxScrollPackage::handle);
         registrar.playToServer(SetScrollPackage.TYPE, SetScrollPackage.STREAM_CODEC, SetScrollPackage::handle);
         registrar.playToClient(CheckSchedulePosPacket.TYPE, CheckSchedulePosPacket.STREAM_CODEC, CheckSchedulePosPacket::handle);
         registrar.playToClient(SyncMaidAreaPackage.TYPE, SyncMaidAreaPackage.STREAM_CODEC, SyncMaidAreaPackage::handle);
         registrar.playToServer(ServantBellSetPackage.TYPE, ServantBellSetPackage.STREAM_CODEC, ServantBellSetPackage::handle);
         registrar.playToServer(SetMonsterListMessage.TYPE, SetMonsterListMessage.STREAM_CODEC, SetMonsterListMessage::handle);
-        registrar.playToServer(ToggleSideTabPackage.TYPE, ToggleSideTabPackage.STREAM_CODEC, ToggleSideTabPackage::handle);
         registrar.playToServer(RefreshMaidBrainPackage.TYPE, RefreshMaidBrainPackage.STREAM_CODEC, RefreshMaidBrainPackage::handle);
+        registrar.playToServer(MaidSubConfigPackage.TYPE, MaidSubConfigPackage.STREAM_CODEC, MaidSubConfigPackage::handle);
+        registrar.playToClient(CChessToClientPackage.TYPE, CChessToClientPackage.STREAM_CODEC, CChessToClientPackage::handle);
+        registrar.playToServer(CChessToServerPackage.TYPE, CChessToServerPackage.STREAM_CODEC, CChessToServerPackage::handle);
+        registrar.playToClient(WChessToClientPackage.TYPE, WChessToClientPackage.STREAM_CODEC, WChessToClientPackage::handle);
+        registrar.playToServer(WChessToServerPackage.TYPE, WChessToServerPackage.STREAM_CODEC, WChessToServerPackage::handle);
     }
 
     public static void sendToNearby(Entity entity, CustomPacketPayload toSend) {

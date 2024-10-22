@@ -1,0 +1,31 @@
+{
+  "parent": "touhou_little_maid:favorability/maid_picnic_eat",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "win_gomoku"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.favorability.win_gomoku.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "touhou_little_maid:gomoku"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.favorability.win_gomoku.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

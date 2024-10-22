@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollPackage;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
@@ -66,7 +68,14 @@ public class ItemFoxScroll extends Item {
                 List<FoxScrollPackage.FoxScrollData> scrollData = data.computeIfAbsent(info.getDimension(), dim -> Lists.newArrayList());
                 scrollData.add(new FoxScrollPackage.FoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
             });
-            PacketDistributor.sendToPlayer((ServerPlayer) player,new FoxScrollPackage(data));
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new FoxScrollPackage(data));
+            if (player instanceof ServerPlayer serverPlayer) {
+                if (item.getItem() == InitItems.RED_FOX_SCROLL.get()) {
+                    InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.USE_RED_FOX_SCROLL);
+                } else if (item.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
+                    InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.USE_WHITE_FOX_SCROLL);
+                }
+            }
             return InteractionResultHolder.success(item);
         }
         return super.use(level, player, hand);

@@ -1,9 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,6 +28,9 @@ public class SaddleMaidEvent {
                 boolean success = maid.startRiding(player);
                 if (success && FMLLoader.getDist() == Dist.CLIENT) {
                     SaddleMaidEvent.showTips();
+                }
+                if (player instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.PICKUP_MAID);
                 }
                 event.setCanceled(true);
                 return;

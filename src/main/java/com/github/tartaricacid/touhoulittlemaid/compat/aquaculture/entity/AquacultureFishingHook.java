@@ -165,6 +165,7 @@ public class AquacultureFishingHook extends MaidFishingHook implements IEntityWi
 
     @Override
     protected void afterFishing() {
+        super.afterFishing();
         ItemStackHandler rodHandler = AquaFishingRodItem.getHandler(this.fishingRod);
         ItemStack bait = rodHandler.getStackInSlot(1);
         if (!bait.isEmpty()) {

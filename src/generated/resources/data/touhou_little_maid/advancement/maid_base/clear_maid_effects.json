@@ -1,0 +1,30 @@
+{
+  "parent": "touhou_little_maid:maid_base/pickup_maid",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "clear_maid_effects"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.maid_base.clear_maid_effects.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:milk_bucket"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.maid_base.clear_maid_effects.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

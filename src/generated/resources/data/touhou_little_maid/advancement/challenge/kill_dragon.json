@@ -1,0 +1,31 @@
+{
+  "parent": "touhou_little_maid:challenge/kill_wither",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "kill_dragon"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.challenge.kill_dragon.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "touhou_little_maid:kill_dragon"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.challenge.kill_dragon.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

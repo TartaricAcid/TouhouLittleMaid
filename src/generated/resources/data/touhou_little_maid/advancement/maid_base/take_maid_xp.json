@@ -1,0 +1,30 @@
+{
+  "parent": "touhou_little_maid:maid_base/pickup_maid",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "take_maid_xp"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.maid_base.take_maid_xp.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:experience_bottle"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.maid_base.take_maid_xp.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

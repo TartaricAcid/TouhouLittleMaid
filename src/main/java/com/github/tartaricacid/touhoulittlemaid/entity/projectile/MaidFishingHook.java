@@ -1,9 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidFishedEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskFishing;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +18,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -26,6 +29,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -393,7 +397,15 @@ public class MaidFishingHook extends Projectile {
     }
 
     protected void spawnLoot(List<ItemStack> randomItems, EntityMaid maid) {
+        EntityMaid maidOwner = getMaidOwner();
+        ServerPlayer serverPlayer = null;
+        if (maidOwner != null && maidOwner.getOwner() instanceof ServerPlayer serverPlayerIn) {
+            serverPlayer = serverPlayerIn;
+        }
         for (ItemStack result : randomItems) {
+            if (serverPlayer != null && result.is(Items.ENCHANTED_BOOK)) {
+                InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.MAID_FISHING_ENCHANTED_BOOK);
+            }
             ItemEntity itemEntity = new ItemEntity(this.level(), maid.getX(), maid.getY() + 0.5, maid.getZ(), result);
             itemEntity.setDeltaMovement(0, 0.1, 0);
             this.level.addFreshEntity(itemEntity);
@@ -405,6 +417,10 @@ public class MaidFishingHook extends Projectile {
     }
 
     protected void afterFishing() {
+        EntityMaid maidOwner = getMaidOwner();
+        if (maidOwner != null && maidOwner.getOwner() instanceof ServerPlayer serverPlayer) {
+            InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.MAID_FISHING);
+        }
     }
 
     protected void hurtRod(EntityMaid maid, ItemStack rodItem, int rodDamage) {

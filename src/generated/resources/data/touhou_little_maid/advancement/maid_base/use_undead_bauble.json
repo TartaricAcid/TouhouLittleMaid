@@ -1,0 +1,31 @@
+{
+  "parent": "touhou_little_maid:maid_base/use_nimble_fabric",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "use_undead_bauble"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.maid_base.use_undead_bauble.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "touhou_little_maid:ultramarine_orb_elixir"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.maid_base.use_undead_bauble.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

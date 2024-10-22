@@ -1,0 +1,31 @@
+{
+  "parent": "touhou_little_maid:challenge/lightning_bolt",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "maid_100_healthy"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.challenge.maid_100_healthy.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "touhou_little_maid:maid_100_healthy"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.challenge.maid_100_healthy.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

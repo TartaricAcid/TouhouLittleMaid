@@ -1,6 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
@@ -16,7 +19,7 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
         return getMaidBlockPathTypeStatic(pContext, new BlockPos.MutableBlockPos(pX, pY, pZ));
     }
 
-    private static PathType getMaidBlockPathTypeStatic(PathfindingContext context, BlockPos.MutableBlockPos pos) {
+    private PathType getMaidBlockPathTypeStatic(PathfindingContext context, BlockPos.MutableBlockPos pos) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -38,13 +41,28 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
         }
     }
 
-    private static PathType getMaidBlockPathTypeRaw(PathfindingContext context, int pX, int pY, int pZ) {
+    private PathType getMaidBlockPathTypeRaw(PathfindingContext context, int pX, int pY, int pZ) {
         BlockPos pos = new BlockPos(pX, pY, pZ);
         BlockState blockState = context.getBlockState(pos);
+        PathType pathType;
         if (blockState.getBlock() instanceof FenceGateBlock) {
-            return blockState.getValue(FenceGateBlock.OPEN) ? PathType.DOOR_OPEN : PathType.DOOR_WOOD_CLOSED;
+            pathType = blockState.getValue(FenceGateBlock.OPEN) ? PathType.DOOR_OPEN : PathType.DOOR_WOOD_CLOSED;
         } else {
-            return context.getPathTypeFromState(pX, pY, pZ);
+            pathType = context.getPathTypeFromState(pX, pY, pZ);
         }
+        if (pathType == PathType.DOOR_WOOD_CLOSED && this.mob instanceof EntityMaid maid && !this.canOpenDoor(blockState.getBlock(), maid)) {
+            pathType = PathType.DOOR_IRON_CLOSED;
+        }
+        return pathType;
+    }
+
+    private boolean canOpenDoor(Block block, EntityMaid maid) {
+        if (block instanceof DoorBlock) {
+            return maid.getConfigManager().isOpenDoor();
+        }
+        if (block instanceof FenceGateBlock) {
+            return maid.getConfigManager().isOpenFenceGate();
+        }
+        return true;
     }
 }

@@ -38,7 +38,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +55,6 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
     private static boolean TASK_LIST_OPEN = false;
-    @Nullable
     protected final EntityMaid maid;
     protected final IMaidTask task;
     private TouhouStateSwitchButton home;
@@ -612,6 +610,6 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     // 绘制侧边栏底部贴图
     private void drawSideTabGui(GuiGraphics graphics, float partialTicks, int x, int y) {
-        graphics.blit(SIDE, leftPos + 251 + 5, topPos + 28 + 9, 235, 107, 21, 99);
+        graphics.blit(SIDE, leftPos + 251 + 5, topPos + 28 + 9, 235, 107, 21, 50);
     }
 }

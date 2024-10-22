@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.PosListData;
 import net.minecraft.client.Minecraft;
@@ -15,7 +16,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -239,7 +242,7 @@ public class BlockAltar extends Block implements EntityBlock {
         CraftingInput craftingInput = CraftingInput.of(6, 1, arrayList);
         PowerAttachment powerAttachment = playerIn.getData(InitDataAttachment.POWER_NUM);
         world.getRecipeManager().getRecipeFor(InitRecipes.ALTAR_CRAFTING.get(), craftingInput, world)
-                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.value(), arrayList, altar));
+                .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.id(), recipe.value(), arrayList, altar));
     }
 
     private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
@@ -250,7 +253,7 @@ public class BlockAltar extends Block implements EntityBlock {
         return Optional.empty();
     }
 
-    private void spawnResultEntity(Level world, Player playerIn, PowerAttachment power,
+    private void spawnResultEntity(Level world, Player playerIn, PowerAttachment power, ResourceLocation altarId,
                                    AltarRecipe altarRecipe, List<ItemStack> inventory, TileEntityAltar altar) {
         if (power.get() >= altarRecipe.getPower()) {
             power.min(altarRecipe.getPower());
@@ -262,6 +265,9 @@ public class BlockAltar extends Block implements EntityBlock {
             removeAllAltarItem(world, altar);
             spawnParticleInCentre(world, centrePos);
             world.playSound(null, centrePos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
+            if (playerIn instanceof ServerPlayer serverPlayer) {
+                InitTrigger.ALTAR_CRAFT.get().trigger(serverPlayer, altarId);
+            }
         } else {
             if (!world.isClientSide) {
                 playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.altar.not_enough_power"));

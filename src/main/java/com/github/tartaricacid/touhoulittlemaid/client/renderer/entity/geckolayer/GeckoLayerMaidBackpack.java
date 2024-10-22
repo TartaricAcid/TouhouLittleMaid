@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolay
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.InGameMaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
@@ -46,7 +45,8 @@ public class GeckoLayerMaidBackpack<T extends Mob> extends GeoLayerRenderer<T, G
                 RenderUtils.prepMatrixForLocator(poseStack, model.backpackBones());
                 poseStack.translate(0, 1, 0.25);
                 poseStack.mulPose(Axis.ZP.rotationDegrees(180));
-                IMaidBackpack backpack = InGameMaidConfig.INSTANCE.isShowBackpack() ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
+                boolean showBackpack = entity instanceof EntityMaid entityMaid && entityMaid.getConfigManager().isShowBackpack();
+                IMaidBackpack backpack = showBackpack ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
                 BackpackManager.findBackpackModel(backpack.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
                 poseStack.popPose();
             }

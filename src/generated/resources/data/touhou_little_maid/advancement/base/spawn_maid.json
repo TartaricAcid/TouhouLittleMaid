@@ -1,0 +1,38 @@
+{
+  "parent": "touhou_little_maid:base/craft_gohei",
+  "criteria": {
+    "altar_craft": {
+      "conditions": {
+        "recipe_id": "touhou_little_maid:altar_recipe/spawn_box"
+      },
+      "trigger": "touhou_little_maid:altar_craft"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.base.spawn_maid.description"
+    },
+    "icon": {
+      "components": {
+        "touhou_little_maid:recipe_id": "spawn_box"
+      },
+      "count": 1,
+      "id": "touhou_little_maid:entity_placeholder"
+    },
+    "title": {
+      "translate": "advancements.touhou_little_maid.base.spawn_maid.title"
+    }
+  },
+  "requirements": [
+    [
+      "altar_craft"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "touhou_little_maid:advancement/cake"
+    ]
+  },
+  "sends_telemetry_event": true
+}

@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -29,6 +31,7 @@ public record SetMaidSoundIdPackage(int entityId, String soundId) implements Cus
                 Entity entity = sender.level.getEntity(message.entityId);
                 if (entity instanceof EntityMaid maid && maid.isOwnedBy(sender)) {
                     maid.setSoundPackId(message.soundId);
+                    InitTrigger.MAID_EVENT.get().trigger(sender, TriggerType.CHANGE_MAID_SOUND);
                 }
             });
         }

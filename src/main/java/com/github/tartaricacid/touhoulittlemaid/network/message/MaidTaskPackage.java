@@ -1,8 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.TabIndex;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.TaskConfigContainer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -40,6 +44,13 @@ public record MaidTaskPackage(int id, ResourceLocation uid) implements CustomPac
                         return;
                     }
                     maid.setTask(task);
+                    if (!TaskManager.getIdleTask().equals(task) && maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                        InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.SWITCH_TASK);
+                    }
+                    // 如果此时玩家打开的是配置界面
+                    if (sender.containerMenu instanceof TaskConfigContainer) {
+                        maid.openMaidGui(sender, TabIndex.TASK_CONFIG);
+                    }
                 }
             });
         }
