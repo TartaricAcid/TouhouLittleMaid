@@ -7,6 +7,9 @@ import com.github.tartaricacid.touhoulittlemaid.util.CChessUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -61,6 +64,14 @@ public class TileEntityCChess extends TileEntityJoy implements IBoardGameEntityB
         checkmate = data.getBoolean(CHECKMATE);
         repeat = data.getBoolean(REPEAT);
         moveNumberLimit = data.getBoolean(MOVE_NUMBER_LIMIT);
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
+        super.onDataPacket(net, pkt, lookupProvider);
+        if (this.level != null) {
+            this.level.markAndNotifyBlock(this.getBlockPos(), level.getChunkAt(this.getBlockPos()), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL, 512);
+        }
     }
 
     public void reset() {

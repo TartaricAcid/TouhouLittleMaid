@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.github.tartaricacid.touhoulittlemaid.mixin",
+  "plugin": "com.github.tartaricacid.touhoulittlemaid.mixin.plugin.MixinTweaker",
   "compatibilityLevel": "JAVA_17",
   "refmap": "touhou_little_maid.refmap.json",
   "mixins": [
@@ -9,7 +10,8 @@
   ],
   "client": [
     "client.HumanoidModelMixin", "client.ItemPropertiesMixin", "client.LanguageMixin",
-    "client.LivingEntityRendererMixin"
+    "client.LivingEntityRendererMixin", "client.RenderSectionMixin", "client.RenderTypeMixin",
+    "client.SectionBufferBuilderPackMixin", "client.SectionCompilerMixin", "client.SimpleBakedModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
