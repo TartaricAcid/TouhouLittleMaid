@@ -216,6 +216,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.pages.0.text": "Le Substitut de Jizo est un objet du mode créatif qui rend invincible une maid en faisant un clic droit sur elle.",
   "patchouli.touhou_little_maid.book.entries.maid.film.name": "Pellicule",
   "patchouli.touhou_little_maid.book.entries.maid.monster_list.name": "Liste de Monstres",
+  "patchouli.touhou_little_maid.book.entries.maid.monster_list.pages.0.text": "La Liste de Monstres est utilisés pour définir quels monstres la Maid doit attaquer ou non. Il suffit de mettre cet objet dans sa main secondaire.$(br2)Note : La Maid n'attaquera aucun joueur et aucun familier ayant un propriétaire.",
   "patchouli.touhou_little_maid.book.entries.other.garage_kit.name": "Statuette",
   "patchouli.touhou_little_maid.book.entries.other.garage_kit.pages.0.text": "Lorsque vous travaillez un bloc d'argile à l'aide d'un Burin directement au-dessus d'une flamme, cela fera cuir votre statuette vous permettant après quelque temps de la récupérer sans la détruire.$(br2)Pour en savoir plus, allez à la page du Burin dans la section Divers.",
   "patchouli.touhou_little_maid.book.entries.other.maid_beacon.name": "Lanterne de Sanctuaire",
