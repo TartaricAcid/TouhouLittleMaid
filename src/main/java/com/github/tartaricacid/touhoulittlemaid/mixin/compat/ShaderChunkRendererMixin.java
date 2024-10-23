@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.mixin.compat.sodium;
+package com.github.tartaricacid.touhoulittlemaid.mixin.compat;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.sodium.client.SodiumShaderExtension;
 import net.caffeinemc.mods.sodium.client.gl.shader.GlProgram;

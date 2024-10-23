@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.mixin.compat.iris;
+package com.github.tartaricacid.touhoulittlemaid.mixin.compat;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.sodium.client.EntityTextureTerrainRenderPass;
 import com.github.tartaricacid.touhoulittlemaid.compat.sodium.client.SodiumShaderExtension;

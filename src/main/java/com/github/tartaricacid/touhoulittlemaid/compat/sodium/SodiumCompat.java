@@ -8,7 +8,7 @@ import net.neoforged.fml.loading.LoadingModList;
 
 public final class SodiumCompat {
     private static final String ID = "sodium";
-    private static boolean INSTALLED = false;
+    private static boolean INSTALLED;
 
     public static void init() {
         INSTALLED = LoadingModList.get().getModFileById(ID) != null;

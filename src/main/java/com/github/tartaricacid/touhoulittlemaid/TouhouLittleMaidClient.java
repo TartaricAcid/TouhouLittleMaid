@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid;
 
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
+import com.github.tartaricacid.touhoulittlemaid.compat.iris.IrisCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.sodium.SodiumCompat;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.init.registry.CompatRegistry;
 import net.neoforged.api.distmarker.Dist;
@@ -23,6 +25,10 @@ public class TouhouLittleMaidClient {
     private void registerClientOnly() {
         // 这个仅用于客户端，所以不需要在服务端注册
         InitDataAttachment.ATTACHMENT_TYPES.register("gecko_maid", () -> GeckoMaidEntity.TYPE);
+
+        // 模组兼容
+        SodiumCompat.init();
+        IrisCompat.init();
     }
 
     private void registerConfigMenu(ModContainer modContainer) {

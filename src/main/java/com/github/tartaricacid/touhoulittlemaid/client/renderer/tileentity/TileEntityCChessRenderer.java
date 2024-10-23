@@ -29,10 +29,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.AddSectionGeometryEvent;
 
 public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityCChess>, BlockEntitySectionGeometryRenderer<TileEntityCChess> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/cchess.png");
-    private static final ResourceLocation PIECES_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/cchess_pieces.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/cchess.png");
+    public static final ResourceLocation PIECES_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/cchess_pieces.png");
+    public static final RenderType CCHESS_RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE);
+    public static final RenderType CCHESS_PIECES_RENDER_TYPE = RenderType.entityCutoutNoCull(PIECES_TEXTURE);
+
     private static final int TIPS_RENDER_DISTANCE = 16;
     private static final int PIECE_RENDER_DISTANCE = 24;
+
     private final Font font;
     private final BlockEntityRenderDispatcher dispatcher;
     private final CChessModel chessModel;
@@ -107,7 +111,7 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
     private void renderPiece(TileEntityCChess cchess, PoseStack poseStack, SectionGeometryRenderContext renderAndCacheContext, int combinedLightIn, int combinedOverlayIn, Direction facing) {
         if (inRenderDistance(cchess, PIECE_RENDER_DISTANCE)) {
             MultiBufferSource bufferSource = renderAndCacheContext.getUncachedDynamicCutoutBufferSource(PIECES_TEXTURE);
-            VertexConsumer piecesBuff = bufferSource.getBuffer(RenderType.entityCutoutNoCull(PIECES_TEXTURE));
+            VertexConsumer piecesBuff = bufferSource.getBuffer(CCHESS_PIECES_RENDER_TYPE);
             int selectX = Position.FILE_X(cchess.getSelectChessPoint());
             int selectY = Position.RANK_Y(cchess.getSelectChessPoint());
             byte[] data = cchess.getChessData().squares;
@@ -158,7 +162,7 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
             poseStack.mulPose(Axis.YN.rotationDegrees(180));
         }
         MultiBufferSource bufferIn = renderAndCacheContext.getUncachedDynamicCutoutBufferSource(TEXTURE);
-        VertexConsumer checkerBoardBuff = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+        VertexConsumer checkerBoardBuff = bufferIn.getBuffer(CCHESS_RENDER_TYPE);
         chessModel.renderToBuffer(poseStack, checkerBoardBuff, combinedLightIn, combinedOverlayIn);
         poseStack.popPose();
     }

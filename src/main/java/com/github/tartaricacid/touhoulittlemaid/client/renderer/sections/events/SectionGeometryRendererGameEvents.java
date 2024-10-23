@@ -62,7 +62,7 @@ public class SectionGeometryRendererGameEvents {
 
     @SubscribeEvent
     public static void onRenderSodiumDynamicCutoutRenderType(RenderLevelStageEvent event) {
-        if (SodiumCompat.isInstalled()) {
+        if (!SodiumCompat.isInstalled()) {
             return;
         }
 
@@ -100,7 +100,7 @@ public class SectionGeometryRendererGameEvents {
 
     @SubscribeEvent
     public static void onRenderSodiumDynamicTranslucentRenderType(RenderLevelStageEvent event) {
-        if (SodiumCompat.isInstalled()) {
+        if (!SodiumCompat.isInstalled()) {
             return;
         }
 
