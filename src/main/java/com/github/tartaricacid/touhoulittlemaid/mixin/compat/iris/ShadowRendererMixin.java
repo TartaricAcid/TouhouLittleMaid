@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.mixin.compat;
+package com.github.tartaricacid.touhoulittlemaid.mixin.compat.iris;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.sections.dynamic.DynamicChunkBuffers;
 import com.llamalad7.mixinextras.sugar.Local;

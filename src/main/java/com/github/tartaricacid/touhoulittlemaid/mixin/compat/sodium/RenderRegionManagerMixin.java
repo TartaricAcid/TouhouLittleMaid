@@ -1,6 +1,6 @@
-package com.github.tartaricacid.touhoulittlemaid.mixin.compat;
+package com.github.tartaricacid.touhoulittlemaid.mixin.compat.sodium;
 
-import com.github.tartaricacid.touhoulittlemaid.compat.sodium.client.DynamicChunkBufferSodiumCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.sodium.sodium.DynamicChunkBufferSodiumCompat;
 import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

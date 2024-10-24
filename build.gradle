@@ -181,6 +181,7 @@ dependencies {
 
     implementation "maven.modrinth:sodium:mc1.21-0.6.0-beta.2-neoforge"
     implementation "maven.modrinth:iris:1.8.0-beta.5+1.21-neoforge"
+    compileOnly "maven.modrinth:embeddium:1.0.11+mc1.21.1-neoforge"
 }
 
 // 用于 neoforge.mods 里替换那一堆 ${xxxx}

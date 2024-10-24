@@ -1,17 +1,18 @@
-package com.github.tartaricacid.touhoulittlemaid.compat.sodium.client;
+package com.github.tartaricacid.touhoulittlemaid.compat.sodium.embeddium;
 
-import net.caffeinemc.mods.sodium.client.render.chunk.terrain.TerrainRenderPass;
-import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.Material;
-import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.parameters.AlphaCutoffParameter;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import org.embeddedt.embeddium.impl.render.chunk.terrain.TerrainRenderPass;
+import org.embeddedt.embeddium.impl.render.chunk.terrain.material.Material;
+import org.embeddedt.embeddium.impl.render.chunk.terrain.material.parameters.AlphaCutoffParameter;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Argon4W
  */
-public class DynamicChunkBufferSodiumCompat {
+public class DynamicChunkBufferEmbeddiumCompat {
     public static final ConcurrentHashMap<RenderType, TerrainRenderPass> DYNAMIC_CUTOUT_PASSES = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<RenderType, Material> DYNAMIC_CUTOUT_MATERIALS = new ConcurrentHashMap<>();
 

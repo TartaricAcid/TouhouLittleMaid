@@ -1,6 +1,6 @@
-package com.github.tartaricacid.touhoulittlemaid.mixin.compat;
+package com.github.tartaricacid.touhoulittlemaid.mixin.compat.sodium;
 
-import com.github.tartaricacid.touhoulittlemaid.compat.sodium.client.DynamicChunkBufferSodiumCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.sodium.sodium.DynamicChunkBufferSodiumCompat;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.sections.dynamic.DynamicChunkBuffers;
 import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
 import net.caffeinemc.mods.sodium.client.render.chunk.ChunkRenderMatrices;

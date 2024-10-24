@@ -11,11 +11,16 @@
     "client.HumanoidModelMixin", "client.ItemPropertiesMixin", "client.LanguageMixin",
     "client.LivingEntityRendererMixin", "client.RenderSectionMixin", "client.RenderTypeMixin",
     "client.SectionBufferBuilderPackMixin", "client.SectionCompilerMixin", "client.SimpleBakedModelMixin",
-    "compat.ChunkBufferBuildersMixin", "compat.ChunkBuilderMeshingTaskMixin", "compat.DefaultMaterialsMixin",
-    "compat.DefaultShaderInterfaceMixin", "compat.MaterialMixin", "compat.RenderRegionManagerMixin",
-    "compat.ShaderChunkRendererMixin", "compat.ShadowRendererMixin", "compat.SodiumProgramsMixin",
-    "compat.SodiumShaderMixin", "compat.SodiumWorldRendererMixin", "compat.TerrainRenderPassMixin",
-    "compat.WorldRenderingPhaseMixin"
+    "compat.embeddium.ChunkBufferBuildersMixin", "compat.embeddium.ChunkBuilderMeshingTaskMixin",
+    "compat.embeddium.ChunkShaderInterfaceMixin", "compat.embeddium.DefaultMaterialsMixin",
+    "compat.embeddium.EmbeddiumWorldRendererMixin", "compat.embeddium.MaterialMixin",
+    "compat.embeddium.RenderRegionManagerMixin", "compat.embeddium.ShaderChunkRendererMixin",
+    "compat.embeddium.TerrainRenderPassMixin", "compat.iris.ShadowRendererMixin", "compat.iris.SodiumProgramsMixin",
+    "compat.iris.SodiumShaderMixin", "compat.iris.WorldRenderingPhaseMixin", "compat.sodium.ChunkBufferBuildersMixin",
+    "compat.sodium.ChunkBuilderMeshingTaskMixin", "compat.sodium.DefaultMaterialsMixin",
+    "compat.sodium.DefaultShaderInterfaceMixin", "compat.sodium.MaterialMixin",
+    "compat.sodium.RenderRegionManagerMixin", "compat.sodium.ShaderChunkRendererMixin",
+    "compat.sodium.SodiumWorldRendererMixin", "compat.sodium.TerrainRenderPassMixin"
   ],
   "injectors": {
     "defaultRequire": 1

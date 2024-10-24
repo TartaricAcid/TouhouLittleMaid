@@ -1,7 +1,7 @@
-package com.github.tartaricacid.touhoulittlemaid.mixin.compat;
+package com.github.tartaricacid.touhoulittlemaid.mixin.compat.iris;
 
-import com.github.tartaricacid.touhoulittlemaid.compat.sodium.client.EntityTextureTerrainRenderPass;
-import com.github.tartaricacid.touhoulittlemaid.compat.sodium.client.SodiumShaderExtension;
+import com.github.tartaricacid.touhoulittlemaid.compat.sodium.sodium.EntityTextureTerrainRenderPass;
+import com.github.tartaricacid.touhoulittlemaid.compat.sodium.sodium.SodiumShaderExtension;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.TerrainRenderPass;

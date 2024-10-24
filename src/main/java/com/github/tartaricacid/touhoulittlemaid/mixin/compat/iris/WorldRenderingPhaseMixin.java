@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.mixin.compat;
+package com.github.tartaricacid.touhoulittlemaid.mixin.compat.iris;
 
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.sections.dynamic.DynamicChunkBuffers;
 import net.irisshaders.iris.pipeline.WorldRenderingPhase;

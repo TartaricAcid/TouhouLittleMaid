@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.compat.sodium.client;
+package com.github.tartaricacid.touhoulittlemaid.compat.sodium.sodium;
 
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.TerrainRenderPass;
 
