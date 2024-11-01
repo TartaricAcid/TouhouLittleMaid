@@ -243,11 +243,13 @@ public class AnimationController<T extends AnimatableEntity<?>> {
             return;
         }
 
+        boolean resetTick = this.shouldResetTick;
         if (this.justStartedTransition && (this.shouldResetTick || this.justStopped)) {
             this.justStopped = false;
             adjustedTick = adjustTick(tick);
         } else if (this.currentAnimation == null && !this.animationQueue.isEmpty()) {
             this.shouldResetTick = true;
+            resetTick = true;
             this.animationState = AnimationState.TRANSITIONING;
             this.justStartedTransition = true;
             this.needsAnimationReload = false;
@@ -259,7 +261,7 @@ public class AnimationController<T extends AnimatableEntity<?>> {
         // 处理过渡到其他动画（或仅开始一个动画）
         if (this.animationState == AnimationState.TRANSITIONING) {
             // 刚开始过渡，所以将当前动画设置为第一个
-            if (adjustedTick == 0 || this.isJustStarting) {
+            if (resetTick || this.isJustStarting) {
                 this.justStartedTransition = false;
                 Pair<ILoopType, Animation> current = this.animationQueue.poll();
                 if (current != null) {
