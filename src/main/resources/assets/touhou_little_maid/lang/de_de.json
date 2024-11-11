@@ -31,8 +31,6 @@
   "message.touhou_little_maid.change_model.disabled": "Modelwechsel ist deaktiviert.",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "Dein Mangel an Wissen weiß nicht, wie du diesen Gegenstand verwenden kannst",
   "message.touhou_little_maid.altar.not_enough_power": "Du hast nicht genug Energie.",
-  "death.touhou_little_maid.attack.danmaku.1": "%1$s wurde von %2$s mit danmaku getötet",
-  "death.touhou_little_maid.attack.danmaku.2": "%1$s wurde von %2$s mit danmaku erschossen",
   "task.touhou_little_maid.idle": "Inaktiv",
   "task.touhou_little_maid.attack": "Angriff",
   "task.touhou_little_maid.ranged_attack": "Bogen",
