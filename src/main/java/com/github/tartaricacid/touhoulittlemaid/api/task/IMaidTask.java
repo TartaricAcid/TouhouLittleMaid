@@ -78,9 +78,21 @@ public interface IMaidTask {
      * 但是有些需要专心致志的工作模式，这样做反而会带来问题。将其设置为 false 就能禁止这种情况
      *
      * @param maid 女仆对象
-     * @return 禁用四处张望和随机走动 AI
+     * @return 是否禁用四处张望和随机走动 AI
      */
     default boolean enableLookAndRandomWalk(EntityMaid maid) {
+        return true;
+    }
+
+    /**
+     * 是否启用慌乱 AI，默认情况下女仆受伤后会乱跑
+     * <p>
+     * 但是处于攻击模式或者灭火模式时不应当启用
+     *
+     * @param maid 女仆对象
+     * @return 是否禁用慌乱 AI
+     */
+    default boolean enablePanic(EntityMaid maid) {
         return true;
     }
 

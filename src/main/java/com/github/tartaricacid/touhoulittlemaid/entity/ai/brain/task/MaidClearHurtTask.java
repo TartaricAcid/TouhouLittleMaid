@@ -14,7 +14,7 @@ public class MaidClearHurtTask extends Behavior<EntityMaid> {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         boolean hurtOrHostile = MaidPanicTask.isHurt(maid) || MaidPanicTask.hasHostile(maid);
-        if (MaidPanicTask.isAttack(maid) || !hurtOrHostile) {
+        if (!MaidPanicTask.canPanic(maid) || !hurtOrHostile) {
             maid.getBrain().eraseMemory(MemoryModuleType.HURT_BY);
             maid.getBrain().eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
             MaidUpdateActivityFromSchedule.updateActivityFromSchedule(maid);

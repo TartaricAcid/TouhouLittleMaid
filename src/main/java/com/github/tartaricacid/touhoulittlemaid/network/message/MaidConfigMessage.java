@@ -1,9 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -71,6 +73,9 @@ public class MaidConfigMessage {
                         maid.getSchedulePos().restrictTo(maid);
                         if (maid.isHomeModeEnable()) {
                             BehaviorUtils.setWalkAndLookTargetMemories(maid, maid.getRestrictCenter(), 0.7f, 3);
+                        }
+                        if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
+                            InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.SWITCH_SCHEDULE);
                         }
                     }
                 }

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.block;
 
-import com.github.tartaricacid.touhoulittlemaid.advancements.maid.MaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityShrine;
@@ -82,7 +82,7 @@ public class BlockShrine extends BaseEntityBlock {
                 ItemStack film = shrine.getStorageItem();
                 ItemFilm.filmToMaid(film, worldIn, pos.above(), playerIn);
                 if (playerIn instanceof ServerPlayer serverPlayer) {
-                    InitTrigger.MAID_EVENT.trigger(serverPlayer, MaidEvent.SHRINE_REBORN_MAID);
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.SHRINE_REBORN_MAID);
                 }
             }
         }

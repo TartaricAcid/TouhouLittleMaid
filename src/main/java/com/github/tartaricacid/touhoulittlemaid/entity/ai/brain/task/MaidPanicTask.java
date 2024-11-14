@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
-import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -24,14 +23,14 @@ public class MaidPanicTask extends Behavior<EntityMaid> {
         return maid.getBrain().hasMemoryValue(MemoryModuleType.HURT_BY);
     }
 
-    public static boolean isAttack(EntityMaid maid) {
-        return maid.getTask() instanceof IAttackTask;
+    public static boolean canPanic(EntityMaid maid) {
+        return maid.getTask().enablePanic(maid);
     }
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         boolean hurtOrHostile = isHurt(maid) || hasHostile(maid);
-        if (!isAttack(maid) && hurtOrHostile) {
+        if (canPanic(maid) && hurtOrHostile) {
             Brain<?> brain = maid.getBrain();
             if (!brain.isActive(Activity.PANIC)) {
                 brain.eraseMemory(MemoryModuleType.PATH);

@@ -5,42 +5,38 @@
 
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.keyframe;
 
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.AnimationControllerContext;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.context.AnimationContext;
+import com.github.tartaricacid.touhoulittlemaid.molang.runtime.ExpressionEvaluator;
+import org.joml.Vector3f;
 
-@SuppressWarnings("rawtypes")
-public class AnimationPoint {
+public abstract class AnimationPoint {
     /**
-     * 动画插值中要从中获取的当前 tick
+     * 当前关键帧播放进度
      */
     public final double currentTick;
     /**
-     * 当前动画结束的 tick
+     * 当前关键帧总长度
      */
-    public final double animationEndTick;
+    public final double totalTick;
     /**
-     * 动画起始值
+     * 与动画控制器相关的 molang 上下文
      */
-    public final double animationStartValue;
-    /**
-     * 动画结束值
-     */
-    public final double animationEndValue;
+    private final AnimationControllerContext context;
 
-    /**
-     * 当前关键帧
-     */
-    public final KeyFrame keyframe;
-
-    public AnimationPoint(KeyFrame keyframe, double tick, double animationEndTick, double animationStartValue, double animationEndValue) {
-        this.keyframe = keyframe;
-        this.currentTick = tick;
-        this.animationEndTick = animationEndTick;
-        this.animationStartValue = animationStartValue;
-        this.animationEndValue = animationEndValue;
+    public AnimationPoint(double currentTick, double totalTick, AnimationControllerContext context) {
+        this.currentTick = currentTick;
+        this.totalTick = totalTick;
+        this.context = context;
     }
 
-    @Override
-    public String toString() {
-        return "Tick: " + currentTick + " | End Tick: " + animationEndTick + " | Start Value: " + animationStartValue
-                + " | End Value: " + animationEndValue;
+    protected double getPercentCompleted() {
+        return totalTick == 0 ? 1 : (currentTick / totalTick);
     }
+
+    protected void setupControllerContext(ExpressionEvaluator<AnimationContext<?>> evaluator) {
+        evaluator.entity().setAnimationControllerContext(context);
+    }
+
+    public abstract Vector3f getLerpPoint(ExpressionEvaluator<AnimationContext<?>> evaluator);
 }

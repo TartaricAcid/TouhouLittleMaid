@@ -19,7 +19,6 @@ public class ClientSetupEvent {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(AnimationRegister::registerAnimationState);
-        event.enqueueWork(AnimationRegister::registerVariables);
         event.enqueueWork(MaidTipsOverlay::init);
         event.enqueueWork(ShowOptifineScreen::checkOptifineIsLoaded);
 

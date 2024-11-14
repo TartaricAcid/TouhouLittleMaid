@@ -456,4 +456,8 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
     public AABB getRenderBoundingBox() {
         return renderBoundingBox;
     }
+
+    public HashMap<String, ModelRendererWrapper> getModelMap() {
+        return modelMap;
+    }
 }

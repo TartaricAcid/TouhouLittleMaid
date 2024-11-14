@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidExtinguishingTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TaskExtinguishing implements IAttackTask {
+public class TaskExtinguishing implements IMaidTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "extinguishing");
 
     @Override
@@ -46,6 +46,11 @@ public class TaskExtinguishing implements IAttackTask {
     @Override
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
         return Collections.singletonList(Pair.of("has_extinguisher", this::hasExtinguisher));
+    }
+
+    @Override
+    public boolean enablePanic(EntityMaid maid) {
+        return false;
     }
 
     private boolean hasExtinguisher(EntityMaid maid) {

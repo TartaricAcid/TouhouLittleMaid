@@ -1,11 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -42,6 +45,9 @@ public class ItemTrumpet extends Item {
                         player.sendSystemMessage(Component.translatable("message.touhou_little_maid.trumpet.unloaded_maid", infos.size()).withStyle(ChatFormatting.DARK_RED));
                     }
                 }
+            }
+            if (player instanceof ServerPlayer serverPlayer) {
+                InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.USE_TRUMPET);
             }
             player.getCooldowns().addCooldown(this, 200);
         }

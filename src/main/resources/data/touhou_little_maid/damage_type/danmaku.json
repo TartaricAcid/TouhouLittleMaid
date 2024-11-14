@@ -1,0 +1,7 @@
+{
+  "message_id": "touhou_little_maid.danmaku",
+  "scaling": "when_caused_by_living_non_player",
+  "exhaustion": 0.1,
+  "effects": "hurt",
+  "death_message_type": "default"
+}

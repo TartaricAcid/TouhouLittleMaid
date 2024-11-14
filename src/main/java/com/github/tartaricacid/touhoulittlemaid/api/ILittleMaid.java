@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManag
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ExtraMaidBrainManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.data.TaskDataRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
@@ -70,6 +71,14 @@ public interface ILittleMaid {
      * @param register 注册器
      */
     default void registerTaskData(TaskDataRegister register) {
+    }
+
+    /**
+     * 给女仆添加额外的 AI 数据，比如 MemoryModuleType 或者 SensorType
+     *
+     * @param manager 注册器
+     */
+    default void addExtraMaidBrain(ExtraMaidBrainManager manager) {
     }
 
     /**

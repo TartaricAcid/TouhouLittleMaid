@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.tileentity;
 
+import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameEntityBlock;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.BlockPos;
@@ -10,7 +11,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class TileEntityGomoku extends TileEntityJoy {
+public class TileEntityGomoku extends TileEntityJoy implements IBoardGameEntityBlock {
     public static final BlockEntityType<TileEntityGomoku> TYPE = BlockEntityType.Builder.of(TileEntityGomoku::new, InitBlocks.GOMOKU.get()).build(null);
 
     private static final String CHESS_DATA = "ChessData";

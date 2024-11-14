@@ -46,6 +46,8 @@ The mod supports custom models in the Bedrock Edition Entity format, you can eas
 - Sound resource from [あみたろの声素材工房](https://www14.big.or.jp/~amiami/happy/)
 - LittleMaid PEKO Sound: <https://booth.pm/ja/items/1903163>
 - Gomoku AI: <https://github.com/anlingyi/xechat-idea>
+- Chinese Chess AI: <https://github.com/xqbase/xqwlight>
+- Chess AI: <https://github.com/xqbase/chess>
 - Other players who have helped me in any ways, and you
 
 ## License

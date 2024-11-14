@@ -153,6 +153,20 @@
       "touhou_little_maid:maid/empty"
     ]
   },
+  "maid.ai.game_win": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.game_win",
+    "sounds": [
+      "touhou_little_maid:maid/empty"
+    ]
+  },
+  "maid.ai.game_lost": {
+    "category": "neutral",
+    "subtitle": "subtitle.touhou_little_maid.maid.ai.game_lost",
+    "sounds": [
+      "touhou_little_maid:maid/empty"
+    ]
+  },
   "maid.environment.hot": {
     "category": "neutral",
     "subtitle": "subtitle.touhou_little_maid.maid.environment.hot",
@@ -210,13 +224,6 @@
         "name": "touhou_little_maid:item/camera_use",
         "stream": true
       }
-    ]
-  },
-  "item.album_open": {
-    "category": "voice",
-    "subtitle": "subtitle.touhou_little_maid.item.album_open",
-    "sounds": [
-      "touhou_little_maid:item/album_open"
     ]
   },
   "block.altar_craft": {

@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapability;
 import com.github.tartaricacid.touhoulittlemaid.capability.PowerCapabilityProvider;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.BeaconAbsorbMessage;
 import net.minecraft.core.BlockPos;
@@ -12,6 +14,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundTakeItemEntityPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -259,6 +262,9 @@ public class EntityPowerPoint extends Entity implements IEntityAdditionalSpawnDa
                     }
                 }
                 this.discard();
+                if (player instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.PICKUP_POWER_POINT);
+                }
             });
         }
     }

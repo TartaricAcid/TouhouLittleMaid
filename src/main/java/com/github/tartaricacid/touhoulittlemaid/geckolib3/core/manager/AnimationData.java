@@ -6,43 +6,25 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.manager;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.AnimationController;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBone;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.snapshot.BoneSnapshot;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.apache.commons.lang3.tuple.Pair;
+import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class AnimationData {
-    private final Map<String, AnimationController> animationControllers = new Object2ObjectLinkedOpenHashMap<>();
+    private final List<AnimationController> animationControllers = new ReferenceArrayList<>(32);
     public double tick;
     public boolean isFirstTick = true;
     public double startTick = -1;
     public boolean shouldPlayWhilePaused = false;
-    private Map<String, Pair<IBone, BoneSnapshot>> boneSnapshotCollection;
     private double resetTickLength = 1;
 
     public AnimationData() {
-        boneSnapshotCollection = new Object2ObjectOpenHashMap<>();
     }
 
     public AnimationController addAnimationController(AnimationController value) {
-        return this.animationControllers.put(value.getName(), value);
-    }
-
-    public Map<String, Pair<IBone, BoneSnapshot>> getBoneSnapshotCollection() {
-        return boneSnapshotCollection;
-    }
-
-    public void setBoneSnapshotCollection(HashMap<String, Pair<IBone, BoneSnapshot>> boneSnapshotCollection) {
-        this.boneSnapshotCollection = boneSnapshotCollection;
-    }
-
-    public void clearSnapshotCache() {
-        this.boneSnapshotCollection = new HashMap<>();
+        animationControllers.add(value);
+        return value;
     }
 
     public double getResetSpeed() {
@@ -58,7 +40,7 @@ public class AnimationData {
         this.resetTickLength = resetTickLength < 0 ? 0 : resetTickLength;
     }
 
-    public Map<String, AnimationController> getAnimationControllers() {
+    public List<AnimationController> getAnimationControllers() {
         return animationControllers;
     }
 }

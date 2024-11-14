@@ -43,6 +43,20 @@ public class Interpolations {
     }
 
     /**
+     * Yaw 的 Hermite 三次插值
+     */
+    public static double cubicHermiteYaw(double y0, double y1, double y2, double y3, double position) {
+        y0 = MathHelper.wrapDegrees(y0);
+        y1 = MathHelper.wrapDegrees(y1);
+        y2 = MathHelper.wrapDegrees(y2);
+        y3 = MathHelper.wrapDegrees(y3);
+        y1 = normalizeYaw(y0, y1);
+        y2 = normalizeYaw(y1, y2);
+        y3 = normalizeYaw(y2, y3);
+        return cubicHermite(y0, y1, y2, y3, position);
+    }
+
+    /**
      * y1 和 y2 之间的三次插值
      */
     public static float cubic(float y0, float y1, float y2, float y3, float x) {

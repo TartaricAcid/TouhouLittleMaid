@@ -1,0 +1,108 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "KING_W",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "QUEEN_W",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [0, 5]}
+					]
+				},
+				{
+					"name": "ROOK_W",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [0, 10]}
+					]
+				},
+				{
+					"name": "BISHOP_W",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [0, 15]}
+					]
+				},
+				{
+					"name": "KNIGHT_W",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [16, 0]}
+					]
+				},
+				{
+					"name": "PAWN_W",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [16, 5]}
+					]
+				},
+				{
+					"name": "KING_B",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [16, 10]}
+					]
+				},
+				{
+					"name": "QUEEN_B",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [16, 15]}
+					]
+				},
+				{
+					"name": "ROOK_B",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [0, 20]}
+					]
+				},
+				{
+					"name": "BISHOP_B",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [16, 20]}
+					]
+				},
+				{
+					"name": "KNIGHT_B",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [0, 25]}
+					]
+				},
+				{
+					"name": "PAWN_B",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, -0.1, -2], "size": [4, 1, 4], "inflate": -0.1, "uv": [16, 25]}
+					]
+				},
+				{
+					"name": "SELECT",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2, 1, -2], "size": [4, 0, 4], "uv": [8, 0]}
+					]
+				}
+			]
+		}
+	]
+}

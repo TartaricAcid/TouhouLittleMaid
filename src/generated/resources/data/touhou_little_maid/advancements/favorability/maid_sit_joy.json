@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "maid_sit_joy"
+      },
+      "trigger": "touhou_little_maid:maid/tamed_maid"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.favorability.maid_sit_joy.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "touhou_little_maid:bookshelf"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.touhou_little_maid.favorability.maid_sit_joy.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "rewards": {
+    "experience": 50
+  },
+  "sends_telemetry_event": true
+}

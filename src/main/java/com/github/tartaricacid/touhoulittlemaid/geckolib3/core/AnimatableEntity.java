@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.AnimationController;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.manager.AnimationData;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.context.AnimationContext;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.AnimationProcessor;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.RateLimiter;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
@@ -48,7 +49,7 @@ public abstract class AnimatableEntity<E extends Entity> {
 
     public abstract ResourceLocation getTextureLocation();
 
-    public boolean setCustomAnimations(@NotNull AnimationEvent<?> animationEvent) {
+    public boolean setCustomAnimations(AnimationContext<?> ctx, @NotNull AnimationEvent<?> animationEvent) {
         if (!updateModel()) {
             return false;
         }
@@ -60,7 +61,7 @@ public abstract class AnimatableEntity<E extends Entity> {
         }
 
         if (!mc.isPaused() || this.manager.shouldPlayWhilePaused) {
-            this.manager.tick = currentTick;
+            this.manager.tick = Math.max(this.manager.tick, currentTick);
             double gameTick = manager.tick;
             double deltaTicks = gameTick - this.lastGameTickTime;
             this.seekTime += deltaTicks;
@@ -69,15 +70,15 @@ public abstract class AnimatableEntity<E extends Entity> {
         }
 
         animationEvent.animationTick = this.seekTime;
-        this.animationProcessor.preAnimationSetup(this.seekTime);
-        if (this.animationProcessor.isModelEmpty()) {
+        this.animationProcessor.preAnimationSetup(this, this.seekTime);
+        if (this.animationProcessor.isModelRendererEmpty()) {
             return false;
         }
         if (!forceUpdate(animationEvent) && !this.rateLimiter.request((float) this.seekTime * 20)) {
             return false;
         }
 
-        this.animationProcessor.tickAnimation(this.seekTime, animationEvent, GeckoLibCache.getInstance().parser);
+        this.animationProcessor.tickAnimation(this.seekTime, animationEvent, ctx);
         return true;
     }
 
@@ -107,7 +108,7 @@ public abstract class AnimatableEntity<E extends Entity> {
         }
         if (this.currentModel == null || model != this.currentModel.geoModel()) {
             this.currentModel = new AnimatedGeoModel(model);
-            this.animationProcessor.updateModel(this.currentModel.bones().values());
+            this.animationProcessor.registerModelRenderer(this.currentModel.bones());
         }
         return true;
     }
@@ -118,7 +119,11 @@ public abstract class AnimatableEntity<E extends Entity> {
     }
 
     public double getCurrentTick(AnimationEvent<?> animationEvent) {
-        return this.entity.tickCount + animationEvent.getPartialTick();
+        float partialTick = animationEvent.getPartialTick();
+        if (partialTick == 1.0f && partialTick != Minecraft.getInstance().getPartialTick()) {
+            partialTick = Minecraft.getInstance().getPartialTick();
+        }
+        return this.entity.tickCount + partialTick;
     }
 
     public void setMolangQueries(double seekTime) {
@@ -133,5 +138,9 @@ public abstract class AnimatableEntity<E extends Entity> {
 
     public E getEntity() {
         return entity;
+    }
+
+    public double getSeekTime() {
+        return seekTime;
     }
 }

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo;
 import com.github.tartaricacid.touhoulittlemaid.extended.LivingEntityRendererAccessor;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimatableEntity;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.context.AnimationContext;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.Color;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.data.EntityModelData;
@@ -189,8 +190,8 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
         entityModelData.netHeadYaw = -Mth.clamp(Mth.wrapDegrees(netHeadYaw), -85, 85);
         AnimationEvent predicate = new AnimationEvent(animatable, limbSwing, limbSwingAmount, partialTick,
                 (limbSwingAmount <= -getSwingMotionAnimThreshold() || limbSwingAmount <= getSwingMotionAnimThreshold()), Collections.singletonList(entityModelData));
-
-        animatable.setCustomAnimations(predicate);
+        AnimationContext<?> ctx = new AnimationContext<>(entity, this.currentAnimatable, predicate, entityModelData);
+        animatable.setCustomAnimations(ctx, predicate);
         AnimatedGeoModel model = animatable.getCurrentModel();
         if (model != null) {
             poseStack.translate(0, 0.01f, 0);
@@ -257,7 +258,7 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
             return false;
         }
         return entity.shouldShowName() || (entity == this.entityRenderDispatcher.crosshairPickEntity && entity.hasCustomName())
-                && Minecraft.renderNames();
+                                          && Minecraft.renderNames();
     }
 
     protected float getSwingProgress(LivingEntity entity, float partialTick) {

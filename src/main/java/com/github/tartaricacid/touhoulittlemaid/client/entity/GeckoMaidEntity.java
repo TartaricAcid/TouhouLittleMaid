@@ -3,17 +3,16 @@ package com.github.tartaricacid.touhoulittlemaid.client.entity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.AnimationManager;
-import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.AnimationRegister;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimatableEntity;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.AnimationController;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangParser;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.context.AnimationContext;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.data.EntityModelData;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,7 +27,6 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
     private static final ResourceLocation GECKO_DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final int FPS = 60;
 
-    private volatile boolean renderedWithTempChanges = false;
     private final IMaid maid;
     private MaidModelInfo maidInfo;
     private final Vector2f headRot = new Vector2f();
@@ -56,7 +54,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
         addAnimationController(new AnimationController<>(this, "hold_mainhand", 0, manager::predicateMainhandHold));
         addAnimationController(new AnimationController<>(this, "swing", 2, manager::predicateSwing));
         addAnimationController(new AnimationController<>(this, "use", 2, manager::predicateUse));
-        addAnimationController(new AnimationController<>(this, "beg", 2, manager::predicateBeg));
+        addAnimationController(new AnimationController<>(this, "misc", 2, manager::predicateMisc));
         addAnimationController(new AnimationController<>(this, "passenger", 2, manager::predicatePassengerAnimation));
         for (int i = 0; i < 8; i++) {
             String controllerName = String.format("parallel_%d_controller", i);
@@ -73,12 +71,12 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
 
     @Override
     @SuppressWarnings("all")
-    public boolean setCustomAnimations(@NotNull AnimationEvent animationEvent) {
+    public boolean setCustomAnimations(AnimationContext context, @NotNull AnimationEvent animationEvent) {
         List extraData = animationEvent.getExtraData();
         MolangParser parser = GeckoLibCache.getInstance().parser;
         if (!Minecraft.getInstance().isPaused() && extraData.size() == 1 && extraData.get(0) instanceof EntityModelData data) {
-            AnimationRegister.setParserValue(animationEvent, parser, data, this.maid);
-            var update = super.setCustomAnimations(animationEvent);
+            //AnimationRegister.setParserValue(animationEvent, parser, data, this.maid);
+            var update = super.setCustomAnimations(context, animationEvent);
             AnimatedGeoModel currentModel = this.getCurrentModel();
             if (currentModel != null && currentModel.head() != null) {
                 IBone head = currentModel.head();
@@ -90,7 +88,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
             }
             return update;
         } else {
-            return super.setCustomAnimations(animationEvent);
+            return super.setCustomAnimations(context, animationEvent);
         }
     }
 
@@ -117,16 +115,8 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> {
 
     @Override
     protected boolean forceUpdate(AnimationEvent<?> animationEvent) {
-        if (RenderUtils.isRenderingEntitiesInInventory()) {
-            renderedWithTempChanges = true;
-            return true;
-        }
-        if (renderedWithTempChanges) {
-            renderedWithTempChanges = false;
-            return true;
-        }
         var tick = (float) getCurrentTick(animationEvent);
-        if (tick != this.currentTick) {
+        if (tick > this.currentTick) {
             this.currentTick = tick;
             this.state.updateState();
             this.modelDirty = false;

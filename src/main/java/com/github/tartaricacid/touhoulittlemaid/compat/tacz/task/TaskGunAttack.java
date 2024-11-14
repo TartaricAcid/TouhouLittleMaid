@@ -8,11 +8,13 @@ import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunWalkToTarget;
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.utils.GunBehaviorUtils;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.tacz.guns.GunMod;
+import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.api.item.builder.GunItemBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +32,7 @@ import java.util.function.Predicate;
 
 public class TaskGunAttack implements IAttackTask {
     public static final ResourceLocation UID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "gun_attack");
+    private ItemStack icon;
 
     @Override
     public ResourceLocation getUid() {
@@ -38,7 +41,12 @@ public class TaskGunAttack implements IAttackTask {
 
     @Override
     public ItemStack getIcon() {
-        return GunItemBuilder.create().setId(new ResourceLocation(GunMod.MOD_ID, "glock_17")).build();
+        ResourceLocation gunId = new ResourceLocation(GunMod.MOD_ID, "glock_17");
+        if (icon == null) {
+            TimelessAPI.getCommonGunIndex(gunId).ifPresentOrElse(index -> this.icon = GunItemBuilder.create().setId(gunId).build(),
+                    () -> this.icon = InitItems.TACZ_GUN_ICON.get().getDefaultInstance());
+        }
+        return this.icon;
     }
 
     @Nullable

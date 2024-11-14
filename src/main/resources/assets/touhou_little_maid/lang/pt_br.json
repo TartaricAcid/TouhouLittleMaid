@@ -1,4 +1,5 @@
 {
+  "advancements.touhou_little_maid.challenge.kill_wither.description": "Empregada matou um Wither",
   "entity.touhou_little_maid.chair": "Cadeiras",
   "entity.touhou_little_maid.maid": "Faxineira",
   "entity.touhou_little_maid.fairy": "Fada da Empregada",
@@ -9,6 +10,7 @@
   "entity.touhou_little_maid.extinguishing_agent": "Extinguindo o agente",
   "entity.touhou_little_maid.sit": "Sentar",
   "entity.touhou_little_maid.tombstone": "Lapide",
+  "entity.touhou_little_maid.tombstone.display": "Disposto a descansar aqui",
   "item_group.touhou_little_maid.main": "Touhou Little Maid: Itens",
   "item_group.touhou_little_maid.chair": "Touhou Little Maid: Cadeiras",
   "item.touhou_little_maid.maid_spawn_egg": "Ovo Gerador de Empregada",
@@ -153,9 +155,6 @@
   "commands.touhou_little_maid.power.handle.info": "O ponto de poder dos jogadores %d foi alterado",
   "commands.touhou_little_maid.maid_num.handle.info": "O número de empregada dos jogadores %d foi alterado",
   "argument.touhou_little_maid.handle_type.invalid": "Tipo de manipulação inválida",
-  "death.touhou_little_maid.attack.danmaku.1": "%1$s foi assassinada por %2$s usando um Danmaku",
-  "death.touhou_little_maid.attack.danmaku.2": "%1$s foi atingida por %2$s usando um Danmaku",
-  "death.touhou_little_maid.attack.danmaku.3": "%1$s foi golpeado por %2$s usando um Danmaku",
   "task.touhou_little_maid.idle": "Ocioso",
   "task.touhou_little_maid.attack": "Ataque",
   "task.touhou_little_maid.ranged_attack": "Arco",

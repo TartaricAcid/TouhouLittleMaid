@@ -1,0 +1,33 @@
+{
+  "parent": "touhou_little_maid:base/craft_gohei",
+  "criteria": {
+    "craft_chair": {
+      "conditions": {
+        "recipe_id": "touhou_little_maid:chair"
+      },
+      "trigger": "minecraft:recipe_crafted"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.base.craft_chair.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "touhou_little_maid:chair"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.touhou_little_maid.base.craft_chair.title"
+    }
+  },
+  "requirements": [
+    [
+      "craft_chair"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.FoxScrollMessage;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidInfo;
@@ -12,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -78,6 +81,13 @@ public class ItemFoxScroll extends Item {
                 scrollData.add(new FoxScrollMessage.FoxScrollData(info.getChunkPos(), info.getName(), info.getTimestamp()));
             });
             NetworkHandler.sendToClientPlayer(new FoxScrollMessage(data), player);
+            if (player instanceof ServerPlayer serverPlayer) {
+                if (item.getItem() == InitItems.RED_FOX_SCROLL.get()) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.USE_RED_FOX_SCROLL);
+                } else if (item.getItem() == InitItems.WHITE_FOX_SCROLL.get()) {
+                    InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.USE_WHITE_FOX_SCROLL);
+                }
+            }
             return InteractionResultHolder.success(item);
         }
         return super.use(level, player, hand);

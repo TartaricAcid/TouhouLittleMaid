@@ -21,7 +21,7 @@ import java.util.List;
 
 public final class MaidBrain {
     public static ImmutableList<MemoryModuleType<?>> getMemoryTypes() {
-        return ImmutableList.of(
+        List<MemoryModuleType<?>> defaultTypes = Lists.newArrayList(
                 MemoryModuleType.PATH,
                 MemoryModuleType.DOORS_TO_CLOSE,
                 MemoryModuleType.LOOK_TARGET,
@@ -34,15 +34,19 @@ public final class MaidBrain {
                 MemoryModuleType.ATTACK_COOLING_DOWN,
                 InitEntities.TARGET_POS.get()
         );
+        ExtraMaidBrainManager.EXTRA_MAID_BRAINS.forEach(extra -> defaultTypes.addAll(extra.getExtraMemoryTypes()));
+        return ImmutableList.copyOf(defaultTypes);
     }
 
     public static ImmutableList<SensorType<? extends Sensor<? super EntityMaid>>> getSensorTypes() {
-        return ImmutableList.of(
+        List<SensorType<? extends Sensor<? super EntityMaid>>> defaultTypes = Lists.newArrayList(
                 InitEntities.MAID_NEAREST_LIVING_ENTITY_SENSOR.get(),
                 SensorType.HURT_BY,
                 InitEntities.MAID_HOSTILES_SENSOR.get(),
                 InitEntities.MAID_PICKUP_ENTITIES_SENSOR.get()
         );
+        ExtraMaidBrainManager.EXTRA_MAID_BRAINS.forEach(extra -> defaultTypes.addAll(extra.getExtraSensorTypes()));
+        return ImmutableList.copyOf(defaultTypes);
     }
 
     public static void registerBrainGoals(Brain<EntityMaid> brain, EntityMaid maid) {
@@ -132,9 +136,8 @@ public final class MaidBrain {
     private static void registerPanicGoals(Brain<EntityMaid> brain) {
         Pair<Integer, BehaviorControl<? super EntityMaid>> clearHurt = Pair.of(5, new MaidClearHurtTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> runAway = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.NEAREST_HOSTILE, 0.7f, false));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> runAwayHurt = Pair.of(5, MaidRunAwayTask.entity(MemoryModuleType.HURT_BY_ENTITY, 0.7f, false));
 
-        brain.addActivity(Activity.PANIC, ImmutableList.of(clearHurt, runAway, runAwayHurt));
+        brain.addActivity(Activity.PANIC, ImmutableList.of(clearHurt, runAway));
     }
 
     private static void registerRideIdleGoals(Brain<EntityMaid> brain) {

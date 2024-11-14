@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.util;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBone;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -9,16 +8,6 @@ import org.joml.Quaternionf;
 import java.util.List;
 
 public final class RenderUtils {
-    private static boolean renderingEntitiesInInventory = false;
-
-    public static void setRenderingEntitiesInInventory(boolean value) {
-        renderingEntitiesInInventory = value;
-    }
-
-    public static boolean isRenderingEntitiesInInventory() {
-        return RenderSystem.isOnRenderThread() && renderingEntitiesInInventory;
-    }
-
     public static void translateMatrixToBone(PoseStack poseStack, IBone bone) {
         poseStack.translate(-bone.getPositionX() / 16f, bone.getPositionY() / 16f, bone.getPositionZ() / 16f);
     }

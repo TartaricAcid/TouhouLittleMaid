@@ -1,0 +1,36 @@
+{
+  "parent": "touhou_little_maid:challenge/kill_100",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "kill_slime_300"
+      },
+      "trigger": "touhou_little_maid:maid/tamed_maid"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.touhou_little_maid.challenge.kill_slime_300.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "touhou_little_maid:kill_slime_300"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.touhou_little_maid.challenge.kill_slime_300.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "rewards": {
+    "experience": 50
+  },
+  "sends_telemetry_event": true
+}

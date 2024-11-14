@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.projectile;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDamage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -92,12 +93,7 @@ public class EntityDanmaku extends ThrowableProjectile {
         }
 
         if (thrower != null && !hit.is(thrower)) {
-            DamageSource source;
-            if (this.hurtEnderman) {
-                source = this.damageSources().indirectMagic(this, thrower);
-            } else {
-                source = this.damageSources().thrown(this, thrower);
-            }
+            DamageSource source = InitDamage.danmakuDamage(thrower, this);
             hit.hurt(source, this.getDamage());
             if (this.impedingLevel > 0 && hit instanceof LivingEntity livingEntity) {
                 int duration = (20 + this.impedingLevel * 10) * 20;
@@ -165,6 +161,10 @@ public class EntityDanmaku extends ThrowableProjectile {
     public EntityDanmaku setHurtEnderman(boolean hurtEnderman) {
         this.hurtEnderman = hurtEnderman;
         return this;
+    }
+
+    public boolean isHurtEnderman() {
+        return hurtEnderman;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.ConditionManager;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
@@ -73,6 +74,7 @@ public class CustomPackLoader {
     public static void reloadPacks() {
         // 清除
         CustomJsAnimationManger.clearAll();
+        ConditionManager.clear();
         MAID_MODELS.clearAll();
         CHAIR_MODELS.clearAll();
         TMP_REGISTER_TEXTURE.clear();

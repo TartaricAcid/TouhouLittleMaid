@@ -120,6 +120,8 @@ public class CustomSoundLoader {
         buffers.put(InitSounds.MAID_TAMED.get().getLocation(), loadSounds(rootPath.resolve("ai"), "tamed"));
         buffers.put(InitSounds.MAID_ITEM_GET.get().getLocation(), loadSounds(rootPath.resolve("ai"), "item_get"));
         buffers.put(InitSounds.MAID_DEATH.get().getLocation(), loadSounds(rootPath.resolve("ai"), "death"));
+        buffers.put(InitSounds.GAME_WIN.get().getLocation(), loadSounds(rootPath.resolve("ai"), "game_win"));
+        buffers.put(InitSounds.GAME_LOST.get().getLocation(), loadSounds(rootPath.resolve("ai"), "game_lost"));
 
         buffers.put(InitSounds.MAID_COLD.get().getLocation(), loadSounds(rootPath.resolve("environment"), "cold"));
         buffers.put(InitSounds.MAID_HOT.get().getLocation(), loadSounds(rootPath.resolve("environment"), "hot"));
@@ -242,6 +244,8 @@ public class CustomSoundLoader {
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_TAMED.get(), "ai", "tamed");
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_ITEM_GET.get(), "ai", "item_get");
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_DEATH.get(), "ai", "death");
+                    loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.GAME_WIN.get(), "ai", "game_win");
+                    loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.GAME_LOST.get(), "ai", "game_lost");
 
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_COLD.get(), "environment", "cold");
                     loadSounds(zipFile, buffers, zipEntry, subDir, fileName, InitSounds.MAID_HOT.get(), "environment", "hot");

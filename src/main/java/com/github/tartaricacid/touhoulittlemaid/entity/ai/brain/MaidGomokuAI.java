@@ -5,8 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.ZhiZhangAIService;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 
 public final class MaidGomokuAI {
     public static final AIService EASY = new ZhiZhangAIService(new AIService.AIConfig(1, 10, false, 0, 6));
@@ -18,7 +16,7 @@ public final class MaidGomokuAI {
     public static final int HARD_COUNT = 24;
 
     public static int getRank(EntityMaid maid) {
-        int maidCount = getMaidCount(maid);
+        int maidCount = maid.getGameRecordManager().getGomokuWinCount();
         if (maidCount <= EASY_COUNT) {
             return 1;
         } else if (maidCount <= NORMAL_COUNT) {
@@ -30,34 +28,16 @@ public final class MaidGomokuAI {
         }
     }
 
-    public static AIService getService(int maidCount) {
-        if (maidCount <= EASY_COUNT) {
+    public static AIService getService(int winCount) {
+        if (winCount <= EASY_COUNT) {
             return EASY;
-        } else if (maidCount <= NORMAL_COUNT) {
+        } else if (winCount <= NORMAL_COUNT) {
             return NORMAL;
-        } else if (maidCount <= HARD_COUNT) {
+        } else if (winCount <= HARD_COUNT) {
             return HARD;
         } else {
             return HELL;
         }
-    }
-
-    public static int getMaidCount(EntityMaid maid) {
-        CompoundTag gameSkill = maid.getGameSkill();
-        if (gameSkill.contains("Gomoku", Tag.TAG_INT)) {
-            return gameSkill.getInt("Gomoku");
-        }
-        return 0;
-    }
-
-    public static void addMaidCount(EntityMaid maid) {
-        CompoundTag gameSkill = maid.getGameSkill();
-        if (gameSkill.contains("Gomoku", Tag.TAG_INT)) {
-            gameSkill.putInt("Gomoku", gameSkill.getInt("Gomoku") + 1);
-        } else {
-            gameSkill.putInt("Gomoku", 1);
-        }
-        maid.setGameSkill(gameSkill);
     }
 
     /**

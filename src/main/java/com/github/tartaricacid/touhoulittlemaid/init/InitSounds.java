@@ -32,6 +32,8 @@ public final class InitSounds {
     public static final RegistryObject<SoundEvent> MAID_TAMED = registerSound("maid.ai.tamed");
     public static final RegistryObject<SoundEvent> MAID_ITEM_GET = registerSound("maid.ai.item_get");
     public static final RegistryObject<SoundEvent> MAID_DEATH = registerSound("maid.ai.death");
+    public static final RegistryObject<SoundEvent> GAME_WIN = registerSound("maid.ai.game_win");
+    public static final RegistryObject<SoundEvent> GAME_LOST = registerSound("maid.ai.game_lost");
     public static final RegistryObject<SoundEvent> MAID_HOT = registerSound("maid.environment.hot");
     public static final RegistryObject<SoundEvent> MAID_COLD = registerSound("maid.environment.cold");
     public static final RegistryObject<SoundEvent> MAID_RAIN = registerSound("maid.environment.rain");
@@ -40,7 +42,6 @@ public final class InitSounds {
     public static final RegistryObject<SoundEvent> MAID_NIGHT = registerSound("maid.environment.night");
     public static final RegistryObject<SoundEvent> MAID_CREDIT = registerSound("maid.credit");
     public static final RegistryObject<SoundEvent> CAMERA_USE = registerSound("item.camera_use");
-    public static final RegistryObject<SoundEvent> ALBUM_OPEN = registerSound("item.album_open");
     public static final RegistryObject<SoundEvent> ALTAR_CRAFT = registerSound("block.altar_craft");
     public static final RegistryObject<SoundEvent> GOMOKU = registerSound("block.gomoku");
     public static final RegistryObject<SoundEvent> GOMOKU_RESET = registerSound("block.gomoku_reset");

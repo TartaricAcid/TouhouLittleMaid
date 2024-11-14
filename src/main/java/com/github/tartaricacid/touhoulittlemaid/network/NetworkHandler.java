@@ -70,9 +70,9 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(22, SetMaidSoundIdMessage.class, SetMaidSoundIdMessage::encode, SetMaidSoundIdMessage::decode, SetMaidSoundIdMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
-        CHANNEL.registerMessage(23, ChessDataToClientMessage.class, ChessDataToClientMessage::encode, ChessDataToClientMessage::decode, ChessDataToClientMessage::handle,
+        CHANNEL.registerMessage(23, GomokuToClientMessage.class, GomokuToClientMessage::encode, GomokuToClientMessage::decode, GomokuToClientMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        CHANNEL.registerMessage(24, ChessDataToServerMessage.class, ChessDataToServerMessage::encode, ChessDataToServerMessage::decode, ChessDataToServerMessage::handle,
+        CHANNEL.registerMessage(24, GomokuToServerMessage.class, GomokuToServerMessage::encode, GomokuToServerMessage::decode, GomokuToServerMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(25, FoxScrollMessage.class, FoxScrollMessage::encode, FoxScrollMessage::decode, FoxScrollMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
@@ -84,11 +84,19 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(29, ServantBellSetMessage.class, ServantBellSetMessage::encode, ServantBellSetMessage::decode, ServantBellSetMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
-        CHANNEL.registerMessage(30, SetMonsterListMessage.class, SetMonsterListMessage::encode, SetMonsterListMessage::decode, SetMonsterListMessage::handle,
+        CHANNEL.registerMessage(30, SetAttackListMessage.class, SetAttackListMessage::encode, SetAttackListMessage::decode, SetAttackListMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(31, MaidSubConfigMessage.class, MaidSubConfigMessage::encode, MaidSubConfigMessage::decode, MaidSubConfigMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(32, RefreshMaidBrainMessage.class, RefreshMaidBrainMessage::encode, RefreshMaidBrainMessage::decode, RefreshMaidBrainMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(33, CChessToClientMessage.class, CChessToClientMessage::encode, CChessToClientMessage::decode, CChessToClientMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(34, CChessToServerMessage.class, CChessToServerMessage::encode, CChessToServerMessage::decode, CChessToServerMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(35, WChessToClientMessage.class, WChessToClientMessage::encode, WChessToClientMessage::decode, WChessToClientMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(36, WChessToServerMessage.class, WChessToServerMessage::encode, WChessToServerMessage::decode, WChessToServerMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 

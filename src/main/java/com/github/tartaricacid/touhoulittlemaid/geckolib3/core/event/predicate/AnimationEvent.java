@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 
 public class AnimationEvent<T extends AnimatableEntity<?>> {
-    private final T animatableEntity;
+    private final T animatable;
     private final float limbSwing;
     private final float limbSwingAmount;
     private final float partialTick;
@@ -16,9 +16,9 @@ public class AnimationEvent<T extends AnimatableEntity<?>> {
     public double animationTick;
     protected AnimationController<T> controller;
 
-    public AnimationEvent(T animatableEntity, float limbSwing, float limbSwingAmount, float partialTick, boolean isMoving,
+    public AnimationEvent(T animatable, float limbSwing, float limbSwingAmount, float partialTick, boolean isMoving,
                           List<Object> extraData) {
-        this.animatableEntity = animatableEntity;
+        this.animatable = animatable;
         this.limbSwing = limbSwing;
         this.limbSwingAmount = limbSwingAmount;
         this.partialTick = partialTick;
@@ -34,7 +34,7 @@ public class AnimationEvent<T extends AnimatableEntity<?>> {
     }
 
     public T getAnimatableEntity() {
-        return animatableEntity;
+        return animatable;
     }
 
     public float getLimbSwing() {
@@ -65,6 +65,7 @@ public class AnimationEvent<T extends AnimatableEntity<?>> {
         return extraData;
     }
 
+    @SuppressWarnings("unchecked")
     public <D> List<D> getExtraDataOfType(Class<D> type) {
         ObjectArrayList<D> matches = new ObjectArrayList<>();
         for (Object obj : this.extraData) {

@@ -3403,6 +3403,10 @@
 		"pre_parallel7": {
 			"loop": true
 		},
+		"game_win": {
+		},
+		"game_lost": {
+		},
 		"vehicle$minecraft:player": {
 			"loop": true,
 			"bones": {

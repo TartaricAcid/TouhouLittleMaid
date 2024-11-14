@@ -10,6 +10,10 @@ import net.minecraft.util.GsonHelper;
 public class MaidEventTrigger extends SimpleCriterionTrigger<MaidEventTrigger.Instance> {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid/tamed_maid");
 
+    public static MaidEventTrigger.Instance create(String eventName) {
+        return new MaidEventTrigger.Instance(eventName);
+    }
+
     @Override
     protected MaidEventTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate entityPredicate, DeserializationContext conditionsParser) {
         String eventName = GsonHelper.getAsString(json, "event");

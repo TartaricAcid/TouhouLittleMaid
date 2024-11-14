@@ -1,9 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.event.maid;
 
+import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,7 +27,13 @@ public class SaddleMaidEvent {
             if (player.getPassengers().isEmpty() && maid.getPassengers().isEmpty()) {
                 boolean success = maid.startRiding(player);
                 if (success) {
+                    if (maid.isHomeModeEnable()) {
+                        maid.setHomeModeEnable(false);
+                    }
                     DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> SaddleMaidEvent::showTips);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.PICKUP_MAID);
+                    }
                 }
                 event.setCanceled(true);
                 return;
