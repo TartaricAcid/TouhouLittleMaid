@@ -53,7 +53,7 @@ public class EntitySit extends Entity {
         if (tag.contains("SitJoyType", Tag.TAG_STRING)) {
             this.setJoyType(tag.getString("SitJoyType"));
         }
-        if (tag.contains("AssociatedBlockPos", Tag.TAG_COMPOUND)) {
+        if (tag.contains("AssociatedBlockPos", Tag.TAG_INT_ARRAY)) {
             Optional<BlockPos> blockPosOptional = NbtUtils.readBlockPos(tag, "AssociatedBlockPos");
             blockPosOptional.ifPresent(blockPos -> this.associatedBlockPos = blockPos);
         }
