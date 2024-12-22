@@ -65,8 +65,8 @@ public class MaidArmsAndHeadAccessor implements ModelAccessor<EntityMaid> {
     }
 
     public void headPitch(float pitch) {
-        getMaidHead().ifPresent(h -> h.xRot = -pitch);
-        getMaidHat().ifPresent(h -> h.xRot = -pitch);
+        getMaidHead().ifPresent(h -> h.xRot = pitch);
+        getMaidHat().ifPresent(h -> h.xRot = pitch);
     }
 
     public float leftArmYaw() {
