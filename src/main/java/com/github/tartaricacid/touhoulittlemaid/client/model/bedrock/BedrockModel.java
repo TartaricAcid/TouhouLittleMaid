@@ -9,7 +9,9 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRen
 import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.ImmersiveMelodiesCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -256,8 +258,13 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
             Invocable invocable = (Invocable) CustomJsAnimationManger.NASHORN;
             if (entityIn instanceof Mob mob) {
                 IMaid maid = IMaid.convert(mob);
-                if (maid != null)
+                if (maid != null) {
                     setupMaidAnim(maid, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, invocable);
+                    ImmersiveMelodiesCompat.setAngles((EntityMaid) maid, this.hasHead() ? this.getHead() : null,
+                            this.hasHat() ? this.getHat() : null, //有hat部分吗？
+                            this.hasLeftArm() ? this.getArm(HumanoidArm.LEFT) : null,
+                            this.hasRightArm() ? this.getArm(HumanoidArm.RIGHT) : null);
+                }
                 return;
             }
             if (entityIn instanceof EntityChair) {
@@ -344,6 +351,14 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
 
     public BedrockPart getHead() {
         return modelMap.get("head").getModelRenderer();
+    }
+
+    public boolean hasHat() {
+        return modelMap.containsKey("hat");
+    }
+
+    public BedrockPart getHat() {
+        return modelMap.get("hat").getModelRenderer();
     }
 
     public boolean hasLeftArm() {

@@ -114,6 +114,9 @@ repositories {
     maven {
         url = "https://api.modrinth.com/maven"
     }
+    maven {
+        url = "https://maven.conczin.net/Artifacts"
+    }
 }
 
 dependencies {
@@ -138,7 +141,7 @@ dependencies {
     runtimeOnly fg.deobf("libs:Patchouli:${patchouli_version}")
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
-    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
+    compileOnly fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
 
     implementation fg.deobf("libs:cloth-config-forge:${cloth_config_forge}")
 
@@ -148,6 +151,8 @@ dependencies {
     implementation fg.deobf("maven.modrinth:slashblade-resharped:1.1.6-1.20.1")
 
     implementation fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
+
+    implementation fg.deobf("net.conczin:immersive_melodies:${immersive_melodies_version}")
 
     runtimeOnly fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
 

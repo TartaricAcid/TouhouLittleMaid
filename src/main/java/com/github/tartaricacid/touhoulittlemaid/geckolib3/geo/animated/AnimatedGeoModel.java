@@ -28,6 +28,12 @@ public class AnimatedGeoModel {
 
     @Nullable
     private final AnimatedGeoBone head;
+    @Nullable
+    private final AnimatedGeoBone hat;
+    @Nullable
+    private final AnimatedGeoBone leftArm;
+    @Nullable
+    private final AnimatedGeoBone rightArm;
 
     public AnimatedGeoModel(GeoModel model) {
         geoModel = model;
@@ -46,6 +52,10 @@ public class AnimatedGeoModel {
         this.headBones = getLocatorHierarchy("Head");
 
         this.head = bones.get("Head");
+        //有hat部分吗？
+        this.hat = bones.get("Hat");
+        this.leftArm = bones.get("LeftArm");
+        this.rightArm = bones.get("RightArm");
     }
 
     private List<AnimatedGeoBone> getLocatorHierarchy(String locatorName) {
@@ -115,5 +125,20 @@ public class AnimatedGeoModel {
     @Nullable
     public AnimatedGeoBone head() {
         return head;
+    }
+
+    @Nullable
+    public AnimatedGeoBone hat() {
+        return hat;
+    }
+
+    @Nullable
+    public AnimatedGeoBone leftArm() {
+        return leftArm;
+    }
+
+    @Nullable
+    public AnimatedGeoBone rightArm() {
+        return rightArm;
     }
 }
