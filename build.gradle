@@ -141,7 +141,7 @@ dependencies {
     runtimeOnly fg.deobf("libs:Patchouli:${patchouli_version}")
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
-    compileOnly fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
 
     implementation fg.deobf("libs:cloth-config-forge:${cloth_config_forge}")
 

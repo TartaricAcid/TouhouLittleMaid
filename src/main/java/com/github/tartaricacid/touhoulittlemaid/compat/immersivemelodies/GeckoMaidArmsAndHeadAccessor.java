@@ -1,20 +1,22 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
 import immersive_melodies.client.animation.EntityModelAnimator;
 import immersive_melodies.client.animation.accessors.ModelAccessor;
+import net.minecraft.world.entity.Mob;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class GeckoMaidArmsAndHeadAccessor implements ModelAccessor<EntityMaid> {
-    private final EntityMaid maid;
-    private final AnimatedGeoBone head;
-    private final AnimatedGeoBone hat;
-    private final AnimatedGeoBone leftArm;
-    private final AnimatedGeoBone rightArm;
+public class GeckoMaidArmsAndHeadAccessor implements ModelAccessor<Mob> {
+    private final Mob maid;
+    private final @Nullable AnimatedGeoBone head;
+    private final @Nullable AnimatedGeoBone hat;
+    private final @Nullable AnimatedGeoBone leftArm;
+    private final @Nullable AnimatedGeoBone rightArm;
 
-    private GeckoMaidArmsAndHeadAccessor(EntityMaid maid, AnimatedGeoBone head, AnimatedGeoBone hat, AnimatedGeoBone leftArm, AnimatedGeoBone rightArm) {
+    private GeckoMaidArmsAndHeadAccessor(Mob maid, @Nullable AnimatedGeoBone head, @Nullable AnimatedGeoBone hat,
+                                         @Nullable AnimatedGeoBone leftArm, @Nullable AnimatedGeoBone rightArm) {
         this.maid = maid;
         this.head = head;
         this.hat = hat;
@@ -22,104 +24,121 @@ public class GeckoMaidArmsAndHeadAccessor implements ModelAccessor<EntityMaid> {
         this.rightArm = rightArm;
     }
 
+    static void setAngles(Mob maid, @Nullable AnimatedGeoBone head, @Nullable AnimatedGeoBone hat,
+                          @Nullable AnimatedGeoBone leftArm, @Nullable AnimatedGeoBone rightArm) {
+        EntityModelAnimator.setAngles(new GeckoMaidArmsAndHeadAccessor(maid, head, hat, leftArm, rightArm));
+    }
+
     @Override
-    public EntityMaid getEntity() {
+    public Mob getEntity() {
         return this.maid;
     }
 
-    public Optional<AnimatedGeoBone> getMaidHead() {
-        return Optional.ofNullable(head);
-    }
-
-    public Optional<AnimatedGeoBone> getMaidHat() {
-        return Optional.ofNullable(hat);
-    }
-
-    public Optional<AnimatedGeoBone> getMaidFlippedLeftArm() {
-        return flipHands() ? getMaidRightArm() : getMaidLeftArm();
-    }
-
-    public Optional<AnimatedGeoBone> getMaidFlippedRightArm() {
-        return flipHands() ? getMaidLeftArm() : getMaidRightArm();
-    }
-
-    public Optional<AnimatedGeoBone> getMaidLeftArm() {
-        return Optional.ofNullable(leftArm);
-    }
-
-    public Optional<AnimatedGeoBone> getMaidRightArm() {
-        return Optional.ofNullable(rightArm);
-    }
-
+    @Override
     public float headYaw() {
         return getMaidHead().map(AnimatedGeoBone::getRotationY).orElse(0.0f);
     }
 
+    @Override
     public void headYaw(float yaw) {
-        getMaidHead().ifPresent(h -> h.setRotationY(flipHands() ? yaw : -yaw));
-        getMaidHat().ifPresent(h -> h.setRotationY(flipHands() ? yaw : -yaw));
+        getMaidHead().ifPresent(bone -> bone.setRotationY(flipHands() ? yaw : -yaw));
+        getMaidHat().ifPresent(bone -> bone.setRotationY(flipHands() ? yaw : -yaw));
     }
 
+    @Override
     public float headPitch() {
         return getMaidHat().map(AnimatedGeoBone::getRotationX).orElse(0.0f);
     }
 
+    @Override
     public void headPitch(float pitch) {
-        getMaidHead().ifPresent(h -> h.setRotationX(-pitch));
-        getMaidHat().ifPresent(h -> h.setRotationX(-pitch));
+        getMaidHead().ifPresent(bone -> bone.setRotationX(-pitch));
+        getMaidHat().ifPresent(bone -> bone.setRotationX(-pitch));
     }
 
+    @Override
     public float leftArmYaw() {
         return getMaidFlippedLeftArm().map(AnimatedGeoBone::getRotationY).orElse(0.0f);
     }
 
+    @Override
     public void leftArmYaw(float yaw) {
-        getMaidFlippedLeftArm().ifPresent(l -> l.setRotationY(flipHands() ? yaw : -yaw));
+        getMaidFlippedLeftArm().ifPresent(bone -> bone.setRotationY(flipHands() ? yaw : -yaw));
     }
 
+    @Override
     public float leftArmPitch() {
         return getMaidFlippedLeftArm().map(AnimatedGeoBone::getRotationX).orElse(0.0f);
     }
 
-    //为啥geckolib的和正常的模型是数值是相反的...
-    //@link{ModelAccessor#leftArmYaw}
+    @Override
     public void leftArmPitch(float pitch) {
-        getMaidFlippedLeftArm().ifPresent(l -> l.setRotationX(-pitch));
+        // GeckoLib 的模型和和默认的的模型是数值是相反的
+        getMaidFlippedLeftArm().ifPresent(bone -> bone.setRotationX(-pitch));
     }
 
+    @Override
     public float leftArmRoll() {
         return getMaidFlippedLeftArm().map(AnimatedGeoBone::getRotationZ).orElse(0.0f);
     }
 
+    @Override
     public void leftArmRoll(float roll) {
-        getMaidFlippedLeftArm().ifPresent(l -> l.setRotationZ(flipHands() ? roll : -roll));
+        getMaidFlippedLeftArm().ifPresent(bone -> bone.setRotationZ(flipHands() ? roll : -roll));
     }
 
+    @Override
     public float rightArmYaw() {
         return getMaidFlippedRightArm().map(AnimatedGeoBone::getRotationY).orElse(0.0f);
     }
 
+    @Override
     public void rightArmYaw(float yaw) {
-        getMaidFlippedRightArm().ifPresent(r -> r.setRotationY(flipHands() ? yaw : -yaw));
+        getMaidFlippedRightArm().ifPresent(bone -> bone.setRotationY(flipHands() ? yaw : -yaw));
     }
 
+    @Override
     public float rightArmPitch() {
         return getMaidFlippedRightArm().map(AnimatedGeoBone::getRotationX).orElse(0.0f);
     }
 
+    @Override
     public void rightArmPitch(float pitch) {
-        getMaidFlippedRightArm().ifPresent(r -> r.setRotationX(-pitch));
+        // GeckoLib 的模型和和默认的的模型是数值是相反的
+        getMaidFlippedRightArm().ifPresent(bone -> bone.setRotationX(-pitch));
     }
 
+    @Override
     public float rightArmRoll() {
         return getMaidFlippedRightArm().map(AnimatedGeoBone::getRotationZ).orElse(0.0f);
     }
 
+    @Override
     public void rightArmRoll(float roll) {
-        getMaidFlippedRightArm().ifPresent(r -> r.setRotationY(flipHands() ? -roll : roll));
+        getMaidFlippedRightArm().ifPresent(bone -> bone.setRotationY(flipHands() ? -roll : roll));
     }
 
-    static void setAngles(EntityMaid maid, AnimatedGeoBone head, AnimatedGeoBone hat, AnimatedGeoBone leftArm, AnimatedGeoBone rightArm) {
-        EntityModelAnimator.setAngles(new GeckoMaidArmsAndHeadAccessor(maid, head, hat, leftArm, rightArm));
+    private Optional<AnimatedGeoBone> getMaidHead() {
+        return Optional.ofNullable(head);
+    }
+
+    private Optional<AnimatedGeoBone> getMaidHat() {
+        return Optional.ofNullable(hat);
+    }
+
+    private Optional<AnimatedGeoBone> getMaidFlippedLeftArm() {
+        return flipHands() ? getMaidRightArm() : getMaidLeftArm();
+    }
+
+    private Optional<AnimatedGeoBone> getMaidFlippedRightArm() {
+        return flipHands() ? getMaidLeftArm() : getMaidRightArm();
+    }
+
+    private Optional<AnimatedGeoBone> getMaidLeftArm() {
+        return Optional.ofNullable(leftArm);
+    }
+
+    private Optional<AnimatedGeoBone> getMaidRightArm() {
+        return Optional.ofNullable(rightArm);
     }
 }

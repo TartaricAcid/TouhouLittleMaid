@@ -52,7 +52,7 @@ public class AnimatedGeoModel {
         this.headBones = getLocatorHierarchy("Head");
 
         this.head = bones.get("Head");
-        //有hat部分吗？
+        // fixme: 有 hat 部分吗？
         this.hat = bones.get("Hat");
         this.leftArm = bones.get("LeftArm");
         this.rightArm = bones.get("RightArm");

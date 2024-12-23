@@ -11,7 +11,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.ImmersiveMelodiesCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -260,8 +259,7 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
                 IMaid maid = IMaid.convert(mob);
                 if (maid != null) {
                     setupMaidAnim(maid, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, invocable);
-                    ImmersiveMelodiesCompat.setAngles((EntityMaid) maid, this.hasHead() ? this.getHead() : null,
-                            this.hasHat() ? this.getHat() : null, //有hat部分吗？
+                    ImmersiveMelodiesCompat.setAngles(maid, this.hasHead() ? this.getHead() : null, this.getHat(),
                             this.hasLeftArm() ? this.getArm(HumanoidArm.LEFT) : null,
                             this.hasRightArm() ? this.getArm(HumanoidArm.RIGHT) : null);
                 }
@@ -353,12 +351,13 @@ public class BedrockModel<T extends LivingEntity> extends EntityModel<T> {
         return modelMap.get("head").getModelRenderer();
     }
 
-    public boolean hasHat() {
-        return modelMap.containsKey("hat");
-    }
-
+    @Nullable
     public BedrockPart getHat() {
-        return modelMap.get("hat").getModelRenderer();
+        ModelRendererWrapper hat = modelMap.get("hat");
+        if (hat != null) {
+            return hat.getModelRenderer();
+        }
+        return null;
     }
 
     public boolean hasLeftArm() {
