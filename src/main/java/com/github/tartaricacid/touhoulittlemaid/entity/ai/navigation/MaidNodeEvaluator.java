@@ -31,31 +31,27 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
     protected int createClimbNode(int nodeID, Node[] nodes, Node origin) {
         // 如果禁用主动攀爬能力，就直接返回，不把可攀爬物体加入寻路节点中
         if (this.mob instanceof EntityMaid maid && !maid.getConfigManager().isActiveClimbing()) {
-            return nodeID;
-        }
-
-        Level level = this.mob.level;
-
-        // 向上搜寻
-        BlockPos.MutableBlockPos upPos = new BlockPos.MutableBlockPos(origin.x, origin.y + 1, origin.z);
-        if (level.getBlockState(upPos).isLadder(level, upPos, this.mob)) {
-            Node node = this.getNode(upPos);
-            if (!node.closed) {
-                node.costMalus = 0;
-                node.type = BlockPathTypes.WALKABLE;
-                if (nodeID + 1 < nodes.length)
-                    nodes[nodeID++] = node;
+            // 向上搜寻
+            BlockPos.MutableBlockPos upPos = new BlockPos.MutableBlockPos(origin.x, origin.y + 1, origin.z);
+            if (isMaidCanClimbBlock(upPos, maid)) {
+                Node node = this.getNode(upPos);
+                if (!node.closed) {
+                    node.costMalus = 0;
+                    node.type = BlockPathTypes.WALKABLE;
+                    if (nodeID + 1 < nodes.length)
+                        nodes[nodeID++] = node;
+                }
             }
-        }
-        // 向下搜寻
-        BlockPos.MutableBlockPos downPos = new BlockPos.MutableBlockPos(origin.x, origin.y - 1, origin.z);
-        if (level.getBlockState(downPos).isLadder(level, downPos, this.mob)) {
-            Node node = this.getNode(downPos);
-            if (!node.closed) {
-                node.costMalus = 0;
-                node.type = BlockPathTypes.WALKABLE;
-                if (nodeID + 1 < nodes.length)
-                    nodes[nodeID++] = node;
+            // 向下搜寻
+            BlockPos.MutableBlockPos downPos = new BlockPos.MutableBlockPos(origin.x, origin.y - 1, origin.z);
+            if (isMaidCanClimbBlock(downPos, maid)) {
+                Node node = this.getNode(downPos);
+                if (!node.closed) {
+                    node.costMalus = 0;
+                    node.type = BlockPathTypes.WALKABLE;
+                    if (nodeID + 1 < nodes.length)
+                        nodes[nodeID++] = node;
+                }
             }
         }
         return nodeID;
@@ -140,6 +136,12 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
             return maid.getConfigManager().isActiveClimbing();
         }
         return false;
+    }
+
+    public static boolean isMaidCanClimbBlock(BlockPos blockPos, EntityMaid maid) {
+        Level level = maid.level;
+        BlockState blockState = level.getBlockState(blockPos);
+        return blockState.isLadder(level, blockPos, maid) && !blockState.isScaffolding(maid);
     }
 
     public static boolean isMaidCanClimbBlock(BlockState blockState, BlockPos blockPos, EntityMaid maid) {
