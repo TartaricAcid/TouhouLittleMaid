@@ -366,6 +366,7 @@
   "gui.touhou_little_maid.maid_config.pick_type": "Pickup Type",
   "gui.touhou_little_maid.maid_config.open_door": "Open Door",
   "gui.touhou_little_maid.maid_config.open_fence_gate": "Open Fence Gate",
+  "gui.touhou_little_maid.maid_config.active_climbing": "Can Active Climbing",
   "gui.touhou_little_maid.maid_config.value.true": "ON",
   "gui.touhou_little_maid.maid_config.value.false": "OFF",
   "gui.touhou_little_maid.maid_config.value.item": "Item",

@@ -120,6 +120,16 @@ public class MaidConfigContainerGui extends AbstractMaidContainerGui<MaidConfigC
                     button.setValue(Component.translatable("gui.touhou_little_maid.maid_config.value." + this.syncNetwork.openFenceGate()));
                 }
         ));
+        buttonTop += 13;
+
+        this.addRenderableWidget(new MaidConfigButton(buttonLeft, buttonTop,
+                Component.translatable("gui.touhou_little_maid.maid_config.active_climbing"),
+                Component.translatable("gui.touhou_little_maid.maid_config.value." + this.syncNetwork.activeClimbing()),
+                button -> {
+                    this.syncNetwork.setActiveClimbing(!this.syncNetwork.activeClimbing());
+                    button.setValue(Component.translatable("gui.touhou_little_maid.maid_config.value." + this.syncNetwork.activeClimbing()));
+                }
+        ));
     }
 
     @Override

@@ -21,6 +21,7 @@ public class MaidConfigManager {
     private static final String PICKUP_TYPE_TAG = "PickupType";
     private static final String OPEN_DOOR_TAG = "OpenDoor";
     private static final String OPEN_FENCE_GATE_TAG = "OpenFenceGate";
+    private static final String ACTIVE_CLIMBING_TAG = "ActiveClimbing";
 
     private final SynchedEntityData entityData;
 
@@ -40,6 +41,7 @@ public class MaidConfigManager {
         this.entityData.define(PICKUP_TYPE, PickType.ALL.ordinal());
         this.entityData.define(OPEN_DOOR, true);
         this.entityData.define(OPEN_FENCE_GATE, true);
+        this.entityData.define(ACTIVE_CLIMBING, true);
     }
 
     void addAdditionalSaveData(CompoundTag compound) {
@@ -55,6 +57,7 @@ public class MaidConfigManager {
         maidSubConfig.putInt(PICKUP_TYPE_TAG, getPickupType().ordinal());
         maidSubConfig.putBoolean(OPEN_DOOR_TAG, isOpenDoor());
         maidSubConfig.putBoolean(OPEN_FENCE_GATE_TAG, isOpenFenceGate());
+        maidSubConfig.putBoolean(ACTIVE_CLIMBING_TAG, isActiveClimbing());
         compound.put(MAID_SUB_CONFIG_TAG, maidSubConfig);
     }
 
@@ -91,6 +94,9 @@ public class MaidConfigManager {
             if (maidSubConfig.contains(OPEN_FENCE_GATE_TAG)) {
                 setOpenFenceGate(maidSubConfig.getBoolean(OPEN_FENCE_GATE_TAG));
             }
+            if (maidSubConfig.contains(ACTIVE_CLIMBING_TAG)) {
+                setActiveClimbing(maidSubConfig.getBoolean(ACTIVE_CLIMBING_TAG));
+            }
         }
     }
 
@@ -126,7 +132,8 @@ public class MaidConfigManager {
                 this.getSoundFreq(),
                 this.getPickupType(),
                 this.isOpenDoor(),
-                this.isOpenFenceGate()
+                this.isOpenFenceGate(),
+                this.isActiveClimbing()
         );
     }
 
@@ -187,6 +194,14 @@ public class MaidConfigManager {
         this.entityData.set(OPEN_FENCE_GATE, openFenceGate);
     }
 
+    public boolean isActiveClimbing() {
+        return this.entityData.get(ACTIVE_CLIMBING);
+    }
+
+    public void setActiveClimbing(boolean activeClimbing) {
+        this.entityData.set(ACTIVE_CLIMBING, activeClimbing);
+    }
+
     public static final class SyncNetwork {
         private boolean showBackpack;
         private boolean showBackItem;
@@ -195,9 +210,10 @@ public class MaidConfigManager {
         private PickType pickType;
         private boolean openDoor;
         private boolean openFenceGate;
+        private boolean activeClimbing;
 
         public SyncNetwork(boolean showBackpack, boolean showBackItem, boolean showChatBubble, float soundFreq,
-                           PickType pickType, boolean openDoor, boolean openFenceGate) {
+                           PickType pickType, boolean openDoor, boolean openFenceGate, boolean activeClimbing) {
             this.showBackpack = showBackpack;
             this.showBackItem = showBackItem;
             this.showChatBubble = showChatBubble;
@@ -205,6 +221,7 @@ public class MaidConfigManager {
             this.pickType = pickType;
             this.openDoor = openDoor;
             this.openFenceGate = openFenceGate;
+            this.activeClimbing = activeClimbing;
         }
 
         public static void encode(SyncNetwork message, FriendlyByteBuf buf) {
@@ -215,6 +232,7 @@ public class MaidConfigManager {
             buf.writeEnum(message.pickType);
             buf.writeBoolean(message.openDoor);
             buf.writeBoolean(message.openFenceGate);
+            buf.writeBoolean(message.activeClimbing);
         }
 
         public static SyncNetwork decode(FriendlyByteBuf buf) {
@@ -225,7 +243,8 @@ public class MaidConfigManager {
             PickType pickType = buf.readEnum(PickType.class);
             boolean openDoor = buf.readBoolean();
             boolean openFenceGate = buf.readBoolean();
-            return new SyncNetwork(showBackpack, showBackItem, showChatBubble, soundFreq, pickType, openDoor, openFenceGate);
+            boolean activeClimbing = buf.readBoolean();
+            return new SyncNetwork(showBackpack, showBackItem, showChatBubble, soundFreq, pickType, openDoor, openFenceGate, activeClimbing);
         }
 
         public static void handle(SyncNetwork message, EntityMaid maid) {
@@ -237,6 +256,7 @@ public class MaidConfigManager {
             configManager.setPickupType(message.pickType);
             configManager.setOpenDoor(message.openDoor);
             configManager.setOpenFenceGate(message.openFenceGate);
+            configManager.setActiveClimbing(message.activeClimbing);
         }
 
         public boolean showBackpack() {
@@ -267,6 +287,10 @@ public class MaidConfigManager {
             return openFenceGate;
         }
 
+        public boolean activeClimbing() {
+            return activeClimbing;
+        }
+
         public void setShowBackpack(boolean showBackpack) {
             this.showBackpack = showBackpack;
         }
@@ -293,6 +317,10 @@ public class MaidConfigManager {
 
         public void setOpenFenceGate(boolean openFenceGate) {
             this.openFenceGate = openFenceGate;
+        }
+
+        public void setActiveClimbing(boolean activeClimbing) {
+            this.activeClimbing = activeClimbing;
         }
     }
 }

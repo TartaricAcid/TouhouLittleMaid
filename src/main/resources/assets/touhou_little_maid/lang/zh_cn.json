@@ -366,6 +366,7 @@
   "gui.touhou_little_maid.maid_config.pick_type": "拾取类型",
   "gui.touhou_little_maid.maid_config.open_door": "能否开门",
   "gui.touhou_little_maid.maid_config.open_fence_gate": "能否开栅栏门",
+  "gui.touhou_little_maid.maid_config.active_climbing": "能否主动爬梯",
   "gui.touhou_little_maid.maid_config.value.true": "开启",
   "gui.touhou_little_maid.maid_config.value.false": "关闭",
   "gui.touhou_little_maid.maid_config.value.item": "物品",
