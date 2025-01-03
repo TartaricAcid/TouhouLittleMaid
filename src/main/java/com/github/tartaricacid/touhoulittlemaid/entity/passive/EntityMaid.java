@@ -19,7 +19,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeComp
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.goal.MaidClimbGoal;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
@@ -102,7 +101,10 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -231,8 +233,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      * 女仆现在可以在前哨站生成，那么会打上这个标签
      */
     private boolean structureSpawn = false;
-    // 女仆主动爬行标志位，便于ClimbGoal控制
-    private boolean climb = false;
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
@@ -1940,73 +1940,60 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return handItemsForAnimation;
     }
 
-    public boolean isClimb() {
-        return climb;
-    }
-
-    public void setClimb(boolean climb) {
-        this.climb = climb;
-    }
-
     @Override
-    protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(4, new MaidClimbGoal(this));
-    }
-
-    @Override
-    public Vec3 handleRelativeFrictionAndCalculateMovement(Vec3 pDeltaMovement, float pFriction) {
-        // 父级的方法，便于你检查是否有疏漏和合适
-        // 修改了this.handleOnClimbable(this.getDeltaMovement())的方法和
-//        this.moveRelative(this.getFrictionInfluencedSpeed(pFriction), pDeltaMovement);
-//        this.setDeltaMovement(this.handleOnClimbable(this.getDeltaMovement()));
-//        this.move(MoverType.SELF, this.getDeltaMovement());
-//        Vec3 vec3 = this.getDeltaMovement();
-        // 这个this.onClimbable() -> this.onClimbable() && !this.isClimb()
-//        if ((this.horizontalCollision || this.jumping) && (this.onClimbable() || this.getFeetBlockState().is(Blocks.POWDER_SNOW) && PowderSnowBlock.canEntityWalkOnPowderSnow(this))) {
-//            vec3 = new Vec3(vec3.x, 0.2D, vec3.z);
-//        }
-//
-//        return vec3;
-
-
-        float v = this.onGround() ? this.getSpeed() * (0.21600002F / (pFriction * pFriction * pFriction)) : this.getFlyingSpeed();
-        this.moveRelative(v, pDeltaMovement);
-        Vec3 oriDelta = this.getDeltaMovement();
+    public Vec3 handleOnClimbable(Vec3 deltaMovement) {
+        Vec3 oriDelta = super.handleOnClimbable(deltaMovement);
+        // 主动爬行过程中严禁水平方向偏移，防止摔伤，y轴保持原样
         if (this.onClimbable()) {
-            this.resetFallDistance();
-
-            float f = 0.15F;
-            double d0 = Mth.clamp(oriDelta.x, -f, f);
-            double d1 = Mth.clamp(oriDelta.z, -f, f);
-            double d2 = Math.max(oriDelta.y, -f);
-            if (d2 < 0.0D && !this.getFeetBlockState().isScaffolding(this) && this.isSuppressingSlidingDownLadder()) {
-                d2 = 0.0D;
+            Vec3 vec3 = this.position();
+            if (vec3.x() % 1 != 0.5D || vec3.z() % 1 != 0.5) {
+                BlockPos currentPosition = this.blockPosition().mutable();
+                Vec3 centerPos = Vec3.atBottomCenterOf(currentPosition);
+                this.moveTo(centerPos.x, vec3.y(), centerPos.z);
             }
-
-            // 主动爬行过程中严禁水平方向偏移，防止摔伤，y轴保持原样
-            if (isClimb()) {
-                Vec3 vec3 = this.position();
-                if(vec3.x() % 1 != 0.5D || vec3.z() % 1 != 0.5) {
-                    BlockPos currentPosition = this.blockPosition().mutable();
-                    Vec3 centerPos = Vec3.atBottomCenterOf(currentPosition);
-                    this.moveTo(centerPos.x, vec3.y(), centerPos.z);
-                }
-
-                oriDelta = new Vec3(0, d2, 0);
-            } else {
-                oriDelta = new Vec3(d0, d2, d1);
-            }
+            oriDelta = new Vec3(0, oriDelta.y, 0);
         }
-        this.setDeltaMovement(oriDelta);
+        return oriDelta;
+    }
+
+    /**
+     * 爬梯子状态加上路径判断
+     */
+    @Override
+    public boolean onClimbable() {
+        boolean result = super.onClimbable();
+        if (level.isClientSide) {
+            // 客户端检测不到路径，所以客户端需要额外返回
+            return result;
+        }
+        if (result) {
+            // 爬梯时，禁止旋转
+            this.getLastClimbablePos().ifPresent(climbablePos -> {
+                BlockState blockState = this.level.getBlockState(climbablePos);
+                blockState.getOptionalValue(HorizontalDirectionalBlock.FACING).ifPresent(direction -> {
+                    int yRot = direction.getOpposite().get2DDataValue() * 90;
+                    this.setYRot(yRot);
+                    this.setYHeadRot(yRot);
+                });
+            });
+        }
+        return result && !this.getNavigation().isDone();
+    }
+
+    /**
+     * 略微修改原版的方法，禁用了向上的动力源
+     */
+    @Override
+    public Vec3 handleRelativeFrictionAndCalculateMovement(Vec3 deltaMovement, float friction) {
+        this.moveRelative(this.getFrictionInfluencedSpeed(friction), deltaMovement);
+        this.setDeltaMovement(this.handleOnClimbable(this.getDeltaMovement()));
         this.move(MoverType.SELF, this.getDeltaMovement());
         Vec3 vec3 = this.getDeltaMovement();
-        // 如果是主动爬行，就先禁用这个由于碰撞箱等的向上的动力源
-        if ((this.horizontalCollision || this.jumping) && ((this.onClimbable() && !this.isClimb()) || this.getFeetBlockState().is(Blocks.POWDER_SNOW) && PowderSnowBlock.canEntityWalkOnPowderSnow(this))) {
-            vec3 = new Vec3(vec3.x, 0.2D, vec3.z);
+        boolean isCollisionOrJump = this.horizontalCollision || this.jumping;
+        // 如果是爬行，就需要禁用这个由于碰撞箱等的向上的动力源
+        if (isCollisionOrJump && !this.onClimbable()) {
+            vec3 = new Vec3(vec3.x, 0.2, vec3.z);
         }
-
         return vec3;
     }
-
 }

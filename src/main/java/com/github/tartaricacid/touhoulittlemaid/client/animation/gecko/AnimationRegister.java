@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.vehicle.Boat;
 
@@ -16,6 +17,10 @@ public class AnimationRegister {
     public static void registerAnimationState() {
         register("death", ILoopType.EDefaultLoopTypes.PLAY_ONCE, Priority.HIGHEST, (maid, event) -> maid.asEntity().isDeadOrDying());
         register("sleep", Priority.HIGHEST, (maid, event) -> maid.asEntity().getPose() == Pose.SLEEPING);
+
+        register("ladder_up", Priority.HIGHEST, (maid, event) -> maid.onClimbable() && getVerticalSpeed(maid) > 0);
+        register("ladder_stillness", Priority.HIGHEST, (maid, event) -> maid.onClimbable() && getVerticalSpeed(maid) == 0);
+        register("ladder_down", Priority.HIGHEST, (maid, event) -> maid.onClimbable() && getVerticalSpeed(maid) < 0);
 
         register("gomoku", Priority.HIGH, (maid, event) -> sitInJoy(maid, Type.GOMOKU));
         register("bookshelf", Priority.HIGH, (maid, event) -> sitInJoy(maid, Type.BOOKSHELF));
@@ -48,5 +53,10 @@ public class AnimationRegister {
 
     private static void register(String animationName, int priority, BiPredicate<IMaid, AnimationEvent<?>> predicate) {
         register(animationName, ILoopType.EDefaultLoopTypes.LOOP, priority, predicate);
+    }
+
+    private static float getVerticalSpeed(IMaid maid) {
+        Mob entity = maid.asEntity();
+        return 20 * (float) (entity.position().y - entity.yo);
     }
 }

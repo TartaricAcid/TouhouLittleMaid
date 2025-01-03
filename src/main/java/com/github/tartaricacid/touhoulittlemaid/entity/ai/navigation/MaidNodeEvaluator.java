@@ -13,7 +13,7 @@ import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 /**
- * 该方法仅修改了栅栏门的寻路判断
+ * 该方法仅修改了栅栏门和梯子的寻路判断
  */
 public class MaidNodeEvaluator extends WalkNodeEvaluator {
     @Override
@@ -22,13 +22,14 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
     }
 
     @Override
-    public int getNeighbors(Node[] pOutputArray, Node pNode) {
-        return this.createClimbNode(super.getNeighbors(pOutputArray, pNode), pOutputArray, pNode);
+    public int getNeighbors(Node[] outputArray, Node node) {
+        int nodeId = super.getNeighbors(outputArray, node);
+        return this.createClimbNode(nodeId, outputArray, node);
     }
 
     // 将可爬行物加入寻路节点里头
     // 一般这些物体都是相连的，所以向上向下搜寻下
-    protected int createClimbNode(int nodeID, Node[] nodes, Node origin) {
+    protected int createClimbNode(int nodeId, Node[] nodes, Node origin) {
         // 只有在开启攀爬能力，才将梯子加入寻路节点里
         if (this.mob instanceof EntityMaid maid && maid.getConfigManager().isActiveClimbing()) {
             // 向上搜寻
@@ -38,8 +39,9 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
                 if (!node.closed) {
                     node.costMalus = 0;
                     node.type = BlockPathTypes.WALKABLE;
-                    if (nodeID + 1 < nodes.length)
-                        nodes[nodeID++] = node;
+                    if (nodeId + 1 < nodes.length) {
+                        nodes[nodeId++] = node;
+                    }
                 }
             }
             // 向下搜寻
@@ -49,12 +51,13 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
                 if (!node.closed) {
                     node.costMalus = 0;
                     node.type = BlockPathTypes.WALKABLE;
-                    if (nodeID + 1 < nodes.length)
-                        nodes[nodeID++] = node;
+                    if (nodeId + 1 < nodes.length) {
+                        nodes[nodeId++] = node;
+                    }
                 }
             }
         }
-        return nodeID;
+        return nodeId;
     }
 
     private BlockPathTypes getMaidBlockPathTypeStatic(BlockGetter level, BlockPos.MutableBlockPos pos) {
@@ -108,7 +111,8 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
             return BlockPathTypes.OPEN;
         } else if (blockState.getBlock() instanceof FenceGateBlock) {
             pathType = blockState.getValue(FenceGateBlock.OPEN) ? BlockPathTypes.DOOR_OPEN : BlockPathTypes.DOOR_WOOD_CLOSED;
-        } else if (this.mob instanceof EntityMaid maid && this.canClimb(blockState, pos, maid)) { //将楼梯视为可行走方块，便于后续将楼梯加入路径节点
+        } else if (this.mob instanceof EntityMaid maid && this.canClimb(blockState, pos, maid)) {
+            // 将楼梯视为可行走方块，便于后续将楼梯加入路径节点
             pathType = BlockPathTypes.WALKABLE;
         } else {
             pathType = WalkNodeEvaluator.getBlockPathTypeRaw(level, pos);
@@ -130,8 +134,6 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
     }
 
     private boolean canClimb(BlockState blockState, BlockPos blockPos, EntityMaid maid) {
-        // 暂时禁用脚手架的攀爬能力，
-        // 脚手架太奇怪了，上爬没问题，但是下爬时不知有啥东西在阻碍着，导致不能向下爬
         if (isMaidCanClimbBlock(blockState, blockPos, maid)) {
             return maid.getConfigManager().isActiveClimbing();
         }
@@ -141,10 +143,10 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
     public static boolean isMaidCanClimbBlock(BlockPos blockPos, EntityMaid maid) {
         Level level = maid.level;
         BlockState blockState = level.getBlockState(blockPos);
-        return blockState.isLadder(level, blockPos, maid) && !blockState.isScaffolding(maid);
+        return isMaidCanClimbBlock(blockState, blockPos, maid);
     }
 
     public static boolean isMaidCanClimbBlock(BlockState blockState, BlockPos blockPos, EntityMaid maid) {
-        return blockState.isLadder(maid.level, blockPos, maid) && !blockState.isScaffolding(maid);
+        return blockState.isLadder(maid.level, blockPos, maid);
     }
 }
