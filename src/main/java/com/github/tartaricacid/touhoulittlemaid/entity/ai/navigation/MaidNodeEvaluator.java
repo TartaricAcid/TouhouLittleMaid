@@ -29,8 +29,8 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
     // 将可爬行物加入寻路节点里头
     // 一般这些物体都是相连的，所以向上向下搜寻下
     protected int createClimbNode(int nodeID, Node[] nodes, Node origin) {
-        // 如果禁用主动攀爬能力，就直接返回，不把可攀爬物体加入寻路节点中
-        if (this.mob instanceof EntityMaid maid && !maid.getConfigManager().isActiveClimbing()) {
+        // 只有在开启攀爬能力，才将梯子加入寻路节点里
+        if (this.mob instanceof EntityMaid maid && maid.getConfigManager().isActiveClimbing()) {
             // 向上搜寻
             BlockPos.MutableBlockPos upPos = new BlockPos.MutableBlockPos(origin.x, origin.y + 1, origin.z);
             if (isMaidCanClimbBlock(upPos, maid)) {
