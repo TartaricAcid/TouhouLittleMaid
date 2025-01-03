@@ -390,6 +390,8 @@
   "task.touhou_little_maid.board_games": "Jeux",
   "task.touhou_little_maid.gun_attack": "Tireur",
   "task.touhou_little_maid.fishing": "Pêche",
+  "task.touhou_little_maid.desc.title": "[Info]",
+  "task.touhou_little_maid.desc.condition": "[Condition Spécial]",
   "button.touhou_little_maid.maid.return": "Retour",
   "subtitle.touhou_little_maid.maid.mode.idle": "Maid Bruitage : Attendre",
   "subtitle.touhou_little_maid.maid.mode.attack": "Maid Bruitage : Attaque",
