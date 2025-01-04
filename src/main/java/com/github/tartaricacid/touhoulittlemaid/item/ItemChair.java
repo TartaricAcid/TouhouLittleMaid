@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -138,10 +139,12 @@ public class ItemChair extends Item {
     @OnlyIn(Dist.CLIENT)
     public Component getName(ItemStack stack) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
+            // 添加坐垫前缀，方便搜索
+            MutableComponent prefix = Component.translatable("item.touhou_little_maid.chair.prefix");
             ItemChair.Data data = getData(stack);
             if (CustomPackLoader.CHAIR_MODELS.getInfo(data.modelId()).isPresent()) {
                 String name = CustomPackLoader.CHAIR_MODELS.getInfo(data.modelId()).get().getName();
-                return ParseI18n.parse(name);
+                return prefix.append(ParseI18n.parse(name));
             }
         }
         return super.getName(stack);

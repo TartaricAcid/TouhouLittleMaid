@@ -29,6 +29,7 @@ public class InitDataComponent {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<TrackInfo>> TRACK_INFO = DATA_COMPONENTS
             .register("track_info", () -> DataComponentType.<TrackInfo>builder().persistent(TrackInfo.CODEC).networkSynchronized(TrackInfo.STREAM_CODEC).build());
 
+    public static final String ENTITY_ID_TAG_NAME = "id";
     public static final String MODEL_ID_TAG_NAME = "model_id";
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> MODEL_ID_TAG = DATA_COMPONENTS
             .register(MODEL_ID_TAG_NAME, () -> DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());

@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.ENTITY_ID_TAG_NAME;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
@@ -59,7 +60,7 @@ public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLeve
             return;
         }
 
-        EntityType.byString(data.read(Codec.STRING.fieldOf("id")).getOrThrow()).ifPresent(type -> {
+        EntityType.byString(data.read(Codec.STRING.fieldOf(ENTITY_ID_TAG_NAME)).getOrThrow()).ifPresent(type -> {
                     try {
                         renderEntity(poseStack, bufferIn, combinedLightIn, data.copyTag(), world, type);
                     } catch (ExecutionException e) {

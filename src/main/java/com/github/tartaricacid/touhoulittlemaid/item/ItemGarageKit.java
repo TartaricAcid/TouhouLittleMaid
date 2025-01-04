@@ -9,19 +9,24 @@ import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.Objects;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.ENTITY_ID_TAG_NAME;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.MODEL_ID_TAG_NAME;
 
 public class ItemGarageKit extends BlockItem {
@@ -32,6 +37,8 @@ public class ItemGarageKit extends BlockItem {
             return new TileEntityItemStackGarageKitRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
         }
     } : null;
+    private static final String DEFAULT_ENTITY_ID = "touhou_little_maid:maid";
+    private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final CustomData DEFAULT_DATA = getDefaultData();
 
     public ItemGarageKit() {
@@ -44,23 +51,35 @@ public class ItemGarageKit extends BlockItem {
 
     private static CustomData getDefaultData() {
         CompoundTag data = new CompoundTag();
-        data.putString("id", "touhou_little_maid:maid");
-        data.putString(MODEL_ID_TAG_NAME, "touhou_little_maid:hakurei_reimu");
+        data.putString(ENTITY_ID_TAG_NAME, DEFAULT_ENTITY_ID);
+        data.putString(MODEL_ID_TAG_NAME, DEFAULT_MODEL_ID);
         return CustomData.of(data);
     }
 
+    @Override
+    @OnlyIn(Dist.CLIENT)
     public Component getName(ItemStack stack) {
-        CustomData data = ItemGarageKit.getMaidData(stack);
-        Level world = Minecraft.getInstance().level;
-        if (data.isEmpty() || world == null) {
-            return Component.literal("No Info");
-        }
+        // 仅在客户端添加这个名称
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            // 手办名字前缀
+            MutableComponent prefix = Component.translatable("block.touhou_little_maid.garage_kit.prefix");
+            CustomData data = getMaidData(stack);
 
-        String id = data.read(Codec.STRING.fieldOf("model_id")).getOrThrow();
-        MaidModelInfo info = CustomPackLoader.MAID_MODELS.getInfo(id).orElse(null);
-        if (info != null) {
-            return Component.translatable(ParseI18n.getI18nKey(info.getName()));
+            String entityId = data.read(Codec.STRING.fieldOf(ENTITY_ID_TAG_NAME)).result().orElse(DEFAULT_ENTITY_ID);
+            // 如果是其他实体，那么不需要显示 model id
+            if (!entityId.equals(DEFAULT_ENTITY_ID)) {
+                EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(entityId));
+                return prefix.append(entityType.getDescription());
+            }
+
+            // 如果是女仆的，直接显示人物名称
+            String modelId = data.read(Codec.STRING.fieldOf(MODEL_ID_TAG_NAME)).result().orElse(DEFAULT_MODEL_ID);
+            MaidModelInfo info = CustomPackLoader.MAID_MODELS.getInfo(modelId).orElse(null);
+            if (info != null) {
+                return prefix.append(ParseI18n.parse(info.getName()));
+            }
+            return super.getName(stack);
         }
-        return Component.literal(id);
+        return super.getName(stack);
     }
 }
