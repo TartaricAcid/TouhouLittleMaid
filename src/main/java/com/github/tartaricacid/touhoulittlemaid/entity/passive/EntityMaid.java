@@ -111,6 +111,7 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Team;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
@@ -738,11 +739,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (source.getEntity() instanceof Player && this.isOwnedBy((Player) source.getEntity())) {
             // 玩家对自己女仆的伤害数值为 1/5，最大为 2
             amount = Mth.clamp(amount / 5, 0, 2);
+            return super.hurt(source, amount);
         }
-        // 同一队伍下的伤害也限伤
-        if (source.getEntity() != null && this.getTeam() == source.getEntity().getTeam()) {
-            // 玩家对自己女仆的伤害数值为 1/5，最大为 2
-            amount = Mth.clamp(amount / 5, 0, 2);
+        // 同一队伍下的玩家对女仆的伤害也限伤
+        if (source.getEntity() != null && source.getEntity() instanceof Player player) {
+            Team throwerTeam = this.getTeam();
+            Team sourceTeam = player.getTeam();
+            if (throwerTeam != null && sourceTeam != null && throwerTeam == sourceTeam) {
+                amount = Mth.clamp(amount / 5, 0, 2);
+                return super.hurt(source, amount);
+            }
         }
         return super.hurt(source, amount);
     }

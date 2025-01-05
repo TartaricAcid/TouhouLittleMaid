@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.scores.Team;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -36,7 +37,9 @@ public final class EntityHurtEvent {
             }
 
             // 同一队伍下的伤害也限伤
-            if (thrower.getTeam() == victim.getTeam()) {
+            Team throwerTeam = thrower.getTeam();
+            Team victimTeam = victim.getTeam();
+            if (throwerTeam != null && victimTeam != null && throwerTeam == victimTeam) {
                 event.setCanceled(true);
             }
         }
