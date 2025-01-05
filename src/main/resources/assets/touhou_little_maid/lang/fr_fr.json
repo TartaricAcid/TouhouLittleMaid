@@ -286,6 +286,7 @@
   "gui.touhou_little_maid.fox_scroll.distance.same_dimension": "Distance: %dm",
   "gui.touhou_little_maid.fox_scroll.distance.different_dimension": "Distance: ???m",
   "gui.touhou_little_maid.fox_scroll.empty": "Il n'y a pas de coordonnées de Maid à afficher",
+  "gui.touhou_little_maid.optifine_warning.title": "Avertissement Optifine - Touhou Little Maid",
   "gui.touhou_little_maid.optifine_warning.text": "Avant de continuer, veuillez noter qu'Optifine est connu pour provoquer des plantages, plusieurs bugs visuels d'entités et de nombreux autres problèmes.\n\nAvant de signaler un bug, veuillez d'abord supprimer Optifine et vérifier à nouveau si le bug est toujours présent.\n\nLes problèmes liés à Optifine ne peuvent pas être résolus par Touhou Little Maid !\n\nVous pouvez utiliser les mods Oculus et Embeddium comme alternatives à Optifine.\n",
   "gui.touhou_little_maid.optifine_warning.embeddium": "Télécharger Embeddium",
   "gui.touhou_little_maid.optifine_warning.oculus": "Télécharger Oculus",
