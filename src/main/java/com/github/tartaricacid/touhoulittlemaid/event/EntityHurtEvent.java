@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
-import com.github.tartaricacid.touhoulittlemaid.api.event.MaidHurtEvent;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -19,22 +18,25 @@ public final class EntityHurtEvent {
     public static void onArrowImpact(ProjectileImpactEvent event) {
         Entity attacker = event.getProjectile().getOwner();
         HitResult ray = event.getRayTraceResult();
-        if (attacker instanceof TamableAnimal && ray instanceof EntityHitResult) {
-            TamableAnimal thrower = (TamableAnimal) attacker;
-            Entity victim = ((EntityHitResult) ray).getEntity();
-            if (victim instanceof TamableAnimal) {
-                TamableAnimal tameable = (TamableAnimal) victim;
+        if (attacker instanceof TamableAnimal thrower && ray instanceof EntityHitResult hitResult) {
+            Entity victim = hitResult.getEntity();
+            if (victim instanceof TamableAnimal tameable) {
                 if (tameable.getOwnerUUID() != null && tameable.getOwnerUUID().equals(thrower.getOwnerUUID())) {
                     event.setCanceled(true);
                 }
             }
-            if (victim instanceof LivingEntity) {
-                if (thrower.isOwnedBy((LivingEntity) victim)) {
+            if (victim instanceof LivingEntity livingVictim) {
+                if (thrower.isOwnedBy(livingVictim)) {
                     event.setCanceled(true);
                 }
             }
             ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(victim.getType());
             if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
+                event.setCanceled(true);
+            }
+
+            // 同一队伍下的伤害也限伤
+            if (thrower.getTeam() == victim.getTeam()) {
                 event.setCanceled(true);
             }
         }

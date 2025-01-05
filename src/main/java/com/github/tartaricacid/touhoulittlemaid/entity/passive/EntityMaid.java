@@ -102,10 +102,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -739,6 +736,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             return false;
         }
         if (source.getEntity() instanceof Player && this.isOwnedBy((Player) source.getEntity())) {
+            // 玩家对自己女仆的伤害数值为 1/5，最大为 2
+            amount = Mth.clamp(amount / 5, 0, 2);
+        }
+        // 同一队伍下的伤害也限伤
+        if (source.getEntity() != null && this.getTeam() == source.getEntity().getTeam()) {
             // 玩家对自己女仆的伤害数值为 1/5，最大为 2
             amount = Mth.clamp(amount / 5, 0, 2);
         }
