@@ -394,6 +394,8 @@
   "task.touhou_little_maid.fishing": "Pêche",
   "task.touhou_little_maid.desc.title": "[Info]",
   "task.touhou_little_maid.desc.condition": "[Condition Spécial]",
+  "task.touhou_little_maid.desc.enable_condition": "[Condition d'Activation]",
+  "task.touhou_little_maid.idle.desc": "Votre Maid ne fera rien lorsqu'elle à cette tâche",
   "button.touhou_little_maid.maid.return": "Retour",
   "subtitle.touhou_little_maid.maid.mode.idle": "Maid Bruitage : Attendre",
   "subtitle.touhou_little_maid.maid.mode.attack": "Maid Bruitage : Attaque",
