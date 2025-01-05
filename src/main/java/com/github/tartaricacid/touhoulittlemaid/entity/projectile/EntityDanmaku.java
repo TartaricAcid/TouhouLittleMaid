@@ -75,13 +75,12 @@ public class EntityDanmaku extends ThrowableProjectile {
     protected void onHitEntity(EntityHitResult result) {
         Entity thrower = getOwner();
         Entity hit = result.getEntity();
-        if (thrower instanceof TamableAnimal) {
-            TamableAnimal tameable = (TamableAnimal) thrower;
-            if (hit instanceof TamableAnimal && hasSameOwner(tameable, (TamableAnimal) hit)) {
+        if (thrower instanceof TamableAnimal tameable) {
+            if (hit instanceof TamableAnimal hitTameable && hasSameOwner(tameable, hitTameable)) {
                 this.discard();
                 return;
             }
-            if (hit instanceof LivingEntity && tameable.isOwnedBy((LivingEntity) hit)) {
+            if (hit instanceof LivingEntity livingEntity && tameable.isAlliedTo(livingEntity)) {
                 this.discard();
                 return;
             }

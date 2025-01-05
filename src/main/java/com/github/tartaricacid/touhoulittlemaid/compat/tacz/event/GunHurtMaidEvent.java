@@ -35,7 +35,8 @@ public class GunHurtMaidEvent {
         DamageSource source = event.getSource();
         if (entity instanceof Player player && isBulletDamage(source)) {
             Entity causingEntity = source.getEntity();
-            if (causingEntity instanceof EntityMaid maid && maid.isOwnedBy(player)) {
+            // 主人和同 Team 玩家免伤
+            if (causingEntity instanceof EntityMaid maid && maid.isAlliedTo(player)) {
                 event.setCanceled(true);
             }
         }

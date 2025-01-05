@@ -102,7 +102,10 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -111,7 +114,6 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.scores.Team;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
@@ -736,19 +738,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (MinecraftForge.EVENT_BUS.post(new MaidAttackEvent(this, source, amount))) {
             return false;
         }
-        if (source.getEntity() instanceof Player && this.isOwnedBy((Player) source.getEntity())) {
-            // 玩家对自己女仆的伤害数值为 1/5，最大为 2
+        if (source.getEntity() instanceof Player player && this.isAlliedTo(player)) {
+            // 主人和同 Team 玩家对自己女仆的伤害数值为 1/5，最大为 2
             amount = Mth.clamp(amount / 5, 0, 2);
             return super.hurt(source, amount);
-        }
-        // 同一队伍下的玩家对女仆的伤害也限伤
-        if (source.getEntity() != null && source.getEntity() instanceof Player player) {
-            Team throwerTeam = this.getTeam();
-            Team sourceTeam = player.getTeam();
-            if (throwerTeam != null && sourceTeam != null && throwerTeam == sourceTeam) {
-                amount = Mth.clamp(amount / 5, 0, 2);
-                return super.hurt(source, amount);
-            }
         }
         return super.hurt(source, amount);
     }

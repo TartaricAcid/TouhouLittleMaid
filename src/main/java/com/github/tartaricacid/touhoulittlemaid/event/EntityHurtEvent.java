@@ -7,7 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.scores.Team;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,24 +21,19 @@ public final class EntityHurtEvent {
         if (attacker instanceof TamableAnimal thrower && ray instanceof EntityHitResult hitResult) {
             Entity victim = hitResult.getEntity();
             if (victim instanceof TamableAnimal tameable) {
+                // 同一主人，那么免伤
                 if (tameable.getOwnerUUID() != null && tameable.getOwnerUUID().equals(thrower.getOwnerUUID())) {
                     event.setCanceled(true);
                 }
             }
             if (victim instanceof LivingEntity livingVictim) {
-                if (thrower.isOwnedBy(livingVictim)) {
+                // 主人和同 Team 玩家免伤
+                if (thrower.isAlliedTo(livingVictim)) {
                     event.setCanceled(true);
                 }
             }
             ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(victim.getType());
             if (registryName != null && MaidConfig.MAID_RANGED_ATTACK_IGNORE.get().contains(registryName.toString())) {
-                event.setCanceled(true);
-            }
-
-            // 同一队伍下的伤害也限伤
-            Team throwerTeam = thrower.getTeam();
-            Team victimTeam = victim.getTeam();
-            if (throwerTeam != null && victimTeam != null && throwerTeam == victimTeam) {
                 event.setCanceled(true);
             }
         }
