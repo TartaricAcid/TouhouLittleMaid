@@ -236,7 +236,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      * 女仆现在可以在前哨站生成，那么会打上这个标签
      */
     private boolean structureSpawn = false;
-    // 女仆主动爬行标志位，用于管控女仆当前时刻需不需要攀爬
+    /**
+     * 女仆主动爬行标志位，用于管控女仆当前时刻需不需要攀爬
+     */
     private boolean canClimb = false;
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
@@ -2012,10 +2014,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public boolean onClimbable() {
         boolean result = super.onClimbable();
-        if (level.isClientSide) {
-            // 客户端检测不到路径，所以客户端需要额外返回
-            return result;
-        }
         if (result) {
             // 爬梯时，禁止旋转
             this.getLastClimbablePos().ifPresent(climbablePos -> {
