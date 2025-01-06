@@ -236,6 +236,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      * 女仆现在可以在前哨站生成，那么会打上这个标签
      */
     private boolean structureSpawn = false;
+    // 女仆主动爬行标志位，用于管控女仆当前时刻需不需要攀爬
+    private boolean canClimb = false;
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
@@ -1992,7 +1994,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public Vec3 handleOnClimbable(Vec3 deltaMovement) {
         Vec3 oriDelta = super.handleOnClimbable(deltaMovement);
         // 主动爬行过程中严禁水平方向偏移，防止摔伤，y轴保持原样
-        if (this.onClimbable()) {
+        if (this.isCanClimb()) {
             Vec3 vec3 = this.position();
             if (vec3.x() % 1 != 0.5D || vec3.z() % 1 != 0.5) {
                 BlockPos currentPosition = this.blockPosition().mutable();
@@ -2025,7 +2027,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 });
             });
         }
-        return result && !this.getNavigation().isDone();
+        return result;
     }
 
     /**
@@ -2037,6 +2039,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.setDeltaMovement(this.handleOnClimbable(this.getDeltaMovement()));
         this.move(MoverType.SELF, this.getDeltaMovement());
         return this.getDeltaMovement();
+    }
+
+    public boolean isCanClimb() {
+        return canClimb;
+    }
+
+    public void setCanClimb(boolean canClimb) {
+        this.canClimb = canClimb;
     }
 
     public void setNavigation(PathNavigation navigation) {
