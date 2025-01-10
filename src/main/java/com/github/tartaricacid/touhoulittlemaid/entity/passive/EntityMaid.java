@@ -228,6 +228,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private int playerHurtSoundCount = 120;
     private int pickupSoundCount = 5;
     private int backpackDelay = 0;
+    private int passiveUseShieldTick = 0;
     private IBackpackData backpackData = null;
     private boolean syncTaskDataMaps = false;
     private MaidConfigManager configManager = new MaidConfigManager(this.entityData);
@@ -465,6 +466,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
             this.level.getProfiler().push("maidCooldowns");
             this.cooldowns.tick();
+            if (this.passiveUseShieldTick > 0) {
+                this.passiveUseShieldTick--;
+                // 最后 1 tick 取消盾牌
+                if (this.passiveUseShieldTick == 1 && this.isUsingItem() && this.getUsedItemHand() == InteractionHand.OFF_HAND) {
+                    this.stopUsingItem();
+                }
+            }
             this.level.getProfiler().pop();
         }
     }
@@ -501,7 +509,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                     this.navigation.stop();
                     this.setTarget(null);
                     this.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
-                    this.level.broadcastEntityEvent(this, (byte) 7);
+                    this.level.broadcastEntityEvent(this, EntityEvent.TAMING_SUCCEEDED);
                     this.playSound(InitSounds.MAID_TAMED.get(), 1, 1);
                     if (player instanceof ServerPlayer serverPlayer) {
                         InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.TAMED_MAID);
@@ -754,6 +762,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             // 主人和同 Team 玩家对自己女仆的伤害数值为 1/5，最大为 2
             amount = Mth.clamp(amount / 5, 0, 2);
             return super.hurt(source, amount);
+        }
+        // 使用盾牌
+        if (source.is(DamageTypeTags.IS_PROJECTILE) && this.canUseShield()) {
+            boolean isUsingShield = this.isUsingItem() && this.getUsedItemHand() == InteractionHand.OFF_HAND;
+            if (!isUsingShield) {
+                this.startUsingItem(InteractionHand.OFF_HAND);
+                // 使用五秒的盾牌
+                this.passiveUseShieldTick = 100;
+            }
         }
         return super.hurt(source, amount);
     }
@@ -2114,52 +2131,44 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public boolean canUseShield() {
         ItemStack offhandItem = this.getOffhandItem();
-        return offhandItem.canPerformAction(ToolActions.SHIELD_BLOCK) && !this.cooldowns.isOnCooldown(offhandItem.getItem());
+        return offhandItem.canPerformAction(ToolActions.SHIELD_BLOCK) && !this.getCooldowns().isOnCooldown(offhandItem.getItem());
     }
 
     @Override
-    protected void blockUsingShield(LivingEntity entityIn) {
-        super.blockUsingShield(entityIn);
-        if (entityIn.getMainHandItem().canDisableShield(this.useItem, this, entityIn)) {
-            this.disableShield(true);
-        }
+    public boolean isBlocking() {
+        // 调整原版的机制，女仆只要使用了盾牌，立马就能防御投掷物
+        return this.isUsingItem() && !this.useItem.isEmpty() && this.useItem.canPerformAction(ToolActions.SHIELD_BLOCK);
     }
 
-    public void disableShield(boolean becauseAxe) {
-        float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
-        if (becauseAxe) {
-            f += 0.75F;
-        }
-
-        if (this.random.nextFloat() < f) {
+    @Override
+    protected void blockUsingShield(LivingEntity attacker) {
+        super.blockUsingShield(attacker);
+        if (attacker.getMainHandItem().canDisableShield(this.useItem, this, attacker)) {
             this.getCooldowns().addCooldown(this.getUseItem().getItem(), 100);
             this.stopUsingItem();
-            this.level.broadcastEntityEvent(this, (byte) 30);
+            this.level.broadcastEntityEvent(this, EntityEvent.SHIELD_DISABLED);
         }
     }
 
     @Override
     protected void hurtCurrentlyUsedShield(float damage) {
-        if (this.useItem.canPerformAction(ToolActions.SHIELD_BLOCK)) {
-            if (damage >= 3.0F) {
-                int damageAmount = 1 + Mth.floor(damage);
-                InteractionHand interactionhand = this.getUsedItemHand();
-                this.useItem.hurtAndBreak(damageAmount, this, (maid) -> {
-                    maid.broadcastBreakEvent(interactionhand);
-                    maid.stopUsingItem();
-                });
-                if (this.useItem.isEmpty()) {
-                    if (interactionhand == InteractionHand.MAIN_HAND) {
-                        this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    } else {
-                        this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
-                    }
-
-                    this.useItem = ItemStack.EMPTY;
-                    this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
+        if (this.useItem.canPerformAction(ToolActions.SHIELD_BLOCK) && damage >= 3.0F) {
+            int damageAmount = 1 + Mth.floor(damage);
+            InteractionHand interactionhand = this.getUsedItemHand();
+            this.useItem.hurtAndBreak(damageAmount, this, maid -> {
+                maid.broadcastBreakEvent(interactionhand);
+                maid.stopUsingItem();
+            });
+            if (this.useItem.isEmpty()) {
+                if (interactionhand == InteractionHand.MAIN_HAND) {
+                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 1.0F);
+                    this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                 }
+                this.useItem = ItemStack.EMPTY;
+                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
+            } else {
+                this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 1.0F);
             }
         }
     }

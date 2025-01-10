@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunAttackStrafing
 import com.github.tartaricacid.touhoulittlemaid.compat.tacz.ai.GunShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidRangedWalkToTarget;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidUseShieldTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -71,13 +72,15 @@ public class TaskGunAttack implements IRangedAttackTask {
         BehaviorControl<EntityMaid> gunWalkTargetTask = MaidRangedWalkToTarget.create(0.6f);
         BehaviorControl<EntityMaid> gunAttackStrafingTask = new GunAttackStrafingTask();
         BehaviorControl<EntityMaid> gunShootTargetTask = new GunShootTargetTask();
+        MaidUseShieldTask maidUseShieldTask = new MaidUseShieldTask();
 
         return Lists.newArrayList(
                 Pair.of(5, supplementedTask),
                 Pair.of(5, findTargetTask),
                 Pair.of(5, gunWalkTargetTask),
                 Pair.of(5, gunAttackStrafingTask),
-                Pair.of(5, gunShootTargetTask)
+                Pair.of(5, gunShootTargetTask),
+                Pair.of(5, maidUseShieldTask)
         );
     }
 
