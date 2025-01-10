@@ -216,6 +216,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final MaidScriptBookManager scriptBookManager;
     private final MaidSwimManager swimManager;
     private final SchedulePos schedulePos;
+    private final ItemCooldowns cooldowns;
 
     public final ItemStack[] handItemsForAnimation = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
     public boolean guiOpening = false;
@@ -249,6 +250,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
         this.moveControl = new MaidMoveControl(this);
         this.swimManager = new MaidSwimManager(this);
+
+        this.cooldowns = new ItemCooldowns();
     }
 
     public EntityMaid(Level worldIn) {
@@ -458,6 +461,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
             this.level.getProfiler().push("maidSchedulePos");
             this.schedulePos.tick(this);
+            this.level.getProfiler().pop();
+
+            this.level.getProfiler().push("maidCooldowns");
+            this.cooldowns.tick();
             this.level.getProfiler().pop();
         }
     }
@@ -2103,5 +2110,61 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public boolean isVisuallySwimming() {
         return this.isSwimming();
+    }
+
+    public boolean canUseShield() {
+        ItemStack offhandItem = this.getOffhandItem();
+        return offhandItem.canPerformAction(ToolActions.SHIELD_BLOCK) && !this.cooldowns.isOnCooldown(offhandItem.getItem());
+    }
+
+    @Override
+    protected void blockUsingShield(LivingEntity entityIn) {
+        super.blockUsingShield(entityIn);
+        if (entityIn.getMainHandItem().canDisableShield(this.useItem, this, entityIn)) {
+            this.disableShield(true);
+        }
+    }
+
+    public void disableShield(boolean becauseAxe) {
+        float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
+        if (becauseAxe) {
+            f += 0.75F;
+        }
+
+        if (this.random.nextFloat() < f) {
+            this.getCooldowns().addCooldown(this.getUseItem().getItem(), 100);
+            this.stopUsingItem();
+            this.level.broadcastEntityEvent(this, (byte) 30);
+        }
+    }
+
+    @Override
+    protected void hurtCurrentlyUsedShield(float damage) {
+        if (this.useItem.canPerformAction(ToolActions.SHIELD_BLOCK)) {
+            if (damage >= 3.0F) {
+                int damageAmount = 1 + Mth.floor(damage);
+                InteractionHand interactionhand = this.getUsedItemHand();
+                this.useItem.hurtAndBreak(damageAmount, this, (maid) -> {
+                    maid.broadcastBreakEvent(interactionhand);
+                    maid.stopUsingItem();
+                });
+                if (this.useItem.isEmpty()) {
+                    if (interactionhand == InteractionHand.MAIN_HAND) {
+                        this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    } else {
+                        this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                    }
+
+                    this.useItem = ItemStack.EMPTY;
+                    this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
+                } else {
+                    this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 1.0F);
+                }
+            }
+        }
+    }
+
+    public ItemCooldowns getCooldowns() {
+        return cooldowns;
     }
 }
