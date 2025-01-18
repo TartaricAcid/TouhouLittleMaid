@@ -192,7 +192,7 @@
   "tooltips.touhou_little_maid.bauble.usage": "Doit être placé dans l'inventaire à relique de la Maid",
   "tooltips.touhou_little_maid.backpack.desc": "§6[Sac à dos de Maid]",
   "tooltips.touhou_little_maid.backpack.usage": "Utilisez cet item sur votre Maid à l'aide d'un clic droit pour le lui équipé",
-  "tooltips.touhou_little_maid.substitute_jizo.desc": "Faites un clic droit avec sur une Maid pour la rendre invulnérable, obtenable uniquement en créatif",
+  "tooltips.touhou_little_maid.substitute_jizo.desc": "Faites un clic droit sur une Maid avec le Substitut de Jizo pour la rendre invulnérable, obtenable uniquement en créatif",
   "tooltips.touhou_little_maid.photo.no_data.desc": "Il n'y a pas de Maid sur cette photo",
   "tooltips.touhou_little_maid.film.no_data.desc": "Il n'y a pas de Maid sur cette pellicule",
   "tooltips.touhou_little_maid.photo.maid.desc": "Nom de la Maid: %s",
