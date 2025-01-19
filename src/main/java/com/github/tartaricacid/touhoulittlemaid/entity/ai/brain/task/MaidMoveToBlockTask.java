@@ -15,6 +15,10 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
     private final float movementSpeed;
     private final int verticalSearchRange;
     protected int verticalSearchStart;
+    /**
+     * 最近工作点标志位（用于记录当前工作的方块位置，缓存下来便于下次在该点附近工作）
+     */
+    private BlockPos currentWorkPos;
 
     public MaidMoveToBlockTask(float movementSpeed) {
         this(movementSpeed, 1);
@@ -29,7 +33,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
     }
 
     protected final void searchForDestination(ServerLevel worldIn, EntityMaid maid) {
-        BlockPos centrePos = maid.getBrainSearchPos();
+        BlockPos centrePos = this.getWorkSearchPos(maid);
         int searchRange = (int) maid.getRestrictRadius();
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
         for (int y = this.verticalSearchStart; y <= this.verticalSearchRange; y = y > 0 ? -y : 1 - y) {
@@ -41,12 +45,28 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
                                 && checkOwnerPos(maid, mutableBlockPos)) {
                             BehaviorUtils.setWalkAndLookTargetMemories(maid, mutableBlockPos, this.movementSpeed, 0);
                             maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(mutableBlockPos));
+                            this.currentWorkPos = mutableBlockPos;
                             this.setNextCheckTickCount(5);
                             return;
                         }
                     }
                 }
             }
+        }
+        this.currentWorkPos = null;
+    }
+
+    // 获取工作的搜寻中心点
+    private BlockPos getWorkSearchPos(EntityMaid maid) {
+        if (maid.hasRestriction()) {
+            // 当且仅当开启home模式，并且工作点在工作范围内才返回最近工作点
+            if (this.currentWorkPos != null && maid.isWithinRestriction(currentWorkPos)) {
+                return this.currentWorkPos;
+            } else {
+                return maid.getRestrictCenter();
+            }
+        } else {
+            return maid.blockPosition();
         }
     }
 
