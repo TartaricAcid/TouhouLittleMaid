@@ -151,7 +151,6 @@
   "message.touhou_little_maid.photo.have_no_nbt_data": "Esta maldita foto não tem dados NBT.",
   "message.touhou_little_maid.chisel.hit_block_error": "Por favor, clique com o botão direito no bloco de argila",
   "message.touhou_little_maid.chisel.offhand_not_photo": "Por favor, tenha uma foto com empregada na mão secundária",
-  "commands.touhou_little_maid.pack.reload.info": "Todos os modelos de pacote foram recarregados!",
   "commands.touhou_little_maid.power.handle.info": "O ponto de poder dos jogadores %d foi alterado",
   "commands.touhou_little_maid.maid_num.handle.info": "O número de empregada dos jogadores %d foi alterado",
   "argument.touhou_little_maid.handle_type.invalid": "Tipo de manipulação inválida",
