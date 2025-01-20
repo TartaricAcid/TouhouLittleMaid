@@ -190,7 +190,6 @@
   "message.touhou_little_maid.photo.have_no_nbt_data": "Cái tấm ảnh đáng nguyền rủa này không có dữ liệu NBT nào.",
   "message.touhou_little_maid.chisel.hit_block_error": "Vui lòng nhấp chuột phải vào khối đất sét",
   "message.touhou_little_maid.chisel.offhand_not_photo": "Vui lòng có một tấm ảnh của maid trên tay phụ của bạn",
-  "commands.touhou_little_maid.pack.reload.info": "Tất cả gói mô hình đã được tải lại!",
   "commands.touhou_little_maid.power.handle.info": "%d Sức mạnh của người chơi đã thay đổi",
   "commands.touhou_little_maid.maid_num.handle.info": "%d số lượng người Hầu người chơi có được đã thay đổi",
   "task.touhou_little_maid.idle": "Chờ",
