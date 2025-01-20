@@ -253,6 +253,7 @@
   "tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist": "Liste noire",
   "tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist": "Liste blanche",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.has": "Position enregistrée: %d, %d, %d",
+  "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "Aucun Coffre lié",
   "tooltips.touhou_little_maid.maid_beacon.desc": "Point Stocké: %s",
   "tooltips.touhou_little_maid.custom_sound.credit": "Jouer un son de crédit",
   "tooltips.touhou_little_maid.custom_sound.open_url": "Ouvrir l'url du pack de sons",
