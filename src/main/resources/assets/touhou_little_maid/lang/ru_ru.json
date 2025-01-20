@@ -135,7 +135,6 @@
   "message.touhou_little_maid.photo.have_no_nbt_data": "У этого фото нет данных NBT.",
   "message.touhou_little_maid.chisel.hit_block_error": "Пожалуйста, нажмите ПКМ по блоку глины",
   "message.touhou_little_maid.chisel.offhand_not_photo": "Пожалуйста, возьмите фото горничной в свою вторую руку",
-  "commands.touhou_little_maid.pack.reload.info": "Все наборы моделей были перезагружены!",
   "commands.touhou_little_maid.power.handle.info": "%d очки силы игрока изменены",
   "commands.touhou_little_maid.maid_num.handle.info": "%d кол-во горничных игрока изменены",
   "argument.touhou_little_maid.handle_type.invalid": "Неверный тип файла",
