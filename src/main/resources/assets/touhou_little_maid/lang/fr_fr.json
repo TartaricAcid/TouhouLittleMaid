@@ -455,7 +455,6 @@
   "message.touhou_little_maid.wchess.move_limit": "Nulle par la Règle des 50 coups !",
   "message.touhou_little_maid.wchess.reset": "Clic droit sur une des zones claires situé sur les côtés pour réinitialiser le jeu",
   "message.touhou_little_maid.entity_id_copy.copy": "L'id de l'entité a été copié : %s",
-  "commands.touhou_little_maid.pack.reload.info": "Tous les packs de modèles ont été rechargés !",
   "commands.touhou_little_maid.power.handle.info": "Les Points Spirituels de %d joueur(s) ont changés",
   "commands.touhou_little_maid.maid_num.handle.info": "Le nombre de Maid de %d joueur(s) à changé",
   "commands.touhou_little_maid.power.get.info": "%s: %.2f",
