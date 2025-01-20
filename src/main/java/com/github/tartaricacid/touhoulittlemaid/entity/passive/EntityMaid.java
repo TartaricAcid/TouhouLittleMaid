@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
@@ -54,6 +55,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -137,10 +139,13 @@ import net.minecraftforge.registries.tags.ITagManager;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.github.tartaricacid.touhoulittlemaid.config.ServerConfig.MAID_AI_TIME_DEBUG;
 
 public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
@@ -169,6 +174,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<String> BACKPACK_TYPE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+
+    private static final long WARNING_TIME_NANOS = Duration.ofMillis(50L).toNanos();
 
     // 游戏数据记录，包括赢棋次数和赢棋状态
     static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
@@ -375,11 +382,22 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     protected void customServerAiStep() {
+        long timeRecord = Util.getNanos();
         this.level.getProfiler().push("maidBrain");
         if (!guiOpening) {
             this.getBrain().tick((ServerLevel) this.level, this);
         }
         this.level.getProfiler().pop();
+        timeRecord = Util.getNanos() - timeRecord;
+        if (MAID_AI_TIME_DEBUG.get() && timeRecord > WARNING_TIME_NANOS) {
+            double timeMs = timeRecord / 1000000.0;
+            BlockPos blockPos = this.blockPosition();
+            String taskId = this.getTask().getUid().toString();
+            int searchRange = Math.round(this.getRestrictRadius());
+
+            TouhouLittleMaid.LOGGER.error("Maid's AI taking too long! Time: {} ms, Pos: ({},{},{}), Task ID: {}, Search Range: {}",
+                    timeMs, blockPos.getX(), blockPos.getY(), blockPos.getZ(), taskId, searchRange);
+        }
         super.customServerAiStep();
     }
 

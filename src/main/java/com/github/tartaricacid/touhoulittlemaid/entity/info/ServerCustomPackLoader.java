@@ -175,6 +175,11 @@ public final class ServerCustomPackLoader {
             CustomModelPack<MaidModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<MaidModelInfo>>() {
                     }.getType());
+            // 加载时有非常小的概率会偶发，不知为何
+            if (pack == null) {
+                LOGGER.warn(MARKER, "Model pack in domain {} is null, file is {}", domain, zipFile.getName());
+                return;
+            }
             pack.decorate(domain);
             for (MaidModelInfo maidModelInfo : pack.getModelList()) {
                 if (maidModelInfo.getEasterEgg() == null) {
@@ -202,6 +207,11 @@ public final class ServerCustomPackLoader {
             CustomModelPack<ChairModelInfo> pack = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8),
                     new TypeToken<CustomModelPack<ChairModelInfo>>() {
                     }.getType());
+            // 加载时有非常小的概率会偶发，不知为何
+            if (pack == null) {
+                LOGGER.warn(MARKER, "Model pack in domain {} is null, file is {}", domain, zipFile.getName());
+                return;
+            }
             pack.decorate(domain);
             for (ChairModelInfo chairModelInfo : pack.getModelList()) {
                 String id = chairModelInfo.getModelId().toString();

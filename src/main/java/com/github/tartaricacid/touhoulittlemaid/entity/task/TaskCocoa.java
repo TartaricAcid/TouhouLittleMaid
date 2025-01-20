@@ -42,6 +42,7 @@ public class TaskCocoa implements IFarmTask {
                 for (int x = -1; x <= 1; x++) {
                     for (int y = 0; y <= 1; y++) {
                         for (int z = -1; z <= 1; z++) {
+                            // FIXME: 2025-01-20 有性能问题，需要优化
                             if (maid.canPathReach(pos.offset(x, y, z))) {
                                 return true;
                             }

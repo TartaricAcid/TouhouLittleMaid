@@ -23,15 +23,9 @@ public final class PackCommand {
     }
 
     private static int reloadAllPack(CommandContext<CommandSourceStack> context) {
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ReloadResourceEvent::reloadAllPack);
-        // DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> PackCommand::sendPackToClient);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.touhou_little_maid.pack.reload.start"), true);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ReloadResourceEvent::asyncReloadAllPack);
         ServerCustomPackLoader.reloadPacks();
-        // TODO：打印加载的时间到客户端聊天栏
-        context.getSource().sendSuccess(() -> Component.translatable("commands.touhou_little_maid.pack.reload.info"), true);
         return Command.SINGLE_SUCCESS;
-    }
-
-    private static void sendPackToClient() {
-        // TODO: 把服务端模型包发送到每个客户端
     }
 }
