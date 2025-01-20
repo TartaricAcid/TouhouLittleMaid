@@ -429,7 +429,6 @@
   "message.touhou_little_maid.servant_bell.not_same_dimension": "メイドと同じディメンションにいないようです、メイドは %s ディメンションにいます。",
   "message.touhou_little_maid.servant_bell.no_result": "メイドが見つかりません",
   "message.touhou_little_maid.servant_bell.data_is_empty": "データが記録されていません",
-  "commands.touhou_little_maid.pack.reload.info": "すべてのモデルパックが再読み込みされました！",
   "commands.touhou_little_maid.power.handle.info": "%d プレイヤーの霊力が変更されました",
   "commands.touhou_little_maid.maid_num.handle.info": "%d プレイヤーのメイド番号が変更されました",
   "commands.touhou_little_maid.power.get.info": "%s: %.2f",
