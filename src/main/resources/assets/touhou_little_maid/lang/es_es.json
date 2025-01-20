@@ -465,7 +465,6 @@
   "message.touhou_little_maid.wchess.move_limit": "¡Empate por regla de 50 movimientos!",
   "message.touhou_little_maid.wchess.reset": "Haz clic derecho en el área amarilla ligera de ambos lados para restablecer",
   "message.touhou_little_maid.entity_id_copy.copy": "El ID de la entidad ha sido copiado: %s",
-  "commands.touhou_little_maid.pack.reload.info": "¡Todos los paquetes de modelos han sido recargados!",
   "commands.touhou_little_maid.power.handle.info": "Se ha cambiado el punto de poder de %d jugadores",
   "commands.touhou_little_maid.maid_num.handle.info": "Se ha cambiado el número de la criada de %d jugadores",
   "commands.touhou_little_maid.power.get.info": "%s: %.2f",
