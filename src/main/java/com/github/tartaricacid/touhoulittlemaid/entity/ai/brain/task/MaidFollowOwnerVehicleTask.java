@@ -73,7 +73,7 @@ public class MaidFollowOwnerVehicleTask extends Behavior<EntityMaid> {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         switch (this.type) {
-            case RIDE -> Optional.of(this.ownerControlledVehicle).ifPresent(maid::startRiding);
+            case RIDE -> Optional.ofNullable(this.ownerControlledVehicle).ifPresent(maid::startRiding);
             case STOP -> maid.stopRiding();
         }
         maid.swing(InteractionHand.MAIN_HAND);
