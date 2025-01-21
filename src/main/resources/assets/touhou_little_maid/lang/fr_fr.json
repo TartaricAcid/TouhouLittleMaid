@@ -371,7 +371,7 @@
   "gui.touhou_little_maid.resources_download.state.downloading": "Téléchargement du fichier %s...",
   "gui.touhou_little_maid.resources_download.state.downloaded": "Fichier %s téléchargé, Temps écoulé : %.3fs",
   "gui.touhou_little_maid.maid_config.sound_frequency": "Fréquence à parler",
-  "gui.touhou_little_maid.maid_config.show_chat_bubble": "Bulles de dialogues",
+  "gui.touhou_little_maid.maid_config.show_chat_bubble": "Bulles de Dialogues",
   "gui.touhou_little_maid.maid_config.show_backpack": "Afficher le sac à dos",
   "gui.touhou_little_maid.maid_config.show_back_item": "Objets dans le dos",
   "gui.touhou_little_maid.maid_config.pick_type": "Mode de ramassage",
@@ -768,7 +768,8 @@
   "patchouli.touhou_little_maid.book.entries.maid.maid_home.pages.1.text": "Vous pouvez utiliser la Boussole Vanilla pour voir les zones de tâches de votre Maid",
   "patchouli.touhou_little_maid.book.entries.maid.snowball_fight.name": "Bataille de boules de neige",
   "patchouli.touhou_little_maid.book.entries.maid.snowball_fight.pages.0.text": "Quand la Maid est sur de la neige et en tâche \"Inactif\", elle lancera des boules de neige sur le joueur et aux autres Maids",
-  "patchouli.touhou_little_maid.book.entries.maid.chat_bubbles.name": "Bulles de dialogues",
+  "patchouli.touhou_little_maid.book.entries.maid.chat_bubbles.name": "Bulles de Dialogues",
+  "patchouli.touhou_little_maid.book.entries.maid.chat_bubbles.pages.0.text": "La Maid affiche occasionnellement plusieurs bulles de dialogues, qui peuvent également être personnalisées par des packs de modèles",
   "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.name": "Zone de tâche",
   "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.pages.0.text": "La Boussole Kappa est un outil permettant de définir les zones de tâches d'une Maid. Vous pouvez l'utiliser pour définir les endroits où votre Maid travaille, se repose et dort.",
   "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.pages.1.text": "Vous devez tout d'abord faire un clic droit sur un bloc pour définir jusqu'à trois positions, puis faire un clic droit sur la Maid pour les lui assigner.$(br2)Elle ira ensuite travailler dans les zones définies si son Mode Maison est activé.",
@@ -833,5 +834,7 @@
   "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.link_text": "Lien Discord",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.name": "Affinité",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "L'Affinité peu augmenter la santé et la puissance de la Maid.$(br2)Augmente l'affinité :$(li)Pendant ses heures de pause, la Maid peut jouer avec le Piano, l'Ordinateur, la Bibliothèque et au Gomoku.$(li)Quand la Maid dort.$(br2)Réduit l'affinité :$(li)Quand la Maid est tué.",
-  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.0.text": "Vous pouvez utiliser un \"Livre et plume\" pour personnaliser le texte des Bulles de dialogues de la Maid.$(br2)Écrivez simplement le texte dans le format indiqué sur l'image de droite avec une ligne vide pour séparer chaque bulle.$(br2)Vous pouvez écrire plusieurs pages et chacune sera analysée."
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.name": "Bulle de Dialogue Personnalisé",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.0.text": "Vous pouvez utiliser un \"Livre et plume\" pour personnaliser le texte des Bulles de dialogues de la Maid.$(br2)Écrivez simplement le texte dans le format indiqué sur l'image de droite avec une ligne vide pour séparer chaque bulle.$(br2)Vous pouvez écrire plusieurs pages et chacune sera analysée.",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.1.text": "Vous pouvez même utiliser des caractères spéciaux vanilla pour afficher le texte en coloré."
 }
