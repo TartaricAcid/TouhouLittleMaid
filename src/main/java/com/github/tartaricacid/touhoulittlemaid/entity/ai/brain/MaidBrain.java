@@ -32,7 +32,8 @@ public final class MaidBrain {
                 MemoryModuleType.WALK_TARGET,
                 MemoryModuleType.ATTACK_TARGET,
                 MemoryModuleType.ATTACK_COOLING_DOWN,
-                InitEntities.TARGET_POS.get()
+                InitEntities.TARGET_POS.get(),
+                InitEntities.CURRENT_ITEMSTACK.get()
         );
         ExtraMaidBrainManager.EXTRA_MAID_BRAINS.forEach(extra -> defaultTypes.addAll(extra.getExtraMemoryTypes()));
         return ImmutableList.copyOf(defaultTypes);

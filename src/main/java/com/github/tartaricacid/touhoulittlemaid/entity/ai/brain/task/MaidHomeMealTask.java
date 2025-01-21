@@ -72,7 +72,8 @@ public class MaidHomeMealTask extends MaidCheckRateTask {
         // 先对把手上的物品放入背包做预处理：如果放入背包后，手上还有剩余，那就不执行后续吃的逻辑并添加气泡提示
         ItemStack itemInHand = maid.getItemInHand(eanHand);
         IItemHandlerModifiable availableInv = maid.getAvailableBackpackInv();
-        ItemStack leftoverStack = ItemHandlerHelper.insertItemStacked(availableInv, itemInHand.copy(), true);
+        ItemStack handItemCopy = itemInHand.copy();
+        ItemStack leftoverStack = ItemHandlerHelper.insertItemStacked(availableInv, handItemCopy, true);
         if (!leftoverStack.isEmpty()) {
             ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full");
             return;
@@ -106,11 +107,12 @@ public class MaidHomeMealTask extends MaidCheckRateTask {
         candidateFood.intStream().skip(skipCount).findFirst().ifPresent(slotIndex -> {
             ItemStack outputStack = handler.extractItem(slotIndex, 1, false);
             this.tmpPicnicMat.refresh();
-            ItemHandlerHelper.insertItemStacked(availableInv, itemInHand.copy(), false);
+            ItemHandlerHelper.insertItemStacked(availableInv, handItemCopy, false);
             maid.setItemInHand(hand, outputStack);
             ItemStack refreshItemInHand = maid.getItemInHand(hand);
             for (IMaidMeal maidMeal : maidMeals) {
                 if (maidMeal.canMaidEat(maid, refreshItemInHand, hand)) {
+                    maid.memoryHandItemStack(handItemCopy);
                     maidMeal.onMaidEat(maid, refreshItemInHand, hand);
                     if (maid.getOwner() instanceof ServerPlayer serverPlayer) {
                         InitTrigger.MAID_EVENT.trigger(serverPlayer, TriggerType.MAID_PICNIC_EAT);

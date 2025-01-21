@@ -79,6 +79,7 @@ public class MaidHealSelfTask extends MaidCheckRateTask {
                     backpackInv.setStackInSlot(i, ItemStack.EMPTY);
                     ItemHandlerHelper.insertItemStacked(backpackInv, handStack, false);
                     itemInHand = maid.getItemInHand(eanHand);
+                    maid.memoryHandItemStack(handStack);
                     hasFood = true;
                     break swapItemCheck;
                 }

@@ -68,6 +68,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -254,7 +255,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         super(type, world);
         this.favorabilityManager = new FavorabilityManager(this);
         this.scriptBookManager = new MaidScriptBookManager();
-        this.schedulePos = new SchedulePos(BlockPos.ZERO, world.dimension().location());
+
+        // 尝试修复 https://github.com/TartaricAcid/TouhouLittleMaid/issues/631
+        ResourceKey<Level> dimension = Objects.requireNonNullElse(world.dimension(), Level.OVERWORLD);
+        this.schedulePos = new SchedulePos(BlockPos.ZERO, dimension.location());
 
         this.moveControl = new MaidMoveControl(this);
         this.swimManager = new MaidSwimManager(this);
@@ -1315,6 +1319,35 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     protected void completeUsingItem() {
         this.getSwimManager().resetEatBreatheItem();
         super.completeUsingItem();
+        this.backCurrentHandItemStack();
+    }
+
+    /**
+     * 当需要临时调换手中物品和背包内物品时，可调用此方法
+     * 当置换后的物品使用完后会自动将之前的手中物品再次返回到手上
+     *
+     * @param itemStack 当前手上的物品（必须是能使用--需要持续使用的物品）
+     */
+    public void memoryHandItemStack(ItemStack itemStack) {
+        this.getBrain().setMemory(InitEntities.CURRENT_ITEMSTACK.get(), itemStack);
+    }
+
+    /**
+     * 将之前临时存在背包里的物品再次放在对应的手上
+     */
+    public void backCurrentHandItemStack() {
+        this.getBrain().getMemory(InitEntities.CURRENT_ITEMSTACK.get()).ifPresent(itemStack -> {
+            InteractionHand usedItemHand = this.getUsedItemHand();
+            ItemStack itemInHand = this.getItemInHand(usedItemHand);
+            this.swapHandItem(usedItemHand, itemInHand, itemStack);
+            this.getBrain().eraseMemory(InitEntities.CURRENT_ITEMSTACK.get());
+        });
+    }
+
+    private void swapHandItem(InteractionHand hand, ItemStack itemInHand, ItemStack backpackItem) {
+        ItemStack handItemCopy = itemInHand.copy();
+        this.setItemInHand(hand, backpackItem.split(backpackItem.getCount()));
+        ItemHandlerHelper.insertItemStacked(this.getMaidInv(), handItemCopy, false);
     }
 
     @Override
