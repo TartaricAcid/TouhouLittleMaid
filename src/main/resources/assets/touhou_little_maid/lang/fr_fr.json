@@ -847,6 +847,7 @@
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.text": "Touhou Project est une série de jeux indépendants du genre shoot'em up créés par ZUN, le seul membre de la Team Shanghai Alice.",
   "patchouli.touhou_little_maid.book.entries.overview.what_is_touhou.pages.0.link_text": "Touhou Wiki",
   "patchouli.touhou_little_maid.book.entries.overview.world_spawn.name": "Spawn des créatures",
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.0.text": "Créer un pack de modèles personnalisés est très simple, tout ce dont vous avez besoin est le logiciel Blockbench qui est gratuit, open source et facile à utiliser.$(br2)Les modèles personnalisés prennent également en charge les animations Bedrock Edition, ainsi qu'un riche ensemble de variables Molang.",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "Ouvrir le Lien",
   "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.name": "Télécharger des Modèles",
   "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.1.text": "Vous trouverez le bouton de téléchargement des packs de modèles en bas de l'interface de votre Maid.",
