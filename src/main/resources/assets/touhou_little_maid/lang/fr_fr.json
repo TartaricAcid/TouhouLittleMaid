@@ -803,7 +803,7 @@
   "patchouli.touhou_little_maid.book.entries.other.trumpet.name": "Trompette",
   "patchouli.touhou_little_maid.book.entries.other.trumpet.pages.0.text": "Un outil pour téléporter les Maids sur vous, clic droit pour l'utiliser. $(br2)$(4)$(l)Note : Cet objet ne peut pas téléporter une Maid se trouvant dans un chunk qui n'ai pas actuellement chargé.",
   "patchouli.touhou_little_maid.book.entries.other.chair.name": "Coussin",
-  "patchouli.touhou_little_maid.book.entries.other.chair.pages.0.text": "Le coussin est un objet purement décoratif. Placé le directement sur le sol avec un clic droit et faite accroupi + clic gauche pour le détruire. Faites un clic droit dessus pour vous asseoir et accroupi + clic droit pour ouvrir son interface et changer son apparence.",
+  "patchouli.touhou_little_maid.book.entries.other.chair.pages.0.text": "Le coussin est un objet décoratif. Placé-le sur le sol avec un clic droit et faites accroupi + clic gauche pour le détruire. Faites un clic droit dessus pour vous asseoir et accroupi + clic droit pour ouvrir son interface et changer son apparence.",
   "patchouli.touhou_little_maid.book.entries.other.command.name": "Commande",
   "patchouli.touhou_little_maid.book.entries.other.command.pages.0.text": "$(#f00)/tlm$(): Il s'agit de la commande fournie avec le mod$(br2)Vous pouvez l'utilisé pour modifier les Points Spirituels, le nombre de Maid ou rechargé les packs de modèle.",
   "patchouli.touhou_little_maid.book.entries.other.extinguisher.name": "Extincteur",
