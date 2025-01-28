@@ -390,6 +390,8 @@
   "gui.touhou_little_maid.resources_download.need_reload.subtitle": "Utilisez la commande §4§o/tlm pack reload§r pour recharger tous les packs de modèle.",
   "gui.touhou_little_maid.resources_download.state.downloading": "Téléchargement du fichier %s...",
   "gui.touhou_little_maid.resources_download.state.downloaded": "Fichier %s téléchargé, Temps écoulé : %.3fs",
+  "gui.touhou_little_maid.model_gui.easter_egg.encrypt": "Ceci est un modèle Easter Egg chiffré",
+  "gui.touhou_little_maid.model_gui.easter_egg.normal": "Ceci est un modèle Easter Egg",
   "gui.touhou_little_maid.maid_config.sound_frequency": "Fréquence à parler",
   "gui.touhou_little_maid.maid_config.show_chat_bubble": "Bulles de Dialogues",
   "gui.touhou_little_maid.maid_config.show_backpack": "Afficher le sac à dos",
