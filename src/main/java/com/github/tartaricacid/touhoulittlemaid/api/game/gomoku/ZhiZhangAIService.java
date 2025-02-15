@@ -1100,7 +1100,9 @@ public class ZhiZhangAIService implements AIService {
                     if (isRoot) {
                         if (point.score > alpha) {
                             // 找到了更好的落子点，将之前选择的落子点清空
-                            bestPointList.clear();
+                            // 第一步估值不准确，所以不清空
+                            if(this.rounds <= 1)
+                                bestPointList.clear();
                         }
                         // 记录该落子点
                         bestPointList.add(point);
@@ -1138,7 +1140,10 @@ public class ZhiZhangAIService implements AIService {
 
         if (isRoot) {
             // 如果有多个落子点，则通过getBestPoint方法选择一个最好的
-            this.bestPoint = bestPointList.size() > 1 ? getBestPoint(bestPointList) : bestPointList.get(0);
+            int count = bestPointList.size();
+            if(count == 1) this.bestPoint = bestPointList.get(0);
+            else if(this.rounds > 1) this.bestPoint = getRandomBestPoint(bestPointList);
+            else this.bestPoint = getBestPoint(bestPointList);
         }
 
         int score = isAI ? alpha : beta;
@@ -1390,6 +1395,34 @@ public class ZhiZhangAIService implements AIService {
         }
 
         return bestPoint;
+    }
+
+    /**
+     * 从给定的点位列表中获取随机最佳或次佳点位
+     *
+     * @param pointList 点位列表
+     * @return
+     */
+    private Point getRandomBestPoint(List<Point> pointList) {
+        Point bestPoint = null;
+        Point secondPoint = null;
+        int bestScore = -INFINITY;
+        int secondScore = -INFINITY;
+
+        for (Point point : pointList) {
+            int score = Math.round(evaluate(point) * this.attack) + evaluate(new Point(point.x, point.y, 3 - point.type));
+            if (score > bestScore) {
+                bestScore = score;
+                bestPoint = point;
+            }
+            if (score > secondScore && score < bestScore) {
+                secondScore = score;
+                secondPoint = point;
+            }
+        }
+        if (secondPoint == null)    return bestPoint;
+
+        return Math.random() < 0.5 ? bestPoint : secondPoint;
     }
 
     /**
