@@ -1,9 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor;
 
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.snapshot.BoneSnapshot;
-
-
-public interface IBone extends IBaseBone{
+public interface IBaseBone {
     float getRotationX();
 
     void setRotationX(float value);
@@ -45,20 +42,4 @@ public interface IBone extends IBaseBone{
     float getPivotY();
 
     float getPivotZ();
-
-    boolean isHidden();
-
-    void setHidden(boolean hidden);
-
-    boolean cubesAreHidden();
-
-    boolean childBonesAreHiddenToo();
-
-    void setCubesHidden(boolean hidden);
-
-    void setHidden(boolean selfHidden, boolean skipChildRendering);
-
-    BoneSnapshot getInitialSnapshot();
-
-    String getName();
 }

@@ -4,14 +4,19 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.api.event.client.InitYsmMaidRendererEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.v2.GeoLayerMaidRender2;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity2;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer2;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -25,8 +30,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModLoader;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("rawtypes,unchecked")
@@ -36,6 +44,8 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     private final GeckoEntityMaidRenderer geckoEntityMaidRenderer;
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
+    @Nullable
+    private IGeoEntityRenderer2<Mob> ysmMaidRenderer2;
 
     public EntityMaidRenderer(EntityRendererProvider.Context manager) {
         super(manager, new BedrockModel<>(), 0.5f);
@@ -46,11 +56,28 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         this.addLayer(new LayerMaidBanner(this, manager.getModelSet()));
         this.addAdditionMaidLayer(manager);
         this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer<>(manager);
+        this.parseYsmModelRenderer(manager);
+    }
+
+    private void parseYsmModelRenderer(EntityRendererProvider.Context manager) {
+        InitYsmMaidRendererEvent ysmMaidRenderer = new InitYsmMaidRendererEvent(manager);
+        ModLoader.get().postEvent(ysmMaidRenderer);
+        IGeoEntityRenderer2<Mob> geoEntityRenderer2 = ysmMaidRenderer.getGeoEntityRenderer2();
+        Function<Mob, IGeoEntity2> ysmGeoEntityGet = ysmMaidRenderer.getYsmGeoEntityGet();
+        if (geoEntityRenderer2 != null && ysmGeoEntityGet != null) {
+            this.ysmMaidRenderer2 = geoEntityRenderer2;
+
+            List<GeoLayerRenderer> layerRenderers = this.geckoEntityMaidRenderer.getLayerRenderers();
+            for (GeoLayerRenderer layerRenderer : layerRenderers) {
+                GeoLayerMaidRender2<Mob, IGeoEntityRenderer2<Mob>> mobGeoLayerMaidRender2 = ((GeoLayerMaidRender2<Mob, IGeoEntityRenderer2<Mob>>) layerRenderer).create(geoEntityRenderer2, manager, ysmGeoEntityGet);
+                ysmMaidRenderer2.addGeoMobLayer(mobGeoLayerMaidRender2);
+            }
+        }
     }
 
     @Override
     public void render(Mob entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
-        var maid = IMaid.convert(entity);
+        IMaid maid = IMaid.convert(entity);
         if (maid == null) {
             return;
         }
@@ -81,6 +108,13 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
             ChatBubbleRenderer.renderChatBubble(this, maidEntity, poseStack, bufferIn, packedLightIn);
         }
 
+        // YsmGeckoLib 接管渲染
+        if (maid.isYsmModel() && this.ysmMaidRenderer2 != null) {
+            this.ysmMaidRenderer2.getGeoEntityRender(entity).setMaidInfo(this.mainInfo);
+            this.ysmMaidRenderer2.getGeoEntityRender(entity).setYsmModel(maid.getYsmModelId(), maid.getYsmModelTexture());
+            this.ysmMaidRenderer2.geoRender(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
+            return;
+        }
         // GeckoLib 接管渲染
         if (this.mainInfo.isGeckoModel()) {
             this.geckoEntityMaidRenderer.getAnimatableEntity(entity).setMaidInfo(this.mainInfo);

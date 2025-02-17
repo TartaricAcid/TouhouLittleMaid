@@ -154,12 +154,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
     public static final String MODEL_ID_TAG = "ModelId";
+    public static final String IS_YSM_MODEL_TAG = "IsYsmModel";
+    public static final String YSM_MODEL_ID_TAG = "YsmModelId";
+    public static final String YSM_MODEL_TEXTURE_TAG = "YsmModelTexture";
     public static final String SOUND_PACK_ID_TAG = "SoundPackId";
     public static final String MAID_BACKPACK_TYPE = "MaidBackpackType";
     public static final String MAID_INVENTORY_TAG = "MaidInventory";
     public static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
     public static final String EXPERIENCE_TAG = "MaidExperience";
     private static final EntityDataAccessor<String> DATA_MODEL_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> DATA_IS_YSM_MODEL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> DATA_YSM_MODEL_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> DATA_YSM_MODEL_TEXTURE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_SOUND_PACK_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_TASK = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_BEGGING = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
@@ -294,6 +300,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
+        this.entityData.define(DATA_IS_YSM_MODEL, false);
+        this.entityData.define(DATA_YSM_MODEL_ID, "");
+        this.entityData.define(DATA_YSM_MODEL_TEXTURE, "");
         this.entityData.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
         this.entityData.define(DATA_TASK, TaskIdle.UID.toString());
         this.entityData.define(DATA_BEGGING, false);
@@ -1141,6 +1150,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString(MODEL_ID_TAG, getModelId());
+        compound.putBoolean(IS_YSM_MODEL_TAG, isYsmModel());
+        compound.putString(YSM_MODEL_ID_TAG, getYsmModelId());
+        compound.putString(YSM_MODEL_TEXTURE_TAG, getYsmModelTexture());
         compound.putString(SOUND_PACK_ID_TAG, getSoundPackId());
         compound.putString(TASK_TAG, getTask().getUid().toString());
         compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT());
@@ -1176,6 +1188,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.setSyncTaskData(this.taskDataMaps.getUpdateTag());
         if (compound.contains(MODEL_ID_TAG, Tag.TAG_STRING)) {
             setModelId(compound.getString(MODEL_ID_TAG));
+        }
+        if (compound.contains(IS_YSM_MODEL_TAG, Tag.TAG_BYTE)) {
+            setIsYsmModel(compound.getBoolean(IS_YSM_MODEL_TAG));
+        }
+        if (compound.contains(YSM_MODEL_ID_TAG, Tag.TAG_STRING)) {
+            setYsmModelId(compound.getString(YSM_MODEL_ID_TAG));
+        }
+        if (compound.contains(YSM_MODEL_TEXTURE_TAG, Tag.TAG_STRING)) {
+            setYsmModelTexture(compound.getString(YSM_MODEL_TEXTURE_TAG));
         }
         if (compound.contains(SOUND_PACK_ID_TAG, Tag.TAG_STRING)) {
             setSoundPackId(compound.getString(SOUND_PACK_ID_TAG));
@@ -1648,6 +1669,34 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public void setModelId(String modelId) {
         this.entityData.set(DATA_MODEL_ID, modelId);
+    }
+
+    public boolean isYsmModel(){
+        return this.entityData.get(DATA_IS_YSM_MODEL);
+    }
+
+    public void setIsYsmModel(boolean isYsmModel){
+        this.entityData.set(DATA_IS_YSM_MODEL, isYsmModel);
+    }
+    public String getYsmModelId() {
+        return this.entityData.get(DATA_YSM_MODEL_ID);
+    }
+
+    protected void setYsmModelId(String modelId) {
+        this.entityData.set(DATA_YSM_MODEL_ID, modelId);
+    }
+
+    public String getYsmModelTexture() {
+        return this.entityData.get(DATA_YSM_MODEL_TEXTURE);
+    }
+
+    protected void setYsmModelTexture(String texture) {
+        this.entityData.set(DATA_YSM_MODEL_TEXTURE, texture);
+    }
+
+    public void setYsmModel(String modelId, String texture) {
+        this.setYsmModelId(modelId);
+        this.setYsmModelTexture(texture);
     }
 
     public String getSoundPackId() {

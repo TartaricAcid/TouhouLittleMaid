@@ -322,4 +322,8 @@ public abstract class GeoReplacedEntityRenderer<T extends LivingEntity, E extend
     public void setCurrentRTB(MultiBufferSource bufferSource) {
         this.rtb = bufferSource;
     }
+
+    public List<GeoLayerRenderer> getLayerRenderers() {
+        return layerRenderers;
+    }
 }

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.simplehats;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBaseBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -27,7 +27,7 @@ public class SimpleHatsRenderer {
         }
     }
 
-    static void renderGeckoHat(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, ItemStack stack, List<AnimatedGeoBone> model) {
+    static void renderGeckoHat(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, ItemStack stack, List<? extends IBaseBone> model) {
         if (!stack.isEmpty() && stack.getItem() instanceof HatItem) {
             poseStack.pushPose();
             RenderUtils.prepMatrixForLocator(poseStack, model);

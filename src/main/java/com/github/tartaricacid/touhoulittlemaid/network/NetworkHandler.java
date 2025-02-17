@@ -104,6 +104,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(39, SyncAiSettingMessage.class, SyncAiSettingMessage::encode, SyncAiSettingMessage::decode, SyncAiSettingMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(40, YsmMaidModelMessage.class, YsmMaidModelMessage::encode, YsmMaidModelMessage::decode, YsmMaidModelMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

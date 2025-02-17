@@ -42,6 +42,7 @@ public class MaidModelMessage {
                 Entity entity = sender.level.getEntity(message.id);
                 if (entity instanceof EntityMaid && ((EntityMaid) entity).isOwnedBy(sender)) {
                     if (sender.isCreative() || MaidConfig.MAID_CHANGE_MODEL.get()) {
+                        ((EntityMaid) entity).setIsYsmModel(false);
                         ((EntityMaid) entity).setModelId(message.modelId.toString());
                         InitTrigger.MAID_EVENT.trigger(sender, TriggerType.CHANGE_MAID_MODEL);
                     } else {

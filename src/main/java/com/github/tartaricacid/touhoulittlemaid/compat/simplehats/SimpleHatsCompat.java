@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.simplehats;
 
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBaseBone;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Mob;
@@ -24,7 +24,7 @@ public class SimpleHatsCompat {
         }
     }
 
-    public static void renderGeckoHat(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, ItemStack stack, List<AnimatedGeoBone> model) {
+    public static void renderGeckoHat(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, Mob mob, ItemStack stack, List<? extends IBaseBone> model) {
         if (isLoaded) {
             SimpleHatsRenderer.renderGeckoHat(poseStack, bufferIn, packedLightIn, mob, stack, model);
         }

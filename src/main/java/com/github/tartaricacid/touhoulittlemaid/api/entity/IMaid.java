@@ -67,6 +67,24 @@ public interface IMaid {
      */
     String getModelId();
 
+    default boolean isYsmModel(){
+        return false;
+    }
+
+    default void setIsYsmModel(boolean isYsmModel){
+    }
+
+    default String getYsmModelId() {
+        return "";
+    }
+
+    default String getYsmModelTexture() {
+        return "";
+    }
+
+    default void setYsmModel(String modelId, String texture) {
+    }
+
     /**
      * 转成原实体对象
      */
