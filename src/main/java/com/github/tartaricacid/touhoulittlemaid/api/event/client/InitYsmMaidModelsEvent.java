@@ -10,13 +10,13 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class InitYsmMaidModelsEvent extends Event {
-    private List<MaidModelGui.YsmMaidInfo> ysmModels = Collections.emptyList();
+    private List<MaidModelGui.YsmMaidBaseInfo> ysmModels = Collections.emptyList();
 
-    public List<MaidModelGui.YsmMaidInfo> getYsmModels() {
+    public List<MaidModelGui.YsmMaidBaseInfo> getYsmModels() {
         return ysmModels;
     }
 
-    public void setYsmModels(List<MaidModelGui.YsmMaidInfo> ysmModels) {
+    public void setYsmModels(List<MaidModelGui.YsmMaidBaseInfo> ysmModels) {
         this.ysmModels = ysmModels;
     }
 }

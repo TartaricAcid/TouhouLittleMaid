@@ -2,8 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -24,16 +26,20 @@ public class YsmModelButton extends Button {
     @Nullable
     private final EntityMaid maid;
     private final MaidModelGui.YsmMaidInfo ysmMaidInfo;
+    private final boolean needAuth;
     private final String modelId;
     private final String modelTexture;
     private final List<Component> tooltips;
+    private final ResourceLocation cacheIconId;
 
     public YsmModelButton(MaidModelGui.YsmMaidInfo ysmModel, int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress pOnPress) {
         super(pX, pY, pWidth, pHeight, pMessage, pOnPress, Supplier::get);
         this.ysmMaidInfo = ysmModel;
+        this.needAuth = ysmModel.needAuth();
         this.modelId = ysmModel.modelId();
         this.modelTexture = ysmModel.textureId();
         this.tooltips = buildTooltips(ysmModel.tooltips());
+        this.cacheIconId = ysmModel.cacheIconId();
         this.maid = createEntityMaid();
     }
 
@@ -50,14 +56,33 @@ public class YsmModelButton extends Button {
     public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (isHovered) {
             pGuiGraphics.blit(BG, getX(), getY(), 42, 225, 15, 24);
+        }
+        {
+            RenderSystem.enableDepthTest();
+            drawYsmEntity(pGuiGraphics, getX() + (width / 2), getY() + this.height);
+        }
+    }
+
+    public void renderTooltip(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        if (isHovered) {
             pGuiGraphics.renderComponentTooltip(Minecraft.getInstance().font, this.tooltips, pMouseX, pMouseY);
         }
-        drawYsmEntity(pGuiGraphics, getX() + (width / 2), getY() + this.height);
     }
 
     private void drawYsmEntity(GuiGraphics graphics, int posX, int posY) {
-        if (maid == null) return;
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * 1.0f), -25, -20, maid);
+        var allTextures = Minecraft.getInstance().textureManager.byPath;
+        if (MiscConfig.MODEL_ICON_CACHE.get() && cacheIconId != null && allTextures.containsKey(cacheIconId)) {
+            int textureSize = 24;
+            graphics.blit(cacheIconId, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
+        } else {
+            if (maid == null) return;
+            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * 1.0f), -25, -20, maid);
+        }
+    }
+
+    @Override
+    protected boolean clicked(double pMouseX, double pMouseY) {
+        return !needAuth && super.clicked(pMouseX, pMouseY);
     }
 
     @Nullable

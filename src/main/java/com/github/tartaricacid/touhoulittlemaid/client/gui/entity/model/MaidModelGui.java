@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model;
 
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.InitYsmMaidModelsEvent;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.MaidModelDetailsGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.YsmModelButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
@@ -13,6 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelMessage
 import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.YsmMaidModelMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -24,9 +25,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
-import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,16 +41,35 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     private static int PACK_INDEX = 0;
     private static int ROW_INDEX = 0;
     private final List<YsmMaidInfo> ysmModels = Lists.newArrayList();
+    private final List<YsmModelButton> ysmModelButtons = Lists.newArrayList();
 
     public MaidModelGui(EntityMaid maid) {
         super(maid, CustomPackLoader.MAID_MODELS.getPackList());
+
+//        CacheIconManager.clearCache();
+
+        // 构建YsmMaid信息
+//        CacheIconManager.buildYsmMaidInfos();
     }
 
     @Override
     public void init() {
         super.init();
+        ysmModelButtons.clear();
         this.addYsmModelTabButton();
         this.addYsmModelButtons();
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderYsmModelTooltips(graphics, mouseX, mouseY, partialTicks);
+    }
+
+    private void renderYsmModelTooltips(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        for (YsmModelButton ysmModelButton : this.ysmModelButtons) {
+            ysmModelButton.renderTooltip(graphics, mouseX, mouseY, partialTicks);
+        }
     }
 
     @Override
@@ -131,10 +150,7 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
     }
 
     public void addYsmModelTabButton() {
-        InitYsmMaidModelsEvent collectYsmModelEvent = new InitYsmMaidModelsEvent();
-        MinecraftForge.EVENT_BUS.post(collectYsmModelEvent);
-
-        List<YsmMaidInfo> ysmModels = collectYsmModelEvent.getYsmModels();
+        List<YsmMaidInfo> ysmModels = CacheIconManager.getYsmMaidInfos();
         if (ysmModels.isEmpty()) {
             return;
         } else {
@@ -167,7 +183,8 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         int offsetY = -38 - 30 + 10;
 
         for (YsmMaidInfo ysmModel : this.ysmModels) {
-            YsmModelButton ysmModelButton = new YsmModelButton(ysmModel, startX + offsetX, startY + offsetY, 15, 24, Component.empty(), this.onModelButtonClick(ysmModel.modelId, ysmModel.textureId));
+            YsmModelButton ysmModelButton = new YsmModelButton(ysmModel, startX + offsetX, startY + offsetY, 15, 24, Component.empty(), this.onModelButtonClick(ysmModel.modelId(), ysmModel.textureId()));
+            ysmModelButtons.add(ysmModelButton);
             this.addRenderableWidget(ysmModelButton);
 
             // 往右绘制
@@ -237,6 +254,48 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         }
     }
 
-    public record YsmMaidInfo(String modelId, String textureId, List<Component> tooltips) {
+    public static class YsmMaidBaseInfo {
+        private final String modelId;
+        private final String textureId;
+        private final List<Component> tooltips;
+        private final boolean needAuth;
+
+        public YsmMaidBaseInfo(String modelId, String textureId, List<Component> tooltips, boolean needAuth) {
+            this.modelId = modelId;
+            this.textureId = textureId;
+            this.tooltips = tooltips;
+            this.needAuth = needAuth;
+        }
+
+        public String modelId() {
+            return modelId;
+        }
+
+        public String textureId() {
+            return textureId;
+        }
+
+        public List<Component> tooltips() {
+            return tooltips;
+        }
+
+        public boolean needAuth() {
+            return needAuth;
+        }
+    }
+
+    public static class YsmMaidInfo extends YsmMaidBaseInfo {
+        @Nullable
+        private final ResourceLocation cacheIconId;
+
+        public YsmMaidInfo(String modelId, String textureId, List<Component> tooltips, boolean needAuth, @Nullable ResourceLocation cacheIconId) {
+            super(modelId, textureId, tooltips, needAuth);
+            this.cacheIconId = cacheIconId;
+        }
+
+        @Nullable
+        public ResourceLocation cacheIconId() {
+            return cacheIconId;
+        }
     }
 }
