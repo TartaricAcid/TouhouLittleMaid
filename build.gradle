@@ -176,46 +176,46 @@ dependencies {
 
     implementation fg.deobf("libs:cloth-config-forge:${cloth_config_forge}")
 
-//    runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
-    compileOnly fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
+    runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
+    implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
 
     implementation fg.deobf("maven.modrinth:slashblade-resharped:1.1.6-1.20.1")
 
-    compileOnly fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
+    implementation fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
 
     implementation fg.deobf("net.conczin:immersive_melodies:${immersive_melodies_version}")
 
     runtimeOnly fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
 
-//    runtimeOnly "curse.maven:kotlin-for-forge-351264:${kotlin_id}"
-//    runtimeOnly fg.deobf("curse.maven:libipn-679177:${libipn_id}")
-    compileOnly fg.deobf("curse.maven:inventory-profiles-next-495267:${ipn_id}")
+    runtimeOnly "curse.maven:kotlin-for-forge-351264:${kotlin_id}"
+    runtimeOnly fg.deobf("curse.maven:libipn-679177:${libipn_id}")
+    implementation fg.deobf("curse.maven:inventory-profiles-next-495267:${ipn_id}")
 
-//    runtimeOnly fg.deobf("curse.maven:catalogue-459701:${catalogue_id}")
+    runtimeOnly fg.deobf("curse.maven:catalogue-459701:${catalogue_id}")
 
-//    runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
-//    runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
+    runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
+    runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
 
     implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6069384-sources-6069403")
 
     implementation fg.deobf("maven.modrinth:simple-hats:1.20.1-0.3.2-forge")
     implementation fg.deobf("maven.modrinth:curios:5.9.1+1.20.1-forge")
 
-    compileOnly fg.deobf("maven.modrinth:torohealth-damage-indicators-updated:1.20.1-forge-1")
+    implementation fg.deobf("maven.modrinth:torohealth-damage-indicators-updated:1.20.1-forge-1")
 
-    compileOnly fg.deobf("curse.maven:aquaculture-60028:5585290")
-//    runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
-//
-//    runtimeOnly fg.deobf("maven.modrinth:better-advancements:0.4.2.10-forge")
-//
-//    runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
-//    runtimeOnly fg.deobf('maven.modrinth:oculus:1.20.1-1.7.0')
-//
-//    runtimeOnly fg.deobf("maven.modrinth:common-network:1.0.5-1.20.1")
-//    runtimeOnly fg.deobf("maven.modrinth:just-more-cakes:1.18.1-forge")
-//    runtimeOnly fg.deobf("maven.modrinth:spawn-animations:1.10+mod-forge")
-//
-//    runtimeOnly fg.deobf("maven.modrinth:farmers-delight:1.20.1-1.2.6-forge")
+    implementation fg.deobf("curse.maven:aquaculture-60028:5585290")
+    runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
+
+    runtimeOnly fg.deobf("maven.modrinth:better-advancements:0.4.2.10-forge")
+
+    runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
+    runtimeOnly fg.deobf('maven.modrinth:oculus:1.20.1-1.7.0')
+
+    runtimeOnly fg.deobf("maven.modrinth:common-network:1.0.5-1.20.1")
+    runtimeOnly fg.deobf("maven.modrinth:just-more-cakes:1.18.1-forge")
+    runtimeOnly fg.deobf("maven.modrinth:spawn-animations:1.10+mod-forge")
+
+    runtimeOnly fg.deobf("maven.modrinth:farmers-delight:1.20.1-1.2.6-forge")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
